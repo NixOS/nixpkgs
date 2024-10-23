@@ -1,0 +1,197 @@
+diff --git c/setup.py w/setup.py
+index b6db079..d468b10 100644
+--- c/setup.py
++++ w/setup.py
+@@ -9,6 +9,7 @@ import cpuinfo
+ from Cython.Distutils.build_ext import new_build_ext as build_ext
+ from setuptools import Extension, setup
+ from setuptools.errors import CCompilerError, ExecError, PlatformError
++import pkgconfig
+ 
+ # determine CPU support for SSE2 and AVX2
+ cpu_info = cpuinfo.get_cpu_info()
+@@ -17,6 +18,7 @@ have_sse2 = 'sse2' in flags
+ have_avx2 = 'avx2' in flags
+ disable_sse2 = 'DISABLE_NUMCODECS_SSE2' in os.environ
+ disable_avx2 = 'DISABLE_NUMCODECS_AVX2' in os.environ
++use_system_libraries = 'NUMCODECS_USE_SYSTEM_LIBS' in os.environ
+ 
+ # setup common compile arguments
+ have_cflags = 'CFLAGS' in os.environ
+@@ -49,8 +51,8 @@ def error(*msg):
+     print('[numcodecs]', *msg, **kwargs)
+ 
+ 
+-def blosc_extension():
+-    info('setting up Blosc extension')
++def _blosc_extension_with_vendored_libs():
++    info('setting up Blosc extension from vendored sources')
+ 
+     extra_compile_args = base_compile_args.copy()
+     define_macros = []
+@@ -125,8 +127,68 @@ def blosc_extension():
+     return extensions
+ 
+ 
+-def zstd_extension():
+-    info('setting up Zstandard extension')
++def _blosc_extension_with_system_libs():
++    info('setting up Blosc extension with system libraries')
++
++    extra_compile_args = base_compile_args.copy()
++
++    blosc_package_configuration = pkgconfig.parse("blosc")
++
++    define_macros = blosc_package_configuration["define_macros"]
++    include_dirs = blosc_package_configuration["include_dirs"]
++    libraries = blosc_package_configuration["libraries"]
++    library_dirs = blosc_package_configuration["library_dirs"]
++
++    # remove minizip because Python.h 3.8 tries to include crypt.h
++    include_dirs = [d for d in include_dirs if 'minizip' not in d]
++
++    # define_macros += [('CYTHON_TRACE', '1')]
++
++    # SSE2
++    if have_sse2 and not disable_sse2:
++        info('compiling Blosc extension with SSE2 support')
++        extra_compile_args.append('-DSHUFFLE_SSE2_ENABLED')
++        if os.name == 'nt':
++            define_macros += [('__SSE2__', 1)]
++    else:
++        info('compiling Blosc extension without SSE2 support')
++
++    # AVX2
++    if have_avx2 and not disable_avx2:
++        info('compiling Blosc extension with AVX2 support')
++        extra_compile_args.append('-DSHUFFLE_AVX2_ENABLED')
++        if os.name == 'nt':
++            define_macros += [('__AVX2__', 1)]
++    else:
++        info('compiling Blosc extension without AVX2 support')
++
++    sources = ['numcodecs/blosc.pyx']
++
++    # define extension module
++    extensions = [
++        Extension(
++            'numcodecs.blosc',
++            sources=sources,
++            include_dirs=include_dirs,
++            define_macros=define_macros,
++            extra_compile_args=extra_compile_args,
++            libraries=libraries,
++            library_dirs=library_dirs,
++        ),
++    ]
++
++    return extensions
++
++
++def blosc_extension():
++    if use_system_libraries:
++        return _blosc_extension_with_system_libs()
++    else:
++        return _blosc_extension_with_vendored_libs()
++
++
++def _zstd_extension_with_vendored_sources():
++    info('setting up Zstandard extension from vendored sources')
+ 
+     zstd_sources = []
+     extra_compile_args = base_compile_args.copy()
+@@ -167,8 +229,46 @@ def zstd_extension():
+     return extensions
+ 
+ 
+-def lz4_extension():
+-    info('setting up LZ4 extension')
++def _zstd_extension_with_system_libs():
++    info('setting up Zstandard extension with system libraries')
++
++    extra_compile_args = base_compile_args.copy()
++
++    zstd_package_configuration = pkgconfig.parse("libzstd")
++    include_dirs = zstd_package_configuration["include_dirs"]
++    define_macros = zstd_package_configuration["define_macros"]
++    libraries = zstd_package_configuration["libraries"]
++    library_dirs = zstd_package_configuration["library_dirs"]
++
++    # define_macros += [('CYTHON_TRACE', '1')]
++
++    sources = ['numcodecs/zstd.pyx']
++
++    # define extension module
++    extensions = [
++        Extension(
++            'numcodecs.zstd',
++            sources=sources,
++            include_dirs=include_dirs,
++            define_macros=define_macros,
++            extra_compile_args=extra_compile_args,
++            libraries=libraries,
++            library_dirs=library_dirs,
++        ),
++    ]
++
++    return extensions
++
++
++def zstd_extension():
++    if use_system_libraries:
++        return _zstd_extension_with_system_libs()
++    else:
++        return _zstd_extension_with_vendored_sources()
++
++
++def _lz4_extension_with_vendored_sources():
++    info('setting up LZ4 extension from vendored sources')
+ 
+     extra_compile_args = base_compile_args.copy()
+     define_macros = []
+@@ -195,6 +295,45 @@ def lz4_extension():
+     return extensions
+ 
+ 
++def _lz4_extension_with_system_libs():
++    info('setting up LZ4 extension with system libraries')
++
++    extra_compile_args = base_compile_args.copy()
++
++    lz4_package_configuration = pkgconfig.parse("liblz4")
++    include_dirs = lz4_package_configuration["include_dirs"]
++    define_macros = lz4_package_configuration["define_macros"]
++    libraries = lz4_package_configuration["libraries"]
++    library_dirs = lz4_package_configuration["library_dirs"]
++
++    include_dirs += ['numcodecs']
++    # define_macros += [('CYTHON_TRACE', '1')]
++
++    sources = ['numcodecs/lz4.pyx']
++
++    # define extension module
++    extensions = [
++        Extension(
++            'numcodecs.lz4',
++            sources=sources,
++            include_dirs=include_dirs,
++            define_macros=define_macros,
++            extra_compile_args=extra_compile_args,
++            libraries=libraries,
++            library_dirs=library_dirs,
++        ),
++    ]
++
++    return extensions
++
++
++def lz4_extension():
++    if use_system_libraries:
++        return _lz4_extension_with_system_libs()
++    else:
++        return _lz4_extension_with_vendored_sources()
++
++
+ def vlen_extension():
+     info('setting up vlen extension')
+     import numpy
