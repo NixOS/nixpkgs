@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
-  version = "2.31.0";
+  version = "2.31.0-unstable-2024-04-25";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xBBtpjtWyba0DogdLobtuWmiiAHTXMK4oRnjYuTUCNk=";
+    rev = "dbaf284e112bea1b90983772a3164e794b923aaf";
+    sha256 = "sha256-eM1K3uObb4eZq0nSfafltp5DuZIDwknUYj9CdLn14lY=";
   };
 
   nativeBuildInputs = [ nasm autoreconfHook ];
@@ -24,6 +24,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/intel/isa-l";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # does not build on M1 mac (asm/hwcap.h file not found) maybe needs gcc not clang?
   };
 })
