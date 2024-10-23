@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.7.0";
+  version = "4.9.0";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wZUQHIkbxt9ckTFs8VTrA5I+ebBeaOm+Fb0+GqX5y0c=";
+    hash = "sha256-b0ogwUA9k5NKyTyJUigt/EN1V8Q+8Tc6I+y6isBcet0=";
   };
 
   buildInputs = [ pahole ];
