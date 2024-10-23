@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchzip
 , meson
 , ninja
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-v${finalAttrs.version}.tar.gz";
     hash = "sha256-Zl2bOGDJIe/bhMFNsy969JYCYqtXTOzgb+bbOlKqOco=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/dgibson/dtc/pull/141
+      url = "https://github.com/dgibson/dtc/commit/56a7d0cb3be5f2f7604bc42299e24d13a39c72d8.patch";
+      hash = "sha256-LBbG/0c5HCaX6eU1gGz8BC5ZxeqeI9PW4PzpUxwYQJE=";
+    })
+  ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
