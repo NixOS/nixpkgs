@@ -5,7 +5,6 @@
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
-  ruff,
   testers,
   openapi-python-client,
 }:
@@ -35,8 +34,9 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies =
-    (with python3Packages; [
+  dependencies = (
+    with python3Packages;
+    [
       attrs
       httpx
       jinja2
@@ -46,8 +46,9 @@ python3Packages.buildPythonApplication rec {
       shellingham
       typer
       typing-extensions
-    ])
-    ++ [ ruff ];
+      ruff
+    ]
+  );
 
   # ruff is not packaged as a python module in nixpkgs
   pythonRemoveDeps = [ "ruff" ];

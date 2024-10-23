@@ -3,9 +3,6 @@
   python3,
   fetchFromGitHub,
 
-  # optional-dependencies
-  ruff,
-
   # tests
   versionCheckHook,
 }:
@@ -27,8 +24,9 @@ let
       setuptools
     ];
 
-    optional-dependencies.toolchain =
-      (with python3.pkgs; [
+    optional-dependencies.toolchain = (
+      with python3.pkgs;
+      [
         black
         blacken-docs
         flake8
@@ -37,10 +35,9 @@ let
         mypy
         pylint
         pyupgrade
-      ])
-      ++ [
         ruff
-      ];
+      ]
+    );
 
     dependencies = with python3.pkgs; [
       autopep8

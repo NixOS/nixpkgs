@@ -7,7 +7,6 @@
 , netpbm
 , qemu_test
 , socat
-, ruff
 , tesseract4
 , vde2
 , extraPythonPackages ? (_ : [])

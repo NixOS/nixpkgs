@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ])" -p pyright ruff isort
+#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ruff ])" -p pyright isort
 import asyncio
 import json
 import os.path

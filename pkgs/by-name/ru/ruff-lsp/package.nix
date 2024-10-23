@@ -3,9 +3,6 @@
   python3Packages,
   fetchFromGitHub,
 
-  # nativeCheckInputs
-  ruff,
-
   # tests
   versionCheckHook,
 
@@ -50,7 +47,7 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     # prefer ruff from user's PATH, that's usually desired behavior
-    "--suffix PATH : ${lib.makeBinPath [ ruff ]}"
+    "--suffix PATH : ${lib.makeBinPath [ python3Packages.ruff ]}"
 
     # Unset ambient PYTHONPATH in the wrapper, so ruff-lsp only ever runs with
     # its own, isolated set of dependencies. This works because the correct

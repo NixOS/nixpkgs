@@ -6,7 +6,6 @@
 , runCommand
 , python3
 , black
-, ruff
 , mypy
 , systemd
 , fakeroot
@@ -62,7 +61,7 @@ let
   amendRepartDefinitions = runCommand "amend-repart-definitions.py"
     {
       # TODO: ruff does not splice properly in nativeBuildInputs
-      depsBuildBuild = [ ruff ];
+      depsBuildBuild = [ python3.pkgs.ruff ];
       nativeBuildInputs = [ python3 black mypy ];
     } ''
     install ${./amend-repart-definitions.py} $out
