@@ -19,6 +19,7 @@
   harfbuzzFull,
   icu70,
   lcms,
+  libavif,
   libdrm,
   libepoxy,
   libevent,
@@ -67,6 +68,18 @@ let
       };
     }
   );
+  libavif' = libavif.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.9.3";
+      src = fetchFromGitHub {
+        owner = "AOMediaCodec";
+        repo = finalAttrs.pname;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
+      };
+      postPatch = "";
+    }
+  );
   webkit-linux = stdenv.mkDerivation {
     name = "playwright-webkit";
     src = fetchzip {
@@ -74,8 +87,8 @@ let
       stripRoot = false;
       hash =
         {
-          x86_64-linux = "sha256-vz/c2Bzr1NWRZZL5hIRwnor2Wte61gS++8rRfmy9T+0=";
-          aarch64-linux = "sha256-dS4Hsy/lGZWgznviwkslSk5oBYdUIBxeQPfaEyLNXyc=";
+          x86_64-linux = "sha256-h6fX2/2GqYJAWS/uABTJgduQJxZdLS/kzwEGBRNCjxU=";
+          aarch64-linux = "sha256-b/J5oI7xTfZbZrdUtioGfw7PUEVPU5Ypld04GBdJUp0=";
         }
         .${system} or throwSystem;
     };
@@ -99,6 +112,7 @@ let
       harfbuzzFull
       icu70
       lcms
+      libavif'
       libdrm
       libepoxy
       libevent
@@ -141,8 +155,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-lOAHJaDXtt80RhqFNaO1JhaJH5WAu6+rpoR+IsfzGeM=";
-        aarch64-darwin = "sha256-GrjTnMGTPBdRI3xE5t9HbXLrvgOjCdqbJGElTKhUoA4=";
+        x86_64-darwin = "sha256-4h48iOj5Y6B5eNiEFgM5CjE2C6tj+2cpuwB+EacI0vw=";
+        aarch64-darwin = "sha256-KaEEvazBJM4wJCuoqwXNTk1B/1GA3b2iAVThINyifdA=";
       }
       .${system} or throwSystem;
   };
