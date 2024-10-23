@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "xeol";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "xeol-io";
     repo = "xeol";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5QlHfchVRFNpU/sBTS9AWOENU86jBatF6KI97NoJa50=";
+    hash = "sha256-4fMH07XKMnpX54mS9pAuTBiHcP6nXj8vpuk3f/3ik+k=";
   };
 
   vendorHash = "sha256-MLNUmJOpgKkIe5NUWYMA5avVvt6QLit0i4hpoaadcrs=";
