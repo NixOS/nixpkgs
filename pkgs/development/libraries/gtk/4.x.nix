@@ -84,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LsU+B9GMnwA7OeSmqDgFTZJZ4Ei2xMBdgMDQWqch2UQ=";
   };
 
+  patches = [
+    ./patches/4.0-Xft-setting-fallback-compute-DPI-properly.patch
+  ];
+
   depsBuildBuild = [
     pkg-config
   ];

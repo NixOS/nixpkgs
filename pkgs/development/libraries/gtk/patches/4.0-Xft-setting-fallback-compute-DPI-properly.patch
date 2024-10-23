@@ -1,0 +1,16 @@
+--- a/gdk/x11/gdkxftdefaults.c
++++ b/gdk/x11/gdkxftdefaults.c
+@@ -185,8 +185,11 @@ init_xft_settings (GdkX11Screen *x11_screen)
+   if (!get_integer_default (x11_screen, "rgba", &x11_screen->xft_rgba))
+     x11_screen->xft_rgba = FC_RGBA_UNKNOWN;
+ 
+-  if (!get_double_default (x11_screen, "dpi", &dpi_double))
+-    dpi_double = 96.0;
++  if (!get_double_default (x11_screen, "dpi", &dpi_double)) {
++    Display *xdisplay = GDK_SCREEN_XDISPLAY (x11_screen);
++    dpi_double = (DisplayHeight(xdisplay, x11_screen->screen_num)*25.4)/
++                   DisplayHeightMM(xdisplay, x11_screen->screen_num);
++  }
+ 
+   x11_screen->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
+ }
