@@ -149,8 +149,7 @@ in
       vim-fugitive
       vim-rhubarb
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "advanced_git_search.utils";
+    nvimRequireCheck = "advanced_git_search.utils";
   };
 
   animation-nvim = super.animation-nvim.overrideAttrs {
