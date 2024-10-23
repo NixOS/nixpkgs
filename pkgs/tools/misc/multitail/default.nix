@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "7.1.3";
+  version = "7.1.5";
   pname = "multitail";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4iAFxDAS3gthYPECzyFj0AKzIGwZ9hTJ96fCnQGLbXU=";
+    hash = "sha256-c9NlQLgHngNBbADZ6/legWFaKHJAQR/LZIfh8bJoc4Y=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -16,8 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/multitail $out/bin
+    runHook preInstall
+
+    install -Dm755 multitail -t $out/bin/
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];
