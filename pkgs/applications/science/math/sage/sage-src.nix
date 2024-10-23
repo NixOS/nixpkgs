@@ -74,11 +74,18 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # https://github.com/sagemath/sage/pull/38500, positively reviewed, to land in 10.5.beta3
+    # https://github.com/sagemath/sage/pull/38500, landed in 10.5.beta3
     (fetchpatch {
       name = "cython-3.0.11-upgrade.patch";
       url = "https://patch-diff.githubusercontent.com/raw/sagemath/sage/pull/38500.diff";
       hash = "sha256-ePfH3Gy1T0UfpoVd3EZowCfy88CbE+yE2MV2itWthsA=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38804, positively reviewed, to land in 10.5.beta7
+    (fetchpatch {
+      name = "gap-4.13.1-upgrade.patch";
+      url = "https://github.com/vbraun/sage/commit/a118f51cd25e44936ca2c180d5f0419c87bfe68d.diff";
+      hash = "sha256-WeRbuyZqe8DCN0POu7K3uOpLS16Po9vlD0+SluIL5gk=";
     })
   ];
 
