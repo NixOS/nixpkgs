@@ -20,7 +20,7 @@ let
     k stdenvSelf mkDerivationSuper;
 
   # Wrap the original `mkDerivation` providing extra args to it.
-  extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
+  extendMkDerivationArgs' = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
     (mkDerivationSuper args).overrideAttrs f);
 
   # Wrap the original `mkDerivation` transforming the result.
@@ -120,9 +120,7 @@ rec {
 
   # Return a modified stdenv that builds static libraries instead of
   # shared libraries.
-  makeStaticLibraries = stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+  makeStaticLibraries = extendMkDerivationArgs (args: {
         dontDisableStatic = true;
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
@@ -132,7 +130,6 @@ rec {
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
-    });
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
@@ -171,12 +168,22 @@ rec {
   /* Modify a stdenv so that all buildInputs are implicitly propagated to
      consuming derivations
   */
-  propagateBuildInputs = stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+  propagateBuildInputs = extendMkDerivationArgs (args: {
         propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
         buildInputs = [];
-      });
+  });
+
+  /* Modify a stdenv so as to extend `mkDerivation`'s arguments.
+     A stronger version of `addAttrsToDerivation`.
+
+     Example:
+      requestCcache = extendMkDerivationArgs
+        (oldAttrs: { requiredSysteFeatures = oldAttrs.requiredSysteFeatures or [ ] ++ [ "ccache" ]; });
+  */
+  extendMkDerivationArgs =
+    extension: stdenv:
+    stdenv.override (old: {
+      mkDerivationFromStdenv = extendMkDerivationArgs' old extension;
     });
 
 
@@ -189,13 +196,11 @@ rec {
            { env.NIX_CFLAGS_COMPILE = "-O0"; }
            stdenv;
   */
-  addAttrsToDerivation = extraAttrs: stdenv: stdenv.override (old: {
-    mkDerivationFromStdenv = extendMkDerivationArgs old (_: extraAttrs);
-  });
+  addAttrsToDerivation = extraAttrs: extendMkDerivationArgs (_: extraAttrs);
 
 
   /* Use the trace output to report all processed derivations with their
-     license name.
+     licen:se name.
   */
   traceDrvLicenses = stdenv:
     stdenv.override (old: {
@@ -218,7 +223,7 @@ rec {
      disabled. */
   keepDebugInfo = stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
         dontStrip = true;
         env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og"; };
       });
@@ -228,7 +233,7 @@ rec {
   /* Modify a stdenv so that it uses the Gold linker. */
   useGoldLinker = stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
         NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     });
@@ -278,7 +283,7 @@ rec {
       # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
       # https://github.com/rui314/mold#how-to-use
       } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
-        mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+        mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
           NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
         });
       });
@@ -289,7 +294,7 @@ rec {
      WARNING: this breaks purity! */
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
         env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native"; };
 
         NIX_ENFORCE_NO_NATIVE = false;
@@ -315,7 +320,7 @@ rec {
   */
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
         env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
     });
@@ -328,7 +333,8 @@ rec {
   # * A version string indicating the requested SDK version; or
   # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
   overrideSDK = import ./darwin/override-sdk.nix {
-    inherit lib extendMkDerivationArgs;
+    extendMkDerivationArgs = extendMkDerivationArgs';
+    inherit lib;
     inherit (pkgs)
       stdenvNoCC
       pkgsBuildBuild
