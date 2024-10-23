@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
-  version = "0.3";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
+    sha256 = "sha256-Zdp5zPeT3Cg/7uUG9WIZEFP1T11W6orQ9fEPljCk1H8=";
   };
 
   pythonPath = with python3Packages; [ enum-compat i3ipc docopt ];
