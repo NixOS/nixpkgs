@@ -37,6 +37,7 @@ let
   serverSettingsString = builtins.toJSON (lib.filterAttrsRecursive (n: v: v != null) serverSettings);
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
   serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
+  serverWhitelistFile = pkgs.writeText "server-whitelist.json" (builtins.toJSON cfg.whitelist);
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {
@@ -65,6 +66,15 @@ in
         example = [ "username" ];
         description = ''
           List of player names which will be admin.
+        '';
+      };
+
+      whitelist = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        example = [ "username" ];
+        description = ''
+          List of players who will be allowed to access the server. Leave empty to allow access to everyone.
         '';
       };
 
@@ -299,6 +309,8 @@ in
           (lib.optionalString cfg.loadLatestSave "--start-server-load-latest")
           (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
           (lib.optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
+          (lib.optionalString (cfg.whitelist != []) "--use-server-whitelist")
+          (lib.optionalString (cfg.whitelist != []) "--server-whitelist=${serverWhitelistFile}")
         ];
 
         # Sandboxing
