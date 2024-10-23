@@ -1,6 +1,6 @@
 # versionCheckHook {#versioncheckhook}
 
-This hook adds a `versionCheckPhase` to the [`preInstallCheckHooks`](#ssec-installCheck-phase) that runs the main program of the derivation with a `--help` or `--version` argument, and checks that the `${version}` string is found in that output. You use it like this:
+This hook adds a `versionCheckPhase` to the [`preInstallCheckHooks`](#ssec-installCheck-phase) that runs the main program of the derivation with a `--help` or `--version` argument, and checks that the `${version}` string is found in that output. If the test fails then the whole build will fail. You use it like this:
 
 ```nix
 {
@@ -33,3 +33,5 @@ The variables that this phase control are:
 - `versionCheckProgramArg`: The argument that needs to be passed to `versionCheckProgram`. If undefined the hook tries first `--help` and then `--version`. Examples: `version`, `-V`, `-v`.
 - `preVersionCheck`: A hook to run before the check is done.
 - `postVersionCheck`: A hook to run after the check is done.
+
+NOTE: If you want the version check to be a sanity test rather than a build blocker, then [`testers.testVersion`](#tester-testVersion) is preferred. This will for example better accommodate precarious or frenetic upstreams.

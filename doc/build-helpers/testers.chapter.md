@@ -169,7 +169,7 @@ The build will fail if `shellcheck` finds any issues.
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+NOTE: If you want a version check failure to trigger a build failure, then [`versionCheckHook`](#versioncheckhook) is preferred. The motivation for adding either tests would be:
 
 - Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
 - Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
