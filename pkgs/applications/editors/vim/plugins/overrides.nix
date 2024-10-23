@@ -235,8 +235,7 @@ in
       plenary-nvim
       telescope-nvim
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "chatgpt";
+    nvimRequireCheck = "chatgpt";
   };
 
   clang_complete = super.clang_complete.overrideAttrs {
