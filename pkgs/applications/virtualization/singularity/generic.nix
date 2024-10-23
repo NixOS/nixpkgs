@@ -132,10 +132,6 @@ let
     lib.optional (privileged-un-utils != null) (lib.makeBinPath [ privileged-un-utils ])
     ++ args.systemBinPaths or [ "/run/wrappers/bin" ];
 
-  concatMapStringAttrsSep =
-    sep: f: attrs:
-    lib.concatMapStringsSep sep (name: f name attrs.${name}) (lib.attrNames attrs);
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
@@ -240,7 +236,7 @@ in
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
 
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    ${concatMapStringAttrsSep "\n" (fileName: originalDefaultPaths: ''
+    ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
         ${
           lib.concatMapStringsSep " \\\n  " (
