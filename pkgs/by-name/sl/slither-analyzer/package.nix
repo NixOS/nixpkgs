@@ -1,45 +1,40 @@
 {
+  slither-analyzer,
   lib,
-  nix-update-script,
-  buildPythonPackage,
-  crytic-compile,
-  fetchFromGitHub,
   makeWrapper,
-  packaging,
-  prettytable,
-  pythonOlder,
-  setuptools-scm,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
   solc,
-  web3,
   withSolc ? false,
   testers,
-  slither-analyzer,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "slither-analyzer";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
+    hash = "sha256-UtpeE5tICBbK7TR9ZnwNYfPVNUOSkhUh2qnVQO21SYs=";
   };
 
   nativeBuildInputs = [
     makeWrapper
+  ];
+
+  build-system = with python3Packages; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     crytic-compile
+    web3
     packaging
     prettytable
-    web3
   ];
 
   postFixup = lib.optionalString withSolc ''
