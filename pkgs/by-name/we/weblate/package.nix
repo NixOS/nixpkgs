@@ -15,9 +15,7 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5.overridePythonAttrs (old: {
-        dependencies = old.dependencies ++ prev.django_5.optional-dependencies.argon2;
-      });
+      django = prev.django_5;
       sentry-sdk = prev.sentry-sdk_2;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
@@ -28,9 +26,11 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.7.2";
+  version = "5.8.1";
 
   pyproject = true;
+
+  disabled = python.pythonOlder "3.11";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     rev = "refs/tags/weblate-${version}";
-    hash = "sha256-cIwCNYXbg7l6z9OAkMAGJ783QI/nCOyrhLPURDcDv+Y=";
+    hash = "sha256-NEz1VYtJ+Rjbih7a6kDv/MFcgWePM6baUYuHr1ym44k=";
   };
 
   pythonRelaxDeps = [
@@ -91,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
       cssselect
       cython
       cyrtranslit
+      dateparser
       diff-match-patch
       django-appconf
       django-celery-beat
@@ -103,6 +104,7 @@ python.pkgs.buildPythonApplication rec {
       django-otp-webauthn
       django
       djangorestframework
+      drf-spectacular
       filelock
       fluent-syntax
       gitpython
@@ -140,8 +142,10 @@ python.pkgs.buildPythonApplication rec {
       weblate-language-data
       weblate-schemas
     ]
+    ++ django.optional-dependencies.argon2
     ++ python-redis-lock.optional-dependencies.django
-    ++ celery.optional-dependencies.redis;
+    ++ celery.optional-dependencies.redis
+    ++ drf-spectacular.optional-dependencies.sidecar;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
