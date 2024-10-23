@@ -11279,8 +11279,6 @@ self: super: with self; {
 
   py3status = callPackage ../development/python-modules/py3status { };
 
-  py3to2 = callPackage ../development/python-modules/3to2 { };
-
   py4j = callPackage ../development/python-modules/py4j { };
 
   pyacaia-async = callPackage ../development/python-modules/pyacaia-async { };
