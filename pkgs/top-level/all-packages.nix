@@ -28316,8 +28316,6 @@ with pkgs;
 
   buzztrax = callPackage ../applications/audio/buzztrax { };
 
-  brave = callPackage ../applications/networking/browsers/brave { };
-
   break-time = callPackage ../applications/misc/break-time { };
 
   breezy = with python3Packages; toPythonApplication breezy;
