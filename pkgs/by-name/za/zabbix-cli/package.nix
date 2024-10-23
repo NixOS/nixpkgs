@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-It0SVbGNIxf2i4gleqVRAZCIks/Tf/WYSAgipOC+HwE=";
+    hash = "sha256-hvLtc6owEOD29Y1oC7EmOOFp9P8hWOuj9N7qhtqkpks=";
   };
 
   pythonRelaxDeps = [ "click-repl" ];
