@@ -7,9 +7,20 @@
 , python3
 , ocamlPackages
 , makeWrapper
+, gpr2
 }:
 let
   gnat_version = lib.versions.major gnat.version;
+
+  # gnatprove fsf-14 requires gpr2 from a special branch
+  gpr2_24_2_next = gpr2.overrideAttrs(old: {
+    src = fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "gpr";
+      rev = "24.2-next";
+      hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
+    };
+  });
 
   fetchSpark2014 = { rev, hash } : fetchFromGitHub {
     owner = "AdaCore";
@@ -33,6 +44,16 @@ let
       };
       commit_date = "2023-01-05";
     };
+    "14" = {
+      src = fetchSpark2014 {
+        rev = "ce5fad038790d5dc18f9b5345dc604f1ccf45b06";
+        hash = "sha256-WprJJIe/GpcdabzR2xC2dAV7kIYdNTaTpNYoR3UYTVo=";
+      };
+      patches = [
+        ./0001-fix-install.patch
+      ];
+      commit_date = "2024-01-11";
+    };
   };
 
   thisSpark = spark2014.${gnat_version} or
@@ -45,24 +66,35 @@ stdenv.mkDerivation rec {
 
   src = thisSpark.src;
 
+  patches = thisSpark.patches or [];
+
   nativeBuildInputs = [
     gnat
     gprbuild
     python3
-    ocamlPackages.ocaml
     makeWrapper
-  ];
+  ] ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
   buildInputs = [
     gnatcoll-core
-    ocamlPackages.camlzip
-    ocamlPackages.findlib
-    ocamlPackages.menhir
-    ocamlPackages.menhirLib
-    ocamlPackages.num
-    ocamlPackages.yojson
-    ocamlPackages.zarith
-  ];
+  ] ++ (with ocamlPackages; [
+    ocamlgraph
+    zarith
+    ppx_deriving
+    ppx_sexp_conv
+    camlzip
+    menhirLib
+    num
+    re
+    sexplib
+    yojson
+  ]) ++ (lib.optionals (gnat_version == "14")[
+    gpr2_24_2_next
+  ]);
 
   propagatedBuildInputs = [
     gprbuild
