@@ -45,9 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebsockets
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.meta.mainProgram} --version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.meta.mainProgram} --version";
+    };
+    updateScript = gitUpdater { };
   };
 
   meta = {
