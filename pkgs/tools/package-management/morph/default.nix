@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "morph";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    hash = "sha256-0CHmjqPxBgALGZYjfJFLoLBnoI0U7oZ8WyCtu1bkzZg=";
+    hash = "sha256-IqWtVklzSq334cGgLx/13l329g391oDW50MZWyO6l08=";
   };
 
-  vendorHash = "sha256-KV+djwUYNfD7NqmYkanRVeKj2lAGfMjJhCUSRiC4/yM=";
+  vendorHash = "sha256-zQlMtbXgrH83zrcIoOuFhb2tYCeQ1pz4UQUvRIsLMCE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
