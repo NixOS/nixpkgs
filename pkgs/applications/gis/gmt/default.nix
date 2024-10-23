@@ -106,7 +106,7 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ tviti ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ tviti ]);
   };
 
 })

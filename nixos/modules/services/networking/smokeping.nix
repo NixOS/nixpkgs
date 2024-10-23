@@ -375,8 +375,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    erictapen
-    nh2
-  ];
+  meta.maintainers = with lib.maintainers; [ nh2 ];
 }

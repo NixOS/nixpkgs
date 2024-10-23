@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, wayland
-, wayland-protocols
-, wayland-scanner
-, hyprlang
-, sdbus-cpp
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  hyprutils,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  hyprlang,
+  sdbus-cpp_2,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7Ft5WZTMIjXOGgRCf31DZBwK6RK8xkeKlD5vFXz3gII=";
+    hash = "sha256-20a3pg94dyLFflbBIN+EYJ04nWfWldTfd2YmB/rcrqY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprlang
-    sdbus-cpp
+    hyprutils
+    sdbus-cpp_2
     systemd
     wayland
     wayland-protocols
@@ -42,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ iogamaster ];
     mainProgram = "hypridle";
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 })

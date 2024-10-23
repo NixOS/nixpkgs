@@ -149,8 +149,7 @@ in
       vim-fugitive
       vim-rhubarb
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "advanced_git_search.utils";
+    nvimRequireCheck = "advanced_git_search.utils";
   };
 
   animation-nvim = super.animation-nvim.overrideAttrs {
@@ -236,8 +235,7 @@ in
       plenary-nvim
       telescope-nvim
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "chatgpt";
+    nvimRequireCheck = "chatgpt";
   };
 
   clang_complete = super.clang_complete.overrideAttrs {
@@ -1588,8 +1586,7 @@ in
       nvim-lspconfig
       nvim-navic
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "nvim-navbuddy";
+    nvimRequireCheck = "nvim-navbuddy";
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
@@ -1675,6 +1672,10 @@ in
   );
 
   nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
+
+  nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
+    nvimRequireCheck = "treesitter-sexp";
+  };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
     dependencies = with self; [ promise-async ];
@@ -2761,8 +2762,6 @@ in
       "coc-tabnine"
       "coc-texlab"
       "coc-toml"
-      "coc-tslint"
-      "coc-tslint-plugin"
       "coc-tsserver"
       "coc-ultisnips"
       "coc-vetur"

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "athens";
-  version = "0.15.2";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     rev = "v${version}";
-    hash = "sha256-Ikm9nznJhd5ZrkJyh3ny1SZeuWVs5xgT4fpWKhVbuDA=";
+    hash = "sha256-iRuy3z5GCsuTnIQuPkzyTvMSMlYTqf3Do7uqgERTXn0=";
   };
 
   vendorHash = "sha256-cK23BIGh/BK1OHHrI++PD1h7lCN7NZfV1Yfirs8vC5A=";
