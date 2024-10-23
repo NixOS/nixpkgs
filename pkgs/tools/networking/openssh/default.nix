@@ -58,12 +58,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.8p1";
+    version = "9.9p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
+      hash = "sha256-s0P7zb/4fxWxmG5uFdbU/Jp9NgZr5rf7UHCHuo+WbAI=";
     };
 
     extraPatches = [
@@ -71,8 +71,8 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-3/debian/patches/gssapi.patch";
-        hash = "sha256-BnmEZ5pMIbbysesMSm54ykdweH4JudM9D4Pn5uWf3EY=";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+        hash = "sha256-cQF5psMZpLWwVqK9CNi+Q8wHn6w6ffQUJRNI5jKGgD0=";
       })
     ];
 
