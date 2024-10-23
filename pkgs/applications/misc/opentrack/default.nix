@@ -17,6 +17,7 @@
   libevdev,
   makeDesktopItem,
   fetchurl,
+  fetchpatch,
 }: let
   version = "2023.3.0";
 
@@ -41,7 +42,10 @@ in
 
     patches = [
       # https://github.com/opentrack/opentrack/pull/1754
-      ./0001-fix-wine-no-wrapper.patch
+      (fetchpatch {
+        url = "https://github.com/opentrack/opentrack/commit/d501d7e0b237ed0c305525788b423d842ffa356d.patch";
+        hash = "sha256-XMGHV78vt/Xn3hS+4V//pqtsdBQCfJPjIXxfwtdXX+Q=";
+      })
     ];
 
     nativeBuildInputs = [cmake pkg-config ninja copyDesktopItems];
