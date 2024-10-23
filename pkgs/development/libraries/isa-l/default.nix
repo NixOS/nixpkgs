@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, nasm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
   version = "2.31.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xBBtpjtWyba0DogdLobtuWmiiAHTXMK4oRnjYuTUCNk=";
   };
 
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     export AS=nasm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of optimised low-level functions targeting storage applications";
     mainProgram = "igzip";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/intel/isa-l";
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # does not build on M1 mac (asm/hwcap.h file not found) maybe needs gcc not clang?
   };
-}
+})
