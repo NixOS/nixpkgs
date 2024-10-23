@@ -10,19 +10,13 @@ buildGoModule {
     src
     ;
 
-  sourceRoot = "${mullvad.src.name}/wireguard/libwg";
+  modRoot = "wireguard-go-rs/libwg";
+  proxyVendor = true;
+  vendorHash = "sha256-uyAzY1hoCtS7da3wtjxTGx5wBb9c9m749TzihVr94rc=";
 
-  vendorHash = "sha256-gaU3na3sjzM6lvmsGRkuGtV2AHvkl6IgzmyGx3R5ZpM=";
-
-  # XXX: hack to make the ar archive go to the correct place
-  # This is necessary because passing `-o ...` to `ldflags` does not work
-  # (this doesn't get communicated everywhere in the chain, apparently, so
-  # `go` complains that it can't find an `a.out` file).
-  GOBIN = "${placeholder "out"}/lib";
-  ldflags = [ "-s" "-w" "-buildmode=c-archive" ];
-
-  patches = [
- ];
+  subPackages = [ "." ];
+  ldflags = [ "-s" "-w" "-buildmode=c-archive" "-o" "${placeholder "out"}/lib" ];
+  tags = [ "daita" ];
 
   postInstall = ''
     mv $out/lib/libwg{,.a}
@@ -30,7 +24,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Tiny wrapper around wireguard-go";
-    homepage = "https://github.com/mullvad/mullvadvpn-app/tree/main/wireguard/libwg";
+    homepage = "https://github.com/mullvad/mullvadvpn-app/tree/main/wireguard-go-rs/libwg";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cole-h ];
   };
