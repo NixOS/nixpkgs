@@ -335,8 +335,14 @@ let
 
     renewService = lockfileName: {
       description = "Renew ACME certificate for ${cert}";
+      # stop conflicting services while certs are renewed
       conflicts = data.conflictingServices;
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      # start conflicting services again after cert renewal
+      # This causes systemd to issue a warning 'multiple trigger source candidates for exit status propagation',
+      # but this is more robust and not prone to race conditions as invoking systemctl in ExecStartPost/ExecStopPost
+      onSuccess = data.conflictingServices;
+      onFailure = data.conflictingServices;
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ data.conflictingServices ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
       wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
@@ -387,13 +393,6 @@ let
             }
           fi
         '');
-
-        # Start conflicting services after finishing
-        # TODO: How to start only if they were actually running and stopped for cert renewal?
-        ExecStopPost = lib.optionalString
-          (data.conflictingServices != [])
-          # Run as root (Prefixed with +)
-          "+systemctl --no-block restart ${lib.escapeShellArgs data.conflictingServices}";
       } // (
         let
           needsToOpenPrivilegedPort =
