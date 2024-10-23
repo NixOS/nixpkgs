@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gengetopt
-, glib, libconfig, libnice, jansson, boringssl, zlib, srtp, libuv
-, libmicrohttpd, curl, libwebsockets, sofia_sip, libogg, libopus
-, usrsctp, ffmpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gengetopt,
+  glib,
+  libconfig,
+  libnice,
+  jansson,
+  boringssl,
+  zlib,
+  srtp,
+  libuv,
+  libmicrohttpd,
+  curl,
+  libwebsockets,
+  sofia_sip,
+  libogg,
+  libopus,
+  usrsctp,
+  ffmpeg,
 }:
 
 let
@@ -24,11 +43,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3o9XxxTlWppq1mFgIUjstUFz6bT44mvBJa4FBgcc4Pc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config gengetopt ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gengetopt
+  ];
 
   buildInputs = [
-    glib libconfig libnice jansson boringssl zlib srtp libuv libmicrohttpd
-    curl libwebsockets_janus sofia_sip libogg libopus usrsctp ffmpeg
+    glib
+    libconfig
+    libnice
+    jansson
+    boringssl
+    zlib
+    srtp
+    libuv
+    libmicrohttpd
+    curl
+    libwebsockets_janus
+    sofia_sip
+    libogg
+    libopus
+    usrsctp
+    ffmpeg
   ];
 
   enableParallelBuilding = true;
@@ -49,7 +86,12 @@ stdenv.mkDerivation rec {
     "CCLD=${stdenv.cc.targetPrefix}c++"
   ];
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   postInstall = ''
     moveToOutput share/janus "$doc"
