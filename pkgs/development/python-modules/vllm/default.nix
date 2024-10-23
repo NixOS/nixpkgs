@@ -69,11 +69,28 @@ let
     sha256 = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
   };
 
-  vllm-flash-attn = fetchFromGitHub {
-    owner = "vllm-project";
-    repo = "flash-attention";
-    rev = "013f0c4fc47e6574060879d9734c1df8c5c273bd";
-    sha256 = "sha256-5wYPIO9QgqpBqoL/L6dJKaSllgwldu9OeNRutDgcXvs=";
+  vllm-flash-attn = stdenv.mkDerivation {
+    pname = "vllm-flash-attn";
+    version = "2.6.2-unstable-2024-09-21";
+
+    src = fetchFromGitHub {
+      owner = "vllm-project";
+      repo = "flash-attention";
+      rev = "013f0c4fc47e6574060879d9734c1df8c5c273bd";
+      sha256 = "sha256-5wYPIO9QgqpBqoL/L6dJKaSllgwldu9OeNRutDgcXvs=";
+    };
+
+    dontConfigure = true;
+
+    # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass
+    buildPhase = ''
+      rm -rf csrc/cutlass
+      ln -sf ${cutlass} csrc/cutlass
+    '';
+
+    installPhase = ''
+      cp -rva . $out
+    '';
   };
 
   cpuSupport = !cudaSupport && !rocmSupport;
@@ -127,6 +144,7 @@ buildPythonPackage rec {
     substituteInPlace requirements*.txt pyproject.toml \
       --replace-warn 'torch==2.4.0' 'torch==${lib.getVersion torch}' \
       --replace-warn 'torch == 2.4.0' 'torch == ${lib.getVersion torch}' \
+    
   '';
 
   nativeBuildInputs = [
@@ -210,21 +228,22 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
     (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
+  ] ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
       name = "cuda-merged-${cudaPackages.cudaVersion}";
       paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
     }}")
-  ] ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")
     (lib.cmakeFeature "CAFFE2_USE_CUFILE" "ON")
     (lib.cmakeFeature "CUTLASS_ENABLE_CUBLAS" "ON")
+  ] ++ lib.optionals cpuSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
   ];
 
   env =
     lib.optionalAttrs cudaSupport {
       VLLM_TARGET_DEVICE = "cuda";
-      # CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
