@@ -9,6 +9,10 @@ in
     (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
   ];
 
+  meta = {
+    maintainers = [ lib.maintainers.kjeremy ];
+  };
+
   options.virtualisation.vmware.guest = {
     enable = mkEnableOption "VMWare Guest Support";
     headless = mkOption {
