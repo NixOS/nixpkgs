@@ -1,4 +1,5 @@
 {
+  pkgs,
   mkDerivation,
   lib,
   callPackage,
@@ -18,6 +19,7 @@
   makeDesktopItem,
   fetchurl,
   fetchpatch,
+  wineWowPackages,
 }: let
   version = "2023.3.0";
 
@@ -49,15 +51,18 @@ in
     ];
 
     nativeBuildInputs = [cmake pkg-config ninja copyDesktopItems];
-    buildInputs = [qtbase qttools opencv4 procps eigen libXdmcp libevdev aruco];
+    buildInputs = [qtbase qttools opencv4 procps eigen libXdmcp libevdev aruco]
+      ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
 
     env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
     dontWrapQtApps = true;
 
     cmakeFlags = [
+      "-GNinja"
+      "-DCMAKE_BUILD_TYPE=Release"
       "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
       "-DSDK_XPLANE=${xplaneSdk}"
-    ];
+    ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ "-DSDK_WINE=ON" ];
 
     postInstall = ''
       wrapQtApp $out/bin/opentrack
