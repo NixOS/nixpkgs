@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "alloy";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tidev";
     repo = "alloy";
     rev = version;
-    hash = "sha256-s1hAbbUy7k/GacBIk8OMD48/1IUcRcpV3LnrCCZim1A=";
+    hash = "sha256-OQfZNmrR+aPS/s+h1Wy2zGqe6djD0PCltFh5KtdfDWg=";
   };
 
-  npmDepsHash = "sha256-YNyFrO6+oFluyk3TlUf/0vdHrgTJ3l5DN801wnpBa6s=";
+  npmDepsHash = "sha256-Rd4UpflYD90QYwBof91WUO6XwNgsLuXITH35G0lspz0=";
 
   dontNpmBuild = true;
 
