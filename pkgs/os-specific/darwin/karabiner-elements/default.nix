@@ -41,9 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = ".";
 
   postPatch = ''
-    for f in *.pkg/Library/Launch{Agents,Daemons}/*.plist; do
-      substituteInPlace $f \
-        --replace "/Library/" "$out/Library/"
+    shopt -s globstar
+    for f in *.pkg/Library/**/Launch{Agents,Daemons}/*.plist; do
+      substituteInPlace "$f" \
+        --replace-fail "/Library/" "$out/Library/"
     done
   '';
 
