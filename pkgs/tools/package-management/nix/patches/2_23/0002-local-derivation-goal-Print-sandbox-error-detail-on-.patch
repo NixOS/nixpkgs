@@ -1,0 +1,34 @@
+From c43954ffac356b4168cbcfe2a67b4bad3f0dff5d Mon Sep 17 00:00:00 2001
+From: Robert Hensing <robert@roberthensing.nl>
+Date: Thu, 3 Oct 2024 12:44:12 +0200
+Subject: [PATCH 2/4] local-derivation-goal: Print sandbox error detail on
+ darwin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-Authored-By: Théophane Hufschmitt <theophane.hufschmitt@tweag.io>
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libstore/unix/build/local-derivation-goal.cc | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/libstore/unix/build/local-derivation-goal.cc b/src/libstore/unix/build/local-derivation-goal.cc
+index 878644fa5..0df1f0683 100644
+--- a/src/libstore/unix/build/local-derivation-goal.cc
++++ b/src/libstore/unix/build/local-derivation-goal.cc
+@@ -2137,8 +2137,9 @@ void LocalDerivationGoal::runChild()
+                 sandboxArgs.push_back("_ALLOW_LOCAL_NETWORKING");
+                 sandboxArgs.push_back("1");
+             }
+-            if (sandbox_init_with_parameters(sandboxProfile.c_str(), 0, stringsToCharPtrs(sandboxArgs).data(), NULL)) {
+-                writeFull(STDERR_FILENO, "failed to configure sandbox\n");
++            char * sandbox_errbuf = nullptr;
++            if (sandbox_init_with_parameters(sandboxProfile.c_str(), 0, stringsToCharPtrs(sandboxArgs).data(), &sandbox_errbuf)) {
++                writeFull(STDERR_FILENO, fmt("failed to configure sandbox: %s\n", sandbox_errbuf ? sandbox_errbuf : "(null)"));
+                 _exit(1);
+             }
+         }
+-- 
+2.46.1
+

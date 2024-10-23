@@ -178,42 +178,85 @@ in lib.makeExtensible (self: ({
     version = "2.18.8";
     hash = "sha256-0rHRifdjzzxMh/im8pRx6XoY62irDTDUes+Pn0CR65I=";
     self_attribute_name = "nix_2_18";
+    patches = [
+      ./patches/2_18/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_18/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_18/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_18/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_19 = common {
     version = "2.19.6";
     hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
     self_attribute_name = "nix_2_19";
+    patches = [
+      ./patches/2_19/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_19/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_19/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_19/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_20 = common {
     version = "2.20.8";
     hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
     self_attribute_name = "nix_2_20";
+    patches = [
+      ./patches/2_20/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_20/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_20/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_20/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_21 = common {
     version = "2.21.4";
     hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
     self_attribute_name = "nix_2_21";
+    patches = [
+      ./patches/2_21/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_21/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_21/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_21/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_22 = common {
     version = "2.22.3";
     hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
     self_attribute_name = "nix_2_22";
+    patches = [
+      ./patches/2_22/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_22/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_22/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_22/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_23 = common {
     version = "2.23.3";
     hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
     self_attribute_name = "nix_2_23";
+    patches = [
+      ./patches/2_23/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_23/0002-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_23/0003-local-derivation-goal-Refactor.patch
+      ./patches/2_23/0004-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   };
 
   nix_2_24 = (common {
     version = "2.24.9";
     hash = "sha256-OwJByTdCz1t91ysBqynK+ifszkoIGEXUn6HE2t82+c8=";
     self_attribute_name = "nix_2_24";
+    patches = [
+      ./patches/2_24/0001-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+      ./patches/2_24/0002-packaging-Add-darwin-lsandbox-in-meson.patch
+      ./patches/2_24/0003-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+      ./patches/2_24/0004-local-derivation-goal-Refactor.patch
+      ./patches/2_24/0005-local-derivation-goal-Move-builder-preparation-to-no.patch
+    ];
   }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
     #
@@ -234,6 +277,14 @@ in lib.makeExtensible (self: ({
       rev = "ca3fc1693b309ab6b8b0c09408a08d0055bf0363";
       hash = "sha256-Hp7dkx7zfB9a4l5QusXUob0b1T2qdZ23LFo5dcp3xrU=";
     };
+   patches = [
+     ./patches/git/0001-Fix-meson-build-on-darwin.patch
+     ./patches/git/0002-fix-Run-all-derivation-builders-inside-the-sandbox-o.patch
+     ./patches/git/0003-packaging-Add-darwin-lsandbox-in-meson.patch
+     ./patches/git/0004-local-derivation-goal-Print-sandbox-error-detail-on-.patch
+     ./patches/git/0005-local-derivation-goal-Refactor.patch
+     ./patches/git/0006-local-derivation-goal-Move-builder-preparation-to-no.patch
+   ];
     self_attribute_name = "git";
   }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
