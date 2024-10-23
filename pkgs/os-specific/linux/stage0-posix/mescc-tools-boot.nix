@@ -28,7 +28,7 @@
 # Objdump, you may need to use ndism or gdb to view the assembly in the binary.
 
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , hostPlatform
 , hex0
 , m2libc
@@ -47,7 +47,7 @@ rec {
   bloodFlags = lib.optional hostPlatform.is64bit "--64";
 
   run = pname: builder: args:
-    derivationWithMeta {
+    minimal-bootstrap.derivationWithMeta {
       inherit pname version builder args;
 
       meta = with lib; {
