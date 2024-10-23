@@ -9,6 +9,9 @@
   boringssl,
   libiconv,
   SystemConfiguration,
+  patchelf,
+  gcc-unwrapped,
+  python,
 }:
 
 let
@@ -21,21 +24,21 @@ let
   '';
 in
 buildPythonPackage rec {
-  pname = "pyreqwest-impersonate";
-  version = "0.4.9";
+  pname = "primp";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
-    repo = "pyreqwest_impersonate";
-    rev = "v${version}";
-    hash = "sha256-U22NNYN8p3IQIAVb6dOrErFvuJ5m5yXi2ELbyuaNlFc=";
+    repo = "primp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wCD99eEU4RW8kUJY72cXhJh5124PVd6kJt+HZjm/hFI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-rj9tfOzhzfWBoxBGlTXHAmiH5qxyoLnHhlEijy/q+Ws=";
+    hash = "sha256-iY6TSc7GU6OWVUpW6qpwH4g9/eGKhP/YZ5PQoO8NmVc=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +46,11 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  # TODO: Can we improve this?
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    ${lib.getExe patchelf} --add-rpath ${lib.getLib gcc-unwrapped.lib} --add-needed libstdc++.so.6 $out/${python.sitePackages}/primp/primp.abi3.so
+  '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -58,11 +66,12 @@ buildPythonPackage rec {
   # Test use network
   doCheck = false;
 
-  pythonImportsCheck = [ "pyreqwest_impersonate" ];
+  pythonImportsCheck = [ "primp" ];
 
   meta = {
-    description = "HTTP client that can impersonate web browsers (Chrome/Edge/OkHttp/Safari), mimicking their headers and TLS/JA3/JA4/HTTP2 fingerprints";
-    homepage = "https://github.com/deedy5/pyreqwest_impersonate";
+    changelog = "https://github.com/deedy5/primp/releases/tag/${version}";
+    description = "PRIMP (Python Requests IMPersonate). The fastest python HTTP client that can impersonate web browsers.";
+    homepage = "https://github.com/deedy5/primp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
   };

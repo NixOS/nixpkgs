@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodbus";
-  version = "3.1.10";
+  version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "stephane";
     repo = "libmodbus";
     rev = "v${version}";
-    hash = "sha256-e2lB5D41a5MOmz9M90ZXfIltSOxNDOrQUpRNU2yYd1k=";
+    hash = "sha256-d/diR9yeV0WY0C6wqxYZfOjEKFeWTvN73MxcWtXPOJc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
