@@ -2,20 +2,13 @@
   buildGoModule,
   version,
   src,
-  extraSources,
 }:
 
 buildGoModule rec {
   pname = "nekobox-core";
   inherit version src;
-  sourceRoot = "${src.name}/go/cmd/nekobox_core";
 
-  postPatch = ''
-    cp -r --no-preserve=all ${extraSources.libneko} ../../../../libneko
-    cp -r --no-preserve=all ${extraSources.sing-box-extra} ../../../../sing-box-extra
-    cp -r --no-preserve=all ${extraSources.sing-box} ../../../../sing-box
-    cp -r --no-preserve=all ${extraSources.sing-quic} ../../../../sing-quic
-  '';
+  sourceRoot = "${src.name}/nekoray/go/cmd/nekobox_core";
 
   vendorHash = "sha256-q/Co67AwJVElJnEY2O0SLLUzwlGiqazKu+fD/nnbrTk=";
 
