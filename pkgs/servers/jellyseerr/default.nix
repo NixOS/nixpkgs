@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,libexec}
-    cp -r {.next,config,dist,node_modules,overseerr-api.yml,package.json} $out/libexec
+    cp -r {.next,config,dist,node_modules,overseerr-api.yml,package.json,public} $out/libexec
     runHook postInstall
   '';
 
