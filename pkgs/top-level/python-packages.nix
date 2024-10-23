@@ -10079,11 +10079,6 @@ self: super: with self; {
 
   pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
 
-  pillow-simd = callPackage ../development/python-modules/pillow-simd {
-      inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
-      inherit (pkgs.xorg) libX11;
-  };
-
   pims = callPackage ../development/python-modules/pims { };
 
   pinboard = callPackage ../development/python-modules/pinboard { };
