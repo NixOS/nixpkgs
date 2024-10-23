@@ -7,7 +7,7 @@
   testers, xunit-viewer,
 }:
 let
-  version = "10.6.1";
+  version = "10.1.1";
 in
 buildNpmPackage {
   pname = "xunit-viewer";
@@ -17,10 +17,10 @@ buildNpmPackage {
     owner = "lukejpreston";
     repo = "xunit-viewer";
     rev = "v${version}";
-    hash = "sha256-n9k1Z/wofExG6k/BxtkU8M+Lo3XdCgCh8VFj9jcwL1Q=";
+    hash = "sha256-RTUzx8/fwqNvX+zRdkijRI5gr7h1kWZ268vpIdAC3pw=";
   };
 
-  npmDepsHash = "sha256-6PV0+G1gzUWUjOfwRtVeALVFFiwkCAB33yB9W0PCGfc=";
+  npmDepsHash = "sha256-ahDgrN9y3v418m5n4lA15dCqWpBDecgiafvZRzo4w2c=";
 
   passthru.updateScript = nix-update-script { };
 
