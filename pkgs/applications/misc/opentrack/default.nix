@@ -37,7 +37,7 @@ in
       owner = "opentrack";
       repo = "opentrack";
       rev = "opentrack-${version}";
-      sha256 = "sha256-C0jLS55DcLJh/e5yM8kLG7fhhKvBNllv5HkfCWRIfc4=";
+      hash = "sha256-C0jLS55DcLJh/e5yM8kLG7fhhKvBNllv5HkfCWRIfc4=";
     };
 
     patches = [
@@ -69,7 +69,7 @@ in
         exec = "opentrack";
         icon = fetchurl {
           url = "https://github.com/opentrack/opentrack/raw/opentrack-${version}/gui/images/opentrack.png";
-          sha256 = "0d114zk78f7nnrk89mz4gqn7yk3k71riikdn29w6sx99h57f6kgn";
+          hash = "sha256-9k3jToEpdW14ErbNGHM4c0x/LH7k14RmtvY4dOYnITQ=";
         };
         desktopName = name;
         genericName = "Head tracking software";
