@@ -3446,6 +3446,8 @@ self: super: with self; {
 
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
 
+  django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
+
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
