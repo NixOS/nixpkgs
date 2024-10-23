@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "obfs4";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -12,18 +12,20 @@ buildGoModule rec {
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
     rev = "lyrebird-${version}";
-    hash = "sha256-2qBSmAsaR3hfxuoR5U5UAFQAepUOEUnIGoxc/GZ5LmY=";
+    hash = "sha256-aPALWvngC/BVQO73yUAykHvEb6T0DZcGMowXINDqhpQ=";
   };
 
-  vendorHash = "sha256-O8CsvpwL9cfipl4M0BquSnG9tBrt/+i+i80OYk2mNiI=";
+  vendorHash = "sha256-iR3+ZMEF0SB3EoLTf2gtqTe3CQcjtDRhfwwbwGj3pXo=";
 
   ldflags = [ "-s" "-w" ];
+
+  subPackages = [ "cmd/lyrebird" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installManPage doc/obfs4proxy.1
-    ln -s $out/share/man/man1/{obfs4proxy,lyrebird}.1
+    installManPage doc/lyrebird.1
+    ln -s $out/share/man/man1/{lyrebird,obfs4proxy}.1
   '';
 
   meta = with lib; {
