@@ -13917,6 +13917,10 @@ self: super: with self; {
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
+  ruff = toPythonModule (pkgs.ruff.override {
+    python3Packages = self;
+  });
+
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
