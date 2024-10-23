@@ -1,87 +1,144 @@
 {
-  gui ? true,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
+  pythonOlder,
+
+  setuptools,
+  setuptools-scm,
+
   sphinx,
-  lxml,
+  sphinx-autodoc2,
+  myst-parser,
+  sphinx-copybutton,
+  furo,
+
+  certifi,
+  filelock,
   isodate,
+  lxml,
   numpy,
   openpyxl,
-  tkinter ? null,
-  py3to2,
-  isPy3k,
-  python,
-  ...
+  pyparsing,
+  python-dateutil,
+  regex,
+  tkinter,
+
+  pycryptodome,
+  pg8000,
+  pymysql,
+  pyodbc,
+  rdflib,
+  holidays,
+  pytz,
+  tinycss2,
+  graphviz,
+  cheroot,
+  cherrypy,
+  tornado,
+
+  pytestCheckHook,
+  boto3,
 }:
 
 buildPythonPackage rec {
-  pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "18.3";
-  format = "setuptools";
+  pname = "arelle";
+  version = "2.30.25";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  # Releases are published at http://arelle.org/download/ but sadly no
-  # tags are published on github.
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "edgr${version}";
-    sha256 = "12a94ipdp6xalqyds7rcp6cjwps6fbj3byigzfy403hlqc9n1g33";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
   };
+
   outputs = [
     "out"
     "doc"
   ];
-  patches = [ ./tests.patch ];
-  postPatch = "rm testParser2.py";
-  nativeBuildInputs = [
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail \
+        'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
+        'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+
+    # docs
     sphinx
-    py3to2
+    sphinx-autodoc2
+    myst-parser
+    sphinx-copybutton
+    furo
   ];
-  propagatedBuildInputs = [
-    lxml
+
+  dependencies = [
+    certifi
+    filelock
     isodate
+    lxml
     numpy
     openpyxl
-  ] ++ lib.optionals gui [ tkinter ];
+    pyparsing
+    python-dateutil
+    regex
+    tkinter
+  ];
 
-  # arelle-gui is useless without gui dependencies, so delete it when !gui.
-  postInstall =
-    lib.optionalString (!gui) ''
-      find $out/bin -name "*arelle-gui*" -delete
-    ''
-    +
-      # By default, not the entirety of the src dir is copied. This means we don't
-      # copy the `images` dir, which is needed for the gui version.
-      lib.optionalString (gui) ''
-        targetDir=$out/${python.sitePackages}
-        cp -vr $src/arelle $targetDir
-      '';
+  optional-dependencies = {
+    crypto = [ pycryptodome ];
+    db = [
+      pg8000
+      pymysql
+      pyodbc
+      rdflib
+    ];
+    efm = [
+      holidays
+      pytz
+    ];
+    esef = [ tinycss2 ];
+    objectmaker = [ graphviz ];
+    webserver = [
+      cheroot
+      cherrypy
+      tornado
+    ];
+  };
 
   # Documentation
   postBuild = ''
-    (cd apidocs && make html && cp -r _build $doc)
+    pushd docs
+    make html
+    mkdir -p $doc/share/doc/arelle
+    cp -r _build/* $doc/share/doc/arelle
+    popd
   '';
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    boto3
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  checkPhase = ''
-    py.test
+  preCheck = ''
+    rm -r tests/integration_tests
+    export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
-    description =
-      ''
-        An open source facility for XBRL, the eXtensible Business Reporting
-        Language supporting various standards, exposed through a Python or
-        REST API''
-      + lib.optionalString gui " and a graphical user interface";
+  meta = {
+    description = "Open source XBRL platform";
     mainProgram = "arelle";
     homepage = "http://arelle.org/";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ roberth ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      roberth
+      tomasajt
+    ];
   };
 }
