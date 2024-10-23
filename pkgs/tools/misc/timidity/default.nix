@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , pkg-config
 , memstreamHook
 , CoreAudio
@@ -101,6 +102,8 @@ stdenv.mkDerivation rec {
   '';
   # This fixup step is unnecessary and fails on Darwin
   dontRewriteSymlinks = stdenv.hostPlatform.isDarwin;
+
+  passthru.tests = nixosTests.timidity;
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/timidity/";
