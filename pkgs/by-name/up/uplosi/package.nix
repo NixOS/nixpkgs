@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "uplosi";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "edgelesssys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AtsFZ92WkVkH8fd0Xa0D6/PR84/dtOH6gpM4mtn32Hk=";
+    hash = "sha256-MsZ4Bl8sW1dZUB9cYPsaLtc8P8RRx4hafSbNB4vXqi4=";
   };
 
   vendorHash = "sha256-o7PPgW3JL47G6Na5n9h3RasRMfU25FD1U/wCMaydRmc=";
