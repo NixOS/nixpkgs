@@ -15530,6 +15530,8 @@ self: super: with self; {
 
   textual = callPackage ../development/python-modules/textual { };
 
+  textual-autocomplete = callPackage ../development/python-modules/textual-autocomplete { };
+
   textual-dev = callPackage ../development/python-modules/textual-dev { };
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
