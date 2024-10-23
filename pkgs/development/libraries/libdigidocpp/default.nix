@@ -1,31 +1,51 @@
-{ lib, stdenv, fetchurl, cmake, minizip, pcsclite, opensc, openssl
-, xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libtool
+, libxml2
+, minizip
+, pcsclite
+, opensc
+, openssl
+, xercesc
+, pkg-config
+, xsd
+, zlib
+, xmlsec
+, xxd
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.17.1";
+  version = "4.0.0";
   pname = "libdigidocpp";
 
   src = fetchurl {
-     url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     hash = "sha256-3qDsIAOiWMZDj2zLE+Os7BoeCPeC4JQ6p8jSBd7PdV0=";
+    url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
+    hash = "sha256-0G7cjJEgLJ24SwHRznKJ18cRY0m50lr6HXstfbYq9f8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];
 
   buildInputs = [
-    minizip pcsclite opensc openssl xercesc
-    xml-security-c xsd zlib xalanc
+    libxml2
+    minizip
+    pcsclite
+    opensc
+    openssl
+    xercesc
+    xsd
+    zlib
+    xmlsec
   ];
 
   outputs = [ "out" "lib" "dev" "bin" ];
 
-  # Cherry-pick of
-  # https://github.com/open-eid/libdigidocpp/commit/2b5db855ba3ceb9bae1f11589ea1aea22bb7595a
-  # Fixes https://github.com/NixOS/nixpkgs/issues/334397
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'TSA_URL "http://dd-at.ria.ee/tsa"' 'TSA_URL "https://eid-dd.ria.ee/ts"'
-  '';
+  # This wants to link to ${CMAKE_DL_LIBS} (ltdl), and there doesn't seem to be
+  # a way to tell CMake where this should be pulled from.
+  # A cleaner fix would probably be to patch cmake to use
+  # `-L${libtool.lib}/lib -ltdl` for `CMAKE_DL_LIBS`, but that's a world rebuild.
+  env.NIX_LDFLAGS = "-L${libtool.lib}/lib";
 
   # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
   # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
