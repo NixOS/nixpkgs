@@ -11,6 +11,9 @@
 , automake
 , curl
 , buildPackages
+, cargo
+, rustPlatform
+, rustc
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +36,9 @@ stdenv.mkDerivation rec {
     automake
     zlib
     curl.dev
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
   ];
   buildInputs = [
     bzip2
@@ -42,6 +48,15 @@ stdenv.mkDerivation rec {
     sqlite
     curl
   ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = "${src}/src/third-party/prqlc-c/Cargo.lock";
+    outputHashes = {
+      "prqlc-0.11.5" = "sha256-EZbaPMOPNxOPtNzaVedYatjgUIrescKEE7cjThQwcOc=";
+    };
+  };
+
+  cargoRoot = "src/third-party/prqlc-c";
 
   preConfigure = ''
     ./autogen.sh
