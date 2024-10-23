@@ -18950,6 +18950,12 @@
     githubId = 695473;
     name = "Sascha Grunert";
   };
+  satoqz = {
+    email = "mail@satoqz.net";
+    github = "satoqz";
+    githubId = 40795431;
+    name = "satoqz";
+  };
   saturn745 = {
     email = "git-commits.rk7uq@aleeas.com";
     github = "saturn745";
