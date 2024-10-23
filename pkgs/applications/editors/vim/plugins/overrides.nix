@@ -1527,6 +1527,10 @@ in
     nvimRequireCheck = "null-ls";
   };
 
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
+    nvimRequireCheck = "notebook-navigator";
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "null-ls";
