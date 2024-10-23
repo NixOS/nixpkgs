@@ -18,25 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZnIfAuvOBJDYqCtKGlWs0r39nG6X2lAVRuUmeIJenZw=";
   };
 
-  patches = [
-    # Compatibility with coin-or-mumps version
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/coin-or-tools/ThirdParty-Mumps/bd0bdf9baa3f3677bd34fb36ce63b2b32cc6cc7d/mumps_mpi.patch";
-      hash = "sha256-70qZUKBVBpJOSRxYxng5Y6ct1fdCUQUGur3chDhGabQ=";
-    })
-  ];
-
-  postPatch =
-    ''
-      # Compatibility with coin-or-mumps version
-      # https://github.com/coin-or-tools/ThirdParty-Mumps/blob/stable/3.0/get.Mumps#L66
-      cp libseq/mpi.h libseq/mumps_mpi.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/Makefile --replace-fail \
-        "-Wl,\''$(SONAME),libmumps_common" \
-        "-Wl,-install_name,$out/lib/libmumps_common"
-    '';
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/Makefile --replace-fail \
+      "-Wl,\''$(SONAME),libmumps_common" \
+      "-Wl,-install_name,$out/lib/libmumps_common"
+  '';
 
   configurePhase = ''
     cp Make.inc/Makefile.debian.SEQ ./Makefile.inc
@@ -63,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Add some compatibility with coin-or-mumps
     ln -s $out/include $out/include/mumps
-    cp libseq/mumps_mpi.h $out/include
+    cp libseq/mpi.h $out/include/mumps_mpi.h
   '';
 
   nativeBuildInputs = [ gfortran ];
