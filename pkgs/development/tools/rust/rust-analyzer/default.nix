@@ -7,6 +7,7 @@
 , cmake
 , libiconv
 , useMimalloc ? false
+, enableProcMacroSrvCli ? false
 , doCheck ? true
 , nix-update-script
 }:
@@ -23,8 +24,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YH0kH5CSOnAuPUB1BUzUqvnKiv5SgDhfMNjrkki9Ahk=";
   };
 
-  cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
-  cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
+  cargoBuildFlags = [ "--bin" "rust-analyzer" ]
+    ++ lib.optionals enableProcMacroSrvCli [ "--bin" "rust-analyzer-proc-macro-srv" ];
+  cargoTestFlags = [ "--package" "rust-analyzer" ]
+    ++ lib.optionals enableProcMacroSrvCli [ "--package" "proc-macro-srv-cli" ];
+  RUSTC_BOOTSTRAP = enableProcMacroSrvCli;
 
   # Code format check requires more dependencies but don't really matter for packaging.
   # So just ignore it.
@@ -37,7 +41,8 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  buildFeatures = lib.optional useMimalloc "mimalloc";
+  buildFeatures = lib.optional useMimalloc "mimalloc"
+    ++ lib.optional enableProcMacroSrvCli "sysroot-abi";
 
   env.CFG_RELEASE = version;
 
@@ -47,11 +52,17 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
+  installCheckPhase = let
+    checkProcMacroSrvCli = ''
+      RUST_ANALYZER_INTERNALS_DO_NOT_USE='this is unstable' \
+        $out/bin/rust-analyzer-proc-macro-srv < /dev/null
+    '';
+  in ''
     runHook preInstallCheck
     versionOutput="$($out/bin/rust-analyzer --version)"
     echo "'rust-analyzer --version' returns: $versionOutput"
     [[ "$versionOutput" == "rust-analyzer ${version}" ]]
+    ${lib.optionalString enableProcMacroSrvCli checkProcMacroSrvCli}
     runHook postInstallCheck
   '';
 
