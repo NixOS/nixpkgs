@@ -33,9 +33,10 @@ mkDerivation rec {
     })
   ];
 
+  # Check https://dss.nowina.lu/tl-info, "Pivots loaded" section
   tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
-    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
+    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-341.xml";
+    hash = "sha256-/TI8qYxXzourjGFPBpsQzi9Depi7lLQ2JaV+FyP0FtE=";
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
