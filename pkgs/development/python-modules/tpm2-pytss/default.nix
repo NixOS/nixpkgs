@@ -96,6 +96,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ baloo ];
+    maintainers = with maintainers; [ ];
   };
 }
