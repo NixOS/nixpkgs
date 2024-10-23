@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   setuptools,
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   pname = "cf-xarray";
   version = "0.10.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
