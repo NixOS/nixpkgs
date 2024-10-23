@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ascii-draw";
-  version = "0.4.0";
+  version = "1.0.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lBlIZrjzJo9R6KnzUSbqz5c/6UbuTv/pQu5Sans37Hc=";
+    hash = "sha256-+K9th1LbESVzAiJqIplWpj2QHt7zDidENs7jHOuJ2S0=";
   };
 
   nativeBuildInputs = [
