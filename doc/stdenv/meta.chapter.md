@@ -174,6 +174,7 @@ This means that `broken` can be used to express constraints, for example:
   ```
 
 This makes `broken` strictly more powerful than `meta.badPlatforms`.
+It is recommended to use `meta.badPlatforms` when only checking for the platforms.
 However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
 
 ## Licenses {#sec-meta-license}

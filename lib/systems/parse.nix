@@ -499,6 +499,8 @@ rec {
     getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
     parsed = {
+      # Required so predicates match correctly
+      _type = "system";
       cpu = getCpu args.cpu;
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor
@@ -521,7 +523,7 @@ rec {
         else                     abis.unknown;
     };
 
-  in mkSystem parsed;
+  in mkSystem (removeAttrs parsed [ "_type" ]);
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
 

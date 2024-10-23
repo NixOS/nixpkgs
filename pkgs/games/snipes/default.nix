@@ -37,11 +37,14 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Modern port of the classic 1982 text-mode game Snipes";
-    mainProgram = "snipes";
-    homepage    = "https://www.vogons.org/viewtopic.php?f=7&t=49073";
-    license     = licenses.free; # This reverse-engineered source code is released with the original authors' permission.
-    maintainers = with maintainers; [ peterhoeg cybershadow ];
-    broken      = stdenv.hostPlatform.isDarwin; # not supported upstream - https://github.com/Davidebyzero/Snipes/issues/8#issuecomment-433720046
+    description  = "Modern port of the classic 1982 text-mode game Snipes";
+    mainProgram  = "snipes";
+    homepage     = "https://www.vogons.org/viewtopic.php?f=7&t=49073";
+    license      = licenses.free; # This reverse-engineered source code is released with the original authors' permission.
+    maintainers  = with maintainers; [ peterhoeg cybershadow ];
+    badPlatforms = [
+      # not supported upstream - https://github.com/Davidebyzero/Snipes/issues/8#issuecomment-433720046
+      { isDarwin = true; }
+    ];
   };
 }
