@@ -30,10 +30,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: {command}`htpasswd -c <filename> <username>`.
-
-        WARNING: The generate file contains the users' passwords in a
-        non-cryptographically-securely hashed way.
+        Can be created by running {command}`nix-shell --packages apacheHttpd --run 'htpasswd -B -c FILENAME USERNAME'`.
       '';
     };
 
