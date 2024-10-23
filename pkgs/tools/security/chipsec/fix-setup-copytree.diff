@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index de527199..341cdec6 100755
+--- a/setup.py
++++ b/setup.py
+@@ -29,7 +29,7 @@ import os
+ import platform
+ import logging
+ import subprocess
+-from shutil import rmtree
++from shutil import rmtree, copytree
+ from setuptools import setup, find_packages, Extension, __version__ as _sutver
+ 
+ if _sutver and int(_sutver.split('.')[0]) < 62:
+@@ -84,7 +84,7 @@ class build_ext(_build_ext):
+         build_driver = os.path.join(self.real_build_lib, 'drivers', 'linux')
+         ko_ext = os.path.join(build_driver, 'chipsec.ko')
+         # We copy the drivers extension to the build directory.
+-        self.copy_tree(os.path.join('drivers', 'linux'), build_driver)
++        copytree(os.path.join('drivers', 'linux'), build_driver)
+         # Run the makefile there.
+         subprocess.check_output(['make', '-C', build_driver])
+         # And copy the resulting .ko to the right place.
