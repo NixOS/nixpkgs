@@ -1,25 +1,29 @@
-{ lib
-, fetchFromGitea
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, blueprint-compiler
-, gtk4
-, libadwaita
-, libnotify
-, webkitgtk_6_0
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, nix-update-script
+{
+  lib,
+  fetchFromGitea,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  blueprint-compiler,
+  gtk4,
+  libadwaita,
+  libnotify,
+  webkitgtk_6_0,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  librsvg,
+  gnome,
+  webp-pixbuf-loader,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.57.0";
+  version = "1.58.0";
 
   format = "other";
 
@@ -28,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-b2XoywPnrYnuehR6xHH8BvhbMZFB1AeBN0khFfaLGn0=";
+    hash = "sha256-21ZtzWjyUC+/iPv+R1DUzCHITR8GVhN+6iepcTIRy0Y=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +78,19 @@ python3.pkgs.buildPythonApplication rec {
   # Tests require network
   doCheck = false;
 
+  # Pull in WebP support for manga pics of some servers.
+  # In postInstall to run before gappsWrapperArgsHook.
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
+
   # Prevent double wrapping.
   dontWrapGApps = true;
 
@@ -87,12 +104,15 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Manga reader for GNOME";
     mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers = with maintainers; [ chuangzhu infinitivewitch ];
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      infinitivewitch
+    ];
   };
 }
