@@ -1615,8 +1615,6 @@ with pkgs;
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku akkuPackages;
 
-  alice-lg = callPackage ../servers/alice-lg{ };
-
   alice-tools = callPackage ../tools/games/alice-tools {
     withGUI = false;
   };
