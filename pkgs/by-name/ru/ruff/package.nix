@@ -4,16 +4,24 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  python3Packages,
   darwin,
   rust-jemalloc-sys,
   ruff-lsp,
   nix-update-script,
   versionCheckHook,
+  libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "ruff";
   version = "0.7.0";
+  pyproject = true;
+
+  outputs = [
+    "bin"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "astral-sh";
@@ -22,7 +30,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-//ayB5ayYM5FqiSXDDns2tIL+PJ0Osvkp8+MEEL0L+8=";
   };
 
-  cargoLock = {
+  # Do not rely on path lookup at runtime to find the ruff binary
+  postPatch = ''
+    substituteInPlace python/ruff/__main__.py \
+      --replace-fail \
+        'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
+        'return "${placeholder "bin"}/bin/ruff"'
+  '';
+
+  cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
@@ -30,18 +46,35 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs =
+    [ installShellFiles ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+      cargoCheckHook
+    ]);
 
-  buildInputs = [
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs =
+    [
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+      libiconv
+    ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ruff \
-      --bash <($out/bin/ruff generate-shell-completion bash) \
-      --fish <($out/bin/ruff generate-shell-completion fish) \
-      --zsh <($out/bin/ruff generate-shell-completion zsh)
-  '';
+  postInstall =
+    ''
+      mkdir -p $bin/bin
+      mv $out/bin/ruff $bin/bin/
+      rmdir $out/bin
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd ruff \
+        --bash <($bin/bin/ruff generate-shell-completion bash) \
+        --fish <($bin/bin/ruff generate-shell-completion fish) \
+        --zsh <($bin/bin/ruff generate-shell-completion zsh)
+    '';
 
   passthru = {
     tests = {
@@ -49,6 +82,12 @@ rustPlatform.buildRustPackage rec {
     };
     updateScript = nix-update-script { };
   };
+
+  # Run cargo tests
+  cargoCheckType = "debug";
+  postInstallCheck = ''
+    cargoCheckHook
+  '';
 
   # Failing on darwin for an unclear reason.
   # According to the maintainers, those tests are from an experimental crate that isn't actually
@@ -73,11 +112,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=unix::symlink_inside_workspace"
   ];
 
-  nativeInstallCheckInputs = [
+  nativeCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
-  doInstallCheck = true;
+
+  pythonImportsCheck = [ "ruff" ];
 
   meta = {
     description = "Extremely fast Python linter";
