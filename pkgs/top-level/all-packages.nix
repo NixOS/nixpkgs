@@ -13149,8 +13149,6 @@ with pkgs;
 
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
-  ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
-
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
