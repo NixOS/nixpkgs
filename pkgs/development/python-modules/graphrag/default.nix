@@ -34,6 +34,7 @@
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
+  protobuf,
 }:
 
 buildPythonPackage rec {
@@ -83,6 +84,10 @@ buildPythonPackage rec {
     tiktoken
     typing-extensions
     umap-learn
+  ];
+
+  nativeBuildInputs = [
+    protobuf
   ];
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";
