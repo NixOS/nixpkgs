@@ -12325,8 +12325,6 @@ with pkgs;
 
   snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
 
-  snet = callPackage ../tools/networking/snet { };
-
   snmpcheck = callPackage ../tools/networking/snmpcheck { };
 
   snobol4 = callPackage ../development/interpreters/snobol4 { };
