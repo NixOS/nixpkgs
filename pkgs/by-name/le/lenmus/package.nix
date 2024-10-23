@@ -1,37 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, makeWrapper
-, boost
-, portmidi
-, sqlite
-, freetype
-, libpng
-, pngpp
-, zlib
-, wxGTK32
-, wxsqlite3
-, fluidsynth
-, fontconfig
-, darwin
-, soundfont-fluid
-, openlilylib-fonts
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  boost,
+  portmidi,
+  sqlite,
+  freetype,
+  libpng,
+  pngpp,
+  zlib,
+  wxGTK32,
+  wxsqlite3,
+  fluidsynth,
+  fontconfig,
+  darwin,
+  soundfont-fluid,
+  openlilylib-fonts,
 }:
 
 let
   inherit (darwin.apple_sdk.frameworks) Cocoa;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
   version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "lenmus";
     repo = "lenmus";
-    rev = "Release_${version}";
-    sha256 = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
+    rev = "Release_${finalAttrs.version}";
+    hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
+  };
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-fpermissive";
   };
 
   postPatch = ''
@@ -40,28 +45,32 @@ stdenv.mkDerivation rec {
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
+    ];
 
-  buildInputs = [
-    boost
-    portmidi
-    sqlite
-    freetype
-    libpng
-    pngpp
-    zlib
-    wxGTK32
-    wxsqlite3
-    fluidsynth
-    fontconfig
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      boost
+      portmidi
+      sqlite
+      freetype
+      libpng
+      pngpp
+      zlib
+      wxGTK32
+      wxsqlite3
+      fluidsynth
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   preConfigure = ''
     mkdir res/fonts
@@ -82,7 +91,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/{Applications/lenmus.app/Contents/MacOS,bin}/lenmus
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LenMus Phonascus is a program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
@@ -90,9 +99,9 @@ stdenv.mkDerivation rec {
       The different activities can be customized to meet your needs
     '';
     homepage = "http://www.lenmus.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers;  [ ramkromberg ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = lib.platforms.unix;
     mainProgram = "lenmus";
   };
-}
+})
