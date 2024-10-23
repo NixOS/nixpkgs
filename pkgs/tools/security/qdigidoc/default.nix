@@ -18,26 +18,25 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
+    hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
+      hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
+    })
+  ];
 
   tsl = fetchurl {
     url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
-
-  patches = [
-    # https://github.com/open-eid/DigiDoc4-Client/pull/1251
-    (fetchpatch {
-      url = "https://github.com/open-eid/DigiDoc4-Client/commit/30281d14c5fb5582832eafbc254b56f8d685227d.patch";
-      hash = "sha256-nv23NbPUogOhS8No3SMIrAcPChl+d1HkxnePpCKIoUw=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
