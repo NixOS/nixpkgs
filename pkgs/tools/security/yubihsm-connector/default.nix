@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "yubihsm-connector";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-connector";
     rev = version;
-    hash = "sha256-snoQZsmKQPcsB5EpZc4yon02QbxNU5B5TAwRPjs1O5I=";
+    hash = "sha256-hiCh/TG1epSmJtaptfVzcPklDTaBh0biKqfM01YoWo0=";
   };
 
   vendorHash = "sha256-XW7rEHY3S+M3b6QjmINgrCak+BqCEV3PJP90jz7J47A=";
