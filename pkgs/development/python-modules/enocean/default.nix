@@ -1,19 +1,21 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  setuptools,
-  beautifulsoup4,
-  enum-compat,
   pyserial,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "enocean";
   version = "0.60.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kipe";
@@ -22,7 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-S62YvRP1bvEzzzMd/jMjIdHAZsUImF9EQhsrPPzebDE=";
   };
 
+  pythonRemoveDeps = [ "enum-compat" ];
+
   patches = [
+    # Replace nose with pytest, https://github.com/kipe/enocean/pull/143
     (fetchpatch2 {
       name = "replace-nose-with-pytest.patch";
       url = "https://github.com/kipe/enocean/commit/e5ca3b70f0920f129219c980ad549d7f3a4576de.patch";
@@ -34,7 +39,6 @@ buildPythonPackage rec {
 
   dependencies = [
     beautifulsoup4
-    enum-compat
     pyserial
   ];
 
