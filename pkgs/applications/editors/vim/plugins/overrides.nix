@@ -1586,8 +1586,7 @@ in
       nvim-lspconfig
       nvim-navic
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "nvim-navbuddy";
+    nvimRequireCheck = "nvim-navbuddy";
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
