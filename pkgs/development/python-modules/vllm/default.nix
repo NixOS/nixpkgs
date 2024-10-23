@@ -5,6 +5,7 @@
   buildPythonPackage,
   pythonRelaxDepsHook,
   fetchFromGitHub,
+  symlinkJoin,
 
   # build system
   packaging,
@@ -64,11 +65,34 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "refs/tags/v3.5.0";
-    sha256 = "sha256-D/s7eYsa5l/mfx73tE4mnFcTQdYqGmXa9d9TCryw4e4=";
+    rev = "refs/tags/v3.5.1";
+    sha256 = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
+  };
+
+  vllm-flash-attn = fetchFromGitHub {
+    owner = "vllm-project";
+    repo = "flash-attention";
+    rev = "013f0c4fc47e6574060879d9734c1df8c5c273bd";
+    sha256 = "sha256-5wYPIO9QgqpBqoL/L6dJKaSllgwldu9OeNRutDgcXvs=";
   };
 
   cpuSupport = !cudaSupport && !rocmSupport;
+
+  mergedCudaLibraries = with cudaPackages; [
+    cuda_cudart # cuda_runtime.h, -lcudart
+    cuda_cccl
+    libcusparse # cusparse.h
+    libcusolver # cusolverDn.h
+    cuda_nvtx
+    cuda_nvrtc
+    libcublas
+  ];
+
+  getAllOutputs = p: [
+    (lib.getBin p)
+    (lib.getLib p)
+    (lib.getDev p)
+  ];
 
 in
 
@@ -110,7 +134,8 @@ buildPythonPackage rec {
     ninja
     pythonRelaxDepsHook
     which
-  ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ];
+  ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   build-system = [
     packaging
@@ -127,18 +152,10 @@ buildPythonPackage rec {
       numactl
       oneDNN
     ]))
-    ++ (lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime.h, -lcudart
-        cuda_cccl
-        libcusparse # cusparse.h
-        libcusolver # cusolverDn.h
-        cuda_nvcc
-        cuda_nvtx
-        libcublas
-      ]
-    ))
+    ++ (lib.optionals cudaSupport mergedCudaLibraries ++ (with cudaPackages; [
+      cudnn
+      libcufile
+    ]))
     ++ (lib.optionals rocmSupport (
       with rocmPackages;
       [
@@ -192,13 +209,22 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   cmakeFlags = [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
+    (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
+    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
+      name = "cuda-merged-${cudaPackages.cudaVersion}";
+      paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
+    }}")
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")
+    (lib.cmakeFeature "CAFFE2_USE_CUFILE" "ON")
+    (lib.cmakeFeature "CUTLASS_ENABLE_CUBLAS" "ON")
   ];
 
   env =
     lib.optionalAttrs cudaSupport {
       VLLM_TARGET_DEVICE = "cuda";
-      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+      # CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
