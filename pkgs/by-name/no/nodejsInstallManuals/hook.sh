@@ -5,6 +5,11 @@ nodejsInstallManuals() {
 
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
+    local -r manualsDirectory=$(@jq@ --raw-output .directories.man "$packageJson")
+    if [[ $manualsDirectory != null ]]; then
+        installManPage "$packageOut/$manualsDirectory"/*
+    fi
+
     while IFS= read -r man; do
         installManPage "$packageOut/$man"
     done < <(@jq@ --raw-output '(.man | type) as $typ | if $typ == "string" then .man
