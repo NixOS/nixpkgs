@@ -71,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
         "<ocp/" \
         "<fatrop/ocp/"
 
-      # fix mumps lib name. No idea where this comes from.
-      substituteInPlace cmake/FindMUMPS.cmake --replace-fail \
-        "mumps_seq" \
-        "mumps"
-
       # help casadi find its own libs
       substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
         "std::vector<std::string> search_paths;" \

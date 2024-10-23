@@ -61,9 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out
     cp -r include lib $out
 
+    # Install mumps_seq headers
+    install -Dm 444 -t $out/include/mumps_seq libseq/*.h
+
     # Add some compatibility with coin-or-mumps
-    ln -s $out/include $out/include/mumps
-    cp libseq/mumps_mpi.h $out/include
+    ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
   '';
 
   nativeBuildInputs = [ gfortran ];
