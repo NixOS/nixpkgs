@@ -1,0 +1,93 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6a38223..5291d0b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -265,7 +265,7 @@ target_link_libraries(Limo
+     PRIVATE cpr::cpr
+     PRIVATE OpenSSL::SSL
+     PRIVATE Qt${QT_VERSION_MAJOR}::Network
+-    PRIVATE ${LIBUNRAR_PATH})
++    )
+ 
+ install(TARGETS Limo
+     BUNDLE DESTINATION .
+diff --git a/src/core/installer.cpp b/src/core/installer.cpp
+index 8645007..ebb921b 100644
+--- a/src/core/installer.cpp
++++ b/src/core/installer.cpp
+@@ -7,7 +7,6 @@
+ #include <ranges>
+ #include <regex>
+ #define _UNIX
+-#include <dll.hpp>
+ 
+ namespace sfs = std::filesystem;
+ namespace pu = path_utils;
+@@ -35,19 +34,7 @@ void Installer::extract(const sfs::path& source_path,
+   }
+   catch(CompressionError& error)
+   {
+-    std::string extension = source_path.extension().string();
+-    std::transform(extension.begin(),
+-                   extension.end(),
+-                   extension.begin(),
+-                   [](unsigned char c) { return std::tolower(c); });
+-    if(extension == ".rar")
+-    {
+-      if(sfs::exists(dest_path))
+-        sfs::remove_all(dest_path);
+-      extractRarArchive(source_path, dest_path);
+-    }
+-    else
+-      throw error;
++    throw error;
+   }
+   for(const auto& dir_entry : sfs::recursive_directory_iterator(dest_path))
+   {
+@@ -409,46 +396,3 @@ void Installer::extractWithProgress(const sfs::path& source_path,
+   archive_write_free(dest);
+   sfs::current_path(working_dir);
+ }
+-
+-void Installer::extractRarArchive(const sfs::path& source_path, const sfs::path& dest_path)
+-{
+-  log(Log::LOG_DEBUG, "Using fallback rar extraction");
+-
+-  const auto source_str = source_path.string();
+-  const auto dest_str = dest_path.string();
+-  char input_path[source_str.size() + 1];
+-  for(int i = 0; i < source_str.size(); i++)
+-    input_path[i] = source_str[i];
+-  input_path[source_str.size()] = '\0';
+-  char output_path[dest_str.size() + 1];
+-  for(int i = 0; i < dest_str.size(); i++)
+-    output_path[i] = dest_str[i];
+-  output_path[dest_str.size()] = '\0';
+-
+-  RAROpenArchiveDataEx archive {
+-    input_path,
+-    nullptr,
+-    RAR_OM_EXTRACT,
+-    0,
+-    nullptr,
+-    0,
+-    0,
+-    0,
+-    0
+-  };
+-  HANDLE hArcData = RAROpenArchiveEx(&archive);
+-  if (archive.OpenResult != 0)
+-    throw CompressionError("Failed to open RAR archive.");
+-  auto header_data = std::make_unique<RARHeaderDataEx>();
+-  int i = 0;
+-  int header_state = RARReadHeaderEx(hArcData, header_data.get());
+-  while (header_state == 0)
+-  {
+-    if(RARProcessFile(hArcData, RAR_EXTRACT, output_path, nullptr) != 0)
+-      throw CompressionError("Failed to extract RAR archive.");
+-    header_state = RARReadHeaderEx(hArcData, header_data.get());
+-  }
+-  if(header_state != ERAR_END_ARCHIVE)
+-    throw CompressionError("Failed to extract RAR archive.");
+-  RARCloseArchive(hArcData);
+-}
