@@ -39,6 +39,10 @@
     ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail ' ?= /usr/' ' ?= /'
+  '';
+
   buildInputs = [ perl ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -55,16 +59,6 @@
     "TLP_WITH_SYSTEMD=1"
 
     "DESTDIR=${placeholder "out"}"
-    "TLP_BATD=/share/tlp/bat.d"
-    "TLP_BIN=/bin"
-    "TLP_CONFDEF=/share/tlp/defaults.conf"
-    "TLP_CONFREN=/share/tlp/rename.conf"
-    "TLP_FLIB=/share/tlp/func.d"
-    "TLP_MAN=/share/man"
-    "TLP_META=/share/metainfo"
-    "TLP_SBIN=/sbin"
-    "TLP_SHCPL=/share/bash-completion/completions"
-    "TLP_TLIB=/share/tlp"
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
