@@ -828,6 +828,7 @@ mapAliases {
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
   oauth2_proxy = throw "'oauth2_proxy' has been renamed to/replaced by 'oauth2-proxy'"; # Converted to throw 2024-10-17
+  oil = lib.warn "Oil has been replaced with the faster native C++ version and renamed to 'oils-for-unix'. See also https://github.com/oils-for-unix/oils/wiki/Oils-Deployments" oils-for-unix; # Added 2024-10-22
   onevpl-intel-gpu = lib.warn "onevpl-intel-gpu has been renamed to vpl-gpu-rt" vpl-gpu-rt; # Added 2024-06-04
   opencv2 = throw "opencv2 has been removed as it is obsolete and was not used by any other package; please migrate to OpenCV 4"; # Added 2024-08-20
   opencv3 = throw "opencv3 has been removed as it is obsolete and was not used by any other package; please migrate to OpenCV 4"; # Added 2024-08-20
@@ -1090,7 +1091,10 @@ mapAliases {
     steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable";
     steam = lib.warn "`steamPackages.steam` has been moved to top level as `steam-unwrapped`" steam-unwrapped;
     steam-fhsenv = lib.warn "`steamPackages.steam-fhsenv` has been moved to top level as `steam`" steam;
+    steam-fhsenv-small = lib.warn "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`; there is no longer a -small variant" steam;
     steam-fhsenv-without-steam = lib.warn "`steamPackages.steam-fhsenv-without-steam` has been moved to top level as `steam-fhsenv-without-steam`" steam-fhsenv-without-steam;
+    steam-runtime = throw "`steamPackages.steam-runtime` has been removed, as it's no longer supported or necessary";
+    steam-runtime-wrapped = throw "`steamPackages.steam-runtime-wrapped` has been removed, as it's no longer supported or necessary";
     steamcmd = lib.warn "`steamPackages.steamcmd` has been moved to top level as `steamcmd`" steamcmd;
   };
   steam-small = steam; # Added 2024-09-12
