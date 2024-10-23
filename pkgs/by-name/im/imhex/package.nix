@@ -19,7 +19,7 @@
   python3,
   jansson,
   curl,
-  fmt_8,
+  fmt,
   nlohmann_json,
   yara,
   rsync,
@@ -97,7 +97,7 @@ stdenv'.mkDerivation (finalAttrs: {
     curl
     dbus
     file
-    fmt_8
+    fmt
     glfw3
     gtk3
     jansson
