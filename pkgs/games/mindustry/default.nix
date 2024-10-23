@@ -189,10 +189,10 @@ stdenv.mkDerivation {
         --add-flags "-jar $out/share/mindustry.jar" \
         ${lib.optionalString stdenv.hostPlatform.isLinux "--suffix PATH : ${lib.makeBinPath [zenity]}"} \
         --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + lib.optionalString enableWayland '' \
-        --set SDL_VIDEODRIVER wayland \
-        --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
-      '' + ''
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/ ${lib.optionalString enableWayland ''
+          --set SDL_VIDEODRIVER wayland \
+          --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+        ''}
 
       # Retain runtime depends to prevent them from being cleaned up.
       # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,

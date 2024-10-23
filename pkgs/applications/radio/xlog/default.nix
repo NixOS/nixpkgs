@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Amateur radio logging program";
-    longDescription =
-      '' Xlog is an amateur radio logging program.
-         It supports cabrillo, ADIF, trlog (format also used by tlf),
-         and EDI (ARRL VHF/UHF contest format) and can import twlog, editest and OH1AA logbook files.
-         Xlog is able to do DXCC lookups and will display country information, CQ and ITU zone,
-         location in latitude and longitude and distance and heading in kilometers or miles,
-         both for short and long path.
-      '';
+    longDescription = ''
+      Xlog is an amateur radio logging program.
+      It supports cabrillo, ADIF, trlog (format also used by tlf),
+      and EDI (ARRL VHF/UHF contest format) and can import twlog, editest and OH1AA logbook files.
+      Xlog is able to do DXCC lookups and will display country information, CQ and ITU zone,
+      location in latitude and longitude and distance and heading in kilometers or miles,
+      both for short and long path.
+    '';
     homepage = "https://www.nongnu.org/xlog";
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;

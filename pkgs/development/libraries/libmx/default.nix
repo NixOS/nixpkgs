@@ -50,12 +50,13 @@ stdenv.mkDerivation rec {
     homepage = "http://www.clutter-project.org/";
     description = "Clutter-based toolkit";
     mainProgram = "mx-create-image-cache";
-    longDescription =
-      ''Mx is a widget toolkit using Clutter that provides a set of standard
-        interface elements, including buttons, progress bars, scroll bars and
-        others. It also implements some standard managers. One other interesting
-        feature is the possibility setting style properties from a CSS format
-        file.'';
+    longDescription = ''
+      Mx is a widget toolkit using Clutter that provides a set of standard
+      interface elements, including buttons, progress bars, scroll bars and
+      others. It also implements some standard managers. One other interesting
+      feature is the possibility setting style properties from a CSS format
+      file.
+    '';
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = with platforms; linux;
