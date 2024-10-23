@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
-  version = "2.5.7";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AQMIH/wng4ouUEeRU8oQXoc9PWXYqVkygunJTH5q+3Y=";
+    sha256 = "sha256-yPD0LmED3qSxpqSDy1VmVOlzAsdGUwj1g2N3j5XxlLE=";
   };
 
   outputs = [ "out" "dev" "info" ];
