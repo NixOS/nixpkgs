@@ -3,9 +3,6 @@
   python3Packages,
   fetchFromGitHub,
 
-  # nativeCheckInputs
-  ruff,
-
   # tests
   versionCheckHook,
 
@@ -25,17 +22,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-TB4OcKkaUGYAmiGNJRnfRmiXTyTQL4sFoBrzxT6DWec=";
   };
 
-  postPatch = ''
-    # ruff binary added to PATH in wrapper so it's not needed
-    sed -i '/"ruff>=/d' pyproject.toml
-  '';
-
   build-system = with python3Packages; [ hatchling ];
 
   dependencies = with python3Packages; [
     packaging
     pygls
     lsprotocol
+    ruff
     typing-extensions
   ];
 
@@ -43,15 +36,14 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
-    ruff
+    ruff.bin
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
 
   makeWrapperArgs = [
     # prefer ruff from user's PATH, that's usually desired behavior
-    "--suffix PATH : ${lib.makeBinPath [ ruff ]}"
-
+    "--suffix PATH : ${lib.makeBinPath (with python3Packages; [ ruff ])}"
     # Unset ambient PYTHONPATH in the wrapper, so ruff-lsp only ever runs with
     # its own, isolated set of dependencies. This works because the correct
     # PYTHONPATH is set in the Python script, which runs after the wrapper.
