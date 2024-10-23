@@ -16,7 +16,7 @@
   rich,
   shapely,
 
-  # checks
+  # tests
   dask,
   pytestCheckHook,
   scipy,
@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.5";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rz0E7GBaN/7zb0dqAxo0SJ4Bd+eQuOOv6x1WubIUh6A=";
+    hash = "sha256-lAVH2QGdMyU5A6QTLKujeAh8n1AkCsAtdyKQEqLahTk=";
   };
 
   build-system = [
