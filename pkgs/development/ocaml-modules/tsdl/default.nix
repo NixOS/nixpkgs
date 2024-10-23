@@ -7,7 +7,7 @@ else
 
 let
   pname = "tsdl";
-  version = "1.0.0";
+  version = "1.1.0";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = "sha256-XdgzCj9Uqplt/8Jk8rSFaQf8zu+9SZa8b9ZIlW/gjyE=";
+    hash = "sha256-ZN4+trqesU1IREKcwm1Ro37jszKG8XcVigoE4BdGhzs=";
   };
 
   strictDeps = true;
