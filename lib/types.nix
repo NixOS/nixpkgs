@@ -83,8 +83,8 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let wrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        payload = f.binOp f.payload f'.payload;
+    let wrapped = lib.warn "Using f.wrapped for type merging is deprecated" (f.wrapped.typeMerge f'.wrapped.functor);
+        payload = lib.warn "Using f.binOp to merge payload" (f.binOp f.payload f'.payload);
     in
     # cannot merge different types
     if f.name != f'.name
@@ -583,7 +583,11 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = (defaultFunctor name) // {
+        payload.wrapped = elemType;
+        type = payload: attrsOf payload.wrapped;
+        binOp = lhs: rhs: { wrapped = lhs.wrapped.typeMerge rhs.wrapped.functor; };
+      };
       nestedTypes.elemType = elemType;
     };
 
