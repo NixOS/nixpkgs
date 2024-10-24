@@ -189,3 +189,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # percona: apply nixfmt
 8d14fa2886fec877690c6d28cfcdba4503dbbcea
+
+# nixos/amazon-image: reformat with nixfmt
+e657cb00615089d77a86f69264fa161649502f1d
