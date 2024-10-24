@@ -4,7 +4,6 @@
   aiohttp,
   boto3,
   buildPythonPackage,
-  codecov,
   fetchFromGitHub,
   flake8,
   flask-sockets,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    codecov
     flake8
     flask-sockets
     moto
