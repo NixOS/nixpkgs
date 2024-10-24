@@ -1,0 +1,358 @@
+diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
+index 5e200c3034..9c86b30192 100644
+--- a/src/core/devices/nm-device.c
++++ b/src/core/devices/nm-device.c
+@@ -14913,14 +14913,14 @@ nm_device_start_ip_check(NMDevice *self)
+             gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
+             if (gw) {
+                 nm_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
+-                ping_binary = nm_utils_find_helper("ping", "/usr/bin/ping", NULL);
++                ping_binary = nm_utils_find_in_path_env("ping", "/usr/bin/ping", NULL);
+                 log_domain  = LOGD_IP4;
+             }
+         } else if (priv->ip_data_6.state == NM_DEVICE_IP_STATE_READY) {
+             gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET6);
+             if (gw) {
+                 nm_inet6_ntop(&NMP_OBJECT_CAST_IP6_ROUTE(gw)->gateway, buf);
+-                ping_binary = nm_utils_find_helper("ping6", "/usr/bin/ping6", NULL);
++                ping_binary = nm_utils_find_in_path_env("ping6", "/usr/bin/ping6", NULL);
+                 log_domain  = LOGD_IP6;
+             }
+         }
+diff --git a/src/core/devices/team/nm-device-team.c b/src/core/devices/team/nm-device-team.c
+index a4c77f7f49..e8149264d4 100644
+--- a/src/core/devices/team/nm-device-team.c
++++ b/src/core/devices/team/nm-device-team.c
+@@ -600,7 +600,7 @@ teamd_kill(NMDeviceTeam *self, const char *teamd_binary, GError **error)
+     gs_free const char         **envp    = NULL;
+ 
+     if (!teamd_binary) {
+-        teamd_binary = nm_utils_find_helper("teamd", NULL, error);
++        teamd_binary = nm_utils_find_in_path_env("teamd", NULL, error);
+         if (!teamd_binary) {
+             _LOGW(LOGD_TEAM, "Activation: (team) failed to start teamd: teamd binary not found");
+             return FALSE;
+@@ -653,7 +653,7 @@ teamd_start(NMDeviceTeam *self)
+ 
+     nm_assert(iface);
+ 
+-    teamd_binary = nm_utils_find_helper("teamd", NULL, NULL);
++    teamd_binary = nm_utils_find_in_path_env("teamd", NULL, NULL);
+     if (!teamd_binary) {
+         _LOGW(LOGD_TEAM, "Activation: (team) failed to start teamd: teamd binary not found");
+         return FALSE;
+diff --git a/src/core/dhcp/nm-dhcp-dhclient.c b/src/core/dhcp/nm-dhcp-dhclient.c
+index 043c2264e3..7c2e992b67 100644
+--- a/src/core/dhcp/nm-dhcp-dhclient.c
++++ b/src/core/dhcp/nm-dhcp-dhclient.c
+@@ -89,7 +89,7 @@ static GBytes *read_duid_from_lease(NMDhcpDhclient *self);
+ static const char *
+ nm_dhcp_dhclient_get_path(void)
+ {
+-    return nm_utils_find_helper("dhclient", DHCLIENT_PATH, NULL);
++    return nm_utils_find_in_path_env("dhclient", DHCLIENT_PATH, NULL);
+ }
+ 
+ /**
+diff --git a/src/core/dhcp/nm-dhcp-dhcpcanon.c b/src/core/dhcp/nm-dhcp-dhcpcanon.c
+index cd42b692df..60531aa93a 100644
+--- a/src/core/dhcp/nm-dhcp-dhcpcanon.c
++++ b/src/core/dhcp/nm-dhcp-dhcpcanon.c
+@@ -60,7 +60,7 @@ G_DEFINE_TYPE(NMDhcpDhcpcanon, nm_dhcp_dhcpcanon, NM_TYPE_DHCP_CLIENT)
+ static const char *
+ nm_dhcp_dhcpcanon_get_path(void)
+ {
+-    return nm_utils_find_helper("dhcpcanon", DHCPCANON_PATH, NULL);
++    return nm_utils_find_in_path_env("dhcpcanon", DHCPCANON_PATH, NULL);
+ }
+ 
+ static gboolean
+diff --git a/src/core/dhcp/nm-dhcp-dhcpcd.c b/src/core/dhcp/nm-dhcp-dhcpcd.c
+index 7c95994ac6..9805eb8524 100644
+--- a/src/core/dhcp/nm-dhcp-dhcpcd.c
++++ b/src/core/dhcp/nm-dhcp-dhcpcd.c
+@@ -61,7 +61,7 @@ G_DEFINE_TYPE(NMDhcpDhcpcd, nm_dhcp_dhcpcd, NM_TYPE_DHCP_CLIENT)
+ static const char *
+ nm_dhcp_dhcpcd_get_path(void)
+ {
+-    return nm_utils_find_helper("dhcpcd", DHCPCD_PATH, NULL);
++    return nm_utils_find_in_path_env("dhcpcd", DHCPCD_PATH, NULL);
+ }
+ 
+ static gboolean
+diff --git a/src/core/dns/nm-dns-dnsmasq.c b/src/core/dns/nm-dns-dnsmasq.c
+index 43cff2e453..f0ba9c025f 100644
+--- a/src/core/dns/nm-dns-dnsmasq.c
++++ b/src/core/dns/nm-dns-dnsmasq.c
+@@ -1146,7 +1146,7 @@ start_dnsmasq(NMDnsDnsmasq *self, gboolean force_start, GError **error)
+         return TRUE;
+     }
+ 
+-    dm_binary = nm_utils_find_helper("dnsmasq", DNSMASQ_PATH, NULL);
++    dm_binary = nm_utils_find_in_path_env("dnsmasq", DNSMASQ_PATH, NULL);
+     if (!dm_binary) {
+         /* We resolve the binary name before trying to start it asynchronously.
+          * The reason is, that if dnsmasq is not installed, we want to fail early,
+diff --git a/src/core/dnsmasq/nm-dnsmasq-manager.c b/src/core/dnsmasq/nm-dnsmasq-manager.c
+index d245d5d3c6..9f0a66e2c9 100644
+--- a/src/core/dnsmasq/nm-dnsmasq-manager.c
++++ b/src/core/dnsmasq/nm-dnsmasq-manager.c
+@@ -113,7 +113,7 @@ create_dm_cmd_line(const char           *iface,
+ 
+     g_return_val_if_fail(listen_address, NULL);
+ 
+-    dm_binary = nm_utils_find_helper("dnsmasq", DNSMASQ_PATH, error);
++    dm_binary = nm_utils_find_in_path_env("dnsmasq", DNSMASQ_PATH, error);
+     if (!dm_binary)
+         return NULL;
+ 
+diff --git a/src/core/nm-dcb.c b/src/core/nm-dcb.c
+index 2b90cfa564..ff25ac9e32 100644
+--- a/src/core/nm-dcb.c
++++ b/src/core/nm-dcb.c
+@@ -286,7 +286,7 @@ run_helper(char **argv, guint which, gpointer user_data, GError **error)
+     char       *errmsg = NULL, *outmsg = NULL;
+     char       *cmdline;
+ 
+-    helper_path = nm_utils_find_helper((which == DCBTOOL) ? "dcbtool" : "fcoeadm", NULL, error);
++    helper_path = nm_utils_find_in_path_env((which == DCBTOOL) ? "dcbtool" : "fcoeadm", NULL, error);
+     if (!helper_path)
+         return FALSE;
+ 
+diff --git a/src/core/nm-firewall-utils.c b/src/core/nm-firewall-utils.c
+index b6b2b0d721..012506b1a5 100644
+--- a/src/core/nm-firewall-utils.c
++++ b/src/core/nm-firewall-utils.c
+@@ -13,12 +13,14 @@
+ #include "libnm-platform/nm-platform.h"
+ 
+ #include "nm-config.h"
++#include "nm-utils.h"
+ #include "NetworkManagerUtils.h"
+ 
+ /*****************************************************************************/
+ 
+-static const struct {
++static struct {
+     const char *name;
++    const char *binary;
+     const char *path;
+ } FirewallBackends[] = {
+     [NM_FIREWALL_BACKEND_NONE - 1] =
+@@ -28,11 +30,13 @@ static const struct {
+     [NM_FIREWALL_BACKEND_NFTABLES - 1] =
+         {
+             .name = "nftables",
++            .binary = "nft",
+             .path = NFT_PATH,
+         },
+     [NM_FIREWALL_BACKEND_IPTABLES - 1] =
+         {
+             .name = "iptables",
++            .binary = "iptables",
+             .path = IPTABLES_PATH,
+         },
+ };
+@@ -213,7 +217,7 @@ _share_iptables_call_v(const char *const *argv)
+ }
+ 
+ #define _share_iptables_call(...) \
+-    _share_iptables_call_v(NM_MAKE_STRV("" IPTABLES_PATH "", "--wait", "2", __VA_ARGS__))
++    _share_iptables_call_v(NM_MAKE_STRV(FirewallBackends[NM_FIREWALL_BACKEND_IPTABLES-1].path, "--wait", "2", __VA_ARGS__))
+ 
+ static gboolean
+ _share_iptables_chain_op(const char *table, const char *chain, const char *op)
+@@ -598,7 +602,7 @@ nm_firewall_nft_call(GBytes             *stdin_buf,
+     g_subprocess_launcher_set_environ(subprocess_launcher, NM_STRV_EMPTY());
+ 
+     call_data->subprocess = g_subprocess_launcher_spawnv(subprocess_launcher,
+-                                                         NM_MAKE_STRV(NFT_PATH, "-f", "-"),
++                                                         NM_MAKE_STRV(FirewallBackends[NM_FIREWALL_BACKEND_NFTABLES-1].path, "-f", "-"),
+                                                          &error);
+ 
+     if (!call_data->subprocess) {
+@@ -1013,9 +1017,9 @@ nm_firewall_config_apply_sync(NMFirewallConfig *self, gboolean up)
+ static NMFirewallBackend
+ _firewall_backend_detect(void)
+ {
+-    if (g_file_test(NFT_PATH, G_FILE_TEST_IS_EXECUTABLE))
++    if (nm_utils_find_in_path_env(FirewallBackends[NM_FIREWALL_BACKEND_NFTABLES - 1].binary, NULL, NULL) != NULL)
+         return NM_FIREWALL_BACKEND_NFTABLES;
+-    if (g_file_test(IPTABLES_PATH, G_FILE_TEST_IS_EXECUTABLE))
++    if (nm_utils_find_in_path_env(FirewallBackends[NM_FIREWALL_BACKEND_IPTABLES - 1].binary, NULL, NULL) != NULL)
+         return NM_FIREWALL_BACKEND_IPTABLES;
+ 
+     return NM_FIREWALL_BACKEND_NFTABLES;
+@@ -1030,9 +1034,10 @@ nm_firewall_utils_get_backend(void)
+ again:
+     b = g_atomic_int_get(&backend);
+     if (b == NM_FIREWALL_BACKEND_UNKNOWN) {
+-        gs_free char *conf_value = NULL;
+-        gboolean      detect;
+-        int           i;
++        gs_free char    *conf_value = NULL;
++        gboolean        detect;
++        const char      *path_value = NULL;
++        int             i;
+ 
+         conf_value =
+             nm_config_data_get_value(NM_CONFIG_GET_DATA_ORIG,
+@@ -1053,6 +1058,17 @@ again:
+         if (detect)
+             b = _firewall_backend_detect();
+ 
++        nm_log_dbg(LOGD_SHARING, "firewall: trying to find %s (%s) backend.",
++                   FirewallBackends[b - 1].name, FirewallBackends[b - 1].binary);
++
++        path_value = nm_utils_find_in_path_env(FirewallBackends[b - 1].binary, NULL, NULL);
++
++        if (path_value == NULL) {
++            g_atomic_int_set(&backend, NM_FIREWALL_BACKEND_NONE);
++        } else {
++            FirewallBackends[b - 1].path = path_value;
++        }
++
+         nm_assert(NM_IN_SET(b,
+                             NM_FIREWALL_BACKEND_NONE,
+                             NM_FIREWALL_BACKEND_IPTABLES,
+@@ -1062,18 +1078,12 @@ again:
+             goto again;
+ 
+         nm_log_dbg(LOGD_SHARING,
+-                   "firewall: use %s backend%s%s%s%s%s%s%s",
++                   "firewall: use %s backend%s%s%s",
+                    FirewallBackends[b - 1].name,
+                    NM_PRINT_FMT_QUOTED(FirewallBackends[b - 1].path,
+                                        " (",
+                                        FirewallBackends[b - 1].path,
+                                        ")",
+-                                       ""),
+-                   detect ? " (detected)" : "",
+-                   NM_PRINT_FMT_QUOTED(detect && conf_value,
+-                                       " (invalid setting \"",
+-                                       conf_value,
+-                                       "\")",
+                                        ""));
+     }
+ 
+diff --git a/src/core/ppp/nm-ppp-manager.c b/src/core/ppp/nm-ppp-manager.c
+index aa95cab28f..4e8f2efa54 100644
+--- a/src/core/ppp/nm-ppp-manager.c
++++ b/src/core/ppp/nm-ppp-manager.c
+@@ -795,7 +795,7 @@ create_pppd_cmd_line(NMPPPManager   *self,
+ #define PPPD_PATH NULL
+ #endif
+ 
+-    pppd_binary = nm_utils_find_helper("pppd", PPPD_PATH, err);
++    pppd_binary = nm_utils_find_in_path_env("pppd", PPPD_PATH, err);
+     if (!pppd_binary)
+         return NULL;
+ 
+diff --git a/src/libnm-client-impl/libnm.ver b/src/libnm-client-impl/libnm.ver
+index eb3645b2c0..74e4eb69bd 100644
+--- a/src/libnm-client-impl/libnm.ver
++++ b/src/libnm-client-impl/libnm.ver
+@@ -768,6 +768,7 @@ global:
+ 	nm_utils_file_is_pkcs12;
+ 	nm_utils_file_is_private_key;
+ 	nm_utils_file_search_in_paths;
++	nm_utils_find_in_path_env;
+ 	nm_utils_hexstr2bin;
+ 	nm_utils_hwaddr_atoba;
+ 	nm_utils_hwaddr_aton;
+diff --git a/src/libnm-core-impl/nm-utils.c b/src/libnm-core-impl/nm-utils.c
+index 06a96318ab..30aa25516b 100644
+--- a/src/libnm-core-impl/nm-utils.c
++++ b/src/libnm-core-impl/nm-utils.c
+@@ -3690,6 +3690,40 @@ nm_utils_file_search_in_paths(const char                       *progname,
+ 
+ /*****************************************************************************/
+ 
++/**
++ * nm_utils_find_in_path_env:
++ * @progname: the helper program name, like "iptables"
++ *   Must be a non-empty string, without path separator (/).
++ * @try_first: (nullable): a custom path to try first before searching.
++ *   It is silently ignored if it is empty or not an absolute path.
++ * @error: on failure, set a "not found" error %G_IO_ERROR %G_IO_ERROR_NOT_FOUND.
++ *
++ * Searches for a @progname file in the given path or the PATH environment variable.
++ *
++ * Returns: (transfer none): the full path to the helper, if found, or %NULL if not found.
++ *   The returned string is not owned by the caller, but later
++ *   invocations of the function might overwrite it.
++ */
++const char *
++nm_utils_find_in_path_env(const char *progname, const char *try_first, GError **error)
++{
++    const char* path_env = NULL;
++    gs_strfreev char **env_paths = NULL;
++
++    path_env = g_getenv("PATH");
++    env_paths = g_strsplit(path_env, ":", -1);
++
++    return nm_utils_file_search_in_paths(progname,
++                                         try_first,
++                                         ((const char* const*)env_paths),
++                                         G_FILE_TEST_IS_EXECUTABLE,
++                                         NULL,
++                                         NULL,
++                                         error);
++}
++
++/*****************************************************************************/
++
+ /* Band, channel/frequency stuff for wireless */
+ struct cf_pair {
+     guint32 chan;
+diff --git a/src/libnm-core-public/nm-utils.h b/src/libnm-core-public/nm-utils.h
+index 35ef580db7..ad4b9b5ce7 100644
+--- a/src/libnm-core-public/nm-utils.h
++++ b/src/libnm-core-public/nm-utils.h
+@@ -135,6 +135,10 @@ const char *nm_utils_file_search_in_paths(const char                       *prog
+                                           gpointer                          user_data,
+                                           GError                          **error);
+ 
++const char *nm_utils_find_in_path_env(const char                       *progname,
++                                      const char                       *try_first,
++                                      GError                          **error);
++
+ guint32  nm_utils_wifi_freq_to_channel(guint32 freq);
+ guint32  nm_utils_wifi_channel_to_freq(guint32 channel, const char *band);
+ guint32  nm_utils_wifi_find_next_channel(guint32 channel, int direction, char *band);
+diff --git a/src/libnmc-base/nm-vpn-helpers.c b/src/libnmc-base/nm-vpn-helpers.c
+index cbe76f5f1c..7f3f6d91d7 100644
+--- a/src/libnmc-base/nm-vpn-helpers.c
++++ b/src/libnmc-base/nm-vpn-helpers.c
+@@ -284,15 +284,6 @@ nm_vpn_openconnect_authenticate_helper(NMSettingVpn *s_vpn, GPtrArray *secrets,
+     const char *const   *iter;
+     const char          *path;
+     const char          *opt;
+-    const char *const    DEFAULT_PATHS[] = {
+-        "/sbin/",
+-        "/usr/sbin/",
+-        "/usr/local/sbin/",
+-        "/bin/",
+-        "/usr/bin/",
+-        "/usr/local/bin/",
+-        NULL,
+-    };
+     const char *oc_argv[(12 + 2 * G_N_ELEMENTS(oc_property_args))];
+     const char *gw;
+     int         port;
+@@ -311,13 +302,8 @@ nm_vpn_openconnect_authenticate_helper(NMSettingVpn *s_vpn, GPtrArray *secrets,
+ 
+     port = extract_url_port(gw);
+ 
+-    path = nm_utils_file_search_in_paths("openconnect",
+-                                         "/usr/sbin/openconnect",
+-                                         DEFAULT_PATHS,
+-                                         G_FILE_TEST_IS_EXECUTABLE,
+-                                         NULL,
+-                                         NULL,
+-                                         error);
++    path = nm_utils_find_in_path_env("openconnect", "/usr/sbin/openconnect", error);
++
+     if (!path)
+         return FALSE;
+ 

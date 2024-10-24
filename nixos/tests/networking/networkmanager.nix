@@ -162,6 +162,38 @@ let
         client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::23")
       '';
     };
+    shared = {
+      name = "shared";
+      nodes = {
+        inherit router;
+        client = clientConfig {
+          networking.networkmanager.logLevel = "DEBUG";
+          networking.networkmanager.ensureProfiles.profiles.shared = {
+            connection = {
+              interface-name = "eth0";
+              type = "ethernet";
+              id = "shared";
+            };
+            ipv4.method = "shared";
+            ipv4.addresses = "192.168.21.42/24";
+          };
+        };
+      };
+      testScript = ''
+        start_all()
+        router.systemctl("start network-online.target")
+        router.wait_for_unit("network-online.target")
+        client.wait_for_unit("NetworkManager.service")
+        with subtest("Test shared connection type and make sure the binaries are found."):
+            # nftables binary is found:
+            client.wait_until_succeeds("journalctl -u NetworkManager | grep -q 'trying to find nftables (nft) backend.'")
+            client.wait_until_succeeds("journalctl -u NetworkManager | grep -q 'nft.*: communicate with nft'")
+            # dhcpcd binary is found:
+            client.wait_until_succeeds("journalctl -u NetworkManager | grep -q \"enabled DHCP client \'dhcpcd\'\"")
+            # dnsmasq binary is found:
+            client.wait_until_succeeds("journalctl -u NetworkManager | grep -q 'dnsmasq-manager: dnsmasq started with pid'")
+      '';
+    };
   };
 in lib.mapAttrs (lib.const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-NetworkManager";
