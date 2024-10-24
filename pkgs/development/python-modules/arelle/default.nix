@@ -1,87 +1,144 @@
 {
-  gui ? true,
-  buildPythonPackage,
-  fetchFromGitHub,
   lib,
-  sphinx,
-  lxml,
+  buildPythonPackage,
+  certifi,
+  cheroot,
+  cherrypy,
+  fetchFromGitHub,
+  filelock,
+  graphviz,
+  gui ? true,
+  holidays,
   isodate,
+  lxml,
   numpy,
   openpyxl,
-  tkinter ? null,
-  py3to2,
-  isPy3k,
+  pg8000,
+  pillow,
+  pycryptodome,
+  pymysql,
+  pyodbc,
+  pyparsing,
+  python-dateutil,
   python,
+  pythonOlder,
+  pytz,
+  rdflib,
+  regex,
+  setuptools-scm,
+  setuptools,
+  sphinx,
+  tinycss2,
+  tkinter ? null,
+  tornado,
+  wheel,
   ...
 }:
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "18.3";
-  format = "setuptools";
+  version = "2.33.0";
+  pyproject = true;
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  # Releases are published at http://arelle.org/download/ but sadly no
-  # tags are published on github.
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "edgr${version}";
-    sha256 = "12a94ipdp6xalqyds7rcp6cjwps6fbj3byigzfy403hlqc9n1g33";
+    rev = "refs/tags/${version}";
+    hash = "sha256-gUuPnjdY+2k4711zUgEMJT+Ln4Raubfes1iE7TKG4WU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=73.0" "setuptools" \
+      --replace-fail "wheel~=0.44" "wheel"
+  '';
+
   outputs = [
     "out"
-    "doc"
+    #"doc"
   ];
-  patches = [ ./tests.patch ];
-  postPatch = "rm testParser2.py";
-  nativeBuildInputs = [
-    sphinx
-    py3to2
+
+  build-system = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
-  propagatedBuildInputs = [
-    lxml
+
+  # Missing dependency
+  # nativeBuildInputs = [
+  #   autodoc2
+  #   sphinx
+  # ];
+
+  dependencies = [
+    certifi
+    filelock
     isodate
+    lxml
     numpy
     openpyxl
+    pillow
+    pyparsing
+    python-dateutil
+    regex
   ] ++ lib.optionals gui [ tkinter ];
 
-  # arelle-gui is useless without gui dependencies, so delete it when !gui.
+  optional-dependencies = {
+    Crypto = [ pycryptodome ];
+    DB = [
+      pg8000
+      pymysql
+      pyodbc
+      rdflib
+    ];
+    EFM = [
+      holidays
+      pytz
+    ];
+    ESEF = [ tinycss2 ];
+    ObjectMaker = [ graphviz ];
+    WebServer = [
+      cheroot
+      cherrypy
+      tornado
+    ];
+  };
+
+  # arelle-gui is useless without GUI dependencies, so delete it when !gui.
   postInstall =
     lib.optionalString (!gui) ''
-      find $out/bin -name "*arelle-gui*" -delete
+      find $out/bin -name "*arelleGUI*" -delete
     ''
     +
       # By default, not the entirety of the src dir is copied. This means we don't
-      # copy the `images` dir, which is needed for the gui version.
+      # copy the `images` dir, which is needed for the GUI version.
       lib.optionalString (gui) ''
         targetDir=$out/${python.sitePackages}
         cp -vr $src/arelle $targetDir
       '';
 
   # Documentation
-  postBuild = ''
-    (cd apidocs && make html && cp -r _build $doc)
-  '';
+  # postBuild = ''
+  #   (cd docs && make html && cp -r _build $doc)
+  # '';
 
   doCheck = false;
 
-  checkPhase = ''
-    py.test
-  '';
-
   meta = with lib; {
-    description =
+    description = "Facility for XBRL";
+    longDescription =
       ''
         An open source facility for XBRL, the eXtensible Business Reporting
         Language supporting various standards, exposed through a Python or
         REST API''
-      + lib.optionalString gui " and a graphical user interface";
-    mainProgram = "arelle";
+      + lib.optionalString gui " and a graphical user interface.";
     homepage = "http://arelle.org/";
+    changelog = "https://github.com/Arelle/Arelle/releases/tag/${version}";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
+    mainProgram = "arelleGUI";
+    platforms = platforms.all;
   };
 }
