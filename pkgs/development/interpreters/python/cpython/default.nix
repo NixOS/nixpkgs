@@ -310,12 +310,25 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     mingw-patch = fetchgit {
       name = "mingw-python-patches";
       url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
-      rev = "45c45833ab9e5480ad0ae00778a05ebf35812ed4"; # for python 3.11.5 at the time of writing.
-      sha256 = "sha256-KIyNvO6MlYTrmSy9V/DbzXm5OsIuyT/BEpuo7Umm9DI=";
+      rev = "3edecdbfb4bbf1276d09cd5e80e9fb3dd88c9511"; # for python 3.11.9 at the time of writing.
+      hash = "sha256-kpXoIHlz53+0FAm/fK99ZBdNUg0u13erOr1XP2FSkQY=";
     };
-  in [
-    "${mingw-patch}/*.patch"
-  ]);
+    # Patches already applied in 3.11.10
+    skipped-patches = [
+      "00415-cve-2023-27043-gh-102988-reject-malformed-addresses-in-email-parseaddr-111116.patch"
+      "00435-gh-121650-encode-newlines-in-headers-and-verify-headers-are-sound-gh-122233.patch"
+      "00436-cve-2024-8088-gh-122905-sanitize-names-in-zipfile-path.patch"
+      "CVE-2024-4032.patch"
+    ];
+  in (
+    lib.filter
+      (
+        f:
+          (lib.hasSuffix ".patch" f) &&
+          (!(lib.any (s: lib.hasSuffix s f) skipped-patches))
+      )
+      (lib.filesystem.listFilesRecursive mingw-patch)
+  ));
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
