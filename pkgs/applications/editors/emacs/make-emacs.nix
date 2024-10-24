@@ -2,6 +2,7 @@
 , version
 , variant
 , src
+, templateNativeCompDriverOptionsPatch
 , patches ? _: [ ]
 , meta
 }:
@@ -132,6 +133,20 @@ let
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
 
+  nativeCompilationPatch = substituteAll {
+    src = templateNativeCompDriverOptionsPatch;
+    backendPath = (lib.concatStringsSep " "
+      (builtins.map (x: ''"-B${x}"'') ([
+        # Paths necessary so the JIT compiler finds its libraries:
+        "${lib.getLib libgccjit}/lib"
+      ] ++ libGccJitLibraryPaths ++ [
+        # Executable paths necessary for compilation (ld, as):
+        "${lib.getBin stdenv.cc.cc}/bin"
+        "${lib.getBin stdenv.cc.bintools}/bin"
+        "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+      ])));
+  };
+
   inherit (if variant == "macport"
            then llvmPackages_14.stdenv
            else stdenv) mkDerivation;
@@ -147,27 +162,9 @@ mkDerivation (finalAttrs: {
 
   inherit src;
 
-  patches = patches fetchpatch ++ lib.optionals withNativeCompilation [
-    (substituteAll {
-      src = if lib.versionOlder finalAttrs.version "29"
-            then ./native-comp-driver-options-28.patch
-            else if lib.versionOlder finalAttrs.version "30"
-            then ./native-comp-driver-options.patch
-            else ./native-comp-driver-options-30.patch;
-      backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''"-B${x}"'') ([
-          # Paths necessary so the JIT compiler finds its libraries:
-          "${lib.getLib libgccjit}/lib"
-        ] ++ libGccJitLibraryPaths ++ [
-          # Executable paths necessary for compilation (ld, as):
-          "${lib.getBin stdenv.cc.cc}/bin"
-          "${lib.getBin stdenv.cc.bintools}/bin"
-          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ])));
-    })
-  ];
+  patches = patches fetchpatch ++ lib.optionals withNativeCompilation [ nativeCompilationPatch ];
 
-  postPatch = lib.concatStringsSep "\n" [
+  postPatch = lib.concatStringsSep "\n" ([
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
@@ -185,20 +182,20 @@ mkDerivation (finalAttrs: {
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
       substituteInPlace src/Makefile.in \
-        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+        --replace-fail 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
     ''
 
     ''
       substituteInPlace lisp/international/mule-cmds.el \
-        --replace /usr/share/locale ${gettext}/share/locale
-
+        --replace-fail /usr/share/locale ${gettext}/share/locale
+    ''
+  ] ++ lib.optionals (lib.versionOlder version "29") [
+    ''
       for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace /bin/pwd pwd
+        substituteInPlace $makefile_in --replace-fail /bin/pwd pwd
       done
     ''
-
-    ""
-  ];
+  ]);
 
   nativeBuildInputs = [
     makeWrapper
