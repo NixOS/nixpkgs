@@ -1,0 +1,12 @@
+diff --git a/crates/muvm/src/guest/bin/muvm-guest.rs b/crates/muvm/src/guest/bin/muvm-guest.rs
+index 311b2ca..b726547 100644
+--- a/crates/muvm/src/guest/bin/muvm-guest.rs
++++ b/crates/muvm/src/guest/bin/muvm-guest.rs
+@@ -38,7 +38,7 @@ fn main() -> Result<()> {
+     if let Err(err) = mount_filesystems() {
+         return Err(err).context("Failed to mount filesystems, bailing out");
+     }
+-    Command::new("/usr/lib/systemd/systemd-udevd").spawn()?;
++    Command::new("@systemd-udevd@").spawn()?;
+ 
+     setup_fex()?;

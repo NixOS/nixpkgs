@@ -13,6 +13,7 @@
 , libkrunfw
 , llvmPackages
 , rustc
+, withBlk ? false
 , withGpu ? false
 , withSound ? false
 , withNet ? false
@@ -56,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ] ++ lib.optional withGpu "GPU=1"
+  ] ++ lib.optional withBlk "BLK=1"
+    ++ lib.optional withGpu "GPU=1"
     ++ lib.optional withSound "SND=1"
     ++ lib.optional withNet "NET=1"
     ++ lib.optional sevVariant "SEV=1";
