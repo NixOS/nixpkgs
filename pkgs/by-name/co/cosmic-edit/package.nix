@@ -1,32 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
-  libglvnd,
-  libxkbcommon,
-  libinput,
-  fontconfig,
-  freetype,
-  mesa,
-  wayland,
-  xorg,
-  vulkan-loader,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, mesa
+, libglvnd
+, cosmic-icons
+, just
+, pkg-config
+, glib
+, libxkbcommon
+, wayland
+, xorg
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cosmic-edit";
+  pname = "cosmic-files";
   version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-edit";
+    repo = "cosmic-files";
     rev = "epoch-${version}";
-    hash = "sha256-3goolnDRGQkQ3zN08WKzN6Dxt+Sh1lR+tFxeWjO3VKY=";
+    hash = "sha256-rBR6IPpMgOltyaRPPZ5V8tYH/xtQphgrPWci/kvlgEg=";
   };
 
   cargoLock = {
@@ -35,9 +31,8 @@ rustPlatform.buildRustPackage rec {
       "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
       "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
+      "cosmic-client-toolkit-0.1.0" = "sha256-1XtyEvednEMN4MApxTQid4eed19dEN5ZBDt/XRjuda0=";
       "cosmic-config-0.1.0" = "sha256-gXrMEoAN+7nYAEcs4w6wROhQTjMCxkGn+muJutktLyk=";
-      "cosmic-files-0.1.0" = "sha256-rBR6IPpMgOltyaRPPZ5V8tYH/xtQphgrPWci/kvlgEg=";
-      "cosmic-syntax-theme-0.1.0" = "sha256-BNb9wrryD5FJImboD3TTdPRIfiBqPpItqwGdT1ZiNng=";
       "cosmic-text-0.12.1" = "sha256-u2Tw+XhpIKeFg8Wgru/sjGw6GUZ2m50ZDmRBJ1IM66w=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "filetime-0.2.24" = "sha256-lU7dPotdnmyleS2B75SmDab7qJfEzmJnHPF18CN/Y98=";
@@ -61,17 +56,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [
-    libxkbcommon
-    xorg.libX11
-    libinput
-    libglvnd
-    fontconfig
-    freetype
-    mesa
-    wayland
-    vulkan-loader
-  ];
+  buildInputs = [ glib libglvnd mesa libxkbcommon wayland ];
 
   dontUseJustBuild = true;
 
@@ -81,34 +66,36 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-edit"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "--set"
+    "applet-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  # TODO: remove next two phases if these packages ever stop requiring mutually exclusive features
+  # Credit to lilyinstarlight
+  buildPhase = ''
+    baseCargoBuildFlags="$cargoBuildFlags"
+    cargoBuildFlags="$baseCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+    cargoBuildFlags="$baseCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+  '';
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-edit" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon wayland
-      ]}
+  checkPhase = ''
+    baseCargoTestFlags="$cargoTestFlags"
+    cargoTestFlags="$baseCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+    cargoTestFlags="$baseCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/pop-os/cosmic-edit";
-    description = "Text Editor for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-edit";
+    homepage = "https://github.com/pop-os/cosmic-files";
+    description = "File Manager for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
   };
 }
+
