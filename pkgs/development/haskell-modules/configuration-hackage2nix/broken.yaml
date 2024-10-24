@@ -6839,7 +6839,6 @@ broken-packages:
   - yhccore # failure in job https://hydra.nixos.org/build/233199669 at 2023-09-02
   - yhseq # failure in job https://hydra.nixos.org/build/233191724 at 2023-09-02
   - yices # failure in job https://hydra.nixos.org/build/233242137 at 2023-09-02
-  - yi-language # failure in job https://hydra.nixos.org/build/233217570 at 2023-09-02
   - yoctoparsec # failure in job https://hydra.nixos.org/build/233192019 at 2023-09-02
   - yoda # failure in job https://hydra.nixos.org/build/233200530 at 2023-09-02
   - Yogurt # failure in job https://hydra.nixos.org/build/233212103 at 2023-09-02

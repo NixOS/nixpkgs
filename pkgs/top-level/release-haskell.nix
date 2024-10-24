@@ -379,6 +379,7 @@ let
         xmobar
         xmonadctl
         xmonad-with-packages
+        yi
         zsh-git-prompt
         ;
 
