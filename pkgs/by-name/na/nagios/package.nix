@@ -1,38 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, php
-, gd
-, libpng
-, openssl
-, zlib
-, unzip
-, nixosTests
-, nix-update-script
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gd,
+  libpng,
+  nix-update-script,
+  nixosTests,
+  openssl,
+  perl,
+  php,
+  testers,
+  unzip,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nagios";
-  version = "4.5.4";
+  version = "4.5.6";
 
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
     rev = "refs/tags/nagios-${finalAttrs.version}";
-    hash = "sha256-QZKSVjaOUDmsQwOlJSTQgy8BuTZ5tcDaJB0a6KttrdU=";
+    hash = "sha256-51+1xxZjIUH7mai0k7XkeL2J/NPENMP2gubgeWCnl6o=";
   };
 
   patches = [ ./nagios.patch ];
+
   nativeBuildInputs = [ unzip ];
 
   buildInputs = [
-    php
-    perl
     gd
     libpng
     openssl
+    perl
+    php
     zlib
   ];
 
@@ -49,7 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     substituteInPlace Makefile --replace-fail '$(MAKE) install-basic' ""
   '';
-  installTargets = "install install-config";
+
+  installTargets = [ "install install-config" ];
+
   postInstall = ''
     # don't make default files use hardcoded paths to commands
     sed -i 's@command_line *[^ ]*/\([^/]*\) @command_line \1 @'  $out/etc/objects/commands.cfg
@@ -66,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "nagios-(.*)" ];
+      extraArgs = [
+        "--version-regex"
+        "nagios-(.*)"
+      ];
     };
   };
 
@@ -77,6 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     mainProgram = "nagios";
-    maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      immae
+      thoughtpolice
+      relrod
+      anthonyroussel
+    ];
   };
 })

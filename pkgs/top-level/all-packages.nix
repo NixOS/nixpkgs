@@ -24809,8 +24809,6 @@ with pkgs;
 
   munin = callPackage ../servers/monitoring/munin { };
 
-  nagios = callPackage ../servers/monitoring/nagios { };
-
   nagiosPlugins = callPackages ../servers/monitoring/nagios-plugins { };
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
