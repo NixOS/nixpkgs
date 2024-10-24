@@ -10,6 +10,7 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-sdk,
 
   # tests
   aiosqlite,
@@ -29,21 +30,18 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
-
-  # passthru
-  langgraph-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.34";
+  version = "0.2.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-5Suyj6pEslgR383MkYGGz7IC2A0A++02YooZmi8YtyM=";
+    hash = "sha256-VZRGlE3MSOzur1TWC6swQjf/o5M62LsYncx2g8dtS+o=";
   };
 
   postgresqlTestSetupPost = ''
@@ -58,6 +56,7 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   pythonImportsCheck = [ "langgraph" ];
