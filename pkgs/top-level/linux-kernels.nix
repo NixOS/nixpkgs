@@ -706,7 +706,12 @@ in {
     version ? (builtins.parseDrvName src.name).version,
     makeTarget ? "defconfig",
     name ? "kernel.config",
-  }: stdenvNoCC.mkDerivation {
+    miniconfig ? null,  # ref https://docs.kernel.org/kbuild/kconfig.html
+  }:
+    assert (miniconfig != null) -> builtins.elem makeTarget
+      [ "allyesconfig" "allmodconfig" "allnoconfig" "alldefconfig" "randconfig" ];
+
+    stdenvNoCC.mkDerivation {
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ buildPackages.bison buildPackages.flex ];
@@ -719,6 +724,7 @@ in {
       make \
         ARCH=${stdenv.hostPlatform.linuxArch} \
         HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
+        ${lib.optionalString (miniconfig != null) "KCONFIG_ALLCONFIG=${miniconfig}"} \
         ${makeTarget}
     '';
     installPhase = ''
