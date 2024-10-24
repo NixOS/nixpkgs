@@ -190,6 +190,24 @@ in
               '';
             };
 
+            passwordFile = mkOption {
+              type = with lib.types; nullOr (str // {
+                # We don't want users to be able to pass a path literal here but
+                # it should look like a path.
+                check = it: lib.isString it && lib.types.path.check it;
+              });
+              example = "/run/keys/db_user_pw";
+              default = null;
+              description = ''
+                The path to a file containing a password that is to be set as the user's PASSWORD field.
+
+                A path must be given because Nix strings would be exposed in Nix store through the .drv files. You must
+                not pass a path literal either for the same reason. The path must therefore be represented as a string.
+
+                Note that the contents of this file are stripped of newlines and that surrounding whitespace is trimmed.
+              '';
+            };
+
             ensureClauses = mkOption {
               description = ''
                 An attrset of clauses to grant to the user. Under the hood this uses the
@@ -588,6 +606,19 @@ in
                     user.ensureDBOwnership
                     ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
 
+                  setPW =
+                    pkgs.writeText
+                    "set-pw.sql"
+                    # You can't use prepared statements for ALTER ROLE, we must wrap it in a procedure
+                    ''
+                      DO $$
+                      DECLARE password TEXT;
+                      BEGIN
+                        password := trim(both from replace(pg_read_file('${user.passwordFile}'), E'\n', '''));
+                        EXECUTE 'ALTER ROLE "${user.name}" WITH PASSWORD' || quote_literal(password);
+                      END $$;
+                    '';
+
                   filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
                   clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
@@ -595,6 +626,7 @@ in
                   userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
                 in ''
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
+                  ${lib.optionalString (user.passwordFile != null) "$PSQL -tAf ${setPW}"}
                   ${userClauses}
 
                   ${dbOwnershipStmt}
