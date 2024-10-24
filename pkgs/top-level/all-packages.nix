@@ -8592,10 +8592,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ifuse = callPackage ../tools/filesystems/ifuse { };
-  ideviceinstaller = callPackage ../tools/misc/ideviceinstaller { };
-  idevicerestore = callPackage ../tools/misc/idevicerestore { };
-
   inherit (callPackages ../tools/filesystems/irods rec {
     stdenv = llvmPackages_13.libcxxStdenv;
     libcxx = llvmPackages_13.libcxx;
@@ -13247,8 +13243,6 @@ with pkgs;
   urn-timer = callPackage ../tools/misc/urn-timer { };
 
   ursadb = callPackage ../servers/ursadb { };
-
-  usbmuxd = callPackage ../tools/misc/usbmuxd { };
 
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
@@ -21056,8 +21050,6 @@ with pkgs;
   libiodbc = callPackage ../development/libraries/libiodbc {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
-
-  libirecovery = callPackage ../development/libraries/libirecovery { };
 
   libivykis = callPackage ../development/libraries/libivykis { };
 

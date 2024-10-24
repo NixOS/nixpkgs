@@ -1,23 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, fuse
-, usbmuxd
-, libimobiledevice
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-stdenv.mkDerivation rec {
+  autoreconfHook,
+  pkg-config,
+
+  fuse,
+  libimobiledevice,
+  usbmuxd,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifuse";
-  version = "1.1.4+date=2022-04-04";
+  version = "1.1.4-unstable-2023-01-06";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "6f5b8e410f9615b3369ca5eb5367745e13d83b92";
-    hash = "sha256-KbuJLS2BWua9DnhLv2KtsQObin0PQwXQwEdgi3lSAPk=";
+    repo = "ifuse";
+    rev = "814a0e38050850937debd697fcfe6eca3de1b66f";
+    hash = "sha256-bjd/47hzveEJIbuT/C8h+uzGFbXLHupEV/OOOAdNlsc=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -26,8 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fuse
-    usbmuxd
     libimobiledevice
+    usbmuxd
   ];
 
   meta = with lib; {
@@ -39,9 +44,9 @@ stdenv.mkDerivation rec {
       app, an app's documents folder or even the root filesystem on jailbroken
       devices.
     '';
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ frontear ];
     mainProgram = "ifuse";
   };
-}
+})
