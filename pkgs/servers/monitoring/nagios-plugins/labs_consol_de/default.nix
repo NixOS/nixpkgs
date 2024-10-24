@@ -75,10 +75,18 @@ in
     buildInputs = [ perlPackages.DBDsybase ];
   };
 
-  check_nwc_health = generic {
+  check_nwc_health = generic rec {
     pname = "check-nwc-health";
-    version = "7.10.0.6";
-    sha256 = "092rhaqnk3403z0y60x38vgh65gcia3wrd6gp8mr7wszja38kxv2";
+    version = "11.7";
+
+    src = fetchFromGitHub {
+      owner = "lausser";
+      repo = "check_nwc_health";
+      rev = "refs/tags/${version}";
+      hash = "sha256-r8Cb9RnEohNp0GxMAIaj7e08dTWZhuV1jz4/b8tuJ6k=";
+      fetchSubmodules = true;
+    };
+
     description = "Check plugin for network equipment";
     buildInputs = [ perlPackages.NetSNMP ];
   };
