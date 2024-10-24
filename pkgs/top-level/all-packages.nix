@@ -29689,14 +29689,6 @@ with pkgs;
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
-  gtklock = callPackage ../tools/wayland/gtklock { };
-
-  gtklock-playerctl-module = callPackage ../tools/wayland/gtklock/playerctl-module.nix { };
-
-  gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
-
-  gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
-
   gv = callPackage ../applications/misc/gv { };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
