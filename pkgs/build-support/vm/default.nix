@@ -449,6 +449,8 @@ rec {
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt${storeDir}
         ${util-linux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
+        # Some programs may require devices in /dev to be available (e.g. /dev/random)
+        ${util-linux}/bin/mount -o bind /dev /mnt/dev
 
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
@@ -487,7 +489,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
+        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp /mnt/dev ${lib.optionalString unifiedSystemDir "/mnt/proc"}
         ${util-linux}/bin/umount /mnt
       '';
 
