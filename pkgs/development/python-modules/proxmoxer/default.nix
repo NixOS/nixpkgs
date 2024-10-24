@@ -8,6 +8,7 @@
   requests,
   requests-toolbelt,
   responses,
+  pynacl,
   setuptools,
 }:
 
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-toolbelt
     responses
+    pynacl
   ];
 
   disabledTestPaths = [
