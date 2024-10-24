@@ -2,13 +2,13 @@
 
 buildNimPackage (finalAttrs: {
   pname = "min";
-  version = "0.43.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "h3rald";
     repo = "min";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4coeasFZrbwYQ6FM0ENkh/pPcvN3rCuheUpmHr1f3wM=";
+    hash = "sha256-T2w0zeb4kGrf7BSDAYU5l7Bj01oGYEWVJJjjwim0BWI=";
   };
 
   lockFile = ./lock.json;
@@ -16,15 +16,6 @@ buildNimPackage (finalAttrs: {
   buildInputs = [ openssl pcre ];
 
   prePatch = ''
-    # substitude our code for their code for data
-    substituteInPlace min.nimble \
-      --replace-fail 'import' "" \
-      --replace-warn 'minpkg/core/meta' "" \
-      --replace-warn 'pkgVersion' '"${finalAttrs.version}"' \
-      --replace-warn 'pkgAuthor' '""' \
-      --replace-warn 'pkgDescription' '""' \
-      --replace-warn 'pkgName' '"${finalAttrs.pname}"' \
-
     # remove vendorabilities
     find . -name '*.a' -delete
     find minpkg/lib -name '*.nim' \
