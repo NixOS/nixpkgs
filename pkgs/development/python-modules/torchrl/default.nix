@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -44,16 +43,12 @@
   pytestCheckHook,
   pyyaml,
   scipy,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "torchrl";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
@@ -138,6 +133,11 @@ buildPythonPackage rec {
     ++ optional-dependencies.rendering;
 
   disabledTests = [
+    # torchrl is incompatible with gymnasium>=1.0
+    # https://github.com/pytorch/rl/discussions/2483
+    "test_resetting_strategies"
+    "test_torchrl_to_gym"
+
     # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
     "test_vecenvs_env"
 
@@ -175,6 +175,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ~3k tests fail with: RuntimeError: internal error
   };
 }
