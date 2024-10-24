@@ -14491,7 +14491,7 @@
   };
   moraxyc = {
     name = "Moraxyc Xu";
-    email = "nix@qaq.li";
+    email = "i@qaq.li";
     github = "Moraxyc";
     githubId = 69713071;
   };
