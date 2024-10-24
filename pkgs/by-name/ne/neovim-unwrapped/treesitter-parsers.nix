@@ -2,12 +2,12 @@
 
 {
   c.src = fetchurl {
-    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.21.3.tar.gz";
-    hash = "sha256:75a3780df6114cd37496761c4a7c9fd900c78bee3a2707f590d78c0ca3a24368";
+    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.23.0.tar.gz";
+    hash = "sha256:ee58c925e2e507c23d735aad46bf7fb0af31ca06d6f4f41bc008216d9232b0cb";
   };
   lua.src = fetchurl {
-    url = "https://github.com/tree-sitter-grammars/tree-sitter-lua/archive/v0.1.0.tar.gz";
-    hash = "sha256:230cfcbfa74ed1f7b8149e9a1f34c2efc4c589a71fe0f5dc8560622f8020d722";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-lua/archive/v0.2.0.tar.gz";
+    hash = "sha256:6c41227cd0a59047b19d31f0031d4d901f08bfd78d6fc7f55c89e5b8374c794e";
   };
   vim.src = fetchurl {
     url = "https://github.com/neovim/tree-sitter-vim/archive/v0.4.0.tar.gz";
@@ -22,7 +22,7 @@
     hash = "sha256:d3a423ab66dc62b2969625e280116678a8a22582b5ff087795222108db2f6a6e";
   };
   markdown.src = fetchurl {
-    url = "https://github.com/MDeiml/tree-sitter-markdown/archive/v0.2.3.tar.gz";
-    hash = "sha256:4909d6023643f1afc3ab219585d4035b7403f3a17849782ab803c5f73c8a31d5";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v0.3.2.tar.gz";
+    hash = "sha256:5dac48a6d971eb545aab665d59a18180d21963afc781bbf40f9077c06cb82ae5";
   };
 }
