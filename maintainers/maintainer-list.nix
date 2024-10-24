@@ -9733,6 +9733,12 @@
     githubId = 3874017;
     name = "Jappie Klooster";
   };
+  jappie3 = {
+    name = "Jappie3";
+    matrix = "@jappie:jappie.dev";
+    github = "Jappie3";
+    githubId = 42720120;
+  };
   jaredmontoya = {
     name = "Jared Montoya";
     github = "jaredmontoya";
@@ -18863,6 +18869,12 @@
     github = "benxiao";
     githubId = 10908495;
     name = "Ran Xiao";
+  };
+  ryan4yin = {
+    email = "xiaoyin_c@qq.com";
+    github = "ryan4yin";
+    githubId = 22363274;
+    name = "Ryan Yin";
   };
   ryanartecona = {
     email = "ryanartecona@gmail.com";

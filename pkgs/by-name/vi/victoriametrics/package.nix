@@ -91,6 +91,7 @@ buildGoModule rec {
       ivan
       leona
       shawn8901
+      ryan4yin
     ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
     mainProgram = "victoria-metrics";
