@@ -26838,7 +26838,7 @@ with pkgs;
   dm-sans = callPackage ../data/fonts/dm-sans { };
   dns-root-data = callPackage ../data/misc/dns-root-data { };
 
-  docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
+  docbook5 = docbook-5;
 
   docbook_sgml_dtd_31 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/3.1.nix { };
 
