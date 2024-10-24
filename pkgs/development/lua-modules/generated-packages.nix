@@ -2515,14 +2515,14 @@ buildLuarocksPackage {
 lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lze";
-  version = "0.1.1-1";
+  version = "0.1.3-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lze-0.1.1-1.rockspec";
-    sha256 = "0rih9kgx846qhp1fmsqlnp8y08kv4hp8gl9dwykz4zr0zljy94j3";
+    url    = "mirror://luarocks/lze-0.1.3-1.rockspec";
+    sha256 = "0dmbkx3z5syqcsmjbiy4s55hcq5fi3nw0rcnyflffnl2i379a3rd";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lze/archive/v0.1.1.zip";
-    sha256 = "1s6n61jabsv94s37xd5g0y7fxhficc4rwsklgsmzajravpgy60a8";
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.1.3.zip";
+    sha256 = "0g7acfhx0klf47f6zswnzx81j7hf0p1f9l1lh4k57ss9c22fsvby";
   };
 
   disabled = luaOlder "5.1";
