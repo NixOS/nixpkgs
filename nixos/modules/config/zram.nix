@@ -92,6 +92,46 @@ in
           as there's no gain from keeping them in RAM.
         '';
       };
+
+      use-optimal-sysctls = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          Applies some sysctls to optimize the virtual memory subsystem
+          for zramSwap.
+
+          - `vm.swappiness = 150` increase swapping aka compression to be
+            able to cache more file page data
+          - `vm.watermark_boost_factor = 0` watermark boosting can cause unpredictable stalls as seen here:
+            https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1861359
+          - `vm.watermark_scale_factor = 125` initiate kswapd much earlier
+            as zram will also apply pressure when requesting memory for
+            compressed swap
+          - `vm.page-cluster = 0` disables page prefetching
+
+          This option when enabled, sets these sysctls when you also
+          enable the zramSwap module.
+
+          Defaults to `true`.
+        '';
+      };
+
+      disable-zswap = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          When using zram-backed swap, it is unwise to have zswap enabled.
+          Zswap is designed to intercept pages destined to be swapped and try
+          to keep them in memory in compressed form. This only makes sense
+          when you are using a block device as swap, no zram as swap.
+
+          This option when enabled, adds the `zswap.enabled=0` kernel
+          parameter when you also enable the zramSwap module.
+
+          Defaults to `true`.
+        '';
+      };
+
     };
 
   };
@@ -125,6 +165,13 @@ in
         })
         devices);
 
-  };
+    boot.kernel.sysctl = lib.mkIf cfg.use-optimal-sysctls {
+        "vm.swappiness" = 150;
+        "vm.watermark_boost_factor" = 0;
+        "vm.watermark_scale_factor" = 125;
+        "vm.page-cluster" = 0;
+    };
 
+    boot.kernelParams = lib.mkIf cfg.disable-zswap [ "zswap.enabled=0" ];
+  };
 }
