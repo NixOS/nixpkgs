@@ -2,7 +2,6 @@
   autoreconfHook,
   coreutils,
   fetchFromGitHub,
-  fetchurl,
   gnugrep,
   gnused,
   lib,
@@ -12,28 +11,16 @@
 }:
 
 let
-  glplugin = fetchFromGitHub {
-    owner = "lausser";
-    repo = "GLPlugin";
-    rev = "ef3107f01afe55fad5452e64ac5bbea00b18a8d5";
-    sha256 = "047fwrycsl2vmpi4wl46fs6f8y191d6qc9ms5rvmrj1dm2r828ws";
-  };
-
   generic =
     {
       pname,
       version,
-      sha256,
+      src,
       description,
       buildInputs,
     }:
     stdenv.mkDerivation {
-      inherit pname version;
-
-      src = fetchurl {
-        url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.gz";
-        inherit sha256;
-      };
+      inherit pname version src;
 
       buildInputs = [ perlPackages.perl ] ++ buildInputs;
 
@@ -42,9 +29,7 @@ let
         makeWrapper
       ];
 
-      prePatch = ''
-        rm -rf GLPlugin
-        ln -s ${glplugin} GLPlugin
+      postPatch = ''
         substituteInPlace plugins-scripts/Makefile.am \
           --replace-fail /bin/cat  ${lib.getExe' coreutils "cat"} \
           --replace-fail /bin/echo ${lib.getExe' coreutils "echo"} \
@@ -74,10 +59,18 @@ let
 
 in
 {
-  check_mssql_health = generic {
+  check_mssql_health = generic rec {
     pname = "check-mssql-health";
-    version = "2.6.4.15";
-    sha256 = "12z0b3c2p18viy7s93r6bbl8fvgsqh80136d07118qhxshp1pwxg";
+    version = "2.7.7";
+
+    src = fetchFromGitHub {
+      owner = "lausser";
+      repo = "check_mssql_health";
+      rev = "refs/tags/${version}";
+      hash = "sha256-K6sGrms9z59a9rkZNulwKBexGF2Nkqqak/cRg12ynxc=";
+      fetchSubmodules = true;
+    };
+
     description = "Check plugin for Microsoft SQL Server";
     buildInputs = [ perlPackages.DBDsybase ];
   };
