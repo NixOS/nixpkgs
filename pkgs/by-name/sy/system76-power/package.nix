@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-power";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
     rev = version;
-    sha256 = "sha256-kYDrSfpOuRigDX792w3hATXoxX6PWpYWXkxw9Q28P5s=";
+    hash = "sha256-Ju4xIWOf6m8z1fUSbzafKkyt9XXT8q1/8RukrhtswsE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0644 data/com.system76.PowerDaemon.xml $out/share/dbus-1/interfaces/com.system76.PowerDaemon.xml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System76 Power Management";
     mainProgram = "system76-power";
     homepage = "https://github.com/pop-os/system76-power";
-    license = licenses.gpl3Plus;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.smonson ];
+    license = lib.licenses.gpl3Plus;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    maintainers = with lib.maintainers; [ smonson ahoneybun ];
   };
 }
