@@ -7,10 +7,10 @@
 , xdg-desktop-portal
 , gtk3
 , gnome-settings-daemon
-, gnome-desktop
 , glib
 , wrapGAppsHook3
 , gsettings-desktop-schemas
+, runCommand
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     xdg-desktop-portal
     gsettings-desktop-schemas # settings exposed by settings portal
-    gnome-desktop
-    gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+     # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+    (runCommand "gnome-settings-daemon-${gnome-settings-daemon.version}-gsettings-schemas" {} ''
+      mkdir -p $out/share
+      cp -r ${gnome-settings-daemon}/share/gsettings-schemas/ $out/share/
+    '')
+  ];
+
+  mesonFlags = [
+    # only useful on Gnome which uses xdg-desktop-portal-gnome
+    "-Dwallpaper=disabled"
   ];
 
   meta = with lib; {
