@@ -172,3 +172,6 @@ to the team without an approval by at least one existing member.
 Various utility scripts, which are mainly useful for nixpkgs maintainers,
 are available under `./scripts/`.  See its [README](./scripts/README.md)
 for further information.
+
+# nixpkgs-merge-bot
+To streamline autoupdates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name and the commenter is among the package maintainers. The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
