@@ -7,6 +7,7 @@
 , writeText
 , wrapGAppsHook3
 , autoPatchelfHook
+, patchelfUnstable # have to use patchelfUnstable to support --no-clobber-old-sections
 , callPackage
 
 , atk
@@ -90,7 +91,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.5.9";
+  version = "14.0";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,7 +103,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-hyFYI42IfFY0vqkqInkLQAWSY8flsmWGN8CaXBwXbGA=";
+      hash = "sha256-D5r1VsbjaswGm5ncgdSIOJFfDMXBZX2JDGcTTRVkoVs=";
     };
   };
 
@@ -125,13 +126,22 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    patchelfUnstable
+    copyDesktopItems
+    makeWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gtk3
     alsa-lib
     dbus-glib
     libXtst
   ];
+
+  # Firefox uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -165,7 +175,8 @@ stdenv.mkDerivation rec {
     tar xf "$src" -C "$MB_IN_STORE" --strip-components=2
     pushd "$MB_IN_STORE"
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "mullvadbrowser.real"
+    # Set ELF interpreter
+    autoPatchelf mullvadbrowser.real
 
     # mullvadbrowser is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv mullvadbrowser.real mullvadbrowser
