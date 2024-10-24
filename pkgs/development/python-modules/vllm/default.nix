@@ -132,19 +132,23 @@ buildPythonPackage rec {
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
   ];
 
-  # Ignore the python version check because it hard-codes minor versions and
-  # lags behind `ray`'s python interpreter support
-  # Relax torch dependency manually because the nonstandard requirements format
-  # is not caught by pythonRelaxDeps
   postPatch = ''
+    # Ignore the python version check because it hard-codes minor versions and
+    # lags behind `ray`'s python interpreter support
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         'set(PYTHON_SUPPORTED_VERSIONS' \
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+
+    # Relax torch dependency manually because the nonstandard requirements format
+    # is not caught by pythonRelaxDeps
     substituteInPlace requirements*.txt pyproject.toml \
       --replace-warn 'torch==2.4.0' 'torch==${lib.getVersion torch}' \
-      --replace-warn 'torch == 2.4.0' 'torch == ${lib.getVersion torch}' \
-    
+      --replace-warn 'torch == 2.4.0' 'torch == ${lib.getVersion torch}'
+
+    # Use Gloo as Jetsons do not support NCCL.
+    substituteInPlace vllm/distributed/parallel_state.py \
+      --replace-fail '"nccl"' '"gloo"'
   '';
 
   nativeBuildInputs = [

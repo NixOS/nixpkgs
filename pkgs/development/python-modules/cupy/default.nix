@@ -19,6 +19,10 @@
 
 let
   inherit (cudaPackages) cudnn cutensor nccl;
+
+  # Some packages are not available on all platforms
+  cuda_nvprof = cudaPackages.nvprof or null;
+
   outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cudart
