@@ -3526,6 +3526,8 @@ self: super: with self; {
 
   djangorestframework-guardian2 = callPackage ../development/python-modules/djangorestframework-guardian2 { };
 
+  djangorestframework-jsonp = callPackage ../development/python-modules/djangorestframework-jsonp { };
+
   djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
@@ -3611,6 +3613,8 @@ self: super: with self; {
   dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
+
+  dmt-core = callPackage ../development/python-modules/dmt-core { };
 
   dm-control = callPackage ../development/python-modules/dm-control { };
 
@@ -6848,6 +6852,8 @@ self: super: with self; {
   kserve = callPackage ../development/python-modules/kserve { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
+
+  kubernetes-asyncio = callPackage ../development/python-modules/kubernetes-asyncio { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
@@ -13585,6 +13591,8 @@ self: super: with self; {
 
   reproject = callPackage ../development/python-modules/reproject { };
 
+  reprint = callPackage ../development/python-modules/reprint { };
+
   reprshed = callPackage ../development/python-modules/reprshed { };
 
   reptor = callPackage ../development/python-modules/reptor { };
@@ -17207,6 +17215,8 @@ self: super: with self; {
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
 
   verboselogs = callPackage ../development/python-modules/verboselogs { };
+
+  verilogae = callPackage ../development/python-modules/verilogae { };
 
   verlib2 = callPackage ../development/python-modules/verlib2 { };
 
