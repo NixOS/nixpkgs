@@ -59,11 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    # Install the upstream systemd unit
+    (lib.mesonBool "systemd" true)
     # Enable Wayland support
     (lib.mesonBool "portal" true)
     # Handle by the module
     (lib.mesonBool "capabilities" false)
-    (lib.mesonBool "systemd" false)
     (lib.mesonBool "nvidia_suspend_fix" false)
   ];
 
