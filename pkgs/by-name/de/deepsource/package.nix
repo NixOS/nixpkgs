@@ -12,7 +12,6 @@ buildGoModule rec {
   };
 
   doCheck = false;
-  doInstallCheck = true;
 
   vendorHash = "sha256-SsMq4ngq3sSOL28ysHTxTF4CT9sIcCIW7yIhBxIPrNs=";
 
@@ -23,5 +22,6 @@ buildGoModule rec {
     mainProgram = "deepsource";
     homepage = "https://github.com/DeepSourceCorp/cli";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ nipeharefa ];
   };
 }
