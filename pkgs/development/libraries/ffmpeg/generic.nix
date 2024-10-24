@@ -840,7 +840,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # Fails with SIGABRT otherwise FIXME: Why?
   checkPhase = let

@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNU SASL, Simple Authentication and Security Layer library";
     mainProgram = "gsasl";
 
-    longDescription =
-      '' GNU SASL is a library that implements the IETF Simple
-         Authentication and Security Layer (SASL) framework and
-         some SASL mechanisms. SASL is used in network servers
-         (e.g. IMAP, SMTP, etc.) to authenticate peers.
-       '';
+    longDescription = ''
+      GNU SASL is a library that implements the IETF Simple
+      Authentication and Security Layer (SASL) framework and
+      some SASL mechanisms. SASL is used in network servers
+      (e.g. IMAP, SMTP, etc.) to authenticate peers.
+    '';
 
     homepage = "https://www.gnu.org/software/gsasl/";
     license = lib.licenses.gpl3Plus;

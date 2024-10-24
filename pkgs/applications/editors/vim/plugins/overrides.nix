@@ -149,8 +149,7 @@ in
       vim-fugitive
       vim-rhubarb
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "advanced_git_search.utils";
+    nvimRequireCheck = "advanced_git_search.utils";
   };
 
   animation-nvim = super.animation-nvim.overrideAttrs {
@@ -236,8 +235,7 @@ in
       plenary-nvim
       telescope-nvim
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "chatgpt";
+    nvimRequireCheck = "chatgpt";
   };
 
   clang_complete = super.clang_complete.overrideAttrs {
@@ -1529,6 +1527,10 @@ in
     nvimRequireCheck = "null-ls";
   };
 
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
+    nvimRequireCheck = "notebook-navigator";
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "null-ls";
@@ -1588,8 +1590,7 @@ in
       nvim-lspconfig
       nvim-navic
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "nvim-navbuddy";
+    nvimRequireCheck = "nvim-navbuddy";
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {

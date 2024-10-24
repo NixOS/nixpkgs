@@ -697,8 +697,8 @@ let
         mktplcRef = {
           name = "biome";
           publisher = "biomejs";
-          version = "2024.5.251958";
-          hash = "sha256-Pxbvj6e3nRwuLKmPEtE02JdHmZbyuXNh4T+FZKjBkWo=";
+          version = "2024.10.131712";
+          hash = "sha256-wslaPz0YwavLgP/gLXDIKsk2dvVmFgkSDCI9OfpKwwI=";
         };
         meta = {
           changelog = "https://github.com/biomejs/biome-vscode/blob/main/CHANGELOG.md";
@@ -5194,8 +5194,8 @@ let
         mktplcRef = {
           name = "vscode-icons";
           publisher = "vscode-icons-team";
-          version = "12.8.0";
-          hash = "sha256-2+Wf0AL9C5xOQCjA9maMt/W/kviNuiyMfaOFDU82KxM=";
+          version = "12.9.0";
+          hash = "sha256-ULjZlbGcVbPiokfnx7d4z7cmVVEfy2d+SUch80rZRA4=";
         };
         meta = {
           description = "Bring real icons to your Visual Studio Code";

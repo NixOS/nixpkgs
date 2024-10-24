@@ -196,6 +196,8 @@ with pkgs;
 
   appimageTools = callPackage ../build-support/appimage { };
 
+  appimageupdate-qt = appimageupdate.override { withQtUI = true; };
+
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
   bindle = callPackage ../servers/bindle {
@@ -11169,7 +11171,9 @@ with pkgs;
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
-  pingu = callPackage ../tools/networking/pingu { };
+  pingu = callPackage ../tools/networking/pingu {
+    buildGoModule = buildGo122Module;
+  };
 
   pinnwand = callPackage ../servers/pinnwand { };
 
@@ -12741,6 +12745,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+    buildGoModule = buildGo122Module;
   }) teleport_15 teleport_16 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
@@ -21022,10 +21027,6 @@ with pkgs;
 
   libhugetlbfs = callPackage ../development/libraries/libhugetlbfs { };
 
-  libhv = callPackage ../development/libraries/libhv {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   libhwy = callPackage ../development/libraries/libhwy { };
 
   libHX = callPackage ../development/libraries/libHX { };
@@ -22562,9 +22563,6 @@ with pkgs;
       protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
         abseil-cpp = abseil-cpp_202103;
       };
-      protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
-        abseil-cpp = abseil-cpp_202103;
-      };
     })
     protobuf_28
     protobuf_27
@@ -22573,7 +22571,6 @@ with pkgs;
     protobuf_24
     protobuf_23
     protobuf_21
-    protobuf3_20
     ;
 
   protobufc = callPackage ../development/libraries/protobufc { };
@@ -24370,8 +24367,6 @@ with pkgs;
   ircdog = callPackage ../applications/networking/irc/ircdog { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
-
-  janus-gateway = callPackage ../servers/janus-gateway { };
 
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
@@ -28989,8 +28984,6 @@ with pkgs;
 
   kerbrute = callPackage ../tools/security/kerbrute { };
 
-  komikku = callPackage ../applications/graphics/komikku { };
-
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
@@ -30235,7 +30228,7 @@ with pkgs;
 
   jaeles = callPackage ../tools/security/jaeles { };
 
-  jalv = callPackage ../applications/audio/jalv { };
+  jalv-qt = jalv.override { useQt = true; };
 
   jameica = callPackage ../applications/office/jameica {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -32244,8 +32237,6 @@ with pkgs;
   scantailor-universal = libsForQt5.callPackage ../applications/graphics/scantailor/universal.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
-
-  scite = callPackage ../applications/editors/scite { };
 
   scli = callPackage ../applications/misc/scli { };
 
@@ -37083,13 +37074,9 @@ with pkgs;
 
   gummi = callPackage ../applications/misc/gummi { };
 
-  gummy = callPackage ../tools/misc/gummy { };
-
   hashpump = callPackage ../tools/misc/hashpump { };
 
   hck = callPackage ../tools/text/hck { };
-
-  helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 

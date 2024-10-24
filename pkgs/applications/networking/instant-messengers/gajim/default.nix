@@ -47,6 +47,14 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  preBuild = ''
+    python make.py build --dist unix
+  '';
+
+  postInstall = ''
+    python make.py install --dist unix --prefix=$out
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
