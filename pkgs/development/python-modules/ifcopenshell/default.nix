@@ -54,7 +54,7 @@ let
 in
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "0.7.10";
+  version = "0.8.0";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     repo = "IfcOpenShell";
     rev = "refs/tags/ifcopenshell-python-${version}";
     fetchSubmodules = true;
-    hash = "sha256-cRzv07T5VN5aTjMtAlLGbvI3c4SL0lfzCn/W6f/vdBY=";
+    hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
   };
 
   nativeBuildInputs = [
