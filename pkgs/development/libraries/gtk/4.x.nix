@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "15.0")
+    (darwinMinVersionHook "10.15")
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin
                    && lib.versionOlder apple-sdk.version "10.15") [
       apple-sdk_10_15
