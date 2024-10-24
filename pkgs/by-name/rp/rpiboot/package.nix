@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/usbboot";
     changelog = "https://github.com/raspberrypi/usbboot/blob/${version}/debian/changelog";
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     mainProgram = "rpiboot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cartr
       flokli
     ];
