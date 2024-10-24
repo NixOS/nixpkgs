@@ -162,7 +162,7 @@ let
       # intent was that this would be configured properly automatically,
       # but that doesn't appear to be the case.
       ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
-      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
+      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? cpuModel) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
       # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
@@ -173,7 +173,7 @@ let
       # The following bogus CFLAGS environment variable triggers the
       # the code above, inhibiting `./Configure` from adding the
       # conflicting flags.
-      "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
+      "CFLAGS=-march=${stdenv.hostPlatform.cpuModel.gnu}"
     ];
 
     makeFlags = [
