@@ -15,6 +15,7 @@
   pkgconf,
   portaudio,
   SDL2,
+  versionCheckHook,
   withSDL2 ? false,
   withPipewire ? stdenv.hostPlatform.isLinux,
 }:
@@ -56,7 +57,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
     autoconf-archive
     pkgconf
+    versionCheckHook
   ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-v";
 
   preAutoreconf = ''
     echo ${version} > version
