@@ -12,6 +12,7 @@
 , python3
 , buildPackages
 , publicsuffix-list
+, withScripts ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]
     # bin/psl-make-dafsa brings a large runtime closure through python3
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
+    ++ lib.optional withScripts "bin";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,16 +42,18 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (
-    !stdenv.hostPlatform.isStatic && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
-  ) python3;
+  ] ++ lib.optional withScripts python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+  postPatch = lib.optionalString withScripts ''
     patchShebangs src/psl-make-dafsa
+  '';
+
+  postInstall = lib.optionalString (!withScripts) ''
+    rm $out/bin/psl-make-dafsa $out/share/man/man1/psl-make-dafsa*
   '';
 
   preAutoreconf = ''
