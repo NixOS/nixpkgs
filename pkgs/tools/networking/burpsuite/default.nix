@@ -70,7 +70,7 @@ buildFHSEnv {
       jython
       libcanberra-gtk3
       libdrm
-      libudev0-shim
+      udev
       libxkbcommon
       mesa
       nspr
