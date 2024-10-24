@@ -19206,7 +19206,18 @@ with self; {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz";
       hash = "sha256-FMN7wcuz883H1sE+DyeoWfFM3P1epUoEZ6iLwlmwt0E=";
     };
-    doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
+    preCheck =
+      (lib.optionalString stdenv.hostPlatform.isLinux ''
+        export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
+        export LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
+      '');
+    propagatedBuildInputs = [
+      CryptDES
+      CryptRijndael
+      DigestHMAC
+      DigestSHA1
+      Socket6
+    ];
     meta = {
       description = "Object oriented interface to SNMP";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
