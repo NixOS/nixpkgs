@@ -20,6 +20,12 @@ let
       ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
+
+      ${lib.optionalString config.system.etc.overlay.enable ''
+        ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
+        ln -s ${config.system.build.etcBasedir} $out/etc-basedir
+      ''}
+
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 

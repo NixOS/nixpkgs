@@ -50,6 +50,7 @@ stdenv.mkDerivation {
     done
 
     ln -s $opt/x86_64/HubstaffClient.bin.x86_64 $out/bin/HubstaffClient
+    ln -s $opt/x86_64/HubstaffCLI.bin.x86_64 $out/bin/HubstaffCLI
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources

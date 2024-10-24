@@ -2101,6 +2101,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "hyper-proxy"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca815a891b24fdfb243fa3239c86154392b0953ee584aa1a2a1f66d20cbe75cc"
+dependencies = [
+ "bytes",
+ "futures",
+ "headers",
+ "http 0.2.12",
+ "hyper 0.14.28",
+ "openssl",
+ "tokio",
+ "tokio-openssl",
+ "tower-service",
+]
+
+[[package]]
 name = "hyper-rustls"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4830,7 +4847,7 @@ dependencies = [
 
 [[package]]
 name = "svix-server"
-version = "1.30.0"
+version = "1.38.0"
 dependencies = [
  "aide",
  "anyhow",
@@ -4857,6 +4874,7 @@ dependencies = [
  "http 0.2.12",
  "hyper 0.14.28",
  "hyper-openssl",
+ "hyper-proxy",
  "hyper-socks2",
  "indexmap 1.9.3",
  "ipnet",

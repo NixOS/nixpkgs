@@ -1,7 +1,9 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
+, autoreconfHook269
+, autoconf-archive
 , pkg-config
 , gtk3
 , fribidi
@@ -24,9 +26,12 @@ stdenv.mkDerivation rec {
   pname = "abiword";
   version = "3.0.5";
 
-  src = fetchurl {
-    url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
-    hash = "sha256-ElckfplwUI1tFFbT4zDNGQnEtCsl4PChvDJSbW86IbQ=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "AbiWord";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-Z55qPm4MYwbG8bvXpX2TH8bxQaJjvb3Em1ymM1XwGqo=";
   };
 
   patches = [
@@ -38,6 +43,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook269
+    autoconf-archive
     pkg-config
     wrapGAppsHook3
     perl
@@ -62,10 +69,18 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs ./tools/cdump/xp/cdump.pl ./po/ui-backport.pl
+  '';
+
+  preAutoreconf = ''
+    ./autogen-common.sh
+  '';
+
   meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";
     mainProgram = "abiword";
-    homepage = "https://www.abisource.com/";
+    homepage = "https://gitlab.gnome.org/World/AbiWord/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ylwghst sna ];

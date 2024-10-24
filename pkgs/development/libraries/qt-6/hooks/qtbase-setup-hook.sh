@@ -71,7 +71,7 @@ else # Only set up Qt once.
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
-        postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+        appendToVar postPhases postPatchMkspecs
     fi
 
     qtPreHook() {
@@ -81,7 +81,7 @@ else # Only set up Qt once.
             exit 1
         fi
     }
-    prePhases+=" qtPreHook"
+    appendToVar prePhases qtPreHook
 
     addQtModulePrefix() {
         addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1

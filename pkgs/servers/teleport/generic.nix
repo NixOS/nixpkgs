@@ -156,11 +156,6 @@ buildGoModule rec {
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
 
-  prePatch = ''
-    # TODO: remove after https://github.com/NixOS/nixpkgs/pull/332852 merges
-    sed -i 's/go 1.22.6/go 1.22.5/' go.mod
-  '';
-
   preBuild = ''
     cp -r ${webassets} webassets
   '' + lib.optionalString withRdpClient ''

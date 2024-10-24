@@ -32,7 +32,7 @@
 , python3
 , sqlite
 , gcc11Stdenv
-, webkitgtk
+, webkitgtk_4_0
 }:
 let
   # JUCE version in submodules is incompatible with GCC12
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     python3
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   # Link-time-optimization fails without these

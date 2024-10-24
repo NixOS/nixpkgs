@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://oss.oetiker.ch/smokeping";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.erictapen ];
+    maintainers = [ ];
   };
 }

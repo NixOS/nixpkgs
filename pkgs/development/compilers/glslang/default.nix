@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 bison jq ];
 
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools
     ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers

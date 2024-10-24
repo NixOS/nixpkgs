@@ -131,6 +131,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
+    maintainers = with maintainers; [ adamcstephens Flakebi ];
   };
 }

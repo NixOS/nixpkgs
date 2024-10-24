@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.7";
+  version = "1.8.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,12 +38,13 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1NvdRAr8T2dDgtyj5tUIqhjHIu4sZYS+oj7hOMEqs0A=";
+    hash = "sha256-M9O9jLjIr9kolkye5RwaS2jK6dpncEOo1rtxY7WXS7U=";
   };
 
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
+    "protobuf"
     "agate"
     "click"
     "dbt-semantic-interfaces"

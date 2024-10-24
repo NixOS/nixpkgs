@@ -51,10 +51,7 @@ let versions = callPackage ./versions.nix { };
           sublist = l: lib.sublist 0 n l;
       in lib.compareLists lib.compare (sublist as) (sublist bs) == 0;
 
-    matchesDoc = v:
-      builtins.match (if webdoc
-                      then ".*[0-9]_LIN(UX)?.sh"
-                      else ".*_B[Nn][Dd][Ll].sh") v.src.name != null;
+    matchesDoc = v: (builtins.match ".*[0-9]_LIN(UX)?.sh" v.src.name != null) == webdoc;
 
 in
 

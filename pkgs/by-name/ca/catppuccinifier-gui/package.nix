@@ -11,7 +11,7 @@
   libsoup,
   fetchzip,
   openssl_3,
-  webkitgtk,
+  webkitgtk_4_0,
   gdk-pixbuf,
   pkg-config,
   makeDesktopItem,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     wget
-    webkitgtk
+    webkitgtk_4_0
     gtk3
     cairo
     gdk-pixbuf

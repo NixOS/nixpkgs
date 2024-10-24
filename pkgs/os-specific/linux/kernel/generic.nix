@@ -108,6 +108,11 @@ let
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
+    rustAvailable =
+      lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
+      && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
+      # Known to be broken: https://lore.kernel.org/lkml/31885EDD-EF6D-4EF1-94CA-276BA7A340B7@kernel.org/T/
+      && !(stdenv.hostPlatform.isRiscV && stdenv.cc.isGNU);
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };

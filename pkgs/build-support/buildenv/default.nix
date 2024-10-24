@@ -1,7 +1,7 @@
 # buildEnv creates a tree of symlinks to the specified paths.  This is
 # a fork of the hardcoded buildEnv in the Nix distribution.
 
-{ buildPackages, runCommand, lib, substituteAll }:
+{ buildPackages, runCommand, lib, substituteAll, writeClosure }:
 
 let
   builder = substituteAll {
@@ -22,6 +22,9 @@ lib.makeOverridable
 
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
+
+, # Whether to include closures of all input paths.
+  includeClosures ? false
 
 , # If there is a collision, check whether the contents and permissions match
   # and only if not, throw a collision error.
@@ -49,27 +52,35 @@ lib.makeOverridable
 , passthru ? {}
 , meta ? {}
 }:
+let
+  chosenOutputs = map (drv: {
+    paths =
+      # First add the usual output(s): respect if user has chosen explicitly,
+      # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
+      # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
+      # aren't expected to have multiple outputs.
+      (if (! drv ? outputSpecified || ! drv.outputSpecified)
+          && drv.meta.outputsToInstall or null != null
+        then map (outName: drv.${outName}) drv.meta.outputsToInstall
+        else [ drv ])
+      # Add any extra outputs specified by the caller of `buildEnv`.
+      ++ lib.filter (p: p!=null)
+        (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+    priority = drv.meta.priority or lib.meta.defaultPriority;
+  }) paths;
 
-runCommand name
+  pathsForClosure = lib.pipe chosenOutputs [
+    (map (p: p.paths))
+    lib.flatten
+    (lib.remove null)
+  ];
+in runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
             nativeBuildInputs buildInputs;
-    pkgs = builtins.toJSON (map (drv: {
-      paths =
-        # First add the usual output(s): respect if user has chosen explicitly,
-        # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
-        # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
-        # aren't expected to have multiple outputs.
-        (if (! drv ? outputSpecified || ! drv.outputSpecified)
-            && drv.meta.outputsToInstall or null != null
-          then map (outName: drv.${outName}) drv.meta.outputsToInstall
-          else [ drv ])
-        # Add any extra outputs specified by the caller of `buildEnv`.
-        ++ lib.filter (p: p!=null)
-          (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
-      priority = drv.meta.priority or lib.meta.defaultPriority;
-    }) paths);
+    pkgs = builtins.toJSON chosenOutputs;
+    extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
     preferLocalBuild = true;
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary

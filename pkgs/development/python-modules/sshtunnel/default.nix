@@ -5,19 +5,22 @@
   paramiko,
   pytestCheckHook,
   mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
-  format = "setuptools";
   pname = "sshtunnel";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-58sOp3Tbgb+RhE2yLecqQKro97D5u5ug9mbUdO9r+fw=";
   };
 
-  propagatedBuildInputs = [ paramiko ];
+  build-system = [ setuptools ];
+
+  dependencies = [ paramiko ] ++ paramiko.optional-dependencies.ed25519;
 
   nativeCheckInputs = [
     pytestCheckHook

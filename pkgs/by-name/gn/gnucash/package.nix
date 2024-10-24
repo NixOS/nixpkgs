@@ -22,7 +22,7 @@
 , perlPackages
 , pkg-config
 , swig
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     swig
-    webkitgtk
+    webkitgtk_4_0
   ]
   ++ (with perlPackages; [
     JSONParse

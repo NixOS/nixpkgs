@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, python3, xmlbird,
-cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
+cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk_4_0, libnotify, sqlite, vala,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook3, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook3 autoPatchelfHook ];
-  buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
+  buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk_4_0 libnotify sqlite gsettings-desktop-schemas ];
 
   postPatch = ''
     substituteInPlace install.py \

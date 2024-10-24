@@ -23,7 +23,7 @@
 , unar
 , unzip
 , vala
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     poppler
     python3
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

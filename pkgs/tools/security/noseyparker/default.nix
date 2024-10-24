@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.18.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-IorJWXhS1ZUye1wKPnGb+zx/YgfXhwi3cb/V3zpYaKY=";
+    hash = "sha256-pFAtyvnqCLTY3l7c47rpN1jHjQon0fTPT3KaV9mcs3Q=";
   };
 
-  cargoHash = "sha256-xf70RKPZY96oUuifBC0mg5lV0MjGpzR2qDQbNJMSYtM=";
+  cargoHash = "sha256-t4tZDww6aySlTBq1BB4OGhi9w6fGY2gi7mPM1SR2mt8=";
 
   nativeCheckInputs = [
     git
@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=github::github_repos_list_user_human_format"
     "--skip=github::github_repos_list_user_json_format"
     "--skip=github::github_repos_list_user_jsonl_format"
+    "--skip=github::github_repos_list_user_repo_filter"
     "--skip=scan::appmaker::scan_workflow_from_git_url"
   ];
 

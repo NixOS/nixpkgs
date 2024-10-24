@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcdada";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "msune";
     repo = "libcdada";
     rev = "v${version}";
-    hash = "sha256-fgH4gl8Uq8mY9gxa968suU66VJYnFzpSLj4JGpJcJA4=";
+    hash = "sha256-x//22FvgxIGL9H2whMAVCTyI9gAjlMWkEmpOAcoeOgE=";
   };
 
   nativeBuildInputs = [

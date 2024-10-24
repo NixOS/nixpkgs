@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "mockgen";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "mock";
     rev = "v${version}";
-    sha256 = "sha256-3nt70xrZisK5vgQa+STZPiY4F9ITKw8PbBWcKoBn4Vc=";
+    sha256 = "sha256-1UlaM3IvKlplBW1pg5l+IXwirlierjDKqKsVwFt7EAw=";
   };
 
-  vendorHash = "sha256-mcNVud2jzvlPPQEaar/eYZkP71V2Civz+R5v10+tewA=";
+  vendorHash = "sha256-0OnK5/e0juEYrNJuVkr+tK66btRW/oaHpJSDakB32Bc=";
 
   CGO_ENABLED = 0;
 

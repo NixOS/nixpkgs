@@ -47,6 +47,9 @@ let
     xiaomi_miio = [
       arrow
     ];
+    zeroconf = [
+      aioshelly
+    ];
     zha = [
       pydeconz
     ];

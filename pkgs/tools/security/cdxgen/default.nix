@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "10.9.6";
+  version = "10.10.4";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cdxgen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WgY0soHwedYbQNDvDIqtaxMSzVcaOVV2/22wOXU2nbA=";
+    hash = "sha256-5FxH9cAJ9FoSn1euimKOvxlAEny+LUqj/EH80+l1v04=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-IgmTYmCmZ65Da5zL6Tx7P4bt2o+YhX0UvU0DEONmr7w=";
+    hash = "sha256-GdFU8mx9H3daxziprIOQWZWEBcz9y9Qk88sus838Xlk=";
   };
 
   buildPhase = ''

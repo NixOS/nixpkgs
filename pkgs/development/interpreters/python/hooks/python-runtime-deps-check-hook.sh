@@ -16,5 +16,5 @@ pythonRuntimeDepsCheckHook() {
 
 if [ -z "${dontCheckRuntimeDeps-}" ]; then
     echo "Using pythonRuntimeDepsCheckHook"
-    preInstallPhases+=" pythonRuntimeDepsCheckHook"
+    appendToVar preInstallPhases pythonRuntimeDepsCheckHook
 fi

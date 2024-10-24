@@ -41,6 +41,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "cookiecutter"
     "packaging"
+    "qrcode"
     "watchdog"
     "websockets"
   ];

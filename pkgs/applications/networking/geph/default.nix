@@ -11,7 +11,7 @@
   perl,
   pkg-config,
   glib,
-  webkitgtk,
+  webkitgtk_4_0,
   libayatana-appindicator,
   cairo,
   openssl,
@@ -88,7 +88,7 @@ in
 
       buildInputs = [
         glib
-        webkitgtk
+        webkitgtk_4_0
         libayatana-appindicator
         cairo
         openssl

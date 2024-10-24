@@ -1,7 +1,7 @@
-diff --git a/tests/functional_tests/t0_main/kfp/wandb_probe.py b/tests/functional_tests/t0_main/kfp/wandb_probe.py
-index 82fadfe1..25c1454c 100644
---- a/tests/functional_tests/t0_main/kfp/wandb_probe.py
-+++ b/tests/functional_tests/t0_main/kfp/wandb_probe.py
+diff --git a/landfill/functional_tests/kfp/wandb_probe.py b/landfill/functional_tests/kfp/wandb_probe.py
+index 86b18a438..23e237e3b 100644
+--- a/landfill/functional_tests/kfp/wandb_probe.py
++++ b/landfill/functional_tests/kfp/wandb_probe.py
 @@ -5,7 +5,7 @@ import subprocess
  def wandb_probe_package():
      if not os.environ.get("WB_PROBE_PACKAGE"):
@@ -12,20 +12,20 @@ index 82fadfe1..25c1454c 100644
          return
      wandb_local = f"git+https://github.com/wandb/wandb.git@{o}#egg=wandb"
 diff --git a/wandb/cli/cli.py b/wandb/cli/cli.py
-index 5767e61c..56009fec 100644
+index 1453100cc..9dc468201 100644
 --- a/wandb/cli/cli.py
 +++ b/wandb/cli/cli.py
-@@ -1919,7 +1919,7 @@ def restore(ctx, run, no_git, branch, project, entity):
+@@ -2531,7 +2531,7 @@ def restore(ctx, run, no_git, branch, project, entity):
      commit, json_config, patch_content, metadata = api.run_config(
          project, run=run, entity=entity
      )
 -    repo = metadata.get("git", {}).get("repo")
 +    repo = metadata.get("@git@", {}).get("repo")
      image = metadata.get("docker")
-     restore_message = (
-         """`wandb restore` needs to be run from the same git repository as the original run.
-@@ -1938,7 +1938,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
-
+     restore_message = """`wandb restore` needs to be run from the same git repository as the original run.
+ Run `git clone {}` and restore from there or pass the --no-git flag.""".format(repo)
+@@ -2547,7 +2547,7 @@ Run `git clone {}` and restore from there or pass the --no-git flag.""".format(r
+ 
      if commit and api.git.enabled:
          wandb.termlog(f"Fetching origin and finding commit: {commit}")
 -        subprocess.check_call(["git", "fetch", "--all"])
@@ -33,7 +33,7 @@ index 5767e61c..56009fec 100644
          try:
              api.git.repo.commit(commit)
          except ValueError:
-@@ -1992,7 +1992,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
+@@ -2604,7 +2604,7 @@ Run `git clone {}` and restore from there or pass the --no-git flag.""".format(r
              # --reject is necessary or else this fails any time a binary file
              # occurs in the diff
              exit_code = subprocess.call(
@@ -42,16 +42,16 @@ index 5767e61c..56009fec 100644
              )
              if exit_code == 0:
                  wandb.termlog("Applied patch")
-diff --git a/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py b/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py
-index 614df9f5..38db460b 100644
---- a/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py
-+++ b/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py
-@@ -67,7 +67,7 @@ def get_git_changeset():
+diff --git a/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py b/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
+index 47d439145..16118feb0 100644
+--- a/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
++++ b/wandb/vendor/promise-2.3.0/wandb_promise/pyutils/version.py
+@@ -69,7 +69,7 @@ def get_git_changeset():
      repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
      try:
          git_log = subprocess.Popen(
--            'git log --pretty=format:%ct --quiet -1 HEAD',
-+            '@git@ log --pretty=format:%ct --quiet -1 HEAD',
-             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-             shell=True, cwd=repo_dir, universal_newlines=True,
-         )
+-            "git log --pretty=format:%ct --quiet -1 HEAD",
++            "@git@ log --pretty=format:%ct --quiet -1 HEAD",
+             stdout=subprocess.PIPE,
+             stderr=subprocess.PIPE,
+             shell=True,

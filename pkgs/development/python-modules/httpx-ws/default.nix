@@ -1,31 +1,31 @@
 {
   lib,
+  anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
-  anyio,
   httpcore,
   httpx,
-  wsproto,
   pytestCheckHook,
+  pythonOlder,
   starlette,
   trio,
   uvicorn,
+  wsproto,
 }:
 
 buildPythonPackage rec {
   pname = "httpx-ws";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-ws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mynr07px+rQb7x8GepQoUgBbh0720S0K2RJrboOoJXA=";
+    hash = "sha256-VsIYOGNEdX4rxjEa01M77arA3ddJS3cPFxXlf13QTuE=";
   };
 
   # we don't need to use the hatch-regex-commit plugin
@@ -46,14 +46,14 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  pythonImportsCheck = [ "httpx_ws" ];
-
   nativeCheckInputs = [
     pytestCheckHook
     starlette
     trio
     uvicorn
   ];
+
+  pythonImportsCheck = [ "httpx_ws" ];
 
   disabledTestPaths = [
     # hang
@@ -63,6 +63,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
+    changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

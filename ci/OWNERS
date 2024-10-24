@@ -27,7 +27,7 @@
 
 # Libraries
 /lib                        @infinisil
-/lib/systems                @alyssais @ericson2314
+/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
 /lib/generators.nix         @infinisil @Profpatsch
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
@@ -49,10 +49,10 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
-/pkgs/stdenv                                     @philiptaron
-/pkgs/stdenv/generic                             @Ericson2314
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314
-/pkgs/stdenv/cross                               @Ericson2314
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
@@ -112,7 +112,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
 
 # ACME
-/nixos/modules/security/acme                @arianvp @flokli @aanderse @emilazy # no merge permission: @m1cr0man
+/nixos/modules/security/acme                @NixOS/acme
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
@@ -127,6 +127,18 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco
 /nixos/modules/installer/sd-card/
+
+# Amazon
+/nixos/modules/virtualisation/amazon-init.nix     @arianvp
+/nixos/modules/virtualisation/ec2-data.nix        @arianvp
+/nixos/modules/virtualisation/amazon-options.nix  @arianvp
+/nixos/modules/virtualisation/amazon-image.nix    @arianvp
+/nixos/maintainers/scripts/ec2/                   @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix @arianvp
+/nixos/tests/amazon-ssm-agent.nix                 @arianvp
+/nixos/modules/system/boot/grow-partition.nix     @arianvp
+
+
 
 # Updaters
 ## update.nix
@@ -167,7 +179,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy
+/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -228,7 +240,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/tools/misc/esphome @mweinelt
 
 # Network Time Daemons
-/pkgs/tools/networking/chrony @thoughtpolice
+/pkgs/by-name/ch/chrony @thoughtpolice
 /pkgs/tools/networking/ntp @thoughtpolice
 /pkgs/tools/networking/openntpd @thoughtpolice
 /nixos/modules/services/networking/ntp @thoughtpolice
@@ -267,9 +279,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs/elisp-packages @adisbladis
-/pkgs/applications/editors/emacs                @adisbladis
-/pkgs/top-level/emacs-packages.nix              @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @NixOS/emacs
+/pkgs/applications/editors/emacs                @NixOS/emacs
+/pkgs/top-level/emacs-packages.nix              @NixOS/emacs
+/doc/packages/emacs.section.md                  @NixOS/emacs
+/nixos/modules/services/editors/emacs.md        @NixOS/emacs
 
 # Kakoune
 /pkgs/applications/editors/kakoune     @philiptaron
@@ -337,6 +351,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
+/pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

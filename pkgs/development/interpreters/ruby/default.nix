@@ -313,9 +313,14 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "4" "";
-    hash = "sha256-/mow+X1U4Cl2jy3fSSNpnEFs28Om6W2z4tVxbH25ajQ=";
+    version = rubyVersion "3" "3" "5" "";
+    hash = "sha256-N4GjUEIiwvJstLnrnBoS2/SUTTZs4kqf+M+Z7LznUZY=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
+  ruby_3_4 = generic {
+    version = rubyVersion "3" "4" "0" "preview2";
+    hash = "sha256-RDzX7FSt5HhryXTOn11J8XKmD47chLWXt/4r0qlLg3E=";
+    cargoHash = "sha256-kdfNY8wVmSRR+cwEDYge/HDPRvdTNKLk/BhgqQeelOg=";
+  };
 }

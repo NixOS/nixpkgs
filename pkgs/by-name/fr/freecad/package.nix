@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
     ./0002-FreeCad-OndselSolver-pkgconfig.patch
+    ./0003-freecad-font-issue-10514.patch
   ];
 
   cmakeFlags = [

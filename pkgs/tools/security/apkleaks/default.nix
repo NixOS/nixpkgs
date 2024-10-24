@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkleaks";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
     repo = "apkleaks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a7zOowvhV9H91RwNDImN2+ecixY8g3WUotlBQVdmLgA=";
+    hash = "sha256-8P4LZsyq0mSVdE6QhnW3QaaA3UAg4UDBS3jSg7Kg/oY=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

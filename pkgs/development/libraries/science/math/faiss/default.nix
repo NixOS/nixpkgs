@@ -48,10 +48,17 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "v${version}";
+    repo = "faiss";
+    rev = "refs/tags/v${version}";
     hash = "sha256-P8TynU6jz5NbcWLdI7n4LX5Gdz0Ks72bmOzQ3LGjQCQ=";
   };
+
+  postPatch = lib.optionalString pythonSupport ''
+    substituteInPlace faiss/python/loader.py \
+      --replace-fail \
+      "# platform-dependent legacy fallback using numpy.distutils.cpuinfo" \
+      "return False"
+  '';
 
   nativeBuildInputs =
     [ cmake ]
@@ -63,7 +70,6 @@ stdenv.mkDerivation {
       pythonPackages.python
       pythonPackages.setuptools
       pythonPackages.pip
-      pythonPackages.wheel
     ];
 
   buildInputs =
@@ -98,6 +104,10 @@ stdenv.mkDerivation {
     mkdir "$dist"
     cp faiss/python/dist/*.whl "$dist/"
   '';
+
+  passthru = {
+    inherit cudaSupport cudaPackages pythonSupport;
+  };
 
   meta = {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";

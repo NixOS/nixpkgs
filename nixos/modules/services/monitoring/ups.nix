@@ -309,8 +309,10 @@ let
         defaultText = lib.literalMD ''
           {
             MINSUPPLIES = 1;
-            RUN_AS_USER = "root";
+            MONITOR = <generated from config.power.ups.upsmon.monitor>
             NOTIFYCMD = "''${pkgs.nut}/bin/upssched";
+            POWERDOWNFLAG = "/run/killpower";
+            RUN_AS_USER = "root";
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
           }
         '';
@@ -330,11 +332,12 @@ let
     config = {
       enable = lib.mkDefault (lib.elem cfg.mode [ "standalone" "netserver" "netclient" ]);
       settings = {
-        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
         MINSUPPLIES = lib.mkDefault 1;
-        NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
-        SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
         MONITOR = lib.flip lib.mapAttrsToList cfg.upsmon.monitor (name: monitor: with monitor; [ system powerValue user "\"@upsmon_password_${name}@\"" type ]);
+        NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
+        POWERDOWNFLAG = lib.mkDefault "/run/killpower";
+        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
+        SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
       };
     };
   };
@@ -572,6 +575,24 @@ in
       restartTriggers = [
         config.environment.etc."nut/ups.conf".source
       ];
+    };
+
+    systemd.services.ups-killpower = lib.mkIf (cfg.upsmon.settings.POWERDOWNFLAG != null) {
+      enable = cfg.upsd.enable;
+      description = "UPS Kill Power";
+      wantedBy = [ "shutdown.target" ];
+      after = [ "shutdown.target" ];
+      before = [ "final.target" ];
+      unitConfig = {
+        ConditionPathExists = cfg.upsmon.settings.POWERDOWNFLAG;
+        DefaultDependencies = "no";
+      };
+      environment = envVars;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.nut}/bin/upsdrvctl shutdown";
+        Slice = "system-ups.slice";
+      };
     };
 
     environment.etc = {

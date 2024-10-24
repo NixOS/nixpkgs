@@ -302,7 +302,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     fi
 
     # Get rid of some "fixed" header files
-    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h}
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

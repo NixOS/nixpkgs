@@ -1,6 +1,8 @@
 {
   rustPlatform,
+  glib-networking,
   gpauth,
+  makeWrapper,
   openconnect,
   openssl,
   perl,
@@ -15,11 +17,15 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = "apps/gpclient";
   cargoHash = "sha256-aJYFBvVrj1n2+9WLLBH5WTRRzTle19LsdJ2DielJYik=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+  ];
   buildInputs = [
     gpauth
     openconnect
     openssl
+    glib-networking
   ];
 
   preConfigure = ''
@@ -32,6 +38,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/applications
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
+  '';
+
+  preFixup = ''
+    wrapProgram "$out/bin/gpclient" \
+      --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
   '';
 
   postFixup = ''

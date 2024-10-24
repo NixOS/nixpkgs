@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
   };
 
+  patches = [ ./macos-fix.patch ];
+
   meta = with lib; {
     description = "Full featured terminal-based screen editor";
     longDescription = ''

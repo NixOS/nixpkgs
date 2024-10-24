@@ -28,6 +28,7 @@ python.pkgs.buildPythonApplication rec {
     "sqlalchemy-utils"
     "sqlalchemy"
     "pycognito"
+    "qrcode"
     "urllib3"
   ];
 

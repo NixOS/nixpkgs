@@ -30,6 +30,8 @@ with pkgs;
         (filter (lib.hasPrefix "gcc"))
         (filter (lib.hasSuffix "Stdenv"))
         (filter (n: n != "gccCrossLibcStdenv"))
+        (filter (n: n != "gcc49Stdenv"))
+        (filter (n: n != "gcc6Stdenv"))
       ] ++ lib.optionals (!(
         (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
@@ -124,8 +126,6 @@ with pkgs;
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
-
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 

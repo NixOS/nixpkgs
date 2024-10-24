@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.9.4";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "rajlaud";
     repo = "pysqueezebox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xi+mjrEF581NL8iRlEijKEO1CgXUr+u5hgq6UJWfoXA=";
+    hash = "sha256-p9EwzkKkNi/jGMXx4sPTSpPk3Uq3Na8WElolNryu2N4=";
   };
 
   build-system = [ setuptools ];

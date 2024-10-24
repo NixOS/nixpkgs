@@ -29,6 +29,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         machine.succeed("[ -e /dev/shm ]") # /dev/shm
         machine.succeed("[ -e /dev/pts/ptmx ]") # /dev/pts
         machine.succeed("[ -e /run/keys ]") # /run/keys
+        # /nixos-closure didn't leak into stage-2
+        machine.succeed("[ ! -e /nixos-closure ]")
 
     with subtest("groups work"):
         machine.fail("journalctl -b 0 | grep 'systemd-udevd.*Unknown group.*ignoring'")

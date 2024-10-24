@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.18.1";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iIUWF93RZheW4uf3zgs1jqDjQnn0nFH7GOMaLBR0w0o=";
+    hash = "sha256-ewpSZD+pCr6gbzT+4lW2+6tssPNLq4rqgUx7p8IsjIY=";
   };
 
   nativeBuildInputs = [

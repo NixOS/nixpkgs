@@ -24,6 +24,11 @@ let
     "REPL"
     # Test flaky
     "ccall"
+  ] ++ lib.optionals (lib.versionAtLeast version "1.11") [
+    # Test flaky
+    # https://github.com/JuliaLang/julia/issues/54280
+    "loading"
+    "cmdlineargs"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test flaky on ofborg
     "FileWatching"

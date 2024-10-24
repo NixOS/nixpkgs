@@ -39,7 +39,7 @@
   pcre,
   systemd,
   tbb_2021_11,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     openvdb_tbb_2021_8
     pcre
     tbb_2021_11
-    webkitgtk
+    webkitgtk_4_0
     wxGTK31'
     xorg.libX11
   ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;

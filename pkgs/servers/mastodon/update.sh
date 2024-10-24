@@ -106,7 +106,5 @@ echo "Creating gemset.nix"
 bundix --lockfile="$SOURCE_DIR/Gemfile.lock" --gemfile="$SOURCE_DIR/Gemfile"
 echo "" >> gemset.nix  # Create trailing newline to please EditorConfig checks
 
-echo "Creating yarn-hash.nix"
-YARN_HASH="$(prefetch-yarn-deps "$SOURCE_DIR/yarn.lock")"
-YARN_HASH="$(nix hash to-sri --type sha256 "$YARN_HASH")"
-sed -i "s/sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=/$YARN_HASH/g" source.nix
+echo "Required manual update of yarn-hash"
+exit 1

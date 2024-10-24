@@ -11,7 +11,7 @@
 , gtksourceview
 , libgee
 , nix-update-script
-, webkitgtk
+, webkitgtk_4_0
 , libqalculate
 , intltool
 , gnuplot
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gtksourceview
     libgee
     pantheon.granite
-    webkitgtk
+    webkitgtk_4_0
     # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
   ] ++ libqalculate.buildInputs ++ libqalculate.propagatedBuildInputs;
 

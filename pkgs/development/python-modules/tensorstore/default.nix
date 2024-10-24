@@ -12,6 +12,7 @@
 let
   pythonVersionNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   systemToPlatform = {
+    "aarch64-linux" = "manylinux_2_17_aarch64.manylinux2014_aarch64";
     "x86_64-linux" = "manylinux_2_17_x86_64.manylinux2014_x86_64";
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
@@ -19,6 +20,9 @@ let
     "310-x86_64-linux" = "sha256-oB68FjYzmRARWpbajQuLpAzWwg9CCji4tLZRFCsztjk=";
     "311-x86_64-linux" = "sha256-kGEecBu7b3TFGUIRirI9q2W3nipiQwsh/1OB92RqDB4=";
     "312-x86_64-linux" = "sha256-Vw8sT5kahSN20BQs3MOYesSUZqk4CuvfZR1z5nAO7g8=";
+    "310-aarch64-linux" = "sha256-Ocfg3VArM/14a06cpMuJDYP/MIo9rCvtFO4Cd3AahA4=";
+    "311-aarch64-linux" = "sha256-hegFeV3m0jpjTXNU6ue/3kGe1Cy+Pfeh4GDe96dvL7o=";
+    "312-aarch64-linux" = "sha256-O0VVtSqSEd4dqjmaXMTRvf/Bcc9YR7zzbz9N/8GVcXk=";
     "310-aarch64-darwin" = "sha256-2vuVxmJMx/GeaHgzUS6rRdysQFHreVzZ5IT5YSDUJro=";
     "311-aarch64-darwin" = "sha256-0xRVDSDE9upz2yU7mzpa3Y6l6M5FWOMAPKWBC8eY3Eo=";
     "312-aarch64-darwin" = "sha256-i2TmLOl2aHD5iyzF6YpjbHKFmBGPx5ixPYyNKKQfRNM=";

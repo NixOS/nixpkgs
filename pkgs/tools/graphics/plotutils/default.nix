@@ -37,21 +37,21 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Powerful C/C++ library for exporting 2D vector graphics";
 
-    longDescription =
-      '' The GNU plotutils package contains software for both programmers and
-         technical users.  Its centerpiece is libplot, a powerful C/C++
-         function library for exporting 2-D vector graphics in many file
-         formats, both vector and raster.  It can also do vector graphics
-         animations.
+    longDescription = ''
+      The GNU plotutils package contains software for both programmers and
+      technical users.  Its centerpiece is libplot, a powerful C/C++
+      function library for exporting 2-D vector graphics in many file
+      formats, both vector and raster.  It can also do vector graphics
+      animations.
 
-         libplot is device-independent in the sense that its API (application
-         programming interface) does not depend on the type of graphics file
-         to be exported.
+      libplot is device-independent in the sense that its API (application
+      programming interface) does not depend on the type of graphics file
+      to be exported.
 
-         Besides libplot, the package contains command-line programs for
-         plotting scientific data.  Many of them use libplot to export
-         graphics.
-      '';
+      Besides libplot, the package contains command-line programs for
+      plotting scientific data.  Many of them use libplot to export
+      graphics.
+    '';
 
     homepage = "https://www.gnu.org/software/plotutils/";
 

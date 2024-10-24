@@ -32,15 +32,15 @@ let
 in
 buildGoModule rec {
   pname = "distrobuilder";
-  version = "3.0";
+  version = "3.1";
 
-  vendorHash = "sha256-pFrEkZnrcx0d3oM1klQrNHH+MiLvO4V1uFQdE0kXUqM=";
+  vendorHash = "sha256-3oHLvOdHbOdaL2FTo+a5HmayNi/i3zoAsU/du9h1N30=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
     rev = "refs/tags/distrobuilder-${version}";
-    sha256 = "sha256-JfME9VaqaQnrhnzhSLGUy9uU+tki1hXdnwqBUD/5XH0=";
+    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
     fetchSubmodules = false;
   };
 

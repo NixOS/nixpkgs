@@ -69,4 +69,4 @@ installSphinxPhase() {
     runHook postInstallSphinx
 }
 
-preDistPhases+=" buildSphinxPhase installSphinxPhase"
+appendToVar preDistPhases buildSphinxPhase installSphinxPhase

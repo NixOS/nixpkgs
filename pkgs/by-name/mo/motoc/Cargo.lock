@@ -511,7 +511,7 @@ dependencies = [
 
 [[package]]
 name = "motoc"
-version = "0.3.1"
+version = "0.3.3"
 dependencies = [
  "anyhow",
  "bindgen 0.70.1",

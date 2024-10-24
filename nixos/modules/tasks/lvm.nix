@@ -31,6 +31,8 @@ in {
 
       Whether to enable booting from LVM2 in the initrd.
     '';
+    default = config.boot.initrd.systemd.enable && config.services.lvm.enable;
+    defaultText = lib.literalExpression "config.boot.initrd.systemd.enable && config.services.lvm.enable";
   };
 
   config = mkMerge [

@@ -13,12 +13,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.7.2";
+  version = "6.8";
 
   src = fetchurl {
     # https://download.qt.io/official_releases/QtForPython/shiboken6/
-    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OisNDW54yapd3H8GyktvEaP+FFYLrrFI7qU7XZjjaMc=";
+    # FIXME: inconsistent version numbers in directory name and tarball?
+    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-${finalAttrs.version}.0-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XAWtOufnJ51tudyUpG6woF/Qk1NzCfdDnDhnG9clUZA=";
   };
 
   sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";

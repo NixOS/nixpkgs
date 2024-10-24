@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "PC/SC IFD Handler based on libnfc";
     mainProgram = "ifdnfc-activate";
-    longDescription =
-    '' libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.
+    longDescription = ''
+       libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.
        It provides support for all readers which are not supported by ccid but by libnfc.
 
        For activating your reader you need to run

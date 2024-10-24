@@ -92,14 +92,15 @@ stdenv.mkDerivation (rec {
   # make: *** [Makefile:222: test-full-programs-release] Killed: 9
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  installPhase = "make config=release prefix=$out "
-    + lib.optionalString stdenv.hostPlatform.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
-    + '' install
+  installPhase = ''
+    make config=release prefix=$out ${
+      lib.optionalString stdenv.hostPlatform.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
+    } install
     wrapProgram $out/bin/ponyc \
-      --prefix PATH ":" "${stdenv.cc}/bin" \
-      --set-default CC "$CC" \
-      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
-  '';
+        --prefix PATH ":" "${stdenv.cc}/bin" \
+        --set-default CC "$CC" \
+        --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
+    '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;

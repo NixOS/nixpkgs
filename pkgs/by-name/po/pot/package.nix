@@ -14,7 +14,7 @@
   buildGoModule,
   libayatana-appindicator,
   gtk3,
-  webkitgtk,
+  webkitgtk_4_0,
   libsoup,
   openssl,
   xdotool,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup
     libayatana-appindicator
     openssl
-    webkitgtk
+    webkitgtk_4_0
     xdotool
   ];
 

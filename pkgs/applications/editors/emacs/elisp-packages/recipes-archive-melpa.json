@@ -6975,8 +6975,8 @@
  },
  {
   "ename": "bbdb",
-  "commit": "1ae754064cd1f062bbdd6ecf9af03fa0c2798cf6",
-  "sha256": "0gnjdlb338gxpsmdx8scj5vb1rbvfkmm71xq37sahy0m4r402al1",
+  "commit": "8a7d0c7287d157f45ebcb7a6ba2a776b3ee2bc2d",
+  "sha256": "0rrjvg3rq9267hyr5dkr82kqd3lxxnv6zhmn4ldzb00ynwwmrzr0",
   "fetcher": "git",
   "url": "https://git.savannah.nongnu.org/git/bbdb.git",
   "unstable": {
@@ -123226,8 +123226,8 @@
  },
  {
   "ename": "ttl-mode",
-  "commit": "0575169e8fb9a2537582f5aa77fc9950f1f1384c",
-  "sha256": "1fi8xxzwz3h7kgn69h4p1wlvhvia0v8qqh7k64pgh44b2fq040p1",
+  "commit": "8a7d0c7287d157f45ebcb7a6ba2a776b3ee2bc2d",
+  "sha256": "1v34axc96n5aqsm9w2j94z8h9mqfa41300lx8aqccwj8a5qwk90k",
   "fetcher": "github",
   "repo": "nxg/ttl-mode",
   "unstable": {

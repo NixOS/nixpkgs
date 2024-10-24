@@ -4,6 +4,52 @@ let
   user = "alice";
   description = "Alice Foobar";
   password = "foobar";
+
+  # tmpfiles setup to make OCRing on terminal output more reliable
+  terminalOcrTmpfilesSetup =
+    {
+      pkgs,
+      lib,
+      config,
+    }:
+    let
+      white = "255, 255, 255";
+      black = "0, 0, 0";
+      colorSection = color: {
+        Color = color;
+        Bold = true;
+        Transparency = false;
+      };
+      terminalColors = pkgs.writeText "customized.colorscheme" (
+        lib.generators.toINI { } {
+          Background = colorSection white;
+          Foreground = colorSection black;
+          Color2 = colorSection black;
+          Color2Intense = colorSection black;
+        }
+      );
+      terminalConfig = pkgs.writeText "terminal.ubports.conf" (
+        lib.generators.toINI { } {
+          General = {
+            colorScheme = "customized";
+            fontSize = "16";
+            fontStyle = "Inconsolata";
+          };
+        }
+      );
+      confBase = "${config.users.users.${user}.home}/.config";
+      userDirArgs = {
+        mode = "0700";
+        user = user;
+        group = "users";
+      };
+    in
+    {
+      "${confBase}".d = userDirArgs;
+      "${confBase}/terminal.ubports".d = userDirArgs;
+      "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
+      "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
+    };
 in
 {
   greeter = makeTest (
@@ -154,47 +200,9 @@ in
           };
 
           # Help with OCR
-          systemd.tmpfiles.settings =
-            let
-              white = "255, 255, 255";
-              black = "0, 0, 0";
-              colorSection = color: {
-                Color = color;
-                Bold = true;
-                Transparency = false;
-              };
-              terminalColors = pkgs.writeText "customized.colorscheme" (
-                lib.generators.toINI { } {
-                  Background = colorSection white;
-                  Foreground = colorSection black;
-                  Color2 = colorSection black;
-                  Color2Intense = colorSection black;
-                }
-              );
-              terminalConfig = pkgs.writeText "terminal.ubports.conf" (
-                lib.generators.toINI { } {
-                  General = {
-                    colorScheme = "customized";
-                    fontSize = "16";
-                    fontStyle = "Inconsolata";
-                  };
-                }
-              );
-              confBase = "${config.users.users.${user}.home}/.config";
-              userDirArgs = {
-                mode = "0700";
-                user = user;
-                group = "users";
-              };
-            in
-            {
-              "10-lomiri-test-setup" = {
-                "${confBase}".d = userDirArgs;
-                "${confBase}/terminal.ubports".d = userDirArgs;
-                "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
-                "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
-              };
-            };
+          systemd.tmpfiles.settings = {
+            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+          };
         };
 
       enableOCR = true;
@@ -360,58 +368,20 @@ in
             };
 
             variables = {
-              # So we can test what content-hub is working behind the scenes
-              CONTENT_HUB_LOGGING_LEVEL = "2";
+              # So we can test what lomiri-content-hub is working behind the scenes
+              LOMIRI_CONTENT_HUB_LOGGING_LEVEL = "2";
             };
 
             systemPackages = with pkgs; [
-              # For a convenient way of kicking off content-hub peer collection
-              lomiri.content-hub.examples
+              # For a convenient way of kicking off lomiri-content-hub peer collection
+              lomiri.lomiri-content-hub.examples
             ];
           };
 
           # Help with OCR
-          systemd.tmpfiles.settings =
-            let
-              white = "255, 255, 255";
-              black = "0, 0, 0";
-              colorSection = color: {
-                Color = color;
-                Bold = true;
-                Transparency = false;
-              };
-              terminalColors = pkgs.writeText "customized.colorscheme" (
-                lib.generators.toINI { } {
-                  Background = colorSection white;
-                  Foreground = colorSection black;
-                  Color2 = colorSection black;
-                  Color2Intense = colorSection black;
-                }
-              );
-              terminalConfig = pkgs.writeText "terminal.ubports.conf" (
-                lib.generators.toINI { } {
-                  General = {
-                    colorScheme = "customized";
-                    fontSize = "16";
-                    fontStyle = "Inconsolata";
-                  };
-                }
-              );
-              confBase = "${config.users.users.${user}.home}/.config";
-              userDirArgs = {
-                mode = "0700";
-                user = user;
-                group = "users";
-              };
-            in
-            {
-              "10-lomiri-test-setup" = {
-                "${confBase}".d = userDirArgs;
-                "${confBase}/terminal.ubports".d = userDirArgs;
-                "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
-                "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
-              };
-            };
+          systemd.tmpfiles.settings = {
+            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+          };
         };
 
       enableOCR = true;
@@ -484,9 +454,9 @@ in
 
               # lomiri-terminal-app has a separate VM test to test its basic functionality
 
-              # for the LSS content-hub test to work reliably, we need to kick off peer collecting
-              machine.send_chars("content-hub-test-importer\n")
-              wait_for_text(r"(/build/source|hub.cpp|handler.cpp|void|virtual|const)") # awaiting log messages from content-hub
+              # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
+              machine.send_chars("lomiri-content-hub-test-importer\n")
+              wait_for_text(r"(/build/source|hub.cpp|handler.cpp|void|virtual|const)") # awaiting log messages from lomiri-content-hub
               machine.send_key("ctrl-c")
 
               # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
@@ -510,7 +480,7 @@ in
               wait_for_text("Rotation Lock")
               machine.screenshot("settings_open")
 
-              # lomiri-system-settings has a separate VM test, only test Lomiri-specific content-hub functionalities here
+              # lomiri-system-settings has a separate VM test, only test Lomiri-specific lomiri-content-hub functionalities here
 
               # Make fullscreen, can't navigate to Background plugin via keyboard unless window has non-phone-like aspect ratio
               toggle_maximise()
@@ -536,7 +506,7 @@ in
 
               # Peers should be loaded
               wait_for_text("Morph") # or Gallery, but Morph is already packaged
-              machine.screenshot("settings_content-hub_peers")
+              machine.screenshot("settings_lomiri-content-hub_peers")
 
               # Select Morph as content source
               mouse_click(370, 100)
@@ -544,11 +514,11 @@ in
               # Expect Morph to be brought into the foreground, with its Downloads page open
               wait_for_text("No downloads")
 
-              # If content-hub encounters a problem, it may have crashed the original application issuing the request.
+              # If lomiri-content-hub encounters a problem, it may have crashed the original application issuing the request.
               # Check that it's still alive
               machine.succeed("pgrep -u ${user} -f lomiri-system-settings")
 
-              machine.screenshot("content-hub_exchange")
+              machine.screenshot("lomiri-content-hub_exchange")
 
               # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
               machine.send_key("esc")
@@ -732,8 +702,17 @@ in
             # Help with OCR
             fonts.packages = [ pkgs.inconsolata ];
 
-            # Non-QWERTY keymap to test keymap patch
-            services.xserver.xkb.layout = "de";
+            services.xserver.xkb.layout = lib.strings.concatStringsSep "," [
+              # Start with a non-QWERTY keymap to test keymap patch
+              "de"
+              # Then a QWERTY one to test switching
+              "us"
+            ];
+
+            # Help with OCR
+            systemd.tmpfiles.settings = {
+              "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+            };
           };
 
         enableOCR = true;
@@ -783,6 +762,30 @@ in
 
                 machine.send_chars("touch ${pwInput}\n")
                 machine.wait_for_file("/home/alice/${pwOutput}", 10)
+
+                # Issues with this keybind: input leaks to focused surface, may open launcher
+                # Don't have the keyboard indicator to handle this better
+                machine.send_key("meta_l-spc")
+                machine.wait_for_console_text('SET KEYMAP "us"')
+
+                # Handle keybind fallout
+                machine.sleep(10) # wait for everything to settle
+                machine.send_key("esc") # close launcher in case it was opened
+                machine.sleep(2) # wait for animation to finish
+                # Make sure input leaks are gone
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+
+                machine.send_chars("touch ${pwInput}\n")
+                machine.wait_for_file("/home/alice/${pwInput}", 10)
 
                 machine.send_key("alt-f4")
           '';

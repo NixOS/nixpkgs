@@ -100,7 +100,7 @@ in
         lib.nameValuePair (toString opts.home) {
           d = {
             mode = opts.homeMode;
-            user = username;
+            user = opts.name;
             inherit (opts) group;
           };
         }

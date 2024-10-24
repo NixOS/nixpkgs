@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.10.1";
+  version = "1.11.2";
   pyproject = true;
 
   # mypy doesn't support python313 yet
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-joV+elRaAICNQHkYuYtTDjvOUkHPsRkG1OLRvdxeIHc=";
+    hash = "sha256-5gfqIBtI/G5HARYdXHjYNYNRxeNgrk9dnpSgvMSu9bw=";
   };
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -133,6 +133,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
+    changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "mypy";
     maintainers = with maintainers; [ lnl7 ];

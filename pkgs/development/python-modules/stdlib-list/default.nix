@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "stdlib-list";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "stdlib_list";
     inherit version;
-    hash = "sha256-ZRnFDWRVE+0odle/6FbVJ/J3MxVAaR3er3eyVFmWShQ=";
+    hash = "sha256-t0p7ZDp3oSY36Qfz9i8KufZzALzkAU9rLTyLTI/WPGY=";
   };
 
   nativeBuildInputs = [ flit-core ];

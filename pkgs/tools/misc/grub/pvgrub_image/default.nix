@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PvGrub image for use for booting PV Xen guests";
 
-    longDescription =
-      '' This package provides a PvGrub image for booting Para-Virtualized (PV)
+    longDescription = ''
+         This package provides a PvGrub image for booting Para-Virtualized (PV)
          Xen guests
       '';
 

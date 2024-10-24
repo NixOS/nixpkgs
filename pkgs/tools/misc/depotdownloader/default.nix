@@ -1,21 +1,24 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
   pname = "depotdownloader";
-  version = "2.5.0";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    sha256 = "Kgi0u+H5BIAhrjk9e+8H1h0p5Edm3+2twYBPY3JQGps=";
+    sha256 = "c8hgeFTgOjRTjaOSrUazko74GdTW5p9i7+YJIqR28hw=";
   };
 
   projectFile = "DepotDownloader.sln";
   nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   passthru.updateScript = ./update.sh;
 

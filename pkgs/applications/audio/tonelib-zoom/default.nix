@@ -12,7 +12,7 @@
 , libXrandr
 , libXrender
 , libjack2
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-    webkitgtk
+    webkitgtk_4_0
   ] ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [

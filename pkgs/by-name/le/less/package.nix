@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "less";
-  version = "661";
+  version = "668";
 
   # Only tarballs on the website are valid releases,
   # other versions, e.g. git tags are considered snapshots.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${finalAttrs.version}.tar.gz";
-    hash = "sha256-K18BZyFuPvD/ywwxw3Tih+sDXk4iPV2uMVwng7bnOO0=";
+    hash = "sha256-KBn1VWTYbVQqu+yv2C/2HoGaPuyWf6o2zT5o8VlqRLg=";
   };
 
   buildInputs = [

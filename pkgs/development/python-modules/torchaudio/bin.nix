@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "wheel";
 
   src =
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
 
   buildInputs =
     [

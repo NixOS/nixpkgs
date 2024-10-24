@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
       "CFLAGS=-DTIME_WITH_SYS_TIME"
     ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   installFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   passthru.tests = {

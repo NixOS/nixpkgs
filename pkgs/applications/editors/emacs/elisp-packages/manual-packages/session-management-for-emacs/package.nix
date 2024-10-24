@@ -14,6 +14,9 @@ melpaBuild rec {
     hash = "sha256-lc6NIX+lx97qCs5JqG7x0iVE6ki09Gy7DEQuPW2c+7s=";
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/335421
+  ignoreCompilationError = true;
+
   meta = {
     /*
       installation: add to your ~/.emacs

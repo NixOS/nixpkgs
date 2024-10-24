@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.9.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9i0AUljcU4dZSNkgqJnKtKobWCSkBGP8vwCbVSbxw/E=";
+    hash = "sha256-SBQ99NJFVwsqyExadw/jvToeZuUzi7+/wQxS8YMwrNM=";
   };
 
   build-system = [ flit-core ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation (
 
     prefix = "/usr/local";
 
-    postPhases = "finalPhase";
+    postPhases = [ "finalPhase" ];
   }
 
   // args //

@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
-  setupHook = ./setup-hook.sh;
-
   meta = with lib; {
     description = "Tool for controlling PaX flags on a per binary basis";
     mainProgram = "paxctl";

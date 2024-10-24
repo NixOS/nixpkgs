@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4.3";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/jakarta/lucene/lucene-${version}.tar.gz";
+    url = "mirror://apache/jakarta/lucene/lucene-${version}.tar.gz";
     sha256 = "1mxaxg65f7v8n60irjwm24v7hcisbl0srmpvcy1l4scs6rjj1awh";
   };
 

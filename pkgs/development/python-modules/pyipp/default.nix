@@ -12,12 +12,13 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyipp";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-ipp";
     rev = "refs/tags/${version}";
-    hash = "sha256-ddI9K0lJDZbVgO+hptP4I+EH//5vOoFDYXWxGALF8Ik=";
+    hash = "sha256-B3x6WkTSTGlZWMAK2BTA2EVVz+IvB3QL+arZGBAkZsE=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   __darwinAllowLocalNetworking = true;

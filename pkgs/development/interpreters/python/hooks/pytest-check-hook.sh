@@ -58,5 +58,5 @@ function pytestCheckPhase() {
 
 if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using pytestCheckPhase"
-    preDistPhases+=" pytestCheckPhase"
+    appendToVar preDistPhases pytestCheckPhase
 fi

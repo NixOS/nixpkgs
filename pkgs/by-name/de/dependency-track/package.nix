@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   jre_headless,
+  protobuf,
   cyclonedx-cli,
   makeWrapper,
   maven,
@@ -10,7 +11,7 @@
   nixosTests,
 }:
 let
-  version = "4.11.7";
+  version = "4.12.0";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -20,10 +21,10 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-hgBDzzG90gunnlZeektzdBIdatNjbkDVmNLbxjyxAXE=";
+      hash = "sha256-7omFxT3WBQp6xftgU6ttGgwIGbLXLetQz2ySvsgsQic=";
     };
 
-    npmDepsHash = "sha256-veyt7fn4g/eh/+2CapQxlEssZP8cQXONpI6sSW299tk=";
+    npmDepsHash = "sha256-LZg3n1+L6tvfC0gBKf8YZd/UMDz04v1V9qrJZrAr4W4=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -40,7 +41,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-BMkn9WnUGs4RxH5I1QQ2UDrlo32JcbfjfFcOG5YogLI=";
+    hash = "sha256-FJ4VNDpmVBXU1/URb/Rnu0LXAbxKw6Zd7MPbN4bs9eY=";
   };
 
   patches = [
@@ -48,8 +49,14 @@ maven.buildMavenPackage rec {
     ./0001-add-junixsocket.patch
   ];
 
+  postPatch = ''
+    substituteInPlace pom.xml \
+      --replace-fail '<protocArtifact>''${tool.protoc.version}</protocArtifact>' \
+      "<protocCommand>${protobuf}/bin/protoc</protocCommand>"
+  '';
+
   mvnJdk = jre_headless;
-  mvnHash = "sha256-c/JwBiKsXuWbCm1dTCrVc+V/1G7Eii1mUW8xDyewyLs=";
+  mvnHash = "sha256-YrlGVJ0Hp9VHfMD0+hT/9q8tskft6RvszmU4tRAXSAY=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 

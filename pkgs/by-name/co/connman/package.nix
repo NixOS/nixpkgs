@@ -62,18 +62,14 @@ assert lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftable
 assert lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "connman";
-  version = "1.42";
+  version = "1.43";
 
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/connman-${finalAttrs.version}.tar.xz";
-    hash = "sha256-o+a65G/Age8una48qk92Sd6JLD3mIsICg6wMqBQjwqo=";
+    hash = "sha256-ElfOvjJ+eQC34rhMD7MwqpCBXkVYmM0vlB9DCO0r47w=";
   };
 
-  patches = [
-    # simply the middle section of upstream commit a48864a2e5d2a725dfc6eef567108bc13b43857f
-    # dist tarball is broken, hence this patch as a workaround
-    ./create-libppp-compat.h.patch
-  ] ++ optionals stdenv.hostPlatform.isMusl [
+  patches = optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
 , capabilitiesSupport ? stdenv.hostPlatform.isLinux
 , libcap_ng
 , libxcrypt
@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=77454e58d58f904cfdc02d3ca5bb65f1bd8739fc";
+      hash = "sha256-ELWC4bYN3rvn9XIN0XgCo55pXNfS2VpbZWuwzRLfO/0=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This

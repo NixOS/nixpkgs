@@ -1,30 +1,32 @@
-{ lib
-, fetchFromGitHub
-, glibcLocales
-, installShellFiles
-, jq
-, python3
+{
+  fetchFromGitHub,
+  installShellFiles,
+  jq,
+  lib,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
   version = "4.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
-    repo = pname;
+    repo = "todoman";
     rev = "refs/tags/v${version}";
     hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ (with python3.pkgs; [
-    setuptools-scm
-  ]);
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools-scm
+  ];
+
+  dependencies = with python3.pkgs; [
     atomicwrites
     click
     click-log
@@ -34,21 +36,17 @@ python3.pkgs.buildPythonApplication rec {
     parsedatetime
     python-dateutil
     pyxdg
+    pytz
     tabulate
     urwid
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    flake8
-    flake8-import-order
     freezegun
     hypothesis
     pytestCheckHook
-    glibcLocales
     pytest-cov-stub
   ];
-
-  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -87,9 +85,14 @@ python3.pkgs.buildPythonApplication rec {
       now.
       Unsupported fields may not be shown but are never deleted or altered.
     '';
-    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${builtins.replaceStrings ["."] ["-"] version}";
+    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ leenaars antonmosich ];
+    maintainers = with lib.maintainers; [
+      leenaars
+      antonmosich
+    ];
     mainProgram = "todo";
   };
 }

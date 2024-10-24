@@ -5,8 +5,6 @@
   fetchurl,
   writeText,
   runCommand,
-  buildPlatform,
-  hostPlatform,
   darwin,
   writeShellScriptBin,
   depot_toolsCommit ? "7d95eb2eb054447592585c73a8ff7adad97ecba1",
@@ -31,8 +29,8 @@
   },
 }:
 let
-  constants = callPackage ./constants.nix { platform = buildPlatform; };
-  host-constants = callPackage ./constants.nix { platform = hostPlatform; };
+  constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
+  host-constants = callPackage ./constants.nix { platform = stdenv.hostPlatform; };
   stdenv-constants = callPackage ./constants.nix { platform = stdenv.hostPlatform; };
 in
 {

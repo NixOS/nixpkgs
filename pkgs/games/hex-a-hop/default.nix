@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchzip {
-    url = "https://downloads.sourceforge.net/project/hexahop/${version}/hex-a-hop-${version}.tar.gz";
+    url = "mirror://sourceforge/project/hexahop/${version}/hex-a-hop-${version}.tar.gz";
     sha256 = "sha256-fBSvNtgNR0aNofbvoYpM1e8ww4ARlXIvrQUvJqVGLlY=";
   };
 

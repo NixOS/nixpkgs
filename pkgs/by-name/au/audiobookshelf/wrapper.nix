@@ -1,4 +1,9 @@
-{ stdenv, ffmpeg-full, pname, nodejs, getopt }: ''
+{
+  stdenv,
+  ffmpeg-full,
+  nunicode,
+  getopt,
+}: ''
     #!${stdenv.shell}
 
     port=8000
@@ -55,6 +60,7 @@
       SKIP_BINARIES_CHECK=1 \
       FFMPEG_PATH=${ffmpeg-full}/bin/ffmpeg \
       FFPROBE_PATH=${ffmpeg-full}/bin/ffprobe \
+      NUSQLITE3_PATH=${nunicode.sqlite}/lib/libnusqlite3 \
       CONFIG_PATH="$config" \
       METADATA_PATH="$metadata" \
       PORT="$port" \

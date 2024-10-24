@@ -119,7 +119,6 @@ let
       pkgsTargetTarget
       buildPackages pkgs targetPackages
       ;
-    inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
   splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [

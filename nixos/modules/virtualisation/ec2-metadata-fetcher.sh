@@ -1,6 +1,6 @@
 metaDir=/etc/ec2-metadata
 mkdir -p "$metaDir"
-chown 0755 "$metaDir"
+chmod 0755 "$metaDir"
 rm -f "$metaDir/*"
 
 get_imds_token() {

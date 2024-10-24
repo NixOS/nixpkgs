@@ -23,7 +23,7 @@
 }:
 
 let
-  apparmor-version = "4.0.1";
+  apparmor-version = "4.0.3";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -37,7 +37,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-0S/P62wi3/aPATvJL6afu+SebjoSHsTMu/WV9m7E1OE=";
+    hash = "sha256-6RMttvlXepxUyqdZeDujjVGOwuXl/nXnjii4sA/ppc4=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -59,6 +59,12 @@ let
 
   patches = [
     ./0001-aa-remove-unknown_empty-ruleset.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://gitlab.com/apparmor/apparmor/-/commit/7fb040bde69ebdfce48cf1a01c1a62fd4f8eef0a.patch";
+      hash = "sha256-RZ04nfcV8hTd2CO3mYcfOGCLke8+FhV7DPfmDqSSdWk=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
@@ -324,12 +330,16 @@ let
     , baseRules ? [
         "r $path"
         "r $path/etc/**"
-        "r $path/share/**"
+        "mr $path/share/**"
         # Note that not all libraries are prefixed with "lib",
         # eg. glibc-2.30/lib/ld-2.30.so
         "mr $path/lib/**.so*"
+        "mr $path/lib64/**.so*"
         # eg. glibc-2.30/lib/gconv/gconv-modules
         "r $path/lib/**"
+        "r $path/lib64/**"
+        # Internal executables
+        "ixr $path/libexec/**"
       ]
     , name ? ""
     }: rootPaths: runCommand

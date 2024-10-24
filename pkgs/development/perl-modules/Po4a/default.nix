@@ -10,6 +10,7 @@
 , docbook_sgml_dtd_41
 , opensp
 , bash
+, fetchpatch
 , perl
 , buildPerlPackage
 , ModuleBuild
@@ -25,11 +26,11 @@
 
 buildPerlPackage rec {
   pname = "po4a";
-  version = "0.71";
+  version = "0.73";
 
   src = fetchurl {
     url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
-    hash = "sha256-xXJAHknMEXV8bTBgkW/ftagzJR7R1K65ibZnBLzyg/k=";
+    hash = "sha256-bxj4LYyyo3c5QTfqOWzD6BldbNbkVP4CGKoPDjYDjqA=";
   };
 
   strictDeps = true;
@@ -54,6 +55,13 @@ buildPerlPackage rec {
       opensp
       kpsewhich-stub
       glibcLocales
+    ];
+  patches = [
+    # Needs a patch for 5.40 until the next release
+    (fetchpatch {
+      url = "https://github.com/mquinson/po4a/commit/28fe52651eb8096d97d6bd3a97b3168522ba5306.patch";
+      hash = "sha256-QUXxkSzcnwRvU+2y2KoBXmtfE8qTZ2BV0StkJHqZehQ=";
+    })
     ];
 
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build

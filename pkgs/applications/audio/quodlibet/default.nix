@@ -21,7 +21,7 @@
   libmodplug,
   librsvg,
   libsoup,
-  webkitgtk,
+  webkitgtk_4_0,
 
   # optional features
   withDbusPython ? false,
@@ -90,7 +90,7 @@ python3.pkgs.buildPythonApplication {
       libappindicator-gtk3
       libmodplug
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals (withXineBackend) [ xine-lib ]
     ++ lib.optionals (withGstreamerBackend) (

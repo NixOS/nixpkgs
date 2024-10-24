@@ -79,7 +79,6 @@ mkCombyPackage {
     ocamlPackages.patience_diff
     ocamlPackages.toml
     ocamlPackages.cohttp-lwt-unix
-    ocamlPackages.opium
     ocamlPackages.textutils
     ocamlPackages.jst-config
     ocamlPackages.parany

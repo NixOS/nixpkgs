@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-path-for-nixos.diff
+    ./fix-dock-can-not-show-with-qt6_8.diff
   ];
 
   postPatch = ''

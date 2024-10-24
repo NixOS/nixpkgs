@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gcov2lcov";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jandelgado";
     repo = "gcov2lcov";
     rev = "v${version}";
-    hash = "sha256-S5fAhd0bh1XEeQwaya8LvnKQ/iz4PjAbpjK4uFI6H1g=";
+    hash = "sha256-E8TPxaKJTd+5OP9e5S1FD5aZP42nJvjiqqNs4xP9gm4=";
   };
 
-  vendorHash = "sha256-r95PFkTywGiDIEnDfLpzt97SkuDeXo4xg2N7ikG0hs0=";
+  vendorHash = "sha256-/2OIBWXbNch6lmw0C1jkyJfNefJXOVG9/jNW8CYHTsc=";
 
   ldflags = [ "-s" "-w" ];
 

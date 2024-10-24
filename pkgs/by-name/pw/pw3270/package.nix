@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/gsettings-schemas
   '';
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "3270 Emulator for gtk";

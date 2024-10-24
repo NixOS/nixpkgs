@@ -23,18 +23,20 @@ makeScopeWithSplicing' {
       fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
 
       buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) { };
-      buildAttrs = {
-        inherit fetchNupkg;
-        buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
-        buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
-        buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
-      };
+      buildDotnetSdk =
+        version:
+        import version {
+          inherit fetchNupkg;
+          buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
+          buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
+          buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
+        };
 
       ## Files in versions/ are generated automatically by update.sh ##
-      dotnet_6_0 = import ./versions/6.0.nix buildAttrs;
-      dotnet_7_0 = import ./versions/7.0.nix buildAttrs;
-      dotnet_8_0 = import ./versions/8.0.nix buildAttrs;
-      dotnet_9_0 = import ./versions/9.0.nix buildAttrs;
+      dotnet_6_0 = buildDotnetSdk ./versions/6.0.nix;
+      dotnet_7_0 = buildDotnetSdk ./versions/7.0.nix;
+      dotnet_8_0 = buildDotnetSdk ./versions/8.0.nix;
+      dotnet_9_0 = buildDotnetSdk ./versions/9.0.nix;
 
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
@@ -47,7 +49,7 @@ makeScopeWithSplicing' {
 
     in
     {
-      inherit callPackage fetchNupkg;
+      inherit callPackage fetchNupkg buildDotnetSdk;
 
       # Convert a "stdenv.hostPlatform.system" to a dotnet RID
       systemToDotnetRid =
@@ -65,7 +67,7 @@ makeScopeWithSplicing' {
       mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
       addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
 
-      dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
+      dotnet_8 = recurseIntoAttrs (callPackage ./8 { });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
     }
     // lib.optionalAttrs config.allowAliases {

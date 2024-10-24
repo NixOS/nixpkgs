@@ -99,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libresprite.github.io/";
     description = "Animated sprite editor & pixel art tool, fork of Aseprite";
     license = licenses.gpl2Only;
-    longDescription =
-      ''LibreSprite is a program to create animated sprites. Its main features are:
+    longDescription = ''
+        LibreSprite is a program to create animated sprites. Its main features are:
 
           - Sprites are composed by layers & frames (as separated concepts).
           - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.

@@ -5,7 +5,7 @@
 , fetchpatch2
 , cmake
 , ninja
-, ffmpeg_7
+, ffmpeg
 , darwin
 , zlib
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ ffmpeg_7 ] ++ lib.optionals stdenv.hostPlatform.isDarwin
+  buildInputs = [ ffmpeg ] ++ lib.optionals stdenv.hostPlatform.isDarwin
     (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];

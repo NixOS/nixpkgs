@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-rhbYG0TpqAZnbLaZOG739/pDA61Dwb4Y1HhBxWLtOus=";
+    repo = "fnlfmt";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LYHhKC8iA4N8DdCH8GfSOkN/e+W3YjkFhVSDQraKoFk=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     echo "#!${lua}/bin/lua" > fnlfmt
-    ${luaPackages.fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
+    ${luaPackages.fennel}/bin/fennel --require-as-include --compile tags/${version}/cli.fnl >> fnlfmt
     chmod +x fnlfmt
 
     runHook postBuild

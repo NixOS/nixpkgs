@@ -1,10 +1,11 @@
 {
   lib,
-  betamax,
   betamax-matchers,
   betamax-serializers,
+  betamax,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   mock,
   prawcore,
   pytestCheckHook,
@@ -16,19 +17,21 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.7.1";
-  format = "setuptools";
+  version = "7.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
-    repo = pname;
+    repo = "praw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7wTHD/ypXVc8GMfl9u16VNb9caLJoXpaMEIzaVVUgo=";
+    hash = "sha256-oJkpFGJswG//5dnfdwkUdAkn8FOuqT/tDoTT5UncOGA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     mock
     prawcore
     update-checker

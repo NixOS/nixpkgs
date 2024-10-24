@@ -37,4 +37,5 @@
 , "unsplash": "agpl3Only"
 , "user_oidc": "agpl3Plus"
 , "user_saml": "agpl3Plus"
+, "whiteboard": "agpl3Plus"
 }

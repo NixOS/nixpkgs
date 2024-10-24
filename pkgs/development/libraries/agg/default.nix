@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     "--x-libraries=${lib.getLib libX11}/lib"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
   # libtool: error: cannot find the library 'libexamples.la'
   enableParallelBuilding = false;

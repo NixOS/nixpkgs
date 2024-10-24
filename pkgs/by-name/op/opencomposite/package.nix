@@ -5,7 +5,6 @@
   jsoncpp,
   lib,
   libGL,
-  openxr-loader,
   python3,
   stdenv,
   unstableGitUpdater,
@@ -22,7 +21,8 @@ stdenv.mkDerivation {
     owner = "znixian";
     repo = "OpenOVR";
     rev = "f969a972e9a151de776fa8d1bd6e67056f0a5d5d";
-    hash = "sha256-CE+ushwNv8kQSXtrQ6K5veBmpQvQaMKk6P9G1wV2uvM=";
+    fetchSubmodules = true;
+    hash = "sha256-3Aar7HGhn9nd/EtJoeUbQTkUR16jx946ZXMNDOXSdfQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,6 @@ stdenv.mkDerivation {
     glm
     jsoncpp
     libGL
-    openxr-loader
     python3
     vulkan-headers
     vulkan-loader
@@ -40,7 +39,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
-    (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
+    # See https://gitlab.com/znixian/OpenOVR/-/issues/416
+    (lib.cmakeBool "USE_SYSTEM_OPENXR" false)
     (lib.cmakeBool "USE_SYSTEM_GLM" true)
   ];
 

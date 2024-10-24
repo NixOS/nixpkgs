@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ jcumming AndersonTorres ];
     platforms = platforms.all;
+    inherit (acl.meta) badPlatforms;
   };
 
   passthru.tests = {

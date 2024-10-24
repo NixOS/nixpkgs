@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGo123Module
 , fetchFromGitHub
 , fetchFromGitLab
 , callPackage
@@ -25,7 +24,7 @@ let
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
-     , mkProviderGoModule ? buildGo123Module
+     , mkProviderGoModule ? buildGoModule
        # "https://registry.terraform.io/providers/vancluever/acme"
      , homepage ? ""
        # "registry.terraform.io/vancluever/acme"
@@ -46,8 +45,6 @@ let
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
-        # nixpkgs-update: no auto update
-        # easier to update all providers together
 
         meta = {
           inherit homepage;

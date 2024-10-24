@@ -29,8 +29,6 @@ melpaBuild {
     make CXX=$CXX
   '';
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

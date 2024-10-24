@@ -4,7 +4,7 @@
 , glibc
 , gtk3
 , libappindicator
-, webkitgtk
+, webkitgtk_4_0
 , e2fsprogs
 , libnotify
 , libgit2
@@ -63,7 +63,7 @@ buildDotnetModule {
     glibc
     gtk3
     libappindicator
-    webkitgtk
+    webkitgtk_4_0
     e2fsprogs
     libnotify
     libgit2

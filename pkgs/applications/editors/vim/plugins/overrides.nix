@@ -149,8 +149,7 @@ in
       vim-fugitive
       vim-rhubarb
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "advanced_git_search.utils";
+    nvimRequireCheck = "advanced_git_search.utils";
   };
 
   animation-nvim = super.animation-nvim.overrideAttrs {
@@ -199,18 +198,7 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
-  # The GitHub repository returns 404, which breaks the update script
-  vim-pony = buildVimPlugin {
-    pname = "vim-pony";
-    version = "2018-07-27";
-    src = fetchFromGitHub {
-      owner = "jakwings";
-      repo = "vim-pony";
-      rev = "b26f01a869000b73b80dceabd725d91bfe175b75";
-      sha256 = "0if8g94m3xmpda80byfxs649w2is9ah1k8v3028nblan73zlc8x8";
-    };
-    meta.homepage = "https://github.com/jakwings/vim-pony/";
-  };
+  blink-cmp = callPackage ./blink-cmp { };
 
   chadtree = super.chadtree.overrideAttrs {
     buildInputs = [
@@ -234,8 +222,7 @@ in
       plenary-nvim
       telescope-nvim
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "chatgpt";
+    nvimRequireCheck = "chatgpt";
   };
 
   clang_complete = super.clang_complete.overrideAttrs {
@@ -368,6 +355,11 @@ in
       neosnippet-vim
     ];
     nvimRequireCheck = "cmp_neosnippet";
+  };
+
+  cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+    nvimRequireCheck = "cmp_nixpkgs_maintainers";
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
@@ -1107,6 +1099,11 @@ in
     };
   };
 
+  hunk-nvim = super.hunk-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim ];
+    nvimRequireCheck = "hunk";
+  };
+
   # https://hurl.dev/
   hurl = buildVimPlugin {
     pname = "hurl";
@@ -1230,12 +1227,36 @@ in
     nvimRequireCheck = "lean";
   };
 
+  LeaderF = super.LeaderF.overrideAttrs {
+    nativeBuildInputs = [ python3.pkgs.setuptools ];
+    buildInputs = [ python3 ];
+    # rm */build/ to prevent dependencies on gcc
+    # strip the *.so to keep files small
+    buildPhase = ''
+      patchShebangs .
+      ./install.sh
+      rm autoload/leaderf/fuzzyMatch_C/build/ -r
+    '';
+    stripDebugList = [ "autoload/leaderf/python" ];
+  };
+
   leap-ast-nvim = super.leap-ast-nvim.overrideAttrs {
     dependencies = with self; [
       leap-nvim
       nvim-treesitter
     ];
     nvimRequireCheck = "leap-ast";
+  };
+
+  leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+      telescope-nvim
+    ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "leetcode";
   };
 
   lens-vim = super.lens-vim.overrideAttrs {
@@ -1517,6 +1538,10 @@ in
     nvimRequireCheck = "null-ls";
   };
 
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
+    nvimRequireCheck = "notebook-navigator";
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "null-ls";
@@ -1576,8 +1601,7 @@ in
       nvim-lspconfig
       nvim-navic
     ];
-    # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-    # nvimRequireCheck = "nvim-navbuddy";
+    nvimRequireCheck = "nvim-navbuddy";
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
@@ -1663,6 +1687,10 @@ in
   );
 
   nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
+
+  nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
+    nvimRequireCheck = "treesitter-sexp";
+  };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
     dependencies = with self; [ promise-async ];
@@ -1847,6 +1875,10 @@ in
   rustaceanvim = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.rustaceanvim;
     nvimRequireCheck = "rustaceanvim";
+  };
+
+  scretch-nvim = super.scretch-nvim.overrideAttrs {
+    nvimRequireCheck = "scretch";
   };
 
   sg-nvim = super.sg-nvim.overrideAttrs (
@@ -2086,6 +2118,14 @@ in
     src = "${taskwarrior2.src}/scripts/vim";
   };
 
+  telekasten-nvim = super.telekasten-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+    nvimRequireCheck = "telekasten";
+  };
+
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs {
     dependencies = with self; [
       sqlite-lua
@@ -2133,6 +2173,10 @@ in
       '';
     meta.platforms = lib.platforms.all;
   });
+
+  telescope-git-conflicts-nvim = super.telescope-git-conflicts-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim ];
+  };
 
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2477,6 +2521,19 @@ in
     dependencies = with self; [ denops-vim ];
   };
 
+  # The GitHub repository returns 404, which breaks the update script
+  vim-pony = buildVimPlugin {
+    pname = "vim-pony";
+    version = "2018-07-27";
+    src = fetchFromGitHub {
+      owner = "jakwings";
+      repo = "vim-pony";
+      rev = "b26f01a869000b73b80dceabd725d91bfe175b75";
+      sha256 = "0if8g94m3xmpda80byfxs649w2is9ah1k8v3028nblan73zlc8x8";
+    };
+    meta.homepage = "https://github.com/jakwings/vim-pony/";
+  };
+
   vim-sensible = super.vim-sensible.overrideAttrs {
     patches = [ ./patches/vim-sensible/fix-nix-store-path-regex.patch ];
   };
@@ -2672,18 +2729,6 @@ in
         --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
-  LeaderF = super.LeaderF.overrideAttrs {
-    nativeBuildInputs = [ python3.pkgs.setuptools ];
-    buildInputs = [ python3 ];
-    # rm */build/ to prevent dependencies on gcc
-    # strip the *.so to keep files small
-    buildPhase = ''
-      patchShebangs .
-      ./install.sh
-      rm autoload/leaderf/fuzzyMatch_C/build/ -r
-    '';
-    stripDebugList = [ "autoload/leaderf/python" ];
-  };
 }
 // (
   let
@@ -2706,10 +2751,8 @@ in
       "coc-lists"
       "coc-ltex"
       "coc-markdownlint"
-      "coc-metals"
       "coc-pairs"
       "coc-prettier"
-      "coc-python"
       "coc-r-lsp"
       "coc-rls"
       "coc-rust-analyzer"
@@ -2724,8 +2767,6 @@ in
       "coc-tabnine"
       "coc-texlab"
       "coc-toml"
-      "coc-tslint"
-      "coc-tslint-plugin"
       "coc-tsserver"
       "coc-ultisnips"
       "coc-vetur"

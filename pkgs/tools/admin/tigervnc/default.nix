@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , xorg
 , xkeyboard_config
 , zlib
@@ -32,6 +33,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "vncauth-security-type.patch";
+      url = "https://github.com/TigerVNC/tigervnc/commit/4f6a3521874da5a67fd746389cfa9b6199eb3582.diff";
+      hash = "sha256-lSkR8e+jsBwkQUJZmA0tb8nM5iSbYtO8uVXtgk5wdF8=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in

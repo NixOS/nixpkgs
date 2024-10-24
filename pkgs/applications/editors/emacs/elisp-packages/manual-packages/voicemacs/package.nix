@@ -49,8 +49,6 @@ melpaBuild {
     el-patch
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {

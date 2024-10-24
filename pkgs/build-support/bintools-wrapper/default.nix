@@ -31,7 +31,6 @@
 , isCCTools ? bintools.isCCTools or false
 , expand-response-params
 , targetPackages ? {}
-, useMacosReexportHack ? false
 , wrapGas ? false
 
 # Note: the hardening flags are part of the bintools-wrapper, rather than
@@ -135,6 +134,7 @@ let
     else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "${sharedLibraryLoader}/libexec/ld-elf.so.1"
+    else if targetPlatform.isOpenBSD                  then "${sharedLibraryLoader}/libexec/ld.so"
     else if hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
 
@@ -228,16 +228,9 @@ stdenvNoCC.mkDerivation {
         fi
       done
 
-    '' + (if !useMacosReexportHack then ''
       if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
         wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
       fi
-    '' else ''
-      ldInner="${targetPrefix}ld-reexport-delegate"
-      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
-      wrap "${targetPrefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
-      unset ldInner
-    '') + ''
 
       for variant in $ldPath/${targetPrefix}ld.*; do
         basename=$(basename "$variant")
@@ -421,7 +414,5 @@ stdenvNoCC.mkDerivation {
         attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
-  } // optionalAttrs useMacosReexportHack {
-    platforms = platforms.darwin;
   };
 }

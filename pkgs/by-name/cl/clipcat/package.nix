@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, protobuf
-, installShellFiles
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  protobuf,
+  installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "xrelkd";
-    repo = pname;
-    rev = "v${version}";
+    repo = "clipcat";
+    rev = "refs/tags/v${version}";
     hash = "sha256-95y/HiLmhqt1DFmAxLg/W7lr/9dfVtce4+tx+vG2Nuw=";
   };
 
@@ -28,8 +29,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     protobuf
-
     installShellFiles
+  ];
+
+  patches = [
+    ./0001-fix-build.patch
   ];
 
   checkFlags = [
@@ -47,12 +51,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clipboard Manager written in Rust Programming Language";
     homepage = "https://github.com/xrelkd/clipcat";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ xrelkd bot-wxt1221 ];
     mainProgram = "clipcatd";
   };
 }

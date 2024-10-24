@@ -89,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
     fpdf2
     ftfy
     google-generativeai
+    googleapis-common-protos
     langchain
     langchain-chroma
     langchain-community
