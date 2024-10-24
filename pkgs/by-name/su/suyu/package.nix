@@ -1,81 +1,86 @@
-{ lib
-, SDL2
-, autoconf
-, boost
-, catch2_3
-, cmake
-, fetchFromGitHub
-, cpp-jwt
-, cubeb
-, discord-rpc
-, enet
-, fetchgit
-, fetchurl
-, ffmpeg-headless
-, fmt
-, glslang
-, libopus
-, libusb1
-, libva
-, lz4
-, unzip
-, nix-update-script
-, nlohmann_json
-, nv-codec-headers-12
-, pkg-config
-, qt6
-, stdenv
-, vulkan-headers
-, vulkan-loader
-, yasm
-, zlib
-, zstd
+{
+  lib,
+  SDL2,
+  autoconf,
+  boost,
+  catch2_3,
+  cmake,
+  fetchFromGitHub,
+  cpp-jwt,
+  cubeb,
+  discord-rpc,
+  enet,
+  fetchgit,
+  fetchurl,
+  ffmpeg-headless,
+  fmt,
+  glslang,
+  libopus,
+  libusb1,
+  libva,
+  lz4,
+  unzip,
+  nix-update-script,
+  nlohmann_json,
+  nv-codec-headers-12,
+  pkg-config,
+  qt6,
+  stdenv,
+  vulkan-headers,
+  vulkan-loader,
+  yasm,
+  simpleini,
+  zlib,
+  vulkan-memory-allocator,
+  zstd,
 }:
 
 let
-  inherit (qt6) qtbase
+  inherit (qt6)
+    qtbase
     qtmultimedia
     qtwayland
     wrapQtAppsHook
     qttools
-    qtwebengine;
+    qtwebengine
+    ;
 
   compat-list = stdenv.mkDerivation {
-  pname = "yuzu-compatibility-list";
-  version = "unstable-2024-02-26";
+    pname = "yuzu-compatibility-list";
+    version = "unstable-2024-02-26";
 
-  src = fetchFromGitHub {
-    owner = "flathub";
-    repo = "org.yuzu_emu.yuzu";
-    rev = "9c2032a3c7e64772a8112b77ed8b660242172068";
-    hash = "sha256-ITh/W4vfC9w9t+TJnPeTZwWifnhTNKX54JSSdpgaoBk=";
-  };
+    src = fetchFromGitHub {
+      owner = "flathub";
+      repo = "org.yuzu_emu.yuzu";
+      rev = "9c2032a3c7e64772a8112b77ed8b660242172068";
+      hash = "sha256-ITh/W4vfC9w9t+TJnPeTZwWifnhTNKX54JSSdpgaoBk=";
+    };
 
-  buildCommand = ''
-    cp $src/compatibility_list.json $out
-  '';
+    buildCommand = ''
+      cp $src/compatibility_list.json $out
+    '';
   };
 
   nx_tzdb = stdenv.mkDerivation rec {
-  pname = "nx_tzdb";
-  version = "221202";
+    pname = "nx_tzdb";
+    version = "221202";
 
-  src = fetchurl {
-    url = "https://github.com/lat9nq/tzdb_to_nx/releases/download/${version}/${version}.zip";
-    hash = "sha256-mRzW+iIwrU1zsxHmf+0RArU8BShAoEMvCz+McXFFK3c=";
-  };
+    src = fetchurl {
+      url = "https://github.com/lat9nq/tzdb_to_nx/releases/download/${version}/${version}.zip";
+      hash = "sha256-mRzW+iIwrU1zsxHmf+0RArU8BShAoEMvCz+McXFFK3c=";
+    };
 
-  nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
-  buildCommand = ''
-    unzip $src -d $out
-  '';
+    buildCommand = ''
+      unzip $src -d $out
+    '';
 
   };
 
 in
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suyu";
   version = "0.0.3";
 
@@ -112,8 +117,8 @@ stdenv.mkDerivation(finalAttrs: {
     # we do not use internal ffmpeg because cuda errors
     autoconf
     yasm
-    libva  # for accelerated video decode on non-nvidia
-    nv-codec-headers-12  # for accelerated video decode on nvidia
+    libva # for accelerated video decode on non-nvidia
+    nv-codec-headers-12 # for accelerated video decode on nvidia
     ffmpeg-headless
     # end ffmpeg deps
 
@@ -131,9 +136,8 @@ stdenv.mkDerivation(finalAttrs: {
     qtwebengine
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
-    # not packaged in nixpkgs: simpleini
     # intentionally omitted: stb - header only libraries, vendor uses git snapshot
-    # not packaged in nixpkgs: vulkan-memory-allocator
+    vulkan-memory-allocator
     # intentionally omitted: xbyak - prefer vendored version for compatibility
     zlib
     zstd
@@ -145,59 +149,63 @@ stdenv.mkDerivation(finalAttrs: {
 
   cmakeFlags = [
     # actually has a noticeable performance impact
-    "-DSUYU_ENABLE_LTO=ON"
+    (lib.cmakeBool "SUYU_ENABLE_LTO" true)
 
-    # build with qt6
-    "-DENABLE_QT6=ON"
-    "-DENABLE_QT_TRANSLATION=ON"
+    (lib.cmakeBool "ENABLE_QT6" true)
+    (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
 
     # use system libraries
     # NB: "external" here means "from the externals/ directory in the source",
     # so "off" means "use system"
-    "-DSUYU_USE_EXTERNAL_SDL2=OFF"
-    "-DSUYU_USE_EXTERNAL_VULKAN_HEADERS=OFF"
+    (lib.cmakeBool "SUYU_USE_EXTERNAL_SDL2" false)
+    (lib.cmakeBool "SUYU_USE_EXTERNAL_VULKAN_HEADERS" false)
 
     # # don't use system ffmpeg, suyu uses internal APIs
-    # "-DSUYU_USE_BUNDLED_FFMPEG=ON"
+    # (lib.cmakeBool "SUYU_USE_BUNDLED_FFMPEG" true)
 
     # don't check for missing submodules
-    "-DSUYU_CHECK_SUBMODULES=OFF"
+    (lib.cmakeBool "SUYU_CHECK_SUBMODULES" false)
 
     # enable some optional features
-    "-DSUYU_USE_QT_WEB_ENGINE=ON"
-    "-DSUYU_USE_QT_MULTIMEDIA=ON"
-    "-DUSE_DISCORD_PRESENCE=ON"
+    (lib.cmakeBool "SUYU_USE_QT_WEB_ENGINE" true)
+    (lib.cmakeBool "SUYU_USE_QT_MULTIMEDIA" true)
+    (lib.cmakeBool "USE_DISCORD_PRESENCE" true)
 
     # We dont want to bother upstream with potentially outdated compat reports
-    "-DSUYU_ENABLE_COMPATIBILITY_REPORTING=OFF"
-    "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
+    (lib.cmakeBool "SUYU_ENABLE_COMPATIBILITY_REPORTING" false)
+    (lib.cmakeBool "ENABLE_COMPATIBILITY_LIST_DOWNLOAD" false) # We provide this deterministically
   ];
 
-  # Does some handrolled SIMD
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse4.1";
+  env = {
+    # Does some handrolled SIMD
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse4.1";
+  };
 
-  # Fixes vulkan detection.
-  # FIXME: patchelf --add-rpath corrupts the binary for some reason, investigate
   qtWrapperArgs = [
+    # Fixes vulkan detection.
+    # FIXME: patchelf --add-rpath corrupts the binary for some reason, investigate
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
   ];
 
-    # see https://github.com/NixOS/nixpkgs/issues/114044, setting this through cmakeFlags does not work.
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DTITLE_BAR_FORMAT_IDLE=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}"
-      "-DTITLE_BAR_FORMAT_RUNNING=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}"
-    )
-
+  # Setting this through cmakeFlags does not work.
+  # https://github.com/NixOS/nixpkgs/issues/114044
+  preConfigure = lib.concatStringsSep "\n" [
+    ''
+      cmakeFlagsArray+=(
+        "-DTITLE_BAR_FORMAT_IDLE=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}"
+        "-DTITLE_BAR_FORMAT_RUNNING=${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}"
+      )
+    '' 
     # provide pre-downloaded tz data
-    mkdir -p build/externals/nx_tzdb
-    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
-  '';
+    ''
+      mkdir -p build/externals/nx_tzdb
+      ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
+    ''
+  ];
 
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
   '';
-
 
   postInstall = "
     install -Dm444 $src/dist/72-suyu-input.rules $out/lib/udev/rules.d/72-suyu-input.rules
@@ -207,12 +215,14 @@ stdenv.mkDerivation(finalAttrs: {
     homepage = "https://suyu.dev";
     description = "An experimental Nintendo Switch emulator written in C++";
     mainProgram = "suyu";
-    platforms =  lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # Better safe than sorry
     license = with lib.licenses; [
       gpl3Plus
       # Icons
-      asl20 mit cc0
+      asl20
+      mit
+      cc0
     ];
   };
 })
