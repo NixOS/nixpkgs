@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libsvm
     libtiff
-    (libxml2.override { enableHttp = true; })
+    libxml2
     netcdf
     pdal
     postgresql
