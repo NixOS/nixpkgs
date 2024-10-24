@@ -34,17 +34,19 @@ let
     else if fetchzip ? override then fetchzip.override { withUnzip = false; }
     else fetchzip;
   privateAttrs = lib.optionalAttrs private {
-    netrcPhase = ''
-      if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
-        echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
-        exit 1
-      fi
-      cat > netrc <<EOF
-      machine ${githubBase}
-              login ''$${varBase}USERNAME
-              password ''$${varBase}PASSWORD
-      EOF
-    '';
+    netrcPhase =
+      let machineName = if githubBase == "github.com" then "api.github.com" else githubBase;
+      in ''
+        if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
+          echo "Error: Private fetchFromGitHub requires the nix building process (nix-daemon in multi user mode) to have the ${varBase}USERNAME and ${varBase}PASSWORD env vars set." >&2
+          exit 1
+        fi
+        cat > netrc <<EOF
+        machine ${machineName}
+                login ''$${varBase}USERNAME
+                password ''$${varBase}PASSWORD
+        EOF
+      '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
 
@@ -55,7 +57,13 @@ let
       inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${rev}.tar.gz";
+      url =
+        let endpoint = "/repos/${owner}/${repo}/tarball/${rev}";
+        in
+        if githubBase == "github.com"
+        then "https://api.github.com${endpoint}"
+        else "https://${githubBase}/api/v3${endpoint}";
+      extension = "tar.gz";
 
       passthru = {
         inherit gitRepoUrl;
