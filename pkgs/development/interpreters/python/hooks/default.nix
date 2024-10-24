@@ -122,6 +122,7 @@ in {
       };
       passthru.tests = import ./python-catch-conflicts-hook-tests.nix {
         inherit pythonOnBuildForHost runCommand;
+        inherit lib;
         inherit (pkgs) coreutils gnugrep writeShellScript;
       };
     } ./python-catch-conflicts-hook.sh) {};
