@@ -313,7 +313,7 @@ in
             old.extraPrefsFiles or [ ]
             ++ cfg.autoConfigFiles
             ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ lib.unique cfg.nativeMessagingHosts.packages;
           cfg = (old.cfg or { }) // cfg.wrapperConfig;
         }))
       ];
