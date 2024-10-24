@@ -46,6 +46,9 @@ buildGoModule ({
   preConfigure = ''
     mkdir -p _build/bin
     cp -r ${auxBins}/bin/* _build/bin
+    for f in ${git}/bin/git-*; do
+      cp "$f" "_build/bin/gitaly-$(basename $f)";
+    done
   '';
 
   outputs = [ "out" ];
