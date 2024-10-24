@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
+
+    # Don't call setgroups unconditionally in mainrelay
+    # https://github.com/coturn/coturn/pull/1508
+    ./dont-call-setgroups-unconditionally.patch
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
