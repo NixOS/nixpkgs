@@ -84,6 +84,10 @@
       name = "derivations";
       description = "miscellaneous derivation-specific functions";
     }
+    {
+      name = "network";
+      description = "networking functions";
+    }
   ],
 }:
 
