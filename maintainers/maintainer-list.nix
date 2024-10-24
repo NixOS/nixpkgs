@@ -18068,6 +18068,12 @@
     githubId = 98139059;
     name = "Mateus Alves";
   };
+  reecertv = {
+    email = "thtrf@proton.me";
+    github = "reecertv";
+    githubId = 82712122;
+    name = "ReecerTV";
+  };
   reedrw = {
     email = "reedrw5601@gmail.com";
     github = "reedrw";
