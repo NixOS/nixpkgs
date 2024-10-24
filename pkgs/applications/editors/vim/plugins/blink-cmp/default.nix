@@ -6,12 +6,12 @@
   vimUtils,
 }:
 let
-  version = "0.3.1";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bvhLOM0NMx5S069uX2OecEpzYaR3hV4r8nCIPD0f0XQ=";
+    hash = "sha256-jWRXrFh83lTRsgm0gSZuRORltqo147BAg1zVcd7rIMg=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
@@ -24,8 +24,7 @@ let
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
-        "c-marshalling-0.2.0" = "sha256-eL6nkZOtuLLQ0r31X7uroUUDYZsWOJ9KNXl4NCVNRuw=";
-        "frizbee-0.1.0" = "sha256-zO2S282DVCjnALMXu3GxmAfjCXsPNUZ7+xgiqITfGmU=";
+        "frizbee-0.1.0" = "sha256-eYth+xOIqwGPkH39OxNCMA9zE+5CTNpsuX8Ue/mySIA=";
       };
     };
   };
