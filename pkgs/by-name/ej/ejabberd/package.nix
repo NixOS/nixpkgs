@@ -2,7 +2,6 @@
   stdenv,
   makeWrapper,
   lib,
-  fetchurl,
   libpng,
   libjpeg,
   libwebp,
@@ -141,7 +140,7 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "ejabberd";
   version = "24.07";
 
@@ -168,10 +167,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLua allBeamDeps.luerl
     ++ lib.optional withRedis allBeamDeps.eredis;
 
-  src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
-    hash = "sha256-wPt0asuoGl20Hel8A5aMH2gaE7G2waiVtxguM4IMGNk=";
-    # remember to update rebar-deps.nix
+  src = fetchFromGitHub {
+    owner = "processone";
+    repo = "ejabberd";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-4wEQBumWrHqN2uNrDxAJhgv2ok7pgQlAEPpL96ZOsTQ=";
   };
 
   passthru.tests = {
@@ -211,16 +211,16 @@ stdenv.mkDerivation rec {
     }"''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source XMPP application server written in Erlang";
     mainProgram = "ejabberdctl";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sander
       abbradar
       chuangzhu
     ];
   };
-}
+})
