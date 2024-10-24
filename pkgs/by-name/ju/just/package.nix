@@ -9,7 +9,14 @@
   libiconv,
   mdbook,
   nix-update-script,
+  buildPackages,
+  withDocs ? true,
 }:
+
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  shouldBuildDocs = withDocs && canExecute;
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
@@ -31,8 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-    mdbook
-  ];
+  ] ++ lib.optionals shouldBuildDocs [ mdbook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -61,21 +67,11 @@ rustPlatform.buildRustPackage rec {
     ./fix-just-path-in-tests.patch
   ];
 
-  postBuild = ''
+  postBuild = lib.optionalString shouldBuildDocs ''
     cargo run --package generate-book
-
-    mkdir -p completions man
-
-    cargo run -- --man > man/just.1
-
-    for shell in bash fish zsh; do
-        cargo run -- --completions $shell > completions/just.$shell
-    done
-
     # No linkcheck in sandbox
     echo 'optional = true' >> book/en/book.toml
     mdbook build book/en
-    find .
   '';
 
   checkFlags = [
@@ -87,16 +83,31 @@ rustPlatform.buildRustPackage rec {
     "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
   ];
 
-  postInstall = ''
-    mkdir -p $doc/share/doc/$name
-    mv ./book/en/build/html $doc/share/doc/$name
-    installManPage man/just.1
+  postInstall =
+    let
+      just = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/just";
+    in
+    lib.optionalString withDocs (
+      if canExecute then
+        ''
+          mkdir -p $doc/share/doc/$name
+          mv ./book/en/build/html $doc/share/doc/$name
+        ''
+      else
+        ''
+          mkdir -p $doc/share
+          cp -r ${buildPackages.just.doc}/share/doc $doc/share
+        ''
+    )
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${just} --man > ./just.1
+      installManPage ./just.1
 
-    installShellCompletion --cmd just \
-      --bash completions/just.bash \
-      --fish completions/just.fish \
-      --zsh completions/just.zsh
-  '';
+      installShellCompletion --cmd just \
+        --bash <(${just} --completions bash) \
+        --fish <(${just} --completions fish) \
+        --zsh <(${just} --completions zsh)
+    '';
 
   setupHook = ./setup-hook.sh;
 
