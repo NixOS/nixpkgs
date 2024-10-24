@@ -98,7 +98,7 @@
   ./hardware/sensor/iio.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
-  ./hardware/tuxedo-keyboard.nix
+  ./hardware/tuxedo-drivers.nix
   ./hardware/ubertooth.nix
   ./hardware/uinput.nix
   ./hardware/uni-sync.nix
