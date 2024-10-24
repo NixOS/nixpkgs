@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Command line interface to DeepSource";
     mainProgram = "deepsource";
     homepage = "https://github.com/DeepSourceCorp/cli";
-    license = licenses.bsd3;
+    license = licenses.bsd2;
     maintainers = with maintainers; [ nipeharefa ];
   };
 }
