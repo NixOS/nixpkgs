@@ -43,6 +43,16 @@ Finally, replace `tlpdb.nix` with the generated file. Note that if the
 The test `pkgs.tests.texlive.tlpdbNix` verifies that the file `tlpdb.nix`
 in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
+### Upgrade package information from tlcontrib package database
+*After* `tlpdb.nix` has been upgraded, update `texlive.tlcontrib.xz.hash` to
+match the new hash of `texlive.tlpdb.nix` in the tlcontrib repository, run
+
+```bash
+nix-build ../../../../.. -A texlive.tlcontrib.nix --no-out-link
+```
+
+and copy the result in `tlcontrib.nix`.
+
 ### Build packages locally and generate fix hashes
 
 To prevent unnecessary rebuilds, texlive packages are built as fixed-output
@@ -52,15 +62,17 @@ Updating the list of fixed hashes requires a local build of all new packages,
 which is a resource-intensive process. First build the hashes for the new
 packages. Consider tweaking the `-j` option to maximise core usage.
 
+You must allow the unfree packages in tlcontrib for this step to work.
+
 ```bash
-nix-build generate-fixed-hashes.nix -A newHashes -j 8
+NIXPKGS_ALLOW_UNFREE=1 nix-build generate-fixed-hashes.nix -A newHashes -j 8
 ```
 
 Then build the Nix expression containing all the hashes, old and new. This step
 cannot be parallelized because it relies on 'import from derivation'.
 
 ```bash
-nix-build generate-fixed-hashes.nix -A fixedHashesNix
+NIXPKGS_ALLOW_UNFREE=1 nix-build generate-fixed-hashes.nix -A fixedHashesNix
 ```
 
 Finally, copy the result to `fixed-hashes.nix`.

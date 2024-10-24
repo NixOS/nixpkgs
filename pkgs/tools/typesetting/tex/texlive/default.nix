@@ -30,16 +30,24 @@ let
 
   tlpdbVersion = tlpdb."00texlive.config";
 
+  tlcontrib = lib.mapAttrs (_: p: p // { mirrors = tlcontribMirrors; }) (import ./tlcontrib.nix);
+
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   overriddenTlpdb = let
     overrides = import ./tlpdb-overrides.nix {
       inherit
-        stdenv lib bin tlpdb tlpdbxz tl
+        stdenv lib bin tlpdb tlpdbxz tlcontrib tlcontribxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
         gnumake gnupg gnused gzip html-tidy ncurses perl python3 ruby zip;
     };
   in overrides tlpdb;
+
+  overriddenTlcontrib = let
+    overrides = import ./tlcontrib-overrides.nix {
+      inherit lib;
+    };
+  in overrides tlcontrib;
 
   version = {
     # day of the snapshot being taken
@@ -74,6 +82,11 @@ let
     "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
   ];
 
+  tlcontribMirrors = with version; [
+    "https://mirror.ctan.org/systems/texlive/tlcontrib"
+    "https://contrib.texlive.info/${toString texliveYear}"
+  ];
+
   tlpdbxz = fetchurl {
     urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz")
       # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
@@ -90,6 +103,18 @@ let
     xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq > "$out"
   '';
 
+  tlcontribxz = fetchurl {
+    # use last mirror as CTAN texlive.tlpdb.xz keeps track of upstream releases
+    # TODO make this less hacky
+    url = "${lib.last tlcontribMirrors}/tlpkg/texlive.tlpdb.xz";
+    hash = "sha256-cDkhOIZR6WcJX4boS7Mv0bxJT63r2LjE4JHT7GWJQDw=";
+  };
+
+  tlcontribNix = tlpdbNix.overrideAttrs {
+    name = "tlcontrib.nix";
+    tlpdbxz = tlcontribxz;
+  };
+
   # map: name -> fixed-output hash
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
@@ -99,11 +124,14 @@ let
   };
 
   tl = lib.mapAttrs (pname: { revision, extraRevision ? "", ... }@args:
-    buildTeXLivePackage (args
+    buildTeXLivePackage (
       # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
-      // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
+      { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
+      // args
       // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
-  ) overriddenTlpdb;
+  )
+  # put tlcontrib first just in case it masks TL packages (it shouldn't)
+  (overriddenTlcontrib // overriddenTlpdb);
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
@@ -217,6 +245,11 @@ in
       # nested in an attribute set to prevent them from appearing in search
       nix = tlpdbNix;
       xz = tlpdbxz;
+    };
+
+    tlcontrib = {
+      nix = tlcontribNix;
+      xz = tlcontribxz;
     };
 
     bin = assert assertions; bin // {
