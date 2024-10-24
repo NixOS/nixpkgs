@@ -17,6 +17,7 @@
       pname,
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
+      pnpmInstallFlags ? [ ],
       ...
     }@args:
     let
@@ -79,8 +80,8 @@
             pnpm install \
                 --force \
                 --ignore-scripts \
-                ${installFlags} \
                 ${lib.escapeShellArgs filterFlags} \
+                ${lib.escapeShellArgs pnpmInstallFlags} \
                 --frozen-lockfile
 
             runHook postInstall
