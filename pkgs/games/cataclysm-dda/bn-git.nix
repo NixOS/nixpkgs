@@ -2,31 +2,27 @@
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2024-07-28"
-, rev ? "bfeb1fffc4179fed242a042f24b1c97f6cfaff3d"
-, sha256 ? "sha256-IodXEA+pWfDdR9huRXieP3+J3WZJO19C8PUPT18dFBw="
+, version ? "2024-10-18"
+, rev ? "551c7279dafe1d283c3ef2779cb335b855e6bc59"
+, sha256 ? "sha256-1xXTGNjLma5++xIEf9n98lPAZZ+nJ7TPMS6S5n4PSzs="
 }:
 
 let
+  desktopFilePath = "";
+
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir;
-    desktopFilePath = "$out/share/applications/org.cataclysmdda.CataclysmDDA.desktop";
+    inherit CoreFoundation tiles Cocoa debug useXdgDir desktopFilePath;
   };
 
   self = common.overrideAttrs (common: rec {
-    pname = common.pname + "-git";
+    pname = "cataclysm-bn-git";
     inherit version;
 
     src = fetchFromGitHub {
-      owner = "CleverRaven";
-      repo = "Cataclysm-DDA";
+      owner = "cataclysmbnteam";
+      repo = "Cataclysm-BN";
       inherit rev sha256;
     };
-
-    patches = [
-      # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-git.patch
-    ];
 
     makeFlags = common.makeFlags ++ [
       "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
