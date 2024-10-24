@@ -36,12 +36,9 @@
 , withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux # Alsa in/output supporT
 , withAmf ? lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
-, withAppKit ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AppKit framework
 , withAribb24 ? withFullDeps # ARIB text and caption decoding
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
-, withAudioToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -51,7 +48,6 @@
 , withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
-, withCoreImage ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
 , withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
@@ -121,7 +117,6 @@
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
-, withVideoToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple VideoToolbox
 , withVidStab ? withHeadlessDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
@@ -554,14 +549,11 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAlsa "alsa")
     (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
-    (enableFeature withAppKit "appkit")
     (enableFeature withAribb24 "libaribb24")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
-    (enableFeature withAudioToolbox "audiotoolbox")
-    (enableFeature withAvFoundation "avfoundation")
     (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
@@ -571,7 +563,6 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCodec2 "libcodec2")
-    (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withCudaNVCC "cuda-nvcc")
@@ -661,7 +652,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast version "6.0")  [
     (enableFeature withVpl "libvpl")
   ] ++ [
-    (enableFeature withVideoToolbox "videotoolbox")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
