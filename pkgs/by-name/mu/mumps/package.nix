@@ -8,6 +8,7 @@
   metis,
   scotch,
   stdenv,
+  fixDarwinDylibNames,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
@@ -54,7 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
   '';
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ [
+      gfortran
+    ];
 
   buildInputs = [
     blas
@@ -62,55 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     metis
     scotch
   ];
-
-  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool \
-      -change    libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib \
-      -change    libpord.dylib \
-        $out/lib/libpord.dylib \
-        $out/lib/libmumps_common.dylib
-    install_name_tool \
-      -change    libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib \
-      -change    libpord.dylib \
-        $out/lib/libpord.dylib \
-      -id \
-        $out/lib/libcmumps.dylib \
-        $out/lib/libcmumps.dylib
-    install_name_tool \
-      -change    libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib \
-      -change    libpord.dylib \
-        $out/lib/libpord.dylib \
-      -id \
-        $out/lib/libdmumps.dylib \
-        $out/lib/libdmumps.dylib
-    install_name_tool \
-      -change    libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib \
-      -change    libpord.dylib \
-        $out/lib/libpord.dylib \
-      -id \
-        $out/lib/libsmumps.dylib \
-        $out/lib/libsmumps.dylib
-    install_name_tool \
-      -change    libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib \
-      -change    libpord.dylib \
-        $out/lib/libpord.dylib \
-      -id \
-        $out/lib/libzmumps.dylib \
-        $out/lib/libzmumps.dylib
-    install_name_tool \
-      -id \
-        $out/lib/libmpiseq.dylib \
-        $out/lib/libmpiseq.dylib
-    install_name_tool \
-      -id \
-        $out/lib/libpord.dylib \
-        $out/lib/libpord.dylib
-  '';
 
   doInstallCheck = true;
   installCheckPhase =
