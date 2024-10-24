@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libvisio";
-  version = "0.1.7";
+  version = "0.1.8";
 
   outputs = [ "out" "bin" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
-    sha256 = "0k7adcbbf27l7n453cca1m6s9yj6qvb5j6bsg2db09ybf3w8vbwg";
+    hash = "sha256-tAmP+/TcuecSE/oKzdvZKPJ77TDbLYAjSBOxXVPQQFs=";
   };
 
   strictDeps = true;
