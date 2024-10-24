@@ -37,7 +37,7 @@ buildGoModule rec {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector.git";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ DavSanchez ];
+    maintainers = with lib.maintainers; [ davsanchez ];
     mainProgram = "ocb";
   };
 }
