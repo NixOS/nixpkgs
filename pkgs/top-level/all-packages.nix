@@ -2038,11 +2038,6 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd {
-    # Workaround systemd static build breakage
-    systemd = if systemd.meta.broken then null else systemd;
-  };
-
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
