@@ -29,11 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-ogX0KsfHRQW7+exRMKGwJiNINrOKPiTKxAqiTZyEWrg=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "utf8-read-0.4.0" = "sha256-L/NcgbB+2Rwtc+1e39fQh1D9S4RqQY6CCFOTh8CI8Ts=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-bDiGk7hsXuVntAP0UfiXlnYX+k4/pf+2k54WgeIW8Jg=";
   };
 
   nativeBuildInputs = [
