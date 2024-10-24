@@ -15039,8 +15039,9 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx17 openjfx21 openjfx23;
-  openjfx = openjfx17;
+  openjfx17 = openjfx;
+  openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
+  openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -28359,7 +28360,7 @@ with pkgs;
   bluej = callPackage ../applications/editors/bluej {
     openjdk = openjdk17.override {
       enableJavaFX = true;
-      openjfx = openjfx17.override { withWebKit = true; };
+      openjfx_jdk = openjfx17.override { withWebKit = true; };
     };
   };
 
@@ -29004,7 +29005,7 @@ with pkgs;
   greenfoot = callPackage ../applications/editors/greenfoot {
     openjdk = openjdk17.override {
       enableJavaFX = true;
-      openjfx = openjfx17.override { withWebKit = true; };
+      openjfx_jdk = openjfx17.override { withWebKit = true; };
     };
   };
 
@@ -30277,7 +30278,7 @@ with pkgs;
   jabref = callPackage ../applications/office/jabref {
     jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx = openjfx23.override { withWebKit = true; };
+      openjfx_jdk = openjfx23.override { withWebKit = true; };
     };
   };
 
