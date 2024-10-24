@@ -30942,8 +30942,6 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = mpc; # green-alias added 2024-10-14
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
