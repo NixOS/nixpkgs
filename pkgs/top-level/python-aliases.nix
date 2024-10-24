@@ -114,6 +114,7 @@ mapAliases ({
   clvm-tools = throw "clvm-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   clvm-tools-rs = throw "clvm-tools-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
+  codecov = throw "python-codecov has been removed, as it was broken and archived by upstream."; # Added 2024-10-24
   codespell = throw "codespell has been promoted to a top-level attribute name: `pkgs.codespell`"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
   command_runner = command-runner; # added 2024-03-06
