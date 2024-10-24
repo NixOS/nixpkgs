@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       texts in around 100 languages.
     '';
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres greg ];
     platforms = lib.platforms.unix;
   };
 })
