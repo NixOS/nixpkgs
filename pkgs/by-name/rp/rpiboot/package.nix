@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/rpiboot
     cp rpiboot $out/bin
-    cp -r msd $out/share/rpiboot
+    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
   '';
 
   meta = with lib; {
