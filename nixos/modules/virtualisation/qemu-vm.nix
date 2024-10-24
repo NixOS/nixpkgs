@@ -111,14 +111,12 @@ let
           ${if (cfg.useBootLoader && cfg.useDefaultFilesystems) then ''
             # Create a writable qcow2 image using the systemImage as a backing
             # image.
-
-            # CoW prevent size to be attributed to an image.
-            # FIXME: raise this issue to upstream.
             ${qemu}/bin/qemu-img create \
               -f qcow2 \
               -b ${systemImage}/nixos.qcow2 \
               -F qcow2 \
-              "$NIX_DISK_IMAGE"
+              "$NIX_DISK_IMAGE" \
+              "${toString cfg.diskSize}M"
           '' else if cfg.useDefaultFilesystems then ''
             createEmptyFilesystemImage "$NIX_DISK_IMAGE" "${toString cfg.diskSize}M"
           '' else ''
@@ -1030,6 +1028,8 @@ in
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
+    boot.growPartition = mkIf (cfg.useBootLoader && cfg.useDefaultFilesystems) true;
+
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
     # allows Nix operations to work in the VM.  The path to the
@@ -1182,6 +1182,7 @@ in
         } else {
           device = cfg.rootDevice;
           fsType = "ext4";
+          autoResize = lib.mkIf cfg.useBootLoader true;
         });
         "/tmp" = lib.mkIf config.boot.tmp.useTmpfs {
           device = "tmpfs";
