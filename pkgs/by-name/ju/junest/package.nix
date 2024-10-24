@@ -18,6 +18,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/lib
     cp -r $src/bin/ $out/
     cp -r $src/lib/ $out/
+    cp -r $src/VERSION $out/
     substituteInPlace $out/lib/core/common.sh --replace-fail "wget" ${lib.getExe wget}
   '';
 
