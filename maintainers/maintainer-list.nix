@@ -6331,6 +6331,11 @@
     githubId = 428026;
     name = "embr";
   };
+  emilio-barradas = {
+    github = "EmilioBarradas";
+    githubId = 16023547;
+    name = "Emilio Barradas";
+  };
   emilioziniades = {
     email = "emilioziniades@protonmail.com";
     github = "emilioziniades";
