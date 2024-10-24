@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rzpipe";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-py4oiNp+WUcOGHn2AdHyIpgV8BsI8A1gtJi2joi1Wxc=";
   };
+
+  build-system = [ setuptools ];
 
   # No native rz_core library
   doCheck = false;
