@@ -21475,6 +21475,7 @@ with pkgs;
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
   libpsl = callPackage ../development/libraries/libpsl { };
+  libpsl-with-scripts = libpsl.override { withScripts = true; };
 
   libpst = callPackage ../development/libraries/libpst { };
 
