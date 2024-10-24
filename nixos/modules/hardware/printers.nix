@@ -119,6 +119,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "cups.service" ];
       after = [ "cups.service" ];
+      partOf = [ "cups.service" ];
 
       serviceConfig = {
         Type = "oneshot";
