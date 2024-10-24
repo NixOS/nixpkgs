@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.115.0";
+  version = "0.115.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-TewFTbYdWIHcgRH+YNxNEUZVlaUn2aTZ0YFmDPrPZl4=";
+    hash = "sha256-JIaPgZVbz887liVwd3YtubJm+L4tFCM9Jcn9/smjiKo=";
   };
 
   build-system = [ pdm-backend ];
@@ -106,24 +106,20 @@ buildPythonPackage rec {
   disabledTests = [
     # Coverage test
     "test_fastapi_cli"
-    # ResourceWarning: Unclosed <MemoryObjectSendStream>
-    "test_openapi_schema"
   ];
 
   disabledTestPaths = [
     # Don't test docs and examples
     "docs_src"
-    # databases is incompatible with SQLAlchemy 2.0
-    "tests/test_tutorial/test_async_sql_databases"
     "tests/test_tutorial/test_sql_databases"
   ];
 
   pythonImportsCheck = [ "fastapi" ];
 
   meta = with lib; {
-    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${version}";
     description = "Web framework for building APIs";
-    homepage = "https://github.com/tiangolo/fastapi";
+    homepage = "https://github.com/fastapi/fastapi";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };
