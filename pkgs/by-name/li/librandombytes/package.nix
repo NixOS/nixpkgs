@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts-build
   '';
 
+  passthru.updateScript = ./update.sh;
+
   __structuredAttrs = true;
 
   # NOTE: librandombytes uses a custom Python `./configure`: it does not expect standard
