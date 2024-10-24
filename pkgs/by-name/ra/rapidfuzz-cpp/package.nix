@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
-  version = "3.0.5";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "rapidfuzz-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8s2Jd1fI8iNmFyMbCEaGZdpqvYFB1tVNZ41ICLN4AeI=";
+    hash = "sha256-0ZMK9WVMflgGD4uEKp7/SvWXCByYQtPU9gSJsNEqTbM=";
   };
 
   nativeBuildInputs = [
