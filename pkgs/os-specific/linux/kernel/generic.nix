@@ -171,23 +171,18 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
-      export HOSTCC=$CC_FOR_BUILD
-      export HOSTCXX=$CXX_FOR_BUILD
-      export HOSTAR=$AR_FOR_BUILD
-      export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
       make $makeFlags \
           -C . O="$buildRoot" $kernelBaseConfig \
-          ARCH=$kernelArch \
-          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
-          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
           $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+        KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
         PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
         perl -w $generateConfig
     '';
