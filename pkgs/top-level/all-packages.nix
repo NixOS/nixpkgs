@@ -9866,8 +9866,6 @@ with pkgs;
 
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
 
-  lzfse = callPackage ../tools/compression/lzfse { };
-
   lzham = callPackage ../tools/compression/lzham { };
 
   lzip = callPackage ../tools/compression/lzip { };
