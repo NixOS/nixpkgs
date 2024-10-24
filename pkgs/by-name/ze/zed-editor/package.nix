@@ -86,14 +86,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.158.1";
+  version = "0.158.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X5FlNjAYG5W+RTdmyZHF1KYHxdwJGwk/qpOgj0JVD/c=";
-    fetchSubmodules = true;
+    hash = "sha256-1mNJ3uL5/Sxwiiq2fO+yE9SHiM/5FQWmnNgOEMWpU9s=";
   };
 
   patches = [
