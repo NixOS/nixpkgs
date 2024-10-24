@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = pname;
+    repo = "just";
     rev = "refs/tags/${version}";
     hash = "sha256-4p4otR0W/v0DoWwwcNq/UEDa1V8vlZMpdk33B/9A4Bo=";
   };
@@ -113,12 +113,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       xrelkd
       jk
     ];
