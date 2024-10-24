@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "octodns";
-  version = "1.9.1";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "octodns";
     repo = "octodns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5EKa5G1rX/BRMMpGd861qTaACa2tBgNrKX52uJPV+N8=";
+    hash = "sha256-L3c4lYt/fgMctJFArc1XlR+hvpz10kcBcYYXajnNQr0=";
   };
 
   build-system = [
