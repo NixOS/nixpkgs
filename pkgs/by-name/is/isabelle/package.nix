@@ -73,8 +73,9 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ java ];
 
-  buildInputs = [ polyml veriT vampire eprover-ho nettools ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ java procps ];
+  buildInputs = [ polyml veriT vampire eprover-ho nettools ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
 
   sourceRoot = "${dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
@@ -221,7 +222,6 @@ in stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru.withComponents = f:
