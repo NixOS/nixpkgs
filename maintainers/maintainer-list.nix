@@ -13640,6 +13640,12 @@
     githubId = 7910815;
     name = "Alex McGrath";
   };
+  lyn = {
+    name = "Lyn";
+    matrix = "@lynatic:catgirl.cloud";
+    github = "lynatic1337";
+    githubId = 39234676;
+  };
   lyndeno = {
     name = "Lyndon Sanche";
     email = "lsanche@lyndeno.ca";
