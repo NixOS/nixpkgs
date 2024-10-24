@@ -60,6 +60,9 @@ mapAliases {
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
 
+  ### _ ###
+  _1password = lib.warn "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
+
   ### A ###
 
   AusweisApp2 = ausweisapp; # Added 2023-11-08
