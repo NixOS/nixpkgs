@@ -22,7 +22,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.47.0";
+  version = "1.48.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C/spH54hhLI0Egs2jjTjQ5BH1pIw1syrfSyUvVQRoKM=";
+    hash = "sha256-ZWVySGehR5r6s0y6qCZuFI8SobYbjWP+A6Rgfug2JEE=";
   };
 
   patches = [
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     setuptools
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
-  pythonRelaxDeps = [ "pyee" ];
+  pythonRelaxDeps = [ "greenlet" ];
 
   propagatedBuildInputs = [
     greenlet
