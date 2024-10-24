@@ -1,0 +1,62 @@
+diff --git a/plugins/fileroller/file-roller-plugin.cc b/plugins/fileroller/file-roller-plugin.cc
+index ff2f14af..77c1b137 100644
+--- a/plugins/fileroller/file-roller-plugin.cc
++++ b/plugins/fileroller/file-roller-plugin.cc
+@@ -93,9 +93,17 @@ static GSettingsSchemaSource* GetGlobalSchemaSource()
+     GSettingsSchemaSource   *global_schema_source;
+     std::string              g_schema_path(PREFIX);
+ 
+-    g_schema_path.append("/share/glib-2.0/schemas");
++    g_schema_path.append("/share/gsettings-schemas/");
++    g_schema_path.append(PACKAGE);
++    g_schema_path.append("-");
++    g_schema_path.append(VERSION);
++    g_schema_path.append("/glib-2.0/schemas");
+ 
+     global_schema_source = g_settings_schema_source_get_default ();
++    if (global_schema_source == nullptr)
++    {
++        g_printerr(_("Could not load default schemas\n"));
++    }
+ 
+     GSettingsSchemaSource *parent = global_schema_source;
+     GError *error = nullptr;
+@@ -111,6 +119,7 @@ static GSettingsSchemaSource* GetGlobalSchemaSource()
+         g_printerr(_("Could not load schemas from %s: %s\n"),
+                    (gchar*) g_schema_path.c_str(), error->message);
+         g_clear_error (&error);
++        return parent;
+     }
+ 
+     return global_schema_source;
+diff --git a/src/gnome-cmd-data.cc b/src/gnome-cmd-data.cc
+index 2d125f5f..7ca3fb79 100644
+--- a/src/gnome-cmd-data.cc
++++ b/src/gnome-cmd-data.cc
+@@ -60,9 +60,17 @@ GSettingsSchemaSource* GnomeCmdData::GetGlobalSchemaSource()
+     GSettingsSchemaSource   *global_schema_source;
+     std::string              g_schema_path(PREFIX);
+ 
+-    g_schema_path.append("/share/glib-2.0/schemas");
++    g_schema_path.append("/share/gsettings-schemas/");
++    g_schema_path.append(PACKAGE);
++    g_schema_path.append("-");
++    g_schema_path.append(VERSION);
++    g_schema_path.append("/glib-2.0/schemas");
+ 
+     global_schema_source = g_settings_schema_source_get_default ();
++    if (global_schema_source == nullptr)
++    {
++        g_printerr(_("Could not load default schemas\n"));
++    }
+ 
+     GSettingsSchemaSource *parent = global_schema_source;
+     GError *error = nullptr;
+@@ -78,6 +86,7 @@ GSettingsSchemaSource* GnomeCmdData::GetGlobalSchemaSource()
+         g_printerr(_("Could not load schemas from %s: %s\n"),
+                    (gchar*) g_schema_path.c_str(), error->message);
+         g_clear_error (&error);
++        return parent;
+     }
+ 
+     return global_schema_source;
