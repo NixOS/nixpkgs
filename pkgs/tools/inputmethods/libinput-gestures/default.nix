@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "bulletmark";
     repo = "libinput-gestures";
     rev = version;
-    sha256 = "sha256-eMXNlSgQSuN+/5SXJQjsylC1ygHS87sIEmnVGFk3pzA=";
+    hash = "sha256-eMXNlSgQSuN+/5SXJQjsylC1ygHS87sIEmnVGFk3pzA=";
   };
   patches = [
     ./0001-hardcode-name.patch
