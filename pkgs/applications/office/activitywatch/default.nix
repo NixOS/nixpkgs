@@ -9,6 +9,7 @@
   openssl,
   rust-jemalloc-sys,
   python3,
+  python3Packages,
   wrapQtAppsHook,
   qtbase,
   qtsvg,
@@ -28,16 +29,16 @@ let
   };
 in
 rec {
-  aw-watcher-afk = python3.pkgs.buildPythonApplication {
+  aw-watcher-afk = python3Packages.buildPythonApplication {
     pname = "aw-watcher-afk";
     inherit version;
 
     src = "${sources}/aw-watcher-afk";
 
     pyproject = true;
-    build-system = [ python3.pkgs.poetry-core ];
+    build-system = [ python3Packages.poetry-core ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-client
       xlib
       pynput
@@ -57,16 +58,16 @@ rec {
     };
   };
 
-  aw-watcher-window = python3.pkgs.buildPythonApplication {
+  aw-watcher-window = python3Packages.buildPythonApplication {
     pname = "aw-watcher-window";
     inherit version;
 
     src = "${sources}/aw-watcher-window";
 
     pyproject = true;
-    build-system = [ python3.pkgs.poetry-core ];
+    build-system = [ python3Packages.poetry-core ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-client
       xlib
     ];
@@ -85,16 +86,16 @@ rec {
     };
   };
 
-  aw-qt = python3.pkgs.buildPythonApplication {
+  aw-qt = python3Packages.buildPythonApplication {
     pname = "aw-qt";
     inherit version;
 
     src = "${sources}/aw-qt";
 
     pyproject = true;
-    build-system = [ python3.pkgs.poetry-core ];
+    build-system = [ python3Packages.poetry-core ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-core
       qtbase
       qtsvg # Rendering icons in the trayicon menu
@@ -142,16 +143,16 @@ rec {
     };
   };
 
-  aw-notify = python3.pkgs.buildPythonApplication {
+  aw-notify = python3Packages.buildPythonApplication {
     pname = "aw-notify";
     inherit version;
 
     src = "${sources}/aw-notify";
 
     pyproject = true;
-    build-system = [ python3.pkgs.poetry-core ];
+    build-system = [ python3Packages.poetry-core ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-client
       desktop-notifier
     ];
