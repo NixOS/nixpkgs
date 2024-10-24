@@ -144,7 +144,19 @@ in
       services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-      xdg.portal.config.sway.default = lib.mkDefault [ "wlr" "gtk" ];
+      # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
+      # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
+      xdg.portal.config.sway = {
+        # Use xdg-desktop-portal-gtk for every portal interface...
+        default = "gtk";
+        # ... except for the ScreenCast, Screenshot and Secret
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
+        # ignore inhibit bc gtk portal always returns as success,
+        # despite sway/the wlr portal not having an implementation,
+        # stopping firefox from using wayland idle-inhibit
+        "org.freedesktop.impl.portal.Inhibit" = "none";
+      };
     }
 
     (import ./wayland-session.nix {
