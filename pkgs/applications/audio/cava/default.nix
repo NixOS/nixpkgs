@@ -7,14 +7,16 @@
   alsa-lib,
   fftw,
   iniparser,
-  libpulseaudio,
-  pipewire,
-  ncurses,
-  pkgconf,
-  SDL2,
   libGL,
+  libpulseaudio,
+  libtool,
+  ncurses,
+  pipewire,
+  pkgconf,
+  portaudio,
+  SDL2,
   withSDL2 ? false,
-  withPipewire ? true,
+  withPipewire ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,15 +32,21 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      alsa-lib
       fftw
-      libpulseaudio
-      ncurses
       iniparser
+      libpulseaudio
+      libtool
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      portaudio
     ]
     ++ lib.optionals withSDL2 [
-      SDL2
       libGL
+      SDL2
     ]
     ++ lib.optionals withPipewire [
       pipewire
@@ -62,7 +70,7 @@ stdenv.mkDerivation rec {
       offline
       mirrexagon
     ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "cava";
   };
 }
