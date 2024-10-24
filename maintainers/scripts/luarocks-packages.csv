@@ -142,7 +142,7 @@ teal-language-server,,,http://luarocks.org/dev,,,
 telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tiktoken_core,,,,,,natsukium
-tl,,,,,,mephistophiles
+tl,,,,0.15.3-1,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
 tree-sitter-norg,,,,,5.1,mrcjkb
 vstruct,,,,,,
