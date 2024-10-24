@@ -9733,6 +9733,12 @@
     githubId = 3874017;
     name = "Jappie Klooster";
   };
+  jappie3 = {
+    name = "Jappie3";
+    matrix = "@jappie:jappie.dev";
+    github = "Jappie3";
+    githubId = 42720120;
+  };
   jaredmontoya = {
     name = "Jared Montoya";
     github = "jaredmontoya";
