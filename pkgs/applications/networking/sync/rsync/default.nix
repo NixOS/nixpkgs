@@ -53,7 +53,22 @@ stdenv.mkDerivation rec {
     # disable the included zlib explicitly as it otherwise still compiles and
     # links them even.
     "--with-included-zlib=no"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
+  ]
+  ++ lib.optional (!enableACLs) "--disable-acl-support"
+  ++ lib.optional (!enableOpenSSL) "--disable-openssl"
+  ++ lib.optional (!enableXXHash) "--disable-xxhash"
+  ++ lib.optional (!enableZstd) "--disable-zstd"
+  ++ lib.optional (!enableLZ4) "--disable-lz4"
+
+  # Work around issue with cross-compilation:
+  #     configure.sh: error: cannot run test program while cross compiling
+  # Remove once 3.2.4 or more recent is released.
+  # The following PR should fix the cross-compilation issue.
+  # Test using `nix-build -A pkgsCross.aarch64-multiplatform.rsync`.
+  # https://github.com/WayneD/rsync/commit/b7fab6f285ff0ff3816b109a8c3131b6ded0b484
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no"
+
+  ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
     # fix `multiversioning needs 'ifunc' which is not supported on this target` error
     "--disable-roll-simd"
   ];
