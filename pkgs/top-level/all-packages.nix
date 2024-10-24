@@ -14502,6 +14502,8 @@ with pkgs;
 
   filecheck = with python3Packages; toPythonApplication filecheck;
 
+  files-to-prompt = with python3Packages; toPythonApplication files-to-prompt;
+
   firrtl = callPackage ../development/compilers/firrtl { };
 
   flasm = callPackage ../development/compilers/flasm { };
