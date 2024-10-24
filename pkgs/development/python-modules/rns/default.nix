@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-uonOifCGvSKJhxTAqD49BOHDdN69pRexcb2ny1GwqjA=";
+    hash = "sha256-3Eif3AVpjNH803XXkPGQ5ZgSpVwV1W4DDm9rYBj6AEo=";
   };
 
   patches = [
