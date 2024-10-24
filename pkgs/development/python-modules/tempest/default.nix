@@ -19,7 +19,6 @@
   paramiko,
   pbr,
   prettytable,
-  pynacl,
   python,
   pythonOlder,
   pyyaml,
@@ -75,7 +74,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hacking
     oslotest
-    pynacl
     stestr
   ];
 
