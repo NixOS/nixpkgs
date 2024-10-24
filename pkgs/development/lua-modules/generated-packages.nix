@@ -555,14 +555,14 @@ buildLuarocksPackage {
 fzf-lua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "fzf-lua";
-  version = "0.0.1475-1";
+  version = "0.0.1476-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/fzf-lua-0.0.1475-1.rockspec";
-    sha256 = "1qmnixzz87q0a2f73vqw2wsjpya3ia5czywshca1565mnh7niyzq";
+    url    = "mirror://luarocks/fzf-lua-0.0.1476-1.rockspec";
+    sha256 = "1k3qmxraf906652lkn0l0r9lh1j7hdxzrklr570dj1jai292n433";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/ibhagwan/fzf-lua/archive/5dec364c9dedec00dcd6d06e323d7bc7f8d6b596.zip";
-    sha256 = "1fr43zyqbxmnzvynjwsiivlj76wblwrvrx5860sg0a675kbkmi83";
+    url    = "https://github.com/ibhagwan/fzf-lua/archive/fc0f2b5781587d388b743c2c114127a7036d1a31.zip";
+    sha256 = "08k9xmnkjian4mr5ak7fzbw5v14rlhr6zl6a9nk4xq155p5qlk2s";
   };
 
   disabled = luaOlder "5.1";
@@ -3048,14 +3048,14 @@ buildLuarocksPackage {
 rocks-git-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio, rocks-nvim }:
 buildLuarocksPackage {
   pname = "rocks-git.nvim";
-  version = "2.4.2-1";
+  version = "2.5.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rocks-git.nvim-2.4.2-1.rockspec";
-    sha256 = "0ig2v2rdczj61vlfdkvmn8f0lkh3lb25sl2l8zz5cz2avn4p5gyi";
+    url    = "mirror://luarocks/rocks-git.nvim-2.5.0-1.rockspec";
+    sha256 = "1qxmwl7b21d9cxbai24pg1pymd8pii4bgikkc017qi3dafk7baqk";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/rocks-git.nvim/archive/v2.4.2.zip";
-    sha256 = "11jp5q2frgd0zbnvrid80bdl9yb0x4dc0hl26vwqzx2mx47v3m3w";
+    url    = "https://github.com/nvim-neorocks/rocks-git.nvim/archive/v2.5.0.zip";
+    sha256 = "1nvq3yhmnab2frfkf5yh6ffq7rqw3rmxsbj0hbm28vg3rr9c2zjw";
   };
 
   disabled = luaOlder "5.1";
