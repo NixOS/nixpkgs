@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1xyg3amgg27zf7188kss7y248s0xhh1vv8rrk0j9bcsd5nasxsmf";
   };
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   preConfigure = ''
     # Configure script is not in the root of the source directory
     cd build/generic
