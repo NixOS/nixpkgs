@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, docbook_xsl
-, docbook_xml_dtd_43
-, gtk-doc
-, lzip
-, libidn2
-, libunistring
-, libxslt
-, pkg-config
-, python3
-, buildPackages
-, publicsuffix-list
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gtk-doc,
+  lzip,
+  libidn2,
+  libunistring,
+  libxslt,
+  pkg-config,
+  python3,
+  buildPackages,
+  publicsuffix-list,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
-  outputs = [ "out" "dev" ]
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
     # bin/psl-make-dafsa brings a large runtime closure through python3
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
 
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isWindows) python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
