@@ -205,6 +205,7 @@ rec {
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
+      xdg-user-dirs # flutter desktop apps
 
       libsecret # For bitwarden
     ];
