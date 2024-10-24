@@ -5,7 +5,6 @@
   fetchFromGitHub,
   mypy,
   py,
-  coreapi,
   pytest-mypy-plugins,
   pytestCheckHook,
   pythonOlder,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     compatible-mypy = [ mypy ] ++ django-stubs.optional-dependencies.compatible-mypy;
-    coreapi = [ coreapi ];
     markdown = [ types-markdown ];
   };
 

@@ -204,7 +204,6 @@ let
           pytest7CheckHook
 
           # optional tests
-          coreapi
           django-guardian
           pyyaml
           uritemplate
