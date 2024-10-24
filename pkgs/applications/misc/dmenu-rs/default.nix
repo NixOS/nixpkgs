@@ -13,9 +13,8 @@
 }:
 
 # The dmenu-rs package has extensive plugin support. However, this derivation
-# only builds the package with the default set of plugins. If you'd like to
-# further customize dmenu-rs you can build it from the source.
-# See: https://github.com/Shizcow/dmenu-rs#plugins
+# builds without any plugins enabled. If you'd like to a version builts with
+# all the plugins available in the upstream repository, see dmenu-rs-full.
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
   version = "5.5.4";
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
+    description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support (no plugins)";
     homepage = "https://github.com/Shizcow/dmenu-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ benjaminedwardwebb ];
