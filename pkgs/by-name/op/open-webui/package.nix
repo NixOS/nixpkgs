@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.32";
+  version = "0.3.33";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XpPaMGn+JA3Rq+Eb97IGWMLAR+0pI+ZJRxOTmxIMPZg=";
+    hash = "sha256-m74fDsIM5TS3fP1PCq26rOy5O2qvDBaJH3lD2HbMBdk=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-tAPI/H5/lv+RuDZ68lL/cZHcOs8H6ZxXSwiFvkp0y4A=";
+    npmDepsHash = "sha256-58o0XmkZSmL9hXglea6K+YcWEiiBmR8cwQJf2mfFrgs=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -62,6 +62,9 @@ python3.pkgs.buildPythonApplication rec {
     "docker"
     "pytest"
     "pytest-docker"
+    # Requires certomancer which is not available for Python 3.12
+    # See https://github.com/MatthiasValvekens/certomancer/issues/12
+    "xhtml2pdf"
   ];
 
   dependencies = with python3.pkgs; [
@@ -70,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
     anthropic
     apscheduler
     argon2-cffi
+    async-timeout
     authlib
     bcrypt
     beautifulsoup4
@@ -88,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-cors
     fpdf2
     ftfy
+    qdrant-client
     google-generativeai
     googleapis-common-protos
     langchain
@@ -107,6 +112,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymdown-extensions
     pymilvus
     pymongo
     pymysql
