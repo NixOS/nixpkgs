@@ -57,6 +57,7 @@ let
     functionArgs
     generators
     genList
+    getAttrs
     getExe
     getExe'
     getLicenseFromSpdxIdOr
@@ -2091,6 +2092,18 @@ runTests {
     expected = {
       a.b = 1;
       a.x = 1;
+    };
+  };
+
+  testGetAttrs = {
+    expr = getAttrs [ "a" "b" "nonexistent" ] {
+      a = 1;
+      b = true;
+      c = "hello";
+    };
+    expected = {
+      a = 1;
+      b = true;
     };
   };
 
