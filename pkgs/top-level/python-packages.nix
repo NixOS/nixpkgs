@@ -10370,6 +10370,8 @@ self: super: with self; {
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
+  pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
+
   pytlv = callPackage ../development/python-modules/pytlv { };
 
   pywebcopy = callPackage ../development/python-modules/pywebcopy { };
@@ -13912,6 +13914,10 @@ self: super: with self; {
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
+
+  ruff = toPythonModule (pkgs.ruff.override {
+    python3Packages = self;
+  });
 
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
