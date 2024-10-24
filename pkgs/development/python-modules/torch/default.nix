@@ -91,6 +91,11 @@
   rocmSupport ? config.rocmSupport,
   rocmPackages_5,
   gpuTargets ? [ ],
+
+  vulkanSupport ? false,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
 }:
 
 let
@@ -375,6 +380,8 @@ buildPythonPackage rec {
       (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaVersion)
     ];
 
+  USE_VULKAN = setBool vulkanSupport;
+
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
     ${python.pythonOnBuildForHost.interpreter} setup.py build --cmake-only
@@ -530,31 +537,37 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "sympy"
   ];
-  dependencies = [
-    astunparse
-    cffi
-    click
-    numpy
-    pyyaml
+  dependencies =
+    [
+      astunparse
+      cffi
+      click
+      numpy
+      pyyaml
 
-    # From install_requires:
-    fsspec
-    filelock
-    typing-extensions
-    sympy
-    networkx
-    jinja2
+      # From install_requires:
+      fsspec
+      filelock
+      typing-extensions
+      sympy
+      networkx
+      jinja2
 
-    # the following are required for tensorboard support
-    pillow
-    six
-    future
-    tensorboard
-    protobuf
+      # the following are required for tensorboard support
+      pillow
+      six
+      future
+      tensorboard
+      protobuf
 
-    # torch/csrc requires `pybind11` at runtime
-    pybind11
-  ] ++ lib.optionals tritonSupport [ _tritonEffective ];
+      # torch/csrc requires `pybind11` at runtime
+      pybind11
+    ]
+    ++ lib.optionals tritonSupport [ _tritonEffective ]
+    ++ lib.optionals vulkanSupport [
+      vulkan-headers
+      vulkan-loader
+    ];
 
   propagatedCxxBuildInputs =
     [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -694,4 +707,7 @@ buildPythonPackage rec {
       ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
+}
+// lib.optionalAttrs vulkanSupport {
+  VULKAN_SDK = shaderc.bin;
 }
