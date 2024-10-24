@@ -5,6 +5,7 @@
 , cmake
 , wrapQtAppsHook
 , qtbase
+, qtsvg
 , bluez
 , ffmpeg
 , libao
@@ -48,13 +49,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
-  version = "1.0.6a";
+  version = "1.0.7a";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    hash = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
+    hash = "sha256-vuTSXQHnR4HxAGGiPg5tUzfiXROU3+E9kyjH+T6zVmc=";
     fetchSubmodules = true;
   };
 
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     fmt
     xz
     qtbase
+    qtsvg
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluez
     udev
