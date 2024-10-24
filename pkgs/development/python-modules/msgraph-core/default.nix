@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.1.5";
+  version = "1.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cyqhNpV3gowSDmZhdI3NbbJ1VOwnrJTXZYR/rYNnFVE=";
+    hash = "sha256-W1tttt4jWGftW8zzklHV3SrAyugi6XZv0PYGs3T5gZ4=";
   };
 
   build-system = [ setuptools ];
