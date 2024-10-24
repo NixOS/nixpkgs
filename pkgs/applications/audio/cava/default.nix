@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, alsa-lib
-, fftw
-, iniparser
-, libpulseaudio
-, pipewire
-, ncurses
-, pkgconf
-, SDL2
-, libGL
-, withSDL2 ? false
-, withPipewire ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  alsa-lib,
+  fftw,
+  iniparser,
+  libpulseaudio,
+  pipewire,
+  ncurses,
+  pkgconf,
+  SDL2,
+  libGL,
+  withSDL2 ? false,
+  withPipewire ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,18 +28,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-y6RslsU/zmr0Ai/rnr73N3OtjuBcWa3JCwh9P5GkNss=";
   };
 
-  buildInputs = [
-    alsa-lib
-    fftw
-    libpulseaudio
-    ncurses
-    iniparser
-  ] ++ lib.optionals withSDL2 [
-    SDL2
-    libGL
-  ] ++ lib.optionals withPipewire [
-    pipewire
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      fftw
+      libpulseaudio
+      ncurses
+      iniparser
+    ]
+    ++ lib.optionals withSDL2 [
+      SDL2
+      libGL
+    ]
+    ++ lib.optionals withPipewire [
+      pipewire
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,7 +58,10 @@ stdenv.mkDerivation rec {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
     license = licenses.mit;
-    maintainers = with maintainers; [ offline mirrexagon ];
+    maintainers = with maintainers; [
+      offline
+      mirrexagon
+    ];
     platforms = platforms.linux;
     mainProgram = "cava";
   };
