@@ -21,6 +21,7 @@ lhapdf.section.md
 locales.section.md
 etc-files.section.md
 nginx.section.md
+openfoam-com.section.md
 opengl.section.md
 shell-helpers.section.md
 steam.section.md
