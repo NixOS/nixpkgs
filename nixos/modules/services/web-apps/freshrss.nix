@@ -164,7 +164,6 @@ in
     let
       defaultServiceConfig = {
         ReadWritePaths = "${cfg.dataDir}";
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = "";
         LockPersonality = true;
         NoNewPrivileges = true;
