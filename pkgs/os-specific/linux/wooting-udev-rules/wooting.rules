@@ -94,3 +94,16 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1312", MODE:="0660
 
 # Wooting 60HE (ARM) update mode
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="131f", MODE:="0660", GROUP="input"
+
+# Wooting 80HE
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1402", MODE:="0660", GROUP="input"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1402", MODE:="0660", GROUP="input"
+# Wooting 80HE: Gamepad: Xbox Controller
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1400", MODE:="0660", GROUP="input"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1400", MODE:="0660", GROUP="input"
+# Wooting 80HE: Gamepad: Classic Controller
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1400", MODE:="0660", GROUP="input"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="1400", MODE:="0660", GROUP="input"
+
+# Wooting 80HE update mode
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="31e3", ATTRS{idProduct}=="140f", MODE:="0660", GROUP="input"
