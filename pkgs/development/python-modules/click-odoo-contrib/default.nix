@@ -16,7 +16,8 @@ buildPythonPackage rec {
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "click_odoo_contrib";
+    inherit version;
     hash = "sha256-Tg3C/mdgkB1TtQZaUOX4ZjpD3InI8CxoNUSfotRqbg0=";
   };
 
