@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation {
   inherit pname;
-  version = "2.4";
+  version = "2.4-unstable-2024-09-12";
 
   src = fetchFromGitHub {
     owner = "tome2";
     repo = "tome2";
-    rev = "4e6a906c80ff07b75a6acf4ff585b47303805e46";
-    sha256 = "06bddj55y673d7bnzblk8n01z32l6k2rad3bpzr8dmw464hx4wwf";
+    rev = "203c8c1d8e180607d99d27c70e233dcc41fa3970";
+    hash = "sha256-E6T5ZnsAzZ4cy2S8WvB0k3W4XGFsiA3TKTCSBqje+tw=";
   };
 
   buildInputs = [ ncurses libX11 boost ];
