@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "python-snap7";
   version = "1.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-CqLG5/U2k7WdZL5LfcFAnV1Q8HcIU7l36gi51lgB39s=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
-
   prePatch = ''
     substituteInPlace snap7/common.py \
       --replace "lib_location = None" "lib_location = '${snap7}/lib/libsnap7.so'"
   '';
 
-  # Tests require root privileges to open privilaged ports
+  build-system = [ setuptools ];
+
+  # Tests require root privileges to open privileged ports
   doCheck = false;
 
   pythonImportsCheck = [
