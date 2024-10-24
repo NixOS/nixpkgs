@@ -131,6 +131,7 @@ rustPlatform.buildRustPackage {
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out"/bin
       mv "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App "$out"/bin/modrinth-app
       ln -s "$out"/bin/modrinth-app "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App
     ''
@@ -163,7 +164,9 @@ rustPlatform.buildRustPackage {
     ];
     maintainers = with lib.maintainers; [ getchoo ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # this builds on architectures like aarch64, but the launcher itself does not support them yet
-    broken = !stdenv.hostPlatform.isx86_64;
+    # This builds on architectures like aarch64, but the launcher itself does not support them yet.
+    # Darwin is the only exception
+    # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
   };
 }
