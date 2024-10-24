@@ -11885,8 +11885,6 @@ with pkgs;
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
-  rpiboot = callPackage ../development/misc/rpiboot { };
-
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
     lua = lua5_4;
