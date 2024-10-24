@@ -207,6 +207,7 @@ customStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fufexan
       johnrtitor
+      khaneliman
       wozeparrot
     ];
     mainProgram = "Hyprland";
