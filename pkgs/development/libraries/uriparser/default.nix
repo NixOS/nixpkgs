@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
 
   nativeCheckInputs = [ gtest ];
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
     changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${version}/ChangeLog";

@@ -43,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ iogamaster ];
+    maintainers = with lib.maintainers; [
+      iogamaster
+      khaneliman
+    ];
     mainProgram = "hypridle";
     platforms = [
       "aarch64-linux"

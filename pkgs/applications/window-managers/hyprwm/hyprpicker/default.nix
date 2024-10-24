@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      khaneliman
+    ];
     platforms = wayland.meta.platforms;
     mainProgram = "hyprpicker";
   };
