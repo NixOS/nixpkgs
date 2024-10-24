@@ -17,8 +17,8 @@ in
       default = true;
       description = ''
         Whether to install files to support the
-        [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/shared-mime-info-spec-latest.html) and the
-        [XDG MIME Applications specification](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html).
+        [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/latest) and the
+        [XDG MIME Applications specification](https://specifications.freedesktop.org/mime-apps-spec/latest).
       '';
     };
 
@@ -32,7 +32,7 @@ in
       description = ''
         Adds associations between mimetypes and applications. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/associations) for more information.
       '';
     };
 
@@ -46,7 +46,7 @@ in
       description = ''
         Sets the default applications for given mimetypes. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#default) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/default) for more information.
       '';
     };
 
@@ -60,7 +60,7 @@ in
       description = ''
         Removes associations between mimetypes and applications. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/associations) for more information.
       '';
     };
   };

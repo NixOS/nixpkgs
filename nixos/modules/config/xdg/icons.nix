@@ -10,7 +10,7 @@
       default = true;
       description = ''
         Whether to install files to support the
-        [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
+        [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/latest).
       '';
     };
     xdg.icons.fallbackCursorThemes = lib.mkOption {

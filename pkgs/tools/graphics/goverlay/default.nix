@@ -26,7 +26,7 @@
 
 let
   # Finds data files using the XDG Base Directory Specification
-  # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+  # See https://specifications.freedesktop.org/basedir-spec/latest
   find-xdg-data-files = writeScriptBin "find-xdg-data-files" ''
     #!${bash}/bin/sh
     IFS=:
