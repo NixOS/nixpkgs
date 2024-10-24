@@ -5,7 +5,11 @@
   pkg-config,
   icu,
   clucene_core,
+
+  autoreconfHook,
+  bzip2,
   curl,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,12 +21,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QkCc894vrxEIUj4sWsB0XSH57SpceO2HjuncwwNCa4o=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    icu
-    clucene_core
-    curl
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      autoreconfHook # The Windows patch modifies autotools files
+      (curl.override { pslSupport = false; }).dev # Provides curl-config
+    ]);
+
+  buildInputs =
+    [
+      icu
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isUnix [
+      clucene_core
+      curl
+    ])
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      bzip2
+      (curl.override { pslSupport = false; })
+      xz
+    ]);
 
   outputs = [
     "out"
@@ -33,17 +53,49 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .;
   '';
 
-  configureFlags = [
-    "--without-conf"
-    "--enable-tests=no"
+  preConfigure = lib.optionalString stdenv.hostPlatform.isWindows ''
+    substituteInPlace configure --replace-fail "-no-undefined" "-Wl,-no-undefined"
+  '';
+
+  patches = lib.optional stdenv.hostPlatform.isWindows ./sword-1.9.0-diatheke-includes.patch;
+
+  configureFlags =
+    [
+      "--without-conf"
+      "--enable-tests=no"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      "--with-xz"
+      "--with-bzip2"
+      "--with-icuregex"
+    ]);
+
+  makeFlags = lib.optionals stdenv.hostPlatform.isWindows [
+    "LDFLAGS=-no-undefined"
   ];
 
-  CXXFLAGS = [
-    "-Wno-unused-but-set-variable"
-    "-Wno-unknown-warning-option"
-    # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-    "-DU_USING_ICU_NAMESPACE=1"
-  ];
+  env = {
+    # When placed in nativeBuildInputs, icu.dev is finding the native ICU libs, but setting it
+    # explicitly here has it finding the platform appropriate version
+    ICU_CONFIG = lib.optionalString stdenv.hostPlatform.isWindows "${icu.dev}/bin/icu-config --noverify";
+
+    CXXFLAGS = (
+      builtins.concatStringsSep " " (
+        [
+          "-Wno-unused-but-set-variable"
+          "-Wno-unknown-warning-option"
+          # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
+          "-DU_USING_ICU_NAMESPACE=1"
+        ]
+        ++ (lib.optionals stdenv.hostPlatform.isWindows [
+          "-Wint-to-pointer-cast"
+          "-fpermissive"
+          "-D_ICUSWORD_"
+          "-DCURL_STATICLIB"
+        ])
+      )
+    );
+  };
 
   meta = {
     description = "Software framework that allows research manipulation of Biblical texts";
@@ -58,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
       texts in around 100 languages.
     '';
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      greg
+    ];
+    platforms = lib.platforms.all;
   };
 })
