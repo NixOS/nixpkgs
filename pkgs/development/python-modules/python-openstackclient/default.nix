@@ -22,6 +22,7 @@
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
+  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -33,12 +34,14 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.1.2";
+  version = "7.2.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hLbxcm/LkqMU2dyTMYhIB12iR7eYMUhC0bFS8zZEGl0=";
+    hash = "sha256-9je3W78PU3iZJjzVMSPXPxBZ0vMYY5xSLJA9zBJ7O5I=";
   };
 
   build-system = [

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-watcherclient";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "watcherclient" ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/python-watcherclient";
+    homepage = "https://github.com/openstack/python-watcherclient";
     description = "Client library for OpenStack Watcher API";
     license = lib.licenses.asl20;
     mainProgram = "watcher";
