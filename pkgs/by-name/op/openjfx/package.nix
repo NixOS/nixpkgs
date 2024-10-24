@@ -140,11 +140,6 @@ stdenv.mkDerivation {
            modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
 
     ''
-    + lib.optionalString (!atLeast21) ''
-      substituteInPlace modules/javafx.web/src/main/native/Source/JavaScriptCore/offlineasm/parser.rb \
-        --replace-fail "File.exists?" "File.exist?"
-
-    ''
     + ''
       ln -s $config gradle.properties
     '';
