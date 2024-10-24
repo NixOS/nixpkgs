@@ -14,8 +14,6 @@ let
 
   inherit (lib) lists strings trivial;
 
-  inherit (lib.lists) last;
-
   /*
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
@@ -33,7 +31,7 @@ let
     the list of strings which then can be parsed using `_parseExpanded`.
     Throws an error when the address is malformed.
 
-    # Type: String -> [ String ]
+    # Type: string -> [ string ]
 
     # Example:
 
@@ -94,7 +92,7 @@ let
     functions.
     Throws an error some element is not an u16 integer.
 
-    # Type: [ String ] -> IPv6
+    # Type: [ string ] -> ipv6IR
 
     # Example:
 
@@ -107,7 +105,7 @@ let
     addr:
     assert lib.assertMsg (
       length addr == ipv6Pieces
-    ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
+    ) "parseExpandedIpv6: expected list of integers with ${toString ipv6Pieces} elements";
     let
       u16FromHexStr =
         hex:
@@ -126,7 +124,7 @@ let
     Parses an IPv6 address from a string to the internal representation (list
     of integers).
 
-    # Type: String -> IPv6
+    # Type: string -> ipv6IR
 
     # Example:
 
@@ -136,31 +134,82 @@ let
     ```
   */
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
+
+  /**
+    Converts an internal representation of an IPv6 address (i.e, a list
+    of integers) to a string. The returned string is not a canonical
+    representation as defined in RFC 5952, i.e zeros are not compressed.
+
+    # Type: ipv6IR -> string
+
+    # Example:
+
+    ```nix
+    parseIpv6FromString [8193 3512 0 0 0 0 0 65535]
+    => "2001:db8:0:0:0:0:0:ffff"
+    ```
+  */
+  toStringFromExpandedIp =
+    pieces:
+    assert lib.assertMsg (
+      length pieces == ipv6Pieces
+    ) "toStringFromExpandedIp: expected a list with ${ipv6Pieces}";
+    (strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces);
 in
 {
   /*
-    Internally, an IPv6 address is stored as a list of 16-bit integers with 8
-    elements. Wherever you see `IPv6` in internal functions docs, it means that
-    it is a list of integers produced by one of the internal parsers, such as
-    `parseIpv6FromString`
+    Internally, an IPv6 address is stored as a list of 16-bit integers with
+    8 elements. Wherever you see `ipv6IR` (ipv6 internal representation) in
+    internal functions docs, it means that it is a list of integers produced by
+    one of the internal parsers, such as `parseIpv6FromString`
   */
   _ipv6 = {
-    /**
-      Converts an internal representation of an IPv6 address (i.e, a list
-      of integers) to a string. The returned string is not a canonical
-      representation as defined in RFC 5952, i.e zeros are not compressed.
+    /*
+      Creates ipv6AddrAttrs. The returned attr set contains most of the basic
+      fields that a user wants to get from an address, such as the URL-formatted
+      address, prefix length, etc.
 
-      # Type: IPv6 -> String
+      We can't just update the attrset because it contains `address` and
+      `addressCidr` strings that depend on the internal address, so when we
+      update the address we need to update all the fields.
+
+      # Type: ipv6IR -> int -> ipv6AddrAttrs
 
       # Example:
 
       ```nix
-      parseIpv6FromString [8193 3512 0 0 0 0 0 65535]
-      => "2001:db8:0:0:0:0:0:ffff"
+      makeIpv6Type [65535 0 0 0 0 0 0 0] 32
+      => {
+        address = "ffff:0:0:0:0:0:0:0";
+        address = "ffff:0:0:0:0:0:0:0/32";
+        url = "[2001:db8:0:0:0:0:0:ffff]";
+        urlWithPort = int -> string;
+        prefixLength = 32;
+        _address = [65535 0 0 0 0 0 0 0];
+      }
       ```
     */
-    toStringFromExpandedIp =
-      pieces: strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces;
+    makeIpv6Type =
+      _address: prefixLength:
+      let
+        address = toStringFromExpandedIp _address;
+        addressCidr = "${address}/${toString prefixLength}";
+        # RFC 2732 section-2:
+        # > To use a literal IPv6 address in a URL, the literal address should be
+        # > enclosed in "[" and "]" characters.
+        url = "[${address}]";
+        urlWithPort = port: "${url}:${toString port}";
+      in
+      {
+        inherit
+          address
+          addressCidr
+          prefixLength
+          url
+          urlWithPort
+          _address
+          ;
+      };
 
     /**
       Extract an address and subnet prefix length from a string. The subnet
@@ -168,7 +217,7 @@ in
       prefix length are validated and converted to an internal representation
       that can be used by other functions.
 
-      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+      # Type: string -> [ {address :: ipv6IR, prefixLength :: int} ]
 
       # Example:
 
@@ -196,7 +245,7 @@ in
           address = parseIpv6FromString (head splitted);
           prefixLength =
             let
-              n = strings.toInt (last splitted);
+              n = strings.toInt (lists.last splitted);
             in
             if 1 <= n && n <= ipv6Bits then
               n
