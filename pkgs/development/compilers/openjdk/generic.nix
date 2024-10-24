@@ -99,12 +99,8 @@ let
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
-  # TODO: Merge these `lib.removePrefix` calls once update scripts have
-  # been run.
-  version = lib.removePrefix tagPrefix (lib.removePrefix "refs/tags/" source.src.rev);
-  versionSplit =
-    # TODO: Remove `-ga` logic once update scripts have been run.
-    builtins.match (if atLeast11 then "(.+)[-+](.+)" else "(.+)-b?(.+)") version;
+  version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
+  versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
   versionBuild = lib.elemAt versionSplit 1;
 
   # The JRE 8 libraries are in directories that depend on the CPU.
