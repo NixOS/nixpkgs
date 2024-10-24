@@ -2221,6 +2221,11 @@
     githubId = 206242;
     name = "Andreas Wiese";
   };
+  aware70 = {
+    name = "aware70";
+    github = "aware70";
+    githubId = 7832566;
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "hafiz";
