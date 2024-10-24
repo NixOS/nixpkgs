@@ -55,6 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf # for protoc
     rustPlatform.cargoSetupHook
   ];
 
