@@ -6,6 +6,7 @@
   protobuf,
   pycryptodome,
   requests,
+  protobuf_27,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,24 @@ buildPythonPackage rec {
     sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'PROTOC_EXEC = "protoc"' 'PROTOC_EXEC = "${lib.getExe protobuf_27}"'
+  '';
+
   # package doesn't contain unit tests
   # scripts in ./test require networking
   doCheck = false;
 
   pythonImportsCheck = [ "gpapi.googleplay" ];
+
+  preBuild = ''
+    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION="python"
+  '';
+
+  buildInputs = [
+    protobuf_27
+  ];
 
   propagatedBuildInputs = [
     cryptography
