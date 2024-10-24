@@ -89,7 +89,6 @@ python311Packages.buildPythonApplication {
   ] ++ lib.optionals withQt5 [
     pyqt5
     pyqt5-sip
-    enum-compat
   ];
 
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${nettools}/bin" ];
