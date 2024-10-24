@@ -24368,8 +24368,6 @@ with pkgs;
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
-  janus-gateway = callPackage ../servers/janus-gateway { };
-
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -25964,9 +25962,11 @@ with pkgs;
     fetchurl = import ../build-support/fetchurl/boot.nix {
       inherit (stdenv.buildPlatform) system;
     };
-    checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
+    checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
   });
-  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
+  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix {
+    inherit (stdenv) hostPlatform;
+  };
   make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
     inherit (stdenv) hostPlatform;
   };
@@ -28402,8 +28402,6 @@ with pkgs;
 
   catt = callPackage ../applications/video/catt { };
 
-  cava = callPackage ../applications/audio/cava { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
@@ -28985,8 +28983,6 @@ with pkgs;
   keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
 
   kerbrute = callPackage ../tools/security/kerbrute { };
-
-  komikku = callPackage ../applications/graphics/komikku { };
 
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
 

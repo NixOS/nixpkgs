@@ -3,7 +3,7 @@
   wrapCCWith,
   makeWrapper,
   runCommand,
-  targetPlatform,
+  stdenv,
   targetPackages,
   zig,
 }:
@@ -34,9 +34,9 @@ wrapCCWith {
   nixSupport.cc-cflags =
     [
       "-target"
-      "${targetPlatform.parsed.cpu.name}-${targetPlatform.parsed.kernel.name}-${targetPlatform.parsed.abi.name}"
+      "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
     ]
     ++ lib.optional (
-      targetPlatform.isLinux && !(targetPackages.isStatic or false)
+      stdenv.targetPlatform.isLinux && !(targetPackages.isStatic or false)
     ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
 }

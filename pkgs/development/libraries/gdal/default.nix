@@ -80,28 +80,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
+    hash = "sha256-8LY63s5vOVK0V37jQ60qFsaW/2D/13Xuy9/2OPLyTso=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/91e4f55f8f374a75f8f2ecd05670edcfa4c0af84.patch";
-      sha256 = "sha256-C2lkZLsORso7WVxgX79r5swkoVu/APPwQp2C/rmmCAo=";
-    })
-    (fetchpatch {
       url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
       sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
-    })
-    # disable test failing with proj 9.5
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/bb9e5c0ec3e45b0f3e60c4d284e4082550448480.patch";
-      hash = "sha256-TpjlxTH/51aRZkogpJuiNlfz3RLCe80wQVD4i+5m+Pw=";
     })
   ];
 
@@ -273,9 +264,9 @@ stdenv.mkDerivation (finalAttrs: {
     # failing with PROJ 9.3.1
     # https://github.com/OSGeo/gdal/issues/8908
     "test_osr_esri_28"
-    # flakey tests, to remove on next release
-    "test_vsiaz_write_blockblob_chunk_size_1"
-    "test_vsiaz_fake_write"
+    # failing for unknown reason
+    # https://github.com/OSGeo/gdal/pull/10806#issuecomment-2362054085
+    "test_ogr_gmlas_billion_laugh"
   ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

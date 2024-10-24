@@ -5,7 +5,6 @@
 , dotnetCorePackages
 , openssl
 , zlib
-, hostPlatform
 , nix-update-script
 }:
 
@@ -30,7 +29,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pupdate.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
+      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
   '';
 
   projectFile = "pupdate.csproj";
