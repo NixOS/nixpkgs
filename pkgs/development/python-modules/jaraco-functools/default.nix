@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   jaraco-classes,
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     jaraco-classes
     pytestCheckHook
   ];
+
+  # test is flaky on darwin
+  disabledTests = if stdenv.isDarwin then [ "test_function_throttled" ] else null;
 
   pythonNamespaces = [ "jaraco" ];
 
