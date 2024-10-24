@@ -31,34 +31,36 @@ def replace_key(
         local_dep = table[key]
         del local_dep["workspace"]
 
-        workspace_dep = workspace_manifest[section][key]
-
         if section == "dependencies":
-            if isinstance(workspace_dep, str):
-                workspace_dep = {"version": workspace_dep}
+            if key in workspace_manifest[section]:
+                workspace_dep = workspace_manifest[section][key]
+                if isinstance(workspace_dep, str):
+                    workspace_dep = {"version": workspace_dep}
 
-            final: dict[str, Any] = workspace_dep.copy()
+                final: dict[str, Any] = workspace_dep.copy()
 
-            merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
-            if merged_features:
-                final["features"] = merged_features
+                merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
+                if merged_features:
+                    final["features"] = merged_features
 
-            local_default_features = local_dep.pop("default-features", None)
-            workspace_default_features = workspace_dep.get("default-features")
+                local_default_features = local_dep.pop("default-features", None)
+                workspace_default_features = workspace_dep.get("default-features")
 
-            if not workspace_default_features and local_default_features:
-                final["default-features"] = True
+                if not workspace_default_features and local_default_features:
+                    final["default-features"] = True
 
-            optional = local_dep.pop("optional", False)
-            if optional:
-                final["optional"] = True
+                optional = local_dep.pop("optional", False)
+                if optional:
+                    final["optional"] = True
 
-            if local_dep:
-                raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
+                if local_dep:
+                    raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
 
-            table[key] = final
+                table[key] = final
         elif section == "package":
-            table[key] = workspace_dep
+            if key in workspace_manifest[section]:
+                workspace_dep = workspace_manifest[section][key]
+                table[key] = workspace_dep
 
         return True
 
