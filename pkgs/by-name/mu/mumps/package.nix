@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm 444 -t $out/include/mumps_seq libseq/*.h
 
     # Add some compatibility with coin-or-mumps
-    ln -s $out/include $out/include/mumps
     ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
   '';
 

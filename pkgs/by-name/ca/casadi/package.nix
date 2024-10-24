@@ -10,6 +10,7 @@
   cplex,
   fatrop,
   fetchFromGitHub,
+  fetchpatch,
   gurobi,
   highs,
   hpipm,
@@ -45,6 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Mft0qhjdAbU82RgjYuKue5p7EqbTbt3ii5yXSsCFHrQ=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-FindMUMPS.cmake.patch";
+      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
+      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
+    })
+  ];
+
   postPatch =
     ''
       # fix case of hpipmConfig.cmake
@@ -56,11 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
         '$'{CLANG_LLVM_LIB_DIR} \
         ${llvmPackages_17.libclang.lib}/lib
-
-      # fix mumps lib name. No idea where this comes from.
-      substituteInPlace cmake/FindMUMPS.cmake --replace-fail \
-        "mumps_seq" \
-        "mumps"
 
       # help casadi find its own libs
       substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
