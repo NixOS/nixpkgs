@@ -182,18 +182,16 @@ class GitilesRepo(Repo):
     def __init__(self, url: str, rev: str) -> None:
         super().__init__()
         self.fetcher = "fetchFromGitiles"
-        # self.fetcher = 'fetchgit'
         self.args = {
             "url": url,
             "rev": rev,
-            # "fetchSubmodules": "false",
         }
 
         if url == "https://chromium.googlesource.com/chromium/src.git":
             self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
             self.args["postFetch"] += "rm -r $out/third_party/hunspell/tests; "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
-            self.args["postFetch"] += "rm -r $out/courgette/testdata; "
+            self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
             self.args["postFetch"] += "rm -r $out/media/test/data; "
 
