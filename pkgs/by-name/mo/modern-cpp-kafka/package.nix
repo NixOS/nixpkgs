@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ rdkafka ];
 
   cmakeFlags = [
-    "-DLIBRDKAFKA_INCLUDE_DIR=${rdkafka.out}/include"
+    "-DLIBRDKAFKA_INCLUDE_DIR=${rdkafka.dev}/include"
     "-DGTEST_LIBRARY_DIR=${gtest.out}/lib"
     "-DGTEST_INCLUDE_DIR=${gtest.dev}/include"
     "-DRAPIDJSON_INCLUDE_DIRS=${rapidjson.out}/include"

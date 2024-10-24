@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib, zstd, pkg-config, python3, openssl, which, curl }:
+{ lib, stdenv, fetchFromGitHub, zlib, zstd, openssl, curl, cmake, ninja }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
@@ -11,14 +11,30 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-2AURPvhpgdIm034KEMm7Tmf8Zx/XER76aT6SiINs6wg=";
   };
 
-  nativeBuildInputs = [ pkg-config python3 which ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ninja ];
 
   buildInputs = [ zlib zstd openssl curl ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+  # examples and tests don't build on darwin statically
+  cmakeFlags = [
+    (lib.cmakeBool "RDKAFKA_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "RDKAFKA_BUILD_TESTS" (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "RDKAFKA_BUILD_EXAMPLES" (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=strict-overflow")
+  ];
 
   postPatch = ''
     patchShebangs .
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isStatic ''
+    # rdkafka changes the library names for static libraries but users in pkgsStatic aren't likely to be aware of this
+    # make sure the libraries are findable with both names
+    for pc in rdkafka{,++}; do
+      ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
+    done
   '';
 
   enableParallelBuilding = true;
