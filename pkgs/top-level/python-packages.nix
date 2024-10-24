@@ -3570,6 +3570,8 @@ self: super: with self; {
 
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
+  django-tinymce = callPackage ../development/python-modules/django-tinymce { };
+
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
