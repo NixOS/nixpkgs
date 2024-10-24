@@ -5,21 +5,31 @@
 }:
 
 let
+  version = "2024.1.2661979";
+
   # Upstream replaces minor versions, so use cached URLs.
   srcs = {
+    "aarch64-linux" = fetchurl {
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4d-${version}/helix-core-server-${version}-linux26aarch64.tgz";
+      hash = "sha256-LBTUO3hElgNWeDDFX9GF6Me4ZHwoGsjgdrRJMeqPpnw=";
+    };
     "x86_64-linux" = fetchurl {
-      url = "https://web.archive.org/web/20231109221336id_/https://ftp.perforce.com/perforce/r23.1/bin.linux26x86_64/helix-core-server.tgz";
-      sha256 = "b68c4907cf9258ab47102e8f0e489c11d528a8f614bfa45e3a2fa198639e2362";
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4d-${version}/helix-core-server-${version}-linux26x86_64.tgz";
+      hash = "sha256-m8Qsbx5JDsiahKpcbXRzK6BCT+AyGnrf8xeUBMbb6Ic=";
+    };
+    "aarch64-darwin" = fetchurl {
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4d-${version}/helix-core-server-${version}-macosx12arm64.tgz";
+      hash = "sha256-rZ5Za/Cb/O6no49hWD256G6vTINgNVU0KqcLvujYFAw=";
     };
     "x86_64-darwin" = fetchurl {
-      url = "https://web.archive.org/web/20231109221937id_/https://ftp.perforce.com/perforce/r23.1/bin.macosx1015x86_64/helix-core-server.tgz";
-      sha256 = "fcbf09787ffc29f7237839711447bf19a37ae18a8a7e19b2d30deb3715ae2c11";
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4d-${version}/helix-core-server-${version}-macosx1015x86_64.tgz";
+      hash = "sha256-/BmXiGRVzZBf25ra8rB2DXV/bArrfXOY5BCdHK2DDbE=";
     };
   };
 in
 stdenv.mkDerivation {
   pname = "p4d";
-  version = "2023.1.2513900";
+  inherit version;
 
   src =
     assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system srcs) "p4d is not available for ${stdenv.hostPlatform.system}";
@@ -30,6 +40,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontBuild = true;
+
+  # Unnecessary, and seems to segfault on aarch64-darwin.
+  dontStrip = true;
 
   installPhase = ''
     install -D -t $out/bin p4broker p4d p4p
