@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
   #
-  version = "4.6.0.0";
+  version = "4.7.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-9ZGt0ZrGbprCmpAuOue6pg2gliu4MvlRFHGxyMJeKAc=";
+    hash = "sha256-TX1iLs941z8sZY0yQEXuy9jGgsn6HU4uqIdxJmNNahU=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
