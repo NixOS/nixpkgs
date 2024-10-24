@@ -26848,7 +26848,7 @@ with pkgs;
 
   docbook_xml_dtd_42 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix { };
 
-  docbook_xml_dtd_43 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix { };
+  docbook_xml_dtd_43 = docbook-xml-dtd-4_3;
 
   docbook_xml_dtd_44 = docbook-xml-dtd-4_4;
 
