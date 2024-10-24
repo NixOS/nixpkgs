@@ -105,7 +105,13 @@ import ./default.nix
 
     # Note: the version MUST be one version prior to the version we're
     # building
-    bootstrapVersion = "1.81.0";
+    bootstrapVersion =
+      # Exceptionally we build the riscv64-linux compiler from the same
+      # bootstrap version when compiling natively because the distributed
+      # 1.81.0 binary cannot build the 1.82.0 compiler on that platform.
+      # https://github.com/rust-lang/rust/issues/129268.
+      # Remove this when bumping to 1.83.0.
+      if stdenv.targetPlatform.isRiscV64 then "1.82.0" else "1.81.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
@@ -119,7 +125,7 @@ import ./default.nix
       x86_64-apple-darwin = "f74d8ad24cc3cbfb825da98a08d98319565e4d18ec2c3e9503bf0a33c81ba767";
       aarch64-apple-darwin = "60a41dea4ae0f4006325745a6400e6fdc3e08ad3f924fac06f04c238cf23f4ec";
       powerpc64le-unknown-linux-gnu = "bf98b27de08a2fd5a2202a2b621b02bfde2a6fde397df2a735d018aeffcdc5e2";
-      riscv64gc-unknown-linux-gnu = "664e7a50c03848afc86d579a9cbf82cd0b2291a97776f7f81cee9bbf9fc1f648";
+      riscv64gc-unknown-linux-gnu = "a72e8aa3fff374061ff90ada317a8d170c2a15eb079ddc828c97189179d3eebd";
       s390x-unknown-linux-gnu = "e0450ff125cadd3813c7888f5ca42f78e68df13c212b12d5eac3325062632723";
       x86_64-unknown-freebsd = "b96ebbc043058eedebccd20f1d01e64f2241107665fe2336e6927966d8b9d8d3";
     };
