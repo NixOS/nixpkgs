@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mail-parser";
-  version = "3.15.0";
+  version = "4.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0da2qr4p8jnjw6jdhbagm6slfcjnjyyjkszwfcfqvcywh1zm1sdw";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-WpV1WJFwzAquPXimew86YpEp++dnkIiBe5E4lMBDl7w=";
   };
 
   LC_ALL = "en_US.utf-8";
