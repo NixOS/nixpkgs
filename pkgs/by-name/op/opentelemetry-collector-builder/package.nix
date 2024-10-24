@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "ocb";
-  version = "0.101.0";
+  version = "0.112.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    hash = "sha256-Ucp00OjyPtHA6so/NOzTLtPSuhXwz6A2708w2WIZb/E=";
+    sha256 = "sha256-Ucp00OjyPtHA6so/NOzTLtPSuhXwz6A2708w2WIZb/E=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
@@ -27,7 +27,7 @@ buildGoModule rec {
   # The TestGenerateAndCompile tests download new dependencies for a modified go.mod. Nix doesn't allow network access so skipping.
   checkFlags = [ "-skip TestGenerateAndCompile" ];
 
-  # Rename the to ocb (it's generated as "builder")
+  # Rename to ocb (it's generated as "builder")
   postInstall = ''
     mv $out/bin/builder $out/bin/ocb
   '';
