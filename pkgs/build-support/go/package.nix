@@ -75,6 +75,12 @@ let
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
+
+  # When building PIE binaries for Linux, we must set CGO_ENABLED and enable external linking.
+  # Otherwise the emitted binary still depends on ld.so but at wrong path
+  linuxGnuPie = builtins.elem "pie" stdenv.cc.bintools.defaultHardeningFlags
+    && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu;
+
   package = stdenv.mkDerivation (
     (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
@@ -87,7 +93,9 @@ let
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
 
-    inherit CGO_ENABLED enableParallelBuilding;
+    inherit enableParallelBuilding;
+
+    CGO_ENABLED = linuxGnuPie || CGO_ENABLED;
 
     GO111MODULE = "off";
     GOTOOLCHAIN = "local";
@@ -95,8 +103,9 @@ let
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
-    # If not set to an explicit value, set the buildid empty for reproducibility.
-    ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
+    ldflags = ldflags
+    ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid="
+    ++ lib.optional linuxGnuPie "-linkmode=external";
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
