@@ -618,6 +618,7 @@
   ./services/hardware/thermald.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/throttled.nix
+  ./services/hardware/tiny-dfr.nix
   ./services/hardware/tlp.nix
   ./services/hardware/trezord.nix
   ./services/hardware/triggerhappy.nix
