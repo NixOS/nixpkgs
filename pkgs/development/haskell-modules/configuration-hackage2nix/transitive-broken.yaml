@@ -802,7 +802,7 @@ dont-distribute-packages:
  - chart-cli
  - chart-svg
  - chart-svg-various
- - chart-svg_0_6_1_0
+ - chart-svg_0_7_0_0
  - chart-unit
  - chassis
  - chatty
@@ -1262,7 +1262,6 @@ dont-distribute-packages:
  - essence-of-live-coding-pulse
  - essence-of-live-coding-pulse-example
  - essence-of-live-coding-quickcheck
- - essence-of-live-coding-vivid
  - essence-of-live-coding-warp
  - estimators
  - estreps
@@ -1866,6 +1865,7 @@ dont-distribute-packages:
  - hark
  - harmony
  - haroonga-httpd
+ - harpie-numhask
  - has-th
  - hasbolt
  - hascat
@@ -2013,7 +2013,6 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heftia
- - heftia-effects
  - heist-aeson
  - helic
  - helics
@@ -3028,6 +3027,7 @@ dont-distribute-packages:
  - perdure
  - perf
  - perf-analysis
+ - perf_0_13_0_0
  - perfecthash
  - periodic-client
  - periodic-client-exe
@@ -3290,6 +3290,7 @@ dont-distribute-packages:
  - rasa-ext-vim
  - rascal
  - raw-feldspar
+ - rawlock
  - rawr
  - razom-text-util
  - rbr
@@ -3379,6 +3380,7 @@ dont-distribute-packages:
  - reserve
  - resin
  - resource-pool-catchio
+ - resource-registry
  - resource-simple
  - respond
  - rest-client
@@ -4289,25 +4291,6 @@ dont-distribute-packages:
  - yesod-routes-typescript
  - yesod-session-redis
  - yesod-worker
- - yi
- - yi-contrib
- - yi-core
- - yi-dynamic-configuration
- - yi-emacs-colours
- - yi-frontend-pango
- - yi-frontend-vty
- - yi-fuzzy-open
- - yi-ireader
- - yi-keymap-cua
- - yi-keymap-emacs
- - yi-keymap-vim
- - yi-misc-modes
- - yi-mode-haskell
- - yi-mode-javascript
- - yi-monokai
- - yi-snippet
- - yi-solarized
- - yi-spolsky
  - yjftp
  - yjftp-libs
  - yoko
