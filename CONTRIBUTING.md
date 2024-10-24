@@ -392,14 +392,10 @@ Here is a Git history diagram showing the flow of commits between the three bran
 } }%%
 gitGraph
     commit id:" "
-    branch staging-next
     branch staging
+    commit id:"  "
+    branch staging-next
 
-    checkout master
-    checkout staging
-    checkout master
-    commit id:"    "
-    checkout staging-next
     merge master id:"automatic"
     checkout staging
     merge staging-next id:"automatic "
@@ -659,9 +655,11 @@ This goes hand in hand with [Writing good commit messages](#writing-good-commit-
 
 For the code quality assessment, you cannot do anything yourself as only the committer can do this and they already have your code to look at.
 In order to minimise the need for back and forth though, do take a look over your code changes yourself and try to put yourself into the shoes of someone who didn't just write that code.
-Would you immediately know what the code does by glancing at it?
+Would you immediately know what the code does or why it is needed by glancing at it?
 If not, reviewers will notice this and will ask you to clarify the code by refactoring it and/or adding a few explanations in code comments.
 Doing this preemptively can save you and the committer a lot of time.
+To better convey the "story" of your change, consider dividing your change into multiple atomic commits.
+There is a balance to strike however: over-fragmentation causes friction.
 
 The code artefacts are the hardest for committers to assess because PRs touch all sorts of components: applications, libraries, NixOS modules, editor plugins and many many other things.
 Any individual committer can only really assess components that they themselves know how to use however and yet they must still be convinced somehow.
@@ -689,7 +687,9 @@ Ask them nicely whether they still intend to review your PR and find yourself an
 
 ### How can I get a committer to look at my PR?
 
-- Simply wait. Reviewers frequently browse open PRs and may happen to run across yours and take a look.
+- Improve skimmability: use a simple descriptive PR title (details go in commit titles) outlining _what_ is done and _why_.
+- Improve discoverability: apply all relevant labels, tick all relevant PR body checkboxes.
+- Wait. Reviewers frequently browse open PRs and may happen to run across yours and take a look.
 - Get non-committers to review/approve. Many committers filter open PRs for low-hanging fruit that are already been reviewed.
 - [@-mention](https://github.blog/news-insights/mention-somebody-they-re-notified/) someone and ask them nicely
 - Post in one of the channels made for this purpose if there has been no activity for at least one week
@@ -710,7 +710,7 @@ Don't worry about it.
 If there is a build failure however and it happened due to a package related to your change, you need to investigate it of course.
 If ofBorg reveals the build to be broken on some platform and you don't have access to that platform, you should set your package's `meta.broken` accordingly.
 
-When in any doubt, please simply ask via a comment in your PR or through one of the help channels.
+When in any doubt, please ask via a comment in your PR or through one of the help channels.
 
 ## I received a review on my PR, how do I get it over the finish line?
 
@@ -730,6 +730,13 @@ There may be constraints you had to work with which they're not aware of or qual
 
 There are some further pitfalls and realities which this section intends to make you aware of.
 
+### Aim to reduce cycles
+
+Please be prepared for it to take a while before the reviewer gets back to you after you respond.
+This is simply the reality of community projects at the scale of Nixpkgs.
+As such, make sure to respond to _all_ feedback, either by applying suggested changes or argue in favor of something else or no change.
+It wastes everyone time waiting for a couple of days just for the reviewer to remind you to address something they asked for.
+
 ### A reviewer requested a bunch of insubstantial changes on my PR
 
 The people involved in Nixpkgs care about code quality because, once in Nixpkgs, it needs to be maintained for many years to come.
@@ -742,11 +749,11 @@ It is convention to mark review comments that are not critical to the PR as nitp
 As the PR author, you should still take a look at these as they will often reveal best practices and unwritten rules that usually have good reasons behind them and you may want to incorporate them into your modus operandi.
 
 Please keep in mind that reviewers almost always mean well here.
-Their intent is not to denounce your code, they simply want your code to be as good as it can be.
+Their intent is not to denounce your code, they want your code to be as good as it can be.
 Through their experience, they may also take notice of a seemingly insignificant issues that have caused significant burden before.
 
 Sometimes however, they can also get a bit carried away and become too perfectionistic.
-If you feel some of the requests are unreasonable or merely a matter of personal preference, try to nicely remind the reviewers that you may not intend this code to be 100% perfect or that you have different taste in some regards and press them on whether they think that these requests are *critical* to the PR's success.
+If you feel some of the requests are unreasonable, out of scope, or merely a matter of personal preference, try to nicely remind the reviewers that you may not intend this code to be 100% perfect or that you have different taste in some regards and press them on whether they think that these requests are *critical* to the PR's success.
 
 While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs/), we don't have standards for everything and there are often multiple valid ways to achieve the same goal.
 Unless there are standards forbidding the patterns used in your code or there are serious technical, maintainability or readability issues with your code, you can insist to keep the code the way you made it and disregard the requests.
@@ -768,9 +775,11 @@ If someone left an approving review on your PR and didn't merge a few days later
 
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
-The easiest way to do so is to simply cause them a Github notification.
-Github notifies people involved in the PR when you add a comment to your PR, push your PR or re-request their review.
+The easiest way to do so is to cause them a Github notification.
+Github notifies people involved in the PR whenever you add a comment to your PR, push your PR or re-request their review.
 Doing any of that will get you people's attention again.
+Everyone deserves proper attention, and yes that includes you!
+However please be mindful that committers can sadly not always give everyone the attention they deserve.
 
 It may very well be the case that you have to do this every time you need the committer to follow up upon your PR.
 Again, this is a community project so please be mindful of people's circumstances here; be nice when requesting reviews again.
