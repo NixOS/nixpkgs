@@ -1,24 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtsvg
+, qtwebengine
+, qt5compat
+, poppler
+, libzip
+, pkg-config
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "4.0.5";
+  version = "5.7";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    hash = "sha256-ODl1yrtrCVhuBWbA1AvHl22d+JSdySG/Gi2hlpVW3jg=";
+    hash = "sha256-1TZFw1Q9+FsGHwitErDhwyA941rtb+h9OgJLFLyhV7k=";
   };
-
-  postPatch = ''
-    substituteInPlace kitsas/kitsas.pro \
-      --replace "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
-  '';
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
 
-  buildInputs = [ qtsvg poppler libzip ];
+  buildInputs = [ qtsvg poppler qtwebengine qt5compat libzip ];
 
   # We use a separate build-dir as otherwise ld seems to get confused between
   # directory and executable name on buildPhase.

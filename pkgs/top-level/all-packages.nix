@@ -30326,7 +30326,7 @@ with pkgs;
 
   kile = callPackage ../applications/editors/kile { };
 
-  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+  kitsas = qt6Packages.callPackage ../applications/office/kitsas { };
 
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
