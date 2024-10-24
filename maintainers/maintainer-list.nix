@@ -18870,6 +18870,12 @@
     githubId = 10908495;
     name = "Ran Xiao";
   };
+  ryan4yin = {
+    email = "xiaoyin_c@qq.com";
+    github = "ryan4yin";
+    githubId = 22363274;
+    name = "Ryan Yin";
+  };
   ryanartecona = {
     email = "ryanartecona@gmail.com";
     github = "ryanartecona";

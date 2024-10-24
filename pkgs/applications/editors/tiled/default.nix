@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       bsd2	# libtiled and tmxviewer
       gpl2Plus	# all the rest
     ];
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir ryan4yin ];
     platforms = platforms.linux;
   };
 }
