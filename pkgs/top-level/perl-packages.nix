@@ -19227,6 +19227,7 @@ with self; {
         url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Rewrite_from_Digest-SHA1-to-Digest-SHA.patch";
         hash = "sha256-dznhj1Fcy0iBBl92p825InjkNZixR2MURVQ/b9bVjtc=";
       })
+      ../development/perl-modules/net-snmp-add-sha-algorithms.patch
     ];
     preCheck =
       (lib.optionalString stdenv.hostPlatform.isLinux ''
