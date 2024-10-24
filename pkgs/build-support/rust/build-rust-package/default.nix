@@ -36,6 +36,7 @@
 , cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
+, cargoDeps ? null
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
@@ -58,14 +59,15 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null
+assert cargoVendorDir == null && cargoLock == null && cargoDeps == null
     -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
     -> throw "cargoHash, cargoVendorDir, or cargoLock must be set";
 
 let
 
-  cargoDeps =
-    if cargoVendorDir != null then null
+  cargoDeps' =
+    if cargoDeps != null then cargoDeps
+    else if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
       inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
@@ -102,7 +104,9 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     + lib.optionalString useSysroot "--sysroot ${sysroot} "
     + (args.RUSTFLAGS or "");
 } // {
-  inherit buildAndTestSubdir cargoDeps;
+  inherit buildAndTestSubdir;
+
+  cargoDeps = cargoDeps';
 
   cargoBuildType = buildType;
 
