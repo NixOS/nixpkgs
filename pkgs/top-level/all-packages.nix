@@ -26854,7 +26854,7 @@ with pkgs;
 
   docbook_xml_dtd_45 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix { };
 
-  docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
+  docbook_xml_ebnf_dtd = docbook-xml-ebnf-dtd;
 
   inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
     docbook-xsl-nons
