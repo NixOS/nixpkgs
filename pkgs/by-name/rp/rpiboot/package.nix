@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, libusb1, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rpiboot";
-  version = "20221215-105525";
+  version = "20240926-102326";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
     rev = version;
-    hash = "sha256-Y77IrDblXmnpZleJ3zTyiGDYLZ7gNxASXpqUzwS1NCU=";
+    hash = "sha256-9m7PAw1WNQlfqOr5hDXrCsZlZLBmvoGUT58NN2cVolw=";
   };
 
   buildInputs = [ libusb1 ];
@@ -22,16 +28,27 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/rpiboot
     cp rpiboot $out/bin
-    cp -r msd $out/share/rpiboot
+    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/usbboot";
     changelog = "https://github.com/raspberrypi/usbboot/blob/${version}/debian/changelog";
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     mainProgram = "rpiboot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cartr flokli ];
-    platforms = [ "aarch64-linux" "aarch64-darwin" "armv7l-linux" "armv6l-linux" "x86_64-linux" "x86_64-darwin" ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      cartr
+      flokli
+      stv0g
+    ];
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "armv7l-linux"
+      "armv6l-linux"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }
