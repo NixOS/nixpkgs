@@ -19980,9 +19980,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa QuartzCore;
   };
 
-  gtk4 = callPackage ../development/libraries/gtk/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
-  };
+  gtk4 = callPackage ../development/libraries/gtk/4.x.nix { };
 
 
   # On darwin gtk uses cocoa by default instead of x11.
