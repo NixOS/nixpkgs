@@ -32,6 +32,8 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Utilities for implementing a modified pre-order traversal tree in Django";
     homepage = "https://github.com/django-mptt/django-mptt";

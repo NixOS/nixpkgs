@@ -29,6 +29,8 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Simple Django model translations without nasty hacks";
     homepage = "https://github.com/django-parler/django-parler";

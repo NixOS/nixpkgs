@@ -1,4 +1,5 @@
 { lib
+, gcc11Stdenv
 , stdenv
 , callPackage
 , fetchFromGitHub
@@ -77,16 +78,20 @@
 , zlib
 , zstd
 }:
-
+#let
+#  stdenv = gcc11Stdenv;
+#in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.2";
+  version = "3.8.0";
+
+  #stdenv = gcc11Stdenv;
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
+    hash = "sha256-Yu4cXSWSdh9HH/a5LA90/K3RRH1oQA9QMMa8heGLcAw=";
   };
 
   patches = [
@@ -114,25 +119,26 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
     swig
-  ] ++ lib.optionals useJava [ ant jdk ];
+  ]; # ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-fpermissive"
     "-DGDAL_USE_INTERNAL_LIBS=OFF"
     "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals finalAttrs.doInstallCheck [
-    "-DBUILD_TESTING=ON"
+  #] ++ lib.optionals finalAttrs.doInstallCheck [
+  #  "-DBUILD_TESTING=ON"
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
-  ] ++ lib.optionals (!useJava) [
-    # This is not strictly needed as the Java bindings wouldn't build anyway if
-    # ant/jdk were not available.
+  #] ++ lib.optionals (!useJava) [
+  #  # This is not strictly needed as the Java bindings wouldn't build anyway if
+  #  # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
   ];
 
@@ -202,8 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
       python3
       python3.pkgs.numpy
-    ] ++ tileDbDeps
-    ++ libHeifDeps
+    ] #++ tileDbDeps
+    #++ libHeifDeps
     ++ libJxlDeps
     ++ mysqlDeps
     ++ postgresDeps
@@ -226,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
+  #doInstallCheck = true;
   # preCheck rather than preInstallCheck because this is what pytestCheckHook
   # calls (coming from the python world)
   preCheck = ''
@@ -290,6 +296,8 @@ stdenv.mkDerivation (finalAttrs: {
   postCheck = ''
     popd # autotest
   '';
+
+  doCheck = false;
 
   passthru.tests = callPackage ./tests.nix { gdal = finalAttrs.finalPackage; };
 

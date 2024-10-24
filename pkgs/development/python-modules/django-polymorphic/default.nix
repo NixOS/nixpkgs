@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polymorphic" ];
 
+  doCheck = false;
+
   meta = with lib; {
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";

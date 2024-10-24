@@ -3342,6 +3342,8 @@ self: super: with self; {
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
 
+  django-cms = callPackage ../development/python-modules/django-cms { };
+
   django-colorful = callPackage ../development/python-modules/django-colorful { };
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
@@ -3366,6 +3368,8 @@ self: super: with self; {
 
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
+  django-crossdomainmedia = callPackage ../development/python-modules/django-crossdomainmedia { };
+
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
 
   django-csp = callPackage ../development/python-modules/django-csp { };
@@ -3376,11 +3380,17 @@ self: super: with self; {
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
 
+  django-elasticsearch-dsl = callPackage ../development/python-modules/django-elasticsearch-dsl { };
+
   django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
 
   django-environ = callPackage ../development/python-modules/django-environ { };
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-filer = callPackage ../development/python-modules/django-filer { };
+
+  django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
 
   django-filter = callPackage ../development/python-modules/django-filter { };
 
@@ -3435,6 +3445,8 @@ self: super: with self; {
   django-markup = callPackage ../development/python-modules/django-markup { };
 
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
+
+  django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
@@ -3524,6 +3536,8 @@ self: super: with self; {
 
   djangorestframework-guardian2 = callPackage ../development/python-modules/djangorestframework-guardian2 { };
 
+  djangorestframework-jsonp = callPackage ../development/python-modules/djangorestframework-jsonp { };
+
   djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
@@ -3565,6 +3579,8 @@ self: super: with self; {
   django-tastypie = callPackage ../development/python-modules/django-tastypie { };
 
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
+
+  django-tinymce = callPackage ../development/python-modules/django-tinymce { };
 
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
 
