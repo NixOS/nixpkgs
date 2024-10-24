@@ -4133,6 +4133,21 @@ let
         };
       };
 
+      sainnhe.gruvbox-material = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gruvbox-material";
+          publisher = "sainnhe";
+          version = "6.5.2";
+          hash = "sha256-D+SZEQQwjZeuyENOYBJGn8tqS3cJiWbEkmEqhNRY/i4=";
+        };
+        meta = {
+          description = "Gruvbox with Material Palette";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=sainnhe.gruvbox-material";
+          homepage = "https://github.com/sainnhe/gruvbox-material-vscode";
+          license = lib.licenses.mit;
+        };
+      };
+
       samuelcolvin.jinjahtml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "jinjahtml";
