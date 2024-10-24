@@ -10032,6 +10032,12 @@
     githubId = 110620;
     name = "Jevin Maltais";
   };
+  jeyemwey = {
+    name = "Jannik";
+    email = "jannik@outlook.com";
+    github = "jeyemwey";
+    githubId = 2796271;
+  };
   jfb = {
     email = "james@yamtime.com";
     github = "tftio";
