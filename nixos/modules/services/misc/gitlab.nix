@@ -1348,7 +1348,7 @@ in {
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
-          ${cfg.packages.gitlab-shell}/bin/gitlab-shell-install
+          ${cfg.packages.gitlab-shell}/support/make_necessary_dirs
 
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
