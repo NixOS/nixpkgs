@@ -5322,6 +5322,8 @@ self: super: with self; {
 
   goveelights = callPackage ../development/python-modules/goveelights { };
 
+  gower = callPackage ../development/python-modules/gower { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
 
   gpaw = callPackage ../development/python-modules/gpaw { };
