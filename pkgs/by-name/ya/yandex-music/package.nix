@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.18.2";
+  version = "5.23.2";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-y+T2ckrnhrOiiPKBUlnvDb4FwrIfbaIXwVi16AoX/bQ=";
+    hash = "sha256-nhy4D2PgTMsQOs8hPY39Z+I+Tldgf1ASZbatfxWqNTw=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,8 @@ stdenvNoCC.mkDerivation rec {
       ym_info = builtins.fromJSON (builtins.readFile ./ym_info.json);
     in
     fetchurl {
-      url = ym_info.ym.exe_link;
-      sha256 = ym_info.ym.exe_sha256;
+      url = ym_info.exe_link;
+      hash = ym_info.exe_hash;
     };
 
   buildPhase = ''
@@ -77,10 +77,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "Yandex Music - Personal recommendations, selections for any occasion and new music";
+    description = "Personal recommendations, selections for any occasion and new music";
     homepage = "https://music.yandex.ru/";
     downloadPage = "https://music.yandex.ru/download/";
-    changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v5.13.2";
+    changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v${version}";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ shved ];
