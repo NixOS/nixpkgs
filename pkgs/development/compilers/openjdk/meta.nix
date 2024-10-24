@@ -3,7 +3,7 @@ lib: version: with lib; {
   license = licenses.gpl2Only;
   description = "Open-source Java Development Kit";
   maintainers = with maintainers; [ edwtjo infinidoge ];
-  platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" "powerpc64le-linux" ];
+  platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" "powerpc64le-linux" "riscv64-linux" ];
   mainProgram = "java";
   knownVulnerabilities = optionals (builtins.elem (versions.major version) [ "12" "13" "14" "15" "16" "18" "19" "20" ]) [
     "This OpenJDK version has reached its end of life."
