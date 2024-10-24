@@ -31160,9 +31160,8 @@ with pkgs;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
+  mpv-unwrapped = callPackage ../applications/video/mpv {
     stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-    inherit lua;
   };
 
   # Wrap avoiding rebuild
