@@ -167,7 +167,7 @@ let
     gr-qtgui = {
       runtime = [
         qt5.qtbase
-        libsForQt5.qwt
+        libsForQt5.qwt6_1
       ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
       cmakeEnableFlag = "GR_QTGUI";
@@ -276,6 +276,7 @@ stdenv.mkDerivation (
           sha256 = "sha256-l4dSzkXb5s3vcCeuKMMwiKfv83hFI9Yg+EMEX+sl+Uo=";
         })
       ];
+
       passthru =
         shared.passthru
         // {
@@ -292,7 +293,7 @@ stdenv.mkDerivation (
           inherit uhd;
         }
         // lib.optionalAttrs (hasFeature "gr-qtgui") {
-          inherit (libsForQt5) qwt;
+          qwt = libsForQt5.qwt6_1;
         };
       cmakeFlags =
         shared.cmakeFlags

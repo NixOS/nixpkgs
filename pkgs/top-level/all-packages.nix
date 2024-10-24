@@ -29162,8 +29162,11 @@ with pkgs;
   gnuradio3_8 = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio/3.8.nix ({
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
-      python = python311;
       volk = volk_2;
+      python = python311;
+      features = {
+        gr-ctrlport = false;
+      };
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
     });
