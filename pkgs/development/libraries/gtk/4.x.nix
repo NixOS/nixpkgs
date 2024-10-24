@@ -50,11 +50,12 @@
 , cupsSupport ? stdenv.hostPlatform.isLinux
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
-, AppKit
-, Cocoa
 , libexecinfo
 , broadwaySupport ? true
 , testers
+, apple-sdk
+, apple-sdk_10_15
+, darwinMinVersionHook
 }:
 
 let
@@ -131,9 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXrandr
     libXrender
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-  ] ++ lib.optionals trackerSupport [
+  ]) ++ lib.optionals trackerSupport [
     tinysparql
   ] ++ lib.optionals waylandSupport [
     libGL
@@ -143,8 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
   ] ++ lib.optionals cupsSupport [
     cups
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     libexecinfo
   ];
@@ -165,6 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Required for GSettings schemas at runtime.
     # Will be picked up by wrapGAppsHook4.
     gsettings-desktop-schemas
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "15.0")
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin
+                   && lib.versionOlder apple-sdk.version "10.15") [
+      apple-sdk_10_15
   ];
 
   mesonFlags = [
