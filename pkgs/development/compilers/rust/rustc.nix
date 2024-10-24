@@ -84,8 +84,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
     prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
-    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
-    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
+    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "gcc"}";
+    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "g++"}";
     setBuild  = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
     setHost   = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
     setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
@@ -167,6 +167,8 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals stdenv.targetPlatform.isWasi [
+    "${setTarget}.wasi-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
   ] ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -223,6 +225,10 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
       --replace-quiet '"rust-lld"' '"lld"'
 
+    # Figuring out when this should be False is a rustc FIXME. Nixpkgs needs it false.
+    substituteInPlace compiler/rustc_target/src/spec/targets/wasm32_wasi*.rs \
+      --replace LinkSelfContainedDefault::True LinkSelfContainedDefault::False
+
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Useful debugging parameter
@@ -262,7 +268,7 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Security zlib ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM) [
+    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isWasi) [
       llvmPackages.libunwind
       # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
       (runCommandLocal "libunwind-libgcc" {} ''
