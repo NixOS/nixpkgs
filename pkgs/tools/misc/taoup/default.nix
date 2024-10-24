@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
-  version = "1.21";
+  version = "1.1.23";
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
     repo = "taoup";
     rev = "v${version}";
-    hash = "sha256-UHo3c+DQn77CJONy/QXM55rpIdhVkJbhR82tqmUltPQ=";
+    hash = "sha256-9J46fKyeSZW71r67R8y9KVPeCH8fn27hOk/XpusqGmk=";
   };
 
   buildInputs = [ rubyEnv bash ncurses ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
      --subst-var-by pname taoup
     substituteInPlace taoup-fortune \
       --subst-var-by out $out \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   dontConfigure = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/taoup
 
-    # Populate the cache created by cachedir.patch above
+    # Populate the cache created by cachefile.patch above
     $out/bin/taoup > $out/lib/taoup/cache
 
     cp taoup-fortune $out/bin
