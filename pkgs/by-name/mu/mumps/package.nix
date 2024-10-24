@@ -112,6 +112,27 @@ stdenv.mkDerivation (finalAttrs: {
         $out/lib/libpord.dylib
   '';
 
+  doInstallCheck = true;
+  installCheckPhase =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export DYLD_LIBRARY_PATH=$out/lib
+    ''
+    + ''
+      cd examples
+      make all
+      ./ssimpletest <input_simpletest_real
+      ./dsimpletest <input_simpletest_real
+      ./csimpletest <input_simpletest_cmplx
+      ./zsimpletest <input_simpletest_cmplx
+      ./c_example
+      ./multiple_arithmetics_example
+      ./ssimpletest_save_restore <input_simpletest_real
+      ./dsimpletest_save_restore <input_simpletest_real
+      ./csimpletest_save_restore <input_simpletest_cmplx
+      ./zsimpletest_save_restore <input_simpletest_cmplx
+      ./c_example_save_restore
+    '';
+
   meta = {
     description = "MUltifrontal Massively Parallel sparse direct Solver";
     homepage = "http://mumps-solver.org/";
