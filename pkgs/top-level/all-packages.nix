@@ -26850,7 +26850,7 @@ with pkgs;
 
   docbook_xml_dtd_43 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix { };
 
-  docbook_xml_dtd_44 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.4.nix { };
+  docbook_xml_dtd_44 = docbook-xml-dtd-4_4;
 
   docbook_xml_dtd_45 = docbook-xml-dtd-4_5;
 
