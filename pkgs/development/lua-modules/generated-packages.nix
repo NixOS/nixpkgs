@@ -3406,14 +3406,14 @@ buildLuarocksPackage {
 toml-edit = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luarocks-build-rust-mlua }:
 buildLuarocksPackage {
   pname = "toml-edit";
-  version = "0.4.1-1";
+  version = "0.5.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/toml-edit-0.4.1-1.rockspec";
-    sha256 = "180zdqrzffr7jr9xls895gj5hrx6pfs98rlxwzg71382jy1n79qi";
+    url    = "mirror://luarocks/toml-edit-0.5.0-1.rockspec";
+    sha256 = "1d80s6jcdw7ny52vda7lx4xccmavnl7sji1bcchmbc7krbf6s7v0";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/vhyrro/toml-edit.lua/archive/v0.4.1.zip";
-    sha256 = "1322p490p6yza3lczfzmwf5nkfj4ra6m9g6hvr2qgay405wnpgy7";
+    url    = "https://github.com/nvim-neorocks/toml-edit.lua/archive/v0.5.0.zip";
+    sha256 = "0cfsp9h7kjm52mrjf42jrp3np7akql8ynlnvq32m2ayshjdsdx6q";
   };
 
   disabled = luaOlder "5.1";
