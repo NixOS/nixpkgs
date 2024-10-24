@@ -16348,6 +16348,11 @@
     githubId = 33182938;
     name = "Pankaj";
   };
+  PapayaJackal = {
+    github = "PapayaJackal";
+    githubId = 145766029;
+    name = "PapayaJackal";
+  };
   paperdigits = {
     email = "mica@silentumbrella.com";
     github = "paperdigits";
