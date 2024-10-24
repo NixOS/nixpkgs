@@ -669,6 +669,28 @@ rec {
     shortDescription = "Swedish (Finland)";
   };
 
+  /* ESTONIAN */
+
+  et_EE = et-ee;
+  et-ee = mkDict rec {
+    pname = "hunspell-dict-et-ee";
+    name = pname;
+    version = "20030606";
+
+    src = fetchzip {
+      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
+      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+    };
+
+    dictFileName = "et_EE";
+    readmeFile = "README";
+
+    preInstall = ''
+      mv latin-1/${dictFileName}.dic ./
+      mv latin-1/${dictFileName}.aff ./
+    '';
+  };
+
   /* GERMAN */
 
   de_DE = de-de;
