@@ -28408,8 +28408,6 @@ with pkgs;
 
   catt = callPackage ../applications/video/catt { };
 
-  cava = callPackage ../applications/audio/cava { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
