@@ -1,5 +1,4 @@
 {
-  pkgs,
   stdenv,
   callPackage,
   lib,
@@ -196,12 +195,6 @@ let
             (substituteAll {
               src = ./pip-path.patch;
               pip = "${self.pip}/bin/pip";
-            })
-
-            # hardcore path to ffmpeg and hide related settings
-            (substituteAll {
-              src = ./ffmpeg-path.patch;
-              ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
             })
           ];
 
