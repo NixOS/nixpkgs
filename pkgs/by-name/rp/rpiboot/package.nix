@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       cartr
       flokli
+      stv0g
     ];
     platforms = [
       "aarch64-linux"
