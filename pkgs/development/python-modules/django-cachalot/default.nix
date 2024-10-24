@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-cachalot";
-  version = "2.6.2";
+  version = "2.6.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8sC0uvfnGh3rp6C9/GsEevVDxAiI6MafIBfUuvnPeas=";
+    hash = "sha256-q4w2goxdDqivGVZCRDGOvYARbzmx6P8Gnw9YlYn9Few=";
   };
 
   patches = [

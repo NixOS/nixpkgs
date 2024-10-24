@@ -7,24 +7,26 @@
 , pkg-config
 , substituteAll
 , vala
+, libadwaita
 , libgee
-, granite
-, gtk3
+, gettext
+, granite7
+, gtk4
 , networkmanager
 , networkmanagerapplet
-, libnma
+, libnma-gtk4
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.5.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-Dd7sZ66iyfuoHeQYrhlx9G9g4ylGq1IBlkTF5zFlVBQ=";
+    hash = "sha256-N/S4oO7wwOMJZhQeqAeLBOMEsJtoKItxmGhsLHMuOoM=";
   };
 
   patches = [
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
@@ -42,13 +45,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     networkmanager
-    libnma
+    libnma-gtk4
     switchboard
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = nix-update-script { };

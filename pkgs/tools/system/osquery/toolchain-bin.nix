@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, autoPatchelfHook, fetchzip }:
+{ stdenv, lib, fetchzip, autoPatchelfHook }:
 let
 
   version = "1.1.0";
@@ -16,13 +16,13 @@ let
 
 in
 
-stdenvNoCC.mkDerivation {
+stdenv.mkDerivation {
 
   name = "osquery-toolchain-bin";
 
   inherit version;
 
-  src = fetchzip dist.${stdenvNoCC.hostPlatform.system};
+  src = fetchzip dist.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

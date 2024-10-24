@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   chardet,
   cryptography,
   feedparser,
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "limnoria";
   version = "2024.5.30";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -26,7 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-uKJMeC1dXhQp1CGbtdnqmELFO64VWblhABGfpKHGCZQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     cryptography
     feedparser
@@ -40,7 +43,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version" 'version="${version}"'
+      --replace-fail "version=version" 'version="${version}"'
   '';
 
   checkPhase = ''

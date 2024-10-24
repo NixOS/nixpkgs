@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "ttfautohint";
 
   src = fetchurl {
-    url = "mirror://savannah/freetype/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/freetype/ttfautohint-${version}.tar.gz";
     sha256 = "0zpqgihn3yh3v51ynxwr8asqrijvs4gv686clwv7bm8sawr4kfw7";
   };
 

@@ -15,16 +15,16 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" pname ];
 
   # error[E0793]: reference to packed field is unaligned
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # FIXME can’t test --all-targets and --doc in a single invocation
   cargoTestFlags = [ "--all-targets" "--workspace" ];
   checkFeatures = [ "std" ];
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+    ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Libsystem
     SystemConfiguration
   ];
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = [ ];
     mainProgram = "bore";
-    broken = stdenv.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
+    broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
   };
 }

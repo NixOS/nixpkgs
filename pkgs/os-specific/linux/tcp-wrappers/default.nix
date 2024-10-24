@@ -2,7 +2,7 @@
 
 let
   vanillaVersion = "7.6.q";
-  patchLevel = "26";
+  patchLevel = "33";
 in stdenv.mkDerivation rec {
   pname = "tcp-wrappers";
   version = "${vanillaVersion}-${patchLevel}";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   debian = fetchurl {
     url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
-    sha256 = "1dcdhi9lwzv7g19ggwxms2msq9fy14rl09rjqb10hwv0jix7z8j8";
+    hash = "sha256-Lykjyu4hKDS/DqQ8JAFhKDffHrbJ9W1gjBKNpdaNRew=";
   };
 
   prePatch = ''
@@ -27,11 +27,6 @@ in stdenv.mkDerivation rec {
 
   # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)
   patches = [ ./cdecls.patch ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace Makefile \
-      --replace '-DNETGROUP' '-DUSE_GETDOMAIN'
-  '';
 
   buildInputs = [ libnsl ];
 

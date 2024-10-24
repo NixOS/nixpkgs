@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";
+    changelog = "https://github.com/gerbera/gerbera/releases/tag/v${version}";
     description = "UPnP Media Server for 2020";
     longDescription = ''
       Gerbera is a Mediatomb fork.

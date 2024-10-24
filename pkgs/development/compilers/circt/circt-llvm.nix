@@ -34,7 +34,7 @@
 
   # Get rid of ${extra_libdir} (which ends up containing a path to circt-llvm.dev
   # in circt) so that we only have to remove the one fixed rpath.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace llvm/llvm/cmake/modules/AddLLVM.cmake \
       --replace-fail 'set(_install_rpath "@loader_path/../lib''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' \
         'set(_install_rpath "@loader_path/../lib''${LLVM_LIBDIR_SUFFIX}")'
@@ -69,7 +69,7 @@
   # it hasn't been populated yet.
   #
   # Inspired by fixDarwinDylibNames.
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     local flags=(-delete_rpath @loader_path/../lib)
     for file in "$lib"/lib/*.dylib; do
       flags+=(-change @rpath/"$(basename "$file")" "$file")

@@ -2,9 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-oncall-app";
-  versionPrefix = "v";
-  version = "1.8.5";
-  zipHash = "sha256-HuZYHPTWm0EPKQbmapALK2j+PzM+J7gcWM9w8vU2yI0=";
+  version = "1.10.2";
+  zipHash = "sha256-wRgzdPKSA24O4kSDhaO/09uOG6lIoJGWUGOgX1vdjlU=";
   meta = with lib; {
     description = "Developer-friendly incident response for Grafana";
     license = licenses.agpl3Only;

@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, gtk3
-, glib
-, libxcrypt
-, gettext
-, iniparser
-, cracklib
-, linux-pam
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gtk3,
+  glib,
+  libxcrypt,
+  gettext,
+  iniparser,
+  cracklib,
+  linux-pam,
 }:
 
 buildGoModule rec {
@@ -23,9 +24,7 @@ buildGoModule rec {
     hash = "sha256-kBrkcB0IWGUV4ZrkFzwdPglRgDcnVvYDFhTXS20pKOk=";
   };
 
-  patches = [
-    "${src}/rpm/0001-Mangle-Suit-Cracklib2.9.6.patch"
-  ];
+  patches = [ "${src}/rpm/0001-Mangle-Suit-Cracklib2.9.6.patch" ];
 
   vendorHash = "sha256-L0vUEkUN70Hrx5roIvTfaZBHbbq7mf3WpQJeFAMU5HY=";
 

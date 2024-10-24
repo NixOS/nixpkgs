@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 
-  prePatch = lib.optionalString stdenv.isAarch64 ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace .cargo/config.offline \
       --replace "[target.aarch64-unknown-linux-gnu]" "" \
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     tl-expected
     utf8cpp
     zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

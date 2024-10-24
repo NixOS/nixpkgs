@@ -13,12 +13,12 @@ let
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.33.11";
+    version = "1.34.29";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Q8qtGChOnscOm7m3s7bWwUFmrUwMua9N6uz1Lyc8QIY=";
+      hash = "sha256-2w9z6f8ThKIISEiExePHObUZzBrdltP3AfZqKh8d1Mo=";
     };
 
     pythonRelaxDeps = [

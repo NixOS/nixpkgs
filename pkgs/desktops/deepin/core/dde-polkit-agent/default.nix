@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, pkg-config
-, cmake
-, qttools
-, wrapQtAppsHook
-, polkit-qt
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  pkg-config,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  polkit-qt,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
+  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   postFixup = ''
     wrapQtApp $out/lib/polkit-1-dde/dde-polkit-agent

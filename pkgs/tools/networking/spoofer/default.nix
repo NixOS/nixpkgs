@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";

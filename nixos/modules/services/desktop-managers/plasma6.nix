@@ -12,7 +12,7 @@
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME/.cache/ksycoca"*
   '';
 in {
   options = {
@@ -58,6 +58,7 @@ in {
     ];
 
     qt.enable = true;
+    programs.xwayland.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
         qtwayland # Hack? To make everything run on Wayland
@@ -78,6 +79,7 @@ in {
         kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
+        kunifiedpush # provides a background service and a KCM
         kwallet # provides helper service
         kwallet-pam # provides helper service
         kwalletmanager # provides KCMs and stuff
@@ -87,7 +89,6 @@ in {
 
         # Core Plasma parts
         kwin
-        pkgs.xwayland
         kscreen
         libkscreen
         kscreenlocker
@@ -143,10 +144,16 @@ in {
         kate
         khelpcenter
         dolphin
+        baloo-widgets  # baloo information in Dolphin
         dolphin-plugins
         spectacle
         ffmpegthumbs
         krdp
+        xwaylandvideobridge  # exposes Wayland windows to X11 screen capture
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Since PackageKit Nix support is not there yet,
+        # only install discover if flatpak is enabled.
+        discover
       ];
     in
       requiredPackages
@@ -239,11 +246,19 @@ in {
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
     xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = mkDefault ["breeze_cursors"];
 
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
-    xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.extraPortals = [
+      kdePackages.kwallet
+      kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    xdg.portal.configPackages = mkDefault [kdePackages.plasma-workspace];
     services.pipewire.enable = mkDefault true;
+
+    # Enable screen reader by default
+    services.orca.enable = mkDefault true;
 
     services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];

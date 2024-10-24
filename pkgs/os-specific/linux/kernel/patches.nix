@@ -39,11 +39,6 @@
       patch = ./request-key-helper-updated.patch;
     };
 
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
-
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
@@ -66,37 +61,13 @@
     patch = ./export-rt-sched-migrate.patch;
   };
 
-  rust_1_75 = {
-    name = "rust-1.75.patch";
-    patch = ./rust-1.75.patch;
-  };
-
-  rust_1_76 = {
-    name = "rust-1.76.patch";
-    patch = fetchurl {
-      name = "rust-1.76.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240217002638.57373-2-ojeda@kernel.org/raw";
-      hash = "sha256-q3iNBo8t4b1Rn5k5lau2myqOAqdA/9V9A+ok2jGkLdY=";
-    };
-  };
-
-  rust_1_77-6_8 = {
-    name = "rust-1.77.patch";
-    patch = ./rust-1.77-6.8.patch;
-  };
-
-  rust_1_77-6_9 = {
-    name = "rust-1.77.patch";
-    patch = ./rust-1.77.patch;
-  };
-
-  rust_1_78 = {
-    name = "rust-1.78.patch";
+  # Backport upstream fix for very annoying Tailscale issue
+  # FIXME: remove when merged upstream
+  netfilter-typo-fix = {
+    name = "netfilter-typo-fix";
     patch = fetchpatch {
-      name = "rust-1.78.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240401212303.537355-4-ojeda@kernel.org/raw";
-      excludes = [ "Documentation/process/changes.rst" ]; # Conflicts on 6.8.
-      hash = "sha256-EZ+Qa9z1AtAv08e72M7BEsCZi9UK572gmW+AR62a8EM=";
+      url = "https://lore.kernel.org/netdev/20241021094536.81487-3-pablo@netfilter.org/raw";
+      hash = "sha256-ZGc1xAIjf+MlV02jhIWZ4jHC742+z/WpN7RenqpU7e4=";
     };
   };
 }

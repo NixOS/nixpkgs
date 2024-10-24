@@ -14,6 +14,9 @@
   vulkan-headers,
   vulkan-loader,
 
+  # NOTE: Not coming from vcpkg
+  IMGUI_LINK_GLVND ? !stdenv.hostPlatform.isWindows && (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING),
+
   # The intent is to mirror vcpkg's flags[^1],
   # but we only actually support Linux and glfw3 until someone contributes the rest
   # [^1]: https://github.com/microsoft/vcpkg/blob/095ee06e7f60dceef7d713e3f8b1c2eb10d650d7/ports/imgui/CMakeLists.txt#L33-L108
@@ -23,15 +26,15 @@
   IMGUI_BUILD_DX10_BINDING ? false,
   IMGUI_BUILD_DX11_BINDING ? false,
   IMGUI_BUILD_DX12_BINDING ? false,
-  IMGUI_BUILD_GLFW_BINDING ? !stdenv.isDarwin,
+  IMGUI_BUILD_GLFW_BINDING ? !stdenv.hostPlatform.isDarwin,
   IMGUI_BUILD_GLUT_BINDING ? false,
-  IMGUI_BUILD_METAL_BINDING ? stdenv.isDarwin,
+  IMGUI_BUILD_METAL_BINDING ? stdenv.hostPlatform.isDarwin,
   IMGUI_BUILD_OPENGL2_BINDING ? false,
   IMGUI_BUILD_OPENGL3_BINDING ?
     IMGUI_BUILD_SDL2_BINDING || IMGUI_BUILD_GLFW_BINDING || IMGUI_BUILD_GLUT_BINDING,
-  IMGUI_BUILD_OSX_BINDING ? stdenv.isDarwin,
+  IMGUI_BUILD_OSX_BINDING ? stdenv.hostPlatform.isDarwin,
   IMGUI_BUILD_SDL2_BINDING ?
-    !IMGUI_BUILD_GLFW_BINDING && !stdenv.isDarwin,
+    !IMGUI_BUILD_GLFW_BINDING && !stdenv.hostPlatform.isDarwin,
   IMGUI_BUILD_SDL2_RENDERER_BINDING ? IMGUI_BUILD_SDL2_BINDING,
   IMGUI_BUILD_VULKAN_BINDING ? false,
   IMGUI_BUILD_WIN32_BINDING ? false,
@@ -55,7 +58,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imgui";
-  version = "1.90.6";
+  version = "1.91.4";
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -66,8 +69,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
-    rev = "v${version}";
-    sha256 = "sha256-FSob6FPfg0tF0n72twA5/moLvEaB251BPkIDJUXhYbg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
   };
 
   cmakeRules = "${vcpkgSource}/ports/imgui";
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs =
-    lib.optionals (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING) [ libGL ]
+    lib.optionals IMGUI_LINK_GLVND [ libGL ]
     ++ lib.optionals IMGUI_BUILD_GLFW_BINDING [ glfw ]
     ++ lib.optionals IMGUI_BUILD_SDL2_BINDING [ SDL2 ]
     ++ lib.optionals IMGUI_BUILD_VULKAN_BINDING [

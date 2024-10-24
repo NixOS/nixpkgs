@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xar cpio ];
 
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat op.pkg/Payload | cpio -i
   '';
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       --zsh <($out/bin/${mainProgram} completion zsh)
   '';
 
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
@@ -73,7 +73,10 @@ stdenv.mkDerivation {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [ joelburget ];
+    maintainers = with maintainers; [
+      joelburget
+      khaneliman
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     inherit mainProgram platforms;

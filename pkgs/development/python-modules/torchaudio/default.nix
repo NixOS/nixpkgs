@@ -1,12 +1,16 @@
 {
   lib,
+  symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
-  symlinkJoin,
-  ffmpeg-full,
   pkg-config,
   ninja,
+
+  # buildInputs
+  ffmpeg_6-full,
   pybind11,
   sox,
   torch,
@@ -72,14 +76,14 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PYaqRNKIhQ1DnFRZYyJJfBszVM2Bmu7A/lvvzJ6lL3g=";
+    hash = "sha256-Swh+HnkGRzjQFt9mYO+qBq4BDTbmLGSkOrN2ZUQdNUI=";
   };
 
   patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
@@ -104,9 +108,9 @@ buildPythonPackage rec {
   FFMPEG_ROOT = symlinkJoin {
     name = "ffmpeg";
     paths = [
-      ffmpeg-full.bin
-      ffmpeg-full.dev
-      ffmpeg-full.lib
+      ffmpeg_6-full.bin
+      ffmpeg_6-full.dev
+      ffmpeg_6-full.lib
     ];
   };
 
@@ -127,7 +131,7 @@ buildPythonPackage rec {
     );
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg_6-full
     pybind11
     sox
     torch.cxxdev

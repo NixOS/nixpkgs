@@ -18,21 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turbo-unwrapped";
-  version = "2.0.12";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
-    rev = "v${version}";
-    hash = "sha256-rh9BX8M3Kgu07Pz4G3AM6S9zeK3Bb6CzOpcYo7rQgIw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MDvwitzZVPVjdIVEAV1aKMAVeLSTMM2owH5RSfVg+rU=";
   };
 
-  patches = [
-    # upstream uses nightly where lazy_cell is stable
-    ./enable-lazy_cell.patch
-  ];
-
-  cargoHash = "sha256-oZHSoPrPCUwXSrxEASm4LuYO+XHyNDRRl38Q7U7F/lk=";
+  cargoHash = "sha256-XBI/eiOyKk80ZDFLD2HCTFYRWvC7qtzQY/zFCmKdKSM=";
 
   nativeBuildInputs =
     [
@@ -42,7 +37,7 @@ rustPlatform.buildRustPackage rec {
       protobuf
     ]
     # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.isLinux llvmPackages.bintools;
+    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs =
     [
@@ -51,7 +46,7 @@ rustPlatform.buildRustPackage rec {
       rust-jemalloc-sys
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         CoreFoundation

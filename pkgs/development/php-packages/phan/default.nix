@@ -7,16 +7,16 @@
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject
   (finalAttrs: {
     pname = "phan";
-    version = "5.4.4";
+    version = "5.4.5";
 
     src = fetchFromGitHub {
       owner = "phan";
       repo = "phan";
       rev = finalAttrs.version;
-      hash = "sha256-9kHTDuCvh0qV6Av6uLD0t4vJO5XLL9dgRAgaREsV7zM=";
+      hash = "sha256-CSV+kapCzGOCBaYnX0lJVlDdZGNBCKZ/nogOac1xj1A=";
     };
 
-    vendorHash = "sha256-yE85MBseJa0VGV5EbjT0te4QT3697YvtumGkMMfZtxI=";
+    vendorHash = "sha256-qRcB0KmUJWRQaMlnK1JdUsZrikThD6nQnrqQZm9yROk=";
 
     meta = {
       description = "Static analyzer for PHP";

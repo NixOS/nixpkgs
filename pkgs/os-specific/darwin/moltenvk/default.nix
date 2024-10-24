@@ -16,6 +16,7 @@
   Foundation,
   Metal,
   QuartzCore,
+  enableStatic ? stdenv.hostPlatform.isStatic,
   # MoltenVK supports using private APIs to implement some Vulkan functionality.
   # Applications that use private APIs can’t be distributed on the App Store,
   # but that’s not really a concern for nixpkgs, so use them by default.
@@ -23,9 +24,6 @@
   enablePrivateAPIUsage ? true,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isStatic;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
   version = "1.2.9";
@@ -109,10 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   env.NIX_LDFLAGS = toString [
-    "-lMachineIndependent"
-    "-lGenericCodeGen"
     "-lglslang"
-    "-lOSDependent"
     "-lSPIRV"
     "-lSPIRV-Tools"
     "-lSPIRV-Tools-opt"
@@ -142,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild =
-    if isStatic then
+    if enableStatic then
       ''
         mkdir -p Package/Release/MoltenVK/static
         cp Products/Release/libMoltenVK.a Package/Release/MoltenVK/static
@@ -174,8 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    libraryExtension=${if isStatic then ".a" else ".dylib"}
-    packagePath=${if isStatic then "static" else "dynamic/dylib"}
+    libraryExtension=${if enableStatic then ".a" else ".dylib"}
+    packagePath=${if enableStatic then "static" else "dynamic/dylib"}
 
     mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin" "$dev"
 

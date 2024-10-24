@@ -2,16 +2,16 @@
   lib,
   anyio,
   buildPythonPackage,
-  curio,
+  curio-compat,
   fetchFromGitHub,
   hypothesis,
   pytest,
   pytestCheckHook,
   pythonOlder,
   poetry-core,
-  sniffio,
   trio,
   trio-asyncio,
+  uvloop,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klen";
@@ -32,16 +32,18 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  dependencies = [
-    anyio
-    curio
-    hypothesis
-    sniffio
-    trio
-    trio-asyncio
-  ];
+  optional-dependencies = {
+    curio = [ curio-compat ];
+    trio = [ trio ];
+    uvloop = [ uvloop ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    anyio
+    hypothesis
+    pytestCheckHook
+    trio-asyncio
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pytest_aio" ];
 

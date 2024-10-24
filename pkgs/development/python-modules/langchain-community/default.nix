@@ -2,55 +2,57 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
   aiohttp,
   dataclasses-json,
-  langchain,
   langchain-core,
+  langchain,
   langsmith,
-  httpx,
-  lark,
+  pydantic-settings,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # optional-dependencies
+  typer,
   numpy,
+
+  # tests
+  httpx,
+  langchain-standard-tests,
+  lark,
   pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyyaml,
-  requests,
   requests-mock,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.7";
+  version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-r0YSJkYPcwjHyw1xST5Zrgg9USjN9GOsvhV97imSFCQ=";
+    hash = "sha256-h7+89w8PkSpFxGGQKFC6FuB6Q2B27EYgLk0aiPqwp4s=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../standard-tests\"" "path = \"./langchain_standard_tests\""
-  '';
-
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "pydantic-settings" ];
 
   dependencies = [
     aiohttp
@@ -58,7 +60,7 @@ buildPythonPackage rec {
     langchain-core
     langchain
     langsmith
-    numpy
+    pydantic-settings
     pyyaml
     requests
     sqlalchemy
@@ -67,12 +69,14 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     cli = [ typer ];
+    numpy = [ numpy ];
   };
 
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
     httpx
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
@@ -87,7 +91,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -95,6 +99,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
+    "test_yandex"
     # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"

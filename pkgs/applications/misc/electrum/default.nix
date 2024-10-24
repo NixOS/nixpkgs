@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, fetchFromGitHub
+, protobuf
 , wrapQtAppsHook
 , python3
 , zbar
@@ -9,71 +9,34 @@
 , enableQt ? true
 , callPackage
 , qtwayland
-, fetchPypi
 }:
 
 let
-  version = "4.5.5";
-
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      # Pin ledger-bitcoin to 0.2.1
-      ledger-bitcoin = super.ledger-bitcoin.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.1";
-        format = "pyproject";
-        src = fetchPypi {
-          pname = "ledger_bitcoin";
-          inherit version;
-          hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
-        };
-      });
-    };
-  };
-
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.{v}"
-    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
+    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.isLinux then "libzbar.so.0"
-    else if stdenv.isDarwin then "libzbar.0.dylib"
+    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  # Not provided in official source releases, which are what upstream signs.
-  tests = fetchFromGitHub {
-    owner = "spesmilo";
-    repo = "electrum";
-    rev = version;
-    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
-
-    postFetch = ''
-      mv $out ./all
-      mv ./all/tests $out
-    '';
-  };
 
 in
 
-python.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  inherit version;
+  version = "4.5.6";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
+    hash = "sha256-LO2ZUvbDJaIxrdgA+cM3sGgqJ+N+UlA9ObNINQcrorA=";
   };
 
-  postUnpack = ''
-    # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/tests
-  '';
+  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
-  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
-
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -104,7 +67,7 @@ python.pkgs.buildPythonApplication {
     qdarkstyle
   ];
 
-  checkInputs = with python.pkgs; lib.optionals enableQt [
+  checkInputs = with python3.pkgs; lib.optionals enableQt [
     pyqt6
   ];
 
@@ -124,7 +87,7 @@ python.pkgs.buildPythonApplication {
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
                 "Exec=$out/bin/electrum %u" \
@@ -136,7 +99,7 @@ python.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "tests" ];
 

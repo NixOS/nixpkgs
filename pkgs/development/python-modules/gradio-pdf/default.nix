@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "gradio-pdf";
-  version = "0.0.11";
+  version = "0.0.15";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "gradio_pdf";
     inherit version;
-    hash = "sha256-HCfjJdd9DIRqm/dS00xlU9AYGM7U/b3zNo2IgZHtasc=";
+    hash = "sha256-R+4CDJo84/+PUTTxoz9CsZlHUVsldgjufWsRkALrfN4=";
   };
 
   nativeBuildInputs = [

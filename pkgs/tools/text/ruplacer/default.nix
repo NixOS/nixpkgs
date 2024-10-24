@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EyLompGEin12q6SC1M1D0QsE42HVEq5O/E99qi54cGo=";
 
-  buildInputs = (lib.optional stdenv.isDarwin Security);
+  buildInputs = (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   meta = with lib; {
     description = "Find and replace text in source files";

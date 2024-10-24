@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pygmt";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -67,8 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
-    # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
-    broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; teams.geospatial.members;
   };
 }

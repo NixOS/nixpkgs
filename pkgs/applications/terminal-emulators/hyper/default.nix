@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];
     mainProgram = "hyper";
+    broken = true; # Error: 'node-pty' failed to load
   };
 }

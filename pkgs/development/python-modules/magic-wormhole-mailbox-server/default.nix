@@ -11,6 +11,7 @@
   autobahn,
   treq,
   mock,
+  nixosTests,
   pythonOlder,
   pythonAtLeast,
   pytestCheckHook,
@@ -53,10 +54,14 @@ buildPythonPackage rec {
     mock
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # these tests fail in Darwin's sandbox
     "src/wormhole_mailbox_server/test/test_web.py"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) magic-wormhole-mailbox-server;
+  };
 
   meta = {
     description = "Securely transfer data between computers";

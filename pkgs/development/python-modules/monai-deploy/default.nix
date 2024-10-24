@@ -31,15 +31,15 @@ buildPythonPackage rec {
     # Asked in https://github.com/Project-MONAI/monai-deploy-app-sdk/issues/450
     # if this patch can be incorporated upstream.
     substituteInPlace pyproject.toml \
-      --replace 'versioneer-518' 'versioneer'
+      --replace-fail 'versioneer-518' 'versioneer'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     versioneer
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     networkx
     colorama

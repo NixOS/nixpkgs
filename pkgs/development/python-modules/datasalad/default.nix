@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "datasalad";
-  version = "0.2.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datasalad";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qgHWTokNBzJcBbEPCA/YfklzqyX1lM2yro7ElqBfrig=";
+    hash = "sha256-UIrbvFz674+HarFbv1eF++flj1hOR0cZyqKQSl+G7xY=";
   };
 
   build-system = [

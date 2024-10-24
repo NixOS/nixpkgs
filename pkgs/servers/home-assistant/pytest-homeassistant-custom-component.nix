@@ -11,13 +11,14 @@
   pytest-asyncio,
   pytest-socket,
   requests-mock,
+  respx,
   syrupy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.147";
+  version = "0.13.172";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     rev = "refs/tags/${version}";
-    hash = "sha256-FivgP0tKmu9QKPSVU9c/3SNduyKoSeAquHysdHSs11E=";
+    hash = "sha256-azTnNgbdj7AMBLTz+y5BLeQDKUqA5wkxFMG3g30f6wo=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-socket
     requests-mock
+    respx
     syrupy
   ];
 

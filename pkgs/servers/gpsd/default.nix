@@ -11,7 +11,7 @@
 , dbus
 , libusb1
 , ncurses
-, kppsSupport ? stdenv.isLinux, pps-tools
+, kppsSupport ? stdenv.hostPlatform.isLinux, pps-tools
 , python3Packages
 
 # optional deps for GUI packages

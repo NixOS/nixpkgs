@@ -26,6 +26,8 @@ derivation (
     isGNU = true;
     hardeningUnsupportedFlags = [
       "fortify3"
+      "shadowstack"
+      "pacret"
       "stackclashprotection"
       "trivialautovarinit"
       "zerocallusedregs"

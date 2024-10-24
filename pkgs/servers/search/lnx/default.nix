@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
       "compose-0.1.0" = "sha256-zcniGI3wa+gI3jFTDqHcesX+6hAtNEbW81ABPUcFTXk=";
     };
   };
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ DiskArbitration Foundation ];
   meta = with lib; {
     description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants.";
     mainProgram = "lnx";

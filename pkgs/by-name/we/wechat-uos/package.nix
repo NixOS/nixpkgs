@@ -19,7 +19,6 @@
 , mesa
 , alsa-lib
 , wayland
-, openssl_1_1
 , atk
 , qt6
 , at-spi2-atk
@@ -63,6 +62,11 @@
   uosLicense ? null
 }:
 let
+  # zerocallusedregs hardening breaks WeChat
+  glibcWithoutHardening = stdenv.cc.libc.overrideAttrs (old: {
+    hardeningDisable = (old.hardeningDisable or [ ]) ++ [ "zerocallusedregs" ];
+  });
+
   wechat-uos-env = stdenvNoCC.mkDerivation {
     meta.priority = 1;
     name = "wechat-uos-env";
@@ -91,7 +95,7 @@ let
           {
             name = "license.tar.gz";
             url = "https://www.uniontech.com";
-            sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
+            hash = "sha256-U3YAecGltY8vo9Xv/h7TUjlZCyiIQdgSIp705VstvWk=";
           } else uosLicense;
 
     installPhase = ''
@@ -107,7 +111,44 @@ let
     outputHash = "sha256-pNftwtUZqBsKBSPQsEWlYLlb6h2Xd9j56ZRMi8I82ME=";
   };
 
+  libuosdevicea = stdenv.mkDerivation rec {
+    name = "libuosdevicea";
+    src = ./libuosdevicea.c;
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      cp ${src} libuosdevicea.c
+
+      runHook postUnpack
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      $CC -shared -fPIC -o libuosdevicea.so libuosdevicea.c
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib
+      cp libuosdevicea.so $out/lib/
+
+      runHook postInstall
+    '';
+
+    meta = with lib; {
+      license = licenses.gpl2Plus;
+    };
+  };
+
   wechat-uos-runtime = with xorg; [
+    # Make sure our glibc without hardening gets picked up first
+    (lib.hiPrio glibcWithoutHardening)
+
     stdenv.cc.cc
     stdenv.cc.libc
     pango
@@ -165,7 +206,6 @@ let
     wayland
     pulseaudio
     qt6.qt5compat
-    openssl_1_1
     bzip2
   ];
 
@@ -191,22 +231,6 @@ let
         };
       }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-      # Don't blame about this. WeChat requires some binary from here to work properly
-      uosSrc = {
-        x86_64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_amd64.deb";
-          hash = "sha256-vVN7w+oPXNTMJ/g1Rpw/AVLIytMXI+gLieNuddyyIYE=";
-        };
-        aarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_arm64.deb";
-          hash = "sha256-XvGFPYJlsYPqRyDycrBGzQdXn/5Da1AJP5LgRVY1pzI=";
-        };
-        loongarch64-linux = fetchurl {
-          url = "https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.weixin/com.tencent.weixin_2.1.5_loongarch64.deb";
-          hash = "sha256-oa6rLE6QXMCPlbebto9Tv7xT3fFqYIlXL6WHpB2U35s=";
-        };
-      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
-
       inherit uosLicense;
 
       nativeBuildInputs = [ dpkg ];
@@ -215,7 +239,6 @@ let
         runHook preUnpack
 
         dpkg -x $src ./wechat-uos
-        dpkg -x $uosSrc ./wechat-uos-old-source
 
         runHook postUnpack
       '';
@@ -229,7 +252,7 @@ let
 
         mkdir -pv $out/usr/lib/wechat-uos/license
         ln -s ${uosLicenseUnzipped}/* $out/usr/lib/wechat-uos/license/
-        cp -r wechat-uos-old-source/usr/lib/license/libuosdevicea.so $out/usr/lib/wechat-uos/license/
+        ln -s ${libuosdevicea}/lib/libuosdevicea.so $out/usr/lib/wechat-uos/license/
 
         runHook postInstall
       '';
@@ -240,7 +263,7 @@ let
         license = licenses.unfree;
         platforms = [ "x86_64-linux" "aarch64-linux" "loongarch64-linux" ];
         sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        maintainers = with maintainers; [ pokon548 ];
+        maintainers = with maintainers; [ pokon548 xddxdd ];
         mainProgram = "wechat-uos";
       };
     };

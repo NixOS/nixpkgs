@@ -15,6 +15,7 @@
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -27,6 +28,7 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
@@ -37,8 +39,8 @@
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -50,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.4";
+  version = "0.5.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -59,18 +61,23 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-wzfzuWuNqLAjfAZC38p1iTtJHez/pJ9Ncgeo23o1dMo=";
+    hash = "sha256-qE8eX97khcQa2JS9ZuJ1j3/pduXcQGyuVyvsnvKaemo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-0OE2i29oE6RpJRswQWI8+5dbA6lOWd3nhqe1RGlnjhk=";
+    hash = "sha256-zciqOK5EkvxX3ctkGdkAppOQAW4CJ554PZsw2ctrdG0=";
   };
 
   pythonRelaxDeps = [
     "chroma-hnswlib"
     "orjson"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
   nativeBuildInputs = [
@@ -79,16 +86,14 @@ buildPythonPackage rec {
     protobuf
     rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     build
     chroma-hnswlib
@@ -122,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
@@ -140,8 +146,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # flaky / timing sensitive
+    # Tests are laky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
   ];
 
   disabledTestPaths = [
@@ -157,6 +164,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
+
   meta = with lib; {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
@@ -164,6 +175,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "chroma";
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

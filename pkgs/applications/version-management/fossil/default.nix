@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
   buildInputs = [ zlib openssl readline which ed ]
-    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
     ++ lib.optional (!withInternalSqlite) sqlite;
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   configureFlags =
     lib.optional (!withInternalSqlite) "--disable-internal-sqlite"

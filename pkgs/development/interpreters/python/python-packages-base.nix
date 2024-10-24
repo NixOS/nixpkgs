@@ -37,15 +37,15 @@ let
   else
     ./python2/mk-python-derivation.nix;
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  buildPythonPackage = makeOverridablePythonPackage (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
-  }));
+  });
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  buildPythonApplication = makeOverridablePythonPackage (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
-  }));
+  });
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
@@ -60,6 +60,10 @@ let
   makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
   removePythonPrefix = lib.removePrefix namePrefix;
+
+  mkPythonEditablePackage = callPackage ./editable.nix { };
+
+  mkPythonMetaPackage = callPackage ./meta-package.nix { };
 
   # Convert derivation to a Python module.
   toPythonModule = drv:
@@ -93,10 +97,11 @@ let
 
 in {
   inherit lib pkgs stdenv;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy312 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit mkPythonMetaPackage mkPythonEditablePackage;
 
   python = toPythonModule python;
 

@@ -5,6 +5,7 @@
 , dotnetCorePackages
 , openssl
 , mono
+, nixosTests
 }:
 
 buildDotnetModule rec {
@@ -27,7 +28,7 @@ buildDotnetModule rec {
 
   runtimeDeps = [ openssl ];
 
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
   nativeCheckInputs = [ mono ];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";
 
@@ -38,8 +39,11 @@ buildDotnetModule rec {
   '';
   passthru.updateScript = ./updater.sh;
 
+  passthru.tests = { inherit (nixosTests) jackett; };
+
   meta = with lib; {
     description = "API Support for your favorite torrent trackers";
+    mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
     license = licenses.gpl2Only;

@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ cloudpathlib ];
     azure = [ azure-storage-blob ];
     gs = [ google-cloud-storage ];

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     CLI = [
       click
       prompt-toolkit

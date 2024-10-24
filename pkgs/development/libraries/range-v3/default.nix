@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   # Building the tests currently fails on AArch64 due to internal compiler
   # errors (with GCC 9.2):
   cmakeFlags = [ "-DRANGES_ENABLE_WERROR=OFF" ]
-    ++ lib.optional stdenv.isAarch64 "-DRANGE_V3_TESTS=OFF";
+    ++ lib.optional stdenv.hostPlatform.isAarch64 "-DRANGE_V3_TESTS=OFF";
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
   checkTarget = "test";
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=c++17";
+  };
 
   meta = with lib; {
     description = "Experimental range library for C++11/14/17";

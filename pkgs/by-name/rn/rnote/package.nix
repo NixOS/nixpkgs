@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
     libadwaita
     libxml2
     poppler
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AudioUnit
   ];
 
@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dotlambda gepbird yrd ];
     platforms = platforms.unix;
     # compiler error since 2023-11-17
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

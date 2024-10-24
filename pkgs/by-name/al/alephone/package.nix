@@ -6,7 +6,7 @@
   alsa-lib,
   boost,
   curl,
-  ffmpeg_4,
+  ffmpeg_6,
   icoutils,
   libGLU,
   libmad,
@@ -28,7 +28,6 @@
   unzip,
   zlib,
   zziplib,
-  alephone,
   testers,
 }:
 
@@ -38,25 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.8.1";
+  version = "1.10";
 
   src = fetchurl {
     url =
       let
-        date = "20240513";
+        date = "20240822";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    sha256 = "sha256-IUvMfG4jtN/QXq4DQIDuI0+Bl3MSSwDGKOyjfcRWgvE=";
+    hash = "sha256-Es2Uo0RIJHYeO/60XiHVLJe9Eoan8DREtAI2KGjuLaM=";
   };
-
-  patches = [
-    # Fix build with miniupnpc 2.2.8
-    # https://github.com/Aleph-One-Marathon/alephone/pull/503
-    (fetchpatch2 {
-      url = "https://github.com/Aleph-One-Marathon/alephone/commit/e25c4bc1ac02619e811b8f19bf4c2f617550e124.patch?full_index=1";
-      hash = "sha256-BFLLSTjNl/+/kVb+t6EyW1jhAlKN/G+Q99TICV9VHOY=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -67,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     boost
     curl
-    ffmpeg_4
+    ffmpeg_6
     libGLU
     libmad
     libogg
@@ -103,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version =
     # test that the version is correct
-    testers.testVersion { package = alephone; };
+    testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
@@ -121,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       version,
       zip,
       meta,
-      icon ? alephone.icons + "/alephone.png",
+      icon ? finalAttrs.finalPackage.icons + "/alephone.png",
       ...
     }@extraArgs:
     stdenv.mkDerivation (
@@ -151,14 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
           mkdir -p $out/bin $out/data/$pname $out/share/applications
           cp -a * $out/data/$pname
           cp $desktopItem/share/applications/* $out/share/applications
-          makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
+          makeWrapper ${finalAttrs.finalPackage}/bin/alephone $out/bin/$pname \
             --add-flags $out/data/$pname
         '';
       }
       // extraArgs
       // {
         meta =
-          alephone.meta
+          finalAttrs.finalPackage.meta
           // {
             license = lib.licenses.free;
             mainProgram = pname;

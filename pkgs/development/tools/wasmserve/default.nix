@@ -1,17 +1,18 @@
-{ buildGoModule
-, lib
-, fetchFromGitHub
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "wasmserve";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "hajimehoshi";
     repo = "wasmserve";
     rev = "v${version}";
-    hash = "sha256-KlCbUre6yIorE1ZM++Rto8vgwVGsC1wZj1xCd3AwQy0=";
+    hash = "sha256-e+pHwk+xJVc+Ki0iJC2B+W8ZN4mEawEQNyGhwITBDlo=";
   };
 
   vendorHash = null;

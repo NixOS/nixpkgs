@@ -8,6 +8,10 @@
 mkKdeDerivation {
   pname = "libplasma";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtsvg qtwayland wayland];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtsvg
+    qtwayland
+    wayland
+  ];
 }

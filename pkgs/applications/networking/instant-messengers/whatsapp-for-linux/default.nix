@@ -20,7 +20,7 @@
 , pcre
 , pcre2
 , pkg-config
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , xorg
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     pcre2
     sqlite
-    webkitgtk
+    webkitgtk_4_0
     xorg.libXdmcp
     xorg.libXtst
   ];
@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "whatsapp-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 })

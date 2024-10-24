@@ -183,6 +183,16 @@ with lib.maintainers;
     githubTeams = [ "cuda-maintainers" ];
   };
 
+  cyberus = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      xanderio
+      blitz
+    ];
+    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
+    shortName = "Cyberus Technology employees";
+  };
+
   darwin = {
     members = [ toonn ];
     githubTeams = [ "darwin-maintainers" ];
@@ -268,7 +278,11 @@ with lib.maintainers;
   };
 
   emacs = {
-    members = [ adisbladis ];
+    members = [
+      AndersonTorres
+      adisbladis
+      linj
+    ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
   };
@@ -315,6 +329,7 @@ with lib.maintainers;
       leona
       osnyx
       ma27
+      laalsaas
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
@@ -484,7 +499,6 @@ with lib.maintainers;
       ryantm
       lassulus
       yayayayaka
-      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -504,10 +518,10 @@ with lib.maintainers;
     githubTeams = [ "k3s" ];
     members = [
       euank
+      frederictobiasc
       marcusramberg
       mic92
       rorosen
-      superherointj
       wrmilling
       yajo
     ];
@@ -554,6 +568,7 @@ with lib.maintainers;
   linux-kernel = {
     members = [
       TredwellGit
+      k900
       ma27
       nequissimus
       qyliss
@@ -733,6 +748,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  ngi = {
+    members = [
+      eljamm
+      fricklerhandwerk
+      wegank
+    ];
+    scope = "Maintain NGI-supported software.";
+    shortName = "NGI";
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
@@ -752,6 +777,7 @@ with lib.maintainers;
     members = [
       SuperSandro2000
       anthonyroussel
+      vinetos
     ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
@@ -780,7 +806,11 @@ with lib.maintainers;
   };
 
   perl = {
-    members = [ sgo ];
+    members = [
+      sgo
+      marcusramberg
+      zakame
+    ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";
     enableFeatureFreezePing = true;
@@ -933,10 +963,24 @@ with lib.maintainers;
     shortName = "Serokell employees";
   };
 
+  stdenv = {
+    members = [
+      artturin
+      emily
+      ericson2314
+      philiptaron
+      reckenrode
+      RossComputerGuy
+    ];
+    scope = "Maintain the standard environment and its surrounding logic.";
+    shortName = "stdenv";
+    enableFeatureFreezePing = true;
+    githubTeams = [ "stdenv" ];
+  };
+
   steam = {
     members = [
       atemu
-      eclairevoyant
       k900
       mkg20001
     ];
@@ -947,7 +991,6 @@ with lib.maintainers;
   stridtech = {
     # Verify additions by approval of an already existing member of the team
     members = [
-      superherointj
       ulrikstrid
     ];
     scope = "Group registration for Strid Tech AB team members who collectively maintain packages";
@@ -1005,6 +1048,19 @@ with lib.maintainers;
     ];
     scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
     shortName = "WDZ GmbH";
+  };
+
+  xen = {
+    members = [
+      hehongbo
+      lach
+      rane
+      sigmasquadron
+    ];
+    scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
+    shortName = "Xen Project Hypervisor";
+    enableFeatureFreezePing = true;
+    githubTeams = [ "xen-project" ];
   };
 
   xfce = {

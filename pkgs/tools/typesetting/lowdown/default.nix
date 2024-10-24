@@ -1,25 +1,28 @@
 { lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
+, enableDarwinSandbox ? true
 # for passthru.tests
 , nix
 }:
 
 stdenv.mkDerivation rec {
-  pname = "lowdown";
-  version = "1.1.0";
+  pname = "lowdown${lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"}";
+  version = "1.1.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-EpAWTz7Zy+2qqJGgzLrt0tK7WEZ+hHbdyqzAmMiaqc6uNXscR88git6/UbTjvB9Yanvetvw9huSuyhcORCEIug==";
+    hash = "sha512-KHQi5NpMU6Kw4Ij+BoGE52aU0vIP1pgMhjnBAUdMh6GV/xHCxfTXJduqh9bSfVMeOim08aZSIM7iq1io0VS8LA==";
   };
 
   nativeBuildInputs = [ which dieHook ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
-  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  # The Darwin sandbox calls fail inside Nix builds, presumably due to
+  # being nested inside another sandbox.
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) ''
     echo 'HAVE_SANDBOX_INIT=0' > configure.local
   '';
 
@@ -31,6 +34,13 @@ stdenv.mkDerivation rec {
                 MANDIR=''${!outputMan}/share/man
     runHook postConfigure
   '';
+
+  # Fix rpath change on darwin to avoid failure like:
+  #     error: install_name_tool: changing install names or
+  #     rpaths can't be redone for: liblowdown.1.dylib (for architecture
+  #     arm64) because larger
+  #   https://github.com/NixOS/nixpkgs/pull/344532#issuecomment-238475791
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   makeFlags = [
     "bins" # prevents shared object from being built unnecessarily
@@ -50,13 +60,13 @@ stdenv.mkDerivation rec {
     in
 
     # Check that soVersion is up to date even if we are not on darwin
-    lib.optionalString (enableShared && !stdenv.isDarwin) ''
+    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
       test -f $lib/lib/liblowdown.so.${soVersion} || \
         die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
     ''
     # Fix lib extension so that fixDarwinDylibNames detects it, see
     # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
-    + lib.optionalString (enableShared && stdenv.isDarwin) ''
+    + lib.optionalString (enableShared && stdenv.hostPlatform.isDarwin) ''
       darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
       mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
 
@@ -68,10 +78,13 @@ stdenv.mkDerivation rec {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
+
+  installCheckPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin || !enableDarwinSandbox) ''
     runHook preInstallCheck
+
     echo '# TEST' > test.md
     $out/bin/lowdown test.md
+
     runHook postInstallCheck
   '';
 

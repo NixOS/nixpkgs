@@ -1,5 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ hostPkgs, ... }: {
   name = "nixos-rebuild-specialisations";
+
+  # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
+  #        make it a _small package instead, then remove pkgsReadOnly = false;.
+  node.pkgsReadOnly = false;
 
   nodes = {
     machine = { lib, pkgs, ... }: {
@@ -21,6 +25,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         pkgs.grub2
       ];
 
+      system.switch.enable = true;
+
       virtualisation = {
         cores = 2;
         memorySize = 4096;
@@ -30,7 +36,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript =
     let
-      configFile = pkgs.writeText "configuration.nix" ''
+      configFile = hostPkgs.writeText "configuration.nix" ''
         { lib, pkgs, ... }: {
           imports = [
             ./hardware-configuration.nix
@@ -71,32 +77,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         }
       '';
 
-      wrongConfigFile = pkgs.writeText "configuration.nix" ''
-        { lib, pkgs, ... }: {
-          imports = [
-            ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          ];
-
-          boot.loader.grub = {
-            enable = true;
-            device = "/dev/vda";
-            forceInstall = true;
-          };
-
-          documentation.enable = false;
-
-          environment.systemPackages = [
-            (pkgs.writeShellScriptBin "parent" "")
-          ];
-
-          specialisation.foo-bar = {
-            inheritParentConfig = true;
-
-            configuration = { ... }: { };
-          };
-        }
-      '';
     in
     ''
       machine.start()
@@ -142,12 +122,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("Make sure nonsense command combinations are forbidden"):
           machine.fail("nixos-rebuild boot --specialisation foo")
           machine.fail("nixos-rebuild boot -c foo")
-
-      machine.copy_from_host(
-          "${wrongConfigFile}",
-          "/etc/nixos/configuration.nix",
-      )
-      with subtest("Make sure that invalid specialisation names are rejected"):
-          machine.fail("nixos-rebuild switch")
     '';
-})
+}

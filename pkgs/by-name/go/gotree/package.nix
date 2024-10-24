@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gotree";
-  version = "0.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "elbachir-one";
     repo = "gt";
     rev = "v${version}";
-    hash = "sha256-0CI9dQXMlED3VoZwB+QI8kUVrUIx9vGIgNZ7mNsZGgs=";
+    hash = "sha256-sWKqfDWwMfj4shg/MxHu7Zr4WE5pxAzHHmsjU3jQY10=";
   };
 
   vendorHash = null;

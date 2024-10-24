@@ -23,34 +23,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lxqBmtHkyk4mnM/AJQmpyCmvhW2e96vZBkgtoREjEXY=";
+    hash = "sha256-6Fh1fbl7Y33EyWbWUhe70CGzhc4y+I59vPbzZydoJ18=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
-    ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  postBuild = lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
     pnpm build
     ./node_modules/.bin/electron-builder \
       --dir \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
     runHook preInstall
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv pack/mac*/YouTube\ Music.app $out/Applications
     makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/youtube-music"
     cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
       --add-flags $out/share/lib/youtube-music/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

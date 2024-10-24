@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # of form /nix/store/.../nix/store/.../include,
   # probably due to relative vs absolute path issue
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://github.com/BioPP/bpp-core";

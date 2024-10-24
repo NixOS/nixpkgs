@@ -49,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-36";
+  version = "7.1.1-39";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-Y/tj8IAhsCFK7Yd0MXZ8X6AOLxICyVOIaSaQveMf17k=";
+    hash = "sha256-3NUl0q/j3dBdNBtLH+69vh0elobBnTOvqQpC/2KwGBU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
     ]
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
     inherit nixos-icons;
     inherit (perlPackages) ImageMagick;
-    inherit (python3.pkgs) img2pdf;
+    inherit (python3.pkgs) img2pdf willow;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       version = lib.head (lib.splitString "-" finalAttrs.version);
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

@@ -1,15 +1,21 @@
 {
   lib,
   stdenv,
+  python,
+  buildPythonPackage,
+  fetchurl,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
+
+  # nativeBuildInputs
   addDriverRunpath,
   autoPatchelfHook,
-  buildPythonPackage,
-  cudaPackages,
-  fetchurl,
-  pythonAtLeast,
-  pythonOlder,
+
+  # dependencies
   pillow,
-  python,
   torch-bin,
 }:
 
@@ -17,7 +23,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.18.1";
+  version = "0.20.0";
 in
 buildPythonPackage {
   inherit version;
@@ -28,20 +34,20 @@ buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
 
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs =
     with cudaPackages;
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # $out/${sitePackages}/torchvision/_C.so wants libcudart.so.11.0 but torchvision.libs only ships
       # libcudart.$hash.so.11.0
       cuda_cudart
     ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    autoPatchelfHook
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     addDriverRunpath
+    autoPatchelfHook
   ];
 
   dependencies = [
@@ -54,7 +60,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 

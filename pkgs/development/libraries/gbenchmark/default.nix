@@ -2,35 +2,43 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 , gtest
 , prometheus-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
-  version = "1.8.4";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    sha256 = "sha256-O+1ZHaNHSkKz3PlKDyI94LqiLtjyrKxjOIi8Q236/MI=";
+    hash = "sha256-5cl1PIjhXaL58kSyWZXRWLq6BITS2BwEovPhwvk2e18=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  postPatch = ''
-    cp -r ${gtest.src} googletest
-    chmod -R u+w googletest
+  buildInputs = [ gtest ];
 
-    # https://github.com/google/benchmark/issues/1396
-    substituteInPlace cmake/benchmark.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)
+    (lib.cmakeBool "BENCHMARK_ENABLE_WERROR" false)
+  ];
+
+  # We ran into issues with gtest 1.8.5 conditioning on
+  # `#if __has_cpp_attribute(maybe_unused)`, which was, for some
+  # reason, going through even when C++14 was being used and
+  # breaking the build on Darwin by triggering errors about using
+  # C++17 features.
+  #
+  # This might be a problem with our Clang, as it does not reproduce
+  # with Xcode, but we just work around it by silencing the warning.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
 
   # Tests fail on 32-bit due to not enough precision
-  doCheck = stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.is64bit;
 
   passthru.tests = {
     inherit prometheus-cpp;
@@ -40,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE
-    = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
+    = optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT";
 
   doCheck = true;
 

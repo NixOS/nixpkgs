@@ -10,22 +10,31 @@
 , glib
 , makeWrapper
 , libcap
-, libunwind
 , elfutils # for libdw
 , bash-completion
 , lib
 , Cocoa
 , CoreServices
-, gobject-introspection
-, rustc
+, xpc
 , testers
+, rustc
+, withRust ?
+    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms &&
+    lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, libunwind
+, withLibunwind ?
+  lib.meta.availableOn stdenv.hostPlatform libunwind &&
+    lib.elem "libunwind" libunwind.meta.pkgConfigModules or []
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [
     "bin"
@@ -39,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-EiXvSjKfrhytxexyfaskmtVn6AcoeUk1Yc65HtNKpBQ=";
+    hash = "sha256-wOdbEkxSu3oMPc23NLKtJg6nKGqHRc8upinUyEnmqVg=";
   };
 
   depsBuildBuild = [
@@ -58,24 +67,28 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-    gobject-introspection
-    rustc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withRust [
+    rustc
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
   buildInputs = [
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-    libunwind
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals withLibunwind [
+    libunwind
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreServices
+    xpc
   ];
 
   propagatedBuildInputs = [
@@ -85,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "ptp-helper" withRust)
+    (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
+    (lib.mesonEnable "libunwind" withLibunwind)
+    (lib.mesonEnable "libdw" withLibunwind)
   ];
 
   postPatch = ''

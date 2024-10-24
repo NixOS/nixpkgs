@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "berghetti";
     repo = "netproc";
     rev = finalAttrs.version;
-    sha256 = "sha256-OQWlFwCga33rTseLeO8rAd+pkLHbSNf3YI5OSwrdIyk=";
+    hash = "sha256-OQWlFwCga33rTseLeO8rAd+pkLHbSNf3YI5OSwrdIyk=";
   };
 
   buildInputs = [ ncurses ];

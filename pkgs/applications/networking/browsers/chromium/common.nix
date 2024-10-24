@@ -1,7 +1,6 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchpatch
 , recompressTarball
 , buildPackages
-, buildPlatform
 , pkgsBuildBuild
 # Channel data:
 , channel, upstream-info
@@ -65,18 +64,14 @@ let
   python3WithPackages = python3.pythonOnBuildForHost.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
-  clangFormatPython3 = fetchurl {
-    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
-    hash = "sha256-1BRxXP+0QgejAWdFHJzGrLMhk/MsRDoVdK/GVoyFg0U=";
-  };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = { commit, hash, revert ? false }: fetchpatch {
+  githubPatch = { commit, hash, revert ? false, excludes ? [] }: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit hash revert;
+    inherit hash revert excludes;
   };
 
   mkGnFlags =
@@ -102,14 +97,12 @@ let
     "flac"
     "libjpeg"
     "libpng"
-  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
-    "libwebp"
-  ] ++ [
+    # "libwebp"
     "libxslt"
     # "opus"
   ];
@@ -314,9 +307,29 @@ let
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
+    ] ++ lib.optionals (versionRange "126" "129") [
       # Rebased variant of patch right above to build M126+ with our rust and our clang.
       ./patches/chromium-126-rust.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "129") [
+      # Rebased variant of patch right above to build M129+ with our rust and our clang.
+      ./patches/chromium-129-rust.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
+      # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
+      # and std::hardware_constructive_interference_size.
+      # So let's revert the change for now and hope that our rustc.llvmPackages and
+      # nixpkgs-stable catch up sooner than later.
+      # https://groups.google.com/a/chromium.org/g/cxx/c/cwktrFxxUY4
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5767325
+      # Note: We exclude the changes made to the partition_allocator (PA), as the revert
+      # would otherwise not apply because upstream reverted those changes to PA already
+      # in https://chromium-review.googlesource.com/c/chromium/src/+/5841144
+      # Note: ungoogled-chromium already reverts this as part of its patchset.
+      (githubPatch {
+        commit = "fc838e8cc887adbe95110045d146b9d5885bf2a9";
+        hash = "sha256-NNKzIp6NYdeZaqBLWDW/qNxiDB1VFRz7msjMXuMOrZ8=";
+        excludes = [ "base/allocator/partition_allocator/src/partition_alloc/*" ];
+        revert = true;
+      })
     ];
 
     postPatch = ''
@@ -377,9 +390,6 @@ let
     '' + ''
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
-
-      # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
-      base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
 
       # Add final newlines to scripts that do not end with one.
       # This is a temporary workaround until https://github.com/NixOS/nixpkgs/pull/255463 (or similar) has been merged,

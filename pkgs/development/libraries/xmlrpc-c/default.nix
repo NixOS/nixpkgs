@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmlrpc-c";
-  version = "1.51.07";
+  version = "1.59.03";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
-    sha256 = "sha256-hNIK4z+SdYL4IdYcC5GUrvvx15JFkKE/qdpa4WmK3tk=";
+    hash = "sha256-vbcdtCqwvlFZFVWIXRFoKwRMEDTUoylkAb+SHsCyM/4=";
   };
 
   buildInputs = [ curl libxml2 ];
@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
     (cd tools/xmlrpc && make && make install)
   '';
 
-  hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
+
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
   meta = with lib; {
     description = "Lightweight RPC library based on XML and HTTP";

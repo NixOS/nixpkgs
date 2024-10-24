@@ -20,6 +20,7 @@
 , gtk3
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libwebp
 , enchant2
 , xorg
@@ -28,11 +29,14 @@
 , libepoxy
 , libjxl
 , at-spi2-core
+, cairo
 , libxml2
 , libsoup
 , libsecret
 , libxslt
 , harfbuzz
+, hyphen
+, libsysprof-capture
 , libpthreadstubs
 , nettle
 , libtasn1
@@ -49,6 +53,8 @@
 , libmanette
 , geoclue2
 , flite
+, fontconfig
+, freetype
 , openssl
 , sqlite
 , gst-plugins-base
@@ -72,21 +78,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.44.2";
+  version = "2.46.1";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   # https://github.com/NixOS/nixpkgs/issues/153528
   # Can't be linked within a 4GB address space.
-  separateDebugInfo = stdenv.isLinux && !stdenv.is32bit;
+  separateDebugInfo = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Uj9CyP8kgyrdF2Mfbqr+j5MDr+MW7xp+GES5Uqf3Uhs=";
+    hash = "sha256-KhT6rDWa/5QdC8REPrVTfjcCvK8xawoSng5l8/+OqsA=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
@@ -117,10 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     glib # for gdbus-codegen
     unifdef
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
   ];
 
   buildInputs = [
     at-spi2-core
+    cairo # required even when using skia
     enchant2
     libavif
     libepoxy
@@ -129,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-bad
     gst-plugins-base
     harfbuzz
+    hyphen
     libGL
     libGLU
     mesa # for libEGL headers
@@ -138,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     lcms2
     libpthreadstubs
+    libsysprof-capture
     libtasn1
     libwebp
     libxkbcommon
@@ -148,10 +159,14 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     sqlite
     woff2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
     # this can likely be removed as:
     # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
     # but the package is marked broken on darwin so unable to test
@@ -163,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
-  ) ++ lib.optionals stdenv.isLinux [
+  ) ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
     libmanette
     wayland
@@ -186,34 +201,34 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DENABLE_INTROSPECTION=ON"
-    "-DPORT=GTK"
-    "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
-    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
-    "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
-  ] ++ lib.optionals stdenv.isLinux [
-    # Have to be explicitly specified when cross.
-    # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
-    "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
-    "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
-    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DENABLE_GAMEPAD=OFF"
-    "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
-    "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_APPLE_ICU=OFF"
-    "-DUSE_OPENGL_OR_ES=OFF"
-  ] ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
-    "-DUSE_GTK4=OFF"
-  ] ++ lib.optionals (!systemdSupport) [
-    "-DENABLE_JOURNALD_LOG=OFF"
-  ];
+  cmakeFlags =
+    let
+      cmakeBool = x: if x then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_INTROSPECTION=ON"
+      "-DPORT=GTK"
+      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+      "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+      "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Have to be explicitly specified when cross.
+      # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
+      "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
+      "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DENABLE_GAMEPAD=OFF"
+      "-DENABLE_GTKDOC=OFF"
+      "-DENABLE_MINIBROWSER=OFF"
+      "-DENABLE_QUARTZ_TARGET=ON"
+      "-DENABLE_X11_TARGET=OFF"
+      "-DUSE_APPLE_ICU=OFF"
+      "-DUSE_OPENGL_OR_ES=OFF"
+    ] ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+      "-DUSE_GTK4=OFF"
+    ] ++ lib.optionals (!systemdSupport) [
+      "-DENABLE_JOURNALD_LOG=OFF"
+    ];
 
   postPatch = ''
     patchShebangs .
@@ -240,6 +255,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

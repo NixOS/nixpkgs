@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   routerFeatures,
+  setuptools,
   janus,
   ncclient,
   paramiko,
@@ -18,7 +19,7 @@ let
     if routerFeatures then
       {
         prePatch = ''
-          substituteInPlace ./setup.py --replace "extra_deps = []" "extra_deps = router_feature_deps"
+          substituteInPlace ./setup.py --replace-fail "extra_deps = []" "extra_deps = router_feature_deps"
         '';
         extraBuildInputs = [
           janus
@@ -36,7 +37,7 @@ in
 buildPythonPackage rec {
   pname = "entrance";
   version = "1.1.20";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -49,7 +50,9 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
     sanic
   ] ++ opts.extraBuildInputs;

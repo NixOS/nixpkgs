@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sqlite
     postgresql
     boost
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Kerberos
   ];
 

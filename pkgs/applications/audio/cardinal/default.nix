@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "24.05";
+  version = "24.09";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
-    hash = "sha256-ZUJI5utUtST+idlL7WKBIs850EpK98cnmO47g8/iZcI=";
+    hash = "sha256-vJxKtZ0rVjf0RJfTNRxpzps1F2k0hHuiPnd1OwpULhQ=";
   };
 
   prePatch = ''
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

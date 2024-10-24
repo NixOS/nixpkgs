@@ -34,7 +34,7 @@ let p2 = buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 };
 p1 = buildGoModule rec {
@@ -66,7 +66,7 @@ p1 = buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 };
 in

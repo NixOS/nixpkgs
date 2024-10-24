@@ -13,18 +13,19 @@
   gtksourceview5,
   xdg-utils,
   ollama,
+  vte-gtk4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "1.0.6";
+  version = "2.6.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = version;
-    hash = "sha256-3xsntOPkcCV8ZizRS6du8cG1ZZEekehjf+4m3pofZBs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tXUM2XxYXUTXsycfq0hmkzc4quHKh7+0qit1YuKdCeQ=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     gtksourceview5
+    vte-gtk4
   ];
 
   dependencies = with python3Packages; [

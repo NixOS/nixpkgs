@@ -1,19 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub, olm }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  olm,
+  # This option enables the use of an experimental pure-Go implementation of
+  # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
+  # is not recommended by the mautrix developers, but they are interested in
+  # people trying it out in non-production-critical environments and reporting
+  # any issues they run into.
+  withGoolm ? false,
+}:
 
 buildGoModule rec {
   pname = "mautrix-whatsapp";
-  version = "0.10.9";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
     rev = "v${version}";
-    hash = "sha256-iVILI6OGndnxIVmgNcIwHA64tkv9V3OTH3YtrCyeYx4=";
+    hash = "sha256-D9ed2/3ymUmZotnD8AZngPGQtzr8+R7xfbcdQLb3EKU=";
   };
 
-  buildInputs = [ olm ];
+  buildInputs = lib.optional (!withGoolm) olm;
+  tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-DpgkSXSLF+U6zIzJ4AF2uTcFWQQYsRgkaUTG9F+bnVk=";
+  vendorHash = "sha256-qd8dGJe3h6JG6B9pZbJXHk3NwYddfHXzprSH20jn9Bk=";
 
   doCheck = false;
 

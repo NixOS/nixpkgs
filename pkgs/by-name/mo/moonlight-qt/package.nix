@@ -20,37 +20,45 @@
   libvdpau,
   libxkbcommon,
   wayland,
+  libdrm,
   nix-update-script,
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks)
+  inherit (darwin.apple_sdk_12_3.frameworks)
     AVFoundation
     AppKit
     AudioUnit
     Cocoa
     VideoToolbox
     ;
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' =
+    if stdenv.hostPlatform.isDarwin then
+      overrideSDK stdenv {
+        darwinMinVersion = "11.0";
+        darwinSdkVersion = "12.3";
+      }
+    else
+      stdenv;
 in
 
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "moonlight-qt";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zrl8WPXvQ/7FTqFnpwoXEJ85prtgJWoWNsdckw5+JHI=";
+    repo = "moonlight-qt";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Don't precompile QML files with disable-prebuilts, fix build on darwin
+    # Fix build for Xcode < 14
     (fetchpatch {
-      url = "https://github.com/moonlight-stream/moonlight-qt/commit/d73df12367749425b86b72c250bb0fba13ddfd29.patch";
-      hash = "sha256-RIrQpZWbwUHs1Iwz/pXfXgshJeHYrzGxuaR5mRG85QY=";
+      url = "https://github.com/moonlight-stream/moonlight-qt/commit/76deafbd7bf868562d69061e7d6abf2612a2c7ad.patch";
+      hash = "sha256-+rXdexZQpOP6yS+oTmvYVxasWxOX16uU1udN75zNX3w=";
     })
   ];
 
@@ -63,7 +71,7 @@ stdenv'.mkDerivation rec {
 
   buildInputs =
     [
-      (SDL2.override { drmSupport = stdenv.isLinux; })
+      (SDL2.override { drmSupport = stdenv.hostPlatform.isLinux; })
       SDL2_ttf
       ffmpeg
       libopus
@@ -72,7 +80,7 @@ stdenv'.mkDerivation rec {
       qt6.qtsvg
       openssl
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
       libva
@@ -80,8 +88,9 @@ stdenv'.mkDerivation rec {
       libxkbcommon
       qt6.qtwayland
       wayland
+      libdrm
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AVFoundation
       AppKit
       AudioUnit
@@ -91,7 +100,7 @@ stdenv'.mkDerivation rec {
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
     mv app/Moonlight.app $out/Applications
     ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight
@@ -99,16 +108,17 @@ stdenv'.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/moonlight-stream/moonlight-qt/releases/tag/v${finalAttrs.version}";
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       azuwis
       luc65r
       zmitchell
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "moonlight";
   };
-}
+})

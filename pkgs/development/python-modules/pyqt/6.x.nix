@@ -13,6 +13,7 @@
   pyqt-builder,
   qt6Packages,
   pythonOlder,
+  mesa,
   withMultimedia ? true,
   withWebSockets ? true,
   withLocation ? true,
@@ -24,17 +25,15 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.7.0.dev2404081550";
+  version = "6.8.0.dev2410141303";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
+  # This is dangerous, how can we get web archive to archive the URL?
   src = fetchurl {
-    urls = [
-      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-    ];
-    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
+    url = "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz";
+    hash = "sha256-eHYqj22us07uFkErJD2d0y0wueZxtQTwTFW9cI7yoK4=";
   };
 
   patches = [
@@ -54,8 +53,11 @@ buildPythonPackage rec {
     verbose = true
     EOF
 
+    # pythonRelaxDeps doesn't work and the wanted versions are not released AFAIK
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"' \
+      --replace-fail "sip >=6.9, <7" "sip >=6.8.6, <7" \
+      --replace-fail 'PyQt-builder >=1.17, <2' "PyQt-builder >=1.16, <2"
   '';
 
   enableParallelBuilding = true;
@@ -117,7 +119,7 @@ buildPythonPackage rec {
       setuptools
     ]
     # ld: library not found for -lcups
-    ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [ cups ];
+    ++ lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
@@ -144,13 +146,13 @@ buildPythonPackage rec {
     # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
     ++ lib.optional withLocation "PyQt6.QtPositioning";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ LunNova ];
   };
 }

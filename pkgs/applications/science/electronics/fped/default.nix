@@ -3,7 +3,6 @@
 , pkg-config
 }:
 
-with lib;
 stdenv.mkDerivation {
   pname = "fped";
   version = "unstable-2017-05-11";
@@ -39,7 +38,7 @@ stdenv.mkDerivation {
     gtk2
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Editor that allows the interactive creation of footprints electronic components";
     mainProgram = "fped";
     homepage = "http://projects.qi-hardware.com/index.php/p/fped/";

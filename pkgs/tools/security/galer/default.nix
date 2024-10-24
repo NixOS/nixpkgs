@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "galer";
-  version = "0.0.2";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-i3rrXpKnUV9REnn4lQWIFpWc2SzkxVomruiAmcMBQ6Q=";
+    repo = "galer";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/VvN6LjK+V8E9XYarRUI/TPGitMM0a3g1lfdYhV1yP8=";
   };
 
-  vendorHash = "sha256-2nJgQfSeo9GrK6Kor29esnMEFmd5pTd8lGwzRi4zq1w=";
+  vendorHash = "sha256-WDOwUjU6AP/8QvqiKTEY6wsMBZQFWn/LGWr8nfqDF+8=";
 
   meta = with lib; {
     description = "Tool to fetch URLs from HTML attributes";
-    mainProgram = "galer";
     homepage = "https://github.com/dwisiswant0/galer";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "galer";
   };
 }

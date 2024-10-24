@@ -8,7 +8,6 @@
   numpy,
   numba,
   pandas,
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numpy_groupies" ];
 
-  passthru.updateScript = gitUpdater { tagPrefix = "v"; };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ml31415/numpy-groupies";
     changelog = "https://github.com/ml31415/numpy-groupies/releases/tag/v${version}";
     description = "Optimised tools for group-indexing operations: aggregated sum and more";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.berquist ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ berquist ];
   };
 }

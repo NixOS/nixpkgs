@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
   ];
   propagatedBuildInputs = [ pango glibmm cairomm ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "C++ interface to the Pango text rendering library";
     homepage    = "https://www.pango.org/";
     license     = with licenses; [ lgpl2 lgpl21 ];

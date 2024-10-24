@@ -218,7 +218,6 @@ in {
       ps.psycopg2
       ps.python-ldap
       ps.netdata-pandas
-      ps.changefinder
     ]);
 
     services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
@@ -368,14 +367,6 @@ in {
 
       "systemd-journal.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
-        capabilities = "cap_dac_read_search,cap_syslog+ep";
-        owner = cfg.user;
-        group = cfg.group;
-        permissions = "u+rx,g+x,o-rwx";
-      };
-
-      "logs-management.plugin" = {
-        source = "${cfg.package}/libexec/netdata/plugins.d/logs-management.plugin.org";
         capabilities = "cap_dac_read_search,cap_syslog+ep";
         owner = cfg.user;
         group = cfg.group;

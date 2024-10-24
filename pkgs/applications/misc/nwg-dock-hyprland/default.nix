@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "nwg-dock-hyprland";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-dock-hyprland";
     rev = "v${version}";
-    hash = "sha256-AB9YOHJCgjR70JNvWzDROWGVGFrjZycEKMV4XmDVcpY=";
+    hash = "sha256-iamDOQcQJRdFVnwffWPIXHlY0J4orfrEbfLzaoeV+KM=";
   };
 
-  vendorHash = "sha256-6AevEnesGZCXHUX8yq3mBA5ug+zb5qyriHdqGBKbbEs=";
+  vendorHash = "sha256-cZ5w7B8bi0faOVWoQ6eeW5ejCZJgnNB91DQalC75mPo=";
 
   ldflags = [ "-s" "-w" ];
 

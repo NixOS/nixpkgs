@@ -258,26 +258,39 @@ It returns a derivation with all `package-lock.json` dependencies downloaded int
 
 #### importNpmLock {#javascript-buildNpmPackage-importNpmLock}
 
-`importNpmLock` is a Nix function that requires the following optional arguments:
+This function replaces the npm dependency references in `package.json` and `package-lock.json` with paths to the Nix store.
+How each dependency is fetched can be customized with the `fetcherOpts` argument.
 
-- `npmRoot`: Path to package directory containing the source tree
+This is a simpler and more convenient alternative to [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps) for managing npm dependencies in Nixpkgs.
+There is no need to specify a `hash`, since it relies entirely on the integrity hashes already present in the `package-lock.json` file.
+
+##### Inputs {#javascript-buildNpmPackage-inputs}
+
+- `npmRoot`: Path to package directory containing the source tree.
+  If this is omitted, the `package` and `packageLock` arguments must be specified instead.
 - `package`: Parsed contents of `package.json`
 - `packageLock`: Parsed contents of `package-lock.json`
 - `pname`: Package name
 - `version`: Package version
+- `fetcherOpts`: An attribute set of arguments forwarded to the underlying fetcher.
 
 It returns a derivation with a patched `package.json` & `package-lock.json` with all dependencies resolved to Nix store paths.
 
-This function is analogous to using `fetchNpmDeps`, but instead of specifying `hash` it uses metadata from `package.json` & `package-lock.json`.
+:::{.note}
+`npmHooks.npmConfigHook` cannot be used with `importNpmLock`.
+Use `importNpmLock.npmConfigHook` instead.
+:::
 
-Note that `npmHooks.npmConfigHook` cannot be used with `importNpmLock`. You will instead need to use `importNpmLock.npmConfigHook`:
+:::{.example}
 
+##### `pkgs.importNpmLock` usage example {#javascript-buildNpmPackage-example}
 ```nix
 { buildNpmPackage, importNpmLock }:
 
 buildNpmPackage {
   pname = "hello";
   version = "0.1.0";
+  src = ./.;
 
   npmDeps = importNpmLock {
     npmRoot = ./.;
@@ -286,6 +299,75 @@ buildNpmPackage {
   npmConfigHook = importNpmLock.npmConfigHook;
 }
 ```
+:::
+
+:::{.example}
+##### `pkgs.importNpmLock` usage example with `fetcherOpts` {#javascript-buildNpmPackage-example-fetcherOpts}
+
+`importNpmLock` uses the following fetchers:
+
+- `pkgs.fetchurl` for `http(s)` dependencies
+- `builtins.fetchGit` for `git` dependencies
+
+It is possible to provide additional arguments to individual fetchers as needed:
+
+```nix
+{ buildNpmPackage, importNpmLock }:
+
+buildNpmPackage {
+  pname = "hello";
+  version = "0.1.0";
+  src = ./.;
+
+  npmDeps = importNpmLock {
+    npmRoot = ./.;
+    fetcherOpts = {
+      # Pass 'curlOptsList' to 'pkgs.fetchurl' while fetching 'axios'
+      { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
+    };
+  };
+
+  npmConfigHook = importNpmLock.npmConfigHook;
+}
+```
+:::
+
+#### importNpmLock.buildNodeModules {#javascript-buildNpmPackage-importNpmLock.buildNodeModules}
+
+`importNpmLock.buildNodeModules` returns a derivation with a pre-built `node_modules` directory, as imported by `importNpmLock`.
+
+This is to be used together with `importNpmLock.hooks.linkNodeModulesHook` to facilitate `nix-shell`/`nix develop` based development workflows.
+
+It accepts an argument with the following attributes:
+
+`npmRoot` (Path; optional)
+: Path to package directory containing the source tree. If not specified, the `package` and `packageLock` arguments must both be specified.
+
+`package` (Attrset; optional)
+: Parsed contents of `package.json`, as returned by `lib.importJSON ./my-package.json`. If not specified, the `package.json` in `npmRoot` is used.
+
+`packageLock` (Attrset; optional)
+: Parsed contents of `package-lock.json`, as returned `lib.importJSON ./my-package-lock.json`. If not specified, the `package-lock.json` in `npmRoot` is used.
+
+`derivationArgs` (`mkDerivation` attrset; optional)
+: Arguments passed to `stdenv.mkDerivation`
+
+For example:
+
+```nix
+pkgs.mkShell {
+  packages = [
+    importNpmLock.hooks.linkNodeModulesHook
+    nodejs
+  ];
+
+  npmDeps = importNpmLock.buildNodeModules {
+    npmRoot = ./.;
+    inherit nodejs;
+  };
+}
+```
+will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
 
 ### corepack {#javascript-corepack}
 
@@ -430,6 +512,7 @@ Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to p
 
 - `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
 - `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
+- `yarnInstallHook`: Runs `yarn install --production` to prune dependencies and installs the project into `$out`.
 
 An example usage of the above attributes is:
 
@@ -441,8 +524,8 @@ An example usage of the above attributes is:
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
+  yarnInstallHook,
   nodejs,
-  npmHooks,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -458,15 +541,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-mo8urQaWIHu33+r0Y7mL9mJ/aSe/5CihuIetTeDHEUQ=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     # Needed for executing package.json scripts
     nodejs
-    npmHooks.npmInstallHook
   ];
 
   meta = {
@@ -474,8 +557,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
-
-Note that there is no setup hook for installing yarn based packages - `npmHooks.npmInstallHook` should fit most cases, but sometimes you may need to override the `installPhase` completely.
 
 #### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
@@ -488,9 +569,15 @@ This script by default runs `yarn --offline build`, and it relies upon the proje
 - `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
 - `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
 
+#### `yarnInstallHook` arguments {#javascript-yarninstallhook}
+
+To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
+
+- `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
+
 ### yarn2nix {#javascript-yarn2nix}
 
-WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook` and `yarnBuildHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
+WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 #### Preparation {#javascript-yarn2nix-preparation}
 

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "metal-cli";
-  version = "0.23.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EuwLsrLwTM3FsUt1oa4N9y5Vq8TjTXQW+5UArXZHxuc=";
+    hash = "sha256-+hpsGFZHuVhh+fKVcap0vhoUmRs3xPgUwW8SD56m6uI=";
   };
 
   vendorHash = "sha256-X+GfM73LAWk2pT4ZOPT2pg8YaKyT+SNjQ14LgB+C7Wo=";

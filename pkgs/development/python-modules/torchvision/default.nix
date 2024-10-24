@@ -1,16 +1,24 @@
 {
+  lib,
+  torch,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
-  libjpeg_turbo,
+
+  # nativeBuildInputs
   libpng,
   ninja,
+  which,
+
+  # buildInputs
+  libjpeg_turbo,
+
+  # dependencies
   numpy,
   pillow,
-  pytest,
   scipy,
-  torch,
-  which,
+
+  # tests
+  pytest,
 }:
 
 let
@@ -18,7 +26,7 @@ let
   inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
-  version = "0.18.1";
+  version = "0.20.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,7 +35,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aFm6CyoMA8HtpOAVF5Q35n3JRaOXYswWEqfooORUKsw=";
+    hash = "sha256-aQ1HhWtkhA2EYPCV2vEW10kcP0m0TLNsgjA0Yiwpm9U=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +84,7 @@ buildPythonPackage {
   meta = {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
+    changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ ericsagnes ];

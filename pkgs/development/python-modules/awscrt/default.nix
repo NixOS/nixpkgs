@@ -5,7 +5,6 @@
   cmake,
   perl,
   stdenv,
-  gcc10,
   CoreFoundation,
   Security,
   pythonOlder,
@@ -13,28 +12,22 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.21.2";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N6zijQ16kfkIYt0plIcqFZYre08TduC3sBqCGVRhFQc=";
+    hash = "sha256-TKKwtJMo8D9aPd4tVlEy34rXTLonNSYS7Nn+JQXh13A=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
   ];
 
-  # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-      gcc10
-      perl
-    ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
 
   dontUseCmakeConfigure = true;
 

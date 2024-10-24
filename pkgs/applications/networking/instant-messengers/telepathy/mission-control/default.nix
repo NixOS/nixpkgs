@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     libxslt
     makeWrapper
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoreconfHook
     gtk-doc
   ];

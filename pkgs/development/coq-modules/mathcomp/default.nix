@@ -20,12 +20,12 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch coq.coq-version [
+      { case = range "8.17" "8.20"; out = "2.2.0"; }
+      { case = range "8.17" "8.18"; out = "2.1.0"; }
+      { case = range "8.17" "8.18"; out = "2.0.0"; }
       { case = range "8.19" "8.20"; out = "1.19.0"; }
       { case = range "8.17" "8.18"; out = "1.18.0"; }
       { case = range "8.15" "8.18"; out = "1.17.0"; }
-      { case = range "8.16" "8.20"; out = "2.2.0"; }
-      { case = range "8.16" "8.18"; out = "2.1.0"; }
-      { case = range "8.16" "8.18"; out = "2.0.0"; }
       { case = range "8.13" "8.18"; out = "1.16.0"; }
       { case = range "8.14" "8.16"; out = "1.15.0"; }
       { case = range "8.11" "8.15"; out = "1.14.0"; }

@@ -13,32 +13,45 @@
 , pam
 , bashInteractive
 , rust-jemalloc-sys
+, kanidm
+# If this is enabled, kanidm will be built with two patches allowing both
+# oauth2 basic secrets and admin credentials to be provisioned.
+# This is NOT officially supported (and will likely never be),
+# see https://github.com/kanidm/kanidm/issues/1747.
+# Please report any provisioning-related errors to
+# https://github.com/oddlama/kanidm-provision/issues/ instead.
+, enableSecretProvisioning ? false
 }:
 
 let
-  arch = if stdenv.isx86_64 then "x86_64" else "generic";
+  arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFmWZlDcsSk+7EGkoK0SkAhNsrIQa55IRIVqisX3zqE=";
+    hash = "sha256-W5G7osV4du6w/BfyY9YrDzorcLNizRsoz70RMfO2AbY=";
   };
 
-  cargoHash = "sha256-8ZENe576gqm+FkQPCgz6mScqdacHilARFWmfe+kDL2A=";
+  cargoHash = "sha256-gJrzOK6vPPBgsQFkKrbMql00XSfKGjgpZhYJLTURxoI=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+
+  patches = lib.optionals enableSecretProvisioning [
+    ./patches/oauth2-basic-secret-modify.patch
+    ./patches/recover-account.patch
+  ];
 
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
         admin_bind_path = "/run/kanidmd/sock";
-        cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
+        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
         default_config_path = "/etc/kanidm/server.toml";
         default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
         htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
@@ -94,11 +107,23 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      inherit (nixosTests) kanidm;
+      inherit (nixosTests) kanidm kanidm-provisioning;
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # avoid spurious releases and tags such as "debs"
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
+
+    inherit enableSecretProvisioning;
+    withSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   };
+
+  # can take over 4 hours on 2 cores and needs 16GB+ RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
@@ -106,6 +131,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
+    maintainers = with maintainers; [ adamcstephens Flakebi ];
   };
 }

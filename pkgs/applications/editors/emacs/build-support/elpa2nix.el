@@ -31,3 +31,12 @@ The file can either be a tar file or an Emacs Lisp file."
 
 ;; Allow installing package tarfiles larger than 10MB
 (setq large-file-warning-threshold nil)
+
+(let ((flag (getenv "turnCompilationWarningToError")))
+  (when (and flag
+             (not (string-empty-p flag)))
+    (setq byte-compile-error-on-warn t)))
+
+(let ((flag (getenv "ignoreCompilationError")))
+  (when (string-empty-p flag)
+    (setq byte-compile-debug t)))

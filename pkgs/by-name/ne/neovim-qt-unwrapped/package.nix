@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "sha256-BitFHHwL2aqBUpY/8eHaZIFvnDCeABC6w33Vmbx0z2g=";
+    hash = "sha256-BitFHHwL2aqBUpY/8eHaZIFvnDCeABC6w33Vmbx0z2g=";
   };
 
   cmakeFlags = [

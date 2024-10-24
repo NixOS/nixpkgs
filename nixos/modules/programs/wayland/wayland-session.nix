@@ -3,6 +3,7 @@
   pkgs,
   enableXWayland ? true,
   enableWlrPortal ? true,
+  enableGtkPortal ? true,
 }:
 
 {
@@ -11,17 +12,17 @@
     pam.services.swaylock = {};
   };
 
-  hardware.graphics.enable = lib.mkDefault true;
-  fonts.enableDefaultPackages = lib.mkDefault true;
-
   programs = {
     dconf.enable = lib.mkDefault true;
     xwayland.enable = lib.mkDefault enableXWayland;
   };
 
-  xdg.icons.enable = true;
+  services.graphical-desktop.enable = true;
 
   xdg.portal.wlr.enable = enableWlrPortal;
+  xdg.portal.extraPortals = lib.mkIf enableGtkPortal [
+    pkgs.xdg-desktop-portal-gtk
+  ];
 
   # Window manager only sessions (unlike DEs) don't handle XDG
   # autostart files, so force them to run the service

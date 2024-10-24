@@ -1,31 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, xwayland
-, xcb-util-cursor
-, libxcb
-, nix-update-script
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  libxcb,
+  makeBinaryWrapper,
+  pkg-config,
+  rustPlatform,
+  unstableGitUpdater,
+  xcb-util-cursor,
+  xwayland,
+  withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "xwayland-satellite";
-  version = "0.4";
+  version = "0.4-unstable-2024-09-15";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
-    rev = "v${version}";
-    hash = "sha256-dwF9nI54a6Fo9XU5s4qmvMXSgCid3YQVGxch00qEMvI=";
+    rev = "b962a0f33b503aa39c9cf6919f488b664e5b79b4";
+    hash = "sha256-OANPb73V/RQDqtpIcbzeJ93KuOHKFQv+1xXC44Ut7tY=";
   };
 
-  cargoHash = "sha256-nKPSkHbh73xKWNpN/OpDmLnVmA3uygs3a+ejOhwU3yA=";
+  postPatch = ''
+    substituteInPlace resources/xwayland-satellite.service \
+      --replace-fail '/usr/local/bin' "$out/bin"
+  '';
+
+  cargoHash = "sha256-1EtwGMoLfYK0VZj8jdQiweO/RHGBzyEoeMEI4pmqfu8=";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -33,30 +40,36 @@ rustPlatform.buildRustPackage rec {
     xcb-util-cursor
   ];
 
-  # disable Xwayland integration tests which need a running display server
-  checkFlags = [
-    "--exact"
-    "--skip=copy_from_wayland"
-    "--skip=copy_from_x11"
-    "--skip=input_focus"
-    "--skip=quick_delete"
-    "--skip=reparent"
-    "--skip=toplevel_flow"
-  ];
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withSystemd "systemd";
 
-  postInstall = ''
-    wrapProgram $out/bin/xwayland-satellite \
-      --prefix PATH : "${lib.makeBinPath [xwayland]}"
+  # All integration tests require a running display server
+  doCheck = false;
+
+  postInstall = lib.optionalString withSystemd ''
+    install -Dm0644 resources/xwayland-satellite.service -t $out/lib/systemd/user
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postFixup = ''
+    wrapProgram $out/bin/xwayland-satellite \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
+  '';
 
-  meta = with lib; {
-    description = "Rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base";
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
+    description = "Xwayland outside your Wayland compositor";
+    longDescription = ''
+      Grants rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base.
+    '';
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ if-loop69420 sodiboo ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      if-loop69420
+      sodiboo
+      getchoo
+    ];
     mainProgram = "xwayland-satellite";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

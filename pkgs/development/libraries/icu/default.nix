@@ -6,6 +6,14 @@ let
   };
 in
 {
+  icu76 = make-icu {
+    version = "76.1rc";
+    hash = "sha256-HMY4hRYbF4Dsf1EGx+m0NRsCUA+Q/JGRpdGIgym/A5I=";
+  };
+  icu75 = make-icu {
+    version = "75.1";
+    hash = "sha256-y5aN8+TS6H6LEcSaXQHHh70TuVRSgPxmQvgmUnYYyu8=";
+  };
   icu74 = make-icu {
     version = "74.2";
     hash = "sha256-aNsIIhKpbW9T411g9H04uWLp+dIHp0z6x4Apro/14Iw=";

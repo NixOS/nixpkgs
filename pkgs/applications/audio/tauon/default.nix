@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, python3Packages
-, ffmpeg
-, flac
-, libjxl
-, librsvg
-, game-music-emu
-, gobject-introspection
-, gtk3
-, kissfft
-, libappindicator
-, libnotify
-, libsamplerate
-, libvorbis
-, miniaudio
-, mpg123
-, libopenmpt
-, opusfile
-, wavpack
-, pango
-, pulseaudio
-, withDiscordRPC ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kissfft,
+  miniaudio,
+  pkg-config,
+  python3Packages,
+  gobject-introspection,
+  flac,
+  game-music-emu,
+  gtk3,
+  libappindicator,
+  libnotify,
+  libopenmpt,
+  librsvg,
+  libsamplerate,
+  libvorbis,
+  mpg123,
+  opusfile,
+  pango,
+  pipewire,
+  wavpack,
+  ffmpeg,
+  pulseaudio,
+  withDiscordRPC ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.8.0";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
-    repo = "TauonMusicBox";
+    repo = "Tauon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8UnUcEvG206tPwyD+WqxcJgDvQlYvTJ6v+sm0u30Z3k=";
+    hash = "sha256-A7JRJ0Eh0ynuwPYZFLEeqWLf6OKdN59jM2vozdpSZC8=";
   };
 
   postUnpack = ''
@@ -46,26 +47,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace tauon.py \
-      --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'install_directory = os.path.dirname(os.path.abspath(__file__))' 'install_directory = "${placeholder "out"}/share/tauon"'
 
     substituteInPlace t_modules/t_main.py \
-      --replace 'install_mode = False' 'install_mode = True' \
-      --replace 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so' \
-      --replace 'lib/libphazor.so' '../../lib/libphazor.so'
+      --replace-fail 'install_mode = False' 'install_mode = True' \
+      --replace-fail 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so'
 
     substituteInPlace t_modules/t_phazor.py \
-      --replace 'lib/libphazor.so' '../../lib/libphazor.so'
+      --replace-fail 'lib/libphazor' '../../lib/libphazor'
 
-    patchShebangs compile-phazor.sh
+    substituteInPlace compile-phazor*.sh --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
 
-    substituteInPlace compile-phazor.sh --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
-
-    substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
+    substituteInPlace extra/tauonmb.desktop --replace-fail 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
   postBuild = ''
-    ./compile-phazor.sh
+    bash ./compile-phazor.sh
+    bash ./compile-phazor-pipewire.sh
   '';
 
   nativeBuildInputs = [
@@ -87,35 +86,42 @@ stdenv.mkDerivation (finalAttrs: {
     mpg123
     opusfile
     pango
+    pipewire
     wavpack
   ];
 
-  pythonPath = with python3Packages; [
-    beautifulsoup4
-    gst-python
-    dbus-python
-    isounidecode
-    libjxl
-    musicbrainzngs
-    mutagen
-    natsort
-    pillow
-    plexapi
-    pycairo
-    pychromecast
-    pylast
-    pygobject3
-    pylyrics
-    pysdl2
-    requests
-    send2trash
-    setproctitle
-  ] ++ lib.optional withDiscordRPC pypresence
-    ++ lib.optional stdenv.isLinux pulsectl;
+  pythonPath =
+    with python3Packages;
+    [
+      beautifulsoup4
+      dbus-python
+      unidecode
+      jxlpy
+      musicbrainzngs
+      mutagen
+      natsort
+      pillow
+      plexapi
+      pycairo
+      pychromecast
+      pylast
+      pygobject3
+      pysdl2
+      requests
+      send2trash
+      setproctitle
+    ]
+    ++ lib.optional withDiscordRPC pypresence
+    ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
-    "--prefix LD_LIBRARY_PATH : ${pulseaudio}/lib"
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        game-music-emu
+        pulseaudio
+      ]
+    }"
     "--prefix PYTHONPATH : $out/share/tauon"
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
   ];

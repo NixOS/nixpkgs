@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc ${lib.optionalString stdenv.isDarwin "-std=c89"}"
+    substituteInPlace Makefile --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc ${lib.optionalString stdenv.hostPlatform.isDarwin "-std=c89"}"
   '';
 
   sourceRoot = "jikespg/src";

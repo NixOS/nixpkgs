@@ -1,22 +1,28 @@
 {
   lib,
   stdenv,
-  addDriverRunpath,
-  autoPatchelfHook,
   buildPythonPackage,
-  cudaPackages,
+  python,
   fetchurl,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
   ffmpeg_6,
   sox,
-  pythonAtLeast,
-  pythonOlder,
-  python,
+
+  # nativeBuildInputs
+  addDriverRunpath,
+  autoPatchelfHook,
+
+  # dependencies
   torch-bin,
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.1";
+  version = "2.5.0";
   format = "wheel";
 
   src =
@@ -27,7 +33,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
 
   buildInputs =
     [
@@ -35,7 +41,7 @@ buildPythonPackage rec {
       ffmpeg_6.dev
       sox
     ]
-    ++ lib.optionals stdenv.isLinux (
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
       with cudaPackages;
       [
         # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
@@ -48,14 +54,14 @@ buildPythonPackage rec {
       ]
     );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
     addDriverRunpath
   ];
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.isLinux ''
+  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 

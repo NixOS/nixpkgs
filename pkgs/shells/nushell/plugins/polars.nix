@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_polars";
   inherit (nushell) version src;
 
-  cargoHash = "sha256-Ym/ypm3bUPZkKXYVrym9LEDL0RenJCcruN3urpN2cEQ=";
+  cargoHash = "sha256-bpZphNYHx9LkEu9JlGrIkks2M99JRjc+skY8MqPHMJA=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
       Foundation
     ];

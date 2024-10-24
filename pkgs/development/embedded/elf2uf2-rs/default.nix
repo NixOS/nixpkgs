@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.isLinux udev
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       DiskArbitration
       Foundation

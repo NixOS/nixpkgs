@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-1qnWJjYsDc70VkHYbKt0X26f0f4TugqMiS1FeaPjhq4=";
+    hash = "sha256-4WP5E8LuuxWZi8DK8yOpvyy6isSfB4eFcbctkTEd3As=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ botocore.optional-dependencies.crt ];
   };
 

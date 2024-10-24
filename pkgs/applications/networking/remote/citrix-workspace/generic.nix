@@ -1,5 +1,5 @@
 { lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
-, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
+, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk_4_0, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxx, symlinkJoin
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the ${if stdenv.hostPlatform.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
 
       ${homepage}
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gnome2.gtkglext
     glib-networking
-    webkitgtk
+    webkitgtk_4_0
     gtk2
     gtk2-x11
     gtk3
@@ -238,7 +238,7 @@ stdenv.mkDerivation rec {
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
-    maintainers = with maintainers; [ michaeladler ];
+    maintainers = [ ];
     inherit homepage;
   };
 }

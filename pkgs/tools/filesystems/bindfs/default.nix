@@ -19,9 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = if stdenv.isDarwin then [ fuse ] else [ fuse3 ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ fuse ] else [ fuse3 ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-macos-fs-link";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-macos-fs-link";
 
   postFixup = ''
     ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs

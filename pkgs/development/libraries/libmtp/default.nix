@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "build" "host" ];
 
-  makeFlags = lib.optionals (stdenv.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "MTP_HOTPLUG=${buildPackages.libmtp}/bin/mtp-hotplug"
   ];
 

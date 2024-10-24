@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "texpresso";
-  version = "0-unstable-2024-06-22";
+  version = "0-unstable-2024-07-02";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "e1e05f5559751d4b50772cd51d14101be0563ce1";
+    rev = "0e14b1df6269b07c2c985f001e32b48673495a8b";
     hash = "sha256-av1yadR2giJUxFQuHSXFgTbCNsmccrzKOmLVnAGJt6c=";
   };
 
   buildFlags = [ "texpresso" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Wno-error=implicit-function-declaration"
   ]);
 

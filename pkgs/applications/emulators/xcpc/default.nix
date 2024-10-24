@@ -3,7 +3,6 @@
   , motifSupport ? false, lesstif
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   version = "20070122";
   pname = "xcpc";
@@ -16,10 +15,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib libdsk libXaw libX11 libXext ]
-    ++ optional libDSKSupport libdsk
-    ++ optional motifSupport lesstif;
+    ++ lib.optional libDSKSupport libdsk
+    ++ lib.optional motifSupport lesstif;
 
-  meta = {
+  meta = with lib; {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
     homepage = "https://www.xcpc-emulator.net";
     license = licenses.gpl2Plus;

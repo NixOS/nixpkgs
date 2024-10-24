@@ -16,7 +16,7 @@
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
-, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , commandLineArgs ? ""
 , pkgsBuildBuild
 , pkgs
@@ -58,6 +58,12 @@ let
         # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
         # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
         hardeningDisable = [ "format" ];
+      } // lib.optionalAttrs (chromiumVersionAtLeast "130") {
+        # At the time of writing, gn is at v2024-05-13 and has a backported patch.
+        # This patch appears to be already present in v2024-09-09 (from M130), which
+        # results in the patch not applying and thus failing the build.
+        # As a work around until gn is updated again, we filter specifically that patch out.
+        patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
       });
       recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
@@ -117,12 +123,12 @@ in stdenv.mkDerivation {
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
 
-  in with lib; ''
+  in ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

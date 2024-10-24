@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost # for tests
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
   ]);
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=true"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "C++ bindings for the Cairo vector graphics library";

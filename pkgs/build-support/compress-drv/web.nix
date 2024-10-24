@@ -1,7 +1,9 @@
 {
-  zopfli,
   brotli,
   compressDrv,
+  lib,
+  zopfli,
+  zstd,
 }:
 /**
   compressDrvWeb compresses a derivation for common web server use.
@@ -16,6 +18,10 @@
   : List of file extensions to compress.
 
     Defaults to common formats that compress well.
+
+  `extraFindOperands` (String)
+
+  : See compressDrv for details.
 
   `extraFormats` ([ String ])
 
@@ -108,24 +114,32 @@ drv:
 {
   formats ? [
     "css"
+    "eot"
+    "htm"
+    "html"
     "js"
+    "json"
+    "map"
+    "otf"
     "svg"
     "ttf"
-    "eot"
     "txt"
-    "xml"
-    "map"
-    "html"
-    "json"
     "webmanifest"
+    "xml"
   ],
   extraFormats ? [ ],
   compressors ? {
-    "gz" = "${zopfli}/bin/zopfli --keep {}";
-    "br" = "${brotli}/bin/brotli --keep --no-copy-stat {}";
+    br = "${lib.getExe brotli} --keep --no-copy-stat {}";
+    gz = "${lib.getExe zopfli} --keep {}";
+    # --force is required to not fail on symlinks
+    # for details on the compression level see
+    # https://github.com/NixOS/nixpkgs/pull/332752#issuecomment-2275110390
+    zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
   },
+  extraFindOperands ? "",
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;
   compressors = compressors;
+  inherit extraFindOperands;
 }

@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = lib.optionals stdenv.isLinux [ systemd parted ]
-    ++ lib.optionals stdenv.isDarwin [ argp-standalone ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd parted ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];
 
   buildFlags = [
     "all" # f3read, f3write
   ]
-  ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
+  ++ lib.optional stdenv.hostPlatform.isLinux "extra"; # f3brew, f3fix, f3probe
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   installTargets = [
     "install"
   ]
-  ++ lib.optional stdenv.isLinux "install-extra";
+  ++ lib.optional stdenv.hostPlatform.isLinux "install-extra";
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr

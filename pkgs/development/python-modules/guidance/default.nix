@@ -79,6 +79,9 @@ buildPythonPackage rec {
     "test_recursion_error"
     "test_openai_class_detection"
     "test_openai_chat_without_roles"
+
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   disabledTestPaths = [
@@ -97,7 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

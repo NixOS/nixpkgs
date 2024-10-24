@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.5.0";
   pname = "libthreadar";
 
   src = fetchurl {
     url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-LkcVF4AnuslzpIg/S8sGNJQye6iGcQRGqCqAhg8aN5E=";
+    sha256 = "sha256-wJAkIUGK7Ud6n2p1275vNkSx/W7LlgKWXQaDevetPko=";
   };
 
   outputs = [ "out" "dev" ];

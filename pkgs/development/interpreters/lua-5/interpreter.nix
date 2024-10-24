@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs:
 
     luaversion = lib.versions.majorMinor finalAttrs.version;
 
-    plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
-          else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
-          else if stdenv.isDarwin then "macosx"
+    plat = if (stdenv.hostPlatform.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+          else if (stdenv.hostPlatform.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
+          else if stdenv.hostPlatform.isDarwin then "macosx"
           else if stdenv.hostPlatform.isMinGW then "mingw"
-          else if stdenv.isFreeBSD then "freebsd"
-          else if stdenv.isSunOS then "solaris"
+          else if stdenv.hostPlatform.isFreeBSD then "freebsd"
+          else if stdenv.hostPlatform.isSunOS then "solaris"
           else if stdenv.hostPlatform.isBSD then "bsd"
           else if stdenv.hostPlatform.isUnix then "posix"
           else "generic";
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs:
 
       # abort if patching didn't work
       grep $out src/luaconf.h
-  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
@@ -96,10 +96,10 @@ stdenv.mkDerivation (finalAttrs:
 
     makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
-    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
+    makeFlagsArray+=(${lib.optionalString stdenv.hostPlatform.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${finalAttrs.version}.dylib"
+      TO_LIB="${if stdenv.hostPlatform.isDarwin then "liblua.${finalAttrs.version}.dylib"
                 else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${finalAttrs.version}" )}" )
 
     runHook postConfigure

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     zeroconf = [ zeroconf ];
   };
 

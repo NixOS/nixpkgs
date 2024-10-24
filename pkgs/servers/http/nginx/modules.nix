@@ -218,8 +218,8 @@ let self = {
       name = "develkit";
       owner = "vision5";
       repo = "ngx_devel_kit";
-      rev = "v0.3.1";
-      sha256 = "1c5zfpvm0hrd9lp8rasmw79dnr2aabh0i6y11wzb783bp8m3p2sq";
+      rev = "v0.3.3";
+      hash= "sha256-/RQUVHwIdNqm3UemQ/oNs2ksg8beziA4Pxejd5Yg0Pg=";
     };
 
     meta = with lib; {
@@ -506,8 +506,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.8.1";
-      sha256 = "sha256-bFHrcA1ROMwYf+s0EWOXzkru6wvfRLvjvN8BV/r2tMc=";
+      rev = "0.8.4";
+      sha256 = "sha256-SooPFx4WNEezPD+W/wmMLY+FdkGRoojLNUFbhn3Riyg=";
       name = "nginx-njs";
     };
 

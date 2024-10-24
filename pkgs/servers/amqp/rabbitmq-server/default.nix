@@ -33,23 +33,23 @@ let
     procps
     gnused
     coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]); # for systemd unit activation check
 in
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-  version = "3.13.3";
+  version = "3.13.7";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-CPnoPK3tBKKmIo8IioUCUWkw6+sdvzRaAngseRZ8eUM=";
+    hash = "sha256-GDUyYudwhQSLrFXO21W3fwmH2tl2STF9gSuZsb3GZh0=";
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
 
   buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 

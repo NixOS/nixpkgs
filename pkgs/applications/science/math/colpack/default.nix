@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
-    "--enable-openmp=${if stdenv.isLinux then "yes" else "no"}"
+    "--enable-openmp=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
     "--enable-examples=no"
   ];
 

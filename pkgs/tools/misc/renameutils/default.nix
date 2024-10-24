@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install-exec.patch ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/apply.c \
       --replace "command = \"mv\"" "command = \"${coreutils}/bin/mv\"" \
       --replace "command = \"cp\"" "command = \"${coreutils}/bin/cp\""
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ readline ];
 
-  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     export ac_cv_func_lstat64=no
   '';
 

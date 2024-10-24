@@ -26,7 +26,7 @@ in
       hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/402562e2559e198c6660171dec58e7a25cc14ec2/security/openssh-portable/files/extra-patch-hpn"; in
+    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7ba88c964b6e5724eec462021d984da3989e6a08/security/openssh-portable/files/extra-patch-hpn"; in
     [
       ./ssh-keysign-8.5.patch
 
@@ -36,7 +36,7 @@ in
         inherit url;
         stripLen = 1;
         excludes = [ "channels.c" ];
-        hash = "sha256-CZ35dQpanzt0Uoo/2sDET5J/hYRF8ofiAz60HlAsCV8=";
+        hash = "sha256-zk7t6FNzTE+8aDU4QuteR1x0W3O2gjIQmeCkTNbaUfA=";
       })
 
       (fetchpatch {
@@ -58,23 +58,21 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "9.7p1";
+    version = "9.8p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
+      hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
     extraPatches = [
       ./ssh-keysign-8.5.patch
-      ./openssh-9.6_p1-CVE-2024-6387.patch
-      ./openssh-9.6_p1-chaff-logic.patch
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
         url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-3/debian/patches/gssapi.patch";
-        hash = "sha256-/lEbH5sIS+o+DStEDAghFy43nZlvcIXSFJrnvp+fDdY=";
+        hash = "sha256-BnmEZ5pMIbbysesMSm54ykdweH4JudM9D4Pn5uWf3EY=";
       })
     ];
 

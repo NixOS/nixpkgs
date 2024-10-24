@@ -1,5 +1,6 @@
 { lts ? false
 , version
+, rev ? "refs/tags/v${version}"
 , hash
 , npmDepsHash
 , vendorHash
@@ -17,8 +18,6 @@
 , nix-update-script
 , nixosTests
 , openssh
-, pam
-, pamSupport ? true
 , sqliteSupport ? true
 , xorg
 , runCommand
@@ -32,8 +31,7 @@ let
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
-    rev = "v${version}";
-    inherit hash;
+    inherit rev hash;
   };
 
   frontend = buildNpmPackage {
@@ -68,8 +66,6 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optional pamSupport pam;
-
   nativeCheckInputs = [
     git
     openssh
@@ -83,8 +79,7 @@ buildGoModule rec {
     substituteInPlace modules/setting/server.go --subst-var data
   '';
 
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
 
   ldflags = [
     "-s"
@@ -115,7 +110,6 @@ buildGoModule rec {
       skippedTests = [
         "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
         "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
-        "TestPamAuth" # we don't have PAM set up in the build sandbox
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
@@ -162,9 +156,9 @@ buildGoModule rec {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
-    broken = stdenv.isDarwin;
+    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens marie ];
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gitea";
   };
 }

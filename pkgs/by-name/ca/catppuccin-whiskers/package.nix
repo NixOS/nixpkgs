@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform }:
-let version = "2.4.0";
+let version = "2.5.1";
 in rustPlatform.buildRustPackage {
   pname = "catppuccin-whiskers";
   inherit version;
@@ -8,10 +8,10 @@ in rustPlatform.buildRustPackage {
     owner = "catppuccin";
     repo = "whiskers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rbPr5eSs99nS70J785SWO7tVBdiX/S7XUNHuo3aOQU4=";
+    hash = "sha256-OLEXy9MCrPQu1KWICsYhe/ayVqxkYIFwyJoJhgiNDz4=";
   };
 
-  cargoHash = "sha256-T7dreELSHfJizfbJEvvgkOmkMwlOETZVUdLwRFJOJEo=";
+  cargoHash = "sha256-5FvW+ioeDi0kofDswyQpUC21wbEZM8TAeUEUemnNfnA=";
 
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";

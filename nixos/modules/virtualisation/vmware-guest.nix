@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.virtualisation.vmware.guest;
   open-vm-tools = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
@@ -9,20 +6,20 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
+    (lib.mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
   ];
 
   options.virtualisation.vmware.guest = {
-    enable = mkEnableOption "VMWare Guest Support";
-    headless = mkOption {
-      type = types.bool;
+    enable = lib.mkEnableOption "VMWare Guest Support";
+    headless = lib.mkOption {
+      type = lib.types.bool;
       default = !config.services.xserver.enable;
       defaultText = "!config.services.xserver.enable";
       description = "Whether to disable X11-related features.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [ {
       assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
@@ -42,7 +39,7 @@ in
       };
 
     # Mount the vmblock for drag-and-drop and copy-and-paste.
-    systemd.mounts = mkIf (!cfg.headless) [
+    systemd.mounts = lib.mkIf (!cfg.headless) [
       {
         description = "VMware vmblock fuse mount";
         documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
@@ -55,7 +52,7 @@ in
       }
     ];
 
-    security.wrappers.vmware-user-suid-wrapper = mkIf (!cfg.headless) {
+    security.wrappers.vmware-user-suid-wrapper = lib.mkIf (!cfg.headless) {
         setuid = true;
         owner = "root";
         group = "root";
@@ -64,10 +61,10 @@ in
 
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
-    services.xserver = mkIf (!cfg.headless) {
-      modules = [ xf86inputvmmouse ];
+    services.xserver = lib.mkIf (!cfg.headless) {
+      modules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ xf86inputvmmouse ];
 
-      config = ''
+      config = lib.optionalString (pkgs.stdenv.hostPlatform.isx86) ''
           Section "InputClass"
             Identifier "VMMouse"
             MatchDevicePath "/dev/input/event*"

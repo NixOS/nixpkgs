@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, copyDesktopItems
 , fetchFromGitHub
+, makeDesktopItem
 , wrapQtAppsHook
 , pkg-config
 , qmake
@@ -13,19 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-LDgRv7Todyy2pnE21Z0O5JQ6mE4ZO3THv6rfEWU66Cc=";
+    sha256 = "sha256-axw0/QFQfnEc2P8tFRtSY5vVUJTqv+kRn68GXdZ5SeQ=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
-  qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.isDarwin [
-    "PGSQL_INC=${postgresql}/include"
-    "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook copyDesktopItems ];
+  qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "PGSQL_INC=${lib.getDev postgresql}/include"
+    "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
     "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
     "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
@@ -33,10 +35,25 @@ stdenv.mkDerivation rec {
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
   buildInputs = [ postgresql qtsvg ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ]
-    ++ lib.optionals stdenv.isDarwin [ cups libxml2 ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups libxml2 ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  desktopItems = [
+    (makeDesktopItem {
+      name = "pgModeler";
+      exec = "pgmodeler";
+      icon = "pgmodeler";
+      desktopName = "PgModeler";
+      genericName = "PgModeler";
+      comment = meta.description;
+      categories = [ "Development" ];
+      startupWMClass = "pgmodeler";
+    })
+  ];
+
+  postInstall = ''
+    install -Dm444 apps/pgmodeler/res/windows_ico.ico $out/share/icons/hicolor/256x256/apps/pgmodeler.ico
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     for item in pgmodeler pgmodeler-{cli,se,ch}
     do
@@ -44,7 +61,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Database modeling tool for PostgreSQL";

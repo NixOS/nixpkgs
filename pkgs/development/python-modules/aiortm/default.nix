@@ -9,29 +9,29 @@
   mashumaro,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  rich,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.8.17";
+  version = "0.9.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iZYzERIJslbvmW+4yeHQvXt1EEyZcSR6+qYdpo9EmAg=";
+    hash = "sha256-mn0BXKfDbbLPt11uhF1laL2F/OA7+w1vHM5SaCQWJRw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aiortm --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "typer" ];
 
   build-system = [ poetry-core ];
 
@@ -40,12 +40,15 @@ buildPythonPackage rec {
     ciso8601
     click
     mashumaro
+    rich
+    typer
     yarl
   ];
 
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

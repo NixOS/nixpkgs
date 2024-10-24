@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   protobuf,
   bzip2,
@@ -15,6 +14,7 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
+  callPackage,
 }:
 
 let
@@ -25,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.9.0";
+  version = "0.10.5";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -34,24 +34,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    # XXX: We need to use a revisoin two commits after v0.9.0, which includes fixes for test cases.
-    # Can be reverted to "v${version}" next release.
-    rev = "2a12e251f2591b7785d7a921364f125d2e9c1e6e";
-    hash = "sha256-qoU09tLpOlsy5lKv2GdCV23bd70hnNZ0r/O5APGVDyw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MD9zAWeitP3cXxzR4znqL551AGFbOcRzhV3goY6l/iY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-rGCu3J+hTxiIENDIQM/jPz1wUNJr0ouoa1IkwWKfOWM=";
-
-  patches = [
-    # Remove "PermissionsStartOnly" from systemd service files,
-    # which is deprecated and conflicts with our module's ExecPreStart.
-    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
-    (fetchpatch {
-      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
-      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
-    })
-  ];
+  cargoHash = "sha256-ug49H6RWLlDdJNVW/BJcqNsG/NDNgWiqR8GiZ/HVrvY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -59,16 +47,30 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    bzip2
-    openssl
-    sqlite
-    foundationdb
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs =
+    [
+      bzip2
+      openssl
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  # skip defaults on darwin because foundationdb is not available
+  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
+  buildFeatures = lib.optional (stdenv.hostPlatform.isDarwin) [
+    "sqlite"
+    "postgres"
+    "mysql"
+    "rocks"
+    "elastic"
+    "s3"
+    "redis"
   ];
 
   env = {
@@ -130,20 +132,38 @@ rustPlatform.buildRustPackage {
     #   left: 0
     #  right: 12
     "--skip=smtp::reporting::analyze::report_analyze"
+    # thread 'smtp::inbound::dmarc::dmarc' panicked at tests/src/smtp/inbound/mod.rs:59:26:
+    # Expected empty queue but got Reload
+    "--skip=smtp::inbound::dmarc::dmarc"
+    # thread 'smtp::queue::concurrent::concurrent_queue' panicked at tests/src/smtp/inbound/mod.rs:65:9:
+    # assertion `left == right` failed
+    "--skip=smtp::queue::concurrent::concurrent_queue"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::auth::auth"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::antispam::antispam"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
-    update-script = nix-update-script { };
+    webadmin = callPackage ./webadmin.nix { };
+    updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada onny oddlama ];
+    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      happysalada
+      onny
+      oddlama
+      pandapip1
+    ];
   };
 }

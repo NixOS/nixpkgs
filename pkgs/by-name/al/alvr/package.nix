@@ -18,7 +18,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/alvr.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/alvr.desktop \
-      --replace 'Exec=alvr_dashboard' 'Exec=alvr'
+      --replace-fail 'Exec=alvr_dashboard' 'Exec=alvr'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

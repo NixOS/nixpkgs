@@ -17,6 +17,7 @@
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   buildInputs = [
     (import ./check-eval.nix)
+    (import ./fetchers.nix)
     (import ./maintainers.nix {
       inherit pkgs;
       lib = import ../.;
@@ -32,7 +33,7 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   nativeBuildInputs = [
     nix
     pkgs.gitMinimal
-  ] ++ lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools;
+  ] ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
   strictDeps = true;
 } ''
   datadir="${nix}/share"

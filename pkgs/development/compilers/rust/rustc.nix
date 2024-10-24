@@ -1,8 +1,9 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
-, fetchurl, file, python3
+, runCommandLocal, fetchurl, file, python3
 , darwin, cargo, cmake, rustc, rustfmt
-, pkg-config, openssl, xz
+, pkg-config, openssl, xz, zlib
+, bintools
 , libiconv
 , which, libffi
 , withBundledLLVM ? false
@@ -24,6 +25,7 @@
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
+  useLLVM = stdenv.targetPlatform.useLLVM or false;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
@@ -66,14 +68,16 @@ in stdenv.mkDerivation (finalAttrs: {
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        # This doesn't apply to cross-building for FreeBSD because the host
        # uses libstdc++, but the target (used for building std) uses libc++
-       optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) "--push-state --as-needed -lstdc++ --pop-state"
-    ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
-    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
+      optional (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM)
+        "--push-state --as-needed -lstdc++ --pop-state"
+    ++ optional (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
+        "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
+    ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+    ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
+    ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
-
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -105,6 +109,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
+    # For Nixpkgs it makes more sense to use stdenv's linker than
+    # letting rustc build its own.
+    "--disable-lld"
     "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
     "--host=${stdenv.hostPlatform.rust.rustcTargetSpec}"
     # std is built for all platforms in --target.
@@ -152,7 +159,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # Since fastCross only builds std, it doesn't make sense (and
     # doesn't work) to build a linker.
     "--disable-llvm-bitcode-linker"
-  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
+  ] ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
     "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
@@ -162,9 +169,13 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
-  ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
+  ] ++ optionals useLLVM [
+    # https://github.com/NixOS/nixpkgs/issues/311930
+    "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
+    "--enable-use-libcxx"
   ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -189,6 +200,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
     ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+    rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
     ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
@@ -215,19 +227,19 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Useful debugging parameter
     # export VERBOSE=1
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     export JEMALLOC_SYS_WITH_LG_VADDR=48
   '' + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
     mkdir .cargo
-    cat > .cargo/config <<\EOF
+    cat > .cargo/config.toml <<\EOF
     [source.crates-io]
     replace-with = "vendored-sources"
     [source.vendored-sources]
     directory = "vendor"
     EOF
-  '' + lib.optionalString (stdenv.isFreeBSD) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
     # lzma-sys bundles an old version of xz that doesn't build
     # on modern FreeBSD, use the system one instead
     substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
@@ -239,6 +251,7 @@ in stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
+  depsBuildTarget = lib.optionals stdenv.targetPlatform.isMinGW [ bintools ];
 
   nativeBuildInputs = [
     file python3 rustc cmake
@@ -247,8 +260,17 @@ in stdenv.mkDerivation (finalAttrs: {
     ++ optionals fastCross [ lndir makeWrapper ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security ]
-    ++ optional (!withBundledLLVM) llvmShared;
+    ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Security zlib ]
+    ++ optional (!withBundledLLVM) llvmShared.lib
+    ++ optional (useLLVM && !withBundledLLVM) [
+      llvmPackages.libunwind
+      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+      (runCommandLocal "libunwind-libgcc" {} ''
+        mkdir -p $out/lib
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
+      '')
+    ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
@@ -284,6 +306,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
+    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
@@ -294,19 +317,9 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Safe, concurrent, practical language";
     maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
-    platforms = [
-      # Platforms with host tools from
-      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-      "x86_64-darwin" "i686-darwin" "aarch64-darwin"
-      "i686-freebsd" "x86_64-freebsd"
-      "x86_64-solaris"
-      "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
-      "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
-      "riscv64-linux" "s390x-linux" "x86_64-linux"
-      "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
-      "x86_64-netbsd"
-      "i686-openbsd" "x86_64-openbsd"
-      "i686-windows" "x86_64-windows"
-    ];
+    platforms = rustc.tier1TargetPlatforms;
+    # If rustc can't target a platform, we also can't build rustc for
+    # that platform.
+    badPlatforms = rustc.badTargetPlatforms;
   };
 })

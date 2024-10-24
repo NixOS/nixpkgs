@@ -13,18 +13,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "3.66.0";
+  version = "3.80.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-YY+wp9rmXDWeSvdMC6FQyuDf8XP3GhHeHuFe9q0uNng=";
+    hash = "sha256-9ClosoDIT+yP2dvNenHW2RSxLimOT3znXD+Pq+N6cQA=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BjSpgkDYafnDb0SBdL3B6IYWT4EOqCAxdDm+Ev6QIgw=";
+    hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
   };
 
   buildInputs = [
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   # so I simply removed it
   postBuild = ''
     rm -fr packages/vitest-pool-workers
+    NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
   '';
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules $out/lib
     cp -r packages/miniflare $out/lib/packages
     cp -r packages/workers-tsconfig $out/lib/packages
+    cp -r packages/workers-shared $out/lib/packages
     cp -r packages/wrangler/node_modules $out/lib/packages/wrangler
     cp -r packages/wrangler/templates $out/lib/packages/wrangler
     cp -r packages/wrangler/wrangler-dist $out/lib/packages/wrangler

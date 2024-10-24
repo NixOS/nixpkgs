@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Very high level, goal-directed, object-oriented, general purpose applications language";
     maintainers = [ ];
     platforms = platforms.linux;

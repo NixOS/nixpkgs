@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.31";
+  version = "4.8.32";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-JBkc+GZ2dbjjH8Sp0YoKZb3AWYwsXE6gkklM0Tq0qxo=";
+    hash = "sha256-TdyD0e3pryNjs+q5h/VLh89mGTJBEM4tOg5wlE0TWf4=";
   };
 
   nativeBuildInputs = [ pkg-config unzip ]
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     slang
     zip
   ] ++ lib.optionals x11Support [ libX11 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = lib.optionalString ((!stdenv.isDarwin) && x11Support) ''
+  postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
     # libX11.so is loaded dynamically so autopatch doesn't detect it
     patchelf \
       --add-needed ${libX11}/lib/libX11.so \

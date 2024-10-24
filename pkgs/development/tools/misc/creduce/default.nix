@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
       lscpu ${util-linux}/bin/lscpu
   '';

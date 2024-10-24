@@ -1,37 +1,37 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, qmake
+, cmake
 , pkg-config
-, wrapQtAppsHook
+, qt6
 , libarchive
 , libpng
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "CEmu";
-  version = "unstable-2022-06-29";
+  version = "2.0";
   src = fetchFromGitHub {
     owner = "CE-Programming";
     repo = "CEmu";
-    rev = "880d391ba9f8b7b2ec36ab9b45a34e9ecbf744e9";
-    hash = "sha256-aFwGZJceh1jEP8cEajY5wYlSaFuNhYvSoZ/E1QDfJEI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fohsIJrvPDMmYHoPbmYQlKLMnj/B3XEBaerZYuqxvd8=";
     fetchSubmodules = true;
   };
 
+  sourceRoot = "${finalAttrs.src.name}/gui/qt/";
+
+
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    cmake
+    qt6.wrapQtAppsHook
     pkg-config
   ];
 
   buildInputs = [
+    qt6.qtbase
     libarchive
     libpng
-  ];
-
-  qmakeFlags = [
-    "gui/qt"
   ];
 
   meta = with lib; {
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

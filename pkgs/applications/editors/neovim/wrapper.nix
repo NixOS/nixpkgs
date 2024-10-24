@@ -1,13 +1,15 @@
 { stdenv, symlinkJoin, lib, makeWrapper
+, bundlerEnv
+, ruby
+, nodejs
 , writeText
 , nodePackages
 , python3
-, python3Packages
 , callPackage
 , neovimUtils
-, vimUtils
 , perl
 , lndir
+, vimUtils
 }:
 
 neovim-unwrapped:
@@ -20,10 +22,11 @@ let
       extraName ? ""
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
-    # a limited RC script used only to generate the manifest for remote plugins
-    , manifestRc ? null
     , withPython2 ? false
-    , withPython3 ? true,  python3Env ? python3
+    , withPython3 ? true
+    /* the function you would have passed to python3.withPackages */
+    , extraPython3Packages ? (_: [ ])
+
     , withNodeJs ? false
     , withPerl ? false
     , rubyEnv ? null
@@ -41,26 +44,73 @@ let
     , neovimRcContent ? null
     # lua code to put into the generated init.lua file
     , luaRcContent ? ""
-    # entry to load in packpath
-    , packpathDirs
+    # DEPRECATED: entry to load in packpath
+    # use 'plugins' instead
+    , packpathDirs ? null # not used anymore
+
+    # a list of neovim plugin derivations, for instance
+    #  plugins = [
+    # { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
+    # ]
+    , plugins ? []
     , ...
-  }:
+  }@attrs:
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
+
+  assert packpathDirs != null -> throw "packpathdirs is not used anymore: pass a list of neovim plugin derivations in 'plugins' instead.";
 
   stdenv.mkDerivation (finalAttrs:
   let
+    pluginsNormalized = neovimUtils.normalizePlugins plugins;
 
+    myVimPackage = neovimUtils.normalizedPluginsToVimPackage pluginsNormalized;
+
+    rubyEnv = bundlerEnv {
+      name = "neovim-ruby-env";
+      gemdir = ./ruby_provider;
+      postBuild = ''
+        ln -sf ${ruby}/bin/* $out/bin
+      '';
+    };
+
+    pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
+
+    # a limited RC script used only to generate the manifest for remote plugins
+    manifestRc = vimUtils.vimrcContent { customRC = ""; };
+    # we call vimrcContent without 'packages' to avoid the init.vim generation
+    neovimRcContent' = vimUtils.vimrcContent {
+      beforePlugins = "";
+      customRC = lib.concatStringsSep "\n" (pluginRC ++ lib.optional (neovimRcContent != null) neovimRcContent);
+      packages = null;
+    };
+
+    packpathDirs.myNeovimPackages = myVimPackage;
     finalPackdir = neovimUtils.packDir packpathDirs;
 
     rcContent = ''
       ${luaRcContent}
-    '' + lib.optionalString (!isNull neovimRcContent) ''
-      vim.cmd.source "${writeText "init.vim" neovimRcContent}"
+    '' + lib.optionalString (neovimRcContent' != null) ''
+      vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
     '';
+
+    getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
+
+    requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
+    pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
+
+    python3Env = lib.warnIf (attrs ? python3Env) "Pass your python packages via the `extraPython3Packages`, e.g., `extraPython3Packages = ps: [ ps.pandas ]`"
+      python3.pkgs.python.withPackages (ps:
+      [ ps.pynvim ]
+      ++ (extraPython3Packages ps)
+      ++ (lib.concatMap (f: f ps) pluginPython3Packages));
+
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    generatedWrapperArgs =
+    generatedWrapperArgs = let
+      binPath = lib.makeBinPath (lib.optional finalAttrs.withRuby rubyEnv ++ lib.optional finalAttrs.withNodeJs nodejs);
+    in
+
       # vim accepts a limited number of commands so we join them all
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
@@ -69,10 +119,15 @@ let
             "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
             "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
           ]
+          ++ lib.optionals finalAttrs.withRuby [
+            "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+          ] ++ lib.optionals (binPath != "") [
+            "--suffix" "PATH" ":" binPath
+          ]
           ;
 
     providerLuaRc = neovimUtils.generateProviderRc {
-      inherit withPython3 withNodeJs withPerl;
+      inherit (finalAttrs) withPython3 withNodeJs withPerl;
       withRuby = rubyEnv != null;
     };
 
@@ -96,6 +151,7 @@ let
   in {
       name = "${pname}-${version}${extraName}";
       inherit pname version;
+      inherit plugins;
 
       __structuredAttrs = true;
       dontUnpack = true;
@@ -107,7 +163,7 @@ let
       luaRcContent = rcContent;
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
-      postBuild = lib.optionalString stdenv.isLinux ''
+      postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim-unwrapped}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace-warn 'Name=Neovim' 'Name=Neovim wrapper'
@@ -192,10 +248,14 @@ let
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper lndir ];
+
+    # A Vim "package", see ':h packages'
+    vimPackage = myVimPackage;
+
     passthru = {
       inherit providerLuaRc packpathDirs;
       unwrapped = neovim-unwrapped;
-      initRc = neovimRcContent;
+      initRc = neovimRcContent';
 
       tests = callPackage ./tests {
       };
@@ -214,7 +274,7 @@ let
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (neovim-unwrapped.meta.priority or 0) - 1;
+      priority = (neovim-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
     };
   });
 in

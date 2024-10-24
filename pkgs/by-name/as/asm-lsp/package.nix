@@ -1,12 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  darwin,
+  libiconv,
 }:
 let
   pname = "asm-lsp";
-  version = "0.7.4";
+  version = "0.9.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,18 +19,19 @@ rustPlatform.buildRustPackage {
     owner = "bergercookie";
     repo = "asm-lsp";
     rev = "v${version}";
-    hash = "sha256-tgwiCAlHuFdeMr1GA4vPg8i94zfRj+uyPMAXYh+Smo4=";
+    hash = "sha256-0GB3tXZuCu3syh+RG+eXoliZVHMPOhYC3RchSSx4u5w=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      libiconv
+    ];
 
-  cargoHash = "sha256-UBYD0rs7bEtVZatu/kRgyCwKHvcgYJWRgyfBi3ooPGQ=";
+  cargoHash = "sha256-AtCnYOOtViMpg+rz8miuBZg1pENBPaf9kamSPaVUyiw=";
 
   # tests expect ~/.cache/asm-lsp to be writable
   preCheck = ''
@@ -37,8 +42,11 @@ rustPlatform.buildRustPackage {
     description = "Language server for NASM/GAS/GO Assembly";
     homepage = "https://github.com/bergercookie/asm-lsp";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ NotAShelf ];
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      CaiqueFigueiredo
+    ];
     mainProgram = "asm-lsp";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

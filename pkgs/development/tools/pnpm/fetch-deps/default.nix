@@ -9,6 +9,7 @@
   pnpm,
   yq,
 }:
+
 {
   fetchDeps =
     {
@@ -31,74 +32,79 @@
             outputHash = "";
             outputHashAlgo = "sha256";
           };
-      installFlags = lib.optionalString (pnpmWorkspace != "")  "--filter=${pnpmWorkspace}";
+      installFlags = lib.optionalString (pnpmWorkspace != "") "--filter=${pnpmWorkspace}";
     in
-    stdenvNoCC.mkDerivation (finalAttrs: (
-      args'
-      // {
-        name = "${pname}-pnpm-deps";
+    stdenvNoCC.mkDerivation (
+      finalAttrs:
+      (
+        args'
+        // {
+          name = "${pname}-pnpm-deps";
 
-        nativeBuildInputs = [
-          cacert
-          jq
-          moreutils
-          pnpm
-          yq
-        ];
+          nativeBuildInputs = [
+            cacert
+            jq
+            moreutils
+            pnpm
+            yq
+          ];
 
-        installPhase = ''
-          runHook preInstall
+          impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-          lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
-          if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
-            echo "ERROR: lockfileVersion $lockfileVersion in pnpm-lock.yaml is too new for the provided pnpm version ${lib.versions.major pnpm.version}!"
-            exit 1
-          fi
+          installPhase = ''
+            runHook preInstall
 
-          export HOME=$(mktemp -d)
-          pnpm config set store-dir $out
-          # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-          pnpm config set side-effects-cache false
-          # As we pin pnpm versions, we don't really care about updates
-          pnpm config set update-notifier false
-          # Run any additional pnpm configuration commands that users provide.
-          ${prePnpmInstall}
-          # pnpm is going to warn us about using --force
-          # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
-          pnpm install \
-              --force \
-              --ignore-scripts \
-              ${installFlags} \
-              --frozen-lockfile
+            lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
+            if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
+              echo "ERROR: lockfileVersion $lockfileVersion in pnpm-lock.yaml is too new for the provided pnpm version ${lib.versions.major pnpm.version}!"
+              exit 1
+            fi
 
-          runHook postInstall
-        '';
+            export HOME=$(mktemp -d)
+            pnpm config set store-dir $out
+            # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+            pnpm config set side-effects-cache false
+            # As we pin pnpm versions, we don't really care about updates
+            pnpm config set update-notifier false
+            # Run any additional pnpm configuration commands that users provide.
+            ${prePnpmInstall}
+            # pnpm is going to warn us about using --force
+            # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
+            pnpm install \
+                --force \
+                --ignore-scripts \
+                ${installFlags} \
+                --frozen-lockfile
 
-        fixupPhase = ''
-          runHook preFixup
+            runHook postInstall
+          '';
 
-          # Remove timestamp and sort the json files
-          rm -rf $out/v3/tmp
-          for f in $(find $out -name "*.json"); do
-            jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
-          done
+          fixupPhase = ''
+            runHook preFixup
 
-          runHook postFixup
-        '';
+            # Remove timestamp and sort the json files
+            rm -rf $out/v3/tmp
+            for f in $(find $out -name "*.json"); do
+              jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
+            done
 
-        passthru = {
-          serve = callPackage ./serve.nix {
-            inherit pnpm;
-            pnpmDeps = finalAttrs.finalPackage;
+            runHook postFixup
+          '';
+
+          passthru = {
+            serve = callPackage ./serve.nix {
+              inherit pnpm;
+              pnpmDeps = finalAttrs.finalPackage;
+            };
           };
-        };
 
-        dontConfigure = true;
-        dontBuild = true;
-        outputHashMode = "recursive";
-      }
-      // hash'
-    ));
+          dontConfigure = true;
+          dontBuild = true;
+          outputHashMode = "recursive";
+        }
+        // hash'
+      )
+    );
 
   configHook = makeSetupHook {
     name = "pnpm-config-hook";

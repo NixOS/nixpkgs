@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     karchive
     kcoreaddons
     kconfigwidgets
+    qtwayland
   ];
 
   passthru.updateScript = nix-update-script { };

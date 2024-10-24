@@ -3,13 +3,17 @@
   fetchFromGitHub,
   melpaBuild,
   js2-mode,
+  lsp-mode,
 }:
 
 melpaBuild {
   pname = "prisma-mode";
   version = "0-unstable-2021-12-07";
 
-  packageRequires = [ js2-mode ];
+  packageRequires = [
+    js2-mode
+    lsp-mode
+  ];
 
   src = fetchFromGitHub {
     owner = "pimeys";

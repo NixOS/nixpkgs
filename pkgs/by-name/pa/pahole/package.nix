@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/acmel/dwarves/commit/6a2b27c0f512619b0e7a769a18a0fb05bb3789a5.patch";
       hash = "sha256-Le1BAew/a/QKkYNLgSQxEvZ9mEEglUw8URwz1kiheeE=";
     })
+    (fetchpatch {
+      name = "fix-clang-btf-generation-bug-2.patch";
+      url = "https://github.com/acmel/dwarves/commit/94a01bde592c555b3eb526aeb4c2ad695c5660d8.patch";
+      hash = "sha256-SMIxLEBjBkprAqVNX1h7nXxAsgbwvCD/Bz7c1ekwg5w=";
+    })
   ];
 
   # Put libraries in "lib" subdirectory, not top level of $out

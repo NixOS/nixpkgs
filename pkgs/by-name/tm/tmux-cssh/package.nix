@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "dennishafemann";
     repo = "tmux-cssh";
     rev = "21750733c5b6fa2fe23b9e50ce69d8564f2f742a";
-    sha256 = "473e27f3b69864b905d1340d97917cd202705c761611eb3aec4c24521f69b52c";
+    hash = "sha256-Rz4n87aYZLkF0TQNl5F80gJwXHYWEes67EwkUh9ptSw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

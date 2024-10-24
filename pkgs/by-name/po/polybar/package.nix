@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "polybar";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "polybar";
     repo = "polybar";
     rev = finalAttrs.version;
-    hash = "sha256-DX648jY1vewl3ImK84gF6/vtcSCg3wtgq6Ie3fCwZoA=";
+    hash = "sha256-5PYKl6Hi4EYEmUBwkV0rLiwxNqIyR5jwm495YnNs0gI=";
     fetchSubmodules = true;
   };
 

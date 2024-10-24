@@ -18,7 +18,7 @@
 , withQttranslation ? true, qttranslations ? null
 
   # options
-, libGLSupported ? !stdenv.isDarwin
+, libGLSupported ? !stdenv.hostPlatform.isDarwin
 , libGL
   # qmake detection for libmysqlclient does not seem to work when cross compiling
 , mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: ({
     libjpeg libpng
     pcre2
   ] ++ (
-    if stdenv.isDarwin then [
+    if stdenv.hostPlatform.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
       AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
       CoreLocation CoreServices DiskArbitration Foundation OpenGL
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: ({
   );
 
   buildInputs = [ python3 at-spi2-core ]
-    ++ lib.optionals (!stdenv.isDarwin)
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin)
     (
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     # `qtbase` expects to find `cc` (with no prefix) in the
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
   # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
   # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
-  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+  propagatedSandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
     (allow file-read* (subpath "/usr/share/icu"))
   '';
 
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
     patchShebangs ./bin
   '' + (
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
         sed -i \
             -e 's|/usr/bin/xcode-select|xcode-select|' \
             -e 's|/usr/bin/xcrun|xcrun|' \
@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-    ++ lib.optional stdenv.isLinux "-DUSE_X11"
+    ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
     ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
       # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
       "-Wno-error=unguarded-availability"
@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ''-${lib.optionalString (!buildTests) "no"}make tests''
   ]
     ++ (
-      if stdenv.isDarwin then [
+      if stdenv.hostPlatform.isDarwin then [
       "-no-fontconfig"
       "-qt-freetype"
       "-qt-libpng"

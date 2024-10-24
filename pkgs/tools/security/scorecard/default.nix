@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "4.13.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xf6HyiZlkU9ifgXr+/O8UeElqwF8c1h/9IRWDVHx2+g=";
+    hash = "sha256-9DuADuEIoZNwkvdKyqus2zNfIK31Jc3+bPW3/z8fvlc=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -28,7 +28,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-ohZcz7fn/YAglLI3YOi0J4FWkCJa2/nsM7T03+BOWkw=";
+  vendorHash = "sha256-apOVAlGjaYSrW4qtUdDNgqwWxnVlBLhrefWEUvN4lzE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -59,8 +59,7 @@ buildGoModule rec {
   '';
 
   checkFlags = [
-    # https://github.com/ossf/scorecard/pull/4134
-    "-skip TestRunScorecard/empty_commits_repos_should_return_repo_details_but_no_checks"
+    "-skip TestCollectDockerfilePinning/Non-pinned_dockerfile|TestMixedPinning"
   ];
 
   postInstall = ''

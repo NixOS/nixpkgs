@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     freetype
     boost
     expat
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.Foundation
     libiconv

@@ -7,6 +7,7 @@
 , alsa-lib
 , at-spi2-atk
 , cairo
+, coreutils
 , cups
 , dbus
 , expat
@@ -34,13 +35,13 @@
 
 let
   pname = "pulsar";
-  version = "1.119.0";
+  version = "1.122.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-wW+mbN+XPpqdksFrJ37eHMYccXxg9zIR139SkuawTmA=";
+    x86_64-linux.hash = "sha256-Sx60cEQ2UAXqMujTaLkgN0Y3tIySg0TmaM0YroaX7nA=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-XSEAo/wGNdzx8MtUrCJ6U1pDoY1p+cTdVAn1NsayZW4=";
+    aarch64-linux.hash = "sha256-Bhk1WZm9N771CC7j+TQsQCRSPwHOVTXCpleuhXC48K8=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -85,10 +86,6 @@ stdenv.mkDerivation {
     url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
     inherit hash;
   };
-
-  patches = [
-    ./001-patch-wrapper.patch
-  ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -187,10 +184,11 @@ stdenv.mkDerivation {
     asar p $asarBundle $opt/resources/app.asar
     rm -rf $asarBundle
 
-    # We have patched the original wrapper, but now it needs the "PULSAR_PATH" env var
+    # Pulsar uses `PULSAR_PATH` to know where it is intalled
     mkdir -p $out/bin
     wrapProgram $opt/resources/pulsar.sh \
-      --prefix "PULSAR_PATH" : "$opt/pulsar"
+      --suffix "PATH" : "${lib.makeBinPath [ coreutils ]}" \
+      --set "PULSAR_PATH" "$opt"
     ln -s $opt/resources/pulsar.sh $out/bin/pulsar
     ln -s $opt/resources/app/ppm/bin/apm $out/bin/ppm
 
@@ -230,8 +228,9 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bryango ];
+    maintainers = with lib.maintainers; [ bryango pbsds ];
     knownVulnerabilities = [
+      # electron 12.2.3, efforts are in place to bump it
       "CVE-2023-5217"
       "CVE-2022-21718"
       "CVE-2022-29247"

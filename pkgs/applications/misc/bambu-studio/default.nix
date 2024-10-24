@@ -39,10 +39,10 @@
   pcre,
   systemd,
   tbb_2021_11,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK31,
   xorg,
-  withSystemd ? stdenv.isLinux,
+  withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     openvdb_tbb_2021_8
     pcre
     tbb_2021_11
-    webkitgtk
+    webkitgtk_4_0
     wxGTK31'
     xorg.libX11
   ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;

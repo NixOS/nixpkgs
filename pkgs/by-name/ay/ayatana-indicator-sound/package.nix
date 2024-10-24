@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, accountsservice
-, cmake
-, dbus
-, dbus-test-runner
-, glib
-, gobject-introspection
-, gtest
-, intltool
-, libayatana-common
-, libgee
-, libnotify
-, libpulseaudio
-, libqtdbusmock
-, libqtdbustest
-, libsForQt5
-, libxml2
-, lomiri
-, pkg-config
-, python3
-, systemd
-, vala
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  accountsservice,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gobject-introspection,
+  gtest,
+  intltool,
+  libayatana-common,
+  libgee,
+  libnotify,
+  libpulseaudio,
+  libqtdbusmock,
+  libqtdbustest,
+  libsForQt5,
+  libxml2,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,27 +62,27 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    accountsservice
-    glib
-    gobject-introspection
-    libayatana-common
-    libgee
-    libnotify
-    libpulseaudio
-    libxml2
-    systemd
-  ] ++ (with lomiri; [
-    cmake-extras
-    lomiri-api
-    lomiri-schemas
-  ]);
+  buildInputs =
+    [
+      accountsservice
+      glib
+      gobject-introspection
+      libayatana-common
+      libgee
+      libnotify
+      libpulseaudio
+      libxml2
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-api
+      lomiri-schemas
+    ]);
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
   ];
 
   checkInputs = [
@@ -105,12 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-sound" ];
+    ayatana-indicators = {
+      ayatana-indicator-sound = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator for managing system sound";
     longDescription = ''
       Ayatana Indicator Sound that provides easy control of the PulseAudio
@@ -118,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-sound";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-sound/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

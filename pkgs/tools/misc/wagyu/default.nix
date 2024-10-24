@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-vseTtok0E0ddg9ALQ1ql3NPPxirfyMPHOSWsM2qu2jU=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Rust library for generating cryptocurrency wallets";

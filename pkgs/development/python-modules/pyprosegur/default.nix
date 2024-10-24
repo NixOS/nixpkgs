@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyprosegur";
-  version = "0.0.10";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = "pyprosegur";
     rev = "refs/tags/${version}";
-    hash = "sha256-OHFJhufymD181FODHlIu+O5xh9dfKwEIVQX/zTOC6ks=";
+    hash = "sha256-A223aafa0eXNBVd2cVVV7p2wXg4Z2rcoggM3czmRsOE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     backoff

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "hydrus-api";
   version = "5.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -20,15 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-3Roeab9/woGF/aZYm9nbqrcyYN8CKA1k66cTRxx6jM4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      "poetry.masonry.api" \
-      "poetry.core.masonry.api"
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "hydrus_api" ];
 

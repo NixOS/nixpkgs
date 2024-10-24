@@ -618,10 +618,6 @@
     "croutons": [
       "extra-cmake-modules"
     ],
-    "crow-translate": [
-      "extra-cmake-modules",
-      "kwayland"
-    ],
     "daykountdown": [
       "extra-cmake-modules",
       "kcoreaddons",
@@ -6085,11 +6081,6 @@
       "qtkeychain",
       "selenium-webdriver-at-spi"
     ],
-    "trojita": [
-      "akonadi-contacts",
-      "extra-cmake-modules",
-      "sonnet"
-    ],
     "umbrello": [
       "extra-cmake-modules",
       "karchive",
@@ -6238,5 +6229,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "65b48b30"
+  "version": "10b4e2ea"
 }

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rqbit";
-  version = "5.6.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-SRom/rLyF7R+ESWsAKeLLujvuj5w7+Evlsm+8BKe2f0=";
+    hash = "sha256-YOjFCX1Ckk0M2QOGoYKoY80TFnHs00aVJJAWv2RIp4A=";
   };
 
   cargoLock = {
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   doCheck = false;
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [ cafkafk toasteruwu ];
     mainProgram = "rqbit";
   };
 }

@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   ];
 
   # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
-  postPatch = lib.optionalString (!stdenv.isx86_64) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     cp source/utils/StackTrace{Stub,Unix}.cpp
   '';
 

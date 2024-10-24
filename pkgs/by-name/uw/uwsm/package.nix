@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-VGywdMRHJaQgWD9EurYdMTlbOo8Wu8NWiLuiY7xJh4M=";
+    hash = "sha256-BtzW0jyYAVGjSBlocgkGHgY3JQUpWizDaSa2YBIX2Bs=";
   };
 
   nativeBuildInputs = [
@@ -60,11 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       "uuctl" = uuctlSupport;
       "man-pages" = true;
     })
+    (lib.mesonOption "python-bin" python.interpreter)
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   postInstall =
     let
@@ -85,9 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
       ''}
     '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
+    changelog = "https://github.com/Vladimir-csp/uwsm/releases/tag/v${finalAttrs.version}";
     mainProgram = "uwsm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

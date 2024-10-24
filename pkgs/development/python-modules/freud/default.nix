@@ -80,7 +80,7 @@ buildPythonPackage rec {
     matplotlib
     sympy
   ];
-  disabledTests = lib.optionals stdenv.isAarch64 [
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
     # https://github.com/glotzerlab/freud/issues/961
     "test_docstring"
   ];

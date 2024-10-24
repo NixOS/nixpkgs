@@ -21,7 +21,7 @@ let
       hash = "sha256-fbf01qa9wx3k9j8AEqv38fAM3F9tZOcnpH/wa/9rawQ=";
     };
   };
-  geekbench_avx2 = lib.optionalString stdenv.isx86_64 "geekbench_avx2";
+  geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
 in
 stdenv.mkDerivation {
   inherit version;

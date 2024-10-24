@@ -12,24 +12,24 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.11";
+  version = "3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     rev = "refs/tags/${version}";
-    hash = "sha256-eHIInoquuyukKuPVvVB6qtovx1NloHHVGKfFBHxVd+o=";
+    hash = "sha256-IhG2FZdCmYrGxHc2i+ERhphxP/uGgOY67epHEWnQXb0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     "test_dm_thin"
     "test_lvm_mirro"
     "test_lvm_thin"
+    "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
   ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
-    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # fix compilation under Darwin
   # remove these patches upon next release

@@ -132,8 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
       ld64
       llvm
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.objc4 ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.objc4 ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
 
   mesonBuildType = "release";
 

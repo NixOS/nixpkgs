@@ -9,21 +9,21 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kclvm_cli";
-  version = "0.9.3";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "kcl";
     rev = "v${version}";
-    hash = "sha256-nk5oJRTBRj0LE2URJqno8AoZ+/342C2tEt8d6k2MAc8=";
+    hash = "sha256-qIaDc10NxQKBH7WRzzkQ6bQfkSqsDrFxSwSX+Hf7qS8=";
   };
 
   sourceRoot = "${src.name}/cli";
-  cargoHash = "sha256-LZUE2J/UYepl5BGf4T4eWKIZfN3mVJtMDLtm0uUmvI8=";
+  cargoHash = "sha256-mB4qOUj9qZmbstvBIyaWHEzX3DQ7tLhQKDEvea4Bnyk=";
   cargoPatches = [ ./cargo_lock.patch ];
 
   buildInputs = [ kclvm rustc ] ++ (
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

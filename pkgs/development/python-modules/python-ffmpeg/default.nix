@@ -19,12 +19,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyee ];
 
   nativeBuildInputs = [ setuptools-scm ];
-  pythonImportCheck = [ "ffmpeg" ];
+  pythonImportsCheck = [ "ffmpeg" ];
 
   meta = {
     homepage = "https://github.com/jonghwanhyeon/python-ffmpeg";
     description = "Python binding for FFmpeg which provides sync and async APIs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }

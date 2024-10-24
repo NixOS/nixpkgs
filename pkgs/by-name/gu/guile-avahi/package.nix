@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-unused-function";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-unused-function";
 
   meta = with lib; {
     description = "Bindings to Avahi for GNU Guile";

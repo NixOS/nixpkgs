@@ -20,7 +20,7 @@ let
           inherit backend;
           containers.nginx = {
             image = "nginx-container";
-            imageFile = pkgs.dockerTools.examples.nginx;
+            imageStream = pkgs.dockerTools.examples.nginxStream;
             ports = ["8181:80"];
           };
         };

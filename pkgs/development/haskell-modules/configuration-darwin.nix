@@ -83,9 +83,6 @@ self: super: ({
   with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
   with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
-
   git-annex = overrideCabal (drv: {
     # We can't use testFlags since git-annex side steps the Cabal test mechanism
     preCheck = drv.preCheck or "" + ''
@@ -359,7 +356,7 @@ self: super: ({
     '';
   }) super.di-core;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
   # elimination barely works on aarch64-darwin, any package that has a
@@ -410,7 +407,26 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+  # https://github.com/NixOS/nixpkgs/issues/198495
+  eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;
+  gargoyle-postgresql-connect = dontCheck super.gargoyle-postgresql-connect;
+  hs-opentelemetry-instrumentation-postgresql-simple = dontCheck super.hs-opentelemetry-instrumentation-postgresql-simple;
+  moto-postgresql = dontCheck super.moto-postgresql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
+  pipes-postgresql-simple = dontCheck super.pipes-postgresql-simple;
+  postgresql-connector = dontCheck super.postgresql-connector;
+  postgresql-migration = dontCheck super.postgresql-migration;
+  postgresql-schema = dontCheck super.postgresql-schema;
+  postgresql-simple = dontCheck super.postgresql-simple;
+  postgresql-simple-interpolate = dontCheck super.postgresql-simple-interpolate;
+  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  postgresql-simple-url = dontCheck super.postgresql-simple-url;
+  postgresql-transactional = dontCheck super.postgresql-transactional;
+  postgrest = dontCheck super.postgrest;
+  rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
+  tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
+
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9

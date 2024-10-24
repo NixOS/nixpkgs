@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "sarif-tools";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sarif-tools";
-    rev = "v${version}";
-    hash = "sha256-80amYGnf7xZdpxzTjBGwgg39YN/jJsEkTm0uAlVbH0w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MYwhewUTZ3Wl93p6bN3+bHqtXz+BAlAhte+JaetPQYU=";
   };
 
   disabled = pythonOlder "3.8";

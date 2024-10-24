@@ -47,6 +47,7 @@
 
   # check
   pytestCheckHook,
+  hypothesis,
   altair,
   boto3,
   gradio-pdf,
@@ -63,7 +64,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.40.0";
+  version = "4.44.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ChV5E6RfFcOwW6uFqU4/phfHfn27yS8+MKjMVytnlgU=";
+    hash = "sha256-popSSYrGtj+IZO+Ev3hmpw59B+vpE+35IeHSo3CK1a4=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -126,13 +127,14 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  passthru.optional-dependencies.oauth = [
+  optional-dependencies.oauth = [
     authlib
     itsdangerous
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    hypothesis
     altair
     boto3
     gradio-pdf
@@ -149,7 +151,7 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ passthru.optional-dependencies.oauth ++ pydantic.passthru.optional-dependencies.email;
+  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
@@ -158,7 +160,7 @@ buildPythonPackage rec {
       export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
@@ -187,10 +189,13 @@ buildPythonPackage rec {
 
     # flaky: OSError: Cannot find empty port in range: 7860-7959
     "test_docs_url"
+    "test_orjson_serialization"
+    "test_dataset_is_updated"
+    "test_multimodal_api"
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_async_generators"
@@ -245,8 +250,8 @@ buildPythonPackage rec {
     "test/test_networking.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Network-related tests that are flaky on darwin (depend on port availability)
+
+    # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
   ];
   pytestFlagsArray = [

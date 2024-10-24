@@ -232,6 +232,27 @@ To add a new plugin, run `nix-shell -p vimPluginsUpdater --run 'vim-plugins-upda
 
 Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
 
+### Testing Neovim plugins {#testing-neovim-plugins}
+
+`nvimRequireCheck=MODULE` is a simple test which checks if Neovim can requires the lua module `MODULE` without errors. This is often enough to catch missing dependencies.
+
+This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+```nix
+  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "gitsigns";
+  };
+```
+
+### Plugin optional configuration {#vim-plugin-required-snippet}
+
+Some plugins require specific configuration to work. We choose not to
+patch those plugins but expose the necessary configuration under
+`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
+needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
+
+
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 
 Run the update script with a GitHub API token that has at least `public_repo` access. Running the script without the token is likely to result in rate-limiting (429 errors). For steps on creating an API token, please refer to [GitHub's token documentation](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).

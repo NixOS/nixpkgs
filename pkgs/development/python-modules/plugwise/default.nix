@@ -1,28 +1,23 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
-  crcmod,
   defusedxml,
   fetchFromGitHub,
   freezegun,
   jsonpickle,
   munch,
-  pyserial,
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  semver,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "1.0.0";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,30 +26,21 @@ buildPythonPackage rec {
     owner = "plugwise";
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OEEk0rMhvk99EVouotcNQlSfx5Xv23WswCQ5ZN5M3A4=";
+    hash = "sha256-eeytJ9X2ChcQDbAfTUPokMl/qKVSU6PUuI/a30xJ6WU=";
   };
 
   postPatch = ''
-    # setuptools
-    sed -i -e "s/~=[0-9.]*//" pyproject.toml
-    # wheel
-    sed -i -e "s/~=[0-9.]*//" pyproject.toml
+    # setuptools and wheel
+    sed -i -e "s/~=[0-9.]*//g" pyproject.toml
   '';
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    async-timeout
-    crcmod
     defusedxml
     munch
-    pyserial
     python-dateutil
-    semver
   ];
 
   nativeCheckInputs = [

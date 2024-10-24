@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = lib.optionals static [ stdenv.cc.libc stdenv.cc.libc.static ] ++
-    lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+    lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
 
   postPatch = ''
     sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     # Both of these are originally hard-coded to gcc
     echo ${stdenv.cc.targetPrefix}cc > conf-cc
-    echo ${stdenv.cc.targetPrefix}cc ${lib.optionalString stdenv.isDarwin "-Xlinker -x "}> conf-ld
+    echo ${stdenv.cc.targetPrefix}cc ${lib.optionalString stdenv.hostPlatform.isDarwin "-Xlinker -x "}> conf-ld
   '';
 
   installPhase = ''

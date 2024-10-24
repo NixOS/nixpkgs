@@ -16,9 +16,9 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "93";
+  version = "98";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   pyproject = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4xZOj6A2RKz7zOhFkLcSM7D870PfOljI8jn2+gKeYk4=";
+    hash = "sha256-VJ4510HLTqdRfeUEe2srT8+W9AaRpi+Mm6srZOOp0fc=";
   };
 
   postPatch = ''
@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   disabledTestPaths =
     [ "bx_py_utils_tests/tests/test_project_setup.py" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # processify() doesn't work under darwin
       # https://github.com/boxine/bx_py_utils/issues/80
       "bx_py_utils_tests/tests/test_processify.py"
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     description = "Various Python utility functions";
     mainProgram = "publish";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

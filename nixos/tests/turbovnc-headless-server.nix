@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes.machine = { pkgs, ... }: {
 
     environment.systemPackages = with pkgs; [
-      glxinfo
+      mesa-demos
       procps # for `pkill`, `pidof` in the test
       scrot # for screenshotting Xorg
       turbovnc

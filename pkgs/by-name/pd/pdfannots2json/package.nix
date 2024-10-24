@@ -11,7 +11,7 @@ in
       owner = "mgmeyers";
       repo = "pdfannots2json";
       rev = "refs/tags/${version}";
-      sha256 = "sha256-qk4OSws/6SevN/Q0lsyxw+fZkm2uy1WwOYYL7CB7QUk=";
+      hash = "sha256-qk4OSws/6SevN/Q0lsyxw+fZkm2uy1WwOYYL7CB7QUk=";
     };
 
     vendorHash = null;

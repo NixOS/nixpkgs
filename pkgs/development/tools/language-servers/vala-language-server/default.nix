@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     scdoc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # GNOME Builder Plugin
     gnome-builder
   ];

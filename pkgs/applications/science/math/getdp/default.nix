@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, cmake, gfortran, blas, lapack, mpi, petsc, python3 }:
 
-stdenv.mkDerivation rec {
+let
+  mpiSupport = petsc.passthru.mpiSupport;
+in stdenv.mkDerivation rec {
   pname = "getdp";
   version = "3.6.0";
   src = fetchurl {
@@ -8,7 +10,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-nzefwCV+Z9BHDofuTfhR+vhqm3cCSiUT+7cbtn601N8=";
   };
 
-  inherit (petsc) mpiSupport;
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ gfortran blas lapack petsc ]
     ++ lib.optional mpiSupport mpi

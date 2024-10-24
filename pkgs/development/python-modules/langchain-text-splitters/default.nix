@@ -2,36 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   langchain-core,
+
+  # tests
+  httpx,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-SixF3ZkN+gjQ4KYLhGoezdQAOQ1AlGEC6IBzHePF6/o=";
+    hash = "sha256-Z0UAUhOjC0wgCY/f1aWsnjFyOPYz/6JnloEKT6b6Ii0=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
   build-system = [ poetry-core ];
 
-  dependencies = [ langchain-core ];
+  dependencies = [
+    langchain-core
+  ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    httpx
     pytest-asyncio
     pytestCheckHook
   ];

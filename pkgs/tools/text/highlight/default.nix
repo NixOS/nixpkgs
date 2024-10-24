@@ -15,7 +15,7 @@ let
     enableParallelBuilding = true;
 
     nativeBuildInputs = [ pkg-config swig perl ]
-      ++ lib.optional stdenv.isDarwin gcc;
+      ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
     buildInputs = [ getopt lua boost libxcrypt ];
 
@@ -35,15 +35,15 @@ let
 
     # This has to happen _before_ the main build because it does a
     # `make clean' for some reason.
-    preBuild = lib.optionalString (!stdenv.isDarwin) ''
+    preBuild = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       make -C extras/swig $makeFlags perl
     '';
 
-    postCheck = lib.optionalString (!stdenv.isDarwin) ''
+    postCheck = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       perl -Iextras/swig extras/swig/testmod.pl
     '';
 
-    preInstall = lib.optionalString (!stdenv.isDarwin) ''
+    preInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p $out/${perl.libPrefix}
       install -m644 extras/swig/highlight.{so,pm} $out/${perl.libPrefix}
       make -C extras/swig clean # Clean up intermediate files.
@@ -59,5 +59,5 @@ let
   };
 
 in
-  if stdenv.isDarwin then self
+  if stdenv.hostPlatform.isDarwin then self
   else perl.pkgs.toPerlModule self

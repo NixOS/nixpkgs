@@ -16,14 +16,14 @@
 
 let
   pname = "pgadmin";
-  version = "8.10";
-  yarnHash = "sha256-UydWtk2UJNsF8FEp6dNsKJGjrWhmdCog0kn9VMcOvVU=";
+  version = "8.12";
+  yarnHash = "sha256-C5CI8oP9vEana3OEs1yAsSSTvO2uLEuCU1nHhC7LerY=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-b7k6A57yMh9vGwMHM9coG2b5tQ+AQoJDFvR/qQZdmtk=";
+    hash = "sha256-OIFHaU+Ty0xJn42iqYhse8dfFJZpx8AV/10RNxp1Y4o=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -39,7 +39,7 @@ let
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
   skippedTests = builtins.concatStringsSep "," (
     [ "browser.tests.test_kerberos_with_mocking" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "browser.server_groups.servers.tests.test_all_server_get"
       "browser.server_groups.servers.tests.test_check_connect"
       "browser.server_groups.servers.tests.test_check_ssh_mock_connect"
@@ -173,7 +173,7 @@ pythonPackages.buildPythonApplication rec {
     python-dateutil
     sqlalchemy
     itsdangerous
-    flask-security-too
+    flask-security
     bcrypt
     cryptography
     sshtunnel

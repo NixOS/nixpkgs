@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Id/vjne73w+bDVA8wT7fV1DMXeGtYbSAdwl07UfYJbw=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
   cargoPatches = [
     # Add Cargo.lock file, https://github.com/rozgo/anevicon/pull/1
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Tries to send large UDP packets that Darwin rejects.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "UDP-based load generator";

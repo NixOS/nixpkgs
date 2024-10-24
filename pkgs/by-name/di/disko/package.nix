@@ -4,17 +4,19 @@
 , fetchFromGitHub
 , bash
 , nix
+, nixos-install
 , coreutils
+, testers
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "disko";
-  version = "1.6.1";
+  version = "1.8.2";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "disko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5CNvkH0Nf7yMwgKhjUNg/lUK40C7DXB4zKOuA2jVO90=";
+    hash = "sha256-O0QVhsj9I/hmcIqJ4qCqFyzvjYL+dtzJP0C5MFd8O/Y=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];
@@ -26,7 +28,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in disko disko-install; do
       sed -e "s|libexec_dir=\".*\"|libexec_dir=\"$out/share/disko\"|" "$i" > "$out/bin/$i"
       chmod 755 "$out/bin/$i"
-      wrapProgram "$out/bin/$i" --prefix PATH : ${lib.makeBinPath [ nix coreutils ]}
+      wrapProgram "$out/bin/$i" \
+        --set DISKO_VERSION "${finalAttrs.version}" \
+        --prefix PATH : ${lib.makeBinPath [ nix coreutils nixos-install ]}
     done
     runHook postInstall
   '';
@@ -37,12 +41,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     $out/bin/disko-install --help
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
   meta = {
     homepage = "https://github.com/nix-community/disko";
     description = "Declarative disk partitioning and formatting using nix";
     license = lib.licenses.mit;
     mainProgram = "disko";
-    maintainers = with lib.maintainers; [ mic92 lassulus ];
+    maintainers = with lib.maintainers; [ mic92 lassulus iFreilicht ];
     platforms = lib.platforms.linux;
   };
 })

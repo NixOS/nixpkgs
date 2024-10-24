@@ -10,23 +10,24 @@
   rav1e,
   nix-update-script,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "av1an-unwrapped";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "master-of-zen";
     repo = "av1an";
-    rev = version;
-    hash = "sha256-A4/1UdM8N5CHP44PBNB+ZH2Gcl84rcpUBwQRSnubBGc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Mb5I+9IBwpfmK1w4LstNHI/qsJKlCuRxgSUiqpwUqF0=";
   };
 
-  cargoHash = "sha256-ahoiCAUREtXgXLNrWVQ2Gc65bWMo4pIJXP9xjnQAlaI=";
+  cargoHash = "sha256-IWcSaJoakXSPIdycWIikGSmOk+D4A3aMnJwuiKn8XNY=";
 
   nativeBuildInputs = [
-    rustPlatform.bindgenHook
-    pkg-config
     nasm
+    pkg-config
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -40,7 +41,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "'^(\d*\.\d*\.\d*)$'"
+      ];
+    };
   };
 
   meta = {
@@ -50,7 +56,7 @@ rustPlatform.buildRustPackage rec {
       It can increase your encoding speed and improve cpu utilization by running multiple encoder processes in parallel.
     '';
     homepage = "https://github.com/master-of-zen/Av1an";
-    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${src.rev}";
+    changelog = "https://github.com/master-of-zen/Av1an/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "av1an";

@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.129"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.35.29"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFbiWvYRLWnF0UoVtC92unaHaHq8RjqWrF7coZwKnC0=";
+    hash = "sha256-TtKKsDZ1uwCKKQxFLF3deqpdTj+hkSqtvfkwV+6ENis=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "botocore" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ awscrt ];
   };
 

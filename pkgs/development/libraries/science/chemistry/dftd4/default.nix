@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
   };
 
+  patches = [
+    # Make sure fortran headers are installed directly in /include
+    ./fortran-module-dir.patch
+  ];
+
   nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ blas lapack mctc-lib mstore multicharge ];

@@ -6,17 +6,18 @@
 {stdenvNoCC, cvs, openssh, lib}:
 
 lib.makeOverridable (
-{cvsRoot, module, tag ? null, date ? null, sha256}:
+  lib.fetchers.withNormalizedHash { } (
+    {cvsRoot, module, tag ? null, date ? null, outputHash, outputHashAlgo}:
 
-stdenvNoCC.mkDerivation {
-  name = "cvs-export";
-  builder = ./builder.sh;
-  nativeBuildInputs = [cvs openssh];
+    stdenvNoCC.mkDerivation {
+      name = "cvs-export";
+      builder = ./builder.sh;
+      nativeBuildInputs = [cvs openssh];
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = sha256;
+      inherit outputHash outputHashAlgo;
+      outputHashMode = "recursive";
 
-  inherit cvsRoot module sha256 tag date;
-}
+      inherit cvsRoot module tag date;
+    }
+  )
 )

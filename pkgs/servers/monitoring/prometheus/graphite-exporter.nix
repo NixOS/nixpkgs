@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "graphite-exporter";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "graphite_exporter";
     rev = "v${version}";
-    hash = "sha256-KBqLPKd8XP7PbjHJu1DIQ2ir+Lyk7LEBaNjJCr91LP8=";
+    hash = "sha256-GiXg4FkEDveKI3JPRJ5bYmdfmcum5abN70ESwH0S7EA=";
   };
 
-  vendorHash = "sha256-he2bmcTNkuKRsNGkn1IkhtOe+Eo/5RLWLYlNFWLo/As=";
+  vendorHash = "sha256-SXxjCXWJcVAyTjH77ga1pFdudUjQfDJCD78fiDlw9Y0=";
 
   checkFlags =
     let

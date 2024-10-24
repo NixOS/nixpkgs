@@ -82,8 +82,9 @@ with pkgs.lib;
         machine.wait_for_unit("multi-user.target")
 
         with subtest("BTRFS filesystems are mounted correctly"):
-          machine.succeed("grep -E '/dev/vda / btrfs rw,relatime,space_cache=v2,subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
-          machine.succeed("grep -E '/dev/vda /home btrfs rw,relatime,space_cache=v2,subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
+          print("output of \"grep -E '/dev/vda' /proc/mounts\":\n" + machine.execute("grep -E '/dev/vda' /proc/mounts")[1])
+          machine.succeed("grep -E '/dev/vda / btrfs rw,.*subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
+          machine.succeed("grep -E '/dev/vda /home btrfs rw,.*subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
       '';
     };
 

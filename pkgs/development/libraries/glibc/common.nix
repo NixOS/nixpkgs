@@ -37,19 +37,21 @@
 , profilingLibraries ? false
 , withGd ? false
 , enableCET ? false
+, enableCETRuntimeDefault ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
-  version = "2.39";
-  patchSuffix = "-52";
-  sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
+  version = "2.40";
+  patchSuffix = "-36";
+  sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
+assert enableCET == false -> !enableCETRuntimeDefault;
 
 stdenv.mkDerivation ({
   version = version + patchSuffix;
@@ -60,17 +62,17 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-          glibc-2.39-52-gf8e4623421
-          $ git show --minimal --reverse glibc-2.39.. ':!ADVISORIES' > 2.39-master.patch
+          glibc-2.40-36-g7073164add
+          $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
 
          To compare the archive contents zdiff can be used.
-          $ diff -u 2.39-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.39-master.patch
+          $ diff -u 2.40-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.40-master.patch
 
          Please note that each commit has changes to the file ADVISORIES excluded since
          that conflicts with the directory advisories/ making cross-builds from
          hosts with case-insensitive file-systems impossible.
        */
-      ./2.39-master.patch
+      ./2.40-master.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -114,7 +116,8 @@ stdenv.mkDerivation ({
       lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
     )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+    ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
 
   postPatch =
     ''
@@ -202,7 +205,7 @@ stdenv.mkDerivation ({
 
   env = {
     linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
-    inherit (stdenv) is64bit;
+    inherit (stdenv.hostPlatform) is64bit;
     # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
     # prevent a retained dependency on the bootstrap tools in the stdenv-linux
     # bootstrap.
@@ -291,7 +294,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 connorbaker ];
+    maintainers = with maintainers; [ ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

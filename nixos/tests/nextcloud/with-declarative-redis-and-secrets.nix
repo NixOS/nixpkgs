@@ -1,29 +1,18 @@
-args@{ nextcloudVersion ? 27, ... }:
-(import ../make-test-python.nix ({ pkgs, ...}: let
-  adminuser = "custom_admin_username";
-  # This will be used both for redis and postgresql
-  pass = "hunter2";
-  # Don't do this at home, use a file outside of the nix store instead
-  passFile = toString (pkgs.writeText "pass-file" ''
-    ${pass}
-  '');
-in {
-  name = "nextcloud-with-declarative-redis";
+{ name, pkgs, testBase, system, ... }:
+
+with import ../../lib/testing-python.nix { inherit system pkgs; };
+runTest ({ config, ... }: let inherit (config) adminuser; in {
+  inherit name;
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ma27 ];
   };
 
+  imports = [ testBase ];
+
   nodes = {
-    # The only thing the client needs to do is download a file.
-    client = { ... }: {};
-
     nextcloud = { config, pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ 80 ];
-
+      environment.systemPackages = [ pkgs.jq ];
       services.nextcloud = {
-        enable = true;
-        hostName = "nextcloud";
-        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = false;
           redis = true;
@@ -35,10 +24,9 @@ in {
           dbtype = "pgsql";
           dbname = "nextcloud";
           dbuser = adminuser;
-          dbpassFile = passFile;
-          adminuser = adminuser;
-          adminpassFile = passFile;
+          dbpassFile = config.services.nextcloud.config.adminpassFile;
         };
+
         secretFile = "/etc/nextcloud-secrets.json";
 
         settings = {
@@ -68,7 +56,7 @@ in {
         package = pkgs.postgresql_14;
       };
       systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
-        password=$(cat ${passFile})
+        password=$(cat ${config.services.nextcloud.config.dbpassFile})
         ${config.services.postgresql.package}/bin/psql <<EOF
           CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
           CREATE DATABASE nextcloud;
@@ -89,38 +77,9 @@ in {
     };
   };
 
-  testScript = let
-    withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
-      #!${pkgs.runtimeShell}
-      export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
-      export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
-      export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
-      export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${pass})"
-      "''${@}"
-    '';
-    copySharedFile = pkgs.writeScript "copy-shared-file" ''
-      #!${pkgs.runtimeShell}
-      echo 'hi' | ${pkgs.rclone}/bin/rclone rcat nextcloud:test-shared-file
-    '';
-
-    diffSharedFile = pkgs.writeScript "diff-shared-file" ''
-      #!${pkgs.runtimeShell}
-      diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
-    '';
-  in ''
-    start_all()
-    nextcloud.wait_for_unit("multi-user.target")
-    nextcloud.succeed("curl -sSf http://nextcloud/login")
-    nextcloud.succeed(
-        "${withRcloneEnv} ${copySharedFile}"
-    )
-    client.wait_for_unit("multi-user.target")
-    client.succeed(
-        "${withRcloneEnv} ${diffSharedFile}"
-    )
-
-    # redis cache should not be empty
-    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+  test-helpers.extraTests = ''
+    with subtest("non-empty redis cache"):
+        # redis cache should not be empty
+        nextcloud.fail('test 0 -lt "$(redis-cli --pass secret --json KEYS "*" | jq "len")"')
   '';
-})) args
+})

@@ -3,6 +3,7 @@
   buildPythonPackage,
   chardet,
   fetchFromGitHub,
+  setuptools,
   karton-core,
   pytestCheckHook,
   python-magic,
@@ -12,30 +13,31 @@
 buildPythonPackage rec {
   pname = "karton-classifier";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-classifier";
     rev = "refs/tags/v${version}";
     hash = "sha256-DH8I4Lbbs2TVMvYlvh/P2I/7O4+VechP2JDDVHNsTSg=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "chardet"
+    "python-magic"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     karton-core
     python-magic
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "chardet==3.0.4" "chardet" \
-      --replace "python-magic==0.4.18" "python-magic"
-  '';
 
   pythonImportsCheck = [ "karton.classifier" ];
 

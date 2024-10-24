@@ -24,7 +24,7 @@ buildGoModule rec {
   '';
 
   # Tests fail in Darwin sandbox.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installShellCompletion --cmd ocm \

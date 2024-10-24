@@ -17,31 +17,31 @@
   zlib,
 
   msaClientID ? null,
-  gamemodeSupport ? stdenv.isLinux,
+  gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "a5e8fd52b8bf4ab5d5bcc042b2a247867589985f";
-    hash = "sha256-A5kTgICnx+Qdq3Fir/bKTfdTt/T1NQP2SC+nhN1ENug=";
+    rev = "23b955121b8217c1c348a9ed2483167a6f3ff4ad";
+    hash = "sha256-yy0q+bky80LtK1GWzz7qpM+aAGrOqLuewbid8WT1ilk=";
   };
 in
 
 assert lib.assertMsg (
-  gamemodeSupport -> stdenv.isLinux
+  gamemodeSupport -> stdenv.hostPlatform.isLinux
 ) "gamemodeSupport is only available on Linux.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "8.4";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
-    rev = finalAttrs.version;
-    hash = "sha256-460hB91M2hZm+uU1tywJEj20oRd5cz/NDvya8/vJdSA=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-EFpZ3V8wm7q7iwUJg0kKdZzOviWKsCji0jgYrrrKSI0=";
   };
 
   postUnpack = ''
@@ -62,14 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
       cmark
       ghc_filesystem
       kdePackages.qtbase
+      kdePackages.qtnetworkauth
       kdePackages.quazip
       tomlplusplus
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
     ++ lib.optional gamemodeSupport gamemode;
 
-  hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
+  hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];
 
   cmakeFlags =
     [
@@ -82,13 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
       (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # we wrap our binary manually
       (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
       # disable built-in updater
       (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
       (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
     ];
+
+  doCheck = true;
 
   dontWrapQtApps = true;
 
@@ -104,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       their associated options with a simple interface.
     '';
     homepage = "https://prismlauncher.org/";
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       minion3665

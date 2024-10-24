@@ -41,8 +41,8 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.31";
-  format = "pyproject";
+  version = "2.0.34";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-+bF7pdz8bxkR+mbrOI773qLoZVzBHpzKOENWPEuVFt8=";
+    hash = "sha256-5nnMh8pEG6rXiy0nk9SKjIOY+htXNx9eHTEtNOkLrd8=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     asyncio = [ greenlet ];
     mypy = [ mypy ];
     mssql = [ pyodbc ];

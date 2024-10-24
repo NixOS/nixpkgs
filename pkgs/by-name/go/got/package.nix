@@ -21,26 +21,26 @@
 }:
 
 let
-  stdenv' = if stdenv.isDarwin && stdenv.isx86_64
+  stdenv' = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
     then overrideSDK stdenv "11.0"
     else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.101";
+  version = "0.104";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JQZBgscxoMv4Dki77s8tYo4r5BBG+ErsDYnY5/am3MA=";
+    hash = "sha256-sy14eSC8SXUhOVoGvrB9f0+StpN5WGMiS2BJ09ZpyMk=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ libressl libbsd libevent libuuid libmd zlib ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libossp_uuid ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
@@ -53,12 +53,12 @@ stdenv'.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withSsh [
     ''-DGOT_DIAL_PATH_SSH="${lib.getExe openssh}"''
     ''-DGOT_TAG_PATH_SSH_KEYGEN="${lib.getExe' openssh "ssh-keygen"}"''
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     ''-DGOT_TAG_PATH_SIGNIFY="${lib.getExe signify}"''
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=implicit-function-declaration"
     "-Wno-error=int-conversion"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # error: conflicting types for 'strmode'
     "-DHAVE_STRMODE=1"
     # Undefined symbols for architecture arm64: "_bsd_getopt"

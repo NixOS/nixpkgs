@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     description = "Patcher for IPS and BPS files";
     homepage = "https://github.com/Alcaro/Flips";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = platforms.linux;
     mainProgram = "flips";
   };

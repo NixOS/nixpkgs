@@ -10,13 +10,13 @@
 
 tcl.mkTclDerivation rec {
   pname = "tclreadline";
-  version = "2.3.8";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclreadline";
     rev = "v${version}";
-    sha256 = "18jl56p0hwgynxpvr0v7b5mvvzc1m64fn61c0957bgb45mc250yq";
+    sha256 = "sha256-rB2bR0yu/ZFf/WOgo1LeLmciaQA42/LulnqSczmzea8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ tcl.mkTclDerivation rec {
 
   # The provided makefile leaves a wrong reference to /build/ in RPATH,
   # so we fix it after checking that everything is also present in $out
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     needed_libraries=$(ls .libs | grep '\.\(so\|la\)$')
     for lib in $needed_libraries; do
       if ! ls $out/lib | grep "$lib"; then

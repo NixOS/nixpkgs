@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-Disable-tests-requiring-network-access.patch
-  ] ++ lib.optional stdenv.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
 
   nativeBuildInputs = [ cmake ];
 
@@ -65,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   outputs = [ "out" "dev" ];
+
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp-target.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

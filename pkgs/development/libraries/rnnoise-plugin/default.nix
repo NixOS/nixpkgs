@@ -6,7 +6,7 @@
 , gtk3-x11
 , pcre
 , pkg-config
-, webkitgtk
+, webkitgtk_4_0
 , xorg
 , WebKit
 , MetalKit
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Ubsan seems to be broken on aarch64-darwin, it produces linker errors similar to https://github.com/NixOS/nixpkgs/issues/140751
     ./disable-ubsan.patch
   ];
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
       pcre
       xorg.libX11
       xorg.libXrandr
-    ] ++ lib.optionals stdenv.isLinux [
-      webkitgtk
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_0
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       WebKit
       MetalKit
       CoreAudioKit

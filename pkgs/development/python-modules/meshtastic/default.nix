@@ -2,6 +2,7 @@
   lib,
   bleak,
   buildPythonPackage,
+  dash-bootstrap-components,
   dotmap,
   fetchFromGitHub,
   hypothesis,
@@ -9,6 +10,7 @@
   parse,
   pexpect,
   platformdirs,
+  poetry-core,
   ppk2-api,
   print-color,
   protobuf,
@@ -22,6 +24,7 @@
   pythonOlder,
   pyyaml,
   requests,
+  riden,
   setuptools,
   tabulate,
   timeago,
@@ -30,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.3.11";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -39,12 +42,15 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-s56apVx7+EXkdw3FUjyGKGFjP+IVbO0/VDB4urXEtXQ=";
+    hash = "sha256-6U/oAVqzNsKFgNtQPzDovoWR23J0Ax0ssCIUjjRVeR4=";
   };
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "bleak"
+    "protobuf"
+  ];
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     bleak
@@ -69,20 +75,27 @@ buildPythonPackage rec {
     webencodings
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
+    dash-bootstrap-components
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    riden
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [ "meshtastic" ];
+
+  disabledTestPaths = [
+    # Circular import with dash-bootstrap-components
+    "meshtastic/tests/test_analysis.py"
+  ];
 
   disabledTests = [
     # TypeError

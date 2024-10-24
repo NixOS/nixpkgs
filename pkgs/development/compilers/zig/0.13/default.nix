@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
   # OS version. This causes the build to fail during stage 3 with
   # OSVersionDetectionFail when the sandbox is enabled.
-  __impureHostDeps = lib.optionals stdenv.isDarwin [
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
     "/System/Library/CoreServices/SystemVersion.plist"
   ];
@@ -95,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
+    cc = callPackage ../cc.nix { zig = finalAttrs.finalPackage; };
+    stdenv = callPackage ../stdenv.nix { zig = finalAttrs.finalPackage; };
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;

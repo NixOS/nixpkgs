@@ -35,11 +35,20 @@ let
     shelly = [
       pyswitchbot
     ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
     tilt_ble = [
       ibeacon-ble
     ];
     xiaomi_miio = [
       arrow
+    ];
+    zeroconf = [
+      aioshelly
     ];
     zha = [
       pydeconz

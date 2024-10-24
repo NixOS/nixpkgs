@@ -9,7 +9,7 @@
 , zlib
   # Linux specific dependencies
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 buildGoModule rec {
@@ -46,9 +46,9 @@ buildGoModule rec {
     go
     stdenv.cc
     nodejs
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   ldflags = [
@@ -60,7 +60,7 @@ buildGoModule rec {
   postFixup = ''
     wrapProgram $out/bin/wails \
       --prefix PATH : ${lib.makeBinPath [ pkg-config go stdenv.cc nodejs ]} \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optionals stdenv.isLinux [ gtk3 webkitgtk ])}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [ gtk3 webkitgtk_4_0 ])}" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';

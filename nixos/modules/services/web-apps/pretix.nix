@@ -249,7 +249,7 @@ in
             };
 
             host = mkOption {
-              type = with types; nullOr path;
+              type = with types; nullOr str;
               default = if cfg.settings.database.backend == "postgresql" then "/run/postgresql" else null;
               defaultText = literalExpression ''
                 if config.services.pretix.settings..database.backend == "postgresql" then "/run/postgresql"
@@ -402,6 +402,15 @@ in
         $sudo ${getExe' pythonEnv "pretix-manage"} "$@"
       '')
     ];
+
+    services.logrotate.settings.pretix = {
+      files = "${cfg.settings.pretix.logdir}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
 
     services = {
       nginx = mkIf cfg.nginx.enable {

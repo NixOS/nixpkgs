@@ -104,7 +104,7 @@ makeScopeWithSplicing' {
 
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
-  sddm = callPackage ../applications/display-managers/sddm {};
+  sddm = kdePackages.callPackage ../applications/display-managers/sddm {};
 
   sierra-breeze-enhanced = kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
 
@@ -114,6 +114,7 @@ makeScopeWithSplicing' {
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
+  xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Remove completely before 24.11
     overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";

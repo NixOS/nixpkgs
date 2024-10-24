@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     spice-protocol
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gdk-pixbuf
   ];
 

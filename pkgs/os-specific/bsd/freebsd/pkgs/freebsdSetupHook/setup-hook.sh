@@ -1,22 +1,22 @@
 setFreeBSDSrcTop() {
-  makeFlags="SRCTOP=$BSDSRCDIR $makeFlags"
+  prependToVar makeFlags "SRCTOP=$BSDSRCDIR"
 }
 
 addFreeBSDMakeFlags() {
-  makeFlags="SBINDIR=${!outputBin}/bin $makeFlags"
-  makeFlags="LIBEXECDIR=${!outputLib}/libexec $makeFlags"
-  makeFlags="LIBDATADIR=${!outputLib}/data $makeFlags"
-  makeFlags="INCLUDEDIR=${!outputDev}/include $makeFlags"
-  makeFlags="CONFDIR=${!outputBin}/etc $makeFlags"
-  makeFlags="MANDIR=${!outputMan}/share/man/man $makeFlags"
+  prependToVar makeFlags "SBINDIR=${!outputBin}/bin"
+  prependToVar makeFlags "LIBEXECDIR=${!outputLib}/libexec"
+  prependToVar makeFlags "LIBDATADIR=${!outputLib}/data"
+  prependToVar makeFlags "INCLUDEDIR=${!outputDev}/include"
+  prependToVar makeFlags "CONFDIR=${!outputBin}/etc"
+  prependToVar makeFlags "MANDIR=${!outputMan}/share/man/man"
 
   if [ -n "$debug" ]; then
-    makeFlags="DEBUGFILEDIR=${debug}/lib/debug $makeFlags"
+    prependToVar makeFlags "DEBUGFILEDIR=${debug}/lib/debug"
   else
-    makeFlags="DEBUGFILEDIR=${out}/lib/debug $makeFlags"
+    prependToVar makeFlags "DEBUGFILEDIR=${out}/lib/debug"
   fi
 
-  echo $makeFlags
+  echoCmd 'FreeBSD makeFlags' "${makeFlags[@]}"
 }
 
 postUnpackHooks+=(setFreeBSDSrcTop)

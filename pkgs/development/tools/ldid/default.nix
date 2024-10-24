@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libplist
     libxml2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "-lcrypto"
     "-lplist-2.0"
     "-lxml2"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework CoreFoundation"
     "-framework Security"
   ];

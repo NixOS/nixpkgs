@@ -3,17 +3,16 @@
 with pkgs;
 
 let
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11 { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
   openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
 
 in {
-  inherit openjfx11 openjfx17 openjfx21 openjfx22;
+  inherit openjfx17 openjfx21 openjfx22;
 
   compiler = let
     mkOpenjdk = path-linux: path-darwin: args:
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then mkOpenjdkLinuxOnly path-linux args
       else let
         openjdk = callPackage path-darwin {};
@@ -21,7 +20,7 @@ in {
 
     mkOpenjdkLinuxOnly = path-linux: args: let
       openjdk = callPackage path-linux (args);
-    in assert stdenv.isLinux; openjdk // {
+    in assert stdenv.hostPlatform.isLinux; openjdk // {
       headless = openjdk.override { headless = true; };
     };
 
@@ -44,7 +43,7 @@ in {
     openjdk11 = mkOpenjdk
       ../development/compilers/openjdk/11.nix
       ../development/compilers/zulu/11.nix
-      { openjfx = openjfx11; };
+      { openjfx = throw "JavaFX is not supported on OpenJDK 11"; };
 
     openjdk17 = mkOpenjdk
       ../development/compilers/openjdk/17.nix
@@ -71,13 +70,13 @@ in {
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then ../development/compilers/temurin-bin/jdk-linux.nix
       else ../development/compilers/temurin-bin/jdk-darwin.nix
     ) {});
 
     semeru-bin = recurseIntoAttrs (callPackage (
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then ../development/compilers/semeru-bin/jdk-linux.nix
       else ../development/compilers/semeru-bin/jdk-darwin.nix
     ) {});

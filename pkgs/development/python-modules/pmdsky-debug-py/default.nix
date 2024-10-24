@@ -8,7 +8,7 @@
 #This package is auto-generated. It could totally be possible to generate it from upstream, but seems unecessary
 buildPythonPackage rec {
   pname = "pmdsky-debug-py";
-  version = "8.0.4";
+  version = "10.0.21";
   pyproject = true;
   # SkyTemple specifically require this version. This is used when patching the binary,
   # and risk to be a bit problematic if using the latest version, given it doesn’t follow semver.
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D81vXhYGxwvy26PvicniCLiS58LmrSP9ppzXKRzQSJc=";
+    sha256 = "sha256-uhLmEViiJ5+2Aw9MJP8GL7nhk8lMPcRZRB8WTDFXe+s=";
   };
 
   prePatch = "cd src";

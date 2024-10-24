@@ -5,7 +5,7 @@ buildNpmPackage rec {
   version = "0.1.36";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@githubnext/${pname}/-/${pname}-${version}.tgz";
+    url = "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-${version}.tgz";
     hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
   };
 

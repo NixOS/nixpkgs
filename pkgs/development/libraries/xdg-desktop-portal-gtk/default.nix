@@ -6,12 +6,11 @@
 , pkg-config
 , xdg-desktop-portal
 , gtk3
-, gnome
+, gnome-settings-daemon
 , gnome-desktop
 , glib
 , wrapGAppsHook3
 , gsettings-desktop-schemas
-, buildPortalsInGnome ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,17 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     xdg-desktop-portal
-  ] ++ lib.optionals buildPortalsInGnome [
     gsettings-desktop-schemas # settings exposed by settings portal
     gnome-desktop
-    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
-  ];
-
-  mesonFlags = lib.optionals (!buildPortalsInGnome) [
-    "-Dwallpaper=disabled"
-    "-Dsettings=disabled"
-    "-Dappchooser=disabled"
-    "-Dlockdown=disabled"
+    gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
   ];
 
   meta = with lib; {

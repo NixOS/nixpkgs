@@ -54,7 +54,7 @@ let
   flashbackWms = lib.optional cfg.flashback.enableMetacity {
     wmName = "metacity";
     wmLabel = "Metacity";
-    wmCommand = "${pkgs.gnome.metacity}/bin/metacity";
+    wmCommand = "${pkgs.metacity}/bin/metacity";
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 
@@ -108,7 +108,7 @@ in
             favorite-apps=[ 'firefox.desktop', 'org.gnome.Calendar.desktop' ]
           '''
         '';
-        description = "List of desktop files to put as favorite apps into gnome-shell. These need to be installed somehow globally.";
+        description = "List of desktop files to put as favorite apps into pkgs.gnome-shell. These need to be installed somehow globally.";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -123,7 +123,7 @@ in
         description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption "pkgs.gnome-session debug messages";
 
       flashback = {
         enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
@@ -162,11 +162,11 @@ in
         };
 
         panelModulePackages = mkOption {
-          default = [ pkgs.gnome.gnome-applets ];
-          defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
+          default = [ pkgs.gnome-applets ];
+          defaultText = literalExpression "[ pkgs.gnome-applets ]";
           type = types.listOf types.package;
           description = ''
-            Packages containing modules that should be made available to `gnome-panel` (usually for applets).
+            Packages containing modules that should be made available to `pkgs.gnome-panel` (usually for applets).
 
             If you're packaging something to use here, please install the modules in `$out/lib/gnome-panel/modules`.
           '';
@@ -196,7 +196,7 @@ in
       services.gnome.core-shell.enable = true;
       services.gnome.core-utilities.enable = mkDefault true;
 
-      services.displayManager.sessionPackages = [ pkgs.gnome.gnome-session.sessions ];
+      services.displayManager.sessionPackages = [ pkgs.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${lib.concatMapStrings (p: ''
@@ -228,7 +228,7 @@ in
           assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
           map
             (wm:
-              pkgs.gnome.gnome-flashback.mkSessionForWm {
+              pkgs.gnome-flashback.mkSessionForWm {
                 inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
@@ -237,25 +237,24 @@ in
         enableGnomeKeyring = true;
       };
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-flashback
-      ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      systemd.packages = [
+        pkgs.gnome-flashback
+      ] ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      environment.systemPackages = with pkgs.gnome; [
-        gnome-flashback
-        (gnome-panel-with-modules.override {
+      environment.systemPackages = [
+        pkgs.gnome-flashback
+        (pkgs.gnome-panel-with-modules.override {
           panelModulePackages = cfg.flashback.panelModulePackages;
         })
       ]
       # For /share/applications/${wmName}.desktop
-      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
-      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -266,7 +265,6 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.gnome-online-miners.enable = true;
       services.gnome.tracker-miners.enable = mkDefault true;
       services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
@@ -283,12 +281,9 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-gnome
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
-      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -310,10 +305,10 @@ in
       services.xserver.desktopManager.gnome.sessionPath =
         let
           mandatoryPackages = [
-            pkgs.gnome.gnome-shell
+            pkgs.gnome-shell
           ];
           optionalPackages = [
-            pkgs.gnome.gnome-shell-extensions
+            pkgs.gnome-shell-extensions
           ];
         in
         mandatoryPackages
@@ -330,15 +325,15 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (mkDefault true));
 
-      systemd.packages = with pkgs.gnome; [
-        gnome-session
-        gnome-shell
+      systemd.packages = [
+        pkgs.gnome-session
+        pkgs.gnome-shell
       ];
 
-      services.udev.packages = with pkgs.gnome; [
+      services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
-        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
-        mutter
+        # https://gitlab.gnome.org/GNOME/pkgs.mutter/-/merge_requests/1443
+        pkgs.mutter
       ];
 
       services.avahi.enable = mkDefault true;
@@ -359,6 +354,8 @@ in
         isSystem = true;
       };
 
+      services.orca.enable = notExcluded pkgs.orca;
+
       fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
@@ -369,20 +366,19 @@ in
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
         let
-          mandatoryPackages = with pkgs.gnome; [
-            gnome-shell
+          mandatoryPackages = [
+            pkgs.gnome-shell
           ];
-          optionalPackages = with pkgs.gnome; [
+          optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
-            gnome-backgrounds
-            gnome-bluetooth
-            gnome-color-manager
-            gnome-control-center
-            gnome-shell-extensions
+            pkgs.gnome-backgrounds
+            pkgs.gnome-bluetooth
+            pkgs.gnome-color-manager
+            pkgs.gnome-control-center
+            pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
-            pkgs.orca
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
             pkgs.gtk3.out # for gtk-launch program
@@ -396,7 +392,6 @@ in
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (lib.mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
-        with pkgs.gnome;
         utils.removePackagesByName
           ([
             pkgs.baobab
@@ -404,16 +399,16 @@ in
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
             pkgs.gnome-calendar
-            gnome-characters
-            gnome-clocks
+            pkgs.gnome-characters
+            pkgs.gnome-clocks
             pkgs.gnome-console
-            gnome-contacts
+            pkgs.gnome-contacts
             pkgs.gnome-font-viewer
-            gnome-logs
-            gnome-maps
-            gnome-music
+            pkgs.gnome-logs
+            pkgs.gnome-maps
+            pkgs.gnome-music
             pkgs.gnome-system-monitor
-            gnome-weather
+            pkgs.gnome-weather
             pkgs.loupe
             pkgs.nautilus
             pkgs.gnome-connections
@@ -424,7 +419,7 @@ in
           ] ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
             # only install gnome-software if flatpak is enabled.
-            gnome-software
+            pkgs.gnome-software
           ])
           config.environment.gnome.excludePackages;
 
@@ -456,27 +451,27 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
-        aisleriot
-        atomix
-        five-or-more
-        four-in-a-row
+      environment.systemPackages = utils.removePackagesByName [
+        pkgs.aisleriot
+        pkgs.atomix
+        pkgs.five-or-more
+        pkgs.four-in-a-row
         pkgs.gnome-2048
-        gnome-chess
-        gnome-klotski
-        gnome-mahjongg
-        gnome-mines
-        gnome-nibbles
-        gnome-robots
-        gnome-sudoku
-        gnome-taquin
-        gnome-tetravex
-        hitori
-        iagno
-        lightsoff
-        quadrapassel
-        swell-foop
-        tali
+        pkgs.gnome-chess
+        pkgs.gnome-klotski
+        pkgs.gnome-mahjongg
+        pkgs.gnome-mines
+        pkgs.gnome-nibbles
+        pkgs.gnome-robots
+        pkgs.gnome-sudoku
+        pkgs.gnome-taquin
+        pkgs.gnome-tetravex
+        pkgs.hitori
+        pkgs.iagno
+        pkgs.lightsoff
+        pkgs.quadrapassel
+        pkgs.swell-foop
+        pkgs.tali
       ] config.environment.gnome.excludePackages;
     })
 
@@ -490,7 +485,7 @@ in
         # it doesn't function well enough to be included
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
-        /* gnome-boxes */
+        /* pkgs.gnome-boxes */
       ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;

@@ -29,6 +29,7 @@ python3Packages.buildPythonPackage rec {
   pythonRelaxDeps = [
     "diagrams"
     "pydantic"
+    "pyyaml"
   ];
 
   pythonImportsCheck = [ "diagrams_as_code" ];

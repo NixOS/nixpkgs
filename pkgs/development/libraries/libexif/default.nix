@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Library to read and manipulate EXIF data in digital photographs";
     license = licenses.lgpl21;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = [ ];
   };
 
 }

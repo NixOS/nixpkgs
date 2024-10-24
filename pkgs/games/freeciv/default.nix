@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pierron ];
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
-    broken = qtClient && stdenv.isDarwin; # Missing Qt5 development files
+    broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
 }

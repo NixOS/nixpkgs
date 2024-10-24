@@ -24,16 +24,16 @@ let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
   pname = "librenms";
-  version = "24.7.0";
+  version = "24.8.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-XAtIm1YVmDhf2JjSiLDPGYhXRTL9lDQxDX+4//skC8Q=";
+    sha256 = "sha256-K4aHFMTHOLkrep2XtcilbaVsQrqXvuQmYZBl3+iG6kg=";
   };
 
-  vendorHash = "sha256-adPBPmm4BDUEY/BGsvghWGc38SbcFxsnDwLfvX6SjvQ=";
+  vendorHash = "sha256-jJa4wQJQyeV6/ZkbZCxwyNi3AmPMtnUpGa4VQzkIKy4=";
 
   php = phpPackage;
 

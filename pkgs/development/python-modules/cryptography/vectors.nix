@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    hash = "sha256-31ZXNnvAqQw3QwnLJhAJosU8rpGkWHgTOaD3JPgZpGo=";
+    hash = "sha256-XJ0JpzLVQzzt4VQqluzXCoDhIq8EfudAS83x88y45wI=";
   };
 
   nativeBuildInputs = [ flit-core ];

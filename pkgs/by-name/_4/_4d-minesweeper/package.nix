@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     owner = "gapophustu";
     repo = "4D-Minesweeper";
     rev = "db176d8aa5981a597bbae6a1a74aeebf0f376df4";
-    sha256 = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
+    hash = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
   };
 
   nativeBuildInputs = [

@@ -5,17 +5,16 @@
 
 buildGoModule rec {
   pname = "nova-password";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "sapcc";
     repo = "nova-password";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pBew5c+wlXwMLDjgwwdOSUyTxPGpa9AwbhZni8FfTsQ=";
+    hash = "sha256-tjjP+LmYaqpzmTk3tgFqZlG1KEeAkfI7RxzSm97jWVU=";
   };
 
-  # The repo contains vendored dependencies
-  vendorHash = null;
+  vendorHash = "sha256-MwemuOaXGl0eF+lVtMCgbBeJGILmaeEHcbu+xp8Lm70=";
 
   meta = {
     description = "Decrypt the admin password generated for the VM in OpenStack";

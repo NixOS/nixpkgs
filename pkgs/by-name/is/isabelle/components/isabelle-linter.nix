@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
     rev = "Isabelle2024-v1.0.1";
-    sha256 = "sha256-oTrwcfJgbkpkIweDIyc6lZjAvdS9J4agPoJgZzH+PuQ=";
+    hash = "sha256-oTrwcfJgbkpkIweDIyc6lZjAvdS9J4agPoJgZzH+PuQ=";
   };
 
   nativeBuildInputs = [ isabelle ];

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     libcap
     zlib
     openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage docs/${pname}.1

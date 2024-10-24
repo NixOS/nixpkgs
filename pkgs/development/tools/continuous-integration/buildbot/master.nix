@@ -26,6 +26,8 @@
 , moto
 , markdown
 , lz4
+, brotli
+, zstandard
 , setuptools-trial
 , buildbot-worker
 , buildbot-plugins
@@ -71,7 +73,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.0.2";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -80,7 +82,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-0ctOInVRJqjmcqy67PTriRmqo3fz1qMEVV+K5lXvZ6k=";
+    hash = "sha256-RPg4eXqpm/F1SSoB4MVo61DgZv/iE2R4VtCkUU69iA8=";
   };
 
   build-system = [
@@ -108,6 +110,9 @@ buildPythonApplication rec {
     importlib-resources
     packaging
     unidiff
+    treq
+    brotli
+    zstandard
   ]
     # tls
     ++ twisted.optional-dependencies.tls;
@@ -137,32 +142,23 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
-  '';
-  preBuild = ''
     cd master
+    touch buildbot/py.typed
+    substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
   '';
-
-  # Silence the depreciation warning from SqlAlchemy
-  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
   # TimeoutErrors on slow machines -> aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
-
-    # remove testfile which is missing configuration file from sdist
-    rm buildbot/test/integration/test_graphql.py
-    # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
-    rm buildbot/test/integration/test_try_client.py
   '';
 
   passthru = {
-    inherit withPlugins;
+    inherit withPlugins python;
     updateScript = ./update.sh;
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     tests = {
       inherit (nixosTests) buildbot;
     };
@@ -174,6 +170,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2Only;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

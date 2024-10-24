@@ -22,18 +22,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.isLinux [ alsa-lib libX11 libXext ];
+  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libX11 libXext ];
 
   enableParallelBuilding = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
 
   preBuild = ''
-    pushd ${if stdenv.isDarwin then "macos/cmdline" else "unix"}
+    pushd ${if stdenv.hostPlatform.isDarwin then "macos/cmdline" else "unix"}
   '';
 
   # TODO: build graphic version for darwin
-  buildFlags = (if stdenv.isDarwin then [ "nox" ] else [ "all" ]) ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = (if stdenv.hostPlatform.isDarwin then [ "nox" ] else [ "all" ]) ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   postBuild = ''
     popd
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    bin/${if stdenv.isDarwin then "minimacyMac" else "minimacy"} system/demo/demo.fun.mandelbrot.mcy
+    bin/${if stdenv.hostPlatform.isDarwin then "minimacyMac" else "minimacy"} system/demo/demo.fun.mandelbrot.mcy
 
     runHook postCheck
   '';

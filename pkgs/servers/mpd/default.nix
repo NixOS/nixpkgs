@@ -97,8 +97,8 @@ let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
-      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
+      platformMask = lib.optionals stdenv.hostPlatform.isDarwin [ "mad" "pulse" "jack" "smbclient" ]
+                  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
@@ -137,7 +137,7 @@ let
         gtest
       ]
         ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit ];
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ AudioToolbox AudioUnit ];
 
       nativeBuildInputs = [
         meson
@@ -148,7 +148,7 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
+      postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
           --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
@@ -166,7 +166,7 @@ let
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
 
-      CXXFLAGS = lib.optionals stdenv.isDarwin [
+      CXXFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
         "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
       ];
 
@@ -210,9 +210,9 @@ in
     "libmpdclient" "id3tag" "expat" "pcre"
     "yajl" "sqlite"
     "soundcloud" "qobuz"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "alsa" "systemd" "syslog" "io_uring"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "mad" "jack"
   ]; };
   mpdWithFeatures = run;

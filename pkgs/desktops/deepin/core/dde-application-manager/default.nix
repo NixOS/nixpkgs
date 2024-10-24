@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6Packages
-, dtk6core
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  dtk6core,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-application-manager";
-  version = "1.2.13";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-nyT5bp37gOWKbpPBmLULJmeL9oZyBwIC5vYwPyBLcAc=";
+    hash = "sha256-9WKKM3SAMgW+UL0DnzDFqA+HHi7euF/yyTyKSbrIgV4=";
   };
 
   nativeBuildInputs = [

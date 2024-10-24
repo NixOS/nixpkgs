@@ -1,26 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libffi
-, pkg-config
-, wayland-protocols
-, wayland
-, xorg
-, darwin
-, nix-update-script
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libffi,
+  pkg-config,
+  wayland-protocols,
+  wayland-scanner,
+  wayland,
+  xorg,
+  darwin,
+  nix-update-script,
+  alsa-lib,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.9.0.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-iILtyURYCshicgAV3MWkgMQsXHe7Unj1A08W7tUMU2o=";
+    hash = "sha256-1vGM9OUE7b4XVTm4Gf20CO80hjYAooeVt0REkY3xu3U=";
   };
 
   postPatch = ''
@@ -30,17 +33,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    libffi
-    wayland-protocols
-    wayland
-    xorg.libX11
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libffi
+      wayland-protocols
+      wayland
+      xorg.libX11
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ];
 
   cmakeBuildType = "MinSizeRel";
 
@@ -49,7 +56,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
 

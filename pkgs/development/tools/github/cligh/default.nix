@@ -28,6 +28,6 @@ buildPythonApplication rec {
     '';
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.jhhuh ];
+    maintainers = [ ];
   };
 }

@@ -5,9 +5,16 @@
 , extraPythonPackages ? (ps: [ ])
 
 , libsForQt5
+
+# unwrapped package parameters
+, withGrass ? false
+, withWebKit ? false
 }:
 let
-  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
+  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {
+    withGrass = withGrass;
+    withWebKit = withWebKit;
+  };
 in symlinkJoin rec {
 
   inherit (qgis-ltr-unwrapped) version;
@@ -24,13 +31,13 @@ in symlinkJoin rec {
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);
 
   postBuild = ''
-    # unpackPhase
-
     buildPythonPath "$pythonInputs"
 
-    wrapProgram $out/bin/qgis \
-      --prefix PATH : $program_PATH \
-      --set PYTHONPATH $program_PYTHONPATH
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : $program_PATH \
+        --set PYTHONPATH $program_PYTHONPATH
+    done
   '';
 
   passthru = {

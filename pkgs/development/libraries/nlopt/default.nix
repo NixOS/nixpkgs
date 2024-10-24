@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TgieCX7yUdTAEblzXY/gCN0r6F9TVDh4RdNDjQdXZ1o=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   buildInputs = [ octave ];
 
   configureFlags = [

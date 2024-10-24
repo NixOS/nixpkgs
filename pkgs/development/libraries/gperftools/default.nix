@@ -31,18 +31,18 @@ stdenv.mkDerivation rec {
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM dynamically linked linux
   buildInputs = [ perl ]
-             ++ lib.optional (stdenv.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic )) libunwind;
+             ++ lib.optional (stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isStatic )) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
   configureFlags = lib.optional stdenv.hostPlatform.isAarch
     "--disable-general-dynamic-tls";
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin
     "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal

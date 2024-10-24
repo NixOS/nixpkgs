@@ -14,7 +14,7 @@ let
   };
   platform = platforms."${stdenv.hostPlatform.system}"
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  download = if stdenv.isDarwin
+  download = if stdenv.hostPlatform.isDarwin
     then { extension = "macos.zip"; hash = "sha256-MnL6lH7q/BrACG4fFJNfnvoh0JClVeaJIlX+XIj2aG4="; }
     else { extension = "linux.tar.gz"; hash = "sha256-rDi7pvDeKQM96GZTjDr6ZDQTGbaVu+OI77xf2egw6Sg="; };
 in
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
     url = "http://static.jonof.id.au/dl/kenutils/pngout-${version}-${download.extension}";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ unzip ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
   # pngout is code-signed on Darwin, so don’t alter the binary to avoid breaking the signature.
-  dontFixup = stdenv.isDarwin;
+  dontFixup = stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
     mkdir -p $out/bin
     cp ${platform.folder}/pngout $out/bin
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/${platform.ld-linux} $out/bin/pngout
   '';
 

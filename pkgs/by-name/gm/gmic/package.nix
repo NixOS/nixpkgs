@@ -13,9 +13,12 @@
 , gnused
 , graphicsmagick
 , jq
+, libX11
+, libXext
 , libjpeg
 , libpng
 , libtiff
+, llvmPackages
 , ninja
 , opencv
 , openexr
@@ -26,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.4.0";
+  version = "3.4.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -34,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-uK/kgzlUvEAxRB8Wc3Inspv4/8vnjXrCilP1g/QMuCs=";
+    hash = "sha256-oyhwdX/eWbb5i7j/Aw7ocJk3KrGdxfKJx+P4Hzemlw8=";
   };
 
   # TODO: build this from source
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib_community.h";
     url = "https://gmic.eu/gmic_stdlib_community${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
-    hash = "sha256-LoqK8ADwzPpxhy2GvaxVjGyYEHAbhspyoIXuBXCLRtQ=";
+    hash = "sha256-quzQ0g6kmbJFygUOlKdTn9Fe9J7jhlLOiNal1kX3iHY=";
   };
 
   nativeBuildInputs = [
@@ -55,25 +58,31 @@ stdenv.mkDerivation (finalAttrs: {
     cimg
     fftw
     graphicsmagick
+    libX11
+    libXext
     libjpeg
     libpng
     libtiff
     opencv
     openexr
     zlib
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
     (lib.cmakeBool "ENABLE_CURL" false)
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
+    (lib.cmakeBool "ENABLE_OPENCV" true)
+    (lib.cmakeBool "ENABLE_XSHM" true)
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
   postPatch = ''
     cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';

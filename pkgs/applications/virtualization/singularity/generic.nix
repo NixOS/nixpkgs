@@ -326,26 +326,23 @@ in
     ''}
   '';
 
-  meta =
-    with lib;
-    {
-      description = "Application containers for linux" + extraDescription;
-      longDescription = ''
-        Singularity (the upstream) renamed themselves to Apptainer
-        to distinguish themselves from a fork made by Sylabs Inc.. See
+  meta = {
+    description = "Application containers for linux" + extraDescription;
+    longDescription = ''
+      Singularity (the upstream) renamed themselves to Apptainer
+      to distinguish themselves from a fork made by Sylabs Inc.. See
 
-        https://sylabs.io/2021/05/singularity-community-edition
-        https://apptainer.org/news/community-announcement-20211130
-      '';
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        jbedo
-        ShamrockLee
-      ];
-      mainProgram = projectName;
-    }
-    // extraMeta;
+      https://sylabs.io/2021/05/singularity-community-edition
+      https://apptainer.org/news/community-announcement-20211130
+    '';
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jbedo
+      ShamrockLee
+    ];
+    mainProgram = projectName;
+  } // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {

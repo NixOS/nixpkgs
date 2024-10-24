@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/xorg62/tty-clock";
     license = licenses.bsd3;
     description = "Digital clock in ncurses";

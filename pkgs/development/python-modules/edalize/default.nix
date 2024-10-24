@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jinja2 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     reporting = [
       pandas
       pyparsing
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "edalize" ];
 

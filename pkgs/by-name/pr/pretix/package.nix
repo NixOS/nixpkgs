@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.7.0";
+  version = "2024.9.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-08ykuFPcG3WvinJd9zadirXFqsMt9GbdOGU2CGbW7ls=";
+    hash = "sha256-L6mTfLIx8kD/5s0Dfp24TEATmjxBXERQjynB0szH3DM=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-BfvKuwB5VLX09Lxji+EpMBvZeKTIQvptVtrHSRYY+14=";
+    npmDepsHash = "sha256-zUui5tYINTDKA91WgRV51ilIPFBJpZ+S2fJwW85KJ9k=";
 
     dontBuild = true;
 
@@ -87,25 +87,23 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
-
-    # https://github.com/pretix/pretix/pull/4362
-    # Fix TOCTOU race in directory creation
-    ./pr4362.patch
   ];
 
   pythonRelaxDeps = [
+    "django-phonenumber-field"
     "importlib-metadata"
     "kombu"
+    "markdown"
     "pillow"
     "protobuf"
+    "pyjwt"
     "python-bidi"
+    "qrcode"
     "requests"
     "sentry-sdk"
   ];
 
   pythonRemoveDeps = [
-    "phonenumberslite" # we provide phonenumbers instead
-    "psycopg2-binary" # we provide psycopg2 instead
     "vat-moss-forked" # we provide a patched vat-moss package
   ];
 
@@ -140,7 +138,6 @@ python.pkgs.buildPythonApplication rec {
     cryptography
     css-inline
     defusedcsv
-    dj-static
     django
     django-bootstrap3
     django-compressor
@@ -178,11 +175,11 @@ python.pkgs.buildPythonApplication rec {
     paypalrestsdk
     paypal-checkout-serversdk
     pyjwt
-    phonenumbers
+    phonenumberslite
     pillow
     pretix-plugin-build
     protobuf
-    psycopg2
+    psycopg2-binary
     pycountry
     pycparser
     pycryptodome
@@ -199,7 +196,6 @@ python.pkgs.buildPythonApplication rec {
     sentry-sdk
     sepaxml
     slimit
-    static3
     stripe
     text-unidecode
     tlds
