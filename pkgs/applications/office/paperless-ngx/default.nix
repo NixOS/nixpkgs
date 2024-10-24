@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.12.1";
+  version = "2.13.0-beta.rc1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-txqwVGLUel74ObCqwMWSqa4Nd2eDRf0SqAIes5tlMDg=";
+    hash = "sha256-WDDHNuq26nrBUZSPOB6s5Az81tk+lc9hJJ8EiHWlj2s=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -40,6 +40,14 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      django = prev.django_5;
+
+      django-extensions = prev.django-extensions.overridePythonAttrs {
+        # Compat issues with Django 5.1
+        # https://github.com/django-extensions/django-extensions/issues/1885
+        doCheck = false;
+      };
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
 
@@ -76,7 +84,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-hb2z2cPMTN5bHtUldTR5Mvgo4nZL8/S+Uhfis37gF44=";
+    npmDepsHash = "sha256-bPtm3me84QeJgn297d8pStJSwMXnZG1XL5rokhrXg9Q=";
 
     nativeBuildInputs = [
       pkg-config
@@ -155,8 +163,10 @@ python.pkgs.buildPythonApplication rec {
     flower
     gotenberg-client
     gunicorn
+    httpx-oauth
     imap-tools
     inotifyrecursive
+    jinja2
     langdetect
     mysqlclient
     nltk
