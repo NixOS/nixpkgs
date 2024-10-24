@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       FlafyDev
       NotAShelf
       Scrumplex
+      donteatoreo
     ];
   };
 })
