@@ -91,10 +91,18 @@ in
     buildInputs = [ perlPackages.NetSNMP ];
   };
 
-  check_ups_health = generic {
+  check_ups_health = generic rec {
     pname = "check-ups-health";
-    version = "2.8.3.3";
-    sha256 = "0qc2aglppwr9ms4p53kh9nr48625sqrbn46xs0k9rx5sv8hil9hm";
+    version = "4.3.1.1";
+
+    src = fetchFromGitHub {
+      owner = "lausser";
+      repo = "check_ups_health";
+      rev = "refs/tags/${version}";
+      hash = "sha256-ZGSTPVJObP49/tDASOCh4wVdMKajheHD+xVTiFf101k=";
+      fetchSubmodules = true;
+    };
+
     description = "Check plugin for UPSs";
     buildInputs = [ perlPackages.NetSNMP ];
   };
