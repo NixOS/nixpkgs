@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      pnpmWorkspace
+      pnpmWorkspaces
       prePnpmInstall
       ;
     hash = "sha256-/X8ZoWK5kBPm/8clBDP+B9A5ofXnH2svmy4kMc2t5iA=";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Must specify to download "@astrojs/yaml2ts" depencendies
   # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspace = "@astrojs/language-server...";
+  pnpmWorkspaces = [ "@astrojs/language-server..." ];
   prePnpmInstall = ''
     # Warning section for "pnpm@v8"
     # https://pnpm.io/cli/install#--filter-package_selector
