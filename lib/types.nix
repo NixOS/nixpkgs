@@ -510,6 +510,27 @@ rec {
           else res;
     };
 
+    driverPackage = package // rec {
+      check = (x:
+        isDerivation x
+        # Must have an APIs attribute
+        && x.passthru.APIs or [ ] != [ ]
+        # If it has a lower bitness package, check it aswell
+        && (
+          if x.stdenv.is64bit && x.passthru ? lowerBitnessPackage
+          then check x.passthru.lowerBitnessPackage
+          else true
+        )
+      );
+    };
+
+    packageSelector = mkOptionType {
+      name = "packageSelector";
+      descriptionClass = "noun";
+      check = x: isFunction x; # TODO check whether the package selects a drv
+      merge = mergeEqualOption;
+    };
+
     shellPackage = package // {
       check = x: isDerivation x && hasAttr "shellPath" x;
     };
