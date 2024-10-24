@@ -301,6 +301,8 @@ in {
 
     openswoole = callPackage ../development/php-packages/openswoole { };
 
+    parallel = callPackage ../development/php-packages/parallel { };
+
     pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
