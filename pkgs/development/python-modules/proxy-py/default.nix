@@ -62,6 +62,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
