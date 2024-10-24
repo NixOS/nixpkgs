@@ -6,11 +6,12 @@
 }:
 
 let
-  version = "17.2.9";
+  version = "17.3.6";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
   git = callPackage ./git.nix { };
+  gitMajorMinor = lib.versions.majorMinor git.version;
 
   commonOpts = {
     inherit version;
@@ -20,10 +21,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-UgNQtM3NdAUJVP+vvTHtZWSjCmVzsHlEtXQroxKorIY=";
+      hash = "sha256-nXblQfr9ml6F5nNz64haN7ub+cuN3eao14N0Y2d3n0Y=";
     };
 
-    vendorHash = "sha256-FqnGVRldhevJgBBvJcvGXzRaYWqSHzZiXIQmCNzJv+4=";
+    vendorHash = "sha256-spfSOOe+9NGu+2ZbEGb93X3HnANEXYbvP73DD6neIXQ=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
@@ -46,6 +47,13 @@ buildGoModule ({
   preConfigure = ''
     mkdir -p _build/bin
     cp -r ${auxBins}/bin/* _build/bin
+    # gitaly embeds these git binaries in its own binary
+    # https://gitlab.com/gitlab-org/gitaly/-/blob/10fd91391a7c30ca54ec81eea881740cfdee8b0a/Makefile#L122
+    for f in ${git}/bin/gitaly-{git,git-remote-http,git-http-backend}-v${gitMajorMinor}; do
+      dest=''${f/#"${git}/bin/gitaly-"/}
+      dest=''${dest/%"-v${gitMajorMinor}"/}
+      cp -a $f _build/bin/$dest
+    done
   '';
 
   outputs = [ "out" ];

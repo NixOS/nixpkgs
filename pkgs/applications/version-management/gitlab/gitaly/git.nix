@@ -9,15 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gitaly-git";
-  version = "2.44.2.gl1";
+  version = "2.45.2";
 
   # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
     rev = "v${version}";
-    hash = "sha256-VIffbZZEbGjVW1No8zojSQlX/ciJ2DJnaogNlQtc77o=";
+    hash = "sha256-R4K5b4d1DQw+pwoOCAK4EJtVPXQDPossTUmVv0LJtUs=";
   };
+
+  majmin = lib.versions.majorMinor version;
 
   # we actually use the gitaly build system
   unpackPhase = ''
@@ -26,16 +28,16 @@ stdenv.mkDerivation rec {
 
     mkdir -p source/_build/deps
 
-    cp -r ${src} source/_build/deps/git-distribution
-    chmod -R +w source/_build/deps/git-distribution
+    cp -r ${src} source/_build/deps/git-v${majmin}
+    chmod -R +w source/_build/deps/git-v${majmin}
 
     # FIXME? maybe just patch the makefile?
-    echo -n 'v${version} DEVELOPER=1 DEVOPTS=no-error USE_LIBPCRE=YesPlease NO_PERL=YesPlease NO_EXPAT=YesPlease NO_TCLTK=YesPlease NO_GETTEXT=YesPlease NO_PYTHON=YesPlease' > source/_build/deps/git-distribution.version
-    echo -n 'v${version}' > source/_build/deps/git-distribution/version
+    echo -n 'v${version} DEVELOPER=1 DEVOPTS=no-error USE_LIBPCRE=YesPlease NO_PERL=YesPlease NO_EXPAT=YesPlease NO_TCLTK=YesPlease NO_GETTEXT=YesPlease NO_PYTHON=YesPlease' > source/_build/deps/git-v${majmin}.version
+    echo -n 'v${version}' > source/_build/deps/git-v${majmin}/version
   '';
   sourceRoot = "source";
 
-  buildFlags = [ "git" ];
+  buildFlags = [ "install-bundled-git" ];
 
   buildInputs = [
     curl
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   # The build phase already installs it all
-  GIT_PREFIX = placeholder "out";
+  PREFIX = placeholder "out";
   dontInstall = true;
 
   meta = {
