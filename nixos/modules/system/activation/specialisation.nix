@@ -42,7 +42,7 @@ in
         (e.g. `fewJobsManyCores`) at runtime, run:
 
         ```
-        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        sudo /run/current-system/specialisation/fewJobsManyCores/bin/apply test
         ```
       '';
       type = types.attrsOf (types.submodule (
