@@ -26032,9 +26032,11 @@ with pkgs;
     fetchurl = import ../build-support/fetchurl/boot.nix {
       inherit (stdenv.buildPlatform) system;
     };
-    checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
+    checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
   });
-  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
+  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix {
+    inherit (stdenv) hostPlatform;
+  };
   make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
     inherit (stdenv) hostPlatform;
   };
@@ -28468,8 +28470,6 @@ with pkgs;
 
   catt = callPackage ../applications/video/catt { };
 
-  cava = callPackage ../applications/audio/cava { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
@@ -29051,8 +29051,6 @@ with pkgs;
   keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
 
   kerbrute = callPackage ../tools/security/kerbrute { };
-
-  komikku = callPackage ../applications/graphics/komikku { };
 
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
 
@@ -31173,9 +31171,8 @@ with pkgs;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
+  mpv-unwrapped = callPackage ../applications/video/mpv {
     stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-    inherit lua;
   };
 
   # Wrap avoiding rebuild

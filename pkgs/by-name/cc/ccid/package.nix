@@ -5,6 +5,8 @@
   flex,
   gitUpdater,
   libusb1,
+  meson,
+  ninja,
   pcsclite,
   perl,
   pkg-config,
@@ -22,14 +24,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace src/Makefile.am --replace-fail /bin/echo echo
+    substituteInPlace meson.build --replace-fail \
+      "pcsc_dep.get_variable('usbdropdir')" \
+      "'$out/pcsc/drivers'"
   '';
 
-  configureFlags = [
-    "--enable-twinserial"
-    "--enable-serialconfdir=${placeholder "out"}/etc/reader.conf.d"
-    "--enable-ccidtwindir=${placeholder "out"}/pcsc/drivers/serial"
-    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
+  mesonFlags = [
+    (lib.mesonBool "serial" true)
   ];
 
   # error: call to undeclared function 'InterruptRead';
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
     flex
     perl
     pkg-config
+    meson
+    ninja
   ];
 
   buildInputs = [
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm 0444 -t $out/lib/udev/rules.d src/92_pcscd_ccid.rules
+    install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
       --replace-fail "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
   '';
@@ -63,6 +66,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater {
     url = "https://salsa.debian.org/rousseau/CCID.git";
   };
+
+  installCheckPhase = ''
+    [ -f $out/etc/reader.conf.d/libccidtwin ]
+    [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
+    [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
+  '';
 
   meta = with lib; {
     description = "PC/SC driver for USB CCID smart card readers";

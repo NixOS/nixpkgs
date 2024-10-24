@@ -1,7 +1,6 @@
 { stdenv, lib, fetchpatch
 , recompressTarball
 , buildPackages
-, buildPlatform
 , pkgsBuildBuild
 # Channel data:
 , channel, upstream-info

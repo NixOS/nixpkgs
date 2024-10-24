@@ -282,6 +282,7 @@ in
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         StateDirectory = "immich";
+        SyslogIdentifier = "immich";
         RuntimeDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;

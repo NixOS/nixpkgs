@@ -108,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-isystem ${lib.getDev libcxx}/include/c++/v1"
       "-I${lib.getDev spirv-cross}/include/spirv_cross"
       "-I${lib.getDev spirv-headers}/include/spirv/unified1"
+
+      # MoltenVK prints a lot of verbose output to the console out of
+      # the box; we adjust this to match Homebrew’s default log level.
+      "-DMVK_CONFIG_LOG_LEVEL=MVK_CONFIG_LOG_LEVEL_NONE"
     ]
     ++ lib.optional enablePrivateAPIUsage "-DMVK_USE_METAL_PRIVATE_API=1"
   );

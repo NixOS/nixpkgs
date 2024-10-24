@@ -18,7 +18,8 @@ buildPythonPackage {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "pyre_extensions";  # changed pname on 0.0.31?
     hash = "sha256-lFgG3TMCeFbPbkHJxK2s/6srVpk/h2L/TqeCb5XbBIE=";
   };
 

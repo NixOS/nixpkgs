@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "oscar";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitLab {
     owner = "pholy";
     repo = "OSCAR-code";
-    rev = "v${version}";
-    hash = "sha256-FBHbPtMZeIgcR1pQflfEWK2FS8bquctXaeY/yaZofHg=";
+    rev = "${version}";
+    hash = "sha256-ukd2pni4qEwWxG4lr8KUliZO/R2eziTTuSvDo8uigxQ=";
   };
 
   buildInputs = [
