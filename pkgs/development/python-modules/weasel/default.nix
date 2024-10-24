@@ -1,27 +1,30 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cloudpathlib,
   confection,
-  fetchFromGitHub,
   packaging,
   pydantic,
-  pytestCheckHook,
-  pythonOlder,
   requests,
-  setuptools,
   smart-open,
   srsly,
   typer,
   wasabi,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "weasel";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "explosion";
@@ -52,7 +55,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weasel" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # This test requires internet access
@@ -61,12 +66,12 @@ buildPythonPackage rec {
     "test_project_git_file_asset"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small and easy workflow system";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "weasel";
   };
 }

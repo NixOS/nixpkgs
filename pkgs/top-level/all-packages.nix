@@ -4806,7 +4806,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_31;
+    electron = electron_32;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -11863,8 +11863,6 @@ with pkgs;
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
-
-  rpiboot = callPackage ../development/misc/rpiboot { };
 
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
