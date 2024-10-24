@@ -2,19 +2,22 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  libxkbcommon
+  libxkbcommon,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2024-05-23";
+  version = "0-unstable-2024-09-20";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
     repo = "wayfreeze";
-    rev = "069dea0b832bd5b7a7872a57bd53f51cd377f206";
-    hash = "sha256-3btFzZbkHT6kBBA3M7OwFsD710VpMiHSXIpHmvCD/es=";
+    rev = "dcbe2690ce41a286ef1eed54747bac47cee6dc2c";
+    hash = "sha256-XlZSVN/kTSA5X/kTpD/Hr5YBXdfh8gJPq5Da4tL0Gpk=";
   };
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   cargoHash = "sha256-3OjZhWAgfmMZ0OGeRawk3KZpPqz1QCVkwsyGM+E7o88=";
 
