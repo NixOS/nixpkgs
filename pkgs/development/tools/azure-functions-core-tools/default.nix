@@ -34,6 +34,11 @@ buildDotnetModule rec {
       --replace "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
   '';
 
+  dotnetBuildFlags = [
+    "-p:BuildNumber=${lib.versions.patch version}"
+    "-p:CommitHash=${src.rev}"
+  ];
+
   postInstall = ''
     mkdir -p $out/bin
     ln -s ${gozip}/bin/gozip $out/bin/gozip
