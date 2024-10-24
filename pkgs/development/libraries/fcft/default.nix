@@ -17,24 +17,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.1.8";
+  version = "3.1.9";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    hash = "sha256-Wgm2QdW4rg573soF/8HhDmlyN4S2cA0VWOejow464gU=";
+    hash = "sha256-D4W62IHuM7ofEeU/3sp038tv2a1+xQd0mdSKXaY7Ikg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "system-nanosvg.patch";
-      url = "https://codeberg.org/dnkl/fcft/commit/5cee776e1d7f1bdb0df383c3dd798831a6fe4fa0.patch";
-      excludes = [ "CHANGELOG.md" ];
-      hash = "sha256-yRBtKCKT/Oih66/OQqt4GPg3GfHmhiLM8mlLEWYYRC0=";
-    })
-  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
