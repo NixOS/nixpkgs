@@ -1,51 +1,38 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudflare-dyndns";
-  version = "4.1";
-  format = "pyproject";
+  version = "5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kissgyorgy";
-    repo = pname;
+    repo = "cloudflare-dyndns";
     rev = "v${version}";
-    hash = "sha256-6Q5fpJ+HuQ+hc3xTtB5tR43pn9WZ0nZZR723iLAkpis=";
+    hash = "sha256-tI6qdNxIMEuAR+BcqsRi2EBXTQnfdDLKW7Y+fbcmlao=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     attrs
     click
     cloudflare
-    pydantic_1
+    pydantic
     requests
+    httpx
+    truststore
   ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/kissgyorgy/cloudflare-dyndns/pull/22
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/kissgyorgy/cloudflare-dyndns/commit/741ed1ccb3373071ce15683a3b8ddc78d64866f8.patch";
-      sha256 = "sha256-mjSah0DWptZB6cjhP6dJg10BpJylPSQ2K4TKda7VmHw=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'attrs = "^21.1.0"' 'attrs = "*"'
-  '';
 
   disabledTests = [
     "test_get_ipv4"
