@@ -24,6 +24,7 @@
 , python311Packages
 , runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.hostPlatform.isLinux
+, ifcSupport ? false
 , stdenv
 , swig
 , vtk
@@ -48,6 +49,7 @@ let
   inherit (python311Packages)
     boost
     gitpython
+    ifcopenshell
     matplotlib
     pivy
     ply
@@ -126,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals spaceNavSupport [
       libspnav
       qtx11extras
+    ]
+    ++ lib.optionals ifcSupport [
+      ifcopenshell
     ];
 
   patches = [
@@ -210,6 +215,14 @@ stdenv.mkDerivation (finalAttrs: {
       mechanical engineering and architecture. Whether you are a hobbyist, a
       programmer, an experienced CAD user, a student or a teacher, you will feel
       right at home with FreeCAD.
+
+      This package supports the following parameters:
+
+      - withWayland (default: true): when false, set QT_QPA_PLATFORM to xcb
+      - spaceNavSupport (enabled by default on linux): whether to enable
+        [spacenavd support](https://spacenav.sourceforge.net/)
+      - ifcSupport (default: false): whether to enable ifc support through
+        ifcopenshell
     '';
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ gebner AndersonTorres srounce ];
