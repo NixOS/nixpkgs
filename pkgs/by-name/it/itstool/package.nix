@@ -1,7 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  python3Packages,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,22 +18,21 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    python3
-    python3.pkgs.wrapPython
-  ];
-
-  buildInputs = [
-    python3
-    python3.pkgs.libxml2
+    python3Packages.python
+    python3Packages.libxml2
+    python3Packages.wrapPython
   ];
 
   pythonPath = [
-    python3.pkgs.libxml2
+    python3Packages.libxml2
   ];
 
   postFixup = ''
     wrapPythonPrograms
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://itstool.org/";
