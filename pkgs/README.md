@@ -741,6 +741,34 @@ stdenv.mkDerivation {
 }
 ```
 
+### Version Testing
+
+Many programs provide a command-line option that emits its version. Therefore, the most straightforward test is to run the program with that specific command-line and verify the output.
+
+Nixpkgs provides two tools for this task: [`testers.testVersion`](#tester-testVersion) and [`versionCheckHook`](#versioncheckhook).
+
+#### Comparison between `versionCheckHook` and `testers.testVersion`
+
+The most notable difference between `versionCheckHook` and `testers.testVersion` is that `versionCheckHook` runs at the build time of the package, while `passthru.tests.versions` executes a whole derivation that depends on the package.
+
+The advantages of `testers.testVersion` over `versionCheckHook` are listed at [Package tests](#var-passthru-tests-packages) already. Below we will list some advantages of `versionCheckHook` over `testers.testVersion`:
+
+- Since [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) does not execute `passthru.tests` attributes, it will not execute `passthru.tests.version`.
+
+  On the other hand, `versionCheckHook` will be executed as a regular phase during the build time of the derivation, therefore it will be indirectly catched by `nixpkgs-review`, working around this limitation.
+
+- When a pull request is opened against Nixpkgs repository, [ofborg](https://github.com/NixOS/ofborg)'s CI will automatically run `passthru.tests` attributes for the packages that are [directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building).
+
+  However, ofBorg does not run the `passthru.tests` attributes for _transitive dependencies_ of those packages. To execute them, commands like [`@ofborg build dependency1.tests dependency2.tests ...`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) are needed.
+
+  On the other hand, `versionCheckHook` will be executed as a regular phase during the build time of the derivation, therefore it will be indirectly catched by ofBorg, working around this limitation.
+
+- Sometimes a package triggers no errors while being build, especially when the upstream provides no tests, however it fails at runtime. If you don't use such a tool in a regular basis, such a silent breakage may rot in your system / profile configuration, not being noticed until the next usage of this package.
+
+  Although `passthru.tests` fills the same purpose, it is more prone to be forgotten by human beings; on the other hand, `versionCheckHook` will be executed as a regular phase during the build time of the derivation, therefore it will not be accidentally ignored.
+
+Despite having an almost identical functioning and a huge overlap, `versionCheckHook` and `testers.testVersion` have complementary roles, and there are no impediments for using both at the same time.
+
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
