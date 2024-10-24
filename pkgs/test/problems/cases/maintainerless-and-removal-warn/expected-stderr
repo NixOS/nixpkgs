@@ -1,0 +1,2 @@
+trace: Package a-0 in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:16 has the following problems: [ "maintainerless" "removal" ], continuing anyway.
+warning: you did not specify '--add-root'; the result might be removed by the garbage collector

@@ -1,0 +1,6 @@
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:11 has an invalid meta attrset:
+  - keys [ 'meta.problems.removal' 'meta.problems.removal2' ] all have the same problem kind, which is not allowed for kind 'removal'
+, refusing to evaluate.
+
+
+(use '--show-trace' to show detailed location information)
