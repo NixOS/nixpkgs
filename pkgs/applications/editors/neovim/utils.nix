@@ -1,6 +1,9 @@
 { lib
+, stdenv
+, makeSetupHook
 , callPackage
 , vimUtils
+, vimPlugins
 , nodejs
 , neovim-unwrapped
 , bundlerEnv
@@ -8,7 +11,6 @@
 , lua
 , python3Packages
 , wrapNeovimUnstable
-, runCommand
 }:
 let
   inherit (vimUtils) toVimPlugin;
@@ -173,35 +175,49 @@ let
         (lib.removePrefix "tree-sitter-")
         (lib.replaceStrings [ "-" ] [ "_" ])
       ];
+
+      nvimGrammars = lib.mapAttrsToList (name: value: value.origGrammar) vimPlugins.nvim-treesitter.grammarPlugins;
+      isNvimGrammar = x: builtins.elem x nvimGrammars;
+
+      toNvimTreesitterGrammar = callPackage ({ }:
+        makeSetupHook {
+          name = "to-nvim-treesitter-grammar";
+        } ./to-nvim-treesitter-grammar.sh) {};
     in
 
-    toVimPlugin (runCommand "treesitter-grammar-${name}"
-      {
-        meta = {
-          platforms = lib.platforms.all;
-        } // grammar.meta;
-      }
-      ''
-        mkdir -p "$out/parser"
-        ln -s "${grammar}/parser" "$out/parser/${name}.so"
+    (toVimPlugin (stdenv.mkDerivation {
+      name = "treesitter-grammar-${name}";
 
-        mkdir -p "$out/queries/${name}"
-        if [ -d "${grammar}/queries/${name}" ]; then
-          echo "moving queries from neovim queries dir"
-          for file in "${grammar}/queries/${name}"*; do
-            ln -s "$file" "$out/queries/${name}/$(basename "$file")"
-          done
-        else
-          if [ -d "${grammar}/queries" ]; then
-            echo "moving queries from standard queries dir"
-            for file in "${grammar}/queries/"*; do
-              ln -s "$file" "$out/queries/${name}/$(basename "$file")"
-            done
-          else
-            echo "missing queries for ${name}"
-          fi
-        fi
-      '');
+      origGrammar = grammar;
+      grammarName = name;
+
+      # Queries for nvim-treesitter's (not just tree-sitter's) officially
+      # supported languages are bundled with nvim-treesitter
+      # Queries from repositories for such languages are incompatible
+      # with nvim's implementation of treesitter.
+      #
+      # We try our best effort to only include queries for niche languages
+      # (there are grammars for them in nixpkgs, but they're in
+      # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
+      # only includes officially supported languages)
+      #
+      # To use grammar for a niche language, users usually do:
+      #   packages.all.start = with final.vimPlugins; [
+      #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
+      #   ]
+      #
+      # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
+      installQueries = !isNvimGrammar grammar;
+
+      dontUnpack = true;
+      __structuredAttrs = true;
+
+      nativeBuildInputs = [ toNvimTreesitterGrammar ];
+
+      meta = {
+        platforms = lib.platforms.all;
+      } // grammar.meta;
+    }));
 
   /*
     Fork of vimUtils.packDir that additionnally generates a propagated-build-inputs-file that
