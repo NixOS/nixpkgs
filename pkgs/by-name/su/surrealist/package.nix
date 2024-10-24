@@ -90,7 +90,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
-    (cargo-tauri.hook.override { cargo-tauri = cargo-tauri_2; })
+    cargo-tauri_2.hook
     gobject-introspection
     makeBinaryWrapper
     nodejs
