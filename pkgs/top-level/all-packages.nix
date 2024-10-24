@@ -9419,6 +9419,7 @@ with pkgs;
 
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
+    qt6 = kdePackages;
   };
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
