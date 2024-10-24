@@ -51,5 +51,6 @@ buildDunePackage rec {
     mainProgram = "jackline";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }
