@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "flask-wtf";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "flask_wtf";
     inherit version;
-    hash = "sha256-i7Jp65u0a4fnyCM9fn3r3x+LdL+QzBeJmIwps3qXtpU=";
+    hash = "sha256-edLuHkNs9XC8y32RZTP6GHV6LxjCkKzP+rG5oLaEZms=";
   };
 
   nativeBuildInputs = [
