@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [ ldb talloc tevent ]
-    ++ optional (enablePrinting && stdenv.hostPlatform.isLinux) cups
+    ++ optional enablePrinting cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
@@ -160,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
+    (lib.enableFeature enablePrinting "cups")
   ] ++ optional (!enableDomainController)
     "--without-ad-dc"
   ++ optionals (!enableLDAP) [
