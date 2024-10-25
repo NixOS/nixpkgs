@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "cgal";
-  version = "6.0.post202410011635";
+  version = "6.0.1.post202410241521";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "cgal-swig-bindings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KXcXykL/m+A5dCDc+f8j7GgVeQahAOaZ/+LLKHyqbS4=";
+    hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 
   dontUseCmakeConfigure = true;
