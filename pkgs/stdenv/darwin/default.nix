@@ -133,6 +133,17 @@ let
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+              ''
+              + lib.optionalString (isFromBootstrapFiles prevStage.llvmPackages.clang-unwrapped) ''
+                # Work around the `-nostdlibinc` patch in the bootstrap tools.
+                # TODO: Remove after the bootstrap tools have been updated.
+                substituteAll ${builtins.toFile "add-flags-extra.sh" ''
+                  if [ "@darwinMinVersion@" ]; then
+                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
+                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
+                  fi
+                ''} add-flags-extra.sh
+                cat add-flags-extra.sh >> $out/nix-support/add-flags.sh
               '';
 
             cc = prevStage.llvmPackages.clang-unwrapped;
@@ -438,9 +449,15 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
               bintools = selfDarwin.binutils-unwrapped;
 
-              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly.
+              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly,
+              # and additional linker flags to work around a since‐removed patch.
               # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
               extraBuildCommands = ''
+                printf %s ${lib.escapeShellArg ''
+                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
+                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
+                ''} >> $out/nix-support/add-local-ldflags-before.sh
+
                 echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
 
                 export signingUtils=${selfDarwin.signingUtils}
@@ -683,6 +700,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly.
               # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
               extraBuildCommands = ''
+                printf %s ${lib.escapeShellArg ''
+                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
+                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
+                ''} >> $out/nix-support/add-local-ldflags-before.sh
+
                 echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
 
                 export signingUtils=${selfDarwin.signingUtils}
