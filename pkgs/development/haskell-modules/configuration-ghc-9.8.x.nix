@@ -4,7 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -146,4 +146,9 @@ self: super: {
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
 
+}
+// lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {
+  # Breakage related to GHC 9.8.3 / deepseq 1.5.1.0
+  # https://github.com/typeable/generic-arbitrary/issues/18
+  generic-arbitrary = dontCheck super.generic-arbitrary;
 }
