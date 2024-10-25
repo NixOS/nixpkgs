@@ -19,6 +19,8 @@ lib.makeScope newScope (self: {
     inherit ghidra;
   };
 
+  ghidra-golanganalyzerextension = self.callPackage ./extensions/ghidra-golanganalyzerextension { };
+
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
   lightkeeper = self.callPackage ./extensions/lightkeeper { };
