@@ -71,6 +71,10 @@ in
 
             sed -i 's/''${platform}/${host-constants.platform}/g' "$ensureFile"
             sed -i 's/gn\/gn\/${stdenv-constants.platform}/gn\/gn\/${constants.platform}/g' "$ensureFile"
+
+            if grep flutter/java/openjdk "$ensureFile" >/dev/null; then
+              sed -i '/src\/flutter\/third_party\/java\/openjdk/,+2 d' "$ensureFile"
+            fi
           else
             params="$params $1"
             shift 1
