@@ -107,6 +107,7 @@ in {
   aaaaxy = runTest ./aaaaxy.nix;
   acme = runTest ./acme.nix;
   acme-dns = handleTest ./acme-dns.nix {};
+  actual = handleTest ./actual.nix {};
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
