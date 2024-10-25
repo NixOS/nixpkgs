@@ -1,36 +1,36 @@
 {
   lib,
-  buildPythonPackage,
+  python3,
   fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "pytubefix";
-  version = "6.4.2";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FbmVQ+nt/WEwE5vRMo2610TO463CT8nCseqB30uXjSM=";
+    hash = "sha256-jZHSvOB0kCeiguLmYDjXcMbMqLWCOO/5+spV5p6Hl3I=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTestPaths = [
     # require network access
     "tests/test_captions.py"
     "tests/test_cli.py"
+    "tests/test_cipher.py"
     "tests/test_exceptions.py"
     "tests/test_extract.py"
     "tests/test_main.py"
     "tests/test_query.py"
     "tests/test_streams.py"
+    "tests/contrib/test_playlist.py"
   ];
 
   pythonImportsCheck = [ "pytubefix" ];
