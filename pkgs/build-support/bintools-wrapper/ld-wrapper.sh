@@ -44,9 +44,9 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
     while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
-        if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
+        if [ "${p:0:3}" = -L/ ] && badPathWithDarwinSdk "${p:2}"; then
             skip "${p:2}"
-        elif [ "$p" = -L ] && badPath "$p2"; then
+        elif [ "$p" = -L ] && badPathWithDarwinSdk "$p2"; then
             n+=1; skip "$p2"
         elif [ "$p" = -rpath ] && badPath "$p2"; then
             n+=1; skip "$p2"

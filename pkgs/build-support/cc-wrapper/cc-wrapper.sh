@@ -103,7 +103,7 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
             -[IL] | -isystem) path=$p2 skipNext=true ;;
         esac
 
-        if [[ -n $path ]] && badPath "$path"; then
+        if [[ -n $path ]] && badPathWithDarwinSdk "$path"; then
             skip "$path"
             $skipNext && n+=1
             continue
