@@ -1,8 +1,9 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian
+#! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian common-updater-scripts
 
 import base64
 import textwrap
+import os
 from urllib import request
 
 from collections import OrderedDict
@@ -22,7 +23,7 @@ def latest_packages(packages: bytes):
     latest_packages: OrderedDict[str, Packages] = {}
     for package in Packages.iter_paragraphs(packages, use_apt_pkg=False):
         name: str = package['Package']
-        if not name.startswith('microsoft-edge-'):
+        if not name.startswith('microsoft-edge-stable'):
             continue
         channel = name.replace('microsoft-edge-', '')
         if channel not in latest_packages:
@@ -34,37 +35,10 @@ def latest_packages(packages: bytes):
     return OrderedDict(sorted(latest_packages.items(), key=lambda x:x[0]))
 
 
-def nix_expressions(latest: dict[str, Packages]):
-    channel_strs: list[str] = []
-    for channel, package in latest.items():
-        print(f"Processing {channel} {package['Version']}")
-        match = Version.re_valid_version.match(package['Version'])
-        assert match is not None
-
-        version = match.group('upstream_version')
-        revision = match.group('debian_revision')
-        sri = 'sha256-' + \
-            base64.b64encode(bytes.fromhex(package['SHA256'])).decode('ascii')
-
-        channel_str = textwrap.dedent(
-            f'''\
-            {channel} = import ./browser.nix {{
-              channel = "{channel}";
-              version = "{version}";
-              revision = "{revision}";
-              hash = "{sri}";
-            }};'''
-        )
-        channel_strs.append(channel_str)
-    return channel_strs
-
-
 def write_expression():
     latest = latest_packages(packages())
-    channel_strs = nix_expressions(latest)
-    nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}\n'
-    with open(PIN_PATH, 'w') as f:
-        f.write(nix_expr)
+    version = Version.re_valid_version.match(latest['stable']['Version']).group('upstream_version')
+    os.system(f'update-source-version microsoft-edge "{version}"')
 
 
 write_expression()
