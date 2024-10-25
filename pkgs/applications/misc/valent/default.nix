@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dplugin_bluez=true"
     # FIXME: libpeas2 (and libpeas) not compiled with -Dvapi=true
-    "-Dvapi=false"
+#    "-Dvapi=false"
   ];
 
   meta = {

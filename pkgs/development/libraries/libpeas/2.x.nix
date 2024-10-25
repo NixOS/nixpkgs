@@ -10,6 +10,7 @@
 , gjs
 , glib
 , lua5_1
+, vala
 , python3
 , spidermonkey_115
 , gnome
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    vala
   ];
 
   buildInputs = [
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ];
 
   postPatch = ''
