@@ -54,9 +54,9 @@ self: super: {
   # Version upgrades
   #
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_3_20241022;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
-  ghc-lib = doDistribute self.ghc-lib_9_8_2_20240223;
+  ghc-lib = doDistribute self.ghc-lib_9_8_3_20241022;
   megaparsec = doDistribute self.megaparsec_9_6_1;
   # aeson 2.2.3.0 seemingly unnecessesarily bumped the lower bound on hashable
   # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
