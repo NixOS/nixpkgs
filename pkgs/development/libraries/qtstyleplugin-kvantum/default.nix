@@ -6,8 +6,8 @@
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras ? null
-, kwindowsystem ? null
+, qtx11extras ? null # Qt 5 only
+, kwindowsystem
 , qtwayland
 , libX11
 , libXext
@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-1aeXcN9DwPE8CoaxCqCNL9UEcRHJdaKxS7Ivjp3YNN8=";
+    hash = "sha256-x2XsJ26y9y6IF9aY0fmAcvO4zmwLjvE2Lfvzw+GqchM=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     libX11
     libXext
-    kwindowsystem
   ] ++ lib.optionals isQt5 [ qtx11extras ]
-    ++ lib.optionals (!isQt5) [ qtwayland ];
+  ++ lib.optionals (!isQt5) [
+    kwindowsystem
+    qtwayland
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/Kvantum";
 
