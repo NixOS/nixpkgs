@@ -72,18 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
-  ] ++ lib.optionals hostPlatform.isDarwin [
-    # Note: Conditional to avoid Linux rebuilds on staging-next. Remove the conditional with the next update.
+
     # ld64 needs `-undefined dynamic_lookup` to link `libctf-nobfd.dylib`, but the Darwin
     # version detection in `libtool.m4` fails to detect the Darwin version correctly.
     ./0001-libtool.m4-update-macos-version-detection-block.patch
-  ]
-  # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
-  # Patch from arch-community
-  # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
-  ++ lib.optional targetPlatform.isAvr ./avr-size.patch
-  ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
-  ;
+
+    # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
+    # Patch from arch-community
+    # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
+    ./avr-size.patch
+
+    ./windres-locate-gcc.patch
+  ];
 
   outputs = [ "out" "info" "man" "dev" ]
   # Ideally we would like to always install 'lib' into a separate
