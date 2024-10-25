@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.2.4";
+  version = "3.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     rev = "refs/tags/${version}";
-    hash = "sha256-7EP2XIbvdB3oCFTY6IS9r00/QEB/eHJth05hVBzZCUI=";
+    hash = "sha256-jYAzFqHuTpcgmnodt7vuNWTHRP3rd0B/3tp2Q04/N9o=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
