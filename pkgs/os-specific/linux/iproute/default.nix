@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
+      name = "color-default-to-dark-background.patch";
+      url = "https://lore.kernel.org/netdev/E1s9tE4-00000006L4I-46tH@ws2.gedalya.net/raw";
+      hash = "sha256-zZWczYOAzebuktrTuOQv9BY+0ZxFAJ+rREc3rjzU1y4=";
+    })
+    (fetchurl {
       name = "musl-endian.patch";
       url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
       hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
