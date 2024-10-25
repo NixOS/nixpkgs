@@ -5,29 +5,7 @@ set -euxo pipefail
 # This script piggybacks on the automatic code generation done by the nix-community emacs overlay
 # You can use this to avoid running lengthy code generation jobs locally
 
-export NIXPKGS_ALLOW_BROKEN=1
-
-download_change() {
-    local FILE_LOCATION="$1"
-
-    local BASEURL="https://raw.githubusercontent.com/nix-community/emacs-overlay/master/repos"
-
-    curl -s -O "${BASEURL}/${FILE_LOCATION}"
-}
-
-commit_change() {
-    local MESSAGE="$1"
-    local FILENAME="$2"
-
-    git diff --exit-code "${FILENAME}" > /dev/null || \
-        git commit -m "${MESSAGE}: updated $(date --iso) (from overlay)" -- "${FILENAME}"
-}
-
-test_packageset(){
-    local PKGSET="$1"
-
-    nix-instantiate --show-trace ../../../../../ -A "emacs.pkgs.$PKGSET"
-}
+source ./lib-update-scripts.sh
 
 download_change "elpa/elpa-generated.nix"
 download_change "elpa/elpa-devel-generated.nix"
@@ -42,8 +20,8 @@ test_packageset "elpaDevelPackages"
 test_packageset "melpaStablePackages"
 test_packageset "melpaPackages"
 
-commit_change "elpa-packages" "elpa-generated.nix"
-commit_change "elpa-devel-packages" "elpa-devel-generated.nix"
-commit_change "melpa-packages" "recipes-archive-melpa.json"
-commit_change "nongnu-packages" "nongnu-generated.nix"
-commit_change "nongnu-devel-packages" "nongnu-devel-generated.nix"
+commit_change "emacsPackages.elpaPackages" "elpa-generated.nix" "nix-community/emacs-overlay"
+commit_change "emacsPackages.elpaDevelPackages" "elpa-devel-generated.nix" "nix-community/emacs-overlay"
+commit_change "emacsPackages.melpaPackages" "recipes-archive-melpa.json" "nix-community/emacs-overlay"
+commit_change "emacsPackages.nongnuPackages" "nongnu-generated.nix" "nix-community/emacs-overlay"
+commit_change "emacsPackages.nongnuDevelPackages" "nongnu-devel-generated.nix" "nix-community/emacs-overlay"
