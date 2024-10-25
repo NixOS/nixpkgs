@@ -14823,6 +14823,8 @@ self: super: with self; {
 
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
+  sphinx-lv2-theme = callPackage ../development/python-modules/sphinx-lv2-theme { };
+
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
 
   sphinx-notfound-page = callPackage ../development/python-modules/sphinx-notfound-page { };
