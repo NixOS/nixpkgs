@@ -88,8 +88,6 @@ buildPythonPackage rec {
     shapely
   ];
 
-  doCheck = true;
-
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio
   '';
