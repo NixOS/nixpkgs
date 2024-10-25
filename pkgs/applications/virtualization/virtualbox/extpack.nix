@@ -14,7 +14,7 @@ fetchurl rec {
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
     # Checksums can also be found at https://www.virtualbox.org/download/hashes/${version}/SHA256SUMS
     let
-      value = "d750fb17688d70e0cb2d7b06f1ad3a661303793f4d1ac39cfa9a54806b89da25";
+      value = "6b0c16074dde1ea273b15e091336034368217ba569e09359a63c4d32af558886";
     in
     assert (builtins.stringLength value) == 64;
     value;
