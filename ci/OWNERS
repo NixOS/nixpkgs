@@ -173,7 +173,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
