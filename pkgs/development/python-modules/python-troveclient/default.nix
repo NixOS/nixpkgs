@@ -20,11 +20,12 @@
   sphinxcontrib-apidoc,
   sphinxHook,
   stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-troveclient";
-  version = "8.5.0";
+  version = "8.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-troveclient";
     rev = "refs/tags/${version}";
-    hash = "sha256-lfnAmQ/IxEdc+XxC0dYxK2FgY7csNewGPuQuq0dNffM=";
+    hash = "sha256-6JviPG2ikKRqvW/eqPIHMvpV6GjqbaXYHhcOOpaIS4U=";
   };
 
   env.PBR_VERSION = version;
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     python-openstackclient
     python-swiftclient
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [

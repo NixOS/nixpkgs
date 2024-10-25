@@ -2036,11 +2036,6 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd {
-    # Workaround systemd static build breakage
-    systemd = if systemd.meta.broken then null else systemd;
-  };
-
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
@@ -10263,8 +10258,10 @@ with pkgs;
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
-  inherit (callPackage ../servers/web-apps/netbox { })
-    netbox netbox_3_6 netbox_3_7;
+  inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
+
+  # Not in aliases because it wouldn't get picked up by callPackage
+  netbox = netbox_4_1;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
@@ -24867,7 +24864,7 @@ with pkgs;
 
   nagios = callPackage ../servers/monitoring/nagios { };
 
-  nagiosPlugins = callPackages ../servers/monitoring/nagios-plugins { };
+  nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
@@ -28366,8 +28363,6 @@ with pkgs;
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
   buzztrax = callPackage ../applications/audio/buzztrax { };
-
-  brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
 
