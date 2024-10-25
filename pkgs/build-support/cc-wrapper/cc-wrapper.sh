@@ -17,6 +17,8 @@ fi
 
 source @out@/nix-support/utils.bash
 
+source @out@/nix-support/darwin-sdk-setup.bash
+
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.

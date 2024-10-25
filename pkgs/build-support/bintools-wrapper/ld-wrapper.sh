@@ -16,6 +16,8 @@ fi
 
 source @out@/nix-support/utils.bash
 
+source @out@/nix-support/darwin-sdk-setup.bash
+
 if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
