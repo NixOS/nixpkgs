@@ -66,8 +66,6 @@ buildPythonPackage rec {
     rustworkx
   ];
 
-  doCheck = false;
-
   meta = with lib; {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
