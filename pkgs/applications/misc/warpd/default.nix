@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "warpd";
-  version = "1.3.5";
+  version = "1.3.7-windows-alpha";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "warpd";
     rev = "v${version}";
-    hash = "sha256-5B3Ec+R1vF2iI0ennYcsRlnFXJkSns0jVbyAWJA4lTU=";
+    hash = "sha256-O0LNMzQnl1La5fQxvoApk6BCVZBp7Zvo96Oxyy9ZZ48=";
     leaveDotGit = true;
   };
 
