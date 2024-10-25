@@ -1,19 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
-, writeShellApplication
-, curl
-, common-updater-scripts
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  writeShellApplication,
+  curl,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arc-browser";
-  version = "1.63.1-54714";
+  version = "1.65.0-54911";
 
   src = fetchurl {
     url = "https://releases.arc.net/release/Arc-${finalAttrs.version}.dmg";
-    hash = "sha256-jL8iAh+e8Z72VG9XQbswjyTPtjO2Pm8ealRte8xr1PQ=";
+    hash = "sha256-7p1FizITL4GVvlDTV91nwYQZ7LKEd4snJQX0NvB81Qo=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -23,8 +24,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/Arc.app
-    cp -R . $out/Applications/Arc.app
+    mkdir -p "$out/Applications/Arc.app"
+    cp -R . "$out/Applications/Arc.app"
 
     runHook postInstall
   '';
@@ -33,9 +34,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "arc-browser-update-script";
-    runtimeInputs = [ curl common-updater-scripts ];
+    runtimeInputs = [
+      curl
+      common-updater-scripts
+    ];
     text = ''
-      set -euo pipefail
       redirect_url="$(curl -s -L -f "https://releases.arc.net/release/Arc-latest.dmg" -o /dev/null -w '%{url_effective}')"
       # The url scheme is: https://releases.arc.net/release/Arc-1.23.4-56789.dmg
       # We strip everything before 'Arc-' and after '.dmg'
@@ -50,7 +53,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://arc.net/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ donteatoreo ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
