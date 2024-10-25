@@ -2434,8 +2434,6 @@ self: super: with self; {
 
   cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
 
-  codecov = callPackage ../development/python-modules/codecov { };
-
   codepy = callPackage ../development/python-modules/codepy { };
 
   cogapp = callPackage ../development/python-modules/cogapp { };
