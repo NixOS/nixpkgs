@@ -191,6 +191,17 @@ in
           and [](#opt-services.transmission.settings.watch-dir).
           Note that you may also want to change
           [](#opt-services.transmission.settings.umask).
+
+          Keep in mind, that if the default user is used, the `home` directory
+          is locked behind a `750` permission, which affects all subdirectories
+          as well. There are 3 ways to get around this:
+
+          1. (Recommended) add the users that should have access to the group
+             set by [](#opt-services.transmission.group)
+          2. Change [](#opt-services.transmission.settings.download-dir) to be
+             under a directory that has the right permissions
+          3. Change `systemd.services.transmission.serviceConfig.StateDirectoryMode`
+             to the same value as this option
         '';
       };
 
@@ -279,17 +290,20 @@ in
     # when /home/foo is not owned by cfg.user.
     # Note also that using an ExecStartPre= wouldn't work either
     # because BindPaths= needs these directories before.
-    system.activationScripts = mkIf (cfg.downloadDirPermissions != null)
-      { transmission-daemon = ''
-        install -d -m 700 '${cfg.home}/${settingsDir}'
-        chown -R '${cfg.user}:${cfg.group}' ${cfg.home}/${settingsDir}
+    system.activationScripts.transmission-daemon =
+      ''
+        install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
+      ''
+      + optionalString (cfg.downloadDirPermissions != null) ''
         install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
-        '' + optionalString cfg.settings.incomplete-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-        '' + optionalString cfg.settings.watch-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
-        '';
-      };
+
+        ${optionalString cfg.settings.incomplete-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+        ''}
+        ${optionalString cfg.settings.watch-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+        ''}
+      '';
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
@@ -409,20 +423,20 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ cfg.package ];
 
-    users.users = optionalAttrs (cfg.user == "transmission") ({
+    users.users = optionalAttrs (cfg.user == "transmission") {
       transmission = {
         group = cfg.group;
         uid = config.ids.uids.transmission;
         description = "Transmission BitTorrent user";
         home = cfg.home;
       };
-    });
+    };
 
-    users.groups = optionalAttrs (cfg.group == "transmission") ({
+    users.groups = optionalAttrs (cfg.group == "transmission") {
       transmission = {
         gid = config.ids.gids.transmission;
       };
-    });
+    };
 
     networking.firewall = mkMerge [
       (mkIf cfg.openPeerPorts (
