@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nasm
+{ lib, stdenv, fetchFromGitHub, fetchpatch, nasm
 , alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libtheora, libvorbis, libGLU, libGL, SDL2, zlib
 , Cocoa, AudioToolbox, Carbon, CoreMIDI, AudioUnit, cctools
 }:
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-8/q16MwHhbbmUxiwJOHkjNxrnBB4grMa7qw/n3KLvRc=";
   };
+
+  patches = [
+    # Fix building with Freetype 2.13.3. Remove after next release.
+    (fetchpatch {
+      url = "https://github.com/scummvm/scummvm/commit/65977961b20ba97b1213b5267da0cb1efb49063b.patch?full_index=1";
+      hash = "sha256-e5dJd3gP8OAD3hEJlvOhMemsNErCKTn7avlprApFig0=";
+    })
+  ];
 
   nativeBuildInputs = [ nasm ];
 
