@@ -32662,12 +32662,6 @@ with pkgs;
 
   thokr = callPackage ../applications/misc/thokr { };
 
-  betterbird-unwrapped = callPackage ../applications/networking/mailreaders/betterbird { };
-  betterbird = wrapThunderbird betterbird-unwrapped {
-    desktopName = "Betterbird";
-    pname = "betterbird";
-  };
-
   thunderbirdPackages = recurseIntoAttrs (callPackage ../applications/networking/mailreaders/thunderbird/packages.nix {
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
