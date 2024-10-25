@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   cython_0,
@@ -17,7 +18,15 @@
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
+  inherit (cudaPackages) cudnn;
+
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
+  # some packages are not available on all platforms
+  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
+  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
+
   outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cudart
