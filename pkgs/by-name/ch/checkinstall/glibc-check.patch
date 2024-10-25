@@ -1,0 +1,71 @@
+diff -x '*~' -rc checkinstall-1.6.2pre20081116-orig/installwatch/create-localdecls checkinstall-1.6.2pre20081116/installwatch/create-localdecls
+*** checkinstall-1.6.2pre20081116-orig/installwatch/create-localdecls	2008-11-16 17:18:58.000000000 +0100
+--- checkinstall-1.6.2pre20081116/installwatch/create-localdecls	2009-09-18 17:01:13.000000000 +0200
+***************
+*** 46,52 ****
+  echo -n 'Checking libc version... '
+  gcc -Wall -o libctest libctest.c
+  VERSION=`ldd libctest | grep libc\\.so | awk '{print $1}'`
+- rm libctest
+  echo $VERSION
+  echo "#define LIBC_VERSION \"$VERSION\"" >> $OUTFILE
+  if test "$VERSION" = 'libc.so.5' ; then
+--- 46,51 ----
+***************
+*** 56,62 ****
+  
+  if test "$VERSION" = 'libc.so.6' ; then
+  	echo -n 'Checking glibc subversion... '
+! 	tmp="`ldd /bin/sh | grep libc.so 2> /dev/null`"
+  	LibcPath=`expr "$tmp" : '[^/]*\(/[^ ]*\)'`
+  	tmp="`strings $LibcPath | grep -i 'c library'`"
+  	OsLibcMajor=`expr "$tmp" : '.* \([0-9][0-9]*\)'`
+--- 55,61 ----
+  
+  if test "$VERSION" = 'libc.so.6' ; then
+  	echo -n 'Checking glibc subversion... '
+! 	tmp="`ldd libctest | grep libc.so 2> /dev/null`"
+  	LibcPath=`expr "$tmp" : '[^/]*\(/[^ ]*\)'`
+  	tmp="`strings $LibcPath | grep -i 'c library'`"
+  	OsLibcMajor=`expr "$tmp" : '.* \([0-9][0-9]*\)'`
+***************
+*** 86,103 ****
+  		6)
+  			echo '#define GLIBC_MINOR 6' >> $OUTFILE
+  			SUBVERSION='glibc-2.6' ;;
+! 		7)
+  			echo '#define GLIBC_MINOR 7' >> $OUTFILE
+  			SUBVERSION='glibc-2.7' ;;
+  		*)
+- 			echo 'Treated as glibc >= 2.1 (finger crossed)'
+  			echo '#define GLIBC_MINOR 1' >> $OUTFILE
+  			SUBVERSION='glibc-2.1' ;;
+  	        esac
+  		;;
+  	esac
+  fi
+  
+  echo >> $OUTFILE
+  echo '#endif' >> $OUTFILE
+  
+--- 85,104 ----
+  		6)
+  			echo '#define GLIBC_MINOR 6' >> $OUTFILE
+  			SUBVERSION='glibc-2.6' ;;
+! 		7|8|9|10|11|12|13|14|15|16|17|18)
+  			echo '#define GLIBC_MINOR 7' >> $OUTFILE
+  			SUBVERSION='glibc-2.7' ;;
+  		*)
+  			echo '#define GLIBC_MINOR 1' >> $OUTFILE
+  			SUBVERSION='glibc-2.1' ;;
+  	        esac
+  		;;
+  	esac
++         echo $SUBVERSION
+  fi
+  
++ rm libctest
++ 
+  echo >> $OUTFILE
+  echo '#endif' >> $OUTFILE
+  
