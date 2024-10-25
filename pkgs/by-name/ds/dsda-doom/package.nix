@@ -14,6 +14,7 @@
   libGLU,
   libzip,
   alsa-lib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,8 +46,11 @@ stdenv.mkDerivation rec {
     SDL2_mixer
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
+    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${version}";
     description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = lib.licenses.gpl2Plus;
