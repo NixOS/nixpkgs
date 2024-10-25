@@ -193,7 +193,6 @@ class GitilesRepo(Repo):
             self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
             self.args["postFetch"] += "rm -r $out/third_party/hunspell/tests; "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
-            self.args["postFetch"] += "rm -r $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
             self.args["postFetch"] += "rm -r $out/media/test/data; "
 
