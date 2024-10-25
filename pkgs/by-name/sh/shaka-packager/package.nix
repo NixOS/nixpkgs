@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L10IMsc4dTMa5zwYq612F4J+uKOmEEChY8k/m09wuNE=";
+    hash = "sha256-9oGoWDGKnAVqVDa/lz0Y3qiE1y0OD9ZobJ44gxdB+2A=";
   };
 
   patches = [
@@ -58,7 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    python3
+    (python3.withPackages (ps: [
+      # As we remove the vendored protobuf in our patch,
+      # we must re-add it to the python package used for
+      # pssh_box.py.
+      ps.protobuf
+    ]))
     abseil-cpp
     curl
     gtest
