@@ -18,11 +18,14 @@
 }:
 
 let
-  inherit (cudaPackages) cudnn nccl;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
+  inherit (cudaPackages) cudnn;
 
   # Some packages are not available on all platforms
-  cuda_nvprof = cudaPackages.nvprof or null;
-  cutensor = cudaPackages.cutensor or null;
+  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
+  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
 
   outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
