@@ -282,6 +282,8 @@ in
       ];
     };
     # for nginx to access gancio socket
-    users.users."${config.services.nginx.user}".extraGroups = [ config.users.users.${cfg.user}.group ];
+    users.users."${config.services.nginx.user}" = lib.mkIf (config.services.nginx.enable) {
+      extraGroups = [ config.users.users.${cfg.user}.group ];
+    };
   };
 }
