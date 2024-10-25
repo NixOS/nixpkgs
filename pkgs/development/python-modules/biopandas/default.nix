@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "biopandas";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
+    hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
   };
 
   patches = [

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "9.0.1";
+  version = "9.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bre5AIzydCiBH6M66zXzM024Hj98wt1J7HxuWpSznxI=";
+    hash = "sha256-yWpOxzIk2n2yK8B+88+qGPi4aQDRhy4pETu87wCToh4=";
   };
 
   prePatch = ''

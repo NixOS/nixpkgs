@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6HSGqVv+FRq1LvFjpek9nL0EOZLPC3Vcyt0r82/t03Y=";
+    hash = "sha256-8796HdWF5P2j6XhUUxxD+5IBV7LFALnmPdNkAf/igDQ=";
   };
 
   build-system = [ setuptools-scm ];

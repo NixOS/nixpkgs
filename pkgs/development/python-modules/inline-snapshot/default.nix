@@ -7,8 +7,9 @@
   dirty-equals,
   executing,
   fetchFromGitHub,
+  hatchling,
   hypothesis,
-  poetry-core,
+  pydantic,
   pyright,
   pytest-subtests,
   pytest-xdist,
@@ -18,11 +19,12 @@
   time-machine,
   toml,
   types-toml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.10.2";
+  version = "0.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -31,24 +33,29 @@ buildPythonPackage rec {
     owner = "15r10nk";
     repo = "inline-snapshot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-19rvhqYkM3QiD0La5TRi/2uKza8HW/bnXeGAhOZ/bgs=";
+    hash = "sha256-hwt/EFYedrml0x58Rd1AjqrIlELAXp1ku8v7glhCebE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    asttokens
-    black
-    click
-    executing
-    rich
-    toml
-    types-toml
-  ];
+  dependencies =
+    [
+      asttokens
+      black
+      click
+      executing
+      rich
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      types-toml
+      toml
+    ];
 
   nativeCheckInputs = [
     dirty-equals
     hypothesis
+    pydantic
     pyright
     pytest-subtests
     pytest-xdist

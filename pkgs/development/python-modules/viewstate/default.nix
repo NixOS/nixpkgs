@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "viewstate";
-  version = "0.4.3";
+  version = "0.6.0";
   format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "yuvadm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "15s0n1lhkz0zwi33waqkkjipal3f7s45rxsj1bw89xpr4dj87qx5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-cXT5niE3rNdqmNqnITWy9c9/MF0gZ6LU2i1uzfOzkUI=";
   };
 
   nativeCheckInputs = [ pytest ];

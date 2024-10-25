@@ -1,55 +1,52 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # runtime
-  importlib-metadata,
-  sqlalchemy,
-
-  # optionals
-  babel,
   arrow,
-  pendulum,
-  #, intervals
-  phonenumbers,
-  passlib,
+  babel,
   colour,
-  python-dateutil,
-  furl,
   cryptography,
-
-  # tests
-  pytestCheckHook,
-  pygments,
-  jinja2,
   docutils,
+  fetchFromGitHub,
   flexmock,
+  furl,
+  # intervals,
+  jinja2,
+  passlib,
+  pendulum,
+  pg8000,
+  phonenumbers,
   psycopg2,
   psycopg2cffi,
-  pg8000,
-  pytz,
-  backports-zoneinfo,
+  pygments,
   pymysql,
   pyodbc,
-
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.41.2";
-  format = "setuptools";
+  version = "0.42.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "SQLAlchemy-Utils";
-    hash = "sha256-vFmcjDszGeU85sXDxHESC9Ml0AcftvOKEOkk49B7mZA=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchFromGitHub {
+    owner = "kvesteri";
+    repo = "sqlalchemy-utils";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
   };
 
   patches = [ ./skip-database-tests.patch ];
 
-  propagatedBuildInputs = [ sqlalchemy ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  build-system = [ setuptools ];
+
+  propagatedBuildInputs = [ sqlalchemy ];
 
   optional-dependencies = {
     babel = [ babel ];
@@ -82,20 +79,24 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [
       # requires distutils, which were removed in 3.12
       psycopg2cffi
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+    ];
 
-  pytestFlagsArray = [
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresCreateDatabaseCloseConnection::test_create_database_twice"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPg8000::test_create_and_drop"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG2CFFI::test_create_and_drop"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG3::test_create_and_drop"
+  disabledTests = [
+    "test_create_database_twice"
+    "test_create_and_drop"
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [ "sqlalchemy_utils" ];
+
   meta = with lib; {
-    changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
-    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     description = "Various utility functions and datatypes for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
+    changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];
   };

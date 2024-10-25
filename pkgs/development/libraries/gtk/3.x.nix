@@ -34,7 +34,7 @@
 , gsettings-desktop-schemas
 , sassc
 , trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
-, tracker
+, tinysparql
 , x11Support ? stdenv.hostPlatform.isLinux
 , waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
-    tracker
+    tinysparql
   ];
   #TODO: colord?
 

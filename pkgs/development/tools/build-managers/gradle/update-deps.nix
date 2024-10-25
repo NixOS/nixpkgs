@@ -1,6 +1,7 @@
 { lib
 , runtimeShell
 , srcOnly
+, stdenvNoCC
 , writeTextFile
 , writeShellScript
 , path
@@ -38,6 +39,8 @@ let
   source = srcOnly (pkg.overrideAttrs (old: {
     mitmCache = "";
     gradleInitScript = ./init-deps.gradle;
+
+    stdenv = old.stdenv or stdenvNoCC;
   }));
   sourceDrvPath = builtins.unsafeDiscardOutputDependency source.drvPath;
   nixShellKeep = lib.concatMapStringsSep " " (x: "--keep ${x}") keep;

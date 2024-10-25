@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , vala
 , meson
@@ -30,20 +29,12 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "43.0";
+  version = "47.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/seahorse/${lib.versions.major version}/seahorse-${version}.tar.xz";
-    hash = "sha256-Wx0b+6dPNlgifzyC4pbzMN0PzR70Y2tqIYIo/uXqgy0=";
+    hash = "sha256-nBkX5KYff+u3h4Sc42znF/znBsNGiAuZHQVtVNrbysw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gpg-2.4.patch";
-      url = "https://gitlab.gnome.org/GNOME/seahorse/-/commit/9260c74779be3d7a378db0671af862ffa3573d42.patch";
-      hash = "sha256-4QiFgH4jC1ucmA9fFozUQZ3Mat76SgpYkMpRz80RH64=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

@@ -16,28 +16,35 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.7";
+  version = "0.6.7.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O3ARmFV6SZxg67U9fyUBkGSFXHMvTz+84gVdeJ5Tph0=";
+    hash = "sha256-VUqhDcqEgZeLTTNOKCAfJO0Y8pTFqENQziAiqLePTXI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" numpy
+  '';
 
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
     cmake
+    numpy
     oldest-supported-numpy
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [ "scipy" ];
+  pythonRelaxDeps = [
+    "scipy"
+  ];
 
   propagatedBuildInputs = [
-    future
     numpy
     qdldl
     scipy

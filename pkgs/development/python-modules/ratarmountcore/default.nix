@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.7.2";
+  version = "0.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
-    rev = "core-v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-2LPGKdofx2ID8BU0dZhGiZ3tUkd+niEVGvTSBFX4InU=";
     fetchSubmodules = true;
   };

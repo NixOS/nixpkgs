@@ -13,9 +13,7 @@ buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independant of pulumi's.
   version = "6.54.1";
-
   pyproject = true;
-  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.8";
 
@@ -28,7 +26,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     parver
     pulumi
     semver

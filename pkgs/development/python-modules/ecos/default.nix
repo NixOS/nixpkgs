@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ecos";
-  version = "2.0.13";
+  version = "2.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,9 +20,14 @@ buildPythonPackage rec {
     owner = "embotech";
     repo = "ecos-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3NcZBZ7fnwiMelGssa74b5PgmXmNZhP4etNRpyrCkpo=";
+    hash = "sha256-nfu1FicWr233r+VHxkQf1vqh2y4DGymJRmik8RJYJkA=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" numpy
+  '';
 
   build-system = [ setuptools ];
 

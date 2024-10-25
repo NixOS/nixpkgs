@@ -6,7 +6,9 @@
 , ninja
 , pkg-config
 , wrapGAppsHook4
+, vala
 , evolution-data-server-gtk4
+, gdk-pixbuf
 , glib
 , glib-networking
 , gnutls
@@ -14,21 +16,22 @@
 , json-glib
 , libadwaita
 , libpeas2
+, libphonenumber
 , libportal-gtk4
 , pipewire
 , pulseaudio
-, sqlite
+, tinysparql
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.45";
+  version = "1.0.0.alpha.46";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hOVWvk4U6VoWAvXNHK1vTm/am69EFqDmSb0NofWVQj8=";
+    hash = "sha256-DpDHU1l8Pot0RwVR1rL9fIhMHo18eo7nTecnSa3hG2E=";
     fetchSubmodules = true;
   };
 
@@ -38,10 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook4
+    vala
   ];
 
   buildInputs = [
     evolution-data-server-gtk4
+    gdk-pixbuf
     glib
     glib-networking
     gnutls
@@ -50,16 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libadwaita
     libpeas2
+    libphonenumber
     libportal-gtk4
     pipewire
     pulseaudio
-    sqlite
+    tinysparql
   ];
 
   mesonFlags = [
     "-Dplugin_bluez=true"
-    # FIXME: libpeas2 (and libpeas) not compiled with -Dvapi=true
-    "-Dvapi=false"
   ];
 
   meta = {

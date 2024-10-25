@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "import-expression";
-  version = "2.0.0";
+  version = "2.1.0.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "import_expression";
     inherit version;
-    hash = "sha256-Biw7dIOPKbDcqYJSCyeqC/seREcVihSZuaKNFfgjTew=";
+    hash = "sha256-mclYGeuISXUDrOS1mhpVgDp1439KnHAwzHKIbRtdibQ=";
   };
 
   build-system = [ setuptools ];

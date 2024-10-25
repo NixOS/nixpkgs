@@ -194,9 +194,13 @@ with lib.maintainers;
   };
 
   darwin = {
-    members = [ toonn ];
-    githubTeams = [ "darwin-maintainers" ];
-    scope = "Maintain Darwin compatibility of packages and Darwin-only packages.";
+    members = [
+      emily
+      reckenrode
+      toonn
+    ];
+    githubTeams = [ "darwin-core" ];
+    scope = "Maintain core platform support and packages for macOS and other Apple platforms.";
     shortName = "Darwin";
     enableFeatureFreezePing = true;
   };

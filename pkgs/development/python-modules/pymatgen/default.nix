@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.7.18";
+  version = "2024.9.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,8 +40,13 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LL3cZO3LkmBuGGcO7dhO2Wtgqx9nxLureFpC8EqvS3M";
+    hash = "sha256-o76bGItldcLfgZ5KDw2uL0GJvyljQJEwISR0topVR44=";
   };
+
+  prePatch = ''
+    # Upstream switched to building against numpy2 but should still be compatible with numpy1
+    substituteInPlace pyproject.toml --replace-fail "numpy>=2.1.0" "numpy>=1.26.0"
+  '';
 
   build-system = [ setuptools ];
 
@@ -87,20 +92,6 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests = [
-    # presumably won't work with our dir layouts
-    "test_egg_sources_txt_is_complete"
-    # borderline precision failure
-    "test_thermal_conductivity"
-    # AssertionError
-    "test_dict_functionality"
-    "test_mean_field"
-    "test_potcar_not_found"
-    "test_read_write_lobsterin"
-    "test_snl"
-    "test_unconverged"
-  ];
-
   pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
@@ -109,6 +100,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
-    broken = true; # tests segfault. that's bad.
   };
 }
