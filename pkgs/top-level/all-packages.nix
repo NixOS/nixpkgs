@@ -5885,10 +5885,6 @@ with pkgs;
     callPackage ../tools/misc/steampipe-packages { }
   );
 
-  step-ca = callPackage ../tools/security/step-ca {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
-
   step-kms-plugin = callPackage ../tools/security/step-kms-plugin { };
 
   string-machine = callPackage ../applications/audio/string-machine { };
