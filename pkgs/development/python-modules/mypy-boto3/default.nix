@@ -810,8 +810,8 @@ rec {
       "sha256-6Vs5eRibHCZvDDIcIEThPa6T1OmfJXjLg4GAZlworsM=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.35.12"
-      "sha256-H+B1dxaGAAwAqWU5/WKKYz1HT9wKmvjVEg57kGvTDh0=";
+    buildMypyBoto3Package "logs" "1.35.49"
+      "sha256-P5uX/Vi4vQb5UweIVkoHt2J7r4fkBnnLHldaRHmya58=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.35.0"
