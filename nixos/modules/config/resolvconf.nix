@@ -161,9 +161,12 @@ in
 
         script = ''
           ${lib.getExe cfg.package} -u
-          files=(/run/resolvconf ${lib.escapeShellArgs cfg.subscriberFiles})
-          chgrp -R resolvconf "''${files[@]}"
-          chmod -R g=u "''${files[@]}"
+          chgrp resolvconf ${lib.escapeShellArgs cfg.subscriberFiles}
+          chmod g=u ${lib.escapeShellArgs cfg.subscriberFiles}
+          ${lib.getExe' pkgs.acl "setfacl"} -R \
+            -m group:resolvconf:rwx \
+            -m default:group:resolvconf:rwx \
+            /run/resolvconf
         '';
       };
 
