@@ -1414,7 +1414,7 @@ self: super: builtins.intersectAttrs super {
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
      in lib.pipe
-          (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
+          (super.mpi-hs_0_7_3_1.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
             ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
