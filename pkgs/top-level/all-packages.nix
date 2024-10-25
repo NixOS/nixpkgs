@@ -6978,10 +6978,6 @@ with pkgs;
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
 
-  doctave = callPackage ../applications/misc/doctave {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   dog = callPackage ../tools/system/dog { };
 
   dogdns = callPackage ../tools/networking/dogdns {
