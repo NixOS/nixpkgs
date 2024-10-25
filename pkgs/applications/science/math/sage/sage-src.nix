@@ -54,13 +54,12 @@ stdenv.mkDerivation rec {
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
   bugfixPatches = [
-    # Sage uses mixed integer programs (MIPs) to find edge disjoint
-    # spanning trees. For some reason, aarch64 glpk takes much longer
-    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
-    # has "numerous problems" and will be replaced by a polynomial
-    # algorithm soon, disable this test for now.
-    # https://github.com/sagemath/sage/issues/34575
-    ./patches/disable-slow-glpk-test.patch
+    # https://github.com/sagemath/sage/pull/38851, landed in 10.5.beta8
+    (fetchpatch {
+      name = "glpk-aarch64-hang-workaround.patch";
+      url = "https://github.com/sagemath/sage/commit/ce4a78dcb4178f85273619cea076c97345977ee1.diff";
+      hash = "sha256-TibTx5llkXjkEZB/MDy4hfGwKBmwtitEpWP6K/ykke0=";
+    })
 
     # compile libs/gap/element.pyx with -O1
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
