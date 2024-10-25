@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight C library for RDF syntax which supports reading and writing Turtle and NTriples";
     homepage = "https://drobilla.net/software/serd";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "serdi";
     platforms = lib.platforms.unix;
   };
