@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/udevinfo" "${systemdMinimal}/bin/udevinfo" \
       --replace-fail "/usr/bin/udevadm" "${systemdMinimal}/bin/udevadm"
 
+    # Replace /usr/bin/perl
+    patchShebangs src/ids/convert_hd
   '';
 
   # The pci/usb ids in hwinfo are ancient. We can get a more up-to-date list simply by copying from systemd
