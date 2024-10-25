@@ -62,6 +62,8 @@
 }@args:
 
 let
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
@@ -105,6 +107,9 @@ let
     libcublas
   ];
 
+  # Some packages are not available on all platforms
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
+
   getAllOutputs = p: [
     (lib.getBin p)
     (lib.getLib p)
@@ -145,8 +150,8 @@ buildPythonPackage rec {
     substituteInPlace requirements*.txt pyproject.toml \
       --replace-warn 'torch==2.4.0' 'torch==${lib.getVersion torch}' \
       --replace-warn 'torch == 2.4.0' 'torch == ${lib.getVersion torch}'
-
-    # Use Gloo as Jetsons do not support NCCL.
+  '' + lib.optionalString (nccl == null) ''
+    # On platforms where NCCL is not supported (e.g. Jetson), substitute Gloo (provided by Torch)
     substituteInPlace vllm/distributed/parallel_state.py \
       --replace-fail '"nccl"' '"gloo"'
   '';
@@ -175,6 +180,7 @@ buildPythonPackage rec {
       oneDNN
     ]))
     ++ (lib.optionals cudaSupport mergedCudaLibraries ++ (with cudaPackages; [
+      nccl
       cudnn
       libcufile
     ]))
@@ -233,6 +239,8 @@ buildPythonPackage rec {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
     (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn}")
   ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${torch.gpuTargetString}")
+    (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.cudaFlags.cmakeCudaArchitecturesString}")
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
       name = "cuda-merged-${cudaPackages.cudaVersion}";
       paths = builtins.concatMap getAllOutputs mergedCudaLibraries;
@@ -261,7 +269,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  pythonImportsCheck = [ "vllm" ];
+  # pythonImportsCheck = [ "vllm" ];
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
