@@ -8643,6 +8643,12 @@
     githubId = 1318743;
     name = "Ivar";
   };
+  ivyfanchiang = {
+    email = "dev@ivyfanchiang.ca";
+    github = "hexadecimalDinosaur";
+    githubId = 36890802;
+    name = "Ivy Fan-Chiang";
+  };
   iwanb = {
     email = "tracnar@gmail.com";
     github = "iwanb";
@@ -15335,6 +15341,13 @@
     github = "peti";
     githubId = 28323;
     name = "Peter Simons";
+  };
+  petrkozorezov = {
+    email = "petr.kozorezov@gmail.com";
+    github = "petrkozorezov";
+    githubId = 645017;
+    name = "Petr Kozorezov";
+    keys = [ { fingerprint = "7F1A 353D 3D6D 9CEF 63A9  B5C6 699F 32D5 9999 7C90"; } ];
   };
   petrosagg = {
     email = "petrosagg@gmail.com";
