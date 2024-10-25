@@ -12,26 +12,32 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "doctave";
-    repo = pname;
+    repo = "doctave";
     rev = version;
-    sha256 = "1780pqvnlbxxhm7rynnysqr0vihdkwmc6rmgp43bmj1k18ar4qgj";
+    hash = "sha256-8mGSFQozyLoGua9mwyqfDcYNMtbeWp9Phb0vaje+AJ0=";
   };
 
-  # Cargo.lock is outdated
-  cargoPatches = [ ./cargo-lock.patch ];
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
-  cargoHash = "sha256-keLcNttdM9JUnn3qi/bWkcObIHl3MRACDHKPSZuScOc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "doctave-markdown-0.9.0" = "sha256-DDeb91DgLx7vOYHwoDy6+/532q/3/myJUZDqjq7ejJ0=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Batteries-included developer documentation site generator";
     homepage = "https://github.com/doctave/doctave";
     changelog = "https://github.com/doctave/doctave/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "doctave";
   };
 }
