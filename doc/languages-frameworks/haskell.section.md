@@ -191,6 +191,10 @@ and `version` from Hackage.
 `sha256`
 : Hash to use for the default case of `src`.
 
+`sourceRoot`, `setSourceRoot`
+: Passed to `stdenv.mkDerivation`; see [“Variables controlling the unpack
+phase”](#variables-controlling-the-unpack-phase).
+
 `revision`
 : Revision number of the updated cabal file to fetch from Hackage.
 If `null` (which is the default value), the one included in `src` is used.
