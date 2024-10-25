@@ -37,5 +37,5 @@ commit_change() {
 test_packageset(){
     local PKGSET="$1"
 
-    NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ${DIR}/../../../../../ -A "emacs.pkgs.$PKGSET"
+    NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ${DIR}/../../../../../ -A "emacsPackages.$PKGSET"
 }
