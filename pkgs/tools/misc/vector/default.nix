@@ -20,28 +20,6 @@
   cmake,
   perl,
   git,
-  # nix has a problem with the `?` in the feature list
-  # enabling kafka will produce a vector with no features at all
-  enableKafka ? false,
-  # TODO investigate adding various "vendor-*"
-  # "disk-buffer" is using leveldb TODO: investigate how useful
-  # it would be, perhaps only for massive scale?
-  features ? (
-    [
-      "api"
-      "api-client"
-      "enrichment-tables"
-      "sinks"
-      "sources"
-      "sources-dnstap"
-      "transforms"
-      "component-validation-runner"
-    ]
-    # the second feature flag is passed to the rdkafka dependency
-    # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "unix"
-  ),
   nixosTests,
   nix-update-script,
 }:
@@ -119,9 +97,6 @@ rustPlatform.buildRustPackage {
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
-  buildNoDefaultFeatures = true;
-  buildFeatures = features;
-
   # TODO investigate compilation failure for tests
   # there are about 100 tests failing (out of 1100) for version 0.22.0
   doCheck = false;
@@ -158,7 +133,6 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    inherit features;
     tests = {
       inherit (nixosTests) vector;
     };
