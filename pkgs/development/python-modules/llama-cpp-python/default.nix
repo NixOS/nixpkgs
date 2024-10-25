@@ -10,6 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   scikit-build-core,
+  llama-cpp-python,
 
   config,
   cudaSupport ? config.cudaSupport,
@@ -86,6 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llama_cpp" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.tests.llama-cpp-python = llama-cpp-python.override { cudaSupport = true; };
 
   meta = {
     description = "Python bindings for llama.cpp";
