@@ -33852,8 +33852,6 @@ with pkgs;
 
   btcpayserver-altcoins = callPackage ../applications/blockchains/btcpayserver { altcoinSupport = true; };
 
-  charge-lnd = callPackage ../applications/blockchains/charge-lnd { };
-
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   dcrctl = callPackage ../applications/blockchains/dcrctl { };
