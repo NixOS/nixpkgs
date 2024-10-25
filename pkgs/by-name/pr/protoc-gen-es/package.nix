@@ -7,20 +7,20 @@
 
 buildNpmPackage rec {
   pname = "protoc-gen-es";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protobuf-es";
     rev = "refs/tags/v${version}";
-    hash = "sha256-foPt++AZjBfqKepzi2mKXB7zbpCqjmPftN9wyk5Yk8g=";
+    hash = "sha256-WoDdO5XYsgYN/gT1XPcPChJjuNe87dWUmInMBR9LQ3w=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-4m3xeiid+Ag9l1qNoBH08hu3wawWfNw1aqeniFK0Byc=";
+  npmDepsHash = "sha256-CZHPEb3YCBKhoeXc8B4KGD5oacstodCVwAc3sfcfpog=";
 
   npmWorkspace = "packages/protoc-gen-es";
 
