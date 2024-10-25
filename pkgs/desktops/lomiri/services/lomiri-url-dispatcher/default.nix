@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "lib"
   ];
 
   patches = [
@@ -148,6 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ qtdeclarative.dev ]}
     )
     wrapQtApp $out/bin/lomiri-url-dispatcher-gui
+  '';
+
+  postFixup = ''
+    moveToOutput share $out
+    moveToOutput libexec $out
   '';
 
   passthru = {
