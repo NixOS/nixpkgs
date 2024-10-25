@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ hmelder ];
     platforms = platforms.linux;
+    mainProgram = "mweco-info";
   };
 }
