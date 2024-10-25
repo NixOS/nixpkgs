@@ -1,26 +1,34 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  flyctl,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.15";
+  version = "0.3.29";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-RM9R3o1NJYrw21SYx5whdR9kbopdOXUj3Uw5dVmo6Kk=";
+    hash = "sha256-gaDmgMJ87d8SosmXuO2arLS7w+3NBS8teKhdIRIXRnM=";
   };
 
-  vendorHash = "sha256-0KVjg4gt0WOJgVaeugSGzJJE/MvKSPZP6MXCYIw0cxQ=";
+  vendorHash = "sha256-0GfbHCKzBE8dlf2ZtUZN5L6ZJK2/Jhd9HNnkCNTAgtk=";
 
   subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
   ];
-  tags = ["production"];
+  tags = [ "production" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -64,7 +72,13 @@ buildGoModule rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood teutat3s ];
+    maintainers = with lib.maintainers; [
+      adtya
+      jsierles
+      techknowlogick
+      RaghavSood
+      teutat3s
+    ];
     mainProgram = "flyctl";
   };
 }
