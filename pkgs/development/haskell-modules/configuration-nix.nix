@@ -113,6 +113,35 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
+  # - Disable scrypt support since the library used only works on x86 due to SSE2:
+  #   https://github.com/informatikr/scrypt/issues/8
+  # - Use crypton as the encryption backend. That override becomes obsolete with
+  #   3.1.* since cabal2nix picks crypton by default then.
+  password =
+    let
+      scryptSupported = pkgs.stdenv.hostPlatform.isx86;
+    in
+
+      lib.pipe
+        (super.password.override ({
+          cryptonite = self.crypton;
+        } // lib.optionalAttrs (!scryptSupported) {
+          scrypt = null;
+        }))
+        ([
+          (enableCabalFlag "crypton")
+          (disableCabalFlag "cryptonite")
+          # https://github.com/cdepillabout/password/pull/84
+          (appendPatch ./patches/password-3.0.4.0-scrypt-conditional.patch)
+          (overrideCabal (drv: {
+            # patch doesn't apply otherwise because of revisions
+            prePatch = drv.prePatch or "" + ''
+              ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+            '';
+          }))
+        ] ++ lib.optionals (!scryptSupported) [
+          (disableCabalFlag "scrypt")
+        ]);
 
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
