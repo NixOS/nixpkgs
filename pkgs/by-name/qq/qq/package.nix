@@ -117,15 +117,15 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://im.qq.com/linuxqq/";
     description = "Messaging app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       fee1-dead
       bot-wxt1221
