@@ -22,12 +22,6 @@
   stevedore,
   typing-extensions,
   symengine,
-  # Optional inputs
-  withOptionalPackages ? true,
-  qiskit-finance,
-  qiskit-machine-learning,
-  qiskit-nature,
-  qiskit-optimization,
 }:
 buildPythonPackage rec {
   pname = "qiskit";
