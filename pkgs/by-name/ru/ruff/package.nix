@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "ruff";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   outputs = [
@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-//ayB5ayYM5FqiSXDDns2tIL+PJ0Osvkp8+MEEL0L+8=";
+    hash = "sha256-TPr6YdSb5JKltXHDi1PdGzPYjmmsbCFQKxIiJURrBMI=";
   };
 
   # Do not rely on path lookup at runtime to find the ruff binary
@@ -42,7 +42,7 @@ python3Packages.buildPythonPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-vuLgeaqIL8U+5PUHJaGdovHFapAMGGQ9nPAMJJnxz/o=";
+      "salsa-0.18.0" = "sha256-zUF2ZBorJzgo8O8ZEnFaitAvWXqNwtHSqx4JE8nByIg=";
     };
   };
 
