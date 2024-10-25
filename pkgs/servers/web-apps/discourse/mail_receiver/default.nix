@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "discourse-mail-receiver";
-  version = "4.0.7";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "mail-receiver";
     rev = "v${version}";
-    sha256 = "0grifm5qyqazq63va3w26xjqnxwmfixhx0fx0zy7kd39378wwa6i";
+    sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 
   nativeBuildInputs = [ replace makeWrapper ];
