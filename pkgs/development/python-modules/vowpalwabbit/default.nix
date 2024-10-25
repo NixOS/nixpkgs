@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "9.9.0";
+  version = "9.10.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YCg2EI4rhEMwcVEzx9ES8Z3CoCddeUFVk4lZ0nuQJUc=";
+    hash = "sha256-Yyqm3MlW6UL+bCufFfzWg9mBBQNhLxR+g++ZrQ6qM/E=";
   };
 
   nativeBuildInputs = [ cmake ];

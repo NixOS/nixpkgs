@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "usrsctp";
@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
     # errors. These issues are fixed in the master branch, but a new release with them has not
     # been made. The following patch can be dropped once a release has been made.
     ./clang-fix-build.patch
+
+    (fetchpatch {
+      name = "freebsd-14.patch";
+      url = "https://github.com/sctplab/usrsctp/commit/ac559d2a95277e5e0827e9ee5a1d3b1b50e0822a.patch";
+      hash = "sha256-QBlzH37Xwwnn1y8pM941Zesz18p2EazfeD0lCU8n6nI=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

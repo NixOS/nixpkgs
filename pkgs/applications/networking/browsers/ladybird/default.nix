@@ -64,18 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
-
-    # libwebp is not built with cmake support yet
-    # https://github.com/NixOS/nixpkgs/issues/334148
-    cat > Meta/CMake/FindWebP.cmake <<'EOF'
-    find_package(PkgConfig)
-    pkg_check_modules(WEBP libwebp REQUIRED)
-    include_directories(''${WEBP_INCLUDE_DIRS})
-    link_directories(''${WEBP_LIBRARY_DIRS})
-    EOF
-    substituteInPlace Userland/Libraries/LibGfx/CMakeLists.txt \
-      --replace-fail 'WebP::' "" \
-      --replace-fail libwebpmux webpmux
   '';
 
   preConfigure = ''

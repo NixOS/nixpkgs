@@ -1,53 +1,57 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  python,
-  oldest-supported-numpy,
-  setuptools,
-  wheel,
   certifi,
-  numpy,
-  zlib,
-  netcdf,
-  hdf5,
-  curl,
-  libjpeg,
-  cython,
   cftime,
+  curl,
+  cython,
+  fetchPypi,
+  hdf5,
+  isPyPy,
+  libjpeg,
+  netcdf,
+  numpy,
+  oldest-supported-numpy,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  stdenv,
+  wheel,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "netcdf4";
-  version = "1.6.5";
-  format = "pyproject";
+  version = "1.7.1.post2";
+  pyproject = true;
 
-  disabled = isPyPy;
+  disabled = isPyPy || pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "netCDF4";
-    inherit version;
-    hash = "sha256-gkiB0KrP3lvZgtat7dhXQlnIVVN4HnuD4M6CuJC/oO8=";
+    inherit pname version;
+    hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    sed -i "/numpy>=/d" pyproject.toml
+  '';
+
+  build-system = [
     cython
     oldest-supported-numpy
-    setuptools
+    setuptools-scm
     wheel
   ];
 
   propagatedBuildInputs = [
     certifi
     cftime
+    curl
+    hdf5
+    libjpeg
+    netcdf
     numpy
     zlib
-    netcdf
-    hdf5
-    curl
-    libjpeg
   ];
 
   checkPhase = ''

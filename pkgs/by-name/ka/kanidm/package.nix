@@ -61,8 +61,8 @@ rustPlatform.buildRustPackage rec {
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace '@htmx_ui_pkg_path@' "${placeholder "out"}/ui/hpkg" \
-        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui/pkg"
+        --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg" \
+        --replace-fail '@web_ui_pkg_path@' "$out/ui/pkg"
     '';
 
   nativeBuildInputs = [
@@ -87,8 +87,10 @@ rustPlatform.buildRustPackage rec {
     cp -r server/core/static $out/ui/hpkg
   '';
 
-  # Otherwise build breaks on some unused code
-  env.RUSTFLAGS = "-A dead_code";
+  # Upstream runs with the Rust equivalent of -Werror,
+  # which breaks when we upgrade to new Rust before them.
+  # Just allow warnings. It's fine, really.
+  env.RUSTFLAGS = "--cap-lints warn";
 
   # Not sure what pathological case it hits when compiling tests with LTO,
   # but disabling it takes the total `cargo check` time from 40 minutes to

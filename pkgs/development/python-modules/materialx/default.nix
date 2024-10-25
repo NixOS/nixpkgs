@@ -5,24 +5,25 @@
   fetchFromGitHub,
   cmake,
   setuptools,
-  darwin,
   libX11,
   libXt,
   libGL,
   openimageio,
   imath,
   python,
+  darwinMinVersionHook,
+  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.38.10";
+  version = "1.39.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
-    rev = "v${version}";
-    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WzzsY1hOWwJEqT/ZRLIoZDfKNvx1Yf6aFhA3ZcSPx+s=";
   };
 
   format = "other";
@@ -37,13 +38,10 @@ buildPythonPackage rec {
       openimageio
       imath
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        Cocoa
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_14
+      (darwinMinVersionHook "10.15")
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
       libXt
@@ -53,9 +51,8 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
-    # don't build MSL shader back-end on x86_x64-darwin, as it requires a newer SDK with metal support
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
-      stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin)
+      stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin
     ))
   ];
 

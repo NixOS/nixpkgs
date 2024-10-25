@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SaoQzP7vtzVWmkUTw0vCeneeSMTmBTIr5kiMXGcgm9g=";
+    hash = "sha256-oS037l5pQW/z4GX5+hb/mCUA219cGHE7lyiG8aos21k=";
   };
 
   build-system = [ pdm-backend ];
@@ -71,6 +71,7 @@ buildPythonPackage rec {
     "test_files_headers"
     "test_large_file"
     "test_file_info_b2_attributes"
+    "test_sync_folder"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];

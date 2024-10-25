@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2L30hvKbFqIGlSEbzc1HvHybBqDGldJfZoUpqJJOv2Q=";
+    hash = "sha256-/mX6gRc52rkHKr6GI9XIHbksdhqpksndmSBNMtk3HFs=";
   };
 
   postPatch = ''

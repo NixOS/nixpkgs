@@ -3,6 +3,7 @@
   fetchPypi,
   lib,
   setuptools,
+  protobuf,
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  propagatedNativeBuildInputs = [
+    protobuf
+  ];
 
   # the pypi source archive does not ship tests
   doCheck = false;

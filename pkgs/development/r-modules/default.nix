@@ -645,7 +645,7 @@ let
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
-    jqr = [ pkgs.jq.lib ];
+    jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
     interpolation = [ pkgs.gmp ];

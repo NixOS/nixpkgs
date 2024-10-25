@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bambinos";
     repo = "bambi";
     rev = "refs/tags/${version}";
-    hash = "sha256-9+uTyV3mQlHOKAjXohwkhTzNe/+I5XR/LuH1ZYvhc8I=";
+    hash = "sha256-kxrNNbZfC96/XHb1I7aUHYZdFJvGR80ZI8ell/0FQXc=";
   };
 
   nativeBuildInputs = [ setuptools ];

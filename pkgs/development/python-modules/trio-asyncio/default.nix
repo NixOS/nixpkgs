@@ -45,6 +45,8 @@ buildPythonPackage rec {
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
     "-W"
     "ignore::RuntimeWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   nativeCheckInputs = [

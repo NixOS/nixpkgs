@@ -118,6 +118,7 @@ self: super: {
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
   universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues

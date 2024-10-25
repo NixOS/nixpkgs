@@ -1,0 +1,73 @@
+From cf3bcbf4444d73cb3d1a9369c569338ae0fcb668 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 25 May 2024 19:03:58 -0400
+Subject: [PATCH 1/2] Support static module loading
+
+---
+ citrus/citrus_module.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/citrus/citrus_module.c b/citrus/citrus_module.c
+index 8ca4702..7667868 100644
+--- a/citrus/citrus_module.c
++++ b/citrus/citrus_module.c
+@@ -324,16 +324,24 @@ out:
+ 	return (path[0] ? path : NULL);
+ }
+ 
++#if defined(ENABLE_STATIC)
++#include "static-modules.h"
++#endif
++
+ void *
+ _citrus_find_getops(_citrus_module_t handle, const char *modname,
+     const char *ifname)
+ {
+ 	char name[PATH_MAX];
+ 	void *p;
+-
++#if defined(ENABLE_STATIC)
++	const struct getops_pair* res = lookup_getops(modname, strlen(modname));
++	p = res ? res->opsfn : NULL;
++#else
+ 	snprintf(name, sizeof(name), "_citrus_%s_%s_getops",
+ 	    modname, ifname);
+ 	p = dlsym((void *)handle, name);
++#endif
+ 	return (p);
+ }
+ 
+@@ -345,6 +353,12 @@ _citrus_load_module(_citrus_module_t *rhandle, const char *encname)
+ 	return (0);
+ #else
+ 
++#if defined(ENABLE_STATIC)
++	if (is_known_encoding(encname, strnlen(encname, MAX_WORD_LENGTH)) > MAX_HASH_VALUE) {
++		return (EINVAL);
++	}
++	*rhandle = (_citrus_module_t)encodings;
++#else
+ 	const char *p;
+ 	char path[PATH_MAX];
+ 	void *handle;
+@@ -373,7 +387,7 @@ _citrus_load_module(_citrus_module_t *rhandle, const char *encname)
+ 	}
+ 
+ 	*rhandle = (_citrus_module_t)handle;
+-
++#endif
+ 	return (0);
+ #endif
+ }
+@@ -390,6 +404,8 @@ _citrus_unload_module(_citrus_module_t handle)
+ 	assert(handle != RTLD_SELF);
+ #endif /* FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION */
+ #endif /* __APPLE__ */
++#if !defined(ENABLE_STATIC)
+ 	if (handle)
+ 		dlclose((void *)handle);
++#endif
+ }
+-- 
+2.46.0
+

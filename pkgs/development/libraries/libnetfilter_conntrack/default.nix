@@ -1,27 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libnfnetlink, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_conntrack";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Z72d9J/jTouCFE9t+5OzIPOEqOpZcn6S/40YtfS1eag=";
+    url = "https://netfilter.org/projects/libnetfilter_conntrack/files/${pname}-${version}.tar.xz";
+    hash = "sha256-Z+3LTrgmwvjcmK8I2r/2jzs9D+b7fZ0Kwe5+zOD+aU4=";
   };
-
-  patches = [
-    # Fix Musl build.
-    (fetchpatch {
-      url = "https://git.netfilter.org/libnetfilter_conntrack/patch/?id=21ee35dde73aec5eba35290587d479218c6dd824";
-      sha256 = "00rp82jrx5ygcw8la3c7bv7sigw9qzbn956dk71qjx981a2g2kqk";
-    })
-  ];
 
   hardeningDisable = [ "trivialautovarinit" ];
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
   nativeBuildInputs = [ pkg-config ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";

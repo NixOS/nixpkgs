@@ -35,8 +35,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "tokenizers"
     "av"
+    "tokenizers"
   ];
 
   dependencies = [

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.1.9";
+  version = "1.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = "refs/tags/${version}";
-    hash = "sha256-pWLKjELy10VNumpBHjBYCO2TltKsZx1GhQcGMHsYJNk=";
+    hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
   };
 
   nativeBuildInputs = [ setuptools ];
