@@ -1,34 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, evolution-data-server-gtk4
-, glib
-, glib-networking
-, gnutls
-, gst_all_1
-, json-glib
-, libadwaita
-, libpeas2
-, libportal-gtk4
-, pipewire
-, pulseaudio
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  evolution-data-server-gtk4,
+  libsysprof-capture,
+  glib,
+  glib-networking,
+  gnutls,
+  appstream,
+  gst_all_1,
+  json-glib,
+  libadwaita,
+  libpeas2,
+  libportal-gtk4,
+  pipewire,
+  libphonenumber,
+  libportal,
+  pulseaudio,
+  vala,
+  tracker,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.45";
+  version = "1.0.0.alpha.46-unstable-2024-10-05";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-hOVWvk4U6VoWAvXNHK1vTm/am69EFqDmSb0NofWVQj8=";
+    rev = "e870cbfd5a1f15e6ac8550500aefe8ea6d2c4539";
+    hash = "sha256-qr9wfgt7+mcmni9JrxZAui069cfvyAo38isMbciM1aQ=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook4
+    appstream # appstreamcli
+    vala # vapigen
   ];
 
   buildInputs = [
@@ -50,11 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libadwaita
     libpeas2
+    libportal
+    libphonenumber
     libportal-gtk4
+    tracker
     pipewire
     pulseaudio
+    libsysprof-capture
     sqlite
-  ];
+  ]; # optional dependency libwalbottle-0
 
   mesonFlags = [
     "-Dplugin_bluez=true"
@@ -84,7 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
+    license = with lib.licenses; [
+      gpl3Plus
+      cc0
+      cc-by-sa-30
+    ];
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
