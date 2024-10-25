@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperlink";
-  version = "0.1.32";
+  version = "0.1.35";
 
   src = fetchFromGitHub {
     owner = "untitaker";
     repo = "hyperlink";
     rev = version;
-    hash = "sha256-QejpyleugPWvr4p8JOMieswVtfQMGxtH+fb46mRLlH4=";
+    hash = "sha256-sx1OW056s40uhwwgGtNKiPkKSUy7/ZzSYGnjc0UKh/E=";
   };
 
-  cargoHash = "sha256-d0JwxxI6Quyan2lgymxGpROKR757LEOUIgJcs5c9Kmc=";
+  cargoHash = "sha256-4UEq9m5SWqmnzc++DjIeSq4ckTKgoxdt+8MekxiYGPE=";
 
   meta = with lib; {
     description = "Very fast link checker for CI";
