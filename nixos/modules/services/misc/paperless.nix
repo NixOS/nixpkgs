@@ -34,9 +34,14 @@ let
     else toString s
   ) cfg.settings);
 
-  manage = pkgs.writeShellScript "manage" ''
+  manage = let
+    maybeSourceSecretsFile = if cfg.secretsFile != null
+      then "source ${cfg.secretsFile}"
+      else "";
+  in pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
+    ${maybeSourceSecretsFile}
     exec ${cfg.package}/bin/paperless-ngx "$@"
   '';
 
@@ -52,6 +57,7 @@ let
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
+    EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
     LockPersonality = true;
     MemoryDenyWriteExecute = true;
     NoNewPrivileges = true;
@@ -228,6 +234,27 @@ in
       This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
       https://github.com/NixOS/nixpkgs/issues/240591 for more information
     '' // mkOption { default = true; };
+
+    secretsFile = mkOption {
+      type = types.nullOr (
+        types.str
+        // {
+          # We don't want users to be able to pass a path literal here but
+          # it should look like a path.
+          check = it: lib.isString it && lib.types.path.check it;
+        }
+      );
+      default = null;
+      example = "/run/secrets/paperless";
+      description = ''
+        Path of a file with extra environment variables to be loaded from disk. This file is not added to the nix store, so it can be used to pass secrets to paperless. Refer to the [documentation](https://docs.paperless-ngx.com/configuration/) for options.
+
+        To set a database password set this to a file containing:
+        ```
+        PAPERLESS_DBPASS=<pass>
+        ```
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
