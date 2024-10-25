@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.5";
+  version = "0.5.post0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     owner = "cher-nov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uJfMetplTyRT95P/8ljz4H4ASYMXEM7jROWSpjftKjU=";
+    hash = "sha256-GCTVxCJQvpvHpzaU+OaFM/AKoRvxLyA0u6VIV+94UTY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-HDMztt7/ZpPlpy0IMGuWGGo4vwKhraFTmTTPr9tC+Ok=";
+    hash = "sha256-BqtswBTurZoKw7DR3S7woDKLqAqIjKdSS5TBwCI+Bps=";
   };
 
   build-system = [
