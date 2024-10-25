@@ -7,24 +7,35 @@
   nixosTests,
 }:
 
+let
+  version = "1.5.1";
+in
+
 rustPlatform.buildRustPackage {
   pname = "nsncd";
-  version = "1.4.1-unstable-2024-10-03";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev = "cf94e3cfc7dfff69867209c7e68945bac2d3913d";
-    hash = "sha256-mjTbyO0b9i4LMv7DWHm0Y4z1pvcapCtFsHLV5cTAxQE=";
+    rev = "v${version}";
+    hash = "sha256-0cFCX5pKvYv6yr4+X5kXGz8clNi/LYndFtHaxSmHN+I=";
   };
 
-  cargoHash = "sha256-cgdob/HmE6I59W5UQRItAFXDj7IvazNt99LbJlKQDNo=";
+  cargoHash = "sha256-1n+yCjuJ7kQkd68AOCVz5MWWe1qItaceT1rDlLi1Vqo=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
     # on IPv4. That's not the case in the Nix sandbox somehow. Works
     # when running cargo test impurely on a (NixOS|Debian) machine.
     "--skip=ffi::test_gethostbyname2_r"
+
+    # Relies on /etc/services to be present?
+    "--skip=handlers::test::test_handle_getservbyname_name"
+    "--skip=handlers::test::test_handle_getservbyname_name_proto"
+    "--skip=handlers::test::test_handle_getservbyport_port"
+    "--skip=handlers::test::test_handle_getservbyport_port_proto"
+    "--skip=handlers::test::test_handle_getservbyport_port_proto_aliases"
   ];
 
   meta = with lib; {
