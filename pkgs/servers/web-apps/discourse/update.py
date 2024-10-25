@@ -234,17 +234,12 @@ def update(rev):
     _call_nix_update('discourse', version.version)
 
     old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
-    new_yarn_hash = repo.get_yarn_lock_hash(version.tag, "app/assets/javascripts/yarn-ember5.lock")
+    new_yarn_hash = repo.get_yarn_lock_hash(version.tag, "yarn.lock")
     click.echo(f"Updating yarn lock hash: {old_yarn_hash} -> {new_yarn_hash}")
-
-    old_yarn_dev_hash = _nix_eval('discourse.assets.yarnDevOfflineCache.outputHash')
-    new_yarn_dev_hash = repo.get_yarn_lock_hash(version.tag, "yarn.lock")
-    click.echo(f"Updating yarn dev lock hash: {old_yarn_dev_hash} -> {new_yarn_dev_hash}")
 
     with open(Path(__file__).parent / "default.nix", 'r+') as f:
         content = f.read()
         content = content.replace(old_yarn_hash, new_yarn_hash)
-        content = content.replace(old_yarn_dev_hash, new_yarn_dev_hash)
         f.seek(0)
         f.write(content)
         f.truncate()
