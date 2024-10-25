@@ -233,9 +233,6 @@ in
         pantheon-agent-polkit
       ])) config.environment.pantheon.excludePackages;
 
-      # Settings from elementary-default-settings
-      environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
-
       xdg.mime.enable = true;
       xdg.icons.enable = true;
 

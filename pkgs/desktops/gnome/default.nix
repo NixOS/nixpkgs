@@ -91,7 +91,6 @@ in
   gnome-session = lib.warn "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly." pkgs.gnome-session; # Added on 2024-08-28.
   gnome-session-ctl = lib.warn "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly." pkgs.gnome-session-ctl; # Added on 2024-08-28.
   gnome-settings-daemon = lib.warn "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly." pkgs.gnome-settings-daemon; # Added on 2024-08-28.
-  gnome-settings-daemon43 = lib.warn "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly." pkgs.gnome-settings-daemon43; # Added on 2024-08-28.
   gnome-shell = lib.warn "The ‘gnome.gnome-shell’ was moved to top-level. Please use ‘pkgs.gnome-shell’ directly." pkgs.gnome-shell; # Added on 2024-08-28.
   gnome-shell-extensions = lib.warn "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly." pkgs.gnome-shell-extensions; # Added on 2024-08-11.
   gnome-software = lib.warn "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly." pkgs.gnome-software; # Added on 2024-08-11.
@@ -113,7 +112,6 @@ in
   lightsoff = lib.warn "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly." pkgs.lightsoff; # Added on 2024-08-11.
   metacity = lib.warn "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly." pkgs.metacity; # Added on 2024-08-11.
   mutter = lib.warn "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly." pkgs.mutter; # Added on 2024-08-28.
-  mutter43 = lib.warn "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly." pkgs.mutter43; # Added on 2024-08-28.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   networkmanager-openvpn = lib.warn "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly." pkgs.networkmanager-openvpn; # Added on 2024-08-31.
   networkmanager-vpnc = lib.warn "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly." pkgs.networkmanager-vpnc; # Added on 2024-08-31.
@@ -139,4 +137,6 @@ in
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
+  gnome-settings-daemon43 = throw "‘gnome.gnome-settings-daemon43’ has been removed since it is no longer used by Pantheon."; # Added on 2024-09-22.
+  mutter43 = throw "‘gnome.mutter43’ has been removed since it is no longer used by Pantheon."; # Added on 2024-09-22.
 }
