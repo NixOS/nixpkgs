@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreServices }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, }:
 
 rustPlatform.buildRustPackage rec {
   pname = "doctave";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-keLcNttdM9JUnn3qi/bWkcObIHl3MRACDHKPSZuScOc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   meta = with lib; {
