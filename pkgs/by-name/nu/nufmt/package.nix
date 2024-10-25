@@ -19,12 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AurQGIZDYOkMMyAEXP01QziISQcSME3GFtvqjCDoeiw=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      IOKit
-    ]
-  );
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${llvmPackages.libclang.lib}/lib";
 
