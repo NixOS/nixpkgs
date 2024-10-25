@@ -6,6 +6,7 @@
   pythonRelaxDepsHook,
   fetchFromGitHub,
   symlinkJoin,
+  autoAddDriverRunpath,
 
   # build system
   packaging,
@@ -97,6 +98,8 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+
   mergedCudaLibraries = with cudaPackages; [
     cuda_cudart # cuda_runtime.h, -lcudart
     cuda_cccl
@@ -161,8 +164,15 @@ buildPythonPackage rec {
     ninja
     pythonRelaxDepsHook
     which
-  ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ] ++ lib.optionals rocmSupport [
+    rocmPackages.hipcc
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ] ++ lib.optionals isCudaJetson [
+    cudaPackages.autoAddCudaCompatRunpath
+  ];
+
 
   build-system = [
     packaging
