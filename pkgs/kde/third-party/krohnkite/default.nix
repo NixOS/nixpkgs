@@ -9,16 +9,16 @@
 }:
 buildNpmPackage rec {
   pname = "krohnkite";
-  version = "0.9.8.2";
+  version = "0.9.8.3";
 
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
     rev = "refs/tags/${version}";
-    hash = "sha256-chADfJ1zaufnwi4jHbEN1Oec3XFNw0YsZxLFhnY3T9w=";
+    hash = "sha256-PiGpYOKvBpwkPfDWHlOhq7dwyBYzfzfJVURiEC1a78g=";
   };
 
-  npmDepsHash = "sha256-3yE2gyyVkLn/dPDG9zDdkHAEb4/hqTJdyMXE5Y6Z5pM=";
+  npmDepsHash = "sha256-IUGRxDCn/aEebCgDPElEPKOxfoYmLoFHVROkTJpNISY=";
 
   dontWrapQtApps = true;
 

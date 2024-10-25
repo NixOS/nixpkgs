@@ -148,7 +148,6 @@
 , "orval"
 , "parcel"
 , "parsoid"
-, "patch-package"
 , "peerflix"
 , "peerflix-server"
 , "poor-mans-t-sql-formatter-cli"
