@@ -35,6 +35,7 @@
   sox,
   transcode,
   kinit,
+  fetchpatch,
 }:
 
 mkDerivation {
@@ -47,6 +48,17 @@ mkDerivation {
     maintainers = with maintainers; [ sander ];
     platforms = platforms.linux;
   };
+  patches = [
+    # compile fixes from upstream, remove when they stop applying
+    (fetchpatch {
+      url = "https://github.com/KDE/k3b/commit/712ef4adc992fd848dfd769f346f87216029c285.diff";
+      sha256 = "sha256-wtLbd6WrytMrF4elPmR7auC7j+id0Ioom6TDQORkI/A=";
+    })
+    (fetchpatch {
+      url = "https://github.com/KDE/k3b/commit/071535a79c3d2b074163cbb0881117a995ed17cd.diff";
+      sha256 = "sha256-L7ZkIu8c/ns2KrvFD4icvUX5ibHcarPZxp3NRsvMowY=";
+    })
+  ];
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
