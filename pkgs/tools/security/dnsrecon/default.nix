@@ -6,22 +6,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
     rev = "refs/tags/${version}";
-    hash = "sha256-XboRxq3ZDIDtuECVSnncQ2Pa8YAvva4KUNm0O5ED6rc=";
+    hash = "sha256-h87sNorCKxUmXZAbF7FaOqruUCv84FepFwKMYrIl70M=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     dnspython
-    netaddr
+    loguru
     lxml
+    netaddr
+    requests
     setuptools
   ];
 
