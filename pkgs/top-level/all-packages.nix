@@ -19249,4 +19249,6 @@ with pkgs;
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
     ruby = ruby_3_1;
   };
+
+  dotultimate = recurseIntoAttrs (callPackages ../development/tools/misc/dotultimate {});
 }
