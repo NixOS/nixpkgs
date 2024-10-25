@@ -638,6 +638,9 @@ stdenv.mkDerivation (finalAttrs: {
         "armv7l-linux"
         "armv6l-linux"
         "powerpc64le-linux"
+      ]
+      ++ lib.optionals atLeast17 [
+        "riscv64-linux"
       ];
     # OpenJDK 8 was broken for musl at 2024-01-17. Tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/281618
