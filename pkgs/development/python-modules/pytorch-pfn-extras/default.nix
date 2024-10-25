@@ -70,6 +70,9 @@ buildPythonPackage rec {
       "test_create_distributed_evaluator"
       "test_distributed_evaluation"
       "test_distributed_evaluator_progress_bar"
+
+      # RuntimeError: Dynamo is not supported on darwin (BackendCompilerFailed)
+      "test_compile_with_optimizer"
     ];
 
   disabledTestPaths =
