@@ -24,6 +24,8 @@
 , patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
+, apple-sdk_11
+, darwinMinVersionHook
 , ...
 }:
 
@@ -90,33 +92,16 @@ stdenv.mkDerivation (rec {
     # buildInputs cc-wrapper will set up rpath correctly for us.
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
-    darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation
     darwin.bootstrap_cmds
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
   ]
-  # The older libSystem used on x86_64 macOS is missing the
-  # `<bsm/audit_session.h>` header which `lldb` uses.
-  #
-  # We copy this header over from macOS 10.12 SDK.
-  #
-  # See here for context:
-  # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-  ++ lib.optional
+  ++ lib.optionals
     (
       stdenv.targetPlatform.isDarwin
         && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-        && (lib.versionAtLeast release_version "15")
-    )
-    (
-      runCommand "bsm-audit-session-header" { } ''
-        install -Dm444 \
-          "${lib.getDev darwin.apple_sdk.sdk}/include/bsm/audit_session.h" \
-          "$out/include/bsm/audit_session.h"
-      ''
-    );
+    ) [
+    apple-sdk_11
+    (darwinMinVersionHook "10.15")
+  ];
 
   hardeningDisable = [ "format" ];
 
