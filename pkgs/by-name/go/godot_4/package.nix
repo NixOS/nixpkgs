@@ -122,6 +122,8 @@ let
       x11 = withX11; # Compile with X11 support
 
       module_mono_enabled = withMono;
+
+      linkflags = "-Wl,--build-id";
     };
 
     enableParallelBuilding = true;
