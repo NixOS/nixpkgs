@@ -8,18 +8,19 @@
 , pkg-config
 , python3
 , sphinx
+, sphinxygen
 , writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "serd";
-  version = "0.30.16";
+  version = "0.32.2";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-9Q9IbaUZzdjQOyDJ5CQU5FkTP1okRBHY5jyu+NmskUY=";
+    hash = "sha256-333CyW8rod7P11bkWOBh3tfYFY0lVVTnaTSDrAljxWs=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sphinx
+    sphinxygen
   ];
 
   postPatch = ''
