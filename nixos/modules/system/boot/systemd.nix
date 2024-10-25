@@ -160,6 +160,7 @@ let
 
       # Misc.
       "systemd-sysctl.service"
+      "systemd-machine-id-commit.service"
     ] ++ optionals cfg.package.withTimedated [
       "dbus-org.freedesktop.timedate1.service"
       "systemd-timedated.service"
