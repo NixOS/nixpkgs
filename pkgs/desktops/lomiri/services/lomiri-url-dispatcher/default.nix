@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, intltool
-, json-glib
-, libapparmor
-, libxkbcommon
-, lomiri-app-launch
-, lomiri-ui-toolkit
-, makeWrapper
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, qtwayland
-, runtimeShell
-, sqlite
-, systemd
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  intltool,
+  json-glib,
+  libapparmor,
+  libxkbcommon,
+  lomiri-app-launch,
+  lomiri-ui-toolkit,
+  makeWrapper,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  qtwayland,
+  runtimeShell,
+  sqlite,
+  systemd,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,19 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace data/CMakeLists.txt \
-      --replace "\''${SYSTEMD_USER_UNIT_DIR}" "\''${CMAKE_INSTALL_LIBDIR}/systemd/user"
+  postPatch =
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
 
-    substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-      --replace "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
+      substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
+        --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
-    # Update URI handler database whenever new url-handler is installed system-wide
-    substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-      --replace '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/test-sql.sh
-  '';
+      # Update URI handler database whenever new url-handler is installed system-wide
+      substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/test-sql.sh
+    '';
 
   strictDeps = true;
 
@@ -75,11 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     makeWrapper
     pkg-config
-    (python3.withPackages (ps: with ps; [
-      setuptools
-    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps:
+      with ps;
+      [
+        setuptools
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        python-dbusmock
+      ]
+    ))
     wrapQtAppsHook
   ];
 
@@ -104,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLOCAL_INSTALL=ON"
-    "-Denable_mirclient=OFF"
+    (lib.cmakeBool "LOCAL_INSTALL" true)
+    (lib.cmakeBool "enable_mirclient" false)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -117,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     substituteInPlace $out/bin/lomiri-url-dispatcher-dump \
-      --replace '/bin/sh' '${runtimeShell}'
+      --replace-fail '/bin/sh' '${runtimeShell}'
 
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
@@ -136,8 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
 
     substituteInPlace $out/share/applications/lomiri-url-dispatcher-gui.desktop \
-      --replace "Exec=$guiExec" "Exec=$(basename $guiScript)" \
-      --replace "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
+      --replace-fail "Exec=$guiExec" "Exec=$(basename $guiScript)" \
+      --replace-fail "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
@@ -151,17 +159,20 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lomiri operating environment service for requesting URLs to be opened";
     longDescription = ''
-       Allows applications to request a URL to be opened and handled by another
-       process without seeing the list of other applications on the system or
-       starting them inside its own Application Confinement.
+      Allows applications to request a URL to be opened and handled by another
+      process without seeing the list of other applications on the system or
+      starting them inside its own Application Confinement.
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
-    license = with licenses; [ lgpl3Only gpl3Only ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl3Only
+      gpl3Only
+    ];
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-url-dispatcher"
     ];
