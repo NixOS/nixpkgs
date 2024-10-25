@@ -4,6 +4,7 @@
   buildPythonPackage,
   isPyPy,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
   curl,
   openssl,
@@ -24,6 +25,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-jCRxr5B5rXmOFkXsCw09QiPbaHN50X3TanBjdEn4HWs=";
   };
+
+  patches = [
+    # Don't use -flat_namespace on macOS
+    # https://github.com/pycurl/pycurl/pull/855 remove on next update
+    (fetchpatch {
+      name = "no_flat_namespace.patch";
+      url = "https://github.com/pycurl/pycurl/commit/7deb85e24981e23258ea411dcc79ca9b527a297d.patch";
+      hash = "sha256-tk0PQy3cHyXxFnoVYNQV+KD/07i7AUYHNJnrw6H8tHk=";
+    })
+  ];
 
   __darwinAllowLocalNetworking = true;
 

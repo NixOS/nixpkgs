@@ -4166,8 +4166,6 @@ with pkgs;
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
-  buildpack = callPackage ../development/tools/buildpack { };
-
   bonk = callPackage ../tools/misc/bonk { };
 
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
@@ -4806,7 +4804,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_31;
+    electron = electron_32;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -11864,8 +11862,6 @@ with pkgs;
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
-  rpiboot = callPackage ../development/misc/rpiboot { };
-
   rpm = callPackage ../tools/package-management/rpm {
     python = python3;
     lua = lua5_4;
@@ -18565,8 +18561,6 @@ with pkgs;
 
   time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
 
-  tflint = callPackage ../development/tools/analysis/tflint { };
-
   tflint-plugins = recurseIntoAttrs (
     callPackage ../development/tools/analysis/tflint-plugins { }
   );
@@ -20063,9 +20057,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa QuartzCore;
   };
 
-  gtk4 = callPackage ../development/libraries/gtk/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
-  };
+  gtk4 = callPackage ../development/libraries/gtk/4.x.nix { };
 
 
   # On darwin gtk uses cocoa by default instead of x11.
@@ -37159,8 +37151,6 @@ with pkgs;
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
-
-  hyfetch = callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;

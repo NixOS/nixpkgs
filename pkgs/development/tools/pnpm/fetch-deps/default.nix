@@ -15,8 +15,9 @@
     {
       hash ? "",
       pname,
-      pnpmWorkspace ? "",
+      pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
+      pnpmInstallFlags ? [ ],
       ...
     }@args:
     let
@@ -32,8 +33,14 @@
             outputHash = "";
             outputHashAlgo = "sha256";
           };
-      installFlags = lib.optionalString (pnpmWorkspace != "") "--filter=${pnpmWorkspace}";
+
+      filterFlags = lib.map (package: "--filter=${package}") pnpmWorkspaces;
     in
+    # pnpmWorkspace was deprecated, so throw if it's used.
+    assert (lib.throwIf (args ? pnpmWorkspace)
+      "pnpm.fetchDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
+    ) true;
+
     stdenvNoCC.mkDerivation (
       finalAttrs:
       (
@@ -73,7 +80,8 @@
             pnpm install \
                 --force \
                 --ignore-scripts \
-                ${installFlags} \
+                ${lib.escapeShellArgs filterFlags} \
+                ${lib.escapeShellArgs pnpmInstallFlags} \
                 --frozen-lockfile
 
             runHook postInstall

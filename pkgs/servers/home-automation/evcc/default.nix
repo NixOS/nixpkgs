@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.131.0";
+  version = "0.131.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-iR+qBRaDmk39wGigz734kS5hn/grX+ulZvytNYQW4bo=";
+    hash = "sha256-GEIiAjurbLLY+HMOxP40E3plZe2EsS82mxKSj9wheQI=";
   };
 
   vendorHash = "sha256-T3SmFnGOw6AJaji4tR1uK+lQj8JNcUMJErUuhwdg3gA=";

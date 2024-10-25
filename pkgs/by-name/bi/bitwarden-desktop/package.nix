@@ -189,6 +189,7 @@ in buildNpmPackage rec {
       comment = description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/bitwarden" ];
     })
   ];
 
