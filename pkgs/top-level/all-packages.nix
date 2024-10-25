@@ -37094,8 +37094,6 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hyfetch = callPackage ../tools/misc/hyfetch { };
-
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
