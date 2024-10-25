@@ -25092,7 +25092,10 @@ with pkgs;
 
   inherit (callPackages ../servers/http/tomcat { })
     tomcat9
-    tomcat10;
+    tomcat10
+    tomcat11;
+
+  tomcat = tomcat11;
 
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
