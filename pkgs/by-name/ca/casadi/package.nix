@@ -52,6 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/casadi/casadi/pull/3792/commits/28bc1b03e67ae06dea0c8557057020f5651be7ad.patch";
       hash = "sha256-t0+RnXoFakmoX93MhN08RWAbCg6Nerh42LicBBgAkRQ=";
     })
+    (fetchpatch {
+      name = "fix-FindMUMPS.cmake.patch";
+      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
+      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
+    })
   ];
 
   postPatch =
@@ -70,11 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace casadi/interfaces/fatrop/fatrop_conic_interface.hpp --replace-fail \
         "<ocp/" \
         "<fatrop/ocp/"
-
-      # fix mumps lib name. No idea where this comes from.
-      substituteInPlace cmake/FindMUMPS.cmake --replace-fail \
-        "mumps_seq" \
-        "mumps"
 
       # help casadi find its own libs
       substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
