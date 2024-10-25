@@ -4166,8 +4166,6 @@ with pkgs;
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
-  buildpack = callPackage ../development/tools/buildpack { };
-
   bonk = callPackage ../tools/misc/bonk { };
 
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
@@ -18551,8 +18549,6 @@ with pkgs;
   };
 
   time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
-
-  tflint = callPackage ../development/tools/analysis/tflint { };
 
   tflint-plugins = recurseIntoAttrs (
     callPackage ../development/tools/analysis/tflint-plugins { }
@@ -37144,8 +37140,6 @@ with pkgs;
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
-
-  hyfetch = callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;
