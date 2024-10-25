@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "go-dnscollector";
@@ -8,12 +12,11 @@ buildGoModule rec {
     owner = "dmachard";
     repo = "go-dnscollector";
     rev = "v${version}";
-    sha256 = "sha256-+EE9miEm1sHxTHcQ+Zmnj5ljSisKtds9L+SLIvgIfb4="; # Replace with the actual SHA256 of the repo
+    sha256 = "sha256-+EE9miEm1sHxTHcQ+Zmnj5ljSisKtds9L+SLIvgIfb4=";
   };
 
-  # Set Go module dependencies
   vendorHash = "sha256-Njv8EGPS45NpCs0+poBxVGWLHhH+mSZuI80kIpsijDQ=";
-  # Specify any subpackages if necessary
+
   subPackages = [ "." ];
 
   meta = with lib; {
@@ -23,4 +26,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ shift ];
   };
 }
-
