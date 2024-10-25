@@ -8303,10 +8303,7 @@ with pkgs;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
-  cvise = python3Packages.callPackage ../development/tools/misc/cvise {
-    # cvise keeps up with fresh llvm releases and supports wide version range
-    inherit (llvmPackages_14) llvm libclang;
-  };
+  cvise = python3Packages.callPackage ../development/tools/misc/cvise { };
 
   dbt = with python3Packages; toPythonApplication dbt-core;
 
