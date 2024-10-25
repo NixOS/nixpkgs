@@ -51,14 +51,25 @@ let
     ] null;
 
   # list of analysis packages sorted by dependency order
-  packages = [ "classical" "analysis" ];
+  packages = {
+    "classical" = [];
+    "reals" = [ "classical" ];
+    "altreals" = [ "reals" ];
+    "analysis" = [ "reals" ];
+    "reals-stdlib" = [ "reals" ];
+    "analysis-stdlib" = [ "analysis" "reals-stdlib" ];
+  };
 
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
-      intra-deps = lib.optionals (package != "single") (map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
-      pkgpath = if package == "single" then "."
-        else if package == "analysis" then "theories" else "${package}";
+      intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
+      pkgpath = lib.switch package [
+        { case = "single"; out = "."; }
+        { case = "analysis"; out = "theories"; }
+        { case = "reals-stdlib"; out = "reals_stdlib"; }
+        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
+      ] package;
       pname = if package == "single" then "mathcomp-analysis-single"
         else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
@@ -81,7 +92,7 @@ let
           license     = lib.licenses.cecill-c;
         };
 
-        passthru = lib.genAttrs packages mathcomp_;
+        passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
       });
     # split packages didn't exist before 0.6, so bulding nothing in that case
     patched-derivation1 = derivation.overrideAttrs (o:
@@ -94,7 +105,13 @@ let
          o.version != null && o.version != "dev" && lib.versions.isLt "0.6" o.version)
       { preBuild = ""; }
     );
-    patched-derivation = patched-derivation2.overrideAttrs (o:
+    # only packages classical and analysis existed before 1.7, so bulding nothing in that case
+    patched-derivation3 = patched-derivation2.overrideAttrs (o:
+      lib.optionalAttrs (o.pname != null && o.pname != "mathcomp-classical" && o.pname != "mathcomp-analysis" &&
+         o.version != null && o.version != "dev" && lib.versions.isLt "1.7" o.version)
+      { preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+    );
+    patched-derivation = patched-derivation3.overrideAttrs (o:
       lib.optionalAttrs (o.version != null
         && (o.version == "dev" || lib.versions.isGe "0.3.4" o.version))
       {
