@@ -104,7 +104,8 @@ in ((buildMozillaMach {
     homepage = "https://www.betterbird.eu/";
     mainProgram = "betterbird";
     maintainers = with maintainers; [ SuperSandro2000 ];
-    inherit (thunderbird-unwrapped.meta) platforms badPlatforms broken license;
+    badPlatforms = lib.platforms.darwin;
+    inherit (thunderbird-unwrapped.meta) platforms broken license;
   };
 }).override {
   crashreporterSupport = false; # not supported
