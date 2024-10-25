@@ -199,9 +199,9 @@ dependencies = [
 
 [[package]]
 name = "async-hwi"
-version = "0.0.21"
+version = "0.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a278b99ded5aa103de53c13496b0fd9266f2218ec7a37c8f7083285bba567fa7"
+checksum = "2f5e1703fc8cf217444fde8f3fdcf44382a1dec3afe5430620aa1b421c692b58"
 dependencies = [
  "async-trait",
  "bitbox-api",
@@ -212,8 +212,6 @@ dependencies = [
  "ledger-apdu",
  "ledger-transport-hidapi",
  "ledger_bitcoin_client",
- "prost 0.12.2",
- "prost-derive 0.12.2",
  "regex",
  "reqwest",
  "serde",
@@ -222,7 +220,6 @@ dependencies = [
  "serialport",
  "tokio",
  "tokio-serial",
- "zeroize",
 ]
 
 [[package]]
@@ -309,10 +306,30 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
+name = "bdk_chain"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c601c4dc7e6c3efa538a0afbb43b964cefab9a9b5e8f352fa0ca38145448a5e7"
+dependencies = [
+ "bitcoin",
+ "miniscript",
+]
+
+[[package]]
 name = "bdk_coin_select"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c084bf76f0f67546fc814ffa82044144be1bb4618183a15016c162f8b087ad4"
+
+[[package]]
+name = "bdk_electrum"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28906275aeb1f71dc32045670f06c8a26fb17cc62151a99f7425d258f4bda589"
+dependencies = [
+ "bdk_chain",
+ "electrum-client",
+]
 
 [[package]]
 name = "bech32"
@@ -1143,11 +1160,11 @@ dependencies = [
 
 [[package]]
 name = "dirs"
-version = "5.0.0"
+version = "5.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dece029acd3353e3a58ac2e3eb3c8d6c35827a892edc6cc4138ef9c33df46ecd"
+checksum = "44c45a9d03d6676652bcb5e724c7e988de1acad23a711b5217ab9cbecbec2225"
 dependencies = [
- "dirs-sys 0.4.0",
+ "dirs-sys 0.4.1",
 ]
 
 [[package]]
@@ -1163,13 +1180,14 @@ dependencies = [
 
 [[package]]
 name = "dirs-sys"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04414300db88f70d74c5ff54e50f9e1d1737d9a5b90f53fcf2e95ca2a9ab554b"
+checksum = "520f05a5cbd335fae5a99ff7a6ab8627577660ee5cfd6a94a6a929b52ff0321c"
 dependencies = [
  "libc",
+ "option-ext",
  "redox_users",
- "windows-sys 0.45.0",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -1268,6 +1286,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7fcaabb2fef8c910e7f4c7ce9f67a1283a1715879a7c230ca9d6d1ae31f16d91"
 
 [[package]]
+name = "electrum-client"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "89008f106be6f303695522f2f4c1f28b40c3e8367ed8b3bb227f1f882cb52cc2"
+dependencies = [
+ "bitcoin",
+ "byteorder",
+ "libc",
+ "log",
+ "rustls",
+ "serde",
+ "serde_json",
+ "webpki-roots",
+ "winapi",
+]
+
+[[package]]
 name = "elliptic-curve"
 version = "0.13.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1284,6 +1319,15 @@ dependencies = [
  "sec1",
  "subtle",
  "zeroize",
+]
+
+[[package]]
+name = "email_address"
+version = "0.2.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e079f19b08ca6239f47f8ba8509c11cf3ea30095831f7fed61441475edd8c449"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
@@ -2579,13 +2623,14 @@ dependencies = [
 
 [[package]]
 name = "liana"
-version = "6.0.0"
-source = "git+https://github.com/wizardsardine/liana?branch=6.x#ec33c071eef11ddbbca039d54f901246bdbda961"
+version = "7.0.0"
+source = "git+https://github.com/wizardsardine/liana?branch=7.x#cc802dedc3f353149901ffde5087c2842b13a01f"
 dependencies = [
  "backtrace",
  "bdk_coin_select",
+ "bdk_electrum",
  "bip39",
- "dirs 5.0.0",
+ "dirs 5.0.1",
  "fern",
  "getrandom",
  "jsonrpc 0.17.0",
@@ -2600,7 +2645,7 @@ dependencies = [
 
 [[package]]
 name = "liana_gui"
-version = "6.0.0"
+version = "7.0.0"
 dependencies = [
  "async-hwi",
  "async-trait",
@@ -2609,6 +2654,7 @@ dependencies = [
  "bitcoin_hashes 0.12.0",
  "chrono",
  "dirs 3.0.2",
+ "email_address",
  "flate2",
  "hex",
  "iced",
@@ -2926,9 +2972,9 @@ dependencies = [
 
 [[package]]
 name = "minreq"
-version = "2.8.1"
+version = "2.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3de406eeb24aba36ed3829532fa01649129677186b44a49debec0ec574ca7da7"
+checksum = "763d142cdff44aaadd9268bebddb156ef6c65a0e13486bb81673cf2d8739f9b0"
 dependencies = [
  "log",
  "serde",
@@ -3249,6 +3295,12 @@ name = "opaque-debug"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
+
+[[package]]
+name = "option-ext"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
 
 [[package]]
 name = "orbclient"
@@ -3808,9 +3860,9 @@ checksum = "3b42e27ef78c35d3998403c1d26f3efd9e135d3e5121b0a4845cc5cc27547f4f"
 
 [[package]]
 name = "rdrand"
-version = "0.8.2"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e233b642160555c1aa1ff7a78443c6139342f411b6fa6602af2ebbfee9e166bb"
+checksum = "d92195228612ac8eed47adbc2ed0f04e513a4ccb98175b6f2bd04d963b533655"
 dependencies = [
  "rand_core",
 ]
