@@ -101,15 +101,12 @@ with lib;
 
         secrets="/etc/ppp-pptpd/chap-secrets"
 
-        [ -f "$secrets" ] || cat > "$secrets" << EOF
+        [ -f "$secrets" ] || install -m 600 -o root -g root /dev/stdin "$secrets" << EOF
         # From: pptpd-1.4.0/samples/chap-secrets
         # Secrets for authentication using CHAP
         # client	server	secret		IP addresses
         #username	pptpd	password	*
         EOF
-
-        chown root:root "$secrets"
-        chmod 600 "$secrets"
       '';
 
       serviceConfig = {
