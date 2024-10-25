@@ -29,7 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-W0BebCXC1wqwtQP+zHjISxSJjXHD9U6p9eNS12Nfb2Y=";
   };
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # pytestCheckHook puts . at the front of Python's sys.path, due to:

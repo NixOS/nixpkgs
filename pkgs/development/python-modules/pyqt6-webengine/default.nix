@@ -73,7 +73,6 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
-  doCheck = true;
 
   pythonImportsCheck = [
     "PyQt6.QtWebEngineCore"

@@ -43,8 +43,6 @@ buildPythonPackage {
 
   configureScript = "./autogen.sh";
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Python wrapper to libcangjie";
     homepage = "http://cangjians.github.io/projects/pycangjie/";

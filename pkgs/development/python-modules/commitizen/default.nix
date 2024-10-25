@@ -77,8 +77,6 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  doCheck = true;
-
   pythonImportsCheck = [ "commitizen" ];
 
   # The tests require a functional git installation

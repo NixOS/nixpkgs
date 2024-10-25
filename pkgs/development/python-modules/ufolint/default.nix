@@ -27,7 +27,6 @@ buildPythonPackage rec {
     fonttools
   ];
 
-  doCheck = true;
   nativeBuildInputs = [ pytestCheckHook ];
 
   meta = with lib; {

@@ -50,7 +50,6 @@ buildPythonPackage rec {
     numpy
   ];
 
-  doCheck = true;
   pythonImportsCheck = [ "eigenpy" ];
 
   meta = with lib; {
