@@ -75,5 +75,7 @@ import ./make-test-python.nix {
     one.succeed("test `wc -l < out` -gt 0")
     two.succeed("avahi-browse -r -t _ssh._tcp | tee out >&2")
     two.succeed("test `wc -l < out` -gt 0")
+
+    one.log(one.execute("systemd-analyze security avahi-daemon.service | grep -v ✓")[1])
   '';
 } args
