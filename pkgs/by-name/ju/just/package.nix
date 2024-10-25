@@ -1,30 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, bashInteractive
-, coreutils
-, installShellFiles
-, libiconv
-, mdbook
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  bashInteractive,
+  coreutils,
+  installShellFiles,
+  libiconv,
+  mdbook,
+  nix-update-script,
+  buildPackages,
+  withDocs ? true,
 }:
+
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  shouldBuildDocs = withDocs && canExecute;
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
   version = "1.36.0";
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = pname;
+    repo = "just";
     rev = "refs/tags/${version}";
     hash = "sha256-4p4otR0W/v0DoWwwcNq/UEDa1V8vlZMpdk33B/9A4Bo=";
   };
 
   cargoHash = "sha256-y6wBFjBOeymbXUIeflQ35FxQRMPlDvB0Zeo2bQeZjJ0=";
 
-  nativeBuildInputs = [ installShellFiles mdbook ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals shouldBuildDocs [ mdbook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -53,21 +67,11 @@ rustPlatform.buildRustPackage rec {
     ./fix-just-path-in-tests.patch
   ];
 
-  postBuild = ''
+  postBuild = lib.optionalString shouldBuildDocs ''
     cargo run --package generate-book
-
-    mkdir -p completions man
-
-    cargo run -- --man > man/just.1
-
-    for shell in bash fish zsh; do
-        cargo run -- --completions $shell > completions/just.$shell
-    done
-
     # No linkcheck in sandbox
     echo 'optional = true' >> book/en/book.toml
     mdbook build book/en
-    find .
   '';
 
   checkFlags = [
@@ -79,27 +83,45 @@ rustPlatform.buildRustPackage rec {
     "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
   ];
 
-  postInstall = ''
-    mkdir -p $doc/share/doc/$name
-    mv ./book/en/build/html $doc/share/doc/$name
-    installManPage man/just.1
+  postInstall =
+    let
+      just = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/just";
+    in
+    lib.optionalString withDocs (
+      if canExecute then
+        ''
+          mkdir -p $doc/share/doc/$name
+          mv ./book/en/build/html $doc/share/doc/$name
+        ''
+      else
+        ''
+          mkdir -p $doc/share
+          cp -r ${buildPackages.just.doc}/share/doc $doc/share
+        ''
+    )
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${just} --man > ./just.1
+      installManPage ./just.1
 
-    installShellCompletion --cmd just \
-      --bash completions/just.bash \
-      --fish completions/just.fish \
-      --zsh completions/just.zsh
-  '';
+      installShellCompletion --cmd just \
+        --bash <(${just} --completions bash) \
+        --fish <(${just} --completions fish) \
+        --zsh <(${just} --completions zsh)
+    '';
 
   setupHook = ./setup-hook.sh;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
+      xrelkd
+      jk
+    ];
     mainProgram = "just";
   };
 }
