@@ -328,6 +328,7 @@ rec {
     sha256 = "sha256-ayMF5yinHVOUaZxhlmqxb/iiGJHmloeYuKcnrPmxo9Y=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_18;
+    doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
 
