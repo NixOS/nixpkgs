@@ -9,14 +9,14 @@
 , copyDesktopItems
 , makeDesktopItem
 }:
-flutterPackages.v3_19.buildFlutterApplication rec {
+flutterPackages.stable.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.6.0";
+  version = "2.6.4";
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     rev = "v${version}";
-    hash = "sha256-7+rw0cD8MJPFOkgmfHD6y+EojTGQhb15o1mn2p14eoE=";
+    hash = "sha256-QBNEKhjBfKxArBykUq/fE4lftCYzGdAaWYD1F7rar5Y=";
   };
   patches = [
     ./corrosion.patch
@@ -28,7 +28,7 @@ flutterPackages.v3_19.buildFlutterApplication rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-tPkLZmHReY1TU2qcY4aGWsQPhLFowrqxTPwmTHZ5fDE=";
+    hash = "sha256-S3Yy0IIMiRUUpFNlLvS1PGwpvxePMB1sO5M6mpm1OgY=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";
 
