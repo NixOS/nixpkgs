@@ -53,6 +53,7 @@ in phpPackage.buildComposerProject rec {
     (python3.withPackages (ps: with ps; [
       pymysql
       python-dotenv
+      python-memcached
       redis
       setuptools
       psutil
