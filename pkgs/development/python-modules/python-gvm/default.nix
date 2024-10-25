@@ -7,6 +7,7 @@
   lxml,
   paramiko,
   poetry-core,
+  pynacl,
   pontos,
   pytestCheckHook,
   pythonOlder,
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     lxml
     paramiko
     typing-extensions
+    pynacl
   ];
 
   nativeCheckInputs = [
