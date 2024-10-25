@@ -142,6 +142,8 @@ let
   supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
   unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
 
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
     supported: unsupported:
@@ -480,6 +482,7 @@ buildPythonPackage rec {
         cuda_nvcc
       ]
     )
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
