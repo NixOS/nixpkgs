@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-x" "--with-ncurses=${ncurses.dev}" ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   postInstall = ''
     mkdir -p $dev/bin
     mv $bin/bin/aalib-config $dev/bin/aalib-config

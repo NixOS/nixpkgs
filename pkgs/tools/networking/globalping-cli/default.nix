@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/W/S+oG/3gD/+8mOWy4oWv7TR3IGKZt4cz0vE4nIzM4=";
+    hash = "sha256-MepnNbRX/smljiR9ysRWExFsfb7Qrz++7Y8S0Xn1Ax8=";
   };
 
   vendorHash = "sha256-V6DwV2KukFfFK0PK9MacoHH0sB5qNV315jn0T+4rhfA=";
@@ -17,6 +17,25 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Skip tests that require network access
+        "Test_Authorize"
+        "Test_TokenIntrospection"
+        "Test_Logout"
+        "Test_RevokeToken"
+        "Test_Limits"
+        "Test_CreateMeasurement"
+        "Test_GetMeasurement"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
   postInstall = ''
     mv $out/bin/${pname} $out/bin/globalping

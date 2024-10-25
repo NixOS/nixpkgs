@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, glib, gtk2, pkg-config, hamlib }:
 stdenv.mkDerivation rec {
   pname = "xlog";
-  version = "2.0.24";
+  version = "2.0.25";
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jUU6xt3H9bY9CAQRTFQjprlsC77VwjIB/6sSRNzE+Lw=";
+    sha256 = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
   };
 
   # glib-2.62 deprecations
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Amateur radio logging program";
-    longDescription =
-      '' Xlog is an amateur radio logging program.
-         It supports cabrillo, ADIF, trlog (format also used by tlf),
-         and EDI (ARRL VHF/UHF contest format) and can import twlog, editest and OH1AA logbook files.
-         Xlog is able to do DXCC lookups and will display country information, CQ and ITU zone,
-         location in latitude and longitude and distance and heading in kilometers or miles,
-         both for short and long path.
-      '';
+    longDescription = ''
+      Xlog is an amateur radio logging program.
+      It supports cabrillo, ADIF, trlog (format also used by tlf),
+      and EDI (ARRL VHF/UHF contest format) and can import twlog, editest and OH1AA logbook files.
+      Xlog is able to do DXCC lookups and will display country information, CQ and ITU zone,
+      location in latitude and longitude and distance and heading in kilometers or miles,
+      both for short and long path.
+    '';
     homepage = "https://www.nongnu.org/xlog";
     maintainers = [ maintainers.mafo ];
     license = licenses.gpl3;

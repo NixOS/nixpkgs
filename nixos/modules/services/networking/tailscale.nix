@@ -57,6 +57,7 @@ in {
       example = "/run/secrets/tailscale_key";
       description = ''
         A file containing the auth key.
+        Tailscale will be automatically started if provided.
       '';
     };
 

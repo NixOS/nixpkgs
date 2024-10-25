@@ -3,13 +3,12 @@
 with pkgs;
 
 let
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11 { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
   openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
 
 in {
-  inherit openjfx11 openjfx17 openjfx21 openjfx22;
+  inherit openjfx17 openjfx21 openjfx22;
 
   compiler = let
     mkOpenjdk = path-linux: path-darwin: args:
@@ -44,7 +43,7 @@ in {
     openjdk11 = mkOpenjdk
       ../development/compilers/openjdk/11.nix
       ../development/compilers/zulu/11.nix
-      { openjfx = openjfx11; };
+      { openjfx = throw "JavaFX is not supported on OpenJDK 11"; };
 
     openjdk17 = mkOpenjdk
       ../development/compilers/openjdk/17.nix

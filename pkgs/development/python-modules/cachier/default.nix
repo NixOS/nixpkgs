@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   setuptools,
+  click,
   watchdog,
   portalocker,
   pytestCheckHook,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "python-cachier";
     repo = "cachier";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VApP1DRs+mjx+SELpdDOm2Sa7zBYHDqD/htFF/eNLu0=";
+    hash = "sha256-LphmYL8Jmry8Jmd5Eps68wD113JMWwyBl18pqdtl+DQ=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -38,6 +39,8 @@ buildPythonPackage rec {
   dependencies = [
     watchdog
     portalocker
+    # not listed as dep, but needed to run main script entrypoint
+    click
   ];
 
   nativeCheckInputs = [
@@ -63,6 +66,10 @@ buildPythonPackage rec {
 
     # don't test formatting
     "test_flake8"
+
+    # timing sensitive
+    "test_being_calc_next_time"
+    "test_pickle_being_calculated"
   ];
 
   preBuild = ''
@@ -73,6 +80,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/python-cachier/cachier";
+    changelog = "https://github.com/python-cachier/cachier/releases/tag/v${version}";
     description = "Persistent, stale-free, local and cross-machine caching for functions";
     mainProgram = "cachier";
     maintainers = with lib.maintainers; [ pbsds ];

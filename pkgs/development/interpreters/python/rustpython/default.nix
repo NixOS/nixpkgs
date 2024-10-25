@@ -8,19 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
     rev = "refs/tags/${version}";
-    hash = "sha256-AtIaWwE1pEIP1SJN9dYgHRP1GX4LTmetIPztHbsBXto=";
+    hash = "sha256-BYYqvPJu/eFJ9lt07A0p7pd8pGFccUe/okFqGEObhY4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rustpython-ast-0.3.1" = "sha256-dT0x4E8k/FcSP/q0uwwBWniT1n9HGmFF/HV6hAE6bGU=";
       "rustpython-doc-0.3.0" = "sha256-34ERuLFKzUD9Xmf1zlafe42GLWZfUlw17ejf/NN6yH4=";
     };
   };

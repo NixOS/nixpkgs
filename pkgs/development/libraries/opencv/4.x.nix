@@ -480,7 +480,7 @@ effectiveStdenv.mkDerivation {
   ] ++ optionals (!effectiveStdenv.hostPlatform.isDarwin) [
     (cmakeOptionType "path" "OPENCL_LIBRARY" "${ocl-icd}/lib/libOpenCL.so")
   ] ++ optionals enablePython [
-    (cmakeBool "OPENCV_SKIP_PYTHON_LOADER" true)
+    (cmakeOptionType "path" "OPENCV_PYTHON_INSTALL_PATH" pythonPackages.python.sitePackages)
   ] ++ optionals (enabledModules != [ ]) [
     (cmakeFeature "BUILD_LIST" (concatStringsSep "," enabledModules))
   ];
@@ -540,10 +540,6 @@ effectiveStdenv.mkDerivation {
 
     pushd dist
     python -m pip install ./*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache
-
-    # the cv2/__init__.py just tries to check provide "nice user feedback" if the installation is bad
-    # however, this also causes infinite recursion when used by other packages
-    rm -r $out/${pythonPackages.python.sitePackages}/cv2
 
     popd
     popd

@@ -20,7 +20,7 @@
 , withEGL ? true
 , withMesa ? !stdenv.hostPlatform.isDarwin
 , withWebKit ? stdenv.hostPlatform.isDarwin
-, webkitgtk
+, webkitgtk_4_0
 , setfile
 , AGL
 , Carbon
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk
+  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
   ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     setfile

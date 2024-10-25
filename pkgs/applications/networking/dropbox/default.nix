@@ -43,7 +43,7 @@ buildFHSEnv {
 
   targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
-    libXxf86vm libxcb xkeyboardconfig
+    libXxf86vm libGL libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
     procps zlib mesa libxshmfence libpthreadstubs libappindicator
   ];

@@ -1,27 +1,30 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 , openssl
 }:
 
 buildGoModule rec {
   pname = "ssh-tpm-agent";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "ssh-tpm-agent";
     rev = "v${version}";
-    hash = "sha256-gO9qVAVCvaiLrC/GiTJ0NghiXVRXXRBlvOIVSAOftR8=";
+    hash = "sha256-yK7G+wZIn+kJazKOFOs8EYlRWZkCQuT0qZfmdqbcOnM=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-Upq8u5Ip0HQW5FGyqhVUT6rINXz2BpCE7lbtk9fPaWs=";
+  vendorHash = "sha256-njKyBfTG/QCPBBsj3Aom42cv2XqLv4YeS4DhwNQNaLA=";
 
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "SSH agent with support for TPM sealed keys for public key authentication";

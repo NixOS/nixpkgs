@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools }:
+{ lib, fetchurl, appimageTools, makeWrapper }:
 
 let
   pname = "plexamp";
@@ -23,6 +23,9 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/scalable/apps/plexamp.svg
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram "$out/bin/plexamp" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
   passthru.updateScript = ./update-plexamp.sh;

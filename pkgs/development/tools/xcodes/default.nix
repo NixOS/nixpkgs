@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
     rev = finalAttrs.version;
-    hash = "sha256-ARrSQ9ozM90Yg7y4WdU7jjNQ64sXHuhxZh/iNJcFfY0=";
+    hash = "sha256-vksfvrx0TqtjcOHn38Ey3P6jIFYF4CbD3SVICVFINSU=";
   };
 
   nativeBuildInputs = [ swift swiftpm makeWrapper ];

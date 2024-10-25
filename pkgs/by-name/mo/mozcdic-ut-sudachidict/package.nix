@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-sudachidict";
-  version = "0-unstable-2024-07-28";
+  version = "0-unstable-2024-10-12";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-sudachidict";
-    rev = "a754f1fff5fded62cc066aa6be0ab0169059a144";
-    hash = "sha256-WzhWNpqtiG9TtFHEOSbHG1mbb4ak0zCkO13g9ZWqyBE=";
+    rev = "a807010ef3fdc9573a83f41594e9d79b969c3f80";
+    hash = "sha256-AGs/MleR/UMtVUDfxpE9clyD1uaI3SvTGFZInOo8ms0=";
   };
 
   installPhase = ''

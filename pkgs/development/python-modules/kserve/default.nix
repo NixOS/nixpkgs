@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -9,35 +8,38 @@
   poetry-core,
 
   # dependencies
-  async-timeout,
-  asgi-logger,
   cloudevents,
   fastapi,
   grpcio,
   httpx,
-  azure-identity,
   kubernetes,
   numpy,
   orjson,
   pandas,
-  prometheus-client,
-  protobuf,
-  requests,
-  psutil,
+  uvicorn,
+
+  # optional-dependencies
+  azure-identity,
   azure-storage-blob,
   azure-storage-file-share,
   boto3,
   google-cloud-storage,
+  huggingface-hub,
+  asgi-logger,
+  ray,
+
+  prometheus-client,
+  protobuf,
+  requests,
+  psutil,
   pydantic,
   python-dateutil,
   pyyaml,
-  ray,
   six,
   tabulate,
   timing-asgi,
-  uvicorn,
 
-  # checks
+  # tests
   avro,
   grpcio-testing,
   pytest-asyncio,
@@ -47,16 +49,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.13.1";
+  version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wGS001PK+k21oCOaQCiAtytTDjfe0aiTVJ9spyOucYA=";
+    hash = "sha256-N/IgiTiyBNw7WQWxcUJlXU+Q9o3UUaduD9ZBKwu0uRE=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -66,7 +66,6 @@ buildPythonPackage rec {
     "httpx"
     "prometheus-client"
     "protobuf"
-    "ray"
     "uvicorn"
     "psutil"
   ];
@@ -77,7 +76,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    async-timeout
     cloudevents
     fastapi
     grpcio
@@ -92,12 +90,11 @@ buildPythonPackage rec {
     pydantic
     python-dateutil
     pyyaml
-    ray
     six
     tabulate
     timing-asgi
     uvicorn
-  ] ++ ray.optional-dependencies.serve-deps;
+  ];
 
   optional-dependencies = {
     storage = [
@@ -105,6 +102,7 @@ buildPythonPackage rec {
       azure-storage-blob
       azure-storage-file-share
       boto3
+      huggingface-hub
       google-cloud-storage
       requests
     ];
@@ -129,11 +127,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Require network access
-    "test_health_handler"
-    "test_infer"
-    "test_infer_v2"
-    # Assertion error due to HTTP response code
-    "test_unload"
+    "test_infer_graph_endpoint"
+    "test_infer_path_based_routing"
+
+    # Tries to access `/tmp` (hardcoded)
+    "test_local_path_with_out_dir_exist"
   ];
 
   meta = {

@@ -26,6 +26,8 @@ rec {
     cooperlake     = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     tigerlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     alderlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
+    sapphirerapids = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
+    emeraldrapids  = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     # x86_64 AMD
     btver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
     btver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -73,6 +75,8 @@ rec {
     cascadelake    = [ "cannonlake"     ] ++ inferiors.cannonlake;
     cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
     tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
+    sapphirerapids = [ "tigerlake"      ] ++ inferiors.tigerlake;
+    emeraldrapids  = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
     # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
     alderlake      = [ ];

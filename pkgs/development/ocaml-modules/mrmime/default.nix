@@ -57,7 +57,8 @@ buildDunePackage rec {
     jsonm
     mirage-crypto-rng
   ];
-  doCheck = true;
+  # Checks are not compatible with mirage-crypto-rng ≥ 1.0
+  doCheck = false;
 
   meta = {
     description = "Parser and generator of mail in OCaml";

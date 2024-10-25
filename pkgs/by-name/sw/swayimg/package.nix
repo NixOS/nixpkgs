@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wayland
-, wayland-protocols
-, json_c
-, libxkbcommon
-, fontconfig
-, giflib
-, libheif
-, libjpeg
-, libwebp
-, libtiff
-, librsvg
-, libpng
-, libjxl
-, libexif
-, libavif
-, openexr_3
-, bash-completion
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  json_c,
+  libxkbcommon,
+  fontconfig,
+  giflib,
+  libheif,
+  libjpeg,
+  libwebp,
+  libtiff,
+  librsvg,
+  libpng,
+  libjxl,
+  libexif,
+  libavif,
+  openexr_3,
+  bash-completion,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Eqs8U2BpjcweDi4oGS9nWpoyoXeuiD+6jviPA3s9/YY=";
+    hash = "sha256-bUU4s7nlN48rYMX4SleUDAOCVz2fowGctEfP6KhMdoA=";
   };
 
   strictDeps = true;
@@ -41,7 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
 
   mesonFlags = [
     (lib.mesonOption "version" finalAttrs.version)

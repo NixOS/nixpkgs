@@ -11,7 +11,7 @@
   openssl,
 
   pkg-config,
-  protobuf_25,
+  protobuf,
   grpc,
   pandoc,
   python3,
@@ -23,18 +23,23 @@
 
   curl,
   libarchive,
+
+  nix-update-script,
+  testers,
+  justbuild,
 }:
-let stdenv = gccStdenv;
+let
+  stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
-    rev = "v${version}";
-    hash = "sha256-kv7HpDEYZml5uk06s8Cxt5rEpxaJBz9s+or6Od1q4Io=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N9K1n2ttxhD0q2BXprt/nQdQseUtpaFmEZUcxRJV5C8=";
   };
 
   bazelapi = fetchurl {
@@ -47,68 +52,69 @@ stdenv.mkDerivation rec {
     hash = "sha256-W7awJTzPZLU9bHJJYlp+P2w7xkAqvVLTd4v6SCWHA6A=";
   };
 
-  nativeBuildInputs =
-    [
-      # Tools for the bootstrap process
-      jq
-      pkg-config
-      python3
-      unzip
-      wget
-      coreutils
+  nativeBuildInputs = [
+    # Tools for the bootstrap process
+    jq
+    pkg-config
+    python3
+    unzip
+    wget
+    coreutils
 
-      # Dependencies of just
-      cli11
-      # Using fmt 10 because this is the same version upstream currently
-      # uses for bundled builds
-      # For future updates: The currently used version can be found in the file
-      # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
-      # under the key .repositories.fmt
-      fmt_10
-      microsoft-gsl
-      nlohmann_json
+    # Dependencies of just
+    cli11
+    # Using fmt 10 because this is the same version upstream currently
+    # uses for bundled builds
+    # For future updates: The currently used version can be found in the file
+    # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
+    # under the key .repositories.fmt
+    fmt_10
+    microsoft-gsl
+    nlohmann_json
 
-      # Dependencies of the compiled just-mr
-      curl
-      libarchive
-    ];
+    # Dependencies of the compiled just-mr
+    curl
+    libarchive
+  ];
 
   buildInputs = [
     grpc
     libgit2
     openssl
-    protobuf_25
+    protobuf
     python3
   ];
 
-  postPatch = ''
-    sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
-    sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_25}"' etc/repos.json > etc/repos.json.patched
-    mv etc/repos.json.patched etc/repos.json
-    jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
-    mv etc/repos.json.patched etc/repos.json
-    jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
-    mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
-  '';
+  postPatch =
+    ''
+      sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
+      sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
+      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.json > etc/repos.json.patched
+      mv etc/repos.json.patched etc/repos.json
+      jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
+      mv etc/repos.json.patched etc/repos.json
+      jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
+      mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
+    '';
 
-  /* The build phase follows the bootstrap procedure that is explained in
-     https://github.com/just-buildsystem/justbuild/blob/master/INSTALL.md
+  /*
+    The build phase follows the bootstrap procedure that is explained in
+    https://github.com/just-buildsystem/justbuild/blob/master/INSTALL.md
 
-     The bootstrap of the just binary depends on two proto libraries, which are
-     supplied as external distfiles.
+    The bootstrap of the just binary depends on two proto libraries, which are
+    supplied as external distfiles.
 
-     The microsoft-gsl library does not provide a pkg-config file, so one is
-     created here. In case also the GNU Scientific Library would be used (which
-     has also the pkg-config name gsl) this would cause a conflict. However, it
-     is very unlikely that a build tool will ever depend on a GPL math library.
+    The microsoft-gsl library does not provide a pkg-config file, so one is
+    created here. In case also the GNU Scientific Library would be used (which
+    has also the pkg-config name gsl) this would cause a conflict. However, it
+    is very unlikely that a build tool will ever depend on a GPL math library.
 
-     The extra build flags (ADD_CFLAGS and ADD_CXXFLAGS) are only needed in the
-     current version of just, the next release will contain a fix from upstream.
-     https://github.com/just-buildsystem/justbuild/commit/5abcd4140a91236c7bda1c21ce69e76a28da7c8a
-
+    The extra build flags (ADD_CFLAGS and ADD_CXXFLAGS) are only needed in the
+    current version of just, the next release will contain a fix from upstream.
+    https://github.com/just-buildsystem/justbuild/commit/5abcd4140a91236c7bda1c21ce69e76a28da7c8a
   */
 
   buildPhase = ''
@@ -165,11 +171,22 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = justbuild;
+      command = "just version";
+      version = builtins.replaceStrings [ "." ] [ "," ] version;
+    };
+  };
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
-    license = licenses.asl20;
-    maintainers = with maintainers; [clkamp];
+    changelog = "https://github.com/just-buildsystem/justbuild/releases/tag/v${version}";
+    mainProgram = "just";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ clkamp ];
   };
 }

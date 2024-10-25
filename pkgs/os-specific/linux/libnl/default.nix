@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnl";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
     rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-zVpoRlB5xDfo6wJkCJGGptuCXkNkriudtZF2Job9YD4=";
+    hash = "sha256-QwDn7S9lyU+/Pc9daqy1qDZFU03dUQF5PDqFEn03WWc=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";

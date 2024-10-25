@@ -2,7 +2,7 @@
   lib,
   flutter324,
   fetchFromGitHub,
-  webkitgtk,
+  webkitgtk_4_0,
   sqlite,
   libayatana-appindicator,
   makeDesktopItem,
@@ -52,28 +52,30 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk
+    webkitgtk_4_0
     sqlite
     libayatana-appindicator
   ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
   # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/ente_auth.appdata.xml
-  desktopItems = makeDesktopItem {
-    name = "ente_auth";
-    exec = "ente_auth";
-    icon = "ente-auth";
-    desktopName = "Ente Auth";
-    genericName = "Ente Authentication";
-    comment = "Open source 2FA authenticator, with end-to-end encrypted backups";
-    categories = [ "Utility" ];
-    keywords = [
-      "Authentication"
-      "2FA"
-    ];
-    mimeTypes = [ "x-scheme-handler/enteauth" ];
-    startupNotify = false;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ente_auth";
+      exec = "ente_auth";
+      icon = "ente-auth";
+      desktopName = "Ente Auth";
+      genericName = "Ente Authentication";
+      comment = "Open source 2FA authenticator, with end-to-end encrypted backups";
+      categories = [ "Utility" ];
+      keywords = [
+        "Authentication"
+        "2FA"
+      ];
+      mimeTypes = [ "x-scheme-handler/enteauth" ];
+      startupNotify = false;
+    })
+  ];
 
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/icons/auth-icon.png

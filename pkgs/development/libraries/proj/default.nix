@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.4.1";
+  version = "9.5.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = finalAttrs.version;
-    hash = "sha256-sLlG9NNHST9d0G5hV1tOGpTSv4rbUxERW3kwGC+t1iU=";
+    hash = "sha256-j7Bvv8F9wxrcQlquRa7Pdj5HTUJhwo8Wc1/JbULkUhM=";
   };
 
   patches = [

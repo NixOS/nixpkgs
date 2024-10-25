@@ -1,13 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
-  perlWrapped = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
-
+  perlWrapped = pkgs.perl.withPackages (
+    p: with p; [
+      ConfigIniFiles
+      FileSlurp
+    ]
+  );
 in
-
 {
-
   options.system.switch = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -36,6 +42,17 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
+      warnings = [
+        ''
+          The Perl implementation of switch-to-configuration will be deprecated
+          and removed in the 25.05 release of NixOS. Please migrate to the
+          newer implementation by removing `system.switch.enableNg = false`
+          from your configuration. If you are unable to migrate due to any
+          issues with the new implementation, please create an issue and tag
+          the maintainers of `switch-to-configuration-ng`.
+        ''
+      ];
+
       system.activatableSystemBuilderCommands = ''
         mkdir $out/bin
         substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \

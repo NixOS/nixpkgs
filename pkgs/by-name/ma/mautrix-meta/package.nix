@@ -46,7 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/mautrix/meta";
     description = "Matrix <-> Facebook and Matrix <-> Instagram hybrid puppeting/relaybot bridge";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ rutherther eyjhb ];
+    maintainers = with lib.maintainers; [ eyjhb ];
     mainProgram = "mautrix-meta";
   };
 }

@@ -59,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Runs in parallel to other tests, limit to 1 thread
     substituteInPlace tests/headers/compile_headers.py \
       --replace 'multiprocessing.cpu_count()' '1'
+
+    sed '1i#include <iomanip>' \
+      -i tests/core/persistent_string_cache/speed_test.cpp
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/{headers,whitespace}/*.py
   '';

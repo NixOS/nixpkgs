@@ -64,7 +64,10 @@ in
         networking.firewall.allowedTCPPorts = [ 443 ];
         networking.firewall.allowedUDPPorts = [ 443 ];
         services.dnsdist.dnscrypt.enable = true;
-        services.dnsdist.dnscrypt.providerKey = "${./dnscrypt-wrapper/secret.key}";
+        services.dnsdist.dnscrypt.providerKey = pkgs.runCommand "dnscrypt-secret.key" {} ''
+          echo 'R70+xqm7AaDsPtDgpSjSG7KHvEqVf6u6PZ+E3cGPbOwUQdg6/
+                RIIpK6pHkINhrv7nxwIG5c7b/m5NJVT3A1AXQ==' | base64 -id > "$out"
+        '';
       }
     ];
 

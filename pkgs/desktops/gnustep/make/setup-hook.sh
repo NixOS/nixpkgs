@@ -18,7 +18,7 @@ addGnustepInstallFlags() {
     )
 }
 
-preInstallPhases+=" addGnustepInstallFlags"
+appendToVar preInstallPhases addGnustepInstallFlags
 
 addGNUstepEnvVars() {
     local filename

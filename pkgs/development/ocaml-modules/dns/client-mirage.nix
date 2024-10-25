@@ -1,5 +1,5 @@
 { buildDunePackage, dns, dns-client, lwt, mirage-clock, mirage-time
-, mirage-random
+, mirage-crypto-rng-mirage
 , domain-name, ipaddr
 , ca-certs-nss
 , happy-eyeballs
@@ -17,7 +17,7 @@ buildDunePackage {
     domain-name
     ipaddr
     lwt
-    mirage-random
+    mirage-crypto-rng-mirage
     mirage-time
     mirage-clock
     ca-certs-nss

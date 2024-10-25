@@ -39,15 +39,17 @@ let
     hash = "sha256-4T0j2ctHmgWOSCmFG2PZCLJS57nIa5MxmJBpMYzy9FI=";
   };
 
-  desktopItems = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = meta.description;
-    desktopName = nameApp;
-    genericName = "Java Profiler Tool";
-    categories = [ "Development" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = meta.description;
+      desktopName = nameApp;
+      genericName = "Java Profiler Tool";
+      categories = [ "Development" ];
+    })
+  ];
 
   linux = stdenv.mkDerivation {
     inherit pname version src desktopItems;

@@ -5,7 +5,7 @@
   p7zip,
 }:
 let
-  version = "1.020";
+  version = "1.021";
 
   source =
     with lib.attrsets;
@@ -18,17 +18,19 @@ let
         })
       )
       {
-        Mono = "sha256-PcP4zJk8pptuX9tchr4qOorqAvj8YMRBcVrtCbp/1Zo=";
-        Round = "sha256-3wqMdnpdn4xpw7wO+QmIpl5/vZjQGgcfTMdtewK28B8=";
-        Sans = "sha256-isRqIVcH24knPqPI+a+9CpxEKd+PG642giUS9+VbC60=";
-        Serif = "sha256-k0I0NXStE1hcdOaOykuESy6sYqBHHaMaDxxr3tJUSYU=";
+        Mono = "sha256-3WwknXSMH12Lu/HA/f647AyhDg2O9Eg5ZGDBrFp4SbE=";
+        Round = "sha256-vRL2YQkcp5vDSbLaMDEYd7HJVohZFYKlBfxAdY2l3mA=";
+        Sans = "sha256-x5z6GYsfQ+8a8W0djJTY8iutuLNYvaemIpdYh94krk0=";
+        Serif = "sha256-3WK7vty3zZFNKkwViEsozU3qa+5hymYwXk6ta9AxmNM=";
       };
+
+  extraOutputs = builtins.attrNames source;
 in
 stdenvNoCC.mkDerivation {
   pname = "shanggu-fonts";
   inherit version;
 
-  outputs = [ "out" ] ++ builtins.attrNames source;
+  outputs = [ "out" ] ++ extraOutputs;
 
   nativeBuildInputs = [ p7zip ];
 
@@ -49,13 +51,10 @@ stdenvNoCC.mkDerivation {
       mkdir -p $out/share/fonts/truetype
     ''
     + lib.strings.concatLines (
-      lib.lists.forEach (builtins.attrNames source) (
-        name: (''
-          install -Dm444 ${name}/*.ttc -t $'' + name + ''/share/fonts/truetype
-          ln -s $'' + name + ''/share/fonts/truetype/*.ttc $out/share/fonts/truetype
-          ''
-        )
-      )
+      lib.lists.forEach extraOutputs (name: ''
+        install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
+        ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
+      '')
     ) + ''
       runHook postInstall
     '';

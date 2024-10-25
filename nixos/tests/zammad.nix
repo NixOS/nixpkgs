@@ -20,8 +20,8 @@ import ./make-test-python.nix (
         let cfg = config.services.zammad; in
         {
           serviceConfig = {
-            Type = "simple";
-            Restart = "always";
+            Type = "oneshot";
+            Restart = "on-failure";
 
             User = "zammad";
             Group = "zammad";

@@ -2,8 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   substituteAll,
 
@@ -32,16 +32,14 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.35.1";
+  version = "2.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
+    hash = "sha256-dQrAVPXtDdibaxxfqW29qY7j5LyegvmI0Y7/btXmsyY=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [

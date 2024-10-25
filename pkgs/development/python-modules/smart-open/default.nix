@@ -12,6 +12,7 @@
   requests,
   moto,
   paramiko,
+  pynacl,
   pytestCheckHook,
   responses,
   setuptools,
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
+    pynacl
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "smart_open" ];

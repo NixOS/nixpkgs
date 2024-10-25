@@ -46,7 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     "/System/Library/CoreServices/SystemVersion.plist"
   ];
 
-  env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
+  preBuild = ''
+    export ZIG_GLOBAL_CACHE_DIR="$TMPDIR/zig-cache";
+  '';
 
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.
@@ -55,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/bin/env" "${coreutils}/bin/env"
   '' else ''
     substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-      --replace "/usr/bin/env" "${coreutils}/bin/env"
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/zig test --cache-dir "$TMPDIR/zig-test-cache" -I $src/test $src/test/behavior.zig
+    $out/bin/zig test -I $src/test $src/test/behavior.zig
 
     runHook postInstallCheck
   '';

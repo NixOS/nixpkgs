@@ -19,7 +19,7 @@
   libkvmi,
 
   xenSupport ? true,
-  xen-slim,
+  xen,
 }:
 
 let
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
       json_c
       libvirt
     ]
-    ++ lib.optionals xenSupport [ xen-slim ]
+    ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals (!legacyKVM) [ libkvmi ]
     ++ lib.optionals withVMIFS [ fuse ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString xenSupport ''
     libvmi="$lib/lib/libvmi.so.${libVersion}"
     oldrpath=$(patchelf --print-rpath "$libvmi")
-    patchelf --set-rpath "$oldrpath:${lib.makeLibraryPath [ xen-slim ]}" "$libvmi"
+    patchelf --set-rpath "$oldrpath:${lib.makeLibraryPath [ xen ]}" "$libvmi"
   '';
 
   passthru = {

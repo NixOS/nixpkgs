@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , ant
 , jdk
 , jre
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://apache/xmlgraphics/fop/fop-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-28168.patch";
+      url = "https://github.com/apache/xmlgraphics-fop/commit/d96ba9a11710d02716b6f4f6107ebfa9ccec7134.patch";
+      hash = "sha256-zmUA1Tq6iZtvNECCiXebXodp6AikBn10NTZnVHpPMlw=";
+    })
+  ];
 
   nativeBuildInputs = [
     ant

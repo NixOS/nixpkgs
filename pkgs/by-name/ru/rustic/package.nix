@@ -11,26 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.8.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SOXuQIdebzMHyO/r+0bvhZvdc09pNPiCXgYfzMoZUZo=";
+    hash = "sha256-DtLyVfABMRhEaelOBKV6tnFYezOOyM8C9T50sPuaHXQ=";
   };
 
-  cargoHash = "sha256-5tXaq/FPC3T+f1p4RtihQGgwAptcO58mOKQhiOpjacc=";
-
-  # At the time of writing, upstream defaults to "self-update", "tui", and "webdav".
-  # "self-update" is a self-updater, which we don't want in nixpkgs.
-  # With each update we should therefore ensure that we mimic the default features
-  # as closely as possible.
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "tui"
-    "webdav"
-  ];
+  cargoHash = "sha256-Ha9qW+nCG4dMUEL6CYm/gl2Xrsp5gQ2+xi0Se5dxmyU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -59,6 +49,9 @@ rustPlatform.buildRustPackage rec {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ lib.maintainers.nobbz ];
+    maintainers = [
+      lib.maintainers.nobbz
+      lib.maintainers.pmw
+    ];
   };
 }

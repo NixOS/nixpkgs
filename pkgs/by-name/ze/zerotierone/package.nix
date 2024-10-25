@@ -115,7 +115,7 @@ in stdenv.mkDerivation {
 
   buildFlags = [ "all" "selftest" ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkPhase = ''
     runHook preCheck
     ./zerotier-selftest

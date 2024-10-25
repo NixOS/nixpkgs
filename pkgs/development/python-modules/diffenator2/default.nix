@@ -27,19 +27,22 @@
 
 buildPythonPackage rec {
   pname = "diffenator2";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zeNcNR14ieY6Inp4kOwIPXd6S+/wFdMFp6wbiqgB/iA=";
+    hash = "sha256-FVdQW2iupAxHFmx6sC88yO2Vx3VvBhPJl55gA0fmvgo=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "python-bidi"
+  ];
 
   build-system = [
     poetry-core

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     rev = "refs/tags/${version}";
-    hash = "sha256-uece+tR3Nd32nfKn1gtcWqckN4z5iUP+C0dJxyDPXBA=";
+    hash = "sha256-xnRVoCs+TyAbvFSBD58MJhwLw7ecKpMFuWewAgmnzqk=";
   };
 
   postPatch = ''

@@ -5,23 +5,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "octosuite";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bellingcat";
     repo = "octosuite";
     rev = "refs/tags/${version}";
-    hash = "sha256-C73txVtyWTcIrJSApBy4uIKDcuUq0HZrGM6dqDVLkKY=";
+    hash = "sha256-bgTAGIJbxOa8q8lMsWa8dHwNZ/jXiWGQOp921sd2Vdo=";
   };
 
   postPatch = ''
     # pyreadline3 is Windows-only
-    substituteInPlace setup.py \
-      --replace ', "pyreadline3"' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pyreadline3",' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = with python3.pkgs; [
     psutil
     requests
     rich

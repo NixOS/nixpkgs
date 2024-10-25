@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
+    hash = "sha256-bgum8UIv0hTcIacjQsL7nc/2AbhjW5Zhq+LFkIWmDu8=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook3 ];

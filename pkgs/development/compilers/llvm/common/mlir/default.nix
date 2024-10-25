@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , llvm_meta
+, release_version
 , buildLlvmTools
 , monorepoSrc
 , runCommand
@@ -18,14 +19,16 @@ stdenv.mkDerivation rec {
   inherit version doCheck;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" { } ''
+  src = runCommand "${pname}-src-${version}" { } (''
     mkdir -p "$out"
+  '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
     cp -r ${monorepoSrc}/cmake "$out"
+  '' + ''
     cp -r ${monorepoSrc}/mlir "$out"
     cp -r ${monorepoSrc}/third-party "$out/third-party"
 
     mkdir -p "$out/llvm"
-  '';
+  '');
 
   sourceRoot = "${src.name}/mlir";
 

@@ -349,13 +349,7 @@ let
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        { object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = config.environment.etc."modprobe.d/nixos.conf".source;

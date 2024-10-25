@@ -412,6 +412,7 @@ remove_tmpPath() {
 }
 
 remove_tmpHomePath() {
+    chmod -R u+w "$tmpHomePath"
     rm -rf "$tmpHomePath"
 }
 

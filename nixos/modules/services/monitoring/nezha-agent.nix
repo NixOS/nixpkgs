@@ -31,6 +31,20 @@ in
           Enable GPU monitoring.
         '';
       };
+      temperature = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Enable temperature monitoring.
+        '';
+      };
+      useIPv6CountryCode = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Use ipv6 countrycode to report location.
+        '';
+      };
       disableCommandExecute = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -96,7 +110,7 @@ in
       startLimitBurst = 3;
       script = lib.concatStringsSep " " (
         [
-          "${cfg.package}/bin/agent"
+          "${lib.getExe cfg.package}"
           "--disable-auto-update"
           "--disable-force-update"
           "--password $(cat ${cfg.passwordFile})"
@@ -109,6 +123,8 @@ in
         ++ lib.optional cfg.skipProcess "--skip-procs"
         ++ lib.optional cfg.tls "--tls"
         ++ lib.optional cfg.gpu "--gpu"
+        ++ lib.optional cfg.temperature "--temperature"
+        ++ lib.optional cfg.useIPv6CountryCode "--use-ipv6-countrycode"
       );
       wantedBy = [ "multi-user.target" ];
     };

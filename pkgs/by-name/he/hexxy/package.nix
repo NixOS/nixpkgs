@@ -6,13 +6,13 @@
 }:
 buildGoModule {
   pname = "hexxy";
-  version = "0-unstable-2024-09-20";
+  version = "0-unstable-2024-09-29";
   src = fetchFromGitHub {
     owner = "sweetbbak";
     repo = "hexxy";
     # upstream does not publish releases, i.e., there are no tags
-    rev = "96cd37561fe54ba0b87d0d0989297f7eba09ecaa";
-    hash = "sha256-SkBHLZW0MDMluoLGFPH+QTXbaikcZXaUnSaTq3uoOaA=";
+    rev = "36174e436f9d57421b9e9515db32ca1425c382bd";
+    hash = "sha256-5r8yaKlRkIcZXubHBMhdGV0u52rs2WnEaWatm+D56Fs=";
   };
 
   vendorHash = "sha256-qkBpSVLWZPRgS9bqOVUWHpyj8z/nheQJON3vJOwPUj4=";

@@ -84,7 +84,10 @@ buildNpmPackage rec {
     description = "Elegant Facebook Messenger desktop app";
     homepage = "https://github.com/sindresorhus/caprine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ astronaut0212 ];
+    maintainers = with lib.maintainers; [
+      astronaut0212
+      khaneliman
+    ];
     inherit (electron.meta) platforms;
   };
 }

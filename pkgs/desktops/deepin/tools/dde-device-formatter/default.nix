@@ -2,16 +2,13 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  dtkwidget,
-  deepin-gettext-tools,
-  qt5integration,
-  qmake,
-  qtbase,
-  qttools,
-  qtx11extras,
   pkg-config,
-  wrapQtAppsHook,
+  deepin-gettext-tools,
+  libsForQt5,
+  dtkwidget,
   udisks2-qt5,
+  qt5platform-plugins,
+  qt5integration,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,30 +31,29 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
     pkg-config
-    wrapQtAppsHook
     deepin-gettext-tools
   ];
 
   buildInputs = [
     dtkwidget
     udisks2-qt5
-    qtx11extras
+    qt5platform-plugins
+    qt5integration
+    libsForQt5.qtx11extras
   ];
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
-
-  meta = with lib; {
+  meta = {
     description = "Simple graphical interface for creating file system in a block device";
     mainProgram = "dde-device-formatter";
     homepage = "https://github.com/linuxdeepin/dde-device-formatter";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

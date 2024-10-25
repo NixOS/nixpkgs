@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     rev = "syslog-ng-${finalAttrs.version}";
-    hash = "sha256-sfCElufK80BU8I6pbdCJ+IlAPhSOt9MOYDy3E2hg5/A=";
+    hash = "sha256-YdGbDpGMC0DPuPSbfe9HvZshBVdv1s1+hiHDnhYbs6Q=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf python3Packages.setuptools ];

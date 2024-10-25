@@ -1,37 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, alsa-lib
-, cmake
-, fluidsynth
-, libsndfile
-, mpg123
-, ninja
-, pkg-config
-, soundfont-fluid
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  fluidsynth,
+  libsndfile,
+  mpg123,
+  ninja,
+  pkg-config,
+  soundfont-fluid,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zmusic";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
     rev = version;
-    hash = "sha256-rvvMS5KciHEvoY4hSfgAEyWJiDMqBto4o09oIpQIGTQ=";
+    hash = "sha256-rEE3MZLwqnvn5MqbSTCErbsGRjKMK8cC3wTJxtf8WaU=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
-    (fetchpatch {
-      name = "system-fluidsynth.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/zmusic/system-fluidsynth.patch?id=ca353107ef4f2e5c55c3cc824b0840e2838fb894";
-      hash = "sha256-xKaqiNk1Kt9yNLB22IVmSEtGeOtxrCi7YtFCmhNr0MI=";
-    })
+    ./fluidsynth.patch
   ];
 
   postPatch = ''
@@ -54,16 +53,20 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GZDoom's music system as a standalone library";
     homepage = "https://github.com/ZDoom/ZMusic";
-    license = with licenses; [
+    license = with lib.licenses; [
       free
       gpl3Plus
       lgpl21Plus
       lgpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ azahi lassulus ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      azahi
+      lassulus
+      Gliczy
+    ];
   };
 }

@@ -1,0 +1,22 @@
+cabal-version: 2.2
+name: ghc-settings-edit
+version: 0.1.0
+synopsis: Tool for editing GHC's settings file
+-- TODO: description for hackage
+-- TODO: category for hackage
+license: MIT AND BSD-3-Clause
+author: sternenseemann
+-- FIXME: must be email for potential Hackage upload
+maintainer: @NixOS/haskell
+copyright: © 2024 The Nixpkgs/NixOS contributors
+stability: experimental
+build-type: Simple
+bug-reports: https://github.com/NixOS/nixpkgs/issues
+
+executable ghc-settings-edit
+  default-language: Haskell2010
+  -- TODO: bounds for hackage
+  build-depends:    base
+                  , containers
+  main-is:          ghc-settings-edit.lhs
+  hs-source-dirs:   .

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , cmake
 , zlib
 , potrace
@@ -46,6 +47,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Backport fix for newer ffmpeg
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/glaxnimate/-/commit/4fb2b67a0f0ce2fbffb6fe9f87c3bf7914c8a602.patch";
+      hash = "sha256-QjCnscGa7n+zwrImA4mbQiTQb9jmDGm8Y/7TK8jZXvM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

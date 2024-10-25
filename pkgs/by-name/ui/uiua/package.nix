@@ -4,9 +4,11 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  audioSupport ? true,
+
   darwin,
+  audioSupport ? true,
   alsa-lib,
+  webcamSupport ? false,
 
   # passthru.tests.run
   runCommand,
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-4XHKcmOeaeSGfl7uvQQdhm29DBWEdZLX021d9+Ebrww=";
 
   nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ]
+    lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
   buildInputs =
@@ -41,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (audioSupport && stdenv.hostPlatform.isDarwin) [ AudioUnit ]
     ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildFeatures = lib.optional audioSupport "audio";
+  buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
 
   passthru.updateScript = ./update.sh;
   passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''

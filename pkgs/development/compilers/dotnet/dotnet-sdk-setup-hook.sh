@@ -198,5 +198,5 @@ configureNuget() {
 }
 
 if [[ -z ${dontConfigureNuget-} ]]; then
-    preConfigurePhases+=(configureNuget)
+    appendToVar preConfigurePhases configureNuget
 fi

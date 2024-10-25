@@ -1,0 +1,25 @@
+From c8b0b467a140d8a67157f5cee26a8510444706be Mon Sep 17 00:00:00 2001
+From: Niklas Korz <niklas@niklaskorz.de>
+Date: Wed, 4 Sep 2024 14:52:47 +0200
+Subject: [PATCH 3/3] Fix curl deprecations
+
+---
+ packager/file/http_file.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packager/file/http_file.cc b/packager/file/http_file.cc
+index b50fef6f07..dca43e26ca 100644
+--- a/packager/file/http_file.cc
++++ b/packager/file/http_file.cc
+@@ -311,7 +311,7 @@ void HttpFile::SetupRequest() {
+       curl_easy_setopt(curl, CURLOPT_POST, 1L);
+       break;
+     case HttpMethod::kPut:
+-      curl_easy_setopt(curl, CURLOPT_PUT, 1L);
++      curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+       break;
+   }
+ 
+-- 
+2.46.0
+

@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "syndicate-server";
-  version = "0.46.0";
+  version = "0.48.0";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
     rev = "${pname}-v${version}";
-    hash = "sha256-bTteZIlBSoQ1o5shgd9NeKVvEhZTyG3i2zbeVojWiO8=";
+    hash = "sha256-DVgFlJCqaTmQ7eL2LQ8rkIbvaEfwx+NDeXRA8qB+/Qo=";
   };
-  cargoHash = "sha256-SIpdFXTk6MC/drjCLaaa49BbGsvCMNbPGCfTxAlCo9c=";
+  cargoHash = "sha256-eSzRKTUDkx0i2z5y5rm1A799CfLPqd+txpmbolqe+PQ=";
   nativeBuildInputs = [
     pkg-config
     versionCheckHook

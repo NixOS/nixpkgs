@@ -19,6 +19,7 @@
   dbus,
   embree,
   fetchgit,
+  fetchpatch2,
   fetchzip,
   ffmpeg,
   fftw,
@@ -132,7 +133,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "source";
 
-  patches = [ ./draco.patch ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
+  patches = [
+    ./draco.patch
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-1.patch";
+      hash = "sha256-YXXqP/+79y3f41n3cJ3A1RBzgdoYqfKZD/REqmWYdgQ=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-2.patch";
+      hash = "sha256-mF6IA/dbHdNEkBN5XXCRcLIZ/8kXoirNwq7RDuLRAjw=";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''

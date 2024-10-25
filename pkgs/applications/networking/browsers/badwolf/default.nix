@@ -5,7 +5,7 @@
 , pkg-config
 , ed
 , wrapGAppsHook3
-, webkitgtk
+, webkitgtk_4_0
 , libxml2
 , glib-networking
 , gettext
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    webkitgtk
+    webkitgtk_4_0
     libxml2
     gettext
     glib-networking

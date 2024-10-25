@@ -26,7 +26,7 @@ in
           How often or when garbage collection is performed. For most desktop and server systems
           a sufficient garbage collection is once a week.
 
-          The format is described in
+          This value must be a calendar event in the format specified by
           {manpage}`systemd.time(7)`.
         '';
       };

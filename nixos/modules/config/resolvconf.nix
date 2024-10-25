@@ -114,6 +114,15 @@ in
         '';
       };
 
+      subscriberFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+        description = ''
+          Files written by resolvconf updates
+        '';
+        internal = true;
+      };
+
     };
 
   };
@@ -132,6 +141,10 @@ in
     }
 
     (lib.mkIf cfg.enable {
+      users.groups.resolvconf = {};
+
+      networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];
+
       networking.resolvconf.package = pkgs.openresolv;
 
       environment.systemPackages = [ cfg.package ];
@@ -143,12 +156,15 @@ in
         wants = [ "network-pre.target" ];
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
 
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${cfg.package}/bin/resolvconf -u";
-          RemainAfterExit = true;
-        };
+        script = ''
+          ${lib.getExe cfg.package} -u
+          files=(/run/resolvconf ${lib.escapeShellArgs cfg.subscriberFiles})
+          chgrp -R resolvconf "''${files[@]}"
+          chmod -R g=u "''${files[@]}"
+        '';
       };
 
     })

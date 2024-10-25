@@ -18,11 +18,13 @@
 , wayland
 , libseccomp
 , systemd
+, udev
 , bubblewrap
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-nons
 , gsettings-desktop-schemas
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -64,11 +66,13 @@ stdenv.mkDerivation rec {
     gtk3
     gtk4
     glib
+  ] ++ lib.optionals withSystemd [
+    systemd
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     bubblewrap
     wayland
     libseccomp
-    systemd
+    udev
   ];
 
   propagatedBuildInputs = [
@@ -78,8 +82,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
+    (lib.mesonEnable "systemd" withSystemd)
   ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dsystemd=disabled"
     "-Dudev=disabled"
   ];
 

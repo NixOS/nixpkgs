@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
-, CoreFoundation, IOKit
+, gettext, CoreFoundation, IOKit, Kerberos
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gettext # bacula requires CoreFoundation, but its `configure` script will only link it when it detects libintl.
       CoreFoundation
       IOKit
+      Kerberos
     ]
     # acl relies on attr, which I can't get to build on darwin
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
@@ -31,7 +33,13 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes"
+    ++ lib.optionals stdenv.isDarwin [
+      # bacula’s `configure` script fails to detect CoreFoundation correctly,
+      # but these symbols are available in the nixpkgs CoreFoundation framework.
+      "gt_cv_func_CFLocaleCopyCurrent=yes"
+      "gt_cv_func_CFPreferencesCopyAppValue=yes"
+  ];
 
   installFlags = [
     "logdir=\${out}/logdir"

@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.14.0";
+  version = "0.14.1";
 in
 crystal.buildCrystalPackage {
   pname = "crystalline";
@@ -17,7 +17,7 @@ crystal.buildCrystalPackage {
     owner = "elbywan";
     repo = "crystalline";
     rev = "v${version}";
-    hash = "sha256-NTuI9sYprX6lu/nfHU4U9bEks6EHlXz/L4yQJ5j3XvA=";
+    hash = "sha256-Z5gEuyK3MeFaIuzr+SdZ6dphSGEqL4fQ+cOwDW1Y3go=";
   };
 
   format = "crystal";

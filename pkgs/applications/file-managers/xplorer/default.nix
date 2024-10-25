@@ -13,7 +13,7 @@
 , openssl
 , pkg-config
 , rustPlatform
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 let
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk ];
+  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk_4_0 ];
 
   checkFlags = [
     # tries to mutate the parent directory

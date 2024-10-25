@@ -56,7 +56,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [
+      khaneliman
+      rmcgibbo
+    ];
     mainProgram = "btop";
   };
 }

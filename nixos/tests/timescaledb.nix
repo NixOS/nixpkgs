@@ -83,7 +83,7 @@ let
     '';
 
   };
-  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "12") postgresql-versions;
+  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "14") postgresql-versions;
 in
 mapAttrs'
   (name: package: {

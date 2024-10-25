@@ -246,7 +246,7 @@ in
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
       knownRockspec = (fetchurl {
-        url = "https://luarocks.org/lmathx-20120430.51-1.rockspec";
+        url = "mirror://luarocks/lmathx-20120430.51-1.rockspec";
         sha256 = "148vbv2g3z5si2db7rqg5bdily7m4sjyh9w6r3jnx3csvfaxyhp0";
       }).outPath;
       src = fetchurl {
@@ -257,7 +257,7 @@ in
       if luaAtLeast "5.2" && luaOlder "5.3" then {
         version = "20120430.52-1";
         knownRockspec = (fetchurl {
-          url = "https://luarocks.org/lmathx-20120430.52-1.rockspec";
+          url = "mirror://luarocks/lmathx-20120430.52-1.rockspec";
           sha256 = "14rd625sipakm72wg6xqsbbglaxyjba9nsajsfyvhg0sz8qjgdya";
         }).outPath;
         src = fetchurl {
@@ -831,7 +831,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
+      hash = "sha256-2WN5RoM1G2SE6H3g5pmEQvOoSCoaw3xMG8cDdfU2DAo=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin

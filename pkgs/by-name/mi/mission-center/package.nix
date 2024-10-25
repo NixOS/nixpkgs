@@ -38,7 +38,19 @@
   wayland,
 
   vulkan-loader,
+
+  versionCheckHook,
 }:
+
+# UPDATE PROCESS:
+# 1) Get the nvtop commit hash (`source-url` in `nvtop.json`):
+#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/src/sys_info_v2/gatherer/3rdparty/nvtop/nvtop.json?ref_type=tags
+# 2) Update the version of the main derivation
+# 3) Get the main `Cargo.lock` and copy it to `Cargo.lock`:
+#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/Cargo.lock?ref_type=tags
+# 4) Get the gatherer `Cargo.lock` and copy it to `gatherer-Cargo.lock`:
+#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/src/sys_info_v2/gatherer/Cargo.lock?ref_type=tags
+# 5) Refresh both the `nvtop` and `src` hashes
 
 let
   nvtop = fetchFromGitHub {
@@ -50,13 +62,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-MHCQHQFMd+YFgwY+k5iVZG08UeYBvEhrZGhHmzR+cLc=";
+    hash = "sha256-1/cbU5yH6VlfFXCAO3m2CCZwCrqls8WZQf2eplfS6Rs=";
   };
 
   cargoDeps = symlinkJoin {
@@ -132,6 +144,12 @@ stdenv.mkDerivation rec {
 
     patchShebangs data/hwdb/generate_hwdb.py
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${builtins.placeholder "out"}/bin/${meta.mainProgram}";
+  doInstallCheck = true;
 
   meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";

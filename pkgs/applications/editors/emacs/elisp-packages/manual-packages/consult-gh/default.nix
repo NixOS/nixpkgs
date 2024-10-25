@@ -30,8 +30,6 @@ melpaBuild {
 
   propagatedUserEnvPkgs = [ gh ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

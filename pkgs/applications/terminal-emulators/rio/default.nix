@@ -55,16 +55,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.1.16";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-3OtPlaYkTPIF98CyaXWGZ/1msWHFdscqZXVviu0/O/o=";
+    hash = "sha256-10E7tIuix0BGKFbADLhcReRC01FXV/dBivJjfSe/X/c=";
   };
 
-  cargoHash = "sha256-VpS3prTmAbWTd+gwAOA0BXso4gkcAFuhMZh8Go3Dlao=";
+  cargoHash = "sha256-yGOvY5+ThSey/k8ilTTC0CzaOIJtc4hDYmdrHJC3HyE=";
 
   nativeBuildInputs = [
     ncurses
@@ -112,8 +112,13 @@ rustPlatform.buildRustPackage rec {
     };
 
     tests = {
-      test = nixosTests.terminal-emulators.rio;
       version = testers.testVersion { package = rio; };
+    } // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
     };
   };
 

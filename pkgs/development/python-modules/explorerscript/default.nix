@@ -2,49 +2,56 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  antlr4,
-  antlr4-python3-runtime,
   igraph,
   pygments,
+  scikit-build-core,
+  pybind11,
+  ninja,
+  ruff,
+  cmake,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.5";
+  version = "0.2.1.post2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-dGbzZYEFEWE5bUz+647pPzP4Z/XmrJU82jNT4ZBRNHk=";
+    hash = "sha256-cKEceWr7XmZbuomPOmjQ32ptAjz3LZDQBWAgZEFadDY=";
+    # Include a pinned antlr4 fork used as a C++ library
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    antlr4
     setuptools
+    scikit-build-core
+    ninja
+    cmake
+    ruff
   ];
 
-  pythonRelaxDeps = [
-    # antlr output is rebuilt in postPatch step.
-    "antlr4-python3-runtime"
-    # igraph > 0.10.4 was marked as incompatible by upstream
-    # due to a breaking change introduced in 0.10.5. Later versions reverted
-    # this change, and introduced a deprecation warning instead.
-    #
-    # https://github.com/igraph/python-igraph/issues/693
-    "igraph"
-  ];
+  # The source include some auto-generated ANTLR code that could be recompiled, but trying that resulted in a crash while decompiling unionall.ssb.
+  # We thus do not rebuild them.
 
   postPatch = ''
-    antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
+    substituteInPlace Makefile \
+      --replace-fail ./generate_parser_bindings.py "python3 ./generate_parser_bindings.py"
+
+    # Doesn’t detect that package for some reason
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"scikit-build-core<=0.9.8\"," ""
   '';
 
+  dontUseCmakeConfigure = true;
+
   propagatedBuildInputs = [
-    antlr4-python3-runtime
     igraph
+    pybind11
   ];
 
   optional-dependencies.pygments = [ pygments ];

@@ -86,9 +86,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = ''
+    -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
-    -D__need_timeval -D__need_timespec -D__need_time_t '';
+    -D__need_timeval -D__need_timespec -D__need_time_t
+  '';
 
   doInstallCheck = true;
   # CMake feature detection is prone to breakage between upgrades:

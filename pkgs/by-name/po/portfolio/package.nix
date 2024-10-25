@@ -9,8 +9,7 @@
   makeDesktopItem,
   openjdk17,
   stdenvNoCC,
-  swt,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -29,17 +28,16 @@ let
     glib-networking
     gtk3
     libsecret
-    swt
-    webkitgtk
+    webkitgtk_4_0
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.71.1";
+  version = "0.71.2";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-bZZTsL2jf4m6Gvc9cXDbAsiPoluljnb1AKshMM4325Q=";
+    hash = "sha256-TVrxYz6hFWn2C0CrBnNCPxkfQkTjCXkNSeQp6eC/fjc=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
       --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item

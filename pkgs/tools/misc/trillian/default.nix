@@ -27,6 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/google/trillian";
     description = "Transparent, highly scalable and cryptographically verifiable data store";
     license = [ licenses.asl20 ];
-    maintainers = [ maintainers.adisbladis ];
+    maintainers = [ ];
   };
 }

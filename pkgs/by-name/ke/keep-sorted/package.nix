@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "keep-sorted";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
     rev = "v${version}";
-    hash = "sha256-yeps+StUA7h12Jlra24Po2zNzjIPNIQCOyWLazC8F8M=";
+    hash = "sha256-jqSb/lcdeQMa1XpzaopDBbkKymp+HubLeAx3d6x5pns=";
   };
 
-  vendorHash = "sha256-tPTWWvr+/8wWUnQcI4Ycco2OEgA2mDQt15OGCk/ZjrQ=";
+  vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";
 
   CGO_ENABLED = "0";
 
-  ldfags = [ "-s" "-w" ];
+  ldflags = [ "-s" ];
 
   checkFlags = [
     # Test tries to find files using git

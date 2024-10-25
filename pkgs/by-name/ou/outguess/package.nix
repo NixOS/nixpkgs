@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, stdenv
-, lib
-, autoreconfHook
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,11 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "outguess";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-yv01jquPTnVk9fd1tqAt1Lxis+ZHZqdG3NiTFxfoXAE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  strictDeps = true;
 
   configureFlags = [ "--with-generic-jconfig" ];
 

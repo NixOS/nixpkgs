@@ -535,7 +535,7 @@ checkConfigError 'A submoduleWith option is declared multiple times with conflic
 
 # _type check
 checkConfigError 'Expected a module, but found a value of type .*"flake".*, while trying to load a module into .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
-checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
 

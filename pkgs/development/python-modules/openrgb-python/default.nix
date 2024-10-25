@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "openrgb-python";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2eeb2XHYvBaHkHHs9KxZKDGXtcLaT28c/aLC9pxrRmM=";
+    hash = "sha256-hzuLNbMuF4LR8fkS6ByULdF37qYwL9smaVAP2G2E+Us=";
   };
 
   build-system = [ setuptools ];

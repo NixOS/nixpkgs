@@ -15,7 +15,7 @@ buildDunePackage rec {
     hash = "sha256-G2jjsc/i9Qgo0TP+ZE4gB/1cjuZ9l8R7e59K2DGD5GY=";
   };
 
-  nativeBuildInpts = [
+  nativeBuildInputs = [
     ppx_sexp_conv
     ppx_deriving
   ];

@@ -155,9 +155,11 @@ There are no schemas available in `XDG_DATA_DIRS`. Temporarily add a random pack
 
 Package is missing some GSettings schemas. You can find out the package containing the schema with `nix-locate org.gnome.foo.gschema.xml` and let the hooks handle the wrapping as [above](#ssec-gnome-common-issues-no-schemas).
 
-### When using `wrapGApps*` hook with special derivers you can end up with double wrapped binaries. {#ssec-gnome-common-issues-double-wrapped}
+### When using `wrapGApps*` hook with special derivers or hooks you can end up with double wrapped binaries. {#ssec-gnome-common-issues-double-wrapped}
 
-This is because derivers like `python.pkgs.buildPythonApplication` or `qt5.mkDerivation` have setup-hooks automatically added that produce wrappers with makeWrapper. The simplest way to workaround that is to disable the `wrapGApps*` hook automatic wrapping with `dontWrapGApps = true;` and pass the arguments it intended to pass to makeWrapper to another.
+This is because some setup hooks like `qt6.wrapQtAppsHook` also wrap programs using `makeWrapper`.  Likewise, some derivers (e.g. `python.pkgs.buildPythonApplication`) automatically pull in their own setup hooks that produce wrappers.
+
+The simplest workaround is to disable the `wrapGApps*` hook's automatic wrapping using `dontWrapGApps = true;` while passing its `makeWrapper` arguments to another wrapper.
 
 In the case of a Python application it could look like:
 
@@ -184,19 +186,19 @@ python3.pkgs.buildPythonApplication {
 And for a QT app like:
 
 ```nix
-mkDerivation {
+stdenv.mkDerivation {
   pname = "calibre";
   version = "3.47.0";
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    qt6.wrapQtAppsHook
     qmake
     # ...
   ];
 
   dontWrapGApps = true;
 
-  # Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

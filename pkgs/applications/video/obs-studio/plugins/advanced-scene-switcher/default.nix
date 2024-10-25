@@ -8,6 +8,7 @@
   alsa-lib,
   asio,
   curl,
+  libremidi,
   nlohmann_json,
   obs-studio,
   opencv,
@@ -16,12 +17,17 @@
   stdenv,
   tesseract,
   websocketpp,
-  xorg,
-
-  httplib,
-  libremidi,
+  libXScrnSaver,
 }:
 
+let
+  httplib-src = fetchFromGitHub {
+    owner = "yhirose";
+    repo = "cpp-httplib";
+    rev = "v0.17.3";
+    hash = "sha256-yvaPIbRqJGkiob3Nrv3H1ieFAC5b+h1tTncJWTy4dmk=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
   version = "1.27.2";
@@ -50,13 +56,13 @@ stdenv.mkDerivation rec {
     qtbase
     tesseract
     websocketpp
-    xorg.libXScrnSaver
+    libXScrnSaver
   ];
 
   dontWrapQtApps = true;
 
   postUnpack = ''
-    cp -r ${httplib.src}/* $sourceRoot/deps/cpp-httplib
+    cp -r ${httplib-src}/* $sourceRoot/deps/cpp-httplib
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
     chmod -R +w $sourceRoot/deps/cpp-httplib
     chmod -R +w $sourceRoot/deps/libremidi

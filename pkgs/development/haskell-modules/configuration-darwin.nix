@@ -83,9 +83,6 @@ self: super: ({
   with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
   with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
-
   git-annex = overrideCabal (drv: {
     # We can't use testFlags since git-annex side steps the Cabal test mechanism
     preCheck = drv.preCheck or "" + ''

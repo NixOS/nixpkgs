@@ -177,6 +177,18 @@ in
           SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
           SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
         };
+        postStart = ''
+          for i in $(seq 300); do
+              if "${lib.getExe pkgs.curl}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
+                  echo "Scrutiny is ready (port is open)"
+                  exit 0
+              fi
+              echo "Waiting for Scrutiny to open port..."
+              sleep 0.2
+          done
+          echo "Timeout waiting for Scrutiny to open port" >&2
+          exit 1
+        '';
         serviceConfig = {
           DynamicUser = true;
           ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";

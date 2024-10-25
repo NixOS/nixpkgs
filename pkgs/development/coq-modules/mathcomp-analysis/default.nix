@@ -9,6 +9,7 @@ let
   repo  = "analysis";
   owner = "math-comp";
 
+  release."1.4.0".sha256 = "sha256-eDggeuEU0fMK7D5FbxvLkbAgpLw5lwL/Rl0eLXAnJeg=";
   release."1.2.0".sha256 = "sha256-w6BivDM4dF4Iv4rUTy++2feweNtMAJxgGExPfYGhXxo=";
   release."1.1.0".sha256 = "sha256-wl4kZf4mh9zbFfGcqaFEgWRyp0Bj511F505mYodpS6o=";
   release."1.0.0".sha256 = "sha256-KiXyaWB4zQ3NuXadq4BSWfoN1cIo1xiLVSN6nW03tC4=";
@@ -32,6 +33,7 @@ let
 
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch [ coq.version mathcomp.version ] [
+      { cases = [ (range "8.19" "8.20") (range "2.1.0" "2.2.0") ];   out = "1.4.0"; }
       { cases = [ (range "8.17" "8.20") (range "2.0.0" "2.2.0") ];   out = "1.1.0"; }
       { cases = [ (range "8.17" "8.19") (range "1.17.0" "1.19.0") ]; out = "0.7.0"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.7"; }

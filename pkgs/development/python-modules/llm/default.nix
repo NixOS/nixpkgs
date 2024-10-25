@@ -1,13 +1,9 @@
 {
   lib,
-  buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
-  makeWrapper,
   pytestCheckHook,
-  python,
   pythonOlder,
-  ruff,
   setuptools,
   click-default-group,
   numpy,

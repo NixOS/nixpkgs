@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-alt-cannadic";
-  version = "0-unstable-2024-07-28";
+  version = "0-unstable-2024-10-13";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-alt-cannadic";
-    rev = "50fee0397b87fe508f9edd45bac56f5290d8ce66";
-    hash = "sha256-KKUj3d9yR2kTTTFbroZQs+OZR4KUyAUYE/X3z9/vQvM=";
+    rev = "7f70e48a63735c781b6453977628e594bdd50d89";
+    hash = "sha256-R7qU2YNdeojuu4VTxH+M5Bvf8XAEvK6N8jPNz9MQqvU=";
   };
 
   installPhase = ''

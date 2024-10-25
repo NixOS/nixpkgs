@@ -49,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-38";
+  version = "7.1.1-39";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-dyk9kCH1w76Jhy/yBhVFLthTKYaMgXLBn7QGWAFS0XU=";
+    hash = "sha256-3NUl0q/j3dBdNBtLH+69vh0elobBnTOvqQpC/2KwGBU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

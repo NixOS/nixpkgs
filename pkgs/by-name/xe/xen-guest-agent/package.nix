@@ -4,7 +4,7 @@
   rustPlatform,
   llvmPackages,
   pkg-config,
-  xen-slim,
+  xen,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xen-guest-agent";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ xen-slim ];
+  buildInputs = [ xen ];
 
   postInstall =
     # Install the sample systemd service.
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup =
     # Add the Xen libraries in the runpath so the guest agent can find libxenstore.
-    "patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib";
+    "patchelf $out/bin/xen-guest-agent --add-rpath ${xen}/lib";
 
   meta = {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";

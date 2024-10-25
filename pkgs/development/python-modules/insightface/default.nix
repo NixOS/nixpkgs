@@ -7,16 +7,18 @@
   fetchPypi,
   insightface,
   matplotlib,
-  mxnet,
   numpy,
   onnx,
   onnxruntime,
   opencv4,
+  pillow,
   prettytable,
   pythonOlder,
+  requests,
+  setuptools,
+  scipy,
   scikit-image,
   scikit-learn,
-  tensorboard,
   testers,
   tqdm,
   stdenv,
@@ -34,22 +36,26 @@ buildPythonPackage rec {
     hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
 
-  build-system = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   dependencies = [
+    albumentations
     easydict
     matplotlib
-    mxnet
     numpy
     onnx
     onnxruntime
     opencv4
+    pillow
+    prettytable
+    requests
     scikit-learn
     scikit-image
-    tensorboard
+    scipy
     tqdm
-    albumentations
-    prettytable
   ];
 
   pythonImportsCheck = [

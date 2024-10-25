@@ -18,6 +18,7 @@
   packaging,
   pillow,
   platformdirs,
+  propcache,
   pydantic,
   pyjwt,
   rich,
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.1.0";
+  version = "6.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SWEWh1c5GcMrjJlcLtXScRNoem2ACGt3nFC4+ARMIIw=";
+    hash = "sha256-42rxRD3mXgMLz3mADF0ksDLpw2di5MyVL7+6iW41nI8=";
   };
 
   build-system = [ poetry-core ];
@@ -68,6 +69,7 @@ buildPythonPackage rec {
     packaging
     pillow
     platformdirs
+    propcache
     pydantic
     pyjwt
     rich

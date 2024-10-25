@@ -483,7 +483,6 @@ dont-distribute-packages:
  - ampersand
  - amqp-streamly
  - analyze-client
- - anansi
  - anansi-hscolour
  - anatomy
  - animate-example
@@ -572,6 +571,7 @@ dont-distribute-packages:
  - aviation-weight-balance
  - awesomium
  - awesomium-glut
+ - aws-arn
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
@@ -673,7 +673,6 @@ dont-distribute-packages:
  - bitmaps
  - bittorrent
  - bla
- - blacktip
  - blakesum-demo
  - blastxml
  - blatex
@@ -824,7 +823,6 @@ dont-distribute-packages:
  - chu2
  - chuchu
  - chunks
- - circuit-notation
  - citation-resolve
  - citeproc-hs-pandoc-filter
  - clac
@@ -832,17 +830,7 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
- - clash-ghc
- - clash-lib
  - clash-lib-hedgehog
- - clash-multisignal
- - clash-prelude-hedgehog
- - clash-prelude-quickcheck
- - clash-shake
- - clash-systemverilog
- - clash-verilog
- - clash-vhdl
- - clashilator
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -1144,7 +1132,6 @@ dont-distribute-packages:
  - direct-rocksdb
  - directory-contents
  - dirfiles
- - dirstream
  - discogs-haskell
  - discord-gateway
  - discord-hs
@@ -1440,6 +1427,8 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
+ - fs-api
+ - fs-sim
  - ftdi
  - ftp-client-conduit
  - ftree
@@ -2280,7 +2269,6 @@ dont-distribute-packages:
  - hyperpublic
  - i
  - iException
- - ice40-prim
  - ide-backend
  - ide-backend-server
  - ideas-math
@@ -2337,6 +2325,7 @@ dont-distribute-packages:
  - introduction-test
  - intset
  - invertible-hlist
+ - io-classes-mtl
  - ion
  - ipatch
  - ipc
@@ -2573,7 +2562,6 @@ dont-distribute-packages:
  - linnet-conduit
  - linux-ptrace
  - lio-eci11
- - lion
  - liquid-base
  - liquid-bytestring
  - liquid-containers
@@ -3157,7 +3145,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-common-persistent
- - postgresql-libpq_0_10_2_0
+ - postgresql-libpq_0_11_0_0
  - postgresql-pure
  - postgresql-simple-ltree
  - postgresql-simple-queue
@@ -3306,6 +3294,7 @@ dont-distribute-packages:
  - rc
  - rdf4h-vocab-activitystreams
  - rdioh
+ - rds-data
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -3403,8 +3392,6 @@ dont-distribute-packages:
  - restricted-workers
  - rethinkdb-model
  - rethinkdb-wereHamster
- - retroclash-lib
- - retroclash-sim
  - rewrite
  - rewriting
  - rezoom
@@ -3556,11 +3543,11 @@ dont-distribute-packages:
  - seqloc-datafiles
  - sequor
  - serdoc-binary
- - serial-test-generators
  - serpentine
  - serv
  - serv-wai
  - servant-aeson-generics-typescript
+ - servant-auth-client_0_4_2_0
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
@@ -4297,7 +4284,6 @@ dont-distribute-packages:
  - yesod-raml-bin
  - yesod-raml-docs
  - yesod-raml-mock
- - yesod-routes-flow
  - yesod-routes-typescript
  - yesod-session-redis
  - yesod-worker

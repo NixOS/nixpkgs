@@ -6,12 +6,12 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   exiv2,
   gettext,
   gst_all_1,
   libusermetrics,
   lomiri-action-api,
+  lomiri-content-hub,
   lomiri-ui-toolkit,
   lomiri-thumbnailer,
   pkg-config,
@@ -145,9 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
       qzxing
 
       # QML
-      content-hub
       libusermetrics
       lomiri-action-api
+      lomiri-content-hub
       lomiri-ui-toolkit
       lomiri-thumbnailer
       qtpositioning
@@ -192,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
       export QML2_IMPORT_PATH=${
         listToQtVar qtbase.qtQmlPrefix [
           lomiri-ui-toolkit
-          content-hub
+          lomiri-content-hub
           lomiri-thumbnailer
         ]
       }
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/lomiri-camera-app/assets/lomiri-camera-app-splash.svg $out/share/lomiri-app-launch/splash/lomiri-camera-app.svg
     ln -s $out/share/lomiri-camera-app/assets/lomiri-barcode-reader-app-splash.svg $out/share/lomiri-app-launch/splash/lomiri-barcode-reader-app.svg
 
-    install -Dm644 ../camera-contenthub.json $out/share/content-hub/peers/lomiri-camera-app
+    install -Dm644 ../camera-contenthub.json $out/share/lomiri-content-hub/peers/lomiri-camera-app
   '';
 
   dontWrapGApps = true;

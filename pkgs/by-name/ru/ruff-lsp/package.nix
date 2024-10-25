@@ -1,28 +1,28 @@
 {
   lib,
-  stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   # nativeCheckInputs
   ruff,
 
+  # tests
+  versionCheckHook,
+
   # passthru
   nix-update-script,
-  testers,
-  ruff-lsp,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.57";
+  version = "0.0.58";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w9NNdsDD+YLrCw8DHDhVx62MdwLhcN8QSmb/2rqlb5g=";
+    hash = "sha256-TB4OcKkaUGYAmiGNJRnfRmiXTyTQL4sFoBrzxT6DWec=";
   };
 
   postPatch = ''
@@ -30,24 +30,23 @@ python3.pkgs.buildPythonApplication rec {
     sed -i '/"ruff>=/d' pyproject.toml
   '';
 
-  build-system = with python3.pkgs; [ hatchling ];
+  build-system = with python3Packages; [ hatchling ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     packaging
     pygls
     lsprotocol
     typing-extensions
   ];
 
-  # fails in linux sandbox
-  doCheck = stdenv.hostPlatform.isDarwin;
-
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
     ruff
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   makeWrapperArgs = [
     # prefer ruff from user's PATH, that's usually desired behavior
@@ -61,7 +60,6 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = ruff-lsp; };
   };
 
   meta = {

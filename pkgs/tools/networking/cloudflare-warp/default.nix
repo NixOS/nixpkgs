@@ -11,12 +11,12 @@
 , makeWrapper
 , nftables
 , nss
-, openssl_3_2
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2024.6.497";
+  version = "2024.9.346";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}-1_${suffix}.deb";
+    url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-j0D1VcPCJpp0yoK6GjuKKwTVNEqKgr9+6X1AfBbsXAg=";
-      x86_64-linux = "sha256-y+1TQ/QzzjkorSscB2+QBYR81IowKWcgSoUm1Nz9Gts=";
+      aarch64-linux = "sha256-dgu/OiQPT7bkPnhrDArQg2lDAcOyhzZ5nJrjS2dqpFo=";
+      x86_64-linux = "sha256-KwxLF7LWB49M+kZPJ9M4OcDSF1f3MX4S0dTtTkzQVRQ=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     dbus
     gtk3
     libpcap
-    openssl_3_2
+    openssl
     nss
     stdenv.cc.cc.lib
   ];

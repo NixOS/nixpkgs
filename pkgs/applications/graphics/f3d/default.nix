@@ -80,5 +80,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin pbsds ];
     platforms = with platforms; unix;
     mainProgram = "f3d";
+    # error: use of undeclared identifier 'NSMenuItem'
+    # adding AppKit does not solve it
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
 }

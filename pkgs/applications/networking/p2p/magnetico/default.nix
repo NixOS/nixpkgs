@@ -11,7 +11,7 @@ buildGoModule rec {
   version = "0.12.1";
 
   src = fetchFromGitea {
-    domain = "maxwell.ydns.eu/git";
+    domain = "maxwell.eurofusion.eu/git";
     owner  = "rnhmjoj";
     repo   = "magnetico";
     rev    = "v${version}";
@@ -31,7 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
-    homepage     = "https://maxwell.ydns.eu/git/rnhmjoj/magnetico";
+    homepage     = "https://maxwell.eurofusion.eu/git/rnhmjoj/magnetico";
     license      = licenses.agpl3Only;
     badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];

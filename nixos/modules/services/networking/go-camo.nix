@@ -55,7 +55,8 @@ in
         GOCAMO_HMAC_FILE = "%d/hmac";
       };
       script = ''
-        export GOCAMO_HMAC=$(cat "$GOCAMO_HMAC_FILE")
+        GOCAMO_HMAC="$(cat "$GOCAMO_HMAC_FILE")"
+        export GOCAMO_HMAC
         exec ${lib.escapeShellArgs(lib.lists.remove "" ([ "${pkgs.go-camo}/bin/go-camo" cfg.listen cfg.sslListen cfg.sslKey cfg.sslCert ] ++ cfg.extraOptions))}
       '';
       serviceConfig = {
