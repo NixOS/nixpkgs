@@ -60,6 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't build `bridge-gui-tester`
     sed -i "/add_subdirectory(bridge-gui-tester)/d" CMakeLists.txt
+
+    # Qt 6.8 support
+    # fix "ColorImage is not a type"
+    find . -name '*.qml' -type f -exec sed -i '
+    /import QtQuick.Controls/ {
+      n
+      /import QtQuick.Controls.impl/! {
+        i import QtQuick.Controls.impl
+      }
+    }' {} +
+    # fix "Cannot override FINAL property"
+    find . -name '*.qml' -type f -exec sed -i 's/\bpopupType\b/protonPopupType/g' {} +
   '';
 
   cmakeFlags = [
