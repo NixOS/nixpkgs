@@ -269,9 +269,9 @@ dependencies = [
 
 [[package]]
 name = "axoupdater"
-version = "0.7.2"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa6f92ef9ab41a352f403f709ef0f09cda1f461795de52085cd46ed831ead02e"
+checksum = "6fe17874ee40fb66fe1d2cb7871b14de4d298fbf77ea29a6cedb8027365e1a33"
 dependencies = [
  "axoasset",
  "axoprocess",
@@ -279,6 +279,7 @@ dependencies = [
  "camino",
  "homedir",
  "miette",
+ "self-replace",
  "serde",
  "tempfile",
  "thiserror",
@@ -916,6 +917,15 @@ name = "directories"
 version = "5.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a49173b84e034382284f27f1af4dcbbd231ffa358c0fe316541a7337f376a35"
+dependencies = [
+ "dirs-sys",
+]
+
+[[package]]
+name = "dirs"
+version = "5.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "44c45a9d03d6676652bcb5e724c7e988de1acad23a711b5217ab9cbecbec2225"
 dependencies = [
  "dirs-sys",
 ]
@@ -2149,6 +2159,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
 
 [[package]]
+name = "os_str_bytes"
+version = "6.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2355d85b9a3786f481747ced0e0ff2ba35213a1f9bd406ed906554d7af805a1"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "overload"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2937,9 +2956,11 @@ checksum = "6c20b6793b5c2fa6553b250154b78d6d0db37e72700ae35fad9387a46f487c97"
 
 [[package]]
 name = "rust-netrc"
-version = "0.1.1"
-source = "git+https://github.com/gribouille/netrc?rev=544f3890b621f0dc30fcefb4f804269c160ce2e9#544f3890b621f0dc30fcefb4f804269c160ce2e9"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7e98097f62769f92dbf95fb51f71c0a68ec18a4ee2e70e0d3e4f47ac005d63e9"
 dependencies = [
+ "shellexpand",
  "thiserror",
 ]
 
@@ -3142,6 +3163,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "self-replace"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03ec815b5eab420ab893f63393878d89c90fdd94c0bcc44c07abb8ad95552fb7"
+dependencies = [
+ "fastrand",
+ "tempfile",
+ "windows-sys 0.52.0",
+]
+
+[[package]]
 name = "semver"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3247,6 +3279,17 @@ name = "shell-escape"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45bb67a18fa91266cc7807181f62f9178a6873bfad7dc788c42e6430db40184f"
+
+[[package]]
+name = "shellexpand"
+version = "3.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da03fa3b94cc19e3ebfc88c4229c49d8f08cdbd1228870a45f0ffdf84988e14b"
+dependencies = [
+ "bstr",
+ "dirs",
+ "os_str_bytes",
+]
 
 [[package]]
 name = "shlex"
@@ -4096,7 +4139,7 @@ checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 
 [[package]]
 name = "uv"
-version = "0.4.25"
+version = "0.4.26"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4304,8 +4347,6 @@ name = "uv-cache"
 version = "0.0.1"
 dependencies = [
  "clap",
- "directories",
- "etcetera",
  "fs-err",
  "nanoid",
  "rmp-serde",
@@ -4316,6 +4357,7 @@ dependencies = [
  "url",
  "uv-cache-info",
  "uv-cache-key",
+ "uv-dirs",
  "uv-distribution-types",
  "uv-fs",
  "uv-normalize",
@@ -4500,6 +4542,16 @@ dependencies = [
  "uv-static",
  "uv-workspace",
  "walkdir",
+]
+
+[[package]]
+name = "uv-dirs"
+version = "0.0.1"
+dependencies = [
+ "directories",
+ "dirs-sys",
+ "etcetera",
+ "uv-static",
 ]
 
 [[package]]
@@ -5136,9 +5188,11 @@ dependencies = [
 name = "uv-settings"
 version = "0.0.1"
 dependencies = [
+ "assert_fs",
  "clap",
  "dirs-sys",
  "fs-err",
+ "indoc",
  "schemars",
  "serde",
  "textwrap",
@@ -5179,10 +5233,9 @@ dependencies = [
 name = "uv-state"
 version = "0.0.1"
 dependencies = [
- "directories",
- "etcetera",
  "fs-err",
  "tempfile",
+ "uv-dirs",
 ]
 
 [[package]]
@@ -5193,7 +5246,6 @@ version = "0.0.1"
 name = "uv-tool"
 version = "0.0.1"
 dependencies = [
- "dirs-sys",
  "fs-err",
  "pathdiff",
  "serde",
@@ -5202,6 +5254,7 @@ dependencies = [
  "toml_edit",
  "tracing",
  "uv-cache",
+ "uv-dirs",
  "uv-fs",
  "uv-install-wheel",
  "uv-installer",
@@ -5237,7 +5290,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.4.25"
+version = "0.4.26"
 
 [[package]]
 name = "uv-virtualenv"
@@ -5288,6 +5341,7 @@ dependencies = [
  "toml_edit",
  "tracing",
  "url",
+ "uv-cache-key",
  "uv-distribution-types",
  "uv-fs",
  "uv-git",
