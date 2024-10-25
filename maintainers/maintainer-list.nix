@@ -15444,6 +15444,12 @@
     githubId = 3159451;
     name = "Nicolas Schneider";
   };
+  nipeharefa = {
+    name = "Nipe Harefa";
+    email = "nipeharefa@gmail.com";
+    github = "nipeharefa";
+    githubId = 12620257;
+  };
   NIS = {
     name = "NSC IT Solutions";
     github = "dev-nis";
