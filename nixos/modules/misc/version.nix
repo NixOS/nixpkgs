@@ -65,6 +65,108 @@ let
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
 
+  checkRelease =
+    version:
+    let
+      parts = lib.versions.splitVersion version;
+      isVersion = lib.length parts == 2 && lib.all (p: lib.stringLength p == 2) parts;
+      majorVersion = lib.toIntBase10 (lib.elemAt parts 0);
+      minorVersion = lib.elemAt parts 1;
+
+      # Refer to both https://channels.nixos.org/ and `git log --follow -p .version`.
+      # Some of the early version have never been released as a channel, but are included
+      # anyway for the benefit of nixos-unstable users who used these intermediate versions.
+      # Versions prior to the introduction of the `stateVersion` option have been observed
+      # in usage, so they can't be omitted.
+      versionPatterns = [
+        {
+          fromMajor = 13;
+          minor = [
+            "07"
+            "09"
+            "10"
+          ];
+        }
+        {
+          fromMajor = 14;
+          minor = [
+            "02"
+            "04"
+            "10"
+            "11"
+            "12"
+          ];
+        }
+        {
+          fromMajor = 15;
+          minor = [
+            "04"
+            "05"
+            "06"
+            "07"
+            "08"
+            "09"
+          ];
+        }
+        {
+          fromMajor = 16;
+          minor = [
+            "03"
+            "09"
+          ];
+        }
+        {
+          fromMajor = 17;
+          minor = [
+            "03"
+            "09"
+            "10"
+          ];
+        }
+        {
+          fromMajor = 18;
+          minor = [
+            "03"
+            "09"
+          ];
+        }
+        {
+          fromMajor = 21;
+          minor = [
+            "03"
+            "05"
+            "11"
+          ];
+        }
+        {
+          fromMajor = 22;
+          minor = [
+            "05"
+            "11"
+          ];
+        }
+      ];
+
+      # find the versioning pattern that applies by looking for the first
+      # major version newer than `majorVersion`, and picking the previous pattern
+      patternIndex = lib.lists.findFirstIndex (
+        { fromMajor, ... }: fromMajor > majorVersion
+      ) (lib.length versionPatterns) versionPatterns;
+
+      validMinorVersions =
+        if patternIndex == 0 then [ ] else (lib.elemAt versionPatterns (patternIndex - 1)).minor;
+
+      correctMinorVersion = lib.elem minorVersion validMinorVersions;
+      notNewerThanNixpkgs = lib.versionAtLeast trivial.release version;
+    in
+    isVersion && correctMinorVersion && notNewerThanNixpkgs;
+
+  regexType = types.strMatching "[[:digit:]]{2}\\.[[:digit:]]{2}";
+  releaseType = types.addCheck regexType checkRelease // {
+    name = "nixosRelease";
+    description = "NixOS release version, e.g. \"${trivial.release}\"";
+    descriptionClass = "nonRestrictiveClause";
+  };
 in
 {
   imports = [
@@ -91,7 +193,7 @@ in
 
       release = mkOption {
         readOnly = true;
-        type = types.str;
+        type = releaseType;
         default = trivial.release;
         description = "The NixOS release (e.g. `16.03`).";
       };
@@ -213,7 +315,7 @@ in
     };
 
     stateVersion = mkOption {
-      type = types.str;
+      type = releaseType;
       # TODO Remove this and drop the default of the option so people are forced to set it.
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
       apply =
