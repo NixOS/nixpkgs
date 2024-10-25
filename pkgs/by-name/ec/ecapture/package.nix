@@ -16,6 +16,7 @@
   mariadb,
   openssl,
   bash,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -102,6 +103,8 @@ buildGoModule rec {
   '';
 
   vendorHash = "sha256-j5AXZqup0nPUlGWvb4PCLKJFoQx/c4I3PxZB99TTTWA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Capture SSL/TLS text content without CA certificate Using eBPF";
