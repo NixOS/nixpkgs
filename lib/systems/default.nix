@@ -92,7 +92,9 @@ let
         else if final.isMusl                  then "musl"
         else if final.isUClibc                then "uclibc"
         else if final.isAndroid               then "bionic"
-        else if final.isLinux  /* default */  then "glibc"
+        else if final.isLinux  /**
+    default
+  */  then "glibc"
         else if final.isFreeBSD               then "fblibc"
         else if final.isOpenBSD               then "oblibc"
         else if final.isNetBSD                then "nblibc"
