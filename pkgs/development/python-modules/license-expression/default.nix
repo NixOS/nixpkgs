@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.3.1";
+  version = "30.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+hINYDfUrNsCmXOIa4XO/ML1fJoB8/n6iQ4UGdw5ClE=";
+    hash = "sha256-RAgGg0Xekcw5H13YHmkgfL7eybK+4tA8EAvVTuWFRck=";
   };
 
   dontConfigure = true;
