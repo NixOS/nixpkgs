@@ -57,8 +57,6 @@ buildPythonPackage rec {
     "sipconfig"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     mainProgram = "sip";
