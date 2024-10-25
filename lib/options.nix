@@ -67,6 +67,12 @@ rec {
     {
     # Default value used when no definition is given in the configuration.
     default ? null,
+    # Option type, providing type-checking and value merging.
+    type ? null,
+    # Whether the option can be set only once
+    readOnly ? null,
+
+
     # Textual representation of the default, for the manual.
     defaultText ? null,
     # Example value used in the manual.
@@ -75,16 +81,12 @@ rec {
     description ? null,
     # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
     relatedPackages ? null,
-    # Option type, providing type-checking and value merging.
-    type ? null,
     # Function that converts the option value to something else.
     apply ? null,
     # Whether the option is for NixOS developers only.
     internal ? null,
     # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
     visible ? null,
-    # Whether the option can be set only once
-    readOnly ? null,
     meta ? {},
     } @ attrs:
     attrs // { _type = "option"; };

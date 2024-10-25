@@ -226,6 +226,15 @@ let
               within a configuration, but can be used in module imports.
             '';
           };
+          _module.optionMeta = mkOption {
+            visible = false;
+            internal = true;
+            type = types.deferredModuleWith {
+              staticModules = [
+                ./modules/default-meta-interface.nix
+              ];
+            };
+          };
         };
 
         config = {
@@ -796,7 +805,7 @@ let
   /* Merge all the definitions of an option to produce the final
      config value. */
   evalOptionValue = evalOptionValue' {};
-  evalOptionValue' = _module: loc: opt: defs:
+  evalOptionValue' = _moduleOptions: loc: opt: defs:
     let
       # Add in the default value for this option, if any.
       defs' =
@@ -833,20 +842,23 @@ let
         inherit (res) isDefined;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
-        meta = checkOptionMeta _module opt;
+        meta = checkOptionMeta _moduleOptions opt;
       };
 
-  checkOptionMeta = _module: opt:
+  checkOptionMeta = _moduleOptions: opt:
     let
       metaConfiguration =
         evalModules {
+          specialArgs = {
+            optionDeclaration = opt;
+          };
           # The option path. Although the things we're checking happen to be options,
           # that's not what we're checking against, and that's what the prefix is
           # about. The checkable options are more like _file, and we'll make use of that.
           prefix = [ "options" ] ++ opt.loc ++ [ "meta" ];
           modules =
             [
-              { options = _module.optionMeta or { }; }
+              _moduleOptions.optionMeta.value
             ]
             ++ lib.zipListsWith
               (decl: pos:
