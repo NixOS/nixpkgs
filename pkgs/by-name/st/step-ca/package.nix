@@ -5,10 +5,10 @@
   buildGoModule,
   coreutils,
   pcsclite,
-  PCSC,
   pkg-config,
   hsmSupport ? true,
   nixosTests,
+  darwin,
 }:
 
 buildGoModule rec {
@@ -33,8 +33,7 @@ buildGoModule rec {
 
   buildInputs =
     lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ]
-    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ PCSC ];
-
+    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.PCSC ];
   postPatch = ''
     substituteInPlace authority/http_client_test.go --replace-fail 't.Run("SystemCertPool", func(t *testing.T) {' 't.Skip("SystemCertPool", func(t *testing.T) {'
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
