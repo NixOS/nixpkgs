@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "24.2.5";
+  version = "24.3.4";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    hash = "sha256-nnaKfGMRNMZzrgMv7OgXj+11RaZSFijrxunnbGSWQlw=";
+    hash = "sha256-vgbWwL4mu8YZzfvBvxna8Ioz6ig29iA2RZHKuHdh5Ic=";
   };
 
   patches = [
