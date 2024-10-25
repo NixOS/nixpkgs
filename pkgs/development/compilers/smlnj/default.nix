@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
     homepage    = "http://smlnj.org";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ skyesoss thoughtpolice ];
     mainProgram = "sml";
     # never built on x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
