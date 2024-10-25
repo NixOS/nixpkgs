@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  electron_30,
+  electron_30-bin,
   dpkg,
   makeWrapper,
   commandLineArgs ? "",
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     cp -r usr/share $out/share
     sed -i "s|Exec=.*|Exec=$out/bin/bilibili|" $out/share/applications/*.desktop
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
-    makeWrapper ${lib.getExe electron_30} $out/bin/bilibili \
+    makeWrapper ${lib.getExe electron_30-bin} $out/bin/bilibili \
       --argv0 "bilibili" \
       --add-flags "$out/opt/app.asar" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
