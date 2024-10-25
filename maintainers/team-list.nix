@@ -442,6 +442,12 @@ with lib.maintainers;
     shortName = "GraalVM-CE";
   };
 
+  guile = {
+    members = [ ];
+    scope = "Maintain Guile interpreter and companion libraries.";
+    shortName = "Guile";
+  };
+
   haskell = {
     members = [
       cdepillabout
