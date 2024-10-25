@@ -52,12 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/sunweaver/lomiri-url-dispatcher/-/commit/ebdd31b9640ca243e90bc7b8aca7951085998bd8.patch";
       hash = "sha256-g4EohB3oDcWK4x62/3r/g6CFxqb7/rdK51+E/Fji1Do=";
     })
+
+    # Make lomiri-url-dispatcher-gui wrappable
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/merge_requests/28 merged & in release
+    (fetchpatch {
+      url = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/commit/6512937e2b388ad1350072b8ed3b4140439b2321.patch";
+      hash = "sha256-P1A3hi8l7fJWFjGeK5hWYl8BoZMzRfo44MUTeM7vG2A=";
+    })
   ];
 
   postPatch =
     ''
       substituteInPlace CMakeLists.txt \
         --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+
+      substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
 
       substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
         --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
@@ -124,34 +134,20 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   preFixup = ''
-    substituteInPlace $out/bin/lomiri-url-dispatcher-dump \
+    substituteInPlace $out/bin/lomiri-url-dispatcher-{dump,gui} \
       --replace-fail '/bin/sh' '${runtimeShell}'
 
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
 
-    # Move from qmlscene call in desktop file to easier-to-wrap script
-    guiScript=$out/bin/lomiri-url-dispatcher-gui
-    guiExec=$(grep 'Exec=' $out/share/applications/lomiri-url-dispatcher-gui.desktop | cut -d'=' -f2-)
-
-    cat <<EOF >$guiScript
-    #!${runtimeShell}
-    $guiExec
-    EOF
-    chmod +x $guiScript
-
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
-
-    substituteInPlace $out/share/applications/lomiri-url-dispatcher-gui.desktop \
-      --replace-fail "Exec=$guiExec" "Exec=$(basename $guiScript)" \
-      --replace-fail "Icon=$out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg" "Icon=lomiri-url-dispatcher-gui"
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ qtdeclarative.dev ]}
     )
-    wrapQtApp $guiScript
+    wrapQtApp $out/bin/lomiri-url-dispatcher-gui
   '';
 
   passthru = {
