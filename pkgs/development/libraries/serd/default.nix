@@ -1,22 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, doxygen
-, mandoc
-, meson
-, ninja
-, pkg-config
-, python3
-, sphinx
-, sphinxygen
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  doxygen,
+  mandoc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sphinx,
+  sphinxygen,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "serd";
   version = "0.32.2";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
