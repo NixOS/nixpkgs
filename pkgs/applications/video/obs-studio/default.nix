@@ -171,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
   ];
 
