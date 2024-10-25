@@ -468,6 +468,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  cope = callPackage ../by-name/co/cope/package.nix {
+    perl = perl538;
+    perlPackages = perl538Packages;
+  };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
