@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, openssh, mpiCheckPhaseHook, mpi, blas, lapack
+, mpiCheckPhaseHook, mpi, blas, lapack
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
   hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
