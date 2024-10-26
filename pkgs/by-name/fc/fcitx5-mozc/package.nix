@@ -9,6 +9,7 @@
   nixosTests,
   pkg-config,
   python3,
+  stdenv,
   unzip,
 }:
 
@@ -122,7 +123,7 @@ buildBazelPackage {
     '';
   };
 
-  passthru.tests = {
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) fcitx5;
   };
 
