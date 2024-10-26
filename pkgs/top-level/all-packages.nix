@@ -1430,8 +1430,6 @@ with pkgs;
 
   _3mux = callPackage ../tools/misc/3mux { };
 
-  _1password = callPackage ../applications/misc/1password { };
-
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
   _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
@@ -5872,10 +5870,6 @@ with pkgs;
     callPackage ../tools/misc/steampipe-packages { }
   );
 
-  step-ca = callPackage ../tools/security/step-ca {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
-
   step-kms-plugin = callPackage ../tools/security/step-kms-plugin { };
 
   string-machine = callPackage ../applications/audio/string-machine { };
@@ -7393,7 +7387,7 @@ with pkgs;
 
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
-  expect = callPackage ../tools/misc/expect { };
+  expect = tclPackages.expect;
 
   expected-lite = callPackage ../development/libraries/expected-lite { };
 
@@ -14047,10 +14041,6 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zincsearch = callPackage ../servers/search/zincsearch {
-    buildGoModule = buildGo122Module;
-  };
-
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
   zpaq = callPackage ../tools/archivers/zpaq { };
@@ -14429,10 +14419,6 @@ with pkgs;
 
   cotton = callPackage ../development/tools/cotton {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
-  critcl = callPackage ../development/compilers/critcl {
-    tcllib = tcllib.override { withCritcl = false; };
   };
 
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
@@ -16618,7 +16604,10 @@ with pkgs;
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
   tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
-  tclreadline = callPackage ../development/interpreters/tclreadline { };
+  # We don't need versioned package sets thanks to the tcl stubs mechanism
+  tclPackages = recurseIntoAttrs (callPackage ./tcl-packages.nix {});
+
+  tclreadline = tclPackages.tclreadline;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
@@ -16706,7 +16695,7 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
-  mise = callPackage ../tools/misc/mise {
+  mise = callPackage ../by-name/mi/mise/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
@@ -17676,10 +17665,10 @@ with pkgs;
   gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
   gradle-unwrapped = gradle_8-unwrapped;
 
-  gradle_6 = wrapGradle gradle_6-unwrapped;
-  gradle_7 = wrapGradle gradle_7-unwrapped;
-  gradle_8 = wrapGradle gradle_8-unwrapped;
-  gradle = wrapGradle gradle-unwrapped;
+  gradle_6 = wrapGradle gradle_6-unwrapped null;
+  gradle_7 = wrapGradle gradle_7-unwrapped null;
+  gradle_8 = wrapGradle gradle_8-unwrapped null;
+  gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -18370,7 +18359,7 @@ with pkgs;
 
   slimerjs = callPackage ../development/tools/slimerjs { };
 
-  slint-lsp = callPackage ../development/tools/misc/slint-lsp {
+  slint-lsp = callPackage ../by-name/sl/slint-lsp/package.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
@@ -18991,8 +18980,6 @@ with pkgs;
   buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
 
   bulletml = callPackage ../development/libraries/bulletml { };
-
-  bwidget = callPackage ../development/libraries/bwidget { };
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
@@ -20265,9 +20252,6 @@ with pkgs;
   ineffassign = callPackage ../development/tools/ineffassign { };
 
   ijs = callPackage ../development/libraries/ijs { };
-
-  itktcl  = callPackage ../development/libraries/itktcl { };
-  incrtcl = callPackage ../development/libraries/incrtcl { };
 
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
@@ -23233,14 +23217,6 @@ with pkgs;
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
-  tcllib = callPackage ../development/libraries/tcllib { };
-
-  tcltls = callPackage ../development/libraries/tcltls { };
-
-  tclx = callPackage ../development/libraries/tclx { };
-
-  tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
-
   tdb = callPackage ../development/libraries/tdb { };
 
   tdlib = callPackage ../development/libraries/tdlib { };
@@ -23289,15 +23265,11 @@ with pkgs;
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
-  tix = callPackage ../development/libraries/tix { };
-
   tk = tk-8_6;
 
   tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
-
-  tkimg = callPackage ../development/libraries/tkimg { };
 
   tkrzw = callPackage ../development/libraries/tkrzw { };
 
@@ -23310,8 +23282,6 @@ with pkgs;
   tntdb = callPackage ../development/libraries/tntdb { };
 
   kyotocabinet = callPackage ../development/libraries/kyotocabinet { };
-
-  tomlplusplus = callPackage ../development/libraries/tomlplusplus { };
 
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
@@ -23466,8 +23436,6 @@ with pkgs;
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
   wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
-
-  wapp = callPackage ../development/libraries/wapp { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
@@ -24954,7 +24922,6 @@ with pkgs;
   liquibase_redshift_extension = callPackage ../development/java-modules/liquibase_redshift_extension { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
-  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-apcupsd-exporter = callPackage ../servers/monitoring/prometheus/apcupsd-exporter.nix { };
   prometheus-artifactory-exporter = callPackage ../servers/monitoring/prometheus/artifactory-exporter.nix { };
@@ -27362,8 +27329,6 @@ with pkgs;
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
 
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
-
-  mustache-tcl = callPackage ../development/libraries/mustache-tcl { };
 
   mustache-go = callPackage ../development/tools/mustache-go { };
 

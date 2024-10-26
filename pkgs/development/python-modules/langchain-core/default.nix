@@ -48,6 +48,8 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   dependencies = [
     jsonpatch
     langsmith
