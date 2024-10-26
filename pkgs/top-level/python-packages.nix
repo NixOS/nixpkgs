@@ -17935,6 +17935,8 @@ self: super: with self; {
 
   zetup = callPackage ../development/python-modules/zetup { };
 
+  zeversolar = callPackage ../development/python-modules/zeversolar { };
+
   zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
