@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "stfl";
-  version = "0.24";
+  version = "0.24-unstable-2021-11-29";
 
-  src = fetchurl {
-    url = "http://www.clifford.at/stfl/stfl-${version}.tar.gz";
-    sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
+  src = fetchFromGitHub {
+    owner ="newsboat";
+    repo = "stfl";
+    rev = "c2c10b8a50fef613c0aacdc5d06a0fa610bf79e9";
+    hash = "sha256-os1yQ6o4m7yBiEZQIPP64diRleIr7FtuQucUbWs4A6k=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
