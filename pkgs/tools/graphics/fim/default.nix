@@ -1,4 +1,4 @@
-{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib
+{ stdenv, fetchurl, autoconf, automake, pkg-config, lib
 , perl, flex, bison, readline, libexif
 , x11Support ? true, SDL
 , svgSupport ? true, inkscape
@@ -9,7 +9,7 @@
 , pngSupport ? true, libpng
 }:
 
-gcc9Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fim";
   version = "0.7";
 
