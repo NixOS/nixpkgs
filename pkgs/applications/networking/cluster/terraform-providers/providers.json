@@ -723,13 +723,13 @@
     "vendorHash": "sha256-v9N7lj7bEgR5HZm1SO0+DSCmQFVnsRvHPMycYMfpYwo="
   },
   "libvirt": {
-    "hash": "sha256-341yVJIRXSISVKfdRqv2HiI90TmgR+2uyNQhONdhjHk=",
+    "hash": "sha256-B99pSnnI+GoMX4uleDqBoAKPe15l/+C5mIUGp6KsE54=",
     "homepage": "https://registry.terraform.io/providers/dmacvicar/libvirt",
     "owner": "dmacvicar",
     "repo": "terraform-provider-libvirt",
-    "rev": "v0.8.0",
+    "rev": "v0.8.1",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-MzRiAVzZXf9B1XwVz7RIJcXuyBtG7LIqp3OfP0AFl2Q="
+    "vendorHash": "sha256-Q9LdhokZol1jhSfQVIRvPe1XrE8nVvc22aWHt7wkcHY="
   },
   "linode": {
     "hash": "sha256-jPKjxvkIxKXs74Y6teZjs7xHzPlzvyUbZaMDRGpy/t0=",
