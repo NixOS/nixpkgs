@@ -2,8 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -35,35 +34,16 @@
   pytestCheckHook,
 }:
 
-let
-  # magic-wormhole relies on the internal API of
-  # magic-wormhole-transit-relay < 0.3.0 for testing.
-  magic-wormhole-transit-relay_0_2_1 =
-    magic-wormhole-transit-relay.overridePythonAttrs
-      (oldAttrs: rec {
-        version = "0.2.1";
-
-        src = fetchPypi {
-          pname = "magic-wormhole-transit-relay";
-          inherit version;
-          hash = "sha256-y0gBtGiQ6v+XKG4OP+xi0dUv/jF9FACDtjNqH7To+l4=";
-        };
-
-        postPatch = "";
-
-        postCheck = "";
-
-        meta.broken = pythonAtLeast "3.12";
-      });
-in
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FObBRomNvaem0ZAmJiOmlBmVU2Pn5DTWSq0tIz1tlMk=";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
   };
 
   postPatch =
@@ -104,10 +84,10 @@ buildPythonPackage rec {
     # For Python 3.12, remove magic-wormhole-mailbox-server and magic-wormhole-transit-relay from test dependencies,
     # which are not yet supported with this version.
     lib.optionals
-      (!magic-wormhole-mailbox-server.meta.broken && !magic-wormhole-transit-relay_0_2_1.meta.broken)
+      (!magic-wormhole-mailbox-server.meta.broken && !magic-wormhole-transit-relay.meta.broken)
       [
         magic-wormhole-mailbox-server
-        magic-wormhole-transit-relay_0_2_1
+        magic-wormhole-transit-relay
       ]
     ++ [
       mock
@@ -122,7 +102,7 @@ buildPythonPackage rec {
     # For Python 3.12, remove the tests depending on magic-wormhole-mailbox-server and magic-wormhole-transit-relay,
     # which are not yet supported with this version.
     lib.optionals
-      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay_0_2_1.meta.broken)
+      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay.meta.broken)
       [
         "src/wormhole/test/dilate/test_full.py"
         "src/wormhole/test/test_args.py"
