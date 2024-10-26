@@ -39,4 +39,5 @@ versionCheckHook.section.md
 waf.section.md
 zig.section.md
 xcbuild.section.md
+xfce4-dev-tools.section.md
 ```
