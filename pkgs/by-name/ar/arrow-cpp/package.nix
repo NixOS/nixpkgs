@@ -73,20 +73,20 @@ let
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "cb7a9674142c137367bf75a01b79c6e214a73199";
+    hash = "sha256-o1KvBZw4QQ4ivKFens0DD4N1rQSwzBsXGomVYKkBlsA=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "17.0.0";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow";
-    rev = "apache-arrow-17.0.0";
-    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
+    rev = "apache-arrow-18.0.0-rc0";
+    hash = "sha256-V2lOYOUJwXSvPPk2G17uc1eZO88EATHKwwDnEroBrPw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
