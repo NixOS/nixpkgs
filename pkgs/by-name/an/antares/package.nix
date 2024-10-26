@@ -6,6 +6,7 @@
   nodejs,
   makeDesktopItem,
   copyDesktopItems,
+  icoutils,
 }:
 
 buildNpmPackage rec {
@@ -30,7 +31,10 @@ buildNpmPackage rec {
 
   buildInputs = [ nodejs ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    icoutils
+  ];
 
   npmBuildScript = "compile";
 
@@ -45,7 +49,8 @@ buildNpmPackage rec {
 
     # Install icon files
     mkdir -pv $out/share/icon/
-    cp assets/icon.ico $out/share/icon/antares.ico
+    icotool -x assets/icon.ico
+    cp icon_1_256x256x32.png $out/share/icon/antares.png
   '';
 
   npmFlags = [ "--legacy-peer-deps" ];
