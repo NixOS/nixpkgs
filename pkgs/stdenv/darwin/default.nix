@@ -1016,6 +1016,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   # Build expand-response-params with last stage like below
                   inherit (prevStage) expand-response-params;
                 };
+                # Avoid rebuilding bmake (and Python) just for locales
+                locale = superDarwin.locale.override { inherit (prevStage) bmake; };
               }
             );
 
