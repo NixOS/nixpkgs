@@ -1,27 +1,27 @@
 {
-  IOKit,
   buildGoModule,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   stdenv,
 }:
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.11.11";
+  version = "1.12.0-initial-poc.6";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9NhwxB5AeGvQgZbjNu5WWHiP194ws7s1WDtCntLr//g=";
+    repo = "avalanchego";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LBwmoegsBWC2xlTc3BJDxyYX58b+X7g5xl9vnThVHW0=";
   };
 
-  vendorHash = "sha256-A8Bf/KzTFvC/hFLU1k6M89649wjoqnIXRQ1uJaTj9YA=";
-  # go mod vendor has a bug, see: https://github.com/golang/go/issues/57529
+  # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  vendorHash = "sha256-slu0f0Y33aGuVpN5pZcRp9RJAXcLnZyUNO7pFdm+HrY=";
+
 
   subPackages = [ "main" ];
 
@@ -35,12 +35,14 @@ buildGoModule rec {
     mv $out/bin/{main,${pname}}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Go implementation of an Avalanche node";
     homepage = "https://github.com/ava-labs/avalanchego";
     changelog = "https://github.com/ava-labs/avalanchego/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       urandom
       qjoly
     ];
