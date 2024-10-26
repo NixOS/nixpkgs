@@ -1,6 +1,8 @@
-name: "Check whether nix files are parseable"
+name: "Check whether nix files are parseable v2"
 
-permissions: read-all
+permissions:
+  pull-requests: read
+  contents: read
 
 on:
   # avoids approving first time contributors
