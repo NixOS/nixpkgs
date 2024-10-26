@@ -357,6 +357,8 @@ in {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
+    tideways = callPackage ../development/php-packages/tideways { };
+
     uv = callPackage ../development/php-packages/uv { };
 
     vld = callPackage ../development/php-packages/vld { };
