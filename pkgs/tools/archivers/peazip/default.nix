@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "peazip";
-  version = "9.9.1";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = pname;
     rev = version;
-    hash = "sha256-hn3EhePmBlj9Zdlij/GMxJPTP6suUm2oThaSKjoKeQQ=";
+    hash = "sha256-dxFGYMq1L7oRGUAfshLTBCXrYL6lzJPu5qIItrjeE5c=";
   };
   sourceRoot = "${src.name}/peazip-sources";
 
