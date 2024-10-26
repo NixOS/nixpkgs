@@ -184,12 +184,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests.ps2pdf-plugin = callPackage ./test-ps2pdf-plugin.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Vector graphics editor";
     homepage = "https://www.inkscape.org";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.jtojnar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      jtojnar
+    ];
+    platforms = lib.platforms.all;
     mainProgram = "inkscape";
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
