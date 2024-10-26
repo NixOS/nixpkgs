@@ -6,7 +6,6 @@ setupMpiCheck() {
   # Find out which MPI implementation we are using
   # and set safe defaults that are guaranteed to run
   # on any build machine
-
   mpiType="NONE"
 
   # OpenMPI signature
@@ -40,6 +39,10 @@ setupMpiCheck() {
       # Make sure the test starts even if we have less than the requested amount of cores
       export OMPI_MCA_rmaps_base_oversubscribe=1
       export PRTE_MCA_rmaps_default_mapping_policy=node:oversubscribe
+
+      # Make sure we do not need openssh in the checkPhase
+      export OMPI_MCA_plm_ssh_agent=false
+      export PRRTE_MCA_plm_ssh_agent=false
 
       # Disable CPU pinning
       export OMPI_MCA_hwloc_base_binding_policy=none
