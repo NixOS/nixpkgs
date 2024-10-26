@@ -4,19 +4,21 @@
 , fetchFromGitHub
 , git
 , gmp
+, cadical
+, libuv
 , perl
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.10.0";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lNWr84aeVpI/p/oxkNAUlUMUROGGzHAkb2D9q8BzHeA=";
+    hash = "sha256-O2Egyh2D0TfQWzQKfHUeAh7qAjMfeLVwXwGUw5QqcvE=";
   };
 
   postPatch = ''
@@ -38,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
+    cadical
+    libuv
   ];
 
   nativeCheckInputs = [
