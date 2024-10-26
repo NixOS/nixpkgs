@@ -74,6 +74,8 @@
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
+, withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1" # LCEVC decoding
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
@@ -125,6 +127,7 @@
 , withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
 , withVulkan ? withSmallDeps && !stdenv.hostPlatform.isDarwin
+, withVvenc ? withFullDeps && lib.versionAtLeast version "7.1" # H.266/VVC encoding
 , withWebp ? withHeadlessDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
@@ -246,6 +249,7 @@
 , kvazaar
 , ladspaH
 , lame
+, lcevcdec
 , lcms2
 , libaom
 , libaribcaption
@@ -265,6 +269,7 @@
 , libilbc
 , libjack2
 , libjxl
+, liblc3
 , libmodplug
 , libmysofa
 , libopenmpt
@@ -318,6 +323,7 @@
 , vo-amrwbenc
 , vulkan-headers
 , vulkan-loader
+, vvenc
 , x264
 , x265
 , xavs
@@ -598,6 +604,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withKvazaar "libkvazaar")
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "7.1") [
+    (enableFeature withLc3 "liblc3")
+    (enableFeature withLcevcdec "liblcevc-dec")
   ] ++ optionals (versionAtLeast version "5.1") [
     (enableFeature withLcms2 "lcms2")
   ] ++ [
@@ -661,6 +670,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withVorbis "libvorbis")
     (enableFeature withVpx "libvpx")
     (enableFeature withVulkan "vulkan")
+  ] ++ optionals (versionAtLeast version "7.1")  [
+    (enableFeature withVvenc "libvvenc")
+  ] ++ [
     (enableFeature withWebp "libwebp")
     (enableFeature withX264 "libx264")
     (enableFeature withX265 "libx265")
@@ -758,6 +770,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJxl [ libjxl ]
   ++ optionals withKvazaar [ kvazaar ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLc3 [ liblc3 ]
+  ++ optionals withLcevcdec [ lcevcdec ]
   ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
@@ -804,6 +818,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVpl [ libvpl ]
   ++ optionals withVpx [ libvpx ]
   ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
+  ++ optionals withVvenc [ vvenc ]
   ++ optionals withWebp [ libwebp ]
   ++ optionals withX264 [ x264 ]
   ++ optionals withX265 [ x265 ]
