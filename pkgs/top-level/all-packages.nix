@@ -5210,6 +5210,10 @@ with pkgs;
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
 
+  hyprpolkitagent = callPackage ../by-name/hy/hyprpolkitagent/package.nix {
+    stdenv = gcc14Stdenv;
+  };
+
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
   hyprlandPlugins = recurseIntoAttrs (callPackage ../applications/window-managers/hyprwm/hyprland-plugins { });
