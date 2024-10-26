@@ -13,9 +13,7 @@
 , lua53Packages
 , perlPackages
 , gtk3
-, Carbon
-, Cocoa
-, IOKit
+, apple-sdk_11
 }:
 
 stdenv.mkDerivation rec {
@@ -36,13 +34,17 @@ stdenv.mkDerivation rec {
     ++ (with lua53Packages; [ lua busted ])
     ++ (with perlPackages; [ perl TemplateToolkit ])
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
     "BOTAN_PKG=botan-3"
     "CXXSTD=-std=c++20"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-f Makefile.osx" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   enableParallelBuilding = true;
 
