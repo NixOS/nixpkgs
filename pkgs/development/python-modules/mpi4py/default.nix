@@ -5,7 +5,6 @@
   cython,
   setuptools,
   mpi,
-  openssh,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    openssh
     mpiCheckPhaseHook
   ];
   # Most tests pass, (besides `test_spawn.py`), but when reaching ~80% tests
