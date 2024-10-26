@@ -466,6 +466,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  cope = callPackage ../by-name/co/cope/package.nix {
+    perl = perl538;
+    perlPackages = perl538Packages;
+  };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
@@ -14495,8 +14500,6 @@ with pkgs;
 
   flasm = callPackage ../development/compilers/flasm { };
 
-  flyctl = callPackage ../development/web/flyctl { };
-
   fluidd = callPackage ../applications/misc/fluidd { };
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
@@ -14765,6 +14768,7 @@ with pkgs;
 
   gnat12Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat12; });
   gnat13Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat13; });
+  gnat14Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat14; });
   gnatPackages   = gnat12Packages;
 
   inherit (gnatPackages)
@@ -17883,8 +17887,6 @@ with pkgs;
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   lemon = callPackage ../development/tools/parsing/lemon { };
-
-  lenmus = callPackage ../applications/misc/lenmus { };
 
   libtool = libtool_2;
 
@@ -37627,8 +37629,6 @@ with pkgs;
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
-  pwncat = python3Packages.callPackage ../tools/security/pwncat { };
-
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   putty = callPackage ../applications/networking/remote/putty {
@@ -38139,8 +38139,6 @@ with pkgs;
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
-
-  xortool = python3Packages.callPackage ../tools/security/xortool { };
 
   xorex = callPackage ../tools/security/xorex { };
 

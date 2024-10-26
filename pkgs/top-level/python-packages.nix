@@ -10374,6 +10374,8 @@ self: super: with self; {
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
+  pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
+
   pytlv = callPackage ../development/python-modules/pytlv { };
 
   pywebcopy = callPackage ../development/python-modules/pywebcopy { };
