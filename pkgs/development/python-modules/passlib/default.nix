@@ -8,6 +8,7 @@
   pytestCheckHook,
   pythonOlder,
   pytest-xdist,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-3v1Q9ytlxUAqssVzgwppeOXyAq0NmEeTyN3ixBUuvgQ";
   };
+
+  dependencies = [ setuptools ];
 
   optional-dependencies = {
     argon2 = [ argon2-cffi ];
