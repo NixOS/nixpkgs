@@ -22147,6 +22147,21 @@ with self; {
     };
   };
 
+  ReturnMultiLevel = buildPerlPackage {
+    pname = "Return-MultiLevel";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Return-MultiLevel-0.08.tar.gz";
+      hash = "sha256-UbGu8wxcQAn2QCZ6CFiSEuh9zRAYAPDSD5xjXJ/+iKE=";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Return::MultiLevel";
+      description = "Return across multiple call levels";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ReturnValue = buildPerlPackage {
     pname = "Return-Value";
     version = "1.666005";
