@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cmake,
   fetchFromGitHub,
@@ -23,13 +24,17 @@
   scipy,
   huggingface-hub,
 }:
-
-buildPythonPackage rec {
-  pname = "llama-cpp-python";
+let
   version = "0.3.1";
+in
+buildPythonPackage {
+  pname = "llama-cpp-python";
+  inherit version;
   pyproject = true;
 
   disabled = pythonOlder "3.7";
+
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   src = fetchFromGitHub {
     owner = "abetlen";
