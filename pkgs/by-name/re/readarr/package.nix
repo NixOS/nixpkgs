@@ -41,11 +41,11 @@ in stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.readarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet/BitTorrent ebook downloader";
     homepage = "https://readarr.com";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.jocelynthode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ jocelynthode devusb ];
     mainProgram = "Readarr";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
