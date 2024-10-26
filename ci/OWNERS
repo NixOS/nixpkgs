@@ -11,13 +11,13 @@
 # - There is no need for user/team listed here to have write access.
 # - No reviews will be requested for PRs that target the wrong base branch.
 #
-# Processing of this file is implemented in workflows/codeowners.yml
+# Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
-/.github/workflows/codeowners.yml @infinisil
+/.github/workflows/codeowners-v2.yml @infinisil
 /ci/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
 
