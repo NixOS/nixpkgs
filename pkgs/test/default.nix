@@ -47,31 +47,21 @@ with pkgs;
       builtGCC =
         let
           inherit (lib) filterAttrs;
-          sets = lib.pipe gccTests ([
+          sets = lib.pipe gccTests [
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
             (filterAttrs (n: _: n != "gccMultiStdenv"))
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            # fails with things like
-            # ld: warning: ld: warning: object file (trunctfsf2_s.o) was built for newer macOS version (11.0) than being linked (10.5)
-            # ld: warning: ld: warning: could not create compact unwind for ___fixunstfdi: register 20 saved somewhere other than in frame
-            (filterAttrs (n: _: n != "gcc11Stdenv"))
-          ]);
+          ];
         in
         toJSON sets;
 
       builtLLVM =
         let
           inherit (lib) filterAttrs;
-          sets = lib.pipe llvmTests ([
+          sets = lib.pipe llvmTests [
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
-
-            # libcxxStdenv broken
-            # fix in https://github.com/NixOS/nixpkgs/pull/216273
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_9"))
-          ]);
+          ];
         in
         toJSON sets;
         buildCommand = ''
