@@ -25,7 +25,6 @@ in
       type = types.package;
       default = pkgs.linuxPackages_latest.usbip;
       description = "The kernel module package to install.";
-      example = config.boot.kernelPackages.usbip;
     };
     devices = mkOption {
       type = types.listOf device;
