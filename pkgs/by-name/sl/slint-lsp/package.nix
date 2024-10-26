@@ -25,14 +25,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
-  version = "1.5.1";
+  version = "1.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-wqAcHBHWtYavAakHLhHHCI+Yercgdtzo1EAOilsZOK0=";
+    hash = "sha256-Shgcjr0mlUNAobMAarZ7dFnXgPGzBHXs2KnUDT/8I2A=";
   };
 
-  cargoHash = "sha256-XjVXhXoGEhxWc+LZa0EsPiw3Gq2pg03YjKONTptSQvA=";
+  cargoHash = "sha256-wyzrFg3hwsJ7SV8KGLKo+gNHzLFpnMx9/jgMalGkufY=";
 
   nativeBuildInputs = [ cmake pkg-config fontconfig ];
   buildInputs = rpathLibs ++ [ xorg.libxcb.dev ]
@@ -45,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     libiconv
     OpenGL
   ];
+
+  # Tests requires `i_slint_backend_testing` which is only a dev dependency
+  doCheck = false;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux  ''
     patchelf --set-rpath ${lib.makeLibraryPath rpathLibs} $out/bin/slint-lsp
