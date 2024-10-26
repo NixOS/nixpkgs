@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, libiconv }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "stfl";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  buildInputs = [ ncurses libiconv ];
+  buildInputs = [ ncurses ];
 
   # Silence warnings related to use of implicitly declared library functions and implicit ints.
   # TODO: Remove and/or fix with patches the next time this package is updated.
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=implicit-int"
     ];
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
   };
 
   preBuild = ''
