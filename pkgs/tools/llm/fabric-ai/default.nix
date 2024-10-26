@@ -1,4 +1,6 @@
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.buildGoModule {
   pname = "fabric-ai";
@@ -11,7 +13,7 @@ pkgs.buildGoModule {
     sha256 = "sha256-fPg7D7Ar543SjQ/f/HpyBbZx+sVcSbcHezUFY7q/iVs=";
   };
 
-  vendorHash ="sha256-/nQj0T52xT3MGyM7hsPvvncXlZWjbjA2NBCisidgoWY=";
+  vendorHash = "sha256-/nQj0T52xT3MGyM7hsPvvncXlZWjbjA2NBCisidgoWY=";
 
   meta = with pkgs.lib; {
     description = "An open-source framework for augmenting humans using AI";
@@ -21,4 +23,3 @@ pkgs.buildGoModule {
     maintainers = [ "DJE98" ];
   };
 }
-
