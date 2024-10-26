@@ -96,5 +96,5 @@ in
       };
   };
   meta.maintainers = with maintainers; [ cbingman ];
-  meta.buildDocsInSandbox = false
+  meta.buildDocsInSandbox = false;
 }
