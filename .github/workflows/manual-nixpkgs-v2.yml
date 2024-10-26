@@ -1,4 +1,4 @@
-name: "Build NixOS manual"
+name: "Build Nixpkgs manual v2"
 
 permissions:
   contents: read
@@ -8,11 +8,13 @@ on:
     branches:
       - master
     paths:
-      - 'nixos/**'
+      - 'doc/**'
+      - 'lib/**'
+      - 'pkgs/tools/nix/nixdoc/**'
 
 jobs:
-  nixos:
-    name: nixos-manual-build
+  nixpkgs:
+    name: nixpkgs-manual-build
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
@@ -29,5 +31,5 @@ jobs:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - name: Building NixOS manual
-        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux
+      - name: Building Nixpkgs manual
+        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true pkgs/top-level/release.nix -A manual -A manual.tests
