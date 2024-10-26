@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreServices,
   eventlet,
   fetchPypi,
   flaky,
@@ -11,6 +10,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  apple-sdk_11,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-tN+7bEkiG+RTViPqRHSk1u4KnO9KgLIMKNtNhYtk4nA=";
   };
 
-  # force kqueue on x86_64-darwin, because our api version does
-  # not support fsevents
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
-    ./force-kqueue.patch
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   optional-dependencies.watchmedo = [ pyyaml ];
 

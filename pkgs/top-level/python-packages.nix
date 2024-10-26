@@ -17470,9 +17470,7 @@ self: super: with self; {
 
   wat = callPackage ../development/python-modules/wat { };
 
-  watchdog = callPackage ../development/python-modules/watchdog {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
-  };
+  watchdog = callPackage ../development/python-modules/watchdog { };
 
   watchdog-gevent = callPackage ../development/python-modules/watchdog-gevent { };
 
