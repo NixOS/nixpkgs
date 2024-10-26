@@ -220,26 +220,20 @@ stdenvNoCC.mkDerivation (
     # New-style output content requirements.
     inherit (hash_) outputHashAlgo outputHash;
 
+    # Disable TLS verification only when we know the hash and no credentials are
+    # needed to access the resource
     SSL_CERT_FILE =
-      let
-        nixSSLCertFile = builtins.getEnv "NIX_SSL_CERT_FILE";
-      in
-      if nixSSLCertFile != "" then
-        nixSSLCertFile
-      else if
+      if
         (
           hash_.outputHash == ""
           || hash_.outputHash == lib.fakeSha256
           || hash_.outputHash == lib.fakeSha512
           || hash_.outputHash == lib.fakeHash
-          # Make sure we always enforce TLS verification when credentials
-          # are needed to access the resource
           || netrcPhase != null
         )
       then
         "${cacert}/etc/ssl/certs/ca-bundle.crt"
       else
-        # Fallback to stdenv default, see pkgs/stdenv/generic/setup.sh
         "/no-cert-file.crt";
 
     outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
