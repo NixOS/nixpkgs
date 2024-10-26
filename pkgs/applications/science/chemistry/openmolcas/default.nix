@@ -15,6 +15,7 @@
 , gsl
 , boost180
 , autoPatchelfHook
+, enableQcmaquis ? false
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
 , enableMpi ? false
@@ -24,14 +25,15 @@
 
 assert blas-ilp64.isILP64;
 assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
+assert enableQcmaquis -> lib.elem blas-ilp64.passthru.implementation "mkl";
 
 let
   python = python3.withPackages (ps: with ps; [ six pyparsing numpy h5py ]);
   qcmaquisSrc = fetchFromGitHub {
     owner = "qcscine";
     repo = "qcmaquis";
-    rev = "release-3.1.1"; # Must match tag in cmake/custom/qcmaquis.cmake
-    hash = "sha256-diLDWj/Om6EHrVp+Hd24jsN6R9vV2vRl0y9gqyRWhkI=";
+    rev = "release-3.1.4"; # Must match tag in cmake/custom/qcmaquis.cmake
+    hash = "sha256-vhC5k+91IPFxdCi5oYt1NtF9W08RxonJjPpA0ls4I+o=";
   };
   nevtp2Src = fetchFromGitHub {
     owner = "qcscine";
@@ -43,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "24.06";
+  version = "24.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${version}";
-    hash = "sha256-/y6vEvA1Zf+p7Z0WpcN4P5voLN8MmfbKz1FuthgVQp0=";
+    hash = "sha256-LXxr/xqBHG7a0rOBrb8IMZ4IjZak3NsBw40Qf+z1fic=";
   };
 
   patches = [
@@ -104,8 +106,8 @@ stdenv.mkDerivation rec {
     "-DHDF5=ON"
     "-DFDE=ON"
     "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
-    "-DDMRG=ON"
-    "-DNEVPT2=ON"
+    (lib.strings.cmakeBool "DMRG" enableQcmaquis)
+    (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
     "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
