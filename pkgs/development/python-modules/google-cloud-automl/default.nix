@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.13.5";
+  version = "2.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_automl";
     inherit version;
-    hash = "sha256-ypmK9Gq7HF2ozS6OFbAJZDPiW8sngucN86b5FHLuiTE=";
+    hash = "sha256-CpVwnxU1DAdU7VGY1LjkOlv5ki2ZxlA0sWd9vsR5rkI=";
   };
 
   build-system = [ setuptools ];
