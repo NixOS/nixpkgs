@@ -40,7 +40,7 @@ platform_sources () {
 
         [[ -z "$url" || -z "$hash" ]] && continue
 
-        hash=$(nix-hash --to-sri --type sha512 "$hash")
+        hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
 
         echo "      $rid = {
         url = \"$url\";
@@ -63,7 +63,7 @@ generate_package_list() {
             echo "Failed to fetch hash for $url" >&2
             exit 1
         fi
-        hash=$(nix-hash --to-sri --type sha256 "$hash")
+        hash=$(nix hash convert --to sri --hash-algo sha256 "$hash")
 
         echo "$indent(fetchNupkg { pname = \"${pkg}\"; version = \"${version}\"; hash = \"${hash}\"; })"
     done
