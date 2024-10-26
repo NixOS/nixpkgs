@@ -21,12 +21,19 @@
 , runCommand
 , rustc
 , rustPlatform
+, stdenv
 }:
 
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_32;
+
+  bitwardenDesktopNativeArch = {
+    aarch64 = "arm64";
+    x86_64  = "x64";
+  }.${stdenv.hostPlatform.parsed.cpu.name} or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
+
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
   version = "2024.9.0";
@@ -122,7 +129,7 @@ in buildNpmPackage rec {
     pushd apps/desktop
 
     # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-x64-musl.node
+    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-${bitwardenDesktopNativeArch}-musl.node
 
     npm exec electron-builder -- \
       --dir \
@@ -163,7 +170,7 @@ in buildNpmPackage rec {
 
     mkdir $out
 
-    pushd apps/desktop/dist/linux-unpacked
+    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
@@ -208,7 +215,7 @@ in buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "bitwarden";
   };
 }
