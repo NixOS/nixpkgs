@@ -1,4 +1,4 @@
-name: Codeowners
+name: Codeowners v2
 
 # This workflow depends on two GitHub Apps with the following permissions:
 # - For checking code owners:

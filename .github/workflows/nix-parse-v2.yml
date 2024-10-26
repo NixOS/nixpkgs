@@ -1,4 +1,4 @@
-name: "Checking EditorConfig"
+name: "Check whether nix files are parseable v2"
 
 permissions:
   pull-requests: read
@@ -12,7 +12,7 @@ on:
 
 jobs:
   tests:
-    name: editorconfig-check
+    name: nix-files-parseable-check
     runs-on: ubuntu-latest
     if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
@@ -22,23 +22,24 @@ jobs:
       run: |
         gh api \
           repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
-          | jq '.[] | select(.status != "removed") | .filename' \
+          | jq --raw-output '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
           > "$HOME/changed_files"
-    - name: print list of changed files
-      run: |
-        cat "$HOME/changed_files"
+        if [[ -s "$HOME/changed_files" ]]; then
+          echo "CHANGED_FILES=$HOME/changed_files" > "$GITHUB_ENV"
+        fi
     - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      if: ${{ env.CHANGED_FILES && env.CHANGED_FILES != '' }}
     - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
       with:
-        # nixpkgs commit is pinned so that it doesn't break
-        # editorconfig-checker 2.4.0
-        nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
-    - name: Checking EditorConfig
+        nix_path: nixpkgs=channel:nixpkgs-unstable
+    - name: Parse all changed or added nix files
       run: |
-        cat "$HOME/changed_files" | nix-shell -p editorconfig-checker --run 'xargs -r editorconfig-checker -disable-indent-size'
-    - if: ${{ failure() }}
-      run: |
-        echo "::error :: Hey! It looks like your changes don't follow our editorconfig settings. Read https://editorconfig.org/#download to configure your editor so you never see this error again."
+        ret=0
+        while IFS= read -r file; do
+          out="$(nix-instantiate --parse "$file")" || { echo "$out" && ret=1; }
+        done < "$HOME/changed_files"
+        exit "$ret"
+      if: ${{ env.CHANGED_FILES && env.CHANGED_FILES != '' }}
