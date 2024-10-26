@@ -7,7 +7,7 @@
 buildGoModule rec {
   pname = "molly-brown";
   version = "unstable-2023-02-10";
-  
+
   src = fetchFromGitea {
     domain = "tildegit.org";
     owner = "solderpunk";
@@ -17,13 +17,12 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-czfHnXS9tf5vQQNXhWH7DStmhsorSc4Di/yZuv4LHRk=";
-  
+
   ldflags = [
     "-s"  # Omit symbol table and debug information
     "-w"  # Omit DWARF symbol table
   ];
 
-  # Ensure tests are run during build
   doCheck = true;
 
   passthru = {
