@@ -13679,6 +13679,8 @@ self: super: with self; {
 
   retry-decorator = callPackage ../development/python-modules/retry-decorator { };
 
+  retry2 = callPackage ../development/python-modules/retry2 { };
+
   retrying = callPackage ../development/python-modules/retrying { };
 
   returns = callPackage ../development/python-modules/returns { };
@@ -17944,6 +17946,8 @@ self: super: with self; {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zetup = callPackage ../development/python-modules/zetup { };
+
+  zeversolar = callPackage ../development/python-modules/zeversolar { };
 
   zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
