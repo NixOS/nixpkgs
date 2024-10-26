@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.24.2";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-p6HY1hibUUQAnN5mS1kFjiNC1/PG7dyrYKkR11SIEpk=";
   };
   patches = [
     # Fix build errors from deprecated QByteArray::count()
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-yZlXMJbFJCZ+MM7F06B2kCR0Ufkv0NhJz0AG7xrQ7Ms=";
   };
 
   buildInputs = [
