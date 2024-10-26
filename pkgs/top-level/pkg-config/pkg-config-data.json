@@ -824,7 +824,7 @@
     },
     "wayland-scanner": {
       "attrPath": [
-        "wayland"
+        "wayland-scanner"
       ]
     },
     "wayland-server": {
