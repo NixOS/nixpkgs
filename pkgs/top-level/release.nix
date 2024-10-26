@@ -30,12 +30,8 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
 , nixpkgsArgs ? { config = {
     allowUnfree = false;
+    allowInsecure = true;
     inHydra = true;
-    # Exceptional unsafe packages that we still build and distribute,
-    # so users choosing to allow don't have to rebuild them every time.
-    permittedInsecurePackages = [
-      "olm-3.2.16" # see PR #347899
-    ];
   }; }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
