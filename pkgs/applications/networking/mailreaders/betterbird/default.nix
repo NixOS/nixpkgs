@@ -104,6 +104,7 @@ in ((buildMozillaMach {
     mainProgram = "betterbird";
     maintainers = with maintainers; [ SuperSandro2000 ];
     inherit (thunderbird-unwrapped.meta) platforms badPlatforms broken license;
+    knownVulnerabilities = [ "CVE-2024-4367" ];
   };
 }).override {
   crashreporterSupport = false; # not supported
