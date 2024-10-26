@@ -25096,6 +25096,20 @@ with self; {
     };
   };
 
+  TestExit = buildPerlPackage {
+    pname = "Test-Exit";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Test-Exit-0.11.tar.gz";
+      hash = "sha256-+9qS034EgdGO68geSNAlIotXGExZstWm9r34cELox7I=";
+    };
+    propagatedBuildInputs = [ ReturnMultiLevel ];
+    meta = {
+      description = "Test whether code exits without terminating testing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestExpect = buildPerlPackage {
     pname = "Test-Expect";
     version = "0.34";
