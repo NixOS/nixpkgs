@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  hostPlatform,
   # See the official readme for a list of optional flags:
   # https://github.com/cyring/CoreFreq/blob/master/README.md
   extraFlags ? [ ],
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  env.NIX_CFLAGS_COMPILE = "-I${src}/${hostPlatform.qemuArch}";
+  env.NIX_CFLAGS_COMPILE = "-I${src}/${stdenv.hostPlatform.qemuArch}";
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
