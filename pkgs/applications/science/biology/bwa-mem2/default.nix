@@ -34,6 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     else if stdenv.hostPlatform.avx512Support then "arch=avx512"
     else "arch=sse41")
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=register"
+      "-Wno-error=implicit-function-declaration"
+    ];
+  };
+
   enableParallelBuilding = true;
   installPhase = ''
     runHook preInstall
