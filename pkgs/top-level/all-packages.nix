@@ -37901,7 +37901,7 @@ with pkgs;
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vips = callPackage ../tools/graphics/vips {
+  vips = callPackage ../by-name/vi/vips/package.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
 
