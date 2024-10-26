@@ -96,16 +96,7 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
     systemd.services.swapspace = {
-      after = [
-        "local-fs.target"
-        "swap.target"
-      ];
-      requires = [
-        "local-fs.target"
-        "swap.target"
-      ];
       wantedBy = [ "multi-user.target" ];
-      description = "Swapspace, a dynamic swap space manager";
       serviceConfig = {
         ExecStart = [
           ""
@@ -113,7 +104,11 @@ in
         ];
       };
     };
-    systemd.tmpfiles.rules = [ "d '${cfg.settings.swappath}' 0700 - - - - " ];
+    systemd.tmpfiles.settings.swapspace = {
+      ${cfg.settings.swappath}.d = {
+        mode = "0700";
+      };
+    };
   };
 
   meta = {
