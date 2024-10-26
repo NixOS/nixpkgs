@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.17.0";
+  version = "1.17.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xKHTBo2AirxDXe/CLSqo++3AgxP4pVkGTNdgS5CCZ3c=";
+    hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
   };
 
   propagatedBuildInputs = [ prometheus-client ];
