@@ -149,6 +149,7 @@ rustPlatform.buildRustPackage {
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
+    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
