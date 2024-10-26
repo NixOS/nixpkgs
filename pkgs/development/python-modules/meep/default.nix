@@ -122,7 +122,6 @@ buildPythonPackage rec {
     (calls `sim.run()`), as only then MPI will be initialised and MPI linking
     errors can be caught.
   */
-  doCheck = true;
   nativeCheckInputs = [
     mpiCheckPhaseHook
     openssh
