@@ -23,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-ibOCqy7krIVC7N75SwEyUII3Tknb60nwA+zGbjOENv4=";
   };
 
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e "/--cov/d" \
-      -e "/--no-cov/d"
-  '';
-
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     aiohttp
