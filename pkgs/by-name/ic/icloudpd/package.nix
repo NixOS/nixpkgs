@@ -21,34 +21,35 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3Packages; [
-    wheel
-    setuptools
-    requests
-    schema
-    click
-    python-dateutil
-    tqdm
-    piexif
-    urllib3
-    six
-    tzlocal
-    pytz
+  dependencies = with python3Packages; [
     certifi
+    click
+    flask
     keyring
     keyrings-alt
-    typing-extensions
-    flask
-    waitress
+    piexif
+    python-dateutil
+    pytz
+    requests
+    schema
+    six
     srp
+    tqdm
+    typing-extensions
+    tzlocal
+    urllib3
+    waitress
+    wheel
   ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    mock
     freezegun
-    vcrpy
+    mock
     pytest-timeout
+    pytestCheckHook
+    vcrpy
   ];
 
   disabledTests = [
