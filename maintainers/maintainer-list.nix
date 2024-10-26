@@ -17676,6 +17676,12 @@
     githubId = 12017109;
     name = "Rabindra Dhakal";
   };
+  qbisi = {
+    name = "qbisicwate";
+    email = "qbisicwate@gmail.com";
+    github = "qbisi";
+    githubId = 84267544;
+  };
   qbit = {
     name = "Aaron Bieber";
     email = "aaron@bolddaemon.com";
