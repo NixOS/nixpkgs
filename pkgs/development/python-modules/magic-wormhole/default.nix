@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -34,6 +35,27 @@
   pytestCheckHook,
 }:
 
+let
+  # magic-wormhole relies on the internal API of
+  # magic-wormhole-transit-relay < 0.3.0 for testing.
+  magic-wormhole-transit-relay_0_2_1 =
+    magic-wormhole-transit-relay.overridePythonAttrs
+      (oldAttrs: rec {
+        version = "0.2.1";
+
+        src = fetchPypi {
+          pname = "magic-wormhole-transit-relay";
+          inherit version;
+          hash = "sha256-y0gBtGiQ6v+XKG4OP+xi0dUv/jF9FACDtjNqH7To+l4=";
+        };
+
+        postPatch = "";
+
+        postCheck = "";
+
+        meta.broken = pythonAtLeast "3.12";
+      });
+in
 buildPythonPackage rec {
   pname = "magic-wormhole";
   version = "0.16.0";
@@ -81,8 +103,12 @@ buildPythonPackage rec {
   nativeCheckInputs =
     # For Python 3.12, remove magic-wormhole-mailbox-server and magic-wormhole-transit-relay from test dependencies,
     # which are not yet supported with this version.
-    lib.optionals (!magic-wormhole-mailbox-server.meta.broken) [ magic-wormhole-mailbox-server ]
-    ++ lib.optionals (!magic-wormhole-transit-relay.meta.broken) [ magic-wormhole-transit-relay ]
+    lib.optionals
+      (!magic-wormhole-mailbox-server.meta.broken && !magic-wormhole-transit-relay_0_2_1.meta.broken)
+      [
+        magic-wormhole-mailbox-server
+        magic-wormhole-transit-relay_0_2_1
+      ]
     ++ [
       mock
       pytestCheckHook
@@ -96,15 +122,15 @@ buildPythonPackage rec {
     # For Python 3.12, remove the tests depending on magic-wormhole-mailbox-server and magic-wormhole-transit-relay,
     # which are not yet supported with this version.
     lib.optionals
-      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay.meta.broken)
+      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay_0_2_1.meta.broken)
       [
         "src/wormhole/test/dilate/test_full.py"
         "src/wormhole/test/test_args.py"
         "src/wormhole/test/test_cli.py"
+        "src/wormhole/test/test_transit.py"
         "src/wormhole/test/test_wormhole.py"
         "src/wormhole/test/test_xfer_util.py"
-      ]
-    ++ lib.optionals magic-wormhole-transit-relay.meta.broken [ "src/wormhole/test/test_transit.py" ];
+      ];
 
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
