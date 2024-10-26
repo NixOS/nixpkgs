@@ -18,7 +18,6 @@
   harminv,
   libctl,
   libGDSII,
-  openssh,
   guile,
   python,
   numpy,
@@ -125,7 +124,6 @@ buildPythonPackage rec {
   doCheck = true;
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
   ];
   checkPhase = ''
     runHook preCheck
