@@ -284,13 +284,6 @@ let
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
   );
-
-  darwinMinVersion = optionalString targetPlatform.isDarwin (
-    targetPlatform.darwinMinVersion
-  );
-
-  darwinMinVersionVariable = optionalString targetPlatform.isDarwin
-    targetPlatform.darwinMinVersionVariable;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -707,6 +700,7 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
     ''
 
     + optionalString cc.langAda or false ''
@@ -751,8 +745,11 @@ stdenvNoCC.mkDerivation {
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
-    inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+    inherit darwinPlatformForCC;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+    # These will become empty strings when not targeting Darwin.
+    inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
   } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
     fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
