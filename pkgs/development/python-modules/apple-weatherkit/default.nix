@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "apple-weatherkit";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -23,9 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-JvN8GmlTxz9VGttIFVG6q//c+BhP2pt1tBOhnJhNwJg=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiohttp-retry
     pyjwt
