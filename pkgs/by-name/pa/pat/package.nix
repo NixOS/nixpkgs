@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, libax25
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  libax25,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,11 +20,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-m5yb6+TfRApw0ZROx9ZA3RPiKV+1DHo/73CNQpIfMlU=";
 
-  ldflags = [ "-s" "-w" ];
-
-  nativeBuildInputs = [
-    installShellFiles
+  ldflags = [
+    "-s"
+    "-w"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux [ libax25 ];
 
@@ -39,7 +41,10 @@ buildGoModule rec {
     description = "Pat is a cross platform Winlink client written in Go";
     homepage = "https://getpat.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotemup sarcasticadmin ];
+    maintainers = with maintainers; [
+      dotemup
+      sarcasticadmin
+    ];
     platforms = platforms.unix;
     mainProgram = "pat";
   };
