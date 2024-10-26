@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.27";
+  version = "7.2.30";
 
   src = fetchurl {
-    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
-    sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
+    url = "https://github.com/otfried/ipe/archive/refs/tags/v${version}.tar.gz";
+    sha256 = "sha256-kihlDtxIrV3uq12SJy4kLpBvkNKSyQrxMqPyDZNUc1o=";
   };
 
   nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
