@@ -24,6 +24,9 @@ on:
   pull_request_target:
     types: [opened, ready_for_review, synchronize, reopened, edited]
 
+# We don't need any default GitHub token
+permissions: {}
+
 env:
   OWNERS_FILE: ci/OWNERS
   # Don't do anything on draft PRs

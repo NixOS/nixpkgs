@@ -1,6 +1,7 @@
 name: "Build NixOS manual"
 
-permissions: read-all
+permissions:
+  contents: read
 
 on:
   pull_request_target:

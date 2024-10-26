@@ -1,6 +1,8 @@
 name: "Checking EditorConfig"
 
-permissions: read-all
+permissions:
+  pull-requests: read
+  contents: read
 
 on:
   # avoids approving first time contributors
