@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow-translate";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "crow-translate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hdrhxbv44DlxoF1JU1d2auP/vR8a3IJI+hN7PhdPMaY=";
+    hash = "sha256-zL+Ucw6rzIoEaBHi/uqKQB0cnR6aAcF8MPOG3hwK3iA=";
     fetchSubmodules = true;
   };
 
