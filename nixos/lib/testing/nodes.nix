@@ -13,7 +13,7 @@ let
     types
     ;
 
-  inherit (hostPkgs) hostPlatform;
+  inherit (hostPkgs.stdenv) hostPlatform;
 
   guestSystem =
     if hostPlatform.isLinux
