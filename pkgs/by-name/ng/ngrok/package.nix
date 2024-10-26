@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  testers,
 }:
 
 let
@@ -28,7 +29,7 @@ let
   inherit (versionInfo) version sha256 url;
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngrok";
   inherit version;
 
@@ -55,7 +56,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   # Stripping causes SEGFAULT on darwin
   dontStrip = stdenv.hostPlatform.isDarwin;
@@ -74,4 +78,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "ngrok";
   };
-}
+})
