@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, installShellFiles, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  installShellFiles,
+  util-linux,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swapspace";
@@ -34,6 +42,10 @@ stdenv.mkDerivation rec {
     installManPage doc/swapspace.8
     install --mode=444 -D 'swapspace.service' "$out/etc/systemd/system/swapspace.service"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) swapspace;
+  };
 
   meta = with lib; {
     description = "Dynamic swap manager for Linux";
