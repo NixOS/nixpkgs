@@ -3,25 +3,25 @@
     "alpha": {
       "experimental": {
         "candidateHashFilenames": [
-          "factorio_linux_2.0.10.tar.xz"
+          "factorio_linux_2.0.11.tar.xz"
         ],
-        "name": "factorio_alpha_x64-2.0.10.tar.xz",
+        "name": "factorio_alpha_x64-2.0.11.tar.xz",
         "needsAuth": true,
-        "sha256": "07508fc5112f95ef5d5afedea66863ea326e039bd872b772b934ed08545c399b",
+        "sha256": "84cc76d9197c274ee73f05f1ceb1895c7c2423ccc3452ac0bdf73cdbfcd4f44e",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/alpha/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/alpha/linux64",
+        "version": "2.0.11"
       },
       "stable": {
         "candidateHashFilenames": [
-          "factorio_linux_2.0.10.tar.xz"
+          "factorio_linux_2.0.11.tar.xz"
         ],
-        "name": "factorio_alpha_x64-2.0.10.tar.xz",
+        "name": "factorio_alpha_x64-2.0.11.tar.xz",
         "needsAuth": true,
-        "sha256": "07508fc5112f95ef5d5afedea66863ea326e039bd872b772b934ed08545c399b",
+        "sha256": "84cc76d9197c274ee73f05f1ceb1895c7c2423ccc3452ac0bdf73cdbfcd4f44e",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/alpha/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/alpha/linux64",
+        "version": "2.0.11"
       }
     },
     "demo": {
@@ -51,51 +51,51 @@
     "expansion": {
       "experimental": {
         "candidateHashFilenames": [
-          "factorio-space-age_linux_2.0.10.tar.xz"
+          "factorio-space-age_linux_2.0.11.tar.xz"
         ],
-        "name": "factorio_expansion_x64-2.0.10.tar.xz",
+        "name": "factorio_expansion_x64-2.0.11.tar.xz",
         "needsAuth": true,
-        "sha256": "f7d346578c812314be8b72fbf6fd291c53d23ecc2dc6556a8948d26b3b95d71e",
+        "sha256": "6d7754718bd980b27469e2298655abfe3d6ad7d6bd22b765f75bbf23770ab179",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/expansion/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/expansion/linux64",
+        "version": "2.0.11"
       },
       "stable": {
         "candidateHashFilenames": [
-          "factorio-space-age_linux_2.0.10.tar.xz"
+          "factorio-space-age_linux_2.0.11.tar.xz"
         ],
-        "name": "factorio_expansion_x64-2.0.10.tar.xz",
+        "name": "factorio_expansion_x64-2.0.11.tar.xz",
         "needsAuth": true,
-        "sha256": "f7d346578c812314be8b72fbf6fd291c53d23ecc2dc6556a8948d26b3b95d71e",
+        "sha256": "6d7754718bd980b27469e2298655abfe3d6ad7d6bd22b765f75bbf23770ab179",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/expansion/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/expansion/linux64",
+        "version": "2.0.11"
       }
     },
     "headless": {
       "experimental": {
         "candidateHashFilenames": [
-          "factorio-headless_linux_2.0.10.tar.xz",
-          "factorio_headless_x64_2.0.10.tar.xz"
+          "factorio-headless_linux_2.0.11.tar.xz",
+          "factorio_headless_x64_2.0.11.tar.xz"
         ],
-        "name": "factorio_headless_x64-2.0.10.tar.xz",
+        "name": "factorio_headless_x64-2.0.11.tar.xz",
         "needsAuth": false,
-        "sha256": "2d7dd212fa6f715218a5e33bad7d593af8998fa7bf7ce727343159ee1f8c23f4",
+        "sha256": "7848f2d8b2b32a0efeb8a401657459486eda9b8072c221d0f9c0b450290da0d6",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/headless/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/headless/linux64",
+        "version": "2.0.11"
       },
       "stable": {
         "candidateHashFilenames": [
-          "factorio-headless_linux_2.0.10.tar.xz",
-          "factorio_headless_x64_2.0.10.tar.xz"
+          "factorio-headless_linux_2.0.11.tar.xz",
+          "factorio_headless_x64_2.0.11.tar.xz"
         ],
-        "name": "factorio_headless_x64-2.0.10.tar.xz",
+        "name": "factorio_headless_x64-2.0.11.tar.xz",
         "needsAuth": false,
-        "sha256": "2d7dd212fa6f715218a5e33bad7d593af8998fa7bf7ce727343159ee1f8c23f4",
+        "sha256": "7848f2d8b2b32a0efeb8a401657459486eda9b8072c221d0f9c0b450290da0d6",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/2.0.10/headless/linux64",
-        "version": "2.0.10"
+        "url": "https://factorio.com/get-download/2.0.11/headless/linux64",
+        "version": "2.0.11"
       }
     }
   }

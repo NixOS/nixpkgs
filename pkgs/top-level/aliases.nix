@@ -204,6 +204,7 @@ mapAliases {
   clwrapperFunction = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   CoinMP = coinmp; # Added 2024-06-12
   collada-dom = opencollada; # added 2024-02-21
+  colorpicker = throw "'colorpicker' has been removed due to lack of maintenance upstream. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-10-19
   coriander = throw "'coriander' has been removed because it depends on GNOME 2 libraries"; # Added 2024-06-27
   corretto19 = throw "Corretto 19 was removed as it has reached its end of life"; # Added 2024-08-01
   cosmic-tasks = tasks; # Added 2024-07-04
@@ -285,6 +286,7 @@ mapAliases {
 
   EBTKS = ebtks; # Added 2024-01-21
   eask = eask-cli; # Added 2024-09-05
+  eboard = throw "'eboard' has been removed due to lack of maintenance upstream. Consider using 'kdePackages.knights' instead"; # Added 2024-10-19
   ec2_ami_tools = throw "'ec2_ami_tools' has been renamed to/replaced by 'ec2-ami-tools'"; # Converted to throw 2024-10-17
   ec2_api_tools = throw "'ec2_api_tools' has been renamed to/replaced by 'ec2-api-tools'"; # Converted to throw 2024-10-17
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
@@ -308,6 +310,7 @@ mapAliases {
 
   EmptyEpsilon = empty-epsilon; # Added 2024-07-14
   enyo-doom = enyo-launcher; # Added 2022-09-09
+  epdfview = throw "'epdfview' has been removed due to lack of maintenance upstream. Consider using 'qpdfview' instead"; # Added 2024-10-19
   epoxy = throw "'epoxy' has been renamed to/replaced by 'libepoxy'"; # Converted to throw 2024-10-17
 
   erlang_27-rc3 = throw "erlang_27-rc3 has been removed in favor of erlang_27"; # added 2024-05-20
@@ -475,6 +478,7 @@ mapAliases {
   gringo = clingo; # added 2022-11-27
   grub2_full = grub2; # Added 2022-11-18
   gtetrinet = throw "'gtetrinet' has been removed because it depends on GNOME 2 libraries"; # Added 2024-06-27
+  gtk2fontsel = throw "'gtk2fontsel' has been removed due to lack of maintenance upstream. GTK now has a built-in font chooser so it's no longer needed for newer apps"; # Added 2024-10-19
   gtkcord4 = dissent; # Added 2024-03-10
   gtkperf = throw "'gtkperf' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   guardian-agent = throw "'guardian-agent' has been removed, as it hasn't been maintained upstream in years and accumulated many vulnerabilities"; # Added 2024-06-09
@@ -565,6 +569,7 @@ mapAliases {
   LASzip = laszip; # Added 2024-06-12
   LASzip2 = laszip_2; # Added 2024-06-12
   latinmodern-math = lmmath;
+  leafpad = throw "'leafpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mouspad' instead"; # Added 2024-10-19
   ledger_agent = ledger-agent; # Added 2024-01-07
   lfs = dysk; # Added 2023-07-03
   libAfterImage = throw "'libAfterImage' has been removed from nixpkgs, as it's no longer in development for a long time"; # Added 2024-06-01
@@ -988,6 +993,7 @@ mapAliases {
   quicklispPackagesFor = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesGCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesSBCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
+  qxw = throw "'qxw' has been removed due to lack of maintenance upstream. Consider using 'crosswords' instead"; # Added 2024-10-19
 
   ### R ###
 
@@ -1250,6 +1256,7 @@ mapAliases {
   ### X ###
 
   x509-limbo = throw "'x509-limbo' has been removed from nixpkgs"; # Added 2024-10-22
+  xarchive = throw "'xarchive' has been removed due to lack of maintenance upstream. Consider using 'file-roller' instead"; # Added 2024-10-19
   xbmc-retroarch-advanced-launchers = throw "'xbmc-retroarch-advanced-launchers' has been renamed to/replaced by 'kodi-retroarch-advanced-launchers'"; # Converted to throw 2024-10-17
   xdg_utils = throw "'xdg_utils' has been renamed to/replaced by 'xdg-utils'"; # Converted to throw 2024-10-17
   xen-light = throw "'xen-light' has been renamed to/replaced by 'xen-slim'"; # Added 2024-06-30

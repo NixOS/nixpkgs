@@ -499,8 +499,6 @@ with pkgs;
 
   colorpanes = callPackage ../tools/misc/colorpanes { };
 
-  colorpicker = callPackage ../tools/misc/colorpicker { };
-
   colorstorm = callPackage ../applications/misc/colorstorm { };
 
   comedilib = callPackage ../development/libraries/comedilib {  };
@@ -9568,8 +9566,6 @@ with pkgs;
 
   ldns = callPackage ../development/libraries/ldns { };
 
-  leafpad = callPackage ../applications/editors/leafpad { };
-
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
   leanify = callPackage ../tools/misc/leanify { };
@@ -13631,8 +13627,6 @@ with pkgs;
   vuls = callPackage ../by-name/vu/vuls/package.nix {
     buildGoModule = buildGo123Module;
   };
-
-  xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
 
@@ -28923,8 +28917,6 @@ with pkgs;
 
   eos-installer = callPackage ../applications/misc/eos-installer { };
 
-  epdfview = callPackage ../applications/misc/epdfview { };
-
   epeg = callPackage ../applications/graphics/epeg { };
 
   epgstation = callPackage ../applications/video/epgstation { };
@@ -29735,8 +29727,6 @@ with pkgs;
   gspell = callPackage ../development/libraries/gspell { };
 
   gst123 = callPackage ../applications/audio/gst123 { };
-
-  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   gtklock = callPackage ../tools/wayland/gtklock { };
 
@@ -32114,8 +32104,6 @@ with pkgs;
   qutebrowser-qt5 = callPackage ../applications/networking/browsers/qutebrowser {
     inherit (__splicedPackages.libsForQt5) qtbase qtwebengine wrapQtAppsHook qtwayland;
   };
-
-  qxw = callPackage ../applications/editors/qxw { };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
@@ -34542,8 +34530,6 @@ with pkgs;
   easyrpg-player = callPackage ../games/easyrpg-player {
     inherit (darwin.apple_sdk.frameworks) Foundation AudioUnit AudioToolbox;
   };
-
-  eboard = callPackage ../games/eboard { };
 
   ecwolf = callPackage ../games/ecwolf { };
 

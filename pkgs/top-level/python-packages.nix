@@ -3572,6 +3572,8 @@ self: super: with self; {
 
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
+  django-tinymce = callPackage ../development/python-modules/django-tinymce { };
+
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
@@ -8890,6 +8892,8 @@ self: super: with self; {
   netapp-lib = callPackage ../development/python-modules/netapp-lib { };
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
+
+  netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
