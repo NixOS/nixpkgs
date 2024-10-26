@@ -22,12 +22,12 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "nodeinfo";
     description = "Command line tool to query nodeinfo based on a given domain";
     homepage = "https://codeberg.org/thefederationinfo/nodeinfo-go";
     changelog = "https://codeberg.org/thefederationinfo/nodeinfo-go/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _6543 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers._6543 ];
   };
 }
