@@ -1,4 +1,4 @@
-name: "Build Nixpkgs manual"
+name: "Build Nixpkgs manual v2"
 
 permissions:
   contents: read
