@@ -100,16 +100,6 @@ let
         ];
       });
 
-      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
-        };
-        doCheck = false;
-      });
-
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
@@ -171,15 +161,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.8";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-rvd8n7lKOsWI6HhBIIvexGRHHZhxvVBQoofMmkdc0Lo=";
         };
       });
 
@@ -323,6 +304,7 @@ let
         doCheck = false; # Tests changed a lot for > 3
       });
 
+      # pinned for sigstore
       tuf = super.tuf.overridePythonAttrs rec {
         version = "2.1.0";
         src = fetchFromGitHub {
@@ -408,7 +390,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.10.3";
+  hassVersion = "2024.10.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -426,13 +408,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-kxxa7FI2wIpE3bEifNyjtEHj7rsuImQvxGd6I46ySqM=";
+    hash = "sha256-uaGGt5qCdyFXuEtg20MzmFd4PXkdPP8h4HJBvRV6sz8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-DhDdCvov5/Yf2MnY2veV8W/lYk3LTDzxYpbAsbjxWcg=";
+    hash = "sha256-al45WS8SIgOM2TqGPIptZU7iNMapYUg+fK2MLh68lxs=";
   };
 
   build-system = with python.pkgs; [
