@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nix-update-script
-, testers
-, icloudpd
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  icloudpd,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -79,6 +80,9 @@ python3Packages.buildPythonApplication rec {
     description = "iCloud Photos Downloader";
     license = licenses.mit;
     mainProgram = "icloudpd";
-    maintainers = with maintainers; [ anpin jnsgruk ];
+    maintainers = with maintainers; [
+      anpin
+      jnsgruk
+    ];
   };
 }
