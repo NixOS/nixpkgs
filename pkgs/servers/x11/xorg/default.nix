@@ -1,9 +1,14 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, pixman }:
+{
+  lib,
+  pixman,
+  luit,
+}:
 
 self: with self; {
 
   inherit pixman;
+  inherit luit;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
@@ -1908,26 +1913,6 @@ self: with self; {
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ xorgproto ];
-    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    meta = {
-      pkgConfigModules = [ ];
-      platforms = lib.platforms.unix;
-    };
-  })) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  luit = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
-    pname = "luit";
-    version = "20240910";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "https://invisible-mirror.net/archives/luit/luit-20240910.tgz";
-      sha256 = "1ma978xdmkxm3q3v1cxpwzb4ahd0dgzj7v0ssr9i9bi5zk5pypd1";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
