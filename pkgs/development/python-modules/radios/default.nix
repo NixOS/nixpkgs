@@ -15,6 +15,7 @@
   yarl,
   aresponses,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -34,17 +35,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  pythonRelaxDeps = [ "pycountry" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiodns
     aiohttp
     awesomeversion
@@ -59,6 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
