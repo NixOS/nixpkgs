@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "apple-weatherkit";
-  version = "1.1.2";
+  version = "1.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tjhorner";
     repo = "python-weatherkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w3KinicaF01I6fIidI7XYHpB8eq52RTUw/BMLrx6Grk=";
+    hash = "sha256-JvN8GmlTxz9VGttIFVG6q//c+BhP2pt1tBOhnJhNwJg=";
   };
 
   nativeBuildInputs = [ poetry-core ];
