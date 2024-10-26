@@ -23,8 +23,9 @@ in
     enable = mkEnableOption "usbip server";
     kernelPackage = mkOption {
       type = types.package;
-      default = config.boot.kernelPackages.usbip;
+      default = pkgs.linuxPackages_latest.usbip;
       description = "The kernel module package to install.";
+      example = config.boot.kernelPackages.usbip;
     };
     devices = mkOption {
       type = types.listOf device;
@@ -66,15 +67,17 @@ in
             script = ''
               set +e
               devices=$(${cfg.kernelPackage}/bin/usbip list -l | grep -E "^.*- busid.*(${dev.vendorid}:${dev.productid})" )
-              output=$(${cfg.kernelPackage}/bin/usbip -d bind -b $(echo $devices | ${pkgs.gawk}/bin/awk '{ print $3 }') 2>&1)
-              code=$?
+              echo $devices | while read device; do
+                output=$(${cfg.kernelPackage}/bin/usbip -d bind -b $(echo $device | ${pkgs.gawk}/bin/awk '{ print $3 }') 2>&1)
+                code=$?
 
-              echo $output
-              if [[ $output =~ "already bound" ]]; then
-                exit 0
-              else
-                exit $code
-              fi
+                echo $output
+                if [[ $output =~ "already bound" ]] || [ $code -eq 0 ]; then
+                  continue
+                else
+                  exit $code
+                fi
+              done
             '';
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -85,7 +88,10 @@ in
       // {
         usbipd = {
           wantedBy = [ "multi-user.target" ];
-          serviceConfig.ExecStart = "${cfg.kernelPackage}/bin/usbipd -D";
+          script = ''
+            ${pkgs.kmod}/bin/modprobe usbip-host usbip-core
+            exec ${cfg.kernelPackage}/bin/usbipd -D
+          '';
           serviceConfig.Type = "forking";
         };
       };
