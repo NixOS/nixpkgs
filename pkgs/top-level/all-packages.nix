@@ -466,6 +466,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  cope = callPackage ../by-name/co/cope/package.nix {
+    perl = perl538;
+    perlPackages = perl538Packages;
+  };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
@@ -2035,11 +2040,6 @@ with pkgs;
   xcd = callPackage ../tools/misc/xcd { };
 
   xpaste = callPackage ../tools/text/xpaste { };
-
-  xrootd = callPackage ../tools/networking/xrootd {
-    # Workaround systemd static build breakage
-    systemd = if systemd.meta.broken then null else systemd;
-  };
 
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
@@ -10263,8 +10263,10 @@ with pkgs;
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
-  inherit (callPackage ../servers/web-apps/netbox { })
-    netbox netbox_3_6 netbox_3_7;
+  inherit (callPackage ../servers/web-apps/netbox { }) netbox_3_7;
+
+  # Not in aliases because it wouldn't get picked up by callPackage
+  netbox = netbox_4_1;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
@@ -14498,8 +14500,6 @@ with pkgs;
 
   flasm = callPackage ../development/compilers/flasm { };
 
-  flyctl = callPackage ../development/web/flyctl { };
-
   fluidd = callPackage ../applications/misc/fluidd { };
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
@@ -14768,6 +14768,7 @@ with pkgs;
 
   gnat12Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat12; });
   gnat13Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat13; });
+  gnat14Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat14; });
   gnatPackages   = gnat12Packages;
 
   inherit (gnatPackages)
@@ -17897,8 +17898,6 @@ with pkgs;
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   lemon = callPackage ../development/tools/parsing/lemon { };
-
-  lenmus = callPackage ../applications/misc/lenmus { };
 
   libtool = libtool_2;
 
@@ -24878,7 +24877,7 @@ with pkgs;
 
   nagios = callPackage ../servers/monitoring/nagios { };
 
-  nagiosPlugins = callPackages ../servers/monitoring/nagios-plugins { };
+  nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
@@ -28377,8 +28376,6 @@ with pkgs;
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
   buzztrax = callPackage ../applications/audio/buzztrax { };
-
-  brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
 
@@ -37643,8 +37640,6 @@ with pkgs;
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
-  pwncat = python3Packages.callPackage ../tools/security/pwncat { };
-
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   putty = callPackage ../applications/networking/remote/putty {
@@ -38155,8 +38150,6 @@ with pkgs;
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
-
-  xortool = python3Packages.callPackage ../tools/security/xortool { };
 
   xorex = callPackage ../tools/security/xorex { };
 
