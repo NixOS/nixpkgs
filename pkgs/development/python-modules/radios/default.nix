@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
-    rev = "v${version}";
-    hash = "sha256-c0zfpfEdZvjvKtwGcNLLgEkBihhtz/wouHuYRLCxtBY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GXiLwwjZ/pN3HquzLLWq/2EfhmrJyCXq0sovIGRB3uQ=";
   };
 
   postPatch = ''
