@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   bcrypt,
   buildPythonPackage,
   cryptography,
@@ -44,10 +45,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    gssapi = [
-      pyasn1
-      gssapi
-    ];
+    gssapi = [ pyasn1 ] ++ lib.optional (!stdenv.hostPlatform.isWindows) [ gssapi ];
     ed25519 = [ ];
     invoke = [ invoke ];
   };
