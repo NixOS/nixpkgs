@@ -24,6 +24,16 @@ rec {
       , knownVulnerabilities ? []
     }:
   let
+    docker-meta = {
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        offline
+        vdemeester
+        periklis
+        teutat3s
+      ];
+    };
+
     docker-runc = runc.overrideAttrs {
       pname = "docker-runc";
       inherit version;
@@ -160,6 +170,11 @@ rec {
         ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
         ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
+
+      meta = docker-meta // {
+          homepage = "https://mobyproject.org/";
+          description = "A collaborative project for the container ecosystem to assemble container-based systems.";
+        };
     });
 
     plugins = lib.optional buildxSupport docker-buildx
@@ -257,7 +272,7 @@ rec {
       tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
     };
 
-    meta = with lib; {
+    meta = docker-meta // {
       homepage = "https://www.docker.com/";
       description = "Open source project to pack, ship and run any application as a lightweight container";
       longDescription = ''
@@ -265,8 +280,6 @@ rec {
 
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
-      license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
       inherit knownVulnerabilities;
     };
