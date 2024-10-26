@@ -190,6 +190,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       jtojnar
+      x123
     ];
     platforms = lib.platforms.all;
     mainProgram = "inkscape";
