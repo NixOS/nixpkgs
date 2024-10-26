@@ -29872,8 +29872,6 @@ with pkgs;
 
   passky-desktop = callPackage ../applications/misc/passky-desktop { };
 
-  pat = callPackage ../applications/radio/pat { };
-
   pinboard = with python3Packages; toPythonApplication pinboard;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
