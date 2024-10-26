@@ -11,9 +11,11 @@ let
     options = {
       productid = mkOption {
         type = types.str;
+        description = "The product id of the device";
       };
       vendorid = mkOption {
         type = types.str;
+        description = "The vendor id of the device";
       };
     };
   };
@@ -30,10 +32,10 @@ in
       type = types.listOf device;
       default = [ ];
       description = "List of USB devices to watch and automatically export.";
-      example = {
+      example = [{
         productid = "xxxx";
         vendorid = "xxxx";
-      };
+      }];
     };
     openFirewall = mkOption {
       type = types.bool;
