@@ -17,15 +17,15 @@ updateHash()
     hash=$(nix-prefetch-url --type sha256 $url)
     sriHash="$(nix hash to-sri --type sha256 $hash)"
 
-    sed -i "s|$hashKey = \"[a-zA-Z0-9\/+-=]*\";|$hashKey = \"$sriHash\";|g" "$dirname/default.nix"
+    sed -i "s|$hashKey = \"[a-zA-Z0-9\/+-=]*\";|$hashKey = \"$sriHash\";|g" "$dirname/package.nix"
 }
 
 updateVersion()
 {
-    sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/default.nix"
+    sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/package.nix"
 }
 
-currentVersion=$(cd $dirname && nix eval --raw -f ../../.. readarr.version)
+currentVersion=$(cd $dirname && nix eval --raw -f ../../../.. readarr.version)
 
 # We cannot use the latest releases as in the past Readarr released old version with v2.0 and then went back to 0.1
 latestTag=$(curl https://api.github.com/repos/Readarr/Readarr/releases | jq -r ".[0].tag_name")
