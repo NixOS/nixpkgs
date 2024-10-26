@@ -33237,6 +33237,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
+  warp-plus = callPackage ../by-name/wa/warp-plus/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   warpd = callPackage ../applications/misc/warpd { };
 
   watershot = callPackage ../applications/misc/watershot { };
