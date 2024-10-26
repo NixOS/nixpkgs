@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.clifford.at/stfl/";
+    homepage = "https://web.archive.org/web/20211113222004/http://www.clifford.at/stfl/";
     description = "Library which implements a curses-based widget set for text terminals";
     maintainers = with lib.maintainers; [ lovek323 ];
     license = lib.licenses.lgpl3;
