@@ -57,9 +57,6 @@ makeScopeWithSplicing' {
   # Must use pkgs.callPackage to avoid infinite recursion.
   impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
 
-  # macOS 10.12 SDK
-  apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk { };
-
   # macOS 11.0 SDK
   apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
 
@@ -69,7 +66,7 @@ makeScopeWithSplicing' {
   apple_sdk = apple_sdk_11_0;
 
   stubs = {
-    inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
+    inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
     libobjc = self.objc4;
   } // lib.genAttrs [
     "CF"
