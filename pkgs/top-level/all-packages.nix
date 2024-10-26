@@ -29352,6 +29352,10 @@ with pkgs;
 
   floorp = wrapFirefox floorp-unwrapped { };
 
+  firedragon-unwrapped = callPackage ../applications/networking/browsers/firedragon { };
+
+  firedragon = wrapFirefox firedragon-unwrapped { };
+
   fomp = callPackage ../applications/audio/fomp { };
 
   formatter = callPackage ../applications/misc/formatter { };

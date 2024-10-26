@@ -330,6 +330,7 @@ in {
   ferretdb = handleTest ./ferretdb.nix {};
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
+  firedragon = handleTest ./firefox.nix { firefoxPackage = pkgs.firedragon; };
   firefly-iii = handleTest ./firefly-iii.nix {};
   firefly-iii-data-importer = handleTest ./firefly-iii-data-importer.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
