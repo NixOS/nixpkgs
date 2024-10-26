@@ -3,13 +3,10 @@
 , fetchFromGitLab
 , cmake
 , extra-cmake-modules
-, qttools
-, kwayland
 , leptonica
+, libsForQt5
+, qt5
 , tesseract4
-, qtmultimedia
-, qtx11extras
-, wrapQtAppsHook
 , gst_all_1
 , testers
 }:
@@ -29,22 +26,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace data/org.kde.CrowTranslate.desktop.in \
-      --subst-var-by QT_BIN_DIR ${lib.getBin qttools}/bin
+      --subst-var-by QT_BIN_DIR ${lib.getBin qt5.qttools}/bin
   '';
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qttools
-    wrapQtAppsHook
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kwayland
+    libsForQt5.kwayland
     leptonica
     tesseract4
-    qtmultimedia
-    qtx11extras
+    qt5.qtmultimedia
+    qt5.qtx11extras
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
