@@ -23,9 +23,8 @@ in
     enable = mkEnableOption "usbip server";
     kernelPackage = mkOption {
       type = types.package;
-      default = pkgs.linuxPackages_latest.usbip;
+      default = config.boot.kernelPackages.usbip;
       description = "The kernel module package to install.";
-      example = config.boot.kernelPackages.usbip;
     };
     devices = mkOption {
       type = types.listOf device;
@@ -97,4 +96,5 @@ in
       };
   };
   meta.maintainers = with maintainers; [ cbingman ];
+  meta.buildDocsInSandbox = false
 }
