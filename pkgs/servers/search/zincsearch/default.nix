@@ -1,16 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, buildNpmPackage
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  buildNpmPackage,
 }:
 
 let
-  version = "0.4.10";
+  version = "0.4.10-unstable-2024-10-25";
   src = fetchFromGitHub {
     owner = "zinclabs";
     repo = "zincsearch";
-    rev = "v${version}";
-    hash = "sha256-lScwnmu4hM78Va7Yi5HA0E5f2WQXrZaeqjRYJYxnQ5E=";
+    rev = "0652db6d39badc753f28ee1122dcbc0e5da1c35e";
+    hash = "sha256-Py4fiZJ2fMwPe2afd19brR+62PGVoU67nMDMPlUFhKQ=";
   };
 
   webui = buildNpmPackage {
@@ -40,7 +41,7 @@ buildGoModule rec {
     cp -r ${webui}/share/zinc-ui web/dist
   '';
 
-  vendorHash = "sha256-SZG5/ISGblpcwwR/HOKxFl9SthXpE+IYS0S+4HYtHos=";
+  vendorHash = "sha256-JB6+sfMB7PgpPg1lmN9/0JFRLi1c7VBUMD/d4XmLIPw=";
   subPackages = [ "cmd/zincsearch" ];
 
   ldflags = [
@@ -55,8 +56,5 @@ buildGoModule rec {
     homepage = "https://zincsearch-docs.zinc.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    # Doesn't build with Go version later v1.21 (which is EOL).
-    # Upstream issue: https://github.com/zincsearch/zincsearch/issues/975
-    broken = true;
   };
 }
