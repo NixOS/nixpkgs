@@ -5,7 +5,6 @@
 , pkg-config
 , mpi
 , mpiCheckPhaseHook
-, openssh
 , gfortran
 , blas
 , lapack
@@ -139,7 +138,6 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
   ];
 
   meta = with lib; {
