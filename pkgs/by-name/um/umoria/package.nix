@@ -1,6 +1,7 @@
 { lib
-, gcc9Stdenv
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , cmake
 , ncurses6
@@ -10,7 +11,7 @@
 let
   savesDir = "~/.umoria";
 in
-gcc9Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "umoria";
   version = "5.7.15";
 
@@ -20,6 +21,38 @@ gcc9Stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-1j4QkE33UcTzM06qAjk1/PyK5uNA7E/kyDe3bZcFKUM=";
   };
+
+  patches = [
+    # gcc-13 support: https://github.com/dungeons-of-moria/umoria/pull/58
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/dungeons-of-moria/umoria/commit/71dad4103b5c8f3e1f7723eb14d14425755e7ba5.patch";
+      hash = "sha256-5Ka3NTe0sJk6kReG+1hwZPEuB3R+Nn+2zxUXuOG7hm0=";
+    })
+    # clang support: https://github.com/dungeons-of-moria/umoria/pull/72
+    (fetchpatch {
+      name = "clang.patch";
+      url = "https://github.com/dungeons-of-moria/umoria/commit/f294e5880cd21d25c11eee820d629f4ff504ad10.patch";
+      hash = "sha256-se8G4n8codXA9gznyIy337IFyznLnpCY7KA6UryZDls=";
+    })
+    (fetchpatch {
+      name = "clang-p2.patch";
+      url = "https://github.com/dungeons-of-moria/umoria/commit/bf513b05dc34405665a8dd1386292cd70307dce0.patch";
+      hash = "sha256-FXj5Y4G0gnXheXC2bmRbIx3a1IixJ/aGfRMxl2S/vqM=";
+    })
+    # clang crash fix: https://github.com/dungeons-of-moria/umoria/pull/87
+    (fetchpatch {
+      name = "clang-crash.patch";
+      url = "https://github.com/dungeons-of-moria/umoria/commit/d073e8f867c49bb04a02c1995dd3efb0c5cc07e7.patch";
+      hash = "sha256-4uwO8fe4M5jt0IM0z6MjO8UaEezweMA5L+pusel4VUU=";
+    })
+  ];
+
+  postPatch = ''
+    # Do not apply blanket -Werror as it tends to fail on fresher
+    # toolchains.
+    substituteInPlace CMakeLists.txt --replace-fail '-Werror")' '-Wno-error")'
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ ncurses6 ];
