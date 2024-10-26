@@ -1,11 +1,11 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-YndBzhUNmn5tJdCqLmpUrs2WBXXpTxiKCNczWEz6DU4=";
+      hash_darwin = "sha256-SZfl93TcaD9j59zGflPFmHgIP5NaS8bgDi3l3SRRFiI=";
       hash_darwin_aarch64 =
-        "sha256-taG58kMgQUD40aGqnyx9O9e9m4qGsTWX57cjD3NeHm4=";
-      hash_linux = "sha256-raWGzhjqWdm5bRK+Z7Qga8QM9kQYSXxdL5N+wk1hlXI=";
-      version = "130.0.6723.58";
+        "sha256-wLX63aA8l+23ehdBHPcXtoZ2WEhrmYVKzqUDBbrhSRw=";
+      hash_linux = "sha256-kP6N7fM+7+S3JwT2JvqfWDRCfAQiNc/rQlHxjJ8DNuo=";
+      version = "130.0.6723.69";
     };
     deps = {
       gn = {
@@ -15,8 +15,8 @@
         version = "2024-09-09";
       };
     };
-    hash = "sha256-w1xQr+B7ROeCqBRN+M9vmh45YTRqVfjDYSsN5saDuDo=";
-    version = "130.0.6723.58";
+    hash = "sha256-k0epbUw9D3Vx7ELNDXIFEnsML+cYvDnHZFOW0kz4Kq8=";
+    version = "130.0.6723.69";
   };
   ungoogled-chromium = {
     deps = {
