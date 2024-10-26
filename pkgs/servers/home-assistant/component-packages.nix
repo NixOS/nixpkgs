@@ -4958,7 +4958,8 @@
       xmltodict
     ];
     "zeversolar" = ps: with ps; [
-    ]; # missing inputs: zeversolar
+      zeversolar
+    ];
     "zha" = ps: with ps; [
       aiohasupervisor
       pillow
@@ -5878,6 +5879,7 @@
     "zamg"
     "zeroconf"
     "zerproc"
+    "zeversolar"
     "zha"
     "zodiac"
     "zone"
