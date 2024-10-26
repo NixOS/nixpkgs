@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.19.1";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     rev = "v${version}";
-    hash = "sha256-0DbYbBs/8irj/55+WHyNj+iLWh7KqxReVWfmsWz43Xo=";
+    hash = "sha256-IP5bjRmHlVKYmcsR1g9B/p4KzVpCyBomwznPwjay4wA=";
   };
 
   pythonRelaxDeps = true;
@@ -37,6 +37,9 @@ python3Packages.buildPythonApplication rec {
     keyring
     keyrings-alt
     typing-extensions
+    flask
+    waitress
+    srp
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -57,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     "test_autodelete_photos_dry_run"
     "test_retry_fail_delete_after_download_internal_error"
     "test_autodelete_invalid_creation_date"
+    "test_folder_structure_de_posix"
   ];
 
   passthru = {
