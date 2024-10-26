@@ -455,7 +455,6 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ]
     ++ optionals (lib.versionAtLeast version "7.1") [
-      ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
       ./fix-fate-ffmpeg-spec-disposition-7.1.patch
 
       # Expose a private API for Chromium / Qt WebEngine.
