@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, installShellFiles, util-linux, binlore, swapspace }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  installShellFiles,
+  util-linux,
+  binlore,
+  swapspace,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swapspace";
@@ -40,6 +50,9 @@ stdenv.mkDerivation rec {
   passthru.binlore.out = binlore.synthesize swapspace ''
     execer cannot bin/swapspace
   '';
+  passthru.tests = {
+    inherit (nixosTests) swapspace;
+  };
 
   meta = with lib; {
     description = "Dynamic swap manager for Linux";
