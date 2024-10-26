@@ -681,6 +681,8 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
+  mumps_par = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
+
   mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
