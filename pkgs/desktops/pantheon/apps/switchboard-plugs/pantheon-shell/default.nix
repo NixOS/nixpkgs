@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-Cv1Ldvk0+VzNsKnDFwDtLZ5ixUOGV+PWYAqN9KV9g/s=";
   };
+
+  patches = [
+    # Set preferred color theme for mutter
+    # https://github.com/elementary/switchboard-plug-pantheon-shell/pull/413
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-pantheon-shell/commit/bdc8c167fabe5a4642efd37b0289e235e5d0a504.patch";
+      hash = "sha256-ueTAwURd8GM0U/qfPmoVLO7OVI/ppazq+ljnVzk0Npk=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
