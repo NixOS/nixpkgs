@@ -40,6 +40,9 @@ d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
 # fix indentation in meteor default.nix
 a37a6de881ec4c6708e6b88fd16256bbc7f26bbd
 
+# pkgs/stdenv/make-derivation: Reindent
+b4cc2a2479a7ab0f6440b2e1319221920ef72699
+
 # treewide: automatically md-convert option descriptions
 2e751c0772b9d48ff6923569adfa661b030ab6a2
 
