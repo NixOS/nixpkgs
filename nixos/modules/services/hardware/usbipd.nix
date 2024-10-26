@@ -32,10 +32,12 @@ in
       type = types.listOf device;
       default = [ ];
       description = "List of USB devices to watch and automatically export.";
-      example = [{
-        productid = "xxxx";
-        vendorid = "xxxx";
-      }];
+      example = [
+        {
+          productid = "xxxx";
+          vendorid = "xxxx";
+        }
+      ];
     };
     openFirewall = mkOption {
       type = types.bool;
