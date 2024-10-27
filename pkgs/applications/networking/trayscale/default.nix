@@ -45,13 +45,13 @@ buildGoModule rec {
     gappsWrapperArgs+=(--prefix PATH : "${tailscale}/bin")
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${src.rev}";
     description = "Unofficial GUI wrapper around the Tailscale CLI client";
     homepage = "https://github.com/DeedleFake/trayscale";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "trayscale";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
