@@ -4,9 +4,10 @@
   fetchFromGitHub,
   fetchpatch,
   dotnetCorePackages,
+  testers,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: rec {
   pname = "fsautocomplete";
   version = "0.73.2";
 
@@ -47,6 +48,8 @@ buildDotnetModule rec {
 
   useDotnetFromEnv = true;
 
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+
   meta = with lib; {
     description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
@@ -59,4 +62,4 @@ buildDotnetModule rec {
       mdarocha
     ];
   };
-}
+})
