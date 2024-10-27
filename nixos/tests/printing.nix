@@ -6,9 +6,13 @@ import ./make-test-python.nix (
 , ...
 }:
 
+let
+  inherit (pkgs) lib;
+in
+
 {
   name = "printing";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ domenkozar matthewbauer ];
   };
 
