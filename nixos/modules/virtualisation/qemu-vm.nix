@@ -157,8 +157,11 @@ let
       ''
       }
 
-      # Create a directory for exchanging data with the VM.
-      mkdir -p "$TMPDIR/xchg"
+      ${lib.optionalString cfg.shareTestDirectories
+      ''
+        # Create a directory for exchanging data with the VM.
+        mkdir -p "$TMPDIR/xchg"
+      ''}
 
       ${lib.optionalString cfg.useHostCerts
       ''
@@ -455,6 +458,17 @@ in
             An attributes set of directories that will be shared with the
             virtual machine using VirtFS (9P filesystem over VirtIO).
             The attribute name will be used as the 9P mount tag.
+          '';
+      };
+
+    virtualisation.shareTestDirectories =
+      mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            Whether to share the directories /tmp/xchg and /tmp/shared that are
+            used by the NixOS testing infrastructure.
           '';
       };
 
@@ -1058,12 +1072,12 @@ in
         target = "/nix/.ro-store";
         securityModel = "none";
       };
-      xchg = {
+      xchg = mkIf cfg.shareTestDirectories {
         source = ''"$TMPDIR"/xchg'';
         securityModel = "none";
         target = "/tmp/xchg";
       };
-      shared = {
+      shared = mkIf cfg.shareTestDirectories {
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
         securityModel = "none";
