@@ -69,6 +69,28 @@ ps.buildPythonApplication rec {
       --set QT_QPA_PLATFORM xcb
       --prefix PATH : ${lib.makeBinPath wrapperDeps}
     )
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # cursed fix on GNOME+wayland
+    # this works because systemd-run runs the command as an ad-hoc service named run-1234567890.service
+    # FIXME: make something like `--slice=app-com.github.dynobo.normcap.slice`
+    #        work such that the "screenshot screenshot" permission in
+    #        `flatpak permissions` is associated with the xdg app id
+    #        "com.github.dynobo.normcap" and not ""
+    makeWrapperArgs+=(
+      --run '
+        if command -v systemd-run >/dev/null; then
+            exec -a "$0" systemd-run --wait --user \
+              --setenv=PATH="$PATH" \
+              --setenv=PYTHONNOUSERSITE="$PYTHONNOUSERSITE" \
+              --setenv=QT_QPA_PLATFORM="$QT_QPA_PLATFORM" \
+              ${placeholder "out"}/bin/.normcap-wrapped "$@"
+        else
+            exec -a "$0" ${placeholder "out"}/bin/.normcap-wrapped "$@"
+        fi
+        exit $?
+      '
+    )
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
