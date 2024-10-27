@@ -23,10 +23,10 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stv0g ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stv0g ];
   };
 }
