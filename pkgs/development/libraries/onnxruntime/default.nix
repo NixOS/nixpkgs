@@ -23,6 +23,7 @@
 , protobuf_21
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
+, ncclSupport ? config.cudaSupport
 , cudaPackages ? {}
 }@inputs:
 
@@ -160,8 +161,9 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+  ] ++ lib.optionals (cudaSupport && ncclSupport) (with cudaPackages; [
     nccl
-  ]);
+  ]));
 
   nativeCheckInputs = [
     gtest
@@ -198,7 +200,7 @@ effectiveStdenv.mkDerivation rec {
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
-    (lib.cmakeBool "onnxruntime_USE_NCCL" cudaSupport)
+    (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [

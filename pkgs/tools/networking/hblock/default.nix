@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hblock";
-  version = "3.4.5";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "hectorm";
     repo = "hblock";
     rev = "v${version}";
-    hash = "sha256-HPQ3SKaQlPEEgWjDCs6tCxi6+3pz1gIqDhHMsPT1hVg=";
+    hash = "sha256-XnBmKOZBHWyjNlv+L24LYns05oGTOJnNNzM0jCwZMuI=";
   };
 
   buildInputs = [ coreutils curl gnugrep gawk ];
