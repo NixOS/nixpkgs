@@ -7,7 +7,7 @@
   stdenv,
 }:
 let
-  version = "0.2.7";
+  version = "0.2.9";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "achristmascarl";
     repo = "rainfrog";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ey9ioPDeuNYw2+UBUgtE0C1wES3wecFDWd9CMeKBq4Q=";
+    hash = "sha256-PiJRVf+rpYFWRmys7Ca2lLfe5F9/ksIzkpKs6CQWu+A=";
   };
 
-  cargoHash = "sha256-mc7Lgaf1seefVu+LafctJm4y8xjX3c1ApadeQMi3STE=";
+  cargoHash = "sha256-L0gXxV/3+5oRV/Ipm4sRqr9dh9AEChWhtILO3PaNxYY=";
 
   buildInputs = lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk.frameworks;
