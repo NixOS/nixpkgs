@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tun2proxy";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "tun2proxy";
     repo = "tun2proxy";
     rev = "v${version}";
-    hash = "sha256-EeSXEPg4TxbjQXoM2jx8T9+VOT7VndBnxhy7pwwQ8Kk=";
+    hash = "sha256-LY7vVD85GVFqARYOBDeb4fS6rL2PwPXYXIAJtwm2goo=";
   };
 
-  cargoHash = "sha256-WwCUSnXSlSrO+YfqpZlC9WWsX/pM6ixYlqU1pZY4e5o=";
+  cargoHash = "sha256-o/zQjWR9qNs0XVL/dcRiMHgj+8Xvl6vVl/Yw5iLhroI=";
 
   cargoPatches = [
     ./Cargo.lock.patch
