@@ -2021,6 +2021,7 @@ in
     passthru = oa.passthru // {
       initLua = ''vim.g.sqlite_clib_path = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"'';
     };
+    nvimRequireCheck = "sqlite";
   });
 
   ssr = super.ssr-nvim.overrideAttrs {
