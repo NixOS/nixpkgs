@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hostmux";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "hukl";
     repo = "hostmux";
     rev = finalAttrs.version;
-    hash = "sha256-odN7QFsU3MsWW8VabVjZH+8+AUFOUio8eF9ORv9iPEA=";
+    hash = "sha256-Rh8eyKoUydixj+X7muWleZW9u8djCQAyexIfRWIOr0o=";
   };
 
   nativeBuildInputs = [
