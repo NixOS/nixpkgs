@@ -361,12 +361,25 @@ in
       };
 
       enableTCPIP = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = ''
-          Whether PostgreSQL should listen on all network interfaces.
-          If disabled, the database can only be accessed via its Unix
-          domain socket or via TCP connections to localhost.
+          Whether PostgreSQL should listen on network interfaces.
+          If 'false', the database can only be accessed via its Unix
+          domain socket.
+          A value of 'null' defaults to 'true'.
+        '';
+      };
+
+      listenAddresses = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+          The TCP/IP address(es) on which the server is to listen for connections from client applications.
+          The value takes the form of a comma-separated list of host names and/or numeric IP addresses.
+          The special entry * corresponds to all available IP interfaces.
+
+          See the PostgreSQL documentation on [listen_address](https://www.postgresql.org/docs/16/runtime-config-connection.html#GUC-LISTEN-ADDRESSES).
         '';
       };
 
@@ -472,12 +485,16 @@ in
       '';
     }) cfg.ensureUsers;
 
+    warnings = lib.optional (cfg.enableTCPIP == true)
+     "Behaviour of `services.postgresql.enableTCPIP` changed from binding on all interfaces to binding
+     on localhost in addition to the unix socket.";
+
     services.postgresql.settings =
       {
         hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
         ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
         log_destination = "stderr";
-        listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
+        listen_addresses = if (cfg.enableTCPIP != false) then cfg.listenAddresses else "";
         jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 

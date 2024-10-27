@@ -271,6 +271,11 @@ let
           pkgs = self;
           package = this;
         };
+        postgresql-listen-addresses = import ../../../../nixos/tests/postgresql-listen-addresses.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        };
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
         postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
