@@ -28,5 +28,8 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
+    # PostgreSQL 17 support issue upstream: https://github.com/hapostgres/pg_auto_failover/issues/1048
+    # Check after next package update.
+    broken = versionAtLeast postgresql.version "17" && version == "2.1";
   };
 }
