@@ -7506,8 +7506,6 @@ with pkgs;
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
-  flent = python3Packages.callPackage ../applications/networking/flent { };
-
   flexoptix-app = callPackage ../tools/misc/flexoptix-app { };
 
   flpsed = callPackage ../applications/editors/flpsed { };
@@ -8470,8 +8468,6 @@ with pkgs;
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
-
-  http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
 
   httpdump = callPackage ../tools/security/httpdump { };
 
