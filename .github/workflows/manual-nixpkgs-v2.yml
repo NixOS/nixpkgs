@@ -1,6 +1,7 @@
-name: "Build Nixpkgs manual"
+name: "Build Nixpkgs manual v2"
 
-permissions: read-all
+permissions:
+  contents: read
 
 on:
   pull_request_target:
