@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, gnum4, pkg-config, python3, wayland-scanner
-, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
-, enableHybridCodec ? false, vaapi-intel-hybrid
-, enableGui ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gnum4,
+  pkg-config,
+  python3,
+  wayland-scanner,
+  intel-gpu-tools,
+  libdrm,
+  libva,
+  libX11,
+  libGL,
+  wayland,
+  libXext,
+  enableHybridCodec ? false,
+  vaapi-intel-hybrid,
+  enableGui ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,9 +24,9 @@ stdenv.mkDerivation rec {
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "intel-vaapi-driver";
-    rev    = version;
+    owner = "intel";
+    repo = "intel-vaapi-driver";
+    rev = version;
     sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
   };
 
@@ -29,11 +43,25 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [
-    autoreconfHook gnum4 pkg-config python3 wayland-scanner
+    autoreconfHook
+    gnum4
+    pkg-config
+    python3
+    wayland-scanner
   ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva ]
-    ++ lib.optionals enableGui [ libX11 libXext libGL wayland ]
+  buildInputs =
+    [
+      intel-gpu-tools
+      libdrm
+      libva
+    ]
+    ++ lib.optionals enableGui [
+      libX11
+      libXext
+      libGL
+      wayland
+    ]
     ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
@@ -52,7 +80,10 @@ stdenv.mkDerivation rec {
       processing. It consists of a main library and driver-specific acceleration
       backends for each supported hardware vendor.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
