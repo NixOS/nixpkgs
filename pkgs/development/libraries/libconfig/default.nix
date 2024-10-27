@@ -1,32 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, # this also disables building tests.
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # This also disables building tests.
   # on static windows cross-compile they fail to build
-  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic)
+  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libconfig";
   version = "1.7.3";
 
   src = fetchurl {
-    url = "https://hyperrealm.github.io/${pname}/dist/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VFFm1srAN3RDgdHpzFpUBQlOe/rRakEWmbz/QLuzHuc=";
+    url = "https://hyperrealm.github.io/${finalAttrs.pname}/dist/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VFFm1srAN3RDgdHpzFpUBQlOe/rRakEWmbz/QLuzHuc=";
   };
 
   inherit doCheck;
 
-  configureFlags = lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
-    ++ lib.optional (!doCheck) "--disable-tests";
+  configureFlags =
+    lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
+    ++ lib.optional (!finalAttrs.doCheck) "--disable-tests";
 
-  cmakeFlags = lib.optionals (!doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
+  cmakeFlags = lib.optionals (!finalAttrs.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
 
-  meta = with lib; {
-    homepage = "http://www.hyperrealm.com/libconfig";
-    description = "Simple library for processing structured configuration files";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.all;
+  meta = {
+    homepage = "https://hyperrealm.github.io/libconfig/";
+    description = "C/C++ library for processing configuration files";
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ stv0g ];
+    platforms = lib.platforms.all;
   };
-}
+})
