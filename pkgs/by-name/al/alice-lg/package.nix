@@ -4,6 +4,7 @@
   buildGoModule,
   fetchYarnDeps,
   stdenv,
+  gitUpdater,
   yarn,
   nodejs,
   nixosTests,
@@ -80,7 +81,10 @@ buildGoModule rec {
   subPackages = [ "cmd/alice-lg" ];
   doCheck = false;
 
-  passthru.tests = nixosTests.alice-lg;
+  passthru = {
+    tests = nixosTests.alice-lg;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     homepage = "https://github.com/alice-lg/alice-lg";
