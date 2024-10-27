@@ -45,7 +45,7 @@ buildDotnetModule {
     install -Dm644 "${lua}/lib/liblua.so.5.2" "$out/lib/yafc-ce/liblua52.so"
   '';
 
-  meta = rec {
+  meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";
     longDescription = ''
       Yet Another Factorio Calculator or YAFC is a planner and analyzer.
