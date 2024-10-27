@@ -14432,12 +14432,15 @@ with pkgs;
     crystal_1_7
     crystal_1_8
     crystal_1_9
+    crystal_1_11
+    crystal_1_12
+    crystal_1_14
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
   crystalline = callPackage ../development/tools/language-servers/crystalline {
-    llvmPackages = llvmPackages_15;
+    llvmPackages = crystal.llvmPackages;
   };
 
   icr = callPackage ../development/tools/icr { };
