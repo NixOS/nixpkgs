@@ -321,7 +321,7 @@ in
 
   config = {
 
-    assertions = let
+    assertions.fileSystems = let
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
       resizableFSes = [
         "ext3"
@@ -329,31 +329,31 @@ in
         "btrfs"
         "xfs"
       ];
-      notAutoResizable = fs: fs.autoResize && !(builtins.elem fs.fsType resizableFSes);
-    in [
-      { assertion = ! (fileSystems' ? cycle);
-        message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
-      }
-      { assertion = ! (any notAutoResizable fileSystems);
-        message = let
-          fs = head (filter notAutoResizable fileSystems);
-        in ''
+    in {
+      topologicallySorted = {
+        assertion = ! (fileSystems' ? cycle);
+        message = ''
+          The ‘fileSystems’ option can't be topologically sorted:
+          mountpoint dependency path ${ls " -> " fileSystems'.cycle or []} loops to ${ls ", " fileSystems'.loops or []}
+        '';
+      };
+      resizable = mapAttrs (name: fs: {
+        assertion = fs.autoResize -> builtins.elem fs.fsType resizableFSes;
+        message = ''
           Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
           ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
           only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
         '';
-      }
-      {
-        assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
-        message = let
-          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
-        in ''
+      }) config.fileSystems;
+      formatOptionsDeprecated = mapAttrs (name: fs: {
+        assertion = fs.formatOptions == null;
+        message = ''
           'fileSystems.<name>.formatOptions' has been removed, since
           systemd-makefs does not support any way to provide formatting
           options.
         '';
-      }
-    ];
+      }) config.fileSystems;
+    };
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;

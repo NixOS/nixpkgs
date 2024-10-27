@@ -873,6 +873,63 @@ rec {
       [];
 
   /**
+    Recursively collect sets that verify a given predicate named `pred`
+    from the set `attrs`. The recursion is stopped when the predicate is
+    verified. This version of `collect` also collects the attribute paths
+    of the items.
+
+
+    # Inputs
+
+    `pred`
+
+    : Given an attribute's value, determine if recursion should stop.
+
+    `attrs`
+
+    : The attribute set to recursively collect.
+
+    # Type
+
+    ```
+    collect' :: (AttrSet -> Bool) -> AttrSet -> [{ path :: [ String ], value :: x }]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.collect'` usage example
+
+    ```nix
+    collect' isList { a = { b = ["b"]; }; c = [1]; }
+    => [
+      { path = [ "a" "b" ]; value = [ "b" ];
+      { path = [ "c" ]; value = [ 1 ]; }
+    ]
+
+    collect (x: x ? outPath)
+       { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+    => [
+      { path = [ "a" ]; value = { outPath = "a/"; }; }
+      { path = [ "b" ]; value = { outPath = "b/"; }; }
+    ]
+    ```
+
+    :::
+  */
+  collect' = let
+    collect'' =
+      path:
+      pred:
+      value:
+      if pred value then
+        [ { inherit path value; } ]
+      else if isAttrs value then
+        concatMap ({ name, value }: collect'' (path ++ [ name ]) pred value) (attrsToList value)
+      else
+        [];
+  in collect'' [];
+
+  /**
     Return the cartesian product of attribute set value combinations.
 
 
