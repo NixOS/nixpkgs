@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    patchShebangs --build scripts/link_llvm_objects.sh
+   '';
+
   nativeBuildInputs = [
     cmake
   ];
