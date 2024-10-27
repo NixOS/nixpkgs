@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, disarchive
-, git
-, glibcLocales
-, guile
-, guile-avahi
-, guile-gcrypt
-, guile-git
-, guile-gnutls
-, guile-json
-, guile-lib
-, guile-lzlib
-, guile-lzma
-, guile-semver
-, guile-ssh
-, guile-sqlite3
-, guile-zlib
-, guile-zstd
-, help2man
-, makeWrapper
-, pkg-config
-, po4a
-, scheme-bytestructures
-, texinfo
-, bzip2
-, libgcrypt
-, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  disarchive,
+  git,
+  glibcLocales,
+  guile,
+  guile-avahi,
+  guile-gcrypt,
+  guile-git,
+  guile-gnutls,
+  guile-json,
+  guile-lib,
+  guile-lzlib,
+  guile-lzma,
+  guile-semver,
+  guile-ssh,
+  guile-sqlite3,
+  guile-zlib,
+  guile-zstd,
+  help2man,
+  makeWrapper,
+  pkg-config,
+  po4a,
+  scheme-bytestructures,
+  texinfo,
+  bzip2,
+  libgcrypt,
+  sqlite,
+  nixosTests,
 
-, stateDir ? "/var"
-, storeDir ? "/gnu/store"
-, confDir ? "/etc"
+  stateDir ? "/var",
+  storeDir ? "/gnu/store",
+  confDir ? "/etc",
 }:
 
 stdenv.mkDerivation rec {
@@ -157,7 +158,10 @@ stdenv.mkDerivation rec {
     changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [ cafkafk foo-dogsquared ];
+    maintainers = with maintainers; [
+      cafkafk
+      foo-dogsquared
+    ];
     platforms = platforms.linux;
   };
 }
