@@ -45,7 +45,10 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/labelbox";
 
-  pythonRelaxDeps = [ "python-dateutil" ];
+  pythonRelaxDeps = [
+    "mypy"
+    "python-dateutil"
+  ];
 
   build-system = [ hatchling ];
 
