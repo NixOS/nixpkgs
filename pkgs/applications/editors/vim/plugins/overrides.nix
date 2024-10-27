@@ -2008,21 +2008,23 @@ in
     meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
   };
 
-  sqlite-lua = super.sqlite-lua.overrideAttrs (oa: {
-    postPatch =
-      let
-        libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
-      in
-      ''
+  sqlite-lua = super.sqlite-lua.overrideAttrs (
+    oa:
+    let
+      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in
+    {
+      postPatch = ''
         substituteInPlace lua/sqlite/defs.lua \
           --replace-fail "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or '${lib.escapeShellArg libsqlite}'"
       '';
 
-    passthru = oa.passthru // {
-      initLua = ''vim.g.sqlite_clib_path = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"'';
-    };
-    nvimRequireCheck = "sqlite";
-  });
+      passthru = oa.passthru // {
+        initLua = ''vim.g.sqlite_clib_path = "${libsqlite}"'';
+      };
+      nvimRequireCheck = "sqlite";
+    }
+  );
 
   ssr = super.ssr-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter ];
