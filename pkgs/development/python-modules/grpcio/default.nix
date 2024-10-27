@@ -5,7 +5,6 @@
   c-ares,
   cython,
   fetchPypi,
-  grpc,
   openssl,
   pkg-config,
   protobuf,
@@ -23,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VjWIxYe3XDS5KLxChUjlsA6jjEaXIYGk2Ldbp+PyQjE=";
+    hash = "sha256-4JCyVT4Noch1RJyOdQc91EFd1xyb3mpAYkD99MDuRnw=";
   };
 
   outputs = [
