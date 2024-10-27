@@ -4,6 +4,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gi-docgen,
   pkg-config,
   gobject-introspection,
@@ -31,7 +32,6 @@
   json-glib,
   bash-completion,
   shared-mime-info,
-  umockdev,
   vala,
   makeFontsConf,
   freefont_ttf,
@@ -50,6 +50,7 @@
   libmbim,
   libcbor,
   xz,
+  hwdata,
   nix-update-script,
   enableFlashrom ? false,
   enablePassim ? false,
@@ -123,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.25";
+  version = "2.0.1";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -141,17 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
+    hash = "sha256-cIkbYoSqVZtEEIh0iTr+Ovu5BWGh6d2NfImTJoc69QU=";
   };
 
   patches = [
-    # Since /etc is the domain of NixOS, not Nix,
-    # we cannot install files there.
-    # Let’s install the files to $prefix/etc
-    # while still reading them from /etc.
-    # NixOS module for fwupd will take take care of copying the files appropriately.
-    ./add-option-for-installation-sysconfdir.patch
-
     # Install plug-ins and libfwupdplugin to $out output,
     # they are not really part of the library.
     ./install-fwupdplugin-to-out.patch
@@ -160,8 +154,20 @@ stdenv.mkDerivation (finalAttrs: {
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
     ./installed-tests-path.patch
 
+    # Since /etc is the domain of NixOS, not Nix,
+    # we cannot install files there.
+    # Let’s install the files to $prefix/etc
+    # while still reading them from /etc.
+    # NixOS module for fwupd will take take care of copying the files appropriately.
+    ./add-option-for-installation-sysconfdir.patch
+
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
+
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/pull/7994.diff?full_index=1";
+      hash = "sha256-fRM033aCoj11Q5u9Yfi3BSD/zpm2kIqf5qabs60nEoM=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -182,6 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
     vala
   ];
 
+  propagatedBuildInputs = [
+    json-glib
+  ];
+
   buildInputs =
     [
       polkit
@@ -195,8 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
       libgudev
       libjcat
       libuuid
-      json-glib
-      umockdev
       bash-completion
       pango
       tpm2-tss
@@ -218,7 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
       # We are building the official releases.
       "-Dsupported_build=enabled"
       "-Dlaunchd=disabled"
-      "-Dudevdir=lib/udev"
       "-Dsystemd_root_prefix=${placeholder "out"}"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "--localstatedir=/var"
@@ -227,6 +234,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-Defi_os_dir=nixos"
       "-Dplugin_modem_manager=enabled"
       "-Dvendor_metadata=true"
+      "-Dplugin_uefi_capsule_splash=false"
+      # TODO: what should this be?
+      "-Dvendor_ids_dir=${hwdata}/share/hwdata"
+      "-Dumockdev_tests=disabled"
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
     ]
@@ -252,19 +263,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   # Environment variables
+  env = {
+    # Fontconfig error: Cannot load default config file
+    FONTCONFIG_FILE =
+      let
+        fontsConf = makeFontsConf {
+          fontDirectories = [ freefont_ttf ];
+        };
+      in
+      fontsConf;
 
-  # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE =
-    let
-      fontsConf = makeFontsConf {
-        fontDirectories = [ freefont_ttf ];
-      };
-    in
-    fontsConf;
-
-  # error: “PolicyKit files are missing”
-  # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
-  PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
+    # error: “PolicyKit files are missing”
+    # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
+    PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
+  };
 
   # Phase hooks
 
@@ -274,22 +286,8 @@ stdenv.mkDerivation (finalAttrs: {
       contrib/generate-man.py \
       po/test-deps
 
-    # tests fail with: Failed to load SMBIOS: neither SMBIOS or DT found
-    sed -i 's/test(.*)//' plugins/lenovo-thinklmi/meson.build
-    sed -i 's/test(.*)//' plugins/mtd/meson.build
-    # fails on amd cpu
-    sed -i 's/test(.*)//' libfwupdplugin/meson.build
     # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
     sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
-
-    # Device tests use device emulation and need to download emulation data from
-    # the internet, which does not work on our test VMs.
-    # It's probably better to disable these tests for NixOS by setting
-    # the device-tests directory to /dev/null.
-    # For more info on device emulation, see:
-    #   https://github.com/fwupd/fwupd/blob/eeeac4e9ba8a6513428b456a551bffd95d533e50/docs/device-emulation.md
-    substituteInPlace data/installed-tests/meson.build \
-      --replace "join_paths(datadir, 'fwupd', 'device-tests')" "'/dev/null'"
   '';
 
   preBuild = ''
@@ -338,6 +336,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+    moveToOutput "etc/doc" "$devdoc"
   '';
 
   separateDebugInfo = true;
@@ -345,7 +344,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     filesInstalledToEtc = [
-      "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
