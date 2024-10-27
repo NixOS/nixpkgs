@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
-, nim-unwrapped-2, nim-unwrapped-1, nim }:
+, nim-unwrapped-2, nim-unwrapped-1 }:
 
 let
   inherit (nim-unwrapped-2.passthru) nimHost nimTarget;
@@ -156,11 +156,6 @@ in {
         };
       });
 in {
-
-  nim2 = wrapNim {
-    nim' = buildPackages.nim-unwrapped-2_2;
-    patches = [ ./nim2.cfg.patch ];
-  };
 
   nim1 = wrapNim {
     nim' = buildPackages.nim-unwrapped-1;
