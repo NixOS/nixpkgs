@@ -3,7 +3,7 @@
   buildGoModule,
   dmarc-report-converter,
   fetchFromGitHub,
-  runCommand,
+  testers,
 }:
 
 buildGoModule rec {
@@ -25,11 +25,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.tests = {
-    simple = runCommand "dmarc-report-converter-test" { } ''
-      ${dmarc-report-converter}/bin/dmarc-report-converter -h > $out
-    '';
-  };
+  passthru.tests.version = testers.testVersion { package = dmarc-report-converter; };
 
   meta = {
     description = "Convert DMARC report files from xml to human-readable formats";
