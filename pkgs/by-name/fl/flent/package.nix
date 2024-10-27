@@ -15,8 +15,8 @@ buildPythonApplication rec {
     hash = "sha256-21gd6sPYCZll3Q2O7kucTRhXvc5byXeQr50+1bZVT3M=";
   };
 
-  buildInputs = [python.pkgs.sphinx];
-  nativeBuildInputs = [qt5.wrapQtAppsHook];
+  buildInputs = [ python.pkgs.sphinx ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   propagatedBuildInputs = [
     procps
     python.pkgs.matplotlib
@@ -50,6 +50,6 @@ buildPythonApplication rec {
     homepage = "https://flent.org";
     license = licenses.gpl3;
 
-    maintainers = [maintainers.mmlb];
+    maintainers = [ maintainers.mmlb ];
   };
 }
