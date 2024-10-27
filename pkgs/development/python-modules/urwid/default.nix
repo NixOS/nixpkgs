@@ -68,6 +68,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests" ];
 
+  disabledTests = [
+    # Flaky tests
+    "TwistedEventLoopTest"
+  ];
+
   disabledTestPaths = [
     # expect call hangs
     "tests/test_vterm.py"

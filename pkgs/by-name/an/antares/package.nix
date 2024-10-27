@@ -6,6 +6,7 @@
   nodejs,
   makeDesktopItem,
   copyDesktopItems,
+  icoutils,
 }:
 
 buildNpmPackage rec {
@@ -15,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
   };
 
@@ -30,7 +31,10 @@ buildNpmPackage rec {
 
   buildInputs = [ nodejs ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    icoutils
+  ];
 
   npmBuildScript = "compile";
 
@@ -45,7 +49,8 @@ buildNpmPackage rec {
 
     # Install icon files
     mkdir -pv $out/share/icon/
-    cp assets/icon.ico $out/share/icon/antares.ico
+    icotool -x assets/icon.ico
+    cp icon_1_256x256x32.png $out/share/icon/antares.png
   '';
 
   npmFlags = [ "--legacy-peer-deps" ];
@@ -66,10 +71,11 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern, fast and productivity driven SQL client with a focus in UX";
     homepage = "https://github.com/antares-sql/antares";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eymeric ];
+    changelog = "https://github.com/antares-sql/antares/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eymeric ];
   };
 }

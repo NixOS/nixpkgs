@@ -356,7 +356,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      postgresql
+      (lib.getDev postgresql)
     ];
   });
 

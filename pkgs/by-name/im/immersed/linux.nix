@@ -3,7 +3,42 @@
 , src
 , meta
 , appimageTools
+, libgpg-error
 }:
-appimageTools.wrapType2 {
-  inherit pname version src meta;
+
+let
+  src' = appimageTools.extract {
+    inherit pname version;
+    src = src;
+
+    # Because of https://github.com/NixOS/nixpkgs/issues/267408
+    postExtract = ''
+      cp ${libgpg-error}/lib/* $out/usr/lib/
+    '';
+  };
+in
+
+appimageTools.wrapAppImage rec {
+  inherit pname version meta;
+  src = src';
+
+  extraPkgs = pkgs: with pkgs; [
+    libgpg-error
+    fontconfig
+    libGL
+    mesa
+    wayland
+    pipewire
+    fribidi
+    harfbuzz
+    freetype
+    libthai
+    e2fsprogs
+    zlib
+    libp11
+    xorg.libX11
+    xorg.libSM
+  ];
+
+  multiArch = true;
 }

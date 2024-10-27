@@ -1,27 +1,30 @@
-{ bash
-, buildGoModule
-, fetchFromGitHub
+{
+  bash,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 
-, withFish ? false
-, fish
+  withFish ? false,
+  fish,
 
-, lib
-, makeWrapper
-, xdg-utils
+  lib,
+  makeWrapper,
+  xdg-utils,
 }:
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.34.1";
+  version = "0.35.2";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iNGagF4+Lz73Ctvh8Qs90E+xvuGi7LWHV/VbjjqMqRY=";
+    sha256 = "sha256-8Ou1TkPGAsrRfV75ntPKpXTUEhVkwgtaXErrRX8hR0E=";
   };
 
-  vendorHash = "sha256-uKzs+plk1W2S7iPv2J1Mi1Ff88+82zrIXLy2eTzD/Hc=";
+  vendorHash = "sha256-XCq+hDxK7C9XYlKe+lUArQlPheWALx806o1IeCRD7vs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -73,18 +76,26 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-  '' + lib.optionalString withFish ''
-    # Install fish script
-    install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
-    substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
-  '';
+    ''
+    + lib.optionalString withFish ''
+      # Install fish script
+      install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
+      substituteInPlace $out/share/assume.fish \
+        --replace /bin/fish ${fish}/bin/fish
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; [
+      jlbribeiro
+    ];
   };
 }
