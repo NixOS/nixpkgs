@@ -31653,8 +31653,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  peazip = libsForQt5.callPackage ../tools/archivers/peazip { };
-
   peek = callPackage ../applications/video/peek { };
 
   peertube = callPackage ../servers/peertube {

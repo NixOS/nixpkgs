@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, wrapQtAppsHook
+, libsForQt5
 , fpc
 , lazarus
 , xorg
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     lazarus
     fpc
   ];
