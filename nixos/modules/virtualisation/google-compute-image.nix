@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -14,18 +19,24 @@ let
 in
 {
 
-  imports = [ ./google-compute-config.nix ];
+  imports = [
+    ./google-compute-config.nix
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "googleComputeImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
-    virtualisation.googleComputeImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 1536;
-      description = ''
-        Size of disk image. Unit is MB.
-      '';
-    };
-
     virtualisation.googleComputeImage.configFile = mkOption {
       type = with types; nullOr str;
       default = null;
@@ -64,7 +75,13 @@ in
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
       postVM = ''
-        PATH=$PATH:${with pkgs; lib.makeBinPath [ gnutar gzip ]}
+        PATH=$PATH:${
+          with pkgs;
+          lib.makeBinPath [
+            gnutar
+            gzip
+          ]
+        }
         pushd $out
         mv $diskImage disk.raw
         tar -Sc disk.raw | gzip -${toString cfg.compressionLevel} > \
@@ -75,7 +92,7 @@ in
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
       partitionTableType = if cfg.efi then "efi" else "legacy";
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
 
