@@ -1,34 +1,12 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
-, nim-unwrapped-2, nim-unwrapped-1 }:
+{ lib, callPackage, buildPackages, stdenv
+, makeWrapper, openssl, pcre, Security
+, nim-unwrapped-1 }:
 
 let
-  inherit (nim-unwrapped-2.passthru) nimHost nimTarget;
-in {
-
-  nim-unwrapped-1 = nim-unwrapped-2.overrideAttrs (finalAttrs: prevAttrs: {
-    version = "1.6.20";
-    src = fetchurl {
-      url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-/+0EdQTR/K9hDw3Xzz4Ce+kaKSsMnFEWFQTC87mE/7k=";
-    };
-
-    patches = [
-      ./NIM_CONFIG_DIR.patch
-      # Override compiler configuration via an environmental variable
-
-      ./nixbuild.patch
-      # Load libraries at runtime by absolute path
-
-      ./extra-mangling.patch
-      # Mangle store paths of modules to prevent runtime dependence.
-    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
-  });
-
-} // (let
+  inherit (nim-unwrapped-1.passthru) nimHost nimTarget;
   wrapNim = { nim', patches }:
     let targetPlatformConfig = stdenv.targetPlatform.config;
     in stdenv.mkDerivation (finalAttrs: {
@@ -162,4 +140,4 @@ in {
     patches = [ ./nim.cfg.patch ];
   };
 
-})
+}
