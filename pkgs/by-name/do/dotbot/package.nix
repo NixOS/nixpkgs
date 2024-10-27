@@ -20,13 +20,18 @@ python3Packages.buildPythonApplication rec {
     patchShebangs bin/dotbot
   '';
 
+  patches = [
+    # ignore pytest-cache because it was not at /tmp/nix-shell and it was used by pytest itself not our program
+    ./0001-fix-build.patch
+  ];
+
   nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [ pyyaml ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that bootstraps your dotfiles";
     mainProgram = "dotbot";
     longDescription = ''
@@ -38,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/anishathalye/dotbot";
     changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ludat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ludat ];
   };
 }
