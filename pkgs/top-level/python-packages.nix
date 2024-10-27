@@ -1755,6 +1755,8 @@ self: super: with self; {
 
   bokeh = callPackage ../development/python-modules/bokeh { };
 
+  bokeh-sampledata = callPackage ../development/python-modules/bokeh-sampledata { };
+
   boltons = callPackage ../development/python-modules/boltons { };
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
