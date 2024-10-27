@@ -91,16 +91,6 @@ with self; with elmLib; {
       };
     };
 
-  elm-review =
-    nodePkgs.elm-review // {
-      meta = with lib; nodePkgs.elm-review.meta // {
-        description = "Analyzes Elm projects, to help find mistakes before your users find them";
-        homepage = "https://package.elm-lang.org/packages/jfmengels/elm-review/${nodePkgs.elm-review.version}";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.turbomack ];
-      };
-    };
-
   elm-language-server = nodePkgs."@elm-tooling/elm-language-server" // {
     meta = with lib; nodePkgs."@elm-tooling/elm-language-server".meta // {
       description = "Language server implementation for Elm";
