@@ -1,13 +1,13 @@
-{ buildDotnetModule
-, stdenv
-, lua
-, lib
-, fetchFromGitHub
-, dotnetCorePackages
-, SDL2
-, SDL2_image
-, SDL2_ttf
-,
+{
+  buildDotnetModule,
+  stdenv,
+  lua,
+  lib,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
 }:
 
 let
@@ -57,7 +57,10 @@ buildDotnetModule {
     downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/${version}";
     changelog = downloadPage;
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ diamond-deluxe TheColorman ];
+    maintainers = with lib.maintainers; [
+      diamond-deluxe
+      TheColorman
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "Yafc";
   };
