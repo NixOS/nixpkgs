@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=ff1251de0bc327ec478fc66a562430fbf35aef42";
       hash = "sha256-f4KWDVrvO/oI+4SCUHU5GandkGtHrlaM1BWygM/Qlao=";
     })
+    # manual port of build user takeover remediation commit
+    # see https://guix.gnu.org/en/blog/2024/build-user-takeover-vulnerability
+    ./guix-build-user-takeover-fix.patch
   ];
 
   postPatch = ''
