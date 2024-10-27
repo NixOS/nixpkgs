@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.19.1";
+  version = "0.19.1-unstable-2024-10-17";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,22 +26,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
-    rev = "v${version}";
-    hash = "sha256-MD7lIKwAwULZp7yLE6jiao2PU6h6RIl0SQ/6b4Lq+9I=";
+    rev = "30adf43a8929ade8a9e0abee6921a5043c962215";
+    hash = "sha256-ytpNKpbaisdd+BXsZBpJV09JRCrX1JcKAelDpIW0bR8=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch2 {
-      # pytest8 compat
-      url = "https://github.com/davidhalter/jedi/commit/39c8317922f8f0312c12127cad10aea38d0ed7b5.patch";
-      hash = "sha256-wXHWcfoRJUl+ADrNMML0+DYTcRTyLs55Qrs7sDqT8BA=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ parso ];
+  dependencies = [ parso ];
 
   nativeCheckInputs = [
     attrs
@@ -57,10 +48,6 @@ buildPythonPackage rec {
     [
       # sensitive to platform, causes false negatives on darwin
       "test_import"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && pythonOlder "3.9") [
-      # AssertionError: assert 'foo' in ['setup']
-      "test_init_extension_module"
     ]
     ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
       # InvalidPythonEnvironment: The python binary is potentially unsafe.
