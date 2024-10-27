@@ -108,18 +108,19 @@ in
     systemd.packages = [ cfg.package ];
     environment.pathsToLink = [ "/share/uwsm" ];
 
-    services.graphical-desktop.enable = true;
-
     # UWSM recommends dbus broker for better compatibility
     services.dbus.implementation = "broker";
 
-    services.displayManager.sessionPackages = lib.mapAttrsToList (
-      name: value:
-      mk_uwsm_desktop_entry {
-        inherit name;
-        inherit (value) prettyName comment binPath;
-      }
-    ) cfg.waylandCompositors;
+    services.displayManager = {
+      enable = true;
+      sessionPackages = lib.mapAttrsToList (
+        name: value:
+        mk_uwsm_desktop_entry {
+          inherit name;
+          inherit (value) prettyName comment binPath;
+        }
+      ) cfg.waylandCompositors;
+    };
   };
 
   meta.maintainers = with lib.maintainers; [
