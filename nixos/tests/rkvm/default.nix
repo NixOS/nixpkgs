@@ -6,6 +6,7 @@ let
   #
   snakeoil-cert = ./cert.pem;
   snakeoil-key = ./key.pem;
+  snakeoil-password = builtins.path { path = ./password.txt; };
 in
 {
   name = "rkvm";
@@ -67,9 +68,8 @@ in
         settings = {
           server = "10.0.0.1:5258";
           certificate = snakeoil-cert;
-          key = snakeoil-key;
-          password = "snakeoil";
         };
+        passwordFile = snakeoil-password;
       };
     };
   };

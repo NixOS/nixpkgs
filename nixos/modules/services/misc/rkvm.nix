@@ -58,7 +58,15 @@ in
 
           } // extraSettings);
         };
+      };
 
+      passwordFile = mkOption {
+        description = ''
+          Path to a file whose contents will be substituted for {option}`.settings.password` at runtime, to avoid placing the password in the nix store.
+
+          The password (i.e., contents of this file) must natch between the server and all connecting clients.
+        '';
+        type = types.nullOr types.path; default = null;
       };
     };
 
@@ -114,7 +122,11 @@ in
 
     systemd.services =
       let
-        mkBase = component: {
+        mkBase = component:
+        let
+          ccfg = cfg.${component};
+        in
+        {
           description = "RKVM ${component}";
           wantedBy = [ "multi-user.target" ];
           after = {
@@ -126,11 +138,21 @@ in
             client = [ "network-online.target" ];
           }.${component};
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/rkvm-${component} ${toml.generate "rkvm-${component}.toml" cfg.${component}.settings}";
             Restart = "always";
             RestartSec = 5;
             Type = "simple";
           };
+          script = ''
+            ${cfg.package}/bin/rkvm-${component} ${if ccfg.passwordFile == null then (
+              toml.generate "rkvm-${component}.toml" ccfg.settings
+            ) else ''<(
+                settings=$( cat ${
+                  toml.generate "rkvm-${component}.toml" (ccfg.settings // { password = "REPLACE_PASSWORD"; })
+                } ) || exit
+                password=$( cat ${lib.escapeShellArg ccfg.passwordFile} ) || exit
+                printf '%s\n' "''${settings/REPLACE_PASSWORD/$password}"
+            )''}
+          '';
         };
       in
       {
