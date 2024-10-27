@@ -194,4 +194,9 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 8d14fa2886fec877690c6d28cfcdba4503dbbcea
 
 # nixos/virtualisation: format image-related files
+# Original formatting commit that was reverted
+04fadac429ca7d6b92025188652376c230205730
+# Revert commit
+4cec81a9959ce612b653860dcca53101a36f328a
+# Final commit that does the formatting
 88b285c01d84de82c0b2b052fd28eaf6709c2d26
