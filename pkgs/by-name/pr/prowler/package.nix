@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     boto3
     botocore
     colorama
+    cryptography
     dash
     dash-bootstrap-components
     detect-secrets
@@ -52,12 +53,13 @@ python3.pkgs.buildPythonApplication rec {
     google-auth-httplib2
     jsonschema
     kubernetes
+    microsoft-kiota-abstractions
     msgraph-sdk
-    msrestazure
     numpy
     pandas
     py-ocsf-models
     pydantic
+    python-dateutil
     pytz
     schema
     shodan
