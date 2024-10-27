@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/hello/manual/";
     changelog = "https://git.savannah.gnu.org/cgit/hello.git/plain/NEWS?h=v${finalAttrs.version}";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stv0g ];
     mainProgram = "hello";
     platforms = platforms.all;
   };
