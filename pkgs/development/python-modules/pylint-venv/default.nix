@@ -9,18 +9,18 @@
 buildPythonPackage rec {
   pname = "pylint-venv";
   version = "3.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jgosmann";
-    repo = pname;
+    repo = "pylint-venv";
     rev = "refs/tags/v${version}";
     hash = "sha256-dJWVfltze4zT0CowBZSn3alqR2Y8obKUCmO8Nfw+ahs=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   # Module has no tests
   doCheck = false;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Module to make pylint respect virtual environments";
     homepage = "https://github.com/jgosmann/pylint-venv/";
     changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
