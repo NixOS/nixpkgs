@@ -12,44 +12,26 @@ import ./make-test-python.nix (
     };
 
     nodes.machine = {
-      virtualisation.memorySize = 256;
-      systemd.oomd.extraConfig.DefaultMemoryPressureDurationSec = "1s";
+      # aarch64-linux on ofborg is 129M
+      virtualisation.memorySize = 128;
 
       services.swapspace = {
         enable = true;
         extraArgs = [ "-v" ];
         settings = {
           # test outside /var/lib/swapspace
-          swappath = "/root/swamp";
+          swappath = "/swamp";
           cooldown = 1;
         };
       };
 
       swapDevices = lib.mkOverride 0 [
         {
+          size = 127;
           device = "/root/swapfile";
-          size = 128;
         }
       ];
-
-      # adopted from systemd-oomd test
-      systemd.slices.workload = {
-        description = "Test slice for memory pressure kills";
-        sliceConfig = {
-          MemoryAccounting = true;
-          ManagedOOMMemoryPressure = "kill";
-          ManagedOOMMemoryPressureLimit = "70%";
-        };
-      };
-
-      systemd.services.testbloat = {
-        description = "Create a lot of memory pressure";
-        serviceConfig = {
-          Slice = "workload.slice";
-          MemoryHigh = "128M";
-          ExecStart = "${pkgs.coreutils}/bin/tail /dev/zero";
-        };
-      };
+      boot.kernel.sysctl."vm.swappiness" = 30;
     };
 
     testScript = ''
@@ -57,26 +39,25 @@ import ./make-test-python.nix (
       machine.wait_for_unit("swapspace.service")
       machine.wait_for_unit("root-swapfile.swap")
 
-      print(machine.succeed("systemctl status swapspace.service"))
+      # sent usr1 and usr2 signals, kind of works outside but not in test
+      print(machine.succeed("journalctl -b -u swapspace.service"))
       print(machine.succeed("swapon --show"))
 
       swamp = False
-      with subtest("swapspace works and oom is a safeguard"):
-        machine.succeed("systemctl start testbloat.service")
-        # wait for a maximum of 45sec
-        for i in range(1, 11):
-          print(machine.succeed("free -h"))
+      with subtest("swapspace works"):
+        machine.execute("mkdir /root/memfs")
+        machine.execute("mount -o size=1G -t tmpfs none /root/memfs")
+        for i in range(35):
           out = machine.succeed("swapon --show")
-          swamp = "/root/swamp" in out
+          swamp = "/swamp" in out
           print(out)
           if swamp:
-            machine.succeed("systemctl kill --wait testbloat.service")
+            machine.succeed("rm -f /root/memfs/*")
             break
-          machine.sleep(i)
+          machine.execute(f"dd if=/dev/zero of=/root/memfs/{i} bs=4238K count=1")
 
-      print(machine.succeed("swapspace -e -s /root/swamp"))
-      machine.succeed("swapoff /root/swapfile")
-      assert machine.succeed("swapon --show") == ""
+      print(machine.succeed("swapspace -e -s /swamp"))
+      assert "/swamp" not in machine.execute("swapon --show")
       assert swamp
     '';
   }
