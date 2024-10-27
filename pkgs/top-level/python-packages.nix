@@ -3616,6 +3616,8 @@ self: super: with self; {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dmgbuild = callPackage ../development/python-modules/dmgbuild { };
+
   dmt-core = callPackage ../development/python-modules/dmt-core { };
 
   dm-control = callPackage ../development/python-modules/dm-control { };
