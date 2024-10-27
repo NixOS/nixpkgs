@@ -19,6 +19,7 @@
   pytestCheckHook,
   python-snappy,
   pythonOlder,
+  pythonAtLeast,
   pyyaml,
   networkx,
   requests,
@@ -126,12 +127,18 @@ buildPythonPackage rec {
       # Timing-based, flaky on darwin and possibly others
       "test_idle_timer"
     ]
-    ++ lib.optionals
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
-      [
-        # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-        "test_second_load_timestamp"
-      ];
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Require deprecated distutils
+      "test_which"
+      "test_load"
+    ]
+    ++
+      lib.optionals
+        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
+        [
+          # Flaky with older low-res mtime on darwin < 10.13 (#143987)
+          "test_second_load_timestamp"
+        ];
 
   pythonImportsCheck = [ "intake" ];
 
