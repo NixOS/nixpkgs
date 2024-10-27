@@ -17,6 +17,7 @@
   enableHybridCodec ? false,
   vaapi-intel-hybrid,
   enableGui ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -65,6 +66,8 @@ stdenv.mkDerivation {
     ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     homepage = "https://01.org/linuxmedia";
