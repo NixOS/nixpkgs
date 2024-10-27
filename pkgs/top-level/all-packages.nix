@@ -861,6 +861,8 @@ with pkgs;
 
   referencesByPopularity = callPackage ../build-support/references-by-popularity { };
 
+  dockerAutoLayer = callPackage ../build-support/docker/auto-layer.nix { };
+
   dockerMakeLayers = callPackage ../build-support/docker/make-layers.nix { };
 
   removeReferencesTo = callPackage ../build-support/remove-references-to {
