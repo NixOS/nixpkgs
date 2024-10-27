@@ -27,6 +27,10 @@
         "date": "2022-10-14",
         "new": "neodev-nvim"
     },
+    "magma-nvim-goose": {
+        "date": "2024-10-28",
+        "new": "magma-nvim"
+    },
     "nvchad-extensions": {
         "date": "2023-08-19",
         "new": "nvchad-ui"
