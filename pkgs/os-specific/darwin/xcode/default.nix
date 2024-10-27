@@ -89,5 +89,6 @@ in lib.makeExtensible (self: {
   xcode_15_3 = requireXcode "15.3" "sha256-FyVA8EEPCI12Z4sJ4RQRZlMMpFmi7S8VYLcyvad3swM=";
   xcode_15_4 = requireXcode "15.4" "sha256-yeo+sf6bBIJy9/1sQiMuPEMPniwGXMB6/FXXL0UrI5U=";
   xcode_16 = requireXcode "16" "sha256-i/MMcEi5wCpe5+nGo6gUTsFFCoorORydAn7D/GClEdo=";
+  xcode_16_1 = requireXcode "16.1" "sha256-yYg6NRRnYM/5X3hhVMfcXcdoiOV36fIongJNQ5nviD8=";
   xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })
