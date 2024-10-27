@@ -535,8 +535,6 @@ with pkgs;
 
   crackql = callPackage ../tools/security/crackql { };
 
-  crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
-
   dae = callPackage ../tools/networking/dae { };
 
   darling = callPackage ../applications/emulators/darling { };
