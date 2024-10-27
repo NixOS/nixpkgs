@@ -2,11 +2,13 @@
   curl,
   expat,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   gumbo,
   help2man,
   lib,
   libuuid,
+  meson,
+  ninja,
   nix-update-script,
   pkg-config,
   stdenv,
@@ -15,46 +17,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httpdirfs";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
+    hash = "sha256-4Tp9DTYWUHElO0YNeINgzmbI0tpXxmKfZ1Jhz5UYn5M=";
   };
-
-  postPatch = lib.optional stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace-fail '-fanalyzer' '-Xanalyzer'
-  '';
 
   nativeBuildInputs = [
     help2man
+    meson
+    ninja
     pkg-config
   ];
 
   buildInputs = [
     curl
     expat
-    fuse
+    fuse3
     gumbo
     libuuid
   ];
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-
-  postBuild = ''
-    make man
-  '';
-
   passthru = {
-    # Disabled for Darwin because requires macFUSE installed outside NixOS
-    tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (
-      testers.testVersion {
-        command = "${lib.getExe finalAttrs.finalPackage} --version";
-        package = finalAttrs.finalPackage;
-      }
-    );
+    tests.version = testers.testVersion {
+      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      package = finalAttrs.finalPackage;
+    };
     updateScript = nix-update-script { };
   };
 
@@ -65,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";
     maintainers = with lib.maintainers; [ sbruder schnusch anthonyroussel ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 })
