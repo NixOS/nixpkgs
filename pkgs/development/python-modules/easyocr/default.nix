@@ -5,7 +5,7 @@
   hdf5,
   numpy,
   onnx,
-  opencv4,
+  opencv-python-headless,
   pillow,
   pyaml,
   pyclipper,
@@ -34,14 +34,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "opencv-python-headless" "" \
       --replace "ninja" ""
   '';
 
   propagatedBuildInputs = [
     hdf5
     numpy
-    opencv4
+    opencv-python-headless
     pillow
     pyaml
     pyclipper
