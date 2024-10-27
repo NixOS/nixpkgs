@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-venv";
-  version = "3.0.3";
+  version = "3.0.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jgosmann";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dsVEHJawsTNKVCVmeOa61wOU5GPeyzAU/eUDFrK9PPg=";
+    hash = "sha256-dJWVfltze4zT0CowBZSn3alqR2Y8obKUCmO8Nfw+ahs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
