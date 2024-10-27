@@ -2480,6 +2480,7 @@
   };
   bbenno = {
     email = "nix@bbenno.com";
+    matrix = "@bbenno:matrix.org";
     github = "bbenno";
     githubId = 32938211;
     name = "Benno Bielmeier";
@@ -19726,6 +19727,12 @@
     email = "stp.tjeerd@gmail.com";
     github = "shhht";
     githubId = 118352823;
+  };
+  shift = {
+    name = "Vincent Palmer";
+    email = "shift@someone.section.me";
+    github = "shift";
+    githubId = 1653;
   };
   shikanime = {
     name = "William Phetsinorath";

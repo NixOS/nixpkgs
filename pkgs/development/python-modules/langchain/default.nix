@@ -58,6 +58,8 @@ buildPythonPackage rec {
 
   buildInputs = [ bash ];
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   dependencies = [
     aiohttp
     langchain-core

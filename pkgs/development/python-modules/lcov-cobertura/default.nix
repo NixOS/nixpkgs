@@ -22,7 +22,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
   dependencies = [ distutils ];
 
-  doCheck = true;
   pythonImportsCheck = [ "lcov_cobertura" ];
 
   meta = {

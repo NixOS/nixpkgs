@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, libmrss, libiconv }:
+{ lib, stdenv, fetchFromGitHub, libmrss }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (final: {
   pname = "rsstail";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "rsstail";
-    rev = "6f2436185372b3f945a4989406c4b6a934fe8a95";
-    sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
+    rev = "v${final.version}";
+    hash = "sha256-wbdf9zhwMN7QhJ5WoJo1Csu0EcKUTON8Q2Ic5scbn7I=";
   };
 
-  buildInputs = [ libmrss ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-
-  postPatch = ''
-    substituteInPlace Makefile --replace -liconv_hook ""
-  '';
+  buildInputs = [ libmrss ];
 
   makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   # just runs cppcheck linter
   doCheck = false;
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
       detects a new entry it'll emit only that new entry.
     '';
     homepage = "https://www.vanheusden.com/rsstail/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.Necior ];
     platforms = platforms.unix;
   };
-}
+})

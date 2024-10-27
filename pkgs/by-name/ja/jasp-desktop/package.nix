@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     rev = "v${version}";
-    hash = "sha256-G84bmR+40W9RV+OIXYuMmwdEFE0iPMp/wEOcRHYUoj8=";
+    hash = "sha256-SACGyNVxa6rFjloRQrEVtUgujEEF7WYL8Qhw6ZqLwdQ=";
     fetchSubmodules = true;
   };
 

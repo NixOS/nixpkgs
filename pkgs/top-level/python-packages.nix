@@ -11241,7 +11241,7 @@ self: super: with self; {
 
   pydmd = callPackage ../development/python-modules/pydmd { };
 
-  pydns = callPackage ../development/python-modules/py3dns { };
+  py3dns = callPackage ../development/python-modules/py3dns { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
@@ -13689,6 +13689,8 @@ self: super: with self; {
   retry = callPackage ../development/python-modules/retry { };
 
   retry-decorator = callPackage ../development/python-modules/retry-decorator { };
+
+  retry2 = callPackage ../development/python-modules/retry2 { };
 
   retrying = callPackage ../development/python-modules/retrying { };
 
@@ -17951,6 +17953,8 @@ self: super: with self; {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zetup = callPackage ../development/python-modules/zetup { };
+
+  zeversolar = callPackage ../development/python-modules/zeversolar { };
 
   zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 

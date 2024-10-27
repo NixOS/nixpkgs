@@ -81,8 +81,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     pytestCheckHook
     tpm2-tools
