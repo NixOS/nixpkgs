@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   hdf5,
   numpy,
-  onnx,
   opencv-python-headless,
   pillow,
   pyaml,
@@ -16,12 +16,13 @@
   shapely,
   torch,
   torchvision,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "easyocr";
   version = "1.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,12 +33,19 @@ buildPythonPackage rec {
     hash = "sha256-9mrAxt2lphYtLW81lGO5SYHsnMnSA/VpHiY2NffD/Js=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "ninja" ""
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "torchvision"
+  ];
+
+  pythonRemoveDeps = [
+    "ninja"
+  ];
+
+  dependencies = [
     hdf5
     numpy
     opencv-python-headless
@@ -52,7 +60,19 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  nativeCheckInputs = [ onnx ];
+  checkPhase = ''
+    runHook preCheck
+
+    export HOME="$(mktemp -d)"
+    pushd unit_test
+    ${python.interpreter} run_unit_test.py --easyocr "$out/${python.sitePackages}/easyocr"
+    popd
+
+    runHook postCheck
+  '';
+
+  # downloads detection model from the internet
+  doCheck = false;
 
   pythonImportsCheck = [ "easyocr" ];
 
