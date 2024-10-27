@@ -307,7 +307,7 @@ let
           $out/bin/${o.program} \
           --add-flags "${toString o.flags}" \
           --set ASDF "${o.asdfFasl}/asdf.${o.faslExt}" \
-          --prefix CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY" \
+          --prefix CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY''${CL_SOURCE_REGISTRY:+:}" \
           --prefix ASDF_OUTPUT_TRANSLATIONS : "$(echo $CL_SOURCE_REGISTRY | sed s,//:,::,g):" \
           --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
           --prefix DYLD_LIBRARY_PATH : "$DYLD_LIBRARY_PATH" \
