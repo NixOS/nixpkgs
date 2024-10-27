@@ -188,7 +188,9 @@ let
 
       # propagate the runtime sandbox profile since the contents apply to published
       # executables
-      propagatedSandboxProfile = toString dotnet-runtime.__propagatedSandboxProfile;
+      propagatedSandboxProfile = lib.optionalString (dotnet-runtime != null) (
+        toString dotnet-runtime.__propagatedSandboxProfile
+      );
 
       meta = (args.meta or { }) // {
         inherit platforms;
