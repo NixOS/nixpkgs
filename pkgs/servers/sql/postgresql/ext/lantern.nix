@@ -2,27 +2,33 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, openssl
 , postgresql
 , postgresqlTestHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql-lantern";
-  version = "0.2.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d5CdS11Z0u8+oPvjH6gVx6k8y05SS6wU3PnafcEgQeY=";
+    hash = "sha256-V8W61hELXeaVvNZgRUcckFlCMWis7NENlRKySxsK/L8=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    patchShebangs --build lantern_hnsw/scripts/link_llvm_objects.sh
+   '';
 
   nativeBuildInputs = [
     cmake
   ];
 
   buildInputs = [
+    openssl
     postgresql
   ];
 
@@ -38,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_FOR_DISTRIBUTING=ON"
+    "-S ../lantern_hnsw"
   ];
 
   passthru.tests.extension = stdenv.mkDerivation {
