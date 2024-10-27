@@ -61,6 +61,7 @@ ps.buildPythonApplication rec {
   dependencies = [
     ps.pyside6
     ps.jeepney
+    ps.toml
   ];
 
   preFixup = ''
@@ -103,7 +104,6 @@ ps.buildPythonApplication rec {
     ps.pytest-cov-stub
     ps.pytest-instafail
     ps.pytest-qt
-    ps.toml
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     ps.pytest-xvfb
     xorg.xvfb
