@@ -33,7 +33,7 @@
 
 let
   pname = "waveterm";
-  version = "0.8.12";
+  version = "0.8.13";
 
   src =
     let
@@ -46,10 +46,10 @@ let
         aarch64-darwin = "Wave-darwin-arm64-${version}.zip";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-lk+YBlsgS2kOsaesKJ0XMCnbxq5iza/0xG6qWjHLZA8=";
-        aarch64-linux = "sha256-57j5qp/1jGiqJP6Qmfw5XkoyXkNpnaTepfhSzlISExM=";
-        x86_64-darwin = "sha256-jBFkBC4PcWSQNw8A2w+2iUnSLoRvXQ3A0CVqkqfx4dI=";
-        aarch64-darwin = "sha256-pQ3TXKhiCI164qmmDkDFb3WUjd/lX1MnAOWqsQICHR4=";
+        x86_64-linux = "sha256-Poh1p+XWbWKByGLbKN7Xg5eOPHsDe18MT/W9JcdiCYk=";
+        aarch64-linux = "sha256-TQKexiW2NptreCen51lM88YoKcgSo7mdj7GsNcHxvZ4=";
+        x86_64-darwin = "sha256-iMm9PvtiNFRSnJ5oXiRnlq1FpkF/siswtS0HET4uSYU=";
+        aarch64-darwin = "sha256-n16vZuUqds4JLJthvLt8vlv3eiTdSv8z58wFhCdPmnI=";
       };
     in
     fetchurl {
