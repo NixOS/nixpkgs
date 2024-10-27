@@ -9,18 +9,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql-lantern";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aw003Y2T9/yNJ5dkCD+qQsUO2V7Q63I/E2IFaZAPd90=";
+    hash = "sha256-V8W61hELXeaVvNZgRUcckFlCMWis7NENlRKySxsK/L8=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    patchShebangs --build scripts/link_llvm_objects.sh
+    patchShebangs --build lantern_hnsw/scripts/link_llvm_objects.sh
    '';
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_FOR_DISTRIBUTING=ON"
+    "-S ../lantern_hnsw"
   ];
 
   passthru.tests.extension = stdenv.mkDerivation {
