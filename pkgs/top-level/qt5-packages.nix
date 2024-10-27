@@ -180,6 +180,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
 
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
+
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
   mlt = pkgs.mlt.override {
