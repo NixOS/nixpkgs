@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.5";
+  version = "2.0.6";
 
   desktopItems = [
     (makeDesktopItem {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ytmdesktop/ytmdesktop/releases/download/v${finalAttrs.version}/youtube-music-desktop-app_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-0j8HVmkFyTk/Jpq9dfQXFxd2jnLwzfEiqCgRHuc5g9o=";
+    hash = "sha256-uLTnVA9ooGlbtmUGoYtrT9IlOhTAJpEXMr1GSs3ae/8=";
   };
 
   unpackPhase = ''
