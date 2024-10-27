@@ -24,6 +24,12 @@ dotnetConfigureHook() {
         local -r parallelFlag="--disable-parallel"
     fi
 
+    if [[ -n ${dotnetSelfContainedBuild-} ]]; then
+        dotnetRestoreFlagsArray+=("-p:SelfContained=true")
+    else
+        dotnetRestoreFlagsArray+=("-p:SelfContained=false")
+    fi
+
     dotnetRestore() {
         local -r projectFile="${1-}"
         for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
