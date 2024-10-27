@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hukl";
     repo = "hostmux";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-Rh8eyKoUydixj+X7muWleZW9u8djCQAyexIfRWIOr0o=";
   };
 
@@ -28,9 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace hostmux \
-      --replace "SSH_CMD=ssh" "SSH_CMD=${openssh}/bin/ssh" \
-      --replace "tmux -2" "${tmux}/bin/tmux -2" \
-      --replace "tmux s" "${tmux}/bin/tmux s"
+      --replace-fail "SSH_CMD=ssh" "SSH_CMD=${openssh}/bin/ssh" \
+      --replace-fail "TMUX_CMD=tmux" "TMUX_CMD=${tmux}/bin/tmux"
   '';
 
   installPhase = ''
@@ -46,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Small wrapper script for tmux to easily connect to a series of hosts via ssh and open a split pane for each of the hosts";
     homepage = "https://github.com/hukl/hostmux";
+    changelog = "https://github.com/hukl/hostmux/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "hostmux";
     maintainers = with lib.maintainers; [ fernsehmuell ];
