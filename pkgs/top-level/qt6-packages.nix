@@ -60,6 +60,8 @@ makeScopeWithSplicing' {
     qt = qt6;
   };
 
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
+
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
   };
