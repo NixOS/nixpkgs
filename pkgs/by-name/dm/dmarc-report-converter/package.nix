@@ -19,6 +19,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  checkFlags = [ "-mod=vendor ./cmd/... ./pkg/..." ];
+
   ldflags = [
     "-s"
     "-w"
