@@ -1,0 +1,12 @@
+diff --git a/tools/blisp/src/util.c b/tools/blisp/src/util.c
+index 906985a..74cc626 100644
+--- a/tools/blisp/src/util.c
++++ b/tools/blisp/src/util.c
+@@ -9,6 +9,7 @@
+ // These are not thread safe, but it doesn't place the responsibility
+ // to free an allocated buffer on the caller.nn
+ 
++#include <mach-o/dyld.h>
+ #include <stdlib.h>
+ 
+ static void util_get_executable_path(char* buffer_out, uint32_t max_size) {
