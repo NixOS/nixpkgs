@@ -80,6 +80,7 @@ buildPythonPackage rec {
 
   preCheck =
     ''
+      (($(ulimit -n) < 1024)) && ulimit -n 1024
       export PATH="$PATH:$out/bin"
 
       # The top directory /build matches black's DEFAULT_EXCLUDE regex.
