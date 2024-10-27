@@ -35,7 +35,7 @@
   removeReferencesTo,
 
   # Build inputs
-  darwin,
+  apple-sdk_13,
   numactl,
 
   # dependencies
@@ -364,6 +364,9 @@ buildPythonPackage rec {
   # NB technical debt: building without NNPACK as workaround for missing `six`
   USE_NNPACK = 0;
 
+  # Explicitly enable MPS for Darwin
+  USE_MPS = setBool stdenv.hostPlatform.isDarwin;
+
   cmakeFlags =
     [
       # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
@@ -519,9 +522,7 @@ buildPythonPackage rec {
     ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.libobjc
+      apple-sdk_13
     ]
     ++ lib.optionals tritonSupport [ _tritonEffective ]
     ++ lib.optionals MPISupport [ mpi ]
