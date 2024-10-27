@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
