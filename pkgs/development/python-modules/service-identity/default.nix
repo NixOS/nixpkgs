@@ -17,32 +17,35 @@
 buildPythonPackage rec {
   pname = "service-identity";
   version = "24.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyca";
-    repo = pname;
+    repo = "service-identity";
     rev = "refs/tags/${version}";
     hash = "sha256-onxCUWqGVeenLqB5lpUpj3jjxTM61ogXCQOGnDnClT4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cryptography
-    idna
     pyasn1
     pyasn1-modules
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    idna = [ idna ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "service_identity" ];
 
