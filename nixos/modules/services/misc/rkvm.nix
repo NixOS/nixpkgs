@@ -109,7 +109,7 @@ in
         description = ''
           A list of keys that, when pressed simultaneously, switch between the clients registered at the server (for this, the server itself is considered a client).
 
-          _A list of available key names is available at <https://github.com/htrefil/rkvm/blob/${cfg.package.version}/switch-keys.md>._
+          _A list of available key names is available at <https://github.com/htrefil/rkvm/blob/master/switch-keys.md>._
         '';
       };
 
@@ -120,7 +120,7 @@ in
         type = types.str;
         example = "192.168.0.123:5258";
         description = ''
-          An RKVM server's internet socket address, either IPv4 or IPv6.
+          Hostname or IPv4/6 address and port number of the `rkvm` server to connect to.
         '';
       };
     };
