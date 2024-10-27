@@ -16035,6 +16035,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  ondt = {
+    name = "Ondrej Telka";
+    email = "nix@ondt.dev";
+    github = "ondt";
+    githubId = 20520951;
+  };
   onedragon = {
     name = "YiLong Liu";
     email = "18922251299@163.com";
