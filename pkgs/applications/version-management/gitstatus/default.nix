@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
 
   postPatch = ''
