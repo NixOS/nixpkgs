@@ -1,34 +1,47 @@
 {
   lib,
   stdenv,
+  grpc,
   buildPythonPackage,
   fetchPypi,
-  grpc,
-  six,
-  protobuf,
-  enum34 ? null,
-  futures ? null,
-  isPy27,
-  pkg-config,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
   cython,
+  pkg-config,
+
+  # buildInputs
   c-ares,
   openssl,
   zlib,
+
+  # dependencies
+  six,
+  protobuf,
+  isPy27,
+  enum34 ? null,
+  futures ? null,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio";
-  format = "setuptools";
-  version = "1.64.1";
+  version = "1.66.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jVHdHFnV+g80JmuAo4BewpofJkJcKlRzYTP22H/Eloo=";
+    hash = "sha256-NTNPnJdFrdPjV+M3J1b9MtklvVLEHal/Tf2vveC/DuI=";
   };
 
   outputs = [
     "out"
     "dev"
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   nativeBuildInputs = [
@@ -41,7 +54,7 @@ buildPythonPackage rec {
     openssl
     zlib
   ];
-  propagatedBuildInputs =
+  dependencies =
     [
       six
       protobuf
@@ -74,10 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2-based RPC framework";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
     maintainers = [ ];
   };
 }
