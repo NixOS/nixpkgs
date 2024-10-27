@@ -3,7 +3,6 @@
   stdenv,
   testers,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   darwin,
   numbat,
@@ -12,24 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
     rev = "v${version}";
-    hash = "sha256-o3EYhMFBgs/Ni+YCM3+RdUYlwRt+nMaEP/cAkDXMVHc=";
+    hash = "sha256-TmzM541S2W5Cy8zHEWKRE2Zj2bSgrM4vbsWw3zbi3LQ=";
   };
 
-  cargoHash = "sha256-rK9RPd/hww2F87l/dd14pB4izE58NuqaewYaqMimV1M=";
-
-  patches = [
-    # https://github.com/sharkdp/numbat/pull/562
-    (fetchpatch {
-      url = "https://github.com/sharkdp/numbat/commit/4756a1989ecdab35fd05ca18c721ed15d8cde2b1.patch";
-      hash = "sha256-22+yePjy+MxJQ60EdvgaTw/IVV0d/wS2Iqza1p1xmfk=";
-    })
-  ];
+  cargoHash = "sha256-exvJJsGIj6KhmMcwhPjXMELvisuUtl17BAO6XEJSJmI=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
