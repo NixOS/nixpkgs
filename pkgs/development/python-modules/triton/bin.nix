@@ -52,6 +52,10 @@ buildPythonPackage rec {
   postFixup =
     ''
       chmod +x "$out/${python.sitePackages}/triton/backends/nvidia/bin/ptxas"
+      substituteInPlace $out/${python.sitePackages}/triton/backends/nvidia/driver.py \
+        --replace \
+          'return [libdevice_dir, *libcuda_dirs()]' \
+          'return [libdevice_dir, "${addDriverRunpath.driverLink}/lib", "${cudaPackages.cuda_cudart}/lib/stubs/"]'
     '';
 
   meta = with lib; {
