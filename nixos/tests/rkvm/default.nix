@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, lib, ... }:
 let
   # Generated with
   #
@@ -9,6 +9,10 @@ let
 in
 {
   name = "rkvm";
+
+  meta = {
+    maintainers = [ lib.maintainers.NiklasGollenstede ];
+  };
 
   nodes = {
     server = { pkgs, ... }: {

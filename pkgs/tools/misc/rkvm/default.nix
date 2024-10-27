@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, nix-update-script
 , rustPlatform
 , pkg-config
 , libevdev
@@ -18,6 +19,7 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-pGCoNmGOeV7ND4kcRjlJZbEMnmKQhlCtyjMoWIwVZrM=";
   };
+  passthru.updateScript = nix-update-script { };
 
   cargoHash = "sha256-aq8Ky29jXY0cW5s0E4NDs29DY8RIA0Fvy2R72WPAYsk=";
 
@@ -42,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.NiklasGollenstede ];
   };
 }

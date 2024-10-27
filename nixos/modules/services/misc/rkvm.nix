@@ -7,7 +7,7 @@ let
   toml = pkgs.formats.toml { };
 in
 {
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.NiklasGollenstede ];
 
   options.services.rkvm = {
     enable = mkOption {
