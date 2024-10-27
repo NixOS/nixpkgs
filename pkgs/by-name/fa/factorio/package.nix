@@ -48,10 +48,12 @@ let
       Please ensure you have set the username and token with config.nix, or
       /etc/nix/nixpkgs-config.nix if on NixOS.
 
-      Your token can be seen at https://factorio.com/profile (after logging in). It is
-      not as sensitive as your password, but should still be safeguarded. There is a
-      link on that page to revoke/invalidate the token, if you believe it has been
-      leaked or wish to take precautions.
+      Your token can be seen at https://factorio.com/profile (after logging in).
+      Beware this will add the credentials to the Nix store, which is
+      world-readable on the local machine. It is not as sensitive as your
+      password, but should still be safeguarded. There is a link on that page to
+      revoke/invalidate the token, if you believe it has been leaked or wish to
+      take precautions.
 
       Example:
       {
