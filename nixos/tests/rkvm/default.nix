@@ -70,6 +70,7 @@ in
           certificate = snakeoil-cert;
         };
         passwordFile = snakeoil-password;
+        useOwnSlice = true;
       };
     };
   };

@@ -68,6 +68,15 @@ in
         '';
         type = types.nullOr types.path; default = null;
       };
+
+      useOwnSlice = lib.mkEnableOption ''
+        running the rkvm ${component} service with higher priority.
+        You can try this on the server and/or client when the forwarding, esp. the cursor, stutters even on a stable network connection.
+
+        Specifically, this moves the server and/or client from `system.slice` into a new `rkvm.slice`, that is on the same hierarchical level as `system.slice` and `user.slice`.
+        In case of resource contention, the `rkvm-${component}.service` will thus (by default) have the same priority as all other services (or user processes) combined.
+      '';
+
     };
 
   in {
@@ -141,6 +150,7 @@ in
             Restart = "always";
             RestartSec = 5;
             Type = "simple";
+            Slice = lib.mkIf cfg.${component}.useOwnSlice "rkvm.slice";
           };
           script = ''
             ${cfg.package}/bin/rkvm-${component} ${if ccfg.passwordFile == null then (
@@ -159,6 +169,9 @@ in
         rkvm-server = mkIf cfg.server.enable (mkBase "server");
         rkvm-client = mkIf cfg.client.enable (mkBase "client");
       };
+
+      systemd.slices.rkvm = lib.mkIf (cfg.client.useOwnSlice || cfg.server.useOwnSlice) { };
+
   };
 
 }
