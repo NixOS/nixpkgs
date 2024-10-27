@@ -160,15 +160,10 @@ buildPythonPackage rec {
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
-  preCheck =
-    ''
-      export HOME=$TMPDIR
-      cat ${./conftest-skip-network-errors.py} >> test/conftest.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # OSError: [Errno 24] Too many open files
-      ulimit -n 4096
-    '';
+  preCheck = ''
+    export HOME=$TMPDIR
+    cat ${./conftest-skip-network-errors.py} >> test/conftest.py
+  '';
 
   disabledTests =
     [

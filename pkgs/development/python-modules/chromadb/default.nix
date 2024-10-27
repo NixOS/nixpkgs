@@ -141,7 +141,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-x" ];
 
   preCheck = ''
-    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export HOME=$(mktemp -d)
   '';
 

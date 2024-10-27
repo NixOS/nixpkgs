@@ -37,11 +37,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  # On darwin: Too many open files
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    ulimit -n 1024
-  '';
-
   disabledTests = [
     # these tests raise circus.tests.support.TimeoutException
     "test_add_start"
