@@ -1,30 +1,28 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, stayrtr
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  stayrtr,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "stayrtr";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "stayrtr";
-    rev = "v${version}";
-    hash = "sha256-/KwL/SEnHquFhPcYXpvQs71W4K1BrbqTPakatTNF47Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uNZe3g8hs9c0uXrkWSTA+e/gziOpWqx5oFIJ2ZPgEzU=";
   };
-  vendorHash = "sha256-ndMME9m3kbv/c1iKlU2Pn/YoiRQy7jfVQri3M+qhujk=";
 
-  patches = [
-    ./go.mod.patch
-  ];
+  vendorHash = "sha256-0PtQzwBhUoASUMnAAVZ4EIDmqIEaH0nct2ngyIkR+Qg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X=main.version=${version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -32,9 +30,11 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Simple RPKI-To-Router server. (Hard fork of GoRTR)";
+    description = "Simple RPKI-To-Router server";
     homepage = "https://github.com/bgp/stayrtr/";
+    changelog = "https://github.com/bgp/stayrtr/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "stayrtr";
   };
 }
