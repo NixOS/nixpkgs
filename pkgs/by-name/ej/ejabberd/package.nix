@@ -1,27 +1,55 @@
-{ stdenv, makeWrapper, lib, fetchurl, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, autoreconfHook
-, gawk
-, rebar3WithPlugins
-, fetchFromGitHub
-, fetchgit
-, fetchHex
-, beamPackages
-, nixosTests
-, withMysql ? false
-, withPgsql ? false
-, withSqlite ? false, sqlite
-, withPam ? false, pam
-, withZlib ? true, zlib
-, withSip ? false
-, withLua ? false
-, withTools ? false
-, withRedis ? false
-, withImagemagick ? false, imagemagick
+{
+  stdenv,
+  makeWrapper,
+  lib,
+  libpng,
+  libjpeg,
+  libwebp,
+  erlang,
+  openssl,
+  expat,
+  libyaml,
+  bash,
+  gnused,
+  gnugrep,
+  coreutils,
+  util-linux,
+  procps,
+  gd,
+  autoreconfHook,
+  gawk,
+  rebar3WithPlugins,
+  fetchFromGitHub,
+  fetchgit,
+  fetchHex,
+  beamPackages,
+  nixosTests,
+  withMysql ? false,
+  withPgsql ? false,
+  withSqlite ? false,
+  sqlite,
+  withPam ? false,
+  pam,
+  withZlib ? true,
+  zlib,
+  withSip ? false,
+  withLua ? false,
+  withTools ? false,
+  withRedis ? false,
+  withImagemagick ? false,
+  imagemagick,
 }:
 
 let
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep gawk coreutils util-linux procps ];
+  ctlpath = lib.makeBinPath [
+    bash
+    gnused
+    gnugrep
+    gawk
+    coreutils
+    util-linux
+    procps
+  ];
 
   provider_asn1 = beamPackages.buildRebar3 {
     name = "provider_asn1";
@@ -44,7 +72,8 @@ let
     beamDeps = [ ];
   };
 
-  allBeamDeps = import ./rebar-deps.nix {  # TODO(@chuangzhu) add updateScript
+  allBeamDeps = import ./rebar-deps.nix {
+    # TODO(@chuangzhu) add updateScript
     inherit fetchHex fetchgit fetchFromGitHub;
     builder = lib.makeOverridable beamPackages.buildRebar3;
 
@@ -55,7 +84,12 @@ let
       stringprep = prev.stringprep.override { buildPlugins = [ beamPackages.pc ]; };
       p1_acme = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
       eimp = prev.eimp.override {
-        buildInputs = [ gd libwebp libpng libjpeg ];
+        buildInputs = [
+          gd
+          libwebp
+          libpng
+          libjpeg
+        ];
         buildPlugins = [ beamPackages.pc ];
       };
       fast_tls = prev.fast_tls.override {
@@ -71,7 +105,10 @@ let
         buildPlugins = [ beamPackages.pc ];
       };
       xmpp = prev.xmpp.override {
-        buildPlugins = [ beamPackages.pc provider_asn1 ];
+        buildPlugins = [
+          beamPackages.pc
+          provider_asn1
+        ];
       };
       # Optional deps
       sqlite3 = prev.sqlite3.override {
@@ -91,19 +128,35 @@ let
     };
   };
 
-  beamDeps = builtins.removeAttrs allBeamDeps [ "sqlite3" "p1_pgsql" "p1_mysql" "luerl" "esip" "eredis" "epam" "ezlib" ];
+  beamDeps = builtins.removeAttrs allBeamDeps [
+    "sqlite3"
+    "p1_pgsql"
+    "p1_mysql"
+    "luerl"
+    "esip"
+    "eredis"
+    "epam"
+    "ezlib"
+  ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs:{
   pname = "ejabberd";
   version = "24.07";
 
   nativeBuildInputs = [
     makeWrapper
     autoreconfHook
-    (rebar3WithPlugins { plugins = [ provider_asn1 rebar3_hex ]; })
+    (rebar3WithPlugins {
+      plugins = [
+        provider_asn1
+        rebar3_hex
+      ];
+    })
   ];
 
-  buildInputs = [ erlang ]
+  buildInputs =
+    [ erlang ]
     ++ builtins.attrValues beamDeps
     ++ lib.optional withMysql allBeamDeps.p1_mysql
     ++ lib.optional withPgsql allBeamDeps.p1_pgsql
@@ -112,13 +165,13 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withZlib allBeamDeps.ezlib
     ++ lib.optional withSip allBeamDeps.esip
     ++ lib.optional withLua allBeamDeps.luerl
-    ++ lib.optional withRedis allBeamDeps.eredis
-  ;
+    ++ lib.optional withRedis allBeamDeps.eredis;
 
-  src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
-    hash = "sha256-wPt0asuoGl20Hel8A5aMH2gaE7G2waiVtxguM4IMGNk=";
-    # remember to update rebar-deps.nix
+  src = fetchFromGitHub {
+    owner = "processone";
+    repo = "ejabberd";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-4wEQBumWrHqN2uNrDxAJhgv2ok7pgQlAEPpL96ZOsTQ=";
   };
 
   passthru.tests = {
@@ -153,15 +206,21 @@ in stdenv.mkDerivation rec {
       -e '2iexport PATH=${ctlpath}:$PATH' \
       -e "s,\(^ *ERL_LIBS=.*\),\1:$ERL_LIBS," \
       $out/sbin/ejabberdctl
-    ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"''}
+    ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${
+      lib.makeBinPath [ imagemagick ]
+    }"''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source XMPP application server written in Erlang";
     mainProgram = "ejabberdctl";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar chuangzhu ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sander
+      abbradar
+      chuangzhu
+    ];
   };
-}
+})
