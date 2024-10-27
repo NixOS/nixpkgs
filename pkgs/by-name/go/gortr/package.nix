@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W6+zCLPcORGcRJF0F6/LRPap4SNVn/oKGs21T4nSNO0=";
+    hash = "sha256-W6+zCLPcORGcRJF0F6/LRPap4SNVn/oKGs21T4nSNO0=";
   };
 
   vendorHash = null;
