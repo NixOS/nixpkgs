@@ -36,7 +36,7 @@ let
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
       SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
-      ANSI_COLOR = optionalString isNixos "1;34";
+      ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
       IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
