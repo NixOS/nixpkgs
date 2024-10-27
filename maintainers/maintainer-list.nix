@@ -23162,6 +23162,13 @@
     githubId = 1215623;
     keys = [ { fingerprint = "DA03 D6C6 3F58 E796 AD26  E99B 366A 2940 479A 06FC"; } ];
   };
+  wilhelmines = {
+    email = "mail@aesz.org";
+    matrix = "@wilhelmines:matrix.org";
+    name = "Ronja Schwarz";
+    github = "wilhelmines";
+    githubId = 71409721;
+  };
   willbush = {
     email = "git@willbush.dev";
     matrix = "@willbush:matrix.org";
