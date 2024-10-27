@@ -3957,6 +3957,8 @@ self: super: with self; {
 
   einops = callPackage ../development/python-modules/einops { };
 
+  einx = callPackage ../development/python-modules/einx { };
+
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
 
   elgato = callPackage ../development/python-modules/elgato { };
