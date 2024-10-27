@@ -19,15 +19,15 @@
   enableGui ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "intel-vaapi-driver";
-  version = "2.4.1";
+  version = "2.4.1-unstable-2024-10-27";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-vaapi-driver";
-    rev = version;
-    sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
+    rev = "d30e01329344858f3c84d0ef9c2b68cbde37bb9a";
+    hash = "sha256-hMXFLXXTe2qvdk8svVlJ0sWJUIv8lu5DXk53SlBO0Cg=";
   };
 
   # Set the correct install path:
