@@ -1,27 +1,30 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, ffmpeg
 , fftwFloat
 , chafa
-, freeimage
 , glib
+, taglib
+, libogg
+, faad2
 , pkg-config
+, opusfile
+, libvorbis
 }:
 
 stdenv.mkDerivation rec {
   pname = "kew";
-  version = "1.5.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     rev = "v${version}";
-    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
+    hash = "sha256-w0EenAgAw/7tSmMuAFSaPOdboHj4ox6lqFnAuuprYxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
+  buildInputs = [ libvorbis opusfile taglib libogg faad2 fftwFloat chafa glib ];
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
