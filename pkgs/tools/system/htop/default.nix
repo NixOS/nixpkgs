@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, autoreconfHook, pkg-config
+{ lib, fetchFromGitHub, fetchpatch2, stdenv, autoreconfHook, pkg-config
 , ncurses
 , IOKit
 , libcap
@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
   };
+
+  patches = [
+    # See https://github.com/htop-dev/htop/pull/1412
+    # Remove when updating to 3.4.0
+    (fetchpatch2 {
+      name = "htop-resolve-configuration-path.patch";
+      url = "https://github.com/htop-dev/htop/commit/0dac8e7d38ec3aeae901a987717b5177986197e4.patch";
+      hash = "sha256-Er1d/yV1fioYfEmXNlLO5ayAyXkyy+IaGSx1KWXvlv0=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ]
     ++ lib.optional stdenv.hostPlatform.isLinux pkg-config

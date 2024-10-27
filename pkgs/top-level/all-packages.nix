@@ -6457,18 +6457,7 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    inherit mozc;
-
-    mozc-ut = mozc.override { dictionaries = [
-      mozcdic-ut-alt-cannadic
-      mozcdic-ut-edict2
-      mozcdic-ut-jawiki
-      mozcdic-ut-neologd
-      mozcdic-ut-personal-names
-      mozcdic-ut-place-names
-      mozcdic-ut-skk-jisyo
-      mozcdic-ut-sudachidict
-    ]; };
+    inherit mozc mozc-ut;
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
@@ -7406,12 +7395,6 @@ with pkgs;
   fcitx5 = callPackage ../tools/inputmethods/fcitx5 { };
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
-
-  fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
-    };
-  };
 
   fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 
@@ -9575,8 +9558,6 @@ with pkgs;
   libck = callPackage ../development/libraries/libck { };
 
   libcork = callPackage ../development/libraries/libcork { };
-
-  libconfig = callPackage ../development/libraries/libconfig { };
 
   libcmis = callPackage ../development/libraries/libcmis { };
 
@@ -24869,12 +24850,14 @@ with pkgs;
     postgresql_14
     postgresql_15
     postgresql_16
+    postgresql_17
 
     postgresql_12_jit
     postgresql_13_jit
     postgresql_14_jit
     postgresql_15_jit
     postgresql_16_jit
+    postgresql_17_jit
   ;
   postgresql = postgresql_16;
   postgresql_jit = postgresql_16_jit;
@@ -24884,12 +24867,14 @@ with pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
   postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
+  postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
+  postgresql17Packages = recurseIntoAttrs postgresql_17.pkgs;
   postgresql12JitPackages = recurseIntoAttrs postgresql_12_jit.pkgs;
   postgresql13JitPackages = recurseIntoAttrs postgresql_13_jit.pkgs;
   postgresql14JitPackages = recurseIntoAttrs postgresql_14_jit.pkgs;
   postgresql15JitPackages = recurseIntoAttrs postgresql_15_jit.pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
-  postgresql16Packages = postgresqlPackages;
+  postgresql17JitPackages = recurseIntoAttrs postgresql_17_jit.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -24952,7 +24937,6 @@ with pkgs;
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
-  prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-pve-exporter = callPackage ../servers/monitoring/prometheus/pve-exporter.nix { };
   prometheus-redis-exporter = callPackage ../servers/monitoring/prometheus/redis-exporter.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
@@ -33278,6 +33262,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
+  warp-plus = callPackage ../by-name/wa/warp-plus/package.nix {
+    buildGoModule = buildGo122Module;
+  };
+
   warpd = callPackage ../applications/misc/warpd { };
 
   watershot = callPackage ../applications/misc/watershot { };
@@ -33341,7 +33329,7 @@ with pkgs;
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_32; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_30; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 

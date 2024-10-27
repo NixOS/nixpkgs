@@ -1,31 +1,30 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
   pname = "dnsmonster";
-  version = "0.9.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "mosajjal";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-2k/WyAM8h2P2gCLt2J9m/ZekrzCyf/LULGOQYy5bsZs=";
+    repo = "dnsmonster";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0WHTrqnc3vYQro+nSsQipAPVymR8L4uOwtd9GJHxhVM=";
   };
 
-  vendorHash = "sha256-gAjR1MoudBAx1dxGObIVPqJdfehWkKckKtwM7sTP0w4=";
+  vendorHash = "sha256-QCG/rhs4Y3lLDVU15cBNUZqbKc4faNAqKMhMOFwK2SY=";
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mosajjal/dnsmonster/util.releaseVersion=${version}"
+    "-X=github.com/mosajjal/dnsmonster/util.releaseVersion=${version}"
   ];
 
   meta = with lib; {
