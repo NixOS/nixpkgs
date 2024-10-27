@@ -1,15 +1,5 @@
-{
-  bash,
-  fetchurl,
-  ffmpeg,
-  gettext,
-  glib,
-  gobject-introspection,
-  lib,
-  mpv-unwrapped,
-  python3,
-  stdenv
-}:
+{ bash, fetchurl, ffmpeg, gettext, glib, gobject-introspection, lib
+, mpv-unwrapped, python3, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "yuki-iptv";
@@ -20,15 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8u8KoabExVqyj8ohGUl28SqIJYGfNLNl/tyHM9gwX88=";
   };
 
-  buildInputs = [
-    ffmpeg
-    mpv-unwrapped
-  ];
+  buildInputs = [ ffmpeg mpv-unwrapped ];
 
-  nativeBuildInputs = [
-    gettext
-    python3.pkgs.wrapPython
-  ];
+  nativeBuildInputs = [ gettext python3.pkgs.wrapPython ];
 
   pythonPath = with python3.pkgs; [
     chardet
@@ -58,7 +42,9 @@ stdenv.mkDerivation rec {
       --replace "python3" "${python3}/bin/python3"
 
     substituteInPlace usr/lib/yuki-iptv/thirdparty/mpv.py \
-      --replace "ctypes.util.find_library('mpv')" "'${lib.makeLibraryPath [ mpv-unwrapped ]}/libmpv.so'"
+      --replace "ctypes.util.find_library('mpv')" "'${
+        lib.makeLibraryPath [ mpv-unwrapped ]
+      }/libmpv.so'"
   '';
 
   installPhase = ''
