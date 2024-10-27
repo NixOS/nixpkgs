@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "Willow";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g9/v56mdo0sJe5Pl/to/R/kXayaKK3qaYbnnPXpFjXE=";
+    hash = "sha256-H/UXE6gA6x849aqBcUgl3JYZ87OMNpuFyWGSsgqW1Rk=";
   };
 
   nativeBuildInputs = [ flit-core ];
