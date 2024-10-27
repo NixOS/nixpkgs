@@ -4,6 +4,7 @@
 , installShellFiles
 , openssh
 , tmux
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Small wrapper script for tmux to easily connect to a series of hosts via ssh and open a split pane for each of the hosts";
