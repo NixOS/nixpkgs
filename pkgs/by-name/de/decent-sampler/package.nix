@@ -17,8 +17,8 @@ let
   version = "1.10.0";
 
   icon = fetchurl {
-    url = "https://archive.org/download/ds-256/DS256.png";
-    hash = "sha256-SV8zY5QJ6uRSrLuGTmT1zwGoIIXCV9GD2ZNiqK+i1Bc=";
+    url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
+    hash = "sha256-EXjaHrlXY0HU2EGTrActNbltIiqTLfdkFgP7FXoLzrM=";
   };
 
   decent-sampler = stdenv.mkDerivation {
@@ -26,7 +26,7 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://archive.org/download/decent-sampler-linux-static-download-mirror/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AF0-CXigJlqmw7vCd7wMn1k/Decent_Sampler-1.10.0-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
       hash = "sha256-KYCf/F2/ziuXDHim4FPZQBARiSywvQDJBzKbHua+3SM=";
     };
 
