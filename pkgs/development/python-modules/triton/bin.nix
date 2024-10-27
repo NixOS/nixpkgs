@@ -49,14 +49,13 @@ buildPythonPackage rec {
   dontStrip = true;
 
   # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
-  postFixup =
-    ''
-      chmod +x "$out/${python.sitePackages}/triton/backends/nvidia/bin/ptxas"
-      substituteInPlace $out/${python.sitePackages}/triton/backends/nvidia/driver.py \
-        --replace \
-          'return [libdevice_dir, *libcuda_dirs()]' \
-          'return [libdevice_dir, "${addDriverRunpath.driverLink}/lib", "${cudaPackages.cuda_cudart}/lib/stubs/"]'
-    '';
+  postFixup = ''
+    chmod +x "$out/${python.sitePackages}/triton/backends/nvidia/bin/ptxas"
+    substituteInPlace $out/${python.sitePackages}/triton/backends/nvidia/driver.py \
+      --replace \
+        'return [libdevice_dir, *libcuda_dirs()]' \
+        'return [libdevice_dir, "${addDriverRunpath.driverLink}/lib", "${cudaPackages.cuda_cudart}/lib/stubs/"]'
+  '';
 
   meta = with lib; {
     description = "Language and compiler for custom Deep Learning operations";
