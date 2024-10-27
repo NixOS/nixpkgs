@@ -1305,15 +1305,7 @@ in
     nvimRequireCheck = "lzn-auto-require.loader";
   };
 
-  magma-nvim-goose = buildVimPlugin {
-    pname = "magma-nvim-goose";
-    version = "2023-03-13";
-    src = fetchFromGitHub {
-      owner = "WhiteBlackGoose";
-      repo = "magma-nvim-goose";
-      rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
-      sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
-    };
+  magma-nvim = super.magma-nvim.overrideAttrs {
     passthru.python3Dependencies =
       ps: with ps; [
         pynvim
@@ -1326,7 +1318,6 @@ in
         pyperclip
         pnglatex
       ];
-    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
   };
 
   markdown-preview-nvim =
