@@ -4412,7 +4412,7 @@ with pkgs;
   shotman = callPackage ../tools/wayland/shotman { };
 
   sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_18;
   };
 
   swayr = callPackage ../tools/wayland/swayr { };
