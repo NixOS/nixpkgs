@@ -900,7 +900,7 @@ rec {
 
   buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
-  defaultLayeringScript = writeShellScript "layering-script" ''
+  oldLayeringScript = writeShellScript "layering-script" ''
     set -euo pipefail
     referencesGraph=$1
     unnecessaryDrvsFile=$2
@@ -923,6 +923,11 @@ rec {
           | map(select(length > 0))
         ' \
         --argjson maxLayers "$availableLayers"
+  '';
+
+  defaultLayeringScript = writeScript "layering-script" ''
+    #!${python3}/bin/python3
+    ${builtins.readFile ./layer.py}
   '';
 
   # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
