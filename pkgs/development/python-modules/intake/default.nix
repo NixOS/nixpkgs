@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  appdirs,
+  platformdirs,
   bokeh,
   buildPythonPackage,
   dask,
@@ -20,6 +20,7 @@
   python-snappy,
   pythonOlder,
   pyyaml,
+  networkx,
   requests,
   setuptools,
   setuptools-scm,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.3";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "intake";
     rev = "refs/tags/${version}";
-    hash = "sha256-Fyv85HkoE9OPOoSHR1sgCG0iAFuSiQMT7cyZcQyLvv0=";
+    hash = "sha256-F13jbAQP3G3cKeAegM1w/t32xyC0BgL9/67aIlzA4SE=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
+    platformdirs
     dask
     entrypoints
     fsspec
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     jinja2
     pandas
     pyyaml
+    networkx
   ];
 
   nativeCheckInputs = [
