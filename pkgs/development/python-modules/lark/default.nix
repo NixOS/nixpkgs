@@ -30,7 +30,7 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  # Js2py is needed for tests but it's marked as insecure
+  # Js2py is needed for tests but it's unmaintained and insecure
   doCheck = false;
 
   meta = with lib; {

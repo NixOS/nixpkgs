@@ -37,7 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     flask-compress
     flask-session
     flask-themes2
-    js2py
     pycurl
     semver
     setuptools
