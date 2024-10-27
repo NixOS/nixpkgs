@@ -3839,8 +3839,6 @@ with pkgs;
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
-  ssh-import-id = python3Packages.callPackage ../tools/admin/ssh-import-id { };
-
   ssh-key-confirmer = callPackage ../tools/networking/ssh-key-confirmer { };
 
   ssh-mitm = callPackage ../tools/security/ssh-mitm { };
