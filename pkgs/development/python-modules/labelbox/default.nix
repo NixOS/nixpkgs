@@ -10,7 +10,7 @@
   nbconvert,
   nbformat,
   numpy,
-  opencv4,
+  opencv-python-headless,
   pillow,
   pydantic,
   pyproj,
@@ -47,8 +47,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "python-dateutil" ];
 
-  pythonRemoveDeps = [ "opencv-python-headless" ];
-
   build-system = [ hatchling ];
 
   dependencies = [
@@ -67,7 +65,7 @@ buildPythonPackage rec {
       shapely
       numpy
       pillow
-      opencv4
+      opencv-python-headless
       typeguard
       imagesize
       pyproj
