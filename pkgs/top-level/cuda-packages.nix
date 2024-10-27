@@ -83,6 +83,30 @@ let
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
+    /**
+      `hasCudaObjects` checks whether the provided `package` contains at
+      least one executable file or static library with compiled cuda objects,
+      using `cuobjdump`.
+
+      # Example
+
+      ```nix
+      stdenv.mkDerivation (finalAttrs: {
+        # ...
+        passthru.tests = lib.optionalAttrs cudaSupport {
+          hasCudaObjects = cudaPackages.hasCudaObjects {
+            package = finalAttrs.finalPackage;
+            # optional arguments:
+            hasPTX = true; # has a PTX that can be compiled at runtime
+            requiredCapabilities = cudaPackages.flags.cudaCapabilities;
+          };
+        };
+        # ...
+      })
+      ```
+    */
+    hasCudaObjects = final.callPackage ../development/cuda-modules/has-cuda-objects.nix { };
+
     tests =
       let
         bools = [

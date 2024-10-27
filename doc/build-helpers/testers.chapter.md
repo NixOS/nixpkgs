@@ -339,6 +339,33 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 :::
 
+## `hasCudaObjects` {#tester-hasCudaObjects}
+
+Check that `package` contains at least one executable file or static
+library with compiled cuda objects. This is achieved using `cuobjdump`.
+Alternative name is `cudaPackages.hasCudaObjects`.
+
+:::{.example #ex-hasCudaObjects}
+
+# Check for cuda artifacts if `cudaSupport=true`
+
+```nix
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests = lib.optionalAttrs cudaSupport {
+    hasCudaObjects = cudaPackages.hasCudaObjects {
+      package = finalAttrs.finalPackage;
+      # optional arguments:
+      hasPTX = true; # has a PTX that can be compiled at runtime
+      requiredCapabilities = cudaPackages.flags.cudaCapabilities;
+    };
+  };
+  # ...
+})
+```
+
+:::
+
 ## `runCommand` {#tester-runCommand}
 
 `runCommand :: { name, script, stdenv ? stdenvNoCC, hash ? "...", ... } -> Derivation`

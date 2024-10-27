@@ -4,6 +4,7 @@
   callPackage,
   pkgs,
   pkgsLinux,
+  cudaPackages,
 
   diffoscopeMinimal,
   runCommand,
@@ -181,4 +182,9 @@
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # or doc/build-helpers/testers.chapter.md
+  # or pkgs/top-level/cuda-packages.nix
+  inherit (cudaPackages) hasCudaObjects;
 }
