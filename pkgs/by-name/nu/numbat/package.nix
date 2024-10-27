@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, testers
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, darwin
-, numbat
-, tzdata
+{
+  lib,
+  stdenv,
+  testers,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  darwin,
+  numbat,
+  tzdata,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -60,9 +61,15 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://numbat.dev";
     changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "numbat";
-    maintainers = with maintainers; [ giomf atemu ];
+    maintainers = with maintainers; [
+      giomf
+      atemu
+    ];
     # Failing tests on Darwin.
     broken = stdenv.isDarwin;
   };
