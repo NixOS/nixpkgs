@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
+  gitUpdater,
 }:
 
 buildGoModule rec {
@@ -20,8 +21,12 @@ buildGoModule rec {
 
   deleteVendor = true;
 
-  passthru.tests = {
-    inherit (nixosTests) birdwatcher;
+  passthru = {
+    tests = {
+      inherit (nixosTests) birdwatcher;
+    };
+
+    updateScript = gitUpdater { };
   };
 
   meta = {
