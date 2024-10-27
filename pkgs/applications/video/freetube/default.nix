@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ryneeverett
       alyaeanyx
+      ryand56
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";
