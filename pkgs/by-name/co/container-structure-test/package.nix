@@ -4,24 +4,24 @@
   fetchurl,
 }:
 let
-  version = "v1.19.1";
+  version = "v1.19.3";
 
   sources = {
     x86_64-linux = {
       url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-linux-amd64";
-      hash = "sha256-7KScpej6Km4fuv6XJez4frLwXUm91lII2RLLT71YRrs=";
+      hash = "sha256-+g+jM7trpcFAZedGjSkE9cgtAh1+HHY8mkXF8vvp/18=";
     };
     aarch64-linux = {
       url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-linux-arm64";
-      hash = "sha256-5MyjOzbDPrV5R3ldJCINipJPOILCzx8+xBVO4bxq9ic=";
+      hash = "sha256-h00EGDxBgq2pkTwfNObRcrhsIbzRh5dSgQe0n5ttvDE=";
     };
     x86_64-darwin = {
       url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-darwin-amd64";
-      hash = "sha256-2QwyKvgzOdGOEuZVwntCpBGBk0JnOLpYOoEYp48qB/I=";
+      hash = "sha256-gnhSbbfgqE1pjpszHUvwh7DZasDtPlVX3bxl+nJz/6Q=";
     };
     aarch64-darwin = {
       url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-darwin-arm64";
-      hash = "sha256-x3RmVdDFmHoGOqX49OWeAab/6m1U0jq/g/30rNjj5aI=";
+      hash = "sha256-IxCYdoIXw1lGZ8Uh6ZFXS/1DcLOz3pWSCNVAWWV/2VY=";
     };
   };
 in
