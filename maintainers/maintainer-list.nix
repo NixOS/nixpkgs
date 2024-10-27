@@ -24275,12 +24275,6 @@
     githubId = 71881325;
     name = "Stefan Bordei";
   };
-  zzamboni = {
-    email = "diego@zzamboni.org";
-    github = "zzamboni";
-    githubId = 32876;
-    name = "Diego Zamboni";
-  };
   zzzsy = {
     email = "me@zzzsy.top";
     github = "zzzsyyy";
