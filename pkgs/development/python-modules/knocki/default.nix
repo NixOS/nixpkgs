@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for Knocki vibration / door sensors";
     homepage = "https://github.com/swan-solutions/knocki-homeassistant";
+    changelog = "https://github.com/swan-solutions/knocki-homeassistant/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mindstorms6 ];
   };
