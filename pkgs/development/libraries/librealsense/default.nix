@@ -21,16 +21,19 @@
 assert cudaSupport -> (cudaPackages?cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation rec {
-  pname = "librealsense";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "librealsense"
+  + lib.optionalString enablePython "-py${pythonPackages.python.version}"
+  + lib.optionalString cudaSupport "-cu${cudaPackages.cudatoolkit.version}"
+  + lib.optionalString enableGUI "-gui";
   version = "2.56.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
-    repo = pname;
-    rev = "v${version}";
+    repo = "librealsense";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7DO+AC9R6mnSs52ex/uIzEv7q+fS7FQ5FGYe5niap4Q=";
   };
 
@@ -84,6 +87,12 @@ stdenv.mkDerivation rec {
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
+  passthru.tests = lib.optionalAttrs cudaSupport {
+    hasCudaObjects = cudaPackages.hasCudaObjects {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
@@ -91,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ brian-dawn pbsds ];
     platforms = platforms.unix;
   };
-}
+})
