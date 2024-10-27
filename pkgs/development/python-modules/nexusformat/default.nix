@@ -19,10 +19,10 @@
 
 buildPythonPackage rec {
   pname = "nexusformat";
-  version = "1.0.6";
+  version = "1.0.7";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UxU3PA/2r/uamdysbfC0L2JinHgfkXhssHIo2hf3zlA=";
+    hash = "sha256-SSS6LTOdqLTHNGpBRO7UELF9qJb/sG8EwrE/azxk7wM=";
   };
 
   pyproject = true;
