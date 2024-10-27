@@ -1,9 +1,10 @@
 { config
+, applyPatches
 , stdenv
 , lib
 , fetchFromGitHub
 , Foundation
-, abseil-cpp_202401
+, howard-hinnant-date
 , cmake
 , cpuinfo
 , eigen
@@ -20,7 +21,7 @@
 , zlib
 , microsoft-gsl
 , libiconv
-, protobuf_21
+, protobuf
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
 , ncclSupport ? config.cudaSupport
@@ -31,19 +32,10 @@
 let
   version = "1.19.2";
 
-  abseil-cpp = abseil-cpp_202401;
-
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
-
-  howard-hinnant-date = fetchFromGitHub {
-    owner = "HowardHinnant";
-    repo = "date";
-    rev = "v3.0.1";
-    sha256 = "sha256-ZSjeJKAcT7mPym/4ViDvIR9nFMQEBCSUtPEuMO27Z+I=";
-  };
 
   mp11 = fetchFromGitHub {
     owner = "boostorg";
@@ -73,14 +65,6 @@ let
       "-DCLOG_BUILD_TESTS=OFF"
     ];
   };
-
-  onnx = fetchFromGitHub {
-    owner = "onnx";
-    repo = "onnx";
-    rev = "refs/tags/v1.16.1";
-    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
-  };
-
    cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
@@ -100,33 +84,19 @@ effectiveStdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    # If you stumble on these patches trying to update onnxruntime, check
-    # `git blame` and ping the introducers.
-
-    # Context: we want the upstream to
-    # - always try find_package first (FIND_PACKAGE_ARGS),
-    # - use MakeAvailable instead of the low-level Populate,
-    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./0001-eigen-allow-dependency-injection.patch
-    # Incorporate a patch that has landed upstream which exposes new
-    # 'abseil-cpp' libraries & modifies the 're2' CMakeLists to fix a
-    # configuration error that around missing 'gmock' exports.
-    #
-    # TODO: Check if it can be dropped after 1.19.0
-    # https://github.com/microsoft/onnxruntime/commit/b522df0ae477e59f60acbe6c92c8a64eda96cace
-    # ./update-re2.patch
-  ] ++ lib.optionals cudaSupport [
-    # We apply the referenced 1064.patch ourselves to our nix dependency.
-    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
-    ./nvcc-gsl.patch
-  ];
+  patches =
+    [ ]
+    ++ lib.optionals cudaSupport [
+      # We apply the referenced 1064.patch ourselves to our nix dependency.
+      #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
+      ./nvcc-gsl.patch
+    ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
-    protobuf_21
+    protobuf
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     pip
     python
@@ -138,6 +108,13 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    (with python3Packages; toPythonApplication onnx)
+    re2
+    gtest
+    howard-hinnant-date
+    nsync
+    flatbuffers_23
+    # NOTE: abseil-cpp already propagated by protobuf
     cpuinfo
     eigen
     glibcLocales
@@ -182,17 +159,16 @@ effectiveStdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-DABSL_ENABLE_INSTALL=ON"
+    # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    # "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
-    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
-    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
+    # "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
+    # "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
@@ -223,9 +199,90 @@ effectiveStdenv.mkDerivation rec {
 
   requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
 
+  cmakeBuildDir = "build"; # We reference the var during postPatch/before configurePhase
+  dontExternalDeps = ''
+    include(external/abseil-cpp.cmake)
+    find_package(re2 REQUIRED)
+    # TODO: Emscripten
+    find_package(GTest REQUIRED)
+    # TOOD: what is google_benchmark
+    if (NOT WIN32)
+      find_package(nsync REQUIRED)
+    endif()
+    if (onnxruntime_USE_MIMALLOC)
+      find_package(mimalloc REQUIRED)
+    endif()
+    find_package(flatbuffers REQUIRED) # TODO: override with patches/flatbuffers/flatbuffers.patch
+    find_package(utf8_range REQUIRED) # Comes with protobuf?
+    find_package(protobuf REQUIRED) # protoc?
+    include(protobuf_function)
+    find_package(date REQUIRED)
+    find_package(boost REQUIRED) # mp11
+    find_package(nlohmann_json REQUIRED)
+    set(CPUINFO_SUPPORTED FALSE) # FIXME: disabled so as not to deal with pytorch_clog
+    find_package(Microsoft.GSL REQUIRED)
+    include(eigen)
+    include(wil)
+    find_package(ONNX REQUIRED)
+
+    set(safeint_SOURCE_DIR "${safeint}")
+    add_library(safeint_interface INTERFACE)
+    target_include_directories(safeint_interface INTERFACE ''${safeint_SOURCE_DIR})
+
+    # TODO : XNNPACK
+
+    if (onnxruntime_USE_MIMALLOC)
+      add_definitions(-DUSE_MIMALLOC)
+    endif()
+
+    # Copy-pasted...
+    set(onnxruntime_EXTERNAL_LIBRARIES ''${onnxruntime_EXTERNAL_LIBRARIES_XNNPACK} ''${WIL_TARGET} nlohmann_json::nlohmann_json onnx onnx_proto ''${PROTOBUF_LIB} re2::re2 Boost::mp11 safeint_interface flatbuffers::flatbuffers ''${GSL_TARGET} ''${ABSEIL_LIBS} date::date ''${ONNXRUNTIME_CLOG_TARGET_NAME})
+    set(onnxruntime_EXTERNAL_DEPENDENCIES onnx_proto flatbuffers::flatbuffers)
+    if (onnxruntime_RUN_ONNX_TESTS)
+      add_definitions(-DORT_RUN_EXTERNAL_ONNX_TESTS)
+    endif()
+
+    # TODO: dlpack
+
+    if(onnxruntime_ENABLE_TRAINING OR (onnxruntime_ENABLE_TRAINING_APIS AND onnxruntime_BUILD_UNIT_TESTS))
+      find_package(cxxopts REQUIRED)
+    endif()
+
+    # TODO: CoreML/Apple stuff
+
+    if (onnxruntime_USE_CUDA)
+      find_package(CUDAToolkit REQUIRED)
+    endif()
+
+    # TODO: SNPE
+
+    FILE(TO_NATIVE_PATH ''${CMAKE_BINARY_DIR}  ORT_BINARY_DIR)
+    FILE(TO_NATIVE_PATH ''${PROJECT_SOURCE_DIR}  ORT_SOURCE_DIR)
+  '';
+
+  # Copy-pasted from cmake/external/onnxruntime_external_deps.cmake
+  gdkCstdlibWrapper = ''
+    #pragma once
+#ifdef __cplusplus
+#include <cstdlib>
+namespace std { using ::getenv; }
+#endif
+  '';
+  prePatch = ''
+    mkdir "$cmakeBuildDir"
+  '';
   postPatch = ''
+    printf "%s" "$dontExternalDeps" > cmake/external/onnxruntime_external_deps.cmake
+    printf "%s" "$gdkCstdlibWrapper" > "$cmakeBuildDir/gdk_cstdlib_wrapper.h"
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+    substituteInPlace cmake/external/abseil-cpp.cmake \
+      --replace-fail \
+        "FIND_PACKAGE_ARGS 20240116 NAMES absl" \
+        "FIND_PACKAGE_ARGS NAMES absl REQUIRED TARGETS absl_log absl_check" \
+      --replace-fail \
+        "onnxruntime_fetchcontent_makeavailable" \
+        "FetchContent_MakeAvailable"
   '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
@@ -245,7 +302,7 @@ effectiveStdenv.mkDerivation rec {
 
   passthru = {
     inherit cudaSupport cudaPackages; # for the python module
-    protobuf = protobuf_21;
+    protobuf = protobuf;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };

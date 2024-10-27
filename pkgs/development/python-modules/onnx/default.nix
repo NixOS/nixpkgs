@@ -79,25 +79,41 @@ buildPythonPackage rec {
     patchShebangs tools/protoc-gen-mypy.sh.in
   '';
 
-  preConfigure = ''
+  env = {
+    ONNX_BUILD_TESTS = true;
+  };
+  cmakeFlags = [
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
-    export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
-    export ONNX_BUILD_TESTS=1
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+
+    # Otherwise ONNX tries to download abseil-cpp
+    (lib.cmakeBool "ONNX_USE_PROTOBUF_SHARED_LIBS" true)
+
+    (lib.cmakeFeature "googletest_STATIC_LIBRARIES" "${lib.getStatic gtestStatic}/lib/libgtest.a")
+  ];
+
+  preConfigure = ''
+    concatTo CMAKE_ARGS cmakeFlags
   '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
+  preInstall = ''
+    (cd .setuptools-cmake-build && make install)
+  '';
   # The executables are just utility scripts that aren't too important
   postInstall = ''
     rm -r $out/bin
   '';
 
-  # The setup.py does all the configuration
-  dontUseCmakeConfigure = true;
+  # The setup.py does all the configuration wrong
+  # dontUseCmakeConfigure = true;
+
+  cmakeBuildDir = ".setuptools-cmake-build";
+  postConfigure = "cd ..";
 
   preCheck = ''
     export HOME=$(mktemp -d)
