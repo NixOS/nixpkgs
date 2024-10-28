@@ -120,27 +120,44 @@ let
       xorg.libXtst
     ];
 
-    postInstall = ''
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -sf $out/include/linux/*_md.h $out/include/
+    postInstall =
+      let
+        cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
+        preservedNixVariables = [
+          "-ELOCALE_ARCHIVE"
+          "-ENIX_BINTOOLS"
+          "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+          "-ENIX_BUILD_CORES"
+          "-ENIX_BUILD_TOP"
+          "-ENIX_CC"
+          "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+          "-ENIX_CFLAGS_COMPILE"
+          "-ENIX_HARDENING_ENABLE"
+          "-ENIX_LDFLAGS"
+        ];
+        preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
+      in
+      ''
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -sf $out/include/linux/*_md.h $out/include/
 
-      mkdir -p $out/share
-      # move files in $out like LICENSE.txt
-      find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
-      # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
-      rm -f $out/LICENSE_NATIVEIMAGE.txt
+        mkdir -p $out/share
+        # move files in $out like LICENSE.txt
+        find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+        # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
+        rm -f $out/LICENSE_NATIVEIMAGE.txt
 
-      # copy-paste openjdk's preFixup
-      # Set JAVA_HOME automatically.
-      mkdir -p $out/nix-support
-      cat > $out/nix-support/setup-hook << EOF
-      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-      EOF
+        # copy-paste openjdk's preFixup
+        # Set JAVA_HOME automatically.
+        mkdir -p $out/nix-support
+        cat > $out/nix-support/setup-hook << EOF
+        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+        EOF
 
-      wrapProgram $out/bin/native-image \
-        --prefix PATH : ${binPath} \
-        ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
-    '';
+        wrapProgram $out/bin/native-image \
+          --prefix PATH : ${binPath} \
+          ${toString (cLibsAsFlags ++ preservedNixVariablesAsFlags)}
+      '';
 
     preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
       for bin in $(find "$out/bin" -executable -type f); do
@@ -171,10 +188,8 @@ let
       echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-      extraNativeImageArgs="$(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n)"
-
       echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility $extraNativeImageArgs HelloWorld
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
       ./helloworld | fgrep 'Hello World'
 
       ${# -H:+StaticExecutableWithDynamicLibC is only available in Linux
