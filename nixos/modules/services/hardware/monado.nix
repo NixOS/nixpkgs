@@ -98,5 +98,10 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ Scrumplex ];
+  meta = {
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    wikiPages = [
+      "https://wiki.nixos.org/wiki/VR"
+    ];
+  };
 }
