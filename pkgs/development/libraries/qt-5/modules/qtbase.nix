@@ -4,7 +4,7 @@
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
   # darwin support
-, darwinMinVersionHook, apple-sdk, apple-sdk_10_14, apple-sdk_14, xcbuild
+, darwinMinVersionHook, apple-sdk, apple-sdk_10_14, apple-sdk_13, xcbuild
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
@@ -38,12 +38,14 @@ let
     then "linux-generic-g++"
     else throw "Please add a qtPlatformCross entry for ${plat.config}";
 
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 14.x.
+  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 13.x or 14.x.
+  # Despite advertising support for the macOS 14 SDK, the build system sets the maximum to 13 and complains
+  # about 14, so we just use that.
   # Note that Qt propagates the 10.14 SDK instead of the 10.13 SDK to make sure that applications linked to Qt
   # support automatic dark mode on x86_64-darwin (see: https://developer.apple.com/documentation/appkit/nsappearancecustomization/choosing_a_specific_appearance_for_your_macos_app).
   propagatedAppleSDK = if lib.versionOlder (lib.getVersion apple-sdk) "10.14" then apple-sdk_10_14 else apple-sdk;
   propagatedMinVersionHook = darwinMinVersionHook "10.13";
-  buildAppleSDK = apple-sdk_14;
+  buildAppleSDK = apple-sdk_13;
 in
 
 stdenv.mkDerivation (finalAttrs: ({
