@@ -12,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.5.2";
+  version = "6.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-AV6upaZcnbKmQm9tTItRB6LpckappjdHvMH/awn/KeE=";
+    hash = "sha256-dl98VhqFmhtWW8UXpHzDmS1iWOhg+RdMUzAzwhivY8M=";
   };
 
   propagatedBuildInputs = [ cffi ];
