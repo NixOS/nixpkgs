@@ -4,6 +4,7 @@
   immich,
   python3,
   nixosTests,
+  stdenv,
 }:
 let
   python = python3.override {
@@ -56,12 +57,14 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  nativeCheckInputs = with python.pkgs; [
-    httpx
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      httpx
+      pytest-asyncio
+      pytest-mock
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.system != "aarch64-linux") [ pytestCheckHook ];
 
   postInstall = ''
     mkdir -p $out/share/immich
