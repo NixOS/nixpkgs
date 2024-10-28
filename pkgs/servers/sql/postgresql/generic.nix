@@ -45,7 +45,6 @@ let
 
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
-    inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
 
     src = fetchurl {
@@ -206,6 +205,7 @@ let
       };
     in
     {
+      inherit version;
       psqlSchema = lib.versions.major version;
 
       withJIT = if jitSupport then this else jitToggle;
@@ -296,8 +296,7 @@ let
       wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
     '';
 
-    passthru.version = postgresql.version;
-    passthru.psqlSchema = postgresql.psqlSchema;
+    inherit (postgresql) passthru;
   };
 
 in
