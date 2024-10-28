@@ -13,7 +13,7 @@ import ./make-test-python.nix (
 
     nodes.machine = {
       # aarch64-linux on ofborg is 129M
-      virtualisation.memorySize = 128;
+      virtualisation.memorySize = 1024;
 
       services.swapspace = {
         enable = true;
