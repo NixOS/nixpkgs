@@ -258,7 +258,7 @@ in
       postgresEnv
       // redisEnv
       // {
-        HOST = cfg.host;
+        IMMICH_HOST = cfg.host;
         IMMICH_PORT = toString cfg.port;
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
