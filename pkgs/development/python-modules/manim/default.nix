@@ -153,7 +153,6 @@ let
       everysel
       preview
       doublestroke
-      ms
       setspace
       rsfs
       relsize
