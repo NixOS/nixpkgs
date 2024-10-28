@@ -15,6 +15,7 @@
   pythonOlder,
   rsa,
   setuptools,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,16 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
   };
+
+  patches = [
+    # Add Moto 5 support
+    # https://github.com/jschneier/django-storages/pull/1464
+    (fetchpatch {
+      url = "https://github.com/jschneier/django-storages/commit/e1aedcf2d137f164101d31f2f430f1594eedd78c.patch";
+      hash = "sha256-jSb/uJ0RXvPsXl+WUAzAgDvJl9Y3ad2F30X1SbsCc04=";
+      name = "add_moto_5_support.patch";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -58,12 +69,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AttributeError: 'str' object has no attribute 'universe_domain'
+    # https://github.com/jschneier/django-storages/issues/1463
     "test_storage_save_gzip"
-  ];
-
-  disabledTestPaths = [
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/test_s3.py"
   ];
 
   meta = with lib; {
