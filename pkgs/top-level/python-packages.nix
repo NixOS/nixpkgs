@@ -15478,7 +15478,6 @@ self: super: with self; {
       };
       grpcioTF = self.grpcio.override {
         protobuf = protobufTF;
-        grpc = grpcTF;
       };
       tensorboard-plugin-profileTF = self.tensorboard-plugin-profile.override {
         protobuf = protobuf-pythonTF;
