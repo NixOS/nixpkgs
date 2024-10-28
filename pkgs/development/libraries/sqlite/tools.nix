@@ -43,4 +43,11 @@ in
     homepage = "https://www.sqlite.org/sqlanalyze.html";
     mainProgram = "sqlite3_analyzer";
   };
+  sqlite-rsync = mkTool {
+    pname = "sqlite-rsync";
+    makeTarget = "sqlite3_rsync";
+    description = "Database remote-copy tool for SQLite";
+    homepage = "https://www.sqlite.org/rsync.html";
+    mainProgram = "sqlite3_rsync";
+  };
 }

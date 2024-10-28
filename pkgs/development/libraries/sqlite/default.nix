@@ -2,7 +2,7 @@
 , updateAutotoolsGnuConfigScriptsHook
 
 # for tests
-, python3Packages, sqldiff, sqlite-analyzer, tinysparql
+, python3Packages, sqldiff, sqlite-analyzer, sqlite-rsync, tinysparql
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
-      inherit sqldiff sqlite-analyzer tinysparql;
+      inherit sqldiff sqlite-analyzer sqlite-rsync tinysparql;
     };
 
     updateScript = gitUpdater {
