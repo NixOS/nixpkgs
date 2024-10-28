@@ -4,15 +4,15 @@ with ocamlPackages;
 
 buildDunePackage rec {
   pname = "jackline";
-  version = "unstable-2024-02-28";
+  version = "unstable-2024-10-21";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev  = "31b90275a5f848cfc8c4f5b75e7d1933bec37852";
-    hash = "sha256-G2jjsc/i9Qgo0TP+ZE4gB/1cjuZ9l8R7e59K2DGD5GY=";
+    rev  = "cf6b26e37e37b0b48be9fd2e74fc563375f757f0";
+    hash = "sha256-6QZZ77C1G3x/GOJsUEQMrCatVsyyxNjq36ez/TgeHSY=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,6 @@ buildDunePackage rec {
     uuseg
     uutf
     dns-client
-    cstruct
     base64
     happy-eyeballs-lwt
     ppx_sexp_conv
@@ -51,6 +50,5 @@ buildDunePackage rec {
     mainProgram = "jackline";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];
-    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }
