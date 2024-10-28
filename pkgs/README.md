@@ -628,8 +628,8 @@ buildGoModule rec {
 }
 ```
 
-Any derivaton can be specified as a test, even if it's in a different file.
-Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
 
 In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
 
