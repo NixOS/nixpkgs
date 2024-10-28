@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   propagatedBuildInputs = [ libiconv ];
 
   meta = with lib; {
