@@ -5,19 +5,16 @@ let
     inherit openssl;
     python = python3;
   };
-
-  gypPatches = callPackage ./gyp-patches.nix { } ++ [
-  ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.9.0";
-  sha256 = "a55aeb368dee93432f610127cf94ce682aac07b93dcbbaadd856df122c9239df";
+  version = "22.10.0";
+  sha256 = "3180710d3130ad9df01466abf010e408d41b374be54301d1480d10eca73558e0";
   patches = [
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
-  ] ++ gypPatches;
+  ];
 }
