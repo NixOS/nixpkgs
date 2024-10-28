@@ -315,6 +315,14 @@ let self = {
     supports = with lib.versions; version: major version == "1" && minor version == "25";
   };
 
+  http_proxy_connect_module_v26 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "26";
+  };
+
+  http_proxy_connect_module_v27 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "27";
+  };
+
   ipscrub = {
     name = "ipscrub";
     src = fetchFromGitHub {
