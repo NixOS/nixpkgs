@@ -1,7 +1,11 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  testers,
+  sqlc,
 }:
 
 let
@@ -23,11 +27,31 @@ buildGoModule {
 
   subPackages = [ "cmd/sqlc" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd sqlc \
+      --bash <($out/bin/sqlc completion bash) \
+      --fish <($out/bin/sqlc completion fish) \
+      --zsh <($out/bin/sqlc completion zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = sqlc;
+    command = "sqlc version";
+    version = "v${version}";
+  };
+
   meta = {
     description = "Generate type-safe code from SQL";
-    mainProgram = "sqlc";
     homepage = "https://sqlc.dev/";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    mainProgram = "sqlc";
   };
 }
