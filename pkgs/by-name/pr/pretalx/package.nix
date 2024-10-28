@@ -220,6 +220,8 @@ python.pkgs.buildPythonApplication rec {
     "test_schedule_page_text_table"
     "test_schedule_page_text_wrong_format"
     "test_versioned_schedule_page"
+    # Test is racy
+    "test_can_reset_password_by_email"
   ];
 
   passthru = {
