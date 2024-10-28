@@ -8,12 +8,14 @@
 , hunspell
 , hspell
 , nuspell
+, libvoikko
 , unittest-cpp
 
 , withHspell ? true
 , withAspell ? true
 , withHunspell ? true
 , withNuspell ? true
+, withVoikko ? true
 , withAppleSpell ? stdenv.hostPlatform.isDarwin
 
 , Cocoa
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     hunspell
   ] ++ lib.optionals withNuspell [
     nuspell
+  ] ++ lib.optionals withVoikko [
+    libvoikko
   ] ++ lib.optionals withAppleSpell [
     Cocoa
   ];
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature withHspell "hspell")
     (lib.withFeature withHunspell "hunspell")
     (lib.withFeature withNuspell "nuspell")
+    (lib.withFeature withVoikko "voikko")
     (lib.withFeature withAppleSpell "applespell")
   ];
 
