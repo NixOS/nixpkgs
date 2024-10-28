@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
   };
+
+  patches = [
+    # fix cross compilation by replacing hardcoded ar with AC_PROG_AR
+    # https://github.com/ColumPaget/Hashrat/pull/27
+    (fetchpatch {
+      url = "https://github.com/ColumPaget/Hashrat/commit/a82615e02021245850a1703e613055da2520c8fd.patch";
+      hash = "sha256-tjyhM2ahZBRoRP8WjyQhrI3l20oaqMtfYmOeAZVEZqU=";
+    })
+  ];
 
   configureFlags = [ "--enable-xattr" ];
 
