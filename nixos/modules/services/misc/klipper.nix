@@ -113,6 +113,7 @@ in
               '';
               serial = lib.mkOption {
                 type = lib.types.nullOr path;
+                default = null;
                 description = "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";
               };
               configFile = lib.mkOption {
