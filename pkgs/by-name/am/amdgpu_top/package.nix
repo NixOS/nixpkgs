@@ -11,6 +11,7 @@
   libXrandr,
   libXi,
   libXcursor,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,13 +52,15 @@ rustPlatform.buildRustPackage rec {
     patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/${pname}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Tool to display AMDGPU usage";
     homepage = "https://github.com/Umio-Yasuno/amdgpu_top";
     changelog = "https://github.com/Umio-Yasuno/amdgpu_top/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ geri1701 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ geri1701 ];
+    platforms = lib.platforms.linux;
     mainProgram = "amdgpu_top";
   };
 }
