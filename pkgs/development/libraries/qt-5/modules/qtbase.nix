@@ -146,13 +146,24 @@ stdenv.mkDerivation (finalAttrs: ({
     patchShebangs ./bin
   '' + (
     if stdenv.hostPlatform.isDarwin then ''
+      for file in \
+        configure \
+        mkspecs/features/mac/asset_catalogs.prf \
+        mkspecs/features/mac/default_pre.prf \
+        mkspecs/features/mac/sdk.mk \
+        mkspecs/features/mac/sdk.prf
+      do
+        substituteInPlace "$file" \
+          --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
+          --replace-quiet /usr/bin/xcrun '${lib.getExe' xcbuild "xcrun"}' \
+          --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
+      done
+
       substituteInPlace configure \
-        --replace-fail '/usr/bin/xcode-select' '${lib.getBin xcbuild}/bin/xcode-select' \
-        --replace-fail '/usr/bin/xcrun' '${lib.getBin xcbuild}/bin/xcrun' \
-        --replace-fail '/System/Library/Frameworks/Cocoa.framework' "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
-      substituteInPlace ./mkspecs/common/mac.conf \
-        --replace-fail "/System/Library/Frameworks/OpenGL.framework/" "$SDKROOT/System/Library/Frameworks/OpenGL.framework/" \
-        --replace-fail "/System/Library/Frameworks/AGL.framework/" "$SDKROOT/System/Library/Frameworks/AGL.framework/"
+        --replace-fail /System/Library/Frameworks/Cocoa.framework "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
+
+      substituteInPlace mkspecs/common/macx.conf \
+        --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
@@ -326,6 +337,7 @@ stdenv.mkDerivation (finalAttrs: ({
       "-qt-freetype"
       "-qt-libpng"
       "-no-framework"
+      "-no-rpath"
     ] else [
       "-rpath"
     ] ++ [
