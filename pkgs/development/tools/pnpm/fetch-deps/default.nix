@@ -56,7 +56,7 @@
             yq
           ];
 
-          impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+          impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ];
 
           installPhase = ''
             runHook preInstall
@@ -82,6 +82,7 @@
                 --ignore-scripts \
                 ${lib.escapeShellArgs filterFlags} \
                 ${lib.escapeShellArgs pnpmInstallFlags} \
+                --registry="$NIX_NPM_REGISTRY" \
                 --frozen-lockfile
 
             runHook postInstall
