@@ -141,7 +141,7 @@ let
       done;
 
       substituteInPlace $out/bin/onlyoffice-desktopeditors \
-        --replace "/opt/onlyoffice/" "$out/share/"
+        --replace-fail "/opt/onlyoffice/" "$out/share/"
 
       ln -s $out/share/desktopeditors/DesktopEditors $out/bin/DesktopEditors
 
@@ -180,7 +180,7 @@ buildFHSEnv {
     ln -s ${derivation}/share/icons $out/share
     cp -r ${derivation}/share/applications $out/share
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
-        --replace "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
+        --replace-fail "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
   '';
 
   passthru.updateScript = ./update.sh;
