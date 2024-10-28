@@ -73,6 +73,7 @@ buildPythonApplication rec {
     defusedxml
     gitpython
     libcloud
+    libvirt
     mwclient
     paramiko
     pillow
