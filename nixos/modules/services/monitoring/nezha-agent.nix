@@ -92,6 +92,14 @@ in
           Address to the dashboard
         '';
       };
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "--gpu" ];
+        description = ''
+          Extra command-line flags passed to nezha-agent.
+        '';
+      };
     };
   };
 
@@ -125,6 +133,7 @@ in
         ++ lib.optional cfg.gpu "--gpu"
         ++ lib.optional cfg.temperature "--temperature"
         ++ lib.optional cfg.useIPv6CountryCode "--use-ipv6-countrycode"
+        ++ cfg.extraFlags
       );
       wantedBy = [ "multi-user.target" ];
     };
