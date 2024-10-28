@@ -3,6 +3,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   z3,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -16,6 +17,7 @@ buildDotnetModule rec {
     hash = "sha256-36aGVJEzaAwQgR11NI+v8c4cXm24iiXtiwjW6qd3qsE=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.nix;
 

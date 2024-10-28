@@ -1,6 +1,7 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
@@ -14,6 +15,7 @@ buildDotnetModule rec {
     hash = "sha256-9G9g4bfH6EGSTZQlaiLsRjnryl+mQ3uNXdBUBVcKwlg=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./deps.nix;
 
   preFixup = ''

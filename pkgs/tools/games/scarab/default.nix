@@ -6,6 +6,7 @@
   copyDesktopItems,
   icoutils,
   makeDesktopItem,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -19,6 +20,7 @@ buildDotnetModule rec {
     sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./deps.nix;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";

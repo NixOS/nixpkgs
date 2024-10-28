@@ -3,6 +3,7 @@
   , fetchFromGitHub
   , lib
   , openal
+  , dotnetCorePackages
 }:
 
 buildDotnetModule rec {
@@ -18,6 +19,7 @@ buildDotnetModule rec {
 
   patches = [ ./targetframework.patch ];
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./deps.nix;
   executables = [ "Knossos.NET" ];
 
