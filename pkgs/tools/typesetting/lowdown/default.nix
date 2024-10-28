@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown${lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"}";
-  version = "1.1.2";
+  version = "1.2.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-KHQi5NpMU6Kw4Ij+BoGE52aU0vIP1pgMhjnBAUdMh6GV/xHCxfTXJduqh9bSfVMeOim08aZSIM7iq1io0VS8LA==";
+    hash = "sha512-D50eoU95ref2Q6jfRCktgiL8j7143Kuv3RxUWbzBZl9aWjyh0nKnjgl709dMM/YQwCl9PDnmYHhYH6J3ULsnXg==";
   };
 
   nativeBuildInputs = [ which dieHook ]
