@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
-    ] ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
+    ] ++ lib.optionals ((opensslSupport || rustlsSupport) && !stdenv.hostPlatform.isDarwin) [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
     ] ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
       "--with-ca-path=/etc/ssl/certs"
