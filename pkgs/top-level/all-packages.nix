@@ -7497,8 +7497,6 @@ with pkgs;
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
-  flent = python3Packages.callPackage ../applications/networking/flent { };
-
   flexoptix-app = callPackage ../tools/misc/flexoptix-app { };
 
   flpsed = callPackage ../applications/editors/flpsed { };
@@ -8461,8 +8459,6 @@ with pkgs;
   htpdate = callPackage ../tools/networking/htpdate { };
 
   http-prompt = callPackage ../tools/networking/http-prompt { };
-
-  http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
 
   httpdump = callPackage ../tools/security/httpdump { };
 
@@ -11418,10 +11414,6 @@ with pkgs;
   pypass = with python3Packages; toPythonApplication pypass;
 
   ticktick = callPackage ../applications/office/ticktick { };
-
-  pyditz = callPackage ../applications/misc/pyditz {
-    pythonPackages = python3Packages;
-  };
 
   py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy {
     # https://github.com/benfred/py-spy/issues/633
@@ -18377,8 +18369,6 @@ with pkgs;
   spruce = callPackage ../development/tools/misc/spruce { };
 
   sqlboiler-crdb = callPackage ../development/tools/database/sqlboiler-crdb { };
-
-  sqlc = callPackage ../development/tools/database/sqlc { };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
@@ -30321,7 +30311,7 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
+  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
@@ -33908,8 +33898,6 @@ with pkgs;
 
   erigon = callPackage ../applications/blockchains/erigon { };
 
-  exodus = callPackage ../applications/blockchains/exodus { };
-
   faraday = callPackage ../applications/blockchains/faraday { };
 
   fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
@@ -36505,8 +36493,6 @@ with pkgs;
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
-
-  xschem = callPackage ../applications/science/electronics/xschem { };
 
   xyce = callPackage ../applications/science/electronics/xyce { };
 

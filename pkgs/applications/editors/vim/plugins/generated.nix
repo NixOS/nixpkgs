@@ -6266,18 +6266,6 @@ final: prev:
     meta.homepage = "https://github.com/Bilal2453/luvit-meta/";
   };
 
-  magma-nvim-goose = buildVimPlugin {
-    pname = "magma-nvim-goose";
-    version = "2023-07-04";
-    src = fetchFromGitHub {
-      owner = "WhiteBlackGoose";
-      repo = "magma-nvim-goose";
-      rev = "9a626aab63361d027541d023707f82e28d7f872c";
-      sha256 = "1z2g96qrgnk817dh9jqavx6yaapddyih8das33v1iwxacnykrbgl";
-    };
-    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
-  };
-
   mark-radar-nvim = buildVimPlugin {
     pname = "mark-radar.nvim";
     version = "2024-06-04";
@@ -18768,5 +18756,16 @@ final: prev:
     meta.homepage = "https://github.com/GCBallesteros/NotebookNavigator.nvim";
   };
 
+  magma-nvim = buildVimPlugin {
+    pname = "magma-nvim";
+    version = "2023-07-08";
+    src = fetchFromGitHub {
+      owner = "dccsillag";
+      repo = "magma-nvim";
+      rev = "ff3deba8a879806a51c005e50782130246143d06";
+      sha256 = "sha256-IrMR57gk9iCk73esHO24KZeep9VrlkV5sOC4PzGexyo=";
+    };
+    meta.homepage = "https://github.com/dccsillag/magma-nvim";
+  };
 
 }
