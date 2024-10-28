@@ -101,8 +101,8 @@ let
 
   web = buildNpmPackage' {
     pname = "immich-web";
-    inherit version;
-    src = "${src}/web";
+    inherit version src;
+    sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
     preBuild = ''
