@@ -21,4 +21,4 @@ EOF
     echo "Finished executing pythonOutputDistPhase"
 }
 
-preFixupPhases+=" pythonOutputDistPhase"
+appendToVar preFixupPhases pythonOutputDistPhase
