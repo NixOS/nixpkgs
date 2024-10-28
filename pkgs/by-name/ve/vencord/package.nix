@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.10.2";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rLdUEdAvYy8SDgKWUanZgmMnJ6Dg2dO5tTpGTwlQCrU=";
+    hash = "sha256-pzb2x5tTDT6yUNURbAok5eQWZHaxP/RUo8T0JECKHJ4=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       FlafyDev
       NotAShelf
       Scrumplex
+      donteatoreo
     ];
   };
 })
