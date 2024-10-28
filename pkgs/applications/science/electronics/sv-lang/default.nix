@@ -49,15 +49,14 @@ stdenv.mkDerivation rec {
     cmake
     python3
     ninja
-
-    # though only used in tests, cmake will complain its absence when configuring
-    catch2_3
   ];
 
   buildInputs = [
     unordered_dense
     boost182
     fmt_9
+    # though only used in tests, cmake will complain its absence when configuring
+    catch2_3
   ];
 
   # TODO: a mysterious linker error occurs when building the unittests on darwin.
