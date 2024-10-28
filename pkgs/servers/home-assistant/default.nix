@@ -318,10 +318,6 @@ let
         ];
       };
 
-      versioningit = super.versioningit.overridePythonAttrs {
-        doCheck = false;
-      };
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
