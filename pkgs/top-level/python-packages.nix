@@ -3372,6 +3372,8 @@ self: super: with self; {
 
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
+  django-crossdomainmedia = callPackage ../development/python-modules/django-crossdomainmedia { };
+
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
 
   django-csp = callPackage ../development/python-modules/django-csp { };
