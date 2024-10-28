@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-axw0/QFQfnEc2P8tFRtSY5vVUJTqv+kRn68GXdZ5SeQ=";
+    sha256 = "sha256-VbAGdMeuIQLzcHwYoPbkC0UjzxXgW4BGlYfz32oHmms=";
   };
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook copyDesktopItems ];
