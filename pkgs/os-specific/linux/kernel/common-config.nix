@@ -224,6 +224,14 @@ let
       UCLAMP_TASK_GROUP = yes;
     };
 
+    # All of these need to be enabled to support sched-ext
+    sched-ext = {
+      BPF = whenAtLeast "6.12" yes;
+      BPF_SYSCALL = yes;
+      SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
+      BPF_JIT            = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit (whenAtLeast "6.12" yes); # whenPlatformHasEBPFJit no; # see https://github.com/NixOS/nixpkgs/issues/79304
+    };
 
     timer = {
       # Enable Full Dynticks System.
@@ -250,8 +258,6 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = whenPlatformHasEBPFJit yes;
-      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
       HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
       BPF_STREAM_PARSER  = yes;
       XDP_SOCKETS        = yes;
@@ -827,7 +833,6 @@ let
       SCHED_TRACER          = yes;
       STACK_TRACER          = yes;
       UPROBE_EVENTS         = option yes;
-      BPF_SYSCALL           = yes;
       BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.16" yes;
       BPF_EVENTS            = yes;
       FUNCTION_PROFILER     = yes;
@@ -1207,7 +1212,6 @@ let
       LIRC = yes;
 
       SCHED_CORE = whenAtLeast "5.14" yes;
-      SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
 
       LRU_GEN = whenAtLeast "6.1"  yes;
       LRU_GEN_ENABLED =  whenAtLeast "6.1" yes;
