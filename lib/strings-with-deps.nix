@@ -46,18 +46,29 @@ let
     concatStringsSep
     head
     isAttrs
-    listToAttrs
     tail
     ;
 in
 rec {
 
-  /* !!! The interface of this function is kind of messed up, since
-     it's way too overloaded and almost but not quite computes a
-     topological sort of the depstrings. */
+  /**
+    :::{.note}
+    If you are the maintainer or user of this function.
+    Please document it. Or remove in case it is unused.
+    :::
 
+    :::{.note}
+    The interface of this function is kind of messed up, since
+    it's way too overloaded and almost but not quite computes a
+    topological sort of the depstrings.
+    :::
+  */
   textClosureList = predefined: arg:
     let
+      # Types are:
+      #
+      # Todo :: [ String | { deps :: Todo; text :: string; } ]
+      # f :: { ... } -> Todo -> { result :: [ String ]; done :: { ... }  }
       f = done: todo:
         if todo == [] then {result = []; inherit done;}
         else
@@ -69,7 +80,7 @@ rec {
                  done = y.done;
                }
           else if done ? ${entry} then f done (tail todo)
-          else f (done // listToAttrs [{name = entry; value = 1;}]) ([predefined.${entry}] ++ tail todo);
+          else f (done // { ${entry} = 1; }) ([predefined.${entry}] ++ tail todo);
     in (f {} arg).result;
 
   textClosureMap = f: predefined: names:
