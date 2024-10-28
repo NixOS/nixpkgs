@@ -3,6 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
+  pkg-config,
   blosc2,
   bzip2,
   c-blosc,
@@ -14,6 +15,7 @@
   packaging,
   setuptools,
   sphinx,
+  typing-extensions,
   # Test inputs
   python,
   pytest,
@@ -22,21 +24,30 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.9.2";
+  version = "3.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1HAmPC5QxLfIY1oNmawf8vnnBMJNceX6M8RSnn0K2cM=";
+    hash = "sha256-SqB6xzS5wDe66vRK7GTskCrSR/V4EbWfMMTjHTHxJs8=";
   };
 
   nativeBuildInputs = [
+    sphinx
+    py-cpuinfo
+    pkg-config
+  ];
+
+  dependencies = [
     blosc2
     cython
+    packaging
     setuptools
-    sphinx
+    numpy
+    numexpr
+    typing-extensions
   ];
 
   buildInputs = [
@@ -45,14 +56,6 @@ buildPythonPackage rec {
     blosc2.c-blosc2
     hdf5
     lzo
-  ];
-
-  propagatedBuildInputs = [
-    blosc2
-    py-cpuinfo
-    numpy
-    numexpr
-    packaging # uses packaging.version at runtime
   ];
 
   # When doing `make distclean`, ignore docs
@@ -84,6 +87,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd ..
+    export HOME=$(mktemp -d)
   '';
 
   # Runs the light (yet comprehensive) subset of the test suite.
@@ -96,11 +100,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
     changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }
