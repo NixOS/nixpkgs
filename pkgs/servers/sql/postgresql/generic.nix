@@ -332,8 +332,9 @@ let
 
     pathsToLink = ["/"];
 
-    passthru.version = postgresql.version;
-    passthru.psqlSchema = postgresql.psqlSchema;
+    passthru = postgresql.passthru // {
+      inherit (postgresql) version;
+    };
   };
 
 in
