@@ -7,6 +7,7 @@
   setuptools,
   python,
   pkg-config,
+  pythonAtLeast,
   gdb,
   numpy,
   ncurses,
@@ -34,6 +35,9 @@ buildPythonPackage rec {
   pname = "cython";
   version = "0.29.36";
   pyproject = true;
+
+  # error: too few arguments to function '_PyLong_AsByteArray'
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     pname = "Cython";
