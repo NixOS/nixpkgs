@@ -9,8 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0dm0m5wd7amrsa8wnrblkv34sq4v4lglc2wfx8klfkdhyhi06s4k";
   };
 
-  # this fixes a typedef compilation error with gcc-3.x
-  patches = [ ./fix-compilation.patch ];
+  patches = [
+    # this fixes a typedef compilation error with gcc-3.x
+    ./fix-compilation.patch
+    # removes register keyword
+    ./c++17-fixes.diff
+  ];
 
   buildInputs = [ SDL2 SDL2_net ];
 
