@@ -24,19 +24,20 @@
   jinja2,
   pytest-asyncio,
   pytestCheckHook,
+  python-dotenv,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.5.0";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     rev = "refs/tags/${version}";
-    hash = "sha256-UrLbKDaQu2ioQHqKKS8SdRTpQj+Z0w+bcLrRuZT3DC0=";
+    hash = "sha256-L/7oErXu0U2G20pFfEReSKAK3P1BseybnPHazA7w6cM=";
   };
 
   pythonRelaxDeps = [
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     jinja2
     pytest-asyncio
     pytestCheckHook
+    python-dotenv
     redis
   ];
 
@@ -91,7 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/v${version}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";
