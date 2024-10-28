@@ -182,7 +182,7 @@ in {
       meta = {
         description = "PHP upstream extension: ${name}";
         inherit (php.meta) maintainers homepage license;
-      };
+      } // args.meta or { };
     }));
 
   php = phpPackage;
@@ -462,13 +462,6 @@ in {
           doCheck = stdenv.hostPlatform.isLinux;
         }
         {
-          name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
-          # Using version from PECL on new PHP versions.
-          enable = lib.versionOlder php.version "8.3";
-        }
-        {
           name = "intl";
           buildInputs = [ icu73 ];
         }
@@ -563,7 +556,7 @@ in {
           internalDeps = [ php.extensions.pdo ];
           configureFlags = [ "--with-pdo-dblib=${freetds}" ];
           # Doesn't seem to work on darwin.
-          enable = (!stdenv.hostPlatform.isDarwin);
+          meta.broken = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {
@@ -658,7 +651,7 @@ in {
           buildInputs = [ net-snmp openssl ];
           configureFlags = [ "--with-snmp" ];
           # net-snmp doesn't build on darwin.
-          enable = (!stdenv.hostPlatform.isDarwin);
+          meta.broken = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {
@@ -813,6 +806,13 @@ in {
             "--with-zlib"
           ];
         }
+      ] ++ lib.optionals (lib.versionOlder php.version "8.3") [
+        # Using version from PECL on new PHP versions.
+        {
+          name = "imap";
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+        }
       ];
 
       # Convert the list of attrs:
@@ -821,14 +821,12 @@ in {
       # [ { name = <name>; value = <extension drv>; } ... ]
       #
       # which we later use listToAttrs to make all attrs available by name.
-      #
-      # Also filter out extensions based on the enable property.
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
-          value = mkExtension (builtins.removeAttrs drv [ "enable" ]);
+          value = mkExtension drv;
         })
-        (builtins.filter (i: i.enable or true) extensionData);
+        extensionData;
 
       # Produce the final attribute set of all extensions defined.
     in
