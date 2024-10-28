@@ -23,6 +23,9 @@ lib.makeOverridable
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
 
+  # Whether to outputs that is a single file instead of a directory.
+, ignoreFileOutputs ? false
+
 , # Whether to include closures of all input paths.
   includeClosures ? false
 
@@ -76,7 +79,7 @@ let
   ];
 in runCommand name
   rec {
-    inherit manifest ignoreCollisions checkCollisionContents passthru
+    inherit manifest ignoreCollisions checkCollisionContents ignoreFileOutputs passthru
             meta pathsToLink extraPrefix postBuild
             nativeBuildInputs buildInputs;
     pkgs = builtins.toJSON chosenOutputs;
