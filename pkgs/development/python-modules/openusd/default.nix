@@ -70,8 +70,9 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "port-to-embree-4.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/2266/commits/4b6c23d459c602fdac5e0ebc9b7722cbd5475e86.patch";
-      hash = "sha256-yjqdGAVqfEsOX1W/tG6c+GgQLYya5U9xgUe/sNIuDbw=";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/c8fec1342e05dca98a1afd4ea93c7a5f0b41e25b.patch?full_index=1";
+      hash = "sha256-pK1TUwmVv9zsZkOypq25pl+FJDxJJvozUtVP9ystGtI=";
     })
   ];
 
