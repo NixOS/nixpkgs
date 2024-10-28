@@ -15,6 +15,7 @@
   pythonOlder,
   rsa,
   setuptools,
+  pynacl,
   fetchpatch,
 }:
 
@@ -62,6 +63,8 @@ buildPythonPackage rec {
     pytestCheckHook
     rsa
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  checkInputs = [ pynacl ];
 
   pythonImportsCheck = [ "storages" ];
 
