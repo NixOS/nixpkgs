@@ -3055,7 +3055,6 @@ with pkgs;
   };
 
   curlHTTP3 = curl.override {
-    openssl = quictls;
     http3Support = true;
   };
 
