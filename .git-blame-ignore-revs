@@ -200,3 +200,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 4cec81a9959ce612b653860dcca53101a36f328a
 # Final commit that does the formatting
 88b285c01d84de82c0b2b052fd28eaf6709c2d26
+
+# sqlc: format with nixfmt
+2bdec131b2bb2c8563f4556d741d34ccb77409e2
