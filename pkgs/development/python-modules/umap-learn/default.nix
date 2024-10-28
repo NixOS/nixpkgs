@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.6";
+  version = "0.5.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "lmcinnes";
     repo = "umap";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
+    hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
   };
 
   propagatedBuildInputs = [
