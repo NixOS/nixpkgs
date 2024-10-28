@@ -32,11 +32,12 @@ in
     ${old.postPatch or ""}
   '';
 
-  meta = with lib; {
+  meta = {
+    inherit (old.meta) license mainProgram;
+    changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
     description = "${old.meta.description} (Jellyfin fork)";
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with lib.maintainers; [ justinas ];
     pkgConfigModules = [ "libavutil" ];
   };
 })
