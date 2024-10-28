@@ -4,6 +4,7 @@
   lib,
   python3Packages,
   versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -47,6 +48,10 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ versionCheckHook ];
 
   pythonImportsCheck = [ "pytr" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/pytr-org/pytr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
