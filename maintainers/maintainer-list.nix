@@ -2545,6 +2545,12 @@
     githubId = 34620799;
     name = "Jacob Bachmann";
   };
+  bcyran = {
+    email = "bazyli@cyran.dev";
+    github = "bcyran";
+    githubId = 8322846;
+    name = "Bazyli Cyran";
+  };
   bdd = {
     email = "bdd@mindcast.org";
     github = "bdd";
