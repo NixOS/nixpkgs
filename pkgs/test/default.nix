@@ -185,4 +185,6 @@ with pkgs;
   replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
 
   substitute = recurseIntoAttrs (callPackage ./substitute { });
+
+  build-environment-info = callPackage ./build-environment-info { };
 }
