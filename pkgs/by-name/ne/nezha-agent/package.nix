@@ -3,19 +3,17 @@
   buildGoModule,
   stdenv,
   fetchFromGitHub,
-  nezha-agent,
   versionCheckHook,
-  testers,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BM3FhCf9zfccC2xC/Fhz2/andZmPYsJojMRUA3M9NOQ=";
+    hash = "sha256-cLLiJbAr7TxVUNV31Y9TG8ZL4uqBCOnrOr1FM4+1U5c=";
   };
 
   vendorHash = "sha256-q6/265vVg6jCnDvs825nni8QFHkJpQz4xxC9MlJH2do=";
