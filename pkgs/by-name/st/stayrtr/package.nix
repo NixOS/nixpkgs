@@ -28,9 +28,11 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Simple RPKI-To-Router server. (Hard fork of GoRTR)";
+    changelog = "https://github.com/bgp/stayrtr/releases/tag/v${version}";
+    description = "RPKI-To-Router server implementation in Go";
     homepage = "https://github.com/bgp/stayrtr/";
     license = licenses.bsd3;
+    mainProgram = "stayrtr";
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }
