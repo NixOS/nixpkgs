@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
     owner = "SoptikHa2";
     repo = "desed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FL9w+XdClLBCRp+cLqDzTVj8j9LMUp8jZ6hiG4KvIds=";
+    hash = "sha256-aKkOs8IhnHjoJkXq9ryGn9fN0AmZyVTHbD/Vano+Erw=";
   };
 
-  cargoHash = "sha256-inH8fUpUR0WXYY2JX72evZqVp3GlnGKBBlrbai/fU6U=";
+  cargoHash = "sha256-3bkNirrvBOqIOhxD5xf3XsdaUMWFVT/lnN3gmZQIB9I=";
 
   passthru.updateScript = nix-update-script { };
 
