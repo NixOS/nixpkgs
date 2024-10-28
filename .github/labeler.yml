@@ -217,9 +217,9 @@
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
-        - pkgs/development/compilers/nim/*
-        - pkgs/development/nim-packages/**/*
-        - pkgs/top-level/nim-packages.nix
+        - pkgs/build-support/build-nim-package.nix
+        - pkgs/by-name/ni/nim*
+        - pkgs/top-level/nim-overrides.nix
 
 "6.topic: nodejs":
   - any:
