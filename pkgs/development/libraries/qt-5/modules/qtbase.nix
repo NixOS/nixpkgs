@@ -44,7 +44,8 @@ let
   # Note that Qt propagates the 10.14 SDK instead of the 10.13 SDK to make sure that applications linked to Qt
   # support automatic dark mode on x86_64-darwin (see: https://developer.apple.com/documentation/appkit/nsappearancecustomization/choosing_a_specific_appearance_for_your_macos_app).
   propagatedAppleSDK = if lib.versionOlder (lib.getVersion apple-sdk) "10.14" then apple-sdk_10_14 else apple-sdk;
-  propagatedMinVersionHook = darwinMinVersionHook "10.13";
+  deploymentTarget = "10.13";
+  propagatedMinVersionHook = darwinMinVersionHook deploymentTarget;
   buildAppleSDK = apple-sdk_13;
 in
 
@@ -165,7 +166,10 @@ stdenv.mkDerivation (finalAttrs: ({
         --replace-fail /System/Library/Frameworks/Cocoa.framework "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
 
       substituteInPlace mkspecs/common/macx.conf \
-        --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
+        --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath ' \
+        --replace-fail \
+          'QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13' \
+          'QMAKE_MACOSX_DEPLOYMENT_TARGET = ${deploymentTarget}'
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
