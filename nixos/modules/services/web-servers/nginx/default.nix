@@ -652,7 +652,7 @@ in
         description = ''
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
-          available in nixpkgs as `nginxMainline`.
+          is available in nixpkgs as `nginxMainline`.
           Supported Nginx forks include `angie`, `openresty` and `tengine`.
           For HTTP/3 support use `nginxQuic` or `angieQuic`.
         '';
