@@ -33856,8 +33856,6 @@ with pkgs;
 
   erigon = callPackage ../applications/blockchains/erigon { };
 
-  exodus = callPackage ../applications/blockchains/exodus { };
-
   faraday = callPackage ../applications/blockchains/faraday { };
 
   fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
