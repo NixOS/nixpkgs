@@ -43,7 +43,7 @@ buildGoModule rec {
     changelog = "https://github.com/turbot/steampipe-plugin-github/blob/v${version}/CHANGELOG.md";
     description = "GitHub Plugin for Steampipe";
     homepage = "https://github.com/turbot/steampipe-plugin-github";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     longDescription = "Use SQL to instantly query repositories, users, gists and more from GitHub.";
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = steampipe.meta.platforms;
