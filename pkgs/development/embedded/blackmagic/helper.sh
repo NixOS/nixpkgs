@@ -17,6 +17,10 @@ PRODUCTS="blackmagic.bin blackmagic.hex blackmagic_dfu.bin blackmagic_dfu.hex"
 
 ################################################################################
 make_platform() {
+  if [ "$1" = "common" ]; then
+    return;
+  fi
+
   echo "Building for hardware platform $1"
 
   make clean
@@ -32,7 +36,6 @@ make_platform() {
       install -m 0444 "$f" "$out/firmware/$1"
     fi
   done
-
 }
 
 ################################################################################
