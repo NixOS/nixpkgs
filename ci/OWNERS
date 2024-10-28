@@ -339,7 +339,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
-/pkgs/development/compilers/nim   @ehmry
+/doc/languages-frameworks/nim.section.md  @ehmry
+/pkgs/build-support/build-nim-package.nix @ehmry
+/pkgs/top-level/nim-overrides.nix         @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq

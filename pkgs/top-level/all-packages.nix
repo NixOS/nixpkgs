@@ -15340,7 +15340,7 @@ with pkgs;
   nim-unwrapped-1 = nim-unwrapped-1_0;
   nim-unwrapped-2 = nim-unwrapped-2_2;
 
-  buildNimPackage = callPackage ../development/compilers/nim/build-nim-package.nix { };
+  buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
 
   neko = callPackage ../development/compilers/neko { };
