@@ -33579,8 +33579,6 @@ with pkgs;
 
   xrestop = callPackage ../tools/X11/xrestop { };
 
-  xrgears = callPackage ../applications/graphics/xrgears { };
-
   xsd = callPackage ../development/libraries/xsd {
     stdenv = gcc9Stdenv;
   };
