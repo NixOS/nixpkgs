@@ -91,6 +91,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
     changelog = "https://github.com/jxnl/instructor/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
