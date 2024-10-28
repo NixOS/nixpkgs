@@ -1,20 +1,30 @@
-{ stdenv
-, rustPlatform
-, lib
-, fetchFromGitHub
-, cargo
-, expat
-, fontconfig
-, libXft
-, libXinerama
-, m4
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cargo,
+  m4,
+  pkg-config,
+  python3,
+  rustPlatform,
+
+  # buildInputs
+  expat,
+  fontconfig,
+  libXft,
+  libXinerama,
 }:
 
-# The dmenu-rs package has extensive plugin support. However, this derivation
-# only builds the package with the default set of plugins. If you'd like to
-# further customize dmenu-rs you can build it from the source.
+# The dmenu-rs package has extensive plugin support. However, only a variant
+# of dmenu-rs without any plugins is packaged here. This is because the set of
+# plugins is defined at compile time and the dmenu-rs build uses this set to
+# dynamically generate a corresponding Cargo.lock file. To work around this
+# dynamic generation in nixpkgs, the Cargo.lock file has been generated in
+# advance and then checked in here. If you'd like to further customize
+# dmenu-rs, either disabling specific plugins or enabling additional plugins,
+# you'll have to build it from the source.
 # See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
@@ -23,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Shizcow";
     repo = "dmenu-rs";
-    rev = version;
-    hash = "sha256-LdbTvuq1IbzWEoASscIh3j3VAHm+W3UekJNiMHTxSQI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +46,13 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = [
-    expat
-    fontconfig
-    libXft
-    libXinerama
-  ];
+  buildInputs =
+    [
+      expat
+      fontconfig
+      libXft
+      libXinerama
+    ];
 
   # The dmenu-rs repository does not include a Cargo.lock because of its
   # dynamic build and plugin support. Generating it with make and checking it
@@ -65,12 +76,12 @@ stdenv.mkDerivation rec {
   # deterministically. See the original PR for some discussion on this.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
     homepage = "https://github.com/Shizcow/dmenu-rs";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ benjaminedwardwebb ];
-    platforms = platforms.linux;
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ benjaminedwardwebb ];
+    platforms = lib.platforms.linux;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }
