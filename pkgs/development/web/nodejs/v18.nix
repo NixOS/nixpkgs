@@ -146,5 +146,16 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/0f7bdcc17fbc7098b89f238f4bd8ecad9367887b.patch?full_index=1";
       hash = "sha256-lXx6QyD2anlY9qAwjNMFM2VcHckBshghUF1NaMoaNl4=";
     })
+
+    # Patches for libuv
+    # https://github.com/nodejs/node/pull/55114#issue-2547473141
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/f97865fab436fba24b46dad14435ec4b482243a2.patch?full_index=1";
+      hash = "sha256-Av13UX6e21omJhHJrJCTOm/51yqcvQDng24dnkAjPqs=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/54d55f2337ebe04451da770935ad453accb147f9.patch?full_index=1";
+      hash = "sha256-FGI6LiXw1WZGOEq3041wsd9XSuK6skLkZHqv6HhXC2k=";
+    })
   ] ++ gypPatches;
 }
