@@ -43,9 +43,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   optional-dependencies = {
     azure = [ azure-storage-blob ];
@@ -76,12 +76,12 @@ buildPythonPackage rec {
     "test_storage_save_gzip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of custom storage backends for Django";
     changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";
     downloadPage = "https://github.com/jschneier/django-storages/";
     homepage = "https://django-storages.readthedocs.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }
