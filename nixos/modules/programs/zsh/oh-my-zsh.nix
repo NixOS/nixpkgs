@@ -87,6 +87,15 @@ in
             Without this option it would default to the read-only nix store.
           '';
         };
+
+        preLoaded = lib.mkOption {
+          type = lib.types.lines;
+          default = "";
+          description = ''
+            Shell commands executed before the `oh-my-zsh` is loaded.
+            For example, to disable async git prompt write `zstyle ':omz:alpha:lib:git' async-prompt force` (more information https://github.com/ohmyzsh/ohmyzsh?tab=readme-ov-file#async-git-prompt)
+          '';
+        };
       };
     };
 
@@ -120,6 +129,7 @@ in
           ZSH_CACHE_DIR=${cfg.cacheDir}
         ''}
 
+        ${cfg.preLoaded}
         source $ZSH/oh-my-zsh.sh
       '';
 
