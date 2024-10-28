@@ -1173,11 +1173,17 @@ rec {
       };
 
       fsi = writeBash "fsi" ''
+        set -euo pipefail
         export HOME=$NIX_BUILD_TOP/.home
         export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
         export DOTNET_NOLOGO=1
+        export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1
         script="$1"; shift
+        (
+          ${lib.getExe dotnet-sdk} new nugetconfig
+          ${lib.getExe dotnet-sdk} nuget disable source nuget
+        ) > /dev/null
         ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
       '';
 
