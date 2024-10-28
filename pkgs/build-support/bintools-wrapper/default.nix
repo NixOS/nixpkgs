@@ -394,6 +394,8 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = (getBin runtimeShell + runtimeShell.shellPath or "");
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
