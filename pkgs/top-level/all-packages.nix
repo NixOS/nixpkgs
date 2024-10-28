@@ -26448,6 +26448,7 @@ with pkgs;
     ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
     ubootRock4CPlus
+    ubootRock5ITX
     ubootRock5ModelB
     ubootRock64
     ubootRock64v2
