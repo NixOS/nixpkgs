@@ -555,14 +555,14 @@ buildLuarocksPackage {
 fzf-lua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "fzf-lua";
-  version = "0.0.1476-1";
+  version = "0.0.1479-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/fzf-lua-0.0.1476-1.rockspec";
-    sha256 = "1k3qmxraf906652lkn0l0r9lh1j7hdxzrklr570dj1jai292n433";
+    url    = "mirror://luarocks/fzf-lua-0.0.1479-1.rockspec";
+    sha256 = "1xj0vw2y9y0ff88gcsh1q8vg9lsrsak435pzx8bizpcxkpaqizc4";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/ibhagwan/fzf-lua/archive/fc0f2b5781587d388b743c2c114127a7036d1a31.zip";
-    sha256 = "08k9xmnkjian4mr5ak7fzbw5v14rlhr6zl6a9nk4xq155p5qlk2s";
+    url    = "https://github.com/ibhagwan/fzf-lua/archive/ce1e24f2a48089b65deefcb0a71a9856839002b5.zip";
+    sha256 = "0nfihl95bxrjmkin8wj6d8sznch695fk2wxkwk6wd92v5dlapypx";
   };
 
   disabled = luaOlder "5.1";
@@ -853,16 +853,16 @@ buildLuarocksPackage {
 llscheck = callPackage({ ansicolors, argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, lua-cjson, luaOlder, luafilesystem, penlight }:
 buildLuarocksPackage {
   pname = "llscheck";
-  version = "0.5.0-1";
+  version = "0.6.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/llscheck-0.5.0-1.rockspec";
-    sha256 = "1bcyg1gphlgwmra8l1503yaw6wfihs1fksdvvp1y38zryhkvj0dy";
+    url    = "mirror://luarocks/llscheck-0.6.0-1.rockspec";
+    sha256 = "1scgsjgsjbapqgwvwcd9l378sipin2w85mcjdi0fzgldsx87gwni";
   }).outPath;
   src = fetchFromGitHub {
     owner = "jeffzi";
     repo = "llscheck";
-    rev = "v0.5.0";
-    hash = "sha256-cG/FNzOwvLvrAEut4OvXI8WWSVzNEl4r3OgiSnp3S5c=";
+    rev = "v0.6.0";
+    hash = "sha256-XYfcVPiYCDrmuHyR1TN4QvsWIvbs86FN3UQYfrRHPiI=";
   };
 
   disabled = luaOlder "5.1";
@@ -1992,16 +1992,16 @@ buildLuarocksPackage {
 luaprompt = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
 buildLuarocksPackage {
   pname = "luaprompt";
-  version = "0.8-1";
+  version = "0.9-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luaprompt-0.8-1.rockspec";
-    sha256 = "17v7yqkvm4rxszqvqk3f6a6vqysh80p18l1ryif79bc7ic948br4";
+    url    = "mirror://luarocks/luaprompt-0.9-1.rockspec";
+    sha256 = "0bh4fpfrqbg9bappnrfr6blvl3lzc99plq7jac67mhph1bjki7rk";
   }).outPath;
   src = fetchFromGitHub {
     owner = "dpapavas";
     repo = "luaprompt";
-    rev = "v0.8";
-    hash = "sha256-GdI5sj7FBeb9q23oxVOzT+yVhMYTnggaN8Xt/z/2xZo=";
+    rev = "v0.9";
+    hash = "sha256-S6bzlIY1KlMK3wy01wGuRujGFgPxcNWmCaISQ87EBGs=";
   };
 
   disabled = luaOlder "5.1";
@@ -2064,16 +2064,16 @@ buildLuarocksPackage {
 luarocks-build-rust-mlua = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "luarocks-build-rust-mlua";
-  version = "0.2.2-1";
+  version = "0.2.3-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luarocks-build-rust-mlua-0.2.2-1.rockspec";
-    sha256 = "0y9ms0cf0jp4b26m6qbxsj4s4ng4z112qq4wc79q7xm7zw9dha4p";
+    url    = "mirror://luarocks/luarocks-build-rust-mlua-0.2.3-1.rockspec";
+    sha256 = "0vkbl2xcjjpi5gn7v2fr7nyyd7fg91zknrgm61cz91mwp4x5i3pf";
   }).outPath;
   src = fetchFromGitHub {
     owner = "mlua-rs";
     repo = "luarocks-build-rust-mlua";
-    rev = "0.2.2";
-    hash = "sha256-vyFX5LFGrC+RXjmwLgBdmVawOCNatJva53MFvKa7ozM=";
+    rev = "0.2.3";
+    hash = "sha256-SktU54lLaa9x6ntsyeaomsvCQJOtkJhIK/q5uDDFHqY=";
   };
 
 
@@ -2492,14 +2492,14 @@ buildLuarocksPackage {
 lz-n = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lz.n";
-  version = "2.9.0-1";
+  version = "2.9.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lz.n-2.9.0-1.rockspec";
-    sha256 = "1014pjjkk0m1hki95gj8zk8nv8nzq3ikaf44i3byg44n84r2if80";
+    url    = "mirror://luarocks/lz.n-2.9.1-1.rockspec";
+    sha256 = "0x2xgmgxj9zvpa9x57981j3g21wm3zsylpwidk0wsbln7nag6b92";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/lz.n/archive/v2.9.0.zip";
-    sha256 = "1l9w5dkagk10nqskj25903mkzra3fr8ds0xfvqry9a1aly79wkvy";
+    url    = "https://github.com/nvim-neorocks/lz.n/archive/v2.9.1.zip";
+    sha256 = "1xk4m8i61aiwcd9k5xp3wpn3frxkkjy5fk2921qkma1vsadd83yk";
   };
 
   disabled = luaOlder "5.1";
@@ -3072,14 +3072,14 @@ buildLuarocksPackage {
 rocks-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, fidget-nvim, fzy, luaOlder, luarocks, nvim-nio, rtp-nvim, toml-edit }:
 buildLuarocksPackage {
   pname = "rocks.nvim";
-  version = "2.40.5-1";
+  version = "2.41.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rocks.nvim-2.40.5-1.rockspec";
-    sha256 = "0cbj6aqw4f36lc4y4jksr4s6dp0vhzw0pj3kd1fi0vclc8g77q1z";
+    url    = "mirror://luarocks/rocks.nvim-2.41.0-1.rockspec";
+    sha256 = "1srhz85sfhkzlsy68mvwhdixvwz0awhrn530sny0287zhnrxrilp";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/rocks.nvim/archive/v2.40.5.zip";
-    sha256 = "1vkjd8dasz8vhpnyjvvvwfpkakrfri6si242ga34wwf9jfg9bfbz";
+    url    = "https://github.com/nvim-neorocks/rocks.nvim/archive/v2.41.0.zip";
+    sha256 = "0j44chcziimqn6jm2ckbwmn97nin0dwhnnrdpm87j754kbqsj21a";
   };
 
   disabled = luaOlder "5.1";
@@ -3338,8 +3338,8 @@ buildLuarocksPackage {
   src = fetchFromGitHub {
     owner = "nvim-telescope";
     repo = "telescope.nvim";
-    rev = "df534c3042572fb958586facd02841e10186707c";
-    hash = "sha256-HWNfj3/b+CUFgWR26IzAuMzlSCEuiK/7n8tWHwqAAik=";
+    rev = "37dc9233a473dd6c3f54456ef9994d8f77c80211";
+    hash = "sha256-zidYSt0WrnATuCpSGGhYuafNpPPN6dJ6hEuCgFytfEk=";
   };
 
   disabled = lua.luaversion != "5.1";
@@ -3420,7 +3420,7 @@ buildLuarocksPackage {
   nativeBuildInputs = [ luarocks-build-rust-mlua ];
 
   meta = {
-    homepage = "https://github.com/vhyrro/toml-edit.lua";
+    homepage = "https://github.com/nvim-neorocks/toml-edit.lua";
     description = "TOML Parser + Formatting and Comment-Preserving Editor";
     maintainers = with lib.maintainers; [ mrcjkb ];
     license.fullName = "MIT";
