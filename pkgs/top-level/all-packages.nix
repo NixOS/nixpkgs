@@ -19018,6 +19018,10 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  globalprotect-openconnect_2-gui = globalprotect-openconnect_2.override {
+    withGui = true;
+  };
+
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
   yamale = with python3Packages; toPythonApplication yamale;
