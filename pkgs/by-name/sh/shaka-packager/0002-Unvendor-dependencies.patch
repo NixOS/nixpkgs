@@ -1,14 +1,3 @@
-From a412a1cbce2b8f28e831aabe0c8d31832eb3f840 Mon Sep 17 00:00:00 2001
-From: Niklas Korz <niklas@niklaskorz.de>
-Date: Thu, 24 Oct 2024 22:05:50 +0200
-Subject: [PATCH 2/3] Unvendor dependencies
-
----
- CMakeLists.txt                     | 24 ++++++++++++++++++++++++
- packager/CMakeLists.txt            |  1 -
- packager/tools/pssh/CMakeLists.txt |  5 -----
- 3 files changed, 24 insertions(+), 6 deletions(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 5b96a2429e..181df0bf2d 100644
 --- a/CMakeLists.txt
@@ -86,6 +75,4 @@ index 9ec3a39d26..0b981cec29 100644
      COMMAND
          ${CMAKE_COMMAND} -E copy
          ${CMAKE_CURRENT_SOURCE_DIR}/pssh-box.py
--- 
-2.46.0
 

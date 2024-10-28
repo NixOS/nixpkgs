@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9oGoWDGKnAVqVDa/lz0Y3qiE1y0OD9ZobJ44gxdB+2A=";
+    hash = "sha256-5TDfIbguBipYciXusn0rDS0ZQl0+fDFfHYbrnYjxSdE=";
   };
 
   patches = [
@@ -46,10 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     # The last step is necessary to keep the patch size to a minimum, otherwise we'd have
     # to add the namespace identifiers everywhere a dependency is used.
     ./0002-Unvendor-dependencies.patch
-    # As nixpkgs ships with a newer version of libcurl than the one vendored in shaka-packager,
-    # we have to fix one deprecation.
-    # See https://curl.se/libcurl/c/CURLOPT_PUT.html for further information.
-    ./0003-Fix-curl-deprecations.patch
   ];
 
   nativeBuildInputs = [
