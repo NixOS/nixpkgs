@@ -39,6 +39,11 @@ buildPythonPackage rec {
 
   env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
 
+  pypaBuildFlags = [
+    "-C--global-option=build_ext"
+    "-C--global-option=--use-system-libuv"
+  ];
+
   buildInputs =
     [ libuv ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
