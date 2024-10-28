@@ -6,7 +6,16 @@ let
   maintainer = mkOptionType {
     name = "maintainer";
     check = email: elem email (attrValues lib.maintainers);
-    merge = loc: defs: listToAttrs (singleton (nameValuePair (last defs).file (last defs).value));
+    merge = _: defs: listToAttrs (singleton (nameValuePair (last defs).file (last defs).value));
+  };
+
+  moduleListOf = type: types.listOf type // {
+    # Returns list of
+    #   {
+    #     "module-file" = [ type.value ];
+    #   }
+    merge = loc: defs:
+      listToAttrs (map (def: nameValuePair def.file def.value) defs);
   };
 
   listOfMaintainers = types.listOf maintainer // {
@@ -15,10 +24,10 @@ let
     #        "maintainer1 <first@nixos.org>"
     #        "maintainer2 <second@nixos.org>" ];
     #   }
-    merge = loc: defs:
+    merge = _: defs:
       zipAttrs
         (flatten (imap1 (n: def: imap1 (m: def':
-          maintainer.merge (loc ++ ["[${toString n}-${toString m}]"])
+          maintainer.merge null
             [{ inherit (def) file; value = def'; }]) def.value) defs));
   };
 
@@ -41,6 +50,19 @@ in
         description = ''
           List of maintainers of each module.  This option should be defined at
           most once per module.
+        '';
+      };
+
+      wikiPages = mkOption {
+        type = moduleListOf types.str;
+        internal = true;
+        default = [];
+        example = [
+          "https://wiki.nixos.org/wiki/NixOS"
+        ];
+        # TODO better description!
+        description = ''
+          A link to a NixOS wiki page for this module.
         '';
       };
 
