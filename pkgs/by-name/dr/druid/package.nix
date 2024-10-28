@@ -19,11 +19,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-druid";
-  version = "30.0.0";
+  version = "31.0.0";
 
   src = fetchurl {
     url = "mirror://apache/druid/${finalAttrs.version}/apache-druid-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-mRYorVkNzM94LP53G78eW20N5UsvMP7Lv4rAysmPwXw=";
+    hash = "sha256-xppAoKNS/qB8WVMwBPxxHbOy5uDGl3IxrCWV1T+YQkE=";
   };
 
   mysqlConnector = fetchurl {
