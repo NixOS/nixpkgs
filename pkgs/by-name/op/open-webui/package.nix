@@ -55,10 +55,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
-    # using `opencv4`
-    "opencv-python-headless"
-    # using `psycopg2` instead
-    "psycopg2-binary"
     "docker"
     "pytest"
     "pytest-docker"
@@ -97,14 +93,14 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     nltk
     openai
-    opencv4
+    opencv-python-headless
     openpyxl
     pandas
     passlib
     peewee
     peewee-migrate
     psutil
-    psycopg2
+    psycopg2-binary
     pydub
     pyjwt
     pymilvus
