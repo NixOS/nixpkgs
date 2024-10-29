@@ -176,13 +176,18 @@ in
               description = "Executable to be run at torrent completion.";
             };
             umask = mkOption {
-              type = types.str;
-              default = "022";
+              type = types.either types.int types.str;
+              default = if cfg.package == pkgs.transmission_3 then 18 else "022";
+              defaultText = literalExpression "if cfg.package == pkgs.transmission_3 then 18 else \"022\"";
               description = ''
                 Sets transmission's file mode creation mask.
                 See the umask(2) manpage for more information.
                 Users who want their saved torrents to be world-writable
-                may want to set this value to `000`.
+                may want to set this value to 0/`"000"`.
+
+                Keep in mind, that if you are using Transmission 3, this has to
+                be passed as a base 10 integer, whereas Transmission 4 takes
+                an octal number in a string instead.
               '';
             };
             utp-enabled = mkOption {
