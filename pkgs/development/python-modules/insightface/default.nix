@@ -58,19 +58,25 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  # aarch64-linux tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
+  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform.system != "aarch64-linux") {
+    version = testers.testVersion {
+      package = insightface;
+      command = "insightface-cli --help";
+      # Doesn't support --version but we still want to make sure the cli is executable
+      # and returns the help output
+      version = "help";
+    };
+  };
+
   pythonImportsCheck = [
     "insightface"
     "insightface.app"
     "insightface.data"
   ];
-
-  passthru.tests.version = testers.testVersion {
-    package = insightface;
-    command = "insightface-cli --help";
-    # Doesn't support --version but we still want to make sure the cli is executable
-    # and returns the help output
-    version = "help";
-  };
 
   doCheck = false; # Upstream has no tests
 
@@ -80,7 +86,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepinsight/insightface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
-    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
-    broken = stdenv.system == "aarch64-linux";
   };
 }

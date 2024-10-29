@@ -223,7 +223,7 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
     xcode_13 xcode_13_1 xcode_13_2 xcode_13_3 xcode_13_3_1 xcode_13_4 xcode_13_4_1
     xcode_14 xcode_14_1
     xcode_15 xcode_15_0_1 xcode_15_1 xcode_15_2 xcode_15_3 xcode_15_4
-    xcode_16
+    xcode_16 xcode_16_1
     xcode;
 
   xcodeProjectCheckHook = pkgs.makeSetupHook {

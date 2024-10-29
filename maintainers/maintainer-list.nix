@@ -5437,6 +5437,12 @@
     githubId = 4490283;
     name = "diadatp";
   };
+  diamond-deluxe = {
+    email = "carbon_lattice@proton.me";
+    github = "diamond-deluxe";
+    githubId = 112557036;
+    name = "Diamond";
+  };
   DianaOlympos = {
     github = "DianaOlympos";
     githubId = 15774340;
@@ -17670,6 +17676,12 @@
     githubId = 12017109;
     name = "Rabindra Dhakal";
   };
+  qbisi = {
+    name = "qbisicwate";
+    email = "qbisicwate@gmail.com";
+    github = "qbisi";
+    githubId = 84267544;
+  };
   qbit = {
     name = "Aaron Bieber";
     email = "aaron@bolddaemon.com";
@@ -18245,6 +18257,11 @@
     github = "k0001";
     githubId = 3302;
     name = "Renzo Carbonara";
+  };
+  reputable2772 = {
+    name = "Reputable2772";
+    github = "Reputable2772";
+    githubId = 153411261;
   };
   rettetdemdativ = {
     email = "michael@koeppl.dev";

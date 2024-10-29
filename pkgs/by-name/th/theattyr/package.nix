@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A terminal theater for playing VT100 art and animations";
+    description = "Terminal theater for playing VT100 art and animations";
     homepage = "https://github.com/orhun/theattyr";
     changelog = "https://github.com/orhun/theattyr/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
