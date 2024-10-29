@@ -17549,8 +17549,6 @@ with pkgs;
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
 
-  geis = callPackage ../development/libraries/geis { };
-
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
 
   git2-cpp = callPackage ../development/libraries/git2-cpp { };
