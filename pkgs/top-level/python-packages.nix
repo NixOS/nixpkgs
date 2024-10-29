@@ -14801,6 +14801,8 @@ self: super: with self; {
 
   sphinx-intl = callPackage ../development/python-modules/sphinx-intl { };
 
+  sphinx-jsonschema = callPackage ../development/python-modules/sphinx-jsonschema { };
+
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
