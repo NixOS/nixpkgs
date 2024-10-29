@@ -12919,6 +12919,8 @@ self: super: with self; {
 
   pytest-unordered = callPackage ../development/python-modules/pytest-unordered { };
 
+  pytest-variables = callPackage ../development/python-modules/pytest-variables { };
+
   pytest-vcr = callPackage ../development/python-modules/pytest-vcr { };
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
