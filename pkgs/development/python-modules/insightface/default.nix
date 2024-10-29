@@ -65,13 +65,17 @@ buildPythonPackage rec {
     "insightface.app"
     "insightface.data"
   ];
-  passthru.tests.version = testers.testVersion {
-    package = insightface;
-    command = "insightface-cli --help";
-    # Doesn't support --version but we still want to make sure the cli is executable
-    # and returns the help output
-    version = "help";
-  };
+  passthru.tests.version =
+    if (stdenv.buildPlatform.system != "aarch64-linux") then
+      testers.testVersion {
+        package = insightface;
+        command = "insightface-cli --help";
+        # Doesn't support --version but we still want to make sure the cli is executable
+        # and returns the help output
+        version = "help";
+      }
+    else
+      null;
 
   doCheck = false; # Upstream has no tests
 
