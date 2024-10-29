@@ -6,8 +6,8 @@
 , python
 , withGodef ? true
 , godef
-, withGotools ? true
-, gotools
+, withGopls ? true
+, gopls
 , withTypescript ? true
 , typescript
 , abseil-cpp
@@ -78,10 +78,10 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/godef
     mkdir -p $TARGET
     ln -sf ${godef}/bin/godef $TARGET
-  '' + lib.optionalString withGotools ''
-    TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
+  '' + lib.optionalString withGopls ''
+    TARGET=$out/lib/ycmd/third_party/go/bin
     mkdir -p $TARGET
-    ln -sf ${gotools}/bin/gopls $TARGET
+    ln -sf ${gopls}/bin/gopls $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${typescript} $TARGET
