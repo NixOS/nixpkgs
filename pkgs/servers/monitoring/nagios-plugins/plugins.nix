@@ -12,4 +12,5 @@
   check_zfs = callPackage ./check_zfs { };
 
   inherit (callPackage ./labs_consol_de { }) check_mssql_health check_nwc_health check_ups_health;
+  manubulon-snmp-plugins = callPackage ./manubulon-snmp-plugins { };
 }
