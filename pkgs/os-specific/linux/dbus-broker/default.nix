@@ -11,6 +11,10 @@
 }:
 
 let
+  meta = {
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
+  };
 
   dep = { pname, version, hash, rev ? "v${version}", buildInputs ? [ ] }:
     stdenv.mkDerivation {
@@ -22,6 +26,14 @@ let
       };
       nativeBuildInputs = [ meson ninja pkg-config ];
       inherit buildInputs;
+      meta = meta // {
+        description = "The C-Util Project is a collection of utility libraries for the C11 language.";
+        homepage = "https://c-util.github.io/";
+        license = [
+          lib.licenses.asl20
+          lib.licenses.lgpl21Plus
+        ];
+      };
     };
 
   # These libraries are not used outside of dbus-broker.
@@ -89,11 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = meta // {
     description = "Linux D-Bus Message Broker";
     homepage = "https://github.com/bus1/dbus-broker/wiki";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
   };
 })
