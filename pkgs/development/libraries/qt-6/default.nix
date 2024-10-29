@@ -54,7 +54,6 @@ let
         inherit (srcs.qtbase) src version;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
-          ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
           ./patches/0004-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0005-qtbase-find-tools-in-PATH.patch

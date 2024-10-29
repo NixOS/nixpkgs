@@ -177,7 +177,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  propagatedNativeBuildInputs = [ lndir ];
+  propagatedNativeBuildInputs = [ lndir ]
+    # I’m not sure if this is necessary, but the macOS mkspecs stuff
+    # tries to call `xcrun xcodebuild`, so better safe than sorry.
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   strictDeps = true;
 
@@ -186,7 +189,24 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    # TODO: Verify that this catches all the occurrences?
+    for file in \
+      cmake/QtPublicAppleHelpers.cmake \
+      mkspecs/features/mac/asset_catalogs.prf \
+      mkspecs/features/mac/default_pre.prf \
+      mkspecs/features/mac/sdk.mk \
+      mkspecs/features/mac/sdk.prf \
+      mkspecs/features/permissions.prf \
+      src/corelib/Qt6CoreMacros.cmake
+    do
+      substituteInPlace "$file" \
+        --replace-quiet /usr/bin/xcrun '${lib.getExe' xcbuild "xcrun"}' \
+        --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
+        --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
+    done
+
+    substituteInPlace mkspecs/common/macx.conf \
+      --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -211,6 +231,7 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DQT_FEATURE_rpath=OFF"
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
   ] ++ lib.optionals isCrossBuild [
