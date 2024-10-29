@@ -53,7 +53,7 @@ let
   });
 
 in
-mkScxScheduler "c" rec {
+mkScxScheduler "c" {
   schedulerName = "scx_csheds";
 
   postPatch = ''
@@ -78,8 +78,11 @@ mkScxScheduler "c" rec {
 
   mesonFlags = [
     (lib.mapAttrsToList lib.mesonEnable {
+      # systemd unit is implemented in the nixos module
+      # upstream systemd files are a hassle to patch
       "systemd" = false;
       "openrc" = false;
+      # libbpf is already fetched as FOD
       "libbpf_a" = false;
       # not for nix
       "libalpm" = false;
@@ -87,7 +90,7 @@ mkScxScheduler "c" rec {
     (lib.mapAttrsToList lib.mesonBool {
       # needed libs are already fetched as FOD
       "offline" = true;
-      # rust schedulers are built seperately
+      # rust based schedulers are built seperately
       "enable_rust" = false;
     })
   ];
@@ -99,8 +102,8 @@ mkScxScheduler "c" rec {
   meta = {
     description = "Sched-ext C userspace schedulers";
     longDescription = ''
-      This includes C based schedulers such as scx_central,
-      scx_flatcg, scx_pair, scx_qmap, scx_simple, scx_userland.
+      This includes C based schedulers such as scx_central, scx_flatcg,
+      scx_nest, scx_pair, scx_qmap, scx_simple, scx_userland.
     '';
   };
 }
