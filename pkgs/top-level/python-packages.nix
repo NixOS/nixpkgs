@@ -8969,6 +8969,8 @@ self: super: with self; {
 
   nice-go = callPackage ../development/python-modules/nice-go { };
 
+  nicegui = callPackage ../development/python-modules/nicegui { };
+
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
   nikola = callPackage ../development/python-modules/nikola { };
