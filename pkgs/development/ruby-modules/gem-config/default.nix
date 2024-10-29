@@ -27,6 +27,8 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
+, substituteAll, jdk
+, libjpeg, libpng, libtiff, libwebp
 , cargo, rustc, rustPlatform
 , autoSignDarwinBinariesHook
 }@args:
@@ -739,6 +741,17 @@ in
     meta.mainProgram = "restclient";
   };
 
+  rjb = attrs: {
+    dontBuild = false;
+    buildInputs = [ jdk ];
+    patches = [
+      (substituteAll {
+        src = ./rjb-set-java-home.patch;
+        javaHome = jdk.home;
+      })
+    ];
+  };
+
   rmagick = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ imagemagick which ];
@@ -767,6 +780,15 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+  };
+
+  ruby-magic = attrs: {
+    buildInputs = [ file ];
+    buildFlags = [
+      "--use-system-libraries"
+      "--with-magic-include=${file.dev}/include"
+      "--with-magic-lib=${file.out}/lib"
+    ];
   };
 
   ruby-terminfo = attrs: {
@@ -900,6 +922,10 @@ in
 
   uuid4r = attrs: {
     buildInputs = [ which libossp_uuid ];
+  };
+
+  webp-ffi = attrs: {
+    buildInputs = [ libjpeg libpng libtiff libwebp ];
   };
 
   whois = attrs: {
