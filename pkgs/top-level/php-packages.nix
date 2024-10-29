@@ -181,7 +181,7 @@ in {
 
       meta = {
         description = "PHP upstream extension: ${name}";
-        inherit (php.meta) maintainers homepage license;
+        inherit (php.meta) maintainers homepage license platforms;
       } // args.meta or { };
     }));
 
