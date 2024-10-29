@@ -1,5 +1,8 @@
 {
   lib,
+  callPackage,
+  linkFarmFromDrvs,
+  writeText,
   fetchzip,
   libGL,
   makeWrapper,
@@ -13,10 +16,31 @@
   curl,
   gnugrep,
   common-updater-scripts,
+
+  starsectorMods ? [ ],
 }:
+
+assert lib.assertMsg (
+  builtins.isList starsectorMods
+  && builtins.all (x: x) (
+    map (n: lib.isDerivation (builtins.elemAt starsectorMods n)) (
+      lib.range 0 ((builtins.length starsectorMods) - 1)
+    )
+  )
+) "The definition for 'starsectorMods' is not of type 'list of derivation'.";
 
 let
   openjdk = openjdk8;
+
+  mkStarsectorMod = lib.recurseIntoAttrs (callPackage ./mods.nix { });
+  mergedModPath = linkFarmFromDrvs "mergedModPath" (
+    starsectorMods
+    ++ [
+      (writeText "enabled_mods.json" (
+        builtins.toJSON { enabledMods = (map (mod: mod.id) starsectorMods); }
+      ))
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,7 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
     ''
-    # We also point the mod, screenshot, and save directories to $XDG_DATA_HOME.
+    # Set the mods folder to the merged store directory if we're using the mod plugins.
+    + lib.optionalString (starsectorMods != [ ]) ''
+      --replace-fail "./mods" "${mergedModPath}" \
+    ''
+    # We also point the mod (if `starsectorMods == [ ]`), screenshot, and save directories to $XDG_DATA_HOME.
     + ''
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
     ''
@@ -120,10 +148,36 @@ stdenv.mkDerivation (finalAttrs: {
       };
       text = builtins.readFile ./update.sh;
     };
+    inherit mkStarsectorMod;
   };
 
   meta = {
     description = "Open-world, single-player space combat, roleplaying, exploration, and economic game";
+    longDescription = ''
+      Starsector can be extended with third-party modifications from the [Fractal Softworks Forum](https://fractalsoftworks.com/forum/index.php?&board=8.0).
+      By default, mods can be imperatively installed in `$HOME/.local/share/starsector/mods`, but you can also override the `starsector` derivation to install mods declaratively, like so:
+      ```nix
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          (starsector.override {
+            starsectorMods = [
+              (starsector.mkStarsectorMod {
+                pname = "myFavouriteMod";
+                version = "1.0.0";
+                url = "https://somefilerepository.example/yourMod/modFile.zip";
+                hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+                id = "my_fav_mod";
+              })
+              # ... more mod derivations.
+            ];
+          })
+        ];
+      }
+      ```
+      This will create a merged store path with the specified mods, and Nix will handle fetching and installing.
+      **Note:** as the mods will be stored inside the read-only /nix/store, they will not be able to write files during runtime, which may cause game crashes if they attempt to do anyway.
+    '';
     homepage = "https://fractalsoftworks.com";
     downloadPage = finalAttrs.meta.homepage + "/preorder";
     changelog = finalAttrs.meta.homepage + "/blog";
