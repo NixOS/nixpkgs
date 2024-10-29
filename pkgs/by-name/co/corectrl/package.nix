@@ -2,8 +2,6 @@
 , fetchFromGitLab
 , extra-cmake-modules
 , botan3
-, karchive
-, kauth
 , libdrm
 , hwdata
 , mesa-demos
@@ -13,14 +11,7 @@
 , spdlog
 , util-linux
 , vulkan-tools
-, qtbase
-, qtcharts
-, qtquickcontrols2
-, qtsvg
-, qttools
-, qtxmlpatterns
-, quazip
-, wrapQtAppsHook
+, libsForQt5
 } :
 
 stdenv.mkDerivation rec{
@@ -39,12 +30,12 @@ stdenv.mkDerivation rec{
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     botan3
-    karchive
-    kauth
+    libsForQt5.karchive
+    libsForQt5.kauth
     libdrm
     mesa-demos
     polkit
@@ -53,13 +44,13 @@ stdenv.mkDerivation rec{
     spdlog
     util-linux
     vulkan-tools
-    qtbase
-    qtcharts
-    qtquickcontrols2
-    qtsvg
-    qttools
-    qtxmlpatterns
-    quazip
+    libsForQt5.qtbase
+    libsForQt5.qtcharts
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qtsvg
+    libsForQt5.qttools
+    libsForQt5.qtxmlpatterns
+    libsForQt5.quazip
   ];
 
   cmakeFlags = [
