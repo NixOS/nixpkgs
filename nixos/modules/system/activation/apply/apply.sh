@@ -28,6 +28,23 @@ die() {
     exit 1
 }
 
+usage() {
+    log "NixOS apply invocation error: $*"
+cat >&2 <<EOF
+Usage: apply [switch|boot|test|dry-activate] [OPTIONS]
+Subcommands:
+    switch        make the configuration the boot default and activate it
+    boot          make the configuration the boot default
+    test          activate the configuration, but don\'t make it the boot default
+    dry-activate  show what would be done if this configuration were activated
+Options:
+    --install-bootloader    install the bootloader
+    --profile PROFILE       use PROFILE as the target profile (if applicable)
+    --specialisation NAME   use the specialisation NAME
+EOF
+}
+
+
 parse_args() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
