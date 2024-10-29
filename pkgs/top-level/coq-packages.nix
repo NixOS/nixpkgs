@@ -125,6 +125,7 @@ let
       metacoq-quotation          = self.metacoq.quotation;
       metacoq-safechecker-plugin = self.metacoq.safechecker-plugin;
       metacoq-erasure-plugin     = self.metacoq.erasure-plugin;
+      metacoq-translations       = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
       mtac2 = callPackage ../development/coq-modules/mtac2 {};
       multinomials = callPackage ../development/coq-modules/multinomials {};
