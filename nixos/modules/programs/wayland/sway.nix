@@ -147,9 +147,8 @@ in
       # https://github.com/emersion/xdg-desktop-portal-wlr/blob/master/contrib/wlroots-portals.conf
       # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
       xdg.portal.config.sway = {
-        # Use xdg-desktop-portal-gtk for every portal interface...
-        default = "gtk";
-        # ... except for the ScreenCast, Screenshot and Secret
+        default = lib.mkDefault [ "wlr" "gtk" ];
+        # use wlr explicitly for screen sharing
         "org.freedesktop.impl.portal.ScreenCast" = "wlr";
         "org.freedesktop.impl.portal.Screenshot" = "wlr";
         # ignore inhibit bc gtk portal always returns as success,
