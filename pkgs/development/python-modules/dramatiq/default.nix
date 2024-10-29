@@ -10,6 +10,7 @@
   pylibmc,
   pytestCheckHook,
   redis,
+  setuptools,
   watchdog,
   watchdog-gevent,
 }:
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "dramatiq";
   version = "1.17.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
   };
 
-  propagatedBuildInputs = [ prometheus-client ];
+  build-system = [ setuptools ];
+
+  dependencies = [ prometheus-client ];
 
   optional-dependencies = {
     all = [
