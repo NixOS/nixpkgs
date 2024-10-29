@@ -16,7 +16,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "license-expression";
     rev = "refs/tags/v${version}";
     hash = "sha256-RAgGg0Xekcw5H13YHmkgfL7eybK+4tA8EAvVTuWFRck=";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions";
-    homepage = "https://github.com/nexB/license-expression";
-    changelog = "https://github.com/nexB/license-expression/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/license-expression";
+    changelog = "https://github.com/aboutcode-org/license-expression/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
