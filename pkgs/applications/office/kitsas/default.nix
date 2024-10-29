@@ -1,24 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
+  poppler,
+  libzip,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "4.0.5";
+  version = "5.7";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    hash = "sha256-ODl1yrtrCVhuBWbA1AvHl22d+JSdySG/Gi2hlpVW3jg=";
+    hash = "sha256-1TZFw1Q9+FsGHwitErDhwyA941rtb+h9OgJLFLyhV7k=";
   };
 
-  postPatch = ''
-    substituteInPlace kitsas/kitsas.pro \
-      --replace "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    qt6.qmake
+    qt6.wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
-
-  buildInputs = [ qtsvg poppler libzip ];
+  buildInputs = [
+    libzip
+    poppler
+    qt6.qt5compat
+    qt6.qtsvg
+    qt6.qtwebengine
+  ];
 
   # We use a separate build-dir as otherwise ld seems to get confused between
   # directory and executable name on buildPhase.
@@ -28,15 +41,17 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "../kitsas/kitsas.pro" ];
 
-  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv kitsas.app $out/Applications
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    install -Dm755 kitsas -t $out/bin
-    install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
-    install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
-    install -Dm644 ../kitsas.desktop -t $out/share/applications
-  '';
+  installPhase =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv kitsas.app $out/Applications
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -Dm755 kitsas -t $out/bin
+      install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
+      install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
+      install -Dm644 ../kitsas.desktop -t $out/share/applications
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/artoh/kitupiikki";
