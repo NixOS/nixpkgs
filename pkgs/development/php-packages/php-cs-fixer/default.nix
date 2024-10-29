@@ -4,21 +4,21 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.58.1";
+  version = "3.64.0";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MBNFTHhApANDeHY0tTKbIP2EfVDH7mxwA42PKihzPug=";
+    hash = "sha256-N2m3U0HjwQtm7loqYfEl7kstqljXC8evp6GEh+Cd9Hs=";
   };
 
-  # Missing `composer.lock` from the repository.
-  # Issue open at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
+  # Upstream doesn't provide a composer.lock.
+  # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-dryqtCUr2xkZgDRLKpQjyEpLGz8WiHtLY4fF/pCR10w=";
+  vendorHash = "sha256-cOKfvNjFl9QKwPZp81IHaRurRhmXgbydhdTWYknlGBM=";
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
