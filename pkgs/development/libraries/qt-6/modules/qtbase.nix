@@ -232,18 +232,11 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DQT_FEATURE_rpath=OFF"
-    # error: 'path' is unavailable: introduced in macOS 10.15
-    "-DQT_FEATURE_cxx17_filesystem=OFF"
   ] ++ lib.optionals isCrossBuild [
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
     "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
   ]
   ++ lib.optional (qttranslations != null && !isCrossBuild) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
-
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
-    "-framework GSS"
-  ]);
 
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
