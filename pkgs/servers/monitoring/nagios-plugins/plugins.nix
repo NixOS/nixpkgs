@@ -2,6 +2,7 @@
 
 {
   check_esxi_hardware = callPackage ./check_esxi_hardware { };
+  check_interfaces = callPackage ./check_interfaces { };
   check_openvpn = callPackage ./check_openvpn { };
   check_smartmon = callPackage ./check_smartmon { };
   check_ssl_cert = callPackage ./check_ssl_cert { };
