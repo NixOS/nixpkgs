@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
@@ -41,12 +47,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=selection::no_types::smoke"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo plugin for showing a tree-like overview of a crate's modules";
-    mainProgram = "cargo-modules";
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ figsoda rvarago matthiasbeyer ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      figsoda
+      rvarago
+      matthiasbeyer
+    ];
+    mainProgram = "cargo-modules";
   };
 }
