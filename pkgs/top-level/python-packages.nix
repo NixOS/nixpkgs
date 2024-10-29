@@ -7823,6 +7823,8 @@ self: super: with self; {
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
+  medallion = callPackage ../development/python-modules/medallion { };
+
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
