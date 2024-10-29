@@ -59,5 +59,5 @@ in
     })
   ]);
 
-  meta.maintainers = with lib.maintainers; [ artturin ];
+  meta.maintainers = with lib.maintainers; [ artturin Scrumplex ];
 }
