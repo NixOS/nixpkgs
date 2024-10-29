@@ -36621,7 +36621,10 @@ with pkgs;
     fltk = fltk-minimal;
   };
 
-  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+  factorio = callPackage ../games/factorio {
+    releaseType = "alpha";
+    versionsJson = ../games/factorio/versions-1.json;
+  };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
 
@@ -36630,6 +36633,26 @@ with pkgs;
   factorio-headless-experimental = factorio.override { releaseType = "headless"; experimental = true; };
 
   factorio-demo = factorio.override { releaseType = "demo"; };
+
+  factorio_1 = factorio;
+
+  factorio_1-experimental = factorio-experimental;
+
+  factorio_1-headless = factorio-headless;
+
+  factorio_1-headless-experimental = factorio-headless-experimental;
+
+  factorio_1-demo = factorio-demo;
+
+  factorio_2 = factorio.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-experimental = factorio-experimental.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-headless = factorio-headless.override { versionsJson = ../games/factorio/versions.json; };
+
+  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../games/factorio/versions.json; };
+
+  # there is no factorio_2-demo
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 
