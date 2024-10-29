@@ -1070,6 +1070,12 @@
     githubId = 50754358;
     name = "Alex Winter";
   };
+  alexymantha = {
+    email = "alexy@mantha.dev";
+    github = "alexymantha";
+    githubId = 1365231;
+    name = "Alexy Mantha";
+  };
   alfarel = {
     email = "alfarelcynthesis@proton.me";
     github = "alfarelcynthesis";
