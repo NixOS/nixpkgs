@@ -1,4 +1,4 @@
-{ appleDerivation', stdenvNoCC }:
+{ lib, appleDerivation', stdenvNoCC }:
 
 appleDerivation' stdenvNoCC {
   # No clue why the same file has two different names. Ask Apple!
@@ -23,4 +23,8 @@ appleDerivation' stdenvNoCC {
     vproc_internal.h
     vproc_priv.h
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
