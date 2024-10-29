@@ -15588,7 +15588,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-limit = callPackage ../development/tools/rust/cargo-limit { };
-  cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-mommy = callPackage ../development/tools/rust/cargo-mommy { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
