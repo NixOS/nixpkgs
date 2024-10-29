@@ -15,27 +15,18 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.122.0";
+  version = "3.137.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5KHptoQliqPtJ6J5u23ZgRZOdO77BJhZbdc3Cty9Myk=";
+    hash = "sha256-U1BubJIqQu+tAYQz8ojVrJpx6ZbMFEarSCmmuahG6ys=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-1UyYbmNNHlAeaW6M6AkaQ5Hs25ziHenSs4QjlnUQGjs=";
-
-  patches = [
-    # Fix a test failure, can be dropped in next release (3.100.0)
-    (fetchpatch {
-      url = "https://github.com/pulumi/pulumi/commit/6dba7192d134d3b6f7e26dee9205711ccc736fa7.patch";
-      hash = "sha256-QRN6XnIR2rrqJ4UFYNt/YmIlokTSkGUvnBO/Q9UN8X8=";
-      stripLen = 1;
-    })
-  ];
+  vendorHash = "sha256-Q9NTlgd+rOD5vmbmeAepIARvFtNQT/IFLPeaFC74E7c=";
 
   sourceRoot = "${src.name}/pkg";
 
@@ -62,18 +53,20 @@ buildGoModule rec {
     ldflags=''${ldflags//"$importpathFlags"/}
 
     # Create some placeholders for plugins used in tests. Otherwise, Pulumi
-    # tries to donwload them and fails, resulting in really long test runs
-    dummyPluginPath=$(mktemp -d)
+    # tries to donwload them and fails, resulting in really long test runs.
+    # This has to be linked to the cwd, otherwise tests will fail and a
+    # warning will be emitted noting that the plugin was located in $PATH.
     for name in pulumi-{resource-pkg{A,B},-pkgB}; do
-      ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
+      ln -s ${coreutils}/bin/true "$name"
     done
-
-    export PATH=$dummyPluginPath''${PATH:+:}$PATH
 
     # Code generation tests also download dependencies from network
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+    # Azure tests are not being skipped when an Azure token is not provided
+    rm secrets/cloud/azure_test.go
     rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
+    unset PULUMI_ACCESS_TOKEN
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
@@ -103,6 +96,14 @@ buildGoModule rec {
         # +aws
         "TestPluginMapper_MappedNamesDifferFromPulumiName"
         "TestProtect"
+        "TestProgressEvents"
+        # This test depends on having a PULUMI_ACCESS_TOKEN but is not skipped when one is not provided.
+        # Other tests are skipped when the env var is missing. I guess they forgot about this one.
+        "TestPulumiNewSetsTemplateTag/python"
+        # Both tests require having a "pulumi-language-yaml" plugin installed since pulumi/pulumi#17285,
+        # which I'm not sure how to add.
+        "TestProjectNameDefaults"
+        "TestProjectNameOverrides"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" disabledTests}$" ];

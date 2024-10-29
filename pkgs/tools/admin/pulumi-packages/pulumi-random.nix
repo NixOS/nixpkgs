@@ -4,10 +4,10 @@
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-random";
-  version = "4.14.0";
+  version = "4.16.7";
   rev = "v${version}";
-  hash = "sha256-1MR7zWNBDbAUoRed7IU80PQxeH18x95MKJKejW5m2Rs=";
-  vendorHash = "sha256-YDuF89F9+pxVq4TNe5l3JlbcqpnJwSTPAP4TwWTriWA=";
+  hash = "sha256-Ef4GRbbGHe+Ni8ksHnV3oCqOw94n5XxHgvfefNpmAm0=";
+  vendorHash = "sha256-O0Edcdw+Auxs+DO9ktESgA4MAnoRrsUDNW6S5QIRilc=";
   cmdGen = "pulumi-tfgen-random";
   cmdRes = "pulumi-resource-random";
   extraLdflags = [

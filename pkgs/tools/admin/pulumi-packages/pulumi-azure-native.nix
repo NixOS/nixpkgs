@@ -4,15 +4,20 @@
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-azure-native";
-  version = "2.13.0";
+  version = "2.69.0";
   rev = "v${version}";
-  hash = "sha256-YyJxACeXyY7hZkTbLXT/ASNWa1uv9h3cvPoItR183fU=";
-  vendorHash = "sha256-20wHbNE/fenxP9wgTSzAnx6b1UYlw4i1fi6SesTs0sc=";
+  hash = "sha256-4kzLCBPHsSJHX7R4LOFYWoyQLdomihC6ppEnQQcdINE=";
+  vendorHash = "sha256-JZNaez9jWQc2jMXTZywClb2/LAL1FuHLCJprV8MaFTk=";
   cmdGen = "pulumi-gen-azure-native";
   cmdRes = "pulumi-resource-azure-native";
   extraLdflags = [
     "-X github.com/pulumi/${repo}/v2/provider/pkg/version.Version=${version}"
   ];
+  cmdGenPostConfigure = ''
+    pushd ..
+    cp versions/v2-lock.json provider/pkg/versionLookup/
+    popd
+  '';
   postConfigure = ''
     pushd ..
 
@@ -23,6 +28,7 @@ mkPulumiPackage rec {
 
     cp bin/schema-full.json provider/cmd/${cmdRes}
     cp bin/metadata-compact.json provider/cmd/${cmdRes}
+    cp versions/v2-lock.json provider/pkg/versionLookup/
 
     popd
 
