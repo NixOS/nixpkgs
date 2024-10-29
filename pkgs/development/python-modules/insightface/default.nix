@@ -7,6 +7,7 @@
   fetchPypi,
   insightface,
   matplotlib,
+  mxnet,
   numpy,
   onnx,
   onnxruntime,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     albumentations
     easydict
     matplotlib
+    mxnet # used in insightface/commands/rec_add_mask_param.py
     numpy
     onnx
     onnxruntime
