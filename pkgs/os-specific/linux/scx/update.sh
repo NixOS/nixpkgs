@@ -4,10 +4,10 @@
 
 set -euo pipefail
 
-srcJson="$(realpath "./pkgs/os-specific/linux/scx/version.json")"
-srcFolder="$(dirname "$srcJson")"
+versionJson="$(realpath "./pkgs/os-specific/linux/scx/version.json")"
+nixFolder="$(dirname "$versionJson")"
 
-localVer=$(jq -r .version <$srcJson)
+localVer=$(jq -r .version <$versionJson)
 latestVer=$(curl -s https://api.github.com/repos/sched-ext/scx/releases/latest | jq -r .tag_name | sed 's/v//g')
 
 if [ "$localVer" == "$latestVer" ]; then
@@ -36,16 +36,15 @@ jq \
   ".scx.version = \$latestVer | .scx.hash = \$latestHash |\
   .bpftool.rev = \$bpftoolRev | .bpftool.hash = \$bpftoolHash |\
   .libbpf.rev = \$libbpfRev | .libbpf.hash = \$libbpfHash" \
-  "$srcJson" | sponge $srcJson
+  "$versionJson" | sponge $versionJson
 
 rm -f Cargo.toml Cargo.lock
 
-pushd scheds/rust
 for scheduler in bpfland lavd layered rlfifo rustland; do
-  pushd "scx_$scheduler"
+  pushd "scheds/rust/scx_$scheduler"
 
   cargo generate-lockfile
-  cp Cargo.lock "$srcFolder/scx_$scheduler/Cargo.lock"
+  cp Cargo.lock "$nixFolder/scx_$scheduler/Cargo.lock"
 
   popd
 done

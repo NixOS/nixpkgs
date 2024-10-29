@@ -4,7 +4,7 @@
   mkScxScheduler,
 }:
 
-mkScxScheduler "rust" rec {
+mkScxScheduler "rust" {
   schedulerName = "scx_lavd";
 
   cargoRoot = "scheds/rust/scx_lavd";

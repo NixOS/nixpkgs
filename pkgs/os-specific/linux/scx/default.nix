@@ -10,6 +10,9 @@
 }:
 let
   versionInfo = lib.importJSON ./version.json;
+
+  # Useful function for packaging schedulers, should be used unless the build system is too complex
+  # passes some default values like src, version (all of which can be overridden)
   mkScxScheduler =
     packageType:
     args@{ schedulerName, ... }:
@@ -43,7 +46,7 @@ let
             "zerocallusedregs"
           ] ++ (args.hardeningDisable or [ ]);
 
-          meta = args.meta // {
+          meta = (args.meta or { }) // {
             description = args.meta.description or "";
             longDescription =
               (args.meta.longDescription or "")
