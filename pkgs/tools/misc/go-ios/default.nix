@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.143";
+  version = "1.0.150";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-6RiKyhV5y6lOrhfZezSB2m/l17T3bHYaYRhsMf04wT8=";
+    sha256 = "sha256-xa2/qshZ4k+Df5l817BXlotR6L/CX6Lw2+tWDYnr96I=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GfVHAOlN2tL21ILQYPw/IaYQZccxitjHGQ09unfHcKg=";
+  vendorHash = "sha256-/aVaTC9lfoXQvhDVQm31HmXBnDYYOv6RH69Nm3I/K7s=";
 
   excludedPackages = [
     "restapi"
