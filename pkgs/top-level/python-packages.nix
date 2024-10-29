@@ -15159,6 +15159,8 @@ self: super: with self; {
 
   stim = callPackage ../development/python-modules/stim { };
 
+  stix2 = callPackage ../development/python-modules/stix2 { };
+
   stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
   stix2-validator = callPackage ../development/python-modules/stix2-validator { };
