@@ -4,7 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch
+, fetchpatch2
 
 # Build time
 , autoconf
@@ -313,6 +313,16 @@ in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
+
+    patches = [
+      (fetchpatch2 {
+        name = "ceph-s3select-arrow-18-compat.patch";
+        url = "https://github.com/ceph/s3select/commit/f333ec82e6e8a3f7eb9ba1041d1442b2c7cd0f05.patch";
+        hash = "sha256-21fi5tMIs/JmuhwPYMWtampv/aqAe+EoPAXZLJlOvgo=";
+        stripLen = 1;
+        extraPrefix = "src/s3select/";
+      })
+    ];
 
     nativeBuildInputs = [
       autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
