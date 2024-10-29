@@ -18258,6 +18258,15 @@
     githubId = 3302;
     name = "Renzo Carbonara";
   };
+  repomaa = {
+    name = "Joakim Repomaa";
+    email = "nixpkgs@pimeys.pm";
+    github = "repomaa";
+    githubId = 1074324;
+    keys = [{
+      fingerprint = "F0AF 1CE3 4733 B223 17A8  937D 0555 7F53 CD3C 6458";
+    }];
+  };
   rettetdemdativ = {
     email = "michael@koeppl.dev";
     github = "rettetdemdativ";
