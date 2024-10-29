@@ -6,6 +6,7 @@
   libiconv,
   dirty-equals,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,8 @@ buildPythonPackage rec {
     dirty-equals
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "Fast iterable JSON parser";
