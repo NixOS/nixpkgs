@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   pname = "perf-linux";
   inherit (kernel) version src;
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast kernel.version "5.10") [
     # fix wrong path to dmesg
     ./fix-dmesg-path.diff
   ] ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
@@ -143,7 +143,12 @@ stdenv.mkDerivation {
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
   ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
+  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
+  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
+  ++ lib.optional (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12") [
+    python3.pkgs.distutils
+    python3.pkgs.packaging
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
