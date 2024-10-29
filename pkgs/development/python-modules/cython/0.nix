@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
   setuptools,
   python,
@@ -33,16 +33,17 @@ let
 in
 buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.36";
+  version = "0.29.37.1";
   pyproject = true;
 
   # error: too few arguments to function '_PyLong_AsByteArray'
   disabled = pythonAtLeast "3.13";
 
-  src = fetchPypi {
-    pname = "Cython";
-    inherit version;
-    hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
+  src = fetchFromGitHub {
+    owner = "cython";
+    repo = "cython";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XsEy2NrG7hq+VXRCRbD4BRaBieU6mVoE0GT52L3mMhs=";
   };
 
   nativeBuildInputs = [
