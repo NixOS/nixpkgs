@@ -27213,8 +27213,6 @@ with pkgs;
     inherit (kdePackages) breeze-icons;
   };
 
-  marwaita-yellow = callPackage ../data/themes/marwaita-pop_os { };
-
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
