@@ -4,12 +4,13 @@
   fetchFromGitHub,
   django-guardian,
   djangorestframework,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian2";
   version = "0.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johnthagen";
@@ -23,7 +24,9 @@ buildPythonPackage rec {
     patchShebangs manage.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django-guardian
     djangorestframework
   ];
