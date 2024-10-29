@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, bash
-, buildPackages
-, linuxHeaders
-, python3
-, swig
-, pkgsCross
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  bash,
+  buildPackages,
+  linuxHeaders,
+  python3,
+  swig,
+  pkgsCross,
 
-# Enabling python support while cross compiling would be possible, but the
-# configure script tries executing python to gather info instead of relying on
-# python3-config exclusively
-, enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
+  # Enabling python support while cross compiling would be possible, but the
+  # configure script tries executing python to gather info instead of relying on
+  # python3-config exclusively
+  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
   version = "4.0";
@@ -40,11 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
-      --replace "/usr/include/linux/audit.h" \
+      --replace-fail "/usr/include/linux/audit.h" \
                 "${linuxHeaders}/include/linux/audit.h"
   '';
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -52,13 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ]
-  ++ lib.optionals enablePython [
-    python3
-    swig
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+    ]
+    ++ lib.optionals enablePython [
+      python3
+      swig
+    ];
 
   buildInputs = [
     bash
