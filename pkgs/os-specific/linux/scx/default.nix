@@ -68,6 +68,7 @@ let
     { layered = import ./scx_layered; }
     { rlfifo = import ./scx_rlfifo; }
     { rustland = import ./scx_rustland; }
+    { rusty = import ./scx_rusty; }
     { csheds = import ./scx_csheds.nix; }
   ];
 in
