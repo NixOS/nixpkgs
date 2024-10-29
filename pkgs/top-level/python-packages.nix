@@ -9376,6 +9376,8 @@ self: super: with self; {
     pythonPackages = self;
   });
 
+  opencv-python-headless = callPackage ../development/python-modules/opencv-python-headless { };
+
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
