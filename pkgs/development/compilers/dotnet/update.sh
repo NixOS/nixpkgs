@@ -348,6 +348,8 @@ in rec {
     version = \"${sdk_version}\";
     $sdk_sources
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_$major_minor_underscore;
+    aspnetcore = aspnetcore_$major_minor_underscore;
   };"
         done
 

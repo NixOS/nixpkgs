@@ -274,6 +274,8 @@ in rec {
       };
     };
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_6_0;
+    aspnetcore = aspnetcore_6_0;
   };
 
   sdk_6_0_1xx = buildNetSdk {
@@ -313,6 +315,8 @@ in rec {
       };
     };
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_6_0;
+    aspnetcore = aspnetcore_6_0;
   };
 
   sdk_6_0 = sdk_6_0_4xx;

@@ -82,8 +82,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             usePackageSource ? false,
             build,
             buildInputs ? [ ],
-            # TODO: use correct runtimes instead of sdk
-            runtime ? finalAttrs.finalPackage,
+            runtime ? finalAttrs.finalPackage.runtime,
             runInputs ? [ ],
             run ? null,
             runAllowNetworking ? false,
@@ -188,6 +187,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             name = "web";
             template = "web";
             build = "dotnet publish -o $out/bin";
+            runtime = finalAttrs.finalPackage.aspnetcore;
             runInputs = [
               expect
               curl

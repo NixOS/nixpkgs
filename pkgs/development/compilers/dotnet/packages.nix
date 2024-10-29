@@ -156,7 +156,12 @@ let
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
 
-      inherit packages targetPackages;
+      inherit
+        packages
+        targetPackages
+        runtime
+        aspnetcore
+        ;
     };
 
     meta = vmr.meta // {
