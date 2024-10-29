@@ -8,36 +8,19 @@
   numpy,
   pandas,
   pytestCheckHook,
-  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   pname = "biopandas";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
+    hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
   };
-
-  patches = [
-    # Needed for below patch to apply properly
-    (fetchpatch2 {
-      name = "deprecate-mmtf-parsing.patch";
-      url = "https://github.com/BioPandas/biopandas/commit/7a1517dbe76f2c70da8edb35f90c9fa69254e726.patch?full_index=1";
-      hash = "sha256-RFtXFqUYl8GnZ319HsBwx5SUbfUDnR66Ppakdvtg/wI=";
-    })
-    # Remove nose as a dependency.
-    (fetchpatch2 {
-      name = "remove-nose.patch";
-      url = "https://github.com/BioPandas/biopandas/commit/67aa2f237c70c826cd9ab59d6ae114582da2112f.patch?full_index=1";
-      hash = "sha256-fVl57/vGuzlYX/MBZnma1ZFCVmIpjr1k8t3bUJnb/uI=";
-      excludes = [ "setup.py" ];
-    })
-  ];
 
   pythonRelaxDeps = [ "looseversion" ];
 
