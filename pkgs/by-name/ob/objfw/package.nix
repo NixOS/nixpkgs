@@ -2,13 +2,12 @@
   autoconf,
   autogen,
   automake,
-  clang,
+  clangStdenv,
   fetchFromGitHub,
   lib,
-  stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
   version = "1.1.7";
 
@@ -20,7 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    clang
     automake
     autogen
     autoconf
