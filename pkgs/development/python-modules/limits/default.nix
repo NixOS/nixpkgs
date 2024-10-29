@@ -90,6 +90,12 @@ buildPythonPackage rec {
     async-etcd = [ aetcd ];
   };
 
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
+
   doCheck = pythonOlder "3.12"; # SystemError in protobuf
 
   nativeCheckInputs = [
