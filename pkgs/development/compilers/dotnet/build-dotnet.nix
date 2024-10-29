@@ -5,6 +5,8 @@
   commonPackages ? null,
   hostPackages ? null,
   targetPackages ? null,
+  runtime ? null,
+  aspnetcore ? null,
 }:
 
 assert builtins.elem type [
@@ -14,7 +16,11 @@ assert builtins.elem type [
 ];
 assert
   if type == "sdk" then
-    commonPackages != null && hostPackages != null && targetPackages != null
+    commonPackages != null
+    && hostPackages != null
+    && targetPackages != null
+    && runtime != null
+    && aspnetcore != null
   else
     true;
 
@@ -190,7 +196,7 @@ mkWrapper type (
       }
       // lib.optionalAttrs (type == "sdk") {
         packages = commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid};
-        inherit targetPackages;
+        inherit targetPackages runtime aspnetcore;
 
         updateScript =
           let

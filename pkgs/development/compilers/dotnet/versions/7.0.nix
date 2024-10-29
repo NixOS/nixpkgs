@@ -282,6 +282,8 @@ in rec {
       };
     };
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_7_0;
+    aspnetcore = aspnetcore_7_0;
   };
 
   sdk_7_0_3xx = buildNetSdk {
@@ -321,6 +323,8 @@ in rec {
       };
     };
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_7_0;
+    aspnetcore = aspnetcore_7_0;
   };
 
   sdk_7_0_1xx = buildNetSdk {
@@ -360,6 +364,8 @@ in rec {
       };
     };
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_7_0;
+    aspnetcore = aspnetcore_7_0;
   };
 
   sdk_7_0 = sdk_7_0_4xx;
