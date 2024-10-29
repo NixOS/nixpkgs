@@ -5,23 +5,20 @@
 }:
 bambu-studio.overrideAttrs (
   finalAttrs: previousAttrs: {
-    version = "2.1.1";
+    version = "2.2.0";
     pname = "orca-slicer";
 
     src = fetchFromGitHub {
       owner = "SoftFever";
       repo = "OrcaSlicer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-7fusdSYpZb4sYl5L/+81PzMd42Nsejj+kCZsq0f7eIk=";
+      hash = "sha256-h+cHWhrp894KEbb3ic2N4fNTn13WlOSYoMsaof0RvRI=";
     };
 
-    patches =[
-      # FIXME: only required for 2.1.1, can be removed in the next version
-      ./patches/0002-fix-build-for-gcc-13.diff
+    patches = [
       # Fix for webkitgtk linking
       ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
-      # Fix build with cgal-5.6.1+
-      ./patches/meshboolean-const.patch
+
       ./patches/dont-link-opencv-world-orca.patch
     ];
 
