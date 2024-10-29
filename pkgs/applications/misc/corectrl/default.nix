@@ -87,6 +87,7 @@ stdenv.mkDerivation rec{
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ Scrumplex ];
   };
 }
 # TODO: report upstream that libdrm is not detected at configure time
