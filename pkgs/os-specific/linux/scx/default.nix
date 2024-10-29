@@ -70,6 +70,7 @@ let
     { rustland = import ./scx_rustland; }
     { rusty = import ./scx_rusty; }
     { csheds = import ./scx_csheds.nix; }
+    { full = import ./scx_full.nix; }
   ];
 in
 (lib.mapAttrs (name: scheduler: callPackage scheduler { inherit mkScxScheduler; }) schedulers)
