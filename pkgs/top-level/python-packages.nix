@@ -8971,6 +8971,8 @@ self: super: with self; {
 
   nicegui = callPackage ../development/python-modules/nicegui { };
 
+  nicegui-highcharts = callPackage ../development/python-modules/nicegui-highcharts { };
+
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
   nikola = callPackage ../development/python-modules/nikola { };
