@@ -12,7 +12,8 @@ import ./make-test-python.nix (
     };
 
     nodes.machine = {
-      virtualisation.memorySize = 512;
+      # aarch64-linux on ofborg is 129M
+      virtualisation.memorySize = 1024;
 
       services.swapspace = {
         enable = true;
@@ -23,22 +24,37 @@ import ./make-test-python.nix (
           cooldown = 1;
         };
       };
+
+      swapDevices = lib.mkOverride 0 [
+        {
+          size = 127;
+          device = "/root/swapfile";
+        }
+      ];
+      boot.kernel.sysctl."vm.swappiness" = 30;
     };
 
     testScript = ''
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("swapspace.service")
+      machine.wait_for_unit("root-swapfile.swap")
+
+      # sent usr1 and usr2 signals, kind of works outside but not in test
+      print(machine.succeed("journalctl -b -u swapspace.service"))
+      print(machine.succeed("swapon --show"))
 
       swamp = False
       with subtest("swapspace works"):
-        for i in range(50):
-          print(machine.succeed("df -h"))
-          print(machine.succeed("free -h"))
+        machine.execute("mkdir /root/memfs")
+        machine.execute("mount -o size=1G -t tmpfs none /root/memfs")
+        for i in range(35):
           out = machine.succeed("swapon --show")
           swamp = "/swamp" in out
           print(out)
           if swamp:
+            machine.succeed("rm -f /root/memfs/*")
             break
+          machine.execute(f"dd if=/dev/zero of=/root/memfs/{i} bs=4238K count=1")
 
       print(machine.succeed("swapspace -e -s /swamp"))
       assert "/swamp" not in machine.execute("swapon --show")
