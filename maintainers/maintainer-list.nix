@@ -1884,6 +1884,12 @@
     githubId = 10285250;
     name = "Artur E. Ruuge";
   };
+  arunoruto = {
+    email = "mirza.arnaut45@gmail.com";
+    github = "arunoruto";
+    githubId = 21687187;
+    name = "Mirza Arnaut";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
@@ -2538,6 +2544,12 @@
     github = "bchmnn";
     githubId = 34620799;
     name = "Jacob Bachmann";
+  };
+  bcyran = {
+    email = "bazyli@cyran.dev";
+    github = "bcyran";
+    githubId = 8322846;
+    name = "Bazyli Cyran";
   };
   bdd = {
     email = "bdd@mindcast.org";
@@ -20104,6 +20116,12 @@
     githubId = 49844593;
     name = "skovati";
   };
+  skyesoss = {
+    name = "Skye Soss";
+    matrix = "@skyesoss:matrix.org";
+    github = "Skyb0rg007";
+    githubId = 30806179;
+  };
   skykanin = {
     github = "skykanin";
     githubId = 3789764;
@@ -20510,6 +20528,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  Srylax = {
+    name = "Srylax";
+    email = "srylax+nixpkgs@srylax.dev";
+    github = "Srylax";
+    githubId = 71783705;
   };
   sshine = {
     email = "simon@simonshine.dk";

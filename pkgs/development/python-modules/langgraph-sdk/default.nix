@@ -40,12 +40,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    # python3Packages.langgraph-sdk depends on python3Packages.langgraph. langgraph-cli is independent of both.
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -eu -o pipefail +e
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
       nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint

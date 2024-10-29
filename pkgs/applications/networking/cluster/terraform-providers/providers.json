@@ -597,11 +597,11 @@
     "vendorHash": "sha256-GoOKTT+EOhaPhpbgSW3SycYsE8LEQP0v4eQfiTEnPy8="
   },
   "huaweicloud": {
-    "hash": "sha256-hDb3dOKaHL1fw0m+dBx6izhw7tltvzm05IyCGJgbGJw=",
+    "hash": "sha256-gCdB2aIpI4IjRldvvVTnV7OTzd64nouiFNQ5bVpGNck=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.69.0",
+    "rev": "v1.69.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1102,13 +1102,13 @@
     "vendorHash": "sha256-MP44e56j7rLyT4+TbFDfDb5GNc/LzZNLplm1/qqeGiw="
   },
   "sentry": {
-    "hash": "sha256-iTwl5FowrrhznO+Zr7QXy7/6HlYWCryZTMxNsBGSfWI=",
+    "hash": "sha256-HGjePQGetglWQEGDtPZ2WAPMlvjEm+KYdagakiko39E=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.13.1",
+    "rev": "v0.14.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-nMI79G1e1+ISdWNjL0Qh/pD8JkD1/1khNkwULU6PyxU="
+    "vendorHash": "sha256-8ONdkr6RoAyjI6ugeGVsWDc+Sn00sJttojYS94HBqsQ="
   },
   "shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",

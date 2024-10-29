@@ -66,7 +66,7 @@ flutter324.buildFlutterApplication (rec {
   };
 
   postInstall = ''
-    FAV=$out/app/data/flutter_assets/assets/favicon.png
+    FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -78,7 +78,7 @@ flutter324.buildFlutterApplication (rec {
       convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
 
-    patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
+    patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
   '';
 } // lib.optionalAttrs (targetFlutterPlatform == "web") {
   prePatch =

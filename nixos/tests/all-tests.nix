@@ -904,6 +904,7 @@ in {
   seafile = handleTest ./seafile.nix {};
   searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix {};
+  send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
