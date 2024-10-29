@@ -44,13 +44,6 @@ buildPythonPackage rec {
     scipy
   ];
 
-  # scipy derivation dont support numpy_2 and is patched to use version 1
-  # Using numpy_2 in the derivation will cause a clojure duplicate error
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
-  '';
-
   pythonImportsCheck = [ "gstools" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
