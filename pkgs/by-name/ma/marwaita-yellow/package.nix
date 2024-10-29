@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-yellow";
-  version = "17.0";
+  version = "20.3.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-yellow";
-    rev = "1f3561f1231d0e9e931f93c5d59df19ed2205ce0";
-    hash = "sha256-WbCIMEWF5853TQyhq8aRoWzpsmjObm9hEc4I0pxDNOM=";
+    rev = version;
+    hash = "sha256-ClM2lvFFLNz+pF/pY7j/V5L24egB3oxpkH8cpZMSu5g=";
   };
 
   buildInputs = [
