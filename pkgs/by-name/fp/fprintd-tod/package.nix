@@ -2,8 +2,13 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
+  libxml2,
   fprintd,
   libfprint-tod,
+  python3Packages,
+  libpam-wrapper,
+  gusb,
+  gobject-introspection,
 }:
 
 (fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (
@@ -18,6 +23,19 @@
       rev = "v${finalAttrs.version}";
       sha256 = "sha256-rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
     };
+
+    nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ [
+      libpam-wrapper
+      python3Packages.python
+      python3Packages.pycairo
+      python3Packages.dbus-python
+      python3Packages.python-dbusmock
+      python3Packages.pygobject3
+      gusb
+      python3Packages.pypamtest
+      gobject-introspection
+      libxml2 # for xmllint
+    ];
 
     patches = previousAttrs.patches or [ ] ++ [
       (fetchpatch {
