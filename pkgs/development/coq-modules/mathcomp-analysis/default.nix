@@ -62,6 +62,7 @@ let
 
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
+      altreals-deps = [ mathcomp-bigenough ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
@@ -80,6 +81,7 @@ let
         propagatedBuildInputs =
           intra-deps
           ++ lib.optionals (lib.elem package [ "classical" "single" ]) classical-deps
+          ++ lib.optionals (lib.elem package [ "altreals" "single" ]) altreals-deps
           ++ lib.optionals (lib.elem package [ "analysis" "single" ]) analysis-deps;
 
         preBuild = ''
