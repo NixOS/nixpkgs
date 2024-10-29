@@ -28,11 +28,6 @@ python.pkgs.buildPythonApplication rec {
     "pydantic-settings"
   ];
 
-  pythonRemoveDeps = [
-    # https://github.com/immich-app/immich/pull/13762
-    "setuptools"
-  ];
-
   build-system = with python.pkgs; [
     poetry-core
     cython
