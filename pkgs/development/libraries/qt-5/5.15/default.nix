@@ -28,15 +28,7 @@ let
   qtCompatVersion = srcs.qtbase.version;
 
   patches = {
-    qtbase = lib.optionals stdenv.hostPlatform.isDarwin [
-      ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-
-      # Patch framework detection to support X.framework/X.tbd,
-      # extending the current support for X.framework/X.
-      ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
-
-      ./qtbase.patch.d/0014-aarch64-darwin.patch
-    ] ++ [
+    qtbase = [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
       ./qtbase.patch.d/0005-qtbase-cmake.patch
