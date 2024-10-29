@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
     (lib.strings.cmakeBool "DMRG" enableQcmaquis)
     (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
     "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
     "-DLINALG=OpenBLAS"
