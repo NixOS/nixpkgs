@@ -4,6 +4,8 @@
   python,
   glibcLocales,
   fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
   setuptools,
   six,
 }:
@@ -32,9 +34,15 @@ buildPythonPackage rec {
     six
   ];
 
+  pythonImportsCheck = [ "mailparser" ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
   # Taken from .travis.yml
-  checkPhase = ''
-    ${python.interpreter} tests/test_main.py
+  postCheck = ''
     ${python.interpreter} -m mailparser -v
     ${python.interpreter} -m mailparser -h
     ${python.interpreter} -m mailparser -f tests/mails/mail_malformed_3 -j
