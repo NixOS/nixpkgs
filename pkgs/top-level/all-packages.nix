@@ -5161,8 +5161,6 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
-  hexyl = callPackage ../tools/misc/hexyl { };
-
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
   hid-tools = callPackage ../tools/misc/hid-tools { };
