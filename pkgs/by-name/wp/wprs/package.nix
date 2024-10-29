@@ -5,6 +5,8 @@
   pkg-config,
   libxkbcommon,
   python3,
+  runCommand,
+  wprs,
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
@@ -38,6 +40,10 @@ rustPlatform.buildRustPackage {
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"
+  '';
+
+  passthru.tests.sanity = runCommand "wprs-sanity" { nativeBuildInputs = [ wprs ]; } ''
+    ${wprs}/bin/wprs -h > /dev/null && touch $out
   '';
 
   meta = with lib; {
