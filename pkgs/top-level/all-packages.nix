@@ -32588,8 +32588,6 @@ with pkgs;
       else stdenv;
   };
 
-  telegram-bot-api = callPackage ../servers/telegram-bot-api { };
-
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
   tg = python3Packages.callPackage ../applications/networking/instant-messengers/telegram/tg { };
