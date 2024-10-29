@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Small wrapper script for tmux to easily connect to a series of hosts via ssh and open a split pane for each of the hosts";
     homepage = "https://github.com/hukl/hostmux";
+    changelog = "https://github.com/hukl/hostmux/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "hostmux";
     maintainers = with lib.maintainers; [ fernsehmuell ];
