@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "docstring-parser";
-  version = "0.15";
+  version = "0.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "rr-";
     repo = "docstring_parser";
     rev = "refs/tags/${version}";
-    hash = "sha256-rnDitZn/xI0I9KMQv6gxzVYevWUymDgyFETjAnRlEHw=";
+    hash = "sha256-xwV+mgCOC/MyCqGELkJVqQ3p2g2yw/Ieomc7k0HMXms=";
   };
 
   nativeBuildInputs = [ poetry-core ];
