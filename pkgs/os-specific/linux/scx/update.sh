@@ -40,7 +40,7 @@ jq \
 
 rm -f Cargo.toml Cargo.lock
 
-for scheduler in bpfland lavd layered rlfifo rustland; do
+for scheduler in bpfland lavd layered rlfifo rustland rusty; do
   pushd "scheds/rust/scx_$scheduler"
 
   cargo generate-lockfile
