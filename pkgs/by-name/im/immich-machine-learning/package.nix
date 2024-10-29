@@ -4,6 +4,7 @@
   immich,
   python3,
   nixosTests,
+  stdenv,
 }:
 let
   python = python3.override {
@@ -57,6 +58,10 @@ python.pkgs.buildPythonApplication rec {
       tokenizers
     ]
     ++ uvicorn.optional-dependencies.standard;
+
+  # aarch64-linux tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  doCheck = stdenv.buildPlatform.system != "aarch64-linux";
 
   nativeCheckInputs = with python.pkgs; [
     httpx
