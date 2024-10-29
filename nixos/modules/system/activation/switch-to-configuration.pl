@@ -80,12 +80,9 @@ if ("@localeArchive@" ne "") {
 
 if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<"EOF";
+error: Unknown action $action
 Usage: $0 [switch|boot|test|dry-activate]
-
-switch:       make the configuration the boot default and activate now
-boot:         make the configuration the boot default
-test:         activate the configuration, but don\'t make it the boot default
-dry-activate: show what would be done if this configuration were activated
+Consider calling `apply` instead of `switch-to-configuration`.
 EOF
     exit(1);
 }
