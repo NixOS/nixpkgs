@@ -1,51 +1,57 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, doxygen
-, fetchFromGitHub
-, ffmpeg
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, lsb-release
-, mkDerivation
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, sqlite
-, swig
-, unzip
-, wget
+
+{
+  lib,
+  stdenv,
+  c-ares,
+  cmake,
+  cryptopp,
+  curl,
+  fetchFromGitHub,
+  ffmpeg,
+  freeimage,
+  hicolor-icon-theme,
+  icu,
+  libmediainfo,
+  libsodium,
+  libtool,
+  libuv,
+  libxcb,
+  libzen,
+  mkDerivation,
+  openssl,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qttools,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qtsvg,
+  qtx11extras,
+  readline,
+  sqlite,
+  unzip,
+  wget,
+  zlib,
+  qt5,
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.9.1.0";
+  version = "5.5.0.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    hash = "sha256-Y1nfY5iP64iSCYwzqxbjZAQNHyj4yVbSudSInm+yJzY=";
+    hash = "sha256-f+FZdMMdGZvYvJZ0xTUuO9zk0/VHFAISvM2cW0zwfaE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    doxygen
+    cmake
     libtool
-    lsb-release
     pkg-config
     qttools
-    swig
     unzip
   ];
   buildInputs = [
@@ -53,23 +59,33 @@ mkDerivation rec {
     cryptopp
     curl
     ffmpeg
+    freeimage
+    hicolor-icon-theme
+    icu
     libmediainfo
-    libraw
     libsodium
     libuv
+    libxcb
     libzen
+    openssl
     qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtquickcontrols
+    qtquickcontrols2
+    qtsvg
     qtx11extras
+    readline
     sqlite
     wget
+    zlib
   ];
 
   patches = [
-    # Distro and version targets attempt to use lsb_release which is broken
-    # (see issue: https://github.com/NixOS/nixpkgs/issues/22729)
-    ./noinstall-distro-version.patch
-    # megasync target is not part of the install rule thanks to a commented block
-    ./install-megasync.patch
+    ./010-megasync-freeimage-remove-obsolete-ffmpeg-macros.patch
+    ./020-megasync-sdk-fix-cmake-dependencies-detection.patch
+    ./030-megasync-app-fix-cmake-dependencies-detection.patch #Thanks Arch Linux
+    ./040-megasync-fix-cmake-install-bindir.patch
   ];
 
   postPatch = ''
@@ -81,46 +97,20 @@ mkDerivation rec {
   dontUseQmakeConfigure = true;
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    cd src/MEGASync/mega
-    ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--disable-examples"
-    "--disable-java"
-    "--disable-php"
-    "--enable-chat"
-    "--with-cares"
-    "--with-cryptopp"
-    "--with-curl"
-    "--with-ffmpeg"
-    "--without-freeimage"
-    "--without-readline"
-    "--without-termcap"
-    "--with-sodium"
-    "--with-sqlite"
-    "--with-zlib"
+  cmakeFlags = [
+    "-DCMAKE_MODULE_PATH:PATH=${src}/src/MEGASync/mega/contrib/cmake/modules/packages"
+    "-Wno-dev"
+    "-DUSE_PDFIUM=FALSE" # PDFIUM is not in nixpkgs
   ];
 
-  postConfigure = ''
-    cd ../..
-  '';
-
-  preBuild = ''
-    qmake CONFIG+="nofreeimage release" MEGA.pro
-    pushd MEGASync
-      lrelease MEGASync.pro
-      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+="nofreeimage release"
-    popd
-  '';
-
   meta = with lib; {
-    description =
-      "Easy automated syncing between your computers and your MEGA Cloud Drive";
+    description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = [ ];
   };
 }
