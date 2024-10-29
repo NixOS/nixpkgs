@@ -4298,9 +4298,9 @@ with pkgs;
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs_20;
-  nodejs-slim = nodejs-slim_20;
-  corepack = hiPrio corepack_20;
+  nodejs = hiPrio nodejs_22;
+  nodejs-slim = nodejs-slim_22;
+  corepack = hiPrio corepack_22;
 
   nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
   nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
