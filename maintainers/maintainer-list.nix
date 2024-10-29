@@ -1351,6 +1351,13 @@
     githubId = 638836;
     name = "Andreas Rammhold";
   };
+  andre4ik3 = {
+    name = "andre4ik3";
+    email = "andre4ik3@fastmail.com";
+    matrix = "@andre4ik3:matrix.org";
+    github = "andre4ik3";
+    githubId = 62390580;
+  };
   andreasfelix = {
     email = "fandreas@physik.hu-berlin.de";
     github = "andreasfelix";
