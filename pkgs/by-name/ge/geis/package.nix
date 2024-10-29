@@ -16,15 +16,17 @@
   xorg,
   pango,
   xorgserver,
+  testers,
+  validatePkgConfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geis";
   version = "2.2.17";
 
   src = fetchurl {
-    url = "https://launchpad.net/geis/trunk/${version}/+download/${pname}-${version}.tar.xz";
-    sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
+    url = "https://launchpad.net/geis/trunk/${finalAttrs.version}/+download/geis-${finalAttrs.version}.tar.xz";
+    hash = "sha256-imD1aDhSCUA4kE5pDSPMWpCpgPxS2mfw8oiQuqJccOs=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation -Wno-error=pointer-compare";
@@ -38,7 +40,9 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     python3Packages.wrapPython
     gobject-introspection
+    validatePkgConfig
   ];
+
   buildInputs = [
     atk
     dbus
@@ -56,9 +60,13 @@ stdenv.mkDerivation rec {
     xorgserver
   ];
 
-  patchPhase = ''
-    substituteInPlace python/geis/geis_v2.py --replace \
+  prePatch = ''
+    substituteInPlace python/geis/geis_v2.py --replace-fail \
       "ctypes.util.find_library(\"geis\")" "'$out/lib/libgeis.so'"
+    substituteInPlace config.aux/py-compile \
+      --replace-fail "import sys, os, py_compile, imp" "import sys, os, py_compile, importlib" \
+      --replace-fail "imp." "importlib." \
+      --replace-fail "hasattr(imp" "hasattr(importlib"
   '';
 
   preFixup = ''
@@ -66,10 +74,16 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
   '';
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
+  };
+
+  meta = {
     description = "Library for input gesture recognition";
     homepage = "https://launchpad.net/geis";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    pkgConfigModules = [ "libgeis" ];
   };
-}
+})
