@@ -5,9 +5,8 @@
   pkg-config,
   libxkbcommon,
   python3,
-  python3Packages,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wprs";
   version = "0-unstable-2024-10-22";
 
@@ -24,9 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libxkbcommon
-    python3
-    python3Packages.psutil
-
+    (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
   cargoLock = {
