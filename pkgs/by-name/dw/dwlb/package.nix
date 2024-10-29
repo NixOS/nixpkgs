@@ -3,12 +3,17 @@
   lib,
   fetchFromGitHub,
   pkg-config,
+  wayland,
   wayland-scanner,
   wayland-protocols,
   unstableGitUpdater,
   pixman,
   fcft,
-  wayland,
+  writeText,
+  # Boolean flags
+  withCustomConfigH ? (configH != null),
+  # Configurable options
+  configH ? null,
 }:
 
 stdenv.mkDerivation {
@@ -26,16 +31,32 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  env = {
-    PREFIX = placeholder "out";
-  };
-
   buildInputs = [
     wayland-scanner
     wayland-protocols
     pixman
     fcft
     wayland
+  ];
+
+  # Allow alternative config.def.h usage. Taken from dwl.nix.
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation configH || builtins.isPath configH then
+          configH
+        else
+          writeText "config.h" configH;
+    in
+    lib.optionalString withCustomConfigH "cp ${configFile} config.h";
+
+  env = {
+    PREFIX = placeholder "out";
+  };
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   passthru.updateScript = unstableGitUpdater { };
@@ -45,7 +66,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kolunmi/dwlb";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dwlb";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      lonyelon
+    ];
     platforms = wayland.meta.platforms;
   };
 }
