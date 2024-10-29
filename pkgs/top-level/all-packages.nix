@@ -28459,8 +28459,6 @@ with pkgs;
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
-  corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
-
   coreth = callPackage ../applications/networking/coreth { };
 
   cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
