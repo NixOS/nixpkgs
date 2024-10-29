@@ -1,6 +1,7 @@
 { lib
 , appimageTools
 , fetchurl
+, gitUpdater
 }:
 
 appimageTools.wrapType2 rec {
@@ -23,6 +24,12 @@ appimageTools.wrapType2 rec {
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/tutao/tutanota";
+    rev-prefix = "tutanota-desktop-release-";
+    allowedVersions = ".+\\.[0-9]{6}\\..+";
+  };
 
   meta = with lib; {
     description = "Tuta official desktop client";
