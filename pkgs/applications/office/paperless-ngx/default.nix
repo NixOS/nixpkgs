@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.12.1";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-txqwVGLUel74ObCqwMWSqa4Nd2eDRf0SqAIes5tlMDg=";
+    hash = "sha256-0dR/NIOnhPRHEMOxVlxDraBbuuvxET4NeA580OB1Tdg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -40,6 +40,27 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      django = prev.django_5;
+
+      # TODO: drop after https://github.com/NixOS/nixpkgs/pull/306556 or similar got merged
+      django-allauth = prev.django-allauth.overridePythonAttrs ({ src, nativeCheckInputs, ... }: let
+        version = "65.0.2";
+      in {
+        inherit version;
+        src = src.override {
+          rev = "refs/tags/${version}";
+          hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
+        };
+
+        nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
+      });
+
+      django-extensions = prev.django-extensions.overridePythonAttrs (_: {
+        # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
+        # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
+        doCheck = false;
+      });
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
 
@@ -76,7 +97,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-hb2z2cPMTN5bHtUldTR5Mvgo4nZL8/S+Uhfis37gF44=";
+    npmDepsHash = "sha256-bPtm3me84QeJgn297d8pStJSwMXnZG1XL5rokhrXg9Q=";
 
     nativeBuildInputs = [
       pkg-config
@@ -137,7 +158,7 @@ python.pkgs.buildPythonApplication rec {
     channels-redis
     concurrent-log-handler
     dateparser
-    django
+    django_5
     django-allauth
     django-auditlog
     django-celery-results
@@ -155,8 +176,10 @@ python.pkgs.buildPythonApplication rec {
     flower
     gotenberg-client
     gunicorn
+    httpx-oauth
     imap-tools
     inotifyrecursive
+    jinja2
     langdetect
     mysqlclient
     nltk
@@ -257,10 +280,8 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
     # Something broken with new Tesseract and inline RTL/LTR overrides?
     "test_rtl_language_detection"
-    # Broke during the pytest-httpx 0.30.0 -> 0.32.0 upgrade
-    "test_request_pdf_a_format"
-    "test_generate_pdf_html_email"
-    "test_generate_pdf_html_email_merge_failure"
+    # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
+    "test_convert"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
