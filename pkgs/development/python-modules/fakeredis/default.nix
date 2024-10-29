@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.25.1";
+  version = "2.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HjId4SueqkbC319Eel8G85ZOj72ZKEVEH2D8V/GfXi4=";
+    hash = "sha256-eBWdrN6QfrZaavKGuVMaU0s+k0VpsBCIaIzuxC7HyYE=";
   };
 
   build-system = [ poetry-core ];
@@ -37,13 +37,6 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
-
   optional-dependencies = {
     lua = [ lupa ];
     json = [ jsonpath-ng ];
@@ -51,6 +44,13 @@ buildPythonPackage rec {
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
   };
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "fakeredis" ];
 
@@ -64,11 +64,6 @@ buildPythonPackage rec {
   postCheck = ''
     kill $REDIS_PID
   '';
-
-  disabledTests = [
-    # AssertionError
-    "test_command"
-  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";
