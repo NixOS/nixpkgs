@@ -4,27 +4,31 @@
   python,
   glibcLocales,
   fetchFromGitHub,
+  setuptools,
   six,
-  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "mail-parser";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SpamScope";
-    repo = pname;
+    repo = "mail-parser";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-WpV1WJFwzAquPXimew86YpEp++dnkIiBe5E4lMBDl7w=";
+    hash = "sha256-WpV1WJFwzAquPXimew86YpEp++dnkIiBe5E4lMBDl7w=";
   };
 
   LC_ALL = "en_US.utf-8";
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [
-    simplejson
+
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "ipaddress" ];
+
+  dependencies = [
     six
   ];
 
