@@ -272,6 +272,11 @@ in
       IMMICH_PORT = "3003";
     };
 
+    systemd.slices.system-immich = {
+      description = "Immich (self-hosted photo and video backup solution) slice";
+      documentation = [ "https://immich.app/docs" ];
+    };
+
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
       after = [ "network.target" ];
@@ -281,6 +286,7 @@ in
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
+        Slice = "system-immich.slice";
         StateDirectory = "immich";
         SyslogIdentifier = "immich";
         RuntimeDirectory = "immich";
@@ -300,6 +306,7 @@ in
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
+        Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
