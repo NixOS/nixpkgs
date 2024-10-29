@@ -5,6 +5,7 @@
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl
+, gmp
 , linuxPackages, libsystemtap
 , gitUpdater
 } @ args:
@@ -53,6 +54,7 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeBinaryWrapper, buildRubyGem, defaultGemConfig
+      , gmp
       , baseRuby ? buildPackages.ruby.override {
           docSupport = false;
           rubygemsSupport = false;
@@ -81,7 +83,7 @@ let
           ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
-        buildInputs = [ autoconf ]
+        buildInputs = [ autoconf gmp ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
