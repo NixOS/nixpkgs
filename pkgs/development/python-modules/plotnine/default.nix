@@ -2,31 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  geopandas,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   matplotlib,
   mizani,
   pandas,
   patsy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-misc,
   scipy,
-  setuptools-scm,
   statsmodels,
+
+  # tests
+  geopandas,
+  pytestCheckHook,
+  scikit-misc,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.6";
+  version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
+    hash = "sha256-4x7euxf+G/HaqC3LVD7TCQEVcihdb/FSMqRvMWAqhgo=";
   };
 
   postPatch = ''
@@ -35,8 +38,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools-scm ];
-
-  pythonRelaxDeps = [ "mizani" ];
 
   dependencies = [
     matplotlib
