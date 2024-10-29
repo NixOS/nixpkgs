@@ -52,6 +52,7 @@
 , proprietaryCodecs ? true
 , pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
+, hardened ? false, hardened-chromium
 # Optional dependencies:
 , libgcrypt ? null # cupsSupport
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -116,6 +117,9 @@ let
 
   ungoogler = ungoogled-chromium {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
+  };
+  hardener = hardened-chromium {
+    inherit (upstream-info.deps.hardened-patches) rev hash;
   };
 
   # There currently isn't a (much) more concise way to get a stdenv
@@ -416,6 +420,11 @@ let
     '' + lib.optionalString ungoogled ''
       ${ungoogler}/utils/patches.py . ${ungoogler}/patches
       ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+    '' + lib.optionalString hardened ''
+      for f in ${hardener}/fedora_patches/* ${hardener}/vanadium_patches/* ${hardener}/patches/*; do
+        echo "patching!!" "$f"
+        patch -p1 --ignore-whitespace -i "$f" -d . --no-backup-if-mismatch || true
+      done
     '';
 
     llvmCcAndBintools = symlinkJoin {

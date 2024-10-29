@@ -1,6 +1,6 @@
 { lib, mkChromiumDerivation
 , channel, chromiumVersionAtLeast
-, enableWideVine, ungoogled
+, enableWideVine, ungoogled, hardened
 }:
 
 mkChromiumDerivation (base: rec {

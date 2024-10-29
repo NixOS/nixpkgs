@@ -1,4 +1,20 @@
 {
+  hardened-chromium = {
+    deps = {
+      gn = {
+        hash = "sha256-iNXRq3Mr8+wmY1SR4sV7yd2fDiIZ94eReelwFI0UhGU=";
+        rev = "20806f79c6b4ba295274e3a589d85db41a02fdaa";
+        url = "https://gn.googlesource.com/gn";
+        version = "2024-09-09";
+      };
+      hardened-patches = {
+        hash = "sha256-+IBvTK03ZxX+5p3EG/Y94hi0oCOUMzYu1EjpVDJD+8M=";
+        rev = "2d63d210fa0e95c214bc05b91cef38a9015ffb7c";
+      };
+    };
+    hash = "sha256-k0epbUw9D3Vx7ELNDXIFEnsML+cYvDnHZFOW0kz4Kq8=";
+    version = "130.0.6723.69";
+  };
   stable = {
     chromedriver = {
       hash_darwin = "sha256-SZfl93TcaD9j59zGflPFmHgIP5NaS8bgDi3l3SRRFiI=";

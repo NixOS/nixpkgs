@@ -20057,6 +20057,11 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  hardened-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
+    hardened = true;
+    channel = "hardened-chromium";
+  });
+
   harfbuzz = callPackage ../development/libraries/harfbuzz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;
   };

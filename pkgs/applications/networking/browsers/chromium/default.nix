@@ -15,6 +15,7 @@
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
+, hardened ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , commandLineArgs ? ""
@@ -48,7 +49,7 @@ let
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
-              cupsSupport pulseSupport ungoogled;
+              cupsSupport pulseSupport ungoogled hardened;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
@@ -69,7 +70,7 @@ let
     });
 
     browser = callPackage ./browser.nix {
-      inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
+      inherit channel chromiumVersionAtLeast enableWideVine ungoogled hardened;
     };
 
     # ungoogled-chromium is, contrary to its name, not a build of
@@ -78,6 +79,8 @@ let
     # contains python scripts which get /nix/store/.../bin/python3
     # patched into their shebangs.
     ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
+    # hardened-chromium is also a collection of patches
+    hardened-chromium = pkgsBuildBuild.callPackage ./hardened.nix {};
   };
 
   suffix = lib.optionalString (channel != "stable" && channel != "ungoogled-chromium") ("-" + channel);
