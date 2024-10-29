@@ -57,14 +57,16 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  nativeCheckInputs =
-    with python.pkgs;
-    [
-      httpx
-      pytest-asyncio
-      pytest-mock
-    ]
-    ++ lib.optionals (stdenv.buildPlatform.system != "aarch64-linux") [ pytestCheckHook ];
+  # aarch64-linux tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  doCheck = stdenv.buildPlatform.system != "aarch64-linux";
+
+  nativeCheckInputs = with python.pkgs; [
+    httpx
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     mkdir -p $out/share/immich

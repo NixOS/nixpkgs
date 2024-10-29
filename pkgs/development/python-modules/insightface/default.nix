@@ -60,22 +60,23 @@ buildPythonPackage rec {
 
   # aarch64-linux tries to get cpu information from /sys, which isn't available
   # inside the nix build sandbox.
-  pythonImportsCheck = lib.optionals (stdenv.buildPlatform.system != "aarch64-linux") [
+  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
+  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform.system != "aarch64-linux") {
+    version = testers.testVersion {
+      package = insightface;
+      command = "insightface-cli --help";
+      # Doesn't support --version but we still want to make sure the cli is executable
+      # and returns the help output
+      version = "help";
+    };
+  };
+
+  pythonImportsCheck = [
     "insightface"
     "insightface.app"
     "insightface.data"
   ];
-  passthru.tests.version =
-    if (stdenv.buildPlatform.system != "aarch64-linux") then
-      testers.testVersion {
-        package = insightface;
-        command = "insightface-cli --help";
-        # Doesn't support --version but we still want to make sure the cli is executable
-        # and returns the help output
-        version = "help";
-      }
-    else
-      null;
 
   doCheck = false; # Upstream has no tests
 
