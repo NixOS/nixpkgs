@@ -32,7 +32,7 @@ buildPythonPackage rec {
   version = "1.8.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     "protobuf"
     "agate"
     "click"
+    "dbt-common"
     "dbt-semantic-interfaces"
     "mashumaro"
     "networkx"
