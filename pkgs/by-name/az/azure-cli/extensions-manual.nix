@@ -18,7 +18,7 @@
     pname = "application-insights";
     version = "1.2.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
-    sha256 = "e1fa824eb587e2bec7f4cb4d1c4ce1033ab3d3fac65af42dd6218f673b019cee";
+    hash = "sha256-4fqCTrWH4r7H9MtNHEzhAzqz0/rGWvQt1iGPZzsBnO4=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
@@ -28,7 +28,7 @@
     pname = "azure-devops";
     version = "1.0.1";
     url = "https://github.com/Azure/azure-devops-cli-extension/releases/download/20240206.1/azure_devops-${version}-py2.py3-none-any.whl";
-    sha256 = "658a2854d8c80f874f9382d421fa45abf6a38d00334737dda006f8dec64cf70a";
+    hash = "sha256-ZYooVNjID4dPk4LUIfpFq/ajjQAzRzfdoAb43sZM9wo=";
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
@@ -39,7 +39,7 @@
     description = "The Azure IoT extension for Azure CLI.";
     version = "0.25.0";
     url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
-    sha256 = "7db4bc07667efa8472513d9e121fb2551fcaeae68255c7bc0768ad4177c1b1c6";
+    hash = "sha256-fbS8B2Z++oRyUT2eEh+yVR/K6uaCVce8B2itQXfBscY=";
     propagatedBuildInputs = (
       with python3Packages;
       [
@@ -65,7 +65,7 @@
     pname = "confcom";
     version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    sha256 = "73823e10958a114b4aca84c330b4debcc650c4635e74c568679b6c32c356411d";
+    hash = "sha256-c4I+EJWKEUtKyoTDMLTevMZQxGNedMVoZ5tsMsNWQR0=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ openssl_1_1 ];
@@ -85,7 +85,7 @@
     pname = "containerapp";
     version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    sha256 = "d80b83b0e22770925c24bca150c84182376b7b0aff9b6f28498d769dc8618b45";
+    hash = "sha256-2AuDsOIncJJcJLyhUMhBgjdrewr/m28oSY12nchhi0U=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -98,7 +98,7 @@
     pname = "rdbms-connect";
     version = "1.0.6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/rdbms_connect-${version}-py2.py3-none-any.whl";
-    sha256 = "49cbe8d9b7ea07a8974a29ad90247e864ed798bed5f28d0e3a57a4b37f5939e7";
+    hash = "sha256-Scvo2bfqB6iXSimtkCR+hk7XmL7V8o0OOleks39ZOec=";
     description = "Support for testing connection to Azure Database for MySQL & PostgreSQL servers";
     propagatedBuildInputs =
       (with python3Packages; [
@@ -115,7 +115,7 @@
     pname = "ssh";
     version = "2.0.5";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
-    sha256 = "80c98b10d7bf1ce4005b7694aedd05c47355456775ba6125308be65fb0fefc93";
+    hash = "sha256-gMmLENe/HOQAW3aUrt0FxHNVRWd1umElMIvmX7D+/JM=";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
     propagatedBuildInputs = with python3Packages; [
       oras
@@ -128,7 +128,7 @@
     pname = "storage-preview";
     version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "2de8fa421622928a308bb70048c3fdf40400bad3b34afd601d0b3afcd8b82764";
+    hash = "sha256-Lej6QhYikoowi7cASMP99AQAutOzSv1gHQs6/Ni4J2Q=";
     description = "Provides a preview for upcoming storage features";
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
