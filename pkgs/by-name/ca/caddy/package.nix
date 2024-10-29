@@ -36,8 +36,12 @@ buildGoModule {
     "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
   ];
 
-  # matches upstream since v2.8.0
-  tags = [ "nobadger" ];
+  # Ref: https://github.com/caddyserver/caddy/blob/master/.goreleaser.yml
+  tags = [
+    "nobadger"
+    "nomysql"
+    "nopgx"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
