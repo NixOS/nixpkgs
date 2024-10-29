@@ -5907,6 +5907,8 @@ self: super: with self; {
 
   httpx-ntlm = callPackage ../development/python-modules/httpx-ntlm { };
 
+  httpx-oauth = callPackage ../development/python-modules/httpx-oauth { };
+
   httpx-socks = callPackage ../development/python-modules/httpx-socks { };
 
   httpx-sse = callPackage ../development/python-modules/httpx-sse { };
