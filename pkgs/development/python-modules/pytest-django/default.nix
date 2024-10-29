@@ -7,7 +7,6 @@
   setuptools-scm,
   django-configurations,
   pytest,
-  pytest-xdist,
   pytestCheckHook,
 }:
 
@@ -33,22 +32,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     django-configurations
-    pytest-xdist
+    # pytest-xidst causes random errors in the form of: django.db.utils.OperationalError: no such table: app_item
     pytestCheckHook
   ];
 
   preCheck = ''
     # bring pytest_django_test module into PYTHONPATH
-    export PYTHONPATH="$(pwd):$PYTHONPATH"
+    export PYTHONPATH="$PWD:$PYTHONPATH"
 
     # test the lightweight sqlite flavor
     export DJANGO_SETTINGS_MODULE="pytest_django_test.settings_sqlite"
   '';
-
-  disabledTests = [
-    # AttributeError: type object 'TestLiveServer' has no attribute '_test_settings_before_run'
-    "test_settings_restored"
-  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -57,5 +51,6 @@ buildPythonPackage rec {
     description = "Pytest plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }
