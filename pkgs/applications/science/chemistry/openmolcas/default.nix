@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOPENMP=ON"
-    "-DLINALG=OpenBLAS"
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
