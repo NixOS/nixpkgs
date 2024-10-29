@@ -25,9 +25,12 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "pydantic-settings"
+  ];
+
+  pythonRemoveDeps = [
+    # https://github.com/immich-app/immich/pull/13762
     "setuptools"
   ];
-  pythonRemoveDeps = [ "opencv-python-headless" ];
 
   build-system = with python.pkgs; [
     poetry-core
@@ -38,7 +41,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       insightface
-      opencv4
+      opencv-python-headless
       pillow
       fastapi
       uvicorn
@@ -47,7 +50,6 @@ python.pkgs.buildPythonApplication rec {
       aiocache
       rich
       ftfy
-      setuptools
       python-multipart
       orjson
       gunicorn
@@ -88,11 +90,9 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Self-hosted photo and video backup solution (machine learning component)";
-    homepage = "https://immich.app/";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    description = "${immich.meta.description} (machine learning component)";
+    homepage = "https://github.com/immich-app/immich/tree/main/machine-learning";
     mainProgram = "machine-learning";
-    inherit (immich.meta) platforms;
+    inherit (immich.meta) license maintainers platforms;
   };
 }
