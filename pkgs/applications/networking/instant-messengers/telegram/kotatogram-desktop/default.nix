@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./macos.patch
     ./macos-opengl.patch
+    ./macos-qt5.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
