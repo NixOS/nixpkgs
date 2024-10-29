@@ -7859,6 +7859,12 @@
     githubId = 6430643;
     name = "Henry Till";
   };
+  hensoko = {
+    email = "hensoko@pub.solar";
+    github = "hensoko";
+    githubId = 13552930;
+    name = "hensoko";
+  };
   heph2 = {
     email = "srht@mrkeebs.eu";
     github = "heph2";

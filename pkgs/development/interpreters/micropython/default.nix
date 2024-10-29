@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.22.2";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-7AA9n6UQchY6POkOp1VWAOAo87uRJSeCBhgvVXLoE04=";
+    hash = "sha256-cFoUa4ZpPy1MldlTeY9ISXi9ilulmhmaH5mapUDBzE8=";
     fetchSubmodules = true;
 
-    # remove unused libaries from rp2 port's SDK. we leave this and the other
+    # remove unused libraries from rp2 port's SDK. we leave this and the other
     # ports around for users who want to override makeFlags flags to build them.
     # https://github.com/micropython/micropython/blob/a61c446c0b34e82aeb54b9770250d267656f2b7f/ports/rp2/CMakeLists.txt#L17-L22
     #

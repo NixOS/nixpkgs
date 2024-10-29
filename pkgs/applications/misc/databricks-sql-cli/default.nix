@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , python3
+, pythonRelaxDepsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,15 +25,20 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  pythonRelaxDeps = [
+    "pandas"
+    "databricks-sql-connector"
+    "sqlparse"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'python = ">=3.7.1,<4.0"' 'python = ">=3.8,<4.0"' \
-      --replace 'pandas = "1.3.4"' 'pandas = "~1.5"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = (with python3.pkgs; [
     poetry-core
-  ];
+  ]) ++ [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cli-helpers
