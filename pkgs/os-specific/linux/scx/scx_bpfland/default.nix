@@ -4,7 +4,7 @@
   mkScxScheduler,
 }:
 
-mkScxScheduler "rust" rec {
+mkScxScheduler "rust" {
   schedulerName = "scx_bpfland";
 
   cargoRoot = "scheds/rust/scx_bpfland";
