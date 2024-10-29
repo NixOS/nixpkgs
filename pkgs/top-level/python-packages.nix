@@ -10307,6 +10307,8 @@ self: super: with self; {
 
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
 
+  pylsl = callPackage ../development/python-modules/pylsl { };
+
   pyngo = callPackage ../development/python-modules/pyngo { };
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };

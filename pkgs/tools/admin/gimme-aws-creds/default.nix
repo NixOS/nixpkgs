@@ -8,23 +8,7 @@
 , gimme-aws-creds
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
-        version = "0.9.3";
-        format = "setuptools";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
-        };
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
   version = "2.8.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
@@ -36,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     installShellFiles
   ];
 
@@ -44,9 +28,8 @@ python.pkgs.buildPythonApplication rec {
     "configparser"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     boto3
-    fido2
     beautifulsoup4
     ctap-keyring-device
     requests
@@ -61,7 +44,7 @@ python.pkgs.buildPythonApplication rec {
     export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     responses
   ];
@@ -82,7 +65,6 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit python;
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = gimme-aws-creds;

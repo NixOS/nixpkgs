@@ -19801,7 +19801,6 @@ with pkgs;
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions
-  gmp5 = callPackage ../development/libraries/gmp/5.1.x.nix { };
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
   gmp = gmp6;
   gmpxx = gmp.override { cxx = true; };
@@ -27915,6 +27914,7 @@ with pkgs;
 
   inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
     aw-qt
+    aw-notify
     aw-server-rust
     aw-watcher-afk
     aw-watcher-window;
@@ -31290,6 +31290,8 @@ with pkgs;
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
+
+  scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
   shod = callPackage ../applications/window-managers/shod { };
 
@@ -36643,8 +36645,6 @@ with pkgs;
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
-
-  grap = callPackage ../tools/security/grap { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
