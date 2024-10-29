@@ -4,15 +4,15 @@ rec {
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "0f003c2785489f59cd01bb2440fcf303149100f2";
-    hash = "sha256-Q3LP8hQrKeM8J0qmJyTeC8Hq949Fe0wOjnkiia+UDag=";
+    rev = "67fea651b886460d7b72295e680528c059bbbe40";
+    hash = "sha256-oDN7UdyfNMG4r36nnRJmYdbd0wyd1titGQQNa9e/3tU=";
   };
 
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "b9b8fd917b195f680a1ce3f3f663c03e1c82579d";
-    hash = "sha256-85kHk1KqhhOqLodRVVpQMhE44IQnzLoFXf/YPNY8aUI=";
+    rev = "c5b76b78c9dec95251e9c1840a671e19bf61abe3";
+    hash = "sha256-N7vGPqQieWnr+mbrmdbvzz7n9q3bbRKLxkYt6OiaJvU=";
   };
 
   jsoncpp = fetchFromGitHub {
@@ -32,29 +32,29 @@ rec {
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "4f7b471f1a66b6d06462cd4ba57628cc0cd087d7";
-    hash = "sha256-CAmDDqeMVKNdV/91VQYAKyCc+e+H99PRYZzt5WjswBI=";
+    rev = "2a9b6f951c7d6b04b6c21fe1bf3f475b68b84801";
+    hash = "sha256-o1yRTvP7a+XVwendTKBJKNnelVGWLD0gH258GGeUDhQ=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "dd4b663e13c07fea4fbb3f70c1c91c86731099f7";
-    hash = "sha256-at3krE0torhjg7G+NkX0/ewc26Sg/1t2xW7wghAAuZo=";
+    rev = "44936c4a9d42f1c67e34babb5792adf5bce7f76b";
+    hash = "sha256-kSiP94hMlblFod2mQhlAQDAENGOvBh7v8bCxxaiYWq4=";
   };
 
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "dedb71a7edc6d5af3f9bfd5e2ef53814de999ef7";
-    hash = "sha256-A61qx7sdcRipX4mHpGJVhd9Qlcv1xcjeGGnfyblMxUg=";
+    rev = "486e4b289053a7d64784e7ce791711843c60c235";
+    hash = "sha256-LGAHUeWF9X6Li1HcdD14pgnBUquWxA+bQpAL09JmwLQ=";
   };
 
   vulkan-validationlayers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "f589bc456545fbab97caf49380b102b8aafe1f40";
-    hash = "sha256-ZNJGGrUwTw3I0MQl9nKqGhb2bdPZZl+AR3YH3T+cn+c=";
+    rev = "9a46ae006fa5c92e2d2af7944187f7794210844b";
+    hash = "sha256-qVQy3kKkZRWHjtj2YxJTZqKg1kwnmLa3bgVathisfOc=";
   };
 
 
