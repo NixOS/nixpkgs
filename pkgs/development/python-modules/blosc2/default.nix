@@ -43,8 +43,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
     substituteInPlace requirements-runtime.txt \
       --replace "pytest" ""
   '';
