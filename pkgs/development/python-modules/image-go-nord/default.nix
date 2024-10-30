@@ -5,15 +5,18 @@
   ffmpeg-python,
   numpy,
   pillow,
+  pypaInstallHook,
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptoolsBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "image-go-nord";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = false;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -23,7 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-2Dnl0dcdMo4PnhHTb/5cJ7C0CvW84av4CCbrTLPqopg=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pypaInstallHook
+    setuptoolsBuildHook
+  ];
+
+  dependencies = [
     ffmpeg-python
     numpy
     pillow
@@ -32,10 +40,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "ImageGoNord" ];
+
+  meta = {
     description = "Tool that can convert rgb images to nordtheme palette";
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://github.com/Schroedinger-Hat/ImageGoNord-pip/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }
