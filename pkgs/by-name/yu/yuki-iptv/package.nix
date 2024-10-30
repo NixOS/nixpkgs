@@ -48,10 +48,6 @@ stdenv.mkDerivation rec {
     substituteInPlace usr/lib/yuki-iptv/yuki-iptv.py \
       --replace __DEB_VERSION__ ${version}
 
-    substituteInPlace usr/bin/yuki-iptv \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "python3" "${python3}/bin/python3"
-
     substituteInPlace usr/lib/yuki-iptv/thirdparty/mpv.py \
       --replace "ctypes.util.find_library('mpv')" "'${lib.makeLibraryPath [ mpv-unwrapped ]}/libmpv.so'"
   '';
