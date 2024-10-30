@@ -28,4 +28,9 @@ callPackage ./generic.nix args {
   };
 
   hash = "sha256-/INlfiPpRm5JprcORzJJKyjpGIMY1LceY3yZ811uf2A=";
+
+  extraLongDescription = ''
+    This is "unstable" ZFS, and will usually be a pre-release version of ZFS.
+    It may be less well-tested and have critical bugs.
+  '';
 }
