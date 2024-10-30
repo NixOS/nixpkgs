@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed for compiling the examples
-  checkInputs = lib.optionals stdenv.isDarwin (
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       Foundation
