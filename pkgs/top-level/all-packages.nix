@@ -13081,6 +13081,8 @@ with pkgs;
     paths = [ dejavu_fonts.out ];
   };
 
+  docbook_5_2 = docbook.override { releaseVersion = "5.2"; };
+  docbook_5_1 = docbook.override { releaseVersion = "5.1"; };
   docbook_5_0 = docbook.override { releaseVersion = "5.0"; };
   docbook_4_5 = docbook.override { releaseVersion = "4.5"; };
   docbook_4_4 = docbook.override { releaseVersion = "4.4"; };

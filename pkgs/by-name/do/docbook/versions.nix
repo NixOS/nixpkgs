@@ -8,6 +8,63 @@ let
     era: pkgInfo: callPackage (import (lib.path.append ./. ("build-" + era + ".nix")) pkgInfo) { };
 in
 {
+  "5.2" =
+    (makeDocBookVersion "xml-rng" {
+      version = "5.2";
+      hash = "sha256-grMb+6HEo18TiZWr1Ofko9yf4XIX3vlSeXm/QsFpiWI=";
+    }).overrideAttrs
+      {
+        installPhase = ''
+          runHook preInstall
+
+          dst_xml=$out/share/xml/docbook-5.2
+          dst_doc=$out/share/doc/docbook-5.2
+          mkdir -p $dst_xml $dst_doc
+
+          rm -r release-notes
+          mv -t $dst_doc *.{docx,html,pdf}
+          cp -pr -t $dst_xml *
+
+          runHook postInstall
+        '';
+
+        fixupPhase = ''
+          runHook preFixup
+
+          substituteInPlace $dst_xml/catalog.xml \
+              --replace-fail uri=\" uri=\"$dst_xml/
+
+          runHook postFixup
+        '';
+      };
+  "5.1" =
+    (makeDocBookVersion "xml-rng" {
+      version = "5.1";
+      hash = "sha256-s/NBNlQAPB53M2DX/GDruKvQ6Mmvjn1sS1XxJPNNHn8=";
+    }).overrideAttrs
+      {
+        installPhase = ''
+          runHook preInstall
+
+          dst_xml=$out/share/xml/docbook-5.1
+          dst_doc=$out/share/doc/docbook-5.1
+          mkdir -p $dst_xml $dst_doc
+
+          cp -pr -t $dst_xml schemas/*
+          cp -pr -t $dst_doc *.{xml,html,pdf}
+
+          runHook postInstall
+        '';
+
+        fixupPhase = ''
+          runHook preFixup
+
+          substituteInPlace $dst_xml/catalog.xml \
+              --replace-fail uri=\" uri=\"$dst_xml/
+
+          runHook postFixup
+        '';
+      };
   "5.0" =
     (makeDocBookVersion "xml-rng" rec {
       version = "5.0.1";
