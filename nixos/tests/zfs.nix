@@ -191,12 +191,6 @@ let
 
 in {
 
-  # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest {
-    zfsPackage = pkgs.zfs_2_1;
-    kernelPackages = pkgs.linuxPackages;
-  };
-
   series_2_2 = makeZfsTest {
     zfsPackage = pkgs.zfs_2_2;
     kernelPackages = pkgs.linuxPackages;
