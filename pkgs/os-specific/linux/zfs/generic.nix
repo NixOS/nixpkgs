@@ -26,6 +26,7 @@ let
   { version
   , hash
   , kernelModuleAttribute
+  , extraLongDescription ? ""
   , extraPatches ? []
   , rev ? "zfs-${version}"
   , kernelCompatible ? null
@@ -220,7 +221,7 @@ let
         snapshotting, cloning, block devices, deduplication, and more.
 
         ${if buildUser then "This is the userspace tools package." else "This is the kernel module package."}
-      '';
+      '' + extraLongDescription;
       homepage = "https://github.com/openzfs/zfs";
       changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
       license = lib.licenses.cddl;
