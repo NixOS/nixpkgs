@@ -5,9 +5,10 @@
   pkg-config,
   libxkbcommon,
   python3,
-  python3Packages,
+  runCommand,
+  wprs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wprs";
   version = "0-unstable-2024-10-22";
 
@@ -24,9 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libxkbcommon
-    python3
-    python3Packages.psutil
-
+    (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
   cargoLock = {
@@ -41,6 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     cp  wprs "$out/bin/wprs"
+  '';
+
+  passthru.tests.sanity = runCommand "wprs-sanity" { nativeBuildInputs = [ wprs ]; } ''
+    ${wprs}/bin/wprs -h > /dev/null && touch $out
   '';
 
   meta = with lib; {
