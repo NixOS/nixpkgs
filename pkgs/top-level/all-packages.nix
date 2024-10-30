@@ -27197,10 +27197,6 @@ with pkgs;
 
   luculent = callPackage ../data/fonts/luculent { };
 
-  luna-icons = callPackage ../data/icons/luna-icons {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 
   mailcap = callPackage ../data/misc/mailcap { };

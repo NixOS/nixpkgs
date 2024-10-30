@@ -719,6 +719,7 @@ mapAliases {
 
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
   lsh = throw "lsh has been removed as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decade"; # Added 2024-08-14
+  luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
   lxd = lib.warn "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
   lxd-unwrapped = lib.warn "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
