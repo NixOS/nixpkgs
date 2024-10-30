@@ -8755,8 +8755,6 @@ with pkgs;
 
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
 
-  jd-gui = callPackage ../tools/security/jd-gui { };
-
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
   jekyll = callPackage ../applications/misc/jekyll { };
