@@ -1940,12 +1940,13 @@
       home-assistant-intents
       ifaddr
       mutagen
+      py-improv-ble-client
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: py-improv-ble-client
+    ];
     "incomfort" = ps: with ps; [
       incomfort-client
     ];
@@ -5342,6 +5343,7 @@
     "image_upload"
     "imap"
     "imgw_pib"
+    "improv_ble"
     "incomfort"
     "influxdb"
     "inkbird"
