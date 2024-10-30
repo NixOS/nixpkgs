@@ -198,7 +198,7 @@ let
       homepage = "https://www.factorio.com/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
-      maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
+      maintainers = with lib.maintainers; [ Baughn elitak priegger lukegb ];
       platforms = [ "x86_64-linux" ];
       mainProgram = "factorio";
     };
