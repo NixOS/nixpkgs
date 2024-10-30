@@ -73,10 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./macos.patch
-    # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
-    # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
-    # see https://github.com/NixOS/nixpkgs/issues/218370
-    ./scheme.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
