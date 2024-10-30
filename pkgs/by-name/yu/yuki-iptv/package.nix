@@ -15,9 +15,12 @@ stdenv.mkDerivation rec {
   pname = "yuki-iptv";
   version = "0.0.15";
 
-  src = fetchurl {
-    url = "https://codeberg.org/liya/yuki-iptv/archive/${version}.tar.gz";
-    sha256 = "sha256-8u8KoabExVqyj8ohGUl28SqIJYGfNLNl/tyHM9gwX88=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "liya";
+    repo = "yuki-iptv";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "";
   };
 
   buildInputs = [
