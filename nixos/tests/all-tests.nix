@@ -366,6 +366,7 @@ in {
   freshrss-http-auth = handleTest ./freshrss-http-auth.nix {};
   freshrss-none-auth = handleTest ./freshrss-none-auth.nix {};
   frigate = handleTest ./frigate.nix {};
+  froide-govplan = handleTest ./web-apps/froide-govplan.nix {};
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
