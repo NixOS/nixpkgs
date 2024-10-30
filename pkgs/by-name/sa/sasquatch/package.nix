@@ -51,6 +51,7 @@ let
       "LZO_SUPPORT=1"
       "XZ_SUPPORT=1"
       "ZSTD_SUPPORT=1"
+      "AR:=$(AR)"
     ];
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString bigEndian "-DFIX_BE";
