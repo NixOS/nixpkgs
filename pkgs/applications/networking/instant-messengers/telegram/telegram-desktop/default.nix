@@ -1,48 +1,42 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , callPackage
 , pkg-config
 , cmake
 , ninja
+, clang
+, lld
 , python3
-, gobject-introspection
-, wrapGAppsHook3
 , wrapQtAppsHook
-, extra-cmake-modules
 , qtbase
-, qtwayland
-, qtsvg
 , qtimageformats
-, gtk3
-, glib-networking
-, boost
-, fmt
-, libdbusmenu
+, qtsvg
+, qtwayland
+, kcoreaddons
 , lz4
 , xxHash
 , ffmpeg
+, protobuf
 , openalSoft
 , minizip
 , libopus
 , alsa-lib
 , libpulseaudio
-, pipewire
 , range-v3
 , tl-expected
 , hunspell
-, webkitgtk_4_1
+, gobject-introspection
 , jemalloc
 , rnnoise
-, protobuf
-, abseil-cpp
-, xdg-utils
 , microsoft-gsl
-, rlottie
+, boost
 , ada
-, stdenv
-, darwin
-, lld
+, wrapGAppsHook3
+, glib-networking
+, webkitgtk_4_1
 , libicns
+, darwin
 , nix-update-script
 }:
 
@@ -89,9 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
-  # We want to run wrapProgram manually (with additional parameters)
+  # Avoid double-wrapping
   dontWrapGApps = true;
-  dontWrapQtApps = true;
+
+  # Wrapping the inside of the app bundles, avoiding double-wrapping
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     pkg-config
@@ -100,18 +96,18 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # to build bundled libdispatch
+    clang
     gobject-introspection
     wrapGAppsHook3
-    extra-cmake-modules
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
   ];
 
   buildInputs = [
     qtbase
-    qtsvg
     qtimageformats
-    boost
+    qtsvg
     lz4
     xxHash
     ffmpeg
@@ -121,23 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
     range-v3
     tl-expected
     rnnoise
-    protobuf
     tg_owt
     microsoft-gsl
-    rlottie
+    boost
     ada
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
     qtwayland
-    gtk3
-    glib-networking
-    fmt
-    libdbusmenu
+    kcoreaddons
     alsa-lib
     libpulseaudio
-    pipewire
     hunspell
-    webkitgtk_4_1
     jemalloc
+    glib-networking
+    webkitgtk_4_1
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
@@ -190,14 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # This is necessary to run Telegram in a pure environment.
-    # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
