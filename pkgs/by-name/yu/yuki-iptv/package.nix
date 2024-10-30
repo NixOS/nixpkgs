@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     python3.pkgs.wrapPython
+    qt6.wrapQtAppsHook
   ];
 
   pythonPath = with python3.pkgs; [
