@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     owner = "desktop-app";
     repo = "tg_owt";
     rev = "dc17143230b5519f3c1a8da0079e00566bd4c5a8";
-    sha256 = "sha256-7j7hBIOXEdNJDnDSVUqy234nkTCaeZ9tDAzqvcuaq0o=";
+    hash = "sha256-7j7hBIOXEdNJDnDSVUqy234nkTCaeZ9tDAzqvcuaq0o=";
     fetchSubmodules = true;
   };
 
