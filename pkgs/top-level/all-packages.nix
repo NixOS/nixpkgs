@@ -12550,9 +12550,6 @@ with pkgs;
 
   inherit
     ({
-      zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
-        configFile = "user";
-      };
       zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
         configFile = "user";
       };
@@ -12563,7 +12560,6 @@ with pkgs;
         configFile = "user";
       };
     })
-    zfs_2_1
     zfs_2_2
     zfs_2_3
     zfs_unstable;
