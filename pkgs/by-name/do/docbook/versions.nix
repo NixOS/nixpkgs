@@ -80,4 +80,12 @@ in
                 --replace-fail V4.2 V4.1.2
           '';
       };
+  "4.1" = makeDocBookVersion "sgml-dtd" {
+    version = "4.1";
+    hash = "sha256-3qr88KNndpLnrUQSwOQcHbPp2mzc2z3TKyzB+cl9YxE=";
+  };
+  "3.1" = makeDocBookVersion "sgml-dtd" {
+    version = "3.1";
+    hash = "sha256-ICYdJ3G5oFKr+j2PqxqmK+BXkaAQKBxWb5Bzvw5kRTg=";
+  };
 }
