@@ -5164,6 +5164,8 @@ self: super: with self; {
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
+  go2rtc-client = callPackage ../development/python-modules/go2rtc-client { };
+
   goalzero = callPackage ../development/python-modules/goalzero { };
 
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
@@ -17531,6 +17533,8 @@ self: super: with self; {
   weblate-schemas = callPackage ../development/python-modules/weblate-schemas { };
 
   webob = callPackage ../development/python-modules/webob { };
+
+  webrtc-models = callPackage ../development/python-modules/webrtc-models { };
 
   webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
 
