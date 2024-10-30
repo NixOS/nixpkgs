@@ -10,6 +10,7 @@
   pkg-config,
   qtbase,
   qtdeclarative,
+  qttools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "doc"
     "examples"
   ];
 
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qtdeclarative # qmlplugindump
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -66,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ dbus-test-runner ];
 
   cmakeFlags = [
-    # Needs qdoc, see https://github.com/NixOS/nixpkgs/pull/245379
-    (lib.cmakeBool "BUILD_DOCS" false)
+    (lib.cmakeBool "BUILD_DOCS" true)
   ];
 
   dontWrapQtApps = true;
