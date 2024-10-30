@@ -96,6 +96,8 @@ buildPythonPackage rec {
       "test_proxy_tlsauth"
       # AssertionError: 'Москва' != '\n...
       "test_encoded_unicode_header"
+      # https://github.com/pycurl/pycurl/issues/856
+      "test_multi_info_read"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Segmentation fault
