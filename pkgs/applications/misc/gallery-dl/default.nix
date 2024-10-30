@@ -10,13 +10,13 @@
 
 buildPythonApplication rec {
   pname = "gallery-dl";
-  version = "1.27.6";
+  version = "1.27.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "gallery_dl";
-    hash = "sha256-bxh15aZIupTaHnYM65MAYuYtKx0z2OIQl3WKEU1gO4Q=";
+    hash = "sha256-9YcxD7AH4U2dOhAiUnknwwGFy9pplFFQ7Rn4cOvDdEc=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,11 @@ buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # requires network access
+    "test_init"
+  ];
 
   pytestFlagsArray = [
     # requires network access
