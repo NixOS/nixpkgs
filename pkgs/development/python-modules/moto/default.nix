@@ -259,6 +259,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }
