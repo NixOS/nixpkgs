@@ -5,8 +5,8 @@ This chapter explains some of the internals of this command to make it simpler
 for new module developers to configure their units correctly and to make it
 easier to understand what is happening and why for curious administrators.
 
-`nixos-rebuild`, like many deployment solutions, calls `switch-to-configuration`
-which resides in a NixOS system at `$out/bin/switch-to-configuration`. The
+`nixos-rebuild`, like many deployment solutions, calls `apply` (or for NixOS older than 24.11, `switch-to-configuration`)
+which resides in a NixOS system at `$out/bin/apply`. The
 script is called with the action that is to be performed like `switch`, `test`,
 `boot`. There is also the `dry-activate` action which does not really perform
 the actions but rather prints what it would do if you called it with `test`.
