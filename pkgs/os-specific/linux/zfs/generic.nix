@@ -237,8 +237,6 @@ let
 
       inherit maintainers;
       mainProgram = "zfs";
-      # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
-      # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
       broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
   };

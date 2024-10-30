@@ -221,7 +221,7 @@ in
         type = lib.types.package;
         default = pkgs.zfs;
         defaultText = lib.literalExpression "pkgs.zfs";
-        description = "Configured ZFS userland tools package, use `pkgs.zfs_unstable` if you want to track the latest staging ZFS branch.";
+        description = "Configured ZFS userland tools package.";
       };
 
       modulePackage = lib.mkOption {
