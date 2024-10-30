@@ -5164,6 +5164,8 @@ self: super: with self; {
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
+  go2rtc-client = callPackage ../development/python-modules/go2rtc-client { };
+
   goalzero = callPackage ../development/python-modules/goalzero { };
 
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
