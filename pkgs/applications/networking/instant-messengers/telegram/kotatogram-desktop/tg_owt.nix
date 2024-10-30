@@ -96,7 +96,5 @@ stdenv.mkDerivation {
     ApplicationServices
   ]);
 
-  enableParallelBuilding = true;
-
   meta.license = lib.licenses.bsd3;
 }
