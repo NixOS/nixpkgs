@@ -25,15 +25,16 @@
 , pkg-config
 , qemu
 , xz
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guestfs-tools";
-  version = "1.52.0";
+  version = "1.52.2";
 
   src = fetchurl {
-    url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
-    sha256 = "sha256-Iv0TIpcEX5CmdAbw/w7uDyoBBqXxyNz8XDlqYl/3g3Y=";
+    url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor finalAttrs.version}-stable/guestfs-tools-${finalAttrs.version}.tar.gz";
+    hash = "sha256-02khDS2NLG1QOSqswtDoqBX2Mg6sE/OiUoP9JFs4vTU=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +56,7 @@ stdenv.mkDerivation rec {
   ]) ++
   (with ocamlPackages; [
     findlib
-    gettext-stub
     ocaml
-    ocaml_gettext
     ounit2
   ]);
 
@@ -107,11 +106,18 @@ stdenv.mkDerivation rec {
       --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';
 
-  meta = with lib; {
-    description = "Extra tools for accessing and modifying virtual machine disk images";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
-    homepage = "https://libguestfs.org/";
-    maintainers = [ ];
-    platforms = platforms.linux;
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/libguestfs/guestfs-tools";
+    rev-prefix = "v";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Extra tools for accessing and modifying virtual machine disk images";
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
+    homepage = "https://libguestfs.org/";
+    changelog = "https://www.libguestfs.org/guestfs-tools-release-notes-${lib.versions.majorMinor finalAttrs.version}.1.html";
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+  };
+})

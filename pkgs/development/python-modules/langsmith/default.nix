@@ -8,16 +8,17 @@
   poetry-core,
 
   # dependencies
+  httpx,
   orjson,
   pydantic,
   requests,
+  requests-toolbelt,
 
   # tests
   anthropic,
   dataclasses-json,
   fastapi,
   freezegun,
-  httpx,
   instructor,
   pytest-asyncio,
   pytestCheckHook,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.129";
+  version = "0.1.137";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GIWDGr6zd/YaSgcSrIw0a1Ul9RxdmtJBMTEbGapudtw=";
+    hash = "sha256-nR3fb3MHBxFvI4qrsTpElLWTDUESZ8J78GsVoCGTIyQ=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -44,9 +45,11 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    httpx
     orjson
     pydantic
     requests
+    requests-toolbelt
   ];
 
   nativeCheckInputs = [
@@ -54,7 +57,6 @@ buildPythonPackage rec {
     dataclasses-json
     fastapi
     freezegun
-    httpx
     instructor
     pytest-asyncio
     pytestCheckHook

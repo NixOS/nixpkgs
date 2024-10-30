@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-A55VCyQi+LBe3hxKp/xsVtXyPHuLPaCOi78Zv6MiwIw=";
+    sha256 = "sha256-NefWnkI7K6I1JY3UG9wUbB/yF3R8tUdPb4tAafiTR3o=";
   };
 
   nativeBuildInputs = [

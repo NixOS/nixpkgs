@@ -6,7 +6,7 @@
   fetchFromGitHub,
   fetchurl,
   linkFarm,
-  ffmpeg_6-headless,
+  ffmpeg-headless,
   numpy,
   pillow,
   pkg-config,
@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "12.3.0";
+  version = "13.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ezeYv55UzNnnYDjrMz5YS5g2pV6U/Fxx3e2bCoPP3eI=";
+    hash = "sha256-blvtHSUqSl9xAM4t+dFJWmXiOjtnAUC9nicMaUY1zuU=";
   };
 
   build-system = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ffmpeg_6-headless ];
+  buildInputs = [ ffmpeg-headless ];
 
   preCheck =
     let

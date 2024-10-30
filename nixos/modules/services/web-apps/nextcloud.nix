@@ -930,7 +930,10 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           occInstallCmd = let
-            mkExport = { arg, value }: "export ${arg}=${value}";
+            mkExport = { arg, value }: ''
+              ${arg}=${value};
+              export ${arg};
+            '';
             dbpass = {
               arg = "DBPASS";
               value = if c.dbpassFile != null

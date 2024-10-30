@@ -7,7 +7,6 @@
   atpublic,
   black,
   clickhouse-connect,
-  dask,
   datafusion,
   db-dtypes,
   duckdb,

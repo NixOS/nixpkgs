@@ -245,7 +245,7 @@ let
             # TODO check platform for revisionOverrides
             "${name}-${value.revision}"
             (
-              callPackage ./${name}.nix (
+              callPackage (./. + "/${name}.nix") (
                 {
                   inherit suffix system throwSystem;
                   inherit (value) revision;

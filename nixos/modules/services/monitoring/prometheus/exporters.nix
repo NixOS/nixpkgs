@@ -50,6 +50,7 @@ let
     "junos-czerwonk"
     "kea"
     "keylight"
+    "klipper"
     "knot"
     "lnd"
     "mail"

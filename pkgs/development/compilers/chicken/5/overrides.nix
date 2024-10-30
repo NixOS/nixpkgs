@@ -139,7 +139,7 @@ in
       addToNativeBuildInputs pkgs.taglib old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk;
+  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;

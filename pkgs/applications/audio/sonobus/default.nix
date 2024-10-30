@@ -16,7 +16,7 @@
 , libopus
 , curl
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     curl
     gtk3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   runtimeDependencies = [

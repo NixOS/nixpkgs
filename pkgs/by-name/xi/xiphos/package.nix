@@ -22,7 +22,7 @@
 , minizip
 , pkg-config
 , sword
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , yelp-tools
 , zip
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libuuid
     minizip
     sword
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   cmakeFlags = [

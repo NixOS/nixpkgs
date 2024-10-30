@@ -74,7 +74,7 @@ mkDerivation (
         # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
         "OBJCOPY=${cctools}/bin/strip"
       ];
-    RENAME = "-D";
+    env.RENAME = "-D";
 
     passthru.tests = {
       netbsd-install = install;

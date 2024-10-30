@@ -32,7 +32,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  doCheck = true;
   # Package has no unit tests, but we can check an example as per README.rst:
   checkPhase = ''
     runHook preCheck

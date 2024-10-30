@@ -43,7 +43,7 @@ buildGoModule rec {
     changelog = "https://github.com/turbot/steampipe-plugin-aws/blob/v${version}/CHANGELOG.md";
     description = "AWS Plugin for Steampipe";
     homepage = "https://github.com/turbot/steampipe-plugin-aws";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     longDescription = "Use SQL to instantly query AWS resources across regions and accounts.";
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = steampipe.meta.platforms;

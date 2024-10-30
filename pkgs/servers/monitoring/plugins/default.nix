@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , runCommand
@@ -43,29 +42,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monitoring-plugins";
-  version = "2.3.5";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "monitoring-plugins";
     repo = "monitoring-plugins";
     rev = "v${version}";
-    sha256 = "sha256-J9fzlxIpujoG7diSRscFhmEV9HpBOxFTJSmGGFjAzcM=";
+    hash = "sha256-T37t0shhC+8k7CN/hIOxsskuuCi0LwQui8xyRTC+pjQ=";
   };
-
-  patches = [
-    # fix build (makefile cannot produce -lcrypto)
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/monitoring-plugins/monitoring-plugins/commit/bad156676894a2755c8b76519a11cdd2037e5cd6.patch";
-      hash = "sha256-aI/sX04KXe968SwdS8ZamNtgdNbHtho5cDsDaA+cjZY=";
-    })
-    # fix check_smtp with --starttls https://github.com/monitoring-plugins/monitoring-plugins/pull/1952
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/monitoring-plugins/monitoring-plugins/commit/2eea6bb2a04bbfb169bac5f0f7c319f998e8ab87.patch";
-      hash = "sha256-CyVD340+zOxuxRRPmtowD3DFFRB1Q7+AANzul9HqwBI=";
-    })
-  ];
 
   # TODO: Awful hack. Grrr...
   # Anyway the check that configure performs to figure out the ping
@@ -76,9 +60,6 @@ stdenv.mkDerivation rec {
   # --with-ping-command needs to be done here instead of in
   # configureFlags due to the spaces in the argument
   postPatch = ''
-    substituteInPlace po/Makefile.in.in \
-      --replace /bin/sh ${runtimeShell}
-
     sed -i configure.ac \
       -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'
 
@@ -116,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
     homepage = "https://www.monitoring-plugins.org";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ thoughtpolice relrod ];
     platforms = platforms.linux;
   };

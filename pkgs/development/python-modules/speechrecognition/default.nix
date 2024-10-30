@@ -2,10 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  numpy,
+  flac,
+  openai,
+  openai-whisper,
+  pocketsphinx,
+  pyaudio,
   pytestCheckHook,
   pythonOlder,
-  torch,
   requests,
   setuptools,
   soundfile,
@@ -26,29 +29,41 @@ buildPythonPackage rec {
     hash = "sha256-icXZUg2lVLo8Z5t9ptDj67BjQLnEgrG8geYZ/lZeJt4=";
   };
 
+  postPatch = ''
+    # Remove Bundled binaries
+    rm speech_recognition/flac-*
+    rm -r third-party
+
+    substituteInPlace speech_recognition/audio.py \
+      --replace-fail 'shutil_which("flac")' '"${lib.getExe flac}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
+    pyaudio
     requests
     typing-extensions
   ];
 
+  optional-dependencies = {
+    whisper-api = [ openai ];
+    whisper-local = [
+      openai-whisper
+      soundfile
+    ];
+  };
+
   nativeCheckInputs = [
-    numpy
     pytestCheckHook
-    torch
-    soundfile
-  ];
+    pocketsphinx
+  ] ++ optional-dependencies.whisper-local ++ optional-dependencies.whisper-api;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
   disabledTests = [
-    # Test files are missing in source
-    "test_flac"
-    # Attribute error
-    "test_whisper"
-    # PocketSphinx is not available in Nixpkgs
-    "test_sphinx"
+    # Parsed string does not match expected
+    "test_sphinx_keywords"
   ];
 
   meta = with lib; {

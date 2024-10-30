@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.10.0";
+  version = "2024.10.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2414,7 +2414,8 @@
     "lirc" = ps: with ps; [
     ]; # missing inputs: python-lirc
     "litejet" = ps: with ps; [
-    ]; # missing inputs: pylitejet
+      pylitejet
+    ];
     "litterrobot" = ps: with ps; [
       pylitterbot
     ];
@@ -4957,7 +4958,8 @@
       xmltodict
     ];
     "zeversolar" = ps: with ps; [
-    ]; # missing inputs: zeversolar
+      zeversolar
+    ];
     "zha" = ps: with ps; [
       aiohasupervisor
       pillow
@@ -5404,6 +5406,7 @@
     "light"
     "linear_garage_door"
     "linkplay"
+    "litejet"
     "litterrobot"
     "livisi"
     "local_calendar"
@@ -5876,6 +5879,7 @@
     "zamg"
     "zeroconf"
     "zerproc"
+    "zeversolar"
     "zha"
     "zodiac"
     "zone"

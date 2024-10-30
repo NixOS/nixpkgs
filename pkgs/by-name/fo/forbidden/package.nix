@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "forbidden";
-  version = "12.5";
+  version = "12.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivan-sincek";
     repo = "forbidden";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZxEkkg1gFs/pSAnrW85UqDQKczXqLW1q4kW58TagEA0=";
+    hash = "sha256-KE2FHn0ocAna5ReRi9re/u8gdNVkCygSbSRj8gEudgI=";
   };
 
   build-system = with python3.pkgs; [
@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     alive-progress
     colorama
-    datetime
     pycurl
     pyjwt
     regex

@@ -40,10 +40,20 @@ buildPythonPackage rec {
   passthru.tests.tester-nvmlInit =
     cudaPackages.writeGpuTestPython { libraries = [ nvidia-ml-py ]; }
       ''
-        import pynvml
-        from pynvml.smi import nvidia_smi  # noqa: F401
+        from pynvml import (
+          nvmlInit,
+          nvmlSystemGetDriverVersion,
+          nvmlDeviceGetCount,
+          nvmlDeviceGetHandleByIndex,
+          nvmlDeviceGetName,
+        )
 
-        print(f"{pynvml.nvmlInit()=}")
+        nvmlInit()
+        print(f"Driver Version: {nvmlSystemGetDriverVersion()}")
+
+        for i in range(nvmlDeviceGetCount()):
+            handle = nvmlDeviceGetHandleByIndex(i)
+            print(f"Device {i} : {nvmlDeviceGetName(handle)}")
       '';
 
   meta = {

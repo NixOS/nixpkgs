@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "newman";
-  version = "6.1.3";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "postmanlabs";
     repo = "newman";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I9gpVwrrug1Ygi0UuBIeq16Nyn8rsaDkMDtpxBYJOuY=";
+    hash = "sha256-p0/uHrLiqw5VnboXzLKF+f56ZfW77m5aoopf2zqIpQE=";
   };
 
-  npmDepsHash = "sha256-StNu5NHGzivl3+GMBWkbxvsRJ/dYuS0dze+8/i7q9qg=";
+  npmDepsHash = "sha256-HQ5V0hisolXqWV/oWlroCzC7ZoNw0P9bwTxFyUrL3Hc=";
 
   dontNpmBuild = true;
 

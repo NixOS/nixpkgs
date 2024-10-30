@@ -12,7 +12,7 @@
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME/.cache/ksycoca"*
   '';
 in {
   options = {
@@ -79,6 +79,7 @@ in {
         kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
+        kunifiedpush # provides a background service and a KCM
         kwallet # provides helper service
         kwallet-pam # provides helper service
         kwalletmanager # provides KCMs and stuff
@@ -249,10 +250,11 @@ in {
 
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [
+      kdePackages.kwallet
       kdePackages.xdg-desktop-portal-kde
       pkgs.xdg-desktop-portal-gtk
     ];
-    xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.configPackages = mkDefault [kdePackages.plasma-workspace];
     services.pipewire.enable = mkDefault true;
 
     # Enable screen reader by default

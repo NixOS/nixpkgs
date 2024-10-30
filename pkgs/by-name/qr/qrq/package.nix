@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-uuETGbv5qm0Z+45+kK66SBHhQ0Puu6I5z+TWIh3iR2g=";
   };
 
+  sourceRoot = "${src.name}/src";
+
   buildInputs = [
     ncurses
     pulseaudio
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/qrq.c \
+    substituteInPlace qrq.c \
       --replace-fail '[80]' '[4000]' \
       --replace-fail '80,' '4000,'
   '';

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.5.6";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-PHTaEkbJvdYdY7f8ISBA6i29IY1H/JhqGOOXTmRZG4A=";
+    hash = "sha256-sqKdvOMrmTQvuULRwhCr7w7qV99vJmZimQOe96kx/v8=";
   };
 
   build-system = [ poetry-core ];

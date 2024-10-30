@@ -4,6 +4,7 @@
   lib,
   fetchFromGitLab,
   fetchgit,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -71,7 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
   };
 
-  patches = [ ./disable-tests-download.patch ];
+  patches = [
+    ./disable-tests-download.patch
+
+    # Fix build with Qt 6.8
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/digikam/-/commit/a8b49ed8df676cae0f48b3369831edde2b74903e.patch";
+      hash = "sha256-93kQ/Dg/A9FR83ChyiUaRwyelE1Iq14eIecUteVbnqI=";
+    })
+  ];
 
   strictDeps = true;
 

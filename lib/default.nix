@@ -73,7 +73,7 @@ let
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
-      info showWarnings nixpkgsVersion version isInOldestRelease
+      info showWarnings nixpkgsVersion version isInOldestRelease oldestSupportedReleaseIsAtLeast
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       fromHexString toHexString toBaseDigits inPureEvalMode isBool isInt pathExists

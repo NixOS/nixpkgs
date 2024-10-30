@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   protobuf,
   bzip2,
@@ -26,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.10.2";
+  version = "0.10.5";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -36,11 +35,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wH26uwaYzfqiamiJ/oosVEiTfCOItwVGbHdRh6Ykpgk=";
+    hash = "sha256-MD9zAWeitP3cXxzR4znqL551AGFbOcRzhV3goY6l/iY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-1AFDyZpkcvFzWBczMAPfajmhBmVl4ou4JdKnrK2KlQI=";
+  cargoHash = "sha256-ug49H6RWLlDdJNVW/BJcqNsG/NDNgWiqR8GiZ/HVrvY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -142,14 +141,17 @@ rustPlatform.buildRustPackage {
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::auth::auth"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::antispam::antispam"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
+    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
-    update-script = nix-update-script { };
+    updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 

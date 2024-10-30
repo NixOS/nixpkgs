@@ -11,7 +11,7 @@
 , gtk3
 , openssl_1_1
 , icu70
-, webkitgtk
+, webkitgtk_4_0
 , librsvg
 , gdk-pixbuf
 , libsoup
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     openssl_1_1.out
     icu70
-    webkitgtk
+    webkitgtk_4_0
     librsvg
     gdk-pixbuf
     libsoup

@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.30.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-W5oLN0rMG2c8h05sIEOf4h95SQrFrs/7vLpsHH91sIA=";
+    hash = "sha256-gi6Jm0tf1lP10UYpouCleN32K71upYOudxjOoRgsGLg=";
   };
 
   sourceRoot = "${src.name}/server";

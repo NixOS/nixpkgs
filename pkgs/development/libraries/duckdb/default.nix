@@ -97,10 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
         "test/sql/attach/attach_remote.test"
         "test/sql/copy/csv/test_sniff_httpfs.test"
         "test/sql/httpfs/internal_issue_2490.test"
+        # fails with incorrect result
+        # Upstream issue https://github.com/duckdb/duckdb/issues/14294
+        "test/sql/copy/file_size_bytes.test"
       ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
+        "test/sql/aggregate/aggregates/histogram_table_function.test"
       ]);
       LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in

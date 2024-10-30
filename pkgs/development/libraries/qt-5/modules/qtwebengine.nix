@@ -25,7 +25,7 @@
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, xcbuild, writeScriptBin
-, ffmpeg_7 ? null
+, ffmpeg ? null
 , lib, stdenv
 , version ? null
 , qtCompatVersion
@@ -232,7 +232,7 @@ qtModule ({
     harfbuzz icu
 
     libevent
-    ffmpeg_7
+    ffmpeg
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 

@@ -1,8 +1,8 @@
 diff --git a/distrobuilder/lxc.generator b/distrobuilder/lxc.generator
-index 0ad81d1..21ddb39 100644
+index dc5b506..0265da8 100644
 --- a/distrobuilder/lxc.generator
 +++ b/distrobuilder/lxc.generator
-@@ -25,16 +25,6 @@ is_incus_vm() {
+@@ -21,16 +21,6 @@ is_incus_vm() {
  	[ -e /dev/virtio-ports/org.linuxcontainers.incus ]
  }
  
@@ -19,8 +19,8 @@ index 0ad81d1..21ddb39 100644
  ## Fix functions
  # fix_ro_paths avoids udevd issues with /sys and /proc being writable
  fix_ro_paths() {
-@@ -45,35 +35,6 @@ BindReadOnlyPaths=/sys /proc
- EOF
+@@ -42,38 +32,6 @@ fix_ro_paths() {
+ 		EOF
  }
  
 -# fix_nm_link_state forces the network interface to a DOWN state ahead of NetworkManager starting up
@@ -35,19 +35,22 @@ index 0ad81d1..21ddb39 100644
 -		return 0
 -	fi
 -	cat <<-EOF > /run/systemd/system/network-device-down.service
--[Unit]
--Description=Turn off network device
--Before=NetworkManager.service
--Before=systemd-networkd.service
--[Service]
--# do not turn off if there is a default route to 169.254.0.1, i.e. the device is a routed nic
--ExecCondition=/bin/sh -c '! /usr/bin/grep -qs 00000000.0100FEA9 /proc/net/route'
--ExecStart=-${ip_path} link set $1 down
--Type=oneshot
--RemainAfterExit=true
--[Install]
--WantedBy=default.target
--EOF
+-		# This file was created by distrobuilder
+-		[Unit]
+-		Description=Turn off network device
+-		Before=NetworkManager.service
+-		Before=systemd-networkd.service
+-
+-		[Service]
+-		# do not turn off if there is a default route to 169.254.0.1, i.e. the device is a routed nic
+-		ExecCondition=/bin/sh -c '! /usr/bin/grep -qs 00000000.0100FEA9 /proc/net/route'
+-		ExecStart=-${ip_path} link set $1 down
+-		Type=oneshot
+-		RemainAfterExit=true
+-
+-		[Install]
+-		WantedBy=default.target
+-		EOF
 -	mkdir -p /run/systemd/system/default.target.wants
 -	ln -sf /run/systemd/system/network-device-down.service /run/systemd/system/default.target.wants/network-device-down.service
 -}
@@ -55,7 +58,7 @@ index 0ad81d1..21ddb39 100644
  # fix_systemd_override_unit generates a unit specific override
  fix_systemd_override_unit() {
  	dropin_dir="/run/systemd/${1}.d"
-@@ -112,16 +73,7 @@ fix_systemd_mask() {
+@@ -113,16 +71,7 @@ fix_systemd_mask() {
  # fix_systemd_udev_trigger overrides the systemd-udev-trigger.service to match the latest version
  # of the file which uses "ExecStart=-" instead of "ExecStart=".
  fix_systemd_udev_trigger() {
@@ -73,8 +76,8 @@ index 0ad81d1..21ddb39 100644
  
  	mkdir -p /run/systemd/system/systemd-udev-trigger.service.d
  	cat <<-EOF > /run/systemd/system/systemd-udev-trigger.service.d/zzz-lxc-override.conf
-@@ -132,37 +84,13 @@ ExecStart=-${cmd} trigger --type=devices --action=add
- EOF
+@@ -134,38 +83,13 @@ fix_systemd_udev_trigger() {
+ 		EOF
  }
  
 -# fix_systemd_sysctl overrides the systemd-sysctl.service to use "ExecStart=-" instead of "ExecStart=".
@@ -83,15 +86,16 @@ index 0ad81d1..21ddb39 100644
 -	! [ -e "${cmd}" ] && cmd=/lib/systemd/systemd-sysctl
 -	mkdir -p /run/systemd/system/systemd-sysctl.service.d
 -	cat <<-EOF > /run/systemd/system/systemd-sysctl.service.d/zzz-lxc-override.conf
--[Service]
--ExecStart=
--ExecStart=-${cmd}
--EOF
+-		# This file was created by distrobuilder
+-		[Service]
+-		ExecStart=
+-		ExecStart=-${cmd}
+-		EOF
 -}
 -
  ## Main logic
 -# Nothing to do in Incus VM but deployed in case it is later converted to a container
--is_incus_vm || is_lxd_vm && exit 0
+-is_incus_vm && exit 0
  
  # Exit immediately if not an Incus/LXC container
  is_lxc_container || exit 0
@@ -105,14 +109,14 @@ index 0ad81d1..21ddb39 100644
 -for path in /usr/lib/systemd/systemd /lib/systemd/systemd; do
 -	[ -x "${path}" ] || continue
 -
--	systemd_version="$("${path}" --version | head -n1 | cut -d' ' -f2)"
+-	systemd_version="$("${path}" --version | head -n1 | cut -d' ' -f2 | cut -d'~' -f1)"
 -	break
 -done
 +systemd_version="$(systemd --version | head -n1 | cut -d' ' -f2)"
  
  # Determine distro name and release
  ID=""
-@@ -192,7 +120,6 @@ fi
+@@ -196,7 +120,6 @@ fi
  
  # Ignore failures on some units.
  fix_systemd_udev_trigger
@@ -120,8 +124,8 @@ index 0ad81d1..21ddb39 100644
  
  # Mask some units.
  fix_systemd_mask dev-hugepages.mount
-@@ -222,11 +149,6 @@ ACTION=="add|change|move", ENV{ID_NET_DRIVER}=="veth", ENV{INTERFACE}=="eth[0-9]
- EOF
+@@ -226,11 +149,6 @@ if [ -d /etc/udev ]; then
+ 		EOF
  fi
  
 -# Workarounds for NetworkManager in containers

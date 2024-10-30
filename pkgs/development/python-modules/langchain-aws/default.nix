@@ -45,6 +45,11 @@ buildPythonPackage rec {
     numpy
   ];
 
+  pythonRelaxDeps = [
+    # Boto @ 1.35 has outstripped the version requirement
+    "boto3"
+  ];
+
   nativeCheckInputs = [
     langchain-standard-tests
     pytest-asyncio

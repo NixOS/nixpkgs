@@ -57,6 +57,7 @@ let
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      coqutil = callPackage ../development/coq-modules/coqutil {};
       corn = callPackage ../development/coq-modules/corn {};
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
@@ -98,13 +99,17 @@ let
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
+      mathcomp-altreals = self.mathcomp-analysis.altreals;
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
@@ -126,6 +131,7 @@ let
       reglang = callPackage ../development/coq-modules/reglang {};
       relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
       rewriter = callPackage ../development/coq-modules/rewriter {};
+      RustExtraction = callPackage ../development/coq-modules/RustExtraction {};
       semantics = callPackage ../development/coq-modules/semantics {};
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };

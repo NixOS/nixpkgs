@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.2.10";
+  version = "9.2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angrop";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+epX+tCSv5Kit4lncDNtjokehCSl+tO7rbi3L+RrI+E=";
+    hash = "sha256-wL6H4UqBqOHMQU91q0uJrgeS/wVvIbinpF9IBtli3Ig=";
   };
 
   build-system = [ setuptools ];

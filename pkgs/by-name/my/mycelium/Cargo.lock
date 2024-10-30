@@ -170,9 +170,9 @@ checksum = "0c4b4d0bd25bd0b74681c0ad21497610ce1b7c91b1022cd21c80c6fbdd9476b0"
 
 [[package]]
 name = "axum"
-version = "0.7.6"
+version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f43644eed690f5374f1af436ecd6aea01cd201f6fbdf0178adaf6907afb2cec"
+checksum = "504e3947307ac8326a5437504c517c4b56716c9d98fac0028c2acc7ca47d70ae"
 dependencies = [
  "async-trait",
  "axum-core",
@@ -203,9 +203,9 @@ dependencies = [
 
 [[package]]
 name = "axum-core"
-version = "0.4.4"
+version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e6b8ba012a258d63c9adfa28b9ddcf66149da6f986c5b5452e629d5ee64bf00"
+checksum = "09f2bd6146b97ae3359fa0cc6d6b376d9539582c7b4220f041a33ec24c226199"
 dependencies = [
  "async-trait",
  "bytes",
@@ -1182,9 +1182,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.158"
+version = "0.2.159"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8adc4bb1803a324070e64a98ae98f38934d91957a99cfb3a43dcbc01bc56439"
+checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
 
 [[package]]
 name = "libloading"
@@ -1312,7 +1312,7 @@ dependencies = [
 
 [[package]]
 name = "mycelium"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "aes-gcm",
  "arc-swap",
@@ -1347,7 +1347,7 @@ dependencies = [
 
 [[package]]
 name = "mycelium-api"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "axum",
  "base64 0.22.1",
@@ -1360,7 +1360,7 @@ dependencies = [
 
 [[package]]
 name = "mycelium-cli"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "base64 0.22.1",
  "byte-unit",
@@ -1377,7 +1377,7 @@ dependencies = [
 
 [[package]]
 name = "mycelium-metrics"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "axum",
  "mycelium",
@@ -1388,7 +1388,7 @@ dependencies = [
 
 [[package]]
 name = "myceliumd"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "base64 0.22.1",
  "byte-unit",
@@ -2064,9 +2064,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.12.7"
+version = "0.12.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8f4955649ef5c38cc7f9e8aa41761d48fb9677197daea9984dc54f56aad5e63"
+checksum = "f713147fbe92361e52392c73b8c9e48c04c6625bce969ef54dc901e58e042a7b"
 dependencies = [
  "base64 0.22.1",
  "bytes",

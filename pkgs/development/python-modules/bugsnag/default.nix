@@ -5,22 +5,25 @@
   fetchPypi,
   flask,
   pythonOlder,
+  setuptools,
   webob,
 }:
 
 buildPythonPackage rec {
   pname = "bugsnag";
   version = "4.7.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-mECP4X1KfzAKVlNUB6ZEi5hE2bUoxEUnkIho/DZG6HM=";
   };
 
-  propagatedBuildInputs = [ webob ];
+  build-system = [ setuptools ];
+
+  dependencies = [ webob ];
 
   optional-dependencies = {
     flask = [

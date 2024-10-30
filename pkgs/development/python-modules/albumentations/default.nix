@@ -15,6 +15,7 @@
   pydantic,
   pyyaml,
   scikit-image,
+  scipy,
 
   # optional dependencies
   huggingface-hub,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.17";
+  version = "1.4.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,8 +40,12 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-4JOqaSpBXSrAR3qrOeab+PvhXPcoEnblO0n9TSqW0bY=";
+    hash = "sha256-lyYbkO2J3kpZGk8Q3FYfRiQh+BdolCfeEcjlI3W/rIw=";
   };
+
+  patches = [
+    ./dont-check-for-updates.patch
+  ];
 
   pythonRemoveDeps = [ "opencv-python" ];
 
@@ -54,6 +59,7 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     scikit-image
+    scipy
   ];
 
   optional-dependencies = {

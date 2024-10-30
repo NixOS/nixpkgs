@@ -3,7 +3,7 @@
 , dpkg
 , fetchurl
 , autoPatchelfHook
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''

@@ -474,7 +474,7 @@ let
     RMySQL = with pkgs; [ zlib libmysqlclient openssl.dev ];
     RNetCDF = with pkgs; [ netcdf udunits ];
     RODBC = [ pkgs.libiodbc ];
-    rpanel = [ pkgs.bwidget ];
+    rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ postgresql ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
@@ -1084,6 +1084,24 @@ let
         '';
     });
 
+    sf = old.sf.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    terra = old.terra.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
@@ -1442,9 +1460,9 @@ let
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
       preConfigure = ''
-        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
+        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
       '';
-      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+      TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
     });
 
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {

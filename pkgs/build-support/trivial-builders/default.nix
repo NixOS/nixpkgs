@@ -469,7 +469,11 @@ rec {
     as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
-    args_@{ name
+    args_@{
+      name ?
+        assert lib.assertMsg (args_ ? pname && args_ ? version)
+          "symlinkJoin requires either a `name` OR `pname` and `version`";
+        "${args_.pname}-${args_.version}"
     , paths
     , preferLocalBuild ? true
     , allowSubstitutes ? false
@@ -595,7 +599,7 @@ rec {
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
-      # hooks go in nativeBuildInput so these will be nativeBuildInput
+      # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
     , depsTargetTargetPropagated ? [ ]

@@ -9,14 +9,17 @@
   rocmSupport ? config.rocmSupport,
   cudaPackages,
   ocl-icd,
-  stdenv,
   rocmPackages,
+  stdenv,
 
   # build-system
   setuptools,
 
   # dependencies
+  llvmlite,
   numpy,
+  triton,
+  unicorn,
 
   # tests
   blobfile,
@@ -25,9 +28,9 @@
   hexdump,
   hypothesis,
   librosa,
+  networkx,
   onnx,
   pillow,
-  pydot,
   pytest-xdist,
   pytestCheckHook,
   safetensors,
@@ -74,6 +77,13 @@ buildPythonPackage rec {
       substituteInPlace tinygrad/runtime/ops_clang.py \
         --replace-fail "'clang'" "'${lib.getExe clang}'"
     ''
+    # `cuda_fp16.h` and co. are needed at runtime to compile kernels
+    + lib.optionalString cudaSupport ''
+      substituteInPlace tinygrad/runtime/support/compiler_cuda.py \
+        --replace-fail \
+        ', "-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include/"' \
+        ', "-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
+    ''
     + lib.optionalString rocmSupport ''
       substituteInPlace tinygrad/runtime/autogen/hip.py \
         --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
@@ -94,6 +104,12 @@ buildPythonPackage rec {
       # pyobjc-framework-metal
     ];
 
+  optional-dependencies = {
+    llvm = [ llvmlite ];
+    arm = [ unicorn ];
+    triton = [ triton ];
+  };
+
   pythonImportsCheck =
     [
       "tinygrad"
@@ -109,9 +125,9 @@ buildPythonPackage rec {
     hexdump
     hypothesis
     librosa
+    networkx
     onnx
     pillow
-    pydot
     pytest-xdist
     pytestCheckHook
     safetensors
@@ -120,7 +136,7 @@ buildPythonPackage rec {
     torch
     tqdm
     transformers
-  ];
+  ] ++ networkx.optional-dependencies.extra;
 
   preCheck = ''
     export HOME=$(mktemp -d)

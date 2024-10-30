@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.08.01";
+  version = "2024.09.20";
 
   src = fetchurl {
     urls = [
@@ -19,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-g5q3Q30B5in4CU6h7Ix6e7UEx97tnt/J4XrDT5oaGT8=";
+    hash = "sha256-TrUneCGaJJxC+GgL1ZZ/ZcONeqDH05Bp44/3lkCs9tg=";
   };
 
   patches = [
     (fetchpatch {
-      name = "cflags-when-darwin.patch";
+      name = "0000-cflags-when-darwin.patch";
       url = "https://github.com/rgaufman/live555/commit/16701af5486bb3a2d25a28edaab07789c8a9ce57.patch?full_index=1";
       hash = "sha256-IDSdByBu/EBLsUTBe538rWsDwH61RJfAEhvT68Nb9rU=";
     })

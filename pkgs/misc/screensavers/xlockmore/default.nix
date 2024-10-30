@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xlockmore";
-  version = "5.78";
+  version = "5.80";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-wMlnQiF4ejMFWJSOWe9EN91IPMgbAoXNReHgaovr+pE=";
+    sha256 = "sha256-UC12U2jTbYFOy3d/1DnHWXkLPdNNXuNfdIB/cbqkdiE=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
+    mainProgram = "xlock";
   };
 }

@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   in
   {
     name = "kanidm";
-    meta.maintainers = with pkgs.lib.maintainers; [ erictapen Flakebi oddlama ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Flakebi oddlama ];
 
     nodes.server = { pkgs, ... }: {
       services.kanidm = {

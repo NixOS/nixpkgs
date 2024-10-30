@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nixosTests
 , rustPlatform
-, hostPlatform
+, stdenv
 , installShellFiles
 , cmake
 , libsodium
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   # nix defaults to building for aarch64 _without_ the armv8-a
   # crypto extensions, but liboqs depends on these
-  preBuild = lib.optionalString hostPlatform.isAarch64 ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -march=armv8-a+crypto"
   '';
 

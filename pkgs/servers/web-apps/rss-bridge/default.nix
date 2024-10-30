@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, nixosTests }:
+{ stdenv, lib, fetchFromGitHub, nixosTests, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "rss-bridge";
@@ -11,17 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VycEgu7uHYwDnNE1eoVxgaWZAnC6mZLBxT8Le3PI4Rs=";
   };
 
-  patches = [
-    ./paths.patch
-  ];
-
   installPhase = ''
     mkdir $out/
     cp -R ./* $out
   '';
 
-  passthru.tests = {
-    basic-functionality = nixosTests.rss-bridge;
+  passthru = {
+    tests = {
+      basic-functionality = nixosTests.rss-bridge;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

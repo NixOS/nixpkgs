@@ -1,0 +1,27 @@
+From 8a80d895dfd779373363c3a4b62ecce5a549efb2 Mon Sep 17 00:00:00 2001
+From: "Haelwenn (lanodan) Monnier" <contact@hacktivis.me>
+Date: Sat, 30 Mar 2024 10:17:10 +0100
+Subject: tools/attr.c: Add missing libgen.h include for basename(3)
+
+Fixes compilation issue with musl and modern C99 compilers.
+
+See: https://bugs.gentoo.org/926294
+---
+ tools/attr.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/attr.c b/tools/attr.c
+index f12e4af..6a3c1e9 100644
+--- a/tools/attr.c
++++ b/tools/attr.c
+@@ -28,6 +28,7 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <locale.h>
++#include <libgen.h>
+ 
+ #include <attr/attributes.h>
+ 
+-- 
+cgit v1.1
+

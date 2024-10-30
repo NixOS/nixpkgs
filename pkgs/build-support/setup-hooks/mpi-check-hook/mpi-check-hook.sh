@@ -44,6 +44,17 @@ setupMpiCheck() {
       # Disable CPU pinning
       export OMPI_MCA_hwloc_base_binding_policy=none
       export PRTE_MCA_hwloc_default_binding_policy=none
+
+      # OpenMPI get confused by the sandbox environment and spew errors like this (both to stdout and stderr):
+      #     [hwloc/linux] failed to find sysfs cpu topology directory, aborting linux discovery.
+      #     [1729458724.473282] [localhost:78   :0]       tcp_iface.c:893  UCX  ERROR scandir(/sys/class/net) failed: No such file or directory
+      # These messages contaminate test output, which makes the difftest to fail.
+      # The solution is to use a preset cpu topology file and disable ucx model.
+
+      # Disable sysfs cpu topology directory discovery.
+      export PRTE_MCA_hwloc_use_topo_file="@topology@"
+      # Use the network model ob1 instead of ucx.
+      export OMPI_MCA_pml=ob1
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox

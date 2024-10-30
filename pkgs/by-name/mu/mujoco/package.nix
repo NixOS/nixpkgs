@@ -35,8 +35,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "f33af052e0e60d4aa367328e7d9dffc9dedca6d8";
-      hash = "sha256-93I6MFIZ8tvdwTmiMihOaVVCdkWOTvXWZ5vYXzsMP+Q=";
+      rev = "b396a6fbb2e173f52edb3360485dedf3389ef830";
+      hash = "sha256-UroGjERR5TW9KbyLwR/NBpytXrW1tHfu6ZvQPngROq4=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -131,7 +131,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.2.3";
+  version = "3.2.4";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     owner = "google-deepmind";
     repo = "mujoco";
     rev = "refs/tags/${version}";
-    hash = "sha256-WMh96sJK9A5QcVmIjy4STN+vMrxLxcDPHMfEnTmSXSU=";
+    hash = "sha256-AWRrPs4G+hLwOz6UT/oWNT1arQP2ppyi+LC4Dy+njG0=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];

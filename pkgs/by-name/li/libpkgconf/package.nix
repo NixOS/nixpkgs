@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://github.com/pkgconf/pkgconf.git";
+    url = "https://gitea.treehouse.systems/ariadne/pkgconf";
     rev-prefix = "pkgconf-";
   };
 
   meta = {
-    homepage = "https://github.com/pkgconf/pkgconf";
+    homepage = "https://gitea.treehouse.systems/ariadne/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
       pkgconf is a program which helps to configure compiler and linker flags
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
+    changelog = "https://gitea.treehouse.systems/ariadne/pkgconf/src/tag/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [ zaninime AndersonTorres ];

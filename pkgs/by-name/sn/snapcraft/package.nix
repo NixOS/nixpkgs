@@ -160,6 +160,7 @@ python3Packages.buildPythonApplication rec {
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+    "test_get_build_commands"
     "test_get_extensions_data_dir"
     "test_get_os_platform_alternative_formats"
     "test_get_os_platform_linux"

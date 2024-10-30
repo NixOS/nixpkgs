@@ -13,23 +13,23 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.12.20";
+  version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "thebjorn";
     repo = "pydeps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d6EeeNem+HfuipKF5ZOI48c11j0ozGrBP4XlqTx+fJ4=";
+    hash = "sha256-ZLFcaWzu8iYBnbSh1Ua4fvFyYD5q71R/iIqzRUKRn1E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ graphviz ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphviz
     stdlib-list
   ];
@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module dependency visualization";
-    mainProgram = "pydeps";
     homepage = "https://github.com/thebjorn/pydeps";
     changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pydeps";
   };
 }

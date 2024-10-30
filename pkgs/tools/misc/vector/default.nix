@@ -20,35 +20,13 @@
   cmake,
   perl,
   git,
-  # nix has a problem with the `?` in the feature list
-  # enabling kafka will produce a vector with no features at all
-  enableKafka ? false,
-  # TODO investigate adding various "vendor-*"
-  # "disk-buffer" is using leveldb TODO: investigate how useful
-  # it would be, perhaps only for massive scale?
-  features ? (
-    [
-      "api"
-      "api-client"
-      "enrichment-tables"
-      "sinks"
-      "sources"
-      "sources-dnstap"
-      "transforms"
-      "component-validation-runner"
-    ]
-    # the second feature flag is passed to the rdkafka dependency
-    # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "unix"
-  ),
   nixosTests,
   nix-update-script,
 }:
 
 let
   pname = "vector";
-  version = "0.41.1";
+  version = "0.42.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -57,7 +35,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E6AVjxwXMDonqsAMcCpaZBEPCi9bVXUygG4PUOLh+ck=";
+    hash = "sha256-0DEEgaQf4/NIbmRQyTdEuj4bPTLX8gjAhv4r48wfNZs=";
   };
 
   cargoLock = {
@@ -101,7 +79,7 @@ rustPlatform.buildRustPackage {
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
   # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
   # TODO remove when upgrading Vector
-  RUSTFLAGS = "--allow unexpected_cfgs";
+  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
@@ -118,9 +96,6 @@ rustPlatform.buildRustPackage {
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = features;
 
   # TODO investigate compilation failure for tests
   # there are about 100 tests failing (out of 1100) for version 0.22.0
@@ -158,7 +133,6 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    inherit features;
     tests = {
       inherit (nixosTests) vector;
     };

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "sops";
@@ -18,6 +24,13 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
 
   passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd sops --bash ${./bash_autocomplete}
+    installShellCompletion --cmd sops --zsh ${./zsh_autocomplete}
+  '';
 
   meta = with lib; {
     homepage = "https://getsops.io/";

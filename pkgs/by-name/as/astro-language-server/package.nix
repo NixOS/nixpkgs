@@ -2,42 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
+  pnpm,
   nodejs_22,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.14.2";
+  version = "2.15.4";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "language-tools";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-4GaLyaRUN9qS2U7eSzASB6fSQY2+fWtgfb54uuHjuh4=";
+    hash = "sha256-NBLUeg1WqxTXtu8eg1fihQSfm8koYAEWhfXAj/fIdC8=";
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      pnpmWorkspace
+      pnpmWorkspaces
       prePnpmInstall
       ;
-    hash = "sha256-q9a4nFPRhR6W/PT1l/Q1799iDmI+WTsudUP8rb8e97g=";
+    hash = "sha256-tlpk+wbLjJqt37lu67p2A2RZAR1ZfnZFiYoqIQwvWPQ=";
   };
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_8.configHook
+    pnpm.configHook
   ];
 
   buildInputs = [ nodejs_22 ];
 
   # Must specify to download "@astrojs/yaml2ts" depencendies
   # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspace = "@astrojs/language-server...";
+  pnpmWorkspaces = [ "@astrojs/language-server..." ];
   prePnpmInstall = ''
     # Warning section for "pnpm@v8"
     # https://pnpm.io/cli/install#--filter-package_selector

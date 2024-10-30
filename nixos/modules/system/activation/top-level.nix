@@ -20,6 +20,12 @@ let
       ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
+
+      ${lib.optionalString config.system.etc.overlay.enable ''
+        ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
+        ln -s ${config.system.build.etcBasedir} $out/etc-basedir
+      ''}
+
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
@@ -43,8 +49,8 @@ let
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
-  # `switch-to-configuration' that activates the configuration and
-  # makes it bootable. See `activatable-system.nix`.
+  # `bin/apply` that activates the configuration and
+  # makes it bootable. See `activatable-system.nix` and `switchable-system.nix`.
   baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;

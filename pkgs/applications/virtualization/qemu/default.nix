@@ -75,11 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "9.1.0";
+  version = "9.1.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gWtwIqi6fCrDDi4M+XPoJva8yFBTOWAyEsXt6OlNeDQ=";
+    hash = "sha256-fcD52lSR/0SVAPMxAGOja2GfI27kVwb9CEbrN9S7qIk=";
   };
 
   depsBuildBuild = [ buildPlatformStdenv.cc ]
@@ -143,6 +143,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
+    })
+
+    # musl changes https://gitlab.com/qemu-project/qemu/-/issues/2215
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/ac1bbe8ca46c550b3ad99c85744119a3ace7b4f4.diff";
+      sha256 = "sha256-wSlf8+7WHk2Z4I5cLFa37MRroQucPIuFzzyWnG9IpeY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/99174ce39e86ec6aea7bb7ce326b16e3eed9e3da.diff";
+      sha256 = "sha256-Cpt01d1ARoCTuJuC66no4doPgL+4/ZqnJTWwjU2MxnY=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

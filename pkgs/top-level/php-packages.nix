@@ -301,6 +301,8 @@ in {
 
     openswoole = callPackage ../development/php-packages/openswoole { };
 
+    parallel = callPackage ../development/php-packages/parallel { };
+
     pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
@@ -404,10 +406,13 @@ in {
             })
           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
@@ -634,10 +639,13 @@ in {
             })
             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
             # Required for libxml2 2.13 compatibility patch.
-            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
@@ -672,10 +680,13 @@ in {
             })
             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
             # Required for libxml2 2.13 compatibility patch.
-            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
@@ -722,10 +733,13 @@ in {
             })
             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
             # Required for libxml2 2.13 compatibility patch.
-            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
@@ -757,10 +771,13 @@ in {
             })
             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
             # Required for libxml2 2.13 compatibility patch.
-            ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];

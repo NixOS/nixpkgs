@@ -8,22 +8,22 @@
 , CoreFoundation
 , SystemConfiguration
 , Security
-, withLLVM ? !stdenv.hostPlatform.isDarwin
+, withLLVM ? false
 , withSinglepass ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.3.5";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hEhU3o/SLHWV9zmgCtW+7K/2ev+oGAnrZmlyNtoeSV4=";
+    hash = "sha256-zKo7d7LAfdGb7hC8RK7YH4lhk7RbivS+hNZDyQyHYM8=";
   };
 
-  cargoHash = "sha256-xyR5pnwMGE5K4o7X0Q2JEervSgR5LK1vqpOa3Mm6xkU=";
+  cargoHash = "sha256-tajvVMRfBHefU0kVro830HeJSdgJEKPmEQm7X0+4+Kc=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -69,5 +69,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://wasmer.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    # error: multiple fields are never read
+    #    --> lib/compiler-llvm/src/translator/intrinsics.rs:141:9
+    broken = withLLVM;
   };
 }

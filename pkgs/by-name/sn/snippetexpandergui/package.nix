@@ -6,7 +6,7 @@
 , installShellFiles
 , xorg
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , snippetexpanderd
 , snippetexpanderx
 }:
@@ -32,7 +32,7 @@ buildGoModule rec {
   buildInputs = [
     xorg.libX11
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     snippetexpanderd
     snippetexpanderx
   ];

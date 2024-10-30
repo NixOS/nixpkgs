@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "3.1.1";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-zK20/vhbVihrxmd52DjByDUO99pBAr8SlJtQpX5fmwY=";
+    sha256 = "sha256-+y9TlSEgnMTtRT9F6OBSle9OqGfljChcHOFJ5lgwjyk=";
   };
 
   outputs = [ "out" "dev" "lib" ];

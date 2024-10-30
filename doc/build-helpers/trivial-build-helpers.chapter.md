@@ -732,7 +732,7 @@ writeShellApplication {
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
-This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
+This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` (or alternatively `pname` and `version`) is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
 Here is an example:
 ```nix
 # adds symlinks of hello and stack to current build and prints "links added"

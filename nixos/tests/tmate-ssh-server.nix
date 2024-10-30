@@ -6,9 +6,9 @@ let
   setUpPrivateKey = name: ''
     ${name}.succeed(
         "mkdir -p /root/.ssh",
-        "chown 700 /root/.ssh",
+        "chmod 700 /root/.ssh",
         "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
-        "chown 600 /root/.ssh/id_snakeoil",
+        "chmod 600 /root/.ssh/id_snakeoil",
     )
     ${name}.wait_for_file("/root/.ssh/id_snakeoil")
   '';

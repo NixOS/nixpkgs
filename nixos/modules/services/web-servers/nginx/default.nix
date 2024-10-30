@@ -853,9 +853,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Resolves domains of proxyPass targets at runtime
-          and not only at start, you have to set
-          services.nginx.resolver, too.
+          Resolves domains of proxyPass targets at runtime and not only at startup.
+          This can be used as a workaround if nginx fails to start because of not-yet-working DNS.
+
+          :::{.warn}
+          `services.nginx.resolver` must be set for this option to work.
+          :::
         '';
       };
 
@@ -1148,14 +1151,6 @@ in
       }
 
       {
-        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
-          1.19.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -1223,6 +1218,7 @@ in
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
 
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
+      serverAliases = [ "127.0.0.1" ] ++ lib.optional config.networking.enableIPv6 "[::1]";
       listenAddresses = lib.mkDefault ([
         "0.0.0.0"
       ] ++ lib.optional enableIPv6 "[::]");
@@ -1378,7 +1374,7 @@ in
     ];
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
-      files = "/var/log/nginx/*.log";
+      files = [ "/var/log/nginx/*.log" ];
       frequency = "weekly";
       su = "${cfg.user} ${cfg.group}";
       rotate = 26;

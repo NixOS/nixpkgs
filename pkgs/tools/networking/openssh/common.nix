@@ -13,6 +13,7 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , zlib
 , openssl
@@ -29,12 +30,16 @@
 , libxcrypt
 , hostname
 , nixosTests
-, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, withSecurityKey ? !stdenv.hostPlatform.isStatic
+, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey
 , withPAM ? stdenv.hostPlatform.isLinux
 , dsaKeysSupport ? false
 , linkOpenssl ? true
 , isNixos ? stdenv.hostPlatform.isLinux
 }:
+
+# FIDO support requires SK support
+assert withFIDO -> withSecurityKey;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
@@ -45,6 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
       sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
+    })
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://anongit.mindrot.org/openssh.git/patch/?id=8b664df75966e5aed8dabea00b8838303d3488b8";
+      hash = "sha256-siVg1mnGiZ2aP3IIY4y1WAp3nkOk0XKSBDqYfw6lrQg=";
     })
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
@@ -96,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withPAM "pam")
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ lib.optional (!withSecurityKey) "--disable-security-key"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
@@ -103,7 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
 
-  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];
+  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [ "-laudit" ]
+    ++ lib.optional withKerberos "-lkeyutils"
+    ++ lib.optional withLdns "-lcrypto";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 

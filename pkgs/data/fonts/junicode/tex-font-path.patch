@@ -77,7 +77,7 @@ index c01ccaf..07a99ad 100644
  
  % DECLARE THE FONTS
  
--\setmainfont{Junicode VF}[
+-\setmainfont{JunicodeVF}[
 -    ItalicFont =         {*-Italic},
 -    BoldFont =           {*},
 -    BoldItalicFont =     {*-Italic},

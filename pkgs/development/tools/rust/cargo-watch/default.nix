@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "8.5.2";
+  version = "8.5.3";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Vf6BFr8MphaUJoHMtksbbVQb+jha7jowhktQCVFxlxQ=";
+    hash = "sha256-agwK20MkvnhqSVAWMy3HLkUJbraINn12i6VAg8mTzBk=";
   };
 
-  cargoHash = "sha256-skUG1B6TCFEXeQSRwA6vWjXmNifk5bTR4+JESw7CZMo=";
+  cargoHash = "sha256-oqGc5haN8Jyi0eQf8egrRXWxi0RGVdIFhpGKgmFB8DI=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation Cocoa ];
 

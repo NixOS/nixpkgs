@@ -119,6 +119,17 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
           "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
 
+      azure-mgmt-billing =
+        (overrideAzureMgmtPackage super.azure-mgmt-billing "6.0.0" "zip"
+          "sha256-1PXFpBiKRW/h6zK2xF9VyiBpx0vkHrdpIYQLOfL1wH8="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+              self.msrestazure
+            ];
+          });
+
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
         overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"

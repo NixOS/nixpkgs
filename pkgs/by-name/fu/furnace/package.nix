@@ -7,7 +7,7 @@
 , pkg-config
 , makeWrapper
 , fftw
-, fmt_8
+, fmt
 , freetype
 , libsndfile
 , libX11
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fftw
-    fmt_8
+    fmt
     freetype
     libsndfile
     rtmidi

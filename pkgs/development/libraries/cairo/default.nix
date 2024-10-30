@@ -13,11 +13,11 @@ in stdenv.mkDerivation (finalAttrs: let
   inherit (finalAttrs) pname version;
 in {
   pname = "cairo";
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchurl {
     url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
-    hash = "sha256-JDoHNrl4oz3uKfnMp1IXM7eKZbVBggb+970cPUzxC2Q=";
+    hash = "sha256-piubtCQl6ETMPW3d4EP/Odur7dFULrpXout5+FiJ1Fo=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

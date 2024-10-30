@@ -20,5 +20,5 @@ pythonRecompileBytecodePhase () {
 }
 
 if [ -z "${dontUsePythonRecompileBytecode-}" ]; then
-    postPhases+=" pythonRecompileBytecodePhase"
+    appendToVar postPhases pythonRecompileBytecodePhase
 fi

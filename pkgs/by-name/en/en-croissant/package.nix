@@ -14,7 +14,7 @@
 
   openssl,
   libsoup,
-  webkitgtk,
+  webkitgtk_4_0,
   gst_all_1,
   darwin,
 }:
@@ -37,7 +37,7 @@ buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-hjSioKpvrGyo5UKvBrwln0S3aIpnJZ2PUdzBfbT7IC4=";
+    hash = "sha256-hvWXSegUWJvwCU5NLb2vqnl+FIWpCLxw96s9NUIgJTI=";
   };
 
   cargoLock = {
@@ -66,7 +66,7 @@ buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [
       openssl
       libsoup
-      webkitgtk
+      webkitgtk_4_0
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-bad

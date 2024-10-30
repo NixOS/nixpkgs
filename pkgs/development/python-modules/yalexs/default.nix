@@ -9,6 +9,7 @@
   fetchFromGitHub,
   freenub,
   poetry-core,
+  propcache,
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.7.1";
+  version = "8.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+1Ff0VttUm9cwrEWNiKQfBmYjrtA3AZxWVm/iU21XCE=";
+    hash = "sha256-0fC12QsCOgFc6GJk5T7kCjVHe9W4Fhwmtv3dwJVh9mM=";
   };
 
   build-system = [ poetry-core ];
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     aiohttp
     ciso8601
     freenub
+    propcache
     pyjwt
     python-dateutil
     python-socketio

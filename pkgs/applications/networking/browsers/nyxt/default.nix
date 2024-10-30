@@ -15,7 +15,7 @@
 , gdk-pixbuf
 , cairo
 , pango
-, webkitgtk
+, webkitgtk_4_0
 , openssl
 , gstreamer
 , gst-libav
@@ -26,15 +26,16 @@
 , xdg-utils
 , xclip
 , wl-clipboard
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
-  version = "3.11.8";
+  version = "3.12.0";
 
   src = fetchzip {
     url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
-    hash = "sha256-mLf2dvnXYUwPEB3QkoB/O3m/e96t6ISUZNfh+y1ArX4=";
+    hash = "sha256-T5p3OaWp28rny81ggdE9iXffmuh6wt6XSuteTOT8FLI=";
     stripRoot = false;
   };
 
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     pango
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     openssl
     libfixposix
   ];
@@ -97,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
   # prevent corrupting core in exe
   dontStrip = true;
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";

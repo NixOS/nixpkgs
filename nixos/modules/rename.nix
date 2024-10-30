@@ -87,6 +87,7 @@ in
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
+    (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ] "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mxisd" ] "The mxisd module has been removed as both mxisd and ma1sd got removed.")
@@ -102,6 +103,7 @@ in
     (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "replay-sorcery" ] "the corresponding package has been removed from nixpkgs as it is unmaintained upstream. Consider using `gpu-screen-recorder` or `obs-studio` instead.")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
+    (mkRemovedOptionModule [ "services" "shout" ] "shout was removed because it was deprecated upstream in favor of thelounge.")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be

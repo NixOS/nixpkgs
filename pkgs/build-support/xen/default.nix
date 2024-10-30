@@ -30,7 +30,8 @@
   zstd,
 
   # Optional Components
-  seabios,
+  seabios-qemu,
+  systemSeaBIOS ? seabios-qemu,
   OVMF,
   ipxe,
   checkpolicy,
@@ -60,7 +61,6 @@
   branch ? lib.versions.majorMinor version,
   version,
   vendor ? "nixos",
-  withEFI ? true,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
@@ -262,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-systemd"
     "--disable-qemu-traditional"
     "--with-system-qemu"
-    (if withSeaBIOS then "--with-system-seabios=${seabios}/share/seabios" else "--disable-seabios")
+    (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
     (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
@@ -280,8 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       "GIT=${coreutils}/bin/false"
       "WGET=${coreutils}/bin/false"
-    ]
-    ++ optionals withEFI [
       "EFI_VENDOR=${vendor}"
       "INSTALL_EFI_STRIP=1"
       "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
@@ -386,8 +384,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    efi =
-      if withEFI then "boot/xen-${version}.efi" else throw "This Xen was compiled without an EFI binary.";
+    efi = "boot/xen-${version}.efi";
     flaskPolicy =
       if withFlask then
         "boot/xenpolicy-${version}"
@@ -434,18 +431,11 @@ stdenv.mkDerivation (finalAttrs: {
 
         Use with the `qemu_xen` package.
       ''
-      # Then, if any of the optional with* components are being built, add the "Includes:" string.
-      + optionalString (withEFI || withFlask) (
-        "\nIncludes:"
-        # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
-        # that many optional components, we just use lib.strings.optionalString, because it's simpler.
-        # Optional components that aren't being built are automatically hidden.
-        + optionalString withEFI "\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-        + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
-        + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
-        + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
-        + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains."
-      )
+      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
+      + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
+      + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
+      + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains."
       # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
       # This will hopefully give users the peace of mind that their Xen is secure, without needing
       # to search the source code for the XSA patches.

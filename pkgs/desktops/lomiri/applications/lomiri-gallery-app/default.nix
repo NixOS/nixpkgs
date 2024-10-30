@@ -6,11 +6,11 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   exiv2,
   imagemagick,
   libglvnd,
   libmediainfo,
+  lomiri-content-hub,
   lomiri-thumbnailer,
   lomiri-ui-extras,
   lomiri-ui-toolkit,
@@ -25,79 +25,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-gallery-app";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-gallery-app";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nX9dTL4W0WxrwvszGd4AUIx4yUrghMM7ZMtGZLhZE/8=";
+    hash = "sha256-uKGPic9XYUj0rLA05i6GjLM+n17MYgiFJMWnLXHKmIU=";
   };
 
   patches = [
-    # Remove when version > 3.0.2
-    (fetchpatch {
-      name = "0001-lomiri-gallery-app-Newer-Evix2-compat.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/afa019b5e9071fbafaa9afb3b4effdae6e0774c5.patch";
-      hash = "sha256-gBc++6EQ7t3VcBZTknkIpC0bJ/P15oI+G0YoQWtjnSY=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/147 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-gallery-app-Stop-using-qt5_use_modules.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/0149c8d422c3e0889d7d523789dc65776a52c4f9.patch";
-      hash = "sha256-jS81F7KNbAn5J8sDDXzhXARNYAu6dEKcbNHpHp/3MaI=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/148 merged & in release
-    (fetchpatch {
-      name = "0003-lomiri-gallery-app-Fix-GNUInstallDirs.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/805121b362a9b486094e570053884b9ffa92b152.patch";
-      hash = "sha256-fyAqKjZ0g7Sw7fWP1IW4SpZ+g0xi/pH6RJie1K3doP0=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/149 merged & in release
-    (fetchpatch {
-      name = "0004-lomiri-gallery-app-Fix-icons.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/906966536363e80fe9906dee935d991955e8f842.patch";
-      hash = "sha256-LJ+ILhokceXFUvP/G1BEBE/J1/XUAmNBxu551x0Q6nk=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/150 merged & in release
-    (fetchpatch {
-      name = "0005-lomiri-gallery-app-Add-ENABLE_WERROR.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/fe32a3453b88cc3563e53ab124f669ce307e9688.patch";
-      hash = "sha256-nFCtY3857D5e66rIME+lj6x4exEfx9D2XGEgyWhemgI=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/151 merged & in release
-    (fetchpatch {
-      name = "0006-lomiri-gallery-app-BUILD_TESTING.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/51f3d5e643db5576b051da63c58ba3492c851e44.patch";
-      hash = "sha256-5aGx2xfCDgq/khgkzGsvUOmTIYALjyfn6W7IR5dldr8=";
-    })
-    (fetchpatch {
-      name = "0007-lomiri-gallery-app-Top-level-Qt5Test.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/c308c689c2841d71554ff6397a110d1a12016b70.patch";
-      hash = "sha256-fXVOKjnj4EPeby9iEp3mZRqx9MLqdF8SUVEouCkyDRc=";
-    })
-
     # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/152 merged & in release
     (fetchpatch {
-      name = "0008-lomiri-gallery-app-bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/90a79972741ee0c5dc734dba6c42afeb3ee6a699.patch";
-      hash = "sha256-YAmH0he5/rZYKWFyPzUFAKJuHhUTxB3q8zbLL7Spz/c=";
+      name = "0001-lomiri-gallery-app-bindtextdomain.patch";
+      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/592eff118cb5056886b73e6698f8941c7a16f2e0.patch";
+      hash = "sha256-aR/Lnzvq4RuRLI75mMd4xTGMAcijm1adSAGVFZZ++No=";
+    })
+    (fetchpatch {
+      name = "0002-lomiri-gallery-app-C++ify-i18n.patch";
+      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/a7582abbe0acef4d49c77a4395bc22dbd1707ef3.patch";
+      hash = "sha256-qzqTXqIYX+enoOwwV9d9fxe7tVYLuh1WkL8Ij/Qx0H0=";
     })
   ];
 
   postPatch = ''
-    # 0003-lomiri-gallery-app-Fix-icons.patch cannot be fully applied via patches due to binary diffs
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/149 merged & in release
-    for size in 64x64 128x128 256x256; do
-      rm desktop/icons/hicolor/"$size"/apps/gallery-app.png
-      magick desktop/lomiri-gallery-app.svg -resize "$size" desktop/icons/hicolor/"$size"/apps/lomiri-gallery-app.png
-    done
-
     # Make splash path in desktop file relative
     substituteInPlace desktop/lomiri-gallery-app.desktop.in.in \
       --replace-fail 'X-Lomiri-Splash-Image=@SPLASH@' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-gallery-app.svg'
@@ -130,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
 
     # QML
-    content-hub
+    lomiri-content-hub
     lomiri-thumbnailer
     lomiri-ui-extras
     lomiri-ui-toolkit
@@ -164,9 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Link splash to splash dir
     mkdir -p $out/share/lomiri-app-launch/splash
     ln -s $out/share/{lomiri-gallery-app/lomiri-gallery-app-splash.svg,lomiri-app-launch/splash/lomiri-gallery-app.svg}
-
-    # Old name
-    mv $out/share/content-hub/peers/{,lomiri-}gallery-app
   '';
 
   passthru = {
