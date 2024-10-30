@@ -19,7 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
       --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
       --add-flags "org.flywaydb.commandline.Main" \
-      --add-flags "-jarDirs='$out/share/flyway/jars'"
   '';
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
