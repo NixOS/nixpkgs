@@ -54,7 +54,10 @@
   typing-extensions,
 }:
 let
-  testBackends = [ "duckdb" "sqlite" ];
+  testBackends = [
+    "duckdb"
+    "sqlite"
+  ];
 
   ibisTestingData = fetchFromGitHub {
     name = "ibis-testing-data";
@@ -94,7 +97,10 @@ buildPythonPackage rec {
       name = "ibis-framework-arrow-18.patch";
       url = "https://github.com/ibis-project/ibis/commit/5dc549b22c2eca29a11a31fb29deef7c1466a204.patch";
       hash = "sha256-4i/g2uixdlkbE6x659wzZJ91FZpzwOVkF6ZeXkiCP3I=";
-      excludes = [ "poetry.lock" "requirements-dev.txt" ];
+      excludes = [
+        "poetry.lock"
+        "requirements-dev.txt"
+      ];
     })
   ];
 
@@ -132,7 +138,10 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
-  pytestFlagsArray = [ "-m" "'${lib.concatStringsSep " or " testBackends} or core'" ];
+  pytestFlagsArray = [
+    "-m"
+    "'${lib.concatStringsSep " or " testBackends} or core'"
+  ];
 
   disabledTests = [
     # tries to download duckdb extensions
