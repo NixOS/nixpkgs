@@ -187,11 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DESKTOP_APP_USE_PACKAGED_FONTS" false)
   ];
 
-  preBuild = ''
-    # for cppgir to locate gir files
-    export GI_GIR_PATH="$XDG_DATA_DIRS"
-  '';
-
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r ${finalAttrs.meta.mainProgram}.app $out/Applications
