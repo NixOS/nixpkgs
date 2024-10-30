@@ -44,14 +44,6 @@ stdenv.mkDerivation rec {
     wand
   ];
 
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-
-    wrapProgram $out/bin/yuki-iptv \
-      --prefix PYTHONPATH : "$program_PYTHONPATH" \
-      --set GI_TYPELIB_PATH "${glib.out}/lib/girepository-1.0:${gobject-introspection.out}/lib/girepository-1.0" \
-  '';
-
   postPatch = ''
     substituteInPlace usr/lib/yuki-iptv/yuki-iptv.py \
       --replace __DEB_VERSION__ ${version}
