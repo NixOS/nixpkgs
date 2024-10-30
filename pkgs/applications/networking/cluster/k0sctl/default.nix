@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.19.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = "k0sctl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6mvSVbSTPFiAIDxNQUmgFmS+3v3RUh10Y552u9bHOn0=";
+    hash = "sha256-TdnZZ27j++o9I4Zup4PmM2VAHwn8BPBG/CwxTUy0BWU=";
   };
 
   vendorHash = "sha256-Hl/eSFbwFiuSaaPh5blWFfz6m4VNrS5mYL8ehQlb90I=";
