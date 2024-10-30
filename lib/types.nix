@@ -1029,8 +1029,26 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t: null;
-        functor = (defaultFunctor name) // { wrapped = finalType; };
+        typeMerge = f':
+          let coercedType' = coercedType.typeMerge (f'.coercedType).functor;
+              finalType' = finalType.typeMerge (f'.wrapped).functor;
+              coerceFunc' =
+                if coerceFunc == null
+                then f'.coerceFunc
+                else if f'.coerceFunc == null
+                then coerceFunc
+                else # both are non-null, but only one conversion function can be used
+                  null;
+          in
+             if name == f'.name
+                && coercedType' != null
+                && finalType' != null
+             then functor.type coercedType' coerceFunc' finalType'
+             else null;
+        functor = (defaultFunctor name) // {
+          wrapped = finalType;
+          inherit coercedType coerceFunc;
+        };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;
       };
