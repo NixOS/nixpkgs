@@ -5,29 +5,31 @@
   fetchpatch2,
   pkg-config,
   cmake,
-  crc32c,
+  ninja,
   python3,
   libjpeg,
   openssl,
   libopus,
   ffmpeg,
   openh264,
+  crc32c,
   libvpx,
-  libXi,
-  libXfixes,
+  libX11,
   libXtst,
   libXcomposite,
   libXdamage,
   libXext,
   libXrender,
   libXrandr,
+  libXi,
   glib,
   abseil-cpp,
   pipewire,
   mesa,
+  libdrm,
   libGL,
-  unstableGitUpdater,
   darwin,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -54,36 +56,50 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
+      --replace-fail '"libEGL.so.1"' '"${lib.getLib libGL}/lib/libEGL.so.1"' \
+      --replace-fail '"libGL.so.1"' '"${lib.getLib libGL}/lib/libGL.so.1"' \
+      --replace-fail '"libgbm.so.1"' '"${lib.getLib mesa}/lib/libgbm.so.1"' \
+      --replace-fail '"libdrm.so.2"' '"${lib.getLib libdrm}/lib/libdrm.so.2"'
+  '';
+
   outputs = [
     "out"
     "dev"
   ];
 
   nativeBuildInputs = [
-    cmake
     pkg-config
+    cmake
+    ninja
     python3
   ];
 
-  buildInputs =
+  propagatedBuildInputs =
     [
-      openssl
       libjpeg
+      openssl
       libopus
       ffmpeg
+      openh264
+      crc32c
+      libvpx
+      abseil-cpp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib
-      libXi
+      libX11
+      libXtst
       libXcomposite
       libXdamage
       libXext
-      libXfixes
       libXrender
       libXrandr
-      libXtst
+      libXi
+      glib
       pipewire
       mesa
+      libdrm
       libGL
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
@@ -99,19 +115,13 @@ stdenv.mkDerivation {
         VideoToolbox
         CoreGraphics
         CoreVideo
+        OpenGL
         Metal
         MetalKit
         CoreFoundation
         ApplicationServices
       ]
     );
-
-  propagatedBuildInputs = [
-    abseil-cpp
-    crc32c
-    openh264
-    libvpx
-  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
