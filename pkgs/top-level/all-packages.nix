@@ -9956,8 +9956,6 @@ with pkgs;
 
   mb2md = callPackage ../tools/text/mb2md { };
 
-  mbuffer = callPackage ../tools/misc/mbuffer { };
-
   mecab =
     let
       mecab-nodic = callPackage ../tools/text/mecab/nodic.nix { };
