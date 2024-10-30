@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
+{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script, procps }:
 
 python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     xpybutil
     marshmallow
     pyyaml
+    procps
   ];
 
   # Tests require access to a X session
