@@ -41,7 +41,7 @@ let
     (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
   ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
@@ -107,6 +107,12 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
+
+    tests = lib.optionalAttrs cudaSupport {
+      hasCudaObjects = cudaPackages.hasCudaObjects {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = {
@@ -117,4 +123,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})
