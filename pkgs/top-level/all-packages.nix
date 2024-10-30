@@ -13082,6 +13082,11 @@ with pkgs;
   };
 
   docbook_5_0 = docbook.override { releaseVersion = "5.0"; };
+  docbook_4_5 = docbook.override { releaseVersion = "4.5"; };
+  docbook_4_4 = docbook.override { releaseVersion = "4.4"; };
+  docbook_4_3 = docbook.override { releaseVersion = "4.3"; };
+  docbook_4_2 = docbook.override { releaseVersion = "4.2"; };
+  docbook_4_1_2 = docbook.override { releaseVersion = "4.1.2"; };
 
   docbook5 = docbook_5_0;
 
@@ -13089,15 +13094,15 @@ with pkgs;
 
   docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
 
-  docbook_xml_dtd_412 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix { };
+  docbook_xml_dtd_412 = docbook_4_1_2;
 
-  docbook_xml_dtd_42 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix { };
+  docbook_xml_dtd_42 = docbook_4_2;
 
-  docbook_xml_dtd_43 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.3.nix { };
+  docbook_xml_dtd_43 = docbook_4_3;
 
-  docbook_xml_dtd_44 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.4.nix { };
+  docbook_xml_dtd_44 = docbook_4_4;
 
-  docbook_xml_dtd_45 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix { };
+  docbook_xml_dtd_45 = docbook_4_5;
 
   inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
     docbook-xsl-nons

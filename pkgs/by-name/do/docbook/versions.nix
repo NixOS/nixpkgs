@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  fetchurl,
 }:
 let
   makeDocBookVersion =
@@ -43,4 +44,40 @@ in
           runHook postFixup
         '';
       });
+  "4.5" = makeDocBookVersion "xml-dtd" {
+    version = "4.5";
+    hash = "sha256-Tk4DeiuDyYxslIGDkNS90/bhD27GLdeRiFlOJhkNx7Q=";
+  };
+  "4.4" = makeDocBookVersion "xml-dtd" {
+    version = "4.4";
+    hash = "sha256-AvFZ64jEJU2V6DHFHBRLGGOyFtkJtf9FdDoc5vUnMJA=";
+  };
+  "4.3" = makeDocBookVersion "xml-dtd" {
+    version = "4.3";
+    hash = "sha256-IwaKlOpv1ISwBMWnPsNqZqpH6o8Na2LMFpWTH1wUNGQ=";
+  };
+  "4.2" = makeDocBookVersion "xml-dtd" {
+    version = "4.2";
+    hash = "sha256-rMRgHk+XoZYHa35ks2jZJIsHx6vyazSgLMpA7uvmD6I=";
+  };
+  "4.1.2" =
+    (makeDocBookVersion "xml-dtd" {
+      version = "4.1.2";
+      url = "https://docbook.org/xml/4.1.2/docbkx412.zip";
+      hash = "sha256-MPBkQGTg6nF1FDglGUCxQx9GrK2oFKBihw9IbHcud3I=";
+    }).overrideAttrs
+      {
+        postPatch =
+          let
+            docbook42catalog = fetchurl {
+              url = "https://docbook.org/xml/4.2/catalog.xml";
+              sha256 = "sha256-J0g0JhEzZpuYlm0qU+lKmLc1oUbD5FKQHuUAKrC5kKI=";
+            };
+          in
+          ''
+            cp ${docbook42catalog} catalog.xml
+            substituteInPlace catalog.xml \
+                --replace-fail V4.2 V4.1.2
+          '';
+      };
 }
