@@ -2,7 +2,10 @@
   appimageTools,
   fetchurl,
   lib,
-}: let
+  makeWrapper,
+}:
+
+let
   pname = "upscayl";
   version = "2.11.5";
 
@@ -15,27 +18,37 @@
     inherit pname version src;
   };
 in
-  appimageTools.wrapType2 {
-    inherit pname version src;
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-    extraPkgs = pkgs: [ pkgs.vulkan-headers pkgs.vulkan-loader ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-    extraInstallCommands = ''
-      mkdir -p $out/share/{applications,pixmaps}
+  extraPkgs = pkgs: [
+    pkgs.vulkan-headers
+    pkgs.vulkan-loader
+  ];
 
-      cp ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-      cp ${appimageContents}/${pname}.png $out/share/pixmaps/${pname}.png
+  extraInstallCommands = ''
+    mkdir -p $out/share/{applications,pixmaps}
 
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
-    '';
+    cp ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
+    cp ${appimageContents}/${pname}.png $out/share/pixmaps/${pname}.png
 
-    meta = with lib; {
-      description = "Free and Open Source AI Image Upscaler";
-      homepage = "https://upscayl.github.io/";
-      maintainers = with maintainers; [icy-thought];
-      license = licenses.agpl3Plus;
-      platforms = platforms.linux;
-      mainProgram = "upscayl";
-    };
-  }
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+  '';
+
+  meta = with lib; {
+    description = "Free and Open Source AI Image Upscaler";
+    homepage = "https://upscayl.github.io/";
+    maintainers = with maintainers; [ icy-thought ];
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    mainProgram = "upscayl";
+  };
+}
