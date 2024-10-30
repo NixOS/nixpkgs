@@ -48,7 +48,7 @@ in
     ] (
       opt: options.services.nextcloud.config.${opt} // {
         default = config.services.nextcloud.config.${opt};
-        defaultText = "config.services.nextcloud.config.${opt}";
+        defaultText = lib.literalExpression "config.services.nextcloud.config.${opt}";
       }
     )
   );
