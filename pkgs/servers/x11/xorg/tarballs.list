@@ -165,7 +165,7 @@ mirror://xorg/individual/font/font-sun-misc-1.0.4.tar.xz
 mirror://xorg/individual/font/font-util-1.4.1.tar.xz
 mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.4.tar.xz
 mirror://xorg/individual/font/font-xfree86-type1-1.0.5.tar.xz
-mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2
+https://gitlab.freedesktop.org/xorg/lib/libAppleWM/-/archive/be972ebc3a97292e7d2b2350eff55ae12df99a42/libAppleWM-be972ebc3a97292e7d2b2350eff55ae12df99a42.tar.bz2
 mirror://xorg/individual/lib/libdmx-1.1.5.tar.xz
 mirror://xorg/individual/lib/libfontenc-1.1.8.tar.xz
 mirror://xorg/individual/lib/libFS-1.0.10.tar.xz
