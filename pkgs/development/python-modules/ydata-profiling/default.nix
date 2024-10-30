@@ -1,54 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, dacite
-, htmlmin
-, imagehash
-, jinja2
-, matplotlib
-, multimethod
-, numba
-, numpy
-, pandas
-, phik
-, pyarrow
-, pydantic
-, pyyaml
-, requests
-, scipy
-, seaborn
-, statsmodels
-, tqdm
-, typeguard
-, visions
-, wordcloud
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  dacite,
+  htmlmin,
+  imagehash,
+  jinja2,
+  matplotlib,
+  multimethod,
+  numba,
+  numpy,
+  pandas,
+  phik,
+  pyarrow,
+  pydantic,
+  pyyaml,
+  requests,
+  scipy,
+  setuptools,
+  seaborn,
+  statsmodels,
+  tqdm,
+  typeguard,
+  visions,
+  wordcloud,
 }:
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.11.0";
+  version = "4.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";
-    repo = pname;
+    repo = "ydata-profiling";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3bgFPPGgLCcJfYr9vmwnHFwz3/zybRI8Aiu5VoOPsNA=";
+    hash = "sha256-G1qW6HcJi176nfxOBGBK2tLyY/Nnz9STYpZWluWvhP0=";
   };
 
   preBuild = ''
     echo ${version} > VERSION
   '';
 
+  build-system = [ setuptools ];
+
   pythonRelaxDeps = [
+    "imagehash"
     "scipy"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
     htmlmin
     imagehash
@@ -72,9 +77,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pyarrow
+    pytestCheckHook
   ];
+
   disabledTestPaths = [
     # needs Spark:
     "tests/backends/spark_backend"
@@ -84,6 +90,7 @@ buildPythonPackage rec {
     "tests/unit/test_dataset_schema.py"
     "tests/unit/test_modular.py"
   ];
+
   disabledTests = [
     # try to download data:
     "test_decorator"
@@ -92,9 +99,7 @@ buildPythonPackage rec {
     "test_urls"
   ];
 
-  pythonImportsCheck = [
-    "ydata_profiling"
-  ];
+  pythonImportsCheck = [ "ydata_profiling" ];
 
   meta = with lib; {
     description = "Create HTML profiling reports from Pandas DataFrames";
