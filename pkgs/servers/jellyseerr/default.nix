@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Fork of overseerr for jellyfin support";
     homepage = "https://github.com/Fallenbagel/jellyseerr";
     longDescription = ''
@@ -81,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: rec {
       requests for your media library. It is a fork of Overseerr built to
       bring support for Jellyfin & Emby media servers!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ camillemndn ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ camillemndn ];
+    platforms = lib.platforms.linux;
     mainProgram = "jellyseerr";
   };
 })
