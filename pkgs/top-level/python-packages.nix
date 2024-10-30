@@ -9205,6 +9205,8 @@ self: super: with self; {
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
+  py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
+
   py-machineid = callPackage ../development/python-modules/py-machineid { };
 
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
