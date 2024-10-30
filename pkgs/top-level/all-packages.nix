@@ -1007,6 +1007,10 @@ with pkgs;
 
   flare-signal = callPackage ../applications/networking/instant-messengers/flare-signal { };
 
+  forgejo = callPackage ../by-name/fo/forgejo/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
