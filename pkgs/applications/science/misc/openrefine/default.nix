@@ -47,13 +47,15 @@ in maven.buildMavenPackage {
 
   pname = "openrefine";
 
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
   postPatch = ''
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-AuZp+uq5bmb4gnzKvqXeTmBrsCT6qmJOrwtJq9iCkRQ=";
+  mvnHash = "sha256-gJq9MyoLuSAEh2MKrToVsHfiKqYmxwBRULDniAuKc+w=";
 
   nativeBuildInputs = [ makeWrapper ];
 

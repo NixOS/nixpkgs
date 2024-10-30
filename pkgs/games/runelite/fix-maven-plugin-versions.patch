@@ -1,0 +1,55 @@
+diff --git a/pom.xml b/pom.xml
+index 3859ea8..2001e73 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -383,6 +383,50 @@
+ 					</locks>
+ 				</configuration>
+ 			</plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-enforcer-plugin</artifactId>
++				<version>3.5.0</version>
++				<executions>
++					<execution>
++						<id>require-all-plugin-versions-to-be-set</id>
++						<phase>validate</phase>
++						<goals>
++							<goal>enforce</goal>
++						</goals>
++						<configuration>
++							<rules>
++								<requirePluginVersions />
++							</rules>
++						</configuration>
++					</execution>
++				</executions>
++            </plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-surefire-plugin</artifactId>
++				<version>3.3.1</version>
++			</plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-clean-plugin</artifactId>
++				<version>3.4.0</version>
++			</plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-install-plugin</artifactId>
++				<version>3.1.3</version>
++			</plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-site-plugin</artifactId>
++				<version>3.20.0</version>
++			</plugin>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-deploy-plugin</artifactId>
++				<version>3.1.3</version>
++			</plugin>
+ 		</plugins>
+ 		<extensions>
+ 			<extension>
