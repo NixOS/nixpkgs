@@ -27,8 +27,6 @@ python3Packages.buildPythonApplication rec {
           --add-flags "$out/share/prometheus-tor-exporter.py"
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) tor; };
-
   meta = with lib; {
     description = "Prometheus exporter that exposes metrics from a Tor daemon";
     mainProgram = "prometheus-tor-exporter";
