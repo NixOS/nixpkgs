@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "Tomiyou";
     repo = "ivyterm";
     rev = "13ee76dfc88bc92807e328991c7a8586a5b13ac7";
-    hash = "sha256-vxDJwA+ZM3ROX9d1+o3cXj4LbaO9Wy5jFAVuAPOzCCI=";
+    hash = "sha256-RVHGDgaNYhR/eGTu4bhJvEfd14qFP+u8ApItVc00Bm8=";
   };
 
   cargoHash = "sha256-tdaI0diwRjqERmAiuKFhMw4AeqxgMq8YMsZWBjsmd0U=";
