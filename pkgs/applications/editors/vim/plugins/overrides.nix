@@ -1665,6 +1665,10 @@ in
     }
   );
 
+  nvim-scissors = super.nvim-scissors.overrideAttrs {
+    nvimRequireCheck = "scissors";
+  };
+
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/tealmaker/init.lua \
