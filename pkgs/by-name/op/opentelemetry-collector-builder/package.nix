@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    sha256 = "sha256-Ucp00OjyPtHA6so/NOzTLtPSuhXwz6A2708w2WIZb/E=";
+    hash = "sha256-0eL9J+PrURiNkL6CzUIlcvjyZor8iS9vKX8j0srLlZ8=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
