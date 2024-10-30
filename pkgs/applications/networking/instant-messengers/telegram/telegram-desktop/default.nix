@@ -30,7 +30,7 @@
 , range-v3
 , tl-expected
 , hunspell
-, webkitgtk_6_0
+, webkitgtk_4_1
 , jemalloc
 , rnnoise
 , protobuf
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+      --replace-fail '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     pipewire
     hunspell
-    webkitgtk_6_0
+    webkitgtk_4_1
     jemalloc
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
