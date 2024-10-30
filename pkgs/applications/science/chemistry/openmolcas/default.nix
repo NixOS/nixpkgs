@@ -1,34 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cmake
-, gfortran
-, perl
-, blas-ilp64
-, hdf5-cpp
-, python3
-, texliveMinimal
-, armadillo
-, libxc
-, makeWrapper
-, gsl
-, boost180
-, autoPatchelfHook
-, enableQcmaquis ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  perl,
+  blas-ilp64,
+  hdf5-cpp,
+  python3,
+  texliveMinimal,
+  armadillo,
+  libxc,
+  makeWrapper,
+  gsl,
+  boost180,
+  autoPatchelfHook,
+  enableQcmaquis ? false,
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
-, enableMpi ? false
-, mpi
-, globalarrays
+  enableMpi ? false,
+  mpi,
+  globalarrays,
 }:
 
 assert blas-ilp64.isILP64;
-assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
+assert lib.elem blas-ilp64.passthru.implementation [
+  "openblas"
+  "mkl"
+];
 assert enableQcmaquis -> lib.elem blas-ilp64.passthru.implementation "mkl";
 
 let
-  python = python3.withPackages (ps: with ps; [ six pyparsing numpy h5py ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      six
+      pyparsing
+      numpy
+      h5py
+    ]
+  );
   qcmaquisSrc = fetchFromGitHub {
     owner = "qcscine";
     repo = "qcmaquis";
@@ -84,42 +95,48 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    blas-ilp64.passthru.provider
-    hdf5-cpp
-    python
-    armadillo
-    libxc
-    gsl.dev
-    boost180
-  ] ++ lib.optionals enableMpi [
-    mpi
-    globalarrays
-  ];
+  buildInputs =
+    [
+      blas-ilp64.passthru.provider
+      hdf5-cpp
+      python
+      armadillo
+      libxc
+      gsl.dev
+      boost180
+    ]
+    ++ lib.optionals enableMpi [
+      mpi
+      globalarrays
+    ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
-  cmakeFlags = [
-    "-DOPENMP=ON"
-    "-DTOOLS=ON"
-    "-DHDF5=ON"
-    "-DFDE=ON"
-    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
-    (lib.strings.cmakeBool "DMRG" enableQcmaquis)
-    (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
-    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
-    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
-    "-DLINALG=OpenBLAS"
-  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
-    "-DMKLROOT=${blas-ilp64.passthru.provider}"
-    "-DLINALG=MKL"
-  ] ++ lib.optionals enableMpi [
-    "-DGA=ON"
-    "-DMPI=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DOPENMP=ON"
+      "-DTOOLS=ON"
+      "-DHDF5=ON"
+      "-DFDE=ON"
+      "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
+      (lib.strings.cmakeBool "DMRG" enableQcmaquis)
+      (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+      (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+      (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    ]
+    ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
+      "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
+      "-DLINALG=OpenBLAS"
+    ]
+    ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
+      "-DMKLROOT=${blas-ilp64.passthru.provider}"
+      "-DLINALG=MKL"
+    ]
+    ++ lib.optionals enableMpi [
+      "-DGA=ON"
+      "-DMPI=ON"
+    ];
 
   preConfigure = lib.optionalString enableMpi ''
     export GAROOT=${globalarrays};
@@ -153,9 +170,14 @@ stdenv.mkDerivation rec {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ lib.maintainers.markuskowa ];
-    license = with lib.licenses; [ lgpl21Only bsd3 ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    license = with lib.licenses; [
+      lgpl21Only
+      bsd3
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "pymolcas";
   };
 }
-
