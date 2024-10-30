@@ -254,11 +254,11 @@ buildPythonPackage rec {
     "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
-  meta = with lib; {
-    description = "Module to allow your tests to easily mock out AWS Services";
+  meta = {
+    description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
