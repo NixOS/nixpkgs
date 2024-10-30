@@ -12,8 +12,7 @@ import ./make-test-python.nix (
     };
 
     nodes.machine = {
-      # aarch64-linux on ofborg is 129M
-      virtualisation.memorySize = 1024;
+      virtualisation.memorySize = 512;
 
       services.swapspace = {
         enable = true;
@@ -31,7 +30,7 @@ import ./make-test-python.nix (
           device = "/root/swapfile";
         }
       ];
-      boot.kernel.sysctl."vm.swappiness" = 30;
+      boot.kernel.sysctl."vm.swappiness" = 60;
     };
 
     testScript = ''
@@ -39,22 +38,27 @@ import ./make-test-python.nix (
       machine.wait_for_unit("swapspace.service")
       machine.wait_for_unit("root-swapfile.swap")
 
-      # sent usr1 and usr2 signals, kind of works outside but not in test
-      print(machine.succeed("journalctl -b -u swapspace.service"))
-      print(machine.succeed("swapon --show"))
-
       swamp = False
       with subtest("swapspace works"):
         machine.execute("mkdir /root/memfs")
-        machine.execute("mount -o size=1G -t tmpfs none /root/memfs")
-        for i in range(35):
+        machine.execute("mount -o size=2G -t tmpfs none /root/memfs")
+        i = 0
+        while i < 14:
+          print(machine.succeed("free -h"))
+          out = machine.succeed("sh -c 'swapon --show --noheadings --raw --bytes | grep /root/swapfile'")
+          row = out.split(' ')
+          freebytes=int(row[2]) - int(row[3]) - 1*1024*1024
+          machine.succeed(f"dd if=/dev/random of=/root/memfs/{i} bs={freebytes} count=1")
+          machine.sleep(1)
           out = machine.succeed("swapon --show")
-          swamp = "/swamp" in out
           print(out)
-          if swamp:
+          swamp = "/swamp" in out
+          if not swamp:
+            i += 1
+          else:
+            print("*"*10, "SWAPED", "*"*10)
             machine.succeed("rm -f /root/memfs/*")
             break
-          machine.execute(f"dd if=/dev/zero of=/root/memfs/{i} bs=4238K count=1")
 
       print(machine.succeed("swapspace -e -s /swamp"))
       assert "/swamp" not in machine.execute("swapon --show")
