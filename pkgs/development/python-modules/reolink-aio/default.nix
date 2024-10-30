@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
