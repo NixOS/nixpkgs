@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rshijack";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UyrHMw+3JE4zR+N7rdcTkLP3m4h6txkYa8uG9r7S9ZE=";
+    sha256 = "sha256-vTbjb0tm6jCP9+QWG5R83v31W6RUgSEv96iR37QdnFo=";
   };
 
-  cargoHash = "sha256-bGGbZ3JXeo6eytiDHrgHOQN3VgfaqtWssz5hY0RZoZ0=";
+  cargoHash = "sha256-3rDPk+lPRrDrE2iqHAOi7zhyc+xYPXkM9P4Bu0JUL40=";
 
   meta = with lib; {
     description = "TCP connection hijacker";
