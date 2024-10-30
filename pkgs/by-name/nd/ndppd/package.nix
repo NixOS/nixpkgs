@@ -1,24 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, gzip, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "ndppd";
-  version = "0.2.5";
+  version = "0.2.5.43";
 
-  src = fetchFromGitHub {
-    owner = "DanielAdolfsson";
-    repo = "ndppd";
-    rev = version;
-    sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
+  src = fetchurl {
+    url = "https://api.opensuse.org/public/source/network/ndppd/ndppd-${version}.tar.xz";
+    hash = "sha256-KhU5WefVaWfHM62zY3m7VryLeN9g2u8vCqyqkVM5jRs";
   };
-
-  nativeBuildInputs = [ gzip ];
 
   makeFlags = [
     "PREFIX=$(out)"
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace /bin/gzip gzip
+    substituteInPlace Makefile --replace-fail /bin/gzip gzip
+    substituteInPlace src/ndppd.h --replace-fail "0.2.4" "${version}"
   '';
 
   postInstall = ''
