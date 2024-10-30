@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "duckstation-bin";
-  version = "0.1-7294";
+  version = "0.1-7371";
 
   src = fetchurl {
     url = "https://github.com/stenzek/duckstation/releases/download/v${finalAttrs.version}/duckstation-mac-release.zip";
-    hash = "sha256-33aipZjYJOquQBbe8Ve9KRfLGW29v9xoztUsaY8LAjw=";
+    hash = "sha256-ukORbTG0lZIsUInkEnyPB9+PwFxxK5hbgj9D6tjOEAY=";
   };
 
   nativeBuildInputs = [ unzip ];
