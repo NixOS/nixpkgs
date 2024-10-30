@@ -5,9 +5,10 @@
 , wayland-scanner
 , pkg-config
 , libdrm
+, runCommand
 }:
 
-qtModule {
+qtModule (finalAttrs: {
   pname = "qtwayland";
   # wayland-scanner needs to be propagated as both build
   # (for the wayland-scanner binary) and host (for the
@@ -22,4 +23,11 @@ qtModule {
   postPatch = ''
     cp ${wayland-scanner}/share/wayland/wayland.xml src/3rdparty/protocol/wayland/wayland.xml
   '';
-}
+
+  passthru = {
+    plugins = runCommand "${finalAttrs.finalPackage.name}-only-plugins" { } ''
+      mkdir -p "$out/lib/qt-6/plugins"
+      ln -s "${finalAttrs.finalPackage}/lib/qt-6/plugins" "$out/lib/qt-6/plugins"
+    '';
+  };
+})
