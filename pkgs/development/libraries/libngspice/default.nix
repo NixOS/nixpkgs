@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   ] ++ [
     "--enable-xspice"
     "--enable-cider"
+    "--enable-osdi"
   ];
 
   enableParallelBuilding = true;
