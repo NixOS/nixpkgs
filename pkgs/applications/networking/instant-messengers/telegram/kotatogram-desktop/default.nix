@@ -149,8 +149,6 @@ stdenv.mkDerivation rec {
     libicns
   ]);
 
-  enableParallelBuilding = true;
-
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
