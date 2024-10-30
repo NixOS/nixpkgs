@@ -24,6 +24,8 @@
   SDL2_mixer,
   SDL2_ttf,
   numpy,
+
+  pygame-gui,
 }:
 
 buildPythonPackage rec {
@@ -150,6 +152,10 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.tests = {
+    inherit pygame-gui;
+  };
 
   meta = {
     description = "Pygame Community Edition (CE) - library for multimedia application built on SDL";
