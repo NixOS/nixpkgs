@@ -27,6 +27,7 @@ let
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
+      knownVulnerabilities = lib.optionals (lib.versionOlder version "116") [ "Thunderbird 115 support ended in Octoboer 2024." ];
     };
   }).override {
     geolocationSupport = false;
