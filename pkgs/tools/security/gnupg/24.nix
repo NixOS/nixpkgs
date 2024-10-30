@@ -34,11 +34,11 @@ assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.5";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-9o99ddBssWNcM2002ESvl0NsP2TqFLy3yGl4L5b0Qnc=";
+    hash = "sha256-eyRwbk2n4OOwbKBoIxAnQB8jgQLEHJCWMTSdzDuF60Y=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
+
   configureFlags =
     [
       "--sysconfdir=/etc"
@@ -116,11 +118,6 @@ stdenv.mkDerivation rec {
         ln -s $out/bin/gpg $out/bin/gpg2
 
         # Make libexec tools available in PATH
-        for f in $out/libexec/; do
-          if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
-          ln -s $f $out/bin/$(basename $f)
-        done
-
         for f in $out/libexec/; do
           if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
           ln -s $f $out/bin/$(basename $f)
