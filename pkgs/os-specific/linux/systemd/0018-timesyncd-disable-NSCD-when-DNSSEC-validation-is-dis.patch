@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yuri Nesterov <yuriy.nesterov@unikie.com>
+Date: Wed, 21 Jun 2023 17:17:38 +0300
+Subject: [PATCH] timesyncd: disable NSCD when DNSSEC validation is disabled
+
+Systemd-timesyncd sets SYSTEMD_NSS_RESOLVE_VALIDATE=0 in the unit file
+to disable DNSSEC validation but it doesn't work when NSCD is used in
+the system. This patch disabes NSCD in systemd-timesyncd when
+SYSTEMD_NSS_RESOLVE_VALIDATE is set to 0 so that it uses NSS libraries
+directly.
+---
+ src/timesync/timesyncd.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/timesync/timesyncd.c b/src/timesync/timesyncd.c
+index 5c308a04bc..81aa3d3334 100644
+--- a/src/timesync/timesyncd.c
++++ b/src/timesync/timesyncd.c
+@@ -21,6 +21,11 @@
+ #include "timesyncd-conf.h"
+ #include "timesyncd-manager.h"
+ #include "user-util.h"
++#include "env-util.h"
++
++struct traced_file;
++extern void __nss_disable_nscd(void (*)(size_t, struct traced_file *));
++static void register_traced_file(size_t dbidx, struct traced_file *finfo) {}
+ 
+ static int advance_tstamp(int fd, const struct stat *st) {
+         assert_se(fd >= 0);
+@@ -198,6 +203,12 @@ static int run(int argc, char *argv[]) {
+         if (r < 0)
+                 return log_error_errno(r, "Failed to parse fallback server strings: %m");
+ 
++        r = secure_getenv_bool("SYSTEMD_NSS_RESOLVE_VALIDATE");
++        if (r == 0) {
++                log_info("Disabling NSCD because DNSSEC validation is turned off");
++                __nss_disable_nscd(register_traced_file);
++        }
++
+         log_debug("systemd-timesyncd running as pid " PID_FMT, getpid_cached());
+ 
+         notify_message = notify_start("READY=1\n"

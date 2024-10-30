@@ -1,0 +1,184 @@
+diff --git a/PolkitQt-1Config.cmake.in b/PolkitQt-1Config.cmake.in
+index e09678c..57d465a 100644
+--- a/PolkitQt-1Config.cmake.in
++++ b/PolkitQt-1Config.cmake.in
+@@ -20,9 +20,9 @@ if(NOT POLKITQT-1_INSTALL_DIR)
+    set(POLKITQT-1_INSTALL_DIR "@CMAKE_INSTALL_PREFIX@")
+ endif(NOT POLKITQT-1_INSTALL_DIR)
+ 
+-set_and_check(POLKITQT-1_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@")
++set_and_check(POLKITQT-1_INCLUDE_DIR "@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@")
+ set_and_check(POLKITQT-1_INCLUDE_DIRS "${POLKITQT-1_INCLUDE_DIR}")
+-set_and_check(POLKITQT-1_LIB_DIR "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
++set_and_check(POLKITQT-1_LIB_DIR "@CMAKE_INSTALL_FULL_LIBDIR@")
+ set(POLKITQT-1_POLICY_FILES_INSTALL_DIR "${POLKITQT-1_INSTALL_DIR}/share/polkit-1/actions")
+ ##################################
+ 
+diff --git a/polkit-qt-1.pc.cmake b/polkit-qt-1.pc.cmake
+index ba8e46e..2d7ea64 100644
+--- a/polkit-qt-1.pc.cmake
++++ b/polkit-qt-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API
+diff --git a/polkit-qt-agent-1.pc.cmake b/polkit-qt-agent-1.pc.cmake
+index 23b2cae..86670a7 100644
+--- a/polkit-qt-agent-1.pc.cmake
++++ b/polkit-qt-agent-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_AGENT_PCNAME@
+ Description: Convenience library for using polkit Agent with a Qt-styled API
+diff --git a/polkit-qt-core-1.pc.cmake b/polkit-qt-core-1.pc.cmake
+index fa501f0..61faa63 100644
+--- a/polkit-qt-core-1.pc.cmake
++++ b/polkit-qt-core-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_CORE_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, non-GUI classes
+diff --git a/polkit-qt-gui-1.pc.cmake b/polkit-qt-gui-1.pc.cmake
+index 7261b0c..8c633bb 100644
+--- a/polkit-qt-gui-1.pc.cmake
++++ b/polkit-qt-gui-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_GUI_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, GUI classes
+diff --git a/polkit-qt5-1.pc.cmake b/polkit-qt5-1.pc.cmake
+index ba8e46e..2d7ea64 100644
+--- a/polkit-qt5-1.pc.cmake
++++ b/polkit-qt5-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API
+diff --git a/polkit-qt5-agent-1.pc.cmake b/polkit-qt5-agent-1.pc.cmake
+index 60b22d5..ee8b80b 100644
+--- a/polkit-qt5-agent-1.pc.cmake
++++ b/polkit-qt5-agent-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_AGENT_PCNAME@
+ Description: Convenience library for using polkit Agent with a Qt-styled API
+diff --git a/polkit-qt5-core-1.pc.cmake b/polkit-qt5-core-1.pc.cmake
+index 2f5d562..387c64b 100644
+--- a/polkit-qt5-core-1.pc.cmake
++++ b/polkit-qt5-core-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_CORE_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, non-GUI classes
+diff --git a/polkit-qt5-gui-1.pc.cmake b/polkit-qt5-gui-1.pc.cmake
+index 1d208fb..dd95f52 100644
+--- a/polkit-qt5-gui-1.pc.cmake
++++ b/polkit-qt5-gui-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_GUI_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, GUI classes
+diff --git a/polkit-qt6-1.pc.cmake b/polkit-qt6-1.pc.cmake
+index ba8e46e..2d7ea64 100644
+--- a/polkit-qt6-1.pc.cmake
++++ b/polkit-qt6-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API
+diff --git a/polkit-qt6-agent-1.pc.cmake b/polkit-qt6-agent-1.pc.cmake
+index 60b22d5..ee8b80b 100644
+--- a/polkit-qt6-agent-1.pc.cmake
++++ b/polkit-qt6-agent-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_AGENT_PCNAME@
+ Description: Convenience library for using polkit Agent with a Qt-styled API
+diff --git a/polkit-qt6-core-1.pc.cmake b/polkit-qt6-core-1.pc.cmake
+index 2f5d562..387c64b 100644
+--- a/polkit-qt6-core-1.pc.cmake
++++ b/polkit-qt6-core-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_CORE_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, non-GUI classes
+diff --git a/polkit-qt6-gui-1.pc.cmake b/polkit-qt6-gui-1.pc.cmake
+index 1d208fb..dd95f52 100644
+--- a/polkit-qt6-gui-1.pc.cmake
++++ b/polkit-qt6-gui-1.pc.cmake
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@POLKITQT-1_INCLUDE_PATH@
+ 
+ Name: @POLKITQT-1_GUI_PCNAME@
+ Description: Convenience library for using polkit with a Qt-styled API, GUI classes

@@ -1,0 +1,22 @@
+{
+  "literal" = [
+    1,
+    "a",
+  ]
+  "nested" = {
+    "literal" = [
+      1,
+      "a",
+    ]
+    "substitution" = ${?PATH}
+  }
+  "nested_in_array" = [
+    ${?PATH},
+    [
+      1,
+      "a",
+    ]
+  ]
+  "substitution" = ${?PATH}
+}
+

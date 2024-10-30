@@ -1,0 +1,15 @@
+diff --git a/src/virt-viewer-display-spice.c b/src/virt-viewer-display-spice.c
+index 2265f02..1d60d81 100644
+--- a/src/virt-viewer-display-spice.c
++++ b/src/virt-viewer-display-spice.c
+@@ -317,8 +317,8 @@ virt_viewer_display_spice_new(VirtViewerSessionSpice *session,
+     gtk_container_add(GTK_CONTAINER(self), GTK_WIDGET(self->display));
+     gtk_widget_show(GTK_WIDGET(self->display));
+     g_object_set(self->display,
+-                 "grab-keyboard", TRUE,
+-                 "grab-mouse", TRUE,
++                 "grab-keyboard", FALSE,
++                 "grab-mouse", FALSE,
+                  "resize-guest", FALSE,
+                  "scaling", TRUE,
+                  NULL);
