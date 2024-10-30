@@ -3448,6 +3448,8 @@ self: super: with self; {
 
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
 
+  django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
+
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
@@ -3966,6 +3968,8 @@ self: super: with self; {
   eigenpy = callPackage ../development/python-modules/eigenpy { };
 
   einops = callPackage ../development/python-modules/einops { };
+
+  einx = callPackage ../development/python-modules/einx { };
 
   eiswarnung = callPackage ../development/python-modules/eiswarnung { };
 
@@ -9420,6 +9424,8 @@ self: super: with self; {
   openshift = callPackage ../development/python-modules/openshift { };
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
+
+  openslide = callPackage ../development/python-modules/openslide { inherit (pkgs) openslide; };
 
   openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
 
