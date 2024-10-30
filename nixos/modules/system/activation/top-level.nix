@@ -97,6 +97,49 @@ let
     '';
   });
 
+  /**
+   * The toplevel derivation may be produced either by replaceDependencies or by the normal toplevel derivation, or even `systemWithBuildDeps`.
+   *
+   * These are quite distinct implementations, and their implementation details leak onto the package attrset due to how `mkDerivation` works.
+   *
+   * This leaking creates a risk that some code may depend on an attribute that is only present in one of the derivations.
+   * Then, when a security issue is patched with `replaceDependencies`, the code may break.
+   *
+   * This is not the kind of thing you want to debug when you're already dealing with a security problem, so with `lazyDerivation` we remove anything that is not strictly necessary here, or not present on each possible derivation recipe.
+   *
+   * Finally, `lazyDerivation` may also improve evaluation performance when toplevels are taken out of their NixOS configuration context and type-tested to see that they're derivations, _but not fully evaluated_.
+   */
+  setPackageAttrs = drv: lib.lazyDerivation {
+    derivation = drv;
+    outputs = [ "out" ];
+    passthru = {
+      # For `stdenv.hostPlatform`, to provide the "runtime" system type.
+      # This info may or may not be available in `config.nixpkgs.hostPlatform` or a combination of `localSystem`,`crossSystem`, so historically `toplevel.stdenv.hostPlatform` has been the most reliable source.
+      inherit (pkgs) stdenv;
+      name = topLevelName;
+      # More attributes can be added here, but only if necessary.
+      # Generally we want to pass whole configurations around, not just `toplevel`, and doing so provides access to the whole configuration.
+    };
+    meta = {
+      description = ''A built NixOS configuration or "toplevel"'';
+      longDescription = ''
+        This provides all the configuration files, packages, and scripts that make up a NixOS system.
+
+        ${if config.system.switch.enable
+          then
+            "This configuration can be switched to with `nixos-rebuild switch` or `nix run <config>.config.system.build.toplevel`."
+          else
+            "This configuration can not be switched to at runtime."
+        }
+      '';
+      homepage = "https://nixos.org/nixos";
+      available = true;
+      name = topLevelName;
+      position = __curPos;
+      unsupported = false;
+    };
+  };
+
 in
 
 {
@@ -362,7 +405,13 @@ in
     };
 
 
-    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
+    system.build.toplevel =
+      setPackageAttrs
+        (
+          if config.system.includeBuildDependencies
+          then systemWithBuildDeps
+          else system
+        );
 
   };
 
