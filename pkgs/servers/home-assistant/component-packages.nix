@@ -2332,13 +2332,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      leaone-ble
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: leaone-ble
+    ];
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -5396,6 +5397,7 @@
     "lawn_mower"
     "lcn"
     "ld2410_ble"
+    "leaone"
     "led_ble"
     "lektrico"
     "lg_netcast"
