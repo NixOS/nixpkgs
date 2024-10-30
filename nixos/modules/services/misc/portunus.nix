@@ -266,7 +266,7 @@ in
           in
           {
             PORTUNUS_SERVER_HTTP_SECURE = "true";
-            PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = "/etc/ssl/certs/ca-certificates.crt";
+            PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = config.security.pki.caBundle;
             PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
             PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;
             PORTUNUS_SLAPD_TLS_PRIVATE_KEY = "${acmeDirectory}/key.pem";

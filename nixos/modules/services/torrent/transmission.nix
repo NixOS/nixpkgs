@@ -296,7 +296,7 @@ in
       after = [ "network.target" ] ++ optional apparmor.enable "apparmor.service";
       requires = optional apparmor.enable "apparmor.service";
       wantedBy = [ "multi-user.target" ];
-      environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
+      environment.CURL_CA_BUNDLE = config.security.pki.caBundle;
       environment.TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
 
       serviceConfig = {

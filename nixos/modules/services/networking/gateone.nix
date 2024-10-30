@@ -19,9 +19,6 @@ options = {
     };
 };
 config = lib.mkIf cfg.enable {
-  environment.systemPackages = with pkgs.pythonPackages; [
-    gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
-
   users.users.gateone = {
     description = "GateOne privilege separation user";
     uid = config.ids.uids.gateone;
@@ -29,9 +26,9 @@ config = lib.mkIf cfg.enable {
   };
   users.groups.gateone.gid = config.ids.gids.gateone;
 
-  systemd.services.gateone = with pkgs; {
+  systemd.services.gateone = {
     description = "GateOne web-based terminal";
-    path = [ pythonPackages.gateone nix openssh procps coreutils ];
+    path = with pkgs; [ pythonPackages.gateone nix openssh procps coreutils ];
     preStart = ''
       if [ ! -d ${cfg.settingsDir} ] ; then
         mkdir -m 0750 -p ${cfg.settingsDir}
@@ -44,7 +41,7 @@ config = lib.mkIf cfg.enable {
       '';
     #unitConfig.RequiresMountsFor = "${cfg.settingsDir}";
     serviceConfig = {
-      ExecStart = ''${pythonPackages.gateone}/bin/gateone --settings_dir=${cfg.settingsDir} --pid_file=${cfg.pidDir}/gateone.pid --gid=${toString config.ids.gids.gateone} --uid=${toString config.ids.uids.gateone}'';
+      ExecStart = ''${pkgs.pythonPackages.gateone}/bin/gateone --settings_dir=${cfg.settingsDir} --pid_file=${cfg.pidDir}/gateone.pid --gid=${toString config.ids.gids.gateone} --uid=${toString config.ids.uids.gateone}'';
       User = "gateone";
       Group = "gateone";
       WorkingDirectory = cfg.settingsDir;
