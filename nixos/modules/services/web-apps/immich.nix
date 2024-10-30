@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.immich;
+  format = pkgs.formats.json { };
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
@@ -108,6 +109,37 @@ in
       type = types.str;
       default = "immich";
       description = "The group immich should run as.";
+    };
+
+    settings = mkOption {
+      default = null;
+      description = ''
+        Configuration for Immich.
+        See <https://immich.app/docs/install/config-file/> or navigate to
+        <https://your-immich-domain/admin/system-settings> for
+        options and defaults.
+        Setting it to `null` allows configuring Immich in the web interface.
+      '';
+      type = types.nullOr (
+        types.submodule {
+          freeformType = format.type;
+          options = {
+            newVersionCheck.enabled = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Check for new versions.
+                This feature relies on periodic communication with github.com.
+              '';
+            };
+            server.externalDomain = mkOption {
+              type = types.str;
+              default = "";
+              description = "Domain for publicly shared links, including `http(s)://`.";
+            };
+          };
+        }
+      );
     };
 
     machine-learning = {
@@ -262,6 +294,9 @@ in
         IMMICH_PORT = toString cfg.port;
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
+      }
+      // lib.optionalAttrs (cfg.settings != null) {
+        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
       };
 
     services.immich.machine-learning.environment = {
