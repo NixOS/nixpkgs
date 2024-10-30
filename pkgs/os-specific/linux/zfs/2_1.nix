@@ -9,6 +9,7 @@
 let
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
 in
+lib.warn "zfs_2_1 is likely to become unsupported soon by upstream, and may be removed from NixOS 24.11, consider migrating to zfs_2_2"
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
