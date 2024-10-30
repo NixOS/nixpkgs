@@ -16718,6 +16718,12 @@
     githubId = 63069986;
     name = "Per Stark";
   };
+  petee = {
+    name = "Pete Erickson";
+    email = "pete.perickson@gmail.com";
+    github = "petee";
+    githubId = 89916;
+  };
   petercommand = {
     email = "petercommand@gmail.com";
     github = "petercommand";

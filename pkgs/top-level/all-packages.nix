@@ -12309,8 +12309,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
-
   snapshot = callPackage ../applications/graphics/snapshot { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
@@ -12887,8 +12885,6 @@ with pkgs;
   trackma-qt = trackma.override { withQT = true; };
 
   tran = callPackage ../tools/networking/tran { };
-
-  trayscale = callPackage ../applications/networking/trayscale { };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
@@ -14791,6 +14787,7 @@ with pkgs;
 
   gleam = callPackage ../development/compilers/gleam {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    erlang = erlang_27;
   };
 
   gmqcc = callPackage ../development/compilers/gmqcc { };
@@ -32712,12 +32709,6 @@ with pkgs;
 
   thokr = callPackage ../applications/misc/thokr { };
 
-  betterbird-unwrapped = callPackage ../applications/networking/mailreaders/betterbird { };
-  betterbird = wrapThunderbird betterbird-unwrapped {
-    desktopName = "Betterbird";
-    pname = "betterbird";
-  };
-
   thunderbirdPackages = recurseIntoAttrs (callPackage ../applications/networking/mailreaders/thunderbird/packages.nix {
     callPackage = newScope {
       inherit (rustPackages) cargo rustc;
@@ -32727,7 +32718,6 @@ with pkgs;
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
 
-  thunderbird-115 = wrapThunderbird thunderbirdPackages.thunderbird-115 { };
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
