@@ -100,11 +100,6 @@ stdenv.mkDerivation {
     libvpx
   ];
 
-  cmakeFlags = [
-    # Building as a shared library isn't officially supported and may break at any time.
-    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
-  ];
-
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
