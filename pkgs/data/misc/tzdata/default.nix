@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=${placeholder "dev"}/lib"
     "MANDIR=${placeholder "man"}/share/man"
     "AWK=awk"
+    "CURL=:" # disable network access
     "CFLAGS=-DHAVE_LINK=0"
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
