@@ -29,8 +29,6 @@ with lib;
 
   programs.command-not-found.enable = mkDefault false;
 
-  programs.ssh.setXAuthLocation = mkDefault false;
-
   services.logrotate.enable = mkDefault false;
 
   services.udisks2.enable = mkDefault false;
