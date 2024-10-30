@@ -13081,6 +13081,10 @@ with pkgs;
     paths = [ dejavu_fonts.out ];
   };
 
+  docbook_5_0 = docbook.override { releaseVersion = "5.0"; };
+
+  docbook5 = docbook_5_0;
+
   docbook_sgml_dtd_31 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/3.1.nix { };
 
   docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
