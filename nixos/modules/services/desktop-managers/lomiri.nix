@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.desktopManager.lomiri;
-in {
+in
+{
   options.services.desktopManager.lomiri = {
     enable = lib.mkEnableOption ''
       the Lomiri graphical shell (formerly known as Unity8)
@@ -11,42 +17,46 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = (with pkgs; [
-        glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
-        libayatana-common
-        ubports-click
-      ]) ++ (with pkgs.lomiri; [
-        hfd-service
-        history-service
-        libusermetrics
-        lomiri
-        lomiri-calculator-app
-        lomiri-camera-app
-        lomiri-clock-app
-        lomiri-content-hub
-        lomiri-docviewer-app
-        lomiri-download-manager
-        lomiri-filemanager-app
-        lomiri-gallery-app
-        lomiri-polkit-agent
-        lomiri-schemas # exposes some required dbus interfaces
-        lomiri-session # wrappers to properly launch the session
-        lomiri-sounds
-        lomiri-system-settings
-        lomiri-terminal-app
-        lomiri-thumbnailer
-        lomiri-url-dispatcher
-        lomiri-wallpapers
-        mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-        morph-browser
-        qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-        suru-icon-theme
-        telephony-service
-        teleports
-      ]);
+      systemPackages =
+        (with pkgs; [
+          glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
+          libayatana-common
+          ubports-click
+        ])
+        ++ (with pkgs.lomiri; [
+          hfd-service
+          history-service
+          libusermetrics
+          lomiri
+          lomiri-calculator-app
+          lomiri-camera-app
+          lomiri-clock-app
+          lomiri-content-hub
+          lomiri-docviewer-app
+          lomiri-download-manager
+          lomiri-filemanager-app
+          lomiri-gallery-app
+          lomiri-polkit-agent
+          lomiri-schemas # exposes some required dbus interfaces
+          lomiri-session # wrappers to properly launch the session
+          lomiri-sounds
+          lomiri-system-settings
+          lomiri-terminal-app
+          lomiri-thumbnailer
+          lomiri-url-dispatcher
+          lomiri-wallpapers
+          mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
+          morph-browser
+          qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
+          suru-icon-theme
+          telephony-service
+          teleports
+        ]);
 
       # To override the default keyboard layout in Lomiri
-      etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text = lib.strings.replaceStrings [","] ["\n"] config.services.xserver.xkb.layout;
+      etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text = lib.strings.replaceStrings [ "," ] [
+        "\n"
+      ] config.services.xserver.xkb.layout;
     };
 
     hardware = {
@@ -84,21 +94,26 @@ in {
 
     services.ayatana-indicators = {
       enable = true;
-      packages = (with pkgs; [
-        ayatana-indicator-datetime
-        ayatana-indicator-display
-        ayatana-indicator-messages
-        ayatana-indicator-power
-        ayatana-indicator-session
-      ] ++ lib.optionals config.hardware.bluetooth.enable [
-        ayatana-indicator-bluetooth
-      ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
-        ayatana-indicator-sound
-      ]) ++ (with pkgs.lomiri; [
-        telephony-service
-      ] ++ lib.optionals config.networking.networkmanager.enable [
-        lomiri-indicator-network
-      ]);
+      packages =
+        (
+          with pkgs;
+          [
+            ayatana-indicator-datetime
+            ayatana-indicator-display
+            ayatana-indicator-messages
+            ayatana-indicator-power
+            ayatana-indicator-session
+          ]
+          ++ lib.optionals config.hardware.bluetooth.enable [ ayatana-indicator-bluetooth ]
+          ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+            ayatana-indicator-sound
+          ]
+        )
+        ++ (
+          with pkgs.lomiri;
+          [ telephony-service ]
+          ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
+        );
     };
 
     services.udisks2.enable = true;
@@ -159,7 +174,13 @@ in {
 
       "lomiri-polkit-agent" = rec {
         description = "Lomiri Polkit agent";
-        wantedBy = [ "lomiri.service" "lomiri-full-greeter.service" "lomiri-full-shell.service" "lomiri-greeter.service" "lomiri-shell.service" ];
+        wantedBy = [
+          "lomiri.service"
+          "lomiri-full-greeter.service"
+          "lomiri-full-shell.service"
+          "lomiri-greeter.service"
+          "lomiri-shell.service"
+        ];
         after = [ "graphical-session.target" ];
         partOf = wantedBy;
         serviceConfig = {
@@ -172,17 +193,19 @@ in {
 
     systemd.services = {
       "dbus-com.lomiri.UserMetrics" = {
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "com.lomiri.UserMetrics";
-          User = "usermetrics";
-          StandardOutput = "syslog";
-          SyslogIdentifier = "com.lomiri.UserMetrics";
-          ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
-        } // lib.optionalAttrs (!config.security.apparmor.enable) {
-          # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
-          Environment = "USERMETRICS_NO_AUTH=1";
-        };
+        serviceConfig =
+          {
+            Type = "dbus";
+            BusName = "com.lomiri.UserMetrics";
+            User = "usermetrics";
+            StandardOutput = "syslog";
+            SyslogIdentifier = "com.lomiri.UserMetrics";
+            ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
+          }
+          // lib.optionalAttrs (!config.security.apparmor.enable) {
+            # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
+            Environment = "USERMETRICS_NO_AUTH=1";
+          };
       };
     };
 
