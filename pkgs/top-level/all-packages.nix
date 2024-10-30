@@ -8741,11 +8741,7 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jd-cli = callPackage ../tools/security/jd-cli { };
-
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
-
-  jd-gui = callPackage ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
