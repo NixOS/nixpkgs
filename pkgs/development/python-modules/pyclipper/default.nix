@@ -2,27 +2,26 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   setuptools-scm,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyclipper";
   version = "1.3.0.post6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
-    repo = pname;
+    repo = "pyclipper";
     rev = "refs/tags/${version}";
     hash = "sha256-s2D0ipDatAaF7A1RYOKyI31nkfc/WL3vHWsAMbo+WcY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
     cython
   ];
