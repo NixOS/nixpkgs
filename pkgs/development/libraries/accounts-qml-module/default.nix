@@ -7,6 +7,7 @@
 , qmake
 , qtbase
 , qtdeclarative
+, qttools
 , signond
 , xvfb-run
 }:
@@ -22,10 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZpnkZauowLPBnO3DDDtG/x07XoQGVNqEF8AQB5TZK84=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   postPatch = ''
     substituteInPlace src/src.pro \
       --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
       --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+
+    # Find qdoc
+    substituteInPlace doc/doc.pri \
+      --replace-fail 'QDOC = $$[QT_INSTALL_BINS]/qdoc' 'QDOC = qdoc'
 
     # Don't install test binary
     sed -i tests/tst_plugin.pro \
@@ -41,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qmake
     qtdeclarative # qmlplugindump
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -57,11 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  qmakeFlags = [
-    # Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
-    "CONFIG+=no_docs"
-  ];
-
   postConfigure = ''
     make qmake_all
   '';
@@ -76,6 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     # Same plugin needed here, re-export in case checks are disabled
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+  '';
+
+  postFixup = ''
+    moveToOutput share/accounts-qml-module/doc $doc
   '';
 
   meta = with lib; {
