@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  ffmpeg-python,
+  numpy,
   pillow,
   pytestCheckHook,
   pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-2Dnl0dcdMo4PnhHTb/5cJ7C0CvW84av4CCbrTLPqopg=";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [
+    ffmpeg-python
+    numpy
+    pillow
+    requests
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
