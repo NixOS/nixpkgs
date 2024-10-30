@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       pSub
     ];
+    mainProgram = "nasm";
     license = licenses.bsd2;
   };
 }
