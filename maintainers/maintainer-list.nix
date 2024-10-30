@@ -5868,6 +5868,12 @@
     githubId = 1931963;
     name = "David Sferruzza";
   };
+  dsluijk = {
+    name = "Dany Sluijk";
+    email = "nix@dany.dev";
+    github = "dsluijk";
+    githubId = 8537327;
+  };
   dstengele = {
     name = "Dennis Stengele";
     email = "dennis@stengele.me";
