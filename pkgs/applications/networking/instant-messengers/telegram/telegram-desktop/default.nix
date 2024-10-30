@@ -55,10 +55,8 @@
 
 let
   tg_owt = callPackage ./tg_owt.nix {
+    # tg_owt should use the same compiler
     inherit stdenv;
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "20";
-    };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
