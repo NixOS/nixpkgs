@@ -2,24 +2,24 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python3,
+  python311,
   nixosTests,
 }:
 let
   pname = "open-webui";
-  version = "0.3.32";
+  version = "0.3.35";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XpPaMGn+JA3Rq+Eb97IGWMLAR+0pI+ZJRxOTmxIMPZg=";
+    hash = "sha256-H46qoOEajPKRU/Lbd6r7r0vRjWSd7uGoA0deaDv6HSw=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-tAPI/H5/lv+RuDZ68lL/cZHcOs8H6ZxXSwiFvkp0y4A=";
+    npmDepsHash = "sha256-ohWSfwZfC/jfOpnNSqsvMyYnukk3Xa3Tq32PAl8Ds60=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -29,6 +29,7 @@ let
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
 
     installPhase = ''
       runHook preInstall
@@ -40,7 +41,7 @@ let
     '';
   };
 in
-python3.pkgs.buildPythonApplication rec {
+python311.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
@@ -60,12 +61,13 @@ python3.pkgs.buildPythonApplication rec {
     "pytest-docker"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python311.pkgs; [
     aiohttp
     alembic
     anthropic
     apscheduler
     argon2-cffi
+    async-timeout
     authlib
     bcrypt
     beautifulsoup4
@@ -84,6 +86,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-cors
     fpdf2
     ftfy
+    qdrant-client
     google-generativeai
     googleapis-common-protos
     langchain
@@ -103,6 +106,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2-binary
     pydub
     pyjwt
+    pymdown-extensions
     pymilvus
     pymongo
     pymysql
@@ -124,11 +128,12 @@ python3.pkgs.buildPythonApplication rec {
     unstructured
     uvicorn
     validators
+    xhtml2pdf
     xlrd
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [ hatchling ];
+  build-system = with python311.pkgs; [ hatchling ];
 
   pythonImportsCheck = [ "open_webui" ];
 
