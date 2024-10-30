@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, libpulseaudio
-, dbus
-, openssl
-, speechd-minimal
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  libpulseaudio,
+  dbus,
+  openssl,
+  speechd-minimal,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "goxlr-utility";
-  version = "1.1.1-unstable-2024-08-06";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
-    rev = "dcd4454a2634f5a2af10f00c1cbcb016241ce2cb";
-    hash = "sha256-kWfCFsk0GhqX+pYOTeJd7XHlcWOX4D6fmIU/4nylU3Y=";
+    rev = "v${version}";
+    hash = "sha256-aThIu+3eNHCKS6lsio7cLZeIMg0509qkE0YQ6M6vPAI=";
   };
 
   cargoLock = {
@@ -70,4 +71,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ errnoh ];
   };
 }
-
