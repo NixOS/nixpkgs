@@ -46,13 +46,15 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
+  topLevelName = "nixos-system-${config.system.name}-${config.system.nixos.label}";
+
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `bin/apply` that activates the configuration and
   # makes it bootable. See `activatable-system.nix` and `switchable-system.nix`.
   baseSystem = pkgs.stdenvNoCC.mkDerivation ({
-    name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
+    name = topLevelName;
     preferLocalBuild = true;
     allowSubstitutes = false;
     passAsFile = [ "extraDependencies" ];
