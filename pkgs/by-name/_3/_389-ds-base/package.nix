@@ -38,22 +38,22 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
-  version = "2.4.6";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
     rev = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-+FTCzEyQY71TCkj8HMnSkrnQtxjHxOmtYhfZEAYOLis=";
+    hash = "sha256-ouWJB5DbAtcLKyFngmxBRObXC6RFA+GXfvOEFk88Zu0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/src";
     name = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-2Ng268tfbMRU3Uyo5ljSS/HxPnw1abvGjcczo25HyVk=";
+    hash = "sha256-nBYuVijF50K3JlEo2py0ephDwlnAhbxeNA4vvC9rEV0=";
   };
 
   nativeBuildInputs = [
