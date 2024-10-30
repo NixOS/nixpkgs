@@ -1,31 +1,32 @@
 {
   bash,
-  fetchurl,
+  fetchFromGitea,
   ffmpeg,
   gettext,
-  glib,
-  gobject-introspection,
   lib,
   mpv-unwrapped,
-  python3,
-  stdenv,
+  python3Packages,
+  qt6,
+  python3
 }:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "yuki-iptv";
   version = "0.0.15";
+  pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "liya";
     repo = "yuki-iptv";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fejAKHvJVDz/UfzAlPbKHQfJTOLy+HY9LfsDgO8vyAU=";
   };
 
   buildInputs = [
     ffmpeg
     mpv-unwrapped
+    qt6.qtbase
   ];
 
   nativeBuildInputs = [
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
-  pythonPath = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     chardet
     pygobject3
     pyqt6
@@ -50,6 +51,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace usr/lib/yuki-iptv/thirdparty/mpv.py \
       --replace "ctypes.util.find_library('mpv')" "'${lib.getLib mpv-unwrapped}/lib/libmpv.so'"
+
+    substituteInPlace usr/bin/yuki-iptv \
+      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace "python3" "${python3}/bin/python3"
   '';
 
   installPhase = ''
