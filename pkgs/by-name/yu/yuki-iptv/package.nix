@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IPTV player with EPG support";
-    license = licenses.cc-by-40;
-    platforms = platforms.linux;
+    license = lib.licenses.cc-by-40;
+    platforms = lib.platforms.linux;
     homepage = "https://codeberg.org/liya/yuki-iptv";
   };
 }
