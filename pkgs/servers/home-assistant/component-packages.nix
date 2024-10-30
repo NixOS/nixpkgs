@@ -2597,13 +2597,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      melnor-bluetooth
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: melnor-bluetooth
+    ];
     "meraki" = ps: with ps; [
     ];
     "mercury_nz" = ps: with ps; [
@@ -5443,6 +5444,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melnor"
     "meraki"
     "met"
     "met_eireann"
