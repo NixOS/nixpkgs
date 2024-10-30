@@ -35,23 +35,24 @@
   rsync,
   withCockpit ? true,
   withAsan ? false,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "389-ds-base";
   version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "389ds";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "389-ds-base";
+    rev = "389-ds-base-${finalAttrs.version}";
     hash = "sha256-+FTCzEyQY71TCkj8HMnSkrnQtxjHxOmtYhfZEAYOLis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${src.name}/src";
-    name = "${pname}-${version}";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/src";
+    name = "389-ds-base-${finalAttrs.version}";
     hash = "sha256-2Ng268tfbMRU3Uyo5ljSS/HxPnw1abvGjcczo25HyVk=";
   };
 
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mkdir -p ./vendor
-    tar -xzf ${cargoDeps} -C ./vendor --strip-components=1
+    tar -xzf ${finalAttrs.cargoDeps} -C ./vendor --strip-components=1
   '';
 
   configureFlags =
@@ -141,13 +142,15 @@ stdenv.mkDerivation rec {
     "localstatedir=${placeholder "TMPDIR"}"
   ];
 
-  passthru.version = version;
+  passthru.version = finalAttrs.version;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://www.port389.org/";
     description = "Enterprise-class Open Source LDAP server for Linux";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ners ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ners ];
   };
-}
+})
