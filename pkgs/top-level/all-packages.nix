@@ -26456,8 +26456,6 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  upscayl = callPackage ../applications/graphics/upscayl { };
-
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
