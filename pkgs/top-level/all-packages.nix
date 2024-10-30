@@ -13973,8 +13973,6 @@ with pkgs;
 
   zet = callPackage ../tools/text/zet { };
 
-  zfp = callPackage ../tools/compression/zfp { };
-
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
   zfsbackup = callPackage ../tools/backup/zfsbackup { };
