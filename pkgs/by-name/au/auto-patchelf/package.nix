@@ -8,12 +8,7 @@ python3Packages.buildPythonApplication {
   version = "0-unstable-2024-08-14";
   pyproject = false;
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.unions [
-      ./auto-patchelf.py
-    ];
-  };
+  src = ./src;
 
   dependencies = with python3Packages; [
     pyelftools
