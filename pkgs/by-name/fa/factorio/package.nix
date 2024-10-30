@@ -71,10 +71,10 @@ let
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
 
-    If you go this route you might want to tell nix to explicitly hold on to the
-    source tarball. Otherwise it could get GC'd from the nix store and you'd
+    If you go this route you might want to tell Nix to explicitly hold on to the
+    source tarball. Otherwise it could get GC'd from the Nix store and you'd
     have to redownload it next time the package wants to rebuild to use a newer
-    dependency. E.g. if you're using nixos:
+    dependency. E.g. if you're using NixOS:
 
       system.extraDependencies = [
         factorio.src
