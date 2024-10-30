@@ -754,8 +754,9 @@
     ];
     "deako" = ps: with ps; [
       ifaddr
+      pydeako
       zeroconf
-    ]; # missing inputs: pydeako
+    ];
     "debugpy" = ps: with ps; [
       debugpy
     ];
@@ -5126,6 +5127,7 @@
     "datadog"
     "date"
     "datetime"
+    "deako"
     "debugpy"
     "deconz"
     "default_config"
