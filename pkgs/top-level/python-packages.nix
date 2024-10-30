@@ -17514,6 +17514,8 @@ self: super: with self; {
 
   webob = callPackage ../development/python-modules/webob { };
 
+  webrtc-models = callPackage ../development/python-modules/webrtc-models { };
+
   webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
