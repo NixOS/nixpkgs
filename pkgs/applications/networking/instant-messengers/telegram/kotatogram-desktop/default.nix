@@ -18,6 +18,7 @@
 , lz4
 , xxHash
 , ffmpeg
+, protobuf
 , openalSoft
 , minizip
 , libopus
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     boost
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
     qtwayland
     kcoreaddons
     alsa-lib

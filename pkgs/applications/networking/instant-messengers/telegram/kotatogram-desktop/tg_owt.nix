@@ -9,7 +9,6 @@
 , openssl
 , libopus
 , ffmpeg
-, protobuf
 , openh264
 , crc32c
 , libvpx
@@ -59,7 +58,6 @@ stdenv.mkDerivation {
     openssl
     libopus
     ffmpeg
-    protobuf
     openh264
     crc32c
     libvpx
