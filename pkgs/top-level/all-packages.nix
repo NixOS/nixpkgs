@@ -24923,7 +24923,7 @@ with pkgs;
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
-  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
+  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
