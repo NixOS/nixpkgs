@@ -7845,6 +7845,8 @@ self: super: with self; {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
+  melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
+
   memestra = callPackage ../development/python-modules/memestra { };
 
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
