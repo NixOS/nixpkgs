@@ -7016,6 +7016,8 @@ self: super: with self; {
 
   leanblueprint = callPackage ../development/python-modules/leanblueprint { };
 
+  leaone-ble = callPackage ../development/python-modules/leaone-ble { };
+
   leb128 = callPackage ../development/python-modules/leb128 { };
 
   led-ble = callPackage ../development/python-modules/led-ble { };
@@ -7846,6 +7848,8 @@ self: super: with self; {
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
+
+  melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
 
   memestra = callPackage ../development/python-modules/memestra { };
 
@@ -9207,6 +9211,8 @@ self: super: with self; {
 
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
+  py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
+
   py-machineid = callPackage ../development/python-modules/py-machineid { };
 
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
@@ -10507,6 +10513,8 @@ self: super: with self; {
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
+  pytorch3d = callPackage ../development/python-modules/pytorch3d { };
+
   pytouchlinesl = callPackage ../development/python-modules/pytouchlinesl { };
 
   pyuca = callPackage ../development/python-modules/pyuca { };
@@ -11225,6 +11233,8 @@ self: super: with self; {
   pydateinfer = callPackage ../development/python-modules/pydateinfer { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
+
+  pydeako = callPackage ../development/python-modules/pydeako { };
 
   pydeck = callPackage ../development/python-modules/pydeck { };
 

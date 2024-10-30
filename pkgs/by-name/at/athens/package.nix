@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "athens";
-  version = "0.15.3";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     rev = "v${version}";
-    hash = "sha256-iRuy3z5GCsuTnIQuPkzyTvMSMlYTqf3Do7uqgERTXn0=";
+    hash = "sha256-6NBdif8rQ1aj4nTYXhrWyErzRv0q8WpIheRnb2FCnkU=";
   };
 
-  vendorHash = "sha256-cK23BIGh/BK1OHHrI++PD1h7lCN7NZfV1Yfirs8vC5A=";
+  vendorHash = "sha256-W65lQYGrRg8LwFERj5MBOPFAn2j+FE7ep4ANuAGmfgM=";
 
   CGO_ENABLED = "0";
   ldflags = [
