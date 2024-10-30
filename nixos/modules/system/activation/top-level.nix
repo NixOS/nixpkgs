@@ -137,6 +137,8 @@ let
       name = topLevelName;
       position = __curPos;
       unsupported = false;
+    } // lib.optionalAttrs config.system.switch.enable {
+      mainProgram = "apply";
     };
   };
 
