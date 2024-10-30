@@ -16,16 +16,22 @@
   enableUtilities ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zfp";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "zfp";
-    rev = version;
-    sha256 = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
+    rev = finalAttrs.version;
+    hash = "sha256-iZxA4lIviZQgaeHj6tEQzEFSKocfgpUyf4WvUykb9qk=";
   };
+
+  patches = [
+    # part of https://github.com/LLNL/zfp/pull/217
+    # Remove distutils
+    ./python312.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -64,13 +70,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://computing.llnl.gov/projects/zfp";
     description = "Library for random-access compression of floating-point arrays";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.spease ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.spease ];
     # 64-bit only
-    platforms = platforms.aarch64 ++ platforms.x86_64;
+    platforms = lib.platforms.aarch64 ++ lib.platforms.x86_64;
     mainProgram = "zfp";
   };
-}
+})
