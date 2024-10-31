@@ -97,5 +97,5 @@ dotnetFixupHook() {
 }
 
 if [[ -z "${dontFixup-}" && -z "${dontDotnetFixup-}" ]]; then
-    preFixupPhases+=" dotnetFixupHook"
+    appendToVar preFixupPhases dotnetFixupHook
 fi
