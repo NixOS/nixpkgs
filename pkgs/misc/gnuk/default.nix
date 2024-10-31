@@ -7,7 +7,7 @@
   makeWrapper,
   python3Packages,
 
-  # Extra options
+  # Default FSIJ IDs
   vid ? "234b",
   pid ? "0000",
 }:
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     binutils-arm-embedded
     makeWrapper
   ];
+
   buildInputs = with python3Packages; [
     python
     pyusb
@@ -61,10 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/{unlock,flash}
   '';
 
-  meta = with lib; {
-    homepage = "https://www.fsij.org/doc-gnuk/";
+  meta = {
+    homepage = "https://www.fsij.org/category/gnuk.html";
     description = "Implementation of USB cryptographic token for gpg";
-    license = licenses.gpl3;
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    broken = true; # Needs Picolib, which is not packaged in Nixpkgs.
   };
 })
