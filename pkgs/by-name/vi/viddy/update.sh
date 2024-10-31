@@ -35,10 +35,10 @@ update-source-version viddy "${latestVersion}"
 
 pushd "$SCRIPT_DIR"
 # Build date
-sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' default.nix
+sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBuildDate}"'"#' package.nix
 
 # Hashes
 # https://github.com/msteen/nix-prefetch/issues/51
 cargoHash=$(nix-prefetch --option extra-experimental-features flakes "{ sha256 }: (import $NIXPKGS_DIR {}).viddy.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
-sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' default.nix
+sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' package.nix
 popd
