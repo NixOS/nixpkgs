@@ -13,14 +13,10 @@
   glib,
   gtk4,
   libadwaita,
-  darwin,
   gettext,
   appstream,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Foundation;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
   version = "1.1.0";
@@ -53,16 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
   # needed for darwin
   env.GETTEXT_DIR = "${gettext}";
