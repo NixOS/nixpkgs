@@ -1,7 +1,7 @@
 { egl-wayland
+, bash
 , libepoxy
 , fetchurl
-, fetchpatch
 , fontutil
 , lib
 , libdecor
@@ -49,22 +49,17 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "24.1.0";
+  version = "24.1.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    hash = "sha256-vvIcTxiAek7VccTi32CrY7VGa71QLszrJIW4kqt23MI=";
+    hash = "sha256-2Wp426uBn1V1AXNERESZW1Ax69zBW3ev672NvAKvNPQ=";
   };
 
-  patches = [
-    # Backport fix for pkg-config generation to make CMake happy
-    # FIXME: remove when merged
-    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1543
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cb1c21a4240a5b6bf4aeeef51819639b4e0ad24.patch";
-      hash = "sha256-MZPP9QgYO4RFJ/vcjkpu7SVSo5Dh09ZdZjOwTopjdYQ=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace os/utils.c \
+      --replace-fail '/bin/sh' '${lib.getExe' bash "sh"}'
+  '';
 
   depsBuildBuild = [
     pkg-config

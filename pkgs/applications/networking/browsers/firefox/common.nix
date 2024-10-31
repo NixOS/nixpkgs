@@ -242,7 +242,8 @@ buildStdenv.mkDerivation {
       hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
+  ++ lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
   ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
   ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
   ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
