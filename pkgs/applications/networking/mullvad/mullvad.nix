@@ -10,6 +10,7 @@
 , libnftnl
 , libmnl
 , libwg
+, darwin
 , enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
@@ -55,11 +56,15 @@ rustPlatform.buildRustPackage rec {
     fakeGoCopyLibwg
   ];
 
-  buildInputs = [
-    dbus.dev
-    libnftnl
-    libmnl
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dbus.dev
+      libnftnl
+      libmnl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libpcap
+    ];
 
   postInstall = ''
     compdir=$(mktemp -d)
