@@ -35,6 +35,7 @@
   nlohmann_json,
   openssl,
   perl,
+  pkg-config,
   protobuf,
   python3,
   rapidjson,
@@ -49,7 +50,7 @@
   zstd,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? true,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
   enableJemalloc ? !stdenv.hostPlatform.isDarwin,
   enableS3 ? true,
   enableGcs ? !stdenv.hostPlatform.isDarwin,
@@ -126,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
@@ -180,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
       "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=ON"
+      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_INTEGRATION=ON"
       "-DARROW_BUILD_UTILITIES=ON"
       "-DARROW_EXTRA_ERROR_CONTEXT=ON"
