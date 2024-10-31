@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-, testers
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -24,14 +25,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Show uncommitted, untracked and unpushed changes for multiple Git repos";
     downloadPage = "https://github.com/fboender/multi-git-status/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/fboender/multi-git-status";
     changelog = "https://github.com/fboender/multi-git-status/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ getpsyched ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getpsyched ];
     mainProgram = "mgitstatus";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })
