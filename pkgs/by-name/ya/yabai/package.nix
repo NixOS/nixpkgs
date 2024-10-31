@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   fetchzip,
   installShellFiles,
@@ -9,23 +8,12 @@
   writeShellScript,
   common-updater-scripts,
   curl,
-  darwin,
   jq,
-  xcodebuild,
   xxd,
   yabai,
+  apple-sdk_11,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
-    ;
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
   version = "7.1.4";
 
@@ -41,15 +29,11 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      xcodebuild
       xxd
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
+    apple-sdk_11
   ];
 
   dontConfigure = true;
