@@ -22862,6 +22862,7 @@ with pkgs;
 
   inherit (skawarePackages)
     execline
+    execline-minimal
     execline-man-pages
     mdevd
     nsss

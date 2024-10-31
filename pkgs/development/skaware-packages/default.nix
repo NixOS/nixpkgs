@@ -10,6 +10,7 @@ lib.makeScope pkgs.newScope (self:
 
   # execline
   execline = callPackage ./execline { };
+  execline-minimal = callPackage ./execline { withDocs = false; };
 
   # servers & tools
   mdevd = callPackage ./mdevd { };

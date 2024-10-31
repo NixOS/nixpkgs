@@ -1,4 +1,4 @@
-{ lib, skawarePackages, skalibs }:
+{ lib, skawarePackages, skalibs, withDocs ? true }:
 
 let
   version = "2.9.6.1";
@@ -14,13 +14,17 @@ in skawarePackages.buildPackage {
   # upstream $version he tags manpages release as ${version}.1, and,
   # in case of extra fixes to manpages, new tags in form ${version}.2,
   # ${version}.3 and so on are created.
-  manpages = skawarePackages.buildManPages {
-    pname = "execline-man-pages";
-    version = "2.9.6.0.1";
-    sha256 = "sha256-0lyX3rIUZ2JqWioRSm22uDS+q9ONkwIZxfR5E2pSDC4=";
-    description = "Port of the documentation for the execline suite to mdoc";
-    maintainers = [ lib.maintainers.sternenseemann ];
-  };
+  manpages =
+    if withDocs then
+      skawarePackages.buildManPages {
+        pname = "execline-man-pages";
+        version = "2.9.6.0.1";
+        sha256 = "sha256-0lyX3rIUZ2JqWioRSm22uDS+q9ONkwIZxfR5E2pSDC4=";
+        description = "Port of the documentation for the execline suite to mdoc";
+        maintainers = [ lib.maintainers.sternenseemann ];
+      }
+    else
+      null;
 
   description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
 
