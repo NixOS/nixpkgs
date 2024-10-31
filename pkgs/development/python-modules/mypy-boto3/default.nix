@@ -446,8 +446,8 @@ rec {
       "sha256-wBJ7PnAlsi88AZIRPoNgbzOhPwUAJBegtwk+tw1lOwU=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.35.48"
-      "sha256-c/tutPhvyGNt2Fv666k9f7mprhInCwyAU2L6p7Rg6Nc=";
+    buildMypyBoto3Package "ec2" "1.35.52"
+      "sha256-nvj7AYDTPDNLpAOcWOl5vGbtfEscLDwhVHTdCtK9X5g=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.35.0"
