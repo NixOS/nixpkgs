@@ -1,26 +1,28 @@
 {
   lib,
   stdenv,
+  fetchFromGitLab,
   gcc-arm-embedded,
   binutils-arm-embedded,
   makeWrapper,
   python3Packages,
-  fetchgit,
 
   # Extra options
   vid ? "234b",
   pid ? "0000",
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnuk";
+  version = "2.2";
 
-  version = "1.2.14";
-
-  src = fetchgit {
-    url = "git://git.gniibe.org/gnuk/gnuk.git";
-    rev = "177ef67edfa2306c2a369a037362385c354083e1";
-    sha256 = "16wa3xsaq4r8caw6c24hnv4j78bklacix4in2y66j35h68ggr3j1";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "gnuk-team";
+    repo = "gnuk/gnuk";
+    rev = "release/${finalAttrs.version}";
+    hash = "sha256-qY/dwkcPJiPx/+inSxH7w7a0v3cWUQDX+NYJwUjnkMY=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -65,4 +67,4 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = with platforms; linux;
   };
-}
+})
