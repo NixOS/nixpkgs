@@ -2,24 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_7,
+  gradle,
   makeWrapper,
   jdk,
   gsettings-desktop-schemas,
 }:
 
-let
-  gradle = gradle_7;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mucommander";
-  version = "1.3.0-1";
+  version = "1.5.2-1";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = finalAttrs.version;
-    sha256 = "sha256-rSHHv96L2EHQuKBSAdpfi1XGP2u9o2y4g1+65FHWFMw=";
+    sha256 = "sha256-J1paBXlAGe2eKMg4wvaXTzMIiSMFIJ1XIAaKrfOwQLc=";
   };
 
   postPatch = ''
