@@ -6,17 +6,21 @@ let
   cfg = config.services.home-assistant;
   format = pkgs.formats.yaml {};
 
-  # Render config attribute sets to YAML
-  # Values that are null will be filtered from the output, so this is one way to have optional
-  # options shown in settings.
-  # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
+  # Post-process YAML output to add support for YAML functions, like
+  # secrets or includes, by naively unquoting strings with leading bangs
+  # and at least one space-separated parameter.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
-  configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
-    cp ${format.generate "configuration.yaml" filteredConfig} $out
+  renderYAMLFile = fn: yaml: pkgs.runCommandLocal fn { } ''
+    cp ${format.generate fn yaml} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
-  lovelaceConfigFile = format.generate "ui-lovelace.yaml" cfg.lovelaceConfig;
+
+  # Filter null values from the configuration, so that we can still advertise
+  # optional options in the config attribute.
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  configFile = renderYAMLFile "configuration.yaml" filteredConfig;
+
+  lovelaceConfigFile = renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig;
 
   # Components advertised by the home-assistant package
   availableComponents = cfg.package.availableComponents;
