@@ -7,6 +7,7 @@
 , ninja
 , clang
 , lld
+, yasm
 , python3
 , wrapQtAppsHook
 , removeReferencesTo
@@ -37,10 +38,22 @@
 }:
 
 let
-  tg_owt = callPackage ./tg_owt.nix {
+  tg_owt = (callPackage ../telegram-desktop/tg_owt.nix {
     # tg_owt should use the same compiler
     inherit stdenv;
-  };
+  }).overrideAttrs(oldAttrs: {
+    version = "0-unstable-2024-06-15";
+
+    src = fetchFromGitHub {
+      owner = "desktop-app";
+      repo = "tg_owt";
+      rev = "c9cc4390ab951f2cbc103ff783a11f398b27660b";
+      hash = "sha256-FfWmSYaeryTDbsGJT3R7YK1oiyJcrR7YKKBOF+9PmpY=";
+      fetchSubmodules = true;
+    };
+
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
+  });
 
   mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
 in
