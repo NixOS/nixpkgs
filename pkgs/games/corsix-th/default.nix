@@ -13,10 +13,7 @@
 , timidity
 # Darwin dependencies
 , libiconv
-, Cocoa
-, CoreVideo
-, CoreMedia
-, VideoToolbox
+, apple-sdk_11
 # Update
 , nix-update-script
 }:
@@ -49,13 +46,7 @@ stdenv.mkDerivation(finalAttrs: {
     SDL2
     SDL2_mixer
     timidity
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Cocoa
-    CoreVideo
-    CoreMedia
-    VideoToolbox
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   cmakeFlags = [ "-Wno-dev" ];
 
