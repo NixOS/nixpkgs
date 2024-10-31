@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, pkgs
-, overrideSDK
-, darwin
-, testers
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  pkgs,
+  overrideSDK,
+  darwin,
+  testers,
+  nix-update-script,
 }:
 let
   stdenv = overrideSDK pkgs.stdenv "11.0";
