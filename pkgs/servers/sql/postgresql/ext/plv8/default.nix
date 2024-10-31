@@ -5,6 +5,7 @@
 , perl
 , postgresql
 , jitSupport
+, buildPostgresqlExtension
 # For test
 , runCommand
 , coreutils
@@ -13,7 +14,7 @@
 
 let
   libv8 = nodejs_20.libv8;
-in stdenv.mkDerivation (finalAttrs: {
+in buildPostgresqlExtension (finalAttrs: {
   pname = "plv8";
   version = "3.2.3";
 
@@ -36,7 +37,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libv8
-    postgresql
   ];
 
   buildFlags = [ "all" ];
@@ -48,24 +48,11 @@ in stdenv.mkDerivation (finalAttrs: {
     "V8_OUTDIR=${libv8}/lib"
   ];
 
-  installFlags = [
-    # PGXS only supports installing to postgresql prefix so we need to redirect this
-    "DESTDIR=${placeholder "out"}"
-  ];
-
   # No configure script.
   dontConfigure = true;
 
   postPatch = ''
     patchShebangs ./generate_upgrade.sh
-  '';
-
-  postInstall = ''
-    # Move the redirected to proper directory.
-    # There appear to be no references to the install directories
-    # so changing them does not cause issues.
-    mv "$out/nix/store"/*/* "$out"
-    rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
   passthru = {

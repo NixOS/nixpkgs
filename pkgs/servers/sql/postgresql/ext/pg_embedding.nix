@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_embedding";
   version = "0.3.6";
 
@@ -10,14 +10,6 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-NTBxsQB8mR7e/CWwkCEyDiYhi3Nxl/aKgRBwqc0THcI=";
   };
-
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    install -D -t $out/lib *.so
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
 
   meta = with lib; {
     description = "PostgreSQL extension implementing the HNSW algorithm for vector similarity search";
