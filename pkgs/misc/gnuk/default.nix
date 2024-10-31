@@ -1,8 +1,15 @@
-{ lib, stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
-, python3Packages, fetchgit
+{
+  lib,
+  stdenv,
+  gcc-arm-embedded,
+  binutils-arm-embedded,
+  makeWrapper,
+  python3Packages,
+  fetchgit,
 
-# Extra options
-, vid ? "234b", pid ? "0000"
+  # Extra options
+  vid ? "234b",
+  pid ? "0000",
 }:
 
 stdenv.mkDerivation {
@@ -16,8 +23,16 @@ stdenv.mkDerivation {
     sha256 = "16wa3xsaq4r8caw6c24hnv4j78bklacix4in2y66j35h68ggr3j1";
   };
 
-  nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
-  buildInputs = with python3Packages; [ python pyusb colorama ];
+  nativeBuildInputs = [
+    gcc-arm-embedded
+    binutils-arm-embedded
+    makeWrapper
+  ];
+  buildInputs = with python3Packages; [
+    python
+    pyusb
+    colorama
+  ];
 
   configurePhase = ''
     cd src
