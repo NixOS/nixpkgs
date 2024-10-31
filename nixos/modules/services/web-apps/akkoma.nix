@@ -279,6 +279,7 @@ let
         cd "${cfg.package}"
 
         RUNTIME_DIRECTORY="''${RUNTIME_DIRECTORY:-/run/akkoma}"
+        CACHE_DIRECTORY="''${CACHE_DIRECTORY:-/var/cache/akkoma}" \
         AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
