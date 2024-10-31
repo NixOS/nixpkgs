@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
@@ -16,8 +17,7 @@
   mupdf,
   fontconfig,
   freetype,
-  stdenv,
-  darwin,
+  apple-sdk_11,
 }:
 
 buildGoModule rec {
@@ -76,6 +76,9 @@ buildGoModule rec {
 
   buildInputs =
     [
+      mupdf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGL
       libX11
       libXcursor
@@ -83,14 +86,11 @@ buildGoModule rec {
       libXinerama
       libXi
       libXxf86vm
-      mupdf
       fontconfig
       freetype
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Carbon
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
+      apple-sdk_11
     ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
