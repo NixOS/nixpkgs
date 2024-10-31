@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchPypi,
+  fetchpatch2,
   buildPythonPackage,
   isPy27,
   pythonAtLeast,
@@ -29,6 +30,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
   };
+
+  patches = [
+    # https://gitlab.com/ase/ase/-/merge_requests/3400
+    (fetchpatch2 {
+      name = "numpy_2-compatibility.patch";
+      url = "https://gitlab.com/ase/ase/-/commit/5434193ad9dd2cb20a76b3d503fa2b50d7a8ed34.patch";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-3hsyzYnFCrlZDT/jqJKKvj2UXjnjLU0U6PJqgOpA7CU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
