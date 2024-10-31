@@ -55,6 +55,7 @@ buildPythonApplication rec {
     simde
     lcms2
     librsync
+    matplotlib
     openssl.dev
     xxHash
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
