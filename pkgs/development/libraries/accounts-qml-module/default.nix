@@ -1,15 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, accounts-qt
-, dbus-test-runner
-, pkg-config
-, qmake
-, qtbase
-, qtdeclarative
-, qttools
-, signond
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  unstableGitUpdater,
+  accounts-qt,
+  dbus-test-runner,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtdeclarative,
+  qttools,
+  signond,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,21 +30,23 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch = ''
-    substituteInPlace src/src.pro \
-      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
-      --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+  postPatch =
+    ''
+      substituteInPlace src/src.pro \
+        --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
+        --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
 
-    # Find qdoc
-    substituteInPlace doc/doc.pri \
-      --replace-fail 'QDOC = $$[QT_INSTALL_BINS]/qdoc' 'QDOC = qdoc'
+      # Find qdoc
+      substituteInPlace doc/doc.pri \
+        --replace-fail 'QDOC = $$[QT_INSTALL_BINS]/qdoc' 'QDOC = qdoc'
 
-    # Don't install test binary
-    sed -i tests/tst_plugin.pro \
-      -e '/TARGET = tst_plugin/a INSTALLS -= target'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i accounts-qml-module.pro -e '/tests/d'
-  '';
+      # Don't install test binary
+      sed -i tests/tst_plugin.pro \
+        -e '/TARGET = tst_plugin/a INSTALLS -= target'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i accounts-qml-module.pro -e '/tests/d'
+    '';
 
   # QMake can't find Qt modules in buildInputs
   strictDeps = false;
@@ -88,11 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/accounts-qml-module/doc $doc
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "VERSION_";
+  };
+
+  meta = {
     description = "QML bindings for libaccounts-qt + libsignon-qt";
     homepage = "https://gitlab.com/accounts-sso/accounts-qml-module";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })
