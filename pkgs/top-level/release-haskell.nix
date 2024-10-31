@@ -591,9 +591,6 @@ let
       language-nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
-      large-hashable = [
-        compilerNames.ghc928
-      ];
       nix-paths = released;
       titlecase = lib.subtractLists [
         compilerNames.ghc9101
