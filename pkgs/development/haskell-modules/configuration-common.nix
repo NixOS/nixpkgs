@@ -2002,14 +2002,6 @@ self: super: {
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
-  vivid = overrideCabal (drv: assert drv.version == "0.5.2.0"; {
-    # 2024-10-18: Some library dependency must have stopped
-    # re-exporting 'void', so now it needs an extra import line.
-    # Fixed in 0.5.2.1.
-    postPatch = ''
-      sed -i '/) where/a import Control.Monad (void)' Vivid/GlobalState.hs
-    '';
-  }) super.vivid;
 
   # Test suite does not compile.
   feed = dontCheck super.feed;
