@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
   ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./dynamic-lookup-darwin.patch);
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
