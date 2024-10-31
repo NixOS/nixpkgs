@@ -34,6 +34,6 @@ buildDotnetModule rec {
       Cross-Platform tool to dump the signing certificate from a Portable Executable (PE) file.
     '';
     license = lib.licenses.asl20;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) baloo; };
+    maintainers = [ lib.maintainers.baloo ];
   };
 }
