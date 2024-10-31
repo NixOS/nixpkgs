@@ -24,6 +24,7 @@ let
     else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
     else if stdenv.hostPlatform.system == "aarch64-linux" then "linux-arm64"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then "macos64-arm64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ flokli r3dl3g ];
     mainProgram = "jameica";
   };
