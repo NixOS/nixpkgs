@@ -12,6 +12,7 @@
   wrapGAppsHook4,
   makeDesktopItem,
   stdenv,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tsukimi";
@@ -67,6 +68,8 @@ rustPlatform.buildRustPackage rec {
 
     install -Dm644 resources/moe.tsuna.tsukimi.desktop.in $out/share/applications/moe.tsuna.tsukimi.desktop
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple third-party Emby client, featured with GTK4-RS, MPV and GStreamer";
