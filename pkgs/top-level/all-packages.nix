@@ -1465,8 +1465,6 @@ with pkgs;
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
-  amdgpu_top = callPackage ../tools/system/amdgpu_top { };
-
   acquire = with python3Packages; toPythonApplication acquire;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
@@ -9438,10 +9436,14 @@ with pkgs;
   nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
   corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
 
+  nodejs_23 = callPackage ../development/web/nodejs/v23.nix { };
+  nodejs-slim_23 = callPackage ../development/web/nodejs/v23.nix { enableNpm = false; };
+  corepack_23 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_23; });
+
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_22;
-  nodejs-slim_latest = nodejs-slim_22;
-  corepack_latest = hiPrio corepack_22;
+  nodejs_latest = nodejs_23;
+  nodejs-slim_latest = nodejs-slim_23;
+  corepack_latest = hiPrio corepack_23;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -38328,8 +38330,6 @@ with pkgs;
     stdenv = stdenvNoLibc;
     nanoizeNewlib = true;
   };
-
-  omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
   wasmtime = callPackage ../development/interpreters/wasmtime {
     inherit (darwin.apple_sdk.frameworks) Security;
