@@ -83,9 +83,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  # Tests do not work with GStreamer 1.18.
-  # https://gitlab.gnome.org/GNOME/totem/-/issues/450
-  doCheck = false;
+  doCheck = true;
 
   postPatch = ''
     chmod +x meson_compile_python.py # patchShebangs requires executable file
@@ -97,7 +95,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     xvfb-run -s '-screen 0 800x600x24' \
-      ninja test
+      meson test --print-errorlogs
 
     runHook postCheck
   '';
