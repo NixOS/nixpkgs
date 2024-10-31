@@ -84,7 +84,6 @@ python.pkgs.buildPythonApplication rec {
     w3lib
     yt-dlp
   ];
-
   makeWrapperArgs =
     [
       "--set USE_NODE True" # used through dependencies, not needed explicitly
