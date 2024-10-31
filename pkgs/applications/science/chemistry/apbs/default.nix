@@ -8,6 +8,7 @@
 , python3
 , libintl
 , libiconv
+, darwin
 }:
 let
   # this is a fork version of fetk (http://www.fetk.org/)
@@ -84,9 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     suitesparse
     blas
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libintl
     libiconv
+    darwin.libutil
   ];
 
   cmakeFlags = [

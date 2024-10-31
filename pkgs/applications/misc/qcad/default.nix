@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
@@ -14,18 +13,19 @@
 , qtsvg
 , qtxmlpatterns
 , qtmacextras
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.30.1.3";
+  version = "3.31.1.2";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    hash = "sha256-bGSXFX1LuNZzs981t0GZxnMPzyJ+bddB4m/wkLMsfg0=";
+    hash = "sha256-lTe/XCW/qUARfIpcps1RMjubLiIR7cvYMZ0XgebaDrk=";
   };
 
   patches = [
@@ -47,6 +47,7 @@ mkDerivation rec {
     pkg-config
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,7 +58,7 @@ mkDerivation rec {
     qtscript
     qtsvg
     qtxmlpatterns
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
@@ -68,17 +69,17 @@ mkDerivation rec {
     "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
   '' + ''

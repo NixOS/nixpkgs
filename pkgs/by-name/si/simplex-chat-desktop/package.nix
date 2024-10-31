@@ -6,11 +6,11 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.0.3";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-No3nS1AUOxhaxvaPvc8tLW+fj59P4AT/bt0dZobdGAw=";
+    hash = "sha256-Fe84rggb539MJXkbJqQRemToTLyX61BbXtoDRUuds8k=";
   };
 
   appimageContents = appimageTools.extract {
@@ -43,7 +43,7 @@ in appimageTools.wrapType2 {
     homepage = "https://simplex.chat";
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ terryg yuu ];
+    maintainers = with maintainers; [ terryg ];
     platforms = [ "x86_64-linux" ];
   };
 }

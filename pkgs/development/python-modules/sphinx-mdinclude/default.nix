@@ -10,6 +10,7 @@
   docutils,
   mistune,
   pygments,
+  sphinx,
 
   # tests
   pytestCheckHook,
@@ -17,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-mdinclude";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinx_mdinclude";
     inherit version;
-    hash = "sha256-7OPYEuLVWbTn5H9ntqh7Dipom2svURR5XI7Uf/s5wWk=";
+    hash = "sha256-RHRi6Cy4vmFASiIEIn+SB2nrkj0vV2COMyXzu4goa0w=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -32,12 +33,12 @@ buildPythonPackage rec {
     docutils
     mistune
     pygments
+    sphinx
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    broken = true; # https://github.com/omnilib/sphinx-mdinclude/issues/22
     homepage = "https://github.com/omnilib/sphinx-mdinclude";
     changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${version}/CHANGELOG.md";
     description = "Sphinx extension for including or writing pages in Markdown format";
@@ -50,6 +51,9 @@ buildPythonPackage rec {
       sphinx-mdinclude is a fork of m2r and m2r2, focused only on providing a Sphinx extension.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [
+      flokli
+      JulianFP
+    ];
   };
 }

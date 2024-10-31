@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix
+, nixosTests
 , boost
 , pkg-config
 , stdenv
@@ -11,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-08-19";
+  version = "0-unstable-2024-10-06";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "acf3c351f8de47c6857f31948ab253f9c7ce2a6f";
-    hash = "sha256-jcY81r8PdMQ9dCGhT0YLZzxPj3kQJXyWCmvQLXbR1EI=";
+    rev = "1b29816235b7573fca7f964709fd201e1a187024";
+    hash = "sha256-icNt2T1obK3hFNgBOgiiyOoiScUfz9blmRbNp3aOUBE=";
   };
 
   nativeBuildInputs = [
@@ -28,15 +29,12 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     nix
     boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     SystemConfiguration
   ]);
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nix-base32-0.1.2-alpha.0" = "sha256-wtPWGOamy3+ViEzCxMSwBcoR4HMMD0t8eyLwXfCDFdo=";
-    };
   };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
@@ -55,6 +53,14 @@ rustPlatform.buildRustPackage {
         --fish <($out/bin/attic gen-completions fish)
     fi
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";

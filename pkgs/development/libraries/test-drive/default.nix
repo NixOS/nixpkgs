@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "test-drive";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ObAnHFP1Hp0knf/jtGHynVF0CCqK47eqetePx4NLmlM=";
+    hash = "sha256-xRx8ErIN9xjxZt/nEsdIQkIGFRltuELdlI8lXA+M030=";
   };
 
   nativeBuildInputs = [
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
+
+  mesonAutoFeatures = "auto";
 
   meta = with lib; {
     description = "Procedural Fortran testing framework";

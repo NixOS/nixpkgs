@@ -5,9 +5,9 @@
 
 let
   platform =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "mac"
-    else if stdenv.isWindows then "windows"
+    if stdenv.hostPlatform.isLinux then "linux"
+    else if stdenv.hostPlatform.isDarwin then "mac"
+    else if stdenv.hostPlatform.isWindows then "windows"
     else throw "unsupported platform";
 in
 maven.buildMavenPackage rec {
@@ -31,7 +31,7 @@ maven.buildMavenPackage rec {
   dontConfigure = true;
   preBuild = ''
     jlink \
-      ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \

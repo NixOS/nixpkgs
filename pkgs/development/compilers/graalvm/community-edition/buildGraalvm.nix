@@ -18,12 +18,12 @@
 , zlib
   # extra params
 , extraCLibs ? [ ]
-, gtkSupport ? stdenv.isLinux
+, gtkSupport ? stdenv.hostPlatform.isLinux
 , useMusl ? false
 , ...
 } @ args:
 
-assert useMusl -> stdenv.isLinux;
+assert useMusl -> stdenv.hostPlatform.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
     "lib"
@@ -51,7 +51,7 @@ let
     "meta"
   ];
 
-  cLibs = lib.optionals stdenv.isLinux (
+  cLibs = lib.optionals stdenv.hostPlatform.isLinux (
     [ glibc zlib.static ]
     ++ lib.optionals (!useMusl) [ glibc.static ]
     ++ lib.optionals useMusl [ musl ]
@@ -86,7 +86,7 @@ let
       #
       # We therefor use --strip-components=1 vs 3 depending on the platform.
       tar xf "$src" -C "$out" --strip-components=${
-        if stdenv.isLinux then "1" else "3"
+        if stdenv.hostPlatform.isLinux then "1" else "3"
       }
 
       # Sanity check
@@ -104,12 +104,12 @@ let
     dontStrip = true;
 
     nativeBuildInputs = [ unzip makeWrapper ]
-      ++ lib.optional stdenv.isLinux autoPatchelfHook;
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
+      ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       stdenv.cc.cc.lib # libstdc++.so.6
@@ -120,23 +120,46 @@ let
       xorg.libXtst
     ];
 
-    postInstall = ''
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -sf $out/include/linux/*_md.h $out/include/
+    postInstall =
+      let
+        cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
+        preservedNixVariables = [
+          "-ELOCALE_ARCHIVE"
+          "-ENIX_BINTOOLS"
+          "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+          "-ENIX_BUILD_CORES"
+          "-ENIX_BUILD_TOP"
+          "-ENIX_CC"
+          "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+          "-ENIX_CFLAGS_COMPILE"
+          "-ENIX_HARDENING_ENABLE"
+          "-ENIX_LDFLAGS"
+        ];
+        preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
+      in
+      ''
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -sf $out/include/linux/*_md.h $out/include/
 
-      # copy-paste openjdk's preFixup
-      # Set JAVA_HOME automatically.
-      mkdir -p $out/nix-support
-      cat > $out/nix-support/setup-hook << EOF
-      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-      EOF
+        mkdir -p $out/share
+        # move files in $out like LICENSE.txt
+        find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+        # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
+        rm -f $out/LICENSE_NATIVEIMAGE.txt
 
-      wrapProgram $out/bin/native-image \
-        --prefix PATH : ${binPath} \
-        ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
-    '';
+        # copy-paste openjdk's preFixup
+        # Set JAVA_HOME automatically.
+        mkdir -p $out/nix-support
+        cat > $out/nix-support/setup-hook << EOF
+        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+        EOF
 
-    preFixup = lib.optionalString (stdenv.isLinux) ''
+        wrapProgram $out/bin/native-image \
+          --prefix PATH : ${binPath} \
+          ${toString (cLibsAsFlags ++ preservedNixVariablesAsFlags)}
+      '';
+
+    preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
       for bin in $(find "$out/bin" -executable -type f); do
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       done
@@ -147,7 +170,7 @@ let
       runHook preInstallCheck
 
       ${# broken in darwin
-      lib.optionalString stdenv.isLinux ''
+      lib.optionalString stdenv.hostPlatform.isLinux ''
         echo "Testing Jshell"
         echo '1 + 1' | $out/bin/jshell
       ''}
@@ -165,21 +188,19 @@ let
       echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-      extraNativeImageArgs="$(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n)"
-
       echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility $extraNativeImageArgs HelloWorld
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
       ./helloworld | fgrep 'Hello World'
 
       ${# -H:+StaticExecutableWithDynamicLibC is only available in Linux
-      lib.optionalString (stdenv.isLinux && !useMusl) ''
+      lib.optionalString (stdenv.hostPlatform.isLinux && !useMusl) ''
         echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
         $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 
       ${# --static is only available in Linux
-      lib.optionalString (stdenv.isLinux && useMusl) ''
+      lib.optionalString (stdenv.hostPlatform.isLinux && useMusl) ''
         echo "Ahead-Of-Time compilation with --static and --libc=musl"
         $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
         ./helloworld | fgrep 'Hello World'

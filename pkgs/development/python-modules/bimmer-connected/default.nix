@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     china = [ pillow ];
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
     time-machine
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # presumably regressed in pytest-asyncio 0.23.0

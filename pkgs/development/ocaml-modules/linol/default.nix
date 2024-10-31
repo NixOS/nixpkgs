@@ -12,7 +12,13 @@ rec {
     hash = "sha256-MwEisPJdzZN1VRnssotvExNMYOQdffS+Y2B8ZSUDVfo=";
   };
 
-  propagatedBuildInputs = [ yojson logs lsp ppx_yojson_conv_lib trace ];
+  propagatedBuildInputs = [
+    yojson
+    logs
+    (lsp.override { version = "1.18.0"; })
+    ppx_yojson_conv_lib
+    trace
+  ];
 
   meta = with lib; {
     description = "LSP server library";

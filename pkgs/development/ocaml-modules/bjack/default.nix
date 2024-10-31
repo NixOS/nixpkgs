@@ -11,7 +11,7 @@ buildDunePackage rec {
     hash = "sha256-jIxxqBVWphWYyLh+24rTxk4WWfPPdGCvNdevFJEKw70=";
   };
 
-  buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreAudio ];
+  buildInputs = [ dune-configurator ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate CoreAudio ];
   propagatedBuildInputs = [ libsamplerate libjack2 ];
 
   meta = with lib; {

@@ -1,5 +1,5 @@
 { lib
-, flutter322
+, flutter324
 , python3
 , fetchFromGitHub
 , pcre2
@@ -11,15 +11,15 @@
 , removeReferencesTo
 }:
 
-flutter322.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.0.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    hash = "sha256-7FgZZCaafjNUaniPWVtba57zFABIJnLOw4GpyMsegKQ=";
+    hash = "sha256-sAs/tglLt1igovtfs07+7G5/xeMcQgfR9G4b7VzyDVY=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
@@ -34,9 +34,6 @@ flutter322.buildFlutterApplication rec {
 
     substituteInPlace linux/CMakeLists.txt \
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
-
-    substituteInPlace linux/my_application.cc \
-      --replace-fail "gtk_widget_realize(GTK_WIDGET(window));" "gtk_widget_show(GTK_WIDGET(window));"
   '';
 
   preInstall = ''
@@ -46,21 +43,21 @@ flutter322.buildFlutterApplication rec {
 
   postInstall = ''
     # Swap the authenticator-helper symlink with the correct symlink.
-    ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/helper/authenticator-helper"
+    ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
     mkdir $out/share/icons
-    mv $out/app/linux_support/com.yubico.yubioath.png $out/share/icons
+    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons
 
     # Cleanup.
     rm -rf \
-      "$out/app/README.adoc" \
-      "$out/app/desktop_integration.sh" \
-      "$out/app/linux_support" \
+      "$out/app/$pname/README.adoc" \
+      "$out/app/$pname/desktop_integration.sh" \
+      "$out/app/$pname/linux_support" \
       $out/bin/* # We will repopulate this directory later.
 
     # Symlink binary.
-    ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
+    ln -sf "$out/app/$pname/authenticator" "$out/bin/yubioath-flutter"
 
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \

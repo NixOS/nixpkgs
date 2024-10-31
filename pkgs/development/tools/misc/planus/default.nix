@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "planus";
-  version = "0.4.0";
+  version = "1.0.0";
 
   src = fetchCrate {
     pname = "planus-cli";
     inherit version;
-    hash = "sha256-KpX4KSA2MjfRS8M0WVYpY4hoSvOOB7MUz7YKZwEGqj8=";
+    hash = "sha256-HbnuLu1yCpwouDVBH/vcFVLDMZWeqHH6qHFJoTbaS9Y=";
   };
 
-  cargoHash = "sha256-yT/ZK5GG0rXpiaCQlQclK2iY8BXhhmiW/UDX9aL8wBQ=";
+  cargoHash = "sha256-AJtQrImQlxnp1RbbOZHAJsvlhm39OlC5WyvD5jybMAY=";
 
   nativeBuildInputs = [
     installShellFiles

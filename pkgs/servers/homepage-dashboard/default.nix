@@ -16,8 +16,8 @@ let
   dashboardIcons = fetchFromGitHub {
     owner = "walkxcode";
     repo = "dashboard-icons";
-    rev = "a02a5999fe56948671721da8b0830cdd5b609ed7"; # Until 2024-02-25
-    hash = "sha256-s0Doh4j6CH66fZoQKMt4yc7aLStNFGMVoDp5dvs7+pk=";
+    rev = "be82e22c418f5980ee2a13064d50f1483df39c8c"; # Until 2024-07-21
+    hash = "sha256-z69DKzKhCVNnNHjRM3dX/DD+WJOL9wm1Im1nImhBc9Y=";
   };
 
   installLocalIcons = ''
@@ -29,16 +29,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.9.6";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-jUKXAqq6Oj8CmOuBUlsf0zDIcK+3MX/czzNDmakN9VM=";
+    hash = "sha256-qDbYgitMbjOMIZUyQuFSNAyb/ZRAcStm/jDrsIutKno=";
   };
 
-  npmDepsHash = "sha256-YjcF8FkURnTurcJ0Iq0ghv/bhu5sFA860jXrn3TkRds=";
+  npmDepsHash = "sha256-gAti4y4Ios7XjJ3nVOhzjwPzcAC2upODZ64qQjx17JE=";
 
   preBuild = ''
     mkdir -p config
@@ -50,9 +50,11 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.isDarwin [ cctools ];
+  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
-  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [
+    nodePackages.node-gyp-build
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -107,6 +109,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

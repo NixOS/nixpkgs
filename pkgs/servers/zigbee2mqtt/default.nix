@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
-  version = "1.40.0";
+  version = "1.40.2";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    hash = "sha256-LKRCsYQOSSLYLYi2IntJuPiLR+l4oUtyVRUoGs/NWeI=";
+    hash = "sha256-gm4MQabvm8NipV6Szml6l2Dy7q3O6YsurGGg9DzahHI=";
   };
 
-  npmDepsHash = "sha256-ufmNe1dVqtDirn1/VydNedns5V8y0oR8fuVi6E86JFs=";
+  npmDepsHash = "sha256-FF7RCV5SDzLUZ/dY8mnPEmYmBhJNjJScQ1R2yKDSawU=";
 
   buildInputs = lib.optionals withSystemd [
     systemdMinimal

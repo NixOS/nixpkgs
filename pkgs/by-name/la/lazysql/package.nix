@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.2.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-QzvaQMSr0PjeAGJr5ThAQ/U0dRMa17E5hiPnc2ViUNo=";
+    hash = "sha256-nDiy7LSSUp1cPgtCfLdu7LEh0A+Ga1p5eNVanbQtQ+E=";
   };
 
-  vendorHash = "sha256-celee8uyoirX+vtAww2iQJtRwJEHyfHL2mZA2muSRiQ=";
+  vendorHash = "sha256-SKNFViwoMzZ1hKKZSvTm0/kKro1IaUVsC+0Pbv7FoAU=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   meta = with lib; {
     description = "A cross-platform TUI database management tool written in Go";

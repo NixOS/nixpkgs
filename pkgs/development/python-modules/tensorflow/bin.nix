@@ -20,6 +20,7 @@
   distutils,
   wheel,
   jax,
+  ml-dtypes,
   opt-einsum,
   tensorflow-estimator-bin,
   tensorboard,
@@ -38,30 +39,34 @@
   typing-extensions,
 }:
 
-# We keep this binary build for two reasons:
+# We keep this binary build for three reasons:
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
+# - the source build doesn't work on NVIDIA Jetson platforms
 
 # unsupported combination
-assert !(stdenv.isDarwin && cudaSupport);
+assert !(stdenv.hostPlatform.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
+
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaX64 = cudaSupport && stdenv.hostPlatform.isx86_64;
 in
 buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
-  inherit (packages) version;
+  version = packages."${"version" + lib.optionalString isCudaJetson "_jetson"}";
   format = "wheel";
 
   src =
     let
       pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
       platform = stdenv.system;
-      cuda = lib.optionalString cudaSupport "_gpu";
+      cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
       key = "${platform}_${pyVerNoDot}${cuda}";
     in
-    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
+    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported configuration: ${key}"));
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -73,7 +78,7 @@ buildPythonPackage {
     protobuf
     numpy
     scipy
-    jax
+    (if isCudaX64 then jax else ml-dtypes)
     termcolor
     grpcio
     six
@@ -90,10 +95,13 @@ buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  build-system = [
-    distutils
-    wheel
-  ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
+  build-system =
+    [
+      distutils
+      wheel
+    ]
+    ++ lib.optionals cudaSupport [ addDriverRunpath ]
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -102,6 +110,11 @@ buildPythonPackage {
     chmod u+rwx -R ./dist
 
     pushd dist
+
+    for f in tensorflow-*+nv*.whl; do
+      # e.g. *nv24.07* -> *nv24.7*
+      mv "$f" "$(sed -E 's/(nv[0-9]+)\.0*([0-9]+)/\1.\2/' <<< "$f")"
+    done
 
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
@@ -147,7 +160,7 @@ buildPythonPackage {
 
       rpath = lib.makeLibraryPath (libpaths ++ cudapaths);
     in
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       # This is an array containing all the directories in the tensorflow2
       # package that contain .so files.
       #

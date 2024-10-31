@@ -760,7 +760,7 @@ that depend on that library, you may want to use:
 
 ```nix
 haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_6_2_0;
+  Cabal = self.Cabal_3_14_0_0;
 })
 ```
 
@@ -1075,6 +1075,9 @@ benchmark component.
 
 `disableLibraryProfiling drv`
 : Sets the `enableLibraryProfiling` argument to `false` for `drv`.
+
+`disableParallelBuilding drv`
+: Sets the `enableParallelBuilding` argument to `false` for `drv`.
 
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 

@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "14.3.0";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    hash = "sha256-slKBFq6NyWHQmJq/YR3LmbGnHyZgRg0hej90tZDOGzA=";
+    hash = "sha256-QXNecJ6SDeWpRjzHRTdPJHob1H3q2HZmWuL2zBt2Tlw=";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake python3 bison jq ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools

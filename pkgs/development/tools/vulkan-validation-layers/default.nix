@@ -24,14 +24,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.283.0";
+  version = "1.3.296.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-OT9VfGg3+NBVV6SCGZ+Hu9FAxGJXXT45yvt2sHDIFTA=";
+    hash = "sha256-H5AG+PXM3IdCfDqHMdaunRUWRm8QgdS6ZbZLMaOOALk=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -40,12 +42,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glslang
     libX11
     libXau
     libXdmcp
     libXrandr
     libffi
     libxcb
+    robin-hood-hashing
+    spirv-headers
     spirv-tools
     vulkan-headers
     vulkan-utility-libraries
@@ -53,11 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGLSLANG_INSTALL_DIR=${glslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
-    "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];

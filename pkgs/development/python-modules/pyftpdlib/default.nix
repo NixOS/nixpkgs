@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   dependencies = [ pysendfile ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ssl = [ pyopenssl ];
   };
 

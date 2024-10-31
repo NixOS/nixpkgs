@@ -74,7 +74,7 @@ mkDerivation (
         # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
         "OBJCOPY=${cctools}/bin/strip"
       ];
-    RENAME = "-D";
+    env.RENAME = "-D";
 
     passthru.tests = {
       netbsd-install = install;
@@ -118,7 +118,7 @@ mkDerivation (
         install -D $BSDSRCDIR/common/include/rpc/types.h $dev/include/rpc/types.h
         sed -i '1s;^;#include "nbtool_config.h"\n;' $dev/include/rpc/types.h
       ''
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         mkdir -p $dev/include/ssp
         touch $dev/include/ssp/ssp.h
       ''

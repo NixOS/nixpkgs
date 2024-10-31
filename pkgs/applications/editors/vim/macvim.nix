@@ -8,7 +8,7 @@
 , cscope
 , ruby_3_2
 , tcl
-, perl536
+, perl540
 , luajit
 , darwin
 , libiconv
@@ -17,8 +17,7 @@
 
 # Try to match MacVim's documented script interface compatibility
 let
-  # Perl 5.30 - closest we get is 5.36. 5.38 is currently failing
-  perl = perl536;
+  perl = perl540;
   # Ruby 3.2
   ruby = ruby_3_2;
 
@@ -35,13 +34,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "178";
+  version = "179";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-JYh5fyaYuME/Lk67vrf1hYOIcAkEbwtslcnI9KRzHa8=";
+    hash = "sha256-L9LVXyeA09aMtNf+b/Oo+eLpeVEKTD1/oNWCiFn5FbU=";
   };
 
   enableParallelBuilding = true;
@@ -95,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
     in
     ''
+      unset DEVELOPER_DIR # Use the system Xcode not the nixpkgs SDK.
+
       CC=/usr/bin/clang
 
       DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer

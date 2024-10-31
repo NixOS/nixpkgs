@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build-system
+  versioneer,
+
   # dependencies
   lightning-utilities,
   numpy,
@@ -15,8 +18,6 @@
   pytestCheckHook,
 
   stdenv,
-
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,13 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "lightning-utilities" ];
 
+  # Remove vendorized versioneer (incompatible with python 3.12)
+  postPatch = ''
+    rm versioneer.py
+  '';
+
+  build-system = [ versioneer ];
+
   dependencies = [
     lightning-utilities
     numpy
@@ -46,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
     "test_progressive_resize_integration"
   ];
@@ -66,7 +74,5 @@ buildPythonPackage rec {
     homepage = "https://rising.rtfd.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    # AttributeError: module 'configparser' has no attribute 'SafeConfigParser'. Did you mean: 'RawConfigParser'?
-    broken = pythonAtLeast "3.12";
   };
 }

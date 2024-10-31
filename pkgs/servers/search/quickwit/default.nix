@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
     substituteInPlace ./quickwit-proto/build.rs \
       --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
+    cp /build/cargo-vendor-dir/Cargo.lock /build/source/quickwit/Cargo.lock
   '';
 
   sourceRoot = "${src.name}/quickwit";
@@ -82,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

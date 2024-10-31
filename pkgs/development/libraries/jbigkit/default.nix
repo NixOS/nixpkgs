@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jbigkit";
@@ -8,6 +8,19 @@ stdenv.mkDerivation rec {
     url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${pname}-${version}.tar.gz";
     sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
   };
+
+  patches = [
+    # Archlinux patch: this helps users to reduce denial-of-service risks, as in CVE-2017-9937
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0013-new-jbig.c-limit-s-maxmem-maximum-decoded-image-size.patch";
+      hash = "sha256-Yq5qCTF7KZTrm4oeWbpctb+QLt3shJUGEReZvd0ey9k=";
+    })
+    # Archlinux patch: fix heap overflow
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0015-jbg_newlen-check-for-end-of-file-within-MARKER_NEWLE.patch";
+      hash = "sha256-F3qA/btR9D9NfzrNY76X4Z6vG6NrisI36SjCDjS+F5s=";
+    })
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"

@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper unzip ocaml curl ];
   buildInputs = [ ncurses getconf ]
-    ++ lib.optionals stdenv.isLinux [ bubblewrap ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   patches = [ ./opam-shebangs.patch ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     mv $out/bin/opam $out/bin/.opam-wrapped
     makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
       --argv0 "opam" \
-      --suffix PATH : ${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
+      --suffix PATH : ${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.hostPlatform.isLinux "${bubblewrap}/bin:"}${getconf}/bin \
       --set OPAM_USER_PATH_RO /run/current-system/sw/bin:/nix/
     $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';

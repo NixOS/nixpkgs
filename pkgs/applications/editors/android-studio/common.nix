@@ -60,12 +60,15 @@
 , usbutils
 , which
 , runCommand
+, wayland
 , xkeyboard_config
 , xorg
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 , androidenv
+
+, forceWayland ? false
 }:
 
 let
@@ -176,7 +179,11 @@ let
           # For GTKLookAndFeel
           gtk2
           glib
-        ]}"
+
+          # For wayland support
+          wayland
+        ]}" \
+        ${lib.optionalString forceWayland "--add-flags -Dawt.toolkit.name=WLToolkit"}
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
       wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [

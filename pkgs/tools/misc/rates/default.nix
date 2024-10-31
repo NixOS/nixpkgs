@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5EcTeMfa1GNp1q60qSgEi/I3298hXUD1Vc1K55XGW4I=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "CLI tool that brings currency exchange rates right into your terminal";

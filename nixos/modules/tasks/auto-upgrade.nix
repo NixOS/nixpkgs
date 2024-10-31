@@ -168,7 +168,7 @@ in {
     assertions = [{
       assertion = !((cfg.channel != null) && (cfg.flake != null));
       message = ''
-        The options 'system.autoUpgrade.channels' and 'system.autoUpgrade.flake' cannot both be set.
+        The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
       '';
     }];
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.23.1";
+  version = "2.23.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-yEiehHcJcVC0hjb9NFgsrSxmAsxNki8HNGKk8dEk75s=";
+    hash = "sha256-wK3RaVq5PwDVAKotkDVEeAMImJxJVN1GceyoKBGBkOY=";
   };
 
   build-system = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     graphviz = [ graphviz ];
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     virtualenv
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pipdeptree" ];
 

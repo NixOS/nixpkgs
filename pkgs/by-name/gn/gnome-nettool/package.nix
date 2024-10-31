@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-nettool/${lib.versions.major version}/gnome-nettool-${version}.tar.xz";
-    sha256 = "pU8p7vIDiu5pVRyLGcpPdY5eueIJCkvGtWM9/wGIdR8=";
+    hash = "sha256-pU8p7vIDiu5pVRyLGcpPdY5eueIJCkvGtWM9/wGIdR8=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gnome-nettool/-/merge_requests/3
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-nettool/-/commit/1124c3e1fdb8472d30b7636500229aa16cdc1244.patch";
-      sha256 = "fbpfL8Xb1GsadpQzAdmu8FSPs++bsGCVdcwnzQWttGY=";
+      hash = "sha256-fbpfL8Xb1GsadpQzAdmu8FSPs++bsGCVdcwnzQWttGY=";
     })
   ];
 

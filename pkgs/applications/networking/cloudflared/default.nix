@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2024.8.3";
+  version = "2024.10.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     rev = "refs/tags/${version}";
-    hash = "sha256-w0VocNM3KVu4TG5s9vdGV4Au+Hz7PfPoaksqidMRJ+E=";
+    hash = "sha256-xCLLWe15+YmU3SyWkclzHBojHi32nUJGe4xY3NZC05M=";
   };
 
   vendorHash = null;
@@ -69,7 +69,7 @@ buildGoModule rec {
       --replace "TestManagerCtxDoneCloseSessions" "SkipManagerCtxDoneCloseSessions"
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests.simple = callPackage ./tests.nix { inherit version; };

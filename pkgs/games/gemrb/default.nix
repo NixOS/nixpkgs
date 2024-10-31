@@ -20,20 +20,20 @@ let
   backend =
     if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
 
-  withVLC = stdenv.isDarwin;
+  withVLC = stdenv.hostPlatform.isDarwin;
 
   inherit (lib) optional optionalString;
 
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    hash = "sha256-riea48Jc9zYb19mf5sBunTp5l27PGRFd/B5KdCUWr6Y=";
+    hash = "sha256-n01Q/27iYXahBbUDFHW1Q3lPqCtTvhstUBgownZbKtg=";
   };
 
   buildInputs = [

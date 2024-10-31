@@ -20,7 +20,7 @@ mkKdeDerivation {
     })
   ];
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtkeychain
     qtwayland

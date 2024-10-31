@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.frp;
   settingsFormat = pkgs.formats.toml { };
@@ -12,12 +9,12 @@ in
 {
   options = {
     services.frp = {
-      enable = mkEnableOption "frp";
+      enable = lib.mkEnableOption "frp";
 
-      package = mkPackageOption pkgs "frp" { };
+      package = lib.mkPackageOption pkgs "frp" { };
 
-      role = mkOption {
-        type = types.enum [ "server" "client" ];
+      role = lib.mkOption {
+        type = lib.types.enum [ "server" "client" ];
         description = ''
           The frp consists of `client` and `server`. The server is usually
           deployed on the machine with a public IP address, and
@@ -26,7 +23,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
         default = { };
         description = ''
@@ -44,13 +41,13 @@ in
 
   config =
     let
-      serviceCapability = optionals isServer [ "CAP_NET_BIND_SERVICE" ];
+      serviceCapability = lib.optionals isServer [ "CAP_NET_BIND_SERVICE" ];
       executableFile = if isClient then "frpc" else "frps";
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       systemd.services = {
         frp = {
-          wants = optionals isClient [ "network-online.target" ];
+          wants = lib.optionals isClient [ "network-online.target" ];
           after = if isClient then [ "network-online.target" ] else [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           description = "A fast reverse proxy frp ${cfg.role}";
@@ -59,10 +56,10 @@ in
             Restart = "on-failure";
             RestartSec = 15;
             ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
-            StateDirectoryMode = optionalString isServer "0700";
+            StateDirectoryMode = lib.optionalString isServer "0700";
             DynamicUser = true;
             # Hardening
-            UMask = optionalString isServer "0007";
+            UMask = lib.optionalString isServer "0007";
             CapabilityBoundingSet = serviceCapability;
             AmbientCapabilities = serviceCapability;
             PrivateDevices = true;
@@ -72,7 +69,7 @@ in
             ProtectKernelModules = true;
             ProtectKernelLogs = true;
             ProtectControlGroups = true;
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ] ++ optionals isClient [ "AF_UNIX" ];
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ] ++ lib.optionals isClient [ "AF_UNIX" ];
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
             RestrictRealtime = true;
@@ -85,5 +82,5 @@ in
       };
     };
 
-  meta.maintainers = with maintainers; [ zaldnoay ];
+  meta.maintainers = with lib.maintainers; [ zaldnoay ];
 }

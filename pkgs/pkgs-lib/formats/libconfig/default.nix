@@ -3,14 +3,6 @@
 }:
 let
   inherit (pkgs) buildPackages callPackage;
-  # Implementation notes:
-  #   Libconfig spec: https://hyperrealm.github.io/libconfig/libconfig_manual.html
-  #
-  #   Since libconfig does not allow setting names to start with an underscore,
-  #   this is used as a prefix for both special types and include directives.
-  #
-  #   The difference between 32bit and 64bit values became optional in libconfig
-  #   1.5, so we assume 64bit values for all numbers.
 
   libconfig-generator = buildPackages.rustPlatform.buildRustPackage {
     name = "libconfig-generator";

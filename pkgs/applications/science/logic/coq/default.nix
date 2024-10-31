@@ -5,7 +5,7 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
+{ lib, stdenv, fetchzip, fetchurl, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
 , ocamlPackages_4_14
@@ -62,7 +62,7 @@ let
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
-    { inherit lib stdenv fetchzip; }
+    { inherit lib stdenv fetchzip fetchurl; }
     { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
     args.version;
   version = fetched.version;

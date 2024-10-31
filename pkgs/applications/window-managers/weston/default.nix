@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "14.0.0";
+  version = "14.0.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-R/0DJbC5SOmwA6OP306zqFgfP9x0C4kys1roeTv05KU=";
+    hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
   };
 
   depsBuildBuild = [ pkg-config ];

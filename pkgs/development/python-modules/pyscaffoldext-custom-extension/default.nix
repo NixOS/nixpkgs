@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyscaffold
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit

@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
-    longDescription =
-      '' GNU Rush is a Restricted User Shell, designed for sites
+    longDescription = ''
+         GNU Rush is a Restricted User Shell, designed for sites
          providing limited remote access to their resources, such as
          svn or git repositories, scp, or the like.  Using a
          sophisticated configuration file, Rush gives you complete

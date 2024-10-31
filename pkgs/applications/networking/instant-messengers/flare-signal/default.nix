@@ -21,23 +21,24 @@
 
 stdenv.mkDerivation rec {
   pname = "flare";
-  version = "0.15.0";
+  version = "0.15.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     rev = version;
-    hash = "sha256-sIT4oEmIV8TJ5MMxg3vxkvK+7PaIy/01kN9I2FTsfo0=";
+    hash = "sha256-w8H6EYnVYJ6gDhdeZwyxRquem4ayZ4cgLaJMKqcetuI=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "blurhash-0.2.3" = "sha256-s1777+2O0D/VyKwlPUA53gho5sOP8pN610KqxEjugz0=";
       "curve25519-dalek-4.1.3" = "sha256-bPh7eEgcZnq9C3wmSnnYv0C4aAP+7pnwk9Io29GrI4A=";
-      "libsignal-core-0.1.0" = "sha256-4aHINlpVAqVTtm7npwXQRutZUmIxYgkhXhApg7jSM4M=";
-      "libsignal-service-0.1.0" = "sha256-UMQqp6hfyVtUwkAqsw/xsn7UrGul/F4WVC/Oy5s+hqA=";
-      "presage-0.6.2" = "sha256-4E23mzXwb5gcj0XpXB17a5BD96+ZAl7dh5I6vMvE9Kg=";
+      "libsignal-core-0.1.0" = "sha256-AdN8UHu0khgsog1btE++0J4BmdUC6wMpZzL7HPzhALQ=";
+      "libsignal-service-0.1.0" = "sha256-bnbbbnoBaHUdobBywOAUQojoMYkOlgI2O1RG2DoyvUc=";
+      "presage-0.6.2" = "sha256-AB4ttolC6MPp3foT66DG5RArqX+c1wf2w3lIZ0u0LCM=";
     };
   };
 

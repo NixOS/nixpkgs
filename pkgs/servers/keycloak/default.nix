@@ -18,11 +18,11 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "25.0.4";
+  version = "26.0.2";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-Pj8+0bfYnHhkYIDQkePpsmbYb6MN4BI+2VLLdZv3C1Q=";
+    hash = "sha256-bhzzhFYMimGts5EElvlRpii4UGPzug6R0/F1lfbXKok=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     mkdir $out
     cp -r * $out
 
-    rm $out/bin/*.{ps1,bat}
+    rm $out/bin/*.{ps1,bat,orig}
 
     runHook postInstall
   '';

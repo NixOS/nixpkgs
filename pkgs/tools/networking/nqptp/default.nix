@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # this patch should be removed when > 1.2.4
+    # these patches should be removed when > 1.2.4
     ./remove-setcap.patch
+    ./systemd-service-capability.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -27,6 +28,11 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater {
     ignoredVersions = ".*(-dev|d0)";
   };
+
+  postInstall = ''
+    mkdir -p $out/lib/systemd/system
+    cp nqptp.service $out/lib/systemd/system
+  '';
 
   meta = {
     homepage = "https://github.com/mikebrady/nqptp";

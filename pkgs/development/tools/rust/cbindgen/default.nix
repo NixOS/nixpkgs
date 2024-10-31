@@ -23,9 +23,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XTGHHD5Qw3mr+lkPKOXyqb0K3sEENW8Sf0n9mtrFFXI=";
   };
 
+  patches = [
+    # open PR: https://github.com/mozilla/cbindgen/pull/1010
+    # see also: https://github.com/NixOS/nixpkgs/pull/298108
+    ./1010-fix-test-failures-due-to-CARGO_BUILD_TARGET.patch
+  ];
+
   cargoHash = "sha256-l4FgwXdibek4BAnqjWd1rLxpEwuMNjYgvo6X3SS3fRo=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     cmake
@@ -40,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     "--skip lib_default_uses_debug_build"
     "--skip lib_explicit_debug_build"
     "--skip lib_explicit_release_build"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # WORKAROUND: test_body fails when using clang
     # https://github.com/eqrion/cbindgen/issues/628
     "--skip test_body"

@@ -34,13 +34,13 @@ let
 
     env = {
       AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
-    } // lib.optionalAttrs stdenv.is32bit {
+    } // lib.optionalAttrs stdenv.hostPlatform.is32bit {
       NIX_CFLAGS_COMPILE = "-fpermissive";
     };
 
     # the configure script thinks that Darwin has ___exp10
     # but it’s not available on my systems (or hydra apparently)
-    postConfigure = lib.optionalString stdenv.isDarwin ''
+    postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace config.h \
         --replace "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
     '';

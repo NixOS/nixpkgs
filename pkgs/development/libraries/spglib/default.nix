@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gfortran gtest ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ openmp ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openmp ];
 
   cmakeFlags = [ "-DSPGLIB_WITH_Fortran=On" ];
 

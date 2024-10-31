@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gitg";
+    changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${version}/NEWS?ref_type=tags";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
     maintainers = with maintainers; [ domenkozar Luflosi ];

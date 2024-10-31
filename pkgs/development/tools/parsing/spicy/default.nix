@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.11.0";
+  version = "1.11.2";
 
   strictDeps = true;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "spicy";
     rev = "v${version}";
-    hash = "sha256-zndqNd4CTzXuDkkc6uzjwKdUnypnV/4NppcVJ0N3S1U=";
+    hash = "sha256-cWK/LdV73VkiUpXyK+M7AotD7ucmNvh3HOzpxtCfGQM=";
     fetchSubmodules = true;
   };
 

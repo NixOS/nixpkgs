@@ -453,7 +453,7 @@ See [](#ex-dockerTools-streamLayeredImage-exploringlayers) to understand how the
 `streamLayeredImage` allows scripts to be run when creating the additional layer with symlinks, allowing custom behaviour to affect the final results of the image (see the documentation of the `extraCommands` and `fakeRootCommands` attributes).
 
 The resulting repository tarball will list a single image as specified by the `name` and `tag` attributes.
-By default, that image will use a static creation date (see documentation for the `created` attribute).
+By default, that image will use a static creation date (see documentation for the `created` and `mtime` attributes).
 This allows the function to produce reproducible images.
 
 ### Inputs {#ssec-pkgs-dockerTools-streamLayeredImage-inputs}
@@ -516,10 +516,23 @@ This allows the function to produce reproducible images.
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
+  This date will be used for the image metadata.
   This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
 
   :::{.caution}
   Using `"now"` means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
+  :::
+
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
+
+`mtime` (String; _optional_)
+
+: Specifies the time used for the modification timestamp of files within the layers of the generated image.
+  This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
+
+  :::{.caution}
+  Using a non-constant date will cause built layers to have a different hash each time, preventing deduplication.
+  Using `"now"` also means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
   :::
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.

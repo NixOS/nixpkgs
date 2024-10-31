@@ -9,14 +9,14 @@ let
   pcsx2 = let
     self = {
       pname = "pcsx2";
-      version = "2.1.102";
+      version = "2.1.127";
       src = fetchFromGitHub {
         pname = "pcsx2-source";
         inherit (self) version;
         owner = "PCSX2";
         repo = "pcsx2";
         rev = "v${self.version}";
-        hash = "sha256-OBxrdZVx6HbSFO6sc2D2HP6iYH3ZKDj+uEqM7cxZNm0=";
+        hash = "sha256-zvvrGxGjIQjSmo18BDG2J3+PoysXj8WxpwtrcXK8LH8=";
       };
     };
   in
@@ -27,14 +27,14 @@ let
   pcsx2_patches = let
     self = {
       pname = "pcsx2_patches";
-      version = "0-unstable-2024-08-12";
+      version = "0-unstable-2024-09-05";
       src = fetchFromGitHub {
         pname = "pcsx2_patches-source";
         inherit (self) version;
         owner = "PCSX2";
         repo = "pcsx2_patches";
-        rev = "9ea7fca481e1e4c2263ca69f9a5c9a70c92626dc";
-        hash = "sha256-T0yTTW6P/NrZsANoduj+gCXyd5qqDRETxLblmnVnP/o=";
+        rev = "377f30ae19acde655cc412086fa1840d16d54a93";
+        hash = "sha256-g2SMMC/oHSF0G3+zwvk1vOoQgYFrPd3eaZ0jgGJIr5g=";
       };
     };
   in

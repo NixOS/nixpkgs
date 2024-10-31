@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "dwmblocks";
-  version = "unstable-2020-12-27";
+  version = "0-unstable-2024-08-24";
 
   src = fetchFromGitHub {
     owner = "torrinfail";
     repo = "dwmblocks";
-    rev = "96cbb453e5373c05372fd4bf3faacfa53e409067";
-    sha256 = "00lxfxsrvhm60zzqlcwdv7xkqzya69mgpi2mr3ivzbc8s9h8nwqx";
+    rev = "8cedd220684064f1433749ed2a19a6184c22cf07";
+    hash = "sha256-QtYQB2mvw1k2LA8D+/cVnA8+GRDWjhIM6rxfi/IGjEw=";
   };
 
   buildInputs = [ libX11 ];

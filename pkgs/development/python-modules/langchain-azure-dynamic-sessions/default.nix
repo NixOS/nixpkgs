@@ -1,38 +1,40 @@
 {
   lib,
-  azure-identity,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  azure-identity,
   langchain-core,
   langchain-openai,
+
+  # tests
+  freezegun,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
   toml,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-azure-dynamic-sessions";
-  version = "0.1.0";
+  version = "0.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-azure-dynamic-sessions==${version}";
-    hash = "sha256-jz4IBMnWuk8FsSsyfLN14B0xWZrmZrvEW95a45S+FOo=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
@@ -63,11 +65,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-azure-dynamic-sessions==(.*)"
-    ];
+  passthru = {
+    inherit (langchain-core) updateScript;
   };
 
   meta = {

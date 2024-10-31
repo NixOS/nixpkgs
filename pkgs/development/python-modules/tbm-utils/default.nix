@@ -61,14 +61,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "test_create_parser_filter_dates"
     "test_parse_args"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "tests/test_datetime.py"

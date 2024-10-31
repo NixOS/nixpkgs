@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
     openssl
     zlib
     python
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libkqueue
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gettext
   ];
 
@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
     "-DDISABLE_JAVASCRIPT=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do

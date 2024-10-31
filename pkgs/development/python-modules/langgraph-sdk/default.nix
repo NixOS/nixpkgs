@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   httpx,
   httpx-sse,
   orjson,
-  poetry-core,
-  pythonOlder,
+
+  # passthru
   writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.26";
+  version = "0.2.28";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/sdk==${version}";
-    hash = "sha256-o7JrB2WSWfPm927tDRMcjzx+6Io6Q+Yjp4XPVs2+F4o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RbV4G5YPAUjS20B1sQsmFGBje1pbxgCu81pCESFbJLs=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -37,14 +40,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    # python3Packages.langgraph-sdk depends on python3Packages.langgraph. langgraph-cli is independent of both.
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -eu -o pipefail +e
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
+      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
+      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
+      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
   };
 

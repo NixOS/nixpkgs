@@ -78,7 +78,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison removeReferencesTo ]
           ++ (op docSupport groff)
-          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
+          ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
@@ -92,8 +92,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ op (!cursesSupport && stdenv.isDarwin) readline
-          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+          ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
+          ++ ops stdenv.hostPlatform.isDarwin [ libiconv libobjc libunwind Foundation ];
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
@@ -156,7 +156,7 @@ let
           # overrides that by enabling `-O2` which is the minimum optimization
           # needed for `_FORTIFY_SOURCE`.
         ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
-        ] ++ ops stdenv.isDarwin [
+        ] ++ ops stdenv.hostPlatform.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed
           "--with-out-ext=tk"
@@ -313,9 +313,14 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "4" "";
-    hash = "sha256-/mow+X1U4Cl2jy3fSSNpnEFs28Om6W2z4tVxbH25ajQ=";
+    version = rubyVersion "3" "3" "5" "";
+    hash = "sha256-N4GjUEIiwvJstLnrnBoS2/SUTTZs4kqf+M+Z7LznUZY=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
+  ruby_3_4 = generic {
+    version = rubyVersion "3" "4" "0" "preview2";
+    hash = "sha256-RDzX7FSt5HhryXTOn11J8XKmD47chLWXt/4r0qlLg3E=";
+    cargoHash = "sha256-kdfNY8wVmSRR+cwEDYge/HDPRvdTNKLk/BhgqQeelOg=";
+  };
 }

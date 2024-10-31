@@ -96,6 +96,7 @@ lib.runTests (
         canExecute = null;
         emulator = null;
         emulatorAvailable = null;
+        staticEmulatorAvailable = null;
         isCompatible = null;
       }?${platformAttrName};
     };

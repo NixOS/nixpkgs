@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-mEgFfg8I+JJuUEvj+sia2aL3BVg3HteQorZ2EOiLo64=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   # device::test_physical_device_name test fails on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # ofborg sometimes fails with "Resource temporarily unavailable"

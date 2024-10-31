@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp ${printVersion} build-aux/git-version-gen
   '';
 
-  preConfigure = lib.optionalString (stdenv.isDarwin && enablePython) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && enablePython) ''
     # prevent configure picking up stack_size from distutils.sysconfig
     export PYTHON_EXTRA_LDFLAGS=" "
   '';
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (!enablePython) "--disable-python";
 
   # FAIL: alive.test
-  doCheck = !stdenv.isLinux;
+  doCheck = !stdenv.hostPlatform.isLinux;
 
   # the "xmlsuite" test requires the libxml2 c library as well as the python module
   nativeCheckInputs = lib.optionals enablePython [ libxml2 libxml2.dev ];

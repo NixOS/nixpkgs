@@ -45,7 +45,7 @@ rebar3Relx {
     HOME=. rebar3 proper --constraint_tries 100
   '';
   # tests seem to be a bit flaky on darwin, skip them for now
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   installFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     homepage = "https://github.com/erlang-ls/erlang_ls";

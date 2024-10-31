@@ -97,6 +97,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       pyyaml
       pytest-asyncio
       dpkt
+      ts1-signatures
     ]}"
 
     # Prepare test root prefix

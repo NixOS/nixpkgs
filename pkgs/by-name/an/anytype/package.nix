@@ -1,23 +1,25 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{ lib, fetchurl, appimageTools, makeWrapper, commandLineArgs ? "" }:
 
 let
   pname = "anytype";
-  version = "0.42.5";
+  version = "0.43.1";
   name = "Anytype-${version}";
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
-    hash = "sha256-43g/CdmmQTSxk7OTZMPIiWIYJjCG2zJNM9kaAq1jOqE=";
+    hash = "sha256-9CjzFJcMiEGods2Ulm4Ow3lIBXc7HPcWMUFM4cG7GuM=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
     install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

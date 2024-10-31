@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     export SYBASE=${freetds}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace "libct.so" "libct.dylib"
   '';
 

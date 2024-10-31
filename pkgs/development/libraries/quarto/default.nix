@@ -63,7 +63,7 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
     } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check

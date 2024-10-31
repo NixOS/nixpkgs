@@ -5,6 +5,7 @@
 , installShellFiles
 , nixosTests
 , enableDbusUi ? true
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -60,8 +61,17 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
+  nativeBuildInputs = lib.optionals enableDbusUi [
+    wrapGAppsHook3
+  ];
+
+  dontWrapGApps = enableDbusUi;
+  makeWrapperArgs = lib.optionals enableDbusUi [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
   # darwin has difficulty communicating with server, fails some integration tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installManPage docs/man/*.[1-9]

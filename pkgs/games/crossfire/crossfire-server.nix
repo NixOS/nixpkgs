@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchsvn
-, autoreconfHook
 , autoconf
 , automake
 , libtool

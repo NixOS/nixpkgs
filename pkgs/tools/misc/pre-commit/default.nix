@@ -18,7 +18,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.7.1";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+9NNXM4i6saxktF1pl93dmkrqjsErqMB6kEK3IPQTNQ=";
+    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''
@@ -165,6 +165,7 @@ buildPythonApplication rec {
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
     "test_dotnet_"
+    "test_health_check_"
 
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
     # but we use an absolute path so it's not an issue.

@@ -28,7 +28,7 @@ in
       '';
       description = ''
         The homebox configuration as Environment variables. For definitions and available options see the upstream
-        [documentation](https://hay-kot.github.io/homebox/quick-start/#env-variables-configuration).
+        [documentation](https://homebox.software/en/quick-start.html#env-variables-configuration).
       '';
     };
   };

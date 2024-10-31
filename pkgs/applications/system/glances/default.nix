@@ -40,14 +40,14 @@ buildPythonApplication rec {
   # CoreFoundation. This issues was solved for binaries but for interpreted
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
-  makeWrapperArgs = lib.optionals stdenv.isDarwin [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
     "--set"
     "DYLD_FRAMEWORK_PATH"
     "/System/Library/Frameworks"
   ];
 
   doCheck = true;
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
@@ -68,7 +68,7 @@ buildPythonApplication rec {
     jinja2
     orjson
     prometheus-client
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";

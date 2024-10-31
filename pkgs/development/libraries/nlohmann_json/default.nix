@@ -29,7 +29,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DJSON_MultipleHeaders=ON"
   ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # skip tests that require git or modify “installed files”
   preCheck = ''

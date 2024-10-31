@@ -41,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.808.0";
+  version = "3.3.859.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-ig8mr4xfYnj1z1H3Ro6HFmlzW9HsBWMDtbHtpM6BIfg=";
+    hash = "sha256-Qxzq91GXOrssBO9VaQTkLZjVqdpUYoYq3N/rakwewJs=";
   };
 
   vendorHash = null;
@@ -63,7 +63,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -95,7 +95,7 @@ buildGoModule rec {
       --replace-fail "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
       --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';

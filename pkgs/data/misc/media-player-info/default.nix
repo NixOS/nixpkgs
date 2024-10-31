@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, udev, systemd }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, python3, udev, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "media-player-info";
-  version = "24";
+  version = "26";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/media-player-info/${pname}-${version}.tar.gz";
-    sha256 = "0d0i7av8v369hzvlynwlrbickv1brlzsmiky80lrjgjh1gdldkz6";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "media-player-info";
+    repo = "media-player-info";
+    rev = version;
+    hash = "sha256-VoMr5Lxy6u/BA/9t65/S8AW41YU0FLp6eftYUVdoMjY=";
   };
 
   buildInputs = [ udev systemd ];
-  nativeBuildInputs = [ pkg-config python3 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
 
   postPatch = ''
     patchShebangs ./tools

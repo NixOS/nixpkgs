@@ -121,10 +121,10 @@ python3.pkgs.buildPythonApplication rec {
     hunspellDicts.en-us
     hunspellDicts.es-es
     hunspellDicts.it-it
-
-    python3.pkgs.nose
   ];
 
+  # Tests have never been enabled, and upstream uses nose as a test
+  # runner (though not as a library).
   doCheck = false;
 
   preBuild = ''

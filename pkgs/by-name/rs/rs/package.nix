@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.mirbsd.org/MirOS/dist/mir/rs/rs-${version}.tar.gz";
-    sha256 = "0gxwlfk7bzivpp2260w2r6gkyl7vdi05cggn1fijfnp8kzf1b4li";
+    hash = "sha256-kZIV3J/oWiejC/Y9VkBs+1A/n8mCAyPEvTv+daajvD8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isx86_64 && stdenv.isDarwin; # missing strtonum()
+    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # missing strtonum()
   };
 }

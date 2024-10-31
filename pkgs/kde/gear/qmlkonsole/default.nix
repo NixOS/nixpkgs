@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "qmlkonsole";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "qmlkonsole";
 }

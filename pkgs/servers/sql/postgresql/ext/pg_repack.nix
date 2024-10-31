@@ -1,12 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, openssl
 , postgresql
-, postgresqlTestHook
-, readline
+, postgresqlTestExtension
 , testers
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,20 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    extension = stdenv.mkDerivation {
-      name = "plpgsql-check-test";
-      dontUnpack = true;
-      doCheck = true;
-      buildInputs = [ postgresqlTestHook ];
-      nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.pg_repack ])) ];
-      postgresqlTestUserOptions = "LOGIN SUPERUSER";
-      failureHook = "postgresqlStop";
-      checkPhase = ''
-        runHook preCheck
-        psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION pg_repack;"
-        runHook postCheck
-      '';
-      installPhase = "touch $out";
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = "CREATE EXTENSION pg_repack;";
     };
   };
 

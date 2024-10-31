@@ -8,7 +8,7 @@
 
 telegram-desktop.overrideAttrs (old: rec {
   pname = "64gram";
-  version = "1.1.34";
+  version = "1.1.43";
 
   src = fetchFromGitHub {
     owner = "TDesktop-x64";
@@ -16,7 +16,7 @@ telegram-desktop.overrideAttrs (old: rec {
     rev = "v${version}";
 
     fetchSubmodules = true;
-    hash = "sha256-DbHbhkInZi8B/0fvbCWutN4noEv7MZ+C5Eg7g+89Moo=";
+    hash = "sha256-vRiAIGY3CU5+hsdn8xiNbgvSM3eGRVwnvsSmSoaDN/k=";
   };
 
   patches = (old.patches or []) ++ [
@@ -41,6 +41,6 @@ telegram-desktop.overrideAttrs (old: rec {
     changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ clot27 ];
     mainProgram = "telegram-desktop";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

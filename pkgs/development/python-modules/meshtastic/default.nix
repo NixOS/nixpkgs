@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.4.0";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-qEjwlIkgZGsnvKCSL4jcJl472HIlQDynwPWRCNE/EQE=";
+    hash = "sha256-6U/oAVqzNsKFgNtQPzDovoWR23J0Ax0ssCIUjjRVeR4=";
   };
 
   pythonRelaxDeps = [
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     webencodings
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tunnel = [ pytap2 ];
   };
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     riden
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

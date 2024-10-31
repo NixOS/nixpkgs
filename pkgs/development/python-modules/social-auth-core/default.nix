@@ -44,7 +44,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     openidconnect = [ python-jose ];
     saml = [
       lxml
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''

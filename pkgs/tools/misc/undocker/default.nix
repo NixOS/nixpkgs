@@ -4,8 +4,8 @@
 , gnumake
 }:
 let
-  version = "1.2.2";
-  hash = "sha256-kBqNopcHpldU5oD6zoVjPjP84t12QFcbWBSNNgwImKg=";
+  version = "1.2.3";
+  hash = "sha256-hyP85pYtXxucAliilUt9Y2qnrfPeSjeGsYEFJndJWyA=";
   src = fetchFromGitea {
     domain = "git.jakstys.lt";
     owner = "motiejus";

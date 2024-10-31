@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.8.0";
+  version = "2024.9.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3flZoDzS3SI7nAi1skEqVPXJM9vSBrGN+F0esbYKQDw=";
+    hash = "sha256-L6mTfLIx8kD/5s0Dfp24TEATmjxBXERQjynB0szH3DM=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-ZS+80LLyS2UBnVGRclYhwVwF1BR17D/79F2moQtqh80=";
+    npmDepsHash = "sha256-zUui5tYINTDKA91WgRV51ilIPFBJpZ+S2fJwW85KJ9k=";
 
     dontBuild = true;
 
@@ -87,6 +87,9 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # TypeError: FakeServer.get_server() missing 1 required positional argument: 'server_type'
+    ./fakeredis-0.25-compat.patch
   ];
 
   pythonRelaxDeps = [
@@ -98,6 +101,8 @@ python.pkgs.buildPythonApplication rec {
     "protobuf"
     "pyjwt"
     "python-bidi"
+    "qrcode"
+    "redis"
     "requests"
     "sentry-sdk"
   ];

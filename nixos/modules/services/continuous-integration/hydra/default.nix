@@ -15,7 +15,6 @@ let
 
   env =
     { NIX_REMOTE = "daemon";
-      SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt"; # Remove in 16.03
       PGPASSFILE = "${baseDir}/pgpass";
       NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
     } // lib.optionalAttrs (cfg.smtpHost != null) {
@@ -246,7 +245,7 @@ in
       }
       {
         assertion = cfg.minSpareServers < cfg.maxSpareServers;
-        message = "services.hydra.minSpareServers cannot be bigger than servives.hydra.maxSpareServers";
+        message = "services.hydra.minSpareServers cannot be bigger than services.hydra.maxSpareServers";
       }
     ];
 
@@ -311,6 +310,11 @@ in
       )
     ];
 
+    systemd.slices.system-hydra = {
+      description = "Hydra CI Server Slice";
+      documentation = [ "file://${cfg.package}/share/doc/hydra/index.html" "https://nixos.org/hydra/manual/" ];
+    };
+
     systemd.services.hydra-init =
       { wantedBy = [ "multi-user.target" ];
         requires = lib.optional haveLocalDB "postgresql.service";
@@ -326,12 +330,12 @@ in
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
-          mkdir -m 0700 -p ${baseDir}/www
+          mkdir -m 0700 ${baseDir}/www || true
           chown hydra-www:hydra ${baseDir}/www
 
-          mkdir -m 0700 -p ${baseDir}/queue-runner
-          mkdir -m 0750 -p ${baseDir}/build-logs
-          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          mkdir -m 0700 ${baseDir}/queue-runner || true
+          mkdir -m 0750 ${baseDir}/build-logs || true
+          mkdir -m 0750 ${baseDir}/runcommand-logs || true
           chown hydra-queue-runner:hydra \
             ${baseDir}/queue-runner \
             ${baseDir}/build-logs \
@@ -358,8 +362,8 @@ in
 
           # Move legacy hydra-www roots.
           if [ -e /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots ]; then
-            find /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots/ -type f \
-              | xargs -r mv -f -t ${cfg.gcRootsDir}/
+            find /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots/ -type f -print0 \
+              | xargs -0 -r mv -f -t ${cfg.gcRootsDir}/
             rmdir /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots
           fi
 
@@ -371,6 +375,7 @@ in
         serviceConfig.User = "hydra";
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
+        serviceConfig.Slice = "system-hydra.slice";
       };
 
     systemd.services.hydra-server =
@@ -389,6 +394,7 @@ in
             User = "hydra-www";
             PermissionsStartOnly = true;
             Restart = "always";
+            Slice = "system-hydra.slice";
           };
       };
 
@@ -408,6 +414,7 @@ in
             ExecStopPost = "${hydra-package}/bin/hydra-queue-runner --unlock";
             User = "hydra-queue-runner";
             Restart = "always";
+            Slice = "system-hydra.slice";
 
             # Ensure we can get core dumps.
             LimitCORE = "infinity";
@@ -430,6 +437,7 @@ in
             User = "hydra";
             Restart = "always";
             WorkingDirectory = baseDir;
+            Slice = "system-hydra.slice";
           };
       };
 
@@ -442,6 +450,7 @@ in
         serviceConfig =
           { ExecStart = "@${hydra-package}/bin/hydra-update-gc-roots hydra-update-gc-roots";
             User = "hydra";
+            Slice = "system-hydra.slice";
           };
         startAt = "2,14:15";
       };
@@ -455,6 +464,7 @@ in
         serviceConfig =
           { ExecStart = "@${hydra-package}/bin/hydra-send-stats hydra-send-stats";
             User = "hydra";
+            Slice = "system-hydra.slice";
           };
       };
 
@@ -474,6 +484,7 @@ in
             User = "hydra-queue-runner";
             Restart = "always";
             RestartSec = 5;
+            Slice = "system-hydra.slice";
           };
       };
 
@@ -492,6 +503,7 @@ in
             fi
           '';
         startAt = "*:0/5";
+        serviceConfig.Slice = "system-hydra.slice";
       };
 
     # Periodically compress build logs. The queue runner compresses
@@ -503,12 +515,15 @@ in
           ''
             set -eou pipefail
             compression=$(sed -nr 's/compress_build_logs_compression = ()/\1/p' ${baseDir}/hydra.conf)
-            if [[ $compression == zstd ]]; then
+            if [[ $compression == "" ]]; then
+              compression="bzip2"
+            elif [[ $compression == zstd ]]; then
               compression="zstd --rm"
             fi
-            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c | xargs -r $compression --force --quiet
+            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "$compression" --force --quiet
           '';
         startAt = "Sun 01:45";
+        serviceConfig.Slice = "system-hydra.slice";
       };
 
     services.postgresql.enable = lib.mkIf haveLocalDB true;

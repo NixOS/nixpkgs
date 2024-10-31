@@ -39,7 +39,7 @@ buildPythonPackage rec {
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [ pyinotify ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet

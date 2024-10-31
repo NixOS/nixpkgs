@@ -27,8 +27,8 @@
 
 let
   preset =
-    if stdenv.isLinux then "Linux/X11"
-    else if stdenv.isDarwin then "Mac OSX"
+    if stdenv.hostPlatform.isLinux then "Linux/X11"
+    else if stdenv.hostPlatform.isDarwin then "Mac OSX"
     else throw "unsupported platform";
 in
 stdenv.mkDerivation rec {

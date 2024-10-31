@@ -24,22 +24,22 @@
   zstd,
   libarchive,
   withBlas ? true,
-  withHyperscan ? stdenv.isx86_64,
-  withLuaJIT ? stdenv.isx86_64,
+  withHyperscan ? stdenv.hostPlatform.isx86_64,
+  withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
-assert withHyperscan -> stdenv.isx86_64;
+assert withHyperscan -> stdenv.hostPlatform.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-qT94DqX5Dt9pLgqed/j+dtiykwRFY3Fsbvcub7IzAZE=";
+    hash = "sha256-fsxeTgciZb0HqvRWoUjwe/mrRZPW23hOwx7PJBSlBSo=";
   };
 
   hardeningEnable = [ "pie" ];

@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # whois fails to link libiconv on Darwin.
+    NIX_LDFLAGS = "-liconv";
+  };
+
   nativeBuildInputs = [ perl gettext pkg-config ];
   buildInputs = [ libidn2 libiconv ];
 

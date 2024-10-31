@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NAhLTrTshCm1QKGaOdD/YaqD6c3oYZwVBst8fvTlScQ=";
 
   nativeBuildInputs = [ pkg-config file perl cmake curl ];
-  buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   COMPLETION_OUT = "out";
   postInstall = ''

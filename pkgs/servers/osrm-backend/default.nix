@@ -53,13 +53,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=stringop-overflow"
-    "-Wno-error=uninitialized"
-    # Needed for GCC 13
-    "-Wno-error=array-bounds"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # Needed with GCC 12
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=uninitialized"
+      # Needed for GCC 13
+      "-Wno-error=array-bounds"
+    ]
+    ++
+      # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
+      (lib.optionals
+        (
+          stdenv.hostPlatform.isDarwin
+          && stdenv.hostPlatform.isx86_64
+          && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
+        )
+        [
+          "-faligned-allocation"
+        ]
+      )
+  );
 
   postInstall = ''
     mkdir -p $out/share/osrm-backend

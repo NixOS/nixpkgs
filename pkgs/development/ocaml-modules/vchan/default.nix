@@ -32,6 +32,6 @@ buildDunePackage rec {
     description = "Xen Vchan implementation";
     homepage = "https://github.com/mirage/ocaml-vchan";
     license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = teams.xen.members ++ [ maintainers.sternenseemann ];
   };
 }

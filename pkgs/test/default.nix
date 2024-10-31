@@ -30,6 +30,8 @@ with pkgs;
         (filter (lib.hasPrefix "gcc"))
         (filter (lib.hasSuffix "Stdenv"))
         (filter (n: n != "gccCrossLibcStdenv"))
+        (filter (n: n != "gcc49Stdenv"))
+        (filter (n: n != "gcc6Stdenv"))
       ] ++ lib.optionals (!(
         (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
@@ -45,32 +47,21 @@ with pkgs;
       builtGCC =
         let
           inherit (lib) filterAttrs;
-          sets = lib.pipe gccTests ([
+          sets = lib.pipe gccTests [
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filterAttrs (n: _: n != "gcc49Stdenv"))
             (filterAttrs (n: _: n != "gccMultiStdenv"))
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            # fails with things like
-            # ld: warning: ld: warning: object file (trunctfsf2_s.o) was built for newer macOS version (11.0) than being linked (10.5)
-            # ld: warning: ld: warning: could not create compact unwind for ___fixunstfdi: register 20 saved somewhere other than in frame
-            (filterAttrs (n: _: n != "gcc11Stdenv"))
-          ]);
+          ];
         in
         toJSON sets;
 
       builtLLVM =
         let
           inherit (lib) filterAttrs;
-          sets = lib.pipe llvmTests ([
+          sets = lib.pipe llvmTests [
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
-
-            # libcxxStdenv broken
-            # fix in https://github.com/NixOS/nixpkgs/pull/216273
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_9"))
-          ]);
+          ];
         in
         toJSON sets;
         buildCommand = ''
@@ -126,8 +117,6 @@ with pkgs;
 
   ld-library-path = callPackage ./ld-library-path {};
 
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
-
   cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
   php = recurseIntoAttrs (callPackages ./php {});
@@ -168,7 +157,7 @@ with pkgs;
     makeBinaryWrapper = pkgs.makeBinaryWrapper.override {
       # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
       # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
-      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64))
+      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
         [ "undefined" "address" ];
     };
   };
@@ -186,4 +175,6 @@ with pkgs;
   replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
 
   substitute = recurseIntoAttrs (callPackage ./substitute { });
+
+  build-environment-info = callPackage ./build-environment-info { };
 }

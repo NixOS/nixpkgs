@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , cc ? null, libc ? null, bintools, coreutils ? null
+, apple-sdk ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -114,7 +115,8 @@ let
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config
+    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
   useGccForLibs = useCcForLibs
     && libcxx == null
@@ -152,8 +154,8 @@ let
         x86-64-v4 = versionAtLeast ccVersion "11.0";
 
         # Intel
-        skylake        = versionAtLeast ccVersion "6.0";
-        skylake-avx512 = versionAtLeast ccVersion "6.0";
+        skylake        = true;
+        skylake-avx512 = true;
         cannonlake     = versionAtLeast ccVersion "8.0";
         icelake-client = versionAtLeast ccVersion "8.0";
         icelake-server = versionAtLeast ccVersion "8.0";
@@ -162,9 +164,11 @@ let
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
         alderlake      = versionAtLeast ccVersion "12.0";
+        sapphirerapids = versionAtLeast ccVersion "11.0";
+        emeraldrapids  = versionAtLeast ccVersion "13.0";
 
         # AMD
-        znver1         = versionAtLeast ccVersion "6.0";
+        znver1         = true;
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
         znver4         = versionAtLeast ccVersion "13.0";
@@ -181,6 +185,8 @@ let
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
         alderlake      = versionAtLeast ccVersion "16.0";
+        sapphirerapids = versionAtLeast ccVersion "12.0";
+        emeraldrapids  = versionAtLeast ccVersion "16.0";
 
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
@@ -202,9 +208,9 @@ let
     else if targetPlatform.isAarch64 then
       (if isGNU then
         {
-          cortex-a53              = versionAtLeast ccVersion "4.8";  # gcc 8c075f
-          cortex-a72              = versionAtLeast ccVersion "5.1";  # gcc d8f70d
-          "cortex-a72.cortex-a53" = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+          cortex-a53              = true;
+          cortex-a72              = true;
+          "cortex-a72.cortex-a53" = true;
         }.${tune} or false
        else if isClang then
          {
@@ -688,7 +694,7 @@ stdenvNoCC.mkDerivation {
     ''
 
     + optionalString targetPlatform.isAndroid ''
-      echo "-D__ANDROID_API__=${targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
+      echo "-D__ANDROID_API__=${targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
     ''
 
     # There are a few tools (to name one libstdcxx5) which do not work
@@ -733,7 +739,7 @@ stdenvNoCC.mkDerivation {
 
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    expandResponseParams = lib.optionalString (expand-response-params != "") (lib.getExe expand-response-params);
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
@@ -745,6 +751,9 @@ stdenvNoCC.mkDerivation {
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

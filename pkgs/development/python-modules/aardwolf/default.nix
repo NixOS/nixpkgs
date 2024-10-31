@@ -66,7 +66,7 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
-  ] ++ lib.optionals (stdenv.isDarwin) [ iconv ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;

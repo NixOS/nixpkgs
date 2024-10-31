@@ -36,7 +36,7 @@ let
     };
   };
 
-  power-pkg = config.boot.kernelPackages.system76-power;
+  power-pkg = pkgs.system76-power;
   powerConfig = mkIf cfg.power-daemon.enable {
     # Make system76-power usable by root from the command line.
     environment.systemPackages = [ power-pkg ];

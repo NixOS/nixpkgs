@@ -7,12 +7,12 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.6.48";
-      hash = "sha256-Ayuq4qKWu/wgG3wiMNrgkcc6BNSUReqileNx4vYMtak=";
+      version = "6.6.58";
+      hash = "sha256-PjF3PIGCHWGIGHupu+vkdiyrL4h4KG2X5WmQUlz8Zww=";
     };
     main = {
-      version = "6.10.7";
-      hash = "sha256-I2gtxaANJBmUlko7I9x1izLTyCBMqvUW/1Qx3a0H4uU=";
+      version = "6.11.5";
+      hash = "sha256-G4u0LQtIeJ0dNAmjNH0OKihmbkivYVbrbXDB9vPw2xI=";
     };
   };
 
@@ -59,7 +59,7 @@ let
       branch = lib.versions.majorMinor version;
       maintainers = with lib.maintainers; [ moni lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
   } // (args.argsOverride or { }));
 in

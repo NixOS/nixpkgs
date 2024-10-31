@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/atomix/${lib.versions.major finalAttrs.version}/atomix-${finalAttrs.version}.tar.xz";
-    sha256 = "yISTF2iNh9pzTJBjA1YxBSAH8qh5m2xsyRUmWIC1X7Q=";
+    hash = "sha256-yISTF2iNh9pzTJBjA1YxBSAH8qh5m2xsyRUmWIC1X7Q=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Puzzle game where you move atoms to build a molecule";
     mainProgram = "atomix";
     homepage = "https://gitlab.gnome.org/GNOME/atomix";
+    changelog = "https://gitlab.gnome.org/GNOME/atomix/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

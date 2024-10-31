@@ -6,7 +6,6 @@
   cmake,
   qttools,
   wrapQtAppsHook,
-  libisoburn,
   ncnn,
   opencv,
   vulkan-headers,

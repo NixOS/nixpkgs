@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # libCommuni.dylib is installed in $out/Applications/Communi.app/Contents/Frameworks/ on Darwin
   # Wrapper hook thinks it's a binary because it's in $out/Applications, wraps it with a shell script
   # So we manually call the wrapper script on just the binary
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
-    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${if stdenv.isDarwin then "Applications" else "bin"}"
+    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${if stdenv.hostPlatform.isDarwin then "Applications" else "bin"}"
   ];
 
   postInstall =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       # Nix qmake does not add the bundle rpath by default.
       install_name_tool \
         -add_rpath @executable_path/../Frameworks \

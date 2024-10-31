@@ -6,14 +6,15 @@
   pythonAtLeast,
   argcomplete,
   requests,
+  setuptools,
   looseversion,
   gnupg,
 }:
 
 buildPythonPackage rec {
   pname = "sdkmanager";
-  version = "0.6.7";
-  format = "setuptools";
+  version = "0.6.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -21,10 +22,14 @@ buildPythonPackage rec {
     owner = "fdroid";
     repo = pname;
     rev = version;
-    hash = "sha256-8Iq3sVp9/dZi4zNZIgNm38ntoA2koS/Ism+pIVATr4Q=";
+    hash = "sha256-Ev90WS/T+Rb8h/21XHQdy/GePhGiYWwyfP88OUyBojQ=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "urllib3" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     argcomplete
     requests
   ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];

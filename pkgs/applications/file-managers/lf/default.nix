@@ -24,7 +24,7 @@ buildGoModule rec {
 
   # Force the use of the pure-go implementation of the os/user library.
   # Relevant issue: https://github.com/gokcehan/lf/issues/191
-  tags = lib.optionals (!stdenv.isDarwin) [ "osusergo" ];
+  tags = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "osusergo" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop

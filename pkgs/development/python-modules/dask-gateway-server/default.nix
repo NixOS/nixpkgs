@@ -38,7 +38,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kerberos = [ pykerberos ];
     jobqueue = [ sqlalchemy ];
     local = [ sqlalchemy ];

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-gotailwind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FRFcFn5aRg+H9M6ZwEfLO1Dwcybvs0ODQv2ruCG+4v0=";
+    hash = "sha256-g4wYjMJXSm7cjb5Zck1O0A+ETfqMTmiI8In26mcGhNw=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ typer ];
   };
 

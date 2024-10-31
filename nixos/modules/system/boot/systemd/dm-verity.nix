@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.enable -> config.boot.initrd.systemd.enable;
+        assertion = config.boot.initrd.systemd.enable;
         message = ''
           'boot.initrd.systemd.dmVerity.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
@@ -29,11 +29,7 @@ in
 
     boot.initrd = {
       availableKernelModules = [
-        # For documentation, see https://docs.kernel.org/admin-guide/device-mapper/dm-init.html
         "dm_mod"
-        # For documentation, see:
-        # - https://docs.kernel.org/admin-guide/device-mapper/verity.html
-        # - https://gitlab.com/cryptsetup/cryptsetup/-/wikis/DMVerity
         "dm_verity"
       ];
 
@@ -44,16 +40,12 @@ in
       # through the systemd tooling.
       systemd = {
         additionalUpstreamUnits = [
-          # https://github.com/systemd/systemd/blob/main/units/veritysetup-pre.target
           "veritysetup-pre.target"
-          # https://github.com/systemd/systemd/blob/main/units/veritysetup.target
           "veritysetup.target"
-          # https://github.com/systemd/systemd/blob/main/units/remote-veritysetup.target
           "remote-veritysetup.target"
         ];
 
         storePaths = [
-          # These are the two binaries mentioned in https://github.com/systemd/systemd/blob/main/src/veritysetup/meson.build; there are no others.
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-veritysetup"
           "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-veritysetup-generator"
         ];
@@ -61,5 +53,9 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.msanft ];
+  meta.maintainers = with lib.maintainers; [
+    msanft
+    nikstur
+    willibutz
+  ];
 }

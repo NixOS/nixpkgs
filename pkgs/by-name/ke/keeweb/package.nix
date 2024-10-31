@@ -82,7 +82,7 @@ let
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
     inherit
       pname

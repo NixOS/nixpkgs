@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.15";
+  version = "4.2.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-SWENMUsTgP3X3EvFiTgpKCZO0/KaZ1x1stSyp2kM/P4=";
+    hash = "sha256-VW/qfqOadivtU8Xg70FLqENtOV7GqJM4bR2Ik6Yag+o=";
   };
 
   patches =
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
   };
@@ -116,9 +116,9 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # make sure the installed library gets imported

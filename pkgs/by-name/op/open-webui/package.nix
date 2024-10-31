@@ -2,33 +2,34 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python3,
+  python311,
   nixosTests,
 }:
 let
   pname = "open-webui";
-  version = "0.3.16";
+  version = "0.3.35";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-AxD7WHL5fGM0CBKi7zc/gmoSJQBohDh0HgIDU1/BQ7w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H46qoOEajPKRU/Lbd6r7r0vRjWSd7uGoA0deaDv6HSw=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-Ik+wXymso3jdKXQgLydnhhWvpHl0d82pwYSmUR0yfPE=";
+    npmDepsHash = "sha256-ohWSfwZfC/jfOpnNSqsvMyYnukk3Xa3Tq32PAl8Ds60=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
 
     installPhase = ''
       runHook preInstall
@@ -40,7 +41,7 @@ let
     '';
   };
 in
-python3.pkgs.buildPythonApplication rec {
+python311.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
@@ -55,29 +56,28 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
-    # using `opencv4`
-    "opencv-python-headless"
-    # using `psycopg2` instead
-    "psycopg2-binary"
     "docker"
     "pytest"
     "pytest-docker"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python311.pkgs; [
     aiohttp
     alembic
     anthropic
     apscheduler
     argon2-cffi
+    async-timeout
     authlib
     bcrypt
     beautifulsoup4
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -85,7 +85,10 @@ python3.pkgs.buildPythonApplication rec {
     flask
     flask-cors
     fpdf2
+    ftfy
+    qdrant-client
     google-generativeai
+    googleapis-common-protos
     langchain
     langchain-chroma
     langchain-community
@@ -93,16 +96,18 @@ python3.pkgs.buildPythonApplication rec {
     markdown
     nltk
     openai
-    opencv4
+    opencv-python-headless
     openpyxl
     pandas
     passlib
     peewee
     peewee-migrate
     psutil
-    psycopg2
+    psycopg2-binary
     pydub
     pyjwt
+    pymdown-extensions
+    pymilvus
     pymongo
     pymysql
     pypandoc
@@ -123,11 +128,12 @@ python3.pkgs.buildPythonApplication rec {
     unstructured
     uvicorn
     validators
+    xhtml2pdf
     xlrd
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [ hatchling ];
+  build-system = with python311.pkgs; [ hatchling ];
 
   pythonImportsCheck = [ "open_webui" ];
 

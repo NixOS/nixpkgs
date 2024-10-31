@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libsodium
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

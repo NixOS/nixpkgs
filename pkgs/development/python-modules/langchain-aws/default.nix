@@ -2,25 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   boto3,
   langchain-core,
   numpy,
-  poetry-core,
-  pytestCheckHook,
-  pytest-asyncio,
+
+  # tests
   langchain-standard-tests,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.1.17";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n9nQheuUZMrjZMpR3aqbrRb/AhcgiF4CFO9ROh9aFNc=";
+    hash = "sha256-LHhyEkgu1sjOk4E4WMy4vYGyikqdVD3WvRPjoAP1CfA=";
   };
 
   postPatch = ''
@@ -39,6 +45,11 @@ buildPythonPackage rec {
     numpy
   ];
 
+  pythonRelaxDeps = [
+    # Boto @ 1.35 has outstripped the version requirement
+    "boto3"
+  ];
+
   nativeCheckInputs = [
     langchain-standard-tests
     pytest-asyncio
@@ -48,6 +59,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_aws" ];
+
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";

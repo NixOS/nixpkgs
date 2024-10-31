@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.18.1";
+  version = "2.19.3";
   pyproject = true;
 
   disabled = python3.pkgs.pythonOlder "3.8";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     rev = "refs/tags/${version}";
-    hash = "sha256-pCBwt55tu9bEVVHfdPsJ5vaJXVXEZ2+4ft9LathwBt0=";
+    hash = "sha256-xgwIPHlTtmgCNN4R6/BJsqmI9hbA0wFAiq4YCa+r/UM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -42,6 +42,8 @@ self: super: {
 
     pgaudit = super.callPackage ./pgaudit.nix { };
 
+    pgmq = super.callPackage ./pgmq.nix { };
+
     pgroonga = super.callPackage ./pgroonga.nix { };
 
     pgsodium = super.callPackage ./pgsodium.nix { };

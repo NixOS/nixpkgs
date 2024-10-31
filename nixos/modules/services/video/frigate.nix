@@ -518,11 +518,12 @@ in
         libva-utils
         procps
         radeontop
-      ] ++ lib.optionals (!stdenv.isAarch64) [
+      ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [
         # not available on aarch64-linux
         intel-gpu-tools
       ];
       serviceConfig = {
+        ExecStartPre = "-rm /var/cache/frigate/*.mp4";
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
 

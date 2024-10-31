@@ -72,7 +72,8 @@ buildPythonPackage rec {
         let
           testName = "${if withOnnx then "withOnnx" else "withoutOnnx"}-${method}";
           # This test fails in the sandbox on aarch64-linux, see https://github.com/microsoft/onnxruntime/issues/10038
-          skipTest = stdenv.isLinux && stdenv.isAarch64 && withOnnx && method == "rivaGan";
+          skipTest =
+            stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && withOnnx && method == "rivaGan";
         in
         lib.optionalAttrs (!skipTest) {
           "${testName}" = callPackage ./tests/cli.nix {

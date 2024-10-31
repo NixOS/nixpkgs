@@ -2,33 +2,23 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 
 , enableWasmEval ? false
 }:
 
-assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+assert enableWasmEval && stdenv.hostPlatform.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.66.0";
+  version = "0.69.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-fx7k6KvL0uy2NXLDLpCnN1ux9MGEO1CbX6TdLweVzag=";
+    hash = "sha256-AEh6HBDLQYptBw68SQurPuWADxL5x5OirtJGQ+UKXdU=";
   };
-
-  patches = [
-    # fix tests in 1.22.5
-    # https://github.com/open-policy-agent/opa/pull/6845
-    (fetchpatch {
-      url = "https://github.com/open-policy-agent/opa/commit/956358516c23b1f33f6667961e20aca65b91355b.patch";
-      hash = "sha256-1nfMwJwbYfdLg9j4ppP1IWdDeFq6vhXcDKr6uprP53U=";
-    })
-  ];
 
   vendorHash = null;
 
@@ -55,9 +45,9 @@ buildGoModule rec {
     # want but also limits the tests
     # Also avoid wasm tests on darwin due to wasmtime-go build issues
     getGoDirs() {
-      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.isDarwin "-e wasm"}
+      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
     }
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     rm server/server_test.go
   '';

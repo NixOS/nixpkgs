@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   env.VERGEN_BUILD_DATE = "2024-09-04";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
@@ -46,11 +46,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sxyazi/yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      xyenon
-      matthiasbeyer
-      linsui
       eljamm
+      khaneliman
+      linsui
+      matthiasbeyer
       uncenter
+      xyenon
     ];
     mainProgram = "yazi";
   };

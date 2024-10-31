@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     expat
     libiconv
     libevent
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libpcap
   ] ++ lib.optionals gtk3Support [
     gtk3
@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=no"
   ] ++ lib.optionals withLibdnssdCompat [
     "--enable-compat-libdns_sd"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # autoipd won't build on darwin
     "--disable-autoipd"
   ];
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c

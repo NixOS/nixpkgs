@@ -6,12 +6,14 @@
   isPyPy,
   pythonAtLeast,
 
-  # build-system
-  llvm,
   setuptools,
 
   # tests
   pytestCheckHook,
+  llvm,
+  libxml2,
+
+  withStaticLLVM ? true,
 }:
 
 buildPythonPackage rec {
@@ -28,32 +30,27 @@ buildPythonPackage rec {
     hash = "sha256-5QBSRDb28Bui9IOhGofj+c7Rk7J5fNv5nPksEPY/O5o=";
   };
 
-  nativeBuildInputs = [
-    llvm
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace llvmlite/tests/test_binding.py \
-      --replace-fail "test_linux" "nope"
+  buildInputs = [ llvm ] ++ lib.optionals withStaticLLVM [ libxml2.dev ];
+
+  postPatch = lib.optionalString withStaticLLVM ''
+    substituteInPlace ffi/build.py --replace-fail "--system-libs --libs all" "--system-libs --libs --link-static all"
   '';
 
   # Set directory containing llvm-config binary
-  preConfigure = ''
-    export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
-  '';
+  env.LLVM_CONFIG = "${llvm.dev}/bin/llvm-config";
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
     cd $out
   '';
 
-  __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [ "/usr/lib/libm.dylib" ];
 
-  passthru.llvm = llvm;
+  passthru = lib.optionalAttrs (!withStaticLLVM) { inherit llvm; };
 
   meta = {
     changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";

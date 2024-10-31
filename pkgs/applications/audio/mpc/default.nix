@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmpdclient
   ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles

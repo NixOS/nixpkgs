@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   buildFeatures = [ "no-self-update" ];
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     # Run patchelf on the downloaded binaries.
     # This is necessary because Lean 4 is now dynamically linked.
     (runCommand "0001-dynamically-patchelf-binaries.patch" {

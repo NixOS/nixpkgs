@@ -2,7 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, withPcre2 ? stdenv.isLinux
+, withPcre2 ? stdenv.hostPlatform.isLinux
 , pcre2
 , testers
 , rare-regex

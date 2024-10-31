@@ -135,8 +135,8 @@ index 8fa34aea..da94cf95 100644
 -    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", keyboard_cfg_file);
 +    LOG(LOG_LEVEL_DEBUG, "keyboard_cfg_file %s", client_info->xrdp_keyboard_ini_file);
  
--    fd = g_file_open(keyboard_cfg_file);
-+    fd = g_file_open(client_info->xrdp_keyboard_ini_file);
+-    fd = g_file_open_ro(keyboard_cfg_file);
++    fd = g_file_open_ro(client_info->xrdp_keyboard_ini_file);
  
      if (fd >= 0)
      {
@@ -179,19 +179,19 @@ index 8fa34aea..da94cf95 100644
                  list_delete(items);
                  list_delete(values);
                  return 1;
-diff --git a/sesman/config.c b/sesman/config.c
+diff --git a/sesman/libsesman/sesman_config.c b/sesman/libsesman/sesman_config.c
 index 61e9e403..0466f61a 100644
---- a/sesman/config.c
-+++ b/sesman/config.c
-@@ -34,6 +34,7 @@
- #include "sesman.h"
+--- a/sesman/libsesman/sesman_config.c
++++ b/sesman/libsesman/sesman_config.c
+@@ -37,6 +37,7 @@
  #include "log.h"
+ #include "os_calls.h"
  #include "string_calls.h"
 +#include <string.h>
- #include "chansrv/chansrv_common.h"
- 
- /***************************************************************************//**
-@@ -47,11 +48,10 @@
+ //#include "chansrv/chansrv_common.h"
+ #include "scp.h"
+
+@@ -171,7 +172,7 @@ config_output_policy_string(unsigned int value,
   *
   */
  static int
@@ -200,61 +200,57 @@ index 61e9e403..0466f61a 100644
                      struct list *param_v)
  {
      int i;
--    int length;
-     char *buf;
- 
-     list_clear(param_v);
-@@ -127,13 +127,12 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
-         g_free(cf->default_wm);
+@@ -249,14 +250,12 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
          cf->default_wm = g_strdup("startwm.sh");
      }
--    /* if default_wm doesn't begin with '/', it's a relative path to XRDP_CFG_PATH */
-+    /* if default_wm doesn't begin with '/', it's a relative path to base_dir */
+     /* if default_wm doesn't begin with '/', it's a relative path to
+-     * XRDP_CFG_PATH */
++     * base_dir */
      if (cf->default_wm[0] != '/')
      {
          /* sizeof operator returns string length including null terminator  */
--        length = sizeof(XRDP_CFG_PATH) + g_strlen(cf->default_wm) + 1; /* '/' */
--        buf = (char *)g_malloc(length, 0);
+-        int length = (sizeof(XRDP_CFG_PATH) +
+-                      g_strlen(cf->default_wm) + 1); /* '/' */
+-        char *buf = (char *)g_malloc(length, 0);
 -        g_sprintf(buf, "%s/%s", XRDP_CFG_PATH, cf->default_wm);
-+        buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->default_wm) + 1, 0);
++        char *buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->default_wm) + 1, 0);
 +        g_sprintf(buf, "%s/%s", base_dir, cf->default_wm);
          g_free(cf->default_wm);
-         cf->default_wm = g_strdup(buf);
-         g_free(buf);
-@@ -151,10 +150,8 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
-     /* if reconnect_sh doesn't begin with '/', it's a relative path to XRDP_CFG_PATH */
+         cf->default_wm = buf;
+     }
+@@ -271,10 +270,8 @@ config_read_globals(int file, struct config_sesman *cf, struct list *param_n,
      if (cf->reconnect_sh[0] != '/')
      {
--        /* sizeof operator returns string length including null terminator  */
--        length = sizeof(XRDP_CFG_PATH) + g_strlen(cf->reconnect_sh) + 1; /* '/' */
--        buf = (char *)g_malloc(length, 0);
+         /* sizeof operator returns string length including null terminator  */
+-        int length = (sizeof(XRDP_CFG_PATH) +
+-                      g_strlen(cf->reconnect_sh) + 1); /* '/' */
+-        char *buf = (char *)g_malloc(length, 0);
 -        g_sprintf(buf, "%s/%s", XRDP_CFG_PATH, cf->reconnect_sh);
-+        buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->reconnect_sh) + 1, 0);
-+        g_sprintf(buf, "%s/%s", base_dir, cf->reconnect_sh);     
++        char *buf = (char *)g_malloc(g_strlen(base_dir) + 1 + g_strlen(cf->reconnect_sh) + 1, 0);
++        g_sprintf(buf, "%s/%s", base_dir, cf->reconnect_sh);
          g_free(cf->reconnect_sh);
-         cf->reconnect_sh = g_strdup(buf);
-         g_free(buf);
-@@ -511,6 +508,7 @@ struct config_sesman *
+         cf->reconnect_sh = buf;
+     }
+@@ -580,6 +577,7 @@ struct config_sesman *
  config_read(const char *sesman_ini)
  {
      struct config_sesman *cfg;
 +    char cfg_dir[256];
      int all_ok = 0;
- 
+
      if ((cfg = g_new0(struct config_sesman, 1)) != NULL)
-@@ -532,8 +530,10 @@ config_read(const char *sesman_ini)
-                 param_v->auto_free = 1;
- 
+@@ -602,7 +600,10 @@ config_read(const char *sesman_ini)
+                 all_ok = 1;
+
                  /* read global config */
 -                config_read_globals(fd, cfg, param_n, param_v);
--
 +                g_strcpy(cfg_dir, sesman_ini);
 +                *(strrchr(cfg_dir, '/')) = 0;  // cfg_file validated to contain '/'
-+            
++
 +                config_read_globals(cfg_dir, fd, cfg, param_n, param_v);
-                 /* read Xvnc/X11rdp/Xorg parameter list */
+
+                 /* read Xvnc/Xorg parameter list */
                  config_read_vnc_params(fd, cfg, param_n, param_v);
-                 config_read_rdp_params(fd, cfg, param_n, param_v);
 diff --git a/xrdp/lang.c b/xrdp/lang.c
 index e4c18077..06f92997 100644
 --- a/xrdp/lang.c

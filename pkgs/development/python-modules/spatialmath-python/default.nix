@@ -17,12 +17,11 @@
   pytest-xvfb,
   sympy,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.10";
+  version = "1.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,13 +29,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-7h29RHCrxdexpabtxMQx/7RahQmCDGHhdJ1WETvtfYg=";
+    hash = "sha256-9EUlDGkpV/a73XWvrbtZLK8wrR8Am5EOkv3iSf9J4rM=";
   };
 
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "pre-commit" ];
@@ -49,7 +47,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dev = [
       coverage
       flake8

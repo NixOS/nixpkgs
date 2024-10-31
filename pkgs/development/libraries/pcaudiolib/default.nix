@@ -10,7 +10,7 @@
 , pkg-config
 , portaudio
 , which
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     portaudio
   ]
-  ++ lib.optional stdenv.isLinux alsa-lib
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # touch ChangeLog to avoid below error on darwin:
   # Makefile.am: error: required file './ChangeLog.md' not found
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     touch ChangeLog
   '' + ''
     ./autogen.sh

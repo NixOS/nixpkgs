@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preCheck = let
-    lib_path = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    lib_path = if stdenv.hostPlatform.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
     export ${lib_path}=$(readlink -f ./src)
   '';

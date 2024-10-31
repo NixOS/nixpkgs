@@ -57,13 +57,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.33";
+  version = "1.36.34";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    hash = "sha256-KUhFZrF7BuLB2Z3LnTcHEEZVA6iosam6YsOd8KWvx7E=";
+    hash = "sha256-ClO1f0Aspz04C8wgQurtHWmwzu2f4RZ/1oGjPN8HQrw=";
     fetchSubmodules = true;
   };
 

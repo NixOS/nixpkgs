@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "1.12.5";
+  version = "1.12.6";
 in
 buildNpmPackage {
   pname = "intelephense";
@@ -13,14 +13,14 @@ buildNpmPackage {
 
   src = fetchurl {
     url = "https://registry.npmjs.org/intelephense/-/intelephense-${version}.tgz";
-    hash = "sha256-S2wlzEDSKu/7NxnFMAj25meXzW37fGbH1ztCbWDRAqc=";
+    hash = "sha256-p2x5Ayipoxk77x0v+zRhg86dbRHuBBk1Iegk/FaZrU4=";
   };
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-HpJYDPPX5elvd0SMCJuTu5j4v1caO25UZqywB2huUAA=";
+  npmDepsHash = "sha256-C60qxPuaiJZ8uQDfDwY+KJUHhXMioPrHnDNJ0bH7N9o=";
 
   dontNpmBuild = true;
 

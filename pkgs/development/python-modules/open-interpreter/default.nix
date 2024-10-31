@@ -50,6 +50,7 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "git-python" ];
 
   pythonRelaxDeps = [
+    "google-generativeai"
     "psutil"
     "pynput"
     "yaspin"

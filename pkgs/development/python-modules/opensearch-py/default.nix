@@ -50,7 +50,7 @@ buildPythonPackage rec {
     events
   ];
 
-  passthru.optional-dependencies.async = [ aiohttp ];
+  optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
     botocore
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     pytz
-  ] ++ passthru.optional-dependencies.async;
+  ] ++ optional-dependencies.async;
 
   disabledTestPaths = [
     # require network

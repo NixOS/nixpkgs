@@ -50,7 +50,7 @@ let
            rustc
          ];
     buildInputs = [ docutils ]
-      ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";

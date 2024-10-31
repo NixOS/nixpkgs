@@ -72,7 +72,7 @@ in
                   type = "path";
                   path = config.flake.outPath;
                 } // filterAttrs
-                  (n: _: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                  (n: _: n == "lastModified" || n == "rev" || n == "narHash")
                   config.flake
               ));
             };

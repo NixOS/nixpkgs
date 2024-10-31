@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "L402 (Lightning HTTP 402) Reverse Proxy";
     homepage = "https://github.com/lightninglabs/aperture";
+    changelog = "https://github.com/lightninglabs/aperture/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sputn1ck HannahMR ];
     mainProgram = "aperture";

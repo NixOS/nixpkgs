@@ -62,7 +62,7 @@ mkDerivation {
     qtquickcontrols
     qtquickcontrols2
     qtgraphicaleffects
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     qtwayland
   ];
 
@@ -83,7 +83,7 @@ mkDerivation {
 
   postInstall = ''
     mkdir -p $out/bin
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp qFlipper.app/Contents/MacOS/qFlipper $out/bin
     ''}
     cp qFlipper-cli $out/bin
@@ -95,7 +95,7 @@ mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;

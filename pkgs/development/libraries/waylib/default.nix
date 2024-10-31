@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
                 "${nixos-artwork.wallpapers.simple-blue}/share/backgrounds/nixos/nix-wallpaper-simple-blue.png"
   '';
 
+  depsBuildBuild = [
+    # To find wayland-scanner
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

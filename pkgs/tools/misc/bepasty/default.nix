@@ -54,7 +54,6 @@ bepastyPython.pkgs.buildPythonPackage rec {
 
   nativeCheckInputs = with bepastyPython.pkgs; [
     build
-    codecov
     flake8
     pytestCheckHook
     pytest-cov

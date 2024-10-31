@@ -6,8 +6,9 @@
 , wrapGAppsHook3
 , wrapQtAppsHook
 
-, withGrass ? true
-, withWebKit ? false
+, withGrass
+, withServer
+, withWebKit
 
 , bison
 , cmake
@@ -78,14 +79,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.10";
+  version = "3.34.11";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-E2Ak14h1kWdGq+JNbCeh5YJkr/S9g/0HD834MtgACSA=";
+    hash = "sha256-VNgUMEA7VKZXsLG1ZYUIlYvjwRrH8LsliGiVRMnXOM0=";
   };
 
   passthru = {
@@ -151,12 +152,14 @@ in mkDerivation rec {
   env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"

@@ -20,7 +20,7 @@
 , darwin
 , libglvnd
 , libxkbcommon
-, enableWayland ? stdenv.isLinux
+, enableWayland ? stdenv.hostPlatform.isLinux
 , wayland
 }:
 
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     pkg-config
     python3 # skia
     removeReferencesTo
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
@@ -96,11 +96,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r extra/osx/Neovide.app $out/Applications
     ln -s $out/bin $out/Applications/Neovide.app/Contents/MacOS
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     for n in 16x16 32x32 48x48 256x256; do
       install -m444 -D "assets/neovide-$n.png" \
         "$out/share/icons/hicolor/$n/apps/neovide.png"

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.xtreemfs;
@@ -29,13 +26,13 @@ let
   dirConfig = pkgs.writeText "xtreemfs-dir-config.properties" ''
     uuid = ${cfg.dir.uuid}
     listen.port = ${toString cfg.dir.port}
-    ${optionalString (cfg.dir.address != "") "listen.address = ${cfg.dir.address}"}
+    ${lib.optionalString (cfg.dir.address != "") "listen.address = ${cfg.dir.address}"}
     http_port = ${toString cfg.dir.httpPort}
     babudb.baseDir = ${home}/dir/database
     babudb.logDir = ${home}/dir/db-log
     babudb.sync = ${if cfg.dir.replication.enable then "FDATASYNC" else cfg.dir.syncMode}
 
-    ${optionalString cfg.dir.replication.enable "babudb.plugin.0 = ${dirReplicationConfig}"}
+    ${lib.optionalString cfg.dir.replication.enable "babudb.plugin.0 = ${dirReplicationConfig}"}
 
     ${cfg.dir.extraConfig}
   '';
@@ -51,13 +48,13 @@ let
   mrcConfig = pkgs.writeText "xtreemfs-mrc-config.properties" ''
     uuid = ${cfg.mrc.uuid}
     listen.port = ${toString cfg.mrc.port}
-    ${optionalString (cfg.mrc.address != "") "listen.address = ${cfg.mrc.address}"}
+    ${lib.optionalString (cfg.mrc.address != "") "listen.address = ${cfg.mrc.address}"}
     http_port = ${toString cfg.mrc.httpPort}
     babudb.baseDir = ${home}/mrc/database
     babudb.logDir = ${home}/mrc/db-log
     babudb.sync = ${if cfg.mrc.replication.enable then "FDATASYNC" else cfg.mrc.syncMode}
 
-    ${optionalString cfg.mrc.replication.enable "babudb.plugin.0 = ${mrcReplicationConfig}"}
+    ${lib.optionalString cfg.mrc.replication.enable "babudb.plugin.0 = ${mrcReplicationConfig}"}
 
     ${cfg.mrc.extraConfig}
   '';
@@ -65,14 +62,14 @@ let
   osdConfig = pkgs.writeText "xtreemfs-osd-config.properties" ''
     uuid = ${cfg.osd.uuid}
     listen.port = ${toString cfg.osd.port}
-    ${optionalString (cfg.osd.address != "") "listen.address = ${cfg.osd.address}"}
+    ${lib.optionalString (cfg.osd.address != "") "listen.address = ${cfg.osd.address}"}
     http_port = ${toString cfg.osd.httpPort}
     object_dir = ${home}/osd/
 
     ${cfg.osd.extraConfig}
   '';
 
-  optionalDir = optionals cfg.dir.enable ["xtreemfs-dir.service"];
+  optionalDir = lib.optionals cfg.dir.enable ["xtreemfs-dir.service"];
 
   systemdOptionalDependencies = {
     after = [ "network.target" ] ++ optionalDir;
@@ -89,10 +86,10 @@ in
 
     services.xtreemfs = {
 
-      enable = mkEnableOption "XtreemFS";
+      enable = lib.mkEnableOption "XtreemFS";
 
-      homeDir = mkOption {
-        type = types.path;
+      homeDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/xtreemfs";
         description = ''
           XtreemFS home dir for the xtreemfs user.
@@ -100,32 +97,32 @@ in
       };
 
       dir = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS DIR service.
           '';
         };
 
-        uuid = mkOption {
+        uuid = lib.mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
           '';
         };
-        port = mkOption {
+        port = lib.mkOption {
           default = 32638;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             The port to listen on for incoming connections (TCP).
           '';
         };
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           example = "127.0.0.1";
           default = "";
           description = ''
@@ -133,16 +130,16 @@ in
             specified, the service will listen on all interfaces (any).
           '';
         };
-        httpPort = mkOption {
+        httpPort = lib.mkOption {
           default = 30638;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
         };
-        syncMode = mkOption {
-          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
+        syncMode = lib.mkOption {
+          type = lib.types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           default = "FSYNC";
           example = "FDATASYNC";
           description = ''
@@ -160,8 +157,8 @@ in
             (If xtreemfs.dir.replication.enable is true then FDATASYNC is forced)
           '';
         };
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           example = ''
             # specify whether SSL is required
@@ -180,9 +177,9 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS DIR replication plugin";
-          extraConfig = mkOption {
-            type = types.lines;
+          enable = lib.mkEnableOption "XtreemFS DIR replication plugin";
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             example = ''
               # participants of the replication including this replica
               babudb.repl.participant.0 = 192.168.0.10
@@ -225,50 +222,50 @@ in
       };
 
       mrc = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS MRC service.
           '';
         };
 
-        uuid = mkOption {
+        uuid = lib.mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
           '';
         };
-        port = mkOption {
+        port = lib.mkOption {
           default = 32636;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             The port to listen on for incoming connections (TCP).
           '';
         };
-        address = mkOption {
+        address = lib.mkOption {
           example = "127.0.0.1";
-          type = types.str;
+          type = lib.types.str;
           default = "";
           description = ''
             If specified, it defines the interface to listen on. If not
             specified, the service will listen on all interfaces (any).
           '';
         };
-        httpPort = mkOption {
+        httpPort = lib.mkOption {
           default = 30636;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
         };
-        syncMode = mkOption {
+        syncMode = lib.mkOption {
           default = "FSYNC";
-          type = types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
+          type = lib.types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
           example = "FDATASYNC";
           description = ''
             The sync mode influences how operations are committed to the disk
@@ -285,8 +282,8 @@ in
             (If xtreemfs.mrc.replication.enable is true then FDATASYNC is forced)
           '';
         };
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           example = ''
             osd_check_interval = 300
             no_atime = true
@@ -323,9 +320,9 @@ in
           '';
         };
         replication = {
-          enable = mkEnableOption "XtreemFS MRC replication plugin";
-          extraConfig = mkOption {
-            type = types.lines;
+          enable = lib.mkEnableOption "XtreemFS MRC replication plugin";
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             example = ''
               # participants of the replication including this replica
               babudb.repl.participant.0 = 192.168.0.10
@@ -368,49 +365,49 @@ in
       };
 
       osd = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable XtreemFS OSD service.
           '';
         };
 
-        uuid = mkOption {
+        uuid = lib.mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
           '';
         };
-        port = mkOption {
+        port = lib.mkOption {
           default = 32640;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             The port to listen on for incoming connections (TCP and UDP).
           '';
         };
-        address = mkOption {
+        address = lib.mkOption {
           example = "127.0.0.1";
-          type = types.str;
+          type = lib.types.str;
           default = "";
           description = ''
             If specified, it defines the interface to listen on. If not
             specified, the service will listen on all interfaces (any).
           '';
         };
-        httpPort = mkOption {
+        httpPort = lib.mkOption {
           default = 30640;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             Specifies the listen port for the HTTP service that returns the
             status page.
           '';
         };
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           example = ''
             local_clock_renewal = 0
             remote_time_sync = 30000
@@ -464,7 +461,7 @@ in
       { gid = config.ids.gids.xtreemfs;
       };
 
-    systemd.services.xtreemfs-dir = mkIf cfg.dir.enable {
+    systemd.services.xtreemfs-dir = lib.mkIf cfg.dir.enable {
       description = "XtreemFS-DIR Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -474,7 +471,7 @@ in
       };
     };
 
-    systemd.services.xtreemfs-mrc = mkIf cfg.mrc.enable ({
+    systemd.services.xtreemfs-mrc = lib.mkIf cfg.mrc.enable ({
       description = "XtreemFS-MRC Server";
       serviceConfig = {
         User = "xtreemfs";
@@ -482,7 +479,7 @@ in
       };
     } // systemdOptionalDependencies);
 
-    systemd.services.xtreemfs-osd = mkIf cfg.osd.enable ({
+    systemd.services.xtreemfs-osd = lib.mkIf cfg.osd.enable ({
       description = "XtreemFS-OSD Server";
       serviceConfig = {
         User = "xtreemfs";

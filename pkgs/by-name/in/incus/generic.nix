@@ -128,8 +128,8 @@ buildGoModule rec {
 
     ui = callPackage ./ui.nix { };
 
-    updateScript = writeScript "ovs-update.nu" ''
-      ${./update.nu} ${updateScriptArgs}
+    updateScript = writeScript "ovs-update.py" ''
+      ${./update.py} ${updateScriptArgs}
     '';
   };
 

@@ -17,6 +17,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-P49fkLvdCm/Eco+nD3SGM04PRQatBzq9CHlayueQetk=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'," ""
+  '';
+
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
   buildInputs = [
@@ -28,7 +33,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    pytest-runner
     pytestCheckHook
   ];
 

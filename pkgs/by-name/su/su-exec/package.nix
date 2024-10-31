@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "ncopa";
     repo   = "su-exec";
     rev    = "v${version}";
-    sha256 = "12vqlnpv48cjfh25sn98k1myc7h2wiv5qw2y2awgp6sipzv88abv";
+    hash = "sha256-eymE9r9Rm/u4El5wXHbkAh7ma5goWV0EdJIhsq+leIs=";
   };
 
   installPhase = ''

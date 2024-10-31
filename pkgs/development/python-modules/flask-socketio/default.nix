@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-socketio";
-  version = "5.3.7";
+  version = "5.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3vqhxz+NPrpjTxNt4scZtPxaFfnM3+gyE+jegwgan2E=";
+    hash = "sha256-owlgbw0QBUz2wCBxd1rjMI+4nPVTZ6JgmU2tL+vIj5g=";
   };
 
   nativeBuildInputs = [ setuptools ];

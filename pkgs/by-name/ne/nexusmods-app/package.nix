@@ -1,28 +1,37 @@
 {
   _7zz,
+  avalonia,
   buildDotnetModule,
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  fontconfig,
+  imagemagick,
   lib,
-  libICE,
-  libSM,
-  libX11,
   runCommand,
+  xdg-utils,
   pname ? "nexusmods-app",
 }:
+let
+  # From https://nexus-mods.github.io/NexusMods.App/developers/Contributing/#for-package-maintainers
+  constants = [
+    # Tell the app it is a distro package; affects wording in update prompts
+    "INSTALLATION_METHOD_PACKAGE_MANAGER"
+
+    # Don't include upstream's 7zz binary; we use the nixpkgs version
+    "NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR"
+  ];
+in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.4.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    hash = "sha256-0uZdN24TvK4QoBEC0BSAYNALQv9swYZ8SgVJ03m2dzQ=";
   };
 
   enableParallelBuilding = false;
@@ -35,45 +44,78 @@ buildDotnetModule (finalAttrs: {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  buildInputs = [
+    # TODO: bump avalonia to 11.1.3
+    # avalonia
+  ];
+
+  nativeCheckInputs = [ _7zz ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    imagemagick # For resizing SVG icon in postInstall
+  ];
 
   nugetDeps = ./deps.nix;
+  mapNuGetDependencies = true;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  preConfigure = ''
-    substituteInPlace Directory.Build.props \
-      --replace '</PropertyGroup>' '<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles></PropertyGroup>'
-  '';
-
   postPatch = ''
-    ln --force --symbolic "${lib.getExe _7zz}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
-
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
   '';
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
-    # Make associating with nxm links work on Linux
-    "--set APPIMAGE ${placeholder "out"}/bin/NexusMods.App"
   ];
 
-  runtimeInputs = [ desktop-file-utils ];
+  postInstall = ''
+    # Desktop entry
+    # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
+    install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
+    substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
+      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
 
-  runtimeDeps = [
-    fontconfig
-    libICE
-    libSM
-    libX11
+    # AppStream metadata
+    install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
+
+    # Icon
+    icon=src/NexusMods.App/icon.svg
+    install -D -m 444 -T $icon $out/share/icons/hicolor/scalable/apps/com.nexusmods.app.svg
+
+    # Bitmap icons
+    for i in 16 24 48 64 96 128 256 512; do
+      size=''${i}x''${i}
+      dir=$out/share/icons/hicolor/$size/apps
+      mkdir -p $dir
+      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+    done
+  '';
+
+  runtimeInputs = [
+    _7zz
+    desktop-file-utils
+    xdg-utils
   ];
 
   executables = [ "NexusMods.App" ];
 
+  dotnetBuildFlags = [
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.2/src/NexusMods.App/app.pupnet.conf#L38
+    "--property:Version=${finalAttrs.version}"
+    "--property:TieredCompilation=true"
+    "--property:PublishReadyToRun=true"
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+  ];
+
   doCheck = true;
 
-  dotnetTestFlags = [ "--environment=USER=nobody" ];
+  dotnetTestFlags = [
+    "--environment=USER=nobody"
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+  ];
 
   testFilters = [
     "Category!=Disabled"
@@ -85,6 +127,9 @@ buildDotnetModule (finalAttrs: {
     [
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+
+      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
+      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"

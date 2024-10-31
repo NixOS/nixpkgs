@@ -1,6 +1,5 @@
 {
   python,
-  pythonAtLeast,
   lib,
   stdenv,
   pyside2,
@@ -15,35 +14,20 @@ stdenv.mkDerivation {
 
   inherit (pyside2) version src patches;
 
-  postPatch =
-    (lib.optionalString (pythonAtLeast "3.12") ''
-      substituteInPlace \
-        ez_setup.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/utils.py \
-        build_scripts/wheel_override.py \
-        build_scripts/wheel_utils.py \
-        sources/shiboken2/CMakeLists.txt \
-        sources/shiboken2/data/shiboken_helpers.cmake \
-        --replace-fail "from distutils" "import setuptools; from distutils"
-      substituteInPlace \
-        build_scripts/config.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/setup_runner.py \
-        build_scripts/utils.py \
-        --replace-fail "import distutils" "import setuptools; import distutils"
-    '')
-    + ''
-      cd sources/shiboken2
-    '';
+  postPatch = ''
+    cd sources/shiboken2
+  '';
 
   CLANG_INSTALL_DIR = llvmPackages_15.libclang.out;
 
   nativeBuildInputs = [
     cmake
-    (python.withPackages (ps: with ps; [ setuptools ]))
+    (python.withPackages (
+      ps: with ps; [
+        distutils
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs =

@@ -29,6 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "CLI calendar application for CalDAV servers written in Go";
     homepage = "https://git.sr.ht/~psic4t/qcal";
+    changelog = "https://git.sr.ht/~psic4t/qcal/refs/${version}";
     license = licenses.gpl3;
     mainProgram = "qcal";
     maintainers = with maintainers; [ antonmosich ];

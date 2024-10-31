@@ -52,7 +52,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fvcore" ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Collection of common code that's shared among different research projects in FAIR computer vision team";

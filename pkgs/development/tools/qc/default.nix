@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "qc";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
     rev = "v${version}";
-    hash = "sha256-SrvcRF2yRGGPTk835ykG+NH9WPoc/bXO5tSj43Q7T3g=";
+    hash = "sha256-D45uJk1Hb7k2qOLIbRdo0gQlPovUwcQ3rnYqhouhow0=";
   };
 
-  vendorHash = "sha256-7t5rQliLm6pMUHhtev/kNrQ7AOvmA/rR93SwNQhov6o=";
+  vendorHash = "sha256-Cg1Op/4okIi2UTtqWnR0N3iMWzrYEaYxmXzvWIibftg=";
 
   ldflags = [
     "-s" "-w" "-X=github.com/qownnotes/qc/cmd.version=${version}"

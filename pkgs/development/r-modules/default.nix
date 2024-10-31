@@ -318,6 +318,7 @@ let
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
+    RQuantLib = [ kupac ];
   };
 
   packagesWithRDepends = {
@@ -338,7 +339,7 @@ let
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     Apollonius = with pkgs; [ pkg-config gmp.dev mpfr.dev ];
-    arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.isDarwin [ intltool ];
+    arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ intltool ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
@@ -362,7 +363,7 @@ let
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
-    data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
@@ -422,7 +423,7 @@ let
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
-    ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib netcdf ];
@@ -437,7 +438,7 @@ let
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
-    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
     pcaL1 = [ pkgs.pkg-config pkgs.clp ];
     pdftools = [ pkgs.poppler.dev ];
     PEPBVS = [ pkgs.gsl ];
@@ -473,8 +474,9 @@ let
     RMySQL = with pkgs; [ zlib libmysqlclient openssl.dev ];
     RNetCDF = with pkgs; [ netcdf udunits ];
     RODBC = [ pkgs.libiodbc ];
-    rpanel = [ pkgs.bwidget ];
+    rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
+    RPostgres = with pkgs; [ postgresql ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
@@ -531,7 +533,7 @@ let
     V8 = [ pkgs.nodejs.libv8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
     XLConnect = [ pkgs.jdk ];
-    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
@@ -605,8 +607,8 @@ let
     unrtf = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
-    bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
+    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
     bayesWatch = [ pkgs.boost.dev ];
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
@@ -643,7 +645,7 @@ let
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
-    jqr = [ pkgs.jq.lib ];
+    jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
     interpolation = [ pkgs.gmp ];
@@ -790,7 +792,7 @@ let
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     ijtiff = [ pkgs.libtiff ];
-    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.isDarwin lerc.dev;
+    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.hostPlatform.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
     spFW = [ pkgs.fftw.dev ];
     qspray = with pkgs; [ gmp.dev mpfr.dev ];
@@ -1082,6 +1084,24 @@ let
         '';
     });
 
+    sf = old.sf.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    terra = old.terra.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
@@ -1218,7 +1238,7 @@ let
 
     ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.isDarwin " -fopenmp";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
       };
     });
 
@@ -1273,7 +1293,7 @@ let
     });
 
     pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {
-      postPatch = lib.optionalString stdenv.isDarwin ''
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
         for file in R/*.{r,r.in}; do
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.cctools}/bin/\1"#g' $file
         done
@@ -1440,9 +1460,9 @@ let
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
       preConfigure = ''
-        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
+        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
       '';
-      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+      TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
     });
 
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {

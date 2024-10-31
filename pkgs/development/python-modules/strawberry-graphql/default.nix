@@ -5,7 +5,6 @@
   buildPythonPackage,
   chalice,
   channels,
-  click,
   daphne,
   django,
   email-validator,
@@ -40,11 +39,13 @@
   starlette,
   typing-extensions,
   uvicorn,
+  typer,
+  graphlib-backport,
 }:
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.237.3";
+  version = "0.243.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-w9ADHKpYijUtN/tB9ANN2ebTMNw8wvqMuYP9fNkisQw=";
+    hash = "sha256-m+KaUd0rl0RRZzVPI+ldwW77YGLq45egkV5vYYz4dW8=";
   };
 
   patches = [
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       pytest-aiohttp
@@ -92,7 +93,7 @@ buildPythonPackage rec {
       libcst
     ];
     debug-server = [
-      click
+      typer
       libcst
       pygments
       python-multipart
@@ -125,10 +126,11 @@ buildPythonPackage rec {
     ];
     chalice = [ chalice ];
     cli = [
-      click
       pygments
       rich
       libcst
+      typer
+      graphlib-backport
     ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
@@ -146,7 +148,7 @@ buildPythonPackage rec {
     pytest-snapshot
     pytestCheckHook
     sanic-testing
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "strawberry" ];
 

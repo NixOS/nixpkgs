@@ -2,36 +2,29 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  makeBinaryWrapper,
-  mkpasswd,
+  libxcrypt,
   nixosTests,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "userborn";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "userborn";
     rev = version;
-    hash = "sha256-aptFDrL9RPPTu4wp2ee3LVaEruRdCWtLGIKdOgsR+/s=";
+    hash = "sha256-ABePye1zuGDH74BL6AP05rR9eBOYu1SoVpd2TcZQMW8=";
   };
 
   sourceRoot = "${src.name}/rust/userborn";
 
-  cargoHash = "sha256-m39AC26E0Pxu1E/ap2kSwr5uznJNgExf5QUrZ+zTNX0=";
+  cargoHash = "sha256-/S2rkZyXHN5NiW9TFhKguqtf/udFcDOTfV2jYRMV14s=";
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ mkpasswd ];
-
-  nativeCheckInputs = [ mkpasswd ];
-
-  postInstall = ''
-    wrapProgram $out/bin/userborn --prefix PATH : ${lib.makeBinPath [ mkpasswd ]}
-  '';
+  buildInputs = [ libxcrypt ];
 
   stripAllList = [ "bin" ];
 
@@ -51,7 +44,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
+    changelog = "https://github.com/nikstur/userborn/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };

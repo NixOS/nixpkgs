@@ -6,7 +6,7 @@
 , makeDesktopItem
 , wrapGAppsHook3
 , gsettings-desktop-schemas
-, enableX11 ? !stdenv.isDarwin
+, enableX11 ? !stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nevivurn ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && enableX11; # unison-gui and uimac are broken on darwin
+    broken = stdenv.hostPlatform.isDarwin && enableX11; # unison-gui and uimac are broken on darwin
     mainProgram = if enableX11 then "unison-gui" else "unison";
   };
 })

@@ -21,7 +21,7 @@ let
   };
 
   mkDerivation =
-    if stdenv.isDarwin then callPackage ./darwin.nix { }
+    if stdenv.hostPlatform.isDarwin then callPackage ./darwin.nix { }
     else qt6Packages.callPackage ./linux.nix { };
 in mkDerivation {
   pname = "p4v";

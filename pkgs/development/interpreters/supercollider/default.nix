@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
   buildInputs = [ gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
-    ++ lib.optional (!stdenv.isDarwin) alsa-lib
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
     ++ lib.optional useSCEL emacs;
 
   hardeningDisable = [ "stackprotector" ];

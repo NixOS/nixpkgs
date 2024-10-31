@@ -4,8 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   overrides,
-  pydantic_1,
-  pydantic-yaml,
+  pydantic,
   pyxdg,
   pyyaml,
   requests,
@@ -17,6 +16,7 @@
   pytest-subprocess,
   requests-mock,
   hypothesis,
+  jsonschema,
   git,
   squashfsTools,
   setuptools-scm,
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.33.0";
+  version = "2.1.2";
 
   pyproject = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     rev = "refs/tags/${version}";
-    hash = "sha256-SP2mkaXsU0btnA3aanSA18GkdW6ReLgImOWdpnwZiyU=";
+    hash = "sha256-QSD43rTy0GsGoUymhoBv1gdS6TMoln5PNsmeycKnXnw=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -43,12 +43,12 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "requests"
     "urllib3"
+    "pydantic"
   ];
 
   dependencies = [
     overrides
-    pydantic_1
-    pydantic-yaml
+    pydantic
     pyxdg
     pyyaml
     requests
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     hypothesis
+    jsonschema
     pytest-check
     pytest-mock
     pytest-subprocess
@@ -96,7 +97,7 @@ buildPythonPackage rec {
       "tests/unit/packages/test_deb.py"
       "tests/unit/packages/test_chisel.py"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
@@ -105,7 +106,6 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = lib.versionAtLeast pydantic-yaml.version "1";
     description = "Software artifact parts builder from Canonical";
     homepage = "https://github.com/canonical/craft-parts";
     changelog = "https://github.com/canonical/craft-parts/releases/tag/${version}";

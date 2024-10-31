@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchPypi,
   buildPythonPackage,
@@ -53,6 +54,10 @@ buildPythonPackage rec {
     zope-event
     zope-interface
   ] ++ lib.optionals (!isPyPy) [ greenlet ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   # Bunch of failures.
   doCheck = false;

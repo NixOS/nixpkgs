@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
-    (lib.mesonEnable "libdrm" (stdenv.isLinux))
+    "-Degl=${if stdenv.hostPlatform.isDarwin then "disabled" else "auto"}"
+    (lib.mesonEnable "libdrm" (stdenv.hostPlatform.isLinux))
     (lib.mesonEnable "osmesa" false)
     (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];

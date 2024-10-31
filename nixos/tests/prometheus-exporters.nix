@@ -482,7 +482,6 @@ let
     json = {
       exporterConfig = {
         enable = true;
-        url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
           modules = {
             default = {
@@ -932,7 +931,9 @@ let
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionEnvFile = "${pkgs.writeText "connstr-env" ''
+          PGBOUNCER_EXPORTER_CONNECTION_STRING=postgres://admin@localhost:6432/pgbouncer?sslmode=disable
+        ''}";
       };
 
       metricProvider = {
@@ -1507,25 +1508,6 @@ let
                 'systemd_service_restart_total{name="prometheus-systemd-exporter.service"} 0'
             )
         )
-      '';
-    };
-
-    tor = {
-      exporterConfig = {
-        enable = true;
-      };
-      metricProvider = {
-        # Note: this does not connect the test environment to the Tor network.
-        # Client, relay, bridge or exit connectivity are disabled by default.
-        services.tor.enable = true;
-        services.tor.settings.ControlPort = 9051;
-      };
-      exporterTest = ''
-        wait_for_unit("tor.service")
-        wait_for_open_port(9051)
-        wait_for_unit("prometheus-tor-exporter.service")
-        wait_for_open_port(9130)
-        succeed("curl -sSf localhost:9130/metrics | grep 'tor_version{.\\+} 1'")
       '';
     };
 

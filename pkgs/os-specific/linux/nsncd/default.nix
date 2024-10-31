@@ -3,32 +3,39 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
+  nixosTests,
 }:
+
+let
+  version = "1.5.1";
+in
 
 rustPlatform.buildRustPackage {
   pname = "nsncd";
-  version = "1.4.1-unstable-2024-04-10";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev = "7605e330d5a313a8656e6fcaf1c10cd6b5cdd427";
-    hash = "sha256-Bd7qE9MP5coBCkr70TdoJfwYhQpdrn/zmN4KoARcaMI=";
+    rev = "v${version}";
+    hash = "sha256-0cFCX5pKvYv6yr4+X5kXGz8clNi/LYndFtHaxSmHN+I=";
   };
 
-  cargoHash = "sha256-N7U9YsyGh8+fLT973GGZTmVXcdnWhpqkeYTxzJ0rzdo=";
-
-  # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
-  cargoPatches = [ ./0001-cargo-bump.patch ];
-
-  # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
-  RUSTFLAGS = "-A dead_code";
+  cargoHash = "sha256-1n+yCjuJ7kQkd68AOCVz5MWWe1qItaceT1rDlLi1Vqo=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
     # on IPv4. That's not the case in the Nix sandbox somehow. Works
     # when running cargo test impurely on a (NixOS|Debian) machine.
     "--skip=ffi::test_gethostbyname2_r"
+
+    # Relies on /etc/services to be present?
+    "--skip=handlers::test::test_handle_getservbyname_name"
+    "--skip=handlers::test::test_handle_getservbyname_name_proto"
+    "--skip=handlers::test::test_handle_getservbyport_port"
+    "--skip=handlers::test::test_handle_getservbyport_port_proto"
+    "--skip=handlers::test::test_handle_getservbyport_port_proto_aliases"
   ];
 
   meta = with lib; {
@@ -44,6 +51,11 @@ rustPlatform.buildRustPackage {
       picnoir
     ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+
+  passthru = {
+    tests.nscd = nixosTests.nscd;
+    updateScript = nix-update-script { };
   };
 }

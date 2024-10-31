@@ -5,17 +5,9 @@
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
 , shared-mime-info
 , perl, perlPackages
-, mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
 
 let
-  # A much better xdg-open
-  mimisrc = fetchFromGitHub {
-    owner = "march-linux";
-    repo = "mimi";
-    rev = "8e0070f17bcd3612ee83cb84e663e7c7fabcca3d";
-    sha256 = "15gw2nyrqmdsdin8gzxihpn77grhk9l97jp7s7pr7sl4n9ya2rpj";
-  };
 
   # Required by the common desktop detection code
   commonDeps = [ dbus coreutils gnugrep gnused ];
@@ -268,10 +260,6 @@ stdenv.mkDerivation (self: {
   # explicitly provide a runtime shell so patchShebangs is consistent across build platforms
   buildInputs = [ bash ];
 
-  postInstall = lib.optionalString mimiSupport ''
-    cp ${mimisrc}/xdg-open $out/bin/xdg-open
-  '';
-
   preFixup = lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions);
 
   passthru.tests.xdg-mime = runCommand "xdg-mime-test" {
@@ -305,7 +293,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2Only else licenses.mit;
+    license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.all;
   };

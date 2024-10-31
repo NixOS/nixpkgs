@@ -11,7 +11,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Security;
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   self = rustPlatform.buildRustPackage {
     pname = "so";
     version = "0.4.10";
@@ -31,9 +31,11 @@ let
 
     buildInputs =
       [ openssl ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         libiconv
+        CoreServices
         Security
+        SystemConfiguration
       ];
 
     strictDeps = true;
@@ -56,7 +58,10 @@ let
       changelog = "https://github.com/samtay/so/blob/main/CHANGELOG.md";
       mainProgram = "so";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [
+        AndersonTorres
+        unsolvedcypher
+      ];
     };
   };
 in

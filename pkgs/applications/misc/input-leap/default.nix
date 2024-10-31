@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 
@@ -22,21 +22,22 @@
 , qtbase
 , qttools
 , wrapGAppsHook3
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-12-27";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "ecf1fb6645af7b79e6ea984d3c9698ca0ab6f391";
-    hash = "sha256-TEv1xR1wUG3wXNATLLIZKOtW05X96wsPNOlE77OQK54=";
+    rev = "v${version}";
+    hash = "sha256-YkBHvwN573qqQWe/p0n4C2NlyNQHSZNz2jyMKGPITF4=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 wrapQtAppsHook qttools ];
   buildInputs = [
     curl qtbase avahi
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM

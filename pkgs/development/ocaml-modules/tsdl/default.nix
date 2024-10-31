@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg ];
   propagatedBuildInputs = [ SDL2 ctypes ctypes-foreign ]
-    ++ lib.optionals stdenv.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)

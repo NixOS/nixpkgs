@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
   buildInputs = [ ncurses ]
-    ++ (if stdenv.isDarwin then [ curl libiconv Security ] else [ openssl ]);
+    ++ (if stdenv.hostPlatform.isDarwin then [ curl libiconv Security ] else [ openssl ]);
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;

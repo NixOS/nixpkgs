@@ -4,20 +4,19 @@
 , coreutils
 , lib
 , testers
-, donkey
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "donkey";
   version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "donkey";
     repo = "donkey";
-    rev = "tags/release/${version}";
+    rev = "tags/release/${finalAttrs.version}";
     hash = "sha256-2xgb9l0Eko39HJVROAWEIP3qLg5t/5h/rm2MoXoKnJI=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   buildInputs = [ libmd ];
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     export INSTALL_DATA="${coreutils}/bin/install -m 444"
   '';
 
-  passthru.tests.version = testers.testVersion { package = donkey; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "Alternative for S/KEY's 'key' command";
@@ -51,4 +50,4 @@ The name "Donkey" is an acronym of "Don't Key".
     maintainers = with maintainers; [ raboof ];
     platforms = platforms.all;
   };
-}
+})

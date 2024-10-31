@@ -1,46 +1,55 @@
 {
   lib,
-  aiohttp,
-  async-timeout,
-  bash,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # buildInputs
+  bash,
+
+  # dependencies
+  aiohttp,
   langchain-core,
   langchain-text-splitters,
   langsmith,
-  lark,
-  numpy,
-  pandas,
-  poetry-core,
   pydantic,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+  async-timeout,
+
+  # optional-dependencies
+  numpy,
+
+  # tests
+  freezegun,
+  httpx,
+  lark,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
   requests-mock,
-  requests,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.15";
+  version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-8F6ntFstCTQjQNbE9oiYbpZ7kZ1grcnV3FHAfhFnAzA=";
+    hash = "sha256-MRpXR4nQDobzofhzkU5Y2OiEsi+VdjCcF/vcxcG/144=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -48,6 +57,8 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   buildInputs = [ bash ];
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     aiohttp
@@ -67,6 +78,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio

@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-bluetooth";
-  version = "46.1";
+  version = "47.1";
 
   # TODO: split out "lib"
   outputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-bluetooth/${lib.versions.major finalAttrs.version}/gnome-bluetooth-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VsRKFwNFmOlgdFivrhvnXz3l798OYjVfCbpY/HvDEqw=";
+    hash = "sha256-A+PnQDoVEI/8FJYhCh2lwpYbKDSlwH7Mx6P0kxldq6M=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-bluetooth";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-bluetooth/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Application that lets you manage Bluetooth in the GNOME desktop";
     mainProgram = "bluetooth-sendto";
     maintainers = teams.gnome.members;

@@ -14,7 +14,7 @@
 }:
 
 let
-  stdenv' = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
@@ -39,11 +39,11 @@ stdenv'.mkDerivation (finalAttrs: {
     python3
     ispc
   ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
-    ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   buildInputs =
     [ tbb ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         Accelerate

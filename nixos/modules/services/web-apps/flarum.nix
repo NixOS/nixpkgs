@@ -106,8 +106,14 @@ in {
 
     createDatabaseLocally = mkOption {
       type = types.bool;
-      default = true;
-      description = "Create the database and database user locally, and run installation.";
+      default = false;
+      description = ''
+        Create the database and database user locally, and run installation.
+
+        WARNING: Due to https://github.com/flarum/framework/issues/4018, this option is set
+        to false by default. The 'flarum install' command may delete existing database tables.
+        Only set this to true if you are certain you are working with a fresh, empty database.
+      '';
     };
   };
 
@@ -116,6 +122,7 @@ in {
       isSystemUser = true;
       home = cfg.stateDir;
       createHome = true;
+      homeMode = "755";
       group = cfg.group;
     };
     users.groups.${cfg.group} = {};
@@ -194,14 +201,15 @@ in {
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
-        chmod a+x . public
-        chmod +x site.php extend.php flarum
       '' + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
         if [ ! -f config.php ]; then
-            php flarum install --file=${flarumInstallConfig}
+          php flarum install --file=${flarumInstallConfig}
         fi
-        php flarum migrate
-        php flarum cache:clear
+      '' + ''
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
       '';
     };
   };

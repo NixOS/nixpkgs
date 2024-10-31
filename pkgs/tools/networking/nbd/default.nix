@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gnutls
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libnl
     linuxHeaders
   ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     test = nixosTests.nbd;

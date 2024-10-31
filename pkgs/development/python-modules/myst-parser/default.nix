@@ -20,23 +20,21 @@
 }:
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TKo1lanZNM+XrOKZ0ZmtlhEPoAYQUspkyHXZm1wNTFE=";
+    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     jinja2
     mdit-py-plugins
@@ -59,6 +57,7 @@ buildPythonPackage rec {
     # sphinx 7.4 compat
     "test_gettext"
     "test_gettext_additional_targets"
+    "test_amsmath"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];

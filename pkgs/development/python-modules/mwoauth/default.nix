@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mwoauth";
-  version = "0.3.8";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CNr07auqD5WoRfmOVwfecxaoODqWJfIK52iwNZkcNqw=";
+    hash = "sha256-IuNAPnSOcBRvjszBQw/lQsn5xP9nfv9CSlLmRPbY98U=";
   };
 
   propagatedBuildInputs = [

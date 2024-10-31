@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pyparsing
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     html = [ html5lib ];
     networkx = [ networkx ];
   };
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
     pytest7CheckHook
     setuptools
-  ] ++ passthru.optional-dependencies.networkx ++ passthru.optional-dependencies.html;
+  ] ++ optional-dependencies.networkx ++ optional-dependencies.html;
 
   pytestFlagsArray = [
     # requires network access
@@ -82,7 +82,7 @@ buildPythonPackage rec {
       "test_guess_format_for_parse"
       "rdflib.extras.infixowl"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Require loopback network access
       "TestGraphHTTP"
     ];

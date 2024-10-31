@@ -56,7 +56,7 @@ stdenv.mkDerivation {
       (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
       (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_ZSTD" true)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "10.14") # For aligned allocation
     ];
 
@@ -66,9 +66,7 @@ stdenv.mkDerivation {
     description = "Structural Netlist API (and more) for EDA post synthesis flow development";
     homepage = "https://github.com/najaeda/naja";
     license = lib.licenses.asl20;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    maintainers = lib.teams.ngi.members;
     mainProgram = "naja_edit";
     platforms = lib.platforms.all;
   };

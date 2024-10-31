@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.9.2";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iuhi4ELHNPxFDz7cmiTFuUA8bf6VI2YXnHOTi69FloU=";
+    hash = "sha256-vzTT8tHpbJSt1PosgKTg3pT4a9UfPabtJppLLD9znhU=";
   };
 
-  npmDepsHash = "sha256-xEXAaYW/2Wx0ar0l7jcSj0NBYKTsa7vHdykLlU0BkJE=";
+  npmDepsHash = "sha256-nVQv+GSnfQa8V/RitvV2juokbiRJ/vIMLWcg9QPDbP0=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -85,7 +85,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
-      eclairevoyant
       huantian
     ];
     platforms = lib.platforms.linux;

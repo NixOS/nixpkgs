@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit src;
     hash = "sha256-XTfKqKs7874ak7Lzscxw8E2qcnJOWMZaaol8TpIB6Vw=";
   };
 
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = lib.teams.gnome.members;
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };
 }

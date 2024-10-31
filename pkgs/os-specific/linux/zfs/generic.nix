@@ -1,8 +1,8 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub
+  { lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
-  , linuxKernel
+  , linuxPackages
   , perl
   , configFile ? "all"
 
@@ -182,9 +182,11 @@ let
       # Remove tests because they add a runtime dependency on gcc
       rm -rf $out/share/zfs/zfs-tests
 
-      # Add Bash completions.
-      install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-      (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ${optionalString (lib.versionOlder version "2.2") ''
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ''}
     '';
 
     postFixup = let
@@ -199,12 +201,8 @@ let
 
     passthru = {
       inherit enableMail kernelModuleAttribute;
-      latestCompatibleLinuxPackages = lib.pipe linuxKernel.packages [
-        builtins.attrValues
-        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.passthru.isVanilla && kPkgs.kernel.pname == "linux" && kernelCompatible kPkgs.kernel))
-        (builtins.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)))
-        lib.last
-      ];
+      latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages ;
+
       # The corresponding userspace tools to this instantiation
       # of the ZFS package set.
       userspaceTools = genericBuild (outerArgs // {

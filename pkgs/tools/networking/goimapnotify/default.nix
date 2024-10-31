@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.3.15";
+  version = "2.4";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    hash = "sha256-da2Q+glDVWSf574pks6UzvQyzKAU+81ypy5H968Y7HE=";
+    hash = "sha256-ieaj97CjoSc/qt/JebATHmiJ7RIvNUpFZjEM6mqG9Rk=";
   };
 
-  vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
+  vendorHash = "sha256-rWPXQj0XFS/Mv9ylGv09vol0kkRDNaOAEgnJvSWMvoI=";
 
   postPatch = ''
     for f in command.go command_test.go; do

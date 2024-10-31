@@ -2,13 +2,13 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
-, withGamemode ? stdenv.isLinux
-, withVulkan ? stdenv.isLinux
-, withWayland ? stdenv.isLinux
+, withGamemode ? stdenv.hostPlatform.isLinux
+, withVulkan ? stdenv.hostPlatform.isLinux
+, withWayland ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, ffmpeg_7
+, ffmpeg
 , flac
 , freetype
 , gamemode
@@ -36,6 +36,7 @@
 , udev
 , vulkan-loader
 , wayland
+, wayland-scanner
 , wrapQtAppsHook
 , zlib
 }:
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     flac
     freetype
     libGL
@@ -76,8 +77,8 @@ stdenv.mkDerivation rec {
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
   lib.optional withVulkan vulkan-loader ++
-  lib.optional withWayland wayland ++
-  lib.optionals stdenv.isLinux [
+  lib.optionals withWayland [wayland wayland-scanner] ++
+  lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
     libX11
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
     "--disable-update_assets"
     "--disable-update_core_info"
   ] ++
-  lib.optionals stdenv.isLinux [
+  lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-dbus"
     "--enable-egl"
     "--enable-kms"
@@ -142,6 +143,6 @@ stdenv.mkDerivation rec {
     # https://docs.libretro.com/development/retroarch/compilation/osx/
     # and
     # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

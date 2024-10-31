@@ -5,7 +5,7 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
@@ -2137,6 +2137,6 @@ rec {
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 
   # DEPRECATED
-  cartesianProductOfSets = warnIf (isInOldestRelease 2405)
+  cartesianProductOfSets = warnIf (oldestSupportedReleaseIsAtLeast 2405)
     "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }

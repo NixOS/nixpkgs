@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       [ Accelerate ]
     else
       [

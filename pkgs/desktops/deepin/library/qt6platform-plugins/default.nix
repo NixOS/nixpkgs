@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   mtdev,
@@ -13,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qt6platform-plugins";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-O2wylkNKqN0JxKffwFNSfv7S1hPIFrVKwSsppSGTp6I=";
+    hash = "sha256-aHqm+WKZLoUymiMFfrF3jgWrxgq51d6yTXWiOMsFgiQ=";
   };
 
   postUnpack = ''

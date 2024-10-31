@@ -1,12 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
   setuptools,
-  wheel,
+
+  # dependencies
   gymnasium,
   numpy,
+
+  # tests
   ale-py,
   bsuite,
   dm-control,
@@ -18,21 +23,32 @@
 
 buildPythonPackage rec {
   pname = "shimmy";
-  version = "1.3.0";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Shimmy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rYBbGyMSFF/iIGruKn2JXKAVIZIfJDEHUEZUESiUg/k=";
+    hash = "sha256-/wIXjOGb3UeMQdeifYagd7OcxbBcdGPS09mjvkFsWmk=";
   };
+
+  patches = [
+    # Shimmy tries to register some environments from `dm-control` that require unpackaged `labmaze`.
+    # This prevents from importing `shimmy` itself by crashing with a `ModuleNotFoundError`.
+    # This patch imports those environments lazily.
+    #
+    # TODO: get rid of this patch at the next release as the issue has been fixed upstream:
+    # https://github.com/Farama-Foundation/Shimmy/pull/125
+    (fetchpatch {
+      name = "prevent-labmaze-import-crash";
+      url = "https://github.com/Farama-Foundation/Shimmy/commit/095d576f6aae15a09a1e426138629ce9f43a3c04.patch";
+      hash = "sha256-rr9l3tHunYFk0j7hfo9IaSRlogAtwXoXcQ0zuU/TL8c=";
+    })
+  ];
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -58,10 +74,6 @@ buildPythonPackage rec {
 
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
-
-    # Broken since ale-py v0.9.0 due to API change
-    # https://github.com/Farama-Foundation/Shimmy/issues/120
-    "tests/test_atari.py"
   ];
 
   preCheck = ''

@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , autoreconfHook
-, fetchpatch2
 , gtk-doc
 , pkg-config
 , intltool
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.52";
+  version = "1.14.53";
 
   outputs = [ "out" "dev" ];
 
@@ -29,16 +28,8 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libgsf";
     rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-uSi2/pZiST07YutU8SHNoY2LifEQhohQeyaH9spyG2s=";
+    hash = "sha256-vC/6QEoV6FvFxQ0YlMkBbTmAtqbkvgZf+9BU8epi8yo=";
   };
-
-  patches = [
-    # Fixes building when nanohttp is not enabled in libxml2, which is the default since libxml2 2.13.
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/libgsf/-/commit/5d4bb55095d3d6ef793c1908a88504183e28644c.diff";
-      hash = "sha256-2TF1KDUxJtSMTDze2/dOJQRkW8S1GA9OyFpYzYeKpjQ=";
-    })
-  ];
 
   postPatch = ''
     # Fix cross-compilation

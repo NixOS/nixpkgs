@@ -33,6 +33,7 @@
 , lib
 , makeBinaryWrapper
 , nix-update-script
+, writeShellScriptBin
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -46,14 +47,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.15.2";
+  version = "3.15.13";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-g6H68dYMmpQYlwhZ6b84yY/qbAP18iNrmYOWf9rL5gc=";
+    hash = "sha256-AePYKdDyAtnVkL8/VeWmhJ3ATZnhyVZcU/QtVpCfTQE=";
   };
 
   patches = [
@@ -98,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     edid-decode
     # For OpenVR
     cmake
+
+    # calls git describe to encode its own version into the build
+    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang

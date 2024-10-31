@@ -23,6 +23,12 @@ let
 in
 {
   options = {
+    isSpecialisation = mkOption {
+      type = lib.types.bool;
+      internal = true;
+      default = false;
+      description = "Whether this system is a specialisation of another.";
+    };
 
     specialisation = mkOption {
       default = { };
@@ -36,7 +42,7 @@ in
         (e.g. `fewJobsManyCores`) at runtime, run:
 
         ```
-        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        sudo /run/current-system/specialisation/fewJobsManyCores/bin/apply test
         ```
       '';
       type = types.attrsOf (types.submodule (

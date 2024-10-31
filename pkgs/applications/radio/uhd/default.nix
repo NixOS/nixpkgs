@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
   #
-  version = "4.6.0.0";
+  version = "4.7.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-9ZGt0ZrGbprCmpAuOue6pg2gliu4MvlRFHGxyMJeKAc=";
+    hash = "sha256-TX1iLs941z8sZY0yQEXuy9jGgsn6HU4uqIdxJmNNahU=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-  ] ++ optionals stdenv.isAarch32 [
+  ] ++ optionals stdenv.hostPlatform.isAarch32 [
     "-DCMAKE_CXX_FLAGS=-Wno-psabi"
   ];
 
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # many tests fails on darwin, according to ofborg
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # Build only the host software
   preConfigure = "cd host";

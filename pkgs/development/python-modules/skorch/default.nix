@@ -60,7 +60,7 @@ buildPythonPackage rec {
       # failing tests
       "test_pickle_load"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # there is a problem with the compiler selection
       "test_fit_and_predict_with_compile"
     ]

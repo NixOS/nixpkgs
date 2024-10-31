@@ -52,7 +52,7 @@ python.pkgs.buildPythonApplication rec {
       watchdog
     ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     aws = [ boto3 ];
     azure = [
       azure-storage-blob

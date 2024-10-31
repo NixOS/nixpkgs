@@ -27,11 +27,11 @@
 
 let
   os-specific-buildInputs =
-    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.2.7";
+  version = "2024.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VeaEDYnGfMYf9/WqMIZ9g4KounD48eWF3Romt79RMEQ=";
+    hash = "sha256-HE7dARgKnZxqjAXX4iI1ml0N2BalyTo+ZAzjC2ThEN8=";
   };
 
   build-system = [
@@ -92,6 +92,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # ld: symbol(s) not found for architecture arm64
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

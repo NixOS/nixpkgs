@@ -96,7 +96,12 @@ in {
 
     extraConfig = lib.mkOption {
       description = ''
-        Docker extra registry configuration via environment variables.
+        Docker extra registry configuration.
+      '';
+      example = lib.literalExpression ''
+        {
+          log.level = "debug";
+        }
       '';
       default = {};
       type = lib.types.attrs;

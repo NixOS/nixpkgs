@@ -5,7 +5,6 @@
   poetry-core,
   crossandra,
   dahlia,
-  pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -20,10 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-sOkJ67B8LaIA2cwCHaFnc16lMG8uaegBJCzF6Li77vk=";
   };
 
-  build-system = [ poetry-core pythonRelaxDepsHook ];
+  build-system = [ poetry-core ];
   dependencies = [ crossandra dahlia ];
-
-  pythonRelaxDeps = [ "crossandra" ];
 
   meta = with lib; {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.7.1";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pyproject-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-TQ6cRkGnZpNchu+eL8gyUYbzp/7NWhG+LWeI8Hq52ok=";
+    hash = "sha256-zFV44xqbwe1QsIVurvsjqY+zxC+X2hCljZ5u70kNTSU=";
   };
 
   outputs = [
@@ -67,6 +67,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires eol python2 interpreter
     "test_can_build_on_python_2"
+    # different formatting for version specifier
+    "test_setuptools_prepare_metadata_for_build_wheel"
   ];
 
   pythonImportsCheck = [ "pyproject_api" ];

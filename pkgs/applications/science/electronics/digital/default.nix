@@ -5,8 +5,8 @@
 let
   pname = "digital";
   pkgDescription = "A digital logic designer and circuit simulator.";
-  version = "0.30";
-  buildDate = "2023-02-03T08:00:56+01:00"; # v0.30 commit date
+  version = "0.31";
+  buildDate = "2024-09-03T14:02:31+02:00"; # v0.31 commit date
 
   desktopItem = makeDesktopItem {
     type = "Application";
@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     owner = "hneemann";
     repo = "Digital";
     rev = "v${version}";
-    hash = "sha256-cDykYlcFvDLFBy9UnX07iCR2LCq28SNU+h9vRT/AoJM=";
+    hash = "sha256-6XaM3U1x/yvoCrkJ2nMtBmj972gCFlWn3F4DM7TLWgw=";
   };
 
   inherit mvnParameters;
@@ -71,7 +71,7 @@ maven.buildMavenPackage rec {
     description = pkgDescription;
     mainProgram = "digital";
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ Dettorer ];
   };
 }

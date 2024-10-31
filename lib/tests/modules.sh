@@ -294,6 +294,9 @@ checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
+# Check coerced option merging.
+checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already declared in .*/declare-coerced-value-no-default.nix.' config.value ./declare-coerced-value.nix ./declare-coerced-value-no-default.nix
+
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
@@ -426,8 +429,8 @@ checkConfigOutput '^null$' config.value.l1.l2.foo ./types-anything/nested-attrs.
 checkConfigOutput '^null$' config.value.l1.l2.l3.foo ./types-anything/nested-attrs.nix
 # Attribute sets that are coercible to strings shouldn't be recursed into
 checkConfigOutput '^"foo"$' config.value.outPath ./types-anything/attrs-coercible.nix
-# Multiple lists aren't concatenated together
-checkConfigError 'The option .* has conflicting definitions' config.value ./types-anything/lists.nix
+# Multiple lists aren't concatenated together if their definitions are not equal
+checkConfigError 'The option .* has conflicting definition values' config.value ./types-anything/lists.nix
 # Check that all equalizable atoms can be used as long as all definitions are equal
 checkConfigOutput '^0$' config.value.int ./types-anything/equal-atoms.nix
 checkConfigOutput '^false$' config.value.bool ./types-anything/equal-atoms.nix
@@ -435,6 +438,7 @@ checkConfigOutput '^""$' config.value.string ./types-anything/equal-atoms.nix
 checkConfigOutput '^"/[^"]+"$' config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput '^null$' config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput '^0.1$' config.value.float ./types-anything/equal-atoms.nix
+checkConfigOutput '^\[1,"a",{"x":null}\]$' config.value.list ./types-anything/equal-atoms.nix
 # Functions can't be merged together
 checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
 checkConfigOutput '^true$' config.valueIsFunction.single-lambda ./types-anything/functions.nix
@@ -530,9 +534,10 @@ checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nix
 checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
 
 # _type check
-checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
-checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
-checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type .*"flake".*, while trying to load a module into .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
+checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
+checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix

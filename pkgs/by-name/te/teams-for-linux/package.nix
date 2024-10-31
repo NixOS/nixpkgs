@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_30,
+  electron_32,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,23 +15,23 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.9.5";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+rEGDg+/qvjCMhGHccb4p+CKOo/65RpkFT/WnCDlCgU=";
+    hash = "sha256-fSZ94Px0NuxUZqc9cHE6czG/VzNsWp+UXllq7kEQvtI=";
   };
 
-  npmDepsHash = "sha256-vDRFFxkIQo5qU9gmkSwUhPz4FG2XbUNkTw6SCuvMqCc=";
+  npmDepsHash = "sha256-MfPdOqxiMDsvxsS3yWukRokDitqWQpTpK407xVX461o=";
 
   nativeBuildInputs = [
     makeWrapper
     versionCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [ copyDesktopItems ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ];
 
-  doInstallCheck = stdenv.isLinux;
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
   env = {
     # disable code signing on Darwin
@@ -42,7 +42,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_30.dist} electron-dist
+    cp -r ${electron_32.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -50,7 +50,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_30.version}
+        -c.electronVersion=${electron_32.version}
 
     runHook postBuild
   '';
@@ -60,7 +60,7 @@ buildNpmPackage rec {
       runHook preInstall
 
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/{applications,teams-for-linux}
       cp dist/*-unpacked/resources/app.asar $out/share/teams-for-linux/
 
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_30}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_32}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
@@ -82,7 +82,7 @@ buildNpmPackage rec {
         --add-flags "$out/share/teams-for-linux/app.asar" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/teams-for-linux.app $out/Applications
       makeWrapper $out/Applications/teams-for-linux.app/Contents/MacOS/teams-for-linux $out/bin/teams-for-linux
@@ -108,6 +108,8 @@ buildNpmPackage rec {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";

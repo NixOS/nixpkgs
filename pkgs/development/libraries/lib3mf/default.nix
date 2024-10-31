@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libzip gtest openssl
-  ] ++ (if stdenv.isDarwin then [ libossp_uuid ] else [ libuuid ]);
+  ] ++ (if stdenv.hostPlatform.isDarwin then [ libossp_uuid ] else [ libuuid ]);
 
   postPatch = ''
     # This lets us build the tests properly on aarch64-darwin.

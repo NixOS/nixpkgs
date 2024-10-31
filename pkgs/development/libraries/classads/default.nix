@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-Dfinite=isfinite";
 
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";

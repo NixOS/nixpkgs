@@ -40,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
-    ++ lib.optional stdenv.isLinux libcap
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

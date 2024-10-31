@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    sha256 = "sha256-qghGgd+OWYiXvcGUfgiQT6rR4mJPAOfOtYB3lWLg4iA=";
+    hash = "sha256-qghGgd+OWYiXvcGUfgiQT6rR4mJPAOfOtYB3lWLg4iA=";
   };
 
   sourceRoot = "${src.name}/nemo-python";

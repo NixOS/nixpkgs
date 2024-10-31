@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , file, openssl, perl, nettools
 , autoreconfHook
 , withPerlTools ? false
@@ -27,7 +27,11 @@ in stdenv.mkDerivation rec {
   in [
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+    (fetchpatch {
+      name = "configure-musl.patch";
+      url = "https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b.patch";
+      hash = "sha256-+vWH095fFL3wE6XLsTaPXgMDya0LRWdlL6urD5AIBUs=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -41,7 +45,7 @@ in stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
       "--disable-embedded-perl"
       "--without-perl-modules"
-    ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
+    ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
@@ -57,7 +61,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ nettools file autoreconfHook ];
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.IOKit

@@ -18,20 +18,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-tray-loader";
-  version = "0.0.11";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-tray-loader";
     rev = finalAttrs.version;
-    hash = "sha256-kz8+essf6O3ckeY5/5a/Z6539qNcfOnGbGTqSo5swhc=";
+    hash = "sha256-FEvoVgwzDYN23TJxu1kRSMSbS4hELYFFByxOsEO9JKE=";
   };
 
   patches = [
     (fetchpatch {
-      name = "set-version-for-dde-dock_pc.patch";
-      url = "https://github.com/linuxdeepin/dde-tray-loader/commit/0f9b90a9aa8096a92c21c8f01d29b4785aaf04e5.patch";
-      hash = "sha256-A6k8XjyIDbA+XuUxYWd5yxFJ8yOWMOtUH5Vg10o//YM=";
+      name = "remove-useless-function.patch";
+      url = "https://github.com/linuxdeepin/dde-tray-loader/commit/cf85f68db52472a0291bbbc3c298d7a2b701e4bc.patch";
+      hash = "sha256-ks7Rg5kLQvo03XKbfQaqu/heP2yoVEbNO6UhDv99JBY=";
     })
   ];
 

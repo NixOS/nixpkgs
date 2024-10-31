@@ -5,7 +5,6 @@ with haskellLib;
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
 
-  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -119,6 +118,7 @@ self: super: {
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
   universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues
@@ -145,8 +145,5 @@ self: super: {
     url = "https://github.com/reflex-frp/reflex/commit/0ac53ca3eab2649dd3f3edc585e10af8d13b28cd.patch";
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
-
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  gi-gtk = disableParallelBuilding super.gi-gtk;
 
 }

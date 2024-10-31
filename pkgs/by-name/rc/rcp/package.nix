@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-INLXVruiaK5yv5old0NOWFcg9y13M6Dm7bBMmcPFY1I=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     IOKit
   ]);
 
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rcp";
     maintainers = with maintainers; [ wykurz ];
     # = note: Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

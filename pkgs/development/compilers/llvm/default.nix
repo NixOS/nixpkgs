@@ -14,7 +14,12 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
-}:
+  # Allows passthrough to packages via newScope in ./common/default.nix.
+  # This makes it possible to do
+  # `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+  # an llvmPackages whose packages are overridden in an internally consistent way.
+  ...
+}@packageSetArgs:
 let
   versions = {
     "13.0.1".officialRelease.sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
@@ -23,11 +28,11 @@ let
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.0-rc3".officialRelease.sha256 = "sha256-SRonSpXt1pH6Xk+rQZk9mrfMdvYIvOImwUfMUu3sBgs=";
+    "19.1.1".officialRelease.sha256 = "sha256-xTo44+vH1Bz49fEl4bIpU3eIgQtFuBTGbgU7mzeY33s=";
     "20.0.0-git".gitRelease = {
-      rev = "837ee5b46a5f7f898f0de7e46a19600b896a0a1f";
-      rev-version = "20.0.0-unstable-2024-09-01";
-      sha256 = "sha256-GZDc1o7dLhPWrHA/LELsKs5ydHv9gn1bNFMg6Lfjs5Y=";
+      rev = "0e8555d4dbfdfeddc01dc2ecf9a9b6e804f7b645";
+      rev-version = "20.0.0-unstable-2024-10-07";
+      sha256 = "sha256-Rn8TkTUJKGFZ7uM1RiFOHIDTfpwEhLDpDh1zxVtTYG8=";
     };
   } // llvmVersions;
 
@@ -53,25 +58,29 @@ let
     in
     lib.nameValuePair attrName (
       recurseIntoAttrs (
-        callPackage ./common {
-          inherit (stdenvAdapters) overrideCC;
-          buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
-          targetLlvmLibraries =
-            targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
-          targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
-          stdenv =
-            if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
-              gcc12Stdenv
-            else
-              stdenv; # does not build with gcc13
-          inherit bootBintoolsNoLibc bootBintools;
-          inherit
-            officialRelease
-            gitRelease
-            monorepoSrc
-            version
-            ;
-        }
+        callPackage ./common (
+          {
+            inherit (stdenvAdapters) overrideCC;
+            buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
+            targetLlvmLibraries =
+              targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+            targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
+            inherit
+              officialRelease
+              gitRelease
+              monorepoSrc
+              version
+              ;
+          }
+          // packageSetArgs # Allow overrides.
+          // {
+            stdenv =
+              if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
+                gcc12Stdenv
+              else
+                stdenv; # does not build with gcc13
+          }
+        )
       )
     );
 

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.5.0";
+  version = "1.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-eJ49sBx1DtbUlvott9UGN4V7RR5XvK6GO/9wfBJHvvc=";
+    hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc2" "numpy"
+      --replace-fail "numpy>=2" "numpy"
 
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
@@ -80,12 +80,12 @@ buildPythonPackage rec {
   '';
 
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # doesn't seem to produce correct results?
     # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
     "test_sparse_input"

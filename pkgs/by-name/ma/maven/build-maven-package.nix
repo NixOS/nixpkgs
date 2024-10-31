@@ -93,6 +93,7 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
+    runHook afterDepsSetup
     mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnSkipTests} ${mvnParameters}
 
     runHook postBuild

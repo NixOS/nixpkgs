@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ raylib ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   configurePhase = ''
     runHook preConfigure

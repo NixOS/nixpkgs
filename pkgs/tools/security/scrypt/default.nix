@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ util-linux ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ util-linux ];
 
   meta = with lib; {
     description = "Encryption utility";

@@ -27,15 +27,15 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-pv75bvswi+JfeL7B8GPaQgXyNdNvzNgXs9VYgzKRn2U=";
+    hash = "sha256-kTwAG1B4gy+1jj5ar5RkmIUMAO9wYsG7QnMcZii/OZk=";
   };
 
-  cargoHash = "sha256-BMMh4BEoB1UhavoiQWfFhsSZsvfFSfEJhEewjA1ukLQ=";
+  cargoHash = "sha256-qcyNFuKJldHVJDAye4K1rHPf/SvpZ+BmqBast1vh/3Q=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ lib.optional (stdenv.isDarwin && mysqlSupport) libiconv
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && mysqlSupport) libiconv
     ++ lib.optional sqliteSupport sqlite
     ++ lib.optional postgresqlSupport postgresql
     ++ lib.optionals mysqlSupport [

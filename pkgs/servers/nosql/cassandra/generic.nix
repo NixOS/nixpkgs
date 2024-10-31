@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, python
+, python311Packages
 , makeWrapper
 , gawk
 , bash
@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  pythonPath = with python311Packages; [ cassandra-driver ];
+
+  nativeBuildInputs = [ python311Packages.wrapPython ];
+
+  buildInputs = [ python311Packages.python ] ++ pythonPath;
 
   installPhase = ''
     runHook preInstall
@@ -98,9 +102,16 @@ stdenv.mkDerivation rec {
       fi
     done
 
-    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
-
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # Remove cassandra bash script wrapper.
+    # The wrapper searches for a suitable python version and is not necessary with Nix.
+    rm $out/bin/cqlsh
+    # Make "cqlsh.py" accessible by invoking "cqlsh"
+    ln -s $out/bin/cqlsh.py $out/bin/cqlsh
+    wrapPythonPrograms
   '';
 
   passthru = {

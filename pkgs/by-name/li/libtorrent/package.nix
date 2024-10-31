@@ -10,18 +10,18 @@
 , openssl
 , pkg-config
 , zlib
-, unstableGitUpdater
+, gitUpdater
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rakshasa-libtorrent";
-  version = "0.13.8-unstable-2024-08-21";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "96cb7e53f4b9f1bccf722627b9736fab85424082";
-    hash = "sha256-IxQ9YA6i7FBu92oswIcHk4G6lI+uduUzVzCs9v+b5NI=";
+    rev = "v${version}";
+    hash = "sha256-MDLAp7KFmVvHL+haWVYwWG8gnLkTh6g19ydRkbu9cIs=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   enableParallelBuilding = true;
 

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pytorch-metric-learning";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1y7VCnzgwFOMeMloVdYyszNhf/zZlBJUjuF4qgA5c0A=";
+    hash = "sha256-xlTqUUF+tUIbULd1B8XR18Kxd7kl2TRKdbp0GoAfi4g=";
   };
 
   build-system = [
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     "test_get_nearest_neighbors"
     "test_list_of_text"
     "test_untrained_indexer"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
     "test_single_proc"
   ] ++ lib.optionals cudaSupport [

@@ -12,6 +12,8 @@
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
+, includeClosures ? false # Whether to include closures of all packages
+, nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -34,7 +36,7 @@
 # /lib will link to /lib32
 
 let
-  inherit (stdenv) is64bit;
+  inherit (stdenv.hostPlatform) is64bit;
 
   name = if (args ? pname && args ? version)
     then "${args.pname}-${args.version}"
@@ -86,7 +88,6 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-fhsenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
@@ -171,6 +172,7 @@ let
           ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
       fi
     '';
+    inherit includeClosures;
   };
 
   staticUsrProfileMulti = buildEnv {
@@ -178,6 +180,7 @@ let
     paths = baseMultiPaths ++ multiPaths;
     extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    inherit includeClosures;
   };
 
   # setup library paths only for the targeted architecture
@@ -208,7 +211,7 @@ let
     chmod u+w -R lib64/
 
     # symlink 32-bit ld-linux.so
-    ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
+    ln -Lsf ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
   setupLibDirs = if isTargetBuild
@@ -242,7 +245,7 @@ let
     done
     cd ..
 
-    for i in var etc opt; do
+    for i in etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi
@@ -257,6 +260,7 @@ let
   '';
 
 in runCommandLocal "${name}-fhs" {
+  inherit nativeBuildInputs;
   passthru = {
     inherit args baseTargetPaths targetPaths baseMultiPaths ldconfig isMultiBuild;
   };

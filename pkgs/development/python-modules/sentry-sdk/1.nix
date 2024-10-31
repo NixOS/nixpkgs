@@ -58,7 +58,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     beam = [ apache-beam ];
     bottle = [ bottle ];
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Issue with the asseration

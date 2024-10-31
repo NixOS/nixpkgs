@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
   sourceRoot = ".";
 
   nativeBuildInputs = [ makeBinaryWrapper installShellFiles ]
-    ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -79,7 +79,7 @@ stdenvNoCC.mkDerivation {
 
   # Stripping removes entitlements of the binary on Darwin making it non-operational.
   # Therefore, disable stripping on Darwin.
-  dontStrip = stdenvNoCC.isDarwin;
+  dontStrip = stdenvNoCC.hostPlatform.isDarwin;
 
   passthru.updateScript =
     let

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, withShishi ? !stdenv.isDarwin
+, withShishi ? !stdenv.hostPlatform.isDarwin
 , shishi
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withShishi shishi;
 
   # ./stdint.h:89:5: error: expected value in expression
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export GNULIBHEADERS_OVERRIDE_WINT_T=0
   '';
 

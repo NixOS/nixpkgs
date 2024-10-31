@@ -38,6 +38,7 @@ let
     "kmod-static-nodes.service"
     "local-fs-pre.target"
     "local-fs.target"
+    "modprobe@.service"
     "multi-user.target"
     "paths.target"
     "poweroff.target"
@@ -68,7 +69,6 @@ let
     "systemd-reboot.service"
     "systemd-sysctl.service"
     "timers.target"
-    "tpm2.target"
     "umount.target"
     "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
@@ -218,7 +218,7 @@ in {
     };
 
     root = lib.mkOption {
-      type = lib.types.nullOr (lib.types.enum [ "fstab" "gpt-auto" ]);
+      type = lib.types.enum [ "fstab" "gpt-auto" ];
       default = "fstab";
       example = "gpt-auto";
       description = ''
@@ -227,9 +227,6 @@ in {
         allow specifying the root file system itself this
         way. Instead, the `fstab` value is used in order to interpret
         the root file system specified with the `fileSystems` option.
-
-        If the root FS is mounted by other means, such as systemd generators other than
-        `fstab`, `gpt-auto` or a custom generator, set this to `null`.
       '';
     };
 
@@ -352,15 +349,6 @@ in {
       visible = "shallow";
       description = "Definition of slice configurations.";
     };
-
-    enableTpm2 = mkOption {
-      default = cfg.package.withTpm2Tss;
-      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
-      type = types.bool;
-      description = ''
-        Whether to enable TPM2 support in the initrd.
-      '';
-    };
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
@@ -397,13 +385,11 @@ in {
       # systemd needs this for some features
       "autofs"
       # systemd-cryptenroll
-    ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
-    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
-    ++ lib.optional cfg.package.withEfi "efivarfs";
+    ] ++ lib.optional cfg.package.withEfi "efivarfs";
 
-    boot.kernelParams =
-      lib.optional (config.boot.initrd.systemd.root != null) "root=${config.boot.initrd.systemd.root}"
-      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+    boot.kernelParams = [
+      "root=${config.boot.initrd.systemd.root}"
+    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
       # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
       # For NixOS activation to succeed, we need to have root writable in initrd.
       ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
@@ -451,9 +437,7 @@ in {
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-        "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
-          ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-        '';
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
         "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
@@ -498,10 +482,6 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
-      ] ++ optionals (cfg.package.withCryptsetup && cfg.enableTpm2) [
-        # tpm2 support
-        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
-        pkgs.tpm2-tss
       ] ++ optionals cfg.package.withCryptsetup [
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
@@ -525,12 +505,20 @@ in {
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
 
-      services.initrd-nixos-activation = {
-        after = [ "initrd-fs.target" ];
+      services.initrd-find-nixos-closure = {
+        description = "Find NixOS closure";
+
+        unitConfig = {
+          RequiresMountsFor = "/sysroot/nix/store";
+          DefaultDependencies = false;
+        };
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         requiredBy = [ "initrd.target" ];
-        unitConfig.AssertPathExists = "/etc/initrd-release";
-        serviceConfig.Type = "oneshot";
-        description = "NixOS Activation";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
 
         script = /* bash */ ''
           set -uo pipefail
@@ -541,7 +529,7 @@ in {
           for o in $(< /proc/cmdline); do
               case $o in
                   init=*)
-                      IFS== read -r -a initParam <<< "$o"
+                      IFS="=" read -r -a initParam <<< "$o"
                       closure="''${initParam[1]}"
                       ;;
               esac
@@ -560,6 +548,8 @@ in {
           # Assume the directory containing the init script is the closure.
           closure="$(dirname "$closure")"
 
+          ln --symbolic "$closure" /nixos-closure
+
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
           if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
@@ -568,16 +558,52 @@ in {
             exit 0
           fi
           echo 'NEW_INIT=' > /etc/switch-root.conf
+        '';
+      };
 
+      # We need to propagate /run for things like /run/booted-system
+      # and /run/current-system.
+      mounts = [
+        {
+          where = "/sysroot/run";
+          what = "/run";
+          options = "bind";
+          unitConfig = {
+            # See the comment on the mount unit for /run/etc-metadata
+            DefaultDependencies = false;
+          };
+          requiredBy = [ "initrd-fs.target" ];
+          before = [ "initrd-fs.target" ];
+        }
+      ];
 
-          # We need to propagate /run for things like /run/booted-system
-          # and /run/current-system.
-          mkdir -p /sysroot/run
-          mount --bind /run /sysroot/run
+      services.initrd-nixos-activation = {
+        requires = [
+          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+        ];
+        after = [
+          "initrd-fs.target"
+          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+        ];
+        requiredBy = [ "initrd.target" ];
+        unitConfig = {
+          AssertPathExists = "/etc/initrd-release";
+          RequiresMountsFor = [
+            "/sysroot/run"
+          ];
+        };
+        serviceConfig.Type = "oneshot";
+        description = "NixOS Activation";
+
+        script = /* bash */ ''
+          set -uo pipefail
+          export PATH="/bin:${cfg.package.util-linux}/bin"
+
+          closure="$(realpath /nixos-closure)"
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true
-          exec chroot /sysroot $closure/prepare-root
+          exec chroot /sysroot "$closure/prepare-root"
         '';
       };
 

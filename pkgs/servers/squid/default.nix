@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap pam systemd ];
 
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-delay-pools"
     "--enable-x-accelerator-vary"
     "--enable-htcp"
-  ] ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
     "--enable-linux-netfilter";
 
   doCheck = true;

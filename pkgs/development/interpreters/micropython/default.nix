@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    hash = "sha256-coUFIepbCRuz+766E7VCTQLm0oWB1CTO20ATriC86dc=";
+    hash = "sha256-cFoUa4ZpPy1MldlTeY9ISXi9ilulmhmaH5mapUDBzE8=";
     fetchSubmodules = true;
 
-    # remove unused libaries from rp2 port's SDK. we leave this and the other
+    # remove unused libraries from rp2 port's SDK. we leave this and the other
     # ports around for users who want to override makeFlags flags to build them.
     # https://github.com/micropython/micropython/blob/a61c446c0b34e82aeb54b9770250d267656f2b7f/ports/rp2/CMakeLists.txt#L17-L22
     #
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true; # needed for select_poll_eintr test
 
   skippedTests = " -e select_poll_fd"
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
-    + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
+    + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) " -e float_parse"
   ;
 
   checkPhase = ''

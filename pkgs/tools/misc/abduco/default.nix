@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     "cp ${writeText "config.def.h" conf} config.def.h";
 
   installFlags = [ "install-completion" ];
-  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   patches = [
     # https://github.com/martanne/abduco/pull/22

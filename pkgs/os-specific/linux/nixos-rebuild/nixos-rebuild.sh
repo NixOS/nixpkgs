@@ -32,6 +32,7 @@ specialisation=
 buildHost=
 targetHost=
 remoteSudo=
+noSSHTTY=
 verboseScript=
 noFlake=
 attr=
@@ -102,21 +103,32 @@ while [ "$#" -gt 0 ]; do
       --use-substitutes|--substitute-on-destination|-s)
         copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders|--log-format)
+      -I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
+      --max-jobs|-j|--cores|--log-format)
+        j="$1"; shift 1
+        extraBuildFlags+=("$i" "$j")
+        copyFlags+=("$i" "$j")
+        ;;
+      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q|--show-trace|--refresh|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
+        ;;
+      --keep-going|-k|--keep-failed|-K|--fallback|--repair)
+        extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
         verboseScript="true"
         extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --option)
         j="$1"; shift 1
         k="$1"; shift 1
         extraBuildFlags+=("$i" "$j" "$k")
+        copyFlags+=("$i" "$j" "$k")
         ;;
       --fast)
         buildNix=
@@ -151,6 +163,9 @@ while [ "$#" -gt 0 ]; do
         ;;
       --use-remote-sudo)
         remoteSudo=1
+        ;;
+      --no-ssh-tty)
+        noSSHTTY=1
         ;;
       --flake)
         flake="$1"
@@ -205,9 +220,9 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "${@@Q}"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "${@@Q}"
     fi
 }
 
@@ -222,17 +237,23 @@ targetHostCmd() {
     if [ -z "$targetHost" ]; then
         runCmd "${c[@]}" "$@"
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
+        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "${@@Q}"
     fi
 }
 
 targetHostSudoCmd() {
+    local t=
+    if [[ ! "${noSSHTTY:-x}" = 1 ]]; then
+        t="-t"
+    fi
+
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
-        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        # But if the user really doesn't want it, don't do it.
+        SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     fi
 }
 
@@ -548,6 +569,28 @@ getNixDrv() {
     fi
 }
 
+getVersion() {
+    local dir="$1"
+    local rev=
+    local gitDir="$dir/.git"
+    if [ -e "$gitDir" ]; then
+        if [ -z "$(type -P git)" ]; then
+            echo "warning: Git not found; cannot figure out revision of $dir" >&2
+            return
+        fi
+        cd "$dir"
+        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
+        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
+            rev+=M
+        fi
+    fi
+
+    if [ -n "$rev" ]; then
+        echo ".git.$rev"
+    fi
+}
+
+
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
@@ -569,7 +612,7 @@ fi
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$(runCmd $SHELL "$nixpkgs/nixos/modules/installer/tools/get-version-suffix" "${extraBuildFlags[@]}" || true)
+        suffix=$(getVersion "$nixpkgs" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
@@ -588,7 +631,7 @@ if [ "$action" = repl ]; then
     if [[ -z $buildingAttribute ]]; then
         exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
-        exec nix repl '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+        exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
     else
         if [[ -n "${lockFlags[0]}" ]]; then
             # nix repl itself does not support locking flags
@@ -747,7 +790,6 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
@@ -798,12 +840,56 @@ else # [ -n "$rollback" ]
 fi
 
 
+hasApplyScript=
+# If we're doing a deployment-like action, we need to know whether the config has
+# an apply script. NixOS versions >= 24.11 should be deployed with toplevel/bin/apply.
+if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    hasApplyScriptOut="$(targetHostCmd sh -c "if test -e $pathToConfig/bin/apply; then echo __has-apply-script__; elif test -e $pathToConfig/bin; then echo __has-no-apply-script__; else echo $pathToConfig is gone; fi
+    ")"
+    # SSH can be messy (e.g. when user has a shell rc file that prints to stdout)
+    # So we only check for the substring
+    case "$hasApplyScriptOut" in
+        *__has-apply-script__*)
+            hasApplyScript=1
+            ;;
+        *__has-no-apply-script__*)
+            hasApplyScript=
+            ;;
+        *)
+            # Unlikely
+            echo "$hasApplyScriptOut" 1>&2
+            log "error: $pathToConfig could not be read"
+            exit 1
+            ;;
+    esac
+fi
+
+# switch|boot|test|dry-activate
+#
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    # Using systemd-run here to protect against PTY failures/network
-    # disconnections during rebuild.
-    # See: https://github.com/NixOS/nixpkgs/issues/39118
+if [[ -n "$hasApplyScript" ]] \
+    && [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    cmd=("$pathToConfig/bin/apply" "$action" "--profile" "$profile")
+    if [[ -n "$specialisation" ]]; then
+        cmd+=("--specialisation" "$specialisation")
+    fi
+    if [[ -n "$installBootloader" ]]; then
+        cmd+=("--install-bootloader")
+    fi
+    targetHostSudoCmd "${cmd[@]}"
+elif [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    # Legacy, without apply script, NixOS < 24.11
+
+    if [[ "$action" = switch || "$action" = boot ]]; then
+        if [[ -z "$rollback" ]]; then
+            : # We've already switched it so that hasApplyScript would check the right $pathToConfig
+        else
+            targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
+        fi
+    fi
+
+    # Legacy logic to support deploying NixOS <24.11; see hasApplyScript
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value

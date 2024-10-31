@@ -8,43 +8,52 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gcalcli";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "insanum";
     repo = "gcalcli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-roHMWUwklLMNhLJANsAeBKcSX1Qk47kH5A3Y8SuDrmg=";
+    hash = "sha256-X9sgnujHMbmrt7cpcBOvTycIKFz3G2QzNDt3me5GUrQ=";
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace gcalcli/argparsers.py \
-      --replace-fail "'notify-send" "'${lib.getExe libnotify}"
-  '';
+  postPatch =
+    ''
+      # dev dependencies
+      substituteInPlace pyproject.toml \
+        --replace-fail "\"google-api-python-client-stubs\"," "" \
+        --replace-fail "\"types-python-dateutil\"," "" \
+        --replace-fail "\"types-requests\"," "" \
+        --replace-fail "\"types-vobject\"," ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace gcalcli/argparsers.py \
+        --replace-fail "'notify-send" "'${lib.getExe libnotify}"
+    '';
 
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
+    argcomplete
     python-dateutil
     gflags
     httplib2
     parsedatetime
-    six
     vobject
     google-api-python-client
-    oauth2client
+    google-auth-oauthlib
     uritemplate
     libnotify
   ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for Google Calendar";
     mainProgram = "gcalcli";
     homepage = "https://github.com/insanum/gcalcli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nocoolnametom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nocoolnametom ];
   };
 }

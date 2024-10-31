@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-
 , meson
 , ninja
 , go-md2man
@@ -25,20 +23,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2h0wwtuhvFz5IExR/Fu0l+/nTAlDpMREVRjgrhbEghw=";
+    hash = "sha256-9YEY7oTjWwVT2KbzTOOc6sJIGEAkdLSKDf1noF1cYuA=";
   };
 
   strictDeps = true;
   outputs = [ "out" "lib" "dev" ];
 
   postPatch = lib.optionalString installExperimentalTools ''
-    sed -i "s/install : false/install : true/g" tools/meson.build
+    substituteInPlace tools/meson.build \
+      --replace-fail "install : false" "install : true"
   '';
 
   nativeBuildInputs = [ meson ninja go-md2man pkg-config ];

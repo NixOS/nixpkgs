@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
-    ++ lib.optionals stdenv.isLinux [ systemd.dev pam iptables ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev pam iptables ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
     ++ lib.optionals enableNetworkManager [ networkmanager glib ];
 
   patches = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ./updown-path.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     # glibc-2.26 reorganized internal includes
     sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
 
@@ -60,14 +60,14 @@ stdenv.mkDerivation rec {
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
       "--enable-chapoly"
       "--enable-curl" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-farp" "--enable-dhcp"
       "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"
       "--enable-af-alg" ]
-    ++ lib.optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") "--enable-padlock"
     ++ lib.optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
          "--enable-nm"
          "--with-nm-ca-dir=/etc/ssl/certs" ]
     # Taken from: https://wiki.strongswan.org/projects/strongswan/wiki/MacOSX
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--disable-systemd"
       "--disable-xauth-pam"
       "--disable-kernel-netlink"
