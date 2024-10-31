@@ -11,26 +11,25 @@
   libepoxy,
   wrapGAppsHook4,
   makeDesktopItem,
-  copyDesktopItems,
   stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tsukimi";
-  version = "0.12.2";
+  version = "0.16.7";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     rev = "v${version}";
-    hash = "sha256-pJ+SUNGQS/kqBdOg21GgDeZThcjnB0FhgG00qLfqxYA=";
+    hash = "sha256-OsdwjmvmVh8lVDy6KWlXe1+9e/EOzQ/auUwaoVHrksI=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-PCJiSyfEgK8inzoRmRvnAU50kLnyVhNrgLrwtBUFpIU=";
+  cargoHash = "sha256-Su7ACU+n90ZkhPUKod/zb2I6bKce/ST+u2Kz3Dg6ogo=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
-    copyDesktopItems
   ];
 
   buildInputs =
@@ -52,18 +51,6 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # tests require networking
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Tsukimi";
-      exec = "tsukimi";
-      type = "Application";
-      icon = "tsukimi";
-      categories = [ "AudioVideo" ];
-      startupWMClass = "moe.tsuna.tsukimi";
-      desktopName = "Tsukimi";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace build.rs \
       --replace-fail 'i18n/locale' "$out/share/locale"
@@ -73,10 +60,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm644 moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
+    install -Dm644 resources/moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
     glib-compile-schemas $out/share/glib-2.0/schemas
 
-    install -Dm644 resources/ui/icons/tsukimi.png -t $out/share/pixmaps
+    install -Dm644 resources/icons/tsukimi.png -t $out/share/pixmaps
+
+    install -Dm644 resources/moe.tsuna.tsukimi.desktop.in $out/share/applications/moe.tsuna.tsukimi.desktop
   '';
 
   meta = {
