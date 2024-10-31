@@ -3822,6 +3822,7 @@ in
       maintainers = with maintainers; [
         marcweber
         jagajaga
+        mel
       ];
       platforms = platforms.unix;
     };
