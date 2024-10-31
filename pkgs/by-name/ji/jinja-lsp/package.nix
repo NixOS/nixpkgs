@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-vMoDbUDImDp+DPjS0rfJD9hYUa79bKsDUyAhAZvEyxA=";
 
   meta = with lib; {
-    description = "jinja-lsp enhances minijinja development experience by providing Helix/Nvim users with advanced features such as autocomplete, syntax highlighting, hover, goto definition, code actions and linting.";
+    description = "Language server for Jinja";
+    longDescription = "jinja-lsp enhances minijinja development experience by providing Helix/Nvim users with advanced features such as autocomplete, syntax highlighting, hover, goto definition, code actions and linting.";
     homepage = "https://github.com/uros-5/jinja-lsp";
     changelog = "https://github.com/uros-5/jinja-lsp/releases";
     license = licenses.mit;
