@@ -288,7 +288,7 @@ in
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.validator.dataDir}/${cfg.network}
 
-        ${cfg.package}/bin/lighthouse validator_client \
+        ${lib.getExe cfg.package} validator_client \
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
           --datadir ${cfg.validator.dataDir}/${cfg.network} \
