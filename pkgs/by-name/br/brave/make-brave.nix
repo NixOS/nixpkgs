@@ -16,6 +16,7 @@
 , gsettings-desktop-schemas
 , gtk3
 , gtk4
+, qt6
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -83,7 +84,7 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xorg.libxcb zlib snappy libkrb5
+    xorg.libxcb zlib snappy libkrb5 qt6.qtbase
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
