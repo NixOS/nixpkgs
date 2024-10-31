@@ -3891,6 +3891,13 @@
     github = "CHN-beta";
     githubId = 35858462;
   };
+  ChocolateLoverRaj = {
+    email = "paranjperajas@gmail.com";
+    github = "ChocolateLoverRaj";
+    githubId = 52586855;
+    matrix = "@chocolateloverraj:matrix.org";
+    name = "Rajas Paranjpe";
+  };
   cholli = {
     email = "christoph.hollizeck@hey.com";
     github = "Daholli";
