@@ -49,7 +49,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel~=" "wheel>="
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
