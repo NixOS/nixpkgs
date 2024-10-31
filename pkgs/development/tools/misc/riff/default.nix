@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -37,7 +37,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool that automatically provides external dependencies for software projects";
+    description = "Tool that automatically provides external dependencies for software projects";
+    mainProgram = "riff";
     homepage = "https://riff.sh";
     changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${version}";
     license = licenses.mpl20;

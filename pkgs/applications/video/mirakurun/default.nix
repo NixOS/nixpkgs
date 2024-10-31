@@ -41,7 +41,7 @@ buildNpmPackage rec {
         bash
         nodejs
         which
-      ] ++ lib.optionals stdenv.isLinux [ v4l-utils ];
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
       crc32Patch = substituteAll {
         src = ./fix-musl-detection.patch;
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";

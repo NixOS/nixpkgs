@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, six
-, tqdm
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  requests,
+  six,
+  tqdm,
 }:
 
 buildPythonPackage {
@@ -23,9 +24,7 @@ buildPythonPackage {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "mediafire_dl"
-  ];
+  pythonImportsCheck = [ "mediafire_dl" ];
 
   meta = with lib; {
     description = "Simple command-line script to download files from mediafire based on gdown";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jellyfish
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jellyfish,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -25,21 +26,18 @@ buildPythonPackage rec {
       --replace "jellyfish==" "jellyfish>="
   '';
 
-  propagatedBuildInputs = [
-    jellyfish
-  ];
+  propagatedBuildInputs = [ jellyfish ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  pythonImportsCheck = [
-    "us"
-  ];
+  pythonImportsCheck = [ "us" ];
 
   meta = with lib; {
-    description = "A package for easily working with US and state metadata";
+    description = "Package for easily working with US and state metadata";
+    mainProgram = "states";
     longDescription = ''
       All US states and territories, postal abbreviations, Associated Press style
       abbreviations, FIPS codes, capitals, years of statehood, time zones, phonetic
@@ -48,6 +46,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/unitedstates/python-us/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

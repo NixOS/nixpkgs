@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , openssh
 , netcat
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "reMarkable screen sharing over SSH";
+    mainProgram = "restream";
     homepage = "https://github.com/rien/reStream";
     license = licenses.mit;
     maintainers = [ maintainers.cpcloud ];

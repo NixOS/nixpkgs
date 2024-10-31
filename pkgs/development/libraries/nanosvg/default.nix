@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "nanosvg";
-  version = "unstable-2022-12-04";
+  version = "0-unstable-2023-12-30";
 
   src = fetchFromGitHub {
     owner = "memononen";
     repo = "nanosvg";
-    rev = "9da543e8329fdd81b64eb48742d8ccb09377aed1";
-    hash = "sha256-VOiN6583DtzGYPRkl19VG2QvSzl4T9HaynBuNcvZf94=";
+    rev = "93ce879dc4c04a3ef1758428ec80083c38610b1f";
+    hash = "sha256-ZtenaXJqMZr2+BxYENG1zUoQ+Qoxlxy0m/1YfJBKAFk=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Simple stupid SVG parser";
@@ -20,4 +22,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

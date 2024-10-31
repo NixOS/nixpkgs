@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nodesemver"
-  ];
+  pythonImportsCheck = [ "nodesemver" ];
 
   meta = with lib; {
     changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
-    description = "A port of node-semver";
+    description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

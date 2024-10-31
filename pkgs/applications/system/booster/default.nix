@@ -49,7 +49,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Fast and secure initramfs generator ";
+    description = "Fast and secure initramfs generator";
     homepage = "https://github.com/anatol/booster";
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];

@@ -26,21 +26,21 @@ let
     };
     parse_trans = builder {
       name = "parse_trans";
-      version = "3.4.1";
+      version = "3.4.2";
       src = fetchHex {
         pkg = "parse_trans";
-        version = "3.4.1";
-        sha256 = "sha256-YgpAbOddragnuC5FPBnPBndr4mb1pnz/NOHvLLtg5Jo=";
+        version = "3.4.2";
+        sha256 = "sha256-TCU0feO3w1cy0y5pq0PRzu4L6uPzs63htZy9PdIk2co=";
       };
       beamDeps = [ ];
     };
     mimerl = builder {
       name = "mimerl";
-      version = "1.2.0";
+      version = "1.3.0";
       src = fetchHex {
         pkg = "mimerl";
-        version = "1.2.0";
-        sha256 = "sha256-8nhYVlCqWBmGJkY46/aY+LsZ3yl/Zq2RsYkQ38bhkyM=";
+        version = "1.3.0";
+        sha256 = "sha256-oeFaUNGIchfelfC5sHk+MoU/fCWKXNInZQiJs4g5/p0=";
       };
       beamDeps = [ ];
     };
@@ -66,11 +66,11 @@ let
     };
     certifi = builder {
       name = "certifi";
-      version = "2.11.0";
+      version = "2.13.0";
       src = fetchHex {
         pkg = "certifi";
-        version = "2.11.0";
-        sha256 = "sha256-njfgVC7D+rqhmgc0s5ANwJV5f6xIxAoql0HYrV48m7c=";
+        version = "2.13.0";
+        sha256 = "sha256-jz2VM6DwYHCv39XVlrMuIcZYBmekkokYUbDic3vFB6E=";
       };
       beamDeps = [ ];
     };
@@ -96,11 +96,11 @@ let
     };
     katana_code = builder {
       name = "katana_code";
-      version = "2.0.2";
+      version = "2.1.0";
       src = fetchHex {
         pkg = "katana_code";
-        version = "2.0.2";
-        sha256 = "sha256-Plf+1jXgsWpfvazNyHLsU96yHtn8bn65tkFf8Zm3sTg=";
+        version = "2.1.0";
+        sha256 = "sha256-rju6yhh1EViPaWlan/IiUcssxnL9zMGAKJd5vdJRde8=";
       };
       beamDeps = [ ];
     };
@@ -146,11 +146,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "3.0.1";
+      version = "3.2.3";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "3.0.1";
-        sha256 = "sha256-TPc1QB50ZcEIUcYkXB4+jnZJhNjAtZSdVpexS1+urUk=";
+        version = "3.2.3";
+        sha256 = "sha256-oPDWgczZNVoWXDWXNnVVHxAhaHz5kvFcW/9mtmZO3gQ=";
       };
       beamDeps = [ katana_code zipper ];
     };

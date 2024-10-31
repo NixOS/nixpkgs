@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +20,12 @@ buildPythonPackage rec {
   # This is a dependency of pyparsing, which is a dependency of pytest
   doCheck = false;
 
-  pythonImportsCheck = [
-    "railroad"
-  ];
+  pythonImportsCheck = [ "railroad" ];
 
   meta = with lib; {
     description = "Module to generate SVG railroad syntax diagrams";
     homepage = "https://github.com/tabatkins/railroad-diagrams";
     license = licenses.cc0;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

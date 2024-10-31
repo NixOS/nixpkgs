@@ -1,85 +1,80 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, setuptools
-, nodejs
-, yarn
-, prefetch-yarn-deps
-, fetchYarnDeps
+  yarnConfigHook,
+  fetchYarnDeps,
+  nodejs,
 
-, flask
-, werkzeug
-, plotly
-, dash-html-components
-, dash-core-components
-, dash-table
-, importlib-metadata
-, typing-extensions
-, requests
-, retrying
-, ansi2html
-, nest-asyncio
+  setuptools,
 
-, celery
-, redis
-, diskcache
-, multiprocess
-, psutil
-, flask-compress
+  flask,
+  werkzeug,
+  plotly,
+  dash-html-components,
+  dash-core-components,
+  dash-table,
+  importlib-metadata,
+  typing-extensions,
+  requests,
+  retrying,
+  nest-asyncio,
 
-, pytestCheckHook
-, pytest-mock
-, mock
-, pyyaml
+  celery,
+  redis,
+  diskcache,
+  multiprocess,
+  psutil,
+  flask-compress,
+
+  pytestCheckHook,
+  pytest-mock,
+  mock,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.2";
+  version = "2.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "v${version}";
-    hash = "sha256-EFEsFgd3VbzlIUiz1fBIsKHywgWrL74taDFx0yIM/Ks=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2LwM1lrJNdekoDN+wDHgaSlGOnpK618r65UHj7cP59E=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    yarnConfigHook
     nodejs
-    yarn
-    prefetch-yarn-deps
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
+    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
   };
 
-  preBuild = ''
+  # as of writing this yarnConfigHook has no parameter that changes in which directory it will be run
+  # until then we use preConfigure for entering the directory and preBuild for exiting it
+  preConfigure = ''
     pushd @plotly/dash-jupyterlab
 
-    export HOME=$(mktemp -d)
+    substituteInPlace package.json \
+        --replace-fail 'jlpm' 'yarn'
+  '';
 
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup-yarn-lock yarn.lock
-
-    substituteInPlace package.json --replace jlpm yarn
-    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
-    patchShebangs node_modules
-
-    # Generates the jupyterlab extension files
-    yarn run build:pack
+  preBuild = ''
+    # Generate the jupyterlab extension files
+    yarn --offline run build:pack
 
     popd
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     werkzeug
     plotly
@@ -90,11 +85,10 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     celery = [
       celery
       redis
@@ -104,9 +98,7 @@ buildPythonPackage rec {
       multiprocess
       psutil
     ];
-    compress = [
-      flask-compress
-    ];
+    compress = [ flask-compress ];
   };
 
   nativeCheckInputs = [
@@ -129,6 +121,9 @@ buildPythonPackage rec {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ antoinerg tomasajt ];
+    maintainers = with lib.maintainers; [
+      antoinerg
+      tomasajt
+    ];
   };
 }

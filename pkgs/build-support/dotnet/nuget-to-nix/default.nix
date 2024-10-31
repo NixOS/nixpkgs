@@ -5,31 +5,33 @@
 , nix
 , coreutils
 , jq
-, yq
+, xmlstarlet
 , curl
 , gnugrep
 , gawk
-, dotnet-sdk
+, cacert
 }:
 
 runCommandLocal "nuget-to-nix" {
   script = substituteAll {
     src = ./nuget-to-nix.sh;
-    inherit runtimeShell;
+    inherit runtimeShell cacert;
 
     binPath = lib.makeBinPath [
       nix
       coreutils
       jq
-      yq
+      xmlstarlet
       curl
       gnugrep
       gawk
-      dotnet-sdk
     ];
   };
 
-  meta.description = "Convert a nuget packages directory to a lockfile for buildDotnetModule";
+  meta = {
+    description = "Convert a nuget packages directory to a lockfile for buildDotnetModule";
+    mainProgram = "nuget-to-nix";
+  };
 } ''
   install -Dm755 $script $out/bin/nuget-to-nix
 ''

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "buildkite-cli";
-  version = "2.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-4MUgyUKyycsreAMVtyKJFpQOHvI6JJSn7TUZtbQANyc=";
+    sha256 = "sha256-lmsL73jck3vt6oDP699BrMq0RyrXAUuTjKtvHcNtcZc=";
   };
 
-  vendorHash = "sha256-3x7yJenJ2BHdqVPaBaqfFVeOSJZ/VRNF/TTfSsw+2os=";
+  vendorHash = "sha256-PZHMJpyZ2w3GFHQW56m+9POyXR6wMt3TmNaQENg9lWw=";
 
   doCheck = false;
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A command line interface for Buildkite";
+    description = "Command line interface for Buildkite";
     homepage = "https://github.com/buildkite/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ groodt ];

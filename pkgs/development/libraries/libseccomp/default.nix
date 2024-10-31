@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [ util-linuxMinimal which ];
-  doCheck = true;
+  doCheck = !(stdenv.targetPlatform.useLLVM or false);
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
+    mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;

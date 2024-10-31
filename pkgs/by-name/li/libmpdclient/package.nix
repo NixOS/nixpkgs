@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ehmry ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

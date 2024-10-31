@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.61";
+  version = "0.68";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-spoZRT/gBCk/e/pn1AujCpCPdEM7hn/ImRyQq4hwctI=";
+    hash = "sha256-1T2VL/7vSIVVmJQ3n3+swFE/faUTT3mHaskdi/TUJFY=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  # Runs multiple dbus instances on the same port failing the bind.
+  enableParallelChecking = false;
 
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
@@ -50,6 +53,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 dtzWill amaxine ];
+    maintainers = with maintainers; [ mic92 dtzWill ];
   };
 }

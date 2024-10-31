@@ -1,6 +1,5 @@
 { lib, stdenv, octave, buildEnv
 , makeWrapper, texinfo
-, octavePackages
 , wrapOctave
 , computeRequiredOctavePackages
 , extraLibs ? []
@@ -63,6 +62,14 @@ in buildEnv {
       addPkgLocalList $out ${octave}
 
       wrapOctavePrograms "${lib.concatStringsSep " " packages}"
+      # We also need to modify the Exec= line of the desktop file, so it will point
+      # to the wrapper we generated above.
+      rm $out/share/applications # should be a symlink to ${octave}/share/applications
+      mkdir $out/share/applications
+      substitute \
+        ${octave}/share/applications/org.octave.Octave.desktop \
+        $out/share/applications/org.octave.Octave.desktop \
+        --replace-fail ${octave}/bin/octave $out/bin/octave
      '' + postBuild;
 
   inherit (octave) meta;

@@ -5,8 +5,8 @@
 , meson
 , ninja
 , python3
-, wrapGAppsHook
-, cinnamon
+, wrapGAppsHook3
+, xapp
 , glib
 , gspell
 , gtk3
@@ -15,17 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.19";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-nvnft62vZ9ivijYnQGULW7ff2aAVJiIx9xq09My2NxE=";
+    hash = "sha256-JrzBME1d4qvGjF2zdiqCX7h+sFadLsRQqZKnQj7elHs=";
   };
 
   postPatch = ''
-    sed -i -e "s|/usr/bin|$out/bin|" data/org.x.sticky.service
     sed -i -e "s|/usr/lib|$out/lib|" usr/bin/sticky
     sed -i -e "s|/usr/share|$out/share|" usr/lib/sticky/*.py
   '';
@@ -35,11 +34,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     glib
     gspell
     gtk3
@@ -48,23 +47,14 @@ stdenv.mkDerivation rec {
 
   pythonPath = with python3.pkgs; [
     pygobject3
-    xapp
+    python-xapp
   ];
-
-  postInstall = ''
-    # https://github.com/linuxmint/sticky/pull/118
-    cp -r ../etc $out
-    cp -r ../usr/* $out
-
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
 
   dontWrapGApps = true;
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
-    chmod +x $out/bin/sticky
     wrapProgram $out/bin/sticky \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       ''${gappsWrapperArgs[@]}
@@ -77,7 +67,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A sticky notes app for the linux desktop";
+    description = "Sticky notes app for the linux desktop";
+    mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

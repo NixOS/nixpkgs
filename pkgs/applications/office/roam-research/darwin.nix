@@ -1,4 +1,4 @@
-{ lib, stdenv, undmg, fetchurl }:
+{ lib, stdenv, _7zz, fetchurl }:
 let
   common = import ./common.nix { inherit fetchurl; };
   inherit (stdenv.hostPlatform) system;
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz ];
   installPhase = ''
     runHook preInstall
 
@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A note-taking tool for networked thought";
+    description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "roam-research";
   };
 }

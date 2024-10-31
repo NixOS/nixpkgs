@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.9.1";
+  version = "7.14.4";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-GS/8UpW99VofpY7R1V5A/Td8niLFthJcNzLS0hI89SI=";
+    sha256 = "sha256-YqqZZnin+aybAZ2dqaxdOrVZ7dLWwnjh2iL77orqHtE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A command line note-taking, bookmarking, archiving, and knowledge base application";
+    description = "Command line note-taking, bookmarking, archiving, and knowledge base application";
     longDescription = ''
       `nb` creates notes in text-based formats like Markdown, Emacs Org mode,
       and LaTeX, can work with files in any format, can import and export notes

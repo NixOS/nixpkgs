@@ -1,0 +1,16 @@
+CONFIG_DIR=$YS/config
+if [ ! -d $CONFIG_DIR ]; then
+    mkdir -p $CONFIG_DIR
+fi
+
+REGISTRY=$CONFIG_DIR/registry8.xml
+if [ ! -e $REGISTRY ]; then
+    cat >$REGISTRY <<EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<registry8>
+  <desktop-file.created>
+    <boolean value="true"/>
+  </desktop-file.created>
+</registry8>
+EOF
+fi

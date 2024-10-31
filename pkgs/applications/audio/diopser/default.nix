@@ -75,7 +75,7 @@ in  stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A totally original phase rotation plugin";
+    description = "Totally original phase rotation plugin";
     homepage = "https://github.com/robbert-vdh/diopser";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ magnetophon ];

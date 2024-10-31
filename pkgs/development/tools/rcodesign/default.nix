@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cpQBdxTw/ge4VtzjdL2a2xgSeCT22fMIjuKu5UEedhI=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
   ];
 
@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cross-platform CLI interface to interact with Apple code signing.";
+    description = "Cross-platform CLI interface to interact with Apple code signing";
+    mainProgram = "rcodesign";
     longDescription = ''
       rcodesign provides various commands to interact with Apple signing,
       including signing and notarizing binaries, generating signing

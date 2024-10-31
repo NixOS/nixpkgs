@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Circular dependency: napari
   doCheck = false;
 
-  pythonImportsCheck = [
-    "napari_plugin_engine"
-  ];
+  pythonImportsCheck = [ "napari_plugin_engine" ];
 
   meta = with lib; {
     description = "First generation napari plugin engine";

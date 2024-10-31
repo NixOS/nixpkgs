@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gfortran ];
 
-  propagatedBuildInputs = [ mpi fftwMpi ];
+  buildInputs = [ mpi fftwMpi ];
 
   preConfigure = ''
     mkdir build && cd build
 
     export PATH=$PATH:${mpi}/bin
     configureFlagsArray+=(
-      --with-mpi=${mpi}
+      --with-mpi=${lib.getDev mpi}
       CC=mpicc
       FC=mpif90
       MPICC=mpicc

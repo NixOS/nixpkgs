@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Disable priority scheduling on Darwin because it doesn’t support sched_setscheduler.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace encodedv/dvconnect.c \
       --replace '#ifdef _SC_PRIORITY_SCHEDULING' '#if 0'
   '';

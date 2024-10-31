@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
     rev = version;
-    hash = "sha256-mLugPi3Xp46Lh48JQVeyOEGiovSF26gUt25MGBPFfkM=";
+    hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -30,14 +30,11 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "id3-1.4.0" = "sha256-0j2iOd/GkMqLu18Eu8nttmqez0G6fu2m19gsHWMmLds=";
-    };
-  };
+  cargoHash = if stdenv.buildPlatform.isDarwin
+    then "sha256-HTqsghjfSjwOaN/ApPFvWVEoquZzE3MYzULkhUOXIWI"
+    else "sha256-Z3AbYtdNAyKT5EuGtCktEg0fxs/gpKdsrttRkxZhLAU";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security
   ];
 
@@ -60,9 +57,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.polaris;
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Self-host your music collection, and access it from any computer and mobile device";

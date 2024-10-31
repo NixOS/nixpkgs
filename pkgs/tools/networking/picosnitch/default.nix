@@ -33,10 +33,14 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Monitor network traffic per executable with hashing";
+    mainProgram = "picosnitch";
     homepage = "https://github.com/elesiuta/picosnitch";
     changelog = "https://github.com/elesiuta/picosnitch/releases";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.elesiuta ];
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "Allows an unprivileged user to write to arbitrary files as root; see https://github.com/elesiuta/picosnitch/issues/40"
+    ];
   };
 }

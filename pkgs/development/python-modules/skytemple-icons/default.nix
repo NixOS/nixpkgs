@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-icons";
@@ -19,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-icons";
     description = "Icons for SkyTemple";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = [ ];
   };
 }

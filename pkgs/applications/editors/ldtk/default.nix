@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 'LDtk ${finalAttrs.version} installer.AppImage' $out/share/ldtk.AppImage
     makeWrapper ${appimage-run}/bin/appimage-run $out/bin/ldtk \
       --add-flags $out/share/ldtk.AppImage
-    install -Dm644 src/ldtk.png $out/share/icons/hicolor/1024x1024/apps/ldtk.png
+    install -Dm644 src/ldtk.png $out/share/icons/hicolor/512x512/apps/ldtk.png
 
     runHook postInstall
   '';

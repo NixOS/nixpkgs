@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.tuxedo-keyboard;
   tuxedo-keyboard = config.boot.kernelPackages.tuxedo-keyboard;
 in
   {
     options.hardware.tuxedo-keyboard = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
           the tuxedo-keyboard driver.
 
           To configure the driver, pass the options to the {option}`boot.kernelParams` configuration.
@@ -24,10 +21,10 @@ in
            "tuxedo_keyboard.color_left=0xff0a0a"
           ];
           ```
-      '');
+      '';
     };
 
-    config = mkIf cfg.enable
+    config = lib.mkIf cfg.enable
     {
       boot.kernelModules = ["tuxedo_keyboard"];
       boot.extraModulePackages = [ tuxedo-keyboard ];

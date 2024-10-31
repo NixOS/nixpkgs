@@ -9,7 +9,7 @@ in
       type = with types; nullOr str;
       default = null;
       example = "http://www.example.org/";
-      description = lib.mdDoc ''
+      description = ''
         Sets up a simple reverse proxy as described by <https://httpd.apache.org/docs/2.4/howto/reverse_proxy.html#simple>.
       '';
     };
@@ -18,7 +18,7 @@ in
       type = with types; nullOr str;
       default = null;
       example = "index.php index.html";
-      description = lib.mdDoc ''
+      description = ''
         Adds DirectoryIndex directive. See <https://httpd.apache.org/docs/2.4/mod/mod_dir.html#directoryindex>.
       '';
     };
@@ -27,7 +27,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/your/alias/directory";
-      description = lib.mdDoc ''
+      description = ''
         Alias directory for requests. See <https://httpd.apache.org/docs/2.4/mod/mod_alias.html#alias>.
       '';
     };
@@ -35,7 +35,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         These lines go to the end of the location verbatim.
       '';
     };
@@ -43,7 +43,7 @@ in
     priority = mkOption {
       type = types.int;
       default = 1000;
-      description = lib.mdDoc ''
+      description = ''
         Order of this location block in relation to the others in the vhost.
         The semantics are the same as with `lib.mkOrder`. Smaller values have
         a greater priority.

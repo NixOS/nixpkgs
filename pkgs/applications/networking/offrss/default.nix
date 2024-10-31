@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libmrss ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
-    ++ lib.optional (!stdenv.isLinux) libiconv;
+    ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace Makefile \
       --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
-  '' + lib.optionalString (!stdenv.isLinux) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
     sed 's/#EXTRA/EXTRA/' -i Makefile
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed 's/^PDF/#PDF/' -i Makefile
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
     description = "Offline RSS/Atom reader";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "offrss";
   };

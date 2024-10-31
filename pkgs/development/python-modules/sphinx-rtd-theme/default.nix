@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, sphinx
-, readthedocs-sphinx-ext
-, sphinxcontrib-jquery
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  sphinx,
+  readthedocs-sphinx-ext,
+  sphinxcontrib-jquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,13 +31,15 @@ buildPythonPackage rec {
     sphinxcontrib-jquery
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     readthedocs-sphinx-ext
+  ];
+
+  disabledTests = [
+    # docutils 0.21 compat
+    "test_basic"
   ];
 
   pythonRelaxDeps = [
@@ -45,9 +47,7 @@ buildPythonPackage rec {
     "sphinxcontrib-jquery"
   ];
 
-  pythonImportsCheck = [
-    "sphinx_rtd_theme"
-  ];
+  pythonImportsCheck = [ "sphinx_rtd_theme" ];
 
   meta = with lib; {
     description = "Sphinx theme for readthedocs.org";

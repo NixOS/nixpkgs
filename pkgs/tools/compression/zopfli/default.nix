@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.asl20;
+    mainProgram = "zopfli";
     maintainers = with maintainers; [ bobvanderlinden edef ];
   };
 }

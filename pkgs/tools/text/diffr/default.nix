@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RmQu55OnKfeuDGcJrfjhMKnxDatdowkvh3Kh4N8I8Sg=";
 
-  buildInputs = (lib.optional stdenv.isDarwin Security);
+  buildInputs = (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   preCheck = ''
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Yet another diff highlighting tool";
+    mainProgram = "diffr";
     homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ davidtwco ];

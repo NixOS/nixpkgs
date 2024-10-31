@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 21:04:20 +0300
+Subject: [PATCH 15/19] Fix segfault in xar_attrcopy_from_heap
+
+Fixes a nasty segfault crash when extracting files with extended
+attributes (and perhaps in other cases).
+
+xar_attrcopy_from_heap (in lib/io.c) must not assume that context is
+convertible to DATA_CONTEXT. Without this change, it calls the callback
+from the provided context as if it was DATA_CONTEXT, but the context can
+actually be other types, e.g. LINUXATTR_CONTEXT.
+---
+ xar/lib/data.c | 9 ++++++++-
+ xar/lib/io.c   | 3 ---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/xar/lib/data.c b/xar/lib/data.c
+index dcb5783..cfb3d58 100644
+--- a/xar/lib/data.c
++++ b/xar/lib/data.c
+@@ -245,6 +245,13 @@ int32_t xar_data_extract(xar_t x, xar_file_t f, const char *file, char *buffer,
+ 	return retval;
+ }
+ 
++static int xar_data_verify_callback(xar_t x, xar_file_t f, void *inbuf, size_t bsize, void *context) {
++	DATA_CONTEXT(context)->total += bsize;
++	if (DATA_CONTEXT(context)->progress)
++		DATA_CONTEXT(context)->progress(x, f, DATA_CONTEXT(context)->total);
++	return 0;
++}
++
+ int32_t xar_data_verify(xar_t x, xar_file_t f, xar_progress_callback p)
+ {
+ 	const char *opt;
+@@ -269,5 +276,5 @@ int32_t xar_data_verify(xar_t x, xar_file_t f, xar_progress_callback p)
+ 	if (!tmpp)		// It appears that xar can have truely empty files, aka, no data. We should just fail to verify these files. 
+ 		return 0;	// After all, the checksum of blank is meaningless. So, failing to do so will cause a crash.
+ 	
+-	return XAR(x)->attrcopy_from_heap(x, f, tmpp, NULL , (void *)(&context));
++	return XAR(x)->attrcopy_from_heap(x, f, tmpp, xar_data_verify_callback, (void *)(&context));
+ }
+diff --git a/xar/lib/io.c b/xar/lib/io.c
+index fb9a72e..64c69af 100644
+--- a/xar/lib/io.c
++++ b/xar/lib/io.c
+@@ -529,9 +529,6 @@ int32_t xar_attrcopy_from_heap(xar_t x, xar_file_t f, xar_prop_t p, write_callba
+ 		
+ 		readsofar += bsize;
+ 		
+-		if (DATA_CONTEXT(context)->progress)
+-			DATA_CONTEXT(context)->progress(x, f, readsofar);
+-		
+ 		bsize = def_bsize;
+ 	}
+ 
+-- 
+2.44.1
+

@@ -1,21 +1,23 @@
 { lib
-, python3
-, fetchPypi
+, python3Packages
+, fetchFromGitHub
 , git
 , git-lfs
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.45.0";
+  version = "0.46.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bT5eqhpSK9u6Q4hO8FTgbpjjv0x2am1m2fOw5OqxixQ=";
+  src = fetchFromGitHub {
+    owner = "josegonzalez";
+    repo = "python-github-backup";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kSxkD8vWBvaT7C0sS9rs3CEP2yeWsAJ0kjPlrGezoLU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 

@@ -1,18 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, linkify-it-py
-, markdown-it-py
-, mdformat
-, mdit-py-plugins
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  mdit-py-plugins,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-footnote";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,18 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-DUCBWcmB5i6/HkqxjlU3aTRO7i0n2sj+e/doKB8ffeo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
     mdit-py-plugins
   ];
 
-  pythonImportsCheck = [
-    "mdformat_footnote"
-  ];
+  pythonImportsCheck = [ "mdformat_footnote" ];
 
   meta = with lib; {
     description = "Footnote format addition for mdformat";

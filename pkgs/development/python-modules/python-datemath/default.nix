@@ -1,54 +1,48 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-datemath";
-  version = "1.5.5";
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nickmaccarthy";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
+    repo = "python-datemath";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VwdY6Gmbmoy7EKZjUlWj56uSiE0OdegPiQv+rmigkq8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "remove-unittest2.patch";
-      url = "https://github.com/nickmaccarthy/python-datemath/commit/781daa0241ed327d5f211f3b62f553f3ee3d86e0.patch";
-      hash = "sha256-WD6fuDaSSNXgYWoaUexiWnofCzEZzercEUlqTvOUT5I=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    arrow
-  ];
+  dependencies = [ arrow ];
 
   nativeCheckInputs = [
+    freezegun
     pytestCheckHook
+    pytz
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "datemath"
-  ];
+  pythonImportsCheck = [ "datemath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to emulate the date math used in SOLR and Elasticsearch";
     homepage = "https://github.com/nickmaccarthy/python-datemath";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nickmaccarthy/python-datemath/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

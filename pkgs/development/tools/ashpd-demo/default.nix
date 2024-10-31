@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, nix-update-script
 , cargo
 , meson
 , ninja
@@ -13,8 +12,6 @@
 , gst_all_1
 , gtk4
 , libadwaita
-, llvmPackages
-, glibc
 , pipewire
 , wayland
 , wrapGAppsHook4
@@ -67,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
+    mainProgram = "ashpd-demo";
     homepage = "https://github.com/bilelmoussaoui/ashpd/tree/master/ashpd-demo";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];

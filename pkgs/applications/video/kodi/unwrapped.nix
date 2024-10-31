@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, fetchpatch
+{ stdenv, lib, fetchFromGitHub, fetchzip
+, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
+, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
-, alsa-lib, libGLU, libGL, fontconfig, freetype, ftgl
+, alsa-lib, libGLU, libGL, ffmpeg, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
-, curl, bzip2, zip, unzip, glxinfo
+, curl, bzip2, zip, unzip, mesa-demos
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
@@ -24,14 +24,16 @@
 , joystickSupport ? true, cwiid
 , nfsSupport ? true, libnfs
 , pulseSupport ? true, libpulseaudio
+, pipewireSupport ? true, pipewire
 , rtmpSupport ? true, rtmpdump
 , sambaSupport ? true, samba
 , udevSupport ? true, udev
+, opticalSupport ? true
 , usbSupport  ? false, libusb-compat-0_1
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
 , waylandpp ?  null, libxkbcommon
-, gbmSupport ? false, mesa, libinput
+, gbmSupport ? false, mesa, libinput, libdisplay-info
 , buildPackages
 }:
 
@@ -39,45 +41,7 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20230629";
-  kodiVersion = "20.2";
-  rel = "Nexus";
-
-  kodi_src = fetchFromGitHub {
-    owner = "xbmc";
-    repo = "xbmc";
-    rev = "${kodiVersion}-${rel}";
-    hash = "sha256-nNdBjqY9gkpv3g/hcyjWPENHFwOlxrKs2cT4IvRPuXs=";
-  };
-
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
-
-  # kodi 20.0 moved to ffmpeg 5, *but* there is a bug making the compilation fail which will
-  # only been fixed in kodi 21, so stick to ffmpeg 4 for now
-  ffmpeg = stdenv.mkDerivation rec {
-    pname = "kodi-ffmpeg";
-    version = "4.4.1";
-    src = fetchFromGitHub {
-      owner   = "xbmc";
-      repo    = "FFmpeg";
-      rev     = "${version}-${rel}-Alpha1";
-      sha256  = "sha256-EQHmmWnDw+/udKYq7Nrf00nL7I5XWUtmzdauDryfTII=";
-    };
-    preConfigure = ''
-      cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
-      sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
-      sed -i 's/--strip=''${CMAKE_STRIP}/--strip=''${CMAKE_STRIP} --ranlib=''${CMAKE_RANLIB}/' CMakeLists.txt
-    '';
-    cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DCROSSCOMPILING=ON"
-      "-DCPU=${stdenv.hostPlatform.parsed.cpu.name}"
-      "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
-      "-DPKG_CONFIG_EXECUTABLE=pkg-config"
-    ];
-    buildInputs = [ libidn2 libtasn1 p11-kit zlib libva ]
-      ++ lib.optional vdpauSupport libvdpau;
-    nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
-  };
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
   # them, so we currently just use them for the src.
@@ -102,30 +66,52 @@ let
     sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
+  groovy = fetchzip {
+    url = "mirror://apache/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
+    sha256 = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
+  };
+
+  apache_commons_lang = fetchzip {
+    url = "mirror://apache/commons/lang/binaries/commons-lang3-3.14.0-bin.zip";
+    sha512 = "sha512-eKF1IQ6PDtifb4pMHWQ2SYHIh0HbMi3qpc92lfbOo3uSsFJVR3n7JD0AdzrG17tLJQA4z5PGDhwyYw0rLeLsXw==";
+  };
+
+  apache_commons_text = fetchzip {
+    url = "mirror://apache/commons/text/binaries/commons-text-1.11.0-bin.zip";
+    sha512 = "sha512-P2IvnrHSYRF70LllTMI8aev43h2oe8lq6rrMYw450PEhEa7OuuCjh1Krnc/A4OqENUcidVAAX5dK1RAsZHh8Dg==";
+  };
+
   kodi_platforms = lib.optional gbmSupport "gbm"
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = kodiVersion;
+    version = "21.1";
+    kodiReleaseName = "Omega";
 
-    src = kodi_src;
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo  = "xbmc";
+      rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
+      hash  = "sha256-NjId1T1cw9dl0Fx1QDsijiN1VUpuQ/EFl1kxWSESCR4=";
+    };
+
     patches = [
-      # Fix compatiblity with fmt 10.0 (from spdlog).
-      # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
-      (fetchpatch {
-        name = "Fix fmt10 compat";
-        url = "https://github.com/xbmc/xbmc/compare/acca69baa2eae65123e78ee2f77249181725ef5d...26c164a28cfd18ceef7a1f2bbba5bf8a4a5a750c.patch";
-        hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
-      })
+      ./no-python-lib.patch
     ];
+
+    # make  derivations declared in the let binding available here, so
+    # they can be overridden
+    inherit libdvdcss libdvdnav libdvdread groovy
+            apache_commons_lang apache_commons_text;
+
     buildInputs = [
       gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
-      openssl gperf tinyxml2 taglib libssh
+      openssl gperf tinyxml2 tinyxml-2 taglib libssh
       gtest ncurses spdlog
       alsa-lib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
@@ -133,7 +119,7 @@ in stdenv.mkDerivation {
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
-      curl bzip2 zip unzip glxinfo
+      curl bzip2 zip unzip mesa-demos
       libcec libcec_platform dcadec libuuid
       libxcrypt libgcrypt libgpg-error libunistring
       libcrossguid libplist
@@ -150,6 +136,7 @@ in stdenv.mkDerivation {
     ++ lib.optional  joystickSupport cwiid
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
+    ++ lib.optional  pipewireSupport pipewire
     ++ lib.optional  rtmpSupport     rtmpdump
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
@@ -166,6 +153,7 @@ in stdenv.mkDerivation {
       libxkbcommon.dev
       mesa.dev
       libinput.dev
+      libdisplay-info
     ];
 
     nativeBuildInputs = [
@@ -187,18 +175,25 @@ in stdenv.mkDerivation {
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
-      "-Dlibdvdcss_URL=${libdvdcss}"
-      "-Dlibdvdnav_URL=${libdvdnav}"
-      "-Dlibdvdread_URL=${libdvdread}"
-      "-DGIT_VERSION=${kodiReleaseDate}"
+      "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
+      "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
+      "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
+      "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
+      "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
+      "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
+      # Upstream derives this from the git HEADs hash and date.
+      # LibreElec (minimal distro for kodi) uses the equivalent to this.
+      "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_INTERNAL_RapidJSON=OFF"
-      "-DENABLE_OPTICAL=ON"
+      "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
+      "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
       # When wrapped KODI_HOME will likely contain symlinks to static assets
       # that Kodi's built in webserver will cautiously refuse to serve up
       # (because their realpaths are outside of KODI_HOME and the other
@@ -234,10 +229,11 @@ in stdenv.mkDerivation {
       # TODO: figure out which binaries should be wrapped this way and which shouldn't
       for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
+          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python mesa-demos ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
+              ([ curl systemd libmad libcec libcec_platform libass ]
+                 ++ lib.optional vdpauSupport libvdpau
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
@@ -256,6 +252,7 @@ in stdenv.mkDerivation {
     passthru = {
       pythonPackages = python3Packages;
       ffmpeg = ffmpeg;
+      kodi = finalAttrs.finalPackage;
     };
 
     meta = with lib; {
@@ -264,5 +261,6 @@ in stdenv.mkDerivation {
       license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
       maintainers = teams.kodi.members;
+      mainProgram = "kodi";
     };
-}
+})

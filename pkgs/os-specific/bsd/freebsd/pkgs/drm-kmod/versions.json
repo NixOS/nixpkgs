@@ -1,0 +1,20 @@
+{
+  "5.10-lts": {
+    "hash": "sha256-6v8FhaEch9fJfo0/1UXeo0bcZh5n4Y2TyAsyHmCBJgw=",
+    "owner": "freebsd",
+    "repo": "drm-kmod",
+    "rev": "e7950546196d44af502dd6abf162d1453f6f0dd0"
+  },
+  "5.15-lts": {
+    "hash": "sha256-i768QfnYo2hqxnoCEnfYqOurDSRwkAsC4qsP7TUalxc=",
+    "owner": "freebsd",
+    "repo": "drm-kmod",
+    "rev": "d7dc64fb8e63208afaca01e6d48284aa2305df35"
+  },
+  "6.1-lts": {
+    "hash": "sha256-+CsqQ0beJgoO3SSWzwLcAO8JP15oaDW9HR+bxwPaan4=",
+    "owner": "freebsd",
+    "repo": "drm-kmod",
+    "rev": "f2d6d4b58446fa45de575bae76d6435439b3ca8b"
+  }
+}

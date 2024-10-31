@@ -31,13 +31,13 @@ mkDerivation rec {
   }) ] ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
 
   postPatch = ''
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace includes/platforms/linux/posixUtils.hpp \
         --replace '"/usr/local/bin/syncthing"'         '"${syncthing}/bin/syncthing"' \
         --replace '"pgrep -x'                          '"${procps}/bin/pgrep -x'
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace includes/platforms/darwin/macUtils.hpp \
         --replace '"/usr/local/bin/syncthing"'         '"${syncthing}/bin/syncthing"'
     ''}
@@ -55,7 +55,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sieren/QSyncthingTray/";
-    description = "A Traybar Application for Syncthing written in C++";
+    description = "Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.
         Currently supports macOS, Windows and Linux.
@@ -64,6 +64,6 @@ mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
     platforms = platforms.all;
-    broken = !preferNative || stdenv.isDarwin;
+    broken = !preferNative || stdenv.hostPlatform.isDarwin;
   };
 }

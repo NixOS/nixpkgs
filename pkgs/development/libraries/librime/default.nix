@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  yaml-cpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
+  yaml-cpp, gtest, capnproto, pkg-config, librime-lua, librime-octagram,
+  plugins ? [ librime-lua librime-octagram ] }:
 
 let
   copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
@@ -11,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.9.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4gEdltdm9A3FxwyZqgSyUWgQ934glinfKwHF8S05f5I=";
+    sha256 = "sha256-QHuzpitxSYQ4EcBPY1f0R5zl4UFtefu0bFXA76Iv+j0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

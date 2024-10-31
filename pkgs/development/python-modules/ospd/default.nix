@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, defusedxml
-, deprecated
-, fetchFromGitHub
-, lxml
-, paramiko
-, psutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  defusedxml,
+  deprecated,
+  fetchFromGitHub,
+  lxml,
+  paramiko,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   version = "21.4.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || stdenv.isDarwin;
+  disabled = pythonOlder "3.7" || stdenv.hostPlatform.isDarwin;
 
   src = fetchFromGitHub {
     owner = "greenbone";
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     psutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ospd"
-  ];
+  pythonImportsCheck = [ "ospd" ];
 
   meta = with lib; {
     description = "Framework for vulnerability scanners which support OSP";

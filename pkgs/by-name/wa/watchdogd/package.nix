@@ -6,6 +6,7 @@
 , libite
 , libuev
 , libconfuse
+, nixosTests
 }:
 stdenv.mkDerivation rec {
   pname = "watchdogd";
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ libite libuev libconfuse ];
+
+  passthru.tests = { inherit (nixosTests) watchdogd; };
 
   meta = with lib; {
     description = "Advanced system & process supervisor for Linux";

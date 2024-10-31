@@ -46,7 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://usememos.com";
-    description = "A lightweight, self-hosted memo hub";
+    description = "Lightweight, self-hosted memo hub";
     maintainers = with maintainers; [ indexyz ];
     license = licenses.mit;
     mainProgram = "memos";

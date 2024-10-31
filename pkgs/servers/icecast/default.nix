@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Server software for streaming multimedia";
+    mainProgram = "icecast";
 
     longDescription = ''
       Icecast is a streaming media server which currently supports
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.icecast.org";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = with lib.platforms; unix;
   };

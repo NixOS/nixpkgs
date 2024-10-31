@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open-source, distributed graph database";
+    description = "Open-source, distributed graph database";
     homepage = "https://janusgraph.org/";
     mainProgram = "janusgraph-server";
     license = licenses.asl20;

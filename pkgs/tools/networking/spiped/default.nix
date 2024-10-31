@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, openssl, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  coreutils,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spiped";
   version = "1.6.2";
 
   src = fetchurl {
-    url    = "https://www.tarsnap.com/spiped/${pname}-${version}.tgz";
-    sha256 = "sha256-BdRofRLRHX+YiNQ/PYDFQbdyHJhwONCF9xyRuwYgRWc=";
+    url = "https://www.tarsnap.com/spiped/spiped-${version}.tgz";
+    hash = "sha256-BdRofRLRHX+YiNQ/PYDFQbdyHJhwONCF9xyRuwYgRWc=";
   };
 
   buildInputs = [ openssl ];
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libcperciva/POSIX/posix-l.sh       \
       --replace "rm" "${coreutils}/bin/rm"   \
       --replace "2>/dev/null" "2>stderr.log"
-   '';
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -28,11 +35,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests.spiped = nixosTests.spiped;
+
   meta = {
     description = "Utility for secure encrypted channels between sockets";
-    homepage    = "https://www.tarsnap.com/spiped.html";
-    license     = lib.licenses.bsd2;
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.tarsnap.com/spiped.html";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

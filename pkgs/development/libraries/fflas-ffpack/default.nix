@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-blas-libs=-lcblas"
     "--with-lapack-libs=-llapacke"
-  ] ++ lib.optionals stdenv.isx86_64 [
+    "--without-archnative"
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Finite Field Linear Algebra Subroutines";
+    mainProgram = "fflas-ffpack-config";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

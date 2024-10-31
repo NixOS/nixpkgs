@@ -14,11 +14,12 @@
 , iptables
 , aardvark-dns
 , netavark
+, passt
 }:
 
 let
   binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     runc
     crun
     conmon
@@ -31,11 +32,12 @@ let
   helpersBin = symlinkJoin {
     name = "${buildah-unwrapped.pname}-helper-binary-wrapper-${buildah-unwrapped.version}";
 
-    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       aardvark-dns
       netavark
+      passt
     ];
   };
 

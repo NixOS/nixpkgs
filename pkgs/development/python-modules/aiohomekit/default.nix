@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, aiocoap
-, aiohappyeyeballs
-, async-interrupt
-, bleak
-, bleak-retry-connector
-, chacha20poly1305
-, chacha20poly1305-reuseable
-, commentjson
-, cryptography
-, fetchFromGitHub
-, orjson
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  aiocoap,
+  aiohappyeyeballs,
+  async-interrupt,
+  bleak,
+  bleak-retry-connector,
+  chacha20poly1305,
+  chacha20poly1305-reuseable,
+  commentjson,
+  cryptography,
+  fetchFromGitHub,
+  orjson,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.1.3";
+  version = "3.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,14 +30,12 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = "aiohomekit";
     rev = "refs/tags/${version}";
-    hash = "sha256-LQplvI6P42dI2vIaWyL50cj9k543qeUoHUogDkBaPvI=";
+    hash = "sha256-9TvpdsWmNXz7UAh0BCgjdRWLKCP2FdE8TIjvyDXydLU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     aiohappyeyeballs
     async-interrupt
@@ -73,9 +72,7 @@ buildPythonPackage rec {
     "test_discover_device_id_case_upper"
   ];
 
-  pythonImportsCheck = [
-    "aiohomekit"
-  ];
+  pythonImportsCheck = [ "aiohomekit" ];
 
   meta = with lib; {
     description = "Python module that implements the HomeKit protocol";
@@ -85,7 +82,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
     changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiohomekitctl";
   };
 }

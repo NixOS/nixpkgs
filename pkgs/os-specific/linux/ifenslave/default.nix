@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Utility for enslaving networking interfaces under a bond";
-    license = lib.licenses.gpl2;
+    mainProgram = "ifenslave";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

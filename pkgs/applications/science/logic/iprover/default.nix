@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An automated first-order logic theorem prover";
+    description = "Automated first-order logic theorem prover";
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
     maintainers = with maintainers; [ raskin gebner ];
     platforms = platforms.linux;

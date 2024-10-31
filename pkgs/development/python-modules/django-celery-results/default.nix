@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, celery
-, django
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  celery,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/django-celery-results";
     changelog = "https://github.com/celery/django-celery-results/blob/v{version}/Changelog";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = [ ];
   };
 }

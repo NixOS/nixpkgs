@@ -22,12 +22,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/Freeze $out/bin/freeze
   '';
 
   meta = with lib; {
     description = "Payload toolkit for bypassing EDRs";
+    mainProgram = "freeze";
     homepage = "https://github.com/optiv/Freeze";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

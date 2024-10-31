@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--enable-SIGCHLD-fallback"
   ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     Xaw3d
     ghostscriptX
     perl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

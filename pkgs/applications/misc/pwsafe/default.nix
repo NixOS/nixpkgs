@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     gettext
     perl
     pkg-config
+    wxGTK32
     zip
   ];
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     openssl
     xercesc
     file
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXext
     libXi
     libXt
@@ -62,14 +63,14 @@ stdenv.mkDerivation rec {
     libuuid
     libyubikey
     yubikey-personalization
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
   cmakeFlags = [
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DNO_YUBI=ON"
   ];
 
@@ -90,19 +91,19 @@ stdenv.mkDerivation rec {
     for f in $(grep -Rl /usr/bin/ .) ; do
       substituteInPlace $f --replace /usr/bin/ ""
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/ui/cli/CMakeLists.txt --replace "uuid" ""
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = gitUpdater {
-    ignoredVersions = "^([^1]|1[^.])"; # ignore anything other than 1.x
+    allowedVersions = "^1\\.";
     url = src.gitRepoUrl;
   };
 
   meta = with lib; {
-    description = "A password database utility";
+    description = "Password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
       such products, commercial and otherwise, it stores your

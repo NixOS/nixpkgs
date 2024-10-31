@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 stepreduce $out/bin/stepreduce
 
-    runHook prostInstall
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/sethhillbrand/stepreduce";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ evils ];
+    mainProgram = "stepreduce";
   };
 }

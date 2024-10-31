@@ -12,17 +12,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
-  version = "7.4.0";
+  version = "7.4.4";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     rev = "v${version}";
-    sha256 = "sha256-Eh1G0jX9KXVlMZLl8whxULywadblWml232qvcq4JLJ4=";
+    hash = "sha256-5jiqR3gn3X+klcYr1zTEB9omxWwHKQNLKCVXhry1jjY=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-aKfgylY9aspL1JpdYa6hOy/6lQoqO54OhZWqSlMPZ8o=";
+  cargoHash = "sha256-J5297V6cHyWZYRyTTKM0V71QoHdHidtQCoAbQ2IoJrc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     SystemConfiguration
   ];
@@ -39,10 +39,11 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = "1";
 
   # tests flaky on darwin on hydra
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Project management tool for Roblox";
+    mainProgram = "rojo";
     longDescription = ''
       Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';

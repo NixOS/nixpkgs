@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , boost
 , libX11
 , libXext
@@ -11,7 +10,7 @@
 stdenv.mkDerivation {
   pname = "tuxclocker-nvidia-plugin";
 
-  inherit (tuxclocker-plugins) src version meta BOOST_INCLUDEDIR BOOST_LIBRARYDIR nativeBuildInputs;
+  inherit (tuxclocker-plugins) src version meta nativeBuildInputs;
 
   buildInputs = [
     boost
@@ -22,13 +21,10 @@ stdenv.mkDerivation {
     openssl
   ];
 
-  # Build doesn't have a way to disable building the CPU plugin, which is already
-  # provided by 'tuxclocker-plugins'
-  patches = [ ./no-cpu-plugin.patch ];
-
   mesonFlags = [
     "-Ddaemon=false"
     "-Dgui=false"
     "-Drequire-nvidia=true"
+    "-Dplugins-cpu=false" # provided by tuxclocker-plugins
   ];
 }

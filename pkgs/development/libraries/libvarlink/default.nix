@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "varlink";
-    repo = finalAttrs.pname;
+    repo = "libvarlink";
     rev = finalAttrs.version;
     sha256 = "sha256-oUy9HhybNMjRBWoqqal1Mw8cC5RddgN4izxAl0cgnKE=";
   };
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C implementation of the Varlink protocol and command line tool";
+    mainProgram = "varlink";
     homepage = "https://github.com/varlink/libvarlink";
     license = licenses.asl20;
     maintainers = with maintainers; [ artturin ];

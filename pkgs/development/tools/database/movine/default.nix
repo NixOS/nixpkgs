@@ -24,12 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "A migration manager written in Rust, that attempts to be smart yet minimal";
+    description = "Migration manager written in Rust, that attempts to be smart yet minimal";
+    mainProgram = "movine";
     homepage = "https://github.com/byronwasti/movine";
     license = licenses.mit;
     longDescription = ''

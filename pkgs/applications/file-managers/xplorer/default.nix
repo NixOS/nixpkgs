@@ -6,11 +6,14 @@
 , freetype
 , gtk3
 , libsoup
-, mkYarnPackage
+, stdenvNoCC
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
 , openssl
 , pkg-config
 , rustPlatform
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 let
@@ -25,7 +28,7 @@ let
     sha256 = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
   };
 
-  frontend-build = mkYarnPackage {
+  frontend-build = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit version src;
     pname = "xplorer-ui";
 
@@ -33,19 +36,16 @@ let
       yarnLock = src + "/yarn.lock";
       sha256 = "sha256-H37vD0GTSsWV5UH7C6UANDWnExTGh8yqajLn3y7P2T8=";
     };
-
-    packageJSON = ./package.json;
-
-    buildPhase = ''
-      export HOME=$(mktemp -d)
-      yarn --offline run prebuild
-
-      cp -r deps/xplorer/out $out
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
+    yarnBuildScript = "prebuild";
+    installPhase = ''
+      cp -r out $out
     '';
-
-    distPhase = "true";
-    dontInstall = true;
-  };
+  });
 in
 
 rustPlatform.buildRustPackage {
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk ];
+  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk_4_0 ];
 
   checkFlags = [
     # tries to mutate the parent directory
@@ -86,9 +86,10 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A customizable, modern file manager";
+    description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "xplorer";
   };
 }

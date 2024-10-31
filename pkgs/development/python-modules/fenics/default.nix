@@ -1,32 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, blas
-, boost
-, cmake
-, doxygen
-, eigen
-, gtest
-, hdf5
-, lapack
-, mpi
-, mpi4py
-, numpy
-, pkg-config
-, ply
-, pybind11
-, pytest
-, python
-, pythonPackages
-, scotch
-, setuptools
-, six
-, sphinx
-, suitesparse
-, swig
-, sympy
-, zlib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  blas,
+  boost,
+  cmake,
+  doxygen,
+  eigen,
+  hdf5,
+  lapack,
+  mpi,
+  mpi4py,
+  numpy,
+  pkg-config,
+  ply,
+  pybind11,
+  pytest,
+  python,
+  pythonPackages,
+  scotch,
+  setuptools,
+  six,
+  sphinx,
+  suitesparse,
+  swig,
+  sympy,
+  zlib,
+  nixosTests,
 }:
 
 let
@@ -39,7 +40,10 @@ let
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
     };
-    propagatedBuildInputs = [ numpy six ];
+    propagatedBuildInputs = [
+      numpy
+      six
+    ];
     nativeCheckInputs = [ pytest ];
     preCheck = ''
       export HOME=$PWD
@@ -64,7 +68,11 @@ let
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
     };
-    propagatedBuildInputs = [ numpy six sympy ];
+    propagatedBuildInputs = [
+      numpy
+      six
+      sympy
+    ];
     nativeCheckInputs = [ pytest ];
 
     preCheck = ''
@@ -100,7 +108,10 @@ let
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
     };
-    propagatedBuildInputs = [ numpy six ];
+    propagatedBuildInputs = [
+      numpy
+      six
+    ];
     nativeCheckInputs = [ pytest ];
     checkPhase = ''
       runHook preCheck
@@ -108,7 +119,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "A domain-specific language for finite element variational forms";
+      description = "Domain-specific language for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -122,9 +133,7 @@ let
       url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
       sha256 = "1zdg6pziss4va74pd7jjl8sc3ya2gmhpypccmyd8p7c66ji23y2g";
     };
-    nativeBuildInputs = [
-      pybind11
-    ];
+    nativeBuildInputs = [ pybind11 ];
     propagatedBuildInputs = [
       dijitso
       fiat
@@ -145,7 +154,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "A compiler for finite element variational forms";
+      description = "Compiler for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -231,7 +240,7 @@ let
       make runtests
     '';
     meta = {
-      description = "The FEniCS Problem Solving Environment in Python and C++";
+      description = "FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
       license = lib.licenses.lgpl3;
     };
@@ -269,7 +278,9 @@ let
       pythonPackages.pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
-    passthru.tests = { inherit (nixosTests) fenics; };
+    passthru.tests = {
+      inherit (nixosTests) fenics;
+    };
     meta = {
       description = "Python bindings for the DOLFIN FEM compiler";
       homepage = "https://fenicsproject.org/";
@@ -277,4 +288,5 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-in python-dolfin
+in
+python-dolfin

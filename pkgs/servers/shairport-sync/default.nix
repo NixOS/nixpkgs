@@ -28,8 +28,8 @@
 , enablePipewire ? true
 , enableJack ? true
 , enableMetadata ? false
-, enableMpris ? stdenv.isLinux
-, enableDbus ? stdenv.isLinux
+, enableMpris ? stdenv.hostPlatform.isLinux
+, enableDbus ? stdenv.hostPlatform.isLinux
 , enableSoxr ? true
 , enableLibdaemon ? false
 }:
@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shairport-sync";
-  version = "4.3.2";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     rev = "refs/tags/${version}";
-    hash = "sha256-M7bJO8KVxP2H27aB0qJcsaN9uHADWeOYPdNo8Xfg9gc=";
+    hash = "sha256:1y8dh1gdffq38hgy6x1228l51l6p56iaiqlflw7w1dcbgw15llcd";
   };
 
   nativeBuildInputs = [
@@ -60,11 +60,6 @@ stdenv.mkDerivation rec {
     "${glib.dev}"
   ] ++ optional enableAirplay2 [
     unixtools.xxd
-  ];
-
-  makeFlags = [
-    # Workaround for https://github.com/mikebrady/shairport-sync/issues/1705
-    "AR=${stdenv.cc.bintools.targetPrefix}ar"
   ];
 
   buildInputs = [
@@ -86,7 +81,7 @@ stdenv.mkDerivation rec {
     libuuid
     ffmpeg
   ]
-  ++ optional stdenv.isLinux glib;
+  ++ optional stdenv.hostPlatform.isLinux glib;
 
   postPatch = ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c

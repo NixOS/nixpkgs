@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A library for arbitrary-precision interval arithmetic";
+    description = "Library for arbitrary-precision interval arithmetic";
     homepage = "https://arblib.org/";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;

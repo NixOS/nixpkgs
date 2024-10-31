@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 
-  cargoSha256 = "sha256-x+DrKo79R8TAeLVuvIIguQs3gdAHiAQ9dUU2/eZRZ0c=";
+  cargoHash = "sha256-x+DrKo79R8TAeLVuvIIguQs3gdAHiAQ9dUU2/eZRZ0c=";
 
   checkFlags = [
     "--skip=docker::shared::tests::directories::test_host"

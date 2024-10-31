@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeloop";
-  version = "unstable-2022-11-29";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "905ba953432c812772de935d57fd0a674a89d3c1";
-    hash = "sha256-EXiWXf8hdX4vFRNk9wbFSOsix/zVkwrafGUtFrsoAN0=";
+    rev = "v${version}";
+    hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
   };
 
   nativeBuildInputs = [ scons ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     yaml-cpp
     ncurses
     accelergy
-   ] ++ lib.optionals stdenv.isLinux [ gpm ];
+   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ];
 
   preConfigure = ''
     cp -r ./pat-public/src/pat ./src/pat
@@ -41,16 +41,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  #link-time optimization fails on darwin
-  #see https://github.com/NixOS/nixpkgs/issues/19098
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
-
   postPatch = ''
+    # Fix gcc-13 build failure due to missing includes:
+    sed -e '1i #include <cstdint>' -i \
+      include/compound-config/compound-config.hpp
+
     # use nix ar/ranlib
     substituteInPlace ./SConstruct \
-      --replace "env.Replace(AR = \"gcc-ar\")" "" \
-      --replace "env.Replace(RANLIB = \"gcc-ranlib\")" ""
-    '' + lib.optionalString stdenv.isDarwin ''
+      --replace-fail "env.Replace(AR = \"gcc-ar\")" "pass" \
+      --replace-fail "env.Replace(RANLIB = \"gcc-ranlib\")" "pass"
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # prevent clang from dying on errors that gcc is fine with
     substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   sconsFlags =
     # will fail on clang/darwin on link without --static due to undefined extern
     # however, will fail with static on linux as nixpkgs deps aren't static
-    lib.optional stdenv.isDarwin "--static"
+    lib.optional stdenv.hostPlatform.isDarwin "--static"
     ++ lib.optional enableAccelergy "--accelergy"
     ++ lib.optional enableISL "--with-isl";
 

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , testers
 
@@ -13,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsass";
-  version = "3.6.5"; # also check sassc for updates
+  version = "3.6.6"; # also check sassc for updates
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = finalAttrs.pname;
+    repo = "libsass";
     rev = finalAttrs.version;
-    sha256 = "1cxj6r85d5f3qxdwzxrmkx8z875hig4cr8zsi30w6vj23cyds3l2";
+    hash = "sha256-FkLL3OAJXDptRQY6ZkYbss2pcc40f/wasIvEIyHRQFo=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -27,19 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-26592.CVE-2022-43357.CVE-2022-43358.patch";
-      url = "https://github.com/sass/libsass/pull/3184/commits/5bb0ea0c4b2ebebe542933f788ffacba459a717a.patch";
-      hash = "sha256-DR6pKFWL70uJt//drzq34LeTzT8rUqgUTpgfUHpD2s4=";
-    })
-  ];
-
   preConfigure = ''
     export LIBSASS_VERSION=${finalAttrs.version}
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit gtk3 gtk4 sassc;
@@ -47,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A C/C++ implementation of a Sass compiler";
+    description = "C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = licenses.mit;
     maintainers = with maintainers; [ codyopel offline ];

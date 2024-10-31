@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "nap";
@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = {
     description = "Code snippets in your terminal 🛌";
+    mainProgram = "nap";
     homepage = "https://github.com/maaslalani/nap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phdcybersec maaslalani ];

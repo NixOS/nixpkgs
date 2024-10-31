@@ -8,10 +8,6 @@
 import ../make-test-python.nix ({ pkgs, lib, ...} : {
   name = "lxd-nftables";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
   nodes.machine = { lib, ... }: {
     virtualisation = {
       lxd.enable = true;

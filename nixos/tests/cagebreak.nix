@@ -14,9 +14,7 @@ in
   };
 
   nodes.machine = { config, ... }:
-  let
-    alice = config.users.users.alice;
-  in {
+  {
     # Automatically login on tty1 as a normal user:
     imports = [ ./common/user-account.nix ];
     services.getty.autologinUser = "alice";
@@ -31,7 +29,7 @@ in
       fi
     '';
 
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
     programs.xwayland.enable = true;
     security.polkit.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];

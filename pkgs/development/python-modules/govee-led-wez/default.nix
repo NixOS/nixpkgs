@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, hatchling
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -26,9 +27,7 @@ buildPythonPackage {
     hash = "sha256-VMH7sot9e2SYMyBNutyW6oCCjp2N+EKukxn1Dla3AlY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -42,9 +41,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "govee_led_wez"
-  ];
+  pythonImportsCheck = [ "govee_led_wez" ];
 
   meta = with lib; {
     description = "Control Govee Lights from Python";

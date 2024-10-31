@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ff2mpv";
-  version = "4.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sxUp/JlmnYW2sPDpIO2/q40cVJBVDveJvbQMT70yjP4=";
+    hash = "sha256-Xx18EX/MxLrnwZGwMFZJxJURUpjU2P01CQue5XbZ3fw=";
   };
 
   buildInputs = [ python3 mpv ];
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Native Messaging Host for ff2mpv firefox addon.";
+    description = "Native Messaging Host for ff2mpv firefox addon";
     homepage = "https://github.com/woodruffw/ff2mpv";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Enzime ];
+    maintainers = [ ];
+    mainProgram = "ff2mpv.py";
   };
 }

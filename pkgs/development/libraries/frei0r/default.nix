@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "2.3.1";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${version}";
-    hash = "sha256-5itlZfnloQXV/aCiNgOOZzEeO1d+NLY4qSk8uMVAOmA=";
+    hash = "sha256-uKYCJD88TnrJTTnzCCietNt01QPeFW+hhnjcBNKUWsY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

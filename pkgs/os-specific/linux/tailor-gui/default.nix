@@ -15,7 +15,7 @@
 }:
 let
   src = tuxedo-rs.src;
-  sourceRoot = "source/tailor_gui";
+  sourceRoot = "${src.name}/tailor_gui";
   pname = "tailor_gui";
   version = "0.2.3";
 in
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-mt4YQ0iB/Mlnm+o9sGgYVEdbxjF7qArxA5FIK4MAZ8M=";
+    hash = "sha256-jcjq0uls28V8Ka2CMM8oOQmZZRUr9eEQeVtW56AmU28=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Rust GUI for interacting with hardware from TUXEDO Computers";
+    mainProgram = "tailor_gui";
     longDescription = ''
       An alternative to the TUXEDO Control Center (https://www.tuxedocomputers.com/en/TUXEDO-Control-Center.tuxedo),
       written in Rust.

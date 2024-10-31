@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, logilab-common
-, pip
-, six
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  logilab-common,
+  pip,
+  six,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
-  version = "0.8.0";
+  version = "1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yIO8sL0sdSKw0OApj2SJsuaojYpwQRTK/hGOIX2+Wh8=";
+    hash = "sha256-UiE1FsHYJxvJd+lqCQKJQkAHXa5iRQYEzU9nDgrR6YY=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # avoid ModuleNotFoundError: No module named 'logilab.common' due to namespace
@@ -51,7 +50,6 @@ buildPythonPackage rec {
     homepage = "https://forge.extranet.logilab.fr/open-source/logilab-constraint";
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-constraint/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
-

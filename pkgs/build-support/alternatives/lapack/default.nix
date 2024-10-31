@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   };
 
   # TODO: drop this forced rebuild, as it was needed just once.
-  rebuild_salt = if stdenv.isDarwin && stdenv.isx86_64 then "J4AQ" else null;
+  rebuild_salt = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "J4AQ" else null;
 
   dontBuild = true;
   dontConfigure = true;

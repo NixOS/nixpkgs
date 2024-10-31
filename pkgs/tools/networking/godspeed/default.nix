@@ -27,10 +27,11 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Manager for reverse shells";
     homepage = "https://github.com/redcode-labs/GodSpeed";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    mainProgram = "godspeed";
   };
 }

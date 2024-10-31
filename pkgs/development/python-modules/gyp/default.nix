@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitiles
-, six
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitiles,
+  six,
+  python,
 }:
 
 buildPythonPackage {
@@ -17,16 +18,17 @@ buildPythonPackage {
     hash = "sha256-LUlF2VhRnuDwJLdITgmXIQV/IuKdx1KXQkiPVHKrl4Q=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-darwin-cflags.patch
     ./no-xcode.patch
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [ "gyp" "gyp.generator" ];
+  pythonImportsCheck = [
+    "gyp"
+    "gyp.generator"
+  ];
 
   # Make mac_tool.py executable so that patchShebangs hook processes it. This
   # file is copied and run by builds using gyp on macOS
@@ -35,7 +37,8 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A tool to generate native build files";
+    description = "Tool to generate native build files";
+    mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];

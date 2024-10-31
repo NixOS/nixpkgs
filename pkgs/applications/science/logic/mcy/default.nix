@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   # the build needs a bit of work...
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin $out/share/mcy/{dash,scripts}
     install mcy.py      $out/bin/mcy      && chmod +x $out/bin/mcy

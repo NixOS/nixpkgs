@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.4.0";
+  version = "1.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "ialbert";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BH6NKbDMhlNuo+orIEweABNSVZv1K9VrZBrCIs6H6BU=";
+    hash = "sha256-EWwDtS2cRLBe4aZuH72hgg2BQnVJQ39GmPx05NxTNjE=";
   };
 
   # tests are broken, see https://github.com/ialbert/plac/issues/74
@@ -30,14 +31,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "plac"
-  ];
+  pythonImportsCheck = [ "plac" ];
 
   meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
+    mainProgram = "plac_runner.py";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

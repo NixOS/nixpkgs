@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://springrts.com/";
-    description = "A powerful real-time strategy (RTS) game engine";
+    description = "Powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight domenkozar sorki ];
     platforms = [ "x86_64-linux" ];

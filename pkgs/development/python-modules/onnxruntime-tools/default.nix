@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, coloredlogs
-, numpy
-, onnx
-, packaging
-, psutil
-, py-cpuinfo
-, py3nvml
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  coloredlogs,
+  numpy,
+  onnx,
+  packaging,
+  psutil,
+  py-cpuinfo,
+  py3nvml,
+  sympy,
 }:
 
 buildPythonPackage rec {

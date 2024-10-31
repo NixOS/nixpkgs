@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   prg = config.programs;
   cfg = prg.thefuck;
@@ -16,13 +14,13 @@ in
   {
     options = {
       programs.thefuck = {
-        enable = mkEnableOption (lib.mdDoc "thefuck");
+        enable = lib.mkEnableOption "thefuck, an app which corrects your previous console command";
 
-        alias = mkOption {
+        alias = lib.mkOption {
           default = "fuck";
-          type = types.str;
+          type = lib.types.str;
 
-          description = lib.mdDoc ''
+          description = ''
             `thefuck` needs an alias to be configured.
             The default value is `fuck`, but you can use anything else as well.
           '';
@@ -30,11 +28,11 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
 
       programs.bash.interactiveShellInit = bashAndZshInitScript;
-      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable bashAndZshInitScript;
-      programs.fish.interactiveShellInit = mkIf prg.fish.enable fishInitScript;
+      programs.zsh.interactiveShellInit = lib.mkIf prg.zsh.enable bashAndZshInitScript;
+      programs.fish.interactiveShellInit = lib.mkIf prg.fish.enable fishInitScript;
     };
   }

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "kakasi";
   version = "2.3.6";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "Kanji Kana Simple Inverter";

@@ -1,16 +1,35 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.nginxlog;
+  inherit (lib) mkOption types;
 in {
   port = 9117;
   extraOpts = {
     settings = mkOption {
-      type = types.attrs;
+      type = types.submodule {
+        options = {
+          consul = mkOption {
+            default = null;
+            type = types.nullOr (types.attrsOf types.anything);
+            description = ''
+              Consul integration options. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
+
+              This is disabled by default.
+            '';
+          };
+          namespaces = mkOption {
+            default = [];
+            type = types.listOf (types.attrsOf types.anything);
+
+            description = ''
+              Namespaces to collect the metrics for. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
+            '';
+          };
+        };
+      };
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         All settings of nginxlog expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
@@ -24,7 +43,7 @@ in {
     metricsEndpoint = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

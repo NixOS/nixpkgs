@@ -8,7 +8,7 @@
 , flex
 , bison
 , pkg-config
-, libelf
+, elfutils
 , perl
 , python3
 
@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libelf
     python3
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   configureFlags = [

@@ -18,11 +18,11 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "23.0.6";
+  version = "26.0.2";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-Sw+6UloKSvYjkm7qYROmsZxKk/sky4DKvgupo+S61Q8=";
+    hash = "sha256-bhzzhFYMimGts5EElvlRpii4UGPzug6R0/F1lfbXKok=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     mkdir $out
     cp -r * $out
 
-    rm $out/bin/*.{ps1,bat}
+    rm $out/bin/*.{ps1,bat,orig}
 
     runHook postInstall
   '';
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
-    maintainers = with maintainers; [ ngerstle talyz ];
+    maintainers = with maintainers; [ ngerstle talyz nickcao ];
   };
 
 }

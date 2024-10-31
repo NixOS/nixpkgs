@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.11.1";
+  version = "7.12.0";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    hash = "sha256-zbE81vsO3rhXrPGL11lBqg3lryndaHEbW+CBxP6PlPA=";
+    hash = "sha256-lAx9TZVRkPMa5swB74zI0xJ7pbRDApZoens747XcuJk=";
   };
 
-  vendorHash = "sha256-Os76Kim+qznVtSY+GF3jgKz7Vmf7mRTcjZ6v8NnFY2U=";
+  vendorHash = "sha256-dXjee2rZn1lVEmL8Cy8rrdpSX1OpS9GHKZo53ur3kew=";
 
   subPackages = [ "fly" ];
 
@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line interface to Concourse CI";
+    mainProgram = "fly";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ ivanbrennan SuperSandro2000 ];

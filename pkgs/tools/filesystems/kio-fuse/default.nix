@@ -13,7 +13,7 @@ mkDerivation rec {
 
   src = fetchgit {
     url = "https://invent.kde.org/system/kio-fuse.git";
-    sha256 = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
+    hash = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
     rev = "v${version}";
   };
 

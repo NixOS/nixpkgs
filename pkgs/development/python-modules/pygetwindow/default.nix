@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyrect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyrect,
 }:
 buildPythonPackage rec {
-  pname = "PyGetWindow";
+  pname = "pygetwindow";
   version = "0.0.9";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyGetWindow";
+    inherit version;
     hash = "sha256-F4lDVefSswXNgy1xdwg4QBfBaYqQziT29/vwJC3Qpog=";
   };
 
@@ -16,12 +18,10 @@ buildPythonPackage rec {
   # This lib officially only works completely on Windows and partially on MacOS but pyautogui requires it
   # pythonImportsCheck = [ "pygetwindow" ];
 
-  propagatedBuildInputs = [
-    pyrect
-  ];
+  propagatedBuildInputs = [ pyrect ];
 
   meta = with lib; {
-    description = "A simple, cross-platform module for obtaining GUI information on applications' windows.";
+    description = "Simple, cross-platform module for obtaining GUI information on applications' windows";
     homepage = "https://github.com/asweigart/PyGetWindow";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lucasew ];

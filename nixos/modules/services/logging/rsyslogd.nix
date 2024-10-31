@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.rsyslogd;
@@ -36,40 +33,40 @@ in
 
     services.rsyslogd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable syslogd.  Note that systemd also logs
           syslog messages, so you normally don't need to run syslogd.
         '';
       };
 
-      defaultConfig = mkOption {
-        type = types.lines;
+      defaultConfig = lib.mkOption {
+        type = lib.types.lines;
         default = defaultConf;
-        description = lib.mdDoc ''
+        description = ''
           The default {file}`syslog.conf` file configures a
           fairly standard setup of log files, which can be extended by
           means of {var}`extraConfig`.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "news.* -/var/log/news";
-        description = lib.mdDoc ''
+        description = ''
           Additional text appended to {file}`syslog.conf`,
           i.e. the contents of {var}`defaultConfig`.
         '';
       };
 
-      extraParams = mkOption {
-        type = types.listOf types.str;
+      extraParams = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-m 0" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional parameters passed to {command}`rsyslogd`.
         '';
       };
@@ -81,7 +78,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.rsyslog ];
 

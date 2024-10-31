@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchgit, darwin, writeText
+{ stdenv, lib, fetchgit, fetchpatch, cctools, darwin, writeText
 , ninja, python3
-, disable-warnings-if-gcc13
 , ...
 }:
 
@@ -18,7 +17,7 @@ let
     #endif  // OUT_LAST_COMMIT_POSITION_H_
   '';
 
-in disable-warnings-if-gcc13 (stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "gn-unstable";
   inherit version;
 
@@ -28,8 +27,17 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
     inherit rev sha256;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "LFS64.patch";
+      url = "https://gn.googlesource.com/gn/+/b5ff50936a726ff3c8d4dfe2a0ae120e6ce1350d%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-/kh8t/Ip1EG2OIhydS//st/C80KJ4P31vGx7j8QpFh0=";
+    })
+  ];
+
   nativeBuildInputs = [ ninja python3 ];
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools
 
@@ -38,6 +46,8 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
     Foundation
     AppKit
   ]);
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   buildPhase = ''
     python build/gen.py --no-last-commit-position
@@ -52,10 +62,11 @@ in disable-warnings-if-gcc13 (stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A meta-build system that generates build files for Ninja";
+    description = "Meta-build system that generates build files for Ninja";
+    mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ stesie matthewbauer primeos ];
   };
-})
+}

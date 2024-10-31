@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-ABxYGYUBOzeOSE0yK8jym+ldinDUCTpqO165OWhszgs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # require internet
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mercadopago"
-  ];
+  pythonImportsCheck = [ "mercadopago" ];
 
   meta = with lib; {
-    description = "This library provides developers with a simple set of bindings to help you integrate Mercado Pago API to a website and start receiving payments.";
+    description = "This library provides developers with a simple set of bindings to help you integrate Mercado Pago API to a website and start receiving payments";
     homepage = "https://www.mercadopago.com";
     changelog = "https://github.com/mercadopago/sdk-python/releases/tag/${version}";
     license = licenses.mit;

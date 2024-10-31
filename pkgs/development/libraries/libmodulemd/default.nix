@@ -1,6 +1,7 @@
-{ lib, stdenv
-, substituteAll
+{ stdenv
+, lib
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , meson
 , ninja
@@ -29,10 +30,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Use proper glib devdoc path.
-    (substituteAll {
-      src = ./glib-devdoc.patch;
-      glib_devdoc = glib.devdoc;
+    # Adapt to GLib 2.79 documentation
+    # https://github.com/fedora-modularity/libmodulemd/pull/612
+    (fetchpatch2 {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/9d2809090cc0cccd7bab67453dc00cf43a289082.patch";
+      hash = "sha256-dMtc6GN6lIDjUReFUhEFJ/8wosASo3tLu4ve72BCXQ8=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/29c339a31b1c753dcdef041e5c2e0e600e48b59d.patch";
+      hash = "sha256-uniHrQdbcXlJk2hq106SgV/E330LfxDc07E4FbOMLr0=";
+    })
+    # Adapt to GLib 2.80.1 documentation
+    (fetchpatch2 {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/f3336199b4e69af3305f156abc7533bed9e9a762.patch";
+      hash = "sha256-Rvg+/KTKiEBXVEK7tlcTDf53HkaW462g/rg1rHPzaZA=";
     })
   ];
 
@@ -57,6 +68,12 @@ stdenv.mkDerivation rec {
     "-Dgobject_overrides_dir_py3=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
+  postPatch = ''
+    # Use proper glib devdoc path
+    substituteInPlace meson.build --replace-fail \
+      "glib_docpath = join_paths(glib_prefix," "glib_docpath = join_paths('${lib.getOutput "devdoc" glib}',"
+  '';
+
   postFixup = ''
     # Python overrides depend our own typelibs and other packages
     mkdir -p "$py/nix-support"
@@ -65,9 +82,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C Library for manipulating module metadata files";
+    mainProgram = "modulemd-validator";
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin ;
+    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A small X window manager, extended from tinywm";
+    description = "Small X window manager, extended from tinywm";
     homepage = "https://github.com/adamnew123456/SmallWM";
     license = lib.licenses.bsd2;
     mainProgram = "smallwm";

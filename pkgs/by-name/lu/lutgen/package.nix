@@ -1,38 +1,41 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lutgen";
-  version = "0.9.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
     rev = "v${version}";
-    hash = "sha256-tKSPk0V11pnKFV4E08H4CUnjw9nAonTRI6W3mGipd9I=";
+    hash = "sha256-jmMVeDDVb/TuxulDYj+8y4Kl42EJTAWb3tAsanfWduE=";
   };
 
-  cargoHash = "sha256-DiorrgTH9lIdmaZL7451uCXj9X7M6eHf4MQc85MpU7s=";
+  cargoHash = "sha256-cT999TukdiKmmNUpK7SE1uiuNoLhmjdtz/2cYXFC6dk=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lutgen \
-      --bash <($out/bin/lutgen completions bash) \
-      --fish <($out/bin/lutgen completions fish) \
-      --zsh <($out/bin/lutgen completions zsh)
+      --bash <($out/bin/lutgen --bpaf-complete-style-bash) \
+      --fish <($out/bin/lutgen --bpaf-complete-style-fish) \
+      --zsh <($out/bin/lutgen --bpaf-complete-style-zsh)
   '';
 
   meta = with lib; {
-    description = "A blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
+    description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
-    maintainers = with maintainers; [ zzzsy donovanglover ];
+    maintainers = with maintainers; [
+      ozwaldorf
+      zzzsy
+      donovanglover
+    ];
     mainProgram = "lutgen";
     license = licenses.mit;
   };

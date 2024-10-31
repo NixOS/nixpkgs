@@ -1,5 +1,5 @@
 { pkgs, fetchFromGitHub, lib, stdenv, gtk3, udev, desktop-file-utils
-, shared-mime-info, intltool, pkg-config, wrapGAppsHook, ffmpegthumbnailer
+, shared-mime-info, intltool, pkg-config, wrapGAppsHook3, ffmpegthumbnailer
 , jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
 
 stdenv.mkDerivation rec {
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
     gtk3 udev desktop-file-utils shared-mime-info
-    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
+    wrapGAppsHook3 ffmpegthumbnailer jmtpfs lsof udisks2
   ] ++ (lib.optionals ifuseSupport [ ifuse ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
   meta = with lib;  {
-    description = "A multi-panel tabbed file manager";
+    description = "Multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux
       with built-in VFS, udev- or HAL-based device manager,

@@ -3,7 +3,7 @@
   backendStdenv,
   fetchFromGitHub,
   cmake,
-  addOpenGLRunpath,
+  addDriverRunpath,
   cudatoolkit,
   cutensor,
 }:
@@ -20,12 +20,12 @@ let
     version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
     nativeBuildInputs = [
       cmake
-      addOpenGLRunpath
+      addDriverRunpath
     ];
-    buildInputs = [cudatoolkit];
+    buildInputs = [ cudatoolkit ];
     postFixup = ''
       for exe in $out/bin/*; do
-        addOpenGLRunpath $exe
+        addDriverRunpath $exe
       done
     '';
     meta = {
@@ -36,7 +36,7 @@ let
         cuSPARSE, cuSOLVER, cuFFT, cuRAND, NPP and nvJPEG.
       '';
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [obsidian-systems-maintenance] ++ lib.teams.cuda.members;
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
     };
   };
 in
@@ -69,14 +69,14 @@ in
 
       src = "${src}/cuTENSOR";
 
-      buildInputs = [cutensor];
+      buildInputs = [ cutensor ];
 
-      cmakeFlags = ["-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"];
+      cmakeFlags = [ "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin" ];
 
       # CUTENSOR_ROOT is double escaped
       postPatch = ''
         substituteInPlace CMakeLists.txt \
-          --replace "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
       '';
 
       CUTENSOR_ROOT = cutensor;

@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A cross platform, customizable graphical frontend for launching emulators and managing your game collection";
+    description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
+    mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tengkuizdihar ];

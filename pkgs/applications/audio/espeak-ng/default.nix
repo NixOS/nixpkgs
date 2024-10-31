@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
     ++ lib.optional sonicSupport sonic
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreAudio
     AudioToolbox
     AudioUnit
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   # touch ChangeLog to avoid below error on darwin:
   # Makefile.am: error: required file './ChangeLog.md' not found
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     touch ChangeLog
   '' + ''
     ./autogen.sh
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       --replace '../src/espeak-ng --compile' "${lib.getExe buildPackages.espeak-ng} --compile"
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
     wrapProgram $out/bin/espeak-ng \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib

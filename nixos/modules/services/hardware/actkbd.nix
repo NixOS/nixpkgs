@@ -20,25 +20,25 @@ let
 
       keys = mkOption {
         type = types.listOf types.int;
-        description = lib.mdDoc "List of keycodes to match.";
+        description = "List of keycodes to match.";
       };
 
       events = mkOption {
         type = types.listOf (types.enum ["key" "rep" "rel"]);
         default = [ "key" ];
-        description = lib.mdDoc "List of events to match.";
+        description = "List of events to match.";
       };
 
       attributes = mkOption {
         type = types.listOf types.str;
         default = [ "exec" ];
-        description = lib.mdDoc "List of attributes.";
+        description = "List of attributes.";
       };
 
       command = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "What to run.";
+        description = "What to run.";
       };
 
     };
@@ -57,7 +57,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the {command}`actkbd` key mapping daemon.
 
           Turning this on will start an {command}`actkbd`
@@ -78,7 +78,7 @@ in
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Key bindings for {command}`actkbd`.
 
           See {command}`actkbd` {file}`README` for documentation.
@@ -90,7 +90,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Literal contents to append to the end of actkbd configuration file.
         '';
       };

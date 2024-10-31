@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "cloudfox";
-  version = "1.13.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "BishopFox";
-    repo = pname;
+    repo = "cloudfox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zP6jrueL3CXl6+fCmx4u0FzFy8mj6WkmECPHRZyqX8A=";
+    hash = "sha256-YLZSrBAEf0SXECAdnF2CQAlEd15DJ1Iv+x+RebM5tw4=";
   };
 
-  vendorHash = "sha256-qPIMmyKTmZEmxlLLftRMnBXvo22WFROYlCAAsAb7jDg=";
+  vendorHash = "sha256-MQ1yoJjAWNx95Eafcarp/JNYq06xu9P05sF2QTW03NY=";
 
   ldflags = [
     "-w"
@@ -30,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cloudfox";
   };
 }

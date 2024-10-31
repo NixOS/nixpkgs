@@ -1,15 +1,14 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, protobuf
-, pycryptodomex
-, pyogg
-, pytestCheckHook
-, pythonRelaxDepsHook
-, requests
-, websocket-client
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  protobuf,
+  pycryptodomex,
+  pyogg,
+  requests,
+  websocket-client,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +25,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     defusedxml
@@ -43,9 +39,7 @@ buildPythonPackage rec {
   # Doesn't include any tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "librespot"
-  ];
+  pythonImportsCheck = [ "librespot" ];
 
   meta = with lib; {
     description = "Open Source Spotify Client";

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, dataclasses-json
-, pycryptodome
-, setuptools-scm
-, pytest-asyncio
-, pytest-cases
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  dataclasses-json,
+  pycryptodome,
+  setuptools-scm,
+  pytest-asyncio,
+  pytest-cases,
+  pytest7CheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace "--cov pysiaalarm --cov-report term-missing" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     dataclasses-json
@@ -43,7 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cases
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

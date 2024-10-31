@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "16q3md7cvdz37pqm1sda81rkjf249xbsrlpdl639r06p7f4nqlc2";
   };
 
-  cargoSha256 = "0fzlvn0sl7613hpsb7ncykmcl53dgl8rzsg317nwkj2w679q4xq6";
+  cargoHash = "sha256-BneC0zFcyMntCePpnxF9bRTK6vTMnqUvHMEcqoHd9Ds=";
 
   meta = with lib; {
     description = "Tool to convert Steam .acf files to JSON";

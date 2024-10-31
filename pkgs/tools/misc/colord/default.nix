@@ -10,7 +10,9 @@
 , gusb
 , lcms2
 , sqlite
+, udev
 , systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , dbus
 , gobject-introspection
 , argyllcms
@@ -32,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.7";
+  version = "1.4.6";
 
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    hash = "sha256-3gLZkQY0rhWVR1hc7EFORQ9xHCcjVFO0+bOKnyNhplM=";
+    url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
+    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
   };
 
   patches = [
@@ -60,6 +62,11 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
     "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
+    (lib.mesonBool "systemd" enableSystemd)
+
+    # The presence of the "udev" pkg-config module (as opposed to "libudev")
+    # indicates whether rules are supported.
+    (lib.mesonBool "udev_rules" (lib.elem "udev" udev.meta.pkgConfigModules))
   ];
 
   nativeBuildInputs = [
@@ -90,6 +97,8 @@ stdenv.mkDerivation rec {
     libgudev
     sane-backends
     sqlite
+    udev
+  ] ++ lib.optionals enableSystemd [
     systemd
   ] ++ lib.optionals enableDaemon [
     polkit

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose2
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose2,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-0BIWgyAV1hJzFX4xYFqswvQi5F1Ce+V9FKSmNYuJfZM=";
   };
 
-  nativeCheckInputs = [
-    nose2
-  ];
+  nativeCheckInputs = [ nose2 ];
 
-  checkInputs = [
-    typing-extensions
-  ];
+  checkInputs = [ typing-extensions ];
 
   pythonImportsCheck = [ "dataclass_factory" ];
 

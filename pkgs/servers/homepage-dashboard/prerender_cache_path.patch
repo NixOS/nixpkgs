@@ -1,0 +1,18 @@
+diff --git a/share/homepage/node_modules/next/dist/server/lib/incremental-cache/file-system-cache.js b/share/homepage/node_modules/next/dist/server/lib/incremental-cache/file-system-cache.js
+index b1b74d8..a46c80b 100644
+--- a/share/homepage/node_modules/next/dist/server/lib/incremental-cache/file-system-cache.js
++++ b/share/homepage/node_modules/next/dist/server/lib/incremental-cache/file-system-cache.js
+@@ -5,11 +5,12 @@ Object.defineProperty(exports, "__esModule", {
+ exports.default = void 0;
+ var _lruCache = _interopRequireDefault(require("next/dist/compiled/lru-cache"));
+ var _path = _interopRequireDefault(require("../../../shared/lib/isomorphic/path"));
++var path = require('node:path');
+ class FileSystemCache {
+     constructor(ctx){
+         this.fs = ctx.fs;
+         this.flushToDisk = ctx.flushToDisk;
+-        this.serverDistDir = ctx.serverDistDir;
++        this.serverDistDir = path.join(process.env.HOMEPAGE_CACHE_DIR, "homepage");
+         this.appDir = !!ctx._appDir;
+         if (ctx.maxMemoryCacheSize) {
+             this.memoryCache = new _lruCache.default({

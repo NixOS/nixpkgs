@@ -4,10 +4,11 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter
+, flutter324
 , pulseaudio
 , makeDesktopItem
-, gnome
+, zenity
+, olm
 
 , targetFlutterPlatform ? "linux"
 }:
@@ -16,22 +17,22 @@ let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter.buildFlutterApplication (rec {
+flutter324.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
-  version = "1.17.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SCZtdmpUaCwORIJgT9lQO/It+WSzkhBOd6liLzPBerU=";
+    hash = "sha256-biFoRcMss3JVrMoilc8BzJ+R6f+e4RYpZ5dbxDpnfTk=";
   };
 
   inherit pubspecLock;
 
   gitHashes = {
+    flutter_shortcuts = "sha256-4nptZ7/tM2W/zylk3rfQzxXgQ6AipFH36gcIb/0RbHo=";
     keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
-    wakelock_windows = "sha256-Dfwe3dSScD/6kvkP67notcbb+EgTQ3kEYcH7wpra2dI=";
   };
 
   inherit targetFlutterPlatform;
@@ -44,13 +45,14 @@ flutter.buildFlutterApplication (rec {
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = [ sourceTypes.fromSource ];
+    inherit (olm.meta) knownVulnerabilities;
   };
 } // lib.optionalAttrs (targetFlutterPlatform == "linux") {
   nativeBuildInputs = [ imagemagick ];
 
   runtimeDependencies = [ pulseaudio ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  extraWrapProgramArgs = "--prefix PATH : ${zenity}/bin";
 
   env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
@@ -64,7 +66,7 @@ flutter.buildFlutterApplication (rec {
   };
 
   postInstall = ''
-    FAV=$out/app/data/flutter_assets/assets/favicon.png
+    FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -76,7 +78,7 @@ flutter.buildFlutterApplication (rec {
       convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
 
-    patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
+    patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
   '';
 } // lib.optionalAttrs (targetFlutterPlatform == "web") {
   prePatch =

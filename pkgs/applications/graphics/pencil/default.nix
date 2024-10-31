@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
+{ stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook3,
   # build dependencies
   alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
   freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
 
   buildInputs = deps;
 
@@ -98,6 +98,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GUI prototyping/mockup tool";
+    mainProgram = "pencil";
     homepage    = "https://pencil.evolus.vn/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl2; # Commercial license is also available

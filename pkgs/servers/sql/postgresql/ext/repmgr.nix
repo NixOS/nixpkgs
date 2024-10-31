@@ -2,13 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , postgresql
-, openssl
-, zlib
-, readline
 , flex
 , curl
 , json_c
-, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline curl json_c ]
-    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
+  buildInputs = postgresql.buildInputs ++ [ postgresql curl json_c ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}
@@ -42,6 +37,9 @@ stdenv.mkDerivation rec {
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ zimbatm ];
+    # PostgreSQL 17 support issue upstream: https://github.com/EnterpriseDB/repmgr/issues/856
+    # Check after next package update.
+    broken = versionAtLeast postgresql.version "17" && version == "5.4.1";
   };
 }
 

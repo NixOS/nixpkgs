@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ]
   # `lchmod` is not available on Linux, so we remove it to fix "not supported" errors (when the zip file contains symlinks).
   # Alpine (musl) and Debian (glibc) also add this flag.
-  ++ lib.optionals stdenv.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile
@@ -99,9 +99,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.info-zip.org";
-    description = "An extraction utility for archives compressed in .zip format";
+    description = "Extraction utility for archives compressed in .zip format";
     license = lib.licenses.info-zip;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "unzip";
   };
 }

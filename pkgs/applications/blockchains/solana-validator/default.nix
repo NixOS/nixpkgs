@@ -2,7 +2,6 @@
 
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , lib
 , rustPlatform
 , pkg-config
@@ -13,7 +12,7 @@
 , openssl
 , libclang
 , libcxx
-, rocksdb
+, rocksdb_8_3
 , rustfmt
 , perl
 , hidapi
@@ -46,6 +45,7 @@ let
   pinData = lib.importJSON ./pin.json;
   version = pinData.version;
   hash = pinData.hash;
+  rocksdb = rocksdb_8_3;
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
 in
@@ -60,20 +60,11 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  # fix build with rust 1.70+
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/solana-labs/solana/commit/9e703f85de4184f577f22a1c72a0d33612f2feb1.patch";
-      hash = "sha256-bAKTIQ6FhTk6bIddYULwLfdH5kzNPw1ltXJEfawtAXg=";
-      includes = [ "sdk/program/src/account_info.rs" ];
-    })
-  ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
-      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
     };
   };
 
@@ -84,8 +75,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
-    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ])
-    ++ lib.optionals stdenv.isDarwin [ Security System Libsystem libcxx ];
+    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.hostPlatform.isLinux [ udev ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security System Libsystem libcxx ];
   strictDeps = true;
 
   doCheck = false;
@@ -97,7 +88,7 @@ rustPlatform.buildRustPackage rec {
 
     # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
     OPENSSL_NO_VENDOR = "1";
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Require this on darwin otherwise the compiler starts rambling about missing
     # cmath functions
     CPPFLAGS = "-isystem ${lib.getDev libcxx}/include/c++/v1";
@@ -105,7 +96,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces.";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];

@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "8.0";
+  version = "9.6";
   format = "other";
 
   src = fetchFromGitLab {
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    hash = "sha256-SEPQjl6hd8IBs0c0LBEYaqn2n8CGQmYSEMJp5yoL/PA=";
+    hash = "sha256-iF2AQYAwwIr/sCZUz1pdqEa74DH4y4Nts6aJj3mS2f4=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     construct
+    pykcs11
     pykeepass
     pyotp
     validators
+    yubico
     zxcvbn
   ];
 

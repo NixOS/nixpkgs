@@ -22,6 +22,6 @@ buildGoModule {
     license = licenses.mit;
     homepage = "https://bosun.org";
     maintainers = with maintainers; [ offline ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

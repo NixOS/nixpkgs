@@ -3,22 +3,24 @@
 , gobject-introspection
 , gtk3
 , gtksourceview4
-, webkitgtk
-, wrapGAppsHook
+, webkitgtk_4_0
+, wrapGAppsHook3
 , python3Packages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.6.3";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple";
     rev = "refs/tags/${version}";
-    hash = "sha256-norcfoxZG9crgQz7p1+Gfne5il1AWfxdZa4JE/LfXU8=";
+    hash = "sha256-RFLxDV/L6Qbz14KqIEcMX/EnirNUrHL0MW8v5Z8ByK0=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   buildInputs = [
     gtk3
@@ -26,15 +28,15 @@ python3Packages.buildPythonApplication rec {
     # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     cairosvg
     natsort
     ndspy
@@ -42,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     pycairo
     pygal
     psutil
-    gbulb
     pypresence
     sentry-sdk
     setuptools
@@ -65,7 +66,8 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
+    mainProgram = "skytemple";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

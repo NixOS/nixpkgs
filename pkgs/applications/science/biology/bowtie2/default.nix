@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bowtie2";
-  version = "2.5.2";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie2";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rWeopeYuCk9ZhJX2SFCcxZWcjXjjTiVRiwkzLQcIgd0=";
+    hash = "sha256-ZbmVOItfAgKdsMrvQIXgKiPtoQJZYfGblCGDoNPjvTU=";
   };
 
   # because of this flag, gcc on aarch64 cannot find the Threads
@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
+    description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
-    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
     mainProgram = "bowtie2";

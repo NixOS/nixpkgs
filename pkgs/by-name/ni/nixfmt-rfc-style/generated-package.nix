@@ -1,27 +1,30 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{ mkDerivation, base, cmdargs, directory, fetchzip, filepath, lib
-, megaparsec, mtl, parser-combinators, safe-exceptions, scientific
-, text, transformers, unix
+{ mkDerivation, base, bytestring, cmdargs, directory, fetchzip
+, file-embed, filepath, lib, megaparsec, mtl, parser-combinators
+, pretty-simple, safe-exceptions, scientific, text, transformers
+, unix
 }:
 mkDerivation {
   pname = "nixfmt";
-  version = "0.5.0";
+  version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/piegamesde/nixfmt/archive/d6930fd0c62c4d7ec9e4a814adc3d2f590d96271.tar.gz";
-    sha256 = "1ijrdzdwricv4asmy296j7gzvhambv96nlxi3qrxb4lj1by6a34m";
+    url = "https://github.com/nixos/nixfmt/archive/14be7e665024f1a8c31d748b22f5e215856d3479.tar.gz";
+    sha256 = "017a1069sy4bhc2wchgd5hl6c106spf0zq5dcg65mf4flba1xs0j";
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base megaparsec mtl parser-combinators scientific text transformers
+    base megaparsec mtl parser-combinators pretty-simple scientific
+    text transformers
   ];
   executableHaskellDepends = [
-    base cmdargs directory filepath safe-exceptions text unix
+    base bytestring cmdargs directory file-embed filepath
+    safe-exceptions text unix
   ];
   jailbreak = true;
-  homepage = "https://github.com/serokell/nixfmt";
-  description = "An opinionated formatter for Nix";
+  homepage = "https://github.com/NixOS/nixfmt";
+  description = "Official formatter for Nix code";
   license = lib.licenses.mpl20;
   mainProgram = "nixfmt";
 }

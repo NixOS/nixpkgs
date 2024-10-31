@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , boost
 , libsodium
@@ -45,6 +46,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-zmGsSbPpVwL0AhCQkdMKORruM5kYrrLe/BYfMphph8c=";
   };
 
+  patches = [
+    # Fix gcc-13 build due to missing <cstdint> neaders
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://git.wownero.com/wownero/wownero/commit/f983ac77805a494ea4a05a00398c553e1359aefd.patch";
+      hash = "sha256-9acQ4bHAKFR+lMgrpQyBmb+9YZYi1ywHoo1jBcIgmGs=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
@@ -57,7 +67,7 @@ stdenv.mkDerivation rec {
     readline
     unbound
     zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
   ];
 
@@ -91,7 +101,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wownero.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

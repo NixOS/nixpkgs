@@ -1,26 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchFromGitHub, ocamlPackages }:
 
-stdenv.mkDerivation rec {
+ocamlPackages.buildDunePackage rec {
   pname = "ocsigen-i18n";
-  version = "3.7.0";
+  version = "4.0.0";
 
-  strictDeps = true;
-
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib ];
-  buildInputs = with ocamlPackages; [ ppx_tools ];
-
-  dontStrip = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    make bindir=$out/bin install
-  '';
+  buildInputs = with ocamlPackages; [ ppxlib ];
 
   src = fetchFromGitHub {
     owner = "besport";
     repo = "ocsigen-i18n";
     rev = version;
-    sha256 = "sha256-PmdDyn+MUcNFrZpP/KLGQzdXUFRr+dYRAZjTZxHSeaw=";
+    hash = "sha256-NIl1YUTws8Ff4nrqdhU7oS/TN0lxVQgrtyEZtpS1ojM=";
   };
 
   meta = {

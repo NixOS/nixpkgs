@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, isPy3k
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  isPy3k,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -46,7 +47,6 @@ buildPythonPackage rec {
     description = "Generic application framework, providing the foundation for other modules";
     homepage = "https://github.com/freevo/kaa-base";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
-
 }

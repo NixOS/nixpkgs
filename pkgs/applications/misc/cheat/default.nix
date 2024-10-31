@@ -16,6 +16,21 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  patches = [
+    (builtins.toFile "fix-zsh-completion.patch" ''
+      diff --git a/scripts/cheat.zsh b/scripts/cheat.zsh
+      index befe1b2..675c9f8 100755
+      --- a/scripts/cheat.zsh
+      +++ b/scripts/cheat.zsh
+      @@ -62,4 +62,4 @@ _cheat() {
+         esac
+       }
+
+      -compdef _cheat cheat
+      +_cheat "$@"
+    '')
+  ];
+
   postInstall = ''
     installManPage doc/cheat.1
     installShellCompletion scripts/cheat.{bash,fish,zsh}
@@ -30,5 +45,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
     inherit (src.meta) homepage;
+    mainProgram = "cheat";
   };
 }

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Uinput driver for Android GfxTablet tablet-as-input-device app";
+    mainProgram = "networktablet";
     license = lib.licenses.mit ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

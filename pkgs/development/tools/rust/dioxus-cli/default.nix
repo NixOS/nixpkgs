@@ -3,30 +3,35 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
+, rustfmt
 , cacert
 , openssl
 , darwin
+, nix-update-script
 , testers
 , dioxus-cli
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.4.3";
+  version = "0.5.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-TWcuEobYH2xpuwB1S63HoP/WjH3zHXTnlXXvOcYIZG8=";
+    hash = "sha256-/LeMh5WX4dvkveu5w6qBQLbtoi5yUW6iad0YatA/tMQ=";
   };
 
-  cargoHash = "sha256-ozbGK46uq3qXZifyTY7DDX1+vQuDJuSOJZw35vwcuxY=";
+  cargoHash = "sha256-D6y2NiFqSf0u6icSKCRZK7ycR+GswOX627M7PEy/D6U=";
 
   nativeBuildInputs = [ pkg-config cacert ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;
+
+  nativeCheckInputs = [ rustfmt ];
 
   checkFlags = [
     # requires network access
@@ -34,20 +39,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=server::web::proxy::test::add_proxy_trailing_slash"
   ];
 
-  # Omitted: --doc
-  # Can be removed after 0.4.3 or when https://github.com/DioxusLabs/dioxus/pull/1706 is resolved
-  # Matches upstream package test CI https://github.com/DioxusLabs/dioxus/blob/544ca5559654c8490ce444c3cbd85c1bfb8479da/Makefile.toml#L94-L108
-  cargoTestFlags = [
-    "--lib"
-    "--bins"
-    "--tests"
-    "--examples"
-  ];
-
-  passthru.tests.version = testers.testVersion {
-    package = dioxus-cli;
-    command = "${meta.mainProgram} --version";
-    inherit version;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = dioxus-cli; };
   };
 
   meta = with lib; {

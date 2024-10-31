@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, arrow
-, freezegun
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  arrow,
+  freezegun,
+  jinja2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ arrow jinja2 ];
+  propagatedBuildInputs = [
+    arrow
+    jinja2
+  ];
 
-  nativeCheckInputs = [ freezegun pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jinja2_time" ];
 
@@ -36,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hackebrot/jinja2-time";
     description = "Jinja2 Extension for Dates and Times";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

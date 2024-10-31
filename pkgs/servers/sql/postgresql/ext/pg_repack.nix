@@ -1,19 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, openssl
 , postgresql
 , postgresqlTestHook
-, readline
 , testers
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pg_repack";
   version = "1.5.0";
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = postgresql.buildInputs ++ [ postgresql ];
 
   src = fetchFromGitHub {
     owner = "reorg";

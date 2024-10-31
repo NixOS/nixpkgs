@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices AudioUnit
     ];
 

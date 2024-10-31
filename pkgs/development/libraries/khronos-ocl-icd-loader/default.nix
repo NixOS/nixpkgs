@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencl-icd-loader";
-  version = "2023.12.14";
+  version = "2024.05.08";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
     rev = "v${version}";
-    hash = "sha256-/4ixQAwJpygdg+qtR1ccBlz8hmtYYxRgUV5dlJabsg8=";
+    hash = "sha256-wFwc1ku3FNEH2k8TJij2sT7JspWorR/XbxXwPZaQcGA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Official Khronos OpenCL ICD Loader";
+    mainProgram = "cllayerinfo";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
     maintainers = with maintainers; [ davidtwco ];

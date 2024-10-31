@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-yWB2caxREjb6XWGnSRwQMecA6NSYydJBjmxh0SUSCa4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  pythonImportsCheck = [
-    "sphinx_multitoc_numbering"
-  ];
+  pythonImportsCheck = [ "sphinx_multitoc_numbering" ];
 
   meta = with lib; {
     description = "Supporting continuous HTML section numbering";
     homepage = "https://github.com/executablebooks/sphinx-multitoc-numbering";
     changelog = "https://github.com/executablebooks/sphinx-multitoc-numbering/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

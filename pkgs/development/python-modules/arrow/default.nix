@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
-, python-dateutil
-, types-python-dateutil
-, pytestCheckHook
-, pytest-mock
-, pytz
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
+  python-dateutil,
+  types-python-dateutil,
+  pytestCheckHook,
+  pytest-mock,
+  pytz,
+  simplejson,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     sed -i "/addopts/d" tox.ini
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -45,9 +44,7 @@ buildPythonPackage rec {
   ];
 
   # ParserError: Could not parse timezone expression "America/Nuuk"
-  disabledTests = [
-    "test_parse_tz_name_zzz"
-  ];
+  disabledTests = [ "test_parse_tz_name_zzz" ];
 
   pythonImportsCheck = [ "arrow" ];
 

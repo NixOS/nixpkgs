@@ -14,12 +14,12 @@
 , shared-mime-info
 , stdenv
 , unzip
-, webkitgtk
+, webkitgtk_4_0
 , zlib
 }:
 
 let
-  pVersion = "1.14.0.20230315";
+  pVersion = "1.15.0.20231206";
   pVersionTriple = lib.splitVersion pVersion;
   majorVersion = lib.elemAt pVersionTriple 0;
   minorVersion = lib.elemAt pVersionTriple 1;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-9YFJILMRhIln4vo99noRxYARh1M/mjwg7t8RdAJCoW4=";
+    sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
   };
 
   desktopItem = makeDesktopItem {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
     makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_0 ])} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libXtst
     zlib
     shared-mime-info
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   dontBuild = true;
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and feature-rich Java heap analyzer";
+    mainProgram = "eclipse-mat";
     longDescription = ''
       The Eclipse Memory Analyzer is a tool that helps you find memory
       leaks and reduce memory consumption. Use the Memory Analyzer to

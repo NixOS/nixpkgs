@@ -60,7 +60,7 @@ in {
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable or disable the amazon-init service.
       '';
     };
@@ -75,6 +75,11 @@ in {
       after = [ "multi-user.target" ];
       requires = [ "network-online.target" ];
 
+      path = [
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
+
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
 
@@ -84,4 +89,5 @@ in {
       };
     };
   };
+  meta.maintainers = with maintainers; [ arianvp ];
 }

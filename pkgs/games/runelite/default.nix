@@ -3,6 +3,7 @@
 , makeDesktopItem
 , makeWrapper
 , maven
+, jdk17
 , jre
 , xorg
 , gitUpdater
@@ -11,15 +12,17 @@
 
 maven.buildMavenPackage rec {
   pname = "runelite";
-  version = "2.6.12";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "runelite";
     repo = "launcher";
     rev = version;
-    hash = "sha256-lovDkEvzclZCBu/Ha8h0j595NZ4ejefEOX7lNmzb8I8=";
+    hash = "sha256-ckeZ/7rACyZ5j+zzC5hv1NaXTi9q/KvOzMPTDd1crHQ=";
   };
-  mvnHash = "sha256-bsJlsIXIIVzZyVgEF/SN+GgpZt6v0u800arO1c5QYHk=";
+
+  mvnJdk = jdk17;
+  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";

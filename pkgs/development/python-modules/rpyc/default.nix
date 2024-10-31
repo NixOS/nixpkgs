@@ -1,38 +1,37 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, plumbum
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  plumbum,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "5.3.1";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
-    repo = pname;
+    repo = "rpyc";
     rev = "refs/tags/${version}";
-    hash = "sha256-2b6ryqDqZPs5VniLhCwA1/c9+3CT+JJrr3VwP3G6tpY=";
+    hash = "sha256-ZYGOwg2IJtVVxHV2hC3inliTLP4BBFOnOz7VPhRpcgg=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    plumbum
-  ];
+  dependencies = [ plumbum ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
+  '';
 
   disabledTests = [
     # Disable tests that requires network access
@@ -42,16 +41,25 @@ buildPythonPackage rec {
     "test_listing"
     "test_pruning"
     "test_rpyc"
+    "test_instancecheck_across_connections"
+    # Internal import error
+    "test_modules"
     # Test is outdated
     # ssl.SSLError: [SSL: NO_CIPHERS_AVAILABLE] no ciphers available (_ssl.c:997)
     "test_ssl_conenction"
   ];
 
-  pythonImportsCheck = [
-    "rpyc"
+  disabledTestPaths = [
+    # Internal import issue
+    "tests/test_attributes.py"
+    "tests/test_service_pickle.py"
+    "tests/test_affinity.py"
+    "tests/test_magic.py"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  pythonImportsCheck = [ "rpyc" ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";

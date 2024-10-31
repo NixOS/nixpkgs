@@ -6,9 +6,10 @@
 , installShellFiles
 , perl
 , xorg
-, libGL
+, libGLX
 , coreutils
 , unixtools
+, runtimeShell
 , targetPackages
 , gnugrep
 , gawk
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++ lib.optionals withGL [
     xorg.libX11
     xorg.libXext
-    libGL
+    libGLX
   ];
 
   runtimeDependencies = [
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/libexec/pgms/multi.sh \
-      --replace '/bin/sh "$' '${targetPackages.runtimeShell} "$'
+      --replace '/bin/sh "$' '${runtimeShell} "$'
 
     substituteInPlace $out/bin/ubench \
       --subst-var out
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A basic indicator of the performance of a Unix-like system";
+    description = "Basic indicator of the performance of a Unix-like system";
     homepage = "https://github.com/kdlucas/byte-unixbench";
     license = licenses.gpl2Plus;
     mainProgram = "ubench";

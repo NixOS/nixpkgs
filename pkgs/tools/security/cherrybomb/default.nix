@@ -16,12 +16,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pj4+rG8XbrxVuNgnTVUTPmgrPBRSnoBnqFhOO/JGGWI=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "A CLI tool that helps you avoid undefined user behavior by validating your API specifications";
+    description = "CLI tool that helps you avoid undefined user behavior by validating your API specifications";
+    mainProgram = "cherrybomb";
     homepage = "https://github.com/blst-security/cherrybomb";
     changelog = "https://github.com/blst-security/cherrybomb/releases/tag/v${version}";
     license = licenses.asl20;

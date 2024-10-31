@@ -18,11 +18,13 @@
 , wayland
 , libseccomp
 , systemd
+, udev
 , bubblewrap
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-nons
 , gsettings-desktop-schemas
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QsdzdF2EuhS8HPHExvRgYUiAOlzTN5QcY5ZHlfPFnUI=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./bubblewrap-paths.patch;
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
@@ -64,11 +66,13 @@ stdenv.mkDerivation rec {
     gtk3
     gtk4
     glib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withSystemd [
+    systemd
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     bubblewrap
     wayland
     libseccomp
-    systemd
+    udev
   ];
 
   propagatedBuildInputs = [
@@ -78,12 +82,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsystemd=disabled"
+    (lib.mesonEnable "systemd" withSystemd)
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dudev=disabled"
   ];
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = {
     updateScript = gnome.updateScript {

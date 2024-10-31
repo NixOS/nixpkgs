@@ -1,17 +1,18 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchPypi
-, fsspec
-, funcy
-, google-api-python-client
-, oauth2client
-, pyopenssl
-, pythonOlder
-, pyyaml
-, setuptools
-, setuptools-scm
-, tqdm
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchPypi,
+  fsspec,
+  funcy,
+  google-api-python-client,
+  oauth2client,
+  pyopenssl,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [
       appdirs
       fsspec
@@ -51,9 +52,7 @@ buildPythonPackage rec {
   # Tests require a account and network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydrive2"
-  ];
+  pythonImportsCheck = [ "pydrive2" ];
 
   meta = with lib; {
     description = "Google Drive API Python wrapper library";

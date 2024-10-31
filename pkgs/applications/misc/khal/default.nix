@@ -1,51 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glibcLocales
-, installShellFiles
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glibcLocales,
+  installShellFiles,
+  python3,
 }:
 
 let
-  py = python3.override {
+  python = python3.override {
     packageOverrides = self: super: {
-
-      # Doesn't work with latest urwid
-      urwid = super.urwid.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.2";
+      # https://github.com/pimutils/khal/issues/1361
+      icalendar = super.icalendar.overridePythonAttrs (old: rec {
+        version = "5.0.13";
         src = fetchFromGitHub {
-          owner = "urwid";
-          repo = "urwid";
-          rev = "refs/tags/${version}";
-          hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
+          owner = "collective";
+          repo = "icalendar";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
         };
-        doCheck = false;
+        patches = [ ];
+        build-system = with self; [ setuptools ];
+        dependencies = with self; [
+          python-dateutil
+          pytz
+        ];
       });
     };
   };
 in
-py.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
+    hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
+
+  build-system = with python.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with py.pkgs; [
-    setuptools-scm
-    sphinx
-    sphinxcontrib-newsfeed
-  ]);
+  ];
 
-  propagatedBuildInputs = with py.pkgs;[
+  dependencies = with python.pkgs; [
     atomicwrites
     click
     click-log
@@ -63,7 +69,7 @@ py.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with py.pkgs;[
+  nativeCheckInputs = with python.pkgs; [
     freezegun
     hypothesis
     packaging
@@ -79,17 +85,24 @@ py.pkgs.buildPythonApplication rec {
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
-    make -C doc man
+    PATH="${
+      python3.withPackages (
+        ps: with ps; [
+          sphinx
+          sphinxcontrib-newsfeed
+        ]
+      )
+    }/bin:$PATH" \
+      make -C doc man
     installManPage doc/build/man/khal.1
 
     # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications
   '';
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   disabledTests = [
     # timing based

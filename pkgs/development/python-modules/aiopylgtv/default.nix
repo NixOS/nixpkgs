@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pythonOlder
-, sqlitedict
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pythonOlder,
+  sqlitedict,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to control webOS based LG TV units";
+    mainProgram = "aiopylgtvcommand";
     homepage = "https://github.com/bendavid/aiopylgtv";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

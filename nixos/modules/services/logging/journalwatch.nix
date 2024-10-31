@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg = config.services.journalwatch;
   user = "journalwatch";
@@ -15,7 +13,7 @@ let
     priority = ${toString cfg.priority}
     mail_from = ${cfg.mailFrom}
   ''
-  + optionalString (cfg.mailTo != null) ''
+  + lib.optionalString (cfg.mailTo != null) ''
     mail_to = ${cfg.mailTo}
   ''
   + cfg.extraConfig);
@@ -27,7 +25,7 @@ let
   '';
 
   # empty line at the end needed to to separate the blocks
-  mkPatterns = filterBlocks: concatStringsSep "\n" (map (block: ''
+  mkPatterns = filterBlocks: lib.concatStringsSep "\n" (map (block: ''
     ${block.match}
     ${block.filters}
 
@@ -48,18 +46,20 @@ let
 in {
   options = {
     services.journalwatch = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, periodically check the journal with journalwatch and report the results by mail.
         '';
       };
 
-      priority = mkOption {
-        type = types.int;
+      package = lib.mkPackageOption pkgs "journalwatch" { };
+
+      priority = lib.mkOption {
+        type = lib.types.int;
         default = 6;
-        description = lib.mdDoc ''
+        description = ''
           Lowest priority of message to be considered.
           A value between 7 ("debug"), and 0 ("emerg"). Defaults to 6 ("info").
           If you don't care about anything with "info" priority, you can reduce
@@ -71,48 +71,48 @@ in {
       # HACK: this is a workaround for journalwatch's usage of socket.getfqdn() which always returns localhost if
       # there's an alias for the localhost on a separate line in /etc/hosts, or take for ages if it's not present and
       # then return something right-ish in the direction of /etc/hostname. Just bypass it completely.
-      mailFrom = mkOption {
-        type = types.str;
+      mailFrom = lib.mkOption {
+        type = lib.types.str;
         default = "journalwatch@${config.networking.hostName}";
-        defaultText = literalExpression ''"journalwatch@''${config.networking.hostName}"'';
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''"journalwatch@''${config.networking.hostName}"'';
+        description = ''
           Mail address to send journalwatch reports from.
         '';
       };
 
-      mailTo = mkOption {
-        type = types.nullOr types.str;
+      mailTo = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Mail address to send journalwatch reports to.
         '';
       };
 
-      mailBinary = mkOption {
-        type = types.path;
+      mailBinary = lib.mkOption {
+        type = lib.types.path;
         default = "/run/wrappers/bin/sendmail";
-        description = lib.mdDoc ''
+        description = ''
           Sendmail-compatible binary to be used to send the messages.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the journalwatch/config configuration file.
           You can add any commandline argument to the config, without the '--'.
           See `journalwatch --help` for all arguments and their description.
           '';
       };
 
-      filterBlocks = mkOption {
-        type = types.listOf (types.submodule {
+      filterBlocks = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-           match = mkOption {
-              type = types.str;
+           match = lib.mkOption {
+              type = lib.types.str;
               example = "SYSLOG_IDENTIFIER = systemd";
-              description = lib.mdDoc ''
+              description = ''
                 Syntax: `field = value`
                 Specifies the log entry `field` this block should apply to.
                 If the `field` of a message matches this `value`,
@@ -123,13 +123,13 @@ in {
               '';
             };
 
-            filters = mkOption {
-              type = types.str;
+            filters = lib.mkOption {
+              type = lib.types.str;
               example = ''
                 (Stopped|Stopping|Starting|Started) .*
                 (Reached target|Stopped target) .*
               '';
-              description = lib.mdDoc ''
+              description = ''
                 The filters to apply on all messages which satisfy {option}`match`.
                 Any of those messages that match any specified filter will be removed from journalwatch's output.
                 Each filter is an extended Python regular expression.
@@ -175,7 +175,7 @@ in {
         ];
 
 
-        description = lib.mdDoc ''
+        description = ''
           filterBlocks can be defined to blacklist journal messages which are not errors.
           Each block matches on a log entry field, and the filters in that block then are matched
           against all messages with a matching log entry field.
@@ -188,19 +188,19 @@ in {
         '';
       };
 
-      interval = mkOption {
-        type = types.str;
+      interval = lib.mkOption {
+        type = lib.types.str;
         default = "hourly";
-        description = lib.mdDoc ''
+        description = ''
           How often to run journalwatch.
 
           The format is described in systemd.time(7).
         '';
       };
-      accuracy = mkOption {
-        type = types.str;
+      accuracy = lib.mkOption {
+        type = lib.types.str;
         default = "10min";
-        description = lib.mdDoc ''
+        description = ''
           The time window around the interval in which the journalwatch run will be scheduled.
 
           The format is described in systemd.time(7).
@@ -209,7 +209,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${user} = {
       isSystemUser = true;
@@ -240,7 +240,7 @@ in {
         # requires a relative directory name to create beneath /var/lib
         StateDirectory = user;
         StateDirectoryMode = "0750";
-        ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
+        ExecStart = "${lib.getExe cfg.package} mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;

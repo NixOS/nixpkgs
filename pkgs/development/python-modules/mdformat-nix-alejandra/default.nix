@@ -1,36 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mdformat
-, poetry-core
-, pythonOlder
+{
+  lib,
+  alejandra,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mdformat,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-nix-alejandra";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aldoborrero";
-    repo = pname;
-    rev = "${version}";
+    repo = "mdformat-nix-alejandra";
+    rev = "refs/tags/${version}";
     hash = "sha256-jUXApGsxCA+pRm4m4ZiHWlxmVkqCPx3A46oQdtyKz5g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace mdformat_nix_alejandra/__init__.py \
+      --replace-fail '"alejandra"' '"${lib.getExe alejandra}"'
+  '';
 
-  buildInputs = [
-    mdformat
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "mdformat_nix_alejandra"
-  ];
+  propagatedBuildInputs = [ mdformat ];
+
+  pythonImportsCheck = [ "mdformat_nix_alejandra" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Mdformat plugin format Nix code blocks with alejandra";

@@ -1,4 +1,4 @@
-{ lib, ocamlPackages }:
+{ ocamlPackages }:
 
 with ocamlPackages; buildDunePackage {
   pname = "msat-bin";
@@ -9,5 +9,6 @@ with ocamlPackages; buildDunePackage {
 
   meta = msat.meta // {
     description = "SAT solver binary based on the msat library";
+    mainProgram = "msat";
   };
 }

@@ -23,8 +23,8 @@ in
             mkdir -p $out
             cd $out
 
-            echo "nixos" > nixos_1.efi
-            sha256sum nixos_1.efi > SHA256SUMS
+            echo "nixos" > nixos_1.txt
+            sha256sum nixos_1.txt > SHA256SUMS
 
             export GNUPGHOME="$(mktemp -d)"
             cp -R ${gpgKeyring}/* $GNUPGHOME
@@ -39,15 +39,15 @@ in
       systemd.sysupdate = {
         enable = true;
         transfers = {
-          "uki" = {
+          "text-file" = {
             Source = {
               Type = "url-file";
               Path = "http://server/";
-              MatchPattern = "nixos_@v.efi";
+              MatchPattern = "nixos_@v.txt";
             };
             Target = {
-              Path = "/boot/EFI/Linux";
-              MatchPattern = "nixos_@v.efi";
+              Path = "/";
+              MatchPattern = [ "nixos_@v.txt" ];
             };
           };
         };
@@ -61,6 +61,6 @@ in
     server.wait_for_unit("nginx.service")
 
     target.succeed("systemctl start systemd-sysupdate")
-    assert "nixos" in target.wait_until_succeeds("cat /boot/EFI/Linux/nixos_1.efi", timeout=5)
+    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
   '';
 }

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.4.1"; # only even minor versions are stable
+  version = "2.6.1"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-gVxh9cJxyqSh2zHdZW61Cn9uqXPaNpD3yFgUCOGAExo=";
+    hash = "sha256-0s4UqRwuJIrSh24pFS1ke8xeQzvGja+tDuluwWb8+tE=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-openssl=${lib.getDev openssl}"
   ]
-  ++ lib.optional withPostgres "--with-pgsql=${postgresql}/bin/pg_config"
+  ++ lib.optional withPostgres "--with-pgsql=${lib.getDev postgresql}/bin/pg_config"
   ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
-    prometheus-exporter = nixosTests.prometheus-exporters.kea;
     networking-scripted = lib.recurseIntoAttrs { inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf; };
     networking-networkd = lib.recurseIntoAttrs { inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf; };
   };

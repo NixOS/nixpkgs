@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
   preConfigure = ''
-    export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${libmysqlclient}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
     export ICU_INCLUDES="-I${icu.dev}/include";
@@ -43,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced purely-functional web programming language";
+    mainProgram = "urweb";
     homepage    = "http://www.impredicative.com/ur/";
     license     = lib.licenses.bsd3;
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;

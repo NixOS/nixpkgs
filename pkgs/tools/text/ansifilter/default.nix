@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to convert ANSI to other formats";
+    mainProgram = "ansifilter";
     longDescription = ''
       Tool to remove ANSI or convert them to another format
       (HTML, TeX, LaTeX, RTF, Pango or BBCode)
     '';
-    homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.php";
+    homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.Adjective-Object ];
     platforms = platforms.linux ++ platforms.darwin;

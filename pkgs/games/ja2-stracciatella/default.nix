@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   inherit src version;
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ SDL2 fltk rapidjson gtest ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  buildInputs = [ SDL2 fltk rapidjson gtest ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   patches = [
     ./remove-rust-buildstep.patch

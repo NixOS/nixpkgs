@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.rabbitmq;
 
@@ -14,24 +11,33 @@ let
 
 in
 {
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "rabbitmq" "cookie" ] ''
+      This option wrote the Erlang cookie to the store, while it should be kept secret.
+      Please remove it from your NixOS configuration and deploy a cookie securely instead.
+      The renamed `unsafeCookie` must ONLY be used in isolated non-production environments such as NixOS VM tests.
+    '')
+  ];
+
   ###### interface
   options = {
     services.rabbitmq = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the RabbitMQ server, an Advanced Message
           Queuing Protocol (AMQP) broker.
         '';
       };
 
-      package = mkPackageOption pkgs "rabbitmq-server" { };
+      package = lib.mkPackageOption pkgs "rabbitmq-server" { };
 
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         default = "127.0.0.1";
         example = "";
-        description = lib.mdDoc ''
+        description = ''
           IP address on which RabbitMQ will listen for AMQP
           connections.  Set to the empty string to listen on all
           interfaces.  Note that RabbitMQ creates a user named
@@ -43,45 +49,50 @@ in
           configItems."listeners.tcp.1" and it's left for backwards
           compatibility with previous version of this module.
         '';
-        type = types.str;
+        type = lib.types.str;
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 5672;
-        description = lib.mdDoc ''
+        description = ''
           Port on which RabbitMQ will listen for AMQP connections.
         '';
-        type = types.port;
+        type = lib.types.port;
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/rabbitmq";
-        description = lib.mdDoc ''
+        description = ''
           Data directory for rabbitmq.
         '';
       };
 
-      cookie = mkOption {
+      unsafeCookie = lib.mkOption {
         default = "";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           Erlang cookie is a string of arbitrary length which must
           be the same for several nodes to be allowed to communicate.
           Leave empty to generate automatically.
+
+          Setting the cookie via this option exposes the cookie to the store, which
+          is not recommended for security reasons.
+          Only use this option in an isolated non-production environment such as
+          NixOS VM tests.
         '';
       };
 
-      configItems = mkOption {
+      configItems = lib.mkOption {
         default = { };
-        type = types.attrsOf types.str;
-        example = literalExpression ''
+        type = lib.types.attrsOf lib.types.str;
+        example = lib.literalExpression ''
           {
             "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
             "auth_backends.1.authz" = "rabbit_auth_backend_internal";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested
           data structures. This is known as the `rabbitmq.conf` file,
@@ -98,10 +109,10 @@ in
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           Verbatim advanced configuration file contents using the Erlang syntax.
           This is also known as the `advanced.config` file or the old config format.
 
@@ -116,24 +127,24 @@ in
         '';
       };
 
-      plugins = mkOption {
+      plugins = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
-        description = lib.mdDoc "The names of plugins to enable";
+        type = lib.types.listOf lib.types.str;
+        description = "The names of plugins to enable";
       };
 
-      pluginDirs = mkOption {
+      pluginDirs = lib.mkOption {
         default = [ ];
-        type = types.listOf types.path;
-        description = lib.mdDoc "The list of directories containing external plugins";
+        type = lib.types.listOf lib.types.path;
+        description = "The list of directories containing external plugins";
       };
 
       managementPlugin = {
-        enable = mkEnableOption (lib.mdDoc "the management plugin");
-        port = mkOption {
+        enable = lib.mkEnableOption "the management plugin";
+        port = lib.mkOption {
           default = 15672;
-          type = types.port;
-          description = lib.mdDoc ''
+          type = lib.types.port;
+          description = ''
             On which port to run the management plugin
           '';
         };
@@ -143,7 +154,7 @@ in
 
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # This is needed so we will have 'rabbitmqctl' in our PATH
     environment.systemPackages = [ cfg.package ];
@@ -161,13 +172,13 @@ in
     users.groups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
     services.rabbitmq.configItems = {
-      "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
-    } // optionalAttrs cfg.managementPlugin.enable {
+      "listeners.tcp.1" = lib.mkDefault "${cfg.listenAddress}:${toString cfg.port}";
+    } // lib.optionalAttrs cfg.managementPlugin.enable {
       "management.tcp.port" = toString cfg.managementPlugin.port;
       "management.tcp.ip" = cfg.listenAddress;
     };
 
-    services.rabbitmq.plugins = optional cfg.managementPlugin.enable "rabbitmq_management";
+    services.rabbitmq.plugins = lib.optional cfg.managementPlugin.enable "rabbitmq_management";
 
     systemd.services.rabbitmq = {
       description = "RabbitMQ Server";
@@ -186,11 +197,11 @@ in
         RABBITMQ_LOGS = "-";
         SYS_PREFIX = "";
         RABBITMQ_CONFIG_FILE = config_file;
-        RABBITMQ_PLUGINS_DIR = concatStringsSep ":" cfg.pluginDirs;
+        RABBITMQ_PLUGINS_DIR = lib.concatStringsSep ":" cfg.pluginDirs;
         RABBITMQ_ENABLED_PLUGINS_FILE = pkgs.writeText "enabled_plugins" ''
-          [ ${concatStringsSep "," cfg.plugins} ].
+          [ ${lib.concatStringsSep "," cfg.plugins} ].
         '';
-      } // optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
+      } // lib.optionalAttrs (cfg.config != "") { RABBITMQ_ADVANCED_CONFIG_FILE = advanced_config_file; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/rabbitmq-server";
@@ -209,9 +220,8 @@ in
       };
 
       preStart = ''
-        ${optionalString (cfg.cookie != "") ''
-            echo -n ${cfg.cookie} > ${cfg.dataDir}/.erlang.cookie
-            chmod 600 ${cfg.dataDir}/.erlang.cookie
+        ${lib.optionalString (cfg.unsafeCookie != "") ''
+          install -m 600 <(echo -n ${cfg.unsafeCookie}) ${cfg.dataDir}/.erlang.cookie
         ''}
       '';
     };

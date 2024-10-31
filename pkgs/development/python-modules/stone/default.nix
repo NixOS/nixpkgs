@@ -1,38 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, ply
-, pytestCheckHook
-, six
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  mock,
+  packaging,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
+  patches = [
+    # fix distutils issue
+    # fix versions in tests to conform pep 440
+    # See https://github.com/dropbox/stone/pull/334
+    (fetchpatch {
+      name = "no-distutils.patch";
+      url = "https://github.com/dropbox/stone/commit/f772d8d3b7e2ce62b14b4fb208a478bc8e54c7f2.patch";
+      hash = "sha256-SH4gG5S13n/pXppm62LvH9poGfeQGGonW7bkzdYh73Q=";
+    })
+    (fetchpatch {
+      name = "fix-test-pep-440.patch";
+      url = "https://github.com/dropbox/stone/commit/f36de56b1f87eae61829258b2f16aa8319bbcc5c.patch";
+      hash = "sha256-sBJukNk02RmQQza1qhLAkyx1OJRck0/zQOeRaXD9tkY=";
+    })
+  ];
+
   src = fetchFromGitHub {
     owner = "dropbox";
-    repo = pname;
+    repo = "stone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
+    hash = "sha256-Og0hUUCCd9wRdHUhZBl62rDAunP2Bph5COsCw/T1kUA=";
   };
 
   postPatch = ''
-    # https://github.com/dropbox/stone/issues/288
-    substituteInPlace stone/frontend/ir_generator.py \
-      --replace "inspect.getargspec" "inspect.getfullargspec"
     substituteInPlace setup.py \
-      --replace "'pytest-runner == 5.2.0'," ""
+      --replace-fail "'pytest-runner == 5.3.2'," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ply
     six
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -40,19 +60,14 @@ buildPythonPackage rec {
     mock
   ];
 
-  disabledTests = [
-    "test_type_name_with_module"
-  ];
-
-  pythonImportsCheck = [
-    "stone"
-  ];
+  pythonImportsCheck = [ "stone" ];
 
   meta = with lib; {
     description = "Official Api Spec Language for Dropbox";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
+    mainProgram = "stone";
   };
 }

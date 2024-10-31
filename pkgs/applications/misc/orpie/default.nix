@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A Curses-based RPN calculator";
+    description = "Curses-based RPN calculator";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ obadz ];
   };

@@ -14,7 +14,7 @@
 , libXext
 , systemd
 , pantheon
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/the-cavalry/light-locker";
-    description = "A simple session-locker for LightDM";
+    description = "Simple session-locker for LightDM";
     longDescription = ''
       A simple locker (forked from gnome-screensaver) that aims to
       have simple, sane, secure defaults and be well integrated with
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       It relies on LightDM for locking and unlocking your session via
       ConsoleKit/UPower or logind/systemd.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };

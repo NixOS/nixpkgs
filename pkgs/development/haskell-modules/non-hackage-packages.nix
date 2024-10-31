@@ -1,3 +1,5 @@
+{ pkgs, haskellLib }:
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -14,6 +16,8 @@ self: super: {
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
   cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+
+  ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };

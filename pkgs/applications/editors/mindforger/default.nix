@@ -6,7 +6,7 @@
 , qmake
 , qtbase
 , qtwebengine
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pghsw8kwvjhg3jpmjs0n892h2l0pm0cs6ymi8b23fwk0kfj67rd";
   };
 
-  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ qmake wrapGAppsHook3 wrapQtAppsHook ];
   buildInputs = [ qtbase qtwebengine cmark-gfm ];
 
   doCheck = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "CONFIG+=mfwebengine"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir "$out"/Applications
     mv app/mindforger.app "$out"/Applications/
   '';

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix broken install command
     substituteInPlace Makefile --replace "-pm755" "-pDm755"
   '';
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast scan of the Internet";
+    mainProgram = "masscan";
     homepage = "https://github.com/robertdavidgraham/masscan";
     changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
     license = licenses.agpl3Only;

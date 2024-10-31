@@ -27,6 +27,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

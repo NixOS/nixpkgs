@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
+    hash = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
   postPatch = ''
@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
     setuptools
   ];
 

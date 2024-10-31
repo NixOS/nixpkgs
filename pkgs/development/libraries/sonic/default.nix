@@ -19,12 +19,13 @@ stdenv.mkDerivation {
 
   postInstall = ''
     installManPage sonic.1
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
   '';
 
   meta = with lib; {
     description = "Simple library to speed up or slow down speech";
+    mainProgram = "sonic";
     homepage = "https://github.com/waywardgeek/sonic";
     license = licenses.asl20;
     maintainers = with maintainers; [ aske ];

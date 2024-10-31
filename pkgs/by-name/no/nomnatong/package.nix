@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nomnatong";
-  version = "5.09";
+  version = "5.12";
 
   src = fetchFromGitHub {
     owner = "nomfoundation";
     repo = "font";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WkDvneCWuAS0/D+WUhd1F6dqpIuSAMK598mSRbNf6/8=";
+    hash = "sha256-DMKL5a830V07U4Pogp2EQtGQUJ26d3F4u7ce5aWPAI8=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +46,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://nomfoundation.org/nom-tools/Nom-Font";
-    description = "The Hán-Nôm Coded Character Set and Nom Na Tong Regular Reference Font";
+    description = "Hán-Nôm Coded Character Set and Nom Na Tong Regular Reference Font";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,7 +1,5 @@
-{ lib
-, rustPlatform
+{ rustPlatform
 , libdeltachat
-, perl
 , pkg-config
 }:
 
@@ -11,9 +9,12 @@ rustPlatform.buildRustPackage {
   inherit (libdeltachat) version src cargoLock buildInputs;
 
   nativeBuildInputs = [
-    perl
     pkg-config
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   cargoBuildFlags = [ "--package" "deltachat-repl" ];
 

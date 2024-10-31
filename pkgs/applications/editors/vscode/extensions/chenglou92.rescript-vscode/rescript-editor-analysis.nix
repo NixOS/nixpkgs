@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, bash, ocaml, ocamlPackages, dune_3, version }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  ocamlPackages,
+  dune_3,
+  version,
+}:
 
 stdenv.mkDerivation {
   pname = "rescript-editor-analysis";
@@ -8,27 +16,30 @@ stdenv.mkDerivation {
     owner = "rescript-lang";
     repo = "rescript-vscode";
     rev = version;
-    sha256 = "sha256-+Ht8qWwxtFWHFMiV/aoZIs2S3SxkOWgdwSKN+akp/LU=";
+    hash = "sha256-v+qCVge57wvA97mtzbxAX9Fvi7ruo6ZyIC14O8uWl9Y=";
   };
 
-  nativeBuildInputs = [ ocaml dune_3 ocamlPackages.cppo ];
+  nativeBuildInputs = [
+    ocaml
+    dune_3
+    ocamlPackages.cppo
+  ];
 
-  # Skip testing phases because they need to download and install node modules
-  postPatch = ''
-    cd analysis
-    substituteInPlace Makefile \
-      --replace "build: build-analysis-binary build-reanalyze build-tests" "build: build-analysis-binary" \
-      --replace "test: test-analysis-binary test-reanalyze" "test: test-analysis-binary"
+  buildPhase = ''
+    dune build -p analysis
   '';
 
   installPhase = ''
-    install -D -m0555 rescript-editor-analysis.exe $out/bin/rescript-editor-analysis.exe
+    install -D -m0555 _build/default/analysis/bin/main.exe $out/bin/rescript-editor-analysis.exe
   '';
 
   meta = {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
-    maintainers = [ lib.maintainers.dlip lib.maintainers.jayesh-bhoot ];
+    maintainers = [
+      lib.maintainers.dlip
+      lib.maintainers.jayesh-bhoot
+    ];
     license = lib.licenses.mit;
   };
 }

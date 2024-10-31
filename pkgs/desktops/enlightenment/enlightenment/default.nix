@@ -16,7 +16,7 @@
 , udisks2
 , waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, pulseSupport ? !stdenv.hostPlatform.isDarwin, libpulseaudio
 , directoryListingUpdater
 }:
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
-    description = "The Compositing Window Manager and Desktop Shell";
+    description = "Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;

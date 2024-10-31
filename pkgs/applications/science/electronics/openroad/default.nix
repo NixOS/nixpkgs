@@ -8,14 +8,13 @@
 , flex
 , git
 , python3
-, swig4
+, swig
 , boost179
 , cbc       # for clp
 , cimg
 , clp       # for or-tools
 , eigen
 , glpk
-, gtest
 , lcov
 , lemon-graph
 , libjpeg
@@ -27,7 +26,7 @@
 , readline
 , spdlog
 , tcl
-, tcllib
+, tclPackages
 , xorg
 , yosys
 , zlib
@@ -52,7 +51,7 @@ mkDerivation rec {
     flex
     git
     pkg-config
-    swig4
+    swig
   ];
 
   buildInputs = [
@@ -73,7 +72,7 @@ mkDerivation rec {
     readline
     spdlog
     tcl
-    tcllib
+    tclPackages.tcllib
     yosys
     xorg.libX11
     zlib

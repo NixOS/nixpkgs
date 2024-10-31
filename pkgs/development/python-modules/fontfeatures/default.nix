@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, beziers
-, fonttools
-, fs
-, glyphtools
-, lxml
-, pytestCheckHook
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beziers,
+  fonttools,
+  fs,
+  glyphtools,
+  lxml,
+  pytestCheckHook,
+  youseedee,
 }:
 
 buildPythonPackage rec {
@@ -31,10 +31,7 @@ buildPythonPackage rec {
     youseedee
   ];
 
-  doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTestPaths = [
     # These tests require babelfont but we have to leave it out and skip them
     # to break the cyclic dependency with babelfont.

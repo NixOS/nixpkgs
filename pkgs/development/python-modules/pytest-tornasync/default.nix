@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, pytest, tornado }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytest,
+  tornado,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-tornasync";
@@ -18,9 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    tornado
-  ];
+  propagatedBuildInputs = [ tornado ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,6 +41,6 @@ buildPythonPackage rec {
     description = "py.test plugin for testing Python 3.5+ Tornado code";
     homepage = "https://github.com/eukaryote/pytest-tornasync";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

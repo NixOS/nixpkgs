@@ -1,35 +1,35 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go
 , git
+, go
 , enumer
 , mockgen
 , nodejs
 , npmHooks
 , nix-update-script
 , nixosTests
-, stdenv
 }:
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.124.0";
+  version = "0.131.3";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-x6BsW4INahGFbFNprE1mZjlW/EoEMZgDIJACd9F+g6A=";
+    hash = "sha256-HbZ/KlsiuHVsDKvCUz7+Xq6Y+XkfZ9Oe7tD3rfZrRRE=";
   };
 
-  vendorHash = "sha256-/TlbjyKGpVqkQAStx8QaAxpWsVYs0yxBMantqelYkhw=";
+  vendorHash = "sha256-hPCTAK4u79r9EoHkv6g1QvkRDZ95hXzyiiQpRD+0aLQ=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-Tl08gscv8WaMG4XfIVUWqj76xICWwUTBDK0VSs2kwMk=";
+    hash = "sha256-4PBlN2pbr7dzZNQzh/P0kBlsg6ut2XPwsfFB132hWO0=";
   };
 
   nativeBuildInputs = [
@@ -67,13 +67,17 @@ buildGoModule rec {
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # tries to bind to local network, doesn't work in darwin sandbox
+  doCheck = !stdenv.hostPlatform.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  preCheck = ''
-    # requires network access
-    rm meter/template_test.go
-    rm charger/template_test.go
-  '';
+  checkFlags = let
+    skippedTests = [
+      # network access
+      "TestOctopusConfigParse"
+      "TestTemplates"
+      "TestOcpp"
+    ];
+  in
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

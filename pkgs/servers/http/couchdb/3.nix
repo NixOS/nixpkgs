@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
     substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
     # (There are warnings, but no hard errors, and it produces an empty dylib.)
     substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
+    description = "Database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "https://couchdb.apache.org";
     license = licenses.asl20;
     platforms = platforms.all;

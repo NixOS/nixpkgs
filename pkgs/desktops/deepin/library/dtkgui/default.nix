@@ -1,79 +1,80 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, qttools
-, doxygen
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, qtimageformats
-, lxqt
-, librsvg
-, freeimage
-, libraw
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  doxygen,
+  libsForQt5,
+  dtkcore,
+  lxqt,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.17";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ssCVMFCE1vhucYMxXkEZV5YlFxT1JdYGqrzILhWX1XI=";
+    hash = "sha256-F3tuLV1hWoUZle0O66MQ+Ew9LRnP6N++HaqS88xBLRY=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
-
-    (fetchpatch {
-      name = "fix_svg_with_filter_attribute_rendering_exception.patch";
-      url = "https://github.com/linuxdeepin/dtkgui/commit/f2c9327eb4989ab8ea96af7560c67d1cada794de.patch";
-      hash = "sha256-lfg09tgS4vPuYachRbHdaMYKWdZZ0lP0Hxakkr9JKGs=";
-    })
   ];
+
+  postPatch = ''
+    substituteInPlace src/util/dsvgrenderer.cpp \
+      --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+  '';
 
   nativeBuildInputs = [
     cmake
-    qttools
     doxygen
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
     dtkcore
-    qtimageformats
+    libsForQt5.qtimageformats
   ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${libsForQt5.qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DGui/bin/*; do
+      wrapQtApp $binary
+    done
+  '';
 
   meta = with lib; {
     description = "Deepin Toolkit, gui module for DDE look and feel";

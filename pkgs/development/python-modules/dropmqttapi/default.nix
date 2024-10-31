@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dropmqttapi";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "ChandlerSystems";
     repo = "dropmqttapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5UnjIv57b4JV/vFyQpe+AS4e/fiE2y7ynZx5g6+oSyQ=";
+    hash = "sha256-njReF9Mu5E9o5WcbK60CCBWaIhZ3tpQHHlY/iEyyHGg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dropmqttapi"
-  ];
+  pythonImportsCheck = [ "dropmqttapi" ];
 
   meta = with lib; {
     description = "Python MQTT API for DROP water management products";

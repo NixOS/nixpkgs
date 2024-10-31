@@ -2,6 +2,7 @@
 , autoreconfHook, pkg-config
 , glibcLocales, kmod, coreutils, perl
 , dmidecode, hwdata, sqlite, libtraceevent
+, fetchpatch
 , nixosTests
 }:
 
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
   };
 
+  patches = [
+    (fetchpatch { # fix #295002 (segfault on AMD), will be in the release after 0.8.0
+      name = "fix crash on AMD";
+      url = "https://github.com/mchehab/rasdaemon/commit/f1ea76375281001cdf4a048c1a4a24d86c6fbe48.patch";
+      hash = "sha256-1VPDTrAsvZGiGbh52EUdG6tYV/n6wUS0mphOSXzran0=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
@@ -27,7 +36,7 @@ stdenv.mkDerivation rec {
     libtraceevent
     (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
   ]
-  ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
+  ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ dmidecode ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
   ''
-  + lib.optionalString (!stdenv.isAarch64) ''
+  + lib.optionalString (!stdenv.hostPlatform.isAarch64) ''
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';

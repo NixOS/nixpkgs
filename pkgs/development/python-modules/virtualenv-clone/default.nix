@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, virtualenv
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  virtualenv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,24 +21,21 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/__init__.py \
       --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
-      --replace "'3.9', '3.10']" "'3.9', '3.10', '3.11']" # if the Python version used isn't in this list, tests fail
+      --replace "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
       --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
   '';
 
-  propagatedBuildInputs = [
-    virtualenv
-  ];
+  propagatedBuildInputs = [ virtualenv ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
+    mainProgram = "virtualenv-clone";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -11,7 +11,6 @@
 , libdrm
 , polkit
 , libxmlb
-, glib
 , gusb
 , sqlite
 , libarchive
@@ -50,6 +49,7 @@
 , libmbim
 , libcbor
 , xz
+, nix-update-script
 , enableFlashrom ? false
 , enablePassim ? false
 }:
@@ -67,7 +67,7 @@ let
   haveDell = isx86;
 
   # only redfish for x86_64
-  haveRedfish = stdenv.isx86_64;
+  haveRedfish = stdenv.hostPlatform.isx86_64;
 
   # only use msr if x86 (requires cpuid)
   haveMSR = isx86;
@@ -93,7 +93,7 @@ let
 
   test-firmware =
     let
-      version = "unstable-2022-04-02";
+      version = "0-unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
@@ -121,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.12";
+  version = "1.9.25";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-hPRp61m/XTXFacYkBOb4SsG4fcFvWrdMfc+sxLk5/sQ=";
+    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
   };
 
   patches = [
@@ -214,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Defi_os_dir=nixos"
     "-Dplugin_modem_manager=enabled"
+    "-Dvendor_metadata=true"
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ] ++ lib.optionals (!enablePassim) [
@@ -228,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_msr=disabled"
   ];
 
-  # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+  # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
 
   doCheck = true;
@@ -325,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"
@@ -339,12 +341,6 @@ stdenv.mkDerivation (finalAttrs: {
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
-    ];
-
-    # DisabledPlugins key in fwupd/daemon.conf
-    defaultDisabledPlugins = [
-      "test"
-      "test_ble"
     ];
 
     # For updating.
@@ -372,21 +368,16 @@ stdenv.mkDerivation (finalAttrs: {
           assert len(package_etc - passthru_etc) == 0, f'fwupd package contains the following paths in /etc that are not listed in passthru.filesInstalledToEtc: {package_etc - passthru_etc}'
           assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
 
-          config = configparser.RawConfigParser()
-          config.read('${finalAttrs.finalPackage}/etc/fwupd/fwupd.conf')
-          package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
-          passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
-          assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
-
           pathlib.Path(os.getenv('out')).touch()
         '';
       };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ rvdp ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ rvdp ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,29 +1,29 @@
-{ lib
-, android-backup
-, appdirs
-, attrs
-, buildPythonPackage
-, click
-, construct
-, croniter
-, cryptography
-, defusedxml
-, fetchPypi
-, fetchpatch
-, importlib-metadata
-, micloud
-, netifaces
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, pyyaml
-, tqdm
-, zeroconf
+{
+  lib,
+  android-backup,
+  appdirs,
+  attrs,
+  buildPythonPackage,
+  click,
+  construct,
+  croniter,
+  cryptography,
+  defusedxml,
+  fetchPypi,
+  fetchpatch,
+  importlib-metadata,
+  micloud,
+  netifaces,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  tqdm,
+  zeroconf,
 }:
-
 
 buildPythonPackage rec {
   pname = "python-miio";
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  nativeBuildInputs = [ poetry-core ];
 
   patches = [
     (fetchpatch {
@@ -64,9 +64,7 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -74,9 +72,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "miio"
-  ];
+  pythonImportsCheck = [ "miio" ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";

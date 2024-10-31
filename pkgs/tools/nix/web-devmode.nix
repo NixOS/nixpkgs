@@ -1,13 +1,21 @@
 {
-  pkgs,
+  lib,
+  findutils,
+  mkShell,
+  nodejs_latest,
+  parallel,
+  rsync,
+  watchexec,
+  writeShellScriptBin,
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
   buildArgs,
   # what path to open a browser at
   open,
-}: let
-  inherit (pkgs) lib;
+}:
+let
+  inherit (nodejs_latest.pkgs) live-server;
 
-  error_page = pkgs.writeShellScriptBin "error_page" ''
+  error_page = writeShellScriptBin "error_page" ''
     echo "<!DOCTYPE html>
     <html>
     <head>
@@ -30,7 +38,7 @@
   # Using rsync here, instead of `cp`, to get as close to an atomic
   # directory copy operation as possible. `--delay-updates` should
   # also go towards that.
-  build_and_copy = pkgs.writeShellScriptBin "build_and_copy" ''
+  build_and_copy = writeShellScriptBin "build_and_copy" ''
     set -euxo pipefail
 
     set +e
@@ -41,7 +49,7 @@
     if [ $exit_status -eq 0 ];
     then
       # setting permissions to be able to clean up
-      ${lib.getBin pkgs.rsync}/bin/rsync \
+      ${lib.getBin rsync}/bin/rsync \
         --recursive \
         --chmod=u=rwX \
         --delete-before \
@@ -53,7 +61,7 @@
       ${lib.getBin error_page}/bin/error_page "$stderr" > $error_page_absolute
       set -x
 
-      ${lib.getBin pkgs.findutils}/bin/find $serve \
+      ${lib.getBin findutils}/bin/find $serve \
         -type f \
         ! -name $error_page_relative \
         -delete
@@ -61,10 +69,10 @@
   '';
 
   # https://watchexec.github.io/
-  watcher = pkgs.writeShellScriptBin "watcher" ''
+  watcher = writeShellScriptBin "watcher" ''
     set -euxo pipefail
 
-    ${lib.getBin pkgs.watchexec}/bin/watchexec \
+    ${lib.getBin watchexec}/bin/watchexec \
       --shell=none \
       --restart \
       --print-events \
@@ -74,10 +82,10 @@
   # A Rust alternative to live-server exists, but it was not in nixpkgs.
   # `--no-css-inject`: without this it seems that only CSS is auto-reloaded.
   # https://www.npmjs.com/package/live-server
-  server = pkgs.writeShellScriptBin "server" ''
+  server = writeShellScriptBin "server" ''
     set -euxo pipefail
 
-    ${lib.getBin pkgs.nodePackages_latest.live-server}/bin/live-server \
+    ${lib.getBin live-server}/bin/live-server \
       --host=127.0.0.1 \
       --verbose \
       --no-css-inject \
@@ -86,32 +94,33 @@
       $serve
   '';
 
-  devmode =
-    pkgs.writeShellScriptBin "devmode"
-    ''
-      set -euxo pipefail
+  devmode = writeShellScriptBin "devmode" ''
+    set -euxo pipefail
 
-      function handle_exit {
-        rm -rf "$tmpdir"
-      }
+    function handle_exit {
+      rm -rf "$tmpdir"
+    }
 
-      tmpdir=$(mktemp -d)
-      trap handle_exit EXIT
+    tmpdir=$(mktemp -d)
+    trap handle_exit EXIT
 
-      export out_link="$tmpdir/result"
-      export serve="$tmpdir/serve"
-      mkdir $serve
-      export error_page_relative=error.html
-      export error_page_absolute=$serve/$error_page_relative
-      ${lib.getBin error_page}/bin/error_page "building …" > $error_page_absolute
+    export out_link="$tmpdir/result"
+    export serve="$tmpdir/serve"
+    mkdir $serve
+    export error_page_relative=error.html
+    export error_page_absolute=$serve/$error_page_relative
+    ${lib.getBin error_page}/bin/error_page "building …" > $error_page_absolute
 
-      ${lib.getBin pkgs.parallel}/bin/parallel \
-        --will-cite \
-        --line-buffer \
-        --tagstr '{/}' \
-        ::: \
-        "${lib.getBin watcher}/bin/watcher" \
-        "${lib.getBin server}/bin/server"
-    '';
+    ${lib.getBin parallel}/bin/parallel \
+      --will-cite \
+      --line-buffer \
+      --tagstr '{/}' \
+      ::: \
+      "${lib.getBin watcher}/bin/watcher" \
+      "${lib.getBin server}/bin/server"
+  '';
 in
-  devmode
+mkShell {
+  name = "web-devmode";
+  packages = [ devmode ];
+}

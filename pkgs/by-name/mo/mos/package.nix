@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}.dmg";
-    sha256 = "38ea33e867815506414323484147b882b6d97df4af9759bca0a64d98c95029b3";
+    hash = "sha256-OOoz6GeBVQZBQyNIQUe4grbZffSvl1m8oKZNmMlQKbM=";
   };
   sourceRoot = ".";
 
@@ -27,8 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Smooths scrolling and set mouse scroll directions independently";
     homepage = "http://mos.caldis.me/";
+    changelog = "https://github.com/Caldis/Mos/releases/tag/${finalAttrs.version}";
     license = licenses.cc-by-nc-40;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
   };

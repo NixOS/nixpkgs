@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/yrp604/rappel";
-    description = "A pretty janky assembly REPL";
+    description = "Pretty janky assembly REPL";
+    mainProgram = "rappel";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.pamplemousse ];
     platforms = platforms.linux;

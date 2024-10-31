@@ -33,10 +33,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ util-linux ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ util-linux ];
 
   meta = with lib; {
     description = "Encryption utility";
+    mainProgram = "scrypt";
     homepage    = "https://www.tarsnap.com/scrypt.html";
     license     = licenses.bsd2;
     platforms   = platforms.all;

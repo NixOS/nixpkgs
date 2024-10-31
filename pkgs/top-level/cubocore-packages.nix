@@ -74,7 +74,7 @@ let
     };
 
     coreterminal = libsForQt5.callPackage ../applications/misc/cubocore-packages/coreterminal {
-      inherit (lxqt) qtermwidget;
+      qtermwidget = lxqt.qtermwidget_1_4;
       inherit libcprime libcsys;
     };
 

@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CMake modules needed to build Open WebOS components";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

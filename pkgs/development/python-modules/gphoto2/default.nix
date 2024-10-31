@@ -1,8 +1,12 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
-, pkg-config
-, libgphoto2
-, setuptools
-, toml
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  pkg-config,
+  libgphoto2,
+  setuptools,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-EXtXlhBx2jCKtMl7HmN87liqiHVAFSeXr11y830AlpY=";
   };
 
-  nativeBuildInputs = [ pkg-config setuptools toml ];
+  nativeBuildInputs = [
+    pkg-config
+    setuptools
+    toml
+  ];
 
   buildInputs = [ libgphoto2 ];
 
@@ -34,6 +42,6 @@ buildPythonPackage rec {
     description = "Python interface to libgphoto2";
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

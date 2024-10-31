@@ -141,7 +141,7 @@ For BLAS/LAPACK switching to work correctly, all packages must depend on `blas` 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation {
-  ...
+  # ...
 }
 ```
 

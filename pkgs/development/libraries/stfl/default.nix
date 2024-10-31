@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
   ''
   # upstream builds shared library unconditionally. Also, it has no
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.clifford.at/stfl/";
-    description = "A library which implements a curses-based widget set for text terminals";
+    description = "Library which implements a curses-based widget set for text terminals";
     maintainers = with lib.maintainers; [ lovek323 ];
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;

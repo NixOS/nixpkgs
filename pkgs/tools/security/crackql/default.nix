@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -35,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GraphQL password brute-force and fuzzing utility";
+    mainProgram = "crackql";
     homepage = "https://github.com/nicholasaleks/CrackQL";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

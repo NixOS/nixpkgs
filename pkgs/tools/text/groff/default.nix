@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl
+{ lib, stdenv, fetchurl, perl
 , enableGhostscript ? false
 , ghostscript, gawk, libX11, libXaw, libXt, libXmu # for postscript and html output
 , enableHtml ? false, psutils, netpbm # for html output

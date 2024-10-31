@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   makefile = "unix/Makefile";
-  buildFlags = if stdenv.isCygwin then [ "cygwin" ] else [ "generic" ];
+  buildFlags = if stdenv.hostPlatform.isCygwin then [ "cygwin" ] else [ "generic" ];
   installFlags = [
     "prefix=${placeholder "out"}"
     "INSTALL=cp"
@@ -33,17 +33,22 @@ stdenv.mkDerivation rec {
     ./fix-memset-detection.patch
     # Implicit declaration of `closedir` and `opendir` cause dirent detection to fail with clang 16.
     ./fix-implicit-declarations.patch
-  ] ++ lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
+    # Buffer overflow on Unicode characters in path names
+    # https://bugzilla.redhat.com/show_bug.cgi?id=2165653
+    ./buffer-overflow-on-utf8-rh-bug-2165653.patch
+    # Fixes forward declaration errors with timezone.c
+    ./fix-time.h-not-included.patch
+  ] ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
   buildInputs = lib.optional enableNLS libnatspec
-    ++ lib.optional stdenv.isCygwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isCygwin libiconv;
 
   meta = with lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
     homepage = "http://www.info-zip.org";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     mainProgram = "zip";
   };
 }

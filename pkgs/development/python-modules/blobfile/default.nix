@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, filelock
-, lxml
-, pycryptodomex
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  filelock,
+  lxml,
+  pycryptodomex,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "blobfile";
-  version = "2.0.2";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "christopher-hesse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vVoiNIN/LNdbedaOQ+gtj4jhzmrGri49fftHKG+K/fg=";
+    hash = "sha256-/v48rLvlN4lsfWKJvXRNuIO6jdsCgRcSPlJzdOfl3xk=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +33,7 @@ buildPythonPackage rec {
   # Tests require a running Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "blobfile"
-  ];
+  pythonImportsCheck = [ "blobfile" ];
 
   meta = with lib; {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";

@@ -1,54 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, typing-extensions
-, wsproto
-, toml
-, h2
-, priority
-, mock
-, poetry-core
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  exceptiongroup,
+  h11,
+  h2,
+  priority,
+  wsproto,
+  poetry-core,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Hypercorn";
-  version = "0.14.3";
-  disabled = pythonOlder "3.7";
+  pname = "hypercorn";
+  version = "0.16.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
-    repo = pname;
+    repo = "Hypercorn";
     rev = version;
-    hash = "sha256-ECREs8UwqTWUweUrwnUwpVotCII2v4Bz7ZCk3DSAd8I=";
+    hash = "sha256-pIUZCQmC3c6FiV0iMMwJGs9TMi6B/YM+vaSx//sAmKE=";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ wsproto toml h2 priority ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  dependencies = [
+    exceptiongroup
+    h11
+    h2
+    priority
+    wsproto
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
+  ];
+
+  disabledTests = [
+    # https://github.com/pgjones/hypercorn/issues/217
+    "test_startup_failure"
+  ];
 
   pythonImportsCheck = [ "hypercorn" ];
 
   meta = with lib; {
     homepage = "https://github.com/pgjones/hypercorn";
-    description = "The ASGI web server inspired by Gunicorn";
+    description = "ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];
   };

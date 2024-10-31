@@ -1,8 +1,15 @@
-{ buildPecl, lib, pcre2, php, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  pcre2,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   version = "1.5.0";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "ds";
 
@@ -17,7 +24,7 @@ in buildPecl {
 
   meta = with lib; {
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
-    description = "An extension providing efficient data structures for PHP";
+    description = "Extension providing efficient data structures for PHP";
     license = licenses.mit;
     homepage = "https://github.com/php-ds/ext-ds";
     maintainers = teams.php.members;

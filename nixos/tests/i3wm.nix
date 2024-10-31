@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes.machine = { lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
-    services.xserver.displayManager.defaultSession = lib.mkForce "none+i3";
+    services.displayManager.defaultSession = lib.mkForce "none+i3";
     services.xserver.windowManager.i3.enable = true;
   };
 

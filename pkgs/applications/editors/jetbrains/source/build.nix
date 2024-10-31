@@ -30,7 +30,7 @@
 
 let
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-17;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -79,7 +79,7 @@ let
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ glib xorg.libX11 libdbusmenu ];
     inherit src;
-    sourceRoot = "source/native/LinuxGlobalMenu";
+    sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
     postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
     passthru.patched-libdbusmenu = libdbusmenu-jb;
@@ -97,10 +97,10 @@ let
     pname = "fsnotifier";
     version = buildVer;
     inherit src;
-    sourceRoot = "source/native/fsNotifier/linux";
+    sourceRoot = "${src.name}/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
-      cc -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
+      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
       runHook postBuild
     '';
     installPhase = ''
@@ -115,8 +115,7 @@ let
     pname = "restarter";
     version = buildVer;
     inherit src;
-    patches = [ ../patches/restarter-no-static-crt-override.patch ];
-    sourceRoot = "source/native/restarter";
+    sourceRoot = "${src.name}/native/restarter";
     cargoHash = restarterHash;
   };
 
@@ -139,7 +138,7 @@ let
     pname = "jps-bootstrap";
     version = buildVer;
     inherit src;
-    sourceRoot = "source/platform/jps-bootstrap";
+    sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [ ant makeWrapper jbr ];
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
@@ -188,11 +187,11 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "1.9.10";
+      version = "1.9.22";
     in
     fetchurl {
       url = repoUrl + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar";
-      hash = "sha256-gpB4lg6wailtxSgPyyOrarXCL9+DszojaYGC4ULgU3c=";
+      hash = "sha256-ZPfEceGoIChDmjIAjjhDZpyMWQ7/DtP9Ll4YIrZN+PM=";
     };
 
     targetClass = if buildType == "pycharm" then "intellij.pycharm.community.build" else "intellij.idea.community.build";
@@ -231,7 +230,7 @@ stdenvNoCC.mkDerivation rec {
       -e 's|MAVEN_REPO_HERE|${mvnRepo}/.m2/repository/|' \
       -e 's|MAVEN_PATH_HERE|${maven}/maven|' \
       -i build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
-    echo '${buildVer}' > build.txt
+    echo '${buildVer}.SNAPSHOT' > build.txt
   '';
 
   configurePhase = ''

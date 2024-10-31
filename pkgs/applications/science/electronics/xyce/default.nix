@@ -17,14 +17,12 @@
 , withMPI ? false
   # for doc
 , texliveMedium
-, pandoc
 , enableDocs ? true
   # for tests
 , bash
 , bc
 , openssh # required by MPI
 , perl
-, perlPackages
 , python3
 , enableTests ? true
 }:
@@ -175,7 +173,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
     longDescription = ''
       Xyce is a SPICE-compatible, high-performance analog circuit simulator,

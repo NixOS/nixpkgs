@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-x6lrkCumEpLoGMILCBBhnWuBps21C8wauS1QrE2yCn8=";
   };
 
-  propagatedBuildInputs = [ requests pillow ];
+  propagatedBuildInputs = [
+    requests
+    pillow
+  ];
 
   pythonImportsCheck = [ "staticmap" ];
 
@@ -23,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A small, python-based library for creating map images with lines and markers";
+    description = "Small, python-based library for creating map images with lines and markers";
     homepage = "https://pypi.org/project/staticmap/";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ traxys ];

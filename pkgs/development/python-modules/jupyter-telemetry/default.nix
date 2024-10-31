@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python-json-logger
-, jsonschema
-, ruamel-yaml
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python-json-logger,
+  jsonschema,
+  ruamel-yaml,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-json-logger jsonschema ruamel-yaml traitlets
+    python-json-logger
+    jsonschema
+    ruamel-yaml
+    traitlets
   ];
 
   meta = with lib; {

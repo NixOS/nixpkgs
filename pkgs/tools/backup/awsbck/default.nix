@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "awsbck";
-  version = "0.3.6";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${version}";
-    hash = "sha256-qW8UY+klNqzDcfVVCW1O7EARFdgLmnf7g/WcYNfT1SI=";
+    hash = "sha256-KHbAmx2CsRqatGt5zTvqZSq8fwcClRZkeMHucLAr8bY=";
   };
 
-  cargoHash = "sha256-T/xzhE1XXexyT5ktDxny68zaszEhqKfSmibjs6T2B2E=";
+  cargoHash = "sha256-dMXaIFc0e6PMYiQrokQoUc1xAVCccE92WzM2fl7tOBQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   # tests run in CI on the source repo
   doCheck = false;

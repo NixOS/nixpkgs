@@ -4,18 +4,17 @@
 , cmake
 , freedvSupport ? false
 , lpcnetfreedv
-, codec2
 }:
 
 stdenv.mkDerivation rec {
   pname = "codec2";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
-    rev = "v${version}";
-    hash = "sha256-p1WMp17PCnr50bXDSd6A4Je7AfKVHuLmyEue9221zPs=";
+    rev = "${version}";
+    hash = "sha256-69Mp4o3MgV98Fqfai4txv5jQw2WpoPuoWcwHsNAFPQM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,9 +23,8 @@ stdenv.mkDerivation rec {
     lpcnetfreedv
   ];
 
-  # Install a binary that is used by openwebrx
   postInstall = ''
-    install -Dm0755 src/freedv_rx -t $out/bin/
+    install -Dm0755 src/{c2enc,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
   '';
 
   # Swap keyword order to satisfy SWIG parser

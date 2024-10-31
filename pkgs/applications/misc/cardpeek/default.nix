@@ -10,7 +10,6 @@
 , curl
 , readline
 , PCSC
-, xcbuild
 }:
 let
   version = "0.8.4";
@@ -26,7 +25,7 @@ stdenv.mkDerivation {
     sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
       --replace 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
@@ -35,16 +34,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib gtk3 lua5_2 curl readline ]
-    ++ lib.optional stdenv.isDarwin PCSC
-    ++ lib.optional stdenv.isLinux pcsclite;
+    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
+    ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/L1L1/cardpeek";
-    description = "A tool to read the contents of ISO7816 smart cards";
+    description = "Tool to read the contents of ISO7816 smart cards";
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ embr ];
+    mainProgram = "cardpeek";
   };
 }

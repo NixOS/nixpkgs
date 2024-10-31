@@ -42,7 +42,7 @@ rec {
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
-    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook;
 
   inherit lua;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -54,7 +54,7 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
+  luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
@@ -76,8 +76,8 @@ rec {
     # The makefile tries to link to `-llua<luaversion>`
     LUA_LIBS = "-llua";
 
-    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
-      ++ lib.optionals stdenv.isDarwin [openpam];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [linux-pam]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [openpam];
 
     installPhase = ''
       runHook preInstall
@@ -100,13 +100,13 @@ rec {
 
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
-    version = "0.1.24";
+    version = "0.1.28";
 
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "lua-resty-core";
       rev = "v${version}";
-      sha256 = "sha256-obwyxHSot1Lb2c1dNqJor3inPou+UIBrqldbkNBCQQk=";
+      sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
     };
 
     propagatedBuildInputs = [ lua-resty-lrucache ];
@@ -115,7 +115,7 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -134,7 +134,7 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -163,7 +163,7 @@ rec {
     '';
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
+      broken = stdenv.hostPlatform.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;
@@ -173,7 +173,7 @@ rec {
   }) {};
 
   nfd = callPackage ../development/lua-modules/nfd {
-    inherit (pkgs.gnome) zenity;
+    inherit (pkgs) zenity;
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
@@ -197,7 +197,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A modular widget library for the awesome window manager";
+      description = "Modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
       changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, modulesPath, ... }:
+{ modulesPath, ... }:
 
 {
   imports =
@@ -13,8 +13,23 @@
       ./lxd.nix
     ];
 
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+  networking = {
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useHostResolvConf = false;
+  };
+
+  systemd.network = {
+    enable = true;
+    networks."50-enp5s0" = {
+      matchConfig.Name = "enp5s0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 
   system.stateVersion = "@stateVersion@"; # Did you read the comment?
 }

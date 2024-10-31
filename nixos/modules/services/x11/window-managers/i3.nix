@@ -12,12 +12,12 @@ in
 
 {
   options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption (lib.mdDoc "i3 window manager");
+    enable = mkEnableOption "i3 window manager";
 
     configFile = mkOption {
       default     = null;
       type        = with types; nullOr path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
       '';
@@ -26,7 +26,7 @@ in
     updateSessionEnvironment = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run dbus-update-activation-environment and systemctl import-environment before session start.
         Required for xdg portals to function properly.
       '';
@@ -35,7 +35,7 @@ in
     extraSessionCommands = mkOption {
       default     = "";
       type        = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands executed just before i3 is started.
       '';
     };
@@ -52,7 +52,7 @@ in
           i3lock
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide.
       '';
     };

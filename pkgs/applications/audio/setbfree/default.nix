@@ -36,18 +36,20 @@ stdenv.mkDerivation  rec {
 
   doInstallCheck = true;
 
-  installCheckPhase = ''(
-    set -x
-    test -e $out/bin/setBfreeUI
-  )'';
+  installCheckPhase = ''
+    (
+      set -x;
+      test -e $out/bin/setBfreeUI
+    )
+  '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A DSP tonewheel organ emulator";
+    description = "DSP tonewheel organ emulator";
     homepage = "https://setbfree.org";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on ARM and Darwin
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildGoModule rec {
   pname = "manifest-tool";
-  version = "2.1.5";
+  version = "2.1.8";
   modRoot = "v2";
 
   src = fetchFromGitHub {
     owner = "estesp";
     repo = "manifest-tool";
     rev = "v${version}";
-    hash = "sha256-TCR8A35oETAZszrZFtNZulzCsh9UwGueTyHyYe+JQeI=";
+    hash = "sha256-1zsNIG7U389L4hXmQ1XGkWCu2ZpyGimoJkoJatY99E0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git-revision
@@ -55,6 +55,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line tool to create and query container image manifest list/indexes";
+    mainProgram = "manifest-tool";
     homepage = "https://github.com/estesp/manifest-tool";
     license = licenses.asl20;
     maintainers = with maintainers; [ tricktron ];

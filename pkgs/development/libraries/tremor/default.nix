@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
+  configureFlags = lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ libogg ];
 

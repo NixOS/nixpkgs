@@ -1,49 +1,75 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, flit-core
-, flask
-, cachelib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  flask,
+  cachelib,
+  msgspec,
+
+  # checks
+  boto3,
+  flask-sqlalchemy,
+  pytestCheckHook,
+  redis,
+  pymongo,
+  pymemcache,
+  python-memcached,
+  pkgs,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Session";
-  version = "0.5.0";
-  format = "pyproject";
+  pname = "flask-session";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-session";
     rev = "refs/tags/${version}";
-    hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
+    hash = "sha256-QLtsM0MFgZbuLJPLc5/mUwyYc3bYxildNKNxOF8Z/3Y=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    flask
+  dependencies = [
     cachelib
+    flask
+    msgspec
   ];
 
   nativeCheckInputs = [
+    flask-sqlalchemy
     pytestCheckHook
+    redis
+    pymongo
+    pymemcache
+    python-memcached
+    boto3
   ];
 
-  # The rest of the tests require database servers and optional db connector dependencies
-  pytestFlagsArray = [
-    "-k"
-    "'null_session or filesystem_session'"
-  ];
+  preCheck = ''
+    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.memcached}/bin/memcached &
+  '';
 
-  pythonImportsCheck = [
-    "flask_session"
-  ];
+  postCheck = ''
+    kill %%
+    kill %%
+  '';
+
+  disabledTests = [ "test_mongo_default" ]; # unfree
+
+  disabledTestPaths = [ "tests/test_dynamodb.py" ];
+
+  pythonImportsCheck = [ "flask_session" ];
 
   meta = with lib; {
-    description = "A Flask extension that adds support for server-side sessions";
+    description = "Flask extension that adds support for server-side sessions";
     homepage = "https://github.com/pallets-eco/flask-session";
     changelog = "https://github.com/pallets-eco/flask-session/releases/tag/${version}";
     license = licenses.bsd3;

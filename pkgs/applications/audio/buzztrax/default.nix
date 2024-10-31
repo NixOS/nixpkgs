@@ -7,7 +7,7 @@
 , itstool
 , libtool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , yelp-tools
 , clutter-gtk
 , gst_all_1
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     itstool
     libtool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 
@@ -62,10 +62,12 @@ stdenv.mkDerivation {
   ];
 
   # 'g_memdup' is deprecated: Use 'g_memdup2' instead
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"
+    # Suppress incompatible function pointer error in clang due to libxml2 2.12 const changes
+    + lib.optionalString stdenv.cc.isClang " -Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
-    description = "Buzztrax is a modular music composer for Linux.";
+    description = "Buzztrax is a modular music composer for Linux";
     homepage = "https://www.buzztrax.org/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.bendlas ];

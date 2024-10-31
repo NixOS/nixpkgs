@@ -16,11 +16,12 @@
 
     mkdir -p "$out/bin"
     cp -r . "$out/bin/cache"
+    rm -f "$out/bin/cache/flutter.version.json"
 
     runHook postInstall
   '';
 }).overrideAttrs (
-  if builtins.pathExists ./overrides/${src.flutterPlatform}.nix
-  then callPackage ./overrides/${src.flutterPlatform}.nix { }
+  if builtins.pathExists (./overrides + "/${src.flutterPlatform}.nix")
+  then callPackage (./overrides + "/${src.flutterPlatform}.nix") { }
   else ({ ... }: { })
 )

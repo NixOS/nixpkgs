@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-scrobbler";
-    description = "Mopidy extension for scrobbling played tracks to Last.fm.";
+    description = "Mopidy extension for scrobbling played tracks to Last.fm";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakeisnt ];
   };

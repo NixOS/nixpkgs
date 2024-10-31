@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "A (mainly) Chinese Unicode font";
+    description = "(mainly) Chinese Unicode font";
     homepage = "http://wenq.org";
     license = lib.licenses.gpl2; # with font embedding exceptions
     maintainers = [ lib.maintainers.pkmx ];

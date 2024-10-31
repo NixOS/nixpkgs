@@ -12,18 +12,18 @@
 , colima
   # use lima-bin on darwin to support native macOS virtualization
   # https://github.com/NixOS/nixpkgs/pull/209171
-, lima-drv ? if stdenv.isDarwin then lima-bin else lima
+, lima-drv ? if stdenv.hostPlatform.isDarwin then lima-bin else lima
 }:
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.6.7";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7s/e/fV6azT26oeEJhh6PPcnI/cjpmEHf9TsZHspcwE=";
+    hash = "sha256-WInmoTUaEm2kQ7esZgPj3YIHmHbBrlBTWcLPC9/2MdY=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -33,9 +33,9 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-ET9n15+YK8ByodePztee6tKdFvvgk7jEKSUjRYSEpq8=";
+  vendorHash = "sha256-niuBo2YUUYKH0eSApOByNLrcHqr9m5VKGoiGp1fKklg=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log

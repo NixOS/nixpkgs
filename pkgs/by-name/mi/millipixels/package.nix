@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , glib
 , meson
 , ninja
@@ -32,6 +33,13 @@ stdenv.mkDerivation rec {
     domain = "source.puri.sm";
     hash = "sha256-pRREQRYyD9+dpRvcfsNiNthFy08Yeup9xDn+x+RWDrE=";
   };
+  patches = [
+    # fix for https://source.puri.sm/Librem5/millipixels/-/issues/87, can be removed with the next release (if there ever will be one)
+    (fetchpatch {
+      url = "https://source.puri.sm/Librem5/millipixels/-/commit/5a0776993051a0af54c148702f36dbbf1064b917.patch?merge_request_iid=105";
+      hash = "sha256-OdjTFHMx64eb94/kSCaxeM/Ju/JxOPoorw2ogwTPP3s=";
+    })
+  ];
 
   nativeBuildInputs = [
     glib

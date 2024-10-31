@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , boehmgc
 , bison
@@ -37,6 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix gcc-13 build:
+    #   https://github.com/p4lang/p4c/pull/4084
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/p4lang/p4c/commit/6756816100b7c51e3bf717ec55114a8e8575ba1d.patch";
+      hash = "sha256-wWM1qjgQCNMPdrhQF38jzFgODUsAcaHTajdbV7L3y8o=";
+    })
+  ];
+
   postFetch = ''
     rm -rf backends/ebpf/runtime/contrib/libbpf
     rm -rf control-plane/p4runtime
@@ -65,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     cmake
+    protobuf
+    python3
   ]
   ++ lib.optionals enableDocumentation [ doxygen graphviz ]
   ++ lib.optionals enableBPF [ libllvm libbpf ];
@@ -75,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     boehmgc
     gmp
     flex
-    python3
   ];
 
   meta = {

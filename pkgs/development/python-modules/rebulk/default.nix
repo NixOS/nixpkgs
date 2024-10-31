@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, regex
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-DTC/gPygD6nGlxhaxHXarJveX2Rs4zOMn/XV3B69/rw=";
   };
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  buildInputs = [
-    pytestCheckHook
-  ];
+  buildInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "rebulk"
-  ];
+  pythonImportsCheck = [ "rebulk" ];
 
   meta = with lib; {
     description = "Advanced string matching from simple patterns";
     homepage = "https://github.com/Toilal/rebulk/";
     changelog = "https://github.com/Toilal/rebulk/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

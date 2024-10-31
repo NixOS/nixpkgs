@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
       if isELF "$f"; then
         patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free touch typing tutor program";
+    mainProgram = "klavaro";
     homepage = "http://klavaro.sourceforge.net/";
     changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
     license = licenses.gpl3Plus;

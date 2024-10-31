@@ -22,12 +22,11 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
-  setupHook = ./setup-hook.sh;
-
   meta = with lib; {
-    description = "A tool for controlling PaX flags on a per binary basis";
+    description = "Tool for controlling PaX flags on a per binary basis";
+    mainProgram = "paxctl";
     homepage    = "https://pax.grsecurity.net";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice ];
   };

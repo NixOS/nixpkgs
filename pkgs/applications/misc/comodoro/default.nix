@@ -3,8 +3,8 @@
 , fetchFromGitHub
 , stdenv
 , installShellFiles
-, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , withTcp ? true
 }:
 
@@ -38,10 +38,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your time.";
+    description = "CLI to manage your time";
     homepage = "https://pimalaya.org/comodoro/";
     changelog = "https://github.com/soywod/comodoro/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod ];
+    mainProgram = "comodoro";
   };
 }

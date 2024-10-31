@@ -7,7 +7,7 @@ let
 
 in {
   options.services.plausible = {
-    enable = mkEnableOption (lib.mdDoc "plausible");
+    enable = mkEnableOption "plausible";
 
     package = mkPackageOption pkgs "plausible" { };
 
@@ -15,7 +15,7 @@ in {
       name = mkOption {
         default = "admin";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of the admin user that plausible will created on initial startup.
         '';
       };
@@ -23,45 +23,45 @@ in {
       email = mkOption {
         type = types.str;
         example = "admin@localhost";
-        description = lib.mdDoc ''
+        description = ''
           Email-address of the admin-user.
         '';
       };
 
       passwordFile = mkOption {
         type = types.either types.str types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file which contains the password of the admin user.
         '';
       };
 
-      activate = mkEnableOption (lib.mdDoc "activating the freshly created admin-user");
+      activate = mkEnableOption "activating the freshly created admin-user";
     };
 
     database = {
       clickhouse = {
-        setup = mkEnableOption (lib.mdDoc "creating a clickhouse instance") // { default = true; };
+        setup = mkEnableOption "creating a clickhouse instance" // { default = true; };
         url = mkOption {
           default = "http://localhost:8123/default";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             The URL to be used to connect to `clickhouse`.
           '';
         };
       };
       postgres = {
-        setup = mkEnableOption (lib.mdDoc "creating a postgresql instance") // { default = true; };
+        setup = mkEnableOption "creating a postgresql instance" // { default = true; };
         dbname = mkOption {
           default = "plausible";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Name of the database to use.
           '';
         };
         socket = mkOption {
           default = "/run/postgresql";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             Path to the UNIX domain-socket to communicate with `postgres`.
           '';
         };
@@ -72,13 +72,13 @@ in {
       disableRegistration = mkOption {
         default = true;
         type = types.enum [true false "invite_only"];
-        description = lib.mdDoc ''
+        description = ''
           Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
       secretKeybaseFile = mkOption {
         type = types.either types.path types.str;
-        description = lib.mdDoc ''
+        description = ''
           Path to the secret used by the `phoenix`-framework. Instructions
           how to generate one are documented in the
           [
@@ -88,20 +88,20 @@ in {
       listenAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The IP address on which the server is listening.
         '';
       };
       port = mkOption {
         default = 8000;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port where the service should be available.
         '';
       };
       baseUrl = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Public URL where plausible is available.
 
           Note that `/path` components are currently ignored:
@@ -116,7 +116,7 @@ in {
       email = mkOption {
         default = "hello@plausible.local";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The email id to use for as *from* address of all communications
           from Plausible.
         '';
@@ -125,36 +125,36 @@ in {
         hostAddr = mkOption {
           default = "localhost";
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             The host address of your smtp server.
           '';
         };
         hostPort = mkOption {
           default = 25;
           type = types.port;
-          description = lib.mdDoc ''
+          description = ''
             The port of your smtp server.
           '';
         };
         user = mkOption {
           default = null;
           type = types.nullOr types.str;
-          description = lib.mdDoc ''
+          description = ''
             The username/email in case SMTP auth is enabled.
           '';
         };
         passwordFile = mkOption {
           default = null;
           type = with types; nullOr (either str path);
-          description = lib.mdDoc ''
+          description = ''
             The path to the file with the password in case SMTP auth is enabled.
           '';
         };
-        enableSSL = mkEnableOption (lib.mdDoc "SSL when connecting to the SMTP server");
+        enableSSL = mkEnableOption "SSL when connecting to the SMTP server";
         retries = mkOption {
           type = types.ints.unsigned;
           default = 2;
-          description = lib.mdDoc ''
+          description = ''
             Number of retries to make until mailer gives up.
           '';
         };
@@ -276,8 +276,11 @@ in {
             ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
               ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
-            # setup
-            ${cfg.package}/createdb.sh
+            ${lib.optionalString cfg.database.postgres.setup ''
+              # setup
+              ${cfg.package}/createdb.sh
+            ''}
+
             ${cfg.package}/migrate.sh
             export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
             ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"
@@ -326,6 +329,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = teams.cyberus.members;
   meta.doc = ./plausible.md;
 }

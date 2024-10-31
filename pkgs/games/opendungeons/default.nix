@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   ];
 
   # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
-  postPatch = lib.optionalString (!stdenv.isx86_64) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     cp source/utils/StackTrace{Stub,Unix}.cpp
   '';
 
@@ -63,7 +63,8 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
+    description = "Open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
+    mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
     license = with licenses; [ gpl3Plus zlib mit cc-by-sa-30 cc0 ofl cc-by-30 ];
     platforms = platforms.linux;

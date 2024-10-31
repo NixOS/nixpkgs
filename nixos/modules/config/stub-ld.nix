@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) optionalString mkOption types mdDoc mkIf mkDefault;
+  inherit (lib) optionalString mkOption types mkIf mkDefault;
 
   cfg = config.environment.stub-ld;
 
@@ -38,7 +38,7 @@ in {
         type = types.bool;
         default = true;
         example = false;
-        description = mdDoc ''
+        description = ''
           Install a stub ELF loader to print an informative error message
           in the event that a user attempts to run an ELF binary not
           compiled for NixOS.
@@ -49,7 +49,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.ldso = mkDefault stub-ld;
-    environment.ldso32 = mkIf pkgs.stdenv.isx86_64 (mkDefault stub-ld32);
+    environment.ldso32 = mkIf pkgs.stdenv.hostPlatform.isx86_64 (mkDefault stub-ld32);
   };
 
   meta.maintainers = with lib.maintainers; [ tejing ];

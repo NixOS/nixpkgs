@@ -32,18 +32,18 @@ import ./make-test-python.nix ({ pkgs, ... }:
     # system one. Overriding this pretty bad default behaviour.
     export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-    echo "jamy-password" | toot login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test"
+    toot login_cli -i "pleroma.nixos.test" -e "jamy@nixos.test" -p 'jamy-password'
     echo "Login OK"
 
     # Send a toot then verify it's part of the public timeline
-    echo "y" | toot post "hello world Jamy here"
+    toot post "hello world Jamy here"
     echo "Send toot OK"
-    echo "y" | toot timeline | grep -c "hello world Jamy here"
+    toot timeline -1 | grep -F -q "hello world Jamy here"
     echo "Get toot from timeline OK"
 
     # Test file upload
-    echo "y" | toot upload ${db-seed} | grep -c "https://pleroma.nixos.test/media"
-    echo "File upload OK"
+    echo "y" | ${pkgs.toot}/bin/toot upload <(dd if=/dev/zero bs=1024 count=1024 status=none) \
+      | grep -F -q "https://pleroma.nixos.test/media"
 
     echo "====================================================="
     echo "=                   SUCCESS                         ="
@@ -182,7 +182,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     client = { nodes, pkgs, config, ... }: {
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = [
         pkgs.toot
         send-toot
       ];
@@ -191,7 +191,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       networking.firewall.enable = false;
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = [
         provision-db
         provision-secrets
         provision-user
@@ -244,11 +244,15 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   testScript = { nodes, ... }: ''
     pleroma.wait_for_unit("postgresql.service")
+    pleroma.wait_until_succeeds("ls /var/lib/pleroma")
     pleroma.succeed("provision-db")
+    pleroma.wait_for_file("/var/lib/pleroma")
     pleroma.succeed("provision-secrets")
     pleroma.systemctl("restart pleroma.service")
     pleroma.wait_for_unit("pleroma.service")
     pleroma.succeed("provision-user")
     client.succeed("send-toot")
   '';
+
+  meta.timeout = 600;
 })

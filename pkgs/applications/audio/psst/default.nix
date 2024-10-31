@@ -16,19 +16,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2024-01-28";
+  version = "unstable-2024-10-07";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "38422b1795c98d8d0e3bc8dc479d12f8d5bd7154";
-    hash = "sha256-VTbjlSfkbon38IPBCazwrZtWR8dH9mE0sSVIlmxcUks=";
+    rev = "38d1c75d59848c54cb88896a93e05da3c71c7df4";
+    hash = "sha256-iMtrZ1Mto3j4lFXI2Sm2R85+m8LpR7V1WoJ3X5JyF60=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cubeb-0.10.3" = "sha256-gV1KHOhq678E/Rj+u8jX9Fw+TepPwuZdV5y/D+Iby+o=";
+      "cubeb-0.13.0" = "sha256-l1JkKlq2qvvLwNLJ2DrIpAFYcRQyd6F8pAflmtnaXhU=";
       "druid-0.8.3" = "sha256-hTB9PQf2TAhcLr64VjjQIr18mczwcNogDSRSN5dQULA=";
       "druid-enums-0.1.0" = "sha256-KJvAgKxicx/g+4QRZq3iHt6MGVQbfOpyN+EhS6CyDZk=";
     };
@@ -68,5 +68,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jpochyla/psst";
     license = licenses.mit;
     maintainers = with maintainers; [ vbrandl peterhoeg ];
+    mainProgram = "psst-gui";
   };
 }

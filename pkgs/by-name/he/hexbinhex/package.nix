@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/dj-on-github/hexbinhex";
+    changelog = "https://github.com/dj-on-github/hexbinhex/releases/tag/${src.rev}";
     description = ''
       Six utility programs to convert between hex, binary, ascii-binary
       and the oddball NIST format for 90B testing.

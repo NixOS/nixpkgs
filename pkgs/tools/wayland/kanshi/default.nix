@@ -8,17 +8,18 @@
 , wayland
 , wayland-scanner
 , libvarlink
+, libscfg
 }:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "sha256-vxysZWFcfYwOgFMcRuPzYpWmFOFMiwc62DqI+nTQ4MI=";
+    sha256 = "sha256-FDt+F5tWHLsMejlExb5yPh0SlWzuUlK9u54Uy+alrzw=";
   };
 
   strictDeps = true;
@@ -26,7 +27,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland libvarlink ];
+  buildInputs = [ wayland libvarlink libscfg ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=maybe-uninitialized"
+  ];
 
   meta = with lib; {
     homepage = "https://sr.ht/~emersion/kanshi";

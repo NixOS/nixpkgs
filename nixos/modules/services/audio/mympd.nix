@@ -7,14 +7,14 @@ in {
 
     services.mympd = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "MyMPD server");
+      enable = lib.mkEnableOption "MyMPD server";
 
       package = lib.mkPackageOption pkgs "mympd" {};
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports needed for the functionality of the program.
         '';
       };
@@ -23,7 +23,7 @@ in {
         type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "music" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional groups for the systemd service.
         '';
       };
@@ -34,7 +34,7 @@ in {
           options = {
             http_port = lib.mkOption {
               type = lib.types.port;
-              description = lib.mdDoc ''
+              description = ''
                 The HTTP port where mympd's web interface will be available.
 
                 The HTTPS/SSL port can be configured via {option}`config`.
@@ -44,7 +44,7 @@ in {
 
             ssl = lib.mkOption {
               type = lib.types.bool;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to enable listening on the SSL port.
 
                 Refer to <https://jcorporation.github.io/myMPD/configuration/configuration-files#ssl-options>
@@ -54,7 +54,7 @@ in {
             };
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Manages the configuration files declaratively. For all the configuration
           options, see <https://jcorporation.github.io/myMPD/configuration/configuration-files>.
 

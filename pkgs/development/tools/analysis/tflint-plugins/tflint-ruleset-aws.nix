@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-aws";
-  version = "0.29.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tqHlvJyLRhREKnuMUP479xuD0PjdCZfIMj4L44skiSE=";
+    hash = "sha256-osQhLnOuJQqyKm24mgaEuYKy69cPvnR3XHU0JgVKA84=";
   };
 
-  vendorHash = "sha256-vEkrDwsetW4HtbcgkhcaK42v/CKfRlIoHgYzjoTavqk=";
+  vendorHash = "sha256-mhc8HJG+sI8pZG/D+91+pyi0RGK0WfZV6ZNuH1bUfhk=";
 
   # upstream Makefile also does a  go test $(go list ./... | grep -v integration)
   preCheck = ''

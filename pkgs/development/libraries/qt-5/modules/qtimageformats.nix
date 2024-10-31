@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , qtModule
 , qtbase
 , libwebp

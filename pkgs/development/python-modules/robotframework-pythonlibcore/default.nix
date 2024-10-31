@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pytest-mockito
-, pytestCheckHook
-, robotframework
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  robotframework,
+  approvaltests,
+  pytest-mockito,
+  pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.3.0";
+  version = "4.4.1";
 
   disabled = pythonOlder "3.8";
 
@@ -21,23 +23,19 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "PythonLibCore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ayOQyOhCg4nLpAyH/eQ6NYEApix0wsL2nhJzEXKJRo=";
+    hash = "sha256-5RUi65+DljCqWoB8vZxc0hyIefEFOWuKluplXrD0SkI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ robotframework ];
 
   nativeCheckInputs = [
+    approvaltests
     pytest-mockito
     pytestCheckHook
-    robotframework
     typing-extensions
   ];
-
-  preCheck = ''
-    export PYTHONPATH="atest:utest/helpers:$PYTHONPATH"
-  '';
 
   pythonImportsCheck = [ "robotlibcore" ];
 

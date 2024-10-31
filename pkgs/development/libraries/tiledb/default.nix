@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-tiledb" "doc" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
   '';
 

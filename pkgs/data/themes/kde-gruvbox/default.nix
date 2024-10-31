@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A suite of themes for KDE applications that match the retro gruvbox colorscheme";
+    description = "Suite of themes for KDE applications that match the retro gruvbox colorscheme";
     homepage = "https://github.com/printesoi/kde-gruvbox";
     license = licenses.mit;
     maintainers = [ maintainers.ymarkus ];

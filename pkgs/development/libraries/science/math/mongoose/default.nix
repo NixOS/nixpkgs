@@ -7,11 +7,11 @@
 }:
 
 let
-  suitesparseVersion = "7.5.1";
+  suitesparseVersion = "7.7.0";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.3.1";
+  version = "3.3.3";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${suitesparseVersion}";
-    hash = "sha256-6eC26rag9kZ1E4qJ5KY/dLXGld+EHP2OUpyikjXQhQk=";
+    hash = "sha256-wE1DKC0Hn3Q9X1FzKH7Kev26ICNWH0LEKQIQP98AGuo=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Graph Coarsening and Partitioning Library";
+    mainProgram = "suitesparse_mongoose";
     homepage = "https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/Mongoose";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wegank ];

@@ -1,17 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pkg-config
-, pkgconfig
-, setuptools-scm
-, wheel
-, libdeltachat
-, cffi
-, imap-tools
-, requests
-, pluggy
-, setuptools
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  pkg-config,
+  pkgconfig,
+  setuptools-scm,
+  libdeltachat,
+  cffi,
+  imap-tools,
+  requests,
+  pluggy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,20 +18,16 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     cffi
     pkg-config
     pkgconfig
-    setuptools
     setuptools-scm
-    wheel
   ];
 
-  buildInputs = [
-    libdeltachat
-  ];
+  buildInputs = [ libdeltachat ];
 
   propagatedBuildInputs = [
     cffi
@@ -42,9 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "deltachat"

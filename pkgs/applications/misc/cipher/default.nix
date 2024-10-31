@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "cipher";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple application for encoding and decoding text, designed for elementary OS";
+    description = "Simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;

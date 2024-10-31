@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = pname;
     rev = version;
-    hash = "sha256-QgmeO6dE5d0X7iMjqvDz/i9tKEzGNzTYqZRXRgYepCg=";
+    hash = "sha256-pTonrxlYvfuLRKMXW0Lao4KCoNFlMzE9rH+hwpa60JY=";
   };
 
-  cargoHash = "sha256-K6dkKtrHQVJfFo3yCWFb0zO4fJDunygU7hCnjAi4svc=";
+  cargoHash = "sha256-2BXUZD63xzHpUi8lk2fV5qBmeq6Gzpq0uEcKfbReANI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,10 +39,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An open-source Shazam client for Linux, written in Rust";
+    description = "Open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tcbravo ];
+    mainProgram = "songrec";
   };
 }

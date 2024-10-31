@@ -1,9 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
-, runAllTests ? false, psautohint # for passthru.tests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fonttools,
+  lxml,
+  fs, # for fonttools extras
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-xdist,
+  runAllTests ? false,
+  psautohint, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -29,7 +37,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  propagatedBuildInputs = [
+    fonttools
+    lxml
+    fs
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

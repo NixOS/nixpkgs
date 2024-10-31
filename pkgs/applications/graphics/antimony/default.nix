@@ -28,7 +28,7 @@ in
        sed -i "s,python3,${python3.executable}," CMakeLists.txt
     '';
 
-    postInstall = lib.optionalString stdenv.isLinux ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 $src/deploy/icon.svg $out/share/icons/hicolor/scalable/apps/antimony.svg
       install -Dm644 ${./mimetype.xml} $out/share/mime/packages/antimony.xml
     '';
@@ -61,7 +61,8 @@ in
     ];
 
     meta = with lib; {
-      description = "A computer-aided design (CAD) tool from a parallel universe";
+      description = "Computer-aided design (CAD) tool from a parallel universe";
+      mainProgram = "antimony";
       homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       maintainers = with maintainers; [ rnhmjoj ];

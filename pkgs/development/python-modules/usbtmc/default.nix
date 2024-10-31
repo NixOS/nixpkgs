@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pyusb }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pyusb,
+}:
 
 buildPythonPackage rec {
   pname = "usbtmc";

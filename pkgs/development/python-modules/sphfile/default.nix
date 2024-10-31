@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildPythonPackage, numpy }:
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  numpy,
+}:
 
 buildPythonPackage rec {
   pname = "sphfile";
@@ -16,9 +21,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numpy-based NIST SPH audio-file reader";
-    homepage    = "https://github.com/mcfletch/sphfile";
-    license     = licenses.mit;
+    homepage = "https://github.com/mcfletch/sphfile";
+    license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,36 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, coverage
-, ipykernel
-, jupyter-client
-, nbformat
-, pytestCheckHook
-, pytest
-, six
-, glibcLocales
-, matplotlib
-, sympy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  coverage,
+  ipykernel,
+  jupyter-client,
+  nbformat,
+  pytestCheckHook,
+  pytest,
+  glibcLocales,
+  matplotlib,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tKzv3BEyrvihtbYr+ak9Eo66UoObKFTqPkJZj023vrM=";
+    hash = "sha256-d8lXl2B7CpaLq9JZfuNJQQLSXDrTdDXeu9rA5G43kJQ=";
   };
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     coverage
     ipykernel
     jupyter-client
@@ -61,14 +62,13 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "nbval"
-  ];
+  pythonImportsCheck = [ "nbval" ];
 
   meta = with lib; {
-    description = "A py.test plugin to validate Jupyter notebooks";
+    description = "Py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
+    changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

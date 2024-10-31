@@ -91,9 +91,10 @@ let
 
     meta = with lib; {
       description = "Autoscaling daemon for Nomad";
+      mainProgram = "nomad-autoscaler";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
       license = licenses.mpl20;
-      maintainers = with maintainers; [ jonringer ];
+      maintainers = [ ];
     };
   };
 

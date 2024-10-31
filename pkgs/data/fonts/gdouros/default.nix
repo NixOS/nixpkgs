@@ -17,7 +17,7 @@ let
     inherit pname version;
 
     src = fetchzip {
-      url = "https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
+      url = "https://web.archive.org/web/20240212172059/https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
       stripRoot = false;
       inherit hash;
     };
@@ -34,12 +34,12 @@ let
 
     meta = {
       inherit description;
-      # see https://dn-works.com/wp-content/uploads/2020/UFAS-Docs/License.pdf
+      # see https://web.archive.org/web/20240212172059/https://dn-works.com/wp-content/uploads/2020/UFAS-Docs/License.pdf
       # quite draconian: non-commercial, no modifications,
       # no redistribution, "a single instantiation and no
       # network installation"
       license = lib.licenses.unfree;
-      homepage = "https://dn-works.com/ufas/";
+      homepage = "https://web.archive.org/web/20240212172059/https://dn-works.com/ufas/";
     };
   };
 in

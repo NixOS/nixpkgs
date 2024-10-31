@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  nativeCheckInputs = lib.optionals stdenv.isDarwin [ ps ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ps ];
 
   postInstall = ''
     wrapProgram "$out/bin/assh" \
@@ -43,7 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ zzamboni ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

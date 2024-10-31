@@ -1,9 +1,6 @@
-{ lib
-, stdenv
+{ stdenv
 , boost
-, cmake
 , gettext
-, git
 , libdrm
 , meson
 , ninja
@@ -14,13 +11,12 @@
 }:
 
 stdenv.mkDerivation {
-  inherit (tuxclocker) src version meta BOOST_INCLUDEDIR BOOST_LIBRARYDIR;
+  inherit (tuxclocker) src version meta;
 
   pname = "tuxclocker-plugins";
 
   nativeBuildInputs = [
     gettext
-    git
     meson
     ninja
     pkg-config

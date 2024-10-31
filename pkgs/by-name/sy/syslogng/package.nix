@@ -20,6 +20,7 @@
 , protobufc
 , pcre
 , paho-mqtt-c
+, python3Packages
 , libnet
 , json_c
 , libuuid
@@ -32,6 +33,9 @@
 , libesmtp
 , rdkafka
 , gperf
+, withGrpc ? true
+, grpc
+, protobuf
 }:
 let
   python-deps = ps: with ps; [
@@ -58,18 +62,18 @@ let
   ];
   py = python3.withPackages python-deps;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.6.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${version}";
-    hash = "sha256-B9s7mprPpS4xc7mfJbsDaq2hB1rjYmuOnOnpu+NnMRs=";
+    rev = "syslog-ng-${finalAttrs.version}";
+    hash = "sha256-YdGbDpGMC0DPuPSbfe9HvZshBVdv1s1+hiHDnhYbs6Q=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf python3Packages.setuptools ];
 
   buildInputs = [
     libcap
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
     paho-mqtt-c
     hiredis
     rdkafka
-  ];
+  ] ++ (lib.optionals withGrpc [ protobuf grpc ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -110,17 +114,17 @@ stdenv.mkDerivation rec {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ];
+  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ vifino ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with lib.maintainers; [ vifino ];
+    platforms = lib.platforms.linux;
   };
-}
+})

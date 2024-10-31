@@ -1,42 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, django
-, boto3
-, hatchling
-, python
-, mock
-, responses
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  python,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "10.2";
+  version = "12.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anymail";
-    repo = pname;
+    repo = "django-anymail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k4C82OYm2SdjxeLScrkkitumjYgWkMNFlNeGW+C1Z8o=";
+    hash = "sha256-TuEEwxwgZVv97Ns4sRWdQjaNymE03nj8CTiU9S6ynZ8=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    requests
+  dependencies = [
     django
+    requests
+    urllib3
   ];
 
   nativeCheckInputs = [
     mock
     responses
-  ] ++ passthru.optional-dependencies.amazon-ses;
+  ] ++ optional-dependencies.amazon-ses;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     amazon-ses = [ boto3 ];
   };
 
@@ -51,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
+    changelog = "https://github.com/anymail/django-anymail/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

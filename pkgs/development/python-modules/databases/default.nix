@@ -1,64 +1,48 @@
-{ lib
-, aiomysql
-, aiopg
-, aiosqlite
-, asyncmy
-, asyncpg
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncmy,
+  asyncpg,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "databases";
     rev = "refs/tags/${version}";
-    hash = "sha256-e3iMZBPdldZFuS7FyhbGj9SufnH5hBBt8MEUjixXfqA=";
+    hash = "sha256-Zf9QqBgDhWAnHdNvzjXtri5rdT00BOjc4YTNzJALldM=";
   };
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    postgresql = [
-      asyncpg
-    ];
-    asyncpg = [
-      asyncpg
-    ];
-    aiopg = [
-      aiopg
-    ];
-    mysql = [
-      aiomysql
-    ];
-    aiomysql = [
-      aiomysql
-    ];
-    asyncmy = [
-      asyncmy
-    ];
-    sqlite = [
-      aiosqlite
-    ];
-    aiosqlite = [
-      aiosqlite
-    ];
+  propagatedBuildInputs = [ sqlalchemy ];
+
+  optional-dependencies = {
+    postgresql = [ asyncpg ];
+    asyncpg = [ asyncpg ];
+    aiopg = [ aiopg ];
+    mysql = [ aiomysql ];
+    aiomysql = [ aiomysql ];
+    asyncmy = [ asyncmy ];
+    sqlite = [ aiosqlite ];
+    aiosqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # circular dependency on starlette
@@ -68,17 +52,13 @@ buildPythonPackage rec {
     "tests/test_connection_options.py"
   ];
 
-  pythonImportsCheck = [
-    "databases"
-  ];
+  pythonImportsCheck = [ "databases" ];
 
   meta = with lib; {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    # https://github.com/encode/databases/issues/530
-    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
+    maintainers = [ ];
   };
 }

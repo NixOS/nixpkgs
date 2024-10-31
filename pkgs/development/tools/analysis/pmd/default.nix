@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An extensible cross-language static code analyzer";
+    description = "Extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = platforms.unix;

@@ -16,10 +16,10 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 6 insertions(+), 20 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index 4e3d59fc56..0d18b9a2d0 100644
+index 540256b73b..a115ec09a3 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
-@@ -92,11 +92,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
+@@ -123,11 +123,7 @@ int runtime_directory(char **ret, RuntimeScope scope, const char *suffix) {
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -31,7 +31,7 @@ index 4e3d59fc56..0d18b9a2d0 100644
          NULL
  };
  
-@@ -613,16 +609,13 @@ int lookup_paths_init(
+@@ -634,16 +630,13 @@ int lookup_paths_init(
                                          persistent_config,
                                          SYSTEM_CONFIG_UNIT_DIR,
                                          "/etc/systemd/system",
@@ -49,7 +49,7 @@ index 4e3d59fc56..0d18b9a2d0 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -638,14 +631,11 @@ int lookup_paths_init(
+@@ -659,14 +652,11 @@ int lookup_paths_init(
                                          persistent_config,
                                          USER_CONFIG_UNIT_DIR,
                                          "/etc/systemd/user",
@@ -65,7 +65,7 @@ index 4e3d59fc56..0d18b9a2d0 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -805,7 +795,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+@@ -825,7 +815,6 @@ char **generator_binary_paths(RuntimeScope scope) {
                  case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-generators",
                                         "/etc/systemd/system-generators",
@@ -73,7 +73,7 @@ index 4e3d59fc56..0d18b9a2d0 100644
                                         SYSTEM_GENERATOR_DIR);
                          break;
  
-@@ -813,7 +802,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+@@ -833,7 +822,6 @@ char **generator_binary_paths(RuntimeScope scope) {
                  case RUNTIME_SCOPE_USER:
                          add = strv_new("/run/systemd/user-generators",
                                         "/etc/systemd/user-generators",
@@ -81,7 +81,7 @@ index 4e3d59fc56..0d18b9a2d0 100644
                                         USER_GENERATOR_DIR);
                          break;
  
-@@ -852,14 +840,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
+@@ -872,14 +860,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
                  case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-environment-generators",
                                          "/etc/systemd/system-environment-generators",

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace "xlc_r gcc" "xlc_r gcc $CC"
     substitute Makefile Makefile.$CC --replace "CC=gcc" "CC=$CC"
   '';
@@ -25,12 +25,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = "https://cntlm.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers =
       [
         maintainers.qknight
         maintainers.carlosdagos
       ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "cntlm";
   };
 }

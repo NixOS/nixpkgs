@@ -13,7 +13,7 @@
 , enableViewer ? true
 , gst_all_1
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , enableUsb ? true
 , libusb1
@@ -25,17 +25,17 @@
 assert enableGstPlugin -> gst_all_1 != null;
 assert enableViewer -> enableGstPlugin;
 assert enableViewer -> gtk3 != null;
-assert enableViewer -> wrapGAppsHook != null;
+assert enableViewer -> wrapGAppsHook3 != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
-  version = "0.8.30";
+  version = "0.8.33";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1OxvLpzEKxIXiLJIUr+hCx+sxnH9Z5dBM5Lug1acCok=";
+    sha256 = "sha256-D6zcTCaFJxJ2VhhsgEFu5+3Xx1MJov4ryrtA0VkjZlY=";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gi-docgen
     gobject-introspection
-  ] ++ lib.optional enableViewer wrapGAppsHook;
+  ] ++ lib.optional enableViewer wrapGAppsHook3;
 
   buildInputs =
     [ glib libxml2 ]

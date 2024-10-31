@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
-  buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildFlags =
     [ "doc" ] ++
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
      then [ "blahtex-mac" "blahtexml-mac" ]
      else [ "blahtex-linux" "blahtexml-linux" ]);
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gva.noekeon.org/blahtexml/";
-    description = "A TeX to MathML converter";
+    description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in
       a syntax close to TeX into MathML. It is designed by David Harvey and is

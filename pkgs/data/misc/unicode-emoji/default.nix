@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "15.0";
+  version = "15.1";
 
   fetchData = { suffix, hash }: stdenvNoCC.mkDerivation {
     pname = "unicode-emoji-${suffix}";
@@ -32,15 +32,15 @@ let
   srcs = {
     emoji-sequences = fetchData {
       suffix = "sequences";
-      hash = "sha256-XCIi2KQy2JagMaaML1SwT79HsPzi5phT8euKPpRetW0=";
+      hash = "sha256-63LJEV41BPu+HIYhthn4eUcaRszFbi9EVBe3wcrQUNE=";
     };
     emoji-test = fetchData {
       suffix = "test";
-      hash = "sha256-hEXyOsg4jglr4Z0CYuFPzv+Fb/Ugk/I1bciUhfGoU9s=";
+      hash = "sha256-2HbuJJqijqp2z6bfqnAoR6jROwYqpIjUZdA5XugTftk=";
     };
     emoji-zwj-sequences = fetchData {
       suffix = "zwj-sequences";
-      hash = "sha256-/jV/kRe3dGZ2Bjdl1YcTft+bJZA6eSvVSTW/CFZ5EYI=";
+      hash = "sha256-mnagPcrPzY+b/gjEnI2QtVGCuXfLzIemlOioGT77Dlc=";
     };
   };
 in

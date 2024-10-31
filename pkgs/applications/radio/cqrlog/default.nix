@@ -16,7 +16,7 @@
 , xdg-utils
 , xplanet
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ! grep -C src -RC0 "/usr"
   '';
 
-  nativeBuildInputs = [ lazarus fpc autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ lazarus fpc autoPatchelfHook wrapGAppsHook3 ];
   buildInputs = [
     atk
     cairo
@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux logging program for amateur radio operators";
+    mainProgram = "cqrlog";
     homepage = "https://www.cqrlog.com/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ shamilton ];

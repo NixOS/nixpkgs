@@ -1,11 +1,10 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , meson
 , python3Packages
 , ninja
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtksourceview4
 , itstool
@@ -33,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     itstool
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -56,7 +55,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    nose
     mock
     xvfb-run
     pytest
@@ -72,11 +70,12 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = " A personal tasks and TODO-list items organizer";
+    mainProgram = "gtg";
     longDescription = ''
       "Getting Things GNOME" (GTG) is a personal tasks and ToDo list organizer inspired by the "Getting Things Done" (GTD) methodology.
       GTG is intended to help you track everything you need to do and need to know, from small tasks to large projects.
     '';
-    homepage = "https://wiki.gnome.org/Apps/GTG";
+    homepage = "https://github.com/getting-things-gnome/gtg";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ oyren ];

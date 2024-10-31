@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numba
-, numpy
-, pillow
-, pytestCheckHook
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numba
@@ -32,13 +31,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pymatting"
-  ];
+  pythonImportsCheck = [ "pymatting" ];
 
   disabledTests = [
     # no access to input data set
@@ -50,11 +45,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for alpha matting";
+    description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
     changelog = "https://github.com/pymatting/pymatting/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

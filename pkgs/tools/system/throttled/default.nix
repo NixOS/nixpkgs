@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, pciutils }:
+{ lib, stdenv, fetchFromGitHub, gobject-introspection, python3Packages, pciutils, wrapGAppsNoGuiHook }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
   };
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    gobject-introspection
+    python3Packages.wrapPython
+    wrapGAppsNoGuiHook
+  ];
 
   pythonPath = with python3Packages; [
     configparser
@@ -35,6 +39,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   postFixup = "wrapPythonPrograms";
 
   meta = with lib; {
@@ -42,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/erpalma/throttled";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michaelpj ];
+    maintainers = [ ];
   };
 }

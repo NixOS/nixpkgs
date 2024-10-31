@@ -1,33 +1,39 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, haversine
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  haversine,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.11";
-  format = "setuptools";
+  version = "0.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Voc1ME0iGQCMaDfBXDSVnRp8olvId+fLhH8sqHwB2Ak=";
+    hash = "sha256-2qo5G/L2yh/6IXswkOyrCYnBNLDLx3EOpR53lnnpNOo=";
   };
 
-  propagatedBuildInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     haversine
     xmltodict
@@ -35,18 +41,14 @@ buildPythonPackage rec {
     dateparser
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aio_georss_client"
-  ];
+  pythonImportsCheck = [ "aio_georss_client" ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";

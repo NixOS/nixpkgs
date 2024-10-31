@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i844dzzc5s5cr4vfpi6k2kdn8jiqq2n6c0fjqvsp4wdidwjahzw";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook ];
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook3 ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
@@ -33,17 +33,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "iNavFlight configuration tool";
-    desktopName = "iNav Configurator";
-    genericName = "Flight controller configuration tool";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = "iNavFlight configuration tool";
+      desktopName = "iNav Configurator";
+      genericName = "Flight controller configuration tool";
+    })
+  ];
 
   meta = with lib; {
-    description = "The iNav flight control system configuration tool";
+    description = "INav flight control system configuration tool";
+    mainProgram = "inav-configurator";
     longDescription = ''
       A crossplatform configuration tool for the iNav flight control system.
       Various types of aircraft are supported by the tool and by iNav, e.g.

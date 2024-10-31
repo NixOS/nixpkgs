@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pyfttt";
@@ -18,6 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Package for sending events to the IFTTT Webhooks Channel";
+    mainProgram = "pyfttt";
     homepage = "https://github.com/briandconnelly/pyfttt";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.bsd2;

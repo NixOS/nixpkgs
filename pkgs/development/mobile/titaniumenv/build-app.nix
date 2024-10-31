@@ -41,7 +41,7 @@ stdenv.mkDerivation ({
   buildPhase = ''
     ${preBuild}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Hack that provides a writable alloy package on macOS. Without it the build fails because of a file permission error.
       alloy=$(dirname $(type -p alloy))/..
       cp -rv $alloy/* alloy
@@ -76,7 +76,7 @@ stdenv.mkDerivation ({
       export GRADLE_USER_HOME=$TMPDIR/gradle
 
       ${if release then ''
-        ${lib.optionalString stdenv.isDarwin ''
+        ${lib.optionalString stdenv.hostPlatform.isDarwin ''
           # Signing the app does not work with OpenJDK on macOS, use host SDK instead
           export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
         ''}

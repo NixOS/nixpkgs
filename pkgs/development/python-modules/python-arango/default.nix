@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, urllib3
-, requests
-, requests-toolbelt
-, pyjwt
-, importlib-metadata
-, packaging
+  # dependencies
+  urllib3,
+  requests,
+  requests-toolbelt,
+  pyjwt,
+  importlib-metadata,
+  packaging,
 
-# tests
-, arangodb
-, mock
+  # tests
+  arangodb,
+  mock,
 }:
 
 let
@@ -32,16 +33,16 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "7.8.1";
+  version = "8.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "ArangoDB-Community";
+    owner = "arangodb";
     repo = "python-arango";
     rev = "refs/tags/${version}";
-    hash = "sha256-R/59SMEVPZow9aG32gqQApuvB2zQLmPCxf/Mz70ubUU=";
+    hash = "sha256-EK1jZajACdc5IWF/Tgg3albUAH566G0IwUsHk4dZpoQ=";
   };
 
   nativeBuildInputs = [
@@ -147,9 +148,7 @@ buildPythonPackage rec {
     "test_replication_applier"
   ];
 
-  pythonImportsCheck = [
-    "arango"
-  ];
+  pythonImportsCheck = [ "arango" ];
 
   meta = with lib; {
     description = "Python Driver for ArangoDB";

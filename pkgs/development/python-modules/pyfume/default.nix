@@ -1,26 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fst-pso
-, numpy
-, pandas
-, pythonOlder
-, scipy
-, simpful
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fst-pso,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  setuptools,
+  simpful,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyfume";
-  version = "0.2.25";
-  format = "setuptools";
+  version = "0.3.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "pyFUME";
-    inherit version;
-    hash = "sha256-uD1IHFyNd9yv3eyHPZ4pg6X2+rLTY5sYsQysuIXbvfA=";
+    inherit pname version;
+    hash = "sha256-UwW5OwFfu01lDKwz72iB2egbOoxb+t8UnEFIUjZmffU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "scipy"
+  ];
 
   propagatedBuildInputs = [
     fst-pso
@@ -28,18 +38,18 @@ buildPythonPackage rec {
     pandas
     scipy
     simpful
+    typing-extensions
   ];
 
   # Module has not test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyfume"
-  ];
+  pythonImportsCheck = [ "pyfume" ];
 
   meta = with lib; {
-    description = "A Python package for fuzzy model estimation";
+    description = "Python package for fuzzy model estimation";
     homepage = "https://github.com/CaroFuchs/pyFUME";
+    changelog = "https://github.com/CaroFuchs/pyFUME/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

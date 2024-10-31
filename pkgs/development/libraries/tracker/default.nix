@@ -25,20 +25,22 @@
 , libsoup
 , libsoup_3
 , json-glib
+, avahi
 , systemd
 , dbus
 , writeText
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
-  version = "3.6.0";
+  version = "3.7.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-qz1KUJN+BMXteEb227mZ4pCYGUAvOJylku5rd90o0fk=";
   };
 
   strictDeps = true;
@@ -74,9 +76,10 @@ stdenv.mkDerivation rec {
     libsoup_3
     libuuid
     json-glib
+    avahi
     libstemmer
     dbus
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemd
   ];
 
@@ -100,15 +103,15 @@ stdenv.mkDerivation rec {
     [
       "--cross-file=${crossFile}"
     ]
-  ) ++ lib.optionals (!stdenv.isLinux) [
+  ) ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dsystemd_user_services=false"
   ];
 
   doCheck =
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
-    !stdenv.isDarwin
+    !stdenv.hostPlatform.isDarwin
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
-    && !stdenv.is32bit;
+    && !stdenv.hostPlatform.is32bit;
 
   postPatch = ''
     chmod +x \
@@ -122,8 +125,8 @@ stdenv.mkDerivation rec {
 
   preCheck =
     let
-      linuxDot0 = lib.optionalString stdenv.isLinux ".0";
-      darwinDot0 = lib.optionalString stdenv.isDarwin ".0";
+      linuxDot0 = lib.optionalString stdenv.hostPlatform.isLinux ".0";
+      darwinDot0 = lib.optionalString stdenv.hostPlatform.isDarwin ".0";
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
@@ -162,15 +165,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
+    mainProgram = "tracker3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
   };
-}
+})

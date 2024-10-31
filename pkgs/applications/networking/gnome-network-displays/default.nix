@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 # native
 , meson
 , ninja
@@ -8,25 +7,31 @@
 , gettext
 , desktop-file-utils
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 # Not native
 , gst_all_1
 , gsettings-desktop-schemas
-, gtk3
+, gtk4
+, avahi
 , glib
 , networkmanager
+, json-glib
+, libadwaita
+, libportal-gtk4
 , libpulseaudio
+, libsoup_3
 , pipewire
+, protobufc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
-  version = "0.90.5";
+  version = "0.93.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-2SBVQK4fJeK8Y2UrrL0g5vQIerDdGE1nhFc6ke4oIpI=";
+    url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-xxvR8zR+Yglo0e9HRrSFPbgEriYpcRN5K0SXg/D0Oo4=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     desktop-file-utils
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
   ];
 
   buildInputs = [
-    gtk3
+    avahi
+    gtk4
     glib
     gsettings-desktop-schemas
     gst_all_1.gstreamer
@@ -53,8 +59,23 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-vaapi
     pipewire
     networkmanager
+    json-glib
+    libadwaita
+    libportal-gtk4
     libpulseaudio
+    libsoup_3
+    protobufc
   ];
+
+  /* Without this flag, we get this include error:
+
+  /nix/store/...-gst-rtsp-server-1.22.8-dev/include/gstreamer-1.0/gst/rtsp-server/rtsp-media-factory.h:21:10: fatal error: gst/rtsp/gstrtspurl.h: No such file or directory
+  21 | #include <gst/rtsp/gstrtspurl.h>
+
+  Hence, this is not necessarily an upstream issue, but could be something
+  wrong with how our gst_all_1 depend on each other.
+  */
+  CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py

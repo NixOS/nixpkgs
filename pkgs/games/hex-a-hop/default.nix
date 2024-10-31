@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchzip {
-    url = "https://downloads.sourceforge.net/project/hexahop/${version}/hex-a-hop-${version}.tar.gz";
+    url = "mirror://sourceforge/project/hexahop/${version}/hex-a-hop-${version}.tar.gz";
     sha256 = "sha256-fBSvNtgNR0aNofbvoYpM1e8ww4ARlXIvrQUvJqVGLlY=";
   };
 
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A puzzle game based on hexagonal tiles";
+    description = "Puzzle game based on hexagonal tiles";
+    mainProgram = "hex-a-hop";
     homepage = "http://hexahop.sourceforge.net";
     license = with lib.licenses; [
       gpl2Plus # Main code

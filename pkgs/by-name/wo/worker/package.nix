@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "worker";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "http://www.boomerangsworld.de/cms/worker/downloads/worker-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7bnJ7w7ejK5VDkna52jCtHKD8iiNOdXCpU0wx7RtkxA=";
+    hash = "sha256-Tff/1I9RZYo2oXGsnrGeSs69W9nPu7OFDwF1Bg6R01s=";
   };
 
   buildInputs = [ libX11 ];

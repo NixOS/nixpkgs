@@ -2,27 +2,33 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, openssl
 , postgresql
 , postgresqlTestHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "lantern";
-  version = "0.0.12";
+  pname = "postgresql-lantern";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PJLpRX5IuHBz7xywgD/lXfr6c6Kn1XmQ6MCGSuKPmlE=";
+    hash = "sha256-V8W61hELXeaVvNZgRUcckFlCMWis7NENlRKySxsK/L8=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    patchShebangs --build lantern_hnsw/scripts/link_llvm_objects.sh
+   '';
 
   nativeBuildInputs = [
     cmake
   ];
 
   buildInputs = [
+    openssl
     postgresql
   ];
 
@@ -38,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_FOR_DISTRIBUTING=ON"
+    "-S ../lantern_hnsw"
   ];
 
   passthru.tests.extension = stdenv.mkDerivation {
@@ -71,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.bsl11;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     # error: use of undeclared identifier 'aligned_alloc'
-    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
+    broken = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
   };
 })

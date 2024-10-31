@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2023.08";
+  version = "2024.06";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "raku";
     repo = "nqp";
     rev = version;
-    hash = "sha256-kVNj6zDT0z6eFxtTovpT1grbl0pygsPKkFoVcFW7baI=";
+    hash = "sha256-FqZPUtzlS+ZSlyuCFMWHofLXPuXCWAT6Oak0g3o8cgM=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Raku/nqp";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [ thoughtpolice sgo ];
   };
 }

@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.gltron.org/";
     description = "Game based on the movie Tron";
+    mainProgram = "gltron";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

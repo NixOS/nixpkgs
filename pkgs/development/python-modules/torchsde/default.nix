@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, boltons
-, numpy
-, scipy
-, torch
-, trampoline
+  # dependencies
+  boltons,
+  numpy,
+  scipy,
+  torch,
+  trampoline,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace "scipy==1.5.*" "scipy"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     boltons
@@ -48,9 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchsde" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   disabledTests = [
     # RuntimeError: a view of a leaf Variable that requires grad is being used in an in-place operation.

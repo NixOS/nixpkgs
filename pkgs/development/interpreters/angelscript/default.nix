@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "angelscript";
-  version = "2.36.1";
+  version = "2.37.0";
 
   src = fetchurl {
     url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "sha256-WLt0mvnH44YwRwX05uYnrkHf4D4LanPD0NLgF8T8lI8=";
+    sha256 = "sha256-DFLRaIAWoLJITpylSUccTild8GB3DFeEAUTGSBX1TxA=";
   };
 
   nativeBuildInputs = [ unzip cmake ];

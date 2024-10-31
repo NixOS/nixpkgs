@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Find and characterise transposable element insertions";
+    mainProgram = "tebreak";
     homepage = "https://github.com/adamewing/tebreak";
     license = licenses.mit;
     maintainers = with maintainers; [ jbedo ];

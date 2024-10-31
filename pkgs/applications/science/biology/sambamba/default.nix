@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "biod";
     repo = "sambamba";
     rev = "v${version}";
-    sha256 = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
+    hash = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SAM/BAM processing tool";
+    mainProgram = "sambamba";
     homepage = "https://lomereiter.github.io/sambamba/";
     maintainers = with maintainers; [ jbedo ];
     license = with licenses; gpl2;

@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, aiolifx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  aiolifx,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256:09fydp5fqqh1s0vav39mw98i1la6qcgk17gch0m5ihyl9q50ks13";
   };
 
-  propagatedBuildInputs = [
-    aiolifx
-  ];
+  propagatedBuildInputs = [ aiolifx ];
 
   # tests are not implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiolifx_connection"
-  ];
+  pythonImportsCheck = [ "aiolifx_connection" ];
 
   meta = with lib; {
     description = "Wrapper for aiolifx to connect to a single LIFX device";

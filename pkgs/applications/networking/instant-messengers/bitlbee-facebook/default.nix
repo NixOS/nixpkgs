@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Facebook protocol plugin for bitlbee";
+    description = "Facebook protocol plugin for bitlbee";
     homepage = "https://github.com/bitlbee/bitlbee-facebook";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ toonn ];

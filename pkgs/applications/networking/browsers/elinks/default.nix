@@ -4,8 +4,7 @@
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
-, enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
-, fetchpatch
+, enablePerl         ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -14,29 +13,20 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.16.1.1";
+  version = "0.17.1.1";
 
   src = fetchFromGitHub {
     owner = "rkd77";
-    repo = "felinks";
+    repo = "elinks";
     rev = "v${version}";
-    sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
+    hash = "sha256-d5bc6SZ8UQuvVJZjWziy4pi/iIiDAnpU9YTlrlfkdoo=";
   };
-
-  patches = [
-    # Fix build bug with perl 5.38.0. Backport of https://github.com/rkd77/elinks/pull/243 by gentoo:
-    # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/elinks/files/elinks-0.16.1.1-perl-5.38.patch?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869";
-      hash = "sha256-bHP9bc/l7VEw7oXlkSUQhhuq8rT2QTahh9SM7ZJgK5w=";
-    })
-  ];
 
   buildInputs = [
     ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
   ]
-    ++ lib.optional stdenv.isLinux gpm
+    ++ lib.optional stdenv.hostPlatform.isLinux gpm
     ++ lib.optional enableGuile guile
     ++ lib.optional enablePython python
     ++ lib.optional enablePerl perl
@@ -64,8 +54,9 @@ stdenv.mkDerivation rec {
     ;
 
   meta = with lib; {
-    description = "Full-featured text-mode web browser (package based on the fork felinks)";
-    homepage = "https://github.com/rkd77/felinks";
+    description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
+    homepage = "https://github.com/rkd77/elinks";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ iblech gebner ];

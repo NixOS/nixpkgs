@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ premake4 bootil ];
 
   targetName =
-    if stdenv.isLinux then "gmad_linux"
-    else if stdenv.isDarwin then "gmad_osx"
+    if stdenv.hostPlatform.isLinux then "gmad_linux"
+    else if stdenv.hostPlatform.isDarwin then "gmad_osx"
     else "gmad";
 
   premakeFlags = [ "--bootil_lib=${bootil}/lib" "--bootil_inc=${bootil}/include" ];

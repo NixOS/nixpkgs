@@ -1,11 +1,12 @@
-{ lib
-, adal
-, azure-common
-, buildPythonPackage
-, fetchPypi
-, msal
-, pythonOlder
-, requests
+{
+  lib,
+  adal,
+  azure-common,
+  buildPythonPackage,
+  fetchPypi,
+  msal,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BbbeYu4/KgpuaUHmkzt5K4AMPn9v/OL8MkvBmHV1c5M=";
+    hash = "sha256-BbbeYu4/KgpuaUHmkzt5K4AMPn9v/OL8MkvBmHV1c5M=";
   };
 
   propagatedBuildInputs = [

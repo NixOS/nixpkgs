@@ -2,16 +2,17 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
-, withGamemode ? stdenv.isLinux
-, withVulkan ? stdenv.isLinux
-, withWayland ? stdenv.isLinux
+, withGamemode ? stdenv.hostPlatform.isLinux
+, withVulkan ? stdenv.hostPlatform.isLinux
+, withWayland ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, ffmpeg_4
+, ffmpeg
 , flac
 , freetype
 , gamemode
+, gitUpdater
 , libdrm
 , libGL
 , libGLU
@@ -35,6 +36,7 @@
 , udev
 , vulkan-loader
 , wayland
+, wayland-scanner
 , wrapQtAppsHook
 , zlib
 }:
@@ -46,12 +48,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.16.0.3";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-BT+LzRDoQF03aNT2Kg7YaSWhK74CvOOiHUeHDtFpe9s=";
+    hash = "sha256-NVe5dhH3w7RL1C7Z736L5fdi/+aO+Ah9Dpa4u4kn0JY=";
     rev = "v${version}";
   };
 
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg
     flac
     freetype
     libGL
@@ -75,8 +77,8 @@ stdenv.mkDerivation rec {
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
   lib.optional withVulkan vulkan-loader ++
-  lib.optional withWayland wayland ++
-  lib.optionals stdenv.isLinux [
+  lib.optionals withWayland [wayland wayland-scanner] ++
+  lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
     libX11
@@ -102,7 +104,7 @@ stdenv.mkDerivation rec {
     "--disable-update_assets"
     "--disable-update_core_info"
   ] ++
-  lib.optionals stdenv.isLinux [
+  lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-dbus"
     "--enable-egl"
     "--enable-kms"
@@ -122,7 +124,12 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man6/retroarch-cg2glsl.6*
   '';
 
-  passthru.tests = nixosTests.retroarch;
+  passthru = {
+    tests = nixosTests.retroarch;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://libretro.com";
@@ -136,6 +143,6 @@ stdenv.mkDerivation rec {
     # https://docs.libretro.com/development/retroarch/compilation/osx/
     # and
     # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

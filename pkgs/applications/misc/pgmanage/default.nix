@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   passthru.tests.sign-in = nixosTests.pgmanage;
 
   meta = with lib; {
-    description = "A fast replacement for PGAdmin";
+    description = "Fast replacement for PGAdmin";
     longDescription = ''
       At the heart of pgManage is a modern, fast, event-based C-binary, built in
       the style of NGINX and Node.js. This heart makes pgManage as fast as any
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pgManage/pgManage";
     license = licenses.postgresql;
     maintainers = [ maintainers.basvandijk ];
+    mainProgram = "pgmanage";
   };
 }

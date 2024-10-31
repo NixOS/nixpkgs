@@ -1,30 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, extra-cmake-modules
-, pkg-config
-, dtkcommon
-, qtbase
-, qtx11extras
-, mtdev
-, cairo
-, xorg
-, wayland
-, dwayland
-, qtwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  dtkcommon,
+  libsForQt5,
+  mtdev,
+  cairo,
+  xorg,
+  wayland,
+  dwayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qt5platform-plugins";
-  version = "5.6.16";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-1/biT8wR44+sdOMhBW/8KMUSBDK/UxuEqsyjTZyjBT4=";
+    hash = "sha256-jbt+ym6TQX3tecFCSlz8Z2ZnqOa69zYgaB5ohQM3lQg=";
   };
 
   nativeBuildInputs = [
@@ -37,25 +35,17 @@ stdenv.mkDerivation rec {
     dtkcommon
     mtdev
     cairo
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
     xorg.libSM
     wayland
     dwayland
-    qtwayland
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "use-ECM-to-help-dwayland-find-wayland.patch";
-      url = "https://github.com/linuxdeepin/qt5platform-plugins/commit/d7f6230716a0ff5ce34fc7d292ec0af5bbac30e4.patch";
-      hash = "sha256-RY2+QBR3OjUGBX4Y9oVvIRY90IH9rTOCg8dCddkB2WE=";
-    })
+    libsForQt5.qtwayland
   ];
 
   cmakeFlags = [
-    "-DINSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
-    "-DQT_XCB_PRIVATE_HEADERS=${qtbase.src}/src/plugins/platforms/xcb"
+    "-DINSTALL_PATH=${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/platforms"
+    "-DQT_XCB_PRIVATE_HEADERS=${libsForQt5.qtbase.src}/src/plugins/platforms/xcb"
   ];
 
   dontWrapQtApps = true;

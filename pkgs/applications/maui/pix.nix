@@ -45,6 +45,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Image gallery application";
+    mainProgram = "pix";
     homepage = "https://invent.kde.org/maui/pix";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

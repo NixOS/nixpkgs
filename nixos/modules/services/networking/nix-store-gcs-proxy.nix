@@ -9,18 +9,18 @@ let
         default = true;
         type = types.bool;
         example = true;
-        description = lib.mdDoc "Whether to enable proxy for this bucket";
+        description = "Whether to enable proxy for this bucket";
       };
       bucketName = mkOption {
         type = types.str;
         default = name;
         example = "my-bucket-name";
-        description = lib.mdDoc "Name of Google storage bucket";
+        description = "Name of Google storage bucket";
       };
       address = mkOption {
         type = types.str;
         example = "localhost:3000";
-        description = lib.mdDoc "The address of the proxy.";
+        description = "The address of the proxy.";
       };
     };
   };
@@ -31,7 +31,7 @@ in
   options.services.nix-store-gcs-proxy = mkOption {
     type = types.attrsOf (types.submodule opts);
     default = {};
-    description = lib.mdDoc ''
+    description = ''
       An attribute set describing an HTTP to GCS proxy that allows us to use GCS
       bucket via HTTP protocol.
     '';

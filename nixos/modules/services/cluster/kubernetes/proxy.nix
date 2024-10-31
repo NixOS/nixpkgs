@@ -16,28 +16,28 @@ in
   options.services.kubernetes.proxy = with lib.types; {
 
     bindAddress = mkOption {
-      description = lib.mdDoc "Kubernetes proxy listening address.";
+      description = "Kubernetes proxy listening address.";
       default = "0.0.0.0";
       type = str;
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes proxy");
+    enable = mkEnableOption "Kubernetes proxy";
 
     extraOpts = mkOption {
-      description = lib.mdDoc "Kubernetes proxy extra command line options.";
+      description = "Kubernetes proxy extra command line options.";
       default = "";
       type = separatedString " ";
     };
 
     featureGates = mkOption {
-      description = lib.mdDoc "List set of feature gates";
+      description = "Attribute set of feature gates.";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      type = attrsOf bool;
     };
 
     hostname = mkOption {
-      description = lib.mdDoc "Kubernetes proxy hostname override.";
+      description = "Kubernetes proxy hostname override.";
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
       type = str;
@@ -46,7 +46,7 @@ in
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
 
     verbosity = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
@@ -69,8 +69,8 @@ in
           --bind-address=${cfg.bindAddress} \
           ${optionalString (top.clusterCidr!=null)
             "--cluster-cidr=${top.clusterCidr}"} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
+          ${optionalString (cfg.featureGates != {})
+            "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
           --hostname-override=${cfg.hostname} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \

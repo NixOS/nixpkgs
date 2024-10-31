@@ -17,44 +17,44 @@ in
   options = {
 
     services.memcached = {
-      enable = mkEnableOption (lib.mdDoc "Memcached");
+      enable = mkEnableOption "Memcached";
 
       user = mkOption {
         type = types.str;
         default = "memcached";
-        description = lib.mdDoc "The user to run Memcached as";
+        description = "The user to run Memcached as";
       };
 
       listen = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "The IP address to bind to.";
+        description = "The IP address to bind to.";
       };
 
       port = mkOption {
         type = types.port;
         default = 11211;
-        description = lib.mdDoc "The port to bind to.";
+        description = "The port to bind to.";
       };
 
-      enableUnixSocket = mkEnableOption (lib.mdDoc "unix socket at /run/memcached/memcached.sock");
+      enableUnixSocket = mkEnableOption "Unix Domain Socket at /run/memcached/memcached.sock instead of listening on an IP address and port. The `listen` and `port` options are ignored";
 
       maxMemory = mkOption {
         type = types.ints.unsigned;
         default = 64;
-        description = lib.mdDoc "The maximum amount of memory to use for storage, in megabytes.";
+        description = "The maximum amount of memory to use for storage, in megabytes.";
       };
 
       maxConnections = mkOption {
         type = types.ints.unsigned;
         default = 1024;
-        description = lib.mdDoc "The maximum number of simultaneous connections.";
+        description = "The maximum number of simultaneous connections.";
       };
 
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "A list of extra options that will be added as a suffix when running memcached.";
+        description = "A list of extra options that will be added as a suffix when running memcached.";
       };
     };
 

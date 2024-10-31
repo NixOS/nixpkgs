@@ -18,9 +18,8 @@
 , libgee
 , callPackage
 , python3
-, gtk3
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook4
 , sixelSupport ? false
 }:
 
@@ -48,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson/postinstall.py
   '';
 
@@ -57,9 +58,8 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     sassc
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
-    gtk3 # For gtk-update-icon-cache
     desktop-file-utils # For update-desktop-database
   ];
   buildInputs = [
@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
         rev = "3c8f66be867aca6656e4109ce880b6ea7431b895";
         hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
       };
+      postPatch = (old.postPatch or "") + ''
+        patchShebangs src/box_drawing_generate.sh
+      '';
     } // lib.optionalAttrs sixelSupport {
       buildInputs = old.buildInputs ++ [ libsixel ];
       mesonFlags = old.mesonFlags ++ [ "-Dsixel=true" ];

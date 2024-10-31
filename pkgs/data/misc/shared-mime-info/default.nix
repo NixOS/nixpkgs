@@ -5,7 +5,6 @@
 , ninja
 , pkg-config
 , gettext
-, itstool
 , libxml2
 , glib
 , shared-mime-info
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A database of common MIME types";
+    description = "Database of common MIME types";
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

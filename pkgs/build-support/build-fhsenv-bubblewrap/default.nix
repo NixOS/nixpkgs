@@ -5,14 +5,13 @@
 , writeShellScript
 , glibc
 , pkgsi686Linux
+, runCommandCC
 , coreutils
 , bubblewrap
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, runScript ? "bash"
+{ runScript ? "bash"
+, nativeBuildInputs ? []
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -29,20 +28,30 @@
 , ...
 } @ args:
 
-assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
+assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
 
-with builtins;
 let
-  pname = if args ? name && args.name != null then args.name else args.pname;
-  versionStr = lib.optionalString (version != null) ("-" + version);
-  name = pname + versionStr;
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    escapeShellArgs
+    filter
+    optionalString
+    splitString
+    ;
+
+  inherit (lib.attrsets) removeAttrs;
+
+  name = args.name or "${args.pname}-${args.version}";
+  executableName = args.pname or args.name;
+  # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
-    "pname" "version"
   ]);
 
   etcBindEntries = let
@@ -90,39 +99,43 @@ let
     ];
   in map (path: "/etc/${path}") files;
 
-  # Create this on the fly instead of linking from /nix
-  # The container might have to modify it and re-run ldconfig if there are
-  # issues running some binary with LD_LIBRARY_PATH
-  createLdConfCache = ''
-    cat > /etc/ld.so.conf <<EOF
-    /lib
-    /lib/x86_64-linux-gnu
-    /lib64
-    /usr/lib
-    /usr/lib/x86_64-linux-gnu
-    /usr/lib64
-    /lib/i386-linux-gnu
-    /lib32
-    /usr/lib/i386-linux-gnu
-    /usr/lib32
-    /run/opengl-driver/lib
-    /run/opengl-driver-32/lib
-    EOF
-    ldconfig &> /dev/null
+  # Here's the problem case:
+  # - we need to run bash to run the init script
+  # - LD_PRELOAD may be set to another dynamic library, requiring us to discover its dependencies
+  # - oops! ldconfig is part of the init script, and it hasn't run yet
+  # - everything explodes
+  #
+  # In particular, this happens with fhsenvs in fhsenvs, e.g. when running
+  # a wrapped game from Steam.
+  #
+  # So, instead of doing that, we build a tiny static (important!) shim
+  # that executes ldconfig in a completely clean environment to generate
+  # the initial cache, and then execs into the "real" init, which is the
+  # first time we see anything dynamically linked at all.
+  #
+  # Also, the real init is placed strategically at /init, so we don't
+  # have to recompile this every time.
+  containerInit = runCommandCC "container-init" {
+    buildInputs = [ stdenv.cc.libc.static or null ];
+  } ''
+    $CXX -static -s -o $out ${./container-init.cc}
   '';
-  init = run: writeShellScript "${name}-init" ''
+
+  realInit = run: writeShellScript "${name}-init" ''
     source /etc/profile
-    ${createLdConfCache}
     exec ${run} "$@"
   '';
 
-  indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
+  indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ${extraPreBwrapCmds}
-    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
+    ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    ${extraPreBwrapCmds}
+
+    # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -136,6 +149,7 @@ let
       fi
     done
 
+    # loop through the entries of /etc in the fhs environment.
     if [[ -d ${fhsenv}/etc ]]; then
       for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
@@ -144,7 +158,11 @@ let
         if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
-        ro_mounts+=(--ro-bind "$i" "/etc$path")
+        if [[ -L $i ]]; then
+          symlinks+=(--symlink "$i" "/etc$path")
+        else
+          ro_mounts+=(--ro-bind "$i" "/etc$path")
+        fi
         etc_ignored+=("/etc$path")
       done
     fi
@@ -156,7 +174,8 @@ let
       ro_mounts+=(--ro-bind /etc /.host-etc)
     fi
 
-    for i in ${lib.escapeShellArgs etcBindEntries}; do
+    # link selected etc entries from the actual root
+    for i in ${escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
@@ -181,13 +200,15 @@ let
     x11_args+=(--tmpfs /tmp/.X11-unix)
 
     # Try to guess X socket path. This doesn't cover _everything_, but it covers some things.
-    if [[ "$DISPLAY" == :* ]]; then
-      display_nr=''${DISPLAY#?}
+    if [[ "$DISPLAY" == *:* ]]; then
+      # recover display number from $DISPLAY formatted [host]:num[.screen]
+      display_nr=''${DISPLAY/#*:} # strip host
+      display_nr=''${display_nr/%.*} # strip screen
       local_socket=/tmp/.X11-unix/X$display_nr
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
-    ${lib.optionalString privateTmp ''
+    ${optionalString privateTmp ''
     # sddm places XAUTHORITY in /tmp
     if [[ "$XAUTHORITY" == /tmp/* ]]; then
       x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
@@ -212,15 +233,15 @@ let
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
-      ${lib.optionalString unshareUser "--unshare-user"}
-      ${lib.optionalString unshareIpc "--unshare-ipc"}
-      ${lib.optionalString unsharePid "--unshare-pid"}
-      ${lib.optionalString unshareNet "--unshare-net"}
-      ${lib.optionalString unshareUts "--unshare-uts"}
-      ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      ${lib.optionalString dieWithParent "--die-with-parent"}
+      ${optionalString unshareUser "--unshare-user"}
+      ${optionalString unshareIpc "--unshare-ipc"}
+      ${optionalString unsharePid "--unshare-pid"}
+      ${optionalString unshareNet "--unshare-net"}
+      ${optionalString unshareUts "--unshare-uts"}
+      ${optionalString unshareCgroup "--unshare-cgroup"}
+      ${optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      ${lib.optionalString privateTmp "--tmpfs /tmp"}
+      ${optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -234,7 +255,8 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
-  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
+      --symlink ${realInit runScript} /init \
+  '' + optionalString fhsenv.isMultiBuild (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
@@ -246,15 +268,14 @@ let
       "''${auto_mounts[@]}"
       "''${x11_args[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}
-      ${init runScript} ${initArgs}
+      ${containerInit} ${initArgs}
     )
     exec "''${cmd[@]}"
   '';
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
-in runCommandLocal name {
-  inherit pname version;
-  inherit meta;
+in runCommandLocal name (nameAttrs // {
+  inherit nativeBuildInputs meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {
@@ -267,9 +288,9 @@ in runCommandLocal name {
     '';
     inherit args fhsenv;
   };
-} ''
+}) ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${executableName}
 
   ${extraInstallCommands}
 ''

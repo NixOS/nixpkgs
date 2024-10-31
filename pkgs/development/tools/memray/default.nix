@@ -1,58 +1,72 @@
-{ lib
-, fetchFromGitHub
-, libunwind
-, lz4
-, pkg-config
-, python3
+{
+  lib,
+  elfutils,
+  fetchFromGitHub,
+  libunwind,
+  lz4,
+  pkg-config,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
+    hash = "sha256-U9JR60rSxPYXbZaKR7vVNhGT78AXnqcoqvVC6/1OW/E=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
+  build-system = with python3Packages; [
+    distutils
+    setuptools
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libunwind
     lz4
-  ] ++ (with python3.pkgs; [
-    cython
-  ]);
+    elfutils # for `-ldebuginfod`
+  ] ++ (with python3Packages; [ cython ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
+    pkgconfig
+    textual
     jinja2
     rich
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    ipython
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    greenlet
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      ipython
+      pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-textual-snapshot
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [ greenlet ];
 
-  pythonImportsCheck = [
-    "memray"
-  ];
+  pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # snapshot-based tests are too fragile
+    # see https://github.com/bloomberg/memray/issues/654
+    "TestTUILooks"
+    "test_tui_basic"
+    "test_tui_pause"
+    "test_tui_gradient"
+    "test_merge_threads"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [

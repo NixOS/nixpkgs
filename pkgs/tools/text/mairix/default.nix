@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     homepage = "http://www.rc0.org.uk/mairix";
     license = lib.licenses.gpl2Plus;
     description = "Program for indexing and searching email messages stored in maildir, MH or mbox";
-    maintainers = with lib.maintainers; [viric];
+    mainProgram = "mairix";
+    maintainers = [ ];
     platforms = with lib.platforms; all;
   };
 }

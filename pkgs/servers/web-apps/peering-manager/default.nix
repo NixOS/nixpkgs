@@ -1,6 +1,5 @@
 { python3
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 , lib
 
@@ -9,16 +8,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-He1AXfNsjVHYt2cBDjObz6sRcPbtsMotAsw+hvMrWyA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
   };
 
   format = "other";
+
+  patches = [
+    # Fix compatibility with pyixapi 0.2.3
+    # https://github.com/peering-manager/peering-manager/commit/ee558ff66e467412942559a8a92252e3fc009920
+    ./fix-pyixapi-0.2.3-compatibility.patch
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     django
@@ -77,6 +82,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://peering-manager.net/";
     license = licenses.asl20;
     description = "BGP sessions management tool";
+    mainProgram = "peering-manager";
     maintainers = teams.wdz.members;
     platforms = platforms.linux;
   };

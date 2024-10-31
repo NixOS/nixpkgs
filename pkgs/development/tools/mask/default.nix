@@ -2,22 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mask";
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "jacobdeichert";
     repo = pname;
     rev = "mask/${version}";
-    hash = "sha256-pi8dD4Fko39yn1maXNOqm+aDWYJhxE/b4kH7H18InbY=";
+    hash = "sha256-xGD23pso5iS+9dmfTMNtR6YqUqKnzJTzMl+OnRGpL3g=";
   };
 
-  cargoHash = "sha256-zbvYSTR0m7S4m0WFQrCqCrMXqMcDW2oIMznD5PDdeHE=";
+  cargoHash = "sha256-bhf6+nUxg4yIQIjiQYFdtPPF1crFVsofHdEsIOpiH2Q=";
 
   # tests require mask to be installed
   doCheck = false;
 
   meta = with lib; {
-    description = "A CLI task runner defined by a simple markdown file";
+    description = "CLI task runner defined by a simple markdown file";
+    mainProgram = "mask";
     homepage = "https://github.com/jacobdeichert/mask";
     changelog = "https://github.com/jacobdeichert/mask/blob/mask/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Netflix/vmaf";
     changelog = "https://github.com/Netflix/vmaf/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd2Patent;
-    maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
+    maintainers = [ maintainers.cfsmp3 ];
     mainProgram = "vmaf";
     platforms = platforms.unix;
   };

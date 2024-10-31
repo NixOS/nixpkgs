@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchurl
 , system
 , snapshotPath
 , autoPatchelfHook
@@ -137,7 +138,7 @@ let
       inherit pname version snapshot;
       src =
         lib.optionalString (src != "")
-          (builtins.fetchurl
+          (fetchurl
             {
               url = src;
               inherit sha256;
@@ -163,7 +164,7 @@ let
       nativeBuildInputs = [
         python3
         stdenv.cc.cc
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
       ];
       buildInputs = [

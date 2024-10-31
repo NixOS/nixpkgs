@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zpV3RpFPYICntNLVTC4FpkrxJ7nDh/KEzmNpg0ORWZQ=";
+    sha256 = "sha256-2agZ/EqLbFdYh7qGDGX938TeCGZr1mUw4mQLy+O2+ug=";
   };
 
   buildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--libdir=${placeholder "out"}/lib"
+    "--datadir=${placeholder "out"}/share"
     "--disable-bundled-getopt"
     "--disable-bundled-md5"
     "--disable-dynamic-load"
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
+{ lib, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook3 }:
 
 python3Packages.buildPythonApplication {
   pname = "connman-notify";
@@ -8,12 +8,12 @@ python3Packages.buildPythonApplication {
     owner = "wavexx";
     repo = "connman-notify";
     rev = "24b10a51721b54d932f4cd61ef2756423768c015";
-    sha256 = "1k5b5y6114yna2cm0cq82xilicran63hrhlklgv7k3p89057xh8j";
+    hash = "sha256-EsF+Ckjojnn2o5PCDIexKrNIYxcIM1CZUNaTEIwvq8w=";
   };
 
   format = "other";
 
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
 
   buildInputs = [ glib ];
 
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication {
 
   meta = with lib; {
     description = "Desktop notification integration for connman";
+    mainProgram = "connman-notify";
     homepage = "https://gitlab.com/wavexx/connman-notify";
     license = licenses.gpl2;
     platforms = platforms.linux;

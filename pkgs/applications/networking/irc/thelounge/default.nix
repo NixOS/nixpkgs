@@ -4,10 +4,10 @@
 , fetchYarnDeps
 , nodejs
 , yarn
-, fixup_yarn_lock
-, python3
+, fixup-yarn-lock
+, python311
 , npmHooks
-, darwin
+, cctools
 , sqlite
 , srcOnly
 , buildPackages
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
-  version = "4.4.1";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "thelounge";
     repo = "thelounge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4FdNYP9VLgv/rfvT7KHCF+ABFsZvPbJjfz6IvvDkRNA=";
+    hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
   };
 
   # Allow setting package path for the NixOS module.
@@ -35,10 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
+    hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
   };
 
-  nativeBuildInputs = [ nodejs yarn fixup_yarn_lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  # Distutils was deprecated in 3.10, and removed in 3.12. This build needs it. An alternative could be adding
+  # setuptools, but testing with that and 3.12 still fails.
+  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python311 npmHooks.npmInstallHook ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME="$PWD"
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

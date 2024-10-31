@@ -11,14 +11,21 @@ buildNpmPackage {
 
   postPatch = ''
     substituteInPlace package.json \
-      --replace "--base=/BASE_PATH/" ""
+      --replace-fail "--base=/BASE_PATH/" ""
 
-    substituteInPlace src/routes/Storage.jsx \
-      --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate"
+    substituteInPlace \
+      src/views/system/StorageMetrics.tsx \
+      src/components/card/{AnimatedEvent,Export,Review}Card.tsx \
+      src/components/timeline/EventSegment.tsx \
+      src/pages/Exports.tsx \
+      src/components/player/PreviewThumbnailPlayer.tsx \
+      --replace-fail "/media/frigate" "/var/lib/frigate" \
+
+    substituteInPlace src/views/system/StorageMetrics.tsx \
+      --replace-fail "/tmp/cache" "/var/cache/frigate"
   '';
 
-  npmDepsHash = "sha256-fvRxpQjSEzd2CnoEOVgQcB6MJJ4dcjN8bOaacHjCdwU=";
+  npmDepsHash = "sha256-PLs3oCWQjK38eHgdQt2Qkj7YqkfanC8JnLMpzMjNfxU=";
 
   installPhase = ''
     cp -rv dist/ $out

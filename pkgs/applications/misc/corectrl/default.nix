@@ -1,14 +1,16 @@
 { lib, stdenv
 , fetchFromGitLab
 , extra-cmake-modules
-, botan2
+, botan3
 , karchive
 , kauth
 , libdrm
 , hwdata
-, glxinfo
+, mesa-demos
 , polkit
 , procps
+, pugixml
+, spdlog
 , util-linux
 , vulkan-tools
 , qtbase
@@ -23,13 +25,13 @@
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.3.8";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-lc6yWzJiSzGKMzJIpgOtirJONsh49vXWDWrhLV/erwQ=";
+    hash = "sha256-WOljOakh177om7tLlroFwWO4gYsarfTCeVXX6+dmZs4=";
   };
   patches = [
     ./polkit-dir.patch
@@ -40,13 +42,15 @@ stdenv.mkDerivation rec{
     wrapQtAppsHook
   ];
   buildInputs = [
-    botan2
+    botan3
     karchive
     kauth
     libdrm
-    glxinfo
+    mesa-demos
     polkit
     procps
+    pugixml
+    spdlog
     util-linux
     vulkan-tools
     qtbase
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec{
     "-DPOLKIT_POLICY_INSTALL_DIR=${placeholder "out"}/share/polkit-1/actions"
   ];
 
-  runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
+  runtimeDeps = [ hwdata mesa-demos vulkan-tools util-linux procps ];
   binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;

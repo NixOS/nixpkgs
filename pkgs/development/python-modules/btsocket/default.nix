@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "btsocket";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,17 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ukBaz";
     repo = "python-btsocket";
-    rev = "v${version}";
-    hash = "sha256-IqlbFYbEyJPlcmT3DIQIwsjQEAGeIGRtFNx4jWwNtjE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/T89GZJth7pBGQuN1ytCf649oWv7aZcfPHjYoftbLw8=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "btsocket"
-  ];
+  pythonImportsCheck = [ "btsocket" ];
 
   meta = with lib; {
     description = "Library to interact with the Bluez Bluetooth Management API";

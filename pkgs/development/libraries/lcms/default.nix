@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cve-2013-4276.patch ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   outputs = [ "bin" "dev" "out" "man" ];
 
   doCheck = false; # fails with "Error in Linear interpolation (2p): Must be i=8000, But is n=8001"

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-eqzqIyQHHklxo3aojCvY06TUPSqChoz6yZ2zzpgRNqs=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postInstall = ''
     installManPage docs/fselect.1

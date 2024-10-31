@@ -9,22 +9,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-f+k7ONX9bDrkyIhFxxaJvZYH2WBxYwCssbfM2fBPtRk=";
+    hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
   };
 
-  cargoHash = "sha256-Omxd0ZgvtEiciFnKWkYupyts2QT9LUTXxaTdfu0Jnx8=";
+  cargoHash = "sha256-/BBue4YfpFk/tId2GV9sstEdgNuy3QnieINGnx45ydU=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=validate_printed_urls"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/miniserve --print-manpage >miniserve.1
     installManPage miniserve.1
 

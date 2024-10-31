@@ -1,4 +1,4 @@
-{ lib, fetchzip, tcl, tcllib, tk, }:
+{ lib, fetchzip, tcl, tclPackages, tk, }:
 
 tcl.mkTclDerivation {
   pname = "nagelfar";
@@ -11,7 +11,7 @@ tcl.mkTclDerivation {
 
   buildInputs = [
     tcl
-    tcllib
+    tclPackages.tcllib
     tk
   ];
 
@@ -21,7 +21,7 @@ tcl.mkTclDerivation {
 
   meta = with lib; {
     homepage = "https://nagelfar.sourceforge.net/";
-    description = "A static syntax checker (linter) for Tcl";
+    description = "Static syntax checker (linter) for Tcl";
     longDescription = ''
       Provides static syntax checking, code coverage instrumentation,
       and is very extendable through its syntax database and plugins.

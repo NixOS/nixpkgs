@@ -39,7 +39,7 @@ mkDerivation {
 
   meta = {
     homepage = "https://apps.kde.org/kalgebra/";
-    description = "A 2D and 3D Graph Calculator";
+    description = "2D and 3D Graph Calculator";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ ninjafb ];
   };

@@ -5,20 +5,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diswall";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "dis-works";
     repo = "diswall-rs";
     rev = "v${version}";
-    sha256 = "sha256-i3R1w2SBBa5hGorvyjEfkuZVN3bE7aHcpoIrtSuS4dA=";
+    sha256 = "sha256-iZln/cgYGSFYwXDvD1CkQdfwBDXj897X1il1m5HfFJs=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
-  cargoHash = "sha256-aJDhLwzOgOVpH/JIrv1aczv5lvJrUlR6Oxj71XeYpSI=";
+  cargoHash = "sha256-5PPI7fnG71xkQCY+OLLk83XZb+4DoPX81bAtKRp/H8U=";
 
   doCheck = false;
 

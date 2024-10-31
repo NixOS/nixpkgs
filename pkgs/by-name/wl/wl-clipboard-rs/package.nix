@@ -6,18 +6,18 @@
 , withNativeLibs ? false
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "wl-clipboard-rs";
-  version = "0.8.0-unstable-2023-11-27";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
-    rev = "be851408e0f91edffdc2f1a76805035847f9f8a9";
-    hash = "sha256-OfLn7izG1KSUjdd2gO4aaSCDlcaWoFiFmgwwhR1hRsQ=";
+    rev = "v${version}";
+    hash = "sha256-qwlR/PJivCgQTXe027zuQxq0iVJ3/BLg6LAD3w5tb9Y=";
   };
 
-  cargoHash = "sha256-rYFCPyWTUhyrEcoRM8I+iX7IaY/6i1tBVjhs47m3XY8=";
+  cargoHash = "sha256-C3vhZq5IHtbfg2mYYdQRqaLSA0iSER8zRaKi72FCd+E=";
 
   cargoBuildFlags = [
     "--package=wl-clipboard-rs"
@@ -47,14 +47,13 @@ rustPlatform.buildRustPackage {
     "--skip=tests::copy::copy_test"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";
     homepage = "https://github.com/YaLTeR/wl-clipboard-rs";
-    # TODO: add `${version}` once we switch to tagged release
-    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/master/CHANGELOG.md";
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [ asl20 mit ];
+    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/v${version}/CHANGELOG.md";
+    platforms = platforms.linux;
+    license = with licenses; [ asl20 mit ];
     mainProgram = "wl-clip";
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ thiagokokada donovanglover ];
   };
 }

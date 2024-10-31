@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
-  buildInputs = lib.optionals stdenv.isDarwin
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
     [ libiconv CoreServices Security ];
 
   checkFlags = [
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An evaluation context for Rust";
+    description = "Evaluation context for Rust";
     homepage = "https://github.com/google/evcxr";
     license = licenses.asl20;
     maintainers = with maintainers; [ protoben ma27 ];

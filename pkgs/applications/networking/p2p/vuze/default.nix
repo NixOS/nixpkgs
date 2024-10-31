@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     homepage = "http://www.vuze.com";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    # Doesn't launch, gives java related incompatibilities errors. Probably
+    # related to swt. Same error happens with swt_jdk8
+    broken = true;
   };
 }

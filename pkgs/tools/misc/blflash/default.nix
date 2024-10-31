@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NRBW2rGrtEmmxONTpCM1D+o5HtnLjp175Sq9+aCp7ZE=";
 
   meta = with lib; {
-    description = "An bl602 serial flasher written in Rust";
+    description = "Bl602 serial flasher written in Rust";
     homepage = "https://github.com/spacemeowx2/blflash";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ _0x4A6F ];

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     imagemagick
     libpng
     pstoedit
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl2;
+    mainProgram = "autotrace";
   };
 }

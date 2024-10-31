@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An LV2 sample based drum plugin";
+    description = "LV2 sample based drum plugin";
     homepage = "https://www.drumgizmo.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu maintainers.nico202 ];
+    maintainers = [ maintainers.nico202 ];
   };
 }

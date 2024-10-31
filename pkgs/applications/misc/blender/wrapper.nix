@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , blender
 , makeWrapper
 , extraModules ? []

@@ -2,21 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-pagetoc";
-  version = "0.1.8";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "slowsage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yFgzgppGX3moLt7X4Xa6Cqs7v5OYJMjXKTV0sqRFL3o=";
+    hash = "sha256-A8J3cKSA//NGIVK3uE43YH3ph9DHGFlg7uOo10j2Kh8=";
   };
 
-  cargoHash = "sha256-U5KNkUXqCU3cVYOqap19aYpaTyY91kGaGxcW8oxsUxI=";
+  cargoHash = "sha256-FvDvPXA4/dxVOIt1LwesBrWEsjdYcrhHescQVAiggBA=";
 
   meta = with lib; {
     description = "Table of contents for mdbook (in sidebar)";
+    mainProgram = "mdbook-pagetoc";
     homepage = "https://github.com/slowsage/mdbook-pagetoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
   };
 }

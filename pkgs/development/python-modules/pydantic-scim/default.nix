@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
       --replace 'version=get_version(),' 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    pydantic
-  ] ++ pydantic.optional-dependencies.email;
+  propagatedBuildInputs = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
-  pythonImportsCheck = [
-    "pydanticscim"
-  ];
+  pythonImportsCheck = [ "pydanticscim" ];
 
   # no tests
   doCheck = false;

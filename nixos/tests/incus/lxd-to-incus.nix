@@ -1,6 +1,11 @@
 import ../make-test-python.nix (
 
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    incus ? pkgs.incus-lts,
+    ...
+  }:
 
   let
     releases = import ../../release.nix { configuration.documentation.enable = lib.mkForce false; };
@@ -18,8 +23,6 @@ import ../make-test-python.nix (
     nodes.machine =
       { lib, ... }:
       {
-        environment.systemPackages = [ pkgs.lxd-to-incus ];
-
         virtualisation = {
           diskSize = 6144;
           cores = 2;
@@ -67,8 +70,12 @@ import ../make-test-python.nix (
             ];
           };
 
-          incus.enable = true;
+          incus = {
+            enable = true;
+            package = incus;
+          };
         };
+        networking.nftables.enable = true;
       };
 
     testScript = ''
@@ -96,7 +103,7 @@ import ../make-test-python.nix (
       machine.wait_for_unit("incus.service")
 
       with machine.nested("run migration"):
-          machine.succeed("lxd-to-incus --yes")
+          machine.succeed("${pkgs.incus}/bin/lxd-to-incus --yes")
 
       with machine.nested("verify resources migrated to incus"):
           machine.succeed("incus config show container")

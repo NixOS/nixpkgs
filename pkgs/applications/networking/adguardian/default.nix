@@ -18,12 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IPkKiXuFN0KFlcrrSjLmML+O5zCrVRKEqdyV2xBsCsg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
+    mainProgram = "adguardian";
     homepage = "https://github.com/Lissy93/AdGuardian-Term";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

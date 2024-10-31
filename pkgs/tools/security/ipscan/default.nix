@@ -7,6 +7,8 @@
 , makeWrapper
 , xorg
 , dpkg
+, gtk3
+, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     cp usr/lib/ipscan/ipscan-linux64-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst gtk3 glib ]}" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Angry IP Scanner - fast and friendly network scanner";
+    mainProgram = "ipscan";
     homepage = "https://angryip.org";
     downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
     changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";
@@ -50,5 +53,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza totoroot ];
+    # Very similar issue to hdfview, see: https://github.com/NixOS/nixpkgs/issues/340048
+    broken = true;
   };
 }

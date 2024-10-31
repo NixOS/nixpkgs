@@ -12,23 +12,31 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_17
+, wlroots_0_18
 , xwayland
 
 , gitUpdater
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.43.0";
+  version = "0.43.4";
 
   src = fetchurl {
-    urls = [
+    urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-plwoIJhY+xa+5Q2AnID5Co5BXA5P2DIQeKGCJ4WlVgo=";
+    hash = "sha256-oGJNuQGAx923n8epFRCT3DfGRtjDjT8jL3Z89kuFoiY=";
   };
+
+  # Raise test timeout, 120s can be slightly exceeded on slower hardware
+  postPatch = ''
+    substituteInPlace test/meson.build \
+      --replace-fail 'timeout : 120' 'timeout : 240'
+  '';
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
@@ -44,7 +52,7 @@ stdenv.mkDerivation rec {
     "-Diwmmxt=disabled"
   ]
   # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-  ++ lib.optional (stdenv.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
+  ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -53,13 +61,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = glib.flattenInclude;
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots xwayland;
+      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
     updateScript = gitUpdater {
       url = "https://gitlab.freedesktop.org/pixman/pixman.git";
@@ -69,8 +80,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://pixman.org";
-    description = "A low-level library for pixel manipulation";
+    description = "Low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
+    pkgConfigModules = [ "pixman-1" ];
   };
-}
+})

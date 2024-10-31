@@ -11,33 +11,33 @@ in
 {
   options = {
     services.varnish = {
-      enable = mkEnableOption (lib.mdDoc "Varnish Server");
+      enable = mkEnableOption "Varnish Server";
 
-      enableConfigCheck = mkEnableOption (lib.mdDoc "checking the config during build time") // { default = true; };
+      enableConfigCheck = mkEnableOption "checking the config during build time" // { default = true; };
 
       package = mkPackageOption pkgs "varnish" { };
 
       http_address = mkOption {
         type = types.str;
         default = "*:6081";
-        description = lib.mdDoc ''
+        description = ''
           HTTP listen address and port.
         '';
       };
 
       config = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Verbatim default.vcl configuration.
         '';
       };
 
       stateDir = mkOption {
         type = types.path;
-        default = "/var/spool/varnish/${config.networking.hostName}";
-        defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
-        description = lib.mdDoc ''
-          Directory holding all state for Varnish to run.
+        default = "/run/varnish/${config.networking.hostName}";
+        defaultText = literalExpression ''"/run/varnish/''${config.networking.hostName}"'';
+        description = ''
+          Directory holding all state for Varnish to run. Note that this should be a tmpfs in order to avoid performance issues and crashes.
         '';
       };
 
@@ -45,7 +45,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.varnishPackages.geoip ]";
-        description = lib.mdDoc ''
+        description = ''
           Varnish modules (except 'std').
         '';
       };
@@ -54,7 +54,7 @@ in
         type = types.str;
         default = "";
         example = "-s malloc,256M";
-        description = lib.mdDoc ''
+        description = ''
           Command line switches for varnishd (run 'varnishd -?' to get list of options)
         '';
       };
@@ -68,11 +68,11 @@ in
       description = "Varnish";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = ''
+      preStart = mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
         mkdir -p ${cfg.stateDir}
         chown -R varnish:varnish ${cfg.stateDir}
       '';
-      postStop = ''
+      postStop = mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
         rm -rf ${cfg.stateDir}
       '';
       serviceConfig = {
@@ -83,6 +83,7 @@ in
         RestartSec = "5s";
         User = "varnish";
         Group = "varnish";
+        RuntimeDirectory = mkIf (lib.hasPrefix "/run/" cfg.stateDir) (lib.removePrefix "/run/" cfg.stateDir);
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         LimitNOFILE = 131072;

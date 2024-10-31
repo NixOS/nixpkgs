@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, cargo
-, rustc
-, libiconv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  cargo,
+  rustc,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit src;
     hash = "sha256-KrEBr998AV/bKcIoq0tX72/QwPD9bQplrS0Zw+JiSMQ=";
   };
 
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "pdoc_pyo3_sample_library" ];
 
@@ -41,7 +40,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A sample PyO3 library used in pdoc tests";
+    description = "Sample PyO3 library used in pdoc tests";
     homepage = "https://github.com/mitmproxy/pdoc-pyo3-sample-library";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbsds ];

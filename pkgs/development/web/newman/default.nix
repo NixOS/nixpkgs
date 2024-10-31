@@ -5,22 +5,23 @@
 
 buildNpmPackage rec {
   pname = "newman";
-  version = "6.1.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "postmanlabs";
     repo = "newman";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n539UlrKnbvyn1Wt/CL+8vZgjBPku82rV9dhcAvwznk=";
+    hash = "sha256-p0/uHrLiqw5VnboXzLKF+f56ZfW77m5aoopf2zqIpQE=";
   };
 
-  npmDepsHash = "sha256-rpGec7Vbxa0wPkMRxIngTqTqKVl70TF7pz8BF0iQ3X0=";
+  npmDepsHash = "sha256-HQ5V0hisolXqWV/oWlroCzC7ZoNw0P9bwTxFyUrL3Hc=";
 
   dontNpmBuild = true;
 
   meta = with lib; {
     homepage = "https://www.getpostman.com";
-    description = "A command-line collection runner for Postman";
+    description = "Command-line collection runner for Postman";
+    mainProgram = "newman";
     changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.asl20;

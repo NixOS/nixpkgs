@@ -1,45 +1,198 @@
 #!@stdenv_shell@ -e
+set -euo pipefail
 shopt -s extglob
 
-[ -z "$DF_DIR" ] && export DF_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
-env_dir="@env@"
-exe="$env_dir/@exe@"
+export NIXPKGS_DF_ENV="@env@"
 
-update_path() {
-  local path="$1"
+### BEGIN: Default DF options
+declare -A _NIXPKGS_DF_OPTS
+_NIXPKGS_DF_OPTS[fmod]=0    # Don't use fmod by default.
+_NIXPKGS_DF_OPTS[debug]=0   # No debugging output by default.
+### END: Default DF options
 
-  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
-  # If user has replaced these data directories, let them stay.
-  if [ ! -e "$DF_DIR/$path" ] || [ -L "$DF_DIR/$path" ]; then
-    @rm@ -f "$DF_DIR/$path"
-    @ln@ -s "$env_dir/$path" "$DF_DIR/$path"
+# Read NIXPKGS_DF_OPTS.
+if [[ ! -v NIXPKGS_DF_OPTS ]]; then
+  NIXPKGS_DF_OPTS=''
+fi
+IFS=',' read -ra options <<< "$NIXPKGS_DF_OPTS"
+for option in ${options[@]+"${options[@]}"}; do
+  key="${option%=*}"
+  value="${option##*=}"
+  if [ -n "$key" ]; then
+    if [ -z "$value" ] || [ "$key" == "$value" ]; then
+      value=1
+    fi
+    _NIXPKGS_DF_OPTS["$key"]="$value"
+  fi
+done
+
+# Rebuild the canonical option string from the read options.
+NIXPKGS_DF_OPTS=''
+for key in "${!_NIXPKGS_DF_OPTS[@]}"; do
+  value="${_NIXPKGS_DF_OPTS["${key}"]}"
+  NIXPKGS_DF_OPTS="$NIXPKGS_DF_OPTS$key=$value,"
+done
+NIXPKGS_DF_OPTS="${NIXPKGS_DF_OPTS%,}"
+
+# Echoes a log.
+# $@: log messages
+log() {
+  for msg in "$@"; do
+    echo "[nixpkgs] $msg" >&2
+  done
+}
+
+# Echoes a log if NIXPKGS_DF_OPTS includes debug.
+# $@: log messages
+debug() {
+  if [ "${_NIXPKGS_DF_OPTS[debug]}" -ne 0 ]; then
+    log "$@"
   fi
 }
 
+# Updates a path in $NIXPKGS_DF_HOME from $NIXPKGS_DF_ENV.
+# $1: The environment path.
+update_path() {
+  local path="$1"
+  local orig="$NIXPKGS_DF_ENV/$path"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  # If user has replaced these data directories, let them stay.
+  @mkdir@ -p "$(dirname -- "$final")"
+  if [ ! -e "$final" ] || [ -L "$final" ]; then
+    debug "Linking: $final -> $orig"
+    @rm@ -f "$final"
+    @ln@ -s "$orig" "$final"
+  else
+    debug "Not updating: $final"
+  fi
+}
+
+# Cleans up a path in $NIXPKGS_DF_HOME that may or may not be in $NIXPKGS_DF_ENV.
+# $1: The environment path.
+cleanup_path() {
+  local path="$1"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  # Let them stay if not a link.
+  if [ ! -e "$final" ] || [ -L "$final" ]; then
+    debug "Cleaning up: $final"
+    @rm@ -f "$final"
+  else
+    debug "Not cleaning: $final"
+  fi
+}
+
+# Force copies a path in $NIXPKGS_DF_HOME that may or may not be in $NIXPKGS_DF_ENV.
+# $1: The environment path.
 forcecopy_path() {
   local path="$1"
 
-  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
-  @rm@ -rf "$DF_DIR/$path"
-  @cp@ -rL --no-preserve=all "$env_dir/$path" "$DF_DIR/$path"
+  if [ -z "$NIXPKGS_DF_ENV" ] || [ -z "$path" ]; then
+    # Avoid producing "/" for any `rm -rf`
+    return
+  fi
+
+  local orig="$NIXPKGS_DF_ENV/$path"
+  local final="$NIXPKGS_DF_HOME/$path"
+
+  if [ -e "$orig" ]; then
+    debug "Force copying: $orig -> $final"
+    @mkdir@ -p "$(dirname -- "$final")"
+    @rm@ -rf "$final"
+    @cp@ -rL --no-preserve=all "$orig" "$final"
+  else
+    debug "Removing: $final"
+    @rm@ -rf "$final"
+  fi
 }
 
-@mkdir@ -p "$DF_DIR"
+# Runs the final executable. Expects NIXPKGS_DF_HOME and NIXPKGS_DF_EXE to be set.
+go() {
+  cd "$NIXPKGS_DF_HOME"
+  debug "Executing: $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
+
+  # If we make it past here, we want to log.
+  # shellcheck disable=SC2093
+  exec -a "$NIXPKGS_DF_EXE" "$NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE"
+  log "Execution of $NIXPKGS_DF_HOME/$NIXPKGS_DF_EXE failed!"
+  exit 1
+}
+
+os_name="$(@uname@)"
+os_rev="$(@uname@ -r)"
+
+if [ "$os_name" == Linux ]; then
+  df_dir="df_linux"
+elif [ "$os_name" == Darwin ]; then
+  df_dir="df_osx"
+else
+  log "Unknown platform: $os_name"
+  exit 1
+fi
+
+if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; }; then
+  # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
+  export NIXPKGS_DF_HOME="$DF_DIR"
+fi
+
+if [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; then
+  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/$df_dir"
+fi
+
+# Compatibility.
+export DF_DIR="$NIXPKGS_DF_HOME"
+
+@mkdir@ -p "$NIXPKGS_DF_HOME"
 
 @cat@ <<EOF >&2
-Using $DF_DIR as Dwarf Fortress overlay directory.
-If you do any changes in it, don't forget to clean it when updating the game version!
-We try to detect changes based on data directories being symbolic links -- keep this in mind.
-
+/------------------------------------------------------------------------------\\
+| Hello from the nixpkgs Dwarf Fortress wrapper!                               |
+|                                                                              |
+| Using the following Dwarf Fortress overlay directory as NIXPKGS_DF_HOME:     |
+| $(@printf@ '% -76s' "$NIXPKGS_DF_HOME") |
+|                                                                              |
+| If you make any changes in it, don't forget to clean it when updating the    |
+| game version! We detect changes if data directories are symbolic links.      |
+|                                                                              |
+| Even though we do our best on our own, this script may miss some. Submit a   |
+| pull request if there are any that become a problem.                         |
+|                                                                              |
+| We started with the following nixpkgs launch options as NIXPKGS_DF_OPTS:     |
+| $(@printf@ '% -76s' "$NIXPKGS_DF_OPTS") |
+|                                                                              |
+| If you want to try fmod over SDL_mixer, set NIXPKGS_DF_OPTS=fmod.            |
+\\------------------------------------------------------------------------------/
 EOF
 
-cd "$env_dir"
-for i in data/init/* data/!(init|index|announcement) raw; do
-  update_path "$i"
+cd "$NIXPKGS_DF_ENV"
+
+# All potential important files in DF 50 and below.
+for path in dwarfort dwarfort.exe df *.so libs raw data/init/* data/!(init|index|announcement); do
+  force_delete=0
+  if [[ "$path" == libfmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
+    force_delete=1
+  fi
+
+  if [ -e "$path" ] && [ "$force_delete" -eq 0 ]; then
+    update_path "$path"
+  else
+    cleanup_path "$path"
+  fi
 done
 
-forcecopy_path data/index
-# For some reason, it's needed to be writable...
-forcecopy_path data/announcement
-forcecopy_path data/help
-forcecopy_path data/dipscript
+# These need to be copied due to read only flags on older versions of DF.
+for path in index announcement help dipscript; do
+  forcecopy_path "data/$path"
+done
+
+# Handle library paths on Darwin.
+if [ "$os_name" == Darwin ]; then
+  if [ "${os_rev%%.*}" -ge 11 ]; then
+    export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+    export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+  else
+    export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+    export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+  fi
+fi

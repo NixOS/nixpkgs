@@ -1,16 +1,15 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , intltool
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , libxml2
 , libxslt
 , sqlite
-, libsoup
-, webkitgtk
+, libsoup_3
+, webkitgtk_4_1
 , json-glib
 , gst_all_1
 , libnotify
@@ -25,25 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.5";
+  version = "1.15.8";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-7lanrs63N6ZnqxvjcW/+cUZVDqUbML2gftQUc/sLr3Q=";
+    hash = "sha256-eBnysEppgYar2QEHq4P+5blmBgrW4H0jHPmYMXri8f8=";
   };
 
-  patches = [
-    # Pull upstream fix for libxml2-2.12 compatibility:
-    #   https://github.com/lwindolf/liferea/pull/1329
-    (fetchpatch {
-      name = "libxml2-2.12.patch";
-      url = "https://github.com/lwindolf/liferea/commit/be8ef494586d9ef73c04ec4ca058a9a158ae3562.patch";
-      hash = "sha256-K1R7dJMm7ui6QKQqAHCo/ZrLCW3PhPU1EKRPEICtCsQ=";
-    })
-  ];
-
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.wrapPython
     intltool
     pkg-config
@@ -53,11 +42,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     libxml2
     libxslt
     sqlite
-    libsoup
+    libsoup_3
     libpeas
     gsettings-desktop-schemas
     json-glib
@@ -84,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GTK-based news feed aggregator";
+    description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ romildo yayayayaka ];

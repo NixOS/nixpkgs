@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, httpx
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  httpx,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "iceportal";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,16 +21,12 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-iceportal";
     rev = "refs/tags/${version}";
-    hash = "sha256-s+jEpxKsa3eIV4a/Ltso51jqZC4jzsvPLTjDFMV9FIA=";
+    hash = "sha256-kpAUgGi2fAHzQYuZAaQW9wdrYjwbduRsoTwSuzcjJa8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "iceportal"
-  ];
+  pythonImportsCheck = [ "iceportal" ];
 
   meta = with lib; {
     description = "Library for getting data from the ICE Portal";

@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     description = "Native Google Chat support for pidgin";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

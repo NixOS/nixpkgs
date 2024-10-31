@@ -3,34 +3,27 @@
 , fetchFromGitHub
 , installShellFiles
 , stdenv
-, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "glow";
-  version = "1.5.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
     rev = "v${version}";
-    hash = "sha256-12UziCf3BO1z+W02slNCCvXhIkvZuVgXk++BdHG3gDI=";
+    hash = "sha256-gPy3MnQHmBJl06oVOpwQB4qIpJ10kUNMNMPkpsIujeI=";
   };
 
-  vendorHash = "sha256-xxFC87t12bZKea9Snscul+xx8IGFAcoIr9Z8wxHL7nM=";
+  vendorHash = "sha256-vxw8yqY6MxIIWeSX1D+unb0VbBmIpz1431N7UNORJP0=";
 
-  # Remove whenever a release with it is available
-  patches = [(fetchpatch {
-    url = "https://github.com/charmbracelet/glow/commit/f0734709f0be19a34e648caaf63340938a50caa2.patch";
-    name = "go-1-17-patch";
-    hash = "sha256-vpMiVb/7SFT9xcSpVGQriEjkexh1F/ljpfpIswdBx2Y=";
-  })];
-
-  doCheck = false;
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  doCheck = false;
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd glow \
       --bash <($out/bin/glow completion bash) \

@@ -13,6 +13,7 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
+, spirv-tools
 , vulkan-headers
 , vulkan-utility-libraries
 , wayland
@@ -23,14 +24,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.275.0";
+  version = "1.3.290.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-hJx8gn0zCN3+DhO6niylZJXPHgQ+VhQV5tL8qAeRaUg=";
+    hash = "sha256-FMzQpc7mwZGib544w0Dx6LeGi64cercm5oUW45raasc=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -39,23 +42,23 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glslang
     libX11
     libXau
     libXdmcp
     libXrandr
     libffi
     libxcb
+    robin-hood-hashing
+    spirv-headers
+    spirv-tools
     vulkan-headers
     vulkan-utility-libraries
     wayland
   ];
 
   cmakeFlags = [
-    "-DGLSLANG_INSTALL_DIR=${glslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
-    "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];
@@ -76,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The official Khronos Vulkan validation layers";
+    description = "Official Khronos Vulkan validation layers";
     homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;
     license     = licenses.asl20;

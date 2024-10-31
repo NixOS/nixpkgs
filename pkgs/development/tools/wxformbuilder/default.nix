@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxformbuilder";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
@@ -21,37 +21,37 @@ stdenv.mkDerivation (finalAttrs: {
     leaveDotGit = true;
     postFetch = ''
       substituteInPlace $out/.git-properties \
-        --replace "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
-        --replace "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
+        --replace-fail "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
+        --replace-fail "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
       rm -rf $out/.git
     '';
-    hash = "sha256-Lqta+u9WVwUREsR7aH+2DJn0oM5QwlwRSBImuwNkmS4=";
+    hash = "sha256-e0oYyUv8EjGDVj/TWx2jGaj22YyFJf1xa6lredV1J0Y=";
   };
 
   postPatch = ''
     substituteInPlace third_party/tinyxml2/cmake/tinyxml2.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     shared-mime-info
   ];
 
   buildInputs = [
     boost
     wxGTK32
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/wxFormBuilder.app $out/Applications
     makeWrapper $out/Applications/wxFormBuilder.app/Contents/MacOS/wxFormBuilder $out/bin/wxformbuilder

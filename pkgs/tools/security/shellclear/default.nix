@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-vPd1cFfoSkOnXH3zKQUB0zWDzEtao50AUrUzhpZIkgI=";
 
+  buildAndTestSubdir = "shellclear";
+
   meta = with lib; {
     description = "Secure shell history commands by finding sensitive data";
     homepage = "https://github.com/rusty-ferris-club/shellclear";

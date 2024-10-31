@@ -1,0 +1,121 @@
+From ae7ecfc9487756659077e126bfd296146125a59d Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sun, 13 Oct 2024 18:03:47 +0200
+Subject: [PATCH] Add missing musl_missing.h includes for basename
+
+Link: https://github.com/elogind/elogind/pull/292
+---
+ src/basic/cgroup-util.c                     | 1 +
+ src/libelogind/sd-bus/test-bus-watch-bind.c | 2 ++
+ src/login/logind-inhibit.c                  | 2 ++
+ src/login/logind-seat.c                     | 2 ++
+ src/login/logind-session.c                  | 1 +
+ src/test/test-fileio.c                      | 2 ++
+ src/test/test-mountpoint-util.c             | 1 +
+ src/test/test-path-util.c                   | 2 ++
+ 8 files changed, 13 insertions(+)
+
+diff --git a/src/basic/cgroup-util.c b/src/basic/cgroup-util.c
+index 90cfeb570..c57fe54d0 100644
+--- a/src/basic/cgroup-util.c
++++ b/src/basic/cgroup-util.c
+@@ -40,6 +40,7 @@
+ //#include "xattr-util.h"
+ /// Additional includes needed by elogind
+ #include "env-file.h"
++#include "musl_missing.h"
+ 
+ static int cg_enumerate_items(const char *controller, const char *path, FILE **ret, const char *item) {
+         _cleanup_free_ char *fs = NULL;
+diff --git a/src/libelogind/sd-bus/test-bus-watch-bind.c b/src/libelogind/sd-bus/test-bus-watch-bind.c
+index d6938a7f0..3227c17d7 100644
+--- a/src/libelogind/sd-bus/test-bus-watch-bind.c
++++ b/src/libelogind/sd-bus/test-bus-watch-bind.c
+@@ -17,6 +17,8 @@
+ #include "string-util.h"
+ #include "tmpfile-util.h"
+ #include "tests.h"
++/// Additional includes needed by elogind
++#include "musl_missing.h"
+ 
+ static int method_foobar(sd_bus_message *m, void *userdata, sd_bus_error *ret_error) {
+         log_info("Got Foobar() call.");
+diff --git a/src/login/logind-inhibit.c b/src/login/logind-inhibit.c
+index 86d1f84b3..4140f1aae 100644
+--- a/src/login/logind-inhibit.c
++++ b/src/login/logind-inhibit.c
+@@ -26,6 +26,8 @@
+ #include "string-util.h"
+ #include "tmpfile-util.h"
+ #include "user-util.h"
++/// Additional includes needed by elogind
++#include "musl_missing.h"
+ 
+ static void inhibitor_remove_fifo(Inhibitor *i);
+ 
+diff --git a/src/login/logind-seat.c b/src/login/logind-seat.c
+index bef542d94..f520562ad 100644
+--- a/src/login/logind-seat.c
++++ b/src/login/logind-seat.c
+@@ -24,6 +24,8 @@
+ #include "string-util.h"
+ #include "terminal-util.h"
+ #include "tmpfile-util.h"
++/// Additional includes needed by elogind
++#include "musl_missing.h"
+ 
+ int seat_new(Seat** ret, Manager *m, const char *id) {
+         _cleanup_(seat_freep) Seat *s = NULL;
+diff --git a/src/login/logind-session.c b/src/login/logind-session.c
+index ea69c2e6c..90ddec899 100644
+--- a/src/login/logind-session.c
++++ b/src/login/logind-session.c
+@@ -42,6 +42,7 @@
+ /// Additional includes needed by elogind
+ #include "cgroup-setup.h"
+ #include "extract-word.h"
++#include "musl_missing.h"
+ 
+ #define RELEASE_USEC (20*USEC_PER_SEC)
+ 
+diff --git a/src/test/test-fileio.c b/src/test/test-fileio.c
+index b9b82e7ff..db981bd41 100644
+--- a/src/test/test-fileio.c
++++ b/src/test/test-fileio.c
+@@ -25,6 +25,8 @@
+ #include "strv.h"
+ #include "tests.h"
+ #include "tmpfile-util.h"
++/// Additional includes needed by elogind
++#include "musl_missing.h"
+ 
+ #if 0 /// elogind does not need load_/write_/merge_env_file()
+ TEST(parse_env_file) {
+diff --git a/src/test/test-mountpoint-util.c b/src/test/test-mountpoint-util.c
+index de526100f..9d37ce77d 100644
+--- a/src/test/test-mountpoint-util.c
++++ b/src/test/test-mountpoint-util.c
+@@ -16,6 +16,7 @@
+ #include "string-util.h"
+ #include "tests.h"
+ /// Addition includes needed by elogind
++#include "musl_missing.h"
+ #include "virt.h"
+ #include "tmpfile-util.h"
+ 
+diff --git a/src/test/test-path-util.c b/src/test/test-path-util.c
+index 76fda746a..1df305d30 100644
+--- a/src/test/test-path-util.c
++++ b/src/test/test-path-util.c
+@@ -16,6 +16,8 @@
+ #include "strv.h"
+ #include "tests.h"
+ #include "tmpfile-util.h"
++/// Additional includes needed by elogind
++#include "musl_missing.h"
+ 
+ TEST(print_paths) {
+         log_info("DEFAULT_PATH=%s", DEFAULT_PATH);
+-- 
+2.46.0
+

@@ -2,9 +2,6 @@
 , libselinux, libsemanage, libsepol, setools }:
 
 # this is python3 only because setools only supports python3
-
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "selinux-python";
   version = "3.3";
@@ -42,10 +39,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SELinux policy core utilities written in Python";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = platforms.linux;
   };
 }

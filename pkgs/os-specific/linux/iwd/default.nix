@@ -13,16 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.13";
+  version = "2.20";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    hash = "sha256-Nyp7Gm3JK6bLzAZxuEjxKnzAK/eAYUO5owMbG90WQ8E=";
+    hash = "sha256-jKYF4wW/wKyOMrgxxU7AU0XN677X1vVjrPgjnX/gOqc=";
   };
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -81,9 +82,9 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/dbus-1/system-services/net.connman.ead.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
     substituteInPlace $out/share/dbus-1/system-services/net.connman.iwd.service \
-      --replace /bin/false ${coreutils}/bin/false
+      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   enableParallelBuilding = true;
@@ -98,6 +99,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
+    maintainers = with maintainers; [ dtzWill fpletz ];
   };
 }

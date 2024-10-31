@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook
+{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook3
 , kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
 , qtbase, qtsvg
 , boost, graphviz
@@ -19,7 +19,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules pkg-config wrapGAppsHook
+    cmake extra-cmake-modules pkg-config wrapGAppsHook3
     kdoctools
   ];
 
@@ -28,9 +28,10 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Graphviz dot graph viewer for KDE";
+    description = "Graphviz dot graph viewer for KDE";
+    mainProgram = "kgraphviewer";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.linux;
   };
 }

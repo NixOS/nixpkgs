@@ -4,7 +4,6 @@
 
 # this is python3 only as it depends on selinux-python
 
-with lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
@@ -51,10 +50,11 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SELinux sandbox utility";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
 }

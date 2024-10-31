@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "x42-gmsynth";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "gmsynth.lv2";
     rev = "v${version}";
-    sha256 = "08dvdj8r17sfl6l18g2b8abgls2irkbrq5vhrfai01hp2m0rlm34";
+    hash = "sha256-onZoaQVAGH/1d7jBRlN3ucx/3mTGUCxjvvt19GyprsY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Chris Colins' General User soundfont player LV2 plugin";
     homepage = "https://x42-plugins.com/x42/x42-gmsynth";
     maintainers = with maintainers; [ orivej ];

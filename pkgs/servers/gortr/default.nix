@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gortr";
-  version = "0.14.8";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3aZf5HINoFIJrN+196kk1lt2S+fN9DlQakwGnkMU5U8=";
+    sha256 = "sha256-W6+zCLPcORGcRJF0F6/LRPap4SNVn/oKGs21T4nSNO0=";
   };
 
   vendorHash = null;
@@ -23,9 +23,9 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "The RPKI-to-Router server used at Cloudflare";
+    description = "RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

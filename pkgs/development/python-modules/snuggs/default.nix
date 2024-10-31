@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, click
-, numpy
-, pyparsing
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  click,
+  numpy,
+  pyparsing,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,21 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ click numpy pyparsing ];
+  propagatedBuildInputs = [
+    click
+    numpy
+    pyparsing
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   meta = with lib; {
     description = "S-expressions for Numpy";
     license = licenses.mit;
     homepage = "https://github.com/mapbox/snuggs";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

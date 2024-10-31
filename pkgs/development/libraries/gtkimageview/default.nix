@@ -20,17 +20,17 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://wiki.gnome.org/Projects/GTK/GtkImageView";
+    homepage = "https://gitlab.gnome.org/Archive/gtkimageview";
 
     description = "Image viewer widget for GTK";
 
-    longDescription =
-      '' GtkImageView is a simple image viewer widget for GTK.  Similar to
-         the image viewer panes in gThumb or Eye of Gnome.  It makes writing
-         image viewing and editing applications easy.  Among its features
-         are: mouse and keyboard zooming; scrolling and dragging; adjustable
-         interpolation; GIF animation support.
-       '';
+    longDescription = ''
+      GtkImageView is a simple image viewer widget for GTK.  Similar to
+      the image viewer panes in gThumb or Eye of Gnome.  It makes writing
+      image viewing and editing applications easy.  Among its features
+      are: mouse and keyboard zooming; scrolling and dragging; adjustable
+      interpolation; GIF animation support.
+    '';
 
     license = lib.licenses.lgpl2Plus;
 

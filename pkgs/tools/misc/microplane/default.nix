@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A CLI tool to make git changes across many repos";
+    description = "CLI tool to make git changes across many repos";
     homepage = "https://github.com/Clever/microplane";
     license = licenses.asl20;
     maintainers = with maintainers; [ dbirks ];

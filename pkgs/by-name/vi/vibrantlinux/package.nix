@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libvibrant";
     repo = "vibrantLinux";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-rvJiVId6221hTrfEIvVO9HTMhaZ6KY44Bu3a5MinPHI=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to automate managing your screen's saturation depending on what programs are running";
+    description = "Tool to automate managing your screen's saturation depending on what programs are running";
     homepage = "https://github.com/libvibrant/vibrantLinux";
     license = licenses.mit;
     maintainers = with maintainers; [ unclamped ];

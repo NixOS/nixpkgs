@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatch-jupyter-builder
-, hatch-nodejs-version
-, hatchling
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     description = "Jupyterlab syntax coloring theme for pygments";
     homepage = "https://github.com/jupyterlab/jupyterlab_pygments";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

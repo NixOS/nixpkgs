@@ -31,26 +31,26 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.25.5";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
-    repo = pname;
+    repo = "netbird";
     rev = "v${version}";
-    hash = "sha256-b+zwDKuB6RRWCZTIjFIW9KA9N7KJhX7gdFJvDk0RtGc=";
+    hash = "sha256-8PIReuWnD7iMesSWAo6E4J+mWNAa7lHKwBWsCsXUG+E=";
   };
 
-  vendorHash = "sha256-vdGF7mIpE1PgCRsRCWE7cziKp9ZaIcxYUU6FREsFb70=";
+  vendorHash = "sha256-KScynPcMZ90XZy/N5X3aQfKuVl/JOCJmd8luNxChkZk=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
-  buildInputs = lib.optionals (stdenv.isLinux && ui) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
     gtk3
     libayatana-appindicator
     libX11
     libXcursor
     libXxf86vm
-  ] ++ lib.optionals (stdenv.isDarwin && ui) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
     Cocoa
     IOKit
     Kernel
@@ -73,9 +73,9 @@ buildGoModule rec {
   postPatch = ''
     # make it compatible with systemd's RuntimeDirectory
     substituteInPlace client/cmd/root.go \
-      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
     substituteInPlace client/ui/client_ui.go \
-      --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
+      --replace-fail 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
   postInstall = lib.concatStringsSep "\n"
@@ -88,15 +88,15 @@ buildGoModule rec {
           --fish <($out/bin/${binary} completion fish) \
           --zsh <($out/bin/${binary} completion zsh)
       '')
-      modules) + lib.optionalString (stdenv.isLinux && ui) ''
+      modules) + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
-    cp $src/client/ui/netbird-systemtray-default.png $out/share/pixmaps/netbird.png
+    cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
 
     mkdir -p $out/share/applications
     cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
 
     substituteInPlace $out/share/applications/netbird.desktop \
-      --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+      --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
   '';
 
   passthru = {
@@ -110,7 +110,7 @@ buildGoModule rec {
     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [ vrifox saturn745 ];
     mainProgram = "netbird";
   };
 }

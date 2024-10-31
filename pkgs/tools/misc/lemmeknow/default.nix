@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-slV9RxdFCEx1El7hngWGv+5CqDSQsU2ACF2nWQLOTU0=";
 
   meta = with lib; {
-    description = "A tool to identify anything";
+    description = "Tool to identify anything";
     homepage = "https://github.com/swanandx/lemmeknow";
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
     license = licenses.mit;

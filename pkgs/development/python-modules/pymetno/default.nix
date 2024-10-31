@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, async-timeout
-, xmltodict
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  async-timeout,
+  xmltodict,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymetno";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "PyMetno";
     rev = "refs/tags/${version}";
-    hash = "sha256-wRSUIaonjjucLM+A4GsF9Lrq2vZYCquEvblbmjKYpQE=";
+    hash = "sha256-0QODCJmGxgSKsTbsq4jsoP3cTy/0y6hq63j36bj7Dvo=";
   };
 
   propagatedBuildInputs = [
@@ -27,15 +28,13 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "metno"
-  ];
+  pythonImportsCheck = [ "metno" ];
 
   # Project has no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "A library to communicate with the met.no API";
+    description = "Library to communicate with the met.no API";
     homepage = "https://github.com/Danielhiversen/pyMetno/";
     changelog = "https://github.com/Danielhiversen/pyMetno/releases/tag/${version}";
     license = licenses.mit;

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cachetools
-, fetchFromGitHub
-, paho-mqtt
-, pythonOlder
-, pytz
-, requests
-, requests-oauthlib
-, schedule
+{
+  lib,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  paho-mqtt,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-oauthlib,
+  schedule,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysmappee"
-  ];
+  pythonImportsCheck = [ "pysmappee" ];
 
   meta = with lib; {
     description = "Python Library for the Smappee dev API";

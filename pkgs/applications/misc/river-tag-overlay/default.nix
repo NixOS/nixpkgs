@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromSourcehut, fetchpatch
-, wayland, pixman, pkg-config, wayland-scanner
+{ lib
+, stdenv
+, fetchFromSourcehut
+, fetchpatch
+, wayland
+, pixman
+, pkg-config
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +36,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A pop-up showing tag status";
+    description = "Pop-up showing tag status";
     homepage = "https://sr.ht/~leon_plickat/river-tag-overlay";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edrex ];
     platforms = platforms.linux;
+    mainProgram = "river-tag-overlay";
   };
 }

@@ -9,7 +9,6 @@
 , glib
 , nss
 , gobject-introspection
-, coreutils
 , cairo
 , libgudev
 , gtk-doc
@@ -85,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
-    description = "A library designed to make it easy to add support for consumer fingerprint readers";
+    description = "Library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

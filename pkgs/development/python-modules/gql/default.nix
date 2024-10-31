@@ -1,29 +1,33 @@
-{ lib
-, aiofiles
-, aiohttp
-, backoff
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, graphql-core
-, mock
-, parse
-, pytest-asyncio
-, pytest-console-scripts
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, urllib3
-, vcrpy
-, websockets
-, yarl
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  anyio,
+  backoff,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphql-core,
+  httpx,
+  mock,
+  parse,
+  pytest-asyncio,
+  pytest-console-scripts,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  urllib3,
+  vcrpy,
+  websockets,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.1";
-  format = "setuptools";
+  version = "3.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +35,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/uPaRju2AJCjMCfA29IKQ4Hu71RBu/Yz8jHwk9EE1Eg=";
+    hash = "sha256-jm0X+X8gQyQYn03gT14bdr79+Wd5KL9ryvrU/0VUtEU=";
   };
 
   postPatch = ''
@@ -40,7 +44,10 @@ buildPythonPackage rec {
       "websockets>=10,<12;python_version>'3.6'"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    anyio
     backoff
     graphql-core
     yarl
@@ -54,40 +61,34 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       aiohttp
       botocore
+      httpx
       requests
       requests-toolbelt
       urllib3
       websockets
     ];
-    aiohttp = [
-      aiohttp
-    ];
+    aiohttp = [ aiohttp ];
+    httpx = [ httpx ];
     requests = [
       requests
       requests-toolbelt
       urllib3
     ];
-    websockets = [
-      websockets
-    ];
-    botocore = [
-      botocore
-    ];
+    websockets = [ websockets ];
+    botocore = [ botocore ];
   };
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTests = [
     # Tests requires network access
@@ -117,12 +118,11 @@ buildPythonPackage rec {
     "tests/test_websocket_subscription.py"
   ];
 
-  pythonImportsCheck = [
-    "gql"
-  ];
+  pythonImportsCheck = [ "gql" ];
 
   meta = with lib; {
     description = "GraphQL client in Python";
+    mainProgram = "gql-cli";
     homepage = "https://github.com/graphql-python/gql";
     changelog = "https://github.com/graphql-python/gql/releases/tag/v${version}";
     license = with licenses; [ mit ];

@@ -47,21 +47,9 @@ do
 
     url="https://services.gradle.org/distributions/gradle-${v}-bin.zip"
     read -d "\n" gradle_hash gradle_path < <(nix-prefetch-url --print-path $url)
+    gradle_hash=$(nix-hash --to-sri --type sha256 "$gradle_hash")
 
-    # Prefix and suffix for "native-platform" dependency.
-    gradle_native_prefix="gradle-$v/lib/native-platform-"
-    gradle_native_suffix=".jar"
-    tmp=$(mktemp)
-    zipinfo -1 "$gradle_path" "$gradle_native_prefix*$gradle_native_suffix" > $tmp
-    gradle_native=$(cat $tmp | head -n1)
-    gradle_native=${gradle_native#"$gradle_native_prefix"}
-    gradle_native=${gradle_native%"$gradle_native_suffix"}
-
-    # Supported architectures
-    #grep -Pho "(linux|osx)-\w+" $tmp | sort | uniq
-    rm -f $tmp
-
-    echo -e "{\\n  version = \"$v\";\\n  nativeVersion = \"$gradle_native\";\\n  sha256 = \"$gradle_hash\";\\n}" > $f
+    echo -e "{\\n  version = \"$v\";\\n  sha256 = \"$gradle_hash\";\\n}" > $f
 
     echo "$v DONE"
 done

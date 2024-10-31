@@ -7,7 +7,7 @@ let
   # sandboxed builds, we manually download them and save them so these files
   # are fetched ahead-of-time instead of during the CMake build. To update
   # plex-media-player use the update.sh script, so the versions and hashes
-  # for these files are are also updated!
+  # for these files are also updated!
   depSrcs = import ./deps.nix { inherit fetchurl; };
 in mkDerivation rec {
   pname = "plex-media-player";

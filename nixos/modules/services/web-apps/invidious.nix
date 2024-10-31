@@ -199,6 +199,41 @@ let
     };
   };
 
+  sigHelperConfig = lib.mkIf cfg.sig-helper.enable {
+    services.invidious.settings.signature_server = "tcp://${cfg.sig-helper.listenAddress}";
+    systemd.services.invidious-sig-helper = {
+      script = ''
+        exec ${lib.getExe cfg.sig-helper.package} --tcp "${cfg.sig-helper.listenAddress}"
+      '';
+      wantedBy = [ "multi-user.target" ];
+      before = [ "invidious.service" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      serviceConfig = {
+        User = "invidious-sig-helper";
+        DynamicUser = true;
+        Restart = "always";
+
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectSystem = true;
+        ProtectProc = "invisible";
+        ProtectHome = true;
+        PrivateDevices = true;
+        NoNewPrivileges = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        CapabilityBoundingSet = "";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" "@network-io" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+      };
+    };
+  };
+
   nginxConfig = lib.mkIf cfg.nginx.enable {
     services.invidious.settings = {
       https_only = config.services.nginx.virtualHosts.${cfg.domain}.forceSSL;
@@ -237,14 +272,14 @@ let
 in
 {
   options.services.invidious = {
-    enable = lib.mkEnableOption (lib.mdDoc "Invidious");
+    enable = lib.mkEnableOption "Invidious";
 
     package = lib.mkPackageOption pkgs "invidious" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         The settings Invidious should use.
 
         See [config.example.yml](https://github.com/iv-org/invidious/blob/master/config/config.example.yml) for a list of all possible options.
@@ -254,7 +289,7 @@ in
     hmacKeyFile = lib.mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A path to a file containing the `hmac_key`. If `null`, a key will be generated automatically on first
         start.
 
@@ -266,7 +301,7 @@ in
     extraSettingsFile = lib.mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A file including Invidious settings.
 
         It gets merged with the settings specified in {option}`services.invidious.settings`
@@ -277,7 +312,7 @@ in
     serviceScale = lib.mkOption {
       type = types.int;
       default = 1;
-      description = lib.mdDoc ''
+      description = ''
         How many invidious instances to run.
 
         See https://docs.invidious.io/improve-public-instance/#2-multiple-invidious-processes for more details
@@ -294,7 +329,7 @@ in
     domain = lib.mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The FQDN Invidious is reachable on.
 
         This is used to configure nginx and for building absolute URLs.
@@ -306,7 +341,7 @@ in
       # default from https://github.com/iv-org/invidious/blob/master/config/config.example.yml
       default = if cfg.nginx.enable then "127.0.0.1" else "0.0.0.0";
       defaultText = lib.literalExpression ''if config.services.invidious.nginx.enable then "127.0.0.1" else "0.0.0.0"'';
-      description = lib.mdDoc ''
+      description = ''
         The IP address Invidious should bind to.
       '';
     };
@@ -315,7 +350,7 @@ in
       type = types.port;
       # Default from https://docs.invidious.io/Configuration.md
       default = 3000;
-      description = lib.mdDoc ''
+      description = ''
         The port Invidious should listen on.
 
         To allow access from outside,
@@ -328,7 +363,7 @@ in
       createLocally = lib.mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create a local database with PostgreSQL.
         '';
       };
@@ -336,7 +371,7 @@ in
       host = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The database host Invidious should use.
 
           If `null`, the local unix socket is used. Otherwise
@@ -346,9 +381,9 @@ in
 
       port = lib.mkOption {
         type = types.port;
-        default = options.services.postgresql.port.default;
-        defaultText = lib.literalExpression "options.services.postgresql.port.default";
-        description = lib.mdDoc ''
+        default = config.services.postgresql.settings.port;
+        defaultText = lib.literalExpression "config.services.postgresql.settings.port";
+        description = ''
           The port of the database Invidious should use.
 
           Defaults to the the default postgresql port.
@@ -359,7 +394,7 @@ in
         type = types.nullOr types.str;
         apply = lib.mapNullable toString;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to file containing the database password.
         '';
       };
@@ -368,7 +403,7 @@ in
     nginx.enable = lib.mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to configure nginx as a reverse proxy for Invidious.
 
         It serves it under the domain specified in {option}`services.invidious.settings.domain` with enabled TLS and ACME.
@@ -381,7 +416,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable http3-ytproxy for faster loading of images and video playback.
 
           If {option}`services.invidious.nginx.enable` is used, nginx will be configured automatically. If not, you
@@ -390,7 +425,31 @@ in
         '';
       };
 
-      package = lib.mkPackageOptionMD pkgs "http3-ytproxy" { };
+      package = lib.mkPackageOption pkgs "http3-ytproxy" { };
+    };
+
+    sig-helper = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to enable and configure inv-sig-helper to emulate the youtube client's javascript. This is required
+          to make certain videos playable.
+
+          This will download and run completely untrusted javascript from youtube! While this service is sandboxed,
+          this may still be an issue!
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "inv-sig-helper" { };
+
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1:2999";
+        description = ''
+          The IP address/port where inv-sig-helper should listen.
+        '';
+      };
     };
   };
 
@@ -399,5 +458,6 @@ in
     localDatabaseConfig
     nginxConfig
     ytproxyConfig
+    sigHelperConfig
   ]);
 }

@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A web service that allows you to share notes anonymously, an alternative to pastebin.com";
+    description = "Web service that allows you to share notes anonymously, an alternative to pastebin.com";
     homepage = "https://git.lcomrade.su/root/lenpaste";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vector1dev ];

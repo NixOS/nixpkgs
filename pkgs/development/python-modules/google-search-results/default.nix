@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-YDow7K4q+OYAsiY1dXpt8nXa1Lk0+XXmeHjM1kC3gkU=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # almost all tests require an API key or network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "serpapi"
-  ];
+  pythonImportsCheck = [ "serpapi" ];
 
   meta = with lib; {
     description = "Scrape and search localized results from Google, Bing, Baidu, Yahoo, Yandex, Ebay, Homedepot, youtube at scale using SerpApi.com";

@@ -15,94 +15,61 @@
 , flex
 , fontconfig
 , freetype
+, ghostscript
 , glib
 , glm
 , gmp
 , harfbuzz
 , hidapi
 , lib3mf
-, libGL
 , libGLU
 , libICE
 , libSM
 , libsForQt5
 , libspnav
 , libzip
+, manifold
+, mesa
 , mpfr
 , python3
-, tbb_2021_8
+, tbb_2021_11
 , wayland
 , wayland-protocols
+, wrapGAppsHook3
+, xorg
+, mimalloc
+, opencsg
 }:
-let
-  # get cccl from source to avoid license issues
-  nvidia-cccl = clangStdenv.mkDerivation {
-    pname = "nvidia-cccl";
-    # note that v2.2.0 has some cmake issues
-    version = "2.2.0-unstable-2024-01-26";
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "cccl";
-      fetchSubmodules = true;
-      rev = "0c9d03276206a5f59368e908e3d643610f9fddcd";
-      hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
-    };
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_8 ];
-    cmakeFlags = [
-      # only enable what we need
-      "-DCCCL_ENABLE_CUB=OFF"
-      "-DCCCL_ENABLE_LIBCUDACXX=ON"
-      "-DCCCL_ENABLE_THRUST=ON"
-      "-DCCCL_ENABLE_TESTING=OFF"
-      "-DCCCL_ENABLE_EXAMPLES=OFF"
-
-      "-DTHRUST_DEVICE_SYSTEM=TBB"
-      "-DTHRUST_HOST_SYSTEM=CPP"
-      "-DTHRUST_ENABLE_HEADER_TESTING=OFF"
-      "-DTHRUST_ENABLE_TESTING=OFF"
-      "-DTHRUST_ENABLE_EXAMPLES=OFF"
-
-      "-DLIBCUDACXX_ENABLE_CUDA=OFF"
-      "-DLIBCUDACXX_ENABLE_STATIC_LIBRARY=OFF"
-      "-DLIBCUDACXX_ENABLE_LIBCUDACXX_TESTS=OFF"
-    ];
-    meta = with lib; {
-      description = "CUDA C++ Core Libraries";
-      homepage = "https://github.com/NVIDIA/cccl";
-      license = licenses.asl20;
-      platforms = platforms.unix;
-    };
-  };
-in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-01-22";
+  version = "2024-10-06";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "88d244aed3c40a76194ff537ed84bd65bc0e1aeb";
-    hash = "sha256-qkQNbYhmOxF14zm+eCcwe9asLOEciYBANefUb8+KNEI=";
-    fetchSubmodules = true;
+    rev = "4e4543d85dfb19630ffe499b75828d48d246bd22";
+    hash = "sha256-k1RjXwjigQAVKUHeAJAyJxfCr8qNkCDFq9p78sudjgs=";
+    fetchSubmodules = true;  # Only really need sanitizers-cmake and MCAD
   };
+
+  patches = [ ./test.diff ];
+
   nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
+    (python3.withPackages (ps: with ps; [ numpy pillow ]))
     bison
+    cmake
     flex
-    python3
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
+    wrapGAppsHook3
+    ninja
+    pkg-config
   ];
   buildInputs = with libsForQt5; with qt5; [
-    # manifold dependencies
     clipper2
     glm
-    tbb_2021_8
-    nvidia-cccl
-
+    tbb_2021_11
+    mimalloc
     boost
     cairo
     cgal_5
@@ -110,32 +77,54 @@ clangStdenv.mkDerivation rec {
     eigen
     fontconfig
     freetype
+    ghostscript
     glib
     gmp
+    opencsg
     harfbuzz
     hidapi
     lib3mf
     libspnav
     libzip
+    manifold
     mpfr
     qscintilla
     qtbase
     qtmultimedia
   ]
-  ++ lib.optionals clangStdenv.isLinux [ libICE libSM libGLU libGL wayland wayland-protocols qtwayland ]
-  ++ lib.optional clangStdenv.isDarwin qtmacextras
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    xorg.libXdmcp
+    libICE
+    libSM
+    wayland
+    wayland-protocols
+    qtwayland
+    libGLU
+  ]
+  ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras
   ;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
-    "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
+    "-DUSE_BUILTIN_OPENCSG=OFF"
+    "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
-    "-DCMAKE_UNITY_BUILD=ON" # faster build
-    "-DENABLE_TESTS=OFF" # tests do not work for now
+    "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
   ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    mesa.llvmpipeHook
+  ];
+
+  checkPhase = ''
+    # some fontconfig issues cause pdf output to have wrong font
+    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
+  '';
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

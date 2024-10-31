@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "hiredis";
   version = "1.2.0";
-  nativeBuildInputs = [openssl];
 
   src = fetchFromGitHub {
     owner = "redis";
@@ -11,6 +10,10 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
   };
+
+  buildInputs = [
+    openssl
+  ];
 
   PREFIX = "\${out}";
   USE_SSL = 1;

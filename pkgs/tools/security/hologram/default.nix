@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/AdRoll/hologram/";
     description = "Easy, painless AWS credentials on developer laptops";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

@@ -152,7 +152,7 @@ in
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
-      overrides = prev: final: { inherit (prevStage) fetchurl; };
+      overrides = self: super: { inherit (prevStage) fetchurl; };
     } // {
       inherit (prevStage) fetchurl;
     };

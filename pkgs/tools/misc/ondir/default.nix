@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "a small program to automate tasks specific to certain directories";
+    description = "Small program to automate tasks specific to certain directories";
     longDescription = ''
     It works by executing scripts in directories when you enter and leave them.
     This is done by overriding the shell builtins cd, pushd, and popd,

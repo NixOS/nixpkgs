@@ -44,13 +44,13 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version  = "4.4.2";
+  version  = "4.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/warzone2100/releases/${version}/warzone2100_src.tar.xz";
-    hash = "sha256-O5Yqxqp1vKYr8uvAZ1SdsI/kocOzg0KRCirCqqvLrN4=";
+    url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
+    hash = "sha256-7tSfLkVth9nbGSwn1uNWeFrHx5ac+jaO3Gk9Bb+hLIk=";
   };
 
   buildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     freetype
     harfbuzz
     sqlite
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     vulkan-headers
     vulkan-loader
   ];
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ] ++ lib.optional stdenv.isDarwin "-P../configure_mac.cmake";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
@@ -122,7 +122,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A free RTS game, originally developed by Pumpkin Studios";
+    description = "Free RTS game, originally developed by Pumpkin Studios";
+    mainProgram = "warzone2100";
     longDescription = ''
         Warzone 2100 is an open source real-time strategy and real-time tactics
       hybrid computer game, originally developed by Pumpkin Studios and
@@ -140,6 +141,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

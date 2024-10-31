@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ]);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_nonmedia_files"
   ];
 
@@ -51,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
+    mainProgram = "sigal";
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar matthiasbeyer ];

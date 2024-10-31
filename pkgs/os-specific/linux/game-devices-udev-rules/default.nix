@@ -6,20 +6,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fabiscafe";
     repo = "game-devices-udev";
     rev = finalAttrs.version;
-    hash = "sha256-1aOb8pJxB+/PM7spcvZcy/cwdEolHQ4+lwBLij+6iDk=";
+    hash = "sha256-dWWo3qXnxdLP68NuFKM4/Cw5yE6uAsWzj0vZa9UTT0U=";
   };
 
   postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules
     substituteInPlace $out/lib/udev/rules.d/71-powera-controllers.rules \
-    --replace "/bin/sh" "${bash}/bin/bash"
+    --replace-fail "/bin/sh" "${bash}/bin/bash"
   '';
 
   meta = with lib; {

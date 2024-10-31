@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, serialio
-, sockio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  serialio,
+  sockio,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "connio"
-  ];
+  pythonImportsCheck = [ "connio" ];
 
   meta = with lib; {
     description = "Library for concurrency agnostic communication";

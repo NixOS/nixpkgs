@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, gobject-introspection, wrapGAppsNoGuiHook }:
 
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
@@ -8,8 +8,10 @@ python3Packages.buildPythonPackage rec {
     owner = "uunicorn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
+    hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
   };
+
+  nativeBuildInputs = [ wrapGAppsNoGuiHook gobject-introspection ];
 
   propagatedBuildInputs = with python3Packages; [ dbus-python pygobject3 ];
 
@@ -29,6 +31,9 @@ python3Packages.buildPythonPackage rec {
     substituteInPlace $out/lib/systemd/system/open-fprintd-suspend.service \
       --replace /usr/lib/open-fprintd "$out/lib/open-fprintd"
   '';
+
+  dontWrapGApps = true;
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/lib/open-fprintd" "$out $pythonPath"

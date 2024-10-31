@@ -1,15 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi
-, defcon, fonttools, lxml, fs
-, mutatormath, fontmath, fontparts
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defcon,
+  fonttools,
+  lxml,
+  fs,
+  mutatormath,
+  fontmath,
+  fontparts,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "ufoProcessor";
+  pname = "ufoprocessor";
   version = "1.9.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ufoProcessor";
+    inherit version;
     sha256 = "0ns11aamgavgsfj8qf5kq7dvzmgl0mhr1cbych2f075ipfdvva5s";
     extension = "zip";
   };

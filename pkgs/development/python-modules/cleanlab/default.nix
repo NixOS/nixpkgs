@@ -1,43 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, scikit-learn
-, termcolor
-, tqdm
-, pandas
-, setuptools
-# test dependencies
-, pytestCheckHook
-, pytest-lazy-fixture
-, tensorflow
-, torch
-, datasets
-, torchvision
-, keras
-, fasttext
-, hypothesis
-, wget
-, matplotlib
-, skorch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+  scikit-learn,
+  termcolor,
+  tqdm,
+  pandas,
+
+  # test dependencies
+  cleanvision,
+  datasets,
+  fasttext,
+  hypothesis,
+  keras,
+  matplotlib,
+  pytestCheckHook,
+  pytest-lazy-fixture,
+  skorch,
+  tensorflow,
+  torch,
+  torchvision,
+  wget,
 }:
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.5.0";
+  version = "2.7.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
-    repo = pname;
+    repo = "cleanlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5XQQVrhjpvjwtFM79DqttObmw/GQLkMQVXb5jhiC8e0=";
+    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    numpy
     scikit-learn
     termcolor
     tqdm
@@ -52,18 +59,19 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-lazy-fixture
-    tensorflow
-    torch
+    cleanvision
     datasets
-    torchvision
-    keras
     fasttext
     hypothesis
-    wget
+    keras
     matplotlib
+    pytestCheckHook
+    pytest-lazy-fixture
     skorch
+    tensorflow
+    torch
+    torchvision
+    wget
   ];
 
   disabledTests = [
@@ -76,13 +84,15 @@ buildPythonPackage rec {
     "tests/test_dataset.py"
     # Requires the datasets we just prevented from downloading
     "tests/datalab/test_cleanvision_integration.py"
+    # Fails because of issues with the keras derivation
+    "tests/test_frameworks.py"
   ];
 
-  meta = with lib; {
-    description = "The standard data-centric AI package for data quality and machine learning with messy, real-world data and labels.";
+  meta = {
+    description = "Standard data-centric AI package for data quality and machine learning with messy, real-world data and labels";
     homepage = "https://github.com/cleanlab/cleanlab";
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

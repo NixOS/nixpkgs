@@ -1,38 +1,30 @@
-{ lib
-, stdenv
-, buildGoPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-buildGoPackage rec {
+
+buildGoModule rec {
   pname = "snicat";
-  version = "0.0.1";
+  version = "0.0.1-unstable-2024-09-05";
 
   src = fetchFromGitHub {
     owner = "CTFd";
     repo = "snicat";
-    rev = version;
-    hash = "sha256-fFlTBOz127le2Y7F9KKhbcldcyFEpAU5QiJ4VCAPs9Y=";
+    rev = "8c8f06e59d5aedb9a97115a4e0eafa75b17a6cdf";
+    hash = "sha256-71wVth+VzEnGW8ErWmj6XjhNtVpx/q8lViIA71njwqU=";
   };
 
-  patchPhase = ''
-    runHook prePatch
+  vendorHash = "sha256-27ykI9HK1jFanxwa6QrN6ZS548JbFNSZHaXr4ciCVOE=";
+  proxyVendor = true;
 
-    substituteInPlace snicat.go \
-      --replace-warn "v0.0.0" "v${version}"
+  ldflags = [
+    "-s"
+    "-X main.version=v${version}"
+  ];
 
-    runHook postPatch
-  '';
-
-  goPackagePath = "github.com/CTFd/snicat";
-
-  goDeps = ./deps.nix;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm555 go/bin/snicat $out/bin/sc
-
-    runHook postInstall
+  postInstall = ''
+    mv $out/bin/snicat $out/bin/sc
   '';
 
   meta = with lib; {

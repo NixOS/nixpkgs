@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ openal
-  ] ++ lib.optional stdenv.isDarwin
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin
     darwin.apple_sdk.frameworks.OpenAL
   ;
 
@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://openal.org/";
     description = "Free implementation of OpenAL's ALUT standard";
+    mainProgram = "freealut-config";
     license = lib.licenses.lgpl2;
     pkgConfigModules = [ "freealut" ];
     platforms = lib.platforms.unix;

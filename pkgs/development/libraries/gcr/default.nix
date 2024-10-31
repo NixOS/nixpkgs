@@ -16,7 +16,7 @@
 , openssh
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , vala
 , gnome
@@ -26,14 +26,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.41.1";
+  version = "3.41.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "u3Eoo8L+u/7pwDuQ131JjQzrI3sHiYAtYBhcccS+ok8=";
+    sha256 = "utEPPFU6DhhUZJq1nFskNNoiyhpUrmE48fU5YVZ+Grc=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -43,10 +45,9 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gi-docgen
-    wrapGAppsHook
+    wrapGAppsHook3
     vala
     shared-mime-info
-    gnupg
     openssh
   ];
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+    "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
   ] ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
   ];
@@ -106,6 +108,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
+    mainProgram = "gcr-viewer";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = licenses.lgpl2Plus;
 

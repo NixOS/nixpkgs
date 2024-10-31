@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
 }:
 let
   version = "0.1.20";
@@ -16,6 +17,10 @@ buildPythonPackage {
     rev = "v${version}";
     hash = "sha256-t57j1HhjNQtBwlbqe4mAHQ9WiNcIhMKYmrZkiqh+k5k=";
   };
+
+  patches = [
+    ./Bump-KaTeX-and-replace-bootcdn-with-jsdelivr.patch
+  ];
 
   propagatedBuildInputs = [ django ];
 

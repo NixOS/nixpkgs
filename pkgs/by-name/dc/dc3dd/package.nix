@@ -23,19 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=$out"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
-
-  configureFlags = lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "--build=arm" ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A patched version of dd that includes a number of features useful for computer forensics";
+    description = "Patched version of dd that includes a number of features useful for computer forensics";
     mainProgram = "dc3dd";
     homepage = "https://sourceforge.net/projects/dc3dd/";
     maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.gpl3Plus; # Refer to https://sourceforge.net/p/dc3dd/code/HEAD/tree/COPYING
-    broken = stdenv.isDarwin;
   };
 })

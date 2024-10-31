@@ -25,6 +25,8 @@
 , withQt ? true
 , qt5
 , zip
+, makeDesktopItem
+, copyDesktopItems
 }:
 let
   dlopenBuildInputs = []
@@ -41,7 +43,7 @@ let
     ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
 in stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5055";
+  version = "5072";
 
   outputs = [ "out" ];
 
@@ -49,7 +51,7 @@ in stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-ABXGbzjdsPUuQnwZQOho4s2xRSDGzbZdA6/hCkBb7zE=";
+    hash = "sha256-cbSz5fi2HYE7ScYFhopXcp9Ct4dMFughF2TKkY1K4uQ=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -58,7 +60,11 @@ in stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = lib.optionals withQt [ zip qt5.wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals withQt [
+    zip
+    qt5.wrapQtAppsHook
+    copyDesktopItems
+  ];
 
   buildInputs = staticBuildInputs ++ dlopenBuildInputs;
 
@@ -118,6 +124,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 bin/linux/release/zxtune123 -t $out/bin
   '' + lib.optionalString withQt ''
     install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
   '' + ''
     runHook postInstall
   '';
@@ -127,6 +134,17 @@ in stdenv.mkDerivation rec {
   preFixup = lib.optionalString withQt ''
     wrapQtApp "$out/bin/zxtune-qt"
   '';
+
+  desktopItems = lib.optionals withQt [(makeDesktopItem {
+    name = "ZXTune";
+    exec = "zxtune-qt";
+    icon = "zxtune";
+    desktopName = "ZXTune";
+    genericName = "ZXTune";
+    comment = meta.description;
+    categories = [ "Audio" ];
+    type = "Application";
+  })];
 
   meta = with lib; {
     description = "Crossplatform chiptunes player";

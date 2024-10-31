@@ -1,17 +1,29 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool
-, gtk3, glib, curl, goocanvas2, gpsd
-, hamlib, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  intltool,
+  autoreconfHook,
+  gtk3,
+  glib,
+  curl,
+  goocanvas2,
+  gpsd,
+  hamlib,
+  wrapGAppsHook3,
 }:
 
-let
-  version = "2.2.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gpredict";
-  inherit version;
+  version = "2.2.1";
 
-  src = fetchurl {
-    url = "https://github.com/csete/gpredict/releases/download/v${version}/gpredict-${version}.tar.bz2";
-    sha256 = "0hwf97kng1zy8rxyglw04x89p0bg07zq30hgghm20yxiw2xc8ng7";
+  src = fetchFromGitHub {
+    owner = "csete";
+    repo = "gpredict";
+    rev = "v${version}";
+    hash = "sha256-+hgjImfT3nWMBYwde7+KC/hzd84pwQbpoJvaJSNG4E8=";
   };
 
   patches = [
@@ -22,13 +34,34 @@ in stdenv.mkDerivation {
       url = "https://github.com/csete/gpredict/commit/c565bb3d48777bfe17114b5d01cd81150521f056.patch";
       sha256 = "1jhy9hpqlachq32bkij60q3dxkgi1kkr80rm29jjxqpmambf406a";
     })
+    # Updates URLs for TLE files
+    # https://github.com/csete/gpredict/pull/305
+    (fetchpatch {
+      name = "TLE-urls.patch";
+      url = "https://github.com/csete/gpredict/commit/8f60f856921e8ee143cd6e2d34a9183778cb0fbf.patch";
+      hash = "sha256-X/nKrqh5sjxDMLhA9LQek8AsJFqhvK/k8Ep3ug/0rMI=";
+    })
+
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
-  buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    wrapGAppsHook3
+    autoreconfHook
+  ];
+  buildInputs = [
+    curl
+    glib
+    gtk3
+    goocanvas2
+    gpsd
+    hamlib
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Real time satellite tracking and orbit prediction";
+    mainProgram = "gpredict";
     longDescription = ''
       Gpredict is a real time satellite tracking and orbit prediction program
       written using the GTK widgets. Gpredict is targetted mainly towards ham radio
@@ -36,9 +69,12 @@ in stdenv.mkDerivation {
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.
     '';
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
-    maintainers = [ maintainers.markuskowa maintainers.cmcdragonkai ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      cmcdragonkai
+    ];
   };
 }

@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Bail out! ERROR:../tests/test-bugs.c:168:test_on_timeout: code should not be reached
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -95,7 +95,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.gupnp.org/";
-    description = "An implementation of the UPnP specification";
+    description = "Implementation of the UPnP specification";
+    mainProgram = "gupnp-binding-tool-1.2";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
   };

@@ -1,35 +1,54 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3-x11
-, libxklavier
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk3-x11,
+  gobject-introspection,
+  libxklavier,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmatekbd";
-  version = "1.26.1";
+  version = "1.28.0";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Y5ONkSUpRe7qiP2DdNEjG9g9As2WXGu6F8GF7bOXvO0=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "libmatekbd";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6s8JiuXbBWOHxbNSuO8rglzOCRKlQ9fx/GsYYc08GmI=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    gettext
+    glib
+    gobject-introspection
   ];
 
   buildInputs = [
+    glib
     gtk3-x11
     libxklavier
   ];
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = with lib; {
     description = "Keyboard management library for MATE";

@@ -1,0 +1,11 @@
+diff --git a/common/lighthouse_metrics/Cargo.toml b/common/lighthouse_metrics/Cargo.toml
+index fe966f4a9..f4153fec2 100644
+--- a/common/lighthouse_metrics/Cargo.toml
++++ b/common/lighthouse_metrics/Cargo.toml
+@@ -8,3 +8,6 @@ edition = { workspace = true }
+ 
+ [dependencies]
+ prometheus = "0.13.0"
++
++[dev-dependencies]
++lazy_static.workspace = true

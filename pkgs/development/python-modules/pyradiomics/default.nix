@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pykwalify
-, pywavelets
-, setuptools
-, simpleitk
-, six
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  numpy,
+  pykwalify,
+  pywavelets,
+  setuptools,
+  simpleitk,
+  six,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,10 @@ buildPythonPackage rec {
     name = "pyradiomics";
   };
 
-  nativeBuildInputs = [ setuptools versioneer ];
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -57,13 +61,12 @@ buildPythonPackage rec {
     "-k '${toString (lib.intersperse "and" (lib.forEach disabledTests (t: "not ${t}")))}'"
   ];
 
-  pythonImportsCheck = [
-    "radiomics"
-  ];
+  pythonImportsCheck = [ "radiomics" ];
 
   meta = with lib; {
     homepage = "https://pyradiomics.readthedocs.io";
     description = "Extraction of Radiomics features from 2D and 3D images and binary masks";
+    mainProgram = "pyradiomics";
     changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];

@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "15.1.04";
+  version = "16.0.01";
 
   otf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.otf";
-    hash = "sha256-J8g8ojXDq5nV013zXXi1rEAYQhpCh7G06mV7IpmZbTg=";
+    hash = "sha256-6jmg5hTnSGSQI5xXWeGgzYb9SeM1xLCNL9E+MTFH8CI=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    hash = "sha256-XHKP8xx+GvhFYBW03Sambpd2gclKvQUz1JAjIlb59OI=";
+    hash = "sha256-51YEW6CJPuLoNpsnr8AkNr7ZApnbThZyznZuBHDNmCU=";
   };
 
   nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
     # Basically GPL2+ with font exception.
     license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.rycee maintainers.vrthra ];
+    maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
 }

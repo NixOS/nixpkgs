@@ -4,6 +4,7 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
+, nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -135,6 +136,7 @@ let
 
       # symlink ALSA stuff
       ln -s /host/etc/asound.conf asound.conf
+      ln -s /host/etc/alsa alsa
 
       # symlink SSL certs
       mkdir -p ssl
@@ -244,6 +246,7 @@ let
 
 in stdenv.mkDerivation {
   name         = "${name}-fhs";
+  inherit nativeBuildInputs;
   buildCommand = ''
     mkdir -p $out
     cd $out

@@ -1,36 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonAtLeast
-, pythonOlder
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "contextlib2";
-  version = "21.6.0";
-  format = "setuptools";
+  version = "21.6.0-unstable-2024-05-23";
+  pyproject = true;
 
-  # Python 3.11 not currently supported
-  # https://github.com/jazzband/contextlib2/issues/43
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qx4r/h0B2Wjht+jZAjvFHvNQm7ohe7cwzuOCfh7oKGk=";
+  src = fetchFromGitHub {
+    owner = "jazzband";
+    repo = "contextlib2";
+    rev = "f64cf04df8a1f6a32ce2095192b4638d229ff25e";
+    hash = "sha256-HX9N8G8jl6cpEwdJ80pDcoo4osTO/f8fz5sNcY/R1Nk=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "contextlib2"
-  ];
+  pythonImportsCheck = [ "contextlib2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backports and enhancements for the contextlib module";
     homepage = "https://contextlib2.readthedocs.org/";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

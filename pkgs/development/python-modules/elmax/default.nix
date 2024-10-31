@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pythonOlder
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pythonOlder,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API client for the Elmax Cloud services";
+    mainProgram = "poetry-template";
     homepage = "https://github.com/home-assistant-ecosystem/python-elmax";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

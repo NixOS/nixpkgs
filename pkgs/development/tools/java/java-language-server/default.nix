@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven
+, jdk_headless, maven
 , makeWrapper
 }:
 
 let
   platform =
-    if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "mac"
-    else if stdenv.isWindows then "windows"
+    if stdenv.hostPlatform.isLinux then "linux"
+    else if stdenv.hostPlatform.isDarwin then "mac"
+    else if stdenv.hostPlatform.isWindows then "windows"
     else throw "unsupported platform";
 in
 maven.buildMavenPackage rec {
@@ -23,21 +23,23 @@ maven.buildMavenPackage rec {
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
-  mvnParameters = "-DskipTests";
+  mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [ jdk_headless makeWrapper ];
 
   dontConfigure = true;
   preBuild = ''
     jlink \
-      ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
+      ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
       --output dist/${platform} \
       --no-header-files \
       --no-man-pages \
       --compress 2
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
@@ -52,7 +54,8 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    description = "Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];

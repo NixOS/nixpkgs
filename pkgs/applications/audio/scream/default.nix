@@ -1,6 +1,6 @@
 { stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio
 , jackSupport ? false, libjack2, soxr
 , pcapSupport ? false, libpcap
 }:

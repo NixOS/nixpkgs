@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "DynamoDB CLI written in Rust";
+    mainProgram = "dy";
     homepage = "https://github.com/awslabs/dynein";
     license = licenses.asl20;
     platforms = platforms.unix;

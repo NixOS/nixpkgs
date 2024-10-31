@@ -12,13 +12,12 @@ let
     x86_64-linux = "amd64";
   };
 
-  data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
+  data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")};
 
   baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
-    mesa.drivers
     libGLU libGL
     fontconfig
     freetype
@@ -57,7 +56,7 @@ let
     };
 
     meta = with lib; {
-      description = "A well known password manager";
+      description = "Well known password manager";
       homepage = "https://www.enpass.io/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;

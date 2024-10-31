@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyfakefs
-, tzlocal
-, google-api-python-client
-, google-auth-httplib2
-, google-auth-oauthlib
-, python-dateutil
-, beautiful-date
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pyfakefs,
+  tzlocal,
+  google-api-python-client,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  python-dateutil,
+  beautiful-date,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     beautiful-date
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pyfakefs ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyfakefs
+  ];
   pythonImportsCheck = [ "gcsa" ];
 
   meta = with lib; {

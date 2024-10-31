@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, isPyPy
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPyPy,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -23,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/mmpython/";
     license = licenses.gpl2;
   };
-
 }

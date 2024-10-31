@@ -5,7 +5,7 @@
 , fetchDebianPatch
 , copyDesktopItems
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , unzip
 , curl
 , glib
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.3";
+  version = "13.7";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-mpCCecG1teBjIJqCzB3pGAQKT6t8bMKbK8KihMXOn3g=";
+    hash = "sha256-bS3J0uevtZH/yjoOtqSMYVHRaNegW6NMOZv7ctW5oRc=";
   };
 
   sourceRoot = ".";
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
   ];
 
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
-    license = [ licenses.gpl3Only licenses.openssl licenses.curl licenses.libssh2 ];
+    license = [ licenses.gpl3Only licenses.openssl licenses.curl licenses.bsd3 ];
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };

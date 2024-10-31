@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , vulkan-loader
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,19 +16,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2pLHnTn0gJKz4gfrR6h85LHOaZPrhIGYzQeci4Dzz2E=";
   };
 
-  cargoSha256 = "sha256-OXMz1qu4/LDeQbwe7shhn2Eee15xKmBpWSsP0IbjoGM=";
+  cargoHash = "sha256-OXMz1qu4/LDeQbwe7shhn2Eee15xKmBpWSsP0IbjoGM=";
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   postFixup = ''
     patchelf --add-rpath ${vulkan-loader}/lib $out/bin/vulkan-helper
-    addOpenGLRunpath $out/bin/vulkan-helper
+    addDriverRunpath $out/bin/vulkan-helper
   '';
 
   meta = with lib; {
-    description = "A simple CLI app used to interface with basic Vulkan APIs";
+    description = "Simple CLI app used to interface with basic Vulkan APIs";
     homepage = "https://github.com/imLinguin/vulkan-helper-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ aidalgol ];

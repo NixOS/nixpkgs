@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "h";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "h";
     rev = "v${version}";
-    hash = "sha256-eitUKOo2c1c+SyctkUW/SUb2RCKUoU6nJplfJVdwBSs=";
+    hash = "sha256-4rhol8a+OMX2+MxFPEM1WzM/70C7sye8jw4pg7CujRo=";
   };
 
   buildInputs = [ ruby ];

@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, qtbase, qmake, qtwebsockets, minizinc, makeWrapper, Cocoa }:
 
 let
-  executableLoc = if stdenv.isDarwin then "$out/Applications/MiniZincIDE.app/Contents/MacOS/MiniZincIDE" else "$out/bin/MiniZincIDE";
+  executableLoc = if stdenv.hostPlatform.isDarwin then "$out/Applications/MiniZincIDE.app/Contents/MacOS/MiniZincIDE" else "$out/bin/MiniZincIDE";
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.8.2";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-3L/hulNI7e2wE9gMt2h3mS0ubHZ4kcVpwALCmWQtv7A=";
+    hash = "sha256-B164KCY06SQRxv4eD9yuCKyGRRrMZfJRuaQ+OEmQC5k=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];
-  buildInputs = [ qtbase qtwebsockets ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ qtbase qtwebsockets ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
+    mainProgram = "MiniZincIDE";
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most

@@ -16,13 +16,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-color-emoji";
-  version = "2.042";
+  version = "2.047";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "noto-emoji";
     rev = "v${version}";
-    hash = "sha256-otJQMXrBIPrxD1vCdgcrZ2h1a9XAMbqEBFumjz1XJ54=";
+    hash = "sha256-v1vLXs8peNF6S7iBLViAWQSW042lwIDqAjB270pRPF0=";
   };
 
   depsBuildBuild = [
@@ -49,6 +49,8 @@ stdenvNoCC.mkDerivation rec {
     # it somehow got stuck doing nothing.
     sed -i 's;\t@;\t;' Makefile
   '';
+
+  buildFlags = [ "BYPASS_SEQUENCE_CHECK=True" ];
 
   enableParallelBuilding = true;
 

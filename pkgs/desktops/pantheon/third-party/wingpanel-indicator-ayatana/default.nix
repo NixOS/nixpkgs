@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-ayatana";
-  version = "unstable-2023-04-18";
+  version = "2.0.7-unstable-2023-04-18";
 
   src = fetchFromGitHub {
     owner = "Lafydev";

@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.v2raya = {
-      enable = options.mkEnableOption (mdDoc "the v2rayA service");
+      enable = options.mkEnableOption "the v2rayA service";
     };
   };
 
@@ -42,7 +42,7 @@ with lib;
         };
 
         wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ iptables bash iproute2 ]; # required by v2rayA TProxy functionality
+        path = with pkgs; [ iptables bash iproute2 ] ++ lib.optionals nftablesEnabled [ nftables ]; # required by v2rayA TProxy functionality
       };
   };
 

@@ -28,11 +28,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A fast, efficient, and concurrent scripting language";
+    description = "Fast, efficient, and concurrent scripting language";
+    mainProgram = "cyber";
     homepage = "https://github.com/fubark/cyber";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     inherit (zig_0_11.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

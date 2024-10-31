@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.90";
-  pyproject= true;
+  version = "2.0.104";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZlZtC0bi9ZUf/1D9hUxxhdix6F8l7Lg5IUOOg+JHGYU=";
+    hash = "sha256-Hs21Okf0gt8eHTuGMW8L2ioW+hv7QDFOP4oJDQfRba0=";
   };
 
   pythonRelaxDeps = true;
@@ -20,13 +21,13 @@ python3.pkgs.buildPythonPackage rec {
     "rpi-ws281x"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     cython
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-cors
     aubio
@@ -56,6 +57,7 @@ python3.pkgs.buildPythonPackage rec {
     sounddevice
     stupidartnet
     uvloop
+    vnoise
     voluptuous
     zeroconf
   ];
@@ -69,5 +71,6 @@ python3.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = licenses.gpl3Only;
     maintainers = teams.c3d2.members;
+    mainProgram = "ledfx";
   };
 }

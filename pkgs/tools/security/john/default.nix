@@ -1,29 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  nss,
+  nspr,
+  libkrb5,
+  gmp,
+  zlib,
+  libpcap,
+  re2,
+  gcc,
+  python3Packages,
+  perl,
+  perlPackages,
+  withOpenCL ? true,
+  opencl-headers,
+  ocl-icd,
+  # include non-free ClamAV unrar code
+  enableUnfree ? false,
+  substituteAll,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "john";
-  version = "1.9.0-jumbo-1";
+  version = "rolling-2404";
 
   src = fetchFromGitHub {
     owner = "openwall";
-    repo = pname;
-    rev = "1.9.0-Jumbo-1";
-    sha256 = "sha256-O1iPh5QTMjZ78sKvGbvSpaHFbBuVc1z49UKTbMa24Rs=";
+    repo = "john";
+    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
+    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-gcc-11-struct-allignment-incompatibility.patch";
-      url = "https://github.com/openwall/john/commit/154ee1156d62dd207aff0052b04c61796a1fde3b.patch";
-      sha256 = "sha256-3rfS2tu/TF+KW2MQiR+bh4w/FVECciTooDQNTHNw31A=";
-    })
-    (fetchpatch {
-      name = "improve-apple-clang-pseudo-intrinsics-portability.patch";
-      url = "https://github.com/openwall/john/commit/c9825e688d1fb9fdd8942ceb0a6b4457b0f9f9b4.patch";
-      excludes = [ "doc/*" ];
-      sha256 = "sha256-hgoiz7IgR4f66fMP7bV1F8knJttY8g2Hxyk3QfkTu+g=";
+  patches = lib.optionals withOpenCL [
+    (substituteAll {
+      src = ./opencl.patch;
+      ocl_icd = ocl-icd;
     })
   ];
 
@@ -38,25 +52,61 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
-  preConfigure = ''
-    cd src
-    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-    export AS=$CC
-    export LD=$CC
-  '';
+  preConfigure =
+    ''
+      cd src
+      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+      export AS=$CC
+      export LD=$CC
+    ''
+    + lib.optionalString withOpenCL ''
+      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+    '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
-  ];
+  ] ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
-  buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 ];
-  nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
-  propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
-                                                CompressRawLzma # For 7z2john.pl
-                                                perlldap ]); # For sha-dump.pl
-                          # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
+  buildInputs =
+    [
+      openssl
+      nss
+      nspr
+      libkrb5
+      gmp
+      zlib
+      libpcap
+      re2
+    ]
+    ++ lib.optionals withOpenCL [
+      opencl-headers
+      ocl-icd
+    ];
+  nativeBuildInputs = [
+    gcc
+    python3Packages.wrapPython
+    perl
+    makeWrapper
+  ];
+  propagatedBuildInputs =
+    # For pcap2john.py
+    (with python3Packages; [
+      dpkt
+      scapy
+      lxml
+    ])
+    ++ (with perlPackages; [
+      # For pass_gen.pl
+      DigestMD4
+      DigestSHA1
+      GetoptLong
+      # For 7z2john.pl
+      CompressRawLzma
+      # For sha-dump.pl
+      perlldap
+    ]);
+  # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
   # gcc: error: memdbg.o: No such file or directory
@@ -83,9 +133,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "John the Ripper password cracker";
-    license = licenses.gpl2Plus;
+    license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [ offline matthewbauer ];
+    maintainers = with maintainers; [
+      offline
+      matthewbauer
+      cherrykitten
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hl7" ];
 
   meta = with lib; {
-    description = "A simple library for parsing messages of Health Level 7 (HL7) version 2.x into Python objects";
+    description = "Simple library for parsing messages of Health Level 7 (HL7) version 2.x into Python objects";
+    mainProgram = "mllp_send";
     homepage = "https://python-hl7.readthedocs.org";
     changelog = "https://python-hl7.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd3;

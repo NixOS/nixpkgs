@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -46,15 +47,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
   };
 
+  patches = [
+    # Remove when version > 0.1.9
+    (fetchpatch {
+      name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/8466e77914e73801499df224fcd4a53c4a0eab25.patch";
+      hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
+    })
+
+    # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
+    ./2001-Inject-current-system-PATH.patch
+  ];
+
   postPatch = ''
     patchShebangs tests/{desktop-hook-test.sh.in,repeat-until-pass.sh}
 
     # used pkg_get_variable, cannot replace prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace tests/jobs-systemd.cpp \
-      --replace '^(/usr)?' '^(/nix/store/\\w+-bash-.+)?'
+      --replace-fail '^(/usr)?' '^(/nix/store/\\w+-bash-.+)?'
   '';
 
   strictDeps = true;
@@ -63,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
     gobject-introspection
+    lttng-ust
     pkg-config
     validatePkgConfig
   ] ++ lib.optionals withDocumentation [
@@ -100,6 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_MIRCLIENT" false)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
+      # Exclude tests
+      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
+        # Flaky, randomly hangs
+        # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
+        "^helper-handshake-test"
+      ]})")
+    ]))
   ];
 
   postBuild = lib.optionalString withDocumentation ''
@@ -118,13 +140,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System and associated utilities to launch applications in a standard and confined way";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-app-launch-0"
     ];

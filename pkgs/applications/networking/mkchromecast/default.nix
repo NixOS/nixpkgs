@@ -25,7 +25,7 @@ let packages = [
   nodejs
   ffmpeg
   youtube-dl
-] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
+] ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
-  buildInputs = lib.optional stdenv.isLinux qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
   propagatedBuildInputs = with python3Packages; ([
     pychromecast
     psutil
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'

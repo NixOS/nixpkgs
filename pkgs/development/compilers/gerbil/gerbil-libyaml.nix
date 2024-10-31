@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, libyaml, ... }:
+{ pkgs, lib, fetchFromGitHub, libyaml, ... }:
 
 {
   pname = "gerbil-libyaml";

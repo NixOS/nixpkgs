@@ -9,11 +9,18 @@
 , libffi
 , makeWrapper
 , config
-, rocmPackages
+, cudaPackages
+, rocmPackages_5
+, ompSupport ? true
+, openclSupport ? false
 , rocmSupport ? config.rocmSupport
+, cudaSupport ? config.cudaSupport
+, autoAddDriverRunpath
 }:
 let
   inherit (llvmPackages_15) stdenv;
+  # move to newer ROCm version once supported
+  rocmPackages = rocmPackages_5;
 in
 stdenv.mkDerivation rec {
   pname = "OpenSYCL";
@@ -29,6 +36,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     makeWrapper
+  ] ++ lib.optionals cudaSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -41,11 +51,19 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.rocm-runtime
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    (lib.getOutput "stubs" cudaPackages.cuda_cudart)
   ];
 
   # opensycl makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
   cmakeFlags = [
     "-DCLANG_INCLUDE_PATH=${llvmPackages_15.libclang.dev}/include"
+    (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
+    (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
+    (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
+  ] ++ lib.optionals (lib.versionAtLeast version "24") [
+    (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
   ];
 
   postFixup = ''

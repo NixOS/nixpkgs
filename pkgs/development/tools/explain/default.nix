@@ -38,11 +38,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library and utility to explain system call errors";
+    mainProgram = "explain";
     homepage = "https://libexplain.sourceforge.net";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ McSinyx ];
     platforms = platforms.unix;
     # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

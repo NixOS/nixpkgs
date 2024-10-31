@@ -1,56 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonRelaxDepsHook
-, pyasn1
-, pyasn1-modules
-, cryptography
-, joblib
-, gitpython
-, sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyasn1,
+  pyasn1-modules,
+  cryptography,
+  joblib,
+  gitpython,
+  sqlalchemy,
+  pygount,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.20.0";
+  version = "0.22.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uqXQbSk/diyTq4d+J1ubc6ylJpETmJt699vfbSuY290=";
+    hash = "sha256-rauk8rY3i5fWUrE8lszyC9KBVjTZ7zhXO98cMhIiiz8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "tinydb"
-    "joblib"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     pyasn1-modules
     cryptography
     joblib
     gitpython
     sqlalchemy
+    pygount
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access

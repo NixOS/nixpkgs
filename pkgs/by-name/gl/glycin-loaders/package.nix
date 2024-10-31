@@ -3,26 +3,31 @@
 , fetchurl
 , substituteAll
 , bubblewrap
+, cairo
 , cargo
 , git
+, gnome
+, gtk4
+, lcms2
+, libheif
+, libjxl
+, librsvg
+, libseccomp
+, libxml2
 , meson
 , ninja
 , pkg-config
 , rustc
-, gtk4
-, cairo
-, libheif
-, libxml2
-, gnome
+, rustPlatform
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "0.1.2";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glycin-loaders/${lib.versions.majorMinor finalAttrs.version}/glycin-loaders-${finalAttrs.version}.tar.xz";
-    hash = "sha256-x2wBklq9BwF0WJzLkWpEpXOrZbHp1JPxVOQnVkMebdc=";
+    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Vg7kIWfB7SKCZhjmHYPkkUDbW/R6Zam6js4s1z0qSqg=";
   };
 
   patches = [
@@ -40,18 +45,30 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.bindgenHook # for libheif-sys
   ];
 
   buildInputs = [
     gtk4 # for GdkTexture
     cairo
+    lcms2
     libheif
     libxml2 # for librsvg crate
+    librsvg
+    libseccomp
+    libjxl
+  ];
+
+  mesonFlags = [
+    "-Dglycin-loaders=true"
+    "-Dlibglycin=false"
+    "-Dvapi=false"
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "glycin-loaders";
+      attrPath = "glycin-loaders";
+      packageName = "glycin";
     };
 
     glycinPathsPatch = substituteAll {

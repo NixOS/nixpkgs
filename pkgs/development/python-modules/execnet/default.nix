@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, hatchling
-, hatch-vcs
-, gevent
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
+  hatchling,
+  hatch-vcs,
+  gevent,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "2.0.2";
-  format = "pyproject";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zFm8RCN0L9ca0icSLrDdRNtR77PcQJW0WsmgjHcAlq8=";
+    hash = "sha256-UYm1LGEhwk/q4ogWarQbMlScfiNIZSc2VAuebn1OcuM=";
   };
 
-  postPatch = ''
-    # remove vbox tests
-    rm testing/test_termination.py
-    rm testing/test_channel.py
-    rm testing/test_xspec.py
-    rm testing/test_gateway.py
-  '' + lib.optionalString isPyPy ''
-    rm testing/test_multi.py
-  '';
+  postPatch =
+    ''
+      # remove vbox tests
+      rm testing/test_termination.py
+      rm testing/test_channel.py
+      rm testing/test_xspec.py
+      rm testing/test_gateway.py
+    ''
+    + lib.optionalString isPyPy ''
+      rm testing/test_multi.py
+    '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
@@ -50,17 +53,15 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-vvv" ];
 
-  pythonImportsCheck = [
-    "execnet"
-  ];
+  pythonImportsCheck = [ "execnet" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/execnet/blob/v${version}/CHANGELOG.rst";
+  meta = {
     description = "Distributed Python deployment and communication";
     homepage = "https://execnet.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/pytest-dev/execnet/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

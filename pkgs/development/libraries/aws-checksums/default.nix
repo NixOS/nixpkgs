@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
-  version = "0.1.17";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OoEwubEEkLJmlqmQR4/rp4+b1WYJEbcjYDSdXXHleZQ=";
+    sha256 = "sha256-EhIVa8/IK4evGt4vYECunLpxrCMSOsr1RZ/8hFbRi9M=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-checksums";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej eelco ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

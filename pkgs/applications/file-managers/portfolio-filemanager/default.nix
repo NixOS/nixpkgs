@@ -4,7 +4,6 @@
 , appstream-glib
 , desktop-file-utils
 , gettext
-, glib
 , gobject-introspection
 , gtk3
 , gtk4
@@ -18,7 +17,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "1.0.0";
+  version = "1.0.1";
 
   format = "other";
 
@@ -26,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-ahVrOyyF/7X19ZJcHQ4YbC+4b96CPEnns7TUAFCvKao=";
+    hash = "sha256-IbzAkHlD6duXkPJRSyD9HJ/JHP8+IR7vIGFp2ESbBug=";
   };
 
   postPatch = ''
@@ -73,11 +72,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A minimalist file manager for those who want to use Linux mobile devices";
+    description = "Minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "dev.tchx84.Portfolio";
     maintainers = with maintainers; [ dotlambda chuangzhu ];
   };
 }

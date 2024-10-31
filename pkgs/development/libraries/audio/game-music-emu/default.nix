@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
   # it doesn't.
   disallowedReferences = [ stdenv.cc.cc ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 
   meta = with lib; {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
-    description = "A collection of video game music file emulators";
+    description = "Collection of video game music file emulators";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ luc65r lheckemann ];
+    maintainers = with maintainers; [ luc65r ];
   };
 }

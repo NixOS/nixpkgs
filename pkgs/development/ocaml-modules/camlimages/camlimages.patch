@@ -1,0 +1,103 @@
+diff --git a/config/xConfigurator.ml b/config/xConfigurator.ml
+index 268df4a..73e1850 100644
+--- a/config/xConfigurator.ml
++++ b/config/xConfigurator.ml
+@@ -8,7 +8,7 @@ let (!%) fmt = Printf.sprintf fmt
+ module Configurator = struct
+   include Configurator.V1
+ 
+-  let ( ^/ ) = Caml.Filename.concat
++  let ( ^/ ) = Stdlib.Filename.concat
+ 
+   let path_sep =
+     if Sys.win32 then
+@@ -19,7 +19,7 @@ module Configurator = struct
+   let exe = if Sys.win32 then ".exe" else ""
+ 
+   let get_path () =
+-    match Caml.Sys.getenv "PATH" with
++    match Stdlib.Sys.getenv "PATH" with
+     | exception Not_found -> []
+     | s -> String.split ~on:path_sep s
+ 
+@@ -27,7 +27,7 @@ module Configurator = struct
+     List.find_map dirs ~f:(fun dir ->
+       List.find_map bases ~f:(fun base ->
+         let path = dir ^/ base in
+-        if Caml.Sys.file_exists path then Some path else None))
++        if Stdlib.Sys.file_exists path then Some path else None))
+ 
+   let find_program prog =
+     let prog = prog ^ exe in
+@@ -45,13 +45,13 @@ module Configurator = struct
+     | s -> 
+         (* findlib 1.7.3 installs META file for graphics 
+            even when there is no graphics library installed. *)
+-        let dest = Caml.Filename.temp_file "test" ".cma" in
+-        let res = match Caml.Sys.command & !% "ocamlfind ocamlc -package %s -o %s -linkpkg" n dest with
++        let dest = Stdlib.Filename.temp_file "test" ".cma" in
++        let res = match Stdlib.Sys.command & !% "ocamlfind ocamlc -package %s -o %s -linkpkg" n dest with
+           | 0 -> Some s
+           | _ -> None
+           | exception _ -> None
+         in
+-        (try Caml.Sys.remove dest with _ -> ());
++        (try Stdlib.Sys.remove dest with _ -> ());
+         res
+     | exception Findlib.No_such_package _ -> None
+ 
+@@ -83,14 +83,14 @@ type item =
+ module Make(A : sig val name : string end) = struct
+   let t = create A.name
+ 
+-  let log fmt = Caml.Format.eprintf fmt
++  let log fmt = Stdlib.Format.eprintf fmt
+ 
+   module Package_conf = Package_conf
+   open Package_conf
+ 
+   let extract_package_conf xs =
+-    Caml.List.fold_left merge empty
+-      (Caml.List.map (fun item -> match item with
++    Stdlib.List.fold_left merge empty
++      (Stdlib.List.map (fun item -> match item with
+            | Library (Some pkc) -> pkc
+            | _ -> empty) xs)
+ 
+@@ -167,8 +167,8 @@ module Make(A : sig val name : string end) = struct
+   let by_cc ~c_flags ~link_flags ~headers ~functions:fnames () =
+     log "Checking library %s by using C compiler... " (String.concat ~sep:" " link_flags);
+     let headers = "stdio.h" :: headers in
+-    let includes = Caml.List.map (!% "#include <%s>") headers in
+-    let fcalls = Caml.List.map (!% "  ( (void(*)()) (%s) )();") fnames in
++    let includes = Stdlib.List.map (!% "#include <%s>") headers in
++    let fcalls = Stdlib.List.map (!% "  ( (void(*)()) (%s) )();") fnames in
+     let code = 
+       String.concat ~sep:"\n" 
+       & includes 
+diff --git a/core/images.ml b/core/images.ml
+index 563ab7e..a53a6a4 100644
+--- a/core/images.ml
++++ b/core/images.ml
+@@ -102,7 +102,7 @@ let get_extension s =
+   | _ -> s, ""
+ 
+ let guess_extension s =
+-  let s = String.lowercase s in
++  let s = String.lowercase_ascii s in
+   match s with
+   | "gif" -> Gif
+   | "bmp" -> Bmp
+diff --git a/core/units.ml b/core/units.ml
+index 634bc9c..ddd6eae 100644
+--- a/core/units.ml
++++ b/core/units.ml
+@@ -30,7 +30,7 @@ let parse_length s = (* return in pt *)
+     let digit,unit =
+       if l > 2 then String.sub s 0 2, String.sub s (l-2) 2 else "", "" in
+     try
+-      (List.assoc (String.lowercase unit) units) *. float_of_string digit
++      (List.assoc (String.lowercase_ascii unit) units) *. float_of_string digit
+     with
+     | Not_found -> (* think it is in "pt" *)
+       float_of_string s in

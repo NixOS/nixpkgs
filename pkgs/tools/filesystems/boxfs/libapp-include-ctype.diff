@@ -1,0 +1,11 @@
+diff --git a/libapp/libapp/app.c b/libapp/libapp/app.c
+index 0188795..f9f1cfa 100644
+--- a/libapp/libapp/app.c
++++ b/libapp/libapp/app.c
+@@ -1,5 +1,6 @@
+ #include "app.h"
+ 
++#include <ctype.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <libgen.h>

@@ -33,19 +33,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "26.0";
+  version = "28.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "00qvaf53jszsk1rr029zmq60v8w0r92192ab65k2krkmh7ybla9l";
+    sha256 = "0kl7nq62362clgzxwwd5c256xnaar4ilxcvbralazxg47zv95r11";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
   '';
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export MACOSX_DEPLOYMENT_TARGET=10.13
   '';
 

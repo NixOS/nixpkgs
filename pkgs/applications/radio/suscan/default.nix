@@ -9,16 +9,17 @@
 , soapysdr-with-plugins
 , libxml2
 , volk
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "suscan";
-  version = "unstable-2022-07-05";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "BatchDrake";
     repo = "suscan";
-    rev = "37dad542b97aff24654f0bb80fb8e85af7cb84ab";
+    rev = "v${version}";
     sha256 = "sha256-h1ogtYjkqiHb1/NAJfJ0HQIvGnZM2K/PSP5nqLXUf9M=";
   };
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     soapysdr-with-plugins
     libxml2
     volk
+    zlib
   ];
 
   meta = with lib; {

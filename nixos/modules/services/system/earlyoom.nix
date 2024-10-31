@@ -4,19 +4,33 @@ let
   cfg = config.services.earlyoom;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption types
-    mkRemovedOptionModule literalExpression
-    escapeShellArg concatStringsSep optional optionalString;
-
+    concatStringsSep
+    escapeShellArg
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    optionalString
+    optionals
+    types;
 in
 {
+  meta = {
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+  };
+
   options.services.earlyoom = {
-    enable = mkEnableOption (lib.mdDoc "early out of memory killing");
+    enable = mkEnableOption "early out of memory killing";
+
+    package = mkPackageOption pkgs "earlyoom" { };
 
     freeMemThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = lib.mdDoc ''
+      description = ''
         Minimum available memory (in percent).
 
         If the available memory falls below this threshold (and the analog is true for
@@ -32,7 +46,7 @@ in
     freeMemKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Minimum available memory (in percent) before sending SIGKILL.
         If unset, this defaults to half of {option}`freeMemThreshold`.
 
@@ -43,7 +57,7 @@ in
     freeSwapThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = lib.mdDoc ''
+      description = ''
         Minimum free swap space (in percent) before sending SIGTERM.
 
         See the description of [](#opt-services.earlyoom.freeMemThreshold).
@@ -53,7 +67,7 @@ in
     freeSwapKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Minimum free swap space (in percent) before sending SIGKILL.
         If unset, this defaults to half of {option}`freeSwapThreshold`.
 
@@ -64,7 +78,7 @@ in
     enableDebugInfo = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable debugging messages.
       '';
     };
@@ -72,7 +86,7 @@ in
     enableNotifications = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Send notifications about killed processes via the system d-bus.
 
         WARNING: enabling this option (while convenient) should *not* be done on a
@@ -95,7 +109,7 @@ in
           echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log
         '''
       '';
-      description = lib.mdDoc ''
+      description = ''
         An absolute path to an executable to be run for each process killed.
         Some environment variables are available, see
         [README](https://github.com/rfjakob/earlyoom#notifications) and
@@ -108,14 +122,14 @@ in
       type = types.int;
       default = 3600;
       example = 0;
-      description = lib.mdDoc "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
+      description = "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
-      description = lib.mdDoc "Extra command-line arguments to be passed to earlyoom.";
+      description = "Extra command-line arguments to be passed to earlyoom.";
     };
   };
 
@@ -138,22 +152,21 @@ in
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
       wantedBy = [ "multi-user.target" ];
-      path = optional cfg.enableNotifications pkgs.dbus;
+      path = optionals cfg.enableNotifications [ pkgs.dbus ];
       serviceConfig = {
         StandardError = "journal";
         ExecStart = concatStringsSep " " ([
-          "${pkgs.earlyoom}/bin/earlyoom"
+          "${lib.getExe cfg.package}"
           ("-m ${toString cfg.freeMemThreshold}"
-            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
+           + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
           ("-s ${toString cfg.freeSwapThreshold}"
-            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
+           + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
           "-r ${toString cfg.reportInterval}"
         ]
-        ++ optional cfg.enableDebugInfo "-d"
-        ++ optional cfg.enableNotifications "-n"
-        ++ optional (cfg.killHook != null) "-N ${escapeShellArg cfg.killHook}"
-        ++ cfg.extraArgs
-        );
+        ++ optionals cfg.enableDebugInfo [ "-d" ]
+        ++ optionals cfg.enableNotifications [ "-n" ]
+        ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
+        ++ cfg.extraArgs);
       };
     };
   };

@@ -2,9 +2,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "netbird";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ misuzu ];
-  };
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes = {
     node = { ... }: {

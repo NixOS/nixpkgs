@@ -1,0 +1,53 @@
+From f7335530619f9b18d6cc249a297e4dca369101a5 Mon Sep 17 00:00:00 2001
+From: Robert Hensing <robert@roberthensing.nl>
+Date: Thu, 3 Oct 2024 12:23:17 +0200
+Subject: [PATCH 3/6] packaging: Add darwin -lsandbox in meson
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libstore/meson.build | 5 +++++
+ src/libstore/package.nix | 2 ++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/src/libstore/meson.build b/src/libstore/meson.build
+index 6a6aabf97..c2aa5bff3 100644
+--- a/src/libstore/meson.build
++++ b/src/libstore/meson.build
+@@ -69,6 +69,11 @@ has_acl_support = cxx.has_header('sys/xattr.h') \
+   and cxx.has_function('lremovexattr')
+ configdata.set('HAVE_ACL_SUPPORT', has_acl_support.to_int())
+ 
++if host_machine.system() == 'darwin'
++  sandbox = cxx.find_library('sandbox')
++  deps_other += [sandbox]
++endif
++
+ subdir('build-utils-meson/threads')
+ 
+ boost = dependency(
+diff --git a/src/libstore/package.nix b/src/libstore/package.nix
+index 9568462b5..f04e3b95f 100644
+--- a/src/libstore/package.nix
++++ b/src/libstore/package.nix
+@@ -3,6 +3,7 @@
+ , mkMesonLibrary
+ 
+ , unixtools
++, darwin
+ 
+ , nix-util
+ , boost
+@@ -56,6 +57,7 @@ mkMesonLibrary (finalAttrs: {
+     sqlite
+   ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+     # There have been issues building these dependencies
++    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.sandbox
+     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin))
+       aws-sdk-cpp
+   ;
+-- 
+2.46.1
+

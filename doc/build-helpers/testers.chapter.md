@@ -14,11 +14,13 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 # Check that `pkg-config` modules are exposed using default values
 
 ```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModules {
-  package = finalAttrs.finalPackage;
-};
+{
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
 
-meta.pkgConfigModules = [ "libfoo" ];
+  meta.pkgConfigModules = [ "libfoo" ];
+}
 ```
 
 :::
@@ -28,21 +30,149 @@ meta.pkgConfigModules = [ "libfoo" ];
 # Check that `pkg-config` modules are exposed using explicit module names
 
 ```nix
-passthru.tests.pkg-config = testers.hasPkgConfigModules {
-  package = finalAttrs.finalPackage;
-  moduleNames = [ "libfoo" ];
-};
+{
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "libfoo" ];
+  };
+}
 ```
 
 :::
+
+## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
+
+Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
+
+You may use Nix to reproducibly build static websites, such as for software documentation.
+Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
+
+If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
+
+:::{.example #ex-lycheelinkcheck}
+
+# Check hyperlinks in the `nix` documentation
+
+```nix
+testers.lycheeLinkCheck {
+  site = nix.doc + "/share/doc/nix/manual";
+}
+```
+
+:::
+
+### Return value {#tester-lycheeLinkCheck-return}
+
+This tester produces a package that does not produce useful outputs, but only succeeds if the hyperlinks in your site are correct. The build log will list the broken links.
+
+It has two modes:
+
+- Build the returned derivation; its build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
+
+- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and checks that both internal and external hyperlinks are correct.
+  Example:
+
+  ```shell
+  nix run nixpkgs#lychee.tests.ok.online
+  ```
+
+### Inputs {#tester-lycheeLinkCheck-inputs}
+
+`site` (path or derivation) {#tester-lycheeLinkCheck-param-site}
+
+: The path to the files to check.
+
+`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+
+: An attribute set where the attribute names are regular expressions.
+  The values should be strings, derivations, or path values.
+
+  In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
+
+  By adding remappings, you can check offline that URLs to external resources are correct, by providing a stand-in from the file system.
+
+  Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
+
+  Example:
+
+  ```nix
+  {
+    "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
+    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+  }
+  ```
+
+  Store paths in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
+  If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
+
+`extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
+
+: Extra configuration to pass to `lychee` in its [configuration file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml).
+  It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
+
+  Example: `{ "include_verbatim" = true; }`
+
+`lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
+
+: The `lychee` package to use.
+
+## `shellcheck` {#tester-shellcheck}
+
+Runs files through `shellcheck`, a static analysis tool for shell scripts.
+
+:::{.example #ex-shellcheck}
+# Run `testers.shellcheck`
+
+A single script
+
+```nix
+testers.shellcheck {
+  name = "shellcheck";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shellcheck {
+  name = "shellcheck";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shellcheck-inputs}
+
+[`src` (path or string)]{#tester-shellcheck-param-src}
+
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+### Return value {#tester-shellcheck-return}
+
+A derivation that runs `shellcheck` on the given script(s).
+The build will fail if `shellcheck` finds any issues.
 
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-Although simplistic, this test assures that the main program can run.
-While there's no substitute for a real test case, it does catch dynamic linking errors and such.
-It also provides some protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
+NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+
+- Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
+- Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
 
 By default, the command to be run will be inferred from the given `package` attribute:
 it will check `meta.mainProgram` first, and fall back to `pname` or `name`.
@@ -55,7 +185,9 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-passthru.tests.version = testers.testVersion { package = hello; };
+{
+  passthru.tests.version = testers.testVersion { package = hello; };
+}
 ```
 
 :::
@@ -70,13 +202,15 @@ This means that an output like "leetcode 0.4.21" would fail the tests, and an ou
 A common usage of the `version` attribute is to specify `version = "v${version}"`.
 
 ```nix
-version = "0.4.2";
+{
+  version = "0.4.2";
 
-passthru.tests.version = testers.testVersion {
-  package = leetcode-cli;
-  command = "leetcode -V";
-  version = "leetcode ${version}";
-};
+  passthru.tests.version = testers.testVersion {
+    package = leetcode-cli;
+    command = "leetcode -V";
+    version = "leetcode ${version}";
+  };
+}
 ```
 
 :::
@@ -116,12 +250,12 @@ runCommand "example" {
   grep -F 'failing though' $failed/testBuildFailure.log
   [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
   touch $out
-'';
+''
 ```
 
 :::
 
-## `testEqualContents` {#tester-equalContents}
+## `testEqualContents` {#tester-testEqualContents}
 
 Check that two paths have the same contents.
 
@@ -193,12 +327,49 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 # Prevent nix from reusing the output of a fetcher
 
 ```nix
-tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
-  name = "nix-source";
-  url = "https://github.com/NixOS/nix";
-  rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-  hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
-};
+{
+  tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "nix-source";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+}
+```
+
+:::
+
+## `runCommand` {#tester-runCommand}
+
+`runCommand :: { name, script, stdenv ? stdenvNoCC, hash ? "...", ... } -> Derivation`
+
+This is a wrapper around `pkgs.runCommandWith`, which
+- produces a fixed-output derivation, enabling the command(s) to access the network ;
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+
+It accepts the following attributes:
+- the derivation's `name` ;
+- the `script` to be executed ;
+- `stdenv`, the environment to use, defaulting to `stdenvNoCC` ;
+- the derivation's output `hash`, defaulting to the empty file's.
+  The derivation's `outputHashMode` is set by default to recursive, so the `script` can output a directory as well.
+
+All other attributes are passed through to [`mkDerivation`](#sec-using-stdenv),
+including `nativeBuildInputs` to specify dependencies available to the `script`.
+
+:::{.example #ex-tester-runCommand-nix}
+
+# Run a command with network access
+
+```nix
+testers.runCommand {
+  name = "access-the-internet";
+  command = ''
+    curl -o /dev/null https://example.com
+    touch $out
+  '';
+  nativeBuildInputs = with pkgs; [ cacert curl ];
+}
 ```
 
 :::

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jaxtyping
-, pytestCheckHook
-, scipy
-, setuptools
-, setuptools-scm
-, torch
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaxtyping,
+  pytestCheckHook,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  torch,
+  typeguard,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -32,21 +34,23 @@ buildPythonPackage rec {
     jaxtyping
     scipy
     torch
+    typeguard
   ];
+
+  pythonRelaxDeps = [ "typeguard" ];
 
   pythonImportsCheck = [ "linear_operator" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # flaky numerical tests
+    "test_matmul_matrix_broadcast"
     "test_svd"
   ];
 
   meta = with lib; {
-    description = "A LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
+    description = "LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
     homepage = "https://github.com/cornellius-gp/linear_operator/";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

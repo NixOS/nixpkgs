@@ -1,33 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo }:
+{ lib, stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo, yaml-cpp }:
 
 stdenv.mkDerivation rec {
   pname = "libpointmatcher";
-  version = "1.3.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    owner = "ethz-asl";
-    repo = pname;
+    owner = "norlab-ulaval";
+    repo = "libpointmatcher";
     rev = version;
-    sha256 = "0lai6sr3a9dj1j4pgjjyp7mx10wixy5wpvbka8nsc2danj6xhdyd";
+    hash = "sha256-ewsU3aCFPeem1pJpqKaceMhL7SwTYOaYlcwOfMxwkSs=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen boost libnabo ];
+  buildInputs = [ eigen boost libnabo yaml-cpp ];
 
   cmakeFlags = [
-    "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
+    (lib.cmakeFeature "EIGEN_INCLUDE_DIR" "${eigen}/include/eigen3")
+    (lib.cmakeBool "BUILD_TESTS" doCheck)
   ];
 
   doCheck = true;
-  checkPhase = ''
-    ./utest/utest --path ../examples/data/
-  '';
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "An \"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
+    description = "\"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ cryptix ];
   };
 }

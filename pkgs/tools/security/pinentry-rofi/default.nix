@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pinentry-rofi";
-  version = "2.0.5";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "plattfot";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6dhzzxjE3GE5JZTirMLeMh91BS2wzDZoubgf4Wefe1o=";
+    sha256 = "sha256-GHpVO8FRphVW0+In7TtB39ewwVLU1EHOeVL05pnZdFQ=";
   };
 
   nativeBuildInputs = [

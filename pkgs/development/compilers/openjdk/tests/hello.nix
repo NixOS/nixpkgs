@@ -20,12 +20,12 @@ in
     src = source;
 
     buildPhase = ''
-      runHook preBuildPhase
+      runHook preBuild
       ${jdk}/bin/javac src/Hello.java
-      runHook postBuildPhase
+      runHook postBuild
     '';
     installPhase = ''
-      runHook preInstallPhase
+      runHook preInstall
 
       mkdir -p $out/lib
       cp src/Hello.class $out/lib
@@ -37,6 +37,6 @@ in
       EOF
       chmod a+x $out/bin/hello
 
-      runHook postInstallPhase
+      runHook postInstall
     '';
   }

@@ -1,37 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, requests
-, pytestCheckHook
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  aiohttp,
+  tenacity,
+  aioresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "3.0.5";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
-    rev = version;
-    hash = "sha256-pgL4JegD1gANefp7jLYb74N9wgpkDgQc/Fe+NyLBrkA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SVkprX9fMy1uGixsxsE7gbUJndvl+V/kle3Rq34S6Hs=";
   };
 
-  propagatedBuildInputs = [
-    requests
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
+    tenacity
   ];
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
-    requests-mock
   ];
 
-  pythonImportsCheck = [
-    "doorbirdpy"
+  disabledTests = [
+    # connection error on mock host
+    "test_info_auth_fails"
   ];
+
+  pythonImportsCheck = [ "doorbirdpy" ];
 
   meta = with lib; {
+    changelog = "https://gitlab.com/klikini/doorbirdpy/-/tags/${version}";
     description = "Python wrapper for the DoorBird LAN API";
     homepage = "https://gitlab.com/klikini/doorbirdpy";
     license = licenses.mit;

@@ -2,7 +2,6 @@
 , stdenvNoCC
 , fetchurl
 , appimageTools
-, libsecret
 , makeWrapper
 , writeShellApplication
 , curl
@@ -11,22 +10,21 @@
 }:
 let
   pname = "beeper";
-  version = "3.93.36";
-  name = "${pname}-${version}";
+  version = "3.109.1";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.93.36-build-2401269p8vcb695-x86_64.AppImage";
-    hash = "sha256-3pOOAI4/BWdbWfPweRx5I2KRi9VOgJ5vcQ89FTJhPak=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.109.1-build-240923466rji1i4-x86_64.AppImage";
+    hash = "sha256-RXpoOgnoPmNID5Jx/lNxqsHsifFSS9dZzhjSu8kGtXc=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
-    extraPkgs = pkgs: with pkgs; [ libsecret ];
+    extraPkgs = pkgs: [ pkgs.libsecret ];
   };
   appimageContents = appimageTools.extractType2 {
     inherit version pname src;
   };
 in
 stdenvNoCC.mkDerivation rec {
-  inherit name pname version;
+  inherit pname version;
 
   src = appimage;
 
@@ -34,8 +32,6 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
-    mv bin/${name} bin/${pname}
 
     mkdir -p $out/
     cp -r bin $out/bin
@@ -69,7 +65,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Universal chat app.";
+    description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
       and receive messages to friends, family and colleagues on

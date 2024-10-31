@@ -1,28 +1,29 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
   # Python Inputs
-, decorator
-, docplex
-, networkx
-, numpy
-, qiskit-terra
-, scipy
+  decorator,
+  docplex,
+  networkx,
+  numpy,
+  qiskit-terra,
+  scipy,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pylatexenc
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pylatexenc,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,16 +32,14 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vVSFvLVjptSgGocGR6i1Fp0BSRaT3uBBxf0OrFaF9EQ=";
+    hash = "sha256-kzEuICajlV8mgD0YLhwFJaDQVxYZo9jv3sr/r/P0VG0=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt --replace "networkx>=2.2,<2.6" "networkx"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     docplex

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nerdypepper/taizen";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "taizen";
   };
 }

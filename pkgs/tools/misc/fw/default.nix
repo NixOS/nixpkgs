@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A workspace productivity booster";
+    description = "Workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];

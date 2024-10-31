@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+}:
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
-  version = "${kernel.version}-unstable-2023-09-21";
+  version = "${kernel.version}-unstable-2024-09-18";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "rtl8188eus";
-    rev = "3fae7237ba121f1169e9a2ea55040dc123697d3b";
-    sha256 = "sha256-ILSMEt9nMdg1ZbFeatWm8Yxf6a/E7Vm7KtKhN933KTc=";
+    rev = "f969c544ab6100da3d80a5709e077f920f2df698";
+    sha256 = "sha256-uwO2nDDff4t0PZw3mLWmUPOHHftDgoaBaWMXQKHQunI=";
   };
 
   prePatch = ''
@@ -33,6 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
-    broken = (lib.versionAtLeast kernel.version "6.6") || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+    broken = (lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened;
   };
 }

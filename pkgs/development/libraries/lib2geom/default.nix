@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
   checkPhase = let
     disabledTests =
-      lib.optionals stdenv.isAarch64 [
+      lib.optionals stdenv.hostPlatform.isAarch64 [
         # Broken on all platforms, test just accidentally passes on some.
         # https://gitlab.com/inkscape/lib2geom/-/issues/63
         "elliptical-arc-test"

@@ -13,4 +13,4 @@ fi
 
 curl -s "${BASEURL}?mode=json&include=all" |
   jq '.[] | select(.version == "go'"${VERSION}"'")' |
-  jq -r '.files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin")) | (.os + "-" + .arch + " = \"" + .sha256 + "\";")'
+  jq -r '.files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin" or .os == "freebsd")) | (.os + "-" + .arch + " = \"" + .sha256 + "\";")'

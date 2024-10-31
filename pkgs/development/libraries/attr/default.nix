@@ -7,16 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "attr";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "mirror://savannah/attr/${pname}-${version}.tar.gz";
-    sha256 = "1y6sibbkrcjygv8naadnsg6xmsqwfh6cwrqk01l0v2i5kfacdqds";
+    sha256 = "sha256-Ob9nRS+kHQlIwhl2AQU/SLPXigKTiXNDMqYwmmgMbIc=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ gettext ];
+
+  patches = [ ./musl.patch ];
 
   postPatch = ''
     for script in install-sh include/install-sh; do
@@ -28,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
     platforms = platforms.linux;
+    badPlatforms = platforms.microblaze;
     license = licenses.gpl2Plus;
   };
 }

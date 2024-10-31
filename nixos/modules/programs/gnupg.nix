@@ -1,32 +1,18 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkRemovedOptionModule mkOption mkPackageOption types mkIf optionalString;
 
   cfg = config.programs.gnupg;
 
   agentSettingsFormat = pkgs.formats.keyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
   };
-
-  xserverCfg = config.services.xserver;
-
-  defaultPinentryFlavor =
-    if xserverCfg.desktopManager.lxqt.enable
-    || xserverCfg.desktopManager.plasma5.enable
-    || xserverCfg.desktopManager.deepin.enable then
-      "qt"
-    else if xserverCfg.desktopManager.xfce.enable then
-      "gtk2"
-    else if xserverCfg.enable || config.programs.sway.enable then
-      "gnome3"
-    else
-      "curses";
-
 in
-
 {
+  imports = [
+    (mkRemovedOptionModule [ "programs" "gnupg" "agent" "pinentryFlavor" ] "Use programs.gnupg.agent.pinentryPackage instead")
+  ];
 
   options.programs.gnupg = {
     package = mkPackageOption pkgs "gnupg" { };
@@ -34,7 +20,7 @@ in
     agent.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables GnuPG agent with socket-activation for every user session.
       '';
     };
@@ -42,7 +28,7 @@ in
     agent.enableSSHSupport = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable SSH agent support in GnuPG agent. Also sets SSH_AUTH_SOCK
         environment variable correctly. This will disable socket-activation
         and thus always start a GnuPG agent per user session.
@@ -52,7 +38,7 @@ in
     agent.enableExtraSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable extra socket for GnuPG agent.
       '';
     };
@@ -60,22 +46,22 @@ in
     agent.enableBrowserSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable browser socket for GnuPG agent.
       '';
     };
 
-    agent.pinentryFlavor = mkOption {
-      type = types.nullOr (types.enum pkgs.pinentry.flavors);
-      example = "gnome3";
-      default = defaultPinentryFlavor;
-      defaultText = literalMD ''matching the configured desktop environment'';
-      description = lib.mdDoc ''
-        Which pinentry interface to use. If not null, the path to the
-        pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
-        If not set at all, it'll pick an appropriate flavor depending on the
-        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
-        4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
+    agent.pinentryPackage = mkOption {
+      type = types.nullOr types.package;
+      example = lib.literalMD "pkgs.pinentry-gnome3";
+      default = pkgs.pinentry-curses;
+      defaultText = lib.literalMD "matching the configured desktop environment or `pkgs.pinentry-curses`";
+      description = ''
+        Which pinentry package to use. The path to the mainProgram as defined in
+        the package's meta attriutes will be set in /etc/gnupg/gpg-agent.conf.
+        If not set by the user, it'll pick an appropriate flavor depending on the
+        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce,
+        gnome3 on all other systems with X enabled, curses otherwise).
       '';
     };
 
@@ -85,7 +71,7 @@ in
       example = {
         default-cache-ttl = 600;
       };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for /etc/gnupg/gpg-agent.conf.
         See {manpage}`gpg-agent(1)` for supported options.
       '';
@@ -94,16 +80,15 @@ in
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };
   };
 
   config = mkIf cfg.agent.enable {
-    programs.gnupg.agent.settings = {
-      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
-        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+    programs.gnupg.agent.settings = mkIf (cfg.agent.pinentryPackage != null) {
+      pinentry-program = lib.getExe cfg.agent.pinentryPackage;
     };
 
     environment.etc."gnupg/gpg-agent.conf".source =
@@ -206,9 +191,9 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    services.dbus.packages = mkIf (cfg.agent.pinentryFlavor == "gnome3") [ pkgs.gcr ];
+    services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [])) [ pkgs.gcr ];
 
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
@@ -229,12 +214,10 @@ in
     '';
 
     assertions = [
-      { assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
+      {
+        assertion = cfg.agent.enableSSHSupport -> !config.programs.ssh.startAgent;
         message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
       }
     ];
   };
-
-  # uses attributes of the linked package
-  meta.buildDocsInSandbox = false;
 }

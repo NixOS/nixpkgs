@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A command line tool for manipulating and querying XML data";
+    description = "Command line tool for manipulating and querying XML data";
     homepage = "https://xmlstar.sourceforge.net/";
     license = lib.licenses.mit;
     mainProgram = "xmlstarlet";

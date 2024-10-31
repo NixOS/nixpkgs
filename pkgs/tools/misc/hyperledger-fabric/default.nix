@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "hyperledger-fabric";
-  version = "2.5.1";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
-    hash = "sha256-hZAGLSf/hez2pvfmaZJRD5b7GW3+exUXgLXUd2Awvpg=";
+    hash = "sha256-Ev9a+d15kr6apKyGR5xTa/2I3cByyPSTW2Y+HAQk9GU=";
   };
 
   vendorHash = null;
@@ -52,6 +52,6 @@ buildGoModule rec {
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

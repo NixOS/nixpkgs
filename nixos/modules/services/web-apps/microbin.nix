@@ -5,7 +5,7 @@ let
 in
 {
   options.services.microbin = {
-    enable = lib.mkEnableOption (lib.mdDoc "MicroBin is a super tiny, feature rich, configurable paste bin web application");
+    enable = lib.mkEnableOption "MicroBin is a super tiny, feature rich, configurable paste bin web application";
 
     package = lib.mkPackageOption pkgs "microbin" { };
 
@@ -16,7 +16,7 @@ in
         MICROBIN_PORT = 8080;
         MICROBIN_HIDE_LOGO = false;
       };
-      description = lib.mdDoc ''
+      description = ''
         Additional configuration for MicroBin, see
         <https://microbin.eu/docs/installation-and-configuration/configuration/>
         for supported values.
@@ -28,14 +28,14 @@ in
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/microbin";
-      description = lib.mdDoc "Default data folder for MicroBin.";
+      description = "Default data folder for MicroBin.";
     };
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/secrets/microbin.env";
-      description = lib.mdDoc ''
+      description = ''
         Path to file containing environment variables.
         Useful for passing down secrets.
         Variables that can be considered secrets are:

@@ -1,7 +1,4 @@
 { config, options, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.hbase-standalone;
   opt = options.services.hbase-standalone;
@@ -33,7 +30,7 @@ let
 in {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "hbase" ] [ "services" "hbase-standalone" ])
+    (lib.mkRenamedOptionModule [ "services" "hbase" ] [ "services" "hbase-standalone" ])
   ];
 
   ###### interface
@@ -41,60 +38,60 @@ in {
   options = {
     services.hbase-standalone = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         HBase master in standalone mode with embedded regionserver and zookeper.
-        Do not use this configuration for production nor for evaluating HBase performance.
-      '');
+        Do not use this configuration for production nor for evaluating HBase performance
+      '';
 
-      package = mkPackageOption pkgs "hbase" { };
+      package = lib.mkPackageOption pkgs "hbase" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "hbase";
-        description = lib.mdDoc ''
+        description = ''
           User account under which HBase runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "hbase";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which HBase runs.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/hbase";
-        description = lib.mdDoc ''
+        description = ''
           Specifies location of HBase database files. This location should be
           writable and readable for the user the HBase service runs as
           (hbase by default).
         '';
       };
 
-      logDir = mkOption {
-        type = types.path;
+      logDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/log/hbase";
-        description = lib.mdDoc ''
+        description = ''
           Specifies the location of HBase log files.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = with lib.types; attrsOf (oneOf [ str int bool ]);
         default = {
           "hbase.rootdir" = "file://${cfg.dataDir}/hbase";
           "hbase.zookeeper.property.dataDir" = "${cfg.dataDir}/zookeeper";
         };
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             "hbase.rootdir" = "file://''${config.${opt.dataDir}}/hbase";
             "hbase.zookeeper.property.dataDir" = "''${config.${opt.dataDir}}/zookeeper";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           configurations in hbase-site.xml, see <https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml> for details.
         '';
       };
@@ -104,7 +101,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"

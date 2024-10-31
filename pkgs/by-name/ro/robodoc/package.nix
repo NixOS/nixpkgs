@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Docs/makefile.am \
       --replace 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
   '';

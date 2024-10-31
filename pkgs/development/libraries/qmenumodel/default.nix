@@ -12,6 +12,7 @@
 , python3
 , qtbase
 , qtdeclarative
+, gobject-introspection
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus
     dbus-test-runner
+    gobject-introspection
     (python3.withPackages (ps: with ps; [
       dbus-python
       pygobject3

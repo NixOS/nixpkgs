@@ -17,7 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://duplicacy.com";
-    description = "A new generation cloud backup tool";
+    description = "New generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
     maintainers = with maintainers; [ ffinkdevs devusb ];

@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, ... }: {
   name = "paperless";
-  meta.maintainers = with lib.maintainers; [ erikarvstedt Flakebi ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
 
   nodes = let self = {
     simple = { pkgs, ... }: {
@@ -23,6 +23,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       };
       services.paperless.settings = {
         PAPERLESS_DBHOST = "/run/postgresql";
+        PAPERLESS_OCR_LANGUAGE = "deu";
       };
     };
   }; in self;

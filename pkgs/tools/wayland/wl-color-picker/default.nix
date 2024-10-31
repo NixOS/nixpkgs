@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , slurp
 , grim
-, gnome
+, zenity
 , wl-clipboard
 , imagemagick
 , makeWrapper
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --replace 'grim' "${grim}/bin/grim" \
       --replace 'slurp' "${slurp}/bin/slurp" \
       --replace 'convert' "${imagemagick}/bin/convert" \
-      --replace 'zenity' "${gnome.zenity}/bin/zenity" \
+      --replace 'zenity' "${zenity}/bin/zenity" \
       --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
   '';
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
          grim
          slurp
          imagemagick
-         gnome.zenity
+         zenity
          wl-clipboard
        ]}
     mkdir -p $out/bin

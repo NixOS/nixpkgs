@@ -14,7 +14,11 @@ import ./make-test-python.nix ({ lib, ... }@args: let
   inherit (pkgs.vscode.passthru) rev vscodeServer;
 in {
   name = "vscode-remote-ssh";
-  meta.maintainers = with lib.maintainers; [ Enzime ];
+
+  meta = {
+    maintainers = [ ];
+    timeout = 600;
+  };
 
   nodes = let
     serverAddress = "192.168.0.2";
@@ -70,7 +74,11 @@ in {
       client.succeed("sudo -u alice code --remote=ssh-remote+root@server /root")
       client.wait_for_window("Visual Studio Code")
 
-      client.wait_for_text("Do you trust the authors" if should_succeed else "Disconnected from SSH")
+      if should_succeed:
+        ocr_text = "Do you trust"
+      else:
+        ocr_text = "Could not establish connection"
+      client.wait_for_text(ocr_text)
       client.screenshot(screenshot)
 
       if should_succeed:

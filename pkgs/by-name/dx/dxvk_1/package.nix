@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glslang
-, meson
-, ninja
-, windows
-, pkgsBuildHost
-, enableMoltenVKCompat ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  glslang,
+  meson,
+  ninja,
+  windows,
+  enableMoltenVKCompat ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs:  {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
   version = "1.10.3";
 
@@ -21,25 +22,38 @@ stdenv.mkDerivation (finalAttrs:  {
   };
 
   # These patches are required when using DXVK with Wine on Darwin.
-  patches = lib.optionals enableMoltenVKCompat [
-    # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
-    # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
-    ./darwin-dxvk-compat.patch
-    # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
-    # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
-    ./darwin-thread-primitives.patch
-  ];
+  patches =
+    [
+      # Fixes errors building with GCC 13.
+      (fetchpatch {
+        url = "https://github.com/doitsujin/dxvk/commit/1a5afc77b1859e6c7e31b55e11ece899e3b5295a.patch";
+        hash = "sha256-tTAsQOMAazgH/6laLNTuG2lki257VUR9EBivnD4vCuY=";
+      })
+    ]
+    ++ lib.optionals enableMoltenVKCompat [
+      # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
+      # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
+      ./darwin-dxvk-compat.patch
+      # Use synchronization primitives from the C++ standard library to avoid deadlocks on Darwin.
+      # See: https://www.reddit.com/r/macgaming/comments/t8liua/comment/hzsuce9/
+      ./darwin-thread-primitives.patch
+    ];
 
-  nativeBuildInputs = [ glslang meson ninja ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    glslang
+    meson
+    ninja
+  ];
   buildInputs = [ windows.pthreads ];
 
-  mesonFlags = [
-    "--buildtype" "release"
-    "--prefix" "${placeholder "out"}"
-  ];
+  mesonBuildType = "release";
+
+  __structuredAttrs = true;
 
   meta = {
-    description = "A Vulkan-based translation layer for Direct3D 9/10/11";
+    description = "Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
     changelog = "https://github.com/doitsujin/dxvk/releases";
     maintainers = [ lib.maintainers.reckenrode ];

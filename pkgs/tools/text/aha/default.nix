@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ANSI HTML Adapter";
+    mainProgram = "aha";
     longDescription = ''
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
     homepage = "https://github.com/theZiz/aha";
+    changelog = "https://github.com/theZiz/aha/blob/${version}/CHANGELOG";
     license = with licenses; [ lgpl2Plus mpl11 ];
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.all;

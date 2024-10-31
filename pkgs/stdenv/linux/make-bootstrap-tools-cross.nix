@@ -12,7 +12,10 @@ let
     pkgs = releaseLib.pkgsForCross crossSystem system;
   };
 in lib.mapAttrs (n: make) (with lib.systems.examples; {
-  # NOTE: Only add platforms for which there are files in `./bootstrap-files`.
+  # NOTE: Only add platforms for which there are files in `./bootstrap-files`
+  # or for which you plan to request the tarball upload soon. See the
+  #   maintainers/scripts/bootstrap-files/README.md
+  # on how to request an upload.
   # Sort following the sorting in `./default.nix` `bootstrapFiles` argument.
 
   armv5tel-unknown-linux-gnueabi = sheevaplug;
@@ -22,8 +25,10 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   mipsel-unknown-linux-gnu = mipsel-linux-gnu;
   mips64el-unknown-linux-gnuabin32 = mips64el-linux-gnuabin32;
   mips64el-unknown-linux-gnuabi64 = mips64el-linux-gnuabi64;
+  powerpc64-unknown-linux-gnuabielfv2 = ppc64;
   powerpc64le-unknown-linux-gnu = powernv;
   riscv64-unknown-linux-gnu = riscv64;
+  s390x-unknown-linux-gnu = s390x;
 
   # musl
   aarch64-unknown-linux-musl = aarch64-multiplatform-musl;

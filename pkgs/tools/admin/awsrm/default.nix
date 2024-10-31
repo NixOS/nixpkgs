@@ -20,9 +20,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A remove command for AWS resources";
+    description = "Remove command for AWS resources";
     homepage = "https://github.com/jckuester/awsrm";
     license = licenses.mit;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "awsrm";
   };
 }

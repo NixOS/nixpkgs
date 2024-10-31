@@ -12,6 +12,8 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman";
   version = "3.3.9";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -19,16 +21,20 @@ buildPythonPackage rec {
     hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     aiosmtpd
     alembic
     authheaders
     click
     dnspython
     falcon
-    flufl_bounce
-    flufl_i18n
-    flufl_lock
+    flufl-bounce
+    flufl-i18n
+    flufl-lock
     gunicorn
     lazr-config
     passlib

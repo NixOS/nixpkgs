@@ -18,6 +18,9 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
+  # https://www.mediawiki.org/wiki/Compatibility
+  php = pkgs.php82;
+
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
     inherit (src) version;
@@ -45,8 +48,8 @@ let
     preferLocalBuild = true;
   } ''
     mkdir -p $out/bin
-    for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
+    for i in changePassword.php createAndPromote.php resetUserEmail.php userOptions.php edit.php nukePage.php update.php; do
+      makeWrapper ${php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
         --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
         --add-flags ${pkg}/share/mediawiki/maintenance/$i
     done
@@ -61,129 +64,135 @@ let
   else
     throw "Unsupported database type: ${cfg.database.type} for socket: ${cfg.database.socket}";
 
-  mediawikiConfig = pkgs.writeText "LocalSettings.php" ''
-    <?php
-      # Protect against web entry
-      if ( !defined( 'MEDIAWIKI' ) ) {
-        exit;
-      }
+  mediawikiConfig = pkgs.writeTextFile {
+    name = "LocalSettings.php";
+    checkPhase = ''
+      ${php}/bin/php --syntax-check "$target"
+    '';
+    text = ''
+      <?php
+        # Protect against web entry
+        if ( !defined( 'MEDIAWIKI' ) ) {
+          exit;
+        }
 
-      $wgSitename = "${cfg.name}";
-      $wgMetaNamespace = false;
+        $wgSitename = "${cfg.name}";
+        $wgMetaNamespace = false;
 
-      ## The URL base path to the directory containing the wiki;
-      ## defaults for all runtime URL paths are based off of this.
-      ## For more information on customizing the URLs
-      ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
-      ## https://www.mediawiki.org/wiki/Manual:Short_URL
-      $wgScriptPath = "${lib.optionalString (cfg.webserver == "nginx") "/w"}";
+        ## The URL base path to the directory containing the wiki;
+        ## defaults for all runtime URL paths are based off of this.
+        ## For more information on customizing the URLs
+        ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
+        ## https://www.mediawiki.org/wiki/Manual:Short_URL
+        $wgScriptPath = "${lib.optionalString (cfg.webserver == "nginx") "/w"}";
 
-      ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${cfg.url}";
+        ## The protocol and server name to use in fully-qualified URLs
+        $wgServer = "${cfg.url}";
 
-      ## The URL path to static resources (images, scripts, etc.)
-      $wgResourceBasePath = $wgScriptPath;
+        ## The URL path to static resources (images, scripts, etc.)
+        $wgResourceBasePath = $wgScriptPath;
 
-      ${lib.optionalString (cfg.webserver == "nginx") ''
-        $wgArticlePath = "/wiki/$1";
-        $wgUsePathInfo = true;
-      ''}
+        ${lib.optionalString (cfg.webserver == "nginx") ''
+          $wgArticlePath = "/wiki/$1";
+          $wgUsePathInfo = true;
+        ''}
 
-      ## The URL path to the logo.  Make sure you change this from the default,
-      ## or else you'll overwrite your logo when you upgrade!
-      $wgLogo = "$wgResourceBasePath/resources/assets/wiki.png";
+        ## The URL path to the logo.  Make sure you change this from the default,
+        ## or else you'll overwrite your logo when you upgrade!
+        $wgLogo = "$wgResourceBasePath/resources/assets/wiki.png";
 
-      ## UPO means: this is also a user preference option
+        ## UPO means: this is also a user preference option
 
-      $wgEnableEmail = true;
-      $wgEnableUserEmail = true; # UPO
+        $wgEnableEmail = true;
+        $wgEnableUserEmail = true; # UPO
 
-      $wgPasswordSender = "${cfg.passwordSender}";
+        $wgPasswordSender = "${cfg.passwordSender}";
 
-      $wgEnotifUserTalk = false; # UPO
-      $wgEnotifWatchlist = false; # UPO
-      $wgEmailAuthentication = true;
+        $wgEnotifUserTalk = false; # UPO
+        $wgEnotifWatchlist = false; # UPO
+        $wgEmailAuthentication = true;
 
-      ## Database settings
-      $wgDBtype = "${cfg.database.type}";
-      $wgDBserver = "${dbAddr}";
-      $wgDBport = "${toString cfg.database.port}";
-      $wgDBname = "${cfg.database.name}";
-      $wgDBuser = "${cfg.database.user}";
-      ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
+        ## Database settings
+        $wgDBtype = "${cfg.database.type}";
+        $wgDBserver = "${dbAddr}";
+        $wgDBport = "${toString cfg.database.port}";
+        $wgDBname = "${cfg.database.name}";
+        $wgDBuser = "${cfg.database.user}";
+        ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
 
-      ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
-        # MySQL specific settings
-        $wgDBprefix = "${cfg.database.tablePrefix}";
-      ''}
+        ${optionalString (cfg.database.type == "mysql" && cfg.database.tablePrefix != null) ''
+          # MySQL specific settings
+          $wgDBprefix = "${cfg.database.tablePrefix}";
+        ''}
 
-      ${optionalString (cfg.database.type == "mysql") ''
-        # MySQL table options to use during installation or update
-        $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-      ''}
+        ${optionalString (cfg.database.type == "mysql") ''
+          # MySQL table options to use during installation or update
+          $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+        ''}
 
-      ## Shared memory settings
-      $wgMainCacheType = CACHE_NONE;
-      $wgMemCachedServers = [];
+        ## Shared memory settings
+        $wgMainCacheType = CACHE_NONE;
+        $wgMemCachedServers = [];
 
-      ${optionalString (cfg.uploadsDir != null) ''
-        $wgEnableUploads = true;
-        $wgUploadDirectory = "${cfg.uploadsDir}";
-      ''}
+        ${optionalString (cfg.uploadsDir != null) ''
+          $wgEnableUploads = true;
+          $wgUploadDirectory = "${cfg.uploadsDir}";
+        ''}
 
-      $wgUseImageMagick = true;
-      $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
+        $wgUseImageMagick = true;
+        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
 
-      # InstantCommons allows wiki to use images from https://commons.wikimedia.org
-      $wgUseInstantCommons = false;
+        # InstantCommons allows wiki to use images from https://commons.wikimedia.org
+        $wgUseInstantCommons = false;
 
-      # Periodically send a pingback to https://www.mediawiki.org/ with basic data
-      # about this MediaWiki instance. The Wikimedia Foundation shares this data
-      # with MediaWiki developers to help guide future development efforts.
-      $wgPingback = true;
+        # Periodically send a pingback to https://www.mediawiki.org/ with basic data
+        # about this MediaWiki instance. The Wikimedia Foundation shares this data
+        # with MediaWiki developers to help guide future development efforts.
+        $wgPingback = true;
 
-      ## If you use ImageMagick (or any other shell command) on a
-      ## Linux server, this will need to be set to the name of an
-      ## available UTF-8 locale
-      $wgShellLocale = "C.UTF-8";
+        ## If you use ImageMagick (or any other shell command) on a
+        ## Linux server, this will need to be set to the name of an
+        ## available UTF-8 locale
+        $wgShellLocale = "C.UTF-8";
 
-      ## Set $wgCacheDirectory to a writable directory on the web server
-      ## to make your wiki go slightly faster. The directory should not
-      ## be publicly accessible from the web.
-      $wgCacheDirectory = "${cacheDir}";
+        ## Set $wgCacheDirectory to a writable directory on the web server
+        ## to make your wiki go slightly faster. The directory should not
+        ## be publicly accessible from the web.
+        $wgCacheDirectory = "${cacheDir}";
 
-      # Site language code, should be one of the list in ./languages/data/Names.php
-      $wgLanguageCode = "en";
+        # Site language code, should be one of the list in ./languages/data/Names.php
+        $wgLanguageCode = "en";
 
-      $wgSecretKey = file_get_contents("${stateDir}/secret.key");
+        $wgSecretKey = file_get_contents("${stateDir}/secret.key");
 
-      # Changing this will log out all existing sessions.
-      $wgAuthenticationTokenVersion = "";
+        # Changing this will log out all existing sessions.
+        $wgAuthenticationTokenVersion = "";
 
-      ## For attaching licensing metadata to pages, and displaying an
-      ## appropriate copyright notice / icon. GNU Free Documentation
-      ## License and Creative Commons licenses are supported so far.
-      $wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
-      $wgRightsUrl = "";
-      $wgRightsText = "";
-      $wgRightsIcon = "";
+        ## For attaching licensing metadata to pages, and displaying an
+        ## appropriate copyright notice / icon. GNU Free Documentation
+        ## License and Creative Commons licenses are supported so far.
+        $wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
+        $wgRightsUrl = "";
+        $wgRightsText = "";
+        $wgRightsIcon = "";
 
-      # Path to the GNU diff3 utility. Used for conflict resolution.
-      $wgDiff = "${pkgs.diffutils}/bin/diff";
-      $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
+        # Path to the GNU diff3 utility. Used for conflict resolution.
+        $wgDiff = "${pkgs.diffutils}/bin/diff";
+        $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
 
-      # Enabled skins.
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
+        # Enabled skins.
+        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
-      # Enabled extensions.
-      ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
+        # Enabled extensions.
+        ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadExtension('${k}');") cfg.extensions)}
 
 
-      # End of automatically generated settings.
-      # Add more configuration options below.
+        # End of automatically generated settings.
+        # Add more configuration options below.
 
-      ${cfg.extraConfig}
-  '';
+        ${cfg.extraConfig}
+      '';
+    };
 
   withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 in
@@ -192,7 +201,7 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption (lib.mdDoc "MediaWiki");
+      enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
 
@@ -201,7 +210,7 @@ in
         readOnly = true;
         default = pkg;
         defaultText = literalExpression "pkg";
-        description = lib.mdDoc ''
+        description = ''
           The final package used by the module. This is the package that will have extensions and skins installed.
         '';
       };
@@ -210,7 +219,7 @@ in
         type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
-        description = lib.mdDoc "Name of the wiki.";
+        description = "Name of the wiki.";
       };
 
       url = mkOption {
@@ -229,13 +238,13 @@ in
           if "mediawiki uses ssl" then "{"https" else "http"}://''${cfg.hostName}" else "http://localhost";
         '';
         example = "https://wiki.example.org";
-        description = lib.mdDoc "URL of the wiki.";
+        description = "URL of the wiki.";
       };
 
       uploadsDir = mkOption {
         type = types.nullOr types.path;
         default = "${stateDir}/uploads";
-        description = lib.mdDoc ''
+        description = ''
           This directory is used for uploads of pictures. The directory passed here is automatically
           created and permissions adjusted as required.
         '';
@@ -243,7 +252,9 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = lib.mdDoc "A file containing the initial password for the admin user.";
+        description = ''
+          A file containing the initial password for the administrator account "admin".
+        '';
         example = "/run/keys/mediawiki-password";
       };
 
@@ -262,13 +273,13 @@ in
             else
               config.services.httpd.adminAddr else "root@localhost"
         '';
-        description = lib.mdDoc "Contact address for password reset.";
+        description = "Contact address for password reset.";
       };
 
       skins = mkOption {
         default = {};
         type = types.attrsOf types.path;
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of paths whose content is copied to the {file}`skins`
           subdirectory of the MediaWiki installation in addition to the default skins.
         '';
@@ -277,7 +288,7 @@ in
       extensions = mkOption {
         default = {};
         type = types.attrsOf (types.nullOr types.path);
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of paths whose content is copied to the {file}`extensions`
           subdirectory of the MediaWiki installation and enabled in configuration.
 
@@ -297,46 +308,46 @@ in
       webserver = mkOption {
         type = types.enum [ "apache" "none" "nginx" ];
         default = "apache";
-        description = lib.mdDoc "Webserver to use.";
+        description = "Webserver to use.";
       };
 
       database = {
         type = mkOption {
           type = types.enum [ "mysql" "postgres" "mssql" "oracle" ];
           default = "mysql";
-          description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
+          description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = lib.mdDoc "Database host address.";
+          description = "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
           default = if cfg.database.type == "mysql" then 3306 else 5432;
           defaultText = literalExpression "3306";
-          description = lib.mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/mediawiki-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`database.user`.
           '';
@@ -345,7 +356,7 @@ in
         tablePrefix = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             If you only have access to a single database and wish to install more than
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
@@ -363,14 +374,14 @@ in
             else
               null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
-          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql" || cfg.database.type == "postgres";
           defaultText = literalExpression "true";
-          description = lib.mdDoc ''
+          description = ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
           '';
@@ -381,7 +392,7 @@ in
         type = types.str;
         example = literalExpression ''wiki.example.com'';
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The hostname to use for the nginx virtual host.
           This is used to generate the nginx configuration.
         '';
@@ -397,7 +408,7 @@ in
             enableACME = true;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           See [](#opt-services.httpd.virtualHosts) for further information.
         '';
@@ -413,7 +424,7 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = lib.mdDoc ''
+        description = ''
           Options for the MediaWiki PHP pool. See the documentation on `php-fpm.conf`
           for details on configuration directives.
         '';
@@ -421,7 +432,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Any additional text to be appended to MediaWiki's
           LocalSettings.php configuration file. For configuration
           settings, see <https://www.mediawiki.org/wiki/Manual:Configuration_settings>.
@@ -485,8 +496,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      # https://www.mediawiki.org/wiki/Compatibility
-      phpPackage = pkgs.php81;
+      phpPackage = php;
       settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -598,8 +608,8 @@ in
         fi
 
         echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -613,7 +623,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
       '';
 
       serviceConfig = {

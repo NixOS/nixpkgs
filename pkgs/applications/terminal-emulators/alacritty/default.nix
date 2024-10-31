@@ -35,7 +35,7 @@ let
     expat
     fontconfig
     freetype
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nn/G7SkRuHXRSRgNjlmdX1G07sp7FPx8UyAn63Nivfg=";
+    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
   };
 
-  cargoHash = "sha256-vCoKaDd0mQRF6NNfK679FhEXuAdn/1o3F1gTfT8NK+0=";
+  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
 
   nativeBuildInputs = [
     cmake
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreGraphics
     CoreServices
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = lib.optionalString (!xdg-utils.meta.broken) ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
 
   postInstall = (
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir $out/Applications
       cp -r extra/osx/Alacritty.app $out/Applications
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
   meta = with lib; {
-    description = "A cross-platform, GPU-accelerated terminal emulator";
+    description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
     mainProgram = "alacritty";

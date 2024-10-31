@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , gobject-introspection
 , sox
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [ gtk3 sox ];
 
@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple and powerful voice changer for Linux, written in GTK 3";
+    mainProgram = "lyrebird";
     homepage = "https://github.com/chxrlt/lyrebird";
     license = licenses.mit;
     maintainers = with maintainers; [ OPNA2608 ];

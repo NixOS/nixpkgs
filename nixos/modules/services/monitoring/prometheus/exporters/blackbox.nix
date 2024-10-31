@@ -1,10 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    escapeShellArg
+    ;
 
   # This ensures that we can deal with string paths, path types and
   # store-path strings with context.
@@ -35,14 +39,14 @@ in {
   extraOpts = {
     configFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };
     enableConfigCheck = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run a correctness check for the configuration file. This depends
         on the configuration file residing in the nix-store. Paths passed as string will
         be copied to the store.

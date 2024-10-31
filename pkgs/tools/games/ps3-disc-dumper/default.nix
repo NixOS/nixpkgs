@@ -21,6 +21,12 @@ buildDotnetModule rec {
   projectFile = "UI.Console/UI.Console.csproj";
   nugetDeps = ./deps.nix;
 
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile nuget.config
+  '';
+
   runtimeDeps = [
     zlib
     openssl
@@ -28,9 +34,10 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/13xforever/ps3-disc-dumper";
-    description = "A handy utility to make decrypted PS3 disc dumps";
+    description = "Handy utility to make decrypted PS3 disc dumps";
     license = licenses.mit;
     maintainers = with maintainers; [ evanjs ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ps3-disc-dumper";
   };
 }

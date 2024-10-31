@@ -1,13 +1,24 @@
 diff --git a/cmake/MapnikExportPkgConfig.cmake b/cmake/MapnikExportPkgConfig.cmake
-index e459f80ef..ec18a71a2 100644
+index f12ed57f1..548e1e6e9 100644
 --- a/cmake/MapnikExportPkgConfig.cmake
 +++ b/cmake/MapnikExportPkgConfig.cmake
-@@ -65,8 +65,8 @@ prefix=@CMAKE_INSTALL_PREFIX@
+@@ -3,7 +3,7 @@ function(create_pkg_config_file _target _lib_name _description)
+ prefix=@CMAKE_INSTALL_PREFIX@
  exec_prefix=${prefix}
  includedir=${prefix}/include
- libdir=${exec_prefix}/lib
+-libdir=${exec_prefix}/@MAPNIK_LIB_DIR@
++libdir=${exec_prefix}@MAPNIK_LIB_DIR@
+ 
+ Name: @_lib_name@
+ Description: @_description@
+@@ -64,9 +64,9 @@ function(create_pkg_config_file_mapnik _lib_name _description)
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ includedir=${prefix}/include
+-libdir=${exec_prefix}/@MAPNIK_LIB_DIR@
 -fonts_dir=${prefix}/@FONTS_INSTALL_DIR@
 -plugins_dir=${prefix}/@PLUGINS_INSTALL_DIR@
++libdir=${exec_prefix}@MAPNIK_LIB_DIR@
 +fonts_dir=@FONTS_INSTALL_DIR@
 +plugins_dir=@PLUGINS_INSTALL_DIR@
  

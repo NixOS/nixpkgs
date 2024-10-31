@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-linalgebra-templates"
     "--enable-performance"
-  ] ++ lib.optional stdenv.isx86_64 "--enable-sse-intrinsics";
+  ] ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
 
   LDFLAGS = "-lblas -llapack";
 
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Quantum chemistry program for large-scale self-consistent field calculations";
+    mainProgram = "ergo";
     homepage = "http://www.ergoscf.org";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.markuskowa ];

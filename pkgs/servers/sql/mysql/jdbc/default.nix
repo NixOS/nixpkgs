@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
-  version = "8.2.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
-    hash = "sha256-N0emBuTaYlyL1SS0wDOR8uiz4yGUOMllKR7LC60eFEg=";
+    hash = "sha256-3Czzu7hheuF0FYF8+GtjkxXSXfxTaqHrPa/+69I8Wfg=";
   };
 
   installPhase = ''
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     description = "MySQL Connector/J";
     homepage = "https://dev.mysql.com/doc/connector-j/en/";
     changelog = "https://dev.mysql.com/doc/relnotes/connector-j/en/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

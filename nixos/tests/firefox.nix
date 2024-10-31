@@ -1,9 +1,9 @@
-import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
+import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
 {
   name = firefoxPackage.pname;
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
+    maintainers = [ shlevy ];
   };
 
   nodes.machine =
@@ -21,8 +21,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
       boot.kernelModules = [ "snd-aloop" ];
-      sound.enable = true;
-      sound.extraConfig = ''
+      environment.etc."asound.conf".text = ''
         pcm.!default {
           type plug
           slave.pcm pcm.dmixer
@@ -55,7 +54,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
     };
 
   testScript = let
-    exe = firefoxPackage.unwrapped.binaryName;
+    exe = lib.getExe firefoxPackage;
   in ''
       from contextlib import contextmanager
 

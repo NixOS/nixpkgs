@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , desktop-file-utils
+, gettext
 , pkg-config
 , writeScript
 , gnome-keyring
@@ -13,6 +14,7 @@
 , elementary-default-settings
 , gnome-settings-daemon
 , runtimeShell
+, systemd
 , writeText
 , meson
 , ninja
@@ -71,7 +73,7 @@ let
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
 
     # Start pantheon session. Keep in sync with upstream
-    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
   '';
 
   # Absolute path patched version of the upstream xsession
@@ -90,17 +92,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
     rev = version;
-    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
+    sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
+    gettext
     meson
     ninja
     pkg-config
@@ -111,6 +114,7 @@ stdenv.mkDerivation rec {
     gnome-settings-daemon
     onboard
     orca
+    systemd
   ];
 
   mesonFlags = [

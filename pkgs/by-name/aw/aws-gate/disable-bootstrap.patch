@@ -38,14 +38,3 @@ index ac37c2f..9743415 100644
      elif args.subcommand == "exec":
          exec(
              config=config,
-diff --git a/requirements/requirements.txt b/requirements/requirements.txt
-index 50b203e..8c3496f 100644
---- a/requirements/requirements.txt
-+++ b/requirements/requirements.txt
-@@ -3,5 +3,4 @@ cryptography==39.0.2
- marshmallow==3.19.0
- packaging==23.0
- PyYAML>=5.1,<6.1
--requests==2.28.2
- unix-ar==0.2.1
- wrapt==1.15.0

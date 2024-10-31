@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nilfs-utils";
-  version = "2.2.9";
+  version = "2.2.11";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XqViUvPj2BHO3bGs9xBO3VpRq9XqnwBptHvMwBOntqo=";
+    sha256 = "sha256-qvs0PBkMYzGfIQ/Z2Wz0aHe2Y2Ia6fA4pMSk5Jhejf4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license =  with licenses; [ gpl2 lgpl21 ];
+    license =  with licenses; [ gpl2Plus lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
 }

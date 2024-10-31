@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to perform sample comparison testing on the command line";
+    description = "Tool to perform sample comparison testing on the command line";
     longDescription = ''
        squishyball is a simple command-line utility for performing
        double-blind A/B, A/B/X or X/X/Y testing on the command line.
@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ michalrus ];
     platforms = platforms.linux;
+    mainProgram = "squishyball";
   };
 }

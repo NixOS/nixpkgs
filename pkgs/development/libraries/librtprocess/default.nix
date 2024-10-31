@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   meta = with lib; {
     description = "Highly optimized library for processing RAW images";

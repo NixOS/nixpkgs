@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "star-history";
-  version = "1.0.17";
+  version = "1.0.22";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-r1mDMpnu0/xWLtfM7WsVdO8nbkqNBXvYn31hB9qzgVY=";
+    hash = "sha256-Ymocx843DVxvtTHBS3PdyYDLgYJJtUMpmdOnOmFKJZE=";
   };
 
-  cargoHash = "sha256-e65WlmHfo6zIXkQ/7RqqX4wYjbATfC1ke9Zwcm+EQ7M=";
+  cargoHash = "sha256-xDO+Qdg8gDj0Eny7QtaRiAxwdXycOsInf5L1YZKv++g=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

@@ -22,7 +22,7 @@ buildGoModule rec {
       --replace "confluence.html" "$out/share/confluence.html"
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/confluencePot $out/bin/${pname}
   '';
 

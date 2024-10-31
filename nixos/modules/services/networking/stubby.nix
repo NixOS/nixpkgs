@@ -25,7 +25,7 @@ in {
   options = {
     services.stubby = {
 
-      enable = mkEnableOption (lib.mdDoc "Stubby DNS resolver");
+      enable = mkEnableOption "Stubby DNS resolver";
 
       settings = mkOption {
         type = types.attrsOf settingsFormat.type;
@@ -41,7 +41,7 @@ in {
             }];
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Content of the Stubby configuration file. All Stubby settings may be set or queried
           here. The default settings are available at
           `pkgs.stubby.passthru.settingsExample`. See
@@ -66,7 +66,7 @@ in {
         default = null;
         type = types.nullOr (types.enum (attrNames logLevels ++ attrValues logLevels));
         apply = v: if isString v then logLevels.${v} else v;
-        description = lib.mdDoc "Log verbosity (syslog keyword or level).";
+        description = "Log verbosity (syslog keyword or level).";
       };
 
     };

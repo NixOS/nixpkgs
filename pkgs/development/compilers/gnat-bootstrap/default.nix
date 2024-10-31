@@ -67,8 +67,9 @@ in {
     zlib
   ] ++ lib.optionals stdenv.buildPlatform.isLinux [
     autoPatchelfHook
-    elfutils
     glibc
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
+    elfutils
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''

@@ -1,43 +1,43 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.7.0";
+  version = "2.7.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
-    repo = pname;
+    repo = "pip-audit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xbplBcoW78Dh5uyhaPicjs74YQfAgTc746Srxa4vu7M=";
+    hash = "sha256-MRFfF5OygUCIdUnPvxhYk4IcLSWGgmlw2qgzPoZDniw=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    flit-core
-  ];
+  build-system = with python3.pkgs; [ flit-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    cachecontrol
-    cyclonedx-python-lib
-    html5lib
-    packaging
-    pip-api
-    pip-requirements-parser
-    rich
-    toml
-  ] ++ cachecontrol.optional-dependencies.filecache;
+  dependencies =
+    with python3.pkgs;
+    [
+      cachecontrol
+      cyclonedx-python-lib
+      html5lib
+      packaging
+      pip-api
+      pip-requirements-parser
+      rich
+      toml
+    ]
+    ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pip_audit"
-  ];
+  pythonImportsCheck = [ "pip_audit" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -64,5 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pip-audit";
   };
 }

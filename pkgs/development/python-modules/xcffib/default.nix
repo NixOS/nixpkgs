@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  xorg,
 }:
 
 buildPythonPackage rec {
@@ -24,18 +25,14 @@ buildPythonPackage rec {
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
     xorg.xeyes
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   preCheck = ''
@@ -43,15 +40,17 @@ buildPythonPackage rec {
     rm -r xcffib
   '';
 
-  pythonImportsCheck = [
-    "xcffib"
-  ];
+  pythonImportsCheck = [ "xcffib" ];
+
+  # Tests use xvfb
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A drop in replacement for xpyb, an XCB python binding";
+    description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
     license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ kamilchm ];
   };
 }

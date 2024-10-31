@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "SESSION=systemd" ];
 
   meta = with lib; {
-    description = "A secure suspend/hibernate-friendly alternative to `vlock -an`";
-    license = licenses.gpl2;
+    description = "Secure suspend/hibernate-friendly alternative to `vlock -an`";
+    mainProgram = "physlock";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

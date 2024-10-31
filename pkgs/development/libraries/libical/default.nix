@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.17";
+  version = "3.0.18";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-GqPCjI40kkqNv9zTnLdJgZVBxS4eZRHl+k/BN9vGnDo=";
+    sha256 = "sha256-32FNnCybXO67Vtg1LM6miJUaK+r0mlfjxgLQg1LD8Es=";
   };
 
   strictDeps = true;
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    icu
     ninja
     perl
     pkg-config
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
   nativeInstallCheckInputs = [
@@ -81,12 +82,20 @@ stdenv.mkDerivation rec {
     ./respect-env-tzdir.patch
   ];
 
+  postPatch = ''
+    # Fix typo in test env setup
+    # https://github.com/libical/libical/commit/03c02ced21494413920744a400c638b0cb5d493f
+    substituteInPlace src/test/libical-glib/CMakeLists.txt \
+      --replace-fail "''${CMAKE_BINARY_DIR}/src/libical-glib;\$ENV{GI_TYPELIB_PATH}" "''${CMAKE_BINARY_DIR}/src/libical-glib:\$ENV{GI_TYPELIB_PATH}" \
+      --replace-fail "''${LIBRARY_OUTPUT_PATH};\$ENV{LD_LIBRARY_PATH}" "''${LIBRARY_OUTPUT_PATH}:\$ENV{LD_LIBRARY_PATH}"
+  '';
+
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   # Musl does not support TZDIR.
   doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
-  preInstallCheck = if stdenv.isDarwin then ''
+  preInstallCheck = if stdenv.hostPlatform.isDarwin then ''
     for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
       for lib in $(cd lib && ls *.3.dylib); do
         install_name_tool -change $lib $out/lib/$lib $testexe
@@ -104,7 +113,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libical/libical";
-    description = "An Open Source implementation of the iCalendar protocols";
+    description = "Open Source implementation of the iCalendar protocols";
     changelog = "https://github.com/libical/libical/raw/v${version}/ReleaseNotes.txt";
     license = licenses.mpl20;
     platforms = platforms.unix;

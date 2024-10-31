@@ -1,17 +1,17 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pygtrie
-, orjson
-, python
-, setuptools-scm
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pygtrie,
+  orjson,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "sqltrie";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,12 +20,10 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-QR5IlMHrDNsauKW3VQG0ibMUwetATuwX4fszGPzKuxg=";
+    hash = "sha256-elW1hCB0sXc+GyIO0358EwcIn8J1qJZE2pOLAxqxhwA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
@@ -36,9 +34,7 @@ buildPythonPackage rec {
   # nox is not available at the moment
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sqltrie"
-  ];
+  pythonImportsCheck = [ "sqltrie" ];
 
   meta = with lib; {
     description = "DVC's data management subsystem";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libchardet";
@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JhEiWM3q8X+eEBHxv8k9yYOaTGoJOzI+/iFYC0gZJJs=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
+    mainProgram = "chardet-config";
     homepage = "ftp://ftp.oops.org/pub/oops/libchardet/index.html";
     license = licenses.mpl11;
     maintainers = [ maintainers.abbradar ];

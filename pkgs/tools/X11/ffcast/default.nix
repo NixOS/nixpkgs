@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, perl
-, ffmpeg-full, imagemagick, xdpyinfo, xprop, xrectsel, xwininfo
+, ffmpeg-full, gawk, imagemagick, xdpyinfo, xprop, xrectsel, xwininfo
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   postInstall = let
     binPath = lib.makeBinPath [
       ffmpeg-full
+      gawk
       imagemagick
       xdpyinfo
       xprop
@@ -30,12 +31,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ffcast --prefix PATH : ${binPath}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run commands on rectangular screen regions";
     homepage = "https://github.com/ropery/FFcast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
     mainProgram = "ffcast";
   };
 }

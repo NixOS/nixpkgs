@@ -28,11 +28,12 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "ReplayGain for wave files";
     homepage = "https://github.com/MestreLion/wavegain";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.robbinch ];
+    mainProgram = "wavegain";
   };
 }

@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pythonOlder,
 
-# Python dependencies
-, uvloop
-, pytest
+  # Python dependencies
+  uvloop,
+  pytest,
 }:
 
 buildPythonPackage rec {

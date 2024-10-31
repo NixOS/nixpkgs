@@ -1,67 +1,68 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchpatch
-, fetchPypi
-, matplotlib
-, numpy
-, oldest-supported-numpy
-, pandas
-, patsy
-, pythonOlder
-, scipy
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  packaging,
+  pandas,
+  patsy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "0.14.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
+    hash = "sha256-iQVQFHrTqBzaJPC6GlxAIa3BYBCAvQDhka581v7s1q0=";
   };
 
-  patches = [
-    # https://github.com/statsmodels/statsmodels/pull/8969
-    (fetchpatch {
-      name = "unpin-setuptools-scm.patch";
-      url = "https://github.com/statsmodels/statsmodels/commit/cfad8d81166e9b1392ba99763b95983afdb6d61b.patch";
-      hash = "sha256-l7cQHodkPm399a+3qIVmXPk/Ca+CqJDyWXWgjb062nM=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    oldest-supported-numpy
-    setuptools-scm
-    wheel
-  ];
-
-  propagatedBuildInputs = [
     numpy
     scipy
+    setuptools
+    setuptools-scm
+  ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
+  dependencies = [
+    numpy
+    packaging
     pandas
     patsy
-    matplotlib
+    scipy
   ];
 
   # Huge test suites with several test failures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "statsmodels"
-  ];
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

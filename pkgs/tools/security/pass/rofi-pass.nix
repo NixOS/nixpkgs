@@ -29,13 +29,13 @@ assert lib.assertOneOf "backend" backend [ "x11" "wayland" ];
 
 stdenv.mkDerivation {
   pname = "rofi-pass";
-  version = "unstable-2023-07-07";
+  version = "2.0.2-unstable-2024-06-16";
 
   src = fetchFromGitHub {
     owner = "carnager";
     repo = "rofi-pass";
-    rev = "e77cbdbe0e885f0b1daba3a0b6bae793cc2b1ba3";
-    hash = "sha256-zmNuFE+++tf4pKTXSTc7s8R9rvI+XwgWl8mCEPaaIRM=";
+    rev = "37c4c862deb133a85b7d72989acfdbd2ef16b8ad";
+    hash = "sha256-1lPNj47vTPLBK7mVm+PngV8C/ZsjJ2EN4ffXGU2TlQo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -83,10 +83,11 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A script to make rofi work with password-store";
+    description = "Script to make rofi work with password-store";
+    mainProgram = "rofi-pass";
     homepage = "https://github.com/carnager/rofi-pass";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

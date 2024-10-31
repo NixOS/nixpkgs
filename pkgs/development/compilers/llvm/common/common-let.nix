@@ -4,7 +4,8 @@
 , gitRelease ? null
 , officialRelease ? null
 , monorepoSrc' ? null
-}:
+, version ? null,
+}@args:
 
 rec {
   llvm_meta = {
@@ -21,17 +22,18 @@ rec {
       lib.platforms.wasi ++
       lib.platforms.x86 ++
       lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv ++
-      lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k;
+      lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k ++
+      lib.optionals (lib.versionAtLeast release_version "16") lib.platforms.loongarch64;
   };
 
   releaseInfo =
     if gitRelease != null then rec {
       original = gitRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version = gitRelease.rev-version;
     } else rec {
       original = officialRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version =
         if original ? candidate then
           "${release_version}-${original.candidate}"

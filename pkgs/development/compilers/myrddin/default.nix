@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
     # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
   };
 }

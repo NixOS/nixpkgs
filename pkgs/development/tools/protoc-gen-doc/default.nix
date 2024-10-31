@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Documentation generator plugin for Google Protocol Buffers";
+    mainProgram = "protoc-gen-doc";
     longDescription = ''
       This is a documentation generator plugin for the Google Protocol Buffers
       compiler (protoc). The plugin can generate HTML, JSON, DocBook and

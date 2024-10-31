@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "kubevela";
-  version = "1.9.9";
+  version = "1.9.13";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${version}";
-    hash = "sha256-4OxkBN0hZ2wtZjU0aQVzhWtWd8kaCokT3WF82WeVS6U=";
+    hash = "sha256-b9N7vEY6AjJmOWySyssW7nrlZ+iFhOzVFmVQGfk/ilw=";
   };
 
-  vendorHash = "sha256-fMo01CmPaNgvNcY8oG4rIGfYa+teKU3ETJsAaF14cnc=";
+  vendorHash = "sha256-WE5jE58pCXUvIKo+NAQUNrNzxLkUDIuJp2yBqE+8Ors=";
 
   ldflags = [
     "-s" "-w"
@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd vela \
       --bash <($out/bin/vela completion bash) \
       --zsh <($out/bin/vela completion zsh)
@@ -54,7 +54,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
+    description = "Application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
     downloadPage = "https://github.com/kubevela/kubevela";
     homepage = "https://kubevela.io/";
     license = lib.licenses.asl20;

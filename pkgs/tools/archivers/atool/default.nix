@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Archive command line helper";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+    mainProgram = "atool";
   };
 }

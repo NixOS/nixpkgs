@@ -1,6 +1,10 @@
-{ lib, bundlerApp, ruby
-, writeShellScriptBin, makeWrapper
-, withOptionalDependencies ? false
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  ruby,
+  writeShellScriptBin,
+  withOptionalDependencies ? false,
 }:
 
 let
@@ -21,14 +25,13 @@ let
     # Else: Don't modify the arguments:
     exec ${ruby}/bin/ruby "$@"
   '';
-in bundlerApp {
+in
+bundlerApp {
   pname = "jekyll";
   exes = [ "jekyll" ];
 
   inherit ruby;
-  gemdir = if withOptionalDependencies
-    then ./full
-    else ./basic;
+  gemdir = if withOptionalDependencies then ./full else ./basic;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -39,7 +42,7 @@ in bundlerApp {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A blog-aware, static site generator, written in Ruby";
+    description = "Blog-aware, static site generator, written in Ruby";
     longDescription = ''
       Jekyll is a simple, blog-aware, static site generator, written in Ruby.
       Think of it like a file-based CMS, without all the complexity. Jekyll
@@ -48,10 +51,11 @@ in bundlerApp {
       web server. Jekyll is the engine behind GitHub Pages, which you can use to
       host sites right from your GitHub repositories.
     '';
-    homepage    = "https://jekyllrb.com/";
-    #changelog   = "https://raw.githubusercontent.com/jekyll/jekyll/v${version}/History.markdown";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
+    homepage = "https://jekyllrb.com/";
+    changelog = "https://jekyllrb.com/news/releases/";
+    license = licenses.mit;
+    maintainers = [ maintainers.anthonyroussel ];
+    platforms = platforms.unix;
+    mainProgram = "jekyll";
   };
 }

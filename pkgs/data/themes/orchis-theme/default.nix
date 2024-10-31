@@ -26,13 +26,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 stdenvNoCC.mkDerivation
 rec {
   inherit pname;
-  version = "2023-10-20";
+  version = "2024-09-02";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    hash = "sha256-GhSzTtbuvbAuXxKNm29sJX5kXE2s2jMDB6Ww6Q7GNSo=";
+    hash = "sha256-rgbqVU2tKLnp+ZQpLTthpo9vPFRkGuayJCADrI2R1ls=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -58,7 +58,7 @@ rec {
   '';
 
   meta = with lib; {
-    description = "A Material Design theme for GNOME/GTK based desktop environments.";
+    description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Orchis-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, zope-interface
-, zope-testrunner
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  zope-interface,
+  zope-testrunner,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-SGvxQjpGlrkVPkiM750ybElv/Bbd6xSwyYh7RsYOKKE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     zope-interface
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     zope-testrunner
   ];
 
-  pythonImportsCheck = [
-    "repoze.sphinx.autointerface"
-  ];
+  pythonImportsCheck = [ "repoze.sphinx.autointerface" ];
 
   pythonNamespaces = [
     "repoze"

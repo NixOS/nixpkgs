@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "vals";
-  version = "0.33.0";
+  version = "0.37.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    owner = "variantdev";
+    owner = "helmfile";
     repo = pname;
-    sha256 = "sha256-ZF73oLe/2s+zsMNElgjnVT7GCsH4VSP1IWTy647JZyw=";
+    sha256 = "sha256-iRXBT3VpEVHna3GkMxVSVRqQ2HTK7gCd6LkthwrBMx4=";
   };
 
-  vendorHash = "sha256-1wlwG0YaLcoLEh5t1hAfgQ+8EMfMDQn430nWGsuFTqs=";
+  vendorHash = "sha256-1iyJ56YKu/WVb7dPP7YE07kdbJte2/Sww8cQu+epFNc=";
+
+  proxyVendor = true;
 
   ldflags = [
     "-s"
@@ -29,9 +31,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Helm-like configuration values loader with support for various sources";
+    mainProgram = "vals";
     license = licenses.asl20;
-    homepage = "https://github.com/variantdev/vals";
-    changelog = "https://github.com/variantdev/vals/releases/v${version}";
+    homepage = "https://github.com/helmfile/vals";
+    changelog = "https://github.com/helmfile/vals/releases/v${version}";
     maintainers = with maintainers; [ stehessel ];
   };
 }

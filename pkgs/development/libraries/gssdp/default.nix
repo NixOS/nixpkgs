@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -50,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
     # Move developer documentation to devdoc output.

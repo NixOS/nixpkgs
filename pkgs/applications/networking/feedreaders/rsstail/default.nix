@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
   };
 
-  buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libmrss ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   postPatch = ''
     substituteInPlace Makefile --replace -liconv_hook ""
@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Monitor RSS feeds for new entries";
+    mainProgram = "rsstail";
     longDescription = ''
       RSSTail is more or less an RSS reader: it monitors an RSS feed and if it
       detects a new entry it'll emit only that new entry.

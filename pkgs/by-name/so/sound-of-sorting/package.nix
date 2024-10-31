@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK32
     SDL2
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 

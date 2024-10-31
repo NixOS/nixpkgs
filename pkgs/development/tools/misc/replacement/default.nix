@@ -27,7 +27,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/siriobalmelli/replacement";
-    description = "A tool to execute yaml templates and output text";
+    description = "Tool to execute yaml templates and output text";
+    mainProgram = "replacement";
     longDescription = ''
         Replacement is a python utility
         that parses a yaml template and outputs text.

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
   '';
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     "--with-pythia=${pythia}"
   ];
 
-  postInstall = if stdenv.isDarwin then ''
+  postInstall = if stdenv.hostPlatform.isDarwin then ''
     install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
   '' else ''
     wrapProgram $out/bin/run-pythia \
@@ -39,12 +39,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A standalone contribution to AGILe for steering Pythia 8";
+    description = "Standalone contribution to AGILe for steering Pythia 8";
+    mainProgram = "run-pythia";
     license     = lib.licenses.gpl2;
     homepage    = "https://agile.hepforge.org/trac/wiki/Sacrifice";
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

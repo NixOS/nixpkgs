@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, cxxfilt
-, fetchPypi
-, msgpack
-, pyasn1
-, pyasn1-modules
-, pycparser
-, pyqt5
-, pythonRelaxDepsHook
-, pyqtwebengine
-, pythonOlder
-, withGui ? false
-, wrapQtAppsHook
+{
+  lib,
+  buildPythonPackage,
+  cxxfilt,
+  fetchPypi,
+  msgpack,
+  pyasn1,
+  pyasn1-modules,
+  pycparser,
+  pyqt5,
+  pyqtwebengine,
+  pythonOlder,
+  withGui ? false,
+  wrapQtAppsHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -43,9 +42,9 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+  ] ++ lib.optionals (withGui) optional-dependencies.gui;
 
-  passthru.optional-dependencies.gui = [
+  optional-dependencies.gui = [
     pyqt5
     pyqtwebengine
   ];
@@ -57,9 +56,7 @@ buildPythonPackage rec {
   # requires another repo for test files
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vivisect"
-  ];
+  pythonImportsCheck = [ "vivisect" ];
 
   meta = with lib; {
     description = "Python disassembler, debugger, emulator, and static analysis framework";

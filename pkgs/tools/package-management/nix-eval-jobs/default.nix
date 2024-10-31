@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , meson
 , ninja
+, curl
 , nix
 , nlohmann_json
 , pkg-config
@@ -11,16 +12,17 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.19.4";
+  version = "2.24.1";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-97ZqhTMqnAr1rzEy96faceWzFyWexnYbH1aTfc1y0JE=";
+    hash = "sha256-j/p2ftkP8MXYEK7Vx65jH/Knr2QkEcRSVoDnVOUDe6Q=";
   };
   buildInputs = [
     boost
     nix
+    curl
     nlohmann_json
   ];
   nativeBuildInputs = [

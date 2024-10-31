@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unar, ffmpeg, nixosTests }:
+{ stdenv, lib, fetchzip, makeWrapper, python3, unar, ffmpeg, nixosTests }:
 
 let
   runtimeProgDeps = [
@@ -8,16 +8,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.4.0";
+  version = "1.4.4";
 
-  sourceRoot = ".";
-
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-sCP1I57FSXTf5iQlmUIQHMrSGNOxG/R2aahU3D8x5Ww=";
+    hash = "sha256-FZKGHC7CLzIzOXH77iHwSb9+Mw1z+kiz+1rLO6XU/94=";
+    stripRoot = false;
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     (python3.withPackages (ps: [
@@ -27,6 +26,7 @@ stdenv.mkDerivation rec {
       ps.gevent-websocket
       ps.pillow
       ps.setuptools
+      ps.psycopg2
     ]))
   ] ++ runtimeProgDeps;
 

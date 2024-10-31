@@ -20,7 +20,7 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-fqzrgmtqy7dlmGEaTXAqpdt9HqZCVooJ0Vf6/JUKihw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP LWPProtocolHttps XMLLibXML Mojolicious
@@ -40,12 +40,13 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
 
   meta = with lib; {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
+    mainProgram = "get_iplayer";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = platforms.all;

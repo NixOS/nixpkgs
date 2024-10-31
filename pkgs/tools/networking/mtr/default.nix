@@ -44,15 +44,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses jansson ]
     ++ lib.optional withGtk gtk3
-    ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A network diagnostics tool";
+    description = "Network diagnostics tool";
     homepage = "https://www.bitwizard.nl/mtr/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ koral orivej raskin globin ];
+    mainProgram = "mtr";
     platforms = platforms.unix;
   };
 }

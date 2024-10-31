@@ -155,7 +155,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
               print(node.succeed("patronictl list cluster1"))
               node.wait_until_succeeds(f"[ $(patronictl list -f json cluster1 | jq 'length') == {expected_replicas + 1} ]")
               node.wait_until_succeeds("[ $(patronictl list -f json cluster1 | jq 'map(select(.Role | test(\"^Leader$\"))) | map(select(.State | test(\"^running$\"))) | length') == 1 ]")
-              node.wait_until_succeeds(f"[ $(patronictl list -f json cluster1 | jq 'map(select(.Role | test(\"^Replica$\"))) | map(select(.State | test(\"^running$\"))) | length') == {expected_replicas} ]")
+              node.wait_until_succeeds(f"[ $(patronictl list -f json cluster1 | jq 'map(select(.Role | test(\"^Replica$\"))) | map(select(.State | test(\"^streaming$\"))) | length') == {expected_replicas} ]")
               print(node.succeed("patronictl list cluster1"))
           client.wait_until_succeeds("psql -h 127.0.0.1 -U postgres --command='select 1;'")
 

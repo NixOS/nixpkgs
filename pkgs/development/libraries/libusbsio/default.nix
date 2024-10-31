@@ -28,17 +28,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
   buildInputs = [
     libusb1
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit
     CoreFoundation
     IOKit
-  ]) ++ lib.optionals stdenv.isLinux [
+  ]) ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemdMinimal # libudev
   ];
 

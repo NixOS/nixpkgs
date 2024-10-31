@@ -34,6 +34,8 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
+      environment.systemPackages = with pkgs; [ git ];
+
       virtualisation.memorySize = 6144;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
@@ -89,6 +91,10 @@ in {
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
+
+        # reduce memory usage
+        sidekiq.concurrency = 1;
+        puma.workers = 2;
       };
     };
   };
@@ -419,7 +425,7 @@ in {
       gitlab.systemctl("start gitlab-backup.service")
       gitlab.wait_for_unit("gitlab-backup.service")
       gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/backup/dump_gitlab_backup.tar")
-      gitlab.systemctl("stop postgresql.service gitlab.target")
+      gitlab.systemctl("stop postgresql.service gitlab-config.service gitlab.target")
       gitlab.succeed(
           "find ${nodes.gitlab.services.gitlab.statePath} -mindepth 1 -maxdepth 1 -not -name backup -execdir rm -r {} +"
       )

@@ -1,0 +1,51 @@
+--- a/conda/base/context.py
++++ b/conda/base/context.py
+@@ -754,7 +754,7 @@
+
+     @property
+     def conda_prefix(self):
+-        return abspath(sys.prefix)
++        return expand("~/.conda")
+
+     @property
+     @deprecated(
+@@ -787,28 +787,17 @@
+         The vars can refer to each other if necessary since the dict is ordered.
+         None means unset it.
+         """
+-        if context.dev:
+-            return {
+-                "CONDA_EXE": sys.executable,
+-                # do not confuse with os.path.join, we are joining paths with ; or : delimiters
+-                "PYTHONPATH": os.pathsep.join(
+-                    (CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", ""))
+-                ),
+-                "_CE_M": "-m",
+-                "_CE_CONDA": "conda",
+-                "CONDA_PYTHON_EXE": sys.executable,
+-            }
+-        else:
+-            bin_dir = "Scripts" if on_win else "bin"
+-            exe = "conda.exe" if on_win else "conda"
+-            # I was going to use None to indicate a variable to unset, but that gets tricky with
+-            # error-on-undefined.
+-            return {
+-                "CONDA_EXE": os.path.join(sys.prefix, bin_dir, exe),
+-                "_CE_M": "",
+-                "_CE_CONDA": "",
+-                "CONDA_PYTHON_EXE": sys.executable,
+-            }
++        import sys
++        return {
++            "CONDA_EXE": sys.executable,
++            # do not confuse with os.path.join, we are joining paths with ; or : delimiters
++            "PYTHONPATH": os.pathsep.join(
++                [CONDA_SOURCE_ROOT, os.environ.get("PYTHONPATH", "")] + [path for path in sys.path if "site-packages" in path]
++            ),
++            "_CE_M": "-m",
++            "_CE_CONDA": "conda",
++            "CONDA_PYTHON_EXE": sys.executable,
++        }
+
+     @memoizedproperty
+     def channel_alias(self):

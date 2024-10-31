@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://epam.github.io/nfstrace/";
     description = "NFS and CIFS tracing/monitoring/capturing/analyzing tool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "nfstrace";
   };
 }

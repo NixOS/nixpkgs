@@ -114,6 +114,12 @@ setup_link_paths() {
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
   fi
+
+  # Add "rustc-cdylib-link-arg" as linker arguments
+  # https://doc.rust-lang.org/cargo/reference/build-scripts.html#rustc-cdylib-link-arg
+  if [[ -n "$CRATE_TYPE_IS_CDYLIB" ]]; then
+    EXTRA_BUILD+=" $EXTRA_CDYLIB_LINK_ARGS"
+  fi
 }
 
 search_for_bin_path() {

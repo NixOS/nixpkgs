@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "virtual-ans";
-  version = "3.0.2c";
+  version = "3.0.3";
 
   src = fetchzip {
     url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
-    sha256 = "03r1v3l7rd59dakr7ndvgsqchv00ppkvi6sslgf1ng07r3rsvb1n";
+    sha256 = "sha256-tqR7icgURUFOyLJ8+mS17JRf2gK53I2FW/2m8IJPtJE=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     ln -s $out/${startScript} $out/bin/virtual-ans
   '';
 
-  startScript = if stdenv.isx86_32 then "START_LINUX_X86"
-    else        if stdenv.isx86_64 then "START_LINUX_X86_64"
-    #else        if stdenv.isDarwin then "START_MACOS.app" # disabled because I cannot test on Darwin
+  startScript = if stdenv.hostPlatform.isx86_32 then "START_LINUX_X86"
+    else        if stdenv.hostPlatform.isx86_64 then "START_LINUX_X86_64"
+    #else        if stdenv.hostPlatform.isDarwin then "START_MACOS.app" # disabled because I cannot test on Darwin
     else abort "Unsupported platform: ${stdenv.hostPlatform.linuxArch}.";
 
-  linuxExecutable = if stdenv.isx86_32 then "pixilang_linux_x86"
-    else            if stdenv.isx86_64 then "pixilang_linux_x86_64"
+  linuxExecutable = if stdenv.hostPlatform.isx86_32 then "pixilang_linux_x86"
+    else            if stdenv.hostPlatform.isx86_64 then "pixilang_linux_x86_64"
     else                                    "";
 
   meta = with lib; {
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://warmplace.ru/soft/ans/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.free;
+    license = licenses.unfreeRedistributable;
     # I cannot test the Darwin version, so I'll leave it disabled
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ jacg ];

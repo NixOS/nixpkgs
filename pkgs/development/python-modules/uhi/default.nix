@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, hatchling
-, hatch-vcs
-, numpy
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DctrGXdQh9OKMe44jLLHDy7P4ExP/iymMiNBDK5b7vo=";
+    hash = "sha256-DctrGXdQh9OKMe44jLLHDy7P4ExP/iymMiNBDK5b7vo=";
   };
 
   buildInputs = [
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Universal Histogram Interface";

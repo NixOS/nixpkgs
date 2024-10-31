@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
-    ++ lib.optional stdenv.isLinux elfutils;
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
-  ] ++ lib.optional stdenv.isLinux "--with-cap";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-cap";
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rpm.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    description = "The RPM Package Manager";
+    description = "RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
     # Support for darwin was removed in https://github.com/NixOS/nixpkgs/pull/196350.

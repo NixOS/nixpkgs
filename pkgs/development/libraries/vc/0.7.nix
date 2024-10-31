@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

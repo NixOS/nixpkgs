@@ -1,20 +1,18 @@
 { buildPackages, cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
 
 let
-  version = "2.17.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    sha256 = "sha256-5+Cyw1cLgBkTePNNFoNAF2oHnLQDHr4vHiaZHJrewug=";
+    hash = "sha256-L2LCRm1Fsg+xRdPc8YmgxDnuXJo92nxs862ewzObZ3I=";
   };
 
   quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {
     pname = "quick-lint-js-build-tools";
     inherit version src;
-
-    patches = [ ./build-tools-install.patch ];
 
     nativeBuildInputs = [ cmake ninja ];
     doCheck = false;
@@ -52,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Find bugs in Javascript programs";
+    mainProgram = "quick-lint-js";
     homepage = "https://quick-lint-js.com";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ratsclub ];

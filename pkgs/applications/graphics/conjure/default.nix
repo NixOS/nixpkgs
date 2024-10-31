@@ -3,7 +3,7 @@
 , lib
 , libadwaita
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook4
 , meson
 , ninja
 , desktop-file-utils
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     appstream-glib
     meson
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Magically transform your images";
+    mainProgram = "conjure";
     longDescription = ''
       Resize, crop, rotate, flip images, apply various filters and effects,
       adjust levels and brightness, and much more. An intuitive tool for designers,

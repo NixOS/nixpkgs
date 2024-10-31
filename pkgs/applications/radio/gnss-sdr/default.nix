@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , armadillo
 , cmake
 , gmp
@@ -21,13 +20,13 @@
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.17";
+  version = "0.0.19.1";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "sha256-0aAjkrVAswoRL/KANBSZ5Jq4Y9VwOHZKUKLpXDdKtk8=";
+    sha256 = "sha256-IbkYdw1pwI+FMnZMChsxMz241Kv4EzMcBb0mm6/jq1k=";
   };
 
   patches = [
@@ -75,31 +74,31 @@ gnuradio.pkgs.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGFlags_INCLUDE_DIRS=${gflags}/include"
-    "-DGLOG_INCLUDE_DIR=${glog}/include"
+    (lib.cmakeFeature "GFlags_INCLUDE_DIRS" "${gflags}/include")
+    (lib.cmakeFeature "GLOG_INCLUDE_DIR" "${glog}/include")
     # Should use .dylib if darwin support is requested
-    "-DGFlags_LIBS=${gflags}/lib/libgflags.so"
-    "-DGLOG_LIBRARIES=${glog}/lib/libglog.so"
+    (lib.cmakeFeature "GFlags_LIBS" "${gflags}/lib/libgflags.so")
+    (lib.cmakeFeature "-DGLOG_LIBRARIES" "${glog}/lib/libglog.so")
     # Use our dependencies glog, gflags and armadillo dependencies
-    "-DENABLE_OWN_GLOG=OFF"
-    "-DENABLE_OWN_ARMADILLO=OFF"
-    "-DENABLE_ORC=ON"
-    "-DENABLE_LOG=ON"
-    "-DENABLE_RAW_UDP=${if enableRawUdp then "ON" else "OFF"}"
-    "-DENABLE_UHD=${if (gnuradio.hasFeature "gr-uhd") then "ON" else "OFF"}"
-    "-DENABLE_FMCOMMS2=${if (gnuradio.hasFeature "gr-iio" && gnuradio.hasFeature "gr-pdu") then "ON" else "OFF"}"
-    "-DENABLE_PLUTOSDR=${if (gnuradio.hasFeature "gr-iio") then "ON" else "OFF"}"
-    "-DENABLE_AD9361=${if (gnuradio.hasFeature "gr-pdu") then "ON" else "OFF"}"
-    "-DENABLE_UNIT_TESTING=OFF"
+    (lib.cmakeBool "ENABLE_OWN_GLOG" false)
+    (lib.cmakeBool "ENABLE_OWN_ARMADILLO" false)
+    (lib.cmakeBool "ENABLE_ORC" true)
+    (lib.cmakeBool "ENABLE_LOG" true)
+    (lib.cmakeBool "ENABLE_RAW_UDP" enableRawUdp)
+    (lib.cmakeBool "ENABLE_UHD" (gnuradio.hasFeature "gr-uhd"))
+    (lib.cmakeBool "ENABLE_FMCOMMS2" (gnuradio.hasFeature "gr-iio" && gnuradio.hasFeature "gr-pdu"))
+    (lib.cmakeBool "ENABLE_PLUTOSDR" (gnuradio.hasFeature "gr-iio"))
+    (lib.cmakeBool "ENABLE_AD9361" (gnuradio.hasFeature "gr-pdu"))
+    (lib.cmakeBool "ENABLE_UNIT_TESTING" false)
 
     # gnss-sdr doesn't truly depend on BLAS or LAPACK, as long as
     # armadillo is built using both, so skip checking for them.
-    "-DBLAS_LIBRARIES=-lblas"
-    "-DLAPACK_LIBRARIES=-llapack"
+    (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
+    (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
   ];
 
   meta = with lib; {
-    description = "An open source Global Navigation Satellite Systems software-defined receiver";
+    description = "Open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

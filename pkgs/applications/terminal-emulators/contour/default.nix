@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , boxed-cpp
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation (final: {
   pname = "contour";
-  version = "0.4.1.6292";
+  version = "0.4.3.6442";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     rev = "v${final.version}";
-    hash = "sha256-t1rZixjpwg2JDBESmymNwUlpQd1VLaECxvpPP94jvH0=";
+    hash = "sha256-m3BEhGbyQm07+1/h2IRhooLPDewmSuhRHOMpWPDluiY=";
   };
 
   patches = [ ./dont-fix-app-bundle.diff ];
@@ -50,7 +49,7 @@ stdenv.mkDerivation (final: {
     file
     wrapQtAppsHook
     installShellFiles
-  ] ++ lib.optionals stdenv.isDarwin [ sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = [
     boxed-cpp
@@ -68,21 +67,21 @@ stdenv.mkDerivation (final: {
     range-v3
     yaml-cpp
   ]
-  ++ lib.optionals stdenv.isLinux [ libutempter ]
-  ++ lib.optionals stdenv.isDarwin [ utmp ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libutempter ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ utmp ];
 
   cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     installShellCompletion --zsh $out/contour.app/Contents/Resources/shell-integration/shell-integration.zsh
     installShellCompletion --fish $out/contour.app/Contents/Resources/shell-integration/shell-integration.fish
     cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
     mv $out/contour.app $out/Applications
     ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/share/terminfo $terminfo/share/
     installShellCompletion --zsh $out/share/contour/shell-integration/shell-integration.zsh
     installShellCompletion --fish $out/share/contour/shell-integration/shell-integration.fish
@@ -100,5 +99,8 @@ stdenv.mkDerivation (final: {
     maintainers = with maintainers; [ moni ];
     platforms = platforms.unix;
     mainProgram = "contour";
+    # This was caused by boxed-cpp 1.4.2 -> 1.4.3
+    # More details in issue #345752
+    broken = true;
   };
 })

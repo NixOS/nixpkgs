@@ -1,48 +1,43 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.5.4";
+  version = "0.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J2VdRxCzIjRUOqQW4YzOC8RRth9tibBS9YuizveqhhI=";
+    hash = "sha256-ZBy3lo7rb361aysi2ezryd5H47r6sgSqmYNeAI+wXeQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     beautifulsoup4
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aiovodafone"
-  ];
+  pythonImportsCheck = [ "aiovodafone" ];
 
   meta = with lib; {
     description = "Library to control Vodafon Station";

@@ -1,0 +1,16 @@
+ rerun_py/build.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rerun_py/build.rs b/rerun_py/build.rs
+index 3d292c55b..28e54f06b 100644
+--- a/rerun_py/build.rs
++++ b/rerun_py/build.rs
+@@ -17,7 +17,7 @@ fn main() {
+         #[cfg(not(target_os = "windows"))]
+         let rerun_bin = std::env::current_dir()
+             .expect("std::env::current_dir() failed")
+-            .join("rerun_sdk/rerun_cli/rerun");
++            .join("rerun_sdk/rerun");
+ 
+         if !rerun_bin.exists() {
+             eprintln!("ERROR: Expected to find `rerun` at `{rerun_bin:?}`.");

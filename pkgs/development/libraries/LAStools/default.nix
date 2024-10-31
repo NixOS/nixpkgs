@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
     rev = "v${version}";
-    sha256 = "sha256-HL64koe0GNzJzyA0QP4I0M1y2HSxigsZTqOw67RCwNc=";
+    sha256 = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
   };
 
   patches = [
@@ -19,6 +24,8 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
+
   nativeBuildInputs = [
     cmake
   ];
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Software for rapid LiDAR processing";
     homepage = "http://lastools.org/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ stephenwithph ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ stephenwithph ];
     platforms = platforms.unix;
   };
 }

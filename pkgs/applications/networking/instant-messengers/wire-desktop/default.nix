@@ -6,7 +6,7 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook
+, buildPackages
 , cpio
 , xar
 , libdbusmenu
@@ -26,23 +26,23 @@ let
   pname = "wire-desktop";
 
   version = let
-    x86_64-darwin = "3.32.4589";
+    x86_64-darwin = "3.35.4861";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "3.32.3079";
+    x86_64-linux = "3.36.3462";
   }.${system} or throwSystem;
 
   hash = let
-    x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+    x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "sha256-+4aRis141ctI50BtBwipoVtPoMGRs82ENqZ+y2ZlL58=";
+    x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
   }.${system} or throwSystem;
 
   meta = with lib; {
-    description = "A modern, secure messenger for everyone";
+    description = "Modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
       and fun features, audited security, and a beautiful, distinct user
@@ -57,10 +57,10 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
-      kiwi
       toonn
     ];
     platforms = platforms.darwin ++ [
@@ -98,7 +98,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
     buildInputs = [
@@ -136,6 +136,10 @@ let
       (lib.getLib udev)
       libdbusmenu
     ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+    '';
 
     postFixup = ''
       makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
@@ -184,6 +188,6 @@ let
   };
 
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

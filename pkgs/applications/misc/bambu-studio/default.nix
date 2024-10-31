@@ -1,76 +1,87 @@
-{ stdenv
-, lib
-, openexr
-, jemalloc
-, c-blosc
-, binutils
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, boost179
-, cereal
-, cgal_5
-, curl
-, dbus
-, eigen
-, expat
-, gcc-unwrapped
-, glew
-, glfw
-, glib
-, glib-networking
-, gmp
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gtest
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mesa
-, mpfr
-, nlopt
-, opencascade-occt
-, openvdb
-, pcre
-, qhull
-, systemd
-, tbb_2021_8
-, webkitgtk
-, wxGTK31
-, xorg
-, fetchpatch
-, withSystemd ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  openexr,
+  jemalloc,
+  c-blosc,
+  binutils,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  boost179,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  gcc-unwrapped,
+  glew,
+  glfw,
+  glib,
+  glib-networking,
+  gmp,
+  gst_all_1,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mesa,
+  mpfr,
+  nlopt,
+  opencascade-occt_7_6,
+  openvdb,
+  opencv,
+  pcre,
+  systemd,
+  tbb_2021_11,
+  webkitgtk_4_0,
+  wxGTK31,
+  xorg,
+  withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
-  wxGTK31' = wxGTK31.overrideAttrs (old: {
-    configureFlags = old.configureFlags ++ [
-      # Disable noisy debug dialogs
-      "--enable-debug=no"
+  wxGTK' =
+    (wxGTK31.override {
+      withCurl = true;
+      withPrivateFonts = true;
+      withWebKit = true;
+    }).overrideAttrs
+      (old: {
+        configureFlags = old.configureFlags ++ [
+          # Disable noisy debug dialogs
+          "--enable-debug=no"
+        ];
+      });
+
+  openvdb' = openvdb.overrideAttrs (old: {
+    buildInputs = [
+      openexr
+      boost179
+      tbb_2021_11
+      jemalloc
+      c-blosc
+      ilmbase
     ];
-  });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.04.51";
+  version = "01.09.07.52";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-rqD1+3Q4ZUBgS57iCItuLX6ZMP7VQuedaJmgKB1szgs=";
+    hash = "sha256-fhH4N29P/ysdHHbZt+FnBl3+QtTNhbVE3j4ZnFJyJH0=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -88,10 +99,10 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gmp
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
     ilmbase
@@ -99,20 +110,23 @@ stdenv.mkDerivation rec {
     mesa.osmesa
     mpfr
     nlopt
-    opencascade-occt
-    openvdb_tbb_2021_8
+    opencascade-occt_7_6
+    openvdb'
     pcre
-    tbb_2021_8
-    webkitgtk
-    wxGTK31'
+    tbb_2021_11
+    webkitgtk_4_0
+    wxGTK'
     xorg.libX11
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ checkInputs;
+    opencv
+  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
-    ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Fix build with cgal-5.6.1+
+    ./patches/meshboolean-const.patch
+    # Fix an issue with
+    ./patches/dont-link-opencv-world-bambu.patch
   ];
 
   doCheck = true;
@@ -129,7 +143,10 @@ stdenv.mkDerivation rec {
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
   # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-ignored-attributes"
+    "-I${opencv.out}/include/opencv4"
+  ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
@@ -164,11 +181,22 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
+    mv $out/README.md $out/share/BambuStudio/README.md
+  '';
+
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ zhaofengli ];
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
+      zhaofengli
+      dsluijk
+    ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;
   };

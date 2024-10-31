@@ -5,34 +5,39 @@ let
   opt = options.system.nixos;
 
   inherit (lib)
-    concatStringsSep mapAttrsToList toLower
+    concatStringsSep mapAttrsToList toLower optionalString
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
-    concatStringsSep "\n" (
-      mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs
-    ) + "\n";
+    concatStringsSep "\n"
+      (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+    + "\n";
 
-  osReleaseContents = {
-    NAME = "${cfg.distroName}";
-    ID = "${cfg.distroId}";
-    VERSION = "${cfg.release} (${cfg.codeName})";
-    VERSION_CODENAME = toLower cfg.codeName;
-    VERSION_ID = cfg.release;
-    BUILD_ID = cfg.version;
-    PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-    LOGO = "nix-snowflake";
-    HOME_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/";
-    DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
-    SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
-    BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
-    IMAGE_ID = lib.optionalString (config.system.image.id != null) config.system.image.id;
-    IMAGE_VERSION = lib.optionalString (config.system.image.version != null) config.system.image.version;
-  } // lib.optionalAttrs (cfg.variant_id != null) {
-    VARIANT_ID = cfg.variant_id;
-  };
+  osReleaseContents =
+    let
+      isNixos = cfg.distroId == "nixos";
+    in
+    {
+      NAME = "${cfg.distroName}";
+      ID = "${cfg.distroId}";
+      VERSION = "${cfg.release} (${cfg.codeName})";
+      VERSION_CODENAME = toLower cfg.codeName;
+      VERSION_ID = cfg.release;
+      BUILD_ID = cfg.version;
+      PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
+      LOGO = "nix-snowflake";
+      HOME_URL = optionalString isNixos "https://nixos.org/";
+      DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
+      SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
+      BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
+      ANSI_COLOR = optionalString isNixos "1;34";
+      IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
+      IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
+    } // lib.optionalAttrs (cfg.variant_id != null) {
+      VARIANT_ID = cfg.variant_id;
+    };
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -56,68 +61,69 @@ in
   };
 
   options.system = {
+    nixos = {
+      version = mkOption {
+        internal = true;
+        type = types.str;
+        description = "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
+      };
 
-    nixos.version = mkOption {
-      internal = true;
-      type = types.str;
-      description = lib.mdDoc "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
-    };
+      release = mkOption {
+        readOnly = true;
+        type = types.str;
+        default = trivial.release;
+        description = "The NixOS release (e.g. `16.03`).";
+      };
 
-    nixos.release = mkOption {
-      readOnly = true;
-      type = types.str;
-      default = trivial.release;
-      description = lib.mdDoc "The NixOS release (e.g. `16.03`).";
-    };
+      versionSuffix = mkOption {
+        internal = true;
+        type = types.str;
+        default = trivial.versionSuffix;
+        description = "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
+      };
 
-    nixos.versionSuffix = mkOption {
-      internal = true;
-      type = types.str;
-      default = trivial.versionSuffix;
-      description = lib.mdDoc "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
-    };
+      revision = mkOption {
+        internal = true;
+        type = types.nullOr types.str;
+        default = trivial.revisionWithDefault null;
+        description = "The Git revision from which this NixOS configuration was built.";
+      };
 
-    nixos.revision = mkOption {
-      internal = true;
-      type = types.nullOr types.str;
-      default = trivial.revisionWithDefault null;
-      description = lib.mdDoc "The Git revision from which this NixOS configuration was built.";
-    };
+      codeName = mkOption {
+        readOnly = true;
+        type = types.str;
+        default = trivial.codeName;
+        description = "The NixOS release code name (e.g. `Emu`).";
+      };
 
-    nixos.codeName = mkOption {
-      readOnly = true;
-      type = types.str;
-      default = trivial.codeName;
-      description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
-    };
+      distroId = mkOption {
+        internal = true;
+        type = types.str;
+        default = "nixos";
+        description = "The id of the operating system";
+      };
 
-    nixos.distroId = mkOption {
-      internal = true;
-      type = types.str;
-      default = "nixos";
-      description = lib.mdDoc "The id of the operating system";
-    };
+      distroName = mkOption {
+        internal = true;
+        type = types.str;
+        default = "NixOS";
+        description = "The name of the operating system";
+      };
 
-    nixos.distroName = mkOption {
-      internal = true;
-      type = types.str;
-      default = "NixOS";
-      description = lib.mdDoc "The name of the operating system";
-    };
-
-    nixos.variant_id = mkOption {
-      type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
-      default = null;
-      description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
-      example = "installer";
+      variant_id = mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = "A lower-case string identifying a specific variant or edition of the operating system";
+        example = "installer";
+      };
     };
 
     image = {
 
       id = lib.mkOption {
-        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Image identifier.
 
           This corresponds to the IMAGE_ID field in os-release. See the
@@ -129,9 +135,9 @@ in
       };
 
       version = lib.mkOption {
-        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Image version.
 
           This corresponds to the IMAGE_VERSION field in os-release. See the
@@ -154,7 +160,7 @@ in
           v;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
-      description = lib.mdDoc ''
+      description = ''
         This option defines the first version of NixOS you have installed on this particular machine,
         and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
 
@@ -187,7 +193,7 @@ in
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "The Git revision of the top-level flake from which this configuration was built.";
+      description = "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mdformat
-, mdit-py-plugins
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-simple-breaks";
   version = "0.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,20 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-4lJHB4r9lI2uGJ/BmFFc92sumTRKBBwiRmGBdQkzfd0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  buildInputs = [
-    mdformat
-  ];
+  propagatedBuildInputs = [ mdformat ];
 
-  pythonImportsCheck = [
-    "mdformat_simple_breaks"
-  ];
+  pythonImportsCheck = [ "mdformat_simple_breaks" ];
 
   meta = with lib; {
-    description = "mdformat plugin to render thematic breaks using three dashes";
+    description = "Mdformat plugin to render thematic breaks using three dashes";
     homepage = "https://github.com/csala/mdformat-simple-breaks";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];

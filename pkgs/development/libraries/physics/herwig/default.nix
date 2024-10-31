@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A multi-purpose particle physics event generator";
+    description = "Multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
+    broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

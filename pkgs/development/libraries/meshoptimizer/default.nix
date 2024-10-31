@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, nix-update-script }:
 
 let
   basis_universal = fetchFromGitHub {
@@ -7,14 +7,14 @@ let
     rev = "8903f6d69849fd782b72a551a4dd04a264434e20";
     hash = "sha256-o3dCxAAkpMoNkvkM7qD75cPn/obDc/fJ8u7KLPm1G6g=";
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "meshoptimizer";
-  version = "unstable-2023-03-22";
+  version = "0.21";
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "meshoptimizer";
-    hash = "sha256-OWeptdnKFvTyfkz0sFCpiTI7323GfVE8vb8bNUBnslA=";
-    rev = "49d9222385daf61a9ce75bb4699472408eb3df3e";
+    rev = "v${version}";
+    hash = "sha256-G8rR4Ff3mVxTPD1etI82fYwFawsjrLvwWuEuib+dUBU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,6 +26,8 @@ in stdenv.mkDerivation {
     "-DMESHOPT_BASISU_PATH=${basis_universal}"
   ] ++ lib.optional (!stdenv.hostPlatform.isStatic)
     "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Mesh optimization library that makes meshes smaller and faster to render";

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     ./replace-bundled-zlib.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace cmake/platforms/*/config.cmake \
       --replace "-m64" ""
   '';
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
 
     # Broken on aarch64-linux as of version 1.8.3
     # See https://github.com/BrunoLevy/geogram/issues/74
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
 
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ tmarkus ];

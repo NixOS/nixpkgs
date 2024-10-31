@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -32,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Cargo extension to help create, manage, and test RISC Zero projects.";
+    description = "Cargo extension to help create, manage, and test RISC Zero projects";
+    mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ cameronfyfe ];

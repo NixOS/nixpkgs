@@ -39,11 +39,6 @@
       patch = ./request-key-helper-updated.patch;
     };
 
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
-
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
@@ -66,17 +61,13 @@
     patch = ./export-rt-sched-migrate.patch;
   };
 
-  rust_1_74 = {
-    name = "rust-1.74.patch";
+  # Backport upstream fix for very annoying Tailscale issue
+  # FIXME: remove when merged upstream
+  netfilter-typo-fix = {
+    name = "netfilter-typo-fix";
     patch = fetchpatch {
-      name = "rust-1.74.patch";
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=80fe9e51510b23472ad0f97175556490549ed714";
-      hash = "sha256-yGt7PwqN/G+ZtZSt6eARvVFdkC8tnUiu0Fz4cFCyguM=";
+      url = "https://lore.kernel.org/netdev/20241021094536.81487-3-pablo@netfilter.org/raw";
+      hash = "sha256-ZGc1xAIjf+MlV02jhIWZ4jHC742+z/WpN7RenqpU7e4=";
     };
-  };
-
-  rust_1_75 = {
-    name = "rust-1.75.patch";
-    patch = ./rust-1.75.patch;
   };
 }

@@ -14,23 +14,30 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2023.04";
+  version = "2024.04";
 
 
-  src = if stdenv.isAarch64 then fetchurl {
-    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-    sha256 = "sha256-uuspjno0750hQMIB5HEhbV63wCna2izKOHEGIg/X0bU=";
-  } else fetchurl {
-    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-tRUeRB1+UcWT49dchN0YDvd0L5n1YRdtMSFc8yy6m5o=";
-  };
+  src = {
+    aarch64-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
+      hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
+    };
+    armv7l-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-armhf.deb";
+      hash = "sha256-LgeWQcHm5Qq/7MUuidjily0WsOFZAWGWeO52jNHWKMw=";
+    };
+    x86_64-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
+      hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-c3j6hs0W0H2jDg6JVfU6ov7r7kucbqrQqf9PAvYBcJ0=";
+    sha256 = "sha256-gHn1xqBc7M9wkek1Ja1gry8TKIuUxQP8T45x3z2S4uc=";
   };
 
   sourceRoot = ".";
@@ -57,16 +64,18 @@ stdenv.mkDerivation rec {
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
     find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc.lib ]
     }
   '';
 
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
+    changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
+    mainProgram = "koreader";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ contrun neonfuz];
   };

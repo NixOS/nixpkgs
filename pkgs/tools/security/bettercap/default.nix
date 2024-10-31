@@ -25,10 +25,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap libusb1 ]
-    ++ lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnfnetlink libnetfilter_queue ];
 
   meta = with lib; {
-    description = "A man in the middle tool";
+    description = "Man in the middle tool";
     longDescription = ''
       BetterCAP is a powerful, flexible and portable tool created to perform various
       types of MITM attacks against a network, manipulate HTTP, HTTPS and TCP traffic

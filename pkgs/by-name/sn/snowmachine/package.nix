@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "snowmachine" ];
 
   meta = with lib; {
-    description = "A python script that will make your terminal snow";
+    description = "Python script that will make your terminal snow";
     homepage = "https://github.com/sontek/snowmachine";
     mainProgram = "snowmachine";
     license = with licenses; [ bsd3 ];

@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "xray";
-  version = "1.8.6";
+  version = "24.9.30";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${version}";
-    hash = "sha256-M1iu/93eOBIk9VxYKNJm/TPx9G35yO5SpcQm/lAJ1Q8=";
+    hash = "sha256-36Uo1ROM4x2LW5RsYvAhIE6TmbcYAbLspoxv/yOXDew=";
   };
 
-  vendorHash = "sha256-zLnYjZmrsWd/WwtkkLiA8Eoh7aDJz+TsvK0yvIrSr8c=";
+  vendorHash = "sha256-6zcYyxWgvJPE7JG2/t4pGJ+2fJfEntnU7QKjICyLGkU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -42,8 +42,8 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/xray \
-      --suffix V2RAY_LOCATION_ASSET : $assetsDrv/share/v2ray \
-      --suffix XRAY_LOCATION_ASSET : $assetsDrv/share/v2ray
+      --set-default V2RAY_LOCATION_ASSET $assetsDrv/share/v2ray \
+      --set-default XRAY_LOCATION_ASSET $assetsDrv/share/v2ray
   '';
 
   passthru = {
@@ -51,7 +51,8 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
+    description = "Platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
+    mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
     license = with lib.licenses; [ mpl20 ];
     maintainers = with lib.maintainers; [ iopq ];

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mbstrdecoder
-, python-dateutil
-, pytz
-, packaging
-, pytestCheckHook
-, pythonOlder
-, tcolorpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mbstrdecoder,
+  python-dateutil,
+  pytz,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  tcolorpy,
 }:
 
 buildPythonPackage rec {
@@ -24,11 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
   };
 
-  propagatedBuildInputs = [
-    mbstrdecoder
-  ];
+  propagatedBuildInputs = [ mbstrdecoder ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     datetime = [
       python-dateutil
       pytz
@@ -39,11 +38,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "typepy"
-  ];
+  pythonImportsCheck = [ "typepy" ];
 
   meta = with lib; {
     description = "Library for variable type checker/validator/converter at a run time";

@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyyardian"
-  ];
+  pythonImportsCheck = [ "pyyardian" ];
 
   meta = with lib; {
     description = "Module for interacting with the Yardian irrigation controller";

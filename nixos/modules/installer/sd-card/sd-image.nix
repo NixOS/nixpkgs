@@ -35,14 +35,14 @@ in
   options.sdImage = {
     imageName = mkOption {
       default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
-      description = lib.mdDoc ''
+      description = ''
         Name of the generated image file.
       '';
     };
 
     imageBaseName = mkOption {
       default = "nixos-sd-image";
-      description = lib.mdDoc ''
+      description = ''
         Prefix of the name of the generated image file.
       '';
     };
@@ -50,7 +50,7 @@ in
     storePaths = mkOption {
       type = with types; listOf package;
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         Derivations to be included in the Nix store in the generated SD image.
       '';
     };
@@ -58,7 +58,7 @@ in
     firmwarePartitionOffset = mkOption {
       type = types.int;
       default = 8;
-      description = lib.mdDoc ''
+      description = ''
         Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
         bytes).
         Can be increased to make more space for boards requiring to dd u-boot
@@ -74,7 +74,7 @@ in
     firmwarePartitionID = mkOption {
       type = types.str;
       default = "0x2178694e";
-      description = lib.mdDoc ''
+      description = ''
         Volume ID for the /boot/firmware partition on the SD card. This value
         must be a 32-bit hexadecimal number.
       '';
@@ -83,7 +83,7 @@ in
     firmwarePartitionName = mkOption {
       type = types.str;
       default = "FIRMWARE";
-      description = lib.mdDoc ''
+      description = ''
         Name of the filesystem which holds the boot firmware.
       '';
     };
@@ -92,7 +92,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
-      description = lib.mdDoc ''
+      description = ''
         UUID for the filesystem on the main NixOS partition on the SD card.
       '';
     };
@@ -101,14 +101,14 @@ in
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
       default = 30;
-      description = lib.mdDoc ''
+      description = ''
         Size of the /boot/firmware partition, in megabytes.
       '';
     };
 
     populateFirmwareCommands = mkOption {
       example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
         /boot/firmware partition on the SD image.
@@ -117,7 +117,7 @@ in
 
     populateRootCommands = mkOption {
       example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
         root (/) partition on the SD image. Use this to
@@ -128,7 +128,7 @@ in
     postBuildCommands = mkOption {
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to run after the image is built.
         Can be used for boards requiring to dd u-boot SPL before actual partitions.
       '';
@@ -137,7 +137,7 @@ in
     compressImage = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether the SD image should be compressed using
         {command}`zstd`.
       '';
@@ -146,8 +146,17 @@ in
     expandOnBoot = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to configure the sd image to expand it's partition on boot.
+      '';
+    };
+
+    nixPathRegistrationFile = mkOption {
+      type = types.str;
+      default = "/nix-path-registration";
+      description = ''
+        Location of the file containing the input for nix-store --load-db once the machine has booted.
+        If overriding fileSystems."/" then you should to set this to the root mount + /nix-path-registration
       '';
     };
   };
@@ -209,7 +218,7 @@ in
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         # The "bootable" partition is where u-boot will look file for the bootloader
         # information (dtbs, extlinux.conf file).
-        sfdisk $img <<EOF
+        sfdisk --no-reread --no-tell-kernel $img <<EOF
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
 
@@ -255,11 +264,8 @@ in
       '';
     }) {};
 
-    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
-      # On the first boot do some maintenance tasks
-      if [ -f /nix-path-registration ]; then
-        set -euo pipefail
-        set -x
+    boot.postBootCommands = let
+      expandOnBoot = lib.optionalString config.sdImage.expandOnBoot ''
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
@@ -269,16 +275,25 @@ in
         echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
+      '';
+      nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
+    in ''
+      # On the first boot do some maintenance tasks
+      if [ -f ${nixPathRegistrationFile} ]; then
+        set -euo pipefail
+        set -x
+
+        ${expandOnBoot}
 
         # Register the contents of the initial Nix store
-        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
+        ${config.nix.package.out}/bin/nix-store --load-db < ${nixPathRegistrationFile}
 
         # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
         # Prevents this from running on later boots.
-        rm -f /nix-path-registration
+        rm -f ${nixPathRegistrationFile}
       fi
     '';
   };

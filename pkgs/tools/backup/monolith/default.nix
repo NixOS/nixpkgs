@@ -21,14 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-FeD0+s79orFDUVsb205W0pdXgDI+p1UrH3GIfKwUqDQ=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
 
-  checkFlagsArray = [ "--skip=tests::cli" ];
+  checkFlags = [ "--skip=tests::cli" ];
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
+    mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
     maintainers = with maintainers; [ Br1ght0ne ];

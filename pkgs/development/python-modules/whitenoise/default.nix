@@ -1,20 +1,21 @@
-{ lib
-, brotli
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.5.0";
-  format = "pyproject";
+  version = "6.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -22,16 +23,12 @@ buildPythonPackage rec {
     owner = "evansd";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-g1D0tjGsAP3y1fWvODWwNvxnTSZJuTpyZ0Otk83Oq9E=";
+    hash = "sha256-4SrTiTqBrfFuQ/8mqQL+YiehFWW+ZzKiAF0h2XyYuSs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    brotli
-  ];
+  propagatedBuildInputs = [ brotli ];
 
   nativeCheckInputs = [
     django
@@ -51,15 +48,13 @@ buildPythonPackage rec {
     "test_modified"
   ];
 
-  pythonImportsCheck = [
-    "whitenoise"
-  ];
+  pythonImportsCheck = [ "whitenoise" ];
 
   meta = with lib; {
     description = "Library to serve static file for WSGI applications";
     homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

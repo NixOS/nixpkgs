@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  unittestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -19,20 +21,21 @@ buildPythonPackage rec {
 
   # it imports the wrong diff,
   # fix offered to upstream https://github.com/nicolashahn/diffimg/pull/6
-  postPatch = ''
-    substituteInPlace diffimg/test.py \
-      --replace "from diff import diff" "from diffimg.diff import diff"
-  '';
+  postPatch =
+    ''
+      substituteInPlace diffimg/test.py \
+        --replace-warn "from diff import diff" "from diffimg.diff import diff"
+    ''
+    + lib.optionalString (pythonAtLeast "3.12") ''
+      substituteInPlace diffimg/test.py \
+        --replace-warn "3503192421617232" "3503192421617233"
+    '';
 
-  propagatedBuildInputs = [
-    pillow
-  ];
+  propagatedBuildInputs = [ pillow ];
 
   pythonImportsCheck = [ "diffimg" ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Differentiate images in python - get a ratio or percentage difference, and generate a diff image";

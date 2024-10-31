@@ -21,5 +21,9 @@ libgit2.overrideAttrs (oldAttrs: {
     hash = "sha256-Bm3Gj9+AhNQMvkIqdrTkK5D9vrZ1qq6CS8Wrn9kfKiw=";
   };
 
+  # this is a heavy fork of the original libgit2
+  # the original checkPhase does not work for this fork
+  doCheck = false;
+
   patches = [ ];
 })

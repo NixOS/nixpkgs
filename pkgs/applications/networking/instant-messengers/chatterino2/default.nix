@@ -1,18 +1,30 @@
-{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qtimageformats, qttools, boost, openssl, wrapQtAppsHook, libsecret }:
+{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qt6, boost, openssl, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
-  version = "2.4.6";
+  version = "2.5.1";
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CQviw5Fw6v5EwjCldAQoJfAIZMWKBfBzUIQZEgW34k0=";
+    hash = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg qtmultimedia qtimageformats qttools boost openssl libsecret ];
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtimageformats
+    qt6.qttools
+    qt6.qt5compat
+    boost
+    openssl
+    libsecret
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
+  cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
   '' + ''
@@ -20,7 +32,8 @@ stdenv.mkDerivation rec {
     cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
   '';
   meta = with lib; {
-    description = "A chat client for Twitch chat";
+    description = "Chat client for Twitch chat";
+    mainProgram = "chatterino";
     longDescription = ''
       Chatterino is a chat client for Twitch chat. It aims to be an
       improved/extended version of the Twitch web chat. Chatterino 2 is
@@ -31,6 +44,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim ];
+    maintainers = with maintainers; [ rexim supa ];
   };
 }

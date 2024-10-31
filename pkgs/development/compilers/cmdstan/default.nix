@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.33.1";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-c+L/6PjW7YgmXHuKhKjiRofBRAhKYCzFCZ6BOX5AmC4=";
+    hash = "sha256-bmzkXbR4KSnpfXjs2MAx8mbNSbNrIWDP/O8S+JGWrcg=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "build"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "arch=${stdenv.hostPlatform.darwinArch}"
   ];
 

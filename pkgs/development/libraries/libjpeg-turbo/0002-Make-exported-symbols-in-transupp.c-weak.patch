@@ -1,0 +1,81 @@
+From 6442d11617f95d13e2a371bd3e01f5082a9c356d Mon Sep 17 00:00:00 2001
+From: Las <las@protonmail.ch>
+Date: Sun, 3 Jan 2021 18:35:37 +0000
+Subject: [PATCH] Make exported symbols in transupp.c weak
+
+The exported symbols are made weak to not conflict with users
+of the library that already vendor this functionality.
+---
+ transupp.c     | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/transupp.c b/transupp.c
+index 34fbb371..c0ade5a9 100644
+--- a/transupp.c
++++ b/transupp.c
+@@ -1388,7 +1388,7 @@ jt_read_integer(const char **strptr, JDIMENSION *result)
+  * This code is loosely based on XParseGeometry from the X11 distribution.
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_parse_crop_spec(jpeg_transform_info *info, const char *spec)
+ {
+   info->crop = FALSE;
+@@ -1488,7 +1488,7 @@ trim_bottom_edge(jpeg_transform_info *info, JDIMENSION full_height)
+  * and transformation is not perfect.  Otherwise returns TRUE.
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_request_workspace(j_decompress_ptr srcinfo,
+                              jpeg_transform_info *info)
+ {
+@@ -2035,7 +2035,7 @@ adjust_exif_parameters(JOCTET *data, unsigned int length, JDIMENSION new_width,
+  * to jpeg_write_coefficients().
+  */
+ 
+-GLOBAL(jvirt_barray_ptr *)
++GLOBAL(jvirt_barray_ptr *) __attribute__((weak))
+ jtransform_adjust_parameters(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                              jvirt_barray_ptr *src_coef_arrays,
+                              jpeg_transform_info *info)
+@@ -2154,7 +2154,7 @@ jtransform_adjust_parameters(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+  * Note that some transformations will modify the source data arrays!
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jtransform_execute_transform(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                              jvirt_barray_ptr *src_coef_arrays,
+                              jpeg_transform_info *info)
+@@ -2266,7 +2266,7 @@ jtransform_execute_transform(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+  *           (may use custom action then)
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
+                              int MCU_width, int MCU_height,
+                              JXFORM_CODE transform)
+@@ -2305,7 +2305,7 @@ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
+  * This must be called before jpeg_read_header() to have the desired effect.
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jcopy_markers_setup(j_decompress_ptr srcinfo, JCOPY_OPTION option)
+ {
+ #ifdef SAVE_MARKERS_SUPPORTED
+@@ -2337,7 +2337,7 @@ jcopy_markers_setup(j_decompress_ptr srcinfo, JCOPY_OPTION option)
+  * JFIF APP0 or Adobe APP14 markers if selected.
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jcopy_markers_execute(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                       JCOPY_OPTION option)
+ {
+-- 
+2.43.0
+

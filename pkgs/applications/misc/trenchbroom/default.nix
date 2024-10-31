@@ -2,19 +2,19 @@
 , cmake, ninja, curl, git, pandoc, pkg-config, unzip, zip
 , libGL, libGLU, freeimage, freetype, assimp
 , catch2, fmt, glew, miniz, tinyxml-2, xorg
-, qtbase, wrapQtAppsHook
+, qtbase, qtwayland, wrapQtAppsHook
 , copyDesktopItems, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
-  version = "2023.1";
+  version = "2024.1";
 
   src = fetchFromGitHub {
     owner = "TrenchBroom";
     repo = "TrenchBroom";
     rev = "v${version}";
-    sha256 = "sha256-62xcFKSqxPS+J54+kLo/hewM+Wu/rVBGD8oiECDCJpA=";
+    hash = "sha256-HNK/gLbew7MKN6GVStxDb2tyMgyw2l1+dhPr6fSaZ4A=";
     fetchSubmodules = true;
   };
   # Manually simulate a vcpkg installation so that it can link the libraries
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja curl git pandoc wrapQtAppsHook copyDesktopItems pkg-config unzip zip ];
   buildInputs = [
     libGL libGLU xorg.libXxf86vm xorg.libSM
-    freeimage freetype qtbase catch2 fmt
+    freeimage freetype qtbase qtwayland catch2 fmt
     glew miniz tinyxml-2 assimp
   ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";

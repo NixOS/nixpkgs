@@ -1,11 +1,13 @@
-{ lib
-, fetchgit
-, buildGoModule
+{
+  lib,
+  fetchgit,
+  buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule {
   pname = "waybar-mpris";
-  version = "unstable-2022-01-27";
+  version = "0.1.0-unstable-2022-01-27";
 
   src = fetchgit {
     url = "https://git.hrfee.pw/hrfee/waybar-mpris";
@@ -20,8 +22,10 @@ buildGoModule {
     "-w"
   ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = with lib; {
-    description = "A waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
+    description = "Waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
     homepage = "https://git.hrfee.pw/hrfee/waybar-mpris";
     license = licenses.mit;
     mainProgram = "waybar-mpris";

@@ -11,7 +11,7 @@
 , libgee
 , dbus
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A desktop-wide extension service used by elementary OS";
+    description = "Desktop-wide extension service used by elementary OS";
     homepage = "https://github.com/elementary/contractor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, setuptools
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  setuptools,
 
-# propagated
-, django
-, hiredis
-, lz4
-, msgpack
-, redis
+  # propagated
+  django,
+  hiredis,
+  lz4,
+  msgpack,
+  redis,
 
-# testing
-, pkgs
-, pytest-django
-, pytest-mock
-, pytestCheckHook
+  # testing
+  pkgs,
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     sed -i '/-cov/d' setup.cfg
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django
@@ -47,15 +46,11 @@ buildPythonPackage rec {
     redis
   ];
 
-  passthru.optional-dependencies = {
-    hiredis = [
-      redis
-    ] ++ redis.optional-dependencies.hiredis;
+  optional-dependencies = {
+    hiredis = [ redis ] ++ redis.optional-dependencies.hiredis;
   };
 
-  pythonImportsCheck = [
-    "django_redis"
-  ];
+  pythonImportsCheck = [ "django_redis" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings.sqlite";
 
@@ -72,7 +67,7 @@ buildPythonPackage rec {
     pytest-django
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"
@@ -90,6 +85,8 @@ buildPythonPackage rec {
     "test_delete_pattern_calls_scan_iter"
     "test_delete_pattern_calls_scan_iter_with_count_if_itersize_given"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Full featured redis cache backend for Django";

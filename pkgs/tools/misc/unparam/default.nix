@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "unparam";
-  version = "unstable-2023-03-12";
+  version = "0-unstable-2024-05-28";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "unparam";
-    rev = "e84e2d14e3b88193890ff95d72ecb81312f36589";
-    sha256 = "sha256-kbEdOqX/p/FrNfWQ2WjXX+lERprSV2EI9l+kapHuFi4=";
+    rev = "8a5130ca722ffad18c95cc467b561f1668b9b0d2";
+    hash = "sha256-CYCXTriGUd4bNY6ZPfkX4puE1imcqYHnX1SXVdnXPGM=";
   };
 
-  vendorHash = "sha256-gEZFAMcr1okqG2IXcS3hDzZKMINohd2JzxezGbzyeBE=";
+  vendorHash = "sha256-2lNC4V1WQkJdkagIlBu6tj4SA4KJKstHXc+B4emKu6s=";
 
   subPackages = [ "." ];
 

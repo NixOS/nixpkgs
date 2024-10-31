@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/BubblesInTheTub/torrent7z";
-    description = "A fork of torrent7z, viz a derivative of 7zip that produces invariant .7z archives for torrenting";
+    description = "Fork of torrent7z, viz a derivative of 7zip that produces invariant .7z archives for torrenting";
     platforms = platforms.linux;
     maintainers = with maintainers; [ cirno-999 ];
     mainProgram = "t7z";

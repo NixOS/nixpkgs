@@ -2,23 +2,24 @@
 
 buildGoModule rec {
   pname = "bazelisk";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-no1+sQ+8Ead1diCYytC3MXVA68SuWWxt40OFVrGWYdQ=";
+    sha256 = "sha256-KD8lh3N9GFlht+HtcuE3i20noVha0lT21a5pSS3zbTw=";
   };
 
-  vendorHash = "sha256-hjV7Pc3DFExSCsA0jKVxb1GxoXQ7LRFGuot3V0IHG58=";
+  vendorHash = "sha256-zoiQ69y0EicH9Jq2XYn+fttKHZY64GD4m/Edk+kle9M=";
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.BazeliskVersion=${version}" ];
 
   meta = with lib; {
-    description = "A user-friendly launcher for Bazel";
+    description = "User-friendly launcher for Bazel";
+    mainProgram = "bazelisk";
     longDescription = ''
       BEWARE: This package does not work on NixOS.
     '';

@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ok/yttRSkCaEdV4aM2670qERjgDBll6Oi3L5TV5YEEA=";
+    hash = "sha256-ok/yttRSkCaEdV4aM2670qERjgDBll6Oi3L5TV5YEEA=";
   };
 
   # This package does not have any tests
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/TarlogicSecurity/kerbrute";
     description = "Kerberos bruteforce utility";
+    mainProgram = "kerbrute";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ applePrincess ];
   };

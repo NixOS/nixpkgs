@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, autoreconfHook }:
+{ lib, stdenv, fetchurl, buildPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "apr";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/GSN6YPzoqbJ543qHxgGOb0vrWwG1VbUNnpwH+XDVXc=";
+    hash = "sha256-zQ9dUrmrFwTHIWDF7j7V09TKLfSn+KtWTjyzUrZyMvI=";
   };
 
   patches = [
@@ -65,9 +65,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apr.apache.org/";
-    description = "The Apache Portable Runtime library";
+    description = "Apache Portable Runtime library";
+    mainProgram = "apr-1-config";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

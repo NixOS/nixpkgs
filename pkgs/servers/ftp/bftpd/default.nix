@@ -10,13 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   # utmp.h is deprecated on aarch64-darwin
-  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+  postPatch = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     for file in login.*; do
       substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
     done
   '';
 
   buildInputs = [ libxcrypt ];
+
+  CFLAGS = "-std=gnu89";
 
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
@@ -31,7 +33,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A minimal ftp server";
+    description = "Minimal ftp server";
+    mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";
     license = licenses.gpl2Plus;
