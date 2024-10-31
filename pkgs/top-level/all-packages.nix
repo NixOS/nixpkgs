@@ -1465,8 +1465,6 @@ with pkgs;
 
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
-  amdgpu_top = callPackage ../tools/system/amdgpu_top { };
-
   acquire = with python3Packages; toPythonApplication acquire;
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
