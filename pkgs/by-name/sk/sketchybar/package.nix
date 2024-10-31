@@ -1,37 +1,23 @@
 {
   lib,
-  overrideSDK,
   stdenv,
-  darwin,
   fetchFromGitHub,
+  apple-sdk_11,
+  darwinMinVersionHook,
   testers,
   nix-update-script,
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    AppKit
-    Carbon
-    CoreAudio
-    CoreWLAN
-    CoreVideo
-    DisplayServices
-    IOKit
-    MediaRemote
-    SkyLight
-    ;
-
   target =
     {
       "aarch64-darwin" = "arm64";
       "x86_64-darwin" = "x86";
     }
     .${system} or (throw "Unsupported system: ${system}");
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
   version = "2.21.0";
 
@@ -43,15 +29,8 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    AppKit
-    Carbon
-    CoreAudio
-    CoreWLAN
-    CoreVideo
-    DisplayServices
-    IOKit
-    MediaRemote
-    SkyLight
+    apple-sdk_11
+    (darwinMinVersionHook "10.13")
   ];
 
   makeFlags = [ target ];
