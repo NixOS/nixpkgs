@@ -55,9 +55,15 @@ let
   nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
     plugins = [ {
         plugin = vimPlugins.luasnip;
-
       }
     ];
+  });
+
+  # build should fail with a wrong
+  nvim-run-failing-check = (wrapNeovimUnstable neovim-unwrapped {
+    luaRcContent = "this is an invalid lua statement to break the build";
+  }).overrideAttrs({
+    doCheck = true;
   });
 
   nvimAutoDisableWrap = makeNeovimConfig { };
@@ -95,6 +101,9 @@ in
   pkgs.recurseIntoAttrs (rec {
 
   inherit nmt;
+
+  # Disabled because of https://github.com/NixOS/nixpkgs/pull/352727
+  # failed_check = pkgs.testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
