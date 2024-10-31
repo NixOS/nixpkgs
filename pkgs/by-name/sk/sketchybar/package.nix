@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  apple-sdk_11,
-  darwinMinVersionHook,
+  apple-sdk_15,
   versionCheckHook,
 }:
 
@@ -30,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    apple-sdk_11
-    (darwinMinVersionHook "10.13")
+    apple-sdk_15
   ];
 
   makeFlags = [ target ];
