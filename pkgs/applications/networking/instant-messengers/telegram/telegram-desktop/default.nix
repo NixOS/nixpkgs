@@ -9,6 +9,7 @@
 , lld
 , python3
 , wrapQtAppsHook
+, tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; }
 , qtbase
 , qtimageformats
 , qtsvg
@@ -48,12 +49,6 @@
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-let
-  tg_owt = callPackage ./tg_owt.nix {
-    # tg_owt should use the same compiler
-    inherit stdenv;
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
   version = "5.6.3";
