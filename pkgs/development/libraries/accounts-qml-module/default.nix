@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qml-module";
-  version = "0.7-unstable-2022-10-28";
+  version = "0.7-unstable-2023-10-28";
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
