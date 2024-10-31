@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (
         categories = [ "Utility" ];
       })
     ];
-    meta = with lib; {
+    meta = {
       description = "Workspace with fully merged docs, whiteboards and databases";
       longDescription = ''
         AFFiNE is an open-source, all-in-one workspace and an operating
@@ -63,8 +63,8 @@ stdenvNoCC.mkDerivation (
       '';
       homepage = "https://affine.pro/";
       downloadPage = "https://affine.pro/download";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         richar
         redyf
       ];
