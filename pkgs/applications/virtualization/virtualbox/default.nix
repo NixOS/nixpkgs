@@ -49,9 +49,6 @@
   yasm,
   glslang,
   nixosTests,
-  # If open-watcom-bin is not passed, VirtualBox will fall back to use
-  # the shipped alternative sources (assembly).
-  open-watcom-bin,
   makeself,
   perl,
   vulkan-loader,
@@ -295,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
-      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
