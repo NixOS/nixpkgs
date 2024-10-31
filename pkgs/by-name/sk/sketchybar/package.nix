@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
   nix-update-script,
   apple-sdk_11,
   darwinMinVersionHook,
+  versionCheckHook,
 }:
 
 let
@@ -45,14 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "sketchybar-v${finalAttrs.version}";
-    };
+  passthru.updateScript = nix-update-script { };
 
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Highly customizable macOS status bar replacement";
