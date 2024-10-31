@@ -22832,8 +22832,6 @@ with pkgs;
 
   seasocks = callPackage ../development/libraries/seasocks { };
 
-  serd = callPackage ../development/libraries/serd { };
-
   serf = callPackage ../development/libraries/serf { };
 
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
