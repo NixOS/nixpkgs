@@ -7,6 +7,7 @@
   colored,
   pytestCheckHook,
   numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     numpy
+    pandas
   ];
 
   meta = with lib; {
