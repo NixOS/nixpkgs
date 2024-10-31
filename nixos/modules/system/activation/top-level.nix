@@ -8,6 +8,7 @@ let
     mkOption
     mkRemovedOptionModule
     mkRenamedOptionModule
+    optionalAttrs
     optionalString
     showWarnings
     types
@@ -31,7 +32,7 @@ let
 
       ln -s ${config.system.build.etc}/etc $out/etc
 
-      ${lib.optionalString config.system.etc.overlay.enable ''
+      ${optionalString config.system.etc.overlay.enable ''
         ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
         ln -s ${config.system.build.etcBasedir} $out/etc-basedir
       ''}
@@ -147,7 +148,7 @@ let
       name = topLevelName;
       position = __curPos;
       unsupported = false;
-    } // lib.optionalAttrs config.system.switch.enable {
+    } // optionalAttrs config.system.switch.enable {
       mainProgram = "apply";
     };
   };
@@ -231,7 +232,7 @@ in
       internal = true;
       default = {};
       description = ''
-        `lib.mkDerivation` attributes that will be passed to the top level system builder.
+        `stdenv.mkDerivation` attributes that will be passed to the top level system builder.
       '';
     };
 
@@ -282,7 +283,7 @@ in
     system.replaceDependencies = {
       replacements = mkOption {
         default = [];
-        example = lib.literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
+        example = literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
         type = types.listOf (types.submodule (
           { ... }: {
             imports = [
@@ -380,7 +381,7 @@ in
             "$out/configuration.nix"
         '' +
       optionalString
-        (config.system.forbiddenDependenciesRegexes != []) (lib.concatStringsSep "\n" (map (regex: ''
+        (config.system.forbiddenDependenciesRegexes != []) (concatStringsSep "\n" (map (regex: ''
           if [[ ${regex} != "" && -n $closureInfo ]]; then
             if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
               echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
@@ -409,7 +410,7 @@ in
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
     }
-    // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
+    // optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
       closureInfo = pkgs.closureInfo { rootPaths = [
         # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
         (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
