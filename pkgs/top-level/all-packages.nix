@@ -3291,6 +3291,10 @@ with pkgs;
 
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
+  bisq2 = callPackage ../by-name/bi/bisq/package.nix {
+    openjdk = jdk22.override { enableJavaFX = true; };
+  };
+
   bic = callPackage ../development/interpreters/bic { };
 
   biscuit-cli = callPackage ../tools/security/biscuit-cli { };
@@ -16862,7 +16866,7 @@ with pkgs;
   electron_27 = electron_27-bin;
   electron_28 = electron_28-bin;
   electron_29 = electron_29-bin;
-  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
+  electron_30 = electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
