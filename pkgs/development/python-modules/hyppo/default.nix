@@ -6,6 +6,7 @@
   setuptools,
   pytestCheckHook,
   autograd,
+  future,
   numba,
   numpy,
   scikit-learn,
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     autograd
+    future
     numba
     numpy
     scikit-learn
