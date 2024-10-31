@@ -4,6 +4,7 @@
   buildGoModule,
   testers,
   bazel-watcher,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-0I/bvuyosN55oNSMuom4C8rVjxneUaqV19l9OMiwWhU=";
 
-  CGO_ENABLED = "0";
+  # The dependency github.com/fsnotify/fsevents requires CGO
+  CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
   ldflags = [
     "-s"
     "-X main.Version=${version}"
@@ -28,7 +30,10 @@ buildGoModule rec {
   subPackages = [ "cmd/ibazel" ];
 
   passthru = {
-    tests.version = testers.testVersion { package = bazel-watcher; };
+    tests.version = testers.testVersion {
+      package = bazel-watcher;
+      command = "ibazel version";
+    };
   };
 
   meta = with lib; {
