@@ -1174,8 +1174,8 @@ rec {
       "sha256-P2Yg3qvcdAcjY+uwPg2DpTgT6ZXb1XYCOeu4bVfgFKI=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.35.32"
-      "sha256-Wz0q0r66Fd6d/T25BiY+AwvLqlihrHEE16gTBydQk0o=";
+    buildMypyBoto3Package "sagemaker" "1.35.52"
+      "sha256-i2XQmwv5AP0qSN6Bc1xM22XLaNSgo3FTbX8UIgOsFBQ=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.35.0"
