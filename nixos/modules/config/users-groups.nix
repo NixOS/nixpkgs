@@ -6,6 +6,7 @@ let
     attrNames
     attrValues
     concatMap
+    concatMapStringsSep
     concatStrings
     elem
     filter
@@ -13,6 +14,7 @@ let
     flatten
     flip
     foldr
+    generators
     getAttr
     hasAttr
     id
@@ -944,16 +946,18 @@ in {
 
     warnings =
       flip concatMap (attrValues cfg.users) (user: let
-        unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
-          user.hashedPassword
-          user.hashedPasswordFile
-          user.password
+        passwordOptions = [
+          "hashedPassword"
+          "hashedPasswordFile"
+          "password"
         ] ++ optionals cfg.mutableUsers [
           # For immutable users, initialHashedPassword is set to hashedPassword,
           # so using these options would always trigger the assertion.
-          user.initialHashedPassword
-          user.initialPassword
-        ]));
+          "initialHashedPassword"
+          "initialPassword"
+        ];
+        unambiguousPasswordConfiguration = 1 >= length
+          (filter (x: x != null) (map (flip getAttr user) passwordOptions));
       in optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
         `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
@@ -961,6 +965,13 @@ in {
         The options silently discard others by the order of precedence
         given above which can lead to surprising results. To resolve this warning,
         set at most one of the options above to a non-`null` value.
+
+        The values of these options are:
+        ${concatMapStringsSep
+          "\n"
+          (value:
+            "* users.users.\"${user.name}\".${value}: ${generators.toPretty {} user.${value}}")
+          passwordOptions}
       '')
       ++ filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
