@@ -42,8 +42,7 @@ let
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
-      SUPPORT_END = "2025-06-30";
-    };
+    } // cfg.extraOSReleaseArgs;
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -143,6 +142,26 @@ in
         default = "NixOS";
         description = "The name of the operating system vendor";
       };
+
+      extraOSReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/os-release generator.";
+        example = {
+          ANSI_COLOR = "1;31";
+        };
+      };
+
+      extraLSBReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/lsb-release generator.";
+        example = {
+          LSB_VERSION = "1.0";
+        };
+      };
     };
 
     image = {
@@ -237,13 +256,13 @@ in
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
     environment.etc = {
-      "lsb-release".text = attrsToText {
+      "lsb-release".text = attrsToText ({
         LSB_VERSION = "${cfg.release} (${cfg.codeName})";
         DISTRIB_ID = "${cfg.distroId}";
         DISTRIB_RELEASE = cfg.release;
         DISTRIB_CODENAME = toLower cfg.codeName;
         DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-      };
+      } // cfg.extraLSBReleaseArgs);
 
       "os-release".text = attrsToText osReleaseContents;
     };
