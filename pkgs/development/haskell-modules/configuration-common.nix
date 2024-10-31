@@ -2276,44 +2276,6 @@ self: super: {
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
 
-  large-hashable = lib.pipe (super.large-hashable.override {
-    # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
-    utf8-light = null;
-  }) [
-    # 2022-03-21: use version from git which supports GHC 9.{0,2} and aeson 2.0
-    (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
-      version = "unstable-2022-06-10";
-      src = pkgs.fetchFromGitHub {
-        owner = "factisresearch";
-        repo = "large-hashable";
-        rev = "4d149c828c185bcf05556d1660f79ff1aec7eaa1";
-        sha256 = "141349qcw3m93jw95jcha9rsg2y8sn5ca5j59cv8xmci38k2nam0";
-      };
-    })
-    # Provide newly added dependencies
-    (overrideCabal (drv: {
-      libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-        self.cryptonite
-        self.memory
-      ];
-      testHaskellDepends = drv.testHaskellDepends or [] ++ [
-        self.inspection-testing
-      ];
-    }))
-    # https://github.com/factisresearch/large-hashable/issues/24
-    (overrideCabal (drv: {
-      testFlags = drv.testFlags or [] ++ [
-        "-n" "^Data.LargeHashable.Tests.Inspection:genericSumGetsOptimized$"
-      ];
-    }))
-    # https://github.com/factisresearch/large-hashable/issues/25
-    # Currently broken with text >= 2.0
-    (overrideCabal (lib.optionalAttrs (lib.versionAtLeast self.ghc.version "9.4") {
-      broken = true;
-      hydraPlatforms = [];
-    }))
-  ];
-
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
   bson = appendConfigureFlag "-f-_old_network" (super.bson.override {
