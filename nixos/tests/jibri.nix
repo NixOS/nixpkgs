@@ -22,9 +22,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         forceSSL = true;
       };
 
-      security.acme.email = "me@example.org";
+      security.acme.defaults.email = "me@example.org";
       security.acme.acceptTerms = true;
-      security.acme.server = "https://example.com"; # self-signed only
+      security.acme.defaults.server = "https://example.com"; # self-signed only
     };
 
   testScript = ''
@@ -44,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as jibri@auth.machine'", timeout=33
     )
     machine.wait_until_succeeds(
-        "cat /var/log/jitsi/jibri/log.0.txt | grep -q 'Joined MUC: jibribrewery@internal.machine'", timeout=34
+        "cat /var/log/jitsi/jibri/log.0.txt | grep -q 'Joined MUC: jibribrewery@internal.auth.machine'", timeout=34
     )
 
     assert '"busyStatus":"IDLE","health":{"healthStatus":"HEALTHY"' in machine.succeed(
