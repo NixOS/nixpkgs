@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "15.1";
+  version = "16.0";
 
   fetchData = { suffix, hash }: stdenvNoCC.mkDerivation {
     pname = "unicode-emoji-${suffix}";
@@ -32,20 +32,20 @@ let
   srcs = {
     emoji-sequences = fetchData {
       suffix = "sequences";
-      hash = "sha256-63LJEV41BPu+HIYhthn4eUcaRszFbi9EVBe3wcrQUNE=";
+      hash = "sha256-P+PHfnLo8m3zAtx9mbEGxdCP2Ajvckb7XUUC1ln+ZZw=";
     };
     emoji-test = fetchData {
       suffix = "test";
-      hash = "sha256-2HbuJJqijqp2z6bfqnAoR6jROwYqpIjUZdA5XugTftk=";
+      hash = "sha256-JPDFNOhs8ULiSWlT6PDkaj5wI5KRHt3NKcbM7YUTlpc=";
     };
     emoji-zwj-sequences = fetchData {
       suffix = "zwj-sequences";
-      hash = "sha256-mnagPcrPzY+b/gjEnI2QtVGCuXfLzIemlOioGT77Dlc=";
+      hash = "sha256-lCPsI1R0NW+XCmllBnN+LV1lRTpn9F32a4u+kgw/q4M=";
     };
   };
 in
 
-symlinkJoin rec {
+symlinkJoin {
   name = "unicode-emoji-${version}";
 
   paths = lib.attrValues srcs;
