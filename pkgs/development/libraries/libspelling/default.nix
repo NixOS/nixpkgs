@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libspelling";
-  version = "0.4.2";
+  version = "0.4.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libspelling";
     rev = version;
-    hash = "sha256-7CvctZaky+Ci/dOA0nH96X3R8KqBRljpsC+1idcLZGM=";
+    hash = "sha256-6ggegeDR4UBP2LKn6lj0pOB1Iz7MwLEf9usIB28SEMA=";
   };
 
   nativeBuildInputs = [
