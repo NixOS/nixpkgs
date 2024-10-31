@@ -5,6 +5,7 @@
   setuptools,
   sphinx,
   sphinx-pytest,
+  defusedxml,
   pytestCheckHook,
 }:
 let
@@ -29,6 +30,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
     sphinx-pytest
+    defusedxml
   ];
 
   meta = with lib; {
