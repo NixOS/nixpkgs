@@ -103,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Qt5 binding and QtQuick2 plugin for U1DB";
     homepage = "https://gitlab.com/ubports/development/core/u1db-qt";
+    changelog = "https://gitlab.com/ubports/development/core/u1db-qt/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl3Only;
     maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
