@@ -6550,8 +6550,6 @@ with pkgs;
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
 
-  certdump = callPackage ../tools/security/certdump { };
-
   certstrap = callPackage ../tools/security/certstrap { };
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
