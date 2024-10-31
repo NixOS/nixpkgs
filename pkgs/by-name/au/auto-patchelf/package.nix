@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication {
   version = "0-unstable-2024-08-14";
   pyproject = false;
 
-  src = ./src;
+  src = ./source;
 
   dependencies = with python3Packages; [
     pyelftools
