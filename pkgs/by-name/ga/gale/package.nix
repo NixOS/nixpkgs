@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     rustPlatform.cargoSetupHook
-    (cargo-tauri.hook.override { cargo-tauri = cargo-tauri_2; })
+    cargo-tauri_2.hook
     rustPlatform.cargoCheckHook
     pkg-config
     wrapGAppsHook3
