@@ -1,75 +1,78 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, SDL
-, jack2
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  python3,
+  jack2,
+  Foundation,
+  alsa-lib,
+  pkg-config,
 }:
-
-stdenv.mkDerivation {
+let
+  python = python3.withPackages (ps: with ps; [ pillow ]);
+  platform = if stdenv.hostPlatform.isDarwin then "OSX" else "X64";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "littlegptracker";
-  version = "0-unstable-2020-11-26";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
-    owner = "Mdashdotdashn";
+    owner = "djdiskmachine";
     repo = "littlegptracker";
-    rev = "4aca8cd765e1ad586da62decd019e66cb64b45b8";
-    sha256 = "0f2ip8z5wxk8fvlw47mczsbcrzh4nh1hgw1fwf5gjrqnzm8v111x";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-1uXC5nJ63YguQuNIkuK0yx9lmrMBqw0WdlmCV8o11cE=";
   };
 
-  buildInputs = [
-    SDL
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin Foundation
-  ++ lib.optional stdenv.hostPlatform.isLinux jack2;
+  nativeBuildInputs = [
+    pkg-config
+    python
+  ];
+  buildInputs =
+    [ SDL2 ]
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform alsa-lib) alsa-lib
+    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation
+    ++ lib.optional stdenv.hostPlatform.isLinux jack2;
 
-  patches = [
-    # Remove outdated (pre-64bit) checks that would fail on modern platforms
-    # (see description in patch file)
-    ./0001-Remove-coherency-checks.patch
+  preBuild = ''
+    cd projects
+  '';
+
+  makeFlags = [
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "PLATFORM=${platform}"
   ];
 
-  preBuild = "cd projects";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation";
 
-  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux  [ "PLATFORM=DEB" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "PLATFORM=OSX" ];
-
-  env.NIX_CFLAGS_COMPILE = toString ([ "-fpermissive" ] ++
-    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing");
-
-  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isDarwin "-framework Foundation";
-
-  installPhase = let extension = if stdenv.hostPlatform.isDarwin then "app" else "deb-exe";
-    in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
-
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/Mdashdotdashn/littlegptracker.git";
-  };
-
-  meta = with lib; {
-    description = "Music tracker similar to lsdj optimised to run on portable game consoles";
-    longDescription = ''
-      LittleGPTracker (a.k.a 'The piggy', 'lgpt') is a music tracker optimised
-      to run on portable game consoles. It is currently running on Game Park's
-      GP2x & Caanoo, PSP, Dingoo, Windows, Mac OSX (intel/ppc) & Linux (Debian).
-
-      It implements the user interface of littlesounddj, a very famous tracker
-      for the Gameboy platform that has been tried and tested by many users over
-      the years, leading to a little complex but yet extremely efficent way of
-      working.
-
-      Piggy currently supports 8 monophonic 16Bit/44.1Khz stereo sample playback
-      channels. Additionally, the program can drive MIDI instruments (with the
-      gp32 and gp2x a custom MIDI interface is required).
+  installPhase =
+    let
+      extension = if stdenv.hostPlatform.isDarwin then "app" else "x64";
+    in
+    ''
+      runHook preInstall
+      install -Dm555 lgpt.${extension} $out/lib/lgpt/lgpt
+      install -Dm444 resources/${platform}/{config,mapping}.xml $out/lib/lgpt/
+      mkdir -p $out/bin
+      ln -s $out/lib/lgpt/lgpt $out/bin/
+      runHook postInstall
     '';
-    homepage = "https://www.littlegptracker.com/";
-    downloadPage = "https://www.littlegptracker.com/download.php";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    # https://github.com/NixOS/nixpkgs/pull/91766#issuecomment-688751821
-    broken = stdenv.hostPlatform.isDarwin;
+
+  meta = {
+    description = "Music tracker optimised to run on portable game consoles";
+    longDescription = ''
+      Little Piggy Tracker (f.k.a 'LittleGPTracker') is a music tracker optimised to run on portable game consoles.
+      It is currently running on Windows, MacOS (intel/arm) & Linux, PSP, Miyoo Mini, and a collection of other retro gaming handhelds.
+      It implements the user interface of littlesounddj and precedes M8 tracker, two popular trackers greatly loved in the tracker community.
+    '';
+    homepage = "https://github.com/djdiskmachine/LittleGPTracker";
+    downloadPage = "https://github.com/djdiskmachine/LittleGPTracker/releases";
     mainProgram = "lgpt";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
+
+    # https://github.com/NixOS/nixpkgs/pull/352617#issuecomment-2495663097
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
