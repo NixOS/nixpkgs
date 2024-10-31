@@ -1,15 +1,16 @@
 { lib
 , appimageTools
 , fetchurl
+, gitUpdater
 }:
 
 appimageTools.wrapType2 rec {
   pname = "tutanota-desktop";
-  version = "235.240718.0";
+  version = "250.241025.0";
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-Pycz05cwse2SUvJlaCXMA1/Trdt6ZGOJK3NRSPb6/VM=";
+    hash = "sha256-PhcrDjqRmR1NVBLVCuj5dcc+WskWeZ9dJXdtOUveyL0=";
   };
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
@@ -23,6 +24,12 @@ appimageTools.wrapType2 rec {
       substituteInPlace $out/share/applications/tutanota-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/tutao/tutanota";
+    rev-prefix = "tutanota-desktop-release-";
+    allowedVersions = ".+\\.[0-9]{6}\\..+";
+  };
 
   meta = with lib; {
     description = "Tuta official desktop client";
