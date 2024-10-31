@@ -7,16 +7,7 @@ import ../make-test-python.nix ({ pkgs, ... } : {
 
   nodes = {
     node = { ... }: {
-      services.etcd = {
-        enable = true;
-        # Ensure etcd is ready to accept connections
-        extraConf = {
-          "initial-advertise-peer-urls" = "http://localhost:2380";
-          "listen-peer-urls" = "http://localhost:2380";
-          "listen-client-urls" = "http://localhost:2379";
-          "advertise-client-urls" = "http://localhost:2379";
-        };
-      };
+      services.etcd.enable = true;
     };
   };
 
@@ -28,7 +19,7 @@ import ../make-test-python.nix ({ pkgs, ... } : {
         node.wait_until_succeeds("etcdctl endpoint health")
 
     with subtest("should write and read some values to etcd"):
-        node.succeed("etcdctl --endpoints=http://localhost:2379 put /foo/bar 'Hello world'")
-        node.succeed("etcdctl --endpoints=http://localhost:2379 get /foo/bar | grep 'Hello world'")
+        node.succeed("etcdctl put /foo/bar 'Hello world'")
+        node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
 })
