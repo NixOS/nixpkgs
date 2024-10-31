@@ -252,17 +252,13 @@ let
 
     passthru = let
       this = self.callPackage generic args;
-      jitToggle = this.override {
-        jitSupport = !jitSupport;
-      };
     in
     {
       inherit dlSuffix;
 
       psqlSchema = lib.versions.major version;
 
-      withJIT = if jitSupport then this else jitToggle;
-      withoutJIT = if jitSupport then jitToggle else this;
+      withJIT = this.override { jitSupport = true; };
 
       pkgs = let
         scope = {
@@ -347,16 +343,13 @@ let
 
     pathsToLink = ["/"];
 
-    passthru.version = postgresql.version;
-    passthru.psqlSchema = postgresql.psqlSchema;
-    passthru.withJIT = postgresqlWithPackages {
-      inherit buildEnv;
-      postgresql = postgresql.withJIT;
-    } f;
-    passthru.withoutJIT = postgresqlWithPackages {
-      inherit buildEnv;
-      postgresql = postgresql.withoutJIT;
-    } f;
+    passthru = {
+      inherit (postgresql) version psqlSchema;
+      withJIT = postgresqlWithPackages {
+        inherit buildEnv;
+        postgresql = postgresql.withJIT;
+      } f;
+    };
   };
 
 in

@@ -38,7 +38,7 @@ let
       #     package = pkgs.postgresql_<major>;
       #   };
       # works.
-      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
+      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package;
     in
     if cfg.extraPlugins == []
       then base
