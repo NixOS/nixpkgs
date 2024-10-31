@@ -65,11 +65,6 @@ python3.pkgs.buildPythonApplication rec {
     "conan"
   ];
 
-  pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
-  ];
-
   disabledTests = [
     # Tests require network access
     "TestFTP"
