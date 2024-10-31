@@ -9512,6 +9512,13 @@
     email = "itepastra@gmail.com";
     keys = [ { fingerprint = "E681 4CAF 06AE B076 D55D  3E32 A16C DCBF 1472 541F"; } ];
   };
+  itsvic-dev = {
+    email = "contact@itsvic.dev";
+    name = "Victor B.";
+    github = "itsvic-dev";
+    githubId = 17727163;
+    keys = [ { fingerprint = "FBAA B86A 101B 4C5F D4F1  25D2 E93D DAC1 7E5D 6CA1"; } ];
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";

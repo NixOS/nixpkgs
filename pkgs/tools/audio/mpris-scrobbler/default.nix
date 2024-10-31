@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];
     platforms = platforms.unix;
+    mainProgram = "mpris-scrobbler";
   };
 }

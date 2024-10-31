@@ -3291,10 +3291,6 @@ with pkgs;
 
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
-  bisq2 = callPackage ../by-name/bi/bisq/package.nix {
-    openjdk = jdk22.override { enableJavaFX = true; };
-  };
-
   bic = callPackage ../development/interpreters/bic { };
 
   biscuit-cli = callPackage ../tools/security/biscuit-cli { };
@@ -13960,8 +13956,6 @@ with pkgs;
 
   zet = callPackage ../tools/text/zet { };
 
-  zfp = callPackage ../tools/compression/zfp { };
-
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
   zfsbackup = callPackage ../tools/backup/zfsbackup { };
@@ -17553,8 +17547,6 @@ with pkgs;
   flexibee = callPackage ../applications/office/flexibee { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
-
-  geis = callPackage ../development/libraries/geis { };
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
 
@@ -27203,10 +27195,6 @@ with pkgs;
   lounge-gtk-theme = callPackage ../data/themes/lounge { };
 
   luculent = callPackage ../data/fonts/luculent { };
-
-  luna-icons = callPackage ../data/icons/luna-icons {
-    inherit (plasma5Packages) breeze-icons;
-  };
 
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 

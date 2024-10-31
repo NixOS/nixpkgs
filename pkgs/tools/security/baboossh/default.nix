@@ -1,12 +1,13 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "baboossh";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cybiere";
@@ -15,26 +16,26 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-E/a6dL6BpQ6D8v010d8/qav/fkxpCYNvSvoPAZsm0Hk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     cmd2
-    tabulate
     paramiko
     python-libnmap
+    tabulate
   ];
 
   # No tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "baboossh"
-  ];
+  pythonImportsCheck = [ "baboossh" ];
 
   meta = with lib; {
     description = "Tool to do SSH spreading";
     homepage = "https://github.com/cybiere/baboossh";
     changelog = "https://github.com/cybiere/baboossh/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    mainProgram = "baboossh";
     maintainers = with maintainers; [ fab ];
+    mainProgram = "baboossh";
   };
 }

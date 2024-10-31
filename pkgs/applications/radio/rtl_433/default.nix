@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "23.11";
+  version = "24.10";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
     rev = version;
-    hash = "sha256-qCfPweJeYHIuM1DfDmeDilkV/RLzbzlIe1sIpSx/EYc=";
+    hash = "sha256-o4eAG6iYK4JXbh9JRv5NLmSxg396ErH++H0J8tTXiUA=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
