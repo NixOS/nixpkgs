@@ -9,7 +9,7 @@ let
 in
 fetchurl {
   url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-  sha256 = "486f90cbfe9ed4bf2b12d726ebf54a839758a237e967aa65fc2c92d90a963021";
+  sha256 = "80c91d35742f68217cf47b13e5b50d53f54c22c485bacce41ad7fdc321649e61";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''
