@@ -271,10 +271,11 @@ in
         type = lib.types.path;
         default = "/dev/disk/by-id";
         description = ''
-          Name of directory from which to import ZFS devices.
+          Name of directory from which to import ZFS device, this is passed to `zpool import`
+          as the value of the `-d` option.
 
-          This should be a path under /dev containing stable names for all devices needed, as
-          import may fail if device nodes are renamed concurrently with a device failing.
+          For guidance on choosing this value, see
+          [the ZFS documentation](https://openzfs.github.io/openzfs-docs/Project%20and%20Community/FAQ.html#selecting-dev-names-when-creating-a-pool-linux).
         '';
       };
 
