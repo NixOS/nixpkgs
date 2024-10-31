@@ -31,6 +31,8 @@
 
   rmv-card = callPackage ./rmv-card { };
 
+  sankey-chart = callPackage ./sankey-chart { };
+
   template-entity-row = callPackage ./template-entity-row { };
 
   universal-remote-card = callPackage ./universal-remote-card { };
