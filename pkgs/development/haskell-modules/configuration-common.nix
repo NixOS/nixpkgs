@@ -27,14 +27,14 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_24_0;
+    process = self.process_1_6_25_0;
   }));
 
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_24_0;
+    process = self.process_1_6_25_0;
   }));
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
