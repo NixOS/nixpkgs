@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -14,19 +14,21 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.3";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-abstractions-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TgHj5Ga6Aw/sN2Hobn0OocFB/iGRHTKEeOa2j2aqnRY=";
+    repo = "kiota-python";
+    rev = "refs/tags/${pname}-v${version}";
+    hash = "sha256-OlQ4Goz/cVAshBv0KUVBnBLMvSk982QFIgh25SJCSwM=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "source/packages/abstractions/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     opentelemetry-api
