@@ -364,7 +364,7 @@ including `nativeBuildInputs` to specify dependencies available to the `script`.
 ```nix
 testers.runCommand {
   name = "access-the-internet";
-  command = ''
+  script = ''
     curl -o /dev/null https://example.com
     touch $out
   '';
