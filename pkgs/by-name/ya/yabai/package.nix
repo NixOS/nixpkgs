@@ -11,7 +11,7 @@
   jq,
   xxd,
   yabai,
-  apple-sdk_11,
+  apple-sdk_15,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
-    apple-sdk_11
+    apple-sdk_15
   ];
 
   dontConfigure = true;
@@ -58,15 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
-        --replace "-arch arm64e" "" \
-        --replace "-arch arm64" "" \
-        --replace "clang" "${stdenv.cc.targetPrefix}clang"
-
-        # `NSScreen::safeAreaInsets` is only available on macOS 12.0 and above, which frameworks aren't packaged.
-        # When a lower OS version is detected upstream just returns 0, so we can hardcode that at compile time.
-        # https://github.com/koekeishiya/yabai/blob/v4.0.2/src/workspace.m#L109
-        substituteInPlace src/workspace.m \
-        --replace 'return screen.safeAreaInsets.top;' 'return 0;'
+        --replace-fail "-arch arm64e" "" \
+        --replace-fail "-arch arm64" "" \
+        --replace-fail "clang" "${stdenv.cc.targetPrefix}clang"
       '';
 
   passthru = {
