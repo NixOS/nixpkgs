@@ -21,6 +21,7 @@
 , qtquickcontrols2
 , qtsvg
 , qtsystems
+, qttools
 , suru-icon-theme
 , validatePkgConfig
 , wrapQtAppsHook
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r+wUCl+ywFcgFYo7BjBoXiulQptd1Zd3LJchXiMtx4I=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "doc" ];
 
   patches = [
     ./2001-Mark-problematic-tests.patch
@@ -66,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Install apicheck tool into bin
     substituteInPlace apicheck/apicheck.pro \
       --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+
+    substituteInPlace documentation/documentation.pro \
+      --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
+      --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
 
     # Causes redefinition error with our own fortify hardening
     sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
@@ -105,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     qmake
+    qttools # qdoc, qhelpgenerator
     validatePkgConfig
     wrapQtAppsHook
   ];
@@ -133,8 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qmakeFlags = [
-    # docs require Qt5's qdoc, which we don't have before https://github.com/NixOS/nixpkgs/pull/245379
-    "CONFIG+=no_docs"
     # Ubuntu UITK compatibility, for older / not-yet-migrated applications
     "CONFIG+=ubuntu-uitk-compat"
     "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
