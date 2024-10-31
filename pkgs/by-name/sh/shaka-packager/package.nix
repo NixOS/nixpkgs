@@ -96,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Media packaging framework for VOD and Live DASH and HLS applications";
     homepage = "https://shaka-project.github.io/shaka-packager/html/";
     changelog = "https://github.com/shaka-project/shaka-packager/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "packager";
-    maintainers = with maintainers; [ niklaskorz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ niklaskorz ];
+    platforms = lib.platforms.all;
   };
 })
