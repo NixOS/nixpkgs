@@ -1,8 +1,18 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatStringsSep
+    filter
+    literalExpression
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionalString
+    showWarnings
+    types
+    ;
+
   systemBuilder =
     ''
       mkdir $out
