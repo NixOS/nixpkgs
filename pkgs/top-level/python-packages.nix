@@ -9338,9 +9338,7 @@ self: super: with self; {
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
-  onnx = callPackage ../development/python-modules/onnx {
-    protobuf-core = pkgs.protobuf;
-  };
+  onnx = callPackage ../development/python-modules/onnx { };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
