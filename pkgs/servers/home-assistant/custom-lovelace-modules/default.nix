@@ -9,6 +9,8 @@
 
   atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
 
+  bubble-card = callPackage ./bubble-card { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
