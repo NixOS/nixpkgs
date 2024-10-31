@@ -2,10 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_11,
+  apple-sdk_15,
   chafa,
   cmake,
-  darwinMinVersionHook,
   dbus,
   dconf,
   ddcutil,
@@ -103,9 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin ([
-      apple-sdk_11
+      apple-sdk_15
       moltenvk
-      (darwinMinVersionHook "10.13")
     ]);
 
   cmakeFlags =
