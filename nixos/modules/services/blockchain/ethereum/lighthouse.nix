@@ -216,12 +216,7 @@ in
         example = "";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lighthouse;
-        defaultText = literalExpression "pkgs.lighthouse";
-        description = lib.mdDoc "The lighthouse package that should be used.";
-      };
+      package = lib.mkPackageOption pkgs "lighthouse" { };
     };
   };
 
