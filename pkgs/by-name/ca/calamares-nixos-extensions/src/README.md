@@ -30,3 +30,12 @@ Images stored in [config/images](config/images) are licensed under [CC-BY-SA-4.0
 Images [gfx-landing-declarative.png](branding/nixos/gfx-landing-declarative.png), [gfx-landing-reliable.png](branding/nixos/gfx-landing-reliable.png), and [gfx-landing-reproducible.png](branding/nixos/gfx-landing-reproducible.png) are licensed under [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt)
 
 Images [nix-snowflake.svg](branding/nixos/nix-snowflake.svg) and [white.png](branding/nixos/white.png) are licensed under [CC-BY-4.0](LICENSES/CC-BY-4.0.txt)
+
+## Tests
+
+- The `nixos` Python job module is has unit tests in [testing/](https://github.com/NixOS/calamares-nixos-extensions/tree/calamares/testing).
+
+These tests can be executed with the command:
+```sh
+$ nix run .
+```
