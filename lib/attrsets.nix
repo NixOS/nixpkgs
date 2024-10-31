@@ -7,7 +7,7 @@ let
   inherit (builtins) head length;
   inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -644,7 +644,7 @@ rec {
   filterAttrs =
     pred:
     set:
-    removeAttrs set (concatMap (name: if pred name set.${name} then [ ] else [ name ]) (attrNames set));
+    removeAttrs set (filter (name: ! pred name set.${name}) (attrNames set));
 
   /**
     Filter an attribute set recursively by removing all attributes for
