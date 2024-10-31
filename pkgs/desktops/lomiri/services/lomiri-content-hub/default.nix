@@ -22,6 +22,7 @@
 , qtdeclarative
 , qtfeedback
 , qtgraphicaleffects
+, qttools
 , validatePkgConfig
 , wrapGAppsHook3
 , xvfb-run
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "doc"
     "examples"
   ];
 
@@ -64,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     qtdeclarative # qmlplugindump
+    qttools # qdoc
     validatePkgConfig
     wrapGAppsHook3
   ];
@@ -100,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_DOC" false) # needs Qt5 qdoc: https://github.com/NixOS/nixpkgs/pull/245379
+    (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
   ];
 
