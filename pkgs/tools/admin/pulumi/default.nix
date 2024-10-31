@@ -67,6 +67,7 @@ buildGoModule rec {
     rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
     unset PULUMI_ACCESS_TOKEN
+    export PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=true
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
@@ -99,7 +100,7 @@ buildGoModule rec {
         "TestProgressEvents"
         # This test depends on having a PULUMI_ACCESS_TOKEN but is not skipped when one is not provided.
         # Other tests are skipped when the env var is missing. I guess they forgot about this one.
-        "TestPulumiNewSetsTemplateTag/python"
+        "TestPulumiNewSetsTemplateTag"
         # Both tests require having a "pulumi-language-yaml" plugin installed since pulumi/pulumi#17285,
         # which I'm not sure how to add.
         "TestProjectNameDefaults"
