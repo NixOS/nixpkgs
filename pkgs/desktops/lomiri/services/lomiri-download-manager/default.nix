@@ -9,8 +9,7 @@
 , cmake-extras
 , dbus
 , dbus-test-runner
-# Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
-, withDocumentation ? false
+, withDocumentation ? true
 , doxygen
 , glog
 , graphviz
@@ -20,6 +19,7 @@
 , python3
 , qtbase
 , qtdeclarative
+, qttools
 , validatePkgConfig
 , wrapQtAppsHook
 , xvfb-run
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withDocumentation [
     doxygen
     graphviz
+    qttools # qdoc
   ];
 
   buildInputs = [
