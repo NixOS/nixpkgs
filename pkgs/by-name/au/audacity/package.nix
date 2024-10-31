@@ -52,9 +52,9 @@
   wavpack,
   wxGTK32,
   gtk3,
+  apple-sdk_11,
   libpng,
   libjpeg,
-  darwin,
 }:
 
 # TODO
@@ -75,18 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       mkdir src/private
       substituteInPlace scripts/build/macOS/fix_bundle.py \
-        --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
+        --replace-fail "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace libraries/lib-files/FileNames.cpp \
-        --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
-        ''
-          sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
-        '';
+        --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+    '';
 
   nativeBuildInputs =
     [
@@ -150,8 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreAudioKit # for portaudio
+      apple-sdk_11
       libpng
       libjpeg
     ];
