@@ -1,0 +1,45 @@
+diff --git a/makefile b/makefile
+index ba47be3..c18281c 100644
+--- a/makefile
++++ b/makefile
+@@ -1,8 +1,8 @@
+ FRAMEWORK_PATH = -F/System/Library/PrivateFrameworks
+ FRAMEWORK      = -framework Carbon -framework Cocoa -framework CoreServices -framework CoreVideo -framework SkyLight
+ CLI_FLAGS      =
+-BUILD_FLAGS    = -std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -mmacosx-version-min=11.0 -fno-objc-arc -arch x86_64 -arch arm64 -sectcreate __TEXT __info_plist $(INFO_PLIST)
++BUILD_FLAGS    = -std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -mmacosx-version-min=11.0 -fno-objc-arc -arch @ARCH@ -sectcreate __TEXT __info_plist $(INFO_PLIST)
+ BUILD_PATH     = ./bin
+ DOC_PATH       = ./doc
+ SCRIPT_PATH    = ./scripts
+ ASSET_PATH     = ./assets
+@@ -17,20 +17,20 @@ BINS           = $(BUILD_PATH)/yabai
+ .PHONY: all asan tsan install man icon archive publish sign clean-build clean
+
+ all: clean-build $(BINS)
+
+-asan: BUILD_FLAGS=-std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -fsanitize=address,undefined -mmacosx-version-min=11.0 -fno-objc-arc -arch x86_64 -arch arm64 -sectcreate __TEXT __info_plist $(INFO_PLIST)
++asan: BUILD_FLAGS=-std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -fsanitize=address,undefined -mmacosx-version-min=11.0 -fno-objc-arc -arch @ARCH@ -sectcreate __TEXT __info_plist $(INFO_PLIST)
+ asan: clean-build $(BINS)
+
+-tsan: BUILD_FLAGS=-std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -fsanitize=thread,undefined -mmacosx-version-min=11.0 -fno-objc-arc -arch x86_64 -arch arm64 -sectcreate __TEXT __info_plist $(INFO_PLIST)
++tsan: BUILD_FLAGS=-std=c11 -Wall -Wextra -g -O0 -fvisibility=hidden -fsanitize=thread,undefined -mmacosx-version-min=11.0 -fno-objc-arc -arch @ARCH@ -sectcreate __TEXT __info_plist $(INFO_PLIST)
+ tsan: clean-build $(BINS)
+
+-install: BUILD_FLAGS=-std=c11 -Wall -Wextra -DNDEBUG -O3 -fvisibility=hidden -mmacosx-version-min=11.0 -fno-objc-arc -arch x86_64 -arch arm64 -sectcreate __TEXT __info_plist $(INFO_PLIST)
++install: BUILD_FLAGS=-std=c11 -Wall -Wextra -DNDEBUG -O3 -fvisibility=hidden -mmacosx-version-min=11.0 -fno-objc-arc -arch @ARCH@ -sectcreate __TEXT __info_plist $(INFO_PLIST)
+ install: clean-build $(BINS)
+
+ $(OSAX_SRC): $(OSAX_PATH)/loader.m $(OSAX_PATH)/payload.m
+-	xcrun clang $(OSAX_PATH)/payload.m -shared -fPIC -O3 -mmacosx-version-min=11.0 -arch x86_64 -arch arm64e -o $(OSAX_PATH)/payload $(FRAMEWORK_PATH) -framework SkyLight -framework Foundation -framework Carbon
+-	xcrun clang $(OSAX_PATH)/loader.m -O3 -mmacosx-version-min=11.0 -arch x86_64 -arch arm64e -o $(OSAX_PATH)/loader -framework Cocoa
++	clang -isystem $(SDKROOT)/usr/include -isystem @CLANG_LIB@/lib/clang/*/include -isystem @CUPS_DEV@/include -F$(SDKROOT)/System/Library/Frameworks -L$(SDKROOT)/usr/lib $(OSAX_PATH)/payload.m -shared -fPIC -O3 -mmacosx-version-min=11.0 -arch @ARCH_SA@ -o $(OSAX_PATH)/payload $(FRAMEWORK_PATH) -framework SkyLight -framework Foundation -framework Carbon
++	clang -isystem $(SDKROOT)/usr/include -isystem @CLANG_LIB@/lib/clang/*/include -isystem @CUPS_DEV@/include -F$(SDKROOT)/System/Library/Frameworks -L$(SDKROOT)/usr/lib $(OSAX_PATH)/loader.m -O3 -mmacosx-version-min=11.0 -arch @ARCH_SA@ -o $(OSAX_PATH)/loader -framework Cocoa
+ 	xxd -i -a $(OSAX_PATH)/payload $(OSAX_PATH)/payload_bin.c
+ 	xxd -i -a $(OSAX_PATH)/loader $(OSAX_PATH)/loader_bin.c
+ 	rm -f $(OSAX_PATH)/payload
+ 	rm -f $(OSAX_PATH)/loader
+@@ -66,4 +66,4 @@ clean: clean-build
+ $(BUILD_PATH)/yabai: $(YABAI_SRC)
+ 	mkdir -p $(BUILD_PATH)
+-	xcrun clang $^ $(BUILD_FLAGS) $(CLI_FLAGS) $(FRAMEWORK_PATH) $(FRAMEWORK) -o $@
++	clang -isystem $(SDKROOT)/usr/include -isystem @CLANG_LIB@/lib/clang/*/include -isystem @CUPS_DEV@/include -F$(SDKROOT)/System/Library/Frameworks -L$(SDKROOT)/usr/lib $^ $(BUILD_FLAGS) $(CLI_FLAGS) $(FRAMEWORK_PATH) $(FRAMEWORK) -o $@
