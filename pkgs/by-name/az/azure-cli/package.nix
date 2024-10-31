@@ -10,6 +10,11 @@
   python3,
   writeScriptBin,
 
+  black,
+  isort,
+  mypy,
+  makeWrapper,
+
   # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
   withImmutableConfig ? true,
@@ -387,6 +392,40 @@ py.pkgs.toPythonApplication (
         echo "Extension was saved to \"extensions-generated.nix\" file."
         echo "Move it to \"{nixpkgs}/pkgs/by-name/az/azure-cli/extensions-generated.nix\"."
       '';
+
+      extensions-tool =
+        runCommand "azure-cli-extensions-tool"
+          {
+            src = ./extensions-tool.py;
+            nativeBuildInputs = [
+              black
+              isort
+              makeWrapper
+              mypy
+              python3
+            ];
+            meta.mainProgram = "extensions-tool";
+          }
+          ''
+            black --check --diff $src
+            # mypy --strict $src
+            isort --profile=black --check --diff $src
+
+            install -Dm755 $src $out/bin/extensions-tool
+
+            patchShebangs --build $out
+            wrapProgram $out/bin/extensions-tool \
+              --set PYTHONPATH "${
+                python3.pkgs.makePythonPath (
+                  with python3.pkgs;
+                  [
+                    packaging
+                    semver
+                    gitpython
+                  ]
+                )
+              }"
+          '';
     };
 
     meta = {
