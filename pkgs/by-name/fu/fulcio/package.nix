@@ -1,14 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+
+  # required for completion and cross-complilation
+  installShellFiles,
+  buildPackages,
+  stdenv,
+
+  # required for testing
+  testers,
+  fulcio,
+}:
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eRf504i9kYQua/p0SNlDGNeXa9ztoyz6M8nukhRyzIY=";
+    hash = "sha256-TCWZrTqNXTcTsLqTnwnJPXN+kMYVVwLm2J3Y6gd2CV8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +33,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-VTJhQrsqwGHq8211N3pUf4fmU4H90gRWYJTdEufNGg4=";
+  vendorHash = "sha256-3E2Y0UlJMjTiM4ILEiaNqVmt4fWMvCRAqzm//CvRIl4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,26 +55,32 @@ buildGoModule rec {
   preCheck = ''
     # test all paths
     unset subPackages
-
-    # skip test that requires networking
-    substituteInPlace pkg/config/config_network_test.go \
-      --replace "TestLoad" "SkipLoad"
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd fulcio \
-      --bash <($out/bin/fulcio completion bash) \
-      --fish <($out/bin/fulcio completion fish) \
-      --zsh <($out/bin/fulcio completion zsh)
-  '';
+  checkFlags = [
+    "-skip=TestLoad"
+  ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/fulcio --help
-    $out/bin/fulcio version 2>&1 | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  postInstall =
+    let
+      fulcio =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.fulcio;
+    in
+    ''
+      installShellCompletion --cmd fulcio \
+        --bash <(${fulcio}/bin/fulcio completion bash) \
+        --fish <(${fulcio}/bin/fulcio completion fish) \
+        --zsh <(${fulcio}/bin/fulcio completion zsh)
+    '';
+
+  passthru.tests.version = testers.testVersion {
+    package = fulcio;
+    command = "fulcio version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/fulcio";
@@ -79,6 +98,9 @@ buildGoModule rec {
       disconnected instance.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [
+      lesuisse
+      jk
+    ];
   };
 }
