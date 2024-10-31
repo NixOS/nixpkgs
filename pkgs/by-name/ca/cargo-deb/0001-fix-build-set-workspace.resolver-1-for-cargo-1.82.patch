@@ -1,0 +1,24 @@
+From 20d5a681eb0f731c1c18c0a91158f7afb30f19e0 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Thu, 31 Oct 2024 20:58:25 +0800
+Subject: [PATCH] fix(build): set workspace.resolver = 1 for cargo 1.82
+
+---
+ Cargo.toml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 9d4ceb5..d6daa7f 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -89,6 +89,7 @@ rstest = { version = "0.22", default-features = false }
+ lazy_static = "1.5.0"
+ 
+ [workspace]
++resolver = "1"
+ exclude = ["example", "tests/*", "test-resources"]
+ 
+ [package.metadata.docs.rs]
+-- 
+2.46.1
+

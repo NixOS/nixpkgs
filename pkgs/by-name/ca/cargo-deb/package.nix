@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ReXDrbFY2qY/0TUYD+EiP9Qa9KwMGb9iLL+tdfDLSpc=";
   };
 
+  patches = [
+    ./0001-fix-build-set-workspace.resolver-1-for-cargo-1.82.patch
+  ];
+
   cargoHash = "sha256-yBMeiYWsb+D8WzWRDDi9JFZTFvQAQ7QUeGDb6yFelD8=";
 
   nativeBuildInputs = [
