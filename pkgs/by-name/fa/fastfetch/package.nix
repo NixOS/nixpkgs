@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  apple-sdk_11,
   chafa,
   cmake,
-  darwin,
+  darwinMinVersionHook,
   dbus,
   dconf,
   ddcutil,
@@ -23,7 +24,6 @@
   nix-update-script,
   ocl-icd,
   opencl-headers,
-  overrideSDK,
   pcre,
   pcre2,
   pkg-config,
@@ -43,10 +43,7 @@
   waylandSupport ? true,
   x11Support ? true,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
   version = "2.28.0";
 
@@ -105,24 +102,11 @@ stdenv'.mkDerivation (finalAttrs: {
       xorg.libXext
     ]
     ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Apple80211
-        AppKit
-        AVFoundation
-        Cocoa
-        CoreDisplay
-        CoreVideo
-        CoreWLAN
-        DisplayServices
-        IOBluetooth
-        MediaRemote
-        OpenCL
-        SystemConfiguration
-        moltenvk
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_11
+      moltenvk
+      (darwinMinVersionHook "10.13")
+    ]);
 
   cmakeFlags =
     [
