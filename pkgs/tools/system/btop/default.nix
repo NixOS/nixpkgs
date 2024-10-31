@@ -1,16 +1,17 @@
-{ lib
-, config
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin
-, removeReferencesTo
-, btop
-, testers
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, rocmSupport ? config.rocmSupport
-, rocmPackages
+{
+  lib,
+  config,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  removeReferencesTo,
+  btop,
+  testers,
+  autoAddDriverRunpath,
+  apple-sdk_11,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,15 +25,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-A5hOBxj8tKlkHd8zDHfDoU6fIu8gDpt3/usbiDk0/G0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals cudaSupport [
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.IOKit
+    apple-sdk_11
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
