@@ -34,12 +34,11 @@ stdenv.mkDerivation {
     colorama
   ];
 
-  configurePhase = ''
-    cd src
-    patchShebangs configure
-    ./configure --vidpid=${vid}:${pid}
-  '';
+  sourceRoot = "${finalAttrs.src.name}/src";
 
+  configureFlags = [ "--vidpid=${vid}:${pid}" ];
+
+  # TODO: Check how many of these patches are actually needed.
   installPhase = ''
     mkdir -p $out/bin
 
