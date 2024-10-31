@@ -96,5 +96,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+    knownVulnerabilities = [
+      "Potential Remote Code Execution https://www.openwall.com/lists/oss-security/2024/10/30/4"
+    ];
   };
 }
