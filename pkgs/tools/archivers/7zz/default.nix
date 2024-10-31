@@ -2,9 +2,9 @@
 , lib
 , fetchzip
 
-  # Only used for Linux's x86/x86_64
+  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
 , uasm
-, useUasm ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86)
+, useUasm ? false
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
