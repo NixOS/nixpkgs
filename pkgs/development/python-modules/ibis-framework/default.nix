@@ -66,7 +66,7 @@ let
     repo = "testing-data";
     # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
     rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
-    sha256 = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
+    hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 

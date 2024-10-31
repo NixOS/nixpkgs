@@ -45,14 +45,12 @@ buildPythonPackage rec {
     hash = "sha256-JA6hFQwF7h1tXyCxBVKGgyevdTxyYeN3I/Bwy9uoC0Y=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
-    "protobuf"
     "agate"
     "deepdiff"
+    "protobuf"
   ];
 
   dependencies = [

@@ -15,6 +15,7 @@
   click-plugins,
   cligj,
   cython,
+  fsspec,
   gdal,
   hypothesis,
   ipython,
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.11";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -41,17 +42,13 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-Yh3n2oyARf7LAtJU8Oa3WWc+oscl7e2N7jpW0v1uTVk=";
+    hash = "sha256-A8o8FYuhlzL6Wl6sfB7D2KRAKZl28E6K2AdUik9zmgs=";
   };
 
   postPatch = ''
-    # remove useless import statement requiring distutils to be present at the runtime
-    substituteInPlace rasterio/rio/calc.py \
-      --replace-fail "from distutils.version import LooseVersion" ""
-
     # relax numpy dependency
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0,<3.0" "numpy"
+      --replace-fail "numpy>=2" "numpy"
   '';
 
   nativeBuildInputs = [
@@ -81,6 +78,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     boto3
+    fsspec
     hypothesis
     packaging
     pytestCheckHook
@@ -97,6 +95,10 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_outer_boundless_pixel_fidelity"
+    # network access
+    "test_issue1982"
+    "test_opener_fsspec_http_fs"
+    "test_fsspec_http_msk_sidecar"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];

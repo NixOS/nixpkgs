@@ -38,21 +38,24 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.3";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-xWr4v+4gL8LAegqerQc1SdAynPk5X8qLlPF211+OBvY=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pydantic-settings" ];
+  pythonRelaxDeps = [
+    "pydantic-settings"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp

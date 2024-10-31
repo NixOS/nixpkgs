@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  apple-sdk,
+  apple-sdk_11,
+  darwinMinVersionHook
+}:
 
 let
     # The x86-64-modern may need to be refined further in the future
@@ -45,6 +53,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "ARCH=${arch}" "CXX=${stdenv.cc.targetPrefix}c++" ];
   buildFlags = [ "build" ];
+
+  buildInputs = lib.optionals (
+       stdenv.hostPlatform.isDarwin
+    && lib.versionOlder apple-sdk.version "11") [
+    apple-sdk_11
+    (darwinMinVersionHook "10.15")
+  ];
+
 
   enableParallelBuilding = true;
 

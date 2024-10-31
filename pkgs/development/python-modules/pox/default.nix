@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pox";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FubsqE8b7DgoIQsGsFKt8EzyqyDCL9b77194Mgyab+0=";
+    hash = "sha256-gSDuTJTpUObgSD4FCk8OVgduWQugqa3RlSTCVL0jwtE=";
   };
 
   # Test sare failing the sandbox

@@ -24,21 +24,21 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "43.0.0"; # Also update the hash in vectors.nix
+  version = "43.0.1"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uIB1raLVGqnxgoNTLJ9g5yFwBBu6iNfzfknLsQJ1KZ4=";
+    hash = "sha256-ID6Sp1cW2M+0kdxHx54X0NkgfM/8vLNfWY++RjrjRE0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-TEQy8PrIaZshiBFTqR/OJp3e/bVM1USjcmpDYcjPJPM=";
+    hash = "sha256-wiAHM0ucR1X7GunZX8V0Jk2Hsi+dVdGgDKqcYjSdD7Q=";
   };
 
   postPatch = ''

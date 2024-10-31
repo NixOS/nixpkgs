@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.29.6";
+  version = "3.30.4";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-E5ExMAO4PUjiqxFai1JaVX942MFURhi0jR2QGEoQ8K8=";
+    hash = "sha256-x1nJcnTx56qq/LHw0mH53pvzpdbst+LfYWMkpG/nBLI=";
   };
 
   patches = [
@@ -179,6 +179,14 @@ stdenv.mkDerivation (finalAttrs: {
   # make install attempts to use the just-built cmake
   preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
+  '';
+
+  # Undo some of `fixCmakeFiles` for Darwin to make sure that checks for libraries in the SDK find them
+  # (e.g., `find_library(MATH_LIBRARY m)` should find `$SDKROOT/usr/lib/libm.tbd`).
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace "$out/share/cmake-${lib.versions.majorMinor finalAttrs.version}/Modules/Platform/Darwin.cmake" \
+       --replace-fail '/var/empty/include' '/usr/include' \
+       --replace-fail '/var/empty/lib' '/usr/lib'
   '';
 
   dontUseCmakeConfigure = true;

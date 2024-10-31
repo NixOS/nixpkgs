@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "simplemma";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "adbar";
     repo = "simplemma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lhk6QrBg0m8orYHphnP+YiCnJFE44buyp3NQbz0U550=";
+    hash = "sha256-X0mqFPdCo0/sTexv4bi4bND7LFHOJvlOPH6tB39ybZY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

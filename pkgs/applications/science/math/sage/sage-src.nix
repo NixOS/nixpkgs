@@ -73,11 +73,25 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # https://github.com/sagemath/sage/pull/38500, positively reviewed, to land in 10.5.beta3
+    # https://github.com/sagemath/sage/pull/38500, landed in 10.5.beta3
     (fetchpatch {
       name = "cython-3.0.11-upgrade.patch";
       url = "https://patch-diff.githubusercontent.com/raw/sagemath/sage/pull/38500.diff";
       hash = "sha256-ePfH3Gy1T0UfpoVd3EZowCfy88CbE+yE2MV2itWthsA=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36641, landed in 10.5.beta3
+    (fetchpatch {
+      name = "sympy-1.13.2-update.patch";
+      url = "https://github.com/sagemath/sage/commit/100189fa62f9a40e7aa0d856615366ea99b87aff.diff";
+      sha256 = "sha256-uWr3I15WByQYGVxbJFqG4zUJ7c7+4rjkcgwkAT85O7w=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38250, landed in 10.5.beta0
+    (fetchpatch {
+      name = "numpy-2.0-compat.patch";
+      url = "https://github.com/sagemath/sage/commit/0962e0bcb159d342e7c7d83557a71e7b670fff47.diff";
+      sha256 = "sha256-4SBhgPgT9VsBxcBH8+T5uYtWzYP5tZi9+iKOG55hWgI=";
     })
   ];
 

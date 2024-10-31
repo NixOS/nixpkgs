@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   mock,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -12,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.1";
+  version = "0.11.0";
   pname = "mwclient";
   format = "setuptools";
 
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";
-    rev = "v${version}";
-    sha256 = "120snnsh9n5svfwkyj1w9jrxf99jnqm0jk282yypd3lpyca1l9hj";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qnWVQEG1Ri0z4RYmmG/fxYrlIFFf/6PnP5Dnv0cZb5I=";
   };
 
   propagatedBuildInputs = [
@@ -33,14 +34,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov mwclient test" ""
-  '';
 
   pythonImportsCheck = [ "mwclient" ];
 

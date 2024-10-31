@@ -27,7 +27,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.2.1";
+    version = "1.3.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -36,17 +36,18 @@ let
       owner = "contourpy";
       repo = "contourpy";
       rev = "refs/tags/v${version}";
-      hash = "sha256-Qd6FC7SgFyC/BvOPWVkr2ZfKVMVAknLlidNRq3zcWU0=";
+      hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
     };
 
     nativeBuildInputs = [
       meson
-      meson-python
       ninja
       pybind11
     ];
 
-    propagatedBuildInputs = [ numpy ];
+    build-system = [ meson-python ];
+
+    dependencies = [ numpy ];
 
     passthru.optional-depdendencies = {
       bokeh = [

@@ -3,22 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "3.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XoN4z2cSv/Z/vnqDB9mfqMGgyyiqR3BW+Pw3Tw3/JK0=";
+    hash = "sha256-9dB7HiN0GHBAYSofzSvLKRn42xgN8lTJWBu5C/kDN30=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools-scm ];
 
   # Requires `pytest-md-report`, causing infinite recursion.
   doCheck = false;

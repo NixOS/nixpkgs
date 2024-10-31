@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-rest-registration";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "apragacz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RDegK+1A01kfpit3LX+ToViqPlTiZ3dIve38ea7lNxE=";
+    hash = "sha256-EaS1qN7GpfPPeSLwwQdVWSRO2dv0DG5LD7vnXckz4Bg=";
   };
 
   propagatedBuildInputs = [

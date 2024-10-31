@@ -18,23 +18,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.17.0";
+  version = "2.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-STeKv/VO9la1Lcpe8PLrqaqD3CsscseHFLA6GpX+k4g=";
+    pname = "google_cloud_storage";
+    inherit version;
+    hash = "sha256-qves1wza2fJ00pMyZz/KuYcI0OH03OtaU1aq7wavTZk=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   pythonRelaxDeps = [ "google-auth" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-cloud-core
     google-resumable-media
@@ -53,21 +52,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Disable tests which require credentials and network access
   disabledTests = [
+    # Disable tests which require credentials and network access
     "create"
     "download"
     "get"
     "post"
-    "upload"
+    "test_anonymous_client_access_to_public_bucket"
     "test_build_api_url"
     "test_ctor_mtls"
+    "test_ctor_w_api_endpoint_override"
+    "test_ctor_w_custom_endpoint_use_auth"
     "test_hmac_key_crud"
     "test_list_buckets"
     "test_open"
-    "test_anonymous_client_access_to_public_bucket"
-    "test_ctor_w_custom_endpoint_use_auth"
-    "test_ctor_w_api_endpoint_override"
+    "test_set_api_request_attr"
+    "upload"
   ];
 
   disabledTestPaths = [

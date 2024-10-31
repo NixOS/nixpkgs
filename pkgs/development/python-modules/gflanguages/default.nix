@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    regex
     uharfbuzz
     youseedee
   ];

@@ -1,6 +1,7 @@
 { lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
 , cpio, elfutils, kernel, gnumake, python3
 , nixosTests
+, withStap ? true # avoid cyclic dependency with glib
 }:
 
 let
@@ -33,7 +34,7 @@ let
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
-in runCommand "systemtap-${kernel.version}-${version}" {
+in runCommand "systemtap-${version}" {
   inherit stapBuild;
   nativeBuildInputs = [ makeWrapper ];
   passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
@@ -43,15 +44,16 @@ in runCommand "systemtap-${kernel.version}-${version}" {
     license = lib.licenses.gpl2;
     platforms = lib.systems.inspect.patterns.isGnu;
   };
-} ''
+} (''
   mkdir -p $out/bin
   for bin in $stapBuild/bin/*; do
     ln -s $bin $out/bin
   done
   rm $out/bin/stap $out/bin/dtrace
+  makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
+    --prefix PYTHONPATH : ${pypkgs}
+'' + lib.optionalString withStap ''
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
     --add-flags "--sysroot ${sysroot}" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
-  makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
-    --prefix PYTHONPATH : ${pypkgs}
-''
+'')

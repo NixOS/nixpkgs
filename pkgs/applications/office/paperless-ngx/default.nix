@@ -257,6 +257,10 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
     # Something broken with new Tesseract and inline RTL/LTR overrides?
     "test_rtl_language_detection"
+    # Broke during the pytest-httpx 0.30.0 -> 0.32.0 upgrade
+    "test_request_pdf_a_format"
+    "test_generate_pdf_html_email"
+    "test_generate_pdf_html_email_merge_failure"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

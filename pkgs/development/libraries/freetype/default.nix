@@ -33,6 +33,7 @@
 , texmacs
 , ttfautohint
 , testers
+, __flattenIncludeHackHook
 }:
 
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkg-config which ]
+  nativeBuildInputs = [ pkg-config which __flattenIncludeHackHook ]
     ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
@@ -72,10 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  postInstall = glib.flattenInclude
-    # pkgsCross.mingwW64.pkg-config doesn't build
-    # makeWrapper doesn't cross-compile to windows #120726
-    + ''
+  # pkgsCross.mingwW64.pkg-config doesn't build
+  # makeWrapper doesn't cross-compile to windows #120726
+  postInstall = ''
     substituteInPlace $dev/bin/freetype-config \
       --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
   '' + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''

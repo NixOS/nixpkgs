@@ -8,35 +8,35 @@ callPackage ./common.nix ({
   # Note that the latest build may differ by platform
   dists = {
     x86_64-linux = {
-      zuluVersion = "21.32.17";
-      jdkVersion = "21.0.2";
+      zuluVersion = "21.36.17";
+      jdkVersion = "21.0.4";
       hash =
-        if enableJavaFX then "sha256-CEM2lMjyZLWS1tBcS1tBTUxBwAyzW3vrpRWFVVSFVGY="
-        else "sha256-Wtcw++5rtJv/8QvznoQ5LnKNiRA9NHSn5d7w/RNLMAo=";
+        if enableJavaFX then "sha256-Q2bdM0/a2t5aBRCIzXBlhXamf8N7wdSUsK5VhaU9DcY="
+        else "sha256-MY0MLtPIdvt+oslSlFzc997PtSZMpRrs4VnmNaxT1UQ=";
     };
 
     aarch64-linux = {
-      zuluVersion = "21.32.17";
-      jdkVersion = "21.0.2";
+      zuluVersion = "21.36.17";
+      jdkVersion = "21.0.4";
       hash =
-        if enableJavaFX then throw "JavaFX is not available for aarch64-linux"
-        else "sha256-zn3xr11EqfRVYXxLiJFEP74+Syacd32Lgu1m93Fnz+A=";
+        if enableJavaFX then "sha256-BzNEcDrQo5yOWnEsJxw9JfXYdZGN6/wxnTDB0qC1i/0="
+        else "sha256-2jwtfbM2cLz2ZTJEGut/M9zw0ifI2v5841zuZ/aCnEw=";
     };
 
     x86_64-darwin = {
-      zuluVersion = "21.32.17";
-      jdkVersion = "21.0.2";
+      zuluVersion = "21.36.17";
+      jdkVersion = "21.0.4";
       hash =
-        if enableJavaFX then "sha256-CbEKa9Z/ItFqVM4BqsWXyRf5ejQZXPK8OqkULr9Cpqk="
-        else "sha256-Otj+KI61fZdcJ4auRToDaqRuR6sqw9gVOOuuKlTTwCU=";
+        if enableJavaFX then "sha256-H3gM2XCCcuUxlAEzX6IO7Cp6NtH85PYHlH54k5XvNAc="
+        else "sha256-XOdaaiR8cCm3TEynz29g/SstaM4eiVb7RI0phDFrX+o=";
     };
 
     aarch64-darwin = {
-      zuluVersion = "21.32.17";
-      jdkVersion = "21.0.2";
+      zuluVersion = "21.36.17";
+      jdkVersion = "21.0.4";
       hash =
-        if enableJavaFX then "sha256-PK+cafgQsnK6acuQxun4IUiyYHQJsBfUawwfGV8OCfQ="
-        else "sha256-6CYFFt6LYGYUIqcl8d8sNu+Ij2+zU5NWawDnMl2z0E4=";
+        if enableJavaFX then "sha256-lLAb8MABo95A5WcayBLNvsBSdVFptnO4EmhX2gjo6r8="
+        else "sha256-vCdQ+BoWbMbpwwroqrpU8lOoyOydjPwEpVX+IHEse/8=";
     };
   };
 } // builtins.removeAttrs args [ "callPackage" ])

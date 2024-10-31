@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.11.0";
+  version = "0.13.0";
 
   build-system = [ setuptools ];
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "symengine";
     repo = "symengine.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uUMcNnynE2itIwc7IGFwxveqLRL8f4dAAcaD6FUWJaY=";
+    hash = "sha256-PJUzA86SGCnDpqU9j/dr3PlM9inyi8SQX0HGqPQ9wQw=";
   };
 
   env = {

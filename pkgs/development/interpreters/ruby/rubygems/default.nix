@@ -7,18 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.5.16";
+  version = "3.5.21";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    hash = "sha256-f9EN6eXpMzIbYrjxGUJWrmRwO6JUHKuR7DEkSgGNkBI=";
+    hash = "sha256-lZs+SIaYaXXYXQsCEXeQiD5TuNBRUp326s/mR0XvMWA=";
   };
 
   patches = [
     ./0001-add-post-extract-hook.patch
     ./0002-binaries-with-env-shebang.patch
     ./0003-gem-install-default-to-user.patch
-    ./0004-delete-binstub-lock-file.patch
   ];
 
   installPhase = ''

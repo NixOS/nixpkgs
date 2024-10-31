@@ -1018,11 +1018,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libAppleWM = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libAppleWM";
-    version = "1.4.1";
+    version = "be972ebc3a97292e7d2b2350eff55ae12df99a42";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2";
-      sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libAppleWM/-/archive/be972ebc3a97292e7d2b2350eff55ae12df99a42/libAppleWM-be972ebc3a97292e7d2b2350eff55ae12df99a42.tar.bz2";
+      sha256 = "1hrq03pahmrbb05r6a7j7m1nxl65wlfi6d2lwm1kvra63q91f9ph";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1398,11 +1398,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXfixes, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXi";
-    version = "1.8.1";
+    version = "1.8.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXi-1.8.1.tar.xz";
-      sha256 = "19snjrsdib2y2iq8c1zbrp78qy1b6sdmyvif422gg27j2klc1gw9";
+      url = "mirror://xorg/individual/lib/libXi-1.8.2.tar.xz";
+      sha256 = "0161qsac0dgvkkcihpm2062p1lk2l5mj4i7smd713qnnadg5bq6h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1918,11 +1918,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   luit = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "luit";
-    version = "20240102";
+    version = "20240910";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://invisible-mirror.net/archives/luit/luit-20240102.tgz";
-      sha256 = "10n0xf8m3j6xhj5dgc0km40n9vy38hwnvjfq4pr0xiffrllflym0";
+      url = "https://invisible-mirror.net/archives/luit/luit-20240910.tgz";
+      sha256 = "1ma978xdmkxm3q3v1cxpwzb4ahd0dgzj7v0ssr9i9bi5zk5pypd1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3898,11 +3898,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkeyboard-config";
-    version = "2.42";
+    version = "2.43";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.42.tar.xz";
-      sha256 = "01q8gs7lnx9d7iz29pal7a3whz7njmgjcpzhy82wa7zhq6znxc56";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.43.tar.xz";
+      sha256 = "00bcs1yj57jbgw1zcilz6f4rgjaj2k6k87m8kpl4x0rar1ig6468";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -4378,11 +4378,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xtrans = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xtrans";
-    version = "1.5.0";
+    version = "1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/xtrans-1.5.0.tar.xz";
-      sha256 = "1gdiiw64p279a1x033w7i002myry9v75pwmc1gsdpzbbd41vg90v";
+      url = "mirror://xorg/individual/lib/xtrans-1.5.1.tar.xz";
+      sha256 = "0glr2vlhs56ij3px5829d00mv0ajnrf7ilminjai951wijyhza6y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

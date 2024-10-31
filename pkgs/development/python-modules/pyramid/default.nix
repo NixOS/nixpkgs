@@ -9,18 +9,20 @@
   plaster,
   plaster-pastedeploy,
   repoze-lru,
+  setuptools,
   translationstring,
   venusian,
   webob,
   zope-deprecation,
   zope-interface,
   pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyramid";
   version = "2.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,12 +31,15 @@ buildPythonPackage rec {
     hash = "sha256-NyE4pzjkIWU1zHbczm7d1aGqypUTDyNU+4NCZMBvGN4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     hupper
     pastedeploy
     plaster
     plaster-pastedeploy
     repoze-lru
+    setuptools # for pkg_resources
     translationstring
     venusian
     webob
@@ -45,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     webtest
     zope-component
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pyramid" ];
