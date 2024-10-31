@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  transmission,
+  transmission_4,
   fetchurl,
   _7zz,
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta =
-    transmission.meta
+    transmission_4.meta
     // (with lib; {
       maintainers = with maintainers; [ fbettag ];
       platforms = platforms.darwin;
