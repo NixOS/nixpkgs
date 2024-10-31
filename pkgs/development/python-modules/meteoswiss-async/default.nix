@@ -26,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-xFvfyLZvBfnbzShKN+94piNUVjV1cfi4jWpc/Xw6XG4=";
   };
 
-  pythonRelaxDeps = [ "aiohttp" ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "asyncstdlib"
+  ];
 
   build-system = [ setuptools ];
 
