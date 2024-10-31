@@ -20,6 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-9pafEIXvsKvr1jZ+RvNRICDz9rnAhvRYpRmDDdYeggY=";
   };
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ llama-index-core ];
