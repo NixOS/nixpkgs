@@ -31,10 +31,10 @@ in
       serviceConfig = {
         Type = "exec";
         StateDirectory = "jellyseerr";
-        WorkingDirectory = "${cfg.package}/libexec/jellyseerr/deps/jellyseerr";
+        WorkingDirectory = "${cfg.package}/libexec";
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
-        BindPaths = [ "/var/lib/jellyseerr/:${cfg.package}/libexec/jellyseerr/deps/jellyseerr/config/" ];
+        BindPaths = [ "/var/lib/jellyseerr/:${cfg.package}/libexec/config/" ];
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";
