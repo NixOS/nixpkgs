@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, doxygen
-, mandoc
-, meson
-, ninja
-, pkg-config
-, python3
-, sphinx
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  doxygen,
+  mandoc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sphinx,
+  sphinxygen,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "serd";
-  version = "0.30.16";
+  version = "0.32.2";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-9Q9IbaUZzdjQOyDJ5CQU5FkTP1okRBHY5jyu+NmskUY=";
+    hash = "sha256-333CyW8rod7P11bkWOBh3tfYFY0lVVTnaTSDrAljxWs=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +37,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sphinx
+    sphinxygen
   ];
 
   postPatch = ''
@@ -51,12 +59,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight C library for RDF syntax which supports reading and writing Turtle and NTriples";
     homepage = "https://drobilla.net/software/serd";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "serdi";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
