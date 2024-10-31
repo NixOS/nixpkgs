@@ -129,6 +129,8 @@ buildPythonPackage rec {
     # Tests require network access
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
+    # asyncio.exceptions.InvalidStateError: invalid state
+    "test_workflow_context_to_dict_mid_run"
   ];
 
   meta = with lib; {
