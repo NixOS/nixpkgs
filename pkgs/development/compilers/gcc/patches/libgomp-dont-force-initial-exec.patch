@@ -1,0 +1,40 @@
+From 01c433f4788441c0963005b9d3fad5b2865e6651 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Mon, 24 Sep 2018 19:57:50 -0500
+Subject: [PATCH] libgomp/configure.tgt: don't force initial-exec tls-model
+
+---
+ libgomp/configure.tgt | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/libgomp/configure.tgt b/libgomp/configure.tgt
+index 74d95a570c7..b608c55f0c1 100644
+--- a/libgomp/configure.tgt
++++ b/libgomp/configure.tgt
+@@ -10,23 +10,6 @@
+ #  XCFLAGS		Add extra compile flags to use.
+ #  XLDFLAGS		Add extra link flags to use.
+ 
+-# Optimize TLS usage by avoiding the overhead of dynamic allocation.
+-if test $gcc_cv_have_tls = yes ; then
+-  case "${target}" in
+-
+-    *-*-k*bsd*-gnu*)
+-	;;
+-
+-    *-*-linux* | *-*-gnu*)
+-	XCFLAGS="${XCFLAGS} -ftls-model=initial-exec"
+-	;;
+-
+-    *-*-rtems*)
+-	XCFLAGS="${XCFLAGS} -ftls-model=local-exec"
+-	;;
+-  esac
+-fi
+-
+ # Since we require POSIX threads, assume a POSIX system by default.
+ config_path="posix"
+ 
+-- 
+2.19.0
+
