@@ -32,18 +32,26 @@ stdenv.mkDerivation (
     nvim-lpeg-dylib =
       luapkgs:
       if stdenv.hostPlatform.isDarwin then
+        let
+          luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
+        in
         (luapkgs.lpeg.overrideAttrs (oa: {
           preConfigure = ''
             # neovim wants clang .dylib
-            sed -i makefile -e "s/CC = gcc/CC = clang/"
-            sed -i makefile -e "s/-bundle/-dynamiclib/"
+            substituteInPlace Makefile \
+              --replace-fail "CC = gcc" "CC = clang" \
+              --replace-fail "-bundle" "-dynamiclib" \
+              --replace-fail "lpeg.so" "lpeg.dylib"
           '';
           preBuild = ''
             # there seems to be implicit calls to Makefile from luarocks, we need to
             # add a stage to build our dylib
             make macosx
-            mkdir -p $out/lib
-            mv lpeg.so $out/lib/lpeg.dylib
+            mkdir -p ${luaLibDir}
+            mv lpeg.dylib ${luaLibDir}/lpeg.dylib
+          '';
+          postInstall = ''
+            rm -f ${luaLibDir}/lpeg.so
           '';
           nativeBuildInputs =
             oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
