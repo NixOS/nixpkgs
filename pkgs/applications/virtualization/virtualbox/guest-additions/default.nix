@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.friedrichaltheide

@@ -392,7 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryNativeCode
     ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       sander
