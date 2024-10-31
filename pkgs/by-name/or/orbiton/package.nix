@@ -4,31 +4,26 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.65.12";
+  version = "2.67.1";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     rev = "v${version}";
-    hash = "sha256-1KVw2dj//6vwUUj1jVWe2J/9F6J8BQsvCAEbJZnW26c=";
+    hash = "sha256-/5USD588kr3uB/Zs1ASKVgxH4kAWZCNBrZL7qqx49gU=";
   };
 
   vendorHash = null;
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-Wl,--as-needed" ""
-
-    # Requires impure pbcopy and pbpaste
-    substituteInPlace v2/pbcopy_test.go \
-      --replace TestPBcopy SkipTestPBcopy
-  '';
 
   nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
 
   buildInputs = lib.optional withGui vte;
 
   preBuild = "cd v2";
+
+  checkFlags = [
+    "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
+  ];
 
   postInstall = ''
     cd ..

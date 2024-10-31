@@ -5156,8 +5156,6 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
-  hexyl = callPackage ../tools/misc/hexyl { };
-
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
   hid-tools = callPackage ../tools/misc/hid-tools { };
@@ -7656,8 +7654,6 @@ with pkgs;
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
 
-  fulcio = callPackage ../tools/security/fulcio { };
-
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
@@ -8734,11 +8730,7 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jd-cli = callPackage ../tools/security/jd-cli { };
-
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
-
-  jd-gui = callPackage ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
@@ -17611,12 +17603,10 @@ with pkgs;
   gradleGen = gradle-packages.gen;
   wrapGradle = callPackage gradle-packages.wrapGradle { };
 
-  gradle_6-unwrapped = callPackage gradle-packages.gradle_6 { };
   gradle_7-unwrapped = callPackage gradle-packages.gradle_7 { };
   gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
   gradle-unwrapped = gradle_8-unwrapped;
 
-  gradle_6 = wrapGradle gradle_6-unwrapped null;
   gradle_7 = wrapGradle gradle_7-unwrapped null;
   gradle_8 = wrapGradle gradle_8-unwrapped null;
   gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
@@ -24934,7 +24924,6 @@ with pkgs;
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
-  prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
   prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
@@ -32403,15 +32392,7 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  bambu-studio = callPackage ../applications/misc/bambu-studio {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good;
-
-    wxGTK31 = wxGTK31.override {
-      withCurl = true;
-      withPrivateFonts = true;
-      withWebKit = true;
-    };
-  };
+  bambu-studio = callPackage ../applications/misc/bambu-studio { };
 
   orca-slicer = callPackage ../applications/misc/bambu-studio/orca-slicer.nix {};
 

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "atproto-goat";
-  version = "0-unstable-2024-10-08";
+  version = "0-unstable-2024-10-29";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "indigo";
-    rev = "06bacb465af714feb77609566aba15ab1ed41e24";
-    hash = "sha256-wWsE3sAGZQmOBVqTgy4RjoU8zmtuvyQIj9DjwSbtmKw=";
+    rev = "983ce4a481a32a3eb2944c4c76e885d0f6006f83";
+    hash = "sha256-Jo3pI4uRyKh3yV03ijOcg+Uyu75Spmy/VS116MVgleU=";
   };
 
   postPatch = ''
