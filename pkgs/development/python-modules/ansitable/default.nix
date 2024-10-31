@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MQ6VLjFDt/dEHDK8PbQsBdfzogJCm+pzyVYDbqkDOao=";
+    hash = "sha256-navayezkSSHgwOysC3fbgTQahRZjIV24JzIAQl+X5Jk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ colored ];
+  dependencies = [ colored ];
 
   pythonImportsCheck = [ "ansitable" ];
 
