@@ -237,7 +237,7 @@ in
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.beacon.dataDir}/${cfg.network}
 
-        ${cfg.package}/bin/lighthouse beacon_node \
+        ${lib.getExe cfg.package} beacon_node \
           --disable-upnp \
           ${lib.optionalString cfg.beacon.disableDepositContractSync "--disable-deposit-contract-sync"} \
           --port ${toString cfg.beacon.port} \
