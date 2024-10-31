@@ -8,17 +8,23 @@
   darwin,
   nix-update-script,
   rustc,
+  fetchurl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "2024.10-caramello";
+  version = "2024.12-aero";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "nym-binaries-v${version}";
-    hash = "sha256-0vEvjVCbwyJ7lpvZnIT551Kul0JfkcNSeURbX2PUZ4w=";
+    hash = "sha256-bUY0ctfE1i0pjqdT/LT43FB9rDO5OKBVaTckm5qxnms=";
+  };
+
+  swagger-ui = fetchurl {
+    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
+    hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
   };
 
   cargoLock = {
@@ -26,8 +32,13 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "bls12_381-0.8.0" = "sha256-4+X/ZQ5Z+Nax4Ot1JWWvvLxuIUaucHkfnDB2L+Ak7Ro=";
       "cosmos-sdk-proto-0.22.0-pre" = "sha256-nRfcAbjFcvAqool+6heYK8joiU5YaSWITnO6S5MRM1E=";
+      "defguard_wireguard_rs-0.4.7" = "sha256-+5m1+XGJ6Fi8v6rgjt0jRmwIruIL+OPP7zq/+166WMw=";
       "indexed_db_futures-0.4.2" = "sha256-vVqrD40CBdSSEtU+kQeuZUfsgpJdl8ks+os0Fct8Ung=";
     };
+  };
+
+  env = {
+    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
   nativeBuildInputs = [
