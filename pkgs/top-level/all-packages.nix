@@ -22529,6 +22529,10 @@ with pkgs;
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
 
+  pyoxidizer = callPackage ../development/tools/pyoxidizer {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   plasma-hud = callPackage ../misc/plasma-hud { };
 
   re2 = callPackage ../development/libraries/re2 { };
