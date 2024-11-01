@@ -8,7 +8,7 @@
   pytestCheckHook,
   setuptools,
   stdenv,
-  swig,
+  swig-pypi,
 }:
 
 let
@@ -28,9 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-wlw2QL1vfhXba8ok/URcd9M+F7Sa+ZtekV1w5X24owE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    swig-pypi
+  ];
 
-  nativeBuildInputs = [ swig ] ++ lib.optionals (!withApplePCSC) [ pkg-config ];
+  nativeBuildInputs = [ ] ++ lib.optionals (!withApplePCSC) [ pkg-config ];
 
   buildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
 
