@@ -5,16 +5,21 @@
   funcy,
   intervaltree,
   pefile,
-  typing-extensions,
-  vivisect,
   pytest-sugar,
   pytestCheckHook,
   python-flirt,
+  pythonOlder,
+  setuptools-scm,
+  typing-extensions,
+  vivisect,
 }:
+
 buildPythonPackage rec {
   pname = "viv-utils";
   version = "0.7.11";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
@@ -23,12 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-zYamhG5oeoYYVLEvv1EdZ1buFDByZatuCxbl0uRhk6Y=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "==" ">="
-  '';
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     funcy
     intervaltree
     pefile
@@ -46,6 +48,8 @@ buildPythonPackage rec {
       flirt = [ python-flirt ];
     };
   };
+
+  pythonImportsCheck = [ "viv_utils" ];
 
   meta = with lib; {
     description = "Utilities for working with vivisect";
