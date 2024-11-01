@@ -69,7 +69,7 @@ let
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-21VwDFw2dyySoc4NC/RR3k/VtksqaZ5vkdx0z5MKqLc=";
+      hash = "sha256-fPvEItavxFwUbk3WsTBvzRMu7fjnm5HxybEueHn//Q4=";
     };
 
     aarch64-darwin = fetchzip {
