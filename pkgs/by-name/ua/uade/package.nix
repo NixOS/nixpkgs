@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
   bencodetools,
   flac,
   lame,
   libao,
+  libzakalwe,
   makeWrapper,
   python3,
   pkg-config,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uade";
-  version = "3.02";
+  version = "3.05";
 
   src = fetchFromGitLab {
     owner = "uade-music-player";
     repo = "uade";
     rev = "uade-${finalAttrs.version}";
-    hash = "sha256-skPEXBQwyr326zCmZ2jwGxcBoTt3Y/h2hagDeeqbMpw=";
+    hash = "sha256-k6t8EQ/G8PbfRrBMXubn1XfBPvw1qDoMGh5xJKrcX+E=";
   };
 
   postPatch = ''
@@ -34,10 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace python/uade/generate_oscilloscope_view.py \
       --replace-fail "default='uade123'" "default='$out/bin/uade123'"
-
-    # https://gitlab.com/uade-music-player/uade/-/issues/37
-    substituteInPlace write_audio/Makefile.in \
-      --replace-fail 'g++' '${stdenv.cc.targetPrefix}c++'
   '';
 
   nativeBuildInputs = [
@@ -51,12 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     flac
     lame
     libao
+    libzakalwe
     sox
     vorbis-tools
   ];
 
   configureFlags = [
     "--bencode-tools-prefix=${bencodetools}"
+    "--libzakalwe-prefix=${libzakalwe}"
     (lib.strings.withFeature true "text-scope")
     (lib.strings.withFeature false "write-audio")
   ];
@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     # This is an old script, don't break expectations by renaming it
     ln -s $out/bin/mod2ogg2{.sh,}
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "uade-"; };
 
   meta = {
     description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
