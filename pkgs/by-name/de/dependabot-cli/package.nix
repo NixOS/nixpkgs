@@ -1,9 +1,10 @@
-{ buildGoModule
-, dependabot-cli
-, fetchFromGitHub
-, installShellFiles
-, lib
-, testers
+{
+  buildGoModule,
+  dependabot-cli,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  testers,
 }:
 let
   pname = "dependabot-cli";
