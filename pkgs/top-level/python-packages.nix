@@ -15715,7 +15715,7 @@ self: super: with self; {
   thttp = callPackage ../development/python-modules/thttp { };
 
   tkinter = callPackage ../development/python-modules/tkinter {
-    py = python.override { x11Support=true; };
+    py = python.override (lib.optionalAttrs (!python.isPyPy) { x11Support = true; });
   };
 
   tidalapi = callPackage ../development/python-modules/tidalapi { };
