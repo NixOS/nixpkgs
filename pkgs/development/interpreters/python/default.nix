@@ -147,8 +147,6 @@ in {
     db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
     python = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
     inherit passthruFun;
-    inherit (darwin) libunwind;
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   pypy39 = callPackage ./pypy {
@@ -164,8 +162,6 @@ in {
     db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
     python = __splicedPackages.pypy27;
     inherit passthruFun;
-    inherit (darwin) libunwind;
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   pypy310 = __splicedPackages.pypy39.override {

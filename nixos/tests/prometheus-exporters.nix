@@ -597,6 +597,8 @@ let
             rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
             zmqpubrawblock=tcp://127.0.0.1:28332
             zmqpubrawtx=tcp://127.0.0.1:28333
+            # https://github.com/lightningnetwork/lnd/issues/9163
+            deprecatedrpc=warnings
           '';
           extraCmdlineOptions = [ "-regtest" ];
         };
