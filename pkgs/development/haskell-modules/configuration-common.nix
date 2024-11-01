@@ -22,20 +22,13 @@ self: super: {
   # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
   dunai = doJailbreak (addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai));
 
-  # Make sure that Cabal 3.10.* can be built as-is
-  Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override ({
+  # Make sure that Cabal_* can be built as-is
+  Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
-    # Use process core package when possible
-    process = self.process_1_6_25_0;
-  }));
-
-  Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override ({
+  });
+  Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
-    # Use process core package when possible
-    process = self.process_1_6_25_0;
-  }));
+  });
   Cabal_3_14_0_0 = doDistribute (super.Cabal_3_14_0_0.override {
     Cabal-syntax = self.Cabal-syntax_3_14_0_0;
   });
