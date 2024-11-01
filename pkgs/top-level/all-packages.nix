@@ -28292,6 +28292,8 @@ with pkgs;
 
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
+  caesium-image-compressor = qt6Packages.callPackage ../applications/graphics/caesium-image-compressor { };
+
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
