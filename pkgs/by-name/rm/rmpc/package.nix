@@ -48,7 +48,10 @@ rustPlatform.buildRustPackage rec {
       album art through kitty image protocol without any ugly hacks. It also features ranger/lf
       inspired browsing of songs and other goodies.
     '';
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      bloxx12
+    ];
     mainProgram = "rmpc";
     platforms = lib.platforms.linux;
   };
