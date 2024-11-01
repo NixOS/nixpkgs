@@ -9138,7 +9138,6 @@ with pkgs;
   lsdvd = callPackage ../tools/cd-dvd/lsdvd { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
-    inherit (darwin) xnu;
     lua = lua5_2_compat;
   };
 
