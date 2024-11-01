@@ -104,8 +104,8 @@ let
           ''
             subdir="antlr4${lib.optionalString (builtins.compareVersions version "4.8" != 0) "-runtime"}"
             substituteInPlace $out/lib/cmake/$subdir/antlr4-runtime-config.cmake \
-              --replace $dev/include/antlr4-runtime $\{PACKAGE_PREFIX_DIR}/include/antlr4-runtime \
-              --replace $\{PACKAGE_PREFIX_DIR}/lib $out/lib
+              --replace-fail $dev/include/antlr4-runtime $\{PACKAGE_PREFIX_DIR}/include/antlr4-runtime \
+              --replace-fail $\{PACKAGE_PREFIX_DIR}/lib $out/lib
           '';
 
         meta = with lib; {
