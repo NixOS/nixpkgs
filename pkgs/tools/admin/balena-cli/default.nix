@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, overrideSDK
-, fetchFromGitHub
-, testers
-, balena-cli
-, node-gyp
-, python3
-, udev
-, cctools
-, darwin
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  overrideSDK,
+  fetchFromGitHub,
+  testers,
+  balena-cli,
+  node-gyp,
+  python3,
+  udev,
+  cctools,
+  darwin,
 }:
 
 let
@@ -17,7 +18,8 @@ let
   buildNpmPackage' = buildNpmPackage.override {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
-in buildNpmPackage' rec {
+in
+buildNpmPackage' rec {
   pname = "balena-cli";
   version = "19.0.13";
 
@@ -35,19 +37,23 @@ in buildNpmPackage' rec {
   '';
   makeCacheWritable = true;
 
-  nativeBuildInputs = [
-    node-gyp
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      node-gyp
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    udev
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = balena-cli;
@@ -69,7 +75,10 @@ in buildNpmPackage' rec {
     homepage = "https://github.com/balena-io/balena-cli";
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.kalebpace maintainers.doronbehar ];
+    maintainers = [
+      maintainers.kalebpace
+      maintainers.doronbehar
+    ];
     mainProgram = "balena";
   };
 }
