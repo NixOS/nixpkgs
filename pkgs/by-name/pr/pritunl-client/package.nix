@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , runtimeShell
 , runCommand
 , makeWrapper
@@ -16,12 +17,12 @@
 , openvpn
 , electron
 }: let
-  version = "1.3.4026.10";
+  version = "1.3.4066.51";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-3P2MEQy9RE2dY7aRCGQl+kmVIaRZp6VvrcHQUzhiAEY=";
+    sha256 = "sha256-yoPpDOcTv3kBTHscYn//KseZpfj1HArInODSxPKOFXY=";
   };
 
   cli = buildGoModule {
@@ -34,6 +35,7 @@
     postInstall = ''
       mv $out/bin/cli $out/bin/pritunl-client
     '';
+    passthru.updateScript = nix-update-script { };
   };
 
   service = buildGoModule {
@@ -46,10 +48,10 @@
     nativeBuildInputs = [ makeWrapper ];
 
     postPatch = ''
-      sed -Ei service/profile/scripts.go \
+      sed -Ei service/connection/scripts.go \
         -e 's|#!\s*(/usr)?/bin/(env )?bash\b|#! ${runtimeShell}|g'
     '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -Ei service/profile/scripts.go \
+      sed -Ei service/connection/scripts.go \
         -e 's|(/usr)?/s?bin/busctl\b|busctl|g' \
         -e 's|(/usr)?/s?bin/resolvectl\b|resolvectl|g' \
         -e 's|(/usr)?/s?bin/ip\b|ip|g'
@@ -61,7 +63,7 @@
       mkdir -p $out/lib/systemd/system/
       cp $src/resources_linux/pritunl-client.service $out/lib/systemd/system/
       substituteInPlace $out/lib/systemd/system/pritunl-client.service \
-        --replace "/usr" "$out"
+        --replace-warn "/usr" "$out"
     '';
 
     postFixup = let
@@ -87,6 +89,7 @@
       wrapProgram $out/bin/pritunl-client-service \
         --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
     '';
+    passthru.updateScript = nix-update-script { };
   };
 in stdenv.mkDerivation {
   pname = "pritunl-client";
@@ -123,7 +126,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/applications/
     cp resources_linux/pritunl-client-electron.desktop $out/share/applications/
     substituteInPlace $out/share/applications/pritunl-client-electron.desktop \
-      --replace "/usr/lib/pritunl_client_electron/Pritunl" "$out/bin/pritunl-client-electron"
+      --replace-fail "/usr/lib/pritunl_client_electron/Pritunl" "$out/bin/pritunl-client-electron"
   '' + ''
     # install shell completions for pritunl-client
     installShellCompletion --cmd pritunl-client \
@@ -134,6 +137,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
   meta = with lib; {
     description = "Pritunl OpenVPN client";
     homepage = "https://client.pritunl.com/";
