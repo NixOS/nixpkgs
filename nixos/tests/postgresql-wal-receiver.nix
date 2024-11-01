@@ -1,20 +1,12 @@
 { system ? builtins.currentSystem,
   config ? {},
   pkgs ? import ../.. { inherit system config; },
-  package ? null
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   lib = pkgs.lib;
-
-  # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
-  makeTestAttribute = name:
-  {
-    inherit name;
-    value = makePostgresqlWalReceiverTest pkgs."${name}";
-  };
 
   makePostgresqlWalReceiverTest = pkg:
     let
@@ -114,11 +106,8 @@ let
         )
       '';
     };
-
 in
-if package == null then
-  # all-tests.nix: Maps the generic function over all attributes of PostgreSQL packages
-  builtins.listToAttrs (map makeTestAttribute (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs)))
-else
-  # Called directly from <package>.tests
-  makePostgresqlWalReceiverTest package
+lib.concatMapAttrs (n: p: { ${n} = makePostgresqlWalReceiverTest p; }) pkgs.postgresqlVersions
+// {
+  passthru.override = p: makePostgresqlWalReceiverTest p;
+}
