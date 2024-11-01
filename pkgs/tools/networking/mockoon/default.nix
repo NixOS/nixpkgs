@@ -1,15 +1,16 @@
 { lib
 , appimageTools
 , fetchurl
+, nix-update-script
 }:
 
 let
   pname = "mockoon";
-  version = "6.1.0";
+  version = "8.1.1";
 
   src = fetchurl {
-    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.AppImage";
-    hash = "sha256-harZU3TTIzfJoY/jAQI0dm7YSOr24Y9xk9L5ZaBLdD8=";
+    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
+    hash = "sha256-USL/arTewBOe6xiN5iIB5eayU62xHY47y5OS8YWtIUs=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -35,5 +36,6 @@ appimageTools.wrapType2 {
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "mockoon";
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };
 }
