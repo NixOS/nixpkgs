@@ -7,7 +7,7 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.41.0";
+  version = "1.57.0";
 in
 buildGoModule {
   inherit pname version;
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-CnSDvLcLupWKBp1Wr6E9BScA8VsBlfmmfPwh8cyERZg=";
+    hash = "sha256-ZT1fwDT19uUjp5iG0NLSrc/6PLW/sukAd0w66mLdFVg=";
   };
 
-  vendorHash = "sha256-vN5r1OtHT16LeJ6iPmHmXTx9Oo+WALhV4PWqzMiUwSA=";
+  vendorHash = "sha256-jSINiETadd0ixzFBilgphi1vJNsRYeDkbaVNk5stTp4=";
 
   ldflags = [
     "-s"
@@ -37,7 +37,7 @@ buildGoModule {
   '';
 
   checkFlags = [
-    "-skip=TestIntegration|TestNewProxy_customCert|TestRun"
+    "-skip=TestDependabot"
   ];
 
   doInstallCheck = true;
