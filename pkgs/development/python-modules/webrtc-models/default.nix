@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "webrtc-models";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-webrtc-models";
     rev = "refs/tags/${version}";
-    hash = "sha256-Wmz+P4FFJJZujWF0SR6HVERNNO7xSM1iCayg6tmVyso=";
+    hash = "sha256-6fVcp9kWr5nV4wOKov3ObqyPJo+u3jN443qv++sJ0TQ=";
   };
 
   postPatch = ''
