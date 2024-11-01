@@ -3,13 +3,15 @@
 set -euxo pipefail
 
 system="x86_64-linux"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+NIXPKGS_PATH="$(readlink -f $SCRIPT_DIR/..)"
 
 parseArgs() {
   while [[ $# -gt 0 ]]; do
     case $1 in
       --system)
         system=$2
-        shift
+        shift 2
         ;;
       *)
         echo "Unknown argument: $1"
@@ -25,14 +27,13 @@ main() {
     trap 'rm -rf "$tmpdir"' EXIT
     (
       set +e
-      nix-env -f . \
-          -qa \* \
-          --meta \
-          --xml \
-          --drv-path \
-          --show-trace \
-          --eval-system "$system" \
-          > "$tmpdir/store-path"
+      nix-env \
+        --arg "supportedSystems" "[\"$system\"]" \
+        -qaP --no-name \
+        --out-path \
+        --arg checkMeta true \
+        --argstr path "$NIXPKGS_PATH" \
+        -f "$SCRIPT_DIR/outpaths.nix" > "$tmpdir/paths"
       echo $? > "$tmpdir/exit-code"
     ) &
     pid=$!
@@ -43,4 +44,4 @@ main() {
     exit "$(cat "$tmpdir/exit-code")"
 }
 
-main
+main "$@"

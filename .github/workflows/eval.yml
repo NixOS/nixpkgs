@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [x86_64-linux, aarch64-linux, aarch64-darwin, x86_64-darwin]
+        system: [x86_64-linux, aarch64-linux, aarch64-darwin, x86_64-darwin]
     steps:
       - name: Set up Git
         run: |
@@ -73,8 +73,16 @@ jobs:
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         if: env.is_pr == 'true'
 
+      - name: Enable swap
+        if: env.is_pr == 'true'
+        run: |
+          sudo fallocate -l 10G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+
       - name: Check eval
         if: env.is_pr == 'true'
         run: |
           cd nixpkgs
-          ./ci/eval-nixpkgs.sh --system "$system"
+          ./ci/eval-nixpkgs.sh --system "${{matrix.system}}"
