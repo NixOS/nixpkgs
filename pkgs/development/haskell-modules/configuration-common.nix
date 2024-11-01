@@ -36,6 +36,9 @@ self: super: {
     # Use process core package when possible
     process = self.process_1_6_25_0;
   }));
+  Cabal_3_14_0_0 = doDistribute (super.Cabal_3_14_0_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_14_0_0;
+  });
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
   # makes sense to use the non Stackage version if we want to use Cabal* >= 3.12

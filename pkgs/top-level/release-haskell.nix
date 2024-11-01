@@ -562,6 +562,7 @@ let
       ] released;
       Cabal_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
+      Cabal_3_14_0_0 = released;
       cabal2nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
