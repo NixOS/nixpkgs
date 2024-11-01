@@ -18935,6 +18935,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
+  faun = callPackage ../development/libraries/audio/faun { };
+
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
@@ -35164,6 +35166,8 @@ with pkgs;
 
   uhexen2 = callPackage ../games/uhexen2 { };
 
+  ultima-xu4 = callPackage ../games/ultima-xu4 { };
+
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
@@ -35281,6 +35285,8 @@ with pkgs;
   xsokoban = callPackage ../games/xsokoban { };
 
   xtris = callPackage ../games/xtris { };
+
+  xu4 = callPackage ../games/xu4 { };
 
   inherit (callPackage ../games/quake2/yquake2 {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
