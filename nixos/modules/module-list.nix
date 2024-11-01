@@ -1146,6 +1146,7 @@
   ./services/networking/nixops-dns.nix
   ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
+  ./services/networking/nm-file-secret-agent.nix
   ./services/networking/nomad.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
