@@ -28927,6 +28927,8 @@ with pkgs;
 
   kerbrute = callPackage ../tools/security/kerbrute { };
 
+  keyoxide-web = callPackage ../servers/web-apps/keyoxide-web { };
+
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };

@@ -513,6 +513,7 @@ in {
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix {};
   keymap = handleTest ./keymap.nix {};
+  keyoxide-web = handleTest ./web-apps/keyoxide-web.nix {};
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5);
