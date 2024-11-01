@@ -1,5 +1,6 @@
 {
   apacheHttpd,
+  ensureNewerSourcesForZipFilesHook,
   fetchFromGitHub,
   lib,
   libintl,
@@ -8,15 +9,15 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_python";
   version = "3.5.0.2";
 
   src = fetchFromGitHub {
     owner = "grisha";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-EH8wrXqUAOFWyPKfysGeiIezgrVc789RYO4AHeSA6t4=";
+    repo = "mod_python";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-++yHNKVe1u3w47DaB0zvYyuTrBcQdmuDm22areAeejs=";
   };
 
   patches = [ ./install.patch ];
@@ -26,10 +27,18 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
   ];
 
+  nativeBuildInputs = [
+    ensureNewerSourcesForZipFilesHook
+  ];
+
   buildInputs =
     [
       apacheHttpd
-      python3
+      (python3.withPackages (ps: with ps; [
+        distutils
+        packaging
+        setuptools
+      ]))
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libintl
@@ -40,12 +49,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://modpython.org/";
-    changelog = "https://github.com/grisha/mod_python/blob/${version}/NEWS";
+    changelog = "https://github.com/grisha/mod_python/blob/master/NEWS";
     description = "Apache module that embeds the Python interpreter within the server";
     mainProgram = "mod_python";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
