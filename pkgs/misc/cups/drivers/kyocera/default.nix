@@ -1,46 +1,34 @@
-{ lib
-, stdenv
-, cups
-, fetchzip
+{ stdenv
+, lib
+, fetchFromGitHub
 , patchPpdFilesHook
+, callPackage
 }:
-
 let
-  platform =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "64bit"
-    else if stdenv.hostPlatform.system == "i686-linux" then "32bit"
-         else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-
-  libPath = lib.makeLibraryPath [ cups ];
+  rastertokpsl = callPackage ./rastertokpsl.nix { };
 in
-
 stdenv.mkDerivation {
   pname = "cups-kyocera";
-  version = "1.1203";
+  version = "1.1203"; # version found in PPDs
 
-  dontPatchELF = true;
-  dontStrip = true;
-
-  src = fetchzip {
-    url = "https://web.archive.org/web/20220709011705/https://cdn.kyostatics.net/dlc/ru/driver/all/linuxdrv_1_1203_fs-1x2xmfp.-downloadcenteritem-Single-File.downloadcenteritem.tmp/LinuxDrv_1.1203_FS-1x2xMFP.zip";
-    sha256 = "0z1pbgidkibv4j21z0ys8cq1lafc6687syqa07qij2qd8zp15wiz";
+  src = fetchFromGitHub {
+    owner = "veehaitch";
+    repo = "kyocera-fs-1xxx";
+    rev = "6f730d95b60b9249b02375525e9a58291ee89133";
+    hash = "sha256-wcY4/J2nhVnVWPzBUXSiM4shw8hL7+thbd7FVvxvEPE=";
   };
 
   nativeBuildInputs = [ patchPpdFilesHook ];
 
+  buildInputs = [ rastertokpsl ];
+
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
-    tar -xvf ${platform}/Global/English.tar.gz
-    install -Dm755 English/rastertokpsl $out/lib/cups/filter/rastertokpsl
-    patchelf \
-      --set-rpath ${libPath} \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/lib/cups/filter/rastertokpsl
-
-    mkdir -p $out/share/cups/model/Kyocera
-    cd English
-    cp *.ppd $out/share/cups/model/Kyocera
+    mkdir -p "$out/share/cups/model/Kyocera"
+    install *.ppd "$out/share/cups/model/Kyocera/"
 
     runHook postInstall
   '';
@@ -48,11 +36,25 @@ stdenv.mkDerivation {
   ppdFileCommands = [ "rastertokpsl" ];
 
   meta = with lib; {
-    description = "CUPS drivers for several Kyocera FS-{1020,1025,1040,1060,1120,1125} printers";
-    homepage = "https://www.kyoceradocumentsolutions.ru/index/service_support/download_center.false.driver.FS1040._.EN.html#";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    description = "CUPS drivers for several Kyocera FS-1xxx KPSL GDI printers";
+    longDescription = ''
+      Supported models include:
+      - FS-1020MFP
+      - FS-1025MFP
+      - FS-1040
+      - FS-1041
+      - FS-1060DN
+      - FS-1061DN
+      - FS-1120MFP
+      - FS-1125MFP
+      - FS-1220MFP
+      - FS-1320MFP
+      - FS-1325MFP
+    '';
+    homepage = "https://global.kyocera.com";
+    # Kyocera allows unmodified redistribution of the PPDs but we patch them
     license = licenses.unfree;
-    maintainers = [ maintainers.vanzef ];
+    maintainers = with maintainers; [ vanzef veehaitch ];
     platforms = platforms.linux;
   };
 }
