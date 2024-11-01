@@ -1,6 +1,3 @@
-# mostly copied from ./postgresql.nix as it seemed unapproriate to
-# test additional extensions for postgresql there.
-
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../.. { inherit system config; }
@@ -10,7 +7,6 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  postgresql-versions = import ../../pkgs/servers/sql/postgresql pkgs;
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION timescaledb;
     CREATE EXTENSION timescaledb_toolkit;
@@ -40,9 +36,12 @@ let
     SELECT
       average(stats)
     FROM t;
+
+    SELECT * FROM sth;
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: makeTest {
-    name = postgresql-name;
+
+  makeTimescaleDbTest = postgresqlPackage: makeTest {
+    name = "timescaledb-${postgresqlPackage.name}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ typetetris ];
     };
@@ -51,7 +50,7 @@ let
       {
         services.postgresql = {
           enable = true;
-          package = postgresql-package;
+          package = postgresqlPackage;
           extraPlugins = ps: with ps; [
             timescaledb
             timescaledb_toolkit
@@ -83,11 +82,8 @@ let
     '';
 
   };
-  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "14") postgresql-versions;
 in
-mapAttrs'
-  (name: package: {
-    inherit name;
-    value = make-postgresql-test name package;
-  })
-  applicablePostgresqlVersions
+pkgs.lib.concatMapAttrs (n: p: { ${n} = makeTimescaleDbTest p; }) (filterAttrs (n: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
+// {
+  passthru.override = p: makeTimescaleDbTest p;
+}
