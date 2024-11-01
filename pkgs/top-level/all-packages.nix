@@ -32192,8 +32192,6 @@ with pkgs;
 
   shipments = callPackage ../applications/misc/shipments { };
 
-  shortwave = callPackage ../applications/audio/shortwave { };
-
   shotgun = callPackage ../tools/graphics/shotgun { };
 
   shot-scraper = callPackage ../tools/graphics/shot-scraper { };
