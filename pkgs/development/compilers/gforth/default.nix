@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, callPackage
-, autoreconfHook, texinfo, libffi
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, texinfo, libffi, buildPackages
 }:
 
 let
-  swig = callPackage ./swig.nix { };
-  bootForth = callPackage ./boot-forth.nix { };
+  swig = buildPackages.callPackage ./swig.nix { };
+  bootForth = buildPackages.callPackage ./boot-forth.nix { };
   lispDir = "${placeholder "out"}/share/emacs/site-lisp";
 in stdenv.mkDerivation rec {
 
@@ -19,8 +19,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook texinfo bootForth swig
-  ];
+    autoreconfHook texinfo swig
+  ] ++ (if (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) then [ buildPackages.gforth ] else [ bootForth]);
   buildInputs = [
     libffi
   ];
@@ -31,6 +31,15 @@ in stdenv.mkDerivation rec {
     "--with-lispdir=${lispDir}"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "--build=x86_64-apple-darwin"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # Tries to run ./engine/gforth-ll
+    "--without-check"
+  ];
+
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "DITCENGINE=${buildPackages.gforth}/bin/gforth-ditc"
+    "GFORTH=${buildPackages.gforth}/bin/gforth"
+    "ENGINE=${buildPackages.gforth}/bin/gforth" # for ./preforth
   ];
 
   preConfigure = ''
