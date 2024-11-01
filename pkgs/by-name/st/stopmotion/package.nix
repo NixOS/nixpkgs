@@ -3,19 +3,15 @@
   stdenv,
   fetchgit,
   pkg-config,
-  qmake,
-  qtbase,
-  qttools,
-  qtmultimedia,
+  qt5,
   libvorbis,
   libtar,
   libxml2,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   version = "0.8.5";
-  pname = "linuxstopmotion";
+  pname = "stopmotion";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/linuxstopmotion/code";
@@ -24,21 +20,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
+    qt5.qmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    qttools
-    qtmultimedia
+    qt5.qtbase
+    qt5.qttools
+    qt5.qtmultimedia
     libvorbis
     libtar
     libxml2
   ];
 
   postPatch = ''
-    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${lib.getDev qttools}/bin'
+    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin'
   '';
 
   meta = with lib; {
