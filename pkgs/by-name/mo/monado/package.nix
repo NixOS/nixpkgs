@@ -7,6 +7,7 @@
 , cmake
 , config
 , dbus
+, depthai-core
 , doxygen
 , eigen
 , elfutils
@@ -94,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     bluez
     cjson
     dbus
+    depthai-core
     eigen
     elfutils
     gst-plugins-base
@@ -136,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # known disabled drivers/features:
-  #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core (See https://github.com/NixOS/nixpkgs/issues/292618)
   #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR (See https://github.com/NixOS/nixpkgs/issues/292661)
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
@@ -155,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak ];
+    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak pandapip1 ];
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };
