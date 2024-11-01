@@ -226,10 +226,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
-/pkgs/servers/sql/postgresql @thoughtpolice
-/nixos/modules/services/databases/postgresql.md @thoughtpolice
-/nixos/modules/services/databases/postgresql.nix @thoughtpolice
-/nixos/tests/postgresql.nix @thoughtpolice
+/pkgs/servers/sql/postgresql @NixOS/postgres
+/nixos/modules/services/databases/postgresql.md @NixOS/postgres
+/nixos/modules/services/databases/postgresql.nix @NixOS/postgres
+/nixos/tests/postgresql.nix @NixOS/postgres
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix @joachifm
