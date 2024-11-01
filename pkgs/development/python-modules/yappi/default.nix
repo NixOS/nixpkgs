@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.6.0";
+  version = "1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sumerc";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zA4apOGyrbjBOxUKBARiKmmM9rSVFVGWsDpOaItOoLU=";
+    hash = "sha256-nkkm50/94iVYZdUBm7DZkNQsBqddO6unjP29ctf7dxo=";
   };
 
   patches = [ ./tests.patch ];
