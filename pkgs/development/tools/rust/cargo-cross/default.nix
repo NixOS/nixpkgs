@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=docker::shared::tests::directories::test_host"
+
+    # The following tests require empty CARGO_BUILD_TARGET env variable, but we
+    # set it ever since https://github.com/NixOS/nixpkgs/pull/298108.
+    "--skip=config::tests::test_config::no_env_and_no_toml_default_target_then_none"
+    "--skip=config::tests::test_config::no_env_but_toml_default_target_then_use_toml"
   ];
 
   passthru = {
@@ -29,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/cross-rs/cross";
     changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ otavio ];
     mainProgram = "cross";
   };
