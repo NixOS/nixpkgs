@@ -13,14 +13,14 @@
 let
   common = { name, npmBuildScript, installPhase }: buildNpmPackage rec {
     pname = name;
-    version = "2024.9.0";
+    version = "2024.10.0";
     nodejs = nodejs_18;
 
     src = fetchFromGitHub {
       owner = "bitwarden";
       repo = "directory-connector";
       rev = "v${version}";
-      hash = "sha256-Vop5Y1prdjA5SOQsA1HNBr3IBhe9Ya8d8M6CsS9xohg=";
+      hash = "sha256-jisMEuIpTWCy+N1QeERf+05tsugY0f+H2ntcRcFKkgo=";
     };
 
     postPatch = ''
@@ -32,7 +32,7 @@ let
         --replace-fail "AppImage" "dir"
     '';
 
-    npmDepsHash = "sha256-8rmZSl5K2l97QHaNtcfW202TtcEa3HIjEjO/AkaZkdQ=";
+    npmDepsHash = "sha256-Zi7EHzQSSrZ6XGGV1DOASuddYA4svXQc1eGmchcLFBc=";
 
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
