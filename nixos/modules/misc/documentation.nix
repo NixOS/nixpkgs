@@ -75,7 +75,7 @@ let
           (name: value:
             let
               wholeName = "${namePrefix}.${name}";
-              guard = warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+              guard = warn "${config.system.diagnostics.prefix}Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
             in if isAttrs value then
               scrubDerivations wholeName value
               // optionalAttrs (isDerivation value) {
