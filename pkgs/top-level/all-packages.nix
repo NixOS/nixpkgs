@@ -11688,6 +11688,8 @@ with pkgs;
 
   repgrep = callPackage ../tools/text/repgrep { };
 
+  reggie = callPackage ../tools/text/reggie { };
+
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
