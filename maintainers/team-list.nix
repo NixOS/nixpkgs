@@ -845,9 +845,14 @@ with lib.maintainers;
   };
 
   postgres = {
-    members = [ thoughtpolice ];
+    members = [
+      thoughtpolice
+      ma27
+      wolfgangwalther
+    ];
     scope = "Maintain the PostgreSQL package and plugins along with the NixOS module.";
     shortName = "PostgreSQL";
+    enableFeatureFreezePing = true;
   };
 
   python = {
