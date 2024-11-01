@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , libsForQt5
 , yasm
@@ -43,6 +44,12 @@
     ./macos.patch
     ./macos-opengl.patch
     ./macos-qt5.patch
+    (fetchpatch {
+      url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
+      stripLen = 1;
+      extraPrefix = "cmake/external/glib/cppgir/";
+      hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
+    })
   ];
 
   meta = with lib; {
