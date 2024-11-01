@@ -17255,6 +17255,8 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
+  cpprestsdk = callPackage ../development/libraries/cpprestsdk { };
+
   cpptest = callPackage ../development/libraries/cpptest { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
