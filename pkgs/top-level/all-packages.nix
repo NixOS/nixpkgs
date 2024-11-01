@@ -37758,8 +37758,6 @@ with pkgs;
 
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
-  valent = callPackage ../applications/misc/valent { };
-
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-ssh-plus = callPackage ../tools/security/vault-ssh-plus { };
