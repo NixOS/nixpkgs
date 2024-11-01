@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildNpmPackage,
-  overrideSDK,
   fetchFromGitHub,
   testers,
   balena-cli,
@@ -10,16 +9,11 @@
   python3,
   udev,
   cctools,
-  darwin,
+  apple-sdk_12,
+  darwinMinVersionHook,
 }:
 
-let
-  # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "balena-cli";
   version = "19.0.13";
 
@@ -51,8 +45,7 @@ buildNpmPackage' rec {
       udev
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.Cocoa
+      apple-sdk_12
     ];
 
   passthru.tests.version = testers.testVersion {
