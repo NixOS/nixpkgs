@@ -18767,4 +18767,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
+
+  fastaction-nvim = buildVimPlugin {
+    pname = "fastaction.nvim";
+    version = "2024-10-24";
+    src = fetchFromGitHub {
+      owner = "Chaitanyabsprip";
+      repo = "fastaction.nvim";
+      rev = "77ae921e6fa6a8e2705768fa89b89b0e45840b94";
+      sha256 = "sha256-2UuEORFTj4+gbuEm1D2FHXrRiU3pDsS5NG50Q9I1wuk=";
+    };
+    meta.homepage = "https://github.com/Chaitanyabsprip/fastaction.nvim/";
+  };
 }
