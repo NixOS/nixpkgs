@@ -62,6 +62,7 @@ buildPythonPackage rec {
     "--ignore=ax/core/tests/test_utils.py"
     "--ignore=ax/early_stopping/tests/test_strategies.py"
     # broken with sqlalchemy 2
+    "--ignore=ax/core/tests/test_experiment.py"
     "--ignore=ax/service/tests/test_ax_client.py"
     "--ignore=ax/service/tests/test_scheduler.py"
     "--ignore=ax/service/tests/test_with_db_settings_base.py"
@@ -79,11 +80,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "ax" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
     description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }
