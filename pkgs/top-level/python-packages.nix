@@ -9344,6 +9344,8 @@ self: super: with self; {
     protobuf-core = pkgs.protobuf;
   };
 
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
+
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
   };
