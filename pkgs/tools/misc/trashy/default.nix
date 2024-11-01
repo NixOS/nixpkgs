@@ -17,7 +17,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd trash \
       --bash <($out/bin/trash completions bash) \
       --fish <($out/bin/trash completions fish) \
-      --zsh <($out/bin/trash completions zsh) \
+      --zsh <($out/bin/trash completions zsh)
+    $out/bin/trash manpage > trash.1
+    cp trash.1 trashy.1
+    installManPage trash.1 trashy.1
   '';
 
   meta = with lib; {
