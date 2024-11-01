@@ -9,6 +9,8 @@
 
   atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
 
+  bubble-card = callPackage ./bubble-card { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
@@ -30,6 +32,8 @@
   mushroom = callPackage ./mushroom { };
 
   rmv-card = callPackage ./rmv-card { };
+
+  sankey-chart = callPackage ./sankey-chart { };
 
   template-entity-row = callPackage ./template-entity-row { };
 

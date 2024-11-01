@@ -17596,6 +17596,12 @@
     githubId = 43755002;
     name = "Dmitriy P";
   };
+  pta2002 = {
+    email = "pta2002@pta2002.com";
+    github = "pta2002";
+    githubId = 7443916;
+    name = "Pedro Alves";
+  };
   ptival = {
     email = "valentin.robert.42@gmail.com";
     github = "Ptival";
@@ -23218,6 +23224,12 @@
     github = "wexder";
     githubId = 24979302;
     name = "Vladimír Zahradník";
+  };
+  wfdewith = {
+    name = "Wim de With";
+    email = "wf@dewith.io";
+    github = "wfdewith";
+    githubId = 2306085;
   };
   wgunderwood = {
     email = "wg.underwood13@gmail.com";

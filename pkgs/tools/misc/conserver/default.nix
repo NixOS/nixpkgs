@@ -53,6 +53,13 @@ stdenv.mkDerivation rec {
   # Disabled due to exist upstream cases failing 8/15 tests
   doCheck = false;
 
+  postPatch = ''
+    # install -s calls the wrong strip program when cross compiling
+    substituteInPlace \
+      console/Makefile.in conserver/Makefile.in autologin/Makefile.in contrib/chat/Makefile.in \
+      --replace-fail "@INSTALL_PROGRAM@ -s" "@INSTALL_PROGRAM@"
+  '';
+
   meta = with lib; {
     homepage = "https://www.conserver.com/";
     description = "Application that allows multiple users to watch a serial console at the same time";
