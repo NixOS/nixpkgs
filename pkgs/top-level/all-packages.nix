@@ -36778,8 +36778,6 @@ with pkgs;
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
-  dbus-map = callPackage ../tools/misc/dbus-map { };
-
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn { };
 
   dockutil = callPackage ../os-specific/darwin/dockutil { };
