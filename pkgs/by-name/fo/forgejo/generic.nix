@@ -155,7 +155,7 @@ buildGoModule rec {
   meta = {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens marie ];
     broken = stdenv.hostPlatform.isDarwin;
