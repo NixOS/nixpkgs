@@ -54,7 +54,7 @@ let
 
 in
 mkScxScheduler "c" {
-  schedulerName = "scx_csheds";
+  schedulerName = "scx_cscheds";
 
   postPatch = ''
     rm meson-scripts/fetch_bpftool
