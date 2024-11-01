@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  python3,
 }:
 
 stdenv.mkDerivation {
@@ -24,13 +23,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ distutils ]))
+  configureFlags = [
+    (lib.strings.withFeature false "python")
   ];
 
   # installCheck instead of check due to -install_name'd library on Darwin
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  installCheckTarget = "check";
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ./bencodetest
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "Collection of tools for manipulating bencoded data";
