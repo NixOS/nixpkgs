@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       Anillc
       Forden
+      nartsiss
     ];
     platforms = lib.platforms.all;
     mainProgram = "telegram-bot-api";
