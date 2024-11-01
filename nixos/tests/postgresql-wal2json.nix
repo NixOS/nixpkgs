@@ -2,16 +2,12 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  postgresql ? null,
 }:
 
+with import ../lib/testing-python.nix { inherit system pkgs; };
+
 let
-  makeTest = import ./make-test-python.nix;
-  # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
-  makeTestAttribute = name: {
-    inherit name;
-    value = makePostgresqlWal2jsonTest pkgs."${name}";
-  };
+  inherit (pkgs) lib;
 
   makePostgresqlWal2jsonTest =
     postgresqlPackage:
@@ -50,11 +46,7 @@ let
     };
 
 in
-# By default, create one test per postgresql version
-if postgresql == null then
-  builtins.listToAttrs (
-    map makeTestAttribute (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs))
-  )
-# but if postgresql is set, we're being made as a passthru test for a specific postgres + wal2json version, just run one
-else
-  makePostgresqlWal2jsonTest postgresql
+lib.concatMapAttrs (n: p: { ${n} = makePostgresqlWal2jsonTest p; }) pkgs.postgresqlVersions
+// {
+  passthru.override = p: makePostgresqlWal2jsonTest p;
+}
