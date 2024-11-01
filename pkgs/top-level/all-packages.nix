@@ -33366,6 +33366,8 @@ with pkgs;
 
   wofi-emoji = callPackage ../applications/misc/wofi-emoji { };
 
+  wifi4wofi = callPackage ../applications/misc/wifi4wofi { };
+
   cl-wordle = callPackage ../games/cl-wordle { };
 
   wordbook = callPackage ../applications/misc/wordbook { };
