@@ -5676,6 +5676,8 @@ with pkgs;
 
   otf2bdf = callPackage ../applications/misc/otf2bdf { };
 
+  ouroboros = callPackage ../applications/networking/ouroboros { };
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
