@@ -283,7 +283,7 @@ in {
     linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
-    linux_6_10_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
