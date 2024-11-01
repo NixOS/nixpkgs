@@ -8,10 +8,11 @@
   btop,
   testers,
   autoAddDriverRunpath,
-  apple-sdk_11,
+  apple-sdk_15,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
   rocmPackages,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
+    apple-sdk_15
+    (darwinMinVersionHook "10.15")
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
