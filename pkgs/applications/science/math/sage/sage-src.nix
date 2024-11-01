@@ -54,6 +54,13 @@ stdenv.mkDerivation rec {
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
   bugfixPatches = [
+    # https://github.com/sagemath/sage/pull/38628, landed in 10.5.beta4
+    (fetchpatch {
+      name = "pari-stack-cysignals-exception.patch";
+      url = "https://github.com/sagemath/sage/commit/4a9c985b769b1209902c970ade1892f18ab48c10.diff";
+      hash = "sha256-S6NdonB7needJlQdx52Huk34Q8/vG3nyGicA5JpsdWc=";
+    })
+
     # https://github.com/sagemath/sage/pull/38851, landed in 10.5.beta8
     (fetchpatch {
       name = "glpk-aarch64-hang-workaround.patch";
