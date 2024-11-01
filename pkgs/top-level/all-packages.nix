@@ -2998,8 +2998,6 @@ with pkgs;
 
   ansifilter = callPackage ../tools/text/ansifilter { };
 
-  antora = callPackage ../development/tools/documentation/antora { };
-
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
