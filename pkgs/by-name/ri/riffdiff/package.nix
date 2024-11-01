@@ -30,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/walles/riff";
     changelog = "https://github.com/walles/riff/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ johnpyp ];
+    maintainers = with lib.maintainers; [
+      johnpyp
+      getchoo
+    ];
     mainProgram = "riff";
   };
 }
