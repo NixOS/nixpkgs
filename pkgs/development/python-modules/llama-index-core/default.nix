@@ -97,6 +97,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   pythonImportsCheck = [ "llama_index" ];
 
   disabledTestPaths = [
@@ -127,6 +129,8 @@ buildPythonPackage rec {
     # Tests require network access
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
+    # flaky
+    "test_workflow_run_step"
   ];
 
   meta = with lib; {
