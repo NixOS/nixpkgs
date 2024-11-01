@@ -21,25 +21,26 @@
 , wrapGAppsHook4
 , sqlite
 , xdg-desktop-portal
+, libseccomp
 }:
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "8";
+  version = "9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     rev = "refs/tags/${version}";
-    hash = "sha256-a77+lPH2eqWTLFrYfcBXSvbyyYC52zSo+Rh/diqKYx4=";
+    hash = "sha256-3UI727LUYw7wUKbGRCtgpkF9NNw4XuZ3tl3KV3Ku9r4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "matrix-sdk-0.7.1" = "sha256-ZlkxGXGrmZ8VQV7UY7A7BBfcqFCAB9Ep7l65irx4Dy8=";
-      "ruma-0.10.1" = "sha256-C/GJ0hDWJ9/grfjMuPSatJq2SrVkV0jxQlAAASkUWqg=";
+      "matrix-sdk-0.7.1" = "sha256-AmODDuNLpI6gXuu+oPl3MqcOnywqR8lqJ0bVOIiz02E=";
+      "ruma-0.10.1" = "sha256-6U2LKMYyY7SLOh2jJcVuDBsfcidNoia1XU+JsmhMHGY=";
     };
   };
 
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     libshumate
     sqlite
     xdg-desktop-portal
+    libseccomp
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
