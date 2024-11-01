@@ -5,20 +5,15 @@
   isPyPy,
   lib,
   defusedxml,
-  future,
-  ujson,
   packaging,
   psutil,
   setuptools,
-  pydantic,
   # Optional dependencies:
   fastapi,
   jinja2,
-  orjson,
   pysnmp,
   hddtemp,
   netifaces, # IP module
-  py-cpuinfo,
   uvicorn,
   requests,
   prometheus-client,
@@ -27,6 +22,8 @@
 buildPythonApplication rec {
   pname = "glances";
   version = "4.2.0";
+  pyproject = true;
+
   disabled = isPyPy;
 
   src = fetchFromGitHub {
@@ -35,6 +32,8 @@ buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-liyrMaqBgK7UZjWIKIgIFbskTGaWfyrK8L74DKmaDmY=";
   };
+
+  build-system = [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -51,22 +50,16 @@ buildPythonApplication rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
-    future
-    ujson
     netifaces
     packaging
     psutil
     pysnmp
-    setuptools
-    py-cpuinfo
-    pydantic
     fastapi
     uvicorn
     requests
     jinja2
-    orjson
     prometheus-client
   ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
