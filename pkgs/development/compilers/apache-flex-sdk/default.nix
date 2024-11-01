@@ -3,7 +3,7 @@
 let
   playerglobal_ver = "27.0";
   playerglobal = fetchurl {
-    url = "https://fpdownload.macromedia.com/get/flashplayer/updaters/27/playerglobal27_0.swc";
+    url = "https://archive.org/download/playerglobal27_0.swc/playerglobal27_0.swc";
     sha256 = "0qw2bgls8qsmp80j8vpd4c7s0c8anlrk0ac8z42w89bajcdbwk2f";
   };
 in stdenv.mkDerivation rec {
