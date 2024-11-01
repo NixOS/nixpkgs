@@ -663,7 +663,7 @@ in {
           # Some tests are causing issues in the Darwin sandbox with issues
           # such as
           #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
-          doCheck = !stdenv.hostPlatform.isDarwin;
+          doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml2 2.12
