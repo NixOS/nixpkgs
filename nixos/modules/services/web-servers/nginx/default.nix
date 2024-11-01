@@ -1374,7 +1374,7 @@ in
     ];
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
-      files = "/var/log/nginx/*.log";
+      files = [ "/var/log/nginx/*.log" ];
       frequency = "weekly";
       su = "${cfg.user} ${cfg.group}";
       rotate = 26;

@@ -90,23 +90,33 @@ in {
       passthru.plugins = plugins ++ (ide.plugins or [ ]);
       newPlugins = plugins;
       disallowedReferences = [ ide ];
-      nativeBuildInputs = [ autoPatchelfHook ] ++ (ide.nativeBuildInputs or [ ]);
+      nativeBuildInputs = (lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook) ++ (ide.nativeBuildInputs or [ ]);
       buildInputs = lib.unique ((ide.buildInputs or [ ]) ++ [ glib ]);
 
       inherit (ide) meta;
 
-      buildPhase = ''
+      buildPhase =
+      let
+        rootDir = if stdenv.hostPlatform.isDarwin then "Applications/${ide.product}.app/Contents" else meta.mainProgram;
+      in
+      ''
         cp -r ${ide} $out
         chmod +w -R $out
-        rm -f $out/${meta.mainProgram}/plugins/plugin-classpath.txt
+        rm -f $out/${rootDir}/plugins/plugin-classpath.txt
         IFS=' ' read -ra pluginArray <<< "$newPlugins"
         for plugin in "''${pluginArray[@]}"
         do
-          ln -s "$plugin" -t $out/${meta.mainProgram}/plugins/
+          ln -s "$plugin" -t "$out/${rootDir}/plugins/"
         done
         sed "s|${ide.outPath}|$out|" \
-          -i $(realpath $out/bin/${meta.mainProgram}) \
-          -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
+          -i $(realpath $out/bin/${meta.mainProgram})
+
+        if test -f "$out/bin/${meta.mainProgram}-remote-dev-server"; then
+          sed "s|${ide.outPath}|$out|" \
+            -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
+        fi
+
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
         autoPatchelf $out
       '';
     };

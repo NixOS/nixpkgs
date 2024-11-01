@@ -36,6 +36,7 @@
 , udev
 , vulkan-loader
 , wayland
+, wayland-scanner
 , wrapQtAppsHook
 , zlib
 }:
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
   lib.optional withVulkan vulkan-loader ++
-  lib.optional withWayland wayland ++
+  lib.optionals withWayland [wayland wayland-scanner] ++
   lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus

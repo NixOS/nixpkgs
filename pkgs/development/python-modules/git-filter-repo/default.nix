@@ -15,7 +15,7 @@ buildPythonPackage rec {
   docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "git_filter_repo";
@@ -34,10 +34,9 @@ buildPythonPackage rec {
     installManPage ${docs}/man1/git-filter-repo.1
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-    installShellFiles
-  ];
+  build-system = [ setuptools-scm ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Project has no tests
   doCheck = false;

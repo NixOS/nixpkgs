@@ -75,7 +75,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
    - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
@@ -628,8 +628,8 @@ buildGoModule rec {
 }
 ```
 
-Any derivaton can be specified as a test, even if it's in a different file.
-Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
 
 In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
 

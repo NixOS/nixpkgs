@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   olm,
   libsignal-ffi,
   # This option enables the use of an experimental pure-Go implementation of
@@ -14,14 +15,22 @@
 
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    hash = "sha256-OjWRdYAxjYMGZswwKqGKUwCIc5qHkNBTQgIcbiRquH0=";
+    hash = "sha256-KGIlLGGVaySRrHt6P2AlnDEew/ERyrDYyN2lOz3318M=";
   };
+
+  patches = [
+    # fixes broken media uploads, will be included in the next release
+    (fetchpatch {
+      url = "https://github.com/mautrix/signal/commit/b09995a892c9930628e1669532d9c1283a4938c8.patch";
+      hash = "sha256-M8TvCLZG5MbD/Bkpo4cxQf/19dPfbGzMyIPn9utPLco=";
+    })
+  ];
 
   buildInputs = (lib.optional (!withGoolm) olm) ++ [
     # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
@@ -30,7 +39,7 @@ buildGoModule rec {
   ];
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-oV8ILDEyMpOZy5m2mnPAZj5XAhleO8yNz49wxvZboVs=";
+  vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
 
   doCheck = false;
 

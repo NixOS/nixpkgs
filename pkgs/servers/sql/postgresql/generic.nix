@@ -5,7 +5,7 @@ let
       { stdenv, lib, fetchurl, fetchpatch, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libuuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
-      , linux-pam
+      , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
 
       , removeReferencesTo, writeShellApplication
 
@@ -114,7 +114,8 @@ let
       pkg-config
       removeReferencesTo
     ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences ];
+      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences ]
+      ++ lib.optionals (atLeast "17") [ bison flex perl docbook_xml_dtd_45 docbook-xsl-nons libxslt ];
 
     enableParallelBuilding = true;
 
@@ -150,7 +151,8 @@ let
       ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
-      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ];
+      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
+      ++ lib.optionals (atLeast "17") [ "--without-perl" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
@@ -163,7 +165,7 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-
+    ] ++ lib.optionals (olderThan "17") [
       # TODO: Remove this with the next set of minor releases
       (fetchpatch (
         if atLeast "14" then {
@@ -179,7 +181,7 @@ let
           hash = "sha256-L8/ns/fxTh2ayfDQXtBIKaArFhMd+v86UxVFWQdmzUw=";
           excludes = [ "doc/*" ];
         })
-      )
+        )
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
@@ -295,8 +297,7 @@ let
       withPackages = postgresqlWithPackages {
                        inherit buildEnv;
                        postgresql = this;
-                     }
-                     this.pkgs;
+                     };
 
       tests = {
         postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
@@ -337,9 +338,9 @@ let
     };
   });
 
-  postgresqlWithPackages = { postgresql, buildEnv }: pkgs: f: buildEnv {
-    name = "postgresql-and-plugins-${postgresql.version}";
-    paths = f pkgs ++ [
+  postgresqlWithPackages = { postgresql, buildEnv }: f: buildEnv {
+    name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+    paths = f postgresql.pkgs ++ [
         postgresql
         postgresql.man   # in case user installs this into environment
     ];
@@ -348,6 +349,14 @@ let
 
     passthru.version = postgresql.version;
     passthru.psqlSchema = postgresql.psqlSchema;
+    passthru.withJIT = postgresqlWithPackages {
+      inherit buildEnv;
+      postgresql = postgresql.withJIT;
+    } f;
+    passthru.withoutJIT = postgresqlWithPackages {
+      inherit buildEnv;
+      postgresql = postgresql.withoutJIT;
+    } f;
   };
 
 in

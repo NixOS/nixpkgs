@@ -34,12 +34,12 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.77";
+  version = "2.78";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-mu/6r1Uo836ZTxuIL3UdsKvuUz+H1FZY9Y3ZbEBK0LQ=";
+    hash = "sha256-gG9TWKRJISOowRIXI1/ROTIwrVwhxFtMOextXqN6KiU=";
   };
 
   # Remove error messages about tput during build process without adding ncurses,

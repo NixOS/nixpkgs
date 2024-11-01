@@ -70,7 +70,6 @@ buildPythonPackage rec {
     scipy
   ];
 
-  doCheck = true;
   preCheck = ''
     substituteInPlace pymoo/config.py \
       --replace-fail "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \

@@ -913,6 +913,8 @@ let
 
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
+    kdf = callPackage ../development/ocaml-modules/kdf { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };

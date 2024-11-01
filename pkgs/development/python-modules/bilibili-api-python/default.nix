@@ -14,7 +14,6 @@
   pyyaml,
   qrcode,
   qrcode-terminal,
-  requests,
   rsa,
   setuptools,
   setuptools-scm,
@@ -27,7 +26,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "bilibili_api_python";
+    inherit version;
     hash = "sha256-mwhyFc3b1qA7W76gaBcAup+Wca6gQAdRwZJaZXOHqCw=";
   };
 
@@ -51,7 +51,6 @@ buildPythonPackage rec {
     brotli
     httpx
     qrcode
-    requests
     apscheduler
     rsa
     pillow

@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "13";
+    broken = versionOlder postgresql.version "13" ||
+      # timescaledb supports PostgreSQL 17 from 2.17.0 on:
+      # https://github.com/timescale/timescaledb/releases/tag/2.17.0
+      # We can't upgrade to it, yet, because this would imply dropping support for
+      # PostgreSQL 13, which is a breaking change.
+      (versionAtLeast postgresql.version "17" && version == "2.14.2");
   };
 }

@@ -11,13 +11,13 @@
 # - There is no need for user/team listed here to have write access.
 # - No reviews will be requested for PRs that target the wrong base branch.
 #
-# Processing of this file is implemented in workflows/codeowners.yml
+# Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
-/.github/workflows/codeowners.yml @infinisil
+/.github/workflows/codeowners-v2.yml @infinisil
 /ci/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
 
@@ -173,9 +173,16 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
+
+# Tcl
+/pkgs/development/interpreters/tcl  @fgaz
+/pkgs/development/libraries/tk      @fgaz
+/pkgs/top-level/tcl-packages.nix    @fgaz
+/pkgs/development/tcl-modules       @fgaz
+/doc/languages-frameworks/tcl.section.md @fgaz
 
 # C compilers
 /pkgs/development/compilers/gcc
@@ -332,7 +339,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
-/pkgs/development/compilers/nim   @ehmry
+/doc/languages-frameworks/nim.section.md  @ehmry
+/pkgs/build-support/build-nim-package.nix @ehmry
+/pkgs/top-level/nim-overrides.nix         @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq

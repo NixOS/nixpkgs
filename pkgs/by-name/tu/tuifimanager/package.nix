@@ -19,14 +19,14 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "4.1.7";
+  version = "5.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
     rev = "v.${version}";
-    hash = "sha256-kljodLSSjvGcjhD7IhAVAAGd6LoiM6IYwMXuSsIJ198=";
+    hash = "sha256-2yYD1YFGoN0uj3HzcYxEs3zbwfUIDLLzvfTcZILx5h4=";
   };
 
   nativeBuildInputs = [

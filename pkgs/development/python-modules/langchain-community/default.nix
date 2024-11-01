@@ -52,7 +52,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pydantic-settings" ];
+  pythonRelaxDeps = [
+    "pydantic-settings"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp

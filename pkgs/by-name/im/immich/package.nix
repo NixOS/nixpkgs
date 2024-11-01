@@ -17,7 +17,7 @@
   cacert,
   unzip,
   # runtime deps
-  ffmpeg-headless,
+  jellyfin-ffmpeg,
   imagemagick,
   libraw,
   libheif,
@@ -101,8 +101,8 @@ let
 
   web = buildNpmPackage' {
     pname = "immich-web";
-    inherit version;
-    src = "${src}/web";
+    inherit version src;
+    sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
     preBuild = ''
@@ -155,7 +155,7 @@ buildNpmPackage' {
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    jellyfin-ffmpeg
     imagemagick
     libraw
     libheif
@@ -198,7 +198,7 @@ buildNpmPackage' {
       --suffix PATH : "${
         lib.makeBinPath [
           perl
-          ffmpeg-headless
+          jellyfin-ffmpeg
         ]
       }"
 

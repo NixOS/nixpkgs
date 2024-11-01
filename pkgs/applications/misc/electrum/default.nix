@@ -26,11 +26,11 @@ in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.5.6";
+  version = "4.5.8";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-LO2ZUvbDJaIxrdgA+cM3sGgqJ+N+UlA9ObNINQcrorA=";
+    hash = "sha256-3YWVoTgTLe6Hzuds52Ch1iL8L9ZdO2rH335Tt/tup+g=";
   };
 
   build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];

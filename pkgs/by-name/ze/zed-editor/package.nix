@@ -88,19 +88,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.158.1";
+  version = "0.159.5";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X5FlNjAYG5W+RTdmyZHF1KYHxdwJGwk/qpOgj0JVD/c=";
+    hash = "sha256-60P5AicvJIN1B/JXe2moHTl4L+7+DWhYak0jciHJGoQ=";
   };
 
   patches =
     [
       # Zed uses cargo-install to install cargo-about during the script execution.
       # We provide cargo-about ourselves and can skip this step.
+      # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
+      # we also skip any crate for which the license cannot be determined.
       ./0001-generate-licenses.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -124,11 +126,12 @@ rustPlatform.buildRustPackage rec {
       "font-kit-0.14.1" = "sha256-qUKvmi+RDoyhMrZ7T6SoVAyMc/aasQ9Y/okzre4SzXo=";
       "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
       "nvim-rs-0.8.0-pre" = "sha256-VA8zIynflul1YKBlSxGCXCwa2Hz0pT3mH6OPsfS7Izo=";
+      "pet-0.1.0" = "sha256-RxwisvRC5I3TCMAOT+kPasijuf66F+VFok1O9Ep8tGE=";
       "reqwest-0.12.8" = "sha256-mjO6SPYOMiw1H0ZEbd4BlPivPtaLVNftpsCu+M2i3Qw=";
       "tree-sitter-gomod-1.0.2" = "sha256-FCb8ndKSFiLY7/nTX7tWF8c4KcSvoBU1QB5R4rdOgT0=";
       "tree-sitter-gowork-0.0.1" = "sha256-WRMgGjOlJ+bT/YnSBeSLRTLlltA5WwTvV0Ow/949+BE=";
       "tree-sitter-heex-0.0.1" = "sha256-SnjhL0WVsHOKuUp3dkTETnCgC/Z7WN0XmpQdJPBeBhw=";
-      "tree-sitter-md-0.3.2" = "sha256-sFcQDabSay9qxzVNAQkHEZB1b9j171dDoYQqaL1iVhE=";
+      "tree-sitter-md-0.3.2" = "sha256-q2/aJx+385B8HiU0soZ1vtRvjkE21ABGzIyR1qwKFOU=";
       "tree-sitter-yaml-0.6.1" = "sha256-95u/bq74SiUHW8lVp3RpanmYS/lyVPW0Inn8gR7N3IQ=";
       "xim-0.4.0" = "sha256-BXyaIBoqMNbzaSJqMadmofdjtlEVSoU6iogF66YP6a4=";
       "xkbcommon-0.7.0" = "sha256-2RjZWiAaz8apYTrZ82qqH4Gv20WyCtPT+ldOzm0GWMo=";

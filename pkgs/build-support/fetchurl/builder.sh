@@ -19,8 +19,7 @@ curl=(
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
 )
 
-# Default fallback value defined in pkgs/build-support/fetchurl/default.nix
-if [ "$SSL_CERT_FILE" == "/no-cert-file.crt" ]; then
+if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 

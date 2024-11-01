@@ -45,7 +45,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "0-unstable-2024-09-27";
+  version = "1.4.9-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./macos.patch
     ./macos-opengl.patch
+    ./macos-qt5.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

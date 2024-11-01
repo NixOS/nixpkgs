@@ -31,9 +31,9 @@ with pkgs;
     openjdk23 = mkOpenjdk "23" ../development/compilers/zulu/23.nix;
 
     # Legacy aliases
-    openjdk8-bootstrap = openjdk8.jdk-bootstrap;
-    openjdk11-bootstrap = openjdk11.jdk-bootstrap;
-    openjdk17-bootstrap = openjdk17.jdk-bootstrap;
+    openjdk8-bootstrap = temurin-bin.jdk-8;
+    openjdk11-bootstrap = temurin-bin.jdk-11;
+    openjdk17-bootstrap = temurin-bin.jdk-17;
 
     temurin-bin = recurseIntoAttrs (callPackage (
       if stdenv.hostPlatform.isLinux

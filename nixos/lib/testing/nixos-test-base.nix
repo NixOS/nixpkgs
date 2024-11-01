@@ -23,7 +23,7 @@ in
       };
     }
     ({ config, ... }: {
-      # Don't pull in switch-to-configuration by default, except when specialisations or early boot shenanigans are involved.
+      # Don't pull in apply and switch-to-configuration by default, except when specialisations or early boot shenanigans are involved.
       # This is mostly a Hydra optimization, so we don't rebuild all the tests every time switch-to-configuration-ng changes.
       key = "no-switch-to-configuration";
       system.switch.enable = mkDefault (config.isSpecialisation || config.specialisation != {} || config.virtualisation.installBootLoader);

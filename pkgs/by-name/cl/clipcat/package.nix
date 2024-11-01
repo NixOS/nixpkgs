@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-95y/HiLmhqt1DFmAxLg/W7lr/9dfVtce4+tx+vG2Nuw=";
+    hash = "sha256-94xw/E1Jp+bctVNzRZDdVaxxSMF/R87DNlRAzRT3Uvg=";
   };
 
-  cargoHash = "sha256-z2t7kq2ogMHJGF7xQnzc11B42gUZFTVokVkbw35CeY0=";
+  cargoHash = "sha256-qDcUEJSBd8c/ept/Y+GQCrp5b7xkSdX6ktdO9/c3k8o=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
@@ -30,10 +30,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     protobuf
     installShellFiles
-  ];
-
-  patches = [
-    ./0001-fix-build.patch
   ];
 
   checkFlags = [

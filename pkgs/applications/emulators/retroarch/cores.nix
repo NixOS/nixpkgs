@@ -8,7 +8,7 @@
 , curl
 , fetchFromGitHub
 , fetchpatch
-, ffmpeg
+, ffmpeg_6
 , fluidsynth
 , fmt
 , freetype
@@ -318,7 +318,7 @@ in
 
   citra = mkLibretroCore rec {
     core = "citra";
-    extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
+    extraBuildInputs = [ libGLU libGL boost ffmpeg_6 nasm ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_FFMPEG_STATIC=0"

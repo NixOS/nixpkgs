@@ -23,7 +23,11 @@ rec {
         "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
-      ]
+      ],
+
+      # Extra attributes to be merged into the resulting derivation's
+      # meta attribute.
+      meta ? {}
     }:
 
     { lib
@@ -172,7 +176,7 @@ rec {
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
         mainProgram = "gradle";
-      };
+      } // meta;
     });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
@@ -180,8 +184,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.10";
-    hash = "sha256-W5xes/n8LJSrrqV9kL14dHyhF927+WyFnTdBGBoSvyo=";
+    version = "8.10.2";
+    hash = "sha256-McVXE+QCM6gwOCfOtCykikcmegrUurkXcSMSHnFSTCY=";
     defaultJava = jdk21;
   };
 
@@ -191,16 +195,11 @@ rec {
     defaultJava = jdk17;
   };
 
-  gradle_6 = gen {
-    version = "6.9.4";
-    hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
-    defaultJava = jdk11;
-  };
-
   wrapGradle = {
-      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook, nix-update-script
     }:
     gradle-unwrapped:
+    updateAttrPath:
     lib.makeOverridable (args:
     let
       gradle = gradle-unwrapped.override args;
@@ -226,8 +225,13 @@ rec {
 
       passthru = {
         fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
-        inherit (gradle) jdk;
+        inherit (gradle) jdk tests;
         unwrapped = gradle;
+      } // lib.optionalAttrs (updateAttrPath != null) {
+        updateScript = nix-update-script {
+          attrPath = updateAttrPath;
+          extraArgs = [ "--url=https://github.com/gradle/gradle" ];
+        };
       };
 
       meta = gradle.meta // {

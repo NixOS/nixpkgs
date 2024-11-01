@@ -49,9 +49,6 @@
   yasm,
   glslang,
   nixosTests,
-  # If open-watcom-bin is not passed, VirtualBox will fall back to use
-  # the shipped alternative sources (assembly).
-  open-watcom-bin,
   makeself,
   perl,
   vulkan-loader,
@@ -78,8 +75,8 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.0.20";
-  virtualboxSha256 = "5cf5979bef66ebab3fcd495796b215a940e8a07c469d4bc56d064de44222dd02";
+  virtualboxVersion = "7.0.22";
+  virtualboxSha256 = "cf3ddf633ca410f1b087b0722413e83247cda4f14d33323dc122a4a42ff61981";
 
   kvmPatchVersion = "20240828";
   kvmPatchHash = "sha256-g0esJbB1IGyLGZMLFJIY8ZYdHWuiM5IZtLMHZvCY6bs=";
@@ -295,7 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
-      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods

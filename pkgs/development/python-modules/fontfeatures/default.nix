@@ -31,7 +31,6 @@ buildPythonPackage rec {
     youseedee
   ];
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
   disabledTestPaths = [
     # These tests require babelfont but we have to leave it out and skip them

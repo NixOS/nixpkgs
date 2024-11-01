@@ -11,6 +11,7 @@
 , expat
 , fdk_aac
 , ffmpeg-headless
+, ffmpeg_6-headless
 , geoip
 , libbsd
 , libiconv
@@ -991,7 +992,7 @@ let self = {
       '';
     };
 
-    inputs = [ ffmpeg-headless fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg_6-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";

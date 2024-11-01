@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "diffenator2";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FVdQW2iupAxHFmx6sC88yO2Vx3VvBhPJl55gA0fmvgo=";
+    hash = "sha256-Iu6ZA8s6XnOYSOwlt8WTmYW6oUTvcm4vLhYvVATOlBA=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";

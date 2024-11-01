@@ -6,6 +6,7 @@
 , pkg-config
 , gettext
 , gperf
+, glib
 , sqlite
 , libarchive
 , libdmapsharing
@@ -52,6 +53,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -59,6 +66,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     gperf # for lua-factory
+    glib # glib-compile-resources
   ];
 
   buildInputs = [

@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, autoreconfHook
 , fetchFromGitHub
+, cmake
 , json_c
 , libnet
 , libpcap
@@ -10,17 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ssldump";
-  version = "1.7";
+  version = "1.8-unstable-2024-10-16";
 
   src = fetchFromGitHub {
     owner = "adulau";
     repo = "ssldump";
-    rev = "v${version}";
-    sha256 = "sha256-BFE42wWqnGGTTjwej3LkH4XW2M4jP7XNSKHLnF2GFJo=";
+    rev = "a7534300bb09184fec991b3b4f19a40538b8adea";
+    hash = "sha256-6jmIPkyT5QCqQw07unc6nKTlxpajiLO05IFshWtCh7w=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
   ];
 
   buildInputs = [
@@ -28,18 +28,6 @@ stdenv.mkDerivation rec {
     libnet
     libpcap
     openssl
-  ];
-
-  prePatch = ''
-    sed -i -e 's|#include.*net/bpf.h|#include <pcap/bpf.h>|' \
-      base/pcap-snoop.c
-  '';
-
-  configureFlags = [
-    "--with-pcap-lib=${libpcap}/lib"
-    "--with-pcap-inc=${libpcap}/include"
-    "--with-openssl-lib=${openssl}/lib"
-    "--with-openssl-inc=${openssl}/include"
   ];
 
   meta = with lib; {

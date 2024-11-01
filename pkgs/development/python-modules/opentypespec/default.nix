@@ -15,7 +15,6 @@ buildPythonPackage rec {
     hash = "sha256-fOEHmtlCkFhn1jyIA+CsHIfud7x3PPb7UWQsnrVyDqY=";
   };
 
-  doCheck = true;
   nativeCheckInputs = [ unittestCheckHook ];
   unittestFlagsArray = [
     "-s"
