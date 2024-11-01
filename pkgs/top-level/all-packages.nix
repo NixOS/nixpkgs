@@ -18397,6 +18397,9 @@ with pkgs;
   systemfd = callPackage ../development/tools/systemfd { };
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
+  c2ffiHook = makeSetupHook {
+    name = "c2ffi-hook";
+  } ../development/tools/misc/c2ffi/setup-hook.sh;
 
   c0 = callPackage ../development/compilers/c0 {
     stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
