@@ -338,6 +338,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/ne/nemo          @mkg20001
 /pkgs/by-name/ne/nemo-*        @mkg20001
 
+# Xfce
+/doc/hooks/xfce4-dev-tools.section.md @NixOS/xfce
+
 # nim
 /doc/languages-frameworks/nim.section.md  @ehmry
 /pkgs/build-support/build-nim-package.nix @ehmry

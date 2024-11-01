@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.2.9";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-6aJrLkmebOhLrnVhl9cnbW1ZBt0vq8lR7Lhz9nPFr8Q=";
+    hash = "sha256-nDiy7LSSUp1cPgtCfLdu7LEh0A+Ga1p5eNVanbQtQ+E=";
   };
 
-  vendorHash = "sha256-celee8uyoirX+vtAww2iQJtRwJEHyfHL2mZA2muSRiQ=";
+  vendorHash = "sha256-SKNFViwoMzZ1hKKZSvTm0/kKro1IaUVsC+0Pbv7FoAU=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 

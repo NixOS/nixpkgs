@@ -1177,6 +1177,8 @@ self: super: with self; {
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
 
+  azure-mgmt-automation = callPackage ../development/python-modules/azure-mgmt-automation { };
+
   azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
 
   azure-mgmt-batch = callPackage ../development/python-modules/azure-mgmt-batch { };
