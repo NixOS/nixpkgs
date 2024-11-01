@@ -11097,6 +11097,10 @@ with pkgs;
     postgresqlSupport = true;
   }).overrideAttrs { pname = "sqitch-pg"; };
 
+  sqitchSqlite = (callPackage ../development/tools/misc/sqitch {
+    sqliteSupport = true;
+  }).overrideAttrs { pname = "sqitch-sqlite"; };
+
   ### DEVELOPMENT / R MODULES
 
   R = darwin.apple_sdk_11_0.callPackage ../applications/science/math/R {
