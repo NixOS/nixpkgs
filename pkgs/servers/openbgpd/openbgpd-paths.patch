@@ -1,0 +1,25 @@
+--- openbgpd-7.2/Makefile.in.orig	2022-01-24 19:42:47.610745455 +0530
++++ openbgpd-7.2/Makefile.in	2022-01-24 19:44:43.554761826 +0530
+@@ -822,17 +822,14 @@
+ 
+ 
+ install-data-hook:
+-	@if [ ! -d "$(DESTDIR)$(runstatedir)" ]; then \
+-		$(INSTALL) -m 755 -d "$(DESTDIR)$(runstatedir)"; \
++	@if [ ! -d "$(DESTDIR)$(docdir)" ]; then \
++		$(INSTALL) -m 755 -d "$(DESTDIR)$(docdir)"; \
+ 	fi
+-	@if [ ! -d "$(DESTDIR)$(sysconfdir)" ]; then \
+-		$(INSTALL) -m 755 -d "$(DESTDIR)$(sysconfdir)"; \
+-	fi
+-	@if [ ! -f "$(DESTDIR)$(sysconfdir)/bgpd.conf" ]; then \
+-		$(INSTALL) -m 644 "$(srcdir)/bgpd.conf" "$(DESTDIR)$(sysconfdir)/bgpd.conf"; \
++	@if [ ! -f "$(DESTDIR)$(docdir)/bgpd.conf" ]; then \
++		$(INSTALL) -m 644 "$(srcdir)/bgpd.conf" "$(DESTDIR)$(docdir)/bgpd.conf"; \
+ 	else \
+ 		echo; \
+-		echo " $(DESTDIR)$(sysconfdir)/bgpd.conf already exists, install will not overwrite"; \
++		echo " $(DESTDIR)$(docdir)/bgpd.conf already exists, install will not overwrite"; \
+ 	fi
+ 
+ uninstall-local:
