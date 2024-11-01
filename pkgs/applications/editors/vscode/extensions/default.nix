@@ -2039,8 +2039,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.236.0"; # compatible with vscode ^1.94
-          hash = "sha256-ozJwByuSjROWSxfrapcyxDkI7xgcjqf/IKtUfEC+MGk=";
+          version = "1.243.1191"; # compatible with vscode ^1.95
+          hash = "sha256-tMUFMi+lBZZQA/8UTyoqQ5s+xnWKh39V8GYErO9ZuSo=";
         };
 
         meta = {
