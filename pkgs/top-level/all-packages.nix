@@ -32136,6 +32136,8 @@ with pkgs;
 
   rtl-sdr = rtl-sdr-blog;
 
+  rtl-wmbus = callPackage ../applications/radio/rtl-wmbus { };
+
   rubyripper = callPackage ../applications/audio/rubyripper { };
 
   rucredstash = callPackage ../tools/security/rucredstash {
