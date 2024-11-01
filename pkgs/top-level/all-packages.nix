@@ -721,6 +721,8 @@ with pkgs;
 
   protoc-gen-twirp_typescript = callPackage ../development/tools/protoc-gen-twirp_typescript { };
 
+  protoc-gen-twirpy = callPackage ../development/tools/protoc-gen-twirpy { };
+
   protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
 
   protolint = callPackage ../development/tools/protolint { };
