@@ -1,25 +1,72 @@
 { lib
+
+# pkgs used inside the VM
 , pkgs
+
+# pkgs used outside the VM
+# (similar to NixOS's `virtualisation.host.pkgs` option)
+# useful for easily running VMs on Darwin
+, hostPkgs ? pkgs.buildPackages
+
 , customQemu ? null
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
-, rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" ]
+, rootModules ? null
 }:
 
 let
   inherit (pkgs) bash bashInteractive busybox cpio coreutils e2fsprogs fetchurl kmod rpm
     stdenv util-linux
-    buildPackages writeScript writeText runCommand;
+    buildPackages writeScript runCommand;
+
+  hostSpecifics = if !hostPkgs.stdenv.isDarwin then
+    {
+      # Host is Linux
+      # - Use virtiofs as it is faster than 9p
+      defaultFilesystemRootModules = [ "virtiofs" ];
+      mountOptions = "-t virtiofs";
+      qemuOptions = [
+        "-chardev socket,id=store,path=virtio-store.sock"
+        "-device vhost-user-fs-pci,chardev=store,tag=store"
+        "-chardev socket,id=xchg,path=virtio-xchg.sock"
+        "-device vhost-user-fs-pci,chardev=xchg,tag=xchg"
+      ];
+      preQemuComamnds = ''
+        ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
+        ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
+      '';
+      additionalQEMU_OPTS = { memSize }: "-object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
+    }
+  else
+    {
+      # Host is Darwin
+      # - Use 9p as virtiofsd isn't supported on Darwin
+      defaultFilesystemRootModules = [ "9p" "9pnet_virtio" ];
+      mountOptions = "-t 9p -o trans=virtio,version=9p2000.L,cache=loose,msize=131072";
+      qemuOptions = [
+        "-virtfs local,path=${storeDir},security_model=none,mount_tag=store"
+        "-virtfs local,path=xchg,security_model=none,mount_tag=xchg"
+      ];
+      preQemuComamnds = "";
+      additionalQEMU_OPTS = { memSize }: "";
+    };
 in
 rec {
   qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
-  qemu = buildPackages.qemu_kvm;
+  qemu = hostPkgs.qemu_kvm;
+
+  # export hostPkgs so that downstream tools (e.g. disko) that wrap around e.g. runInLinuxVM can use it
+  inherit hostPkgs;
 
   modulesClosure = pkgs.makeModulesClosure {
-    inherit kernel rootModules;
+    inherit kernel;
+    rootModules = if rootModules == null then
+      [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "crc32c_generic" ]
+        ++ hostSpecifics.defaultFilesystemRootModules
+    else
+      rootModules;
     firmware = kernel;
   };
 
@@ -123,7 +170,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t virtiofs store /fs${storeDir}
+    mount ${hostSpecifics.mountOptions} store /fs${storeDir}
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -132,7 +179,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t virtiofs xchg /fs/tmp/xchg
+    mount ${hostSpecifics.mountOptions} xchg /fs/tmp/xchg
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -222,10 +269,7 @@ rec {
     ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      -chardev socket,id=store,path=virtio-store.sock \
-      -device vhost-user-fs-pci,chardev=store,tag=store \
-      -chardev socket,id=xchg,path=virtio-xchg.sock \
-      -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
+      ${builtins.concatStringsSep " " hostSpecifics.qemuOptions} \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
@@ -234,16 +278,16 @@ rec {
   '';
 
 
-  vmRunCommand = qemuCommand: writeText "vm-run" ''
-    ${coreutils}/bin/mkdir xchg
+  vmRunCommand = qemuCommand: hostPkgs.writeText "vm-run" ''
+    ${hostPkgs.coreutils}/bin/mkdir xchg
     export > xchg/saved-env
-    PATH=${coreutils}/bin
+    PATH=${hostPkgs.coreutils}/bin
 
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
       cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
       source "$NIX_ATTRS_SH_FILE"
     fi
-    source $stdenv/setup
+    source ${hostPkgs.stdenv}/setup
 
     eval "$preVM"
 
@@ -259,10 +303,9 @@ rec {
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
     cat > ./run-vm <<EOF
-    #! ${bash}/bin/sh
+    #! ${hostPkgs.bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
-    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
+    ${hostSpecifics.preQemuComamnds}
     ${qemuCommand}
     EOF
 
@@ -338,12 +381,16 @@ rec {
      that allows you to boot into the VM and debug it interactively. */
 
   runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
-    requiredSystemFeatures = [ "kvm" ];
-    builder = "${bash}/bin/sh";
+    system = hostPkgs.system;
+    requiredSystemFeatures = if !hostPkgs.stdenv.isDarwin then
+      [ "kvm" ]
+    else
+      [ "apple-virt" ];
+    builder = "${hostPkgs.bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
-    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
+    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} ${hostSpecifics.additionalQEMU_OPTS { inherit memSize; }}";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
