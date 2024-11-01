@@ -2,6 +2,7 @@
   php,
   fetchFromGitHub,
   lib,
+  nixosTests,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -49,6 +50,10 @@ php.buildComposerProject (finalAttrs: {
     mkdir -p "$out"/share/php/kimai "$out"/bin
     ln -s "$out"/share/php/kimai/bin/console "$out"/bin/console
   '';
+
+  passthru.tests = {
+    kimai = nixosTests.kimai;
+  };
 
   meta = {
     description = "Web-based multi-user time-tracking application";
