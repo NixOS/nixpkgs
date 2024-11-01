@@ -3323,6 +3323,8 @@ self: super: with self; {
 
   djangocms-text-ckeditor = callPackage ../development/python-modules/djangocms-text-ckeditor { };
 
+  djangocms-alias = callPackage ../development/python-modules/djangocms-alias { };
+
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
