@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mgitstatus";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "fboender";
     repo = "multi-git-status";
     rev = finalAttrs.version;
-    hash = "sha256-jzoX7Efq9+1UdXQdhLRqBlhU3cBrk5AZblg9AYetItg=";
+    hash = "sha256-DToyP6TD9up0k2/skMW3el6hNvKD+c8q2zWpk0QZGRA=";
   };
 
   installFlags = [
