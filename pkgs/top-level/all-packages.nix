@@ -34910,8 +34910,6 @@ with pkgs;
 
   raylib-games = callPackage ../games/raylib-games { };
 
-  raycast = callPackage ../os-specific/darwin/raycast { };
-
   redeclipse = callPackage ../games/redeclipse { };
 
   rftg = callPackage ../games/rftg { };
