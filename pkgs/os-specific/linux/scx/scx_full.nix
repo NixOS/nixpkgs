@@ -4,7 +4,7 @@
   scx,
   mkScxScheduler,
 }:
-scx.csheds.overrideAttrs (oldAttrs: {
+scx.cscheds.overrideAttrs (oldAttrs: {
   pname = "scx_full";
   postInstall =
     (oldAttrs.postInstall or "")
