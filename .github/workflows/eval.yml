@@ -1,0 +1,80 @@
+name: Check eval on pull request
+
+on:
+  - workflow_dispatch
+  - push
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: eval-check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x86_64-linux, aarch64-linux, aarch64-darwin, x86_64-darwin]
+    steps:
+      - name: Set up Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Check if Branch is Part of an Open Pull Request
+        id: check_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract the current branch name (removes "refs/heads/" from GITHUB_REF)
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          # Get all open pull requests where the head is this branch in the user's fork
+          PR_INFO=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/NixOS/nixpkgs/pulls?head=${{ github.actor }}:${BRANCH_NAME}")
+          if [[ "$PR_INFO" == "[]" ]]; then
+            echo "No open pull request found for this branch."
+            echo "is_pr=false" >> $GITHUB_ENV
+          else
+            echo "This branch is part of an open pull request."
+            PR_NUMBER=$(echo "$PR_INFO" | jq -r '.[0].number')
+            echo "Pull Request #${PR_NUMBER} detected."
+            echo "is_pr=true" >> $GITHUB_ENV
+            echo "pr_number=${PR_NUMBER}" >> $GITHUB_ENV
+          fi
+
+      - name: Wait for PR Merge Commit Ref to Become Available
+        if: env.is_pr == 'true'
+        run: |
+          MAX_ATTEMPTS=10
+          SLEEP_TIME=10
+          ATTEMPT=1
+          while [[ $ATTEMPT -le $MAX_ATTEMPTS ]]; do
+            MERGE_REF=$(git ls-remote https://github.com/NixOS/nixpkgs "refs/pull/${{ env.pr_number }}/merge")
+            if [[ -n "$MERGE_REF" ]]; then
+              echo "Merge commit ref is available."
+              break
+            fi
+            echo "Merge commit ref not available yet. Attempt $ATTEMPT/$MAX_ATTEMPTS. Waiting $SLEEP_TIME seconds..."
+            sleep $SLEEP_TIME
+            ((ATTEMPT++))
+          done
+          if [[ $ATTEMPT -gt $MAX_ATTEMPTS ]]; then
+            echo "Merge commit ref did not become available in time."
+            exit 1
+          fi
+
+      - name: Checkout PR Merge Commit
+        if: env.is_pr == 'true'
+        run: |
+          git clone --depth 1 https://github.com/NixOS/nixpkgs.git nixpkgs
+          cd nixpkgs
+          git fetch --depth 1 https://github.com/NixOS/nixpkgs.git pull/${{ env.pr_number }}/merge
+          git checkout FETCH_HEAD
+
+      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        if: env.is_pr == 'true'
+
+      - name: Check eval
+        if: env.is_pr == 'true'
+        run: |
+          cd nixpkgs
+          ./ci/eval-nixpkgs.sh --system "$system"
