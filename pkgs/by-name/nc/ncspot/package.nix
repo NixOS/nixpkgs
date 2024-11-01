@@ -80,8 +80,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withTermion "termion_backend";
 
   postInstall = ''
-    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/nscpot.desktop
-    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/nscpot.png
+    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/ncspot.desktop
+    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/ncspot.svg
   '';
 
   passthru = {
