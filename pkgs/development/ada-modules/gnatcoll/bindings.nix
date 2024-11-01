@@ -27,6 +27,7 @@ let
     python3 = [ python3 ncurses ];
     syslog = [ ];
     zlib = [ zlib ];
+    cpp = [ ];
   };
 in
 

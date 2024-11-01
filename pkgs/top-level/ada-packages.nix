@@ -26,6 +26,7 @@ makeScopeWithSplicing' {
     gnatcoll-core     = self.callPackage ../development/ada-modules/gnatcoll/core.nix { };
 
     # gnatcoll-bindings repository
+    gnatcoll-cpp      = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "cpp"; };
     gnatcoll-gmp      = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "gmp"; };
     gnatcoll-iconv    = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "iconv"; };
     gnatcoll-lzma     = self.callPackage ../development/ada-modules/gnatcoll/bindings.nix { component = "lzma"; };
