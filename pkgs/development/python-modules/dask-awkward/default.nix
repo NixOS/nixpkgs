@@ -71,6 +71,8 @@ buildPythonPackage rec {
     "test_from_text"
     # ValueError: not a ROOT file: first four bytes...
     "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;
