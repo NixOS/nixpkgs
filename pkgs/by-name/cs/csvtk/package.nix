@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.30.0";
+  version = "0.31.0";
 in
 buildGoModule {
   pname = "csvtk";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "shenwei356";
     repo = "csvtk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xq56dErO0vjG9bZ5aISIFWX4IOHaQksE9W1is2HiFuQ=";
+    hash = "sha256-RfW7SiRcsN0F/+2bixLMNsqJCOSD1BQwlm4Zm2kogXM=";
   };
 
-  vendorHash = "sha256-wJedDF7QIg8oWc/QX+rZDyq/nkAW+PMb8EYb0RGJxQM=";
+  vendorHash = "sha256-5RqAtnGioasbQxLltglCWitzb7mQgNYIE9IFkE0AOME=";
 
   meta = {
     description = "Cross-platform, efficient and practical CSV/TSV toolkit in Golang";
