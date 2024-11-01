@@ -8,12 +8,7 @@
 , vendorHash ? "sha256-mp+0/DQTNsgAZTnLqcQq1HVLAfKr5vUGYSZlIvM7KpE="
 }:
 
-let
-  attrsToPlugins = attrs:
-    builtins.map ({name, repo, version}: "${name}:${repo}") attrs;
-  attrsToSources = attrs:
-    builtins.map ({name, repo, version}: "${repo}@${version}") attrs;
-in buildGoModule rec {
+buildGoModule rec {
   pname = "coredns";
   version = "1.11.3";
 
@@ -31,9 +26,17 @@ in buildGoModule rec {
   outputs = [ "out" "man" ];
 
   # Override the go-modules fetcher derivation to fetch plugins
-  modBuildPhase = ''
-    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
-    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
+  modBuildPhase = lib.concatMapStrings
+    ({ name, repo, before ? "", ... }:
+      "sed -i '${if before != "" then "/^${before}:.*$/" else "$"}i ${name}:${repo}' plugin.cfg;"
+    )
+    externalPlugins
+  + lib.concatMapStrings
+    ({ repo, version, ... }:
+      "go get ${repo}@${version}"
+    )
+    externalPlugins
+  + '';
     GOOS= GOARCH= go generate
     go mod vendor
   '';
