@@ -23,9 +23,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    (lib.strings.withFeature false "python")
-  ];
+  configureFlags = [ (lib.strings.withFeature false "python") ];
 
   # installCheck instead of check due to -install_name'd library on Darwin
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
