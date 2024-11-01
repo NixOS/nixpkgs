@@ -14,7 +14,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Compatibility Semaphore module";
     homepage = "https://github.com/mirage/semaphore-compat";
-    license = licenses.lgpl21Only;
+    license = with licenses; [ lgpl21Plus ocamlLgplLinkingException ];
     maintainers = [ maintainers.sternenseemann ];
   };
 }
