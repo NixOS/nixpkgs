@@ -45,9 +45,15 @@ buildPythonApplication rec {
     "/System/Library/Frameworks"
   ];
 
-  doCheck = true;
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  # some tests fail in darwin sandbox
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkPhase = ''
+    runHook preCheck
+
+    python unittest-core.py
+
+    runHook postCheck
   '';
 
   dependencies = [
