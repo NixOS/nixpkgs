@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.46";
+  version = "1.0.0.alpha.46-unstable-2024-10-26";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-DpDHU1l8Pot0RwVR1rL9fIhMHo18eo7nTecnSa3hG2E=";
+    rev = "165a2791d4bf3e7dee69e3dd7885dbe4948265b9";
+    hash = "sha256-7klvOvwyAg+Xno6zWo8UByjaS9OkOuCceuZcAIEgdyU=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dplugin_bluez=true"
+    (lib.mesonBool "plugin_bluez" true)
   ];
 
   meta = {
