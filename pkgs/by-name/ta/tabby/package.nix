@@ -13,17 +13,15 @@
 
   llama-cpp,
 
+  apple-sdk_15,
   autoAddDriverRunpath,
+  versionCheckHook,
+
   cudaSupport ? config.cudaSupport,
-
   rocmSupport ? config.rocmSupport,
-
-  darwin,
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-
   # one of [ null "cpu" "rocm" "cuda" "metal" ];
   acceleration ? null,
-  versionCheckHook,
 }:
 
 let
@@ -106,19 +104,9 @@ let
   # TODO(ghthor): some of this can be removed
   darwinBuildInputs =
     [ llamaccpPackage ]
-    ++ optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Foundation
-        Accelerate
-        CoreVideo
-        CoreGraphics
-      ]
-      ++ optionals enableMetal [
-        Metal
-        MetalKit
-      ]
-    );
+    ++ optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_15
+    ]);
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
