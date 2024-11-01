@@ -18150,8 +18150,6 @@ with pkgs;
 
   riff = callPackage ../development/tools/misc/riff { };
 
-  riffdiff = callPackage ../tools/text/riffdiff {};
-
   rman = callPackage ../development/tools/misc/rman { };
 
   rnginline = with python3Packages; toPythonApplication rnginline;
