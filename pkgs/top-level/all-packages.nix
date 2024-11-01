@@ -28610,8 +28610,6 @@ with pkgs;
 
   oed = callPackage ../applications/editors/oed { };
 
-  electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
-
   electrum = libsForQt5.callPackage ../applications/misc/electrum { };
 
   electrum-grs = libsForQt5.callPackage ../applications/misc/electrum/grs.nix { };

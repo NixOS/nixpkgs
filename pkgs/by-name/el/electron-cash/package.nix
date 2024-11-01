@@ -3,9 +3,8 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  wrapQtAppsHook,
+  qt5,
   secp256k1,
-  qtwayland,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -56,9 +55,9 @@ python3Packages.buildPythonApplication rec {
     pysatochip
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
   postPatch = ''
     substituteInPlace setup.py \
