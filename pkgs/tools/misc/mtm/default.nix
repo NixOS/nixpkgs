@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "mtm";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gibrvah059z37jvn1qs4b6kvd4ivk2mfihmcpgx1vz6yg70zghv";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ darwin.libutil ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "MANDIR=${placeholder "out"}/share/man/man1" ];
 
