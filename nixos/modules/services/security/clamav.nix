@@ -120,6 +120,16 @@ in
             The default includes everything I could think of that is valid for nixos. Feel free to contribute a PR to add to the default if you see something missing.
           '';
         };
+
+        multiscan = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Should clamdscan run with `--multiscan`?
+            In the multiscan mode clamd will attempt to scan the directory contents in parallel using available threads.
+            This option is especially useful on multiprocessor and multi-core systems.
+          '';
+        };
       };
     };
   };
@@ -280,9 +290,13 @@ in
       after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
       wants = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
 
-      serviceConfig = {
+      serviceConfig = let
+        allmatch =
+          "--allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        multiscan = if cfg.scanner.multiscan then "--multiscan" else "";
+      in {
         Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        ExecStart = "${cfg.package}/bin/clamdscan ${multiscan} --fdpass --infected ${allmatch}";
         Slice = "system-clamav.slice";
       };
     };
