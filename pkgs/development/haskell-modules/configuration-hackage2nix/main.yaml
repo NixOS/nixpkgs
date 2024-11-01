@@ -36,7 +36,8 @@ default-package-overrides:
   - hnix-store-remote < 0.7
   # 2024-09-12: match xmonad 0.17.* from Stackage LTS
   - xmonad-contrib < 0.18.1
-
+  # 2024-11-01: no release version of http2/3 supports http-semantics >= 0.3.0 at the moment
+  - http-semantics < 0.3.0
 
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
