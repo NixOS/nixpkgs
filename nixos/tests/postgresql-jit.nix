@@ -1,20 +1,15 @@
 { system ? builtins.currentSystem
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
-, package ? null
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   inherit (pkgs) lib;
-  packages = builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs);
-
-  mkJitTestFromName = name:
-    mkJitTest pkgs.${name};
 
   mkJitTest = package: makeTest {
-    name = package.name;
+    name = "postgresql-jit-${package.name}";
     meta.maintainers = with lib.maintainers; [ ma27 ];
     nodes.machine = { pkgs, lib, ... }: {
       services.postgresql = {
@@ -49,7 +44,7 @@ let
     '';
   };
 in
-if package == null then
-  lib.genAttrs packages mkJitTestFromName
-else
-  mkJitTest package
+lib.concatMapAttrs (n: p: { ${n} = mkJitTest p; }) (lib.filterAttrs (n: _: lib.hasSuffix "_jit" n) pkgs.postgresqlVersions)
+// {
+  passthru.override = p: mkJitTest p;
+}
