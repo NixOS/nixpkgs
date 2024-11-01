@@ -14504,7 +14504,7 @@ with pkgs;
     enableLTO = false;
   };
 
-  gnat = gnat12; # When changing this, update also gnatPackages
+  gnat = gnat13; # When changing this, update also gnatPackages
 
   gnat11 = wrapCC (gcc11.cc.override {
     name = "gnat";
@@ -14609,7 +14609,7 @@ with pkgs;
   gnat12Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat12; });
   gnat13Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat13; });
   gnat14Packages = recurseIntoAttrs (callPackage ./ada-packages.nix { gnat = buildPackages.gnat14; });
-  gnatPackages   = gnat12Packages;
+  gnatPackages   = gnat13Packages;
 
   inherit (gnatPackages)
     gprbuild
