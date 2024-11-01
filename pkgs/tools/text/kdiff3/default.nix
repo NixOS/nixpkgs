@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdiff3";
-  version = "1.11.2";
+  version = "1.11.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kYU3dcP6qVIkaOwSPNbedGYqy21RFkdZlqyk3Cw778g=";
+    hash = "sha256-rt573JqpZ1rukP0qNScFLtMbMJGNQuaQelksunzmp8M=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
