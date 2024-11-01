@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "task-keeper";
-  version = "0.13.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "tennox"; # Using my fork because of https://github.com/linux-china/task-keeper/pull/5
     repo = "task-keeper";
-    rev = "2a793dd7082259eab084f62bfd3a281f93c82a74";
-    hash = "sha256-oPdg8abAM+uSzx0OhRjDlTf4GdfmT9ALqTaH8u/9PUk=";
+    rev = "4e39d65d01c44b44ae9876d8a3cb37066ce9f3f7";
+    hash = "sha256-l/sqYuFrSDJN4Y9NN2fpkEI7AWctezLRi/pNAkPmHRk=";
   };
 
   cargoLock = {
