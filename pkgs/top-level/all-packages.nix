@@ -9930,6 +9930,8 @@ with pkgs;
 
   mencal = callPackage ../applications/misc/mencal { } ;
 
+  meshnamed = callPackage ../tools/networking/meshnamed { };
+
   metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   metar = callPackage ../applications/misc/metar { };
