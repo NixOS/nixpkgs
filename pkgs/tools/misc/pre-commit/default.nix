@@ -3,6 +3,8 @@
 , python3Packages
 , libiconv
 , cargo
+, rustup
+, gcc
 , coursier
 , dotnet-sdk
 , git
@@ -43,6 +45,8 @@ buildPythonApplication rec {
     pyyaml
     toml
     virtualenv
+    rustup
+    gcc
   ];
 
   nativeCheckInputs = [
