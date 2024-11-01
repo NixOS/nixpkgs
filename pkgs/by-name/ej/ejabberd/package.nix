@@ -73,7 +73,6 @@ let
   };
 
   allBeamDeps = import ./rebar-deps.nix {
-    # TODO(@chuangzhu) add updateScript
     inherit fetchHex fetchgit fetchFromGitHub;
     builder = lib.makeOverridable beamPackages.buildRebar3;
 
@@ -210,6 +209,8 @@ stdenv.mkDerivation (finalAttrs:{
       lib.makeBinPath [ imagemagick ]
     }"''}
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source XMPP application server written in Erlang";
