@@ -17752,6 +17752,8 @@ with pkgs;
 
   krankerl = callPackage ../development/tools/krankerl { };
 
+  kroki-cli = callPackage ../tools/text/kroki-cli { };
+
   krew = callPackage ../development/tools/krew { };
 
   kube-bench = callPackage ../tools/security/kube-bench { };
