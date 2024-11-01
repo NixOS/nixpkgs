@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
   ];
 
-  buildInputs = [
-    apacheHttpd
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libintl
-  ];
+  buildInputs =
+    [
+      apacheHttpd
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libintl
+    ];
 
   passthru = {
     inherit apacheHttpd;
