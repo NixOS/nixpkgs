@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp -r ${kotatogram-desktop}/share $out
+    substituteInPlace $out/share/dbus-1/services/* --replace-fail ${kotatogram-desktop} $out
   '';
   postFixup = ''
     mkdir -p $out/bin
