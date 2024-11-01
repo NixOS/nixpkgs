@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "cnspec";
-  version = "11.28.0";
+  version = "11.28.1";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vtefht623aXx6tUXb+MyKjGTyF4YQYQ/Huy8kEkjrVc=";
+    hash = "sha256-XbufLkszKqddqBrYrUHzQLUT+kzLaRo60f0D1mRmwRA=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-D8AZ1qPon4Ujiw96N79AAA14P0LFDL2W3kmpR4mhOa0=";
+  vendorHash = "sha256-0XA3kDOY2PLczv9wlbeXzFe7UDNI5FQo4Q7bV1nsprA=";
 
   subPackages = [ "apps/cnspec" ];
 
