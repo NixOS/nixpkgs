@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   hatchling,
@@ -39,6 +40,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/encode/starlette/security/advisories/GHSA-f96h-pmfr-66vw
+      name = "CVE-2024-47874.patch";
+      url = "https://github.com/encode/starlette/commit/fd038f3070c302bff17ef7d173dbb0b007617733.patch";
+      hash = "sha256-N/v0xBa6e40ZrdHfDa5mlHJhh5IyDdC/XdmTtKNOYP4=";
+    })
+  ];
 
   nativeBuildInputs = [ hatchling ];
 

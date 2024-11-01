@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
   build,
   git,
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/python-poetry/poetry-core/commit/bd1ce358dec403c66e62176b11bfad77a51aacfd.patch";
+      hash = "sha256-dl2xTsn0nNAGJKNmgNPXlaeJOs1gNfDeQMJnD7EnKB4=";
+    })
+  ];
 
   nativeCheckInputs = [
     build
