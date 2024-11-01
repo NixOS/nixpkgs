@@ -9233,6 +9233,18 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
 
+  nvim-scissors = buildVimPlugin {
+    pname = "nvim-scissors";
+    version = "2024-10-30";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-scissors";
+      rev = "27213bd106239eeb8adbfdd4f346f76ccd50ce53";
+      sha256 = "sha256-8rOkXEhLNLLaYoBs5Ir3kIDYWPXyhmXL7PAsY2FiX2U=";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-scissors/";
+  };
+
   nvim-search-and-replace = buildVimPlugin {
     pname = "nvim-search-and-replace";
     version = "2022-09-06";
