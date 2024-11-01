@@ -95,6 +95,9 @@ buildGoModule {
     mainProgram = "dependabot";
     homepage = "https://github.com/dependabot/cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    maintainers = with maintainers; [
+      l0b0
+      infinisil
+    ];
   };
 }
