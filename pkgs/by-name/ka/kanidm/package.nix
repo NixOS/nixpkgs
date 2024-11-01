@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg" \
+        --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
     '';
 
   nativeBuildInputs = [
