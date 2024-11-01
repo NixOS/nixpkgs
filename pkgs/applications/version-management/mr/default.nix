@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "mr";
-  version = "1.20180726";
+  version = "1.20230114";
 
   src = fetchgit {
     url = "git://myrepos.branchable.com/";
     # the repository moved its tags at least once
     # when updating please continue using the revision hash here
-    rev = "0ad7a17bb455de1fec3b2375c7aac72ab2a22ac4";
-    sha256 = "0jphw61plm8cgklja6hs639xhdvxgvjwbr6jpvjwpp7hc5gmhms5";
+    rev = "7196c47ed91ea188eed86c8da2eeddafee9cb2ed";
+    sha256 = "sha256-+R1wijdFRftsLUGVj37pmAzEfuj1gzcuuU3wdjREsLI=";
   };
 
   postPatch = ''
