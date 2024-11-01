@@ -132,6 +132,7 @@
 , "lodash"
 , "lua-fmt"
 , "madoko"
+, "@marp-team/marp-cli"
 , "mastodon-bot"
 , "mathjax"
 , "meat"
