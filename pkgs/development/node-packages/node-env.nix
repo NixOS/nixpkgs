@@ -476,6 +476,8 @@ let
     { name
     , packageName
     , version ? null
+    , src ? null
+    , srcs ? null
     , dependencies ? []
     , buildInputs ? []
     , production ? true
@@ -487,11 +489,12 @@ let
     , dontStrip ? true
     , unpackPhase ? "true"
     , buildPhase ? "true"
+    , passthru ? {}
     , meta ? {}
     , ... }@args:
 
     let
-      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "passthru" "meta" ];
     in
     stdenv.mkDerivation ({
       name = "${name}${if version == null then "" else "-${version}"}";
@@ -557,11 +560,28 @@ let
         runHook postInstall
       '';
 
+      passthru = {
+        allSourceFiles = (
+          if src != null then {
+            inherit src;
+          } else if srcs != null then (builtins.listToAttrs lib.imap0 (i: item:
+            lib.nameValuePair "srcs.${i}" item
+          ) srcs) else {}
+        ) // (flattenDependenciesSourceFiles dependencies);
+      } // passthru;
+
       meta = {
         # default to Node.js' platforms
         platforms = nodejs.meta.platforms;
       } // meta;
     } // extraArgs);
+
+  flattenDependenciesSourceFiles = let
+    flattenToNameValuePairs = dependencies: lib.concatMap (d:
+      [{ name = "${d.packageName}-${d.version}"; value = d.src; }]
+        ++ (if (d.dependencies or []) == [] then [] else flattenToNameValuePairs d.dependencies)
+    ) dependencies;
+  in dependencies: builtins.listToAttrs (flattenToNameValuePairs dependencies);
 
   # Builds a node environment (a node_modules folder and a set of binaries)
   buildNodeDependencies =
