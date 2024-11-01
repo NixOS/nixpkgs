@@ -11,8 +11,7 @@
 buildPythonPackage rec {
   pname = "blockfrost-python";
   version = "0.6.0";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blockfrost";
