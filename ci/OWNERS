@@ -18,8 +18,8 @@
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
 /.github/workflows/codeowners-v2.yml @infinisil
-/ci/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
+/ci/OWNERS @infinisil
 
 # Development support
 /.editorconfig @Mic92 @zowoq
