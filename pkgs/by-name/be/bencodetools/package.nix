@@ -2,17 +2,18 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bencodetools";
-  version = "unstable-2022-05-11";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "heikkiorsila";
     repo = "bencodetools";
-    rev = "384d78d297a561dddbbd0f4632f0c74c0db41577";
-    hash = "sha256-FQ+U4cya3CfUb4BVpqtOrrFKSlciwTVxrROOkRNOybQ=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-5Y1r6+aVtK22lYr2N+YUPPdUts9PIF9I/Pq/mI+WqQs=";
   };
 
   postPatch = ''
@@ -34,6 +35,8 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
   meta = {
     description = "Collection of tools for manipulating bencoded data";
     homepage = "https://gitlab.com/heikkiorsila/bencodetools";
@@ -42,4 +45,4 @@ stdenv.mkDerivation {
     mainProgram = "bencat";
     platforms = lib.platforms.unix;
   };
-}
+})
