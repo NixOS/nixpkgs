@@ -732,6 +732,10 @@ self: super:
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
 
+    hardeningDisable = lib.optionals stdenv.isDarwin [
+      "pie"
+    ];
+
     patches = [
       (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";

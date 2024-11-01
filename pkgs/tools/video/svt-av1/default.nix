@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   cmakeFlags = [
     "-DSVT_AV1_LTO=ON"
   ];

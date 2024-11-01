@@ -12,6 +12,10 @@ tcl.mkTclDerivation {
 
   setOutputFlags = false;
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   preConfigure = ''
     configureFlagsArray+=(--mandir=$man/share/man --enable-man-symlinks)
     cd unix
