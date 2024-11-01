@@ -7,6 +7,7 @@
 , bison
 , flex
 , zlib
+, apple-sdk_11
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
   ];
 
   postPatch = ''
@@ -64,5 +67,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ tobim ];
+    platforms = platforms.unix;
   };
 }
