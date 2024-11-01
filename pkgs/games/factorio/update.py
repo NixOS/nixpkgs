@@ -55,6 +55,7 @@ SYSTEMS = [
 
 RELEASE_TYPES = [
     ReleaseType("alpha", needs_auth=True),
+    ReleaseType("expansion", needs_auth=True),
     ReleaseType("demo"),
     ReleaseType("headless"),
 ]
