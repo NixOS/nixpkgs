@@ -20,15 +20,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-OBLKCj+v5KgYslJGuwLgJHjgcrxLPiiyO5/ucrJ14Ws=";
   };
 
-  pnpmWorkspace = "shadcn";
+  pnpmWorkspaces = [ "shadcn" ];
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      pnpmWorkspace
+      pnpmWorkspaces
       ;
-    hash = "sha256-OcoZfbB04CFHpAM/fW3IhIMXtas6x8H3+lvk7nTN8Tg=";
+    hash = "sha256-/80LJm65ZRqyfhsNqGl83bsI2wjgVkvrA6Ij4v8rtoQ=";
   };
 
   nativeBuildInputs = [
