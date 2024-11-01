@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Custom Discord App aiming to give you better performance and improve linux support";
     homepage = "https://github.com/Equicord/Equibop";
-    changelog = "https://github.com/Equicord/Equibop/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Equicord/Equibop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [
       lib.maintainers.NotAShelf
