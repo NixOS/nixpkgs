@@ -855,7 +855,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "--no-ask-password"
         "--pipe"
         "--quiet"
-        "--same-dir"
         "--service-type=exec"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"
