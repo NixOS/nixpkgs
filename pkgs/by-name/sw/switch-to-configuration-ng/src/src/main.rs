@@ -940,7 +940,10 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 fn usage(argv0: &str) -> ! {
     eprintln!(
         r#"Usage: {} [switch|boot|test|dry-activate]
-Consider calling `apply` instead of `switch-to-configuration`.
+switch:       make the configuration the boot default and activate now
+boot:         make the configuration the boot default
+test:         activate the configuration, but don't make it the boot default
+dry-activate: show what would be done if this configuration were activated
 "#,
         argv0
     );
