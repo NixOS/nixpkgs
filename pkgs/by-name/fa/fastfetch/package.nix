@@ -29,8 +29,8 @@
   python3,
   rpm,
   sqlite,
-  testers,
   util-linux,
+  versionCheckHook,
   vulkan-loader,
   wayland,
   xfce,
@@ -140,14 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "fastfetch -v | cut -d '(' -f 1";
-      version = "fastfetch ${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
