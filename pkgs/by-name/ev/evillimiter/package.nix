@@ -1,28 +1,26 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, colorama
-, iproute2
-, iptables
-, netaddr
-, netifaces
-, scapy
-, terminaltables
-, tqdm
+{
+  lib,
+  fetchFromGitHub,
+  iproute2,
+  iptables,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "evillimiter";
   version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitbrute";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1l0acd4a36wzz1gyc6mcw3zpagyi2mc425c6d4c6anq3jxwm3847";
+    repo = "evillimiter";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-h6BReZcDW2UYaYYVQVgV0T91/+CsGuZf+J+boUhjCtA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools-scm ];
+
+  dependencies = with python3Packages; [
     colorama
     iproute2
     iptables
@@ -33,14 +31,11 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  # no tests present
+  # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "evillimiter.evillimiter" ];
-
-  meta = with lib; {
+   meta = with lib; {
     description = "Tool that monitors, analyzes and limits the bandwidth";
-    mainProgram = "evillimiter";
     longDescription = ''
       A tool to monitor, analyze and limit the bandwidth (upload/download) of
       devices on your local network without physical or administrative access.
@@ -48,7 +43,8 @@ buildPythonApplication rec {
       bandwidth of hosts on the network.
     '';
     homepage = "https://github.com/bitbrute/evillimiter";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "evillimiter";
   };
 }
