@@ -5,6 +5,7 @@
   fetchFromGitHub,
   httpx,
   poetry-core,
+  pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
@@ -25,11 +26,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-d+cN6f6jw8D+noxyYl/TpDAkeTb8Krt+r0/Ai65cvdU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=deezer" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -40,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     environs
+    pytest-cov-stub
     pytest-mock
     pytest-vcr
     pytestCheckHook
