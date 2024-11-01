@@ -32,6 +32,7 @@
 , microsoft-gsl
 , boost
 , ada
+, withWebKitGTK ? true
 , wrapGAppsHook3
 , glib-networking
 , webkitgtk_4_1
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
       --replace-fail '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -99,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     # to build bundled libdispatch
     clang
     gobject-introspection
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
     wrapGAppsHook3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
@@ -129,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     hunspell
     jemalloc
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
     glib-networking
     webkitgtk_4_1
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
@@ -183,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
