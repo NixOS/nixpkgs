@@ -54,7 +54,7 @@ let
           broken = kernel.meta.broken;
         };
       };
-      kernelPatches = lib.filter ({ name ? null, ... }: name != "netfilter-typo-fix") kernel.kernelPatches ++ [
+      kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
       isHardened = true;
@@ -138,7 +138,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -147,7 +146,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -156,7 +154,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -165,7 +162,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -174,7 +170,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -183,7 +178,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -192,7 +186,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -204,7 +197,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.netfilter-typo-fix
         ];
       };
       latest = packageAliases.linux_latest.kernel;
