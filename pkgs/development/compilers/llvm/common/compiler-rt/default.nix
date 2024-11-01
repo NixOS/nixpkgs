@@ -188,6 +188,13 @@ stdenv.mkDerivation ({
     substituteInPlace ../libcxx/utils/merge_archives.py \
       --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
       --replace-fail "distutils.spawn." ""
+  '' + lib.optionalString (lib.versionAtLeast release_version "19")
+    # codesign in sigtool doesn't support the various options used by the build
+    # and is present in the bootstrap-tools. Removing find_program prevents the
+    # build from trying to use it and failing.
+    ''
+    substituteInPlace cmake/Modules/AddCompilerRT.cmake \
+      --replace-fail 'find_program(CODESIGN codesign)' ""
   '';
 
   # Hack around weird upsream RPATH bug
