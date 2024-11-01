@@ -77,8 +77,6 @@ buildPythonPackage rec {
     gumbo
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
 
-  propagatedBuildInputs = [ mupdf-cxx ];
-
   env = {
     # force using system MuPDF (must be defined in environment and empty)
     PYMUPDF_SETUP_MUPDF_BUILD = "";
@@ -89,12 +87,17 @@ buildPythonPackage rec {
     PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
   };
 
-  # TODO: manually add mupdf rpath until upstream fixes it
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for lib in */*.so $out/${python.sitePackages}/*/*.so; do
-      install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
-    done
-  '';
+  postInstall =
+    (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # manually add mupdf rpath until upstream fixes it
+      for lib in */*.so $out/${python.sitePackages}/*/*.so; do
+        install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
+      done
+    '')
+    + ''
+      # bundle the `mupdf` module provided by mupdf-cxx
+      cp -r ${lib.getLib mupdf-cxx}/${python.sitePackages}/mupdf $out/${python.sitePackages}/mupdf
+    '';
 
   nativeCheckInputs = [
     pytestCheckHook
