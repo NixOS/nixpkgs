@@ -6,7 +6,8 @@
   bzip2,
   zstd,
   stdenv,
-  darwin,
+  apple-sdk_15,
+  darwinMinVersionHook,
   rocksdb,
   nix-update-script,
   testers,
@@ -63,7 +64,9 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
     ++ lib.optional enableLiburing liburing
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
+      apple-sdk_15
+      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
+      (darwinMinVersionHook "10.15")
     ];
 
   env = {
