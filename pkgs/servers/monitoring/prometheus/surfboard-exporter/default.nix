@@ -11,9 +11,9 @@ buildGoModule rec {
     sha256 = "11qms26648nwlwslnaflinxcr5rnp55s908rm1qpnbz0jnxf5ipw";
   };
 
-  postPatch = ''
-    go mod init github.com/ipstatic/surfboard_exporter
-  '';
+  patches = [
+    ./add-go-mod.patch
+  ];
 
   vendorHash = null;
 
