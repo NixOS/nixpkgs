@@ -8,6 +8,7 @@
   autograd,
   numba,
   numpy,
+  future,
   scikit-learn,
   scipy,
   matplotlib,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     numpy
     scikit-learn
     scipy
+    future
   ];
 
   nativeCheckInputs = [
@@ -49,6 +51,7 @@ buildPythonPackage rec {
     matplotlib
     seaborn
   ];
+
   pytestFlagsArray = [
     "hyppo"
   ];
