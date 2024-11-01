@@ -315,6 +315,7 @@ let
                      };
 
       tests = {
+        postgresql = nixosTests.postgresql.passthru.override finalAttrs.finalPackage;
         postgresql-wal-receiver = nixosTests.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {

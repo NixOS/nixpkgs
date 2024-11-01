@@ -7,7 +7,13 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  postgresql-versions = import ../../pkgs/servers/sql/postgresql pkgs;
+  testsForPackage = package:
+    recurseIntoAttrs {
+      postgresql = make-postgresql-test package false;
+      postgresql-backup-all = make-postgresql-test package true;
+      postgresql-clauses = mk-ensure-clauses-test package;
+    };
+
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION pgcrypto; -- just to check if lib loading works
     CREATE TABLE sth (
@@ -21,8 +27,9 @@ let
     CREATE TABLE xmltest ( doc xml );
     INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: backup-all: makeTest {
-    name = postgresql-name;
+
+  make-postgresql-test = postgresql-package: backup-all: makeTest {
+    name = "postgresql${optionalString backup-all "-backup-all"}-${postgresql-package.name}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ zagy ];
     };
@@ -133,8 +140,8 @@ let
 
   };
 
-  mk-ensure-clauses-test = postgresql-name: postgresql-package: makeTest {
-    name = postgresql-name;
+  mk-ensure-clauses-test = postgresql-package: makeTest {
+    name = "postgresql-clauses-${postgresql-package.name}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ zagy ];
     };
@@ -219,8 +226,7 @@ let
     '';
   };
 in
-  concatMapAttrs (name: package: {
-    ${name} = make-postgresql-test name package false;
-    ${name + "-backup-all"} = make-postgresql-test "${name + "-backup-all"}" package true;
-    ${name + "-clauses"} = mk-ensure-clauses-test name package;
-  }) postgresql-versions
+concatMapAttrs (n: p: { ${n} = testsForPackage p; }) pkgs.postgresqlVersions
+// {
+  passthru.override = p: testsForPackage p;
+}
