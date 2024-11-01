@@ -4089,11 +4089,7 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
-  tmuxPlugins = recurseIntoAttrs (
-    callPackage ../misc/tmux-plugins {
-      pkgs = pkgs.__splicedPackages;
-    }
-  );
+  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
   tpm2-totp-with-plymouth = tpm2-totp.override {
     withPlymouth = true;
@@ -4311,9 +4307,7 @@ with pkgs;
   yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
   yarn-berry_3 = yarn-berry.override { berryVersion = 3; };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea {
-    pkgs = pkgs.__splicedPackages;
-  };
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { };
 
   inherit (yarn2nix-moretea)
     yarn2nix
@@ -5015,7 +5009,6 @@ with pkgs;
   idrisPackages = recurseIntoAttrs (
     callPackage ../development/idris-modules {
       idris-no-deps = haskellPackages.idris;
-      pkgs = pkgs.__splicedPackages;
     }
   );
 

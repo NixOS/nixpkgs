@@ -1,11 +1,10 @@
 {
   lib,
-  __splicedPackages,
+  pkgs,
   erlang,
 }:
 
 let
-  pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
   # FIXME: add support for overrideScope
