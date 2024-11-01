@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoLock = {
-    lockFile = "${src}/Cargo.lock";
+    lockFile = "${./.}/Cargo.lock";
   };
   doCheck = false; # tests depend on many packages (java, node, python, sbt, ...) - which I'm not currently willing to set up 😅
 
