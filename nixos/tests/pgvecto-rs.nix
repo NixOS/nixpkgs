@@ -1,6 +1,3 @@
-# mostly copied from ./timescaledb.nix which was copied from ./postgresql.nix
-# as it seemed unapproriate to test additional extensions for postgresql there.
-
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../.. { inherit system config; }
@@ -10,7 +7,6 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  postgresql-versions = import ../../pkgs/servers/sql/postgresql pkgs;
   # Test cases from https://docs.pgvecto.rs/use-cases/hybrid-search.html
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION vectors;
@@ -27,8 +23,9 @@ let
       ('a thin cat sat on a mat and ate a thin rat', '[7, 8, 9]'),
       ('a thin dog sat on a mat and ate a thin rat', '[10, 11, 12]');
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: makeTest {
-    name = postgresql-name;
+
+  makePgVectorsTest = postgresqlPackage: makeTest {
+    name = "pgvecto-rs-${postgresqlPackage.name}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ diogotcorreia ];
     };
@@ -37,7 +34,7 @@ let
       {
         services.postgresql = {
           enable = true;
-          package = postgresql-package;
+          package = postgresqlPackage;
           extraPlugins = ps: with ps; [
             pgvecto-rs
           ];
@@ -45,7 +42,11 @@ let
         };
       };
 
-    testScript = ''
+    testScript = { nodes, ... }:
+    let
+      inherit (nodes.machine.services.postgresql.package.pkgs) pgvecto-rs;
+    in
+    ''
       def check_count(statement, lines):
           return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
               statement, lines
@@ -56,7 +57,7 @@ let
       machine.wait_for_unit("postgresql")
 
       with subtest("Postgresql with extension vectors is available just after unit start"):
-          machine.succeed(check_count("SELECT * FROM pg_available_extensions WHERE name = 'vectors' AND default_version = '${postgresql-package.pkgs.pgvecto-rs.version}';", 1))
+          machine.succeed(check_count("SELECT * FROM pg_available_extensions WHERE name = 'vectors' AND default_version = '${pgvecto-rs.version}';", 1))
 
       machine.succeed("sudo -u postgres psql -f ${test-sql}")
 
@@ -66,11 +67,8 @@ let
     '';
 
   };
-  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "14") postgresql-versions;
 in
-mapAttrs'
-  (name: package: {
-    inherit name;
-    value = make-postgresql-test name package;
-  })
-  applicablePostgresqlVersions
+concatMapAttrs (n: p: { ${n} = makePgVectorsTest p; }) (filterAttrs (n: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions)
+// {
+  passthru.override = p: makePgVectorsTest p;
+}
