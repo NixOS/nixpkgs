@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
