@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hex";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "sitkevij";
     repo = "hex";
     rev = "v${version}";
-    hash = "sha256-0LUT86mtqkscTfWNj2WHdMUizq0UQMCqXqTE0HRUItc=";
+    hash = "sha256-YctXDhCMJvDQLPsuhzdyYDUIlFE2vKltNtrFFeE7YE8=";
   };
 
-  cargoHash = "sha256-BDDAKr6F9KtZGKX6FjasnO8oneZp0cy0M9r0tyqxL+o=";
+  cargoHash = "sha256-Nlha9Zn0qaQhpN2ivbBvpIPxCN2I7BtJJULb6sYdpdo=";
 
   passthru.tests.version = testers.testVersion {
     package = hex;
@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sitkevij/hex/releases/tag/v${version}";
     mainProgram = "hx";
     license = licenses.mit;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = [ ];
   };
 }

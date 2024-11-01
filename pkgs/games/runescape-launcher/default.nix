@@ -8,7 +8,6 @@
 , gcc-unwrapped
 , glib
 , glibc
-, gnome2
 , gtk2-x11
 , libGL
 , libpulseaudio
@@ -18,7 +17,7 @@
 , openssl_1_1
 , pango
 , SDL2
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 , xorg_sys_opengl
@@ -40,7 +39,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

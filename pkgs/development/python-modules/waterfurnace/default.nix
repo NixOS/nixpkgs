@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, pythonOlder
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
+  pythonOlder,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "waterfurnace"
-  ];
+  pythonImportsCheck = [ "waterfurnace" ];
 
   meta = with lib; {
     description = "Python interface to waterfurnace geothermal systems";
+    mainProgram = "waterfurnace-debug";
     homepage = "https://github.com/sdague/waterfurnace";
     changelog = "https://github.com/sdague/waterfurnace/blob/v${version}/HISTORY.rst";
     license = with licenses; [ asl20 ];

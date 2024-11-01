@@ -1,46 +1,54 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, importlib-metadata
-, packaging
-, pip
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, userpath
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  installShellFiles,
+  packaging,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  userpath,
+  git,
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.2.1";
-  format = "pyproject";
+  version = "1.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "pipxproject";
-    repo = pname;
+    owner = "pypa";
+    repo = "pipx";
     rev = "refs/tags/${version}";
-    hash = "sha256-eNZJXznKgamGR9yrswrrLEqUTxFhLGxWTkYbi13bebY=";
+    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argcomplete
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    argcomplete
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    git
   ];
 
   preCheck = ''
@@ -72,12 +80,33 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_auto_update_shared_libs"
+    "test_cli"
+    "test_cli_global"
+    "test_fetch_missing_python"
+    "test_list_does_not_trigger_maintenance"
+    "test_list_pinned_packages"
     "test_list_short"
+    "test_list_standalone_interpreter"
+    "test_list_unused_standalone_interpreters"
+    "test_list_used_standalone_interpreters"
+    "test_pin"
+    "test_skip_maintenance"
+    "test_unpin"
+    "test_unpin_warning"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd pipx \
+      --bash <(register-python-argcomplete pipx --shell bash) \
+      --zsh <(register-python-argcomplete pipx --shell zsh) \
+      --fish <(register-python-argcomplete pipx --shell fish)
+  '';
 
   meta = with lib; {
     description = "Install and run Python applications in isolated environments";
-    homepage = "https://github.com/pipxproject/pipx";
+    mainProgram = "pipx";
+    homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ yshym ];

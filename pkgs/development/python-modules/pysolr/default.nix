@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm, requests, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  requests,
+  mock,
+}:
 
 buildPythonPackage rec {
   pname = "pysolr";
-  version = "3.9.0";
+  version = "3.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rj5jmscvxjwcmlfi6hmkj44l4x6n3ln5p7d8d18j566hzmmzw3f";
+    sha256 = "sha256-EntKLdFpI0rLFYZkOmzR4+lLkXkh5pv1adeyoqoO9Ak=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -23,4 +31,3 @@ buildPythonPackage rec {
     license = licenses.bsd3;
   };
 }
-

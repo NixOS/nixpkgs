@@ -18,15 +18,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SkvAtV613+ARk79dB2zRKoLjPgdzoEKQa3JrRw9qBkA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   meta = with lib; {
     description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis 🐱";
+    mainProgram = "mdbook-emojicodes";
     homepage = "https://github.com/blyxyas/mdbook-emojicodes";
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
   };
 }

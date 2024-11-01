@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
       "https://github.com/mapbox/protozero/releases/tag/v${version}"
       "https://github.com/mapbox/protozero/blob/v${version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
   };
 }

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , at-spi2-core
 , babl
 , dbus
@@ -28,9 +27,9 @@
 , nixosTests
 , pkg-config
 , python3
-, tracker
-, tracker-miners
-, wrapGAppsHook
+, tinysparql
+, localsearch
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
       pygobject3
       pyatspi
     ]))
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -81,8 +80,8 @@ stdenv.mkDerivation rec {
     libdazzle
     libportal-gtk3
     libhandy
-    tracker
-    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    tinysparql
+    localsearch # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 
     at-spi2-core # for tests
   ];
@@ -114,7 +113,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Access, organize and share your photos";
-    homepage = "https://wiki.gnome.org/Apps/Photos";
+    mainProgram = "gnome-photos";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

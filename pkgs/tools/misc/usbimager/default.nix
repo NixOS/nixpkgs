@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
 , withLibui ? true, gtk3
-, withUdisks ? stdenv.isLinux, udisks, glib
+, withUdisks ? stdenv.hostPlatform.isLinux, udisks, glib
 , libX11 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
+    hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       -e 's|install -m 2755 -g $(GRP)|install |g' Makefile
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/usbimager.desktop \
+      --replace-fail "Exec=/usr/bin/usbimager" "Exec=usbimager"
+  '';
+
   dontConfigure = true;
 
   makeFlags =  [ "PREFIX=$(out)" ]
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
   meta = with lib; {
-    description = "A very minimal GUI app that can write compressed disk images to USB drives";
+    description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
     license = licenses.mit;
     maintainers = with maintainers; [ vdot0x23 ];
@@ -44,6 +49,7 @@ stdenv.mkDerivation rec {
     # feel free add them if you have a machine to test
     platforms = with platforms; linux;
     # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    mainProgram = "usbimager";
   };
 }

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "bson";
   version = "0.5.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

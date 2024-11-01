@@ -18,9 +18,14 @@
 , extraBuildInputs ? []
 , extraMakeFlags ? []
 , extraPassthru ? {}
-, tests ? []
+, tests ? {}
 }:
 
+let
+  # Rename the variables to prevent infinite recursion
+  requireSigningDefault = requireSigning;
+  allowAddonSideloadDefault = allowAddonSideload;
+in
 
 { lib
 , pkgs
@@ -45,7 +50,7 @@
 , rustPlatform
 , unzip
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # runtime
 , bzip2
@@ -57,8 +62,8 @@
 , glib
 , gnum4
 , gtk3
-, icu
 , icu72
+, icu73
 , libGL
 , libGLU
 , libevent
@@ -80,25 +85,29 @@
 
 # optionals
 
+## addon signing/sideloading
+, requireSigning ? requireSigningDefault
+, allowAddonSideload ? allowAddonSideloadDefault
+
 ## debugging
 
 , debugBuild ? false
 
 # On 32bit platforms, we disable adding "-g" for easier linking.
-, enableDebugSymbols ? !stdenv.is32bit
+, enableDebugSymbols ? !stdenv.hostPlatform.is32bit
 
 ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsa-lib
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
-, jackSupport ? stdenv.isLinux, libjack2
+, jackSupport ? stdenv.hostPlatform.isLinux, libjack2
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
+, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
-, sndioSupport ? stdenv.isLinux, sndio
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
+, sndioSupport ? stdenv.hostPlatform.isLinux, sndio
 , waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
@@ -112,7 +121,7 @@
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
+, webrtcSupport ? !privacySupport
 
 # digital rights managemewnt
 
@@ -174,7 +183,7 @@ let
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" {} ''
     mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/* ${pkgsCross.wasi32.llvmPackages.libcxxabi}/lib/*; do
+    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
@@ -225,36 +234,26 @@ buildStdenv.mkDerivation {
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
+  patches = lib.optionals (lib.versionAtLeast version "111" && lib.versionOlder version "133") [ ./env_var_for_system_dir-ff111.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
-      # Crash when desktop scaling does not divide window scale on Wayland
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
-      name = "mozbz1803016.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
-      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
-    })
-  ] ++ lib.optionals (lib.versionOlder version "114.0") [
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1830040
-    # https://hg.mozilla.org/mozilla-central/rev/cddb250a28d8
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
-      hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
+      name = "cbindgen-0.27.0-compat.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
+      hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
     })
   ]
-  ++ lib.optionals (lib.versionOlder version "102.13") [
-    # cherry-pick bindgen change to fix build with clang 16
+  ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
+  ++ lib.optionals (lib.versionOlder version "123") [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
-      hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
+      name = "clang-18.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
+      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
-    # cherry-pick mp4parse change fixing build with Rust 1.70+
-    # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
-    # vendored to update checksums
-    ./mp4parse-rust-170.patch
   ]
-  ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
   postPatch = ''
@@ -287,7 +286,7 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
@@ -296,15 +295,15 @@ buildStdenv.mkDerivation {
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
-
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
+    # Set reproducible build date; https://bugzilla.mozilla.org/show_bug.cgi?id=885777#c21
+    export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
+
     # Set predictable directories for build and state
-    export MOZ_OBJDIR=$(pwd)/mozobj
-    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
+    export MOZ_OBJDIR=$(pwd)/objdir
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
 
     # Don't try to send libnotify notifications during build
     export MOZ_NOSPAM=1
@@ -330,11 +329,9 @@ buildStdenv.mkDerivation {
           unset 'configureFlagsArray[i]'
         fi
       done
-      configureFlagsArray+=(
-        "--enable-profile-use=cross"
-        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-        "--with-pgo-jarlog="$TMPDIR/jarlog""
-      )
+      appendToVar configureFlags --enable-profile-use=cross
+      appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
+      appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
       ${lib.optionalString stdenv.hostPlatform.isMusl ''
         LDFLAGS="$OLD_LDFLAGS"
         unset OLD_LDFLAGS
@@ -350,7 +347,7 @@ buildStdenv.mkDerivation {
       # since the profiling build has not been installed to $out
       ''
         OLD_LDFLAGS="$LDFLAGS"
-        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+        LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
       ''}
     fi
   '' + lib.optionalString googleAPISupport ''
@@ -367,7 +364,7 @@ buildStdenv.mkDerivation {
     # please get your own set of keys at https://location.services.mozilla.com/api.
     echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
+  '' + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString (!requireSigning) ''
     export MOZ_REQUIRE_SIGNING=
@@ -410,7 +407,7 @@ buildStdenv.mkDerivation {
   ]
   # elf-hack is broken when using clang+lld:
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
@@ -428,7 +425,7 @@ buildStdenv.mkDerivation {
     (if debugBuild then "--enable-profiling" else "--enable-optimize")
     # --enable-release adds -ffunction-sections & LTO that require a big amount
     # of RAM, and the 32-bit memory space cannot handle that linking
-    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+    (enableFeature (!debugBuild && !stdenv.hostPlatform.is32bit) "release")
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
@@ -474,7 +471,9 @@ buildStdenv.mkDerivation {
   ]
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  # icu74 fails to build on 127 and older
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
+  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
@@ -507,10 +506,7 @@ buildStdenv.mkDerivation {
   '';
 
   preBuild = ''
-    cd mozobj
-  '' + lib.optionalString (lib.versionAtLeast version "120") ''
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
+    cd objdir
   '';
 
   postBuild = ''
@@ -535,9 +531,9 @@ buildStdenv.mkDerivation {
   preInstall = lib.optionalString crashreporterSupport ''
     ./mach buildsymbols
     mkdir -p $symbols/
-    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+    cp objdir/dist/*.crashreporter-symbols.zip $symbols/
   '' + ''
-    cd mozobj
+    cd objdir
   '';
 
   postInstall = ''
@@ -545,7 +541,7 @@ buildStdenv.mkDerivation {
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
     install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
 
-  '' + lib.optionalString buildStdenv.isLinux ''
+  '' + lib.optionalString buildStdenv.hostPlatform.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
@@ -568,6 +564,7 @@ buildStdenv.mkDerivation {
     inherit updateScript;
     inherit alsaSupport;
     inherit binaryName;
+    inherit requireSigning allowAddonSideload;
     inherit jackSupport;
     inherit pipewireSupport;
     inherit sndioSupport;

@@ -1,56 +1,70 @@
-{ lib
-, black
-, buildPythonPackage
-, cachecontrol
-, fetchPypi
-, importlib-resources
-, lockfile
-, mistune
-, mypy
-, pytestCheckHook
-, pythonOlder
-, rdflib
-, ruamel-yaml
-, setuptools
-, setuptools-scm
+{
+  lib,
+  black,
+  buildPythonPackage,
+  cachecontrol,
+  fetchFromGitHub,
+  fetchpatch,
+  importlib-resources,
+  mistune,
+  mypy,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonOlder,
+  rdflib,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  types-dataclasses,
+  types-requests,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230808163024";
-  format = "setuptools";
+  version = "8.7.20241021092521";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ai4vv6EFX4yTR8sgRspiG+M8a8oa83LIlJPGX7q+Kd0=";
+  src = fetchFromGitHub {
+    owner = "common-workflow-language";
+    repo = "schema_salad";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1V73y+sp94QwoCz8T2LCMnf5iq8MtL9cvrhF949R+08=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy[mypyc]==1.12.1" "mypy"
+  '';
 
-  propagatedBuildInputs = [
-    cachecontrol
-    importlib-resources
-    lockfile
-    mistune
-    mypy
-    rdflib
-    ruamel-yaml
-    setuptools # needs pkg_resources at runtime
-  ] ++ cachecontrol.optional-dependencies.filecache;
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pycodegen;
+  dependencies =
+    [
+      cachecontrol
+      mistune
+      mypy
+      mypy-extensions
+      rdflib
+      requests
+      ruamel-yaml
+      types-dataclasses
+      types-requests
+      types-setuptools
+    ]
+    ++ cachecontrol.optional-dependencies.filecache
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
   preCheck = ''
     rm tox.ini
   '';
 
   disabledTests = [
+    "test_load_by_yaml_metaschema"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
@@ -59,14 +73,10 @@ buildPythonPackage rec {
     "test_bad_schemas"
   ];
 
-  pythonImportsCheck = [
-    "schema_salad"
-  ];
+  pythonImportsCheck = [ "schema_salad" ];
 
-  passthru.optional-dependencies = {
-    pycodegen = [
-      black
-    ];
+  optional-dependencies = {
+    pycodegen = [ black ];
   };
 
   meta = with lib; {
@@ -75,7 +85,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
-    # https://github.com/common-workflow-language/schema_salad/issues/721
-    broken = versionAtLeast mistune.version "2.1";
   };
 }

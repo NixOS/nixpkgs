@@ -1,56 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flatten-dict
-, fsspec
-, funcy
-, pygtrie
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, shortuuid
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  funcy,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  reflink,
+  setuptools-scm,
+  shortuuid,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "5.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-objects";
     rev = "refs/tags/${version}";
-    hash = "sha256-kTp0CowXtnLXetcnoCeqlXoadgaQhL5mTYTfq9QLIl8=";
+    hash = "sha256-CXZKya22i2PhHk/CYd10AlzkiOBo5xZfR9l4rnkaV5Y=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --benchmark-skip" ""
+  '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    flatten-dict
-    fsspec
-    funcy
-    pygtrie
-    shortuuid
-    tqdm
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ fsspec ] ++ lib.optionals (pythonOlder "3.12") [ funcy ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
+    reflink
+    shortuuid
   ];
 
-  pythonImportsCheck = [
-    "dvc_objects"
+  pythonImportsCheck = [ "dvc_objects" ];
+
+  disabledTestPaths = [
+    # Disable benchmarking
+    "tests/benchmarks/"
   ];
 
   meta = with lib; {

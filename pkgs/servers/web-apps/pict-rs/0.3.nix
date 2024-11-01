@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
@@ -45,7 +45,8 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = { inherit (nixosTests) pict-rs; };
 
   meta = with lib; {
-    description = "A simple image hosting service";
+    description = "Simple image hosting service";
+    mainProgram = "pict-rs";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ happysalada ];

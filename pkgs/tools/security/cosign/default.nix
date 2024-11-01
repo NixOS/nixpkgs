@@ -13,22 +13,22 @@
 }:
 buildGoModule rec {
   pname = "cosign";
-  version = "2.2.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J/CQonW/ICrNUSQXVZPMR+WACZYJH0eH6bXhdXE27TY=";
+    hash = "sha256-+UZ1o9rkbk/RnyU2Vzzs7uIm+texl5kGa+qt88x4zuk=";
   };
 
   buildInputs =
-    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
-    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
+    lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite)
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pivKeySupport) [ PCSC ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorHash = "sha256-RPwU6W6a9mnfriyz3ASvamZ3jEG6C2ug/MTp1Pahc/Q=";
+  vendorHash = "sha256-E1QHLh2gg5RZ7+tl7eJNR2FmtfVI6rwI6qLD7tio18c=";
 
   subPackages = [
     "cmd/cosign"
@@ -51,11 +51,12 @@ buildGoModule rec {
 
     rm pkg/cosign/ctlog_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_test.go # Require network access
     rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
     rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cosign \
       --bash <($out/bin/cosign completion bash) \
       --fish <($out/bin/cosign completion fish) \
@@ -72,6 +73,7 @@ buildGoModule rec {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
+    mainProgram = "cosign";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse jk developer-guy ];
   };

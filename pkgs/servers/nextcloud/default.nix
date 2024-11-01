@@ -1,68 +1,79 @@
-{ lib, stdenvNoCC, fetchurl, nixosTests
-, nextcloud27Packages
-, nextcloud26Packages
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nixosTests,
+  nextcloud28Packages,
+  nextcloud29Packages,
+  nextcloud30Packages,
 }:
 
 let
-  generic = {
-    version, hash
-  , eol ? false, extraVulnerabilities ? []
-  , packages
-  }: stdenvNoCC.mkDerivation rec {
-    pname = "nextcloud";
-    inherit version;
+  generic =
+    {
+      version,
+      hash,
+      eol ? false,
+      extraVulnerabilities ? [ ],
+      packages,
+    }:
+    stdenvNoCC.mkDerivation rec {
+      pname = "nextcloud";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit hash;
+      src = fetchurl {
+        url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+        inherit hash;
+      };
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/
+        cp -R . $out/
+        runHook postInstall
+      '';
+
+      meta = {
+        changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
+        description = "Sharing solution for files, calendars, contacts and more";
+        homepage = "https://nextcloud.com";
+        maintainers = with lib.maintainers; [
+          schneefux
+          bachp
+          globin
+          ma27
+        ];
+        license = lib.licenses.agpl3Plus;
+        platforms = lib.platforms.linux;
+        knownVulnerabilities =
+          extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
+      };
     };
-
-    passthru = {
-      tests = nixosTests.nextcloud;
-      inherit packages;
-    };
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/
-      cp -R . $out/
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
-      description = "Sharing solution for files, calendars, contacts and more";
-      homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
-      license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
-      knownVulnerabilities = extraVulnerabilities
-        ++ (optional eol "Nextcloud version ${version} is EOL");
-    };
+in
+{
+  nextcloud28 = generic {
+    version = "28.0.11";
+    hash = "sha256-S6rs7GpvFFgy28PGNdcuIM1IBKytmmZOanS5CnmB40g=";
+    packages = nextcloud28Packages;
   };
-in {
-  nextcloud25 = throw ''
-    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud26;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
-    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  '';
-
-  nextcloud26 = generic {
-    version = "26.0.8";
-    hash = "sha256-ydCay0RuM2AZYIKRM/jzdutvJ5pN73CCF/xxWBiSiH8=";
-    packages = nextcloud26Packages;
+  nextcloud29 = generic {
+    version = "29.0.8";
+    hash = "sha256-CrVLUX92zSbyvTi2/hhLn7rtMvc0JGxYwaz4NHPApLk=";
+    packages = nextcloud29Packages;
   };
 
-  nextcloud27 = generic {
-    version = "27.1.3";
-    hash = "sha256-HWFJNSReSjdbSsmRwC8yNZK3U5cvhviHY/2A7X0nV5M=";
-    packages = nextcloud27Packages;
+  nextcloud30 = generic {
+    version = "30.0.1";
+    hash = "sha256-eewv+tYjG9j8xKuqzBLlrFHmcNCJr/s3lINZLNoP3Ms=";
+    packages = nextcloud30Packages;
   };
 
   # tip: get the sha with:

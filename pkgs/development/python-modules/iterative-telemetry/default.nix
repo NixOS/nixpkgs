@@ -1,20 +1,21 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, filelock
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, requests
-, setuptools-scm
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  filelock,
+  pytestCheckHook,
+  pytest-mock,
+  pythonOlder,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "iterative-telemtry";
-  version = "0.0.7";
-  format = "pyproject";
+  version = "0.0.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,16 +23,12 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "telemetry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-n67nc9a/Qrz2v1EYbHZb+pGhuMDqofUMpgfD/0BwqLM=";
+    hash = "sha256-bcGniytjlN3JFPeMQYjyIP8Ruty9/dnzp9neclbdsfU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     appdirs
     filelock
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "iterative_telemetry"
-  ];
+  pythonImportsCheck = [ "iterative_telemetry" ];
 
   meta = with lib; {
     description = "Common library to send usage telemetry";

@@ -1,47 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, aiohttp
-, diskcache
-, gptcache
-, msal
-, nest-asyncio
-, numpy
-, openai
-, platformdirs
-, pygtrie
-, pyparsing
-, requests
-, tiktoken
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pybind11,
+  setuptools,
+  wheel,
+  aiohttp,
+  diskcache,
+  fastapi,
+  gptcache,
+  msal,
+  numpy,
+  openai,
+  ordered-set,
+  platformdirs,
+  protobuf,
+  pyformlang,
+  requests,
+  tiktoken,
+  torch,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.0.64";
-  format = "setuptools";
+  version = "0.1.16";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "guidance-ai";
     repo = "guidance";
     rev = "refs/tags/${version}";
-    hash = "sha256-tQpDJprxctKI88F+CZ9aSJbVo7tjmI4+VrI+WO4QlxE=";
+    hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pybind11 ];
+
+  build-system = [
+    setuptools
+    wheel
+  ];
+
+  dependencies = [
     aiohttp
     diskcache
+    fastapi
     gptcache
     msal
-    nest-asyncio
     numpy
     openai
+    ordered-set
     platformdirs
-    pygtrie
-    pyparsing
+    protobuf
+    pyformlang
     requests
     tiktoken
+    uvicorn
   ];
 
   nativeCheckInputs = [
@@ -51,17 +69,24 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require network access
-    "test_each_parallel_with_gen_openai"
+    "test_select_simple"
+    "test_commit_point"
+    "test_token_healing"
+    "test_fstring"
+    "test_fstring_custom"
+    "test_token_count"
+    "test_gpt2"
+    "test_recursion_error"
+    "test_openai_class_detection"
+    "test_openai_chat_without_roles"
+
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   disabledTestPaths = [
     # require network access
     "tests/library/test_gen.py"
-    "tests/library/test_include.py"
-    "tests/library/test_select.py"
-    "tests/llms/test_openai.py"
-    "tests/llms/test_transformers.py"
-    "tests/test_program.py"
   ];
 
   preCheck = ''
@@ -70,10 +95,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guidance" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "A guidance language for controlling large language models";
-    homepage = "https://github.com/microsoft/guidance";
-    changelog = "https://github.com/microsoft/guidance/releases/tag/${src.rev}";
+    description = "Guidance language for controlling large language models";
+    homepage = "https://github.com/guidance-ai/guidance";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

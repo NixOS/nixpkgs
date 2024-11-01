@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
     maintainers = [ maintainers.freezeboy ];
+    mainProgram = "demoit";
   };
 }

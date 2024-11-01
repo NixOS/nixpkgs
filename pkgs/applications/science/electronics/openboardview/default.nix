@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , cmake
 , pkg-config
@@ -8,7 +9,7 @@
 , SDL2
 , fontconfig
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
 }:
 
@@ -23,12 +24,21 @@ stdenv.mkDerivation rec {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     rev = version;
-    sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook ];
-  buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [
+  patches = [
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/OpenBoardView/OpenBoardView/commit/b03d0f69ec1611f5eb93f81291b4ba8c58cd29eb.patch";
+      hash = "sha256-Hp7KgzulPC2bPtRsd6HJrTLu0oVoQEoBHl0p2DcOLQw=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook3 ];
+  buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
@@ -43,10 +53,10 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/Applications"
       mv "$out/openboardview.app" "$out/Applications/OpenBoardView.app"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       wrapGApp "$out/bin/${pname}" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
   '';
@@ -57,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux SDL/ImGui edition software for viewing .brd files";
+    mainProgram = "openboardview";
     homepage = "https://github.com/OpenBoardView/OpenBoardView";
     license = licenses.mit;
     platforms = platforms.unix;

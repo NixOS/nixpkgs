@@ -36,8 +36,9 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/asiermarques/adrgen";
-    description = "A command-line tool for generating and managing Architecture Decision Records";
+    description = "Command-line tool for generating and managing Architecture Decision Records";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
+    mainProgram = "adrgen";
   };
 }

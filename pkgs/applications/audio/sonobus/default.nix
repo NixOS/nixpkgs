@@ -16,18 +16,18 @@
 , libopus
 , curl
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sonobus";
-  version = "1.6.2";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
-    rev = version;
-    sha256 = "sha256-/Pb+PYmoCYA6Qcy/tR1Ejyt+rZ3pfJeWV4j7bQWYE58=";
+    rev = finalAttrs.version;
+    hash = "sha256-NOdmHFKrV7lb8XbeG5GdLKYZ0c/vcz3fcqYj9JvE+/Q=";
     fetchSubmodules = true;
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libopus
     curl
     gtk3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   runtimeDependencies = [
@@ -56,16 +56,18 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
-  postPatch = lib.optionalString (stdenv.isLinux) ''
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath (finalAttrs.runtimeDependencies)}";
+  dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
+
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     # needs special setup on Linux, dunno if it can work on Darwin
-    # https://github.com/NixOS/nixpkgs/issues/19098
     # Also, I get issues with linking without that, not sure why
     sed -i -e '/juce::juce_recommended_lto_flags/d' CMakeLists.txt
     patchShebangs linux/install.sh
   '';
 
   # The program does not provide any CMake install instructions
-  installPhase = lib.optionalString (stdenv.isLinux) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     runHook preInstall
     cd ../linux
     ./install.sh "$out"
@@ -78,6 +80,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ PowerUser64 ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "sonobus";
   };
-}
+})

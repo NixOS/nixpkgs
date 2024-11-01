@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-7VPn5YXNoAR3ftYMDQuQRqeMCrbyB56ir1sQWBiPWAI=";
+    sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
   };
 
   nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
@@ -93,9 +93,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.classicube.net/";
-    description = "A lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
+    description = "Lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ _360ied ];
+    mainProgram = "ClassiCube";
   };
 }

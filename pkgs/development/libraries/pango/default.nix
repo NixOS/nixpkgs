@@ -16,20 +16,21 @@
 , ninja
 , glib
 , python3
-, x11Support? !stdenv.isDarwin, libXft
+, x11Support? !stdenv.hostPlatform.isDarwin, libXft
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.51.0";
+  version = "1.54.0";
 
   outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "dO/BCa5vkDu+avd+qirGCUuO4kWi4j8TKnqPCGLRqfU=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-ip7tdQIe5zTX/A/fOmXDu6Ud/v5K5RqbQUpgxwstHtg=";
   };
 
   depsBuildBuild = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fribidi
     libthai
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "xft" x11Support)
   ];
@@ -93,15 +94,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = finalAttrs.pname;
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
   meta = with lib; {
-    description = "A library for laying out and rendering of text, with an emphasis on internationalization";
+    description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
@@ -126,4 +131,4 @@ stdenv.mkDerivation rec {
       "pangoxft"
     ];
   };
-}
+})

@@ -4,17 +4,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.36";
+  version = "3.38";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-w1k1DGgGYL2K/fZ30HMQE2vMcT6ZaaweM+KTcHKVEq4=";
+    sha256 = "sha256-hjU6be1+x4YsY9hztqSD5zIxojs6qRZH7GwEkxPwdus=";
   };
 
   buildInputs = [ python3 zlib ]
-    ++ lib.optional (!stdenv.isDarwin) libaio;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio;
 
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

@@ -24,7 +24,9 @@ import ./make-test-python.nix ({ lib, ... }: {
          machine.wait_for_window("Archi")
 
          # wait till main UI is open
-         machine.wait_for_text("Welcome to Archi")
+         # since OCR seems to be buggy wait_for_text was replaced by sleep, issue: #302965
+         # machine.wait_for_text("Welcome to Archi")
+         machine.sleep(20)
 
          machine.screenshot("welcome-screen")
   '';

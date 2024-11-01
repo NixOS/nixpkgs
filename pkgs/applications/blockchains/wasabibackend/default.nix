@@ -4,9 +4,9 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  autoPatchelfHook,
   zlib,
   openssl,
+  nixosTests,
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";
@@ -25,7 +25,6 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
 
-  nativeBuildInputs = [autoPatchelfHook];
   buildInputs = [stdenv.cc.cc.lib zlib];
 
   runtimeDeps = [openssl zlib];
@@ -39,6 +38,10 @@ buildDotnetModule rec {
   postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wasabibackend;
+  };
 
   meta = with lib; {
     description = "Backend for the Wasabi Wallet";

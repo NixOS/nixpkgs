@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , flac
@@ -41,19 +40,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.4.4";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
-    hash = "sha256-bnoNkBsNJ/6CVmm5I/nwy6LGxYhxPXssjZ3TT7FdEz8=";
+    hash = "sha256-gxRKLukwdyCvqQ+gRYb4cv/8B52nRAFwdcps6FcKFXk=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
+    gettext # msgmerge
   ];
 
   buildInputs = [
@@ -104,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://ice-wm.org/";
-    description = "A simple, lightweight X window manager";
+    description = "Simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is
       speed, simplicity, and not getting in the user’s way. It comes with a

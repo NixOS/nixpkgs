@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ashuffle";
-  version = "3.13.6";
+  version = "3.14.8";
 
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
     rev = "v${version}";
-    sha256 = "sha256-8XjLs4MI5MXvA6veCoTAj8tlYDe7YTggutO3F9eNyMM=";
+    hash = "sha256-XnibLlwUspI2aveWfMg/TOe59vK6Z2WEnF7gafUmx6E=";
     fetchSubmodules = true;
   };
 
@@ -27,11 +27,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dunsupported_use_system_yamlcpp=true" ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework CoreFoundation";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/joshkunz/ashuffle";
     description = "Automatic library-wide shuffle for mpd";
     maintainers = [ maintainers.tcbravo ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "ashuffle";
   };
 }

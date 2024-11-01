@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytools
-, numpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytools,
+  numpy,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "cgen";
   version = "2020.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +27,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/cgen";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

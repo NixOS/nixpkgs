@@ -1,45 +1,55 @@
-{ lib
-, aiohttp
-, aioitertools
-, botocore
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, flask
-, flask-cors
-, moto
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, wrapt
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  botocore,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  flask,
+  flask-cors,
+  awscli,
+  moto,
+  boto3,
+  setuptools,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-e8FBUG08yWNL9B51Uv4ftYx1C0kcdoweOreUtvvvTAk=";
+    hash = "sha256-kPSkvvXBBwnWrdf0jmDNiTG6T1qpm5pNcPDHpnMFdmc=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
-  postPatch = ''
-    sed -i "s/'botocore>=.*'/'botocore'/" setup.py
-  '';
+  pythonRelaxDeps = [ "botocore" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     aioitertools
     botocore
     wrapt
   ];
+
+  optional-dependencies = {
+    awscli = [ awscli ];
+    boto3 = [ boto3 ];
+  };
 
   nativeCheckInputs = [
     dill
@@ -50,9 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiobotocore"
-  ];
+  pythonImportsCheck = [ "aiobotocore" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -73,14 +81,22 @@ buildPythonPackage rec {
     "tests/test_waiter.py"
   ];
 
-  disabledTests = [
-    "test_get_credential"
-    "test_load_sso_credentials_without_cache"
-    "test_load_sso_credentials"
-    "test_required_config_not_set"
-    "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
-    "test_sso_credential_fetcher_can_fetch_credentials"
-  ];
+  disabledTests =
+    [
+      "test_get_credential"
+      "test_load_sso_credentials_without_cache"
+      "test_load_sso_credentials"
+      "test_required_config_not_set"
+      "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
+      "test_sso_credential_fetcher_can_fetch_credentials"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12.") [
+      # AttributeError: 'called_with' is not a valid assertion. Use a spec for the mock if 'called_with' is meant to be an attribute.
+      "test_max_rate_updated_on_success_response"
+      "test_max_rate_cant_exceed_20_percent_max"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for amazon services";

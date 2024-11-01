@@ -1,159 +1,153 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, atpublic
-, bidict
-, black
-, clickhouse-connect
-, dask
-, datafusion
-, db-dtypes
-, duckdb
-, duckdb-engine
-, filelock
-, geoalchemy2
-, geopandas
-, google-cloud-bigquery
-, google-cloud-bigquery-storage
-, graphviz-nox
-, hypothesis
-, multipledispatch
-, numpy
-, oracledb
-, packaging
-, pandas
-, parsy
-, poetry-core
-, poetry-dynamic-versioning
-, polars
-, pooch
-, psycopg2
-, pyarrow
-, pydata-google-auth
-, pydruid
-, pymysql
-, pyspark
-, pytest-benchmark
-, pytest-httpserver
-, pytest-mock
-, pytest-randomly
-, pytest-snapshot
-, pytest-xdist
-, python-dateutil
-, pytz
-, regex
-, rich
-, shapely
-, snowflake-connector-python
-, snowflake-sqlalchemy
-, sqlalchemy
-, sqlalchemy-views
-, sqlglot
-, sqlite
-, toolz
-, trino-python-client
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  atpublic,
+  black,
+  clickhouse-connect,
+  datafusion,
+  db-dtypes,
+  duckdb,
+  fetchpatch,
+  filelock,
+  geopandas,
+  google-cloud-bigquery,
+  google-cloud-bigquery-storage,
+  graphviz,
+  hypothesis,
+  numpy,
+  oracledb,
+  packaging,
+  pandas,
+  parsy,
+  pins,
+  poetry-core,
+  poetry-dynamic-versioning,
+  polars,
+  psycopg2,
+  pyarrow,
+  pyarrow-hotfix,
+  pydata-google-auth,
+  pydruid,
+  pymysql,
+  pyodbc,
+  pyspark,
+  pytest-benchmark,
+  pytest-httpserver,
+  pytest-mock,
+  pytest-randomly,
+  pytest-snapshot,
+  pytest-timeout,
+  pytest-xdist,
+  python-dateutil,
+  pytz,
+  regex,
+  rich,
+  shapely,
+  snowflake-connector-python,
+  sqlglot,
+  sqlite,
+  toolz,
+  trino-python-client,
+  typing-extensions,
 }:
 let
-  testBackends = [ "datafusion" "duckdb" "pandas" "sqlite" ];
+  testBackends = [
+    "duckdb"
+    "sqlite"
+    "datafusion"
+  ];
 
   ibisTestingData = fetchFromGitHub {
     name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "2b3968deaa1a28791b2901dbbcc9bfd3d2f23e9b";
-    hash = "sha256-q1b5IcOl5oIFXP7/P5RufncjHEVrWp4NjoU2uo/BE9U=";
+    # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
+    rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
+    hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "6.1.0";
-  format = "pyproject";
+  version = "9.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-+AtXgRNxPryP/fd/GQlLNxWbP6ozikqG2yBCp3dE0tY=";
+    hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
   };
+
+  patches = [
+    # remove after the 10.0 release
+    (fetchpatch {
+      name = "ibis-framework-duckdb-1.1.1.patch";
+      url = "https://github.com/ibis-project/ibis/commit/a54eceabac1d6592e9f6ab0ca7749e37a748c2ad.patch";
+      hash = "sha256-j5BPYVqnEF9GQV5N3/VhFUCdsEwAIOQC0KfZ5LNBSRg=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  dontBypassPoetryDynamicVersioning = true;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
 
   propagatedBuildInputs = [
     atpublic
-    bidict
-    filelock
-    multipledispatch
-    numpy
-    pandas
     parsy
-    pooch
-    pyarrow
     python-dateutil
     pytz
-    rich
     sqlglot
     toolz
     typing-extensions
-  ]
-  ++ pooch.optional-dependencies.progress
-  ++ pooch.optional-dependencies.xxhash;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    black
+    filelock
     hypothesis
     pytest-benchmark
     pytest-httpserver
     pytest-mock
     pytest-randomly
     pytest-snapshot
+    pytest-timeout
+    # this dependency is still needed due to use of strict markers and
+    # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
-  ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
+  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+
+  dontUsePytestXdist = true;
 
   pytestFlagsArray = [
-    "--dist=loadgroup"
     "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
-    # breakage from sqlalchemy2 truediv changes
-    "--deselect=ibis/tests/sql/test_sqlalchemy.py::test_tpc_h17"
+    # tpcds and tpch are slow, so disable them
+    "'not tpcds and not tpch and (${lib.concatStringsSep " or " testBackends} or core)'"
+  ];
+
+  disabledTests = [
     # tries to download duckdb extensions
-    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_register_sqlite"
-    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_read_sqlite"
-
-    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
-    "--deselect=ibis/backends/tests/test_register.py::test_csv_reregister_schema"
-
-    # duckdb fails with:
-    # "This function can not be called with an active transaction!, commit or abort the existing one first"
-    "--deselect=ibis/backends/tests/test_udf.py::test_vectorized_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_map_merge_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_map_udf"
-
-    # pyarrow13 is not supported yet.
-    "--deselect=ibis/backends/tests/test_temporal.py::test_date_truncate"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_interval_add_cast_column"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_filter_before_window"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_aggregation.py::test_aggregate_grouped"
+    "test_attach_sqlite"
+    "test_connect_extensions"
+    "test_load_extension"
+    "test_read_sqlite"
+    "test_register_sqlite"
+    # requires network connection
+    "test_s3_403_fallback"
+    "test_hugging_face"
+    # requires pytest 8.2+
+    "test_roundtrip_delta"
   ];
 
   # patch out tests that check formatting with black
@@ -161,7 +155,6 @@ buildPythonPackage rec {
     find ibis/tests -type f -name '*.py' -exec sed -i \
       -e '/^ *assert_decompile_roundtrip/d' \
       -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
-    substituteInPlace pyproject.toml --replace 'sqlglot = ">=10.4.3,<12"' 'sqlglot = "*"'
   '';
 
   preCheck = ''
@@ -176,32 +169,141 @@ buildPythonPackage rec {
     rm -r "$IBIS_TEST_DATA_DIRECTORY"
   '';
 
-  pythonImportsCheck = [
-    "ibis"
-  ] ++ map (backend: "ibis.backends.${backend}") testBackends;
+  pythonImportsCheck = [ "ibis" ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
-  passthru = {
-    optional-dependencies = {
-      bigquery = [ db-dtypes google-cloud-bigquery google-cloud-bigquery-storage pydata-google-auth ];
-      clickhouse = [ clickhouse-connect sqlalchemy ];
-      dask = [ dask regex ];
-      datafusion = [ datafusion ];
-      druid = [ pydruid sqlalchemy ];
-      duckdb = [ duckdb duckdb-engine packaging sqlalchemy sqlalchemy-views ];
-      flink = [ ];
-      geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ sqlalchemy pymysql sqlalchemy-views ];
-      oracle = [ sqlalchemy oracledb packaging sqlalchemy-views ];
-      pandas = [ regex ];
-      polars = [ polars ];
-      postgres = [ psycopg2 sqlalchemy sqlalchemy-views ];
-      pyspark = [ pyspark sqlalchemy ];
-      snowflake = [ snowflake-connector-python snowflake-sqlalchemy sqlalchemy-views ];
-      sqlite = [ regex sqlalchemy sqlite sqlalchemy-views ];
-      trino = [ trino-python-client sqlalchemy sqlalchemy-views ];
-      visualization = [ graphviz-nox ];
-      decompiler = [ black ];
-    };
+  optional-dependencies = {
+    bigquery = [
+      db-dtypes
+      google-cloud-bigquery
+      google-cloud-bigquery-storage
+      pyarrow
+      pyarrow-hotfix
+      pydata-google-auth
+      numpy
+      pandas
+      rich
+    ];
+    clickhouse = [
+      clickhouse-connect
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    datafusion = [
+      datafusion
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    druid = [
+      pydruid
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    duckdb = [
+      duckdb
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    flink = [
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    geospatial = [
+      geopandas
+      shapely
+    ];
+    mssql = [
+      pyodbc
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    mysql = [
+      pymysql
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    oracle = [
+      oracledb
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    polars = [
+      polars
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    postgres = [
+      psycopg2
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    pyspark = [
+      pyspark
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    snowflake = [
+      snowflake-connector-python
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    sqlite = [
+      regex
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    trino = [
+      trino-python-client
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    visualization = [ graphviz ];
+    decompiler = [ black ];
+    examples = [ pins ] ++ pins.optional-dependencies.gcs;
   };
 
   meta = with lib; {

@@ -1,39 +1,39 @@
-{ lib
-, makeDesktopItem
-, copyDesktopItems
-, stdenvNoCC
-, fetchurl
-, appimageTools
-, makeWrapper
+{
+  lib,
+  makeDesktopItem,
+  copyDesktopItems,
+  stdenvNoCC,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
 }:
 
 let
-  version = "1.11.4";
+  version = "1.13.2";
   pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    hash = "sha256-fSa113BYpTZ4jvxroQsoslAkWfQr4/ROkgVOFyiVsKQ=";
+    hash = "sha256-71v6CvlKa4m1LPG07eGhPqkpK60X4VrafCQyfjQR3rs=";
   };
-  appimage = appimageTools.wrapType2 {
-    inherit version pname src;
-  };
-  appimage-contents = appimageTools.extractType2 {
-    inherit version pname src;
-  };
+  appimage = appimageTools.wrapType2 { inherit version pname src; };
+  appimage-contents = appimageTools.extractType2 { inherit version pname src; };
 in
 stdenvNoCC.mkDerivation {
   inherit version pname;
   src = appimage;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
       name = "Session";
       desktopName = "Session";
       comment = "Onion routing based messenger";
-      exec = "${appimage}/bin/session-desktop-${version}";
+      exec = "session-desktop";
       icon = "${appimage-contents}/session-desktop.png";
       terminal = false;
       type = "Application";
@@ -43,8 +43,6 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
-    mv bin/session-desktop-${version} bin/session-desktop
 
     mkdir -p $out/
     cp -r bin $out/bin
@@ -57,9 +55,13 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     description = "Onion routing based messenger";
+    mainProgram = "session-desktop";
     homepage = "https://getsession.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ alexnortung ];
+    maintainers = with maintainers; [
+      alexnortung
+      cyewashish
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

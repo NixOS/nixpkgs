@@ -33,6 +33,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/blendle/kns";
     license = licenses.isc;
     maintainers = with maintainers; [ mmlb ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

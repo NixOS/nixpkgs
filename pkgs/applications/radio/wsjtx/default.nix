@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       These modes were all designed for making reliable, confirmed ham radio
       contacts under extreme weak-signal conditions.
     '';
-    homepage = "https://physics.princeton.edu/pulsar/k1jt/wsjtx.html";
+    homepage = "https://wsjt.sourceforge.io";
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ lasandell numinit melling ];

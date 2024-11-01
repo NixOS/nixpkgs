@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ scons ];
-  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   CPPPATH = symlinkJoin {
      name = "nsis-includes";
-     paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+     paths = [ zlib.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   };
 
   LIBPATH = symlinkJoin {
     name = "nsis-libs";
-    paths = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    paths = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   };
 
   sconsFlags = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "SKIPUTILS=all"
     "SKIPMISC=all"
     "NSIS_CONFIG_CONST_DATA=no"
-  ] ++ lib.optional stdenv.isDarwin "APPEND_LINKFLAGS=-liconv";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "APPEND_LINKFLAGS=-liconv";
 
   preBuild = ''
     sconsFlagsArray+=(
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-compiler" ];
 
   meta = with lib; {
-    description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
+    description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pombeirp ];
     mainProgram = "makensis";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

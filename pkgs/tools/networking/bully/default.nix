@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
+    mainProgram = "bully";
   };
 }

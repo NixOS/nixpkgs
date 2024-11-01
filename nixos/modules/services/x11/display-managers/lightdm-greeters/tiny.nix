@@ -17,12 +17,12 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable lightdm-tiny-greeter as the lightdm greeter.
 
           Note that this greeter starts only the default X session.
           You can configure the default X session using
-          [](#opt-services.xserver.displayManager.defaultSession).
+          [](#opt-services.displayManager.defaultSession).
         '';
       };
 
@@ -30,7 +30,7 @@ in
         user = mkOption {
           type = types.str;
           default = "Username";
-          description = lib.mdDoc ''
+          description = ''
             The string to represent the user_text label.
           '';
         };
@@ -38,7 +38,7 @@ in
         pass = mkOption {
           type = types.str;
           default = "Password";
-          description = lib.mdDoc ''
+          description = ''
             The string to represent the pass_text label.
           '';
         };
@@ -48,7 +48,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Section to describe style and ui.
         '';
       };
@@ -81,7 +81,7 @@ in
       {
         assertion = dmcfg.defaultSession != null;
         message = ''
-          Please set: services.xserver.displayManager.defaultSession
+          Please set: services.displayManager.defaultSession
         '';
       }
     ];

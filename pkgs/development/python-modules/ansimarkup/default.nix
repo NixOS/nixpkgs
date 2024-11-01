@@ -1,29 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  colorama,
 }:
 
 buildPythonPackage rec {
   pname = "ansimarkup";
-  version = "1.5.0";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gvalkov";
     repo = "python-ansimarkup";
-    rev = "v${version}";
-    hash = "sha256-HGeVapv2Z5GtPwSp3+dvUwAH0bFqu+Bmk5E6SRr7NO4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+kZt8tv09RHrMRZtvJPBBiFaeCksXyrlHqIabPrXYDY=";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  build-system = [ setuptools ];
+
+  dependencies = [ colorama ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ansimarkup" ];
 
   meta = with lib; {
-    description = "An XML-like markup for producing colored terminal text.";
+    description = "XML-like markup for producing colored terminal text";
     homepage = "https://github.com/gvalkov/python-ansimarkup";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cpcloud ];

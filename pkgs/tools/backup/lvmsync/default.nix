@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Optimised synchronisation of LVM snapshots over a network";
+    mainProgram = "lvmsync";
     homepage = "https://theshed.hezmatt.org/lvmsync/";
     license = licenses.gpl3;
     platforms = platforms.all;

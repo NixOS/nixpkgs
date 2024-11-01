@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spike";
-  version = "1.1.0";
+  version = "1.1.0-unstable-2024-09-21";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "riscv-isa-sim";
-    rev = "v${version}";
-    sha256 = "sha256-4D2Fezej0ioOOupw3kgMT5VLs+/jXQjwvek6v0AVMzI=";
+    rev = "de5094a1a901d77ff44f89b38e00fefa15d4018e";
+    sha256 = "sha256-mAgR2VzDgeuIdmPEgrb+MaA89BnWfmNanOVidqn0cgc=";
   };
 
   nativeBuildInputs = [ dtc ];
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs scripts/*.sh
-    patchShebangs tests/ebreak.py
   '';
 
   doCheck = true;
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A RISC-V ISA Simulator";
+    description = "RISC-V ISA Simulator";
     homepage = "https://github.com/riscv/riscv-isa-sim";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" "aarch64-linux" ];

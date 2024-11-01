@@ -52,7 +52,7 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
-          extraPlugins = with postgresql-package.pkgs; [
+          extraPlugins = ps: with ps; [
             timescaledb
             timescaledb_toolkit
           ];
@@ -83,7 +83,7 @@ let
     '';
 
   };
-  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "12") postgresql-versions;
+  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "14") postgresql-versions;
 in
 mapAttrs'
   (name: package: {

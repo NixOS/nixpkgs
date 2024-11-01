@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "mcrypt";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcrypt/MCrypt/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/mcrypt/MCrypt/${version}/mcrypt-${version}.tar.gz";
     sha256 = "5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098";
   };
 
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libmcrypt libmhash ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   meta = {
     description = "Replacement for old UNIX crypt(1)";

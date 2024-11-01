@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${pname}"
-    cp README* LICENSE "$out/share/doc/${pname}"
+    mkdir -p "$out/share/doc/clac"
+    cp README* LICENSE "$out/share/doc/clac"
   '';
 
   meta = with lib; {
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
+    mainProgram = "clac";
   };
 }

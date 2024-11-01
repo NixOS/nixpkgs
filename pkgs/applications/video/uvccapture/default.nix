@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlagsArray = [ "PREFIX=$(out)/bin/" ];
+  makeFlags = [ "PREFIX=$(out)/bin/" ];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "uvccapture";
   };
 }

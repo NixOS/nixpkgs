@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "traceroute";
-  version = "2.1.3";
+  version = "2.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
-    sha256 = "sha256-BevHq6KKkQD5u65Uzuy/dcgsz0a9/Oi11kgGRZp+BBI=";
+    sha256 = "sha256-nM75zbnXqY/3+/k/eevQ5IiBZktSXEsjKg/Ox9y5214=";
   };
 
   makeFlags = [
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ koral ];
     platforms = platforms.linux;
+    mainProgram = "traceroute";
   };
 }

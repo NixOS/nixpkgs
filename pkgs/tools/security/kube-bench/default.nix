@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-bench";
-  version = "0.6.19";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-owpmQ/APTUu1V8au2UE48SIIZnVI93tlv5bhkS/2kgQ=";
+    hash = "sha256-x6xCrxePB/TR7BP1kLiVFjv4pLUJu9JVh5/Y0ebOjvY=";
   };
 
-  vendorHash = "sha256-dBN6Yi8HtS9LzXr08jhw1hqDwS8a4UqrYaRpM+RzvVM=";
+  vendorHash = "sha256-d6GhZBHDSRgMVeglw8rhq5QF7gRH4hQOzTn0DZjvhiA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,6 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/kube-bench";
     changelog = "https://github.com/aquasecurity/kube-bench/releases/tag/v${version}";
     description = "Checks whether Kubernetes is deployed according to security best practices as defined in the CIS Kubernetes Benchmark";
+    mainProgram = "kube-bench";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
   };

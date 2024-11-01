@@ -198,12 +198,6 @@ while (<>) {
         push @{$extraAttrs{$pkg}}, "postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`\$PKG_CONFIG' '';";
     }
 
-    # libpciaccess requires pci.ids{,.gz} at runtime
-    if ($pkg eq "libpciaccess") {
-        push @requires, "hwdata";
-        push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-pciids-path=\${hwdata}/share/hwdata\" ];";
-    }
-
     if (@@ = glob("$tmpDir/*/app-defaults/")) {
         push @nativeRequires, "wrapWithXFileSearchPathHook";
     }
@@ -332,7 +326,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my $pcProvidesStr = "";
     if (defined $pcProvides{$pkg}) {
-      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } @{$pcProvides{$pkg}};
+      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } (sort @{$pcProvides{$pkg}});
     }
 
     print OUT <<EOF

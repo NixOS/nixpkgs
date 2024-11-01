@@ -5,17 +5,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
-  version = "2.28";
+  version = "2.29";
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "urlwatch";
     rev = version;
-    hash = "sha256-dGohG2+HrsuKegPAn1fmpLYPpovEEUsx+C/0sp2/cX0=";
+    hash = "sha256-X1UR9JrQuujOIUg87W0YqfXsM3A5nttWjjJMIe3hgk8=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs
     cssselect
     jq
     keyring
@@ -23,9 +22,10 @@ python3Packages.buildPythonApplication rec {
     markdown2
     matrix-client
     minidb
+    playwright
+    platformdirs
     pushbullet-py
     pycodestyle
-    pyppeteer
     pyyaml
     requests
   ];
@@ -34,7 +34,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for monitoring webpages for updates";
+    description = "Tool for monitoring webpages for updates";
+    mainProgram = "urlwatch";
     homepage = "https://thp.io/2008/urlwatch/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kmein tv ];

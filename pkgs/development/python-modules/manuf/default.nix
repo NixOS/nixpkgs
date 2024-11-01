@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, runCommand
-, python3
-, wireshark-cli
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  runCommand,
+  wireshark-cli,
+  pytestCheckHook,
+  manuf, # remove when buildPythonPackage supports finalAttrs
 }:
 
 buildPythonPackage rec {
@@ -29,22 +30,19 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    cat ${wireshark-cli}/share/wireshark/{manuf,wka} > manuf/manuf
+    ${lib.getExe wireshark-cli} -G manuf > manuf/manuf
+    cat ${wireshark-cli}/share/wireshark/wka >> manuf/manuf
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_update_update"
-  ];
+  disabledTests = [ "test_update_update" ];
 
   pythonImportsCheck = [ "manuf" ];
 
   passthru.tests = {
-    testMacAddress = runCommand "${pname}-test" {} ''
-      ${python3.pkgs.manuf}/bin/manuf BC:EE:7B:00:00:00 > $out
+    testMacAddress = runCommand "${pname}-test" { } ''
+      ${lib.getExe manuf} BC:EE:7B:00:00:00 > $out
       [ "$(cat $out | tr -d '\n')" = "Vendor(manuf='ASUSTekC', manuf_long='ASUSTek COMPUTER INC.', comment=None)" ]
     '';
   };
@@ -54,7 +52,10 @@ buildPythonPackage rec {
     description = " Parser library for Wireshark's OUI database";
     mainProgram = "manuf";
     platforms = platforms.linux;
-    license = with licenses; [ lgpl3Plus asl20 ];
+    license = with licenses; [
+      lgpl3Plus
+      asl20
+    ];
     maintainers = with maintainers; [ dsuetin ];
   };
 }

@@ -1,25 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, mpv-unwrapped }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  glib,
+  mpv-unwrapped,
+  ffmpeg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
     rev = version;
-    sha256 = "sha256-7kPpCfiWe58V4fBOsEVvGoGeNIlMUAyD1fqS5/8k/e4=";
+    hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
   };
+  passthru.updateScript = gitUpdater { };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib mpv-unwrapped ];
+  buildInputs = [
+    glib
+    mpv-unwrapped
+    ffmpeg
+  ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    substituteInPlace Makefile --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
 
-  installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
+  installFlags = [ "SCRIPTS_DIR=${placeholder "out"}/share/mpv/scripts" ];
 
   # Otherwise, the shared object isn't `strip`ped. See:
   # https://discourse.nixos.org/t/debug-why-a-derivation-has-a-reference-to-gcc/7009
@@ -31,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hoyon/mpv-mpris";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ajs124 ];
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

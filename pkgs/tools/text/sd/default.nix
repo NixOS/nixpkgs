@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     installManPage gen/sd.1
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";
+    mainProgram = "sd";
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
     maintainers = with maintainers; [ amar1729 Br1ght0ne ];

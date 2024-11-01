@@ -220,10 +220,10 @@ rec {
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
-  /* Alias of mkPackageOption. Previously used to create options with markdown
-     documentation, which is no longer required.
+  /* Deprecated alias of mkPackageOption, to be removed in 25.05.
+     Previously used to create options with markdown documentation, which is no longer required.
   */
-  mkPackageOptionMD = mkPackageOption;
+  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -254,13 +254,31 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
+  /*
+    Require a single definition.
+
+    WARNING: Does not perform nested checks, as this does not run the merge function!
+    */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
-  mergeUniqueOption = { message }: loc: defs:
-    if length defs == 1
-    then (head defs).value
-    else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
+  /*
+    Require a single definition.
+
+    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+   */
+  mergeUniqueOption = args@{
+      message,
+      # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
+      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - if you want attribute values to be checked, or list items
+      #   - if you want coercedTo-like behavior to work
+      merge ? loc: defs: (head defs).value }:
+    loc: defs:
+      if length defs == 1
+      then merge loc defs
+      else
+        assert length defs > 1;
+        throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -379,12 +397,14 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
-  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
+  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
-     syntax. This is a no-op and no longer needed.
+     syntax. Has been a no-op for some while and been removed from nixpkgs.
+     Kept here to alert downstream users who may not be aware of the migration's
+     completion that it should be removed from modules.
   */
-  mdDoc = lib.id;
+  mdDoc = lib.warn "lib.mdDoc will be removed from nixpkgs in 24.11. Option descriptions are now in Markdown by default; you can remove any remaining uses of lib.mdDoc.";
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when

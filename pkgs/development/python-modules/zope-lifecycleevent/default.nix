@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope_event
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-event,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-6tP7SW52FPm1adFtrUt4BSsKwhh1utjWbKNQNS2bb50=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ zope_event zope_interface ];
+  propagatedBuildInputs = [
+    zope-event
+    zope-interface
+  ];
 
   # namespace colides with local directory
   doCheck = false;
@@ -39,6 +41,6 @@ buildPythonPackage rec {
     description = "Object life-cycle events";
     changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

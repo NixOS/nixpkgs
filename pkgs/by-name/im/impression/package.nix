@@ -16,24 +16,25 @@
 , glib
 , gtk4
 , libadwaita
+, openssl
 , pango
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "2.1";
+  version = "3.2.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${version}";
-    hash = "sha256-Pq1Pz/uNBsk4UdtCwA5gmZoS+kiDrCbpum4ABW7oocA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cNkc/z0hVNYdyuCw0nHKEQKdQVeRouk/K7gIp0xpjt4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-eIfDuz4ewTzmLDKShro3VkoXAZEUOKu133eD/z75jjY=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-IcmJAD/55dOdN04N/wd6gZ9DO/UdUire1eXSuNMxu9M=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+    openssl
     pango
   ];
 
@@ -66,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
   };
-}
+})

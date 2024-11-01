@@ -13,10 +13,10 @@
 , libsoup
 , json-glib
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 , libmanette
 , libXtst
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libsoup
     libXtst
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   meta = with lib; {

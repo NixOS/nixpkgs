@@ -1,4 +1,4 @@
-{ lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, installShellFiles, makeWrapper, pandoc }:
+{ lib, stdenv, xdg-utils, gnugrep, fetchFromGitHub, installShellFiles, makeWrapper, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "git-open";
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "git-open";
   };
 }

@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
-    meson ninja pkg-config scdoc wayland-protocols wayland-scanner
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-protocols
+    wayland-scanner
   ];
   buildInputs = [ freetype harfbuzz cairo pango wayland libxkbcommon ];
 

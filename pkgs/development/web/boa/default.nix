@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ bzip2 openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
     ];
@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   env = { ZSTD_SYS_USE_PKG_CONFIG = true; };
 
   meta = with lib; {
-    description = "An embeddable and experimental Javascript engine written in Rust";
+    description = "Embeddable and experimental Javascript engine written in Rust";
+    mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ unlicense ];

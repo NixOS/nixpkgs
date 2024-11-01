@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, acme
-, certbot
-, cloudflare
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  cloudflare,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
@@ -20,9 +22,7 @@ buildPythonPackage rec {
     cloudflare
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"

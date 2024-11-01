@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, peewee
-, wtforms
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  peewee,
+  wtforms,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "wtf-peewee";
-  version = "3.0.4";
+  version = "3.0.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cTbYRdvAUTY86MPR33BH+nA6H/epR8sgHDgOBQ/TUkQ=";
+    hash = "sha256-LQbOWg65rPTSLRVK5vvqmdsRsXaDgcYZ54oqxgpWGRU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     peewee

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (if stdenv.is64bit then "--enable-32-64" else "--enable-32")
+    (if stdenv.hostPlatform.is64bit then "--enable-32-64" else "--enable-32")
     "--enable-readline"
   ];
 
@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
   enableParallelInstalling = false;
 
   installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.is64bit "install64";
+                ++ lib.optional stdenv.hostPlatform.is64bit "install64";
 
   meta = {
-    description = "The ERESI Reverse Engineering Software Interface";
+    description = "ERESI Reverse Engineering Software Interface";
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/thorkill/eresi"; # Formerly http://www.eresi-project.org/
     platforms = lib.platforms.linux;

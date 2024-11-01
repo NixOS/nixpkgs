@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
-  cargoSha256 = "00g06zf0m1wry0mhf098pw99kbb99d8a17985pb90yf1w74rdkh6";
+  cargoHash = "sha256-Bs6WyeHBeZDWLSidoFBLaa2ZEr8oAQcr8JmHCtw34AE=";
 
   checkFlags = [
     # uses internet
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     # assumes the target is x86_64-unknown-linux-gnu
     "--skip simple_project::it_checks_okay_project_correctly";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Cargo subcommand to check rust documentation for broken links";

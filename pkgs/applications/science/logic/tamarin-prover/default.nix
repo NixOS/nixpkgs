@@ -1,16 +1,22 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
+{ haskellPackages, mkDerivation, fetchFromGitHub, applyPatches, lib, stdenv
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
   version = "1.8.0";
-  src = fetchFromGitHub {
-    owner  = "tamarin-prover";
-    repo   = "tamarin-prover";
-    rev    = version;
-    sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
+  src = applyPatches {
+      src = fetchFromGitHub {
+      owner  = "tamarin-prover";
+      repo   = "tamarin-prover";
+      rev    = version;
+      sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
+    };
+    patches = [
+      ./tamarin-prover-1.8.0-ghc-9.6.patch
+    ];
   };
+
 
   # tamarin has its own dependencies, but they're kept inside the repo,
   # no submodules. this factors out the common metadata among all derivations
@@ -34,7 +40,7 @@ let
   tamarin-prover-utils = mkDerivation (common "tamarin-prover-utils" (src + "/lib/utils") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = with haskellPackages; [
-      base64-bytestring blaze-builder
+      base64-bytestring blaze-builder list-t
       dlist exceptions fclabels safe SHA syb
     ];
   });
@@ -93,8 +99,6 @@ mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
 
-  patches = [ ];
-
   # strip out unneeded deps manually
   doHaddock = false;
   enableSharedExecutables = false;
@@ -104,7 +108,7 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
   '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}

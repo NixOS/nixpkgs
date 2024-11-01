@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, argcomplete
-, colorama
-, halo
-, nose2
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  argcomplete,
+  colorama,
+  halo,
+  spinners,
+  types-colorama,
+  nose2,
+  semver,
 }:
 
 buildPythonPackage rec {
   pname = "milc";
-  version = "1.4.2";
+  version = "1.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
     rev = version;
-    hash = "sha256-aX6cTpIN9+9xuEGYHVlM5SjTPLcudJFEuOI4CiN3byE=";
+    hash = "sha256-DUA79R/pf/arG4diJKaJTSLNdB4E0XnS4NULlqP4h/M=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +29,8 @@ buildPythonPackage rec {
     argcomplete
     colorama
     halo
+    spinners
+    types-colorama
   ];
 
   nativeCheckInputs = [
@@ -35,7 +41,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "milc" ];
 
   meta = with lib; {
-    description = "An Opinionated Batteries-Included Python 3 CLI Framework";
+    description = "Opinionated Batteries-Included Python 3 CLI Framework";
+    mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];

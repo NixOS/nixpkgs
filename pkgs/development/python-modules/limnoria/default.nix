@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, chardet
-, cryptography
-, feedparser
-, fetchPypi
-, mock
-, pysocks
-, pytestCheckHook
-, python-dateutil
-, python-gnupg
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  chardet,
+  cryptography,
+  feedparser,
+  fetchPypi,
+  mock,
+  pysocks,
+  pytestCheckHook,
+  python-dateutil,
+  python-gnupg,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2023.9.24";
-  format = "setuptools";
+  version = "2024.8.26";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VJXIuGcgwAEObCCah+yc/o3IEpe4ln5F4wVwCy54Auc=";
+    hash = "sha256-X1Nvm7bccwHn9KIKQuRb+mLzUwEdeiLNkzyxKa2Jk8Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     cryptography
     feedparser
@@ -33,17 +37,13 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version" 'version="${version}"'
+      --replace-fail "version=version" 'version="${version}"'
   '';
 
   checkPhase = ''
@@ -59,9 +59,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A modified version of Supybot, an IRC bot";
+    description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

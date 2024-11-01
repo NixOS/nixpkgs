@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jedi
-, pygments
-, urwid
-, urwid-readline
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  jedi,
+  packaging,
+  pygments,
+  urwid,
+  urwid-readline,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2023.1";
-  format = "setuptools";
+  version = "2024.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fd88YDq6h6kYpmbvjhv2P3ZCOMw1ids8W3pfGwHqLwM=";
+    hash = "sha256-rcmwAEK6g2cRffCmwNxi+pYJq9IcO/jltz1iCQfFtD4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jedi
+    packaging
     pygments
     urwid
     urwid-readline
@@ -38,15 +44,14 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [
-    "pudb"
-  ];
+  pythonImportsCheck = [ "pudb" ];
 
   meta = with lib; {
-    description = "A full-screen, console-based Python debugger";
+    description = "Full-screen, console-based Python debugger";
+    mainProgram = "pudb";
     homepage = "https://github.com/inducer/pudb";
     changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

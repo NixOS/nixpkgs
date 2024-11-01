@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "rplcd";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -18,6 +23,7 @@ buildPythonPackage rec {
     description = ''
       Raspberry Pi LCD library for the widely used Hitachi HD44780 controller
     '';
+    mainProgram = "rplcd-tests";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

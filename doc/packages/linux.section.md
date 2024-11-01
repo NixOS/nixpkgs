@@ -12,20 +12,6 @@ Both functions have an argument `kernelPatches` which should be a list of `{name
 
 The kernel derivation created with `pkgs.buildLinux` exports an attribute `features` specifying whether optional functionality is or isn’t enabled. This is used in NixOS to implement kernel-specific behaviour.
 
-:::{.example #ex-skip-package-from-kernel-feature}
-
-# Skipping an external package because of a kernel feature
-
-For instance, if the kernel has the `iwlwifi` feature (i.e., has built-in support for Intel wireless chipsets), then NixOS doesn’t have to build the external `iwlwifi` package:
-
-```nix
-modulesTree = [kernel]
-  ++ pkgs.lib.optional (!kernel.features ? iwlwifi) kernelPackages.iwlwifi
-  ++ ...;
-```
-
-:::
-
 If you are using a kernel packaged in Nixpkgs, you can customize it by overriding its arguments. For details on how each argument affects the generated kernel, refer to [the `pkgs.buildLinux` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/generic.nix).
 
 :::{.example #ex-overriding-kernel-derivation}
@@ -54,48 +40,42 @@ pkgs.linux_latest.override {
 ## Manual kernel configuration {#sec-manual-kernel-configuration}
 
 Sometimes it may not be desirable to use kernels built with `pkgs.buildLinux`, especially if most of the common configuration has to be altered or disabled to achieve a kernel as expected by the target use case.
-An example of this is building a kernel for use in a VM or micro VM. You can use `pkgs.linuxManualConfig` in these cases. It requires the `src`, `version`, and `configfile` attributes to be specified.
+An example of this is building a kernel for use in a VM or micro VM. You can use `pkgs.linuxPackages_custom` in these cases. It requires the `src`, `version`, and `configfile` attributes to be specified.
 
 :::{.example #ex-using-linux-manual-config}
 
-# Using `pkgs.linuxManualConfig` with a specific source, version, and config file
+# Using `pkgs.linuxPackages_custom` with a specific source, version, and config file
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+pkgs.linuxPackages_custom {
   version = "6.1.55";
   src = pkgs.fetchurl {
     url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz";
-    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+    hash = "sha256-qH4kHsFdU0UsTv4hlxOjdp2IzENrW5jPbvsmLEr/FcA=";
   };
   configfile = ./path_to_config_file;
-  linux = pkgs.linuxManualConfig {
-    inherit version src configfile;
-    allowImportFromDerivation = true;
-  };
 }
 ```
 
 If necessary, the version string can be slightly modified to explicitly mark it as a custom version. If you do so, ensure the `modDirVersion` attribute matches the source's version, otherwise the build will fail.
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+pkgs.linuxPackages_custom {
   version = "6.1.55-custom";
   modDirVersion = "6.1.55";
   src = pkgs.fetchurl {
     url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${modDirVersion}.tar.xz";
-    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+    hash = "sha256-qH4kHsFdU0UsTv4hlxOjdp2IzENrW5jPbvsmLEr/FcA=";
   };
   configfile = ./path_to_config_file;
-  linux = pkgs.linuxManualConfig {
-    inherit version modDirVersion src configfile;
-    allowImportFromDerivation = true;
-  };
 }
 ```
 
 :::
 
-Additional attributes can be used with `linuxManualConfig` for further customisation. You're encouraged to read [the `pkgs.linuxManualConfig` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) to understand how to use them.
+Additional attributes can be used with `linuxManualConfig` for further customisation instead of `linuxPackages_custom`. You're encouraged to read [the `pkgs.linuxManualConfig` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) to understand how to use them.
 
 To edit the `.config` file for Linux X.Y from within Nix, proceed as follows:
 

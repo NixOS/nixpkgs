@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prqlc";
-  version = "0.10.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
     rev = version;
-    hash = "sha256-McJ3V3kndawheWo/xsBU8Xi8K47vHMpQHTpDbR4vkWk=";
+    hash = "sha256-DuuWeXuqOKpC4NbaQ6xhYxzZLtxOMzqDl7eOd9zTIuY=";
   };
 
-  cargoHash = "sha256-Q1PSpGpd5QRT6QKQOd6hVdZrlDBawfsqqp/CTJfnl7E=";
+  cargoHash = "sha256-ZOlbKmSHAcgYMYbeyyljltf56WbP5dK7ezpmgSA3CyQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
       sqlite
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.Security
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
+    description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
     changelog = "https://github.com/prql/prql/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

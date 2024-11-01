@@ -12,7 +12,7 @@ addEnvHooks "$targetOffset" make_glib_find_gsettings_schemas
 glibPreInstallPhase() {
   makeFlagsArray+=("gsettingsschemadir=${!outputLib}/share/gsettings-schemas/$name/glib-2.0/schemas/")
 }
-preInstallPhases+=" glibPreInstallPhase"
+appendToVar preInstallPhases glibPreInstallPhase
 
 glibPreFixupPhase() {
     # Move gschemas in case the install flag didn't help

@@ -20,6 +20,7 @@
 , wrapQtAppsHook
 , yaml-cpp
 , litehtml
+, libsecret
 , gumbo
 , llvmPackages
 , rustc-demangle
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "11.0.3";
+  version = "14.0.2";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-X1AeZOg2t+PlC5iz68NFsgE5al/ZLklzjau14mjVzxw=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-stL4eLtpKKjm4w2HYAvdk89ATCYZoVHGS9zcjNB4OJI=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     qtquicktimeline
     yaml-cpp
     litehtml
+    libsecret
     gumbo
     llvmPackages.libclang
     llvmPackages.llvm

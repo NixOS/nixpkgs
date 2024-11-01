@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://web.archive.org/web/20130901222855/http://www.amigaemulator.org/";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
+    mainProgram = "uae";
   };
 }

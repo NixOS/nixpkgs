@@ -1,17 +1,18 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "dde-account-faces";
-  version = "1.0.12.1";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NWjR8qxWi2IrcP0cSF+lLxBJ/GrVpk1BfTjVH0ytinY=";
+    hash = "sha256-PtbEsFQl6M5Ouadxy9CTVh1Bmmect83NODO4Ks+ckKU=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}/var" ];
@@ -19,7 +20,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Account faces of deepin desktop environment";
     homepage = "https://github.com/linuxdeepin/dde-account-faces";
-    license = with licenses; [ gpl3Plus cc0 ];
+    license = with licenses; [
+      gpl3Plus
+      cc0
+    ];
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
   };

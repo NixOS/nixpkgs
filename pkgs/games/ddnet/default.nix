@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , cmake
 , ninja
@@ -35,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "17.4";
+  version = "18.6";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-VWn6fbK6f9/MwjZuFMD2LDv9erRhFnU4JEnbpYDBl70=";
+    hash = "sha256-thAB7QtR23j39ORK1YT2Idp4J7GffbNV7snbLAnYzMI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-ntAH78BTfPU9nMorsXzZnrZIyNWVCxmQWwwEFIFQB1c=";
+    hash = "sha256-/kCsAZP9cwUQFcNnk5/eYMzw80Bh4JnwPXd299p1JEU=";
   };
 
   nativeBuildInputs = [
@@ -82,9 +83,9 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     Cocoa
     OpenGL
@@ -101,7 +102,8 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  # Tests loop forever on Darwin for some reason
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''
@@ -113,8 +115,13 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/metainfo
   '';
 
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
+    install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
+  '';
+
   meta = with lib; {
-    description = "A Teeworlds modification with a unique cooperative gameplay.";
+    description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
       a Teeworlds modification with a unique cooperative gameplay.

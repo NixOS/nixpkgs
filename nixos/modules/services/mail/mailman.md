@@ -9,7 +9,7 @@ an existing, securely configured Postfix setup, as it does not automatically con
 ## Basic usage with Postfix {#module-services-mailman-basic-usage}
 
 For a basic configuration with Postfix as the MTA, the following settings are suggested:
-```
+```nix
 { config, ... }: {
   services.postfix = {
     enable = true;
@@ -50,7 +50,7 @@ necessary, but outside the scope of the Mailman module.
 ## Using with other MTAs {#module-services-mailman-other-mtas}
 
 Mailman also supports other MTA, though with a little bit more configuration. For example, to use Mailman with Exim, you can use the following settings:
-```
+```nix
 { config, ... }: {
   services = {
     mailman = {

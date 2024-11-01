@@ -22,7 +22,7 @@
 , python3
 , stdenv
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs /build/source/build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   meta = with lib; {
-    description = "A GUI for configuring your sway desktop";
+    description = "GUI for configuring your sway desktop";
     longDescription = ''
       Sway settings enables easy configuration of a sway desktop environment
       such as selection of application or icon themes.

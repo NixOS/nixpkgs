@@ -1,17 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.9.11";
+  version = "2.11.16";
 
   src = fetchurl {
     url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-L7E3naVeFYxeS8OAEkXEgY7YB+6E+yrGfIAUr52EWvA=";
+    hash = "sha256-cv2fTb3Xykp5HnBhkGezUwWk2SkHQVMcRjJ8rXJlUrU=";
   };
+
   sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
@@ -19,18 +22,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    mkdir -p "$out/Applications"
+    cp -r *.app "$out/Applications"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "macOS system monitor in your menu bar";
     homepage = "https://github.com/exelban/stats";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+    ];
+    platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
-    platforms = platforms.darwin;
   };
 })

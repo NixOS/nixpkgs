@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , enableMultilib
+, targetConfig
 }:
 
 let
@@ -19,8 +20,10 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
 
     if test "$staticCompiler" = "1"; then
         EXTRA_LDFLAGS="-static"
-    else
+    elif test "''${NIX_DONT_SET_RPATH-}" != "1"; then
         EXTRA_LDFLAGS="-Wl,-rpath,''${!outputLib}/lib"
+    else
+        EXTRA_LDFLAGS=""
     fi
 
     # GCC interprets empty paths as ".", which we don't want.
@@ -55,8 +58,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
                 extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
                 libc_libdir="/usr/lib"
             fi
-            extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
-                          "''${extraLDFlags[@]}")
+            declare -a prefixExtraLDFlags=()
+            prefixExtraLDFlags=("-L$libc_libdir")
+            nixDontSetRpathVar=NIX_DONT_SET_RPATH''${post}
+            if test "''${!nixDontSetRpathVar-}" != "1"; then
+                prefixExtraLDFlags+=("-rpath" "$libc_libdir")
+            fi
+            extraLDFlags=("''${prefixExtraLDFlags[@]}" "''${extraLDFlags[@]}")
             for i in "''${extraLDFlags[@]}"; do
                 declare -g EXTRA_LDFLAGS''${post}+=" -Wl,$i"
             done
@@ -196,6 +204,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     mkdir -p "$out/''${targetConfig}/lib"
     mkdir -p "''${!outputLib}/''${targetConfig}/lib"
   '' +
+  # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
+  # since native-compiles have $lib/lib as a directory (not a
+  # symlink), this ensures that in every case we can assume that
+  # $lib/lib contains the .so files
+  lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
+    ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
+  '' +
   # Make `lib64` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
     ln -s lib "$out/''${targetConfig}/lib64"
@@ -261,7 +276,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     fi
 
     # Get rid of some "fixed" header files
-    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h}
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

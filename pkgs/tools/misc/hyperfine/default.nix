@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-E2y/hQNcpW6b/ZJBlsp+2RDH2OgpX4kbn36aBHA5X6U=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage doc/hyperfine.1
@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/hyperfine/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda thoughtpolice ];
+    mainProgram = "hyperfine";
   };
 }

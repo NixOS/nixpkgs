@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2023.06.1";
+  version = "2024.07.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-3+eIR8wkBlcUQVDsugHo/rHNHbE2vpE9gutp55kRY4Y=";
+    hash = "sha256-at6jWm/Dv/duKmBBCIFkKborMxsQEpqEDO6NrJgzhz8=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   ]);
 
   propagatedBuildInputs = with ocamlPackages; [
+    angstrom
     batteries
     menhirLib
     zarith
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A workbench for high-assurance and high-speed cryptography";
+    description = "Workbench for high-assurance and high-speed cryptography";
     homepage = "https://github.com/jasmin-lang/jasmin/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

@@ -1,78 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, dde-dock
-, dde-control-center
-, dde-session-shell
-, dde-qt-dbus-factory
-, gsettings-qt
-, gio-qt
-, networkmanager-qt
-, glib
-, pcre
-, util-linux
-, libselinux
-, libsepol
-, dbus
-, gtest
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dtkwidget,
+  dde-control-center,
+  dde-session-shell,
+  libsForQt5,
+  glib,
+  gtest,
 }:
+
 stdenv.mkDerivation rec {
   pname = "dde-network-core";
-  version = "1.1.8";
+  version = "2.0.34";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ysmdB9CT7mhN/0r8CRT4FQsK12HkhjbezGXwWiNScqg=";
+    hash = "sha256-bS/PkutP5BQtqZ6MzeImFyGKoztoTswXhXaEftEv0FI=";
   };
-
-  postPatch = ''
-    substituteInPlace dock-network-plugin/networkplugin.cpp dcc-network-plugin/dccnetworkmodule.cpp dss-network-plugin/network_module.cpp \
-      --replace "/usr/share" "$out/share"
-    substituteInPlace dss-network-plugin/notification/bubbletool.cpp \
-      --replace "/usr/share" "/run/current-system/sw/share"
-  '';
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     dtkwidget
-    dde-dock
     dde-control-center
     dde-session-shell
-    dde-qt-dbus-factory
-    gsettings-qt
-    gio-qt
-    networkmanager-qt
+    libsForQt5.networkmanager-qt
     glib
-    pcre
-    util-linux
-    libselinux
-    libsepol
     gtest
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     description = "DDE network library framework";
     homepage = "https://github.com/linuxdeepin/dde-network-core";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

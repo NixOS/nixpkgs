@@ -1,6 +1,8 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
+, autoconf-archive
+, autoreconfHook
 , pkg-config
 , curlWithGnuTls
 , libev
@@ -9,14 +11,15 @@
 
 stdenv.mkDerivation rec {
   pname = "clboss";
-  version = "0.12";
+  version = "0.14.0";
 
-  src = fetchurl {
-    url = "https://github.com/ZmnSCPxj/clboss/releases/download/${version}/clboss-${version}.tar.gz";
-    hash = "sha256-UZcSfbpp3vPsD3CDukp+r5Z60h0UEWTduqF4DhJ+H2U=";
+  # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
+  src = fetchzip {
+    url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${version}/clboss-v${version}.tar.gz";
+    hash = "sha256-Qp8br4ZxiqaxFZ6Tb+wFpqp2APmnU9QdNkM8MyGAtrw=";
   };
 
-  nativeBuildInputs = [ pkg-config libev curlWithGnuTls sqlite ];
+  nativeBuildInputs = [ autoconf-archive autoreconfHook pkg-config libev curlWithGnuTls sqlite ];
 
   enableParallelBuilding = true;
 
@@ -26,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "clboss";
   };
 }

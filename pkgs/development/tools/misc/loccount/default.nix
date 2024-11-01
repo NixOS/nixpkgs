@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitLab, python3 }:
 buildGoModule rec {
   pname = "loccount";
-  version = "2.15";
+  version = "2.16";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "loccount";
     rev = version;
-    hash = "sha256-IRDwxz/InF4okyfAzbK0PzZz+HMUwv5LgRthUUy3rus=";
+    hash = "sha256-uHX45KZO6R0tgTU10csKLiVYZZ/ea2V6BwhF6vfKKtA=";
   };
 
   vendorHash = null;
@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Re-implementation of sloccount in Go";
+    mainProgram = "loccount";
     longDescription = ''
       loccount is a re-implementation of David A. Wheeler's sloccount tool
       in Go.  It is faster and handles more different languages. Because

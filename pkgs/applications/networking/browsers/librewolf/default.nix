@@ -11,10 +11,11 @@ in
   src = librewolf-src.firefox;
   requireSigning = false;
   allowAddonSideload = true;
+  branding = "browser/branding/librewolf";
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
-    description = "A fork of Firefox, focused on privacy, security and freedom";
+    description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [ squalus ];
     platforms = lib.platforms.unix;
@@ -25,7 +26,7 @@ in
     license = lib.licenses.mpl20;
     mainProgram = "librewolf";
   };
-  tests = [ nixosTests.librewolf ];
+  tests = { inherit (nixosTests) librewolf; };
   updateScript = callPackage ./update.nix {
     attrPath = "librewolf-unwrapped";
   };

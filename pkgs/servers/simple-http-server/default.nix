@@ -9,20 +9,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.7";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Xi5tJIfK4zjckKERhxHuDqeyOB9Dxul/eFLKOtpgR/w=";
+    sha256 = "sha256-r8Ush6cdGNxcRB3RSRJLtjseII5SQt9+oMqOTBmVfaY=";
   };
 
-  cargoSha256 = "sha256-wv1hlBTQe1Mm67J2FqrrXSSlZkFPB0TzKc5VUMMfUIQ=";
+  cargoHash = "sha256-RdHcMnUctHYdQRsF6T9w8FoD56Bv4Xm0Jlu4Rls0C+M=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mephistophiles ];
+    mainProgram = "simple-http-server";
   };
 }

@@ -1,40 +1,41 @@
-{ config, options, lib, pkgs, stdenv, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.pleroma;
-in {
+in
+{
   options = {
     services.pleroma = with lib; {
-      enable = mkEnableOption (lib.mdDoc "pleroma");
+      enable = mkEnableOption "pleroma";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.pleroma;
-        defaultText = literalExpression "pkgs.pleroma";
-        description = lib.mdDoc "Pleroma package to use.";
-      };
+      package = mkPackageOption pkgs "pleroma" { };
 
       user = mkOption {
         type = types.str;
         default = "pleroma";
-        description = lib.mdDoc "User account under which pleroma runs.";
+        description = "User account under which pleroma runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "pleroma";
-        description = lib.mdDoc "Group account under which pleroma runs.";
+        description = "Group account under which pleroma runs.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
-        description = lib.mdDoc "Directory where the pleroma service will save the uploads and static files.";
+        description = "Directory where the pleroma service will save the uploads and static files.";
       };
 
       configs = mkOption {
         type = with types; listOf str;
-        description = lib.mdDoc ''
+        description = ''
           Pleroma public configuration.
 
           This list gets appended from left to
@@ -53,13 +54,13 @@ in {
 
           Have a look to Pleroma section in the NixOS manual for more
           information.
-          '';
+        '';
       };
 
       secretConfigFile = mkOption {
         type = types.str;
         default = "/var/lib/pleroma/secrets.exs";
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing your secret pleroma configuration.
 
           *DO NOT POINT THIS OPTION TO THE NIX
@@ -78,7 +79,7 @@ in {
         group = cfg.group;
         isSystemUser = true;
       };
-      groups."${cfg.group}" = {};
+      groups."${cfg.group}" = { };
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -95,56 +96,79 @@ in {
       import_config "${cfg.secretConfigFile}"
     '';
 
-    systemd.services.pleroma = {
-      description = "Pleroma social network";
-      after = [ "network-online.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
-      environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Type = "exec";
-        WorkingDirectory = "~";
-        StateDirectory = "pleroma pleroma/static pleroma/uploads";
-        StateDirectoryMode = "700";
+    systemd.services =
+      let
+        commonSystemdServiceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          WorkingDirectory = "~";
+          StateDirectory = "pleroma pleroma/static pleroma/uploads";
+          StateDirectoryMode = "700";
+          # Systemd sandboxing directives.
+          # Taken from the upstream contrib systemd service at
+          # pleroma/installation/pleroma.service
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          PrivateDevices = false;
+          NoNewPrivileges = true;
+          CapabilityBoundingSet = "~CAP_SYS_ADMIN";
+        };
 
-        # Checking the conf file is there then running the database
-        # migration before each service start, just in case there are
-        # some pending ones.
-        #
-        # It's sub-optimal as we'll always run this, even if pleroma
-        # has not been updated. But the no-op process is pretty fast.
-        # Better be safe than sorry migration-wise.
-        ExecStartPre =
-          let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f /var/lib/pleroma/.cookie ]
-            then
-              echo "Creating cookie file"
-              dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
-            fi
-            ${cfg.package}/bin/pleroma_ctl migrate
-          '';
-          in "${preScript}/bin/pleromaStartPre";
+      in
+      {
+        pleroma-migrations = {
+          description = "Pleroma social network migrations";
+          wants = [ "network-online.target" ];
+          after = [
+            "network-online.target"
+            "postgresql.service"
+          ];
+          wantedBy = [ "pleroma.service" ];
+          environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
+          serviceConfig = commonSystemdServiceConfig // {
+            Type = "oneshot";
+            # Checking the conf file is there then running the database
+            # migration before each service start, just in case there are
+            # some pending ones.
+            #
+            # It's sub-optimal as we'll always run this, even if pleroma
+            # has not been updated. But the no-op process is pretty fast.
+            # Better be safe than sorry migration-wise.
+            ExecStart =
+              let
+                preScript = pkgs.writers.writeBashBin "pleroma-migrations" ''
+                  if [ ! -f /var/lib/pleroma/.cookie ]
+                  then
+                    echo "Creating cookie file"
+                    dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
+                  fi
+                  ${cfg.package}/bin/pleroma_ctl migrate
+                '';
+              in
+              "${preScript}/bin/pleroma-migrations";
+          };
+          # disksup requires bash
+          path = [ pkgs.bash ];
+        };
 
-        ExecStart = "${cfg.package}/bin/pleroma start";
-        ExecStop = "${cfg.package}/bin/pleroma stop";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-
-        # Systemd sandboxing directives.
-        # Taken from the upstream contrib systemd service at
-        # pleroma/installation/pleroma.service
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "full";
-        PrivateDevices = false;
-        NoNewPrivileges = true;
-        CapabilityBoundingSet = "~CAP_SYS_ADMIN";
+        pleroma = {
+          description = "Pleroma social network";
+          wants = [ "pleroma-migrations.service" ];
+          after = [ "pleroma-migrations.service" ];
+          wantedBy = [ "multi-user.target" ];
+          restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
+          environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
+          serviceConfig = commonSystemdServiceConfig // {
+            Type = "exec";
+            ExecStart = "${cfg.package}/bin/pleroma start";
+            ExecStop = "${cfg.package}/bin/pleroma stop";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          };
+          # disksup requires bash
+          path = [ pkgs.bash ];
+        };
       };
-      # disksup requires bash
-      path = [ pkgs.bash ];
-    };
-
   };
   meta.maintainers = with lib.maintainers; [ picnoir ];
   meta.doc = ./pleroma.md;

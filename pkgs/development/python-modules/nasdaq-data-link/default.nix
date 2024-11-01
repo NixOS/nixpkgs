@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, factory-boy
-, fetchFromGitHub
-, httpretty
-, inflection
-, jsondate
-, mock
-, more-itertools
-, numpy
-, pandas
-, parameterized
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  factory-boy,
+  fetchFromGitHub,
+  httpretty,
+  inflection,
+  jsondate,
+  mock,
+  more-itertools,
+  numpy,
+  pandas,
+  parameterized,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "nasdaqdatalink"
-  ];
+  pythonImportsCheck = [ "nasdaqdatalink" ];
 
   meta = with lib; {
     description = "Library for Nasdaq Data Link's RESTful API";

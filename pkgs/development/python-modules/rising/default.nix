@@ -1,39 +1,60 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, pythonRelaxDepsHook
-, dill
-, lightning-utilities
-, numpy
-, torch
-, threadpoolctl
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  versioneer,
+
+  # dependencies
+  lightning-utilities,
+  numpy,
+  torch,
+  threadpoolctl,
+  tqdm,
+
+  # tests
+  dill,
+  pytestCheckHook,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "rising";
   version = "0.3.0";
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
-    repo = pname;
+    repo = "rising";
     rev = "refs/tags/v${version}";
     hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [ "lightning-utilities" ];
 
-  propagatedBuildInputs = [
-    lightning-utilities numpy torch threadpoolctl tqdm
+  # Remove vendorized versioneer (incompatible with python 3.12)
+  postPatch = ''
+    rm versioneer.py
+  '';
+
+  build-system = [ versioneer ];
+
+  dependencies = [
+    lightning-utilities
+    numpy
+    torch
+    threadpoolctl
+    tqdm
   ];
-  nativeCheckInputs = [ dill pytestCheckHook ];
-  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+
+  nativeCheckInputs = [
+    dill
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
     "test_progressive_resize_integration"
   ];

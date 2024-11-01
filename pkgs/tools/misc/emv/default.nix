@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     description = "Editor Move: Rename files with your favourite text editor";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
+    mainProgram = "emv";
   };
 }

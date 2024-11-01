@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.0.5";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
     rev = "v${version}";
-    hash = "sha256-mYE8cu7qHRyG/pZSr4u6tMEF3ZM5Qz+CX+oLf/chwl4=";
+    hash = "sha256-V4ppqHQjPkkRKHkDHzEr05vOyv3BhiLnYxEftIn08XU=";
   };
 
-  vendorHash = "sha256-fP6yxfIQoVaBC9hYcrCyo3YP3ntEVDbDTwKMO9TdyDI=";
+  vendorHash = "sha256-xolhwdWRjYZMgwI4jq0fGzvxnNjx6EplvZC7XMvBw+M=";
 
   meta = with lib; {
     homepage = "https://github.com/guyfedwards/nom";

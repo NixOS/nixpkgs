@@ -8,13 +8,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
-  version = "unstable-2023-10-27";
+  version = "0-unstable-2024-06-17";
 
   src = fetchFromGitHub {
     owner = "talex5";
     repo = pname;
-    rev = "cc9548c4980ff33f86d5645ce337a79bf95d6139";
-    sha256 = "sha256-aAqbPslTu+RLQPKPJQH2iYjcI8/De2WPk5nHULdfocU=";
+    rev = "1c0cd6d4f13454f0c72148b4c4a1c1e3b728205e";
+    sha256 = "sha256-E9UTq9sNBdg+ANO8b9Nga/JBD+Tt9O5QV5NQmbY6GLE=";
   };
 
   minimalOCamlVersion = "5.0";

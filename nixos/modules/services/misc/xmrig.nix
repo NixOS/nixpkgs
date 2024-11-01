@@ -13,14 +13,10 @@ with lib;
 {
   options = {
     services.xmrig = {
-      enable = mkEnableOption (lib.mdDoc "XMRig Mining Software");
+      enable = mkEnableOption "XMRig Mining Software";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xmrig;
-        defaultText = literalExpression "pkgs.xmrig";
-        example = literalExpression "pkgs.xmrig-mo";
-        description = lib.mdDoc "XMRig package to use.";
+      package = mkPackageOption pkgs "xmrig" {
+        example = "xmrig-mo";
       };
 
       settings = mkOption {
@@ -42,7 +38,7 @@ with lib;
             ]
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           XMRig configuration. Refer to
           <https://xmrig.com/docs/miner/config>
           for details on supported values.

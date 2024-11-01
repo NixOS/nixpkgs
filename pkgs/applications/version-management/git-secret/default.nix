@@ -24,10 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A bash-tool to store your private data inside a git repository";
+    description = "Bash-tool to store your private data inside a git repository";
     homepage = "https://git-secret.io";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lo1tuma ];
     platforms = lib.platforms.all;
+    mainProgram = "git-secret";
   };
 }

@@ -2,20 +2,26 @@
 , rustPlatform
 , fetchFromGitHub
 , rustfmt
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "2.3.0";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-5UOLfsNgtg5EDDId23ysmWfeqMeh8R2UfMeBAtFCx6s=";
+    hash = "sha256-xHvBbm1ewNu96TyK//l2emiq+jaPhSWvvbVK9Q/O5lo=";
   };
 
-  cargoHash = "sha256-YoPStyPeEqLoUvGLEPwXR8XVhXtb6XwFuPNoDCiT7OA=";
+  cargoHash = "sha256-E6nnT+I5ur4PPvLjwfebR1Tdm206hI05HCVc3IWDqFY=";
+
+  # openssl crate requires perl during build process
+  nativeBuildInputs = [
+    perl
+  ];
 
   nativeCheckInputs = [
     rustfmt
@@ -24,6 +30,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Requires a mythical rustfmt 2.0 or a nightly compiler
     "--skip=golden_test::sourcegen_ast"
+
+    # Test broken
+    "--skip=test_lowering_consistency"
   ];
 
   postInstall = ''

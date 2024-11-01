@@ -22,7 +22,8 @@ buildGoModule rec {
 
   patches = [
     # Bump sha1cd package, otherwise i686-linux fails to build.
-    ./bump-sha1cd.patch
+    # Also bump github.com/swaggo/swag for PR 257790.
+    ./deps.patch
 
     # Seems to be an anti-feature. Startup is the only place where user/group is
     # hardcoded and checked.
@@ -57,7 +58,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-swag ];
 
-  vendorHash = "sha256-402ND99FpU+zNV1e5Th1+aZKok49cIEdpPPLLfNyL3E=";
+  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
@@ -97,10 +98,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A free, open source game management panel";
+    description = "Free, open source game management panel";
     homepage = "https://www.pufferpanel.com/";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ ckie tie ];
+    maintainers = with maintainers; [ tie ];
     mainProgram = "pufferpanel";
   };
 }

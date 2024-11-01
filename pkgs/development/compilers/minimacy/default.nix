@@ -11,29 +11,29 @@
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
     rev =  version;
-    hash = "sha256-WBmpinMnGr7Tmf1jLhdq5DXdR+ohOY0CpOBJ6fewKFU=";
+    hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.isLinux [ alsa-lib libX11 libXext ];
+  buildInputs = [ libGL libGLU ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libX11 libXext ];
 
   enableParallelBuilding = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-unused-result";
 
   preBuild = ''
-    pushd ${if stdenv.isDarwin then "macos/cmdline" else "unix"}
+    pushd ${if stdenv.hostPlatform.isDarwin then "macos/cmdline" else "unix"}
   '';
 
   # TODO: build graphic version for darwin
-  buildFlags = (if stdenv.isDarwin then [ "nox" ] else [ "all" ]) ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = (if stdenv.hostPlatform.isDarwin then [ "nox" ] else [ "all" ]) ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   postBuild = ''
     popd
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    bin/${if stdenv.isDarwin then "minimacyMac" else "minimacy"} system/demo/demo.fun.mandelbrot.mcy
+    bin/${if stdenv.hostPlatform.isDarwin then "minimacyMac" else "minimacy"} system/demo/demo.fun.mandelbrot.mcy
 
     runHook postCheck
   '';
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source minimalist computing technology";
+    description = "Open-source minimalist computing technology";
     longDescription = ''
       Minimacy is an open-source minimalist computation system based on the principle "Less is more".
       It is designed and programmed by Sylvain Huet.

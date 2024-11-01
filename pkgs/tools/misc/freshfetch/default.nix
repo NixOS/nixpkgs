@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreFoundation
     DiskArbitration
@@ -39,9 +39,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A fresh take on neofetch";
+    description = "Fresh take on neofetch";
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "freshfetch";
   };
 }

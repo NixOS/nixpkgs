@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.3";
+  version = "7.3.0";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    hash = "sha256-VZmJk3mwGwnjMaJCbXjTm39uwSbbJUPp00Cu/mqlD4Q=";
+    hash = "sha256-JiSBnS3/EFupUuobXPEutvSSbUlRd0pBkHaZ4vVnaGw=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool gfortran ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A multi-purpose particle physics event generator";
+    description = "Multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
+    broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

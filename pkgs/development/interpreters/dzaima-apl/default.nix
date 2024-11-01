@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dzaima/APL";
-    description = "An APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    description = "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (jdk.meta) platforms;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
   };
 }
 # TODO: Processing app

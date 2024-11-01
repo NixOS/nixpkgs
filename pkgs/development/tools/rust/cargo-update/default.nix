@@ -7,7 +7,7 @@
 , ronn
 , stdenv
 , curl
-, libgit2_1_5
+, libgit2
 , libssh2
 , openssl
 , zlib
@@ -16,30 +16,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "13.2.0";
+  version = "15.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-yMHGn/RPtYuxS3rHzm87mW7nBUEaSOGsCT7Ckxvhabk=";
+    hash = "sha256-2Z/fRd80qZi61KO07gx3Jdnslxv1KUCubv9bIUmjGKU=";
   };
 
-  cargoHash = "sha256-hO2W0NRV9fGHnnS1kOkQ+e0sFzVSBQk3MOm8qDYbA00=";
+  cargoHash = "sha256-v5rsFzox1x2pf/LilZy/YI985sL5Pigm2GGaCWWjB7s=";
 
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
     ronn
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     darwin.apple_sdk.frameworks.Security
   ];
@@ -55,8 +55,12 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
   meta = with lib; {
-    description = "A cargo subcommand for checking and applying updates to installed executables";
+    description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
     license = licenses.mit;

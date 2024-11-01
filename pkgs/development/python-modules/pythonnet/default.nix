@@ -1,22 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, pycparser
-, psutil
-, dotnet-sdk
-, buildDotnetModule
-, clr-loader
-, setuptools
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  pycparser,
+  psutil,
+  dotnet-sdk,
+  buildDotnetModule,
+  clr-loader,
+  setuptools,
 }:
 
 let
   pname = "pythonnet";
-  version = "3.0.3";
+  version = "3.0.4";
   src = fetchPypi {
     pname = "pythonnet";
     inherit version;
-    hash = "sha256-jUsulxWKAjh1+GR0WKWPOIF/T+Oa9gq91rDYrfHXfnU=";
+    hash = "sha256-yS+8/d0WV19+daZDMCJxZYtgbYVX338BMqwkDgPMOo8=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -35,6 +36,8 @@ buildPythonPackage {
     substituteInPlace pyproject.toml \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
+
+  buildInputs = dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
@@ -61,7 +64,7 @@ buildPythonPackage {
     dotnet restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
-      --source ${dotnet-build.nuget-source}
+      --source "$nugetSource"
   '';
 
   # Rerun this when updating to refresh Nuget dependencies
@@ -74,6 +77,9 @@ buildPythonPackage {
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ jraygauthier mdarocha ];
+    maintainers = with maintainers; [
+      jraygauthier
+      mdarocha
+    ];
   };
 }

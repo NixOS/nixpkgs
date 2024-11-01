@@ -19,7 +19,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,14 +27,13 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
     };
 
   };
-
 
   config = {
 
@@ -111,7 +110,7 @@ in
       postgres = 71;
       #vboxusers = 72; # unused
       #vboxsf = 73; # unused
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -180,7 +179,7 @@ in
       #dnsmasq = 141;# dynamically allocated as of 2021-09-03
       #uhub = 142; # unused
       yandexdisk = 143;
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145;# dynamically allocated as of 2021-09-03
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -237,7 +236,7 @@ in
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
-      #shout = 206; # dynamically allocated as of 2021-09-18
+      #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
@@ -288,16 +287,16 @@ in
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
-      ipfs  = 261;
+      ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
@@ -313,7 +312,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       #monero = 287; # dynamically allocated as of 2021-05-08
@@ -327,7 +326,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
@@ -436,7 +435,7 @@ in
       postgres = 71;
       vboxusers = 72;
       vboxsf = 73;
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -503,7 +502,7 @@ in
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145; # unused
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -599,7 +598,7 @@ in
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -608,7 +607,7 @@ in
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused
@@ -623,7 +622,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       # monero = 287; # dynamically allocated as of 2021-05-08
@@ -637,7 +636,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
@@ -666,6 +665,7 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
+      uinput = 327;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

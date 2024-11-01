@@ -49,14 +49,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
-
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "Markdown slideshows in Rust";
@@ -64,5 +59,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "slippy";
   };
 }

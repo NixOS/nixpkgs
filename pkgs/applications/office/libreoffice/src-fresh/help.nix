@@ -1,4 +1,5 @@
-{
-  sha256 = "0j6idhdywnbl0qaimf1ahxaqvp9s0y2hfrbcbmw32c30g812gp3b";
-  url = "https://download.documentfoundation.org/libreoffice/src/7.6.2/libreoffice-help-7.6.2.1.tar.xz";
+{ fetchurl, ... }:
+fetchurl {
+  sha256 = "1vbi2qbap3ccychc0sfn32z46klyzjh0hhk4in0sd7qkl97y6lvn";
+  url = "https://download.documentfoundation.org/libreoffice/src/24.8.0/libreoffice-help-24.8.0.3.tar.xz";
 }

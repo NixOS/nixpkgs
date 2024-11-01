@@ -1,27 +1,34 @@
 { lib
 , stdenv
 , buildNpmPackage
+, overrideSDK
 , fetchFromGitHub
 , testers
 , balena-cli
-, nodePackages
+, node-gyp
 , python3
 , udev
+, cctools
 , darwin
 }:
 
-buildNpmPackage rec {
+let
+  # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' = buildNpmPackage.override {
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "17.0.0";
+  version = "19.0.13";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-sNpxjSumiP+4fX6b3j+HEl/lr4pvudrhfTzr2TYastE=";
+    hash = "sha256-2U+P3LsxaRpktNbDn8iNhHQVjokiWZADYVDpJsDosZU=";
   };
 
-  npmDepsHash = "sha256-q2Yc6e5dEiP2Q4tFIeqj4mswM1/pX1pdGeoagyiupvs=";
+  npmDepsHash = "sha256-CA6qs9Gk19dEK2yCFMVVKmJSoZVLdpnf4V6P5fv2Bcc=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -29,15 +36,15 @@ buildNpmPackage rec {
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    nodePackages.node-gyp
+    node-gyp
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
     darwin.apple_sdk.frameworks.Cocoa
   ];
@@ -52,7 +59,7 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "A command line interface for balenaCloud or openBalena";
+    description = "Command line interface for balenaCloud or openBalena";
     longDescription = ''
       The balena CLI is a Command Line Interface for balenaCloud or openBalena. It is a software
       tool available for Windows, macOS and Linux, used through a command prompt / terminal window.

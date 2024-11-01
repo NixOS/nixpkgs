@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pillow
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 let
   pname = "pydicom";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PF4iA/FPxPYD8OfgWqKRndwi2vURuzh6tlEwduxs/3E=";
+    hash = "sha256-iJE1horEmdL7bKPn+NlZLgmtCbLZCZWQ8NjDBQPzXk8=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
@@ -28,18 +30,19 @@ let
     rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
     hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
   };
-
 in
 buildPythonPackage {
   inherit pname version src;
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.10";
 
   patches = [
     # backport of https://github.com/pydicom/pydicom/commit/2513a20cc41743a42bdb86f4cbb4873899b7823c
     ./pillow-10.1.0-compat.patch
   ];
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,9 +50,7 @@ buildPythonPackage {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
@@ -60,24 +61,27 @@ buildPythonPackage {
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';
 
-  disabledTests = [
-    # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
-    "test_fetch_data_files"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # https://github.com/pydicom/pydicom/issues/1386
-    "test_array"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky, hard to reproduce failure outside hydra
-    "test_time_check"
-  ];
+  disabledTests =
+    [
+      # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
+      "test_fetch_data_files"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # https://github.com/pydicom/pydicom/issues/1386
+      "test_array"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # flaky, hard to reproduce failure outside hydra
+      "test_time_check"
+    ];
 
-  pythonImportsCheck = [
-    "pydicom"
-  ];
+  pythonImportsCheck = [ "pydicom" ];
 
   meta = with lib; {
     description = "Python package for working with DICOM files";
+    mainProgram = "pydicom";
     homepage = "https://pydicom.github.io";
+    changelog = "https://github.com/pydicom/pydicom/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

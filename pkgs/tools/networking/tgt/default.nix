@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.89";
+  version = "1.0.93";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sgflHkG4FncQ31+BwcZsp7LRgqeqANCIKGysxUk8aEs=";
+    hash = "sha256-0Yfah8VxmbBe1J1OMhG6kyHlGBBAed8F9uStjMs6S2E=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
   ];
 
-  hardeningDisable = lib.optionals stdenv.isAarch64 [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
     # error: 'read' writing 1 byte into a region of size 0 overflows the destination
     "fortify3"
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "https://github.com/fujita/tgt";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg ];
   };

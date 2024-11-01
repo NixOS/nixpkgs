@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses postgresql ];
 
   meta = with lib; {
-    description = "A 'top' like tool for PostgreSQL";
+    description = "'top' like tool for PostgreSQL";
     longDescription = ''
       pg_top allows you to:
        * View currently running SQL statement of a process.
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ptop.projects.postgresql.org/";
     platforms = platforms.linux;
     license = licenses.free; # see commands.c
+    mainProgram = "pg_top";
   };
 }

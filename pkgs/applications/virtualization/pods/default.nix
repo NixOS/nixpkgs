@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.2.3";
+  version = "2.0.1-unstable-2024-08-11";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-1NeIrEr6judTR5zHhhboUncx953hEjIl0qVaWkMVNiU=";
+    rev = "146a85b4860375ac0a5be8d7be57fb12753a3c42";
+    sha256 = "sha256-KaS38XC+V3jRPPTnI4UqMc9KGAC7INHMu47LVo9YP44=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -57,11 +57,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A podman desktop application";
+    description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
     changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;
+    mainProgram = "pods";
   };
 }

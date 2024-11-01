@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchurl }:
+{
+  fetchurl,
+  gitUpdater,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.4.22";
+  version = "3.5.21";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    hash = "sha256-gD+nd3bRHT0btWOCZhbIERJEJeAzGtH9mDxBRARqYVY=";
+    hash = "sha256-lZs+SIaYaXXYXQsCEXeQiD5TuNBRUp326s/mR0XvMWA=";
   };
 
   patches = [
@@ -20,6 +25,12 @@ stdenv.mkDerivation rec {
     cp -r . $out
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/rubygems/rubygems.git";
+    rev-prefix = "v";
+    ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
+  };
 
   meta = with lib; {
     description = "Package management framework for Ruby";

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "untokenize";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

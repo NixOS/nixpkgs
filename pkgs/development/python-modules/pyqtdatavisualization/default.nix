@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqt-builder
-, python
-, pythonOlder
-, qtdatavis3d
-, setuptools
-, sip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqt-builder,
+  python,
+  pythonOlder,
+  qtdatavis3d,
+  setuptools,
+  sip,
 }:
 
 buildPythonPackage rec {
   pname = "pyqtdatavisualization";
-  version = "5.15.5";
+  version = "5.15.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQtDataVisualization";
     inherit version;
-    hash = "sha256-iSf496pwhX7wDFHj379vg92fOFX0FuDVMVknYcu53H8=";
+    hash = "sha256-ntM7IOdHvGnh1hnxR7sWJcwA1u9ATb8Ha6E6n/b2Bh0=";
   };
 
   postPatch = ''
@@ -29,7 +29,10 @@ buildPythonPackage rec {
       --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
   # HACK: paralellize compilation of make calls within pyqt's setup.py
@@ -51,22 +54,16 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = [
-    qtdatavis3d
-  ];
+  buildInputs = [ qtdatavis3d ];
 
-  propagatedBuildInputs = [
-    pyqt5
-  ];
+  propagatedBuildInputs = [ pyqt5 ];
 
   dontConfigure = true;
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5.QtDataVisualization"
-  ];
+  pythonImportsCheck = [ "PyQt5.QtDataVisualization" ];
 
   meta = with lib; {
     description = "Python bindings for the Qt Data Visualization library";

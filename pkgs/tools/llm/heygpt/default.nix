@@ -25,10 +25,11 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_DIR = "${lib.getDev openssl}";
 
   meta = with lib; {
-    description = "A simple command-line interface for ChatGPT API.";
+    description = "Simple command-line interface for ChatGPT API";
     homepage = "https://github.com/fuyufjh/heygpt";
+    changelog = "https://github.com/fuyufjh/heygpt/releases/tag/v${version}";
     license = licenses.mit;
-    mainProgram = pname;
+    mainProgram = "heygpt";
     maintainers = with maintainers; [aldoborrero];
   };
 }

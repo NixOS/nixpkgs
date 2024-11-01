@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-MzXObbxccwEG7egmQMCdhUukGqZS+NgbYwZjTaqME7I=";
   };
 
-  cargoSha256 = "sha256-1BoB7K/dWy3AbogvHIDLrdPD7K54EISvn4RVU5RLTi4=";
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  cargoHash = "sha256-1BoB7K/dWy3AbogvHIDLrdPD7K54EISvn4RVU5RLTi4=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = with lib; {
     description = "Fast text uwuifier";
@@ -20,5 +20,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = lib.platforms.x86; # uses SSE instructions
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "uwuify";
   };
 }

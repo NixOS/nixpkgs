@@ -27,13 +27,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     libintl
   ];
 
   meta = with lib; {
     description = "Library for reading and writing the IPTC metadata in images and other files";
+    mainProgram = "iptc";
     homepage = "https://github.com/ianw/libiptcdata";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

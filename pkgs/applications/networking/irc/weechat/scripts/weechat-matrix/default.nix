@@ -56,10 +56,10 @@ in buildPythonPackage {
     attrs
     logbook
     pygments
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     aiohttp
     requests
-  ] ++ matrix-nio.optional-dependencies.e2e;
+  ];
 
   passthru.scripts = [ "matrix.py" ];
 
@@ -76,11 +76,11 @@ in buildPythonPackage {
     cp contrib/matrix_decrypt.py $out/bin/matrix_decrypt
     cp contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
     substituteInPlace $out/bin/matrix_upload \
-      --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_sso_helper \
-      --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_decrypt \
-      --replace '/usr/bin/env python3' '${scriptPython}/bin/python'
+      --replace-fail '/usr/bin/env python3' '${scriptPython}/bin/python'
 
     mkdir -p $out/${python.sitePackages}
     cp -r matrix $out/${python.sitePackages}/matrix
@@ -90,14 +90,15 @@ in buildPythonPackage {
   postFixup = ''
     addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
-    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+    substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace-fail \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+    substituteInPlace $out/${python.sitePackages}/matrix/uploads.py --replace-fail \"matrix_upload\" \"$out/bin/matrix_upload\"
   '';
 
   meta = with lib; {
-    description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
+    description = "Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner emily ];
+    maintainers = with maintainers; [ tilpner ];
   };
 }

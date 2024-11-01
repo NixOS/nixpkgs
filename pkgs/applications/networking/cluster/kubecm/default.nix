@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubecm";
-  version = "0.25.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
     rev = "v${version}";
-    hash = "sha256-8Y8JChZxjbN/nOw2tzDfJvYSMAtAadf6QMsDFK4IIOg=";
+    hash = "sha256-Go2lroa8lq1XjIzvdA5ZL/lOjTAyDKopBepqgWzsUII=";
   };
 
-  vendorHash = "sha256-HjMgXEDX9pDpK+1Hm0xI0wYRfpj7K6xkZJXCUBqbE3Y=";
+  vendorHash = "sha256-BrSYfxftrnNOcPgG/rsTF3OukDd+VlOvE7OJcos7vW4=";
   ldflags = [ "-s" "-w" "-X github.com/sunny0826/kubecm/version.Version=${version}"];
 
   doCheck = false;
@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/sunny0826/kubecm/";
     license = licenses.asl20;
     maintainers = with maintainers; [ qjoly ];
+    mainProgram = "kubecm";
   };
 }

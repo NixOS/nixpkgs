@@ -1,24 +1,25 @@
-{ lib
-, beartype
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, license-expression
-, ply
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rdflib
-, semantic-version
-, setuptools
-, setuptools-scm
-, uritools
-, xmltodict
+{
+  lib,
+  beartype,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  license-expression,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rdflib,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
+  uritools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,10 +28,8 @@ buildPythonPackage rec {
     owner = "spdx";
     repo = "tools-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KB+tfuz0ZnoQcMX3H+IZXjcmPZ4x2ecl8ofz1/3r0/8=";
+    hash = "sha256-r7+RYGoq3LJYN1jYfwzb1r3fc/kL+CPd4pmGATFq8Pw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -49,13 +48,9 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "spdx_tools.spdx"
-  ];
+  pythonImportsCheck = [ "spdx_tools.spdx" ];
 
   disabledTestPaths = [
     # Test depends on the currently not packaged pyshacl module

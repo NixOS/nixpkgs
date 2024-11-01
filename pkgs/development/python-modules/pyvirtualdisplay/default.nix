@@ -1,10 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, easyprocess }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  xorg,
+
+  # build-system
+  setuptools,
+
+  # tests
+  easyprocess,
+  entrypoint2,
+  pillow,
+  psutil,
+  pytest-xdist,
+  pytestCheckHook,
+  vncdo,
+}:
 
 buildPythonPackage rec {
   pname = "pyvirtualdisplay";
   version = "3.0";
-
-  propagatedBuildInputs = [ easyprocess ];
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyVirtualDisplay";
@@ -12,8 +30,30 @@ buildPythonPackage rec {
     hash = "sha256-CXVbw86263JfsH7KVCX0PyNY078I4A0qm3kqGu3RYVk=";
   };
 
-  # requires X server
-  doCheck = false;
+  patches = lib.optionals stdenv.isLinux [
+    (substituteAll {
+      src = ./paths.patch;
+      xauth = lib.getExe xorg.xauth;
+      xdpyinfo = lib.getExe xorg.xdpyinfo;
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  doCheck = stdenv.isLinux;
+
+  nativeCheckInputs = [
+    easyprocess
+    entrypoint2
+    pillow
+    psutil
+    pytest-xdist
+    pytestCheckHook
+    (vncdo.overridePythonAttrs { doCheck = false; })
+    xorg.xorgserver
+    xorg.xmessage
+    xorg.xvfb
+  ];
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";

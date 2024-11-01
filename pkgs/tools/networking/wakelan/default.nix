@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-PfXrj4d2SHmatiPPFxjsxvhusML1HTRNjoYEQtzFzW8=";
   };
 
+  # code predates c99
+  env.CFLAGS = "-std=c89";
+
   preInstall = ''
     mkdir -p $out/man/man1 $out/bin
   '';
@@ -21,7 +24,8 @@ stdenv.mkDerivation rec {
       power on.
    '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
+    mainProgram = "wakelan";
   };
 }

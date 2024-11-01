@@ -14,7 +14,7 @@
 , thrift
 , fftwFloat
 , python
-, swig
+, swig3
 , uhd
 , icu
 , airspy
@@ -22,29 +22,30 @@
 , libbladeRF
 , rtl-sdr
 , soapysdr-with-plugins
+, gnuradioAtLeast
 }:
 
 let
   version = {
     "3.7" = "0.1.5";
     "3.8" = "0.2.3";
-    "3.9" = "0.2.4";
-    "3.10" = "0.2.4";
+    "3.9" = "0.2.6";
+    "3.10" = "0.2.6";
   }.${gnuradio.versionAttr.major};
   src = fetchgit {
-    url = "git://git.osmocom.org/gr-osmosdr";
+    url = "https://gitea.osmocom.org/sdr/gr-osmosdr";
     rev = "v${version}";
     sha256 = {
       "3.7" = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
       "3.8" = "sha256-ZfI8MshhZOdJ1U5FlnZKXsg2Rsvb6oKg943ZVYd/IWo=";
-      "3.9" = "sha256-d0hbiJ44lEu8V4XX7JpZVSTQwwykwKPUfiqetRBI6uI=";
-      "3.10" = "sha256-d0hbiJ44lEu8V4XX7JpZVSTQwwykwKPUfiqetRBI6uI=";
+      "3.9" = "sha256-jCUzBY1pYiEtcRQ97t9F6uEMVYw2NU0eoB5Xc2H6pGQ=";
+      "3.10" = "sha256-jCUzBY1pYiEtcRQ97t9F6uEMVYw2NU0eoB5Xc2H6pGQ=";
     }.${gnuradio.versionAttr.major};
   };
 in mkDerivation {
   pname = "gr-osmosdr";
   inherit version src;
-  disabledForGRafter = "3.11";
+  disabled = gnuradioAtLeast "3.11";
 
   outputs = [ "out" "dev" ];
 
@@ -70,7 +71,7 @@ in mkDerivation {
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       python.pkgs.numpy
       python.pkgs.pybind11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.Security
   ];
@@ -84,7 +85,7 @@ in mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah

@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.berry.enable = mkEnableOption (lib.mdDoc "berry");
+    services.xserver.windowManager.berry.enable = mkEnableOption "berry";
   };
 
   ###### implementation

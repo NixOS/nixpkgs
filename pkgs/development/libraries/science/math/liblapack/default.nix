@@ -11,19 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblapack";
-  version = "3.11";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AYD78u70y8cY19hmM/aDjQEzxO8u9lPWhCFxRe5cqXI=";
+    sha256 = "sha256-xn9HL4YF8JPka1gwet5bGGo2k505H3RfWpxkUIYNecQ=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];
 
   # Configure stage fails on aarch64-darwin otherwise, due to either clang 11 or gfortran 10.
-  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ "stackprotector" ];
 
   cmakeFlags = [
     "-DCMAKE_Fortran_FLAGS=-fPIC"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Upstream issue to track:
   # * https://github.com/Reference-LAPACK/lapack/issues/440
-  ctestArgs = lib.optionalString stdenv.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
+  ctestArgs = lib.optionalString stdenv.hostPlatform.isDarwin "-E '^(CBLAS-(x[sdcz]cblat[23]))$'";
 
   checkPhase = ''
     runHook preCheck

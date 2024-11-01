@@ -1,80 +1,94 @@
 {
   # eval time deps
-  lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
 
-# buildtime
-, hatchling
+  # buildtime
+  hatchling,
 
-# runtime deps
-, click
-, ghp-import
-, importlib-metadata
-, jinja2
-, markdown
-, markupsafe
-, mergedeep
-, packaging
-, pathspec
-, platformdirs
-, pyyaml
-, pyyaml-env-tag
-, watchdog
+  # runtime deps
+  click,
+  ghp-import,
+  importlib-metadata,
+  jinja2,
+  markdown,
+  markupsafe,
+  mergedeep,
+  mkdocs-get-deps,
+  packaging,
+  pathspec,
+  platformdirs,
+  pyyaml,
+  pyyaml-env-tag,
+  watchdog,
 
-# testing deps
-, babel
-, mock
-, unittestCheckHook
+  # optional-dependencies
+  babel,
+  setuptools,
+
+  # testing deps
+  mock,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.5.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "1.6.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9sV1bewsHVJEc2kTyGxDM6SjDTEKEc/HSY6gWBC5tvE=";
+    hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     ghp-import
     jinja2
     markdown
     markupsafe
     mergedeep
+    mkdocs-get-deps
     packaging
     pathspec
     platformdirs
     pyyaml
     pyyaml-env-tag
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+
+  optional-dependencies = {
+    i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+  };
 
   nativeCheckInputs = [
     unittestCheckHook
-    babel
     mock
-  ];
+  ] ++ optional-dependencies.i18n;
 
-  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
+  unittestFlagsArray = [
+    "-v"
+    "-p"
+    "'*tests.py'"
+    "mkdocs"
+  ];
 
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
+    mainProgram = "mkdocs";
+    downloadPage = "https://github.com/mkdocs/mkdocs";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's
       geared towards building project documentation. Documentation source files

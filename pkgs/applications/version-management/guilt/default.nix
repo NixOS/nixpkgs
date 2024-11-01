@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gawk
     git
     gnused
-  ] ++ lib.optionals stdenv.isDarwin [ openssl ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
   makeFlags = [
     "PREFIX=$(out)"
   ];
@@ -88,5 +88,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ javimerino ];
     license = [ licenses.gpl2 ];
     platforms = platforms.all;
+    mainProgram = "guilt";
   };
 }

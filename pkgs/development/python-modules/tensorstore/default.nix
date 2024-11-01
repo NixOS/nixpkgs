@@ -1,28 +1,36 @@
-{ autoPatchelfHook
-, buildPythonPackage
-, fetchPypi
-, lib
-, numpy
-, python
-, stdenv
+{
+  autoPatchelfHook,
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  ml-dtypes,
+  numpy,
+  python,
+  stdenv,
 }:
 
 let
   pythonVersionNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   systemToPlatform = {
+    "aarch64-linux" = "manylinux_2_17_aarch64.manylinux2014_aarch64";
     "x86_64-linux" = "manylinux_2_17_x86_64.manylinux2014_x86_64";
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
   hashes = {
-    "310-x86_64-linux" = "sha256-Zuy2zBLV950CMbdtpLNpIWqnXHw2jkjrZG48eGtm42w=";
-    "311-x86_64-linux" = "sha256-Bg5j8QB5z8Ju4bEQsZDojJHTJ4UoQF1pkd4ma83Sc/s=";
-    "310-aarch64-darwin" = "sha256-6Tta4ru1TnobFa4FXWz8fm9rAxF0G09Y2Pj/KaQPVnE=";
-    "311-aarch64-darwin" = "sha256-Sb0tv9ZPQJ4n9b0ybpjJWpreQPZvSC5Sd7CXuUwHCn0=";
+    "310-x86_64-linux" = "sha256-oB68FjYzmRARWpbajQuLpAzWwg9CCji4tLZRFCsztjk=";
+    "311-x86_64-linux" = "sha256-kGEecBu7b3TFGUIRirI9q2W3nipiQwsh/1OB92RqDB4=";
+    "312-x86_64-linux" = "sha256-Vw8sT5kahSN20BQs3MOYesSUZqk4CuvfZR1z5nAO7g8=";
+    "310-aarch64-linux" = "sha256-Ocfg3VArM/14a06cpMuJDYP/MIo9rCvtFO4Cd3AahA4=";
+    "311-aarch64-linux" = "sha256-hegFeV3m0jpjTXNU6ue/3kGe1Cy+Pfeh4GDe96dvL7o=";
+    "312-aarch64-linux" = "sha256-O0VVtSqSEd4dqjmaXMTRvf/Bcc9YR7zzbz9N/8GVcXk=";
+    "310-aarch64-darwin" = "sha256-2vuVxmJMx/GeaHgzUS6rRdysQFHreVzZ5IT5YSDUJro=";
+    "311-aarch64-darwin" = "sha256-0xRVDSDE9upz2yU7mzpa3Y6l6M5FWOMAPKWBC8eY3Eo=";
+    "312-aarch64-darwin" = "sha256-i2TmLOl2aHD5iyzF6YpjbHKFmBGPx5ixPYyNKKQfRNM=";
   };
 in
 buildPythonPackage rec {
   pname = "tensorstore";
-  version = "0.1.40";
+  version = "0.1.65";
   format = "wheel";
 
   # The source build involves some wonky Bazel stuff.
@@ -33,21 +41,26 @@ buildPythonPackage rec {
     abi = "cp${pythonVersionNoDot}";
     dist = "cp${pythonVersionNoDot}";
     platform = systemToPlatform.${stdenv.system} or (throw "unsupported system");
-    hash = hashes."${pythonVersionNoDot}-${stdenv.system}" or (throw "unsupported system/python version combination");
+    hash =
+      hashes."${pythonVersionNoDot}-${stdenv.system}"
+        or (throw "unsupported system/python version combination");
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    ml-dtypes
+    numpy
+  ];
 
   pythonImportsCheck = [ "tensorstore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing large multi-dimensional arrays";
     homepage = "https://google.github.io/tensorstore";
     changelog = "https://github.com/google/tensorstore/releases/tag/v${version}";
-    license = licenses.asl20;
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

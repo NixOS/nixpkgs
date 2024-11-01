@@ -1,36 +1,60 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, appdirs
-, cryptography
-, dogpile-cache
-, jmespath
-, jsonpatch
-, keystoneauth1
-, munch
-, netifaces
-, os-service-types
-, pbr
-, pythonOlder
-, pyyaml
-, requestsexceptions
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  platformdirs,
+  cryptography,
+  dogpile-cache,
+  jmespath,
+  jsonpatch,
+  keystoneauth1,
+  munch,
+  netifaces,
+  openstackdocstheme,
+  os-service-types,
+  pbr,
+  pythonOlder,
+  pyyaml,
+  requestsexceptions,
+  setuptools,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "1.5.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FBtR+ijGsc3rmOvcOMHO5qTnVL1ryEq3qqDQwrzlRD4=";
+    hash = "sha256-54YN2WtwUxMJI8EdVx0lgCuWjx4xOIRct8rHxrMzv0s=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
+  postPatch = ''
+    # Disable rsvgconverter not needed to build manpage
+    substituteInPlace doc/source/conf.py \
+      --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
+  '';
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    platformdirs
     cryptography
     dogpile-cache
     jmespath
@@ -51,12 +75,11 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "openstack"
-  ];
+  pythonImportsCheck = [ "openstack" ];
 
   meta = with lib; {
-    description = "An SDK for building applications to work with OpenStack";
+    description = "SDK for building applications to work with OpenStack";
+    mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

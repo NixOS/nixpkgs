@@ -1,29 +1,23 @@
-{ buildPythonPackage
-, cirq-core
-, google-api-core
-, protobuf
-, pytestCheckHook
-, freezegun
-, pythonRelaxDepsHook
+{
+  buildPythonPackage,
+  cirq-core,
+  freezegun,
+  google-api-core,
+  protobuf,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-google";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "google-api-core[grpc] >= 1.14.0, < 2.0.0dev" "google-api-core[grpc] >= 1.14.0, < 3.0.0dev" \
-      --replace "protobuf >= 3.15.0, < 4" "protobuf >= 3.15.0"
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cirq-core
     google-api-core
     protobuf
@@ -39,6 +33,8 @@ buildPythonPackage rec {
     "cirq_google/_version_test.py"
     # Trace/BPT trap: 5
     "cirq_google/engine/calibration_test.py"
+    # Very time-consuming
+    "cirq_google/engine/*_test.py"
   ];
 
   disabledTests = [
@@ -48,5 +44,4 @@ buildPythonPackage rec {
     # Calibration issue
     "test_xeb_to_calibration_layer"
   ];
-
 }

@@ -1,14 +1,17 @@
-{ lib
-, buildPythonPackage
-, cacert
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cacert,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2023.07.22";
+  version = "2024.08.30";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-certifi";
     rev = version;
-    hash = "sha256-V3bptJDNMGXlCMg6GHj792IrjfsG9+F/UpQKxeM0QOc=";
+    hash = "sha256-E3Ykb7KLWWVlJ8kFGC9X/6I1SlyNxUXUPb3xN8CwlHI=";
   };
 
   patches = [
@@ -30,18 +33,16 @@ buildPythonPackage rec {
     ln -snvf "${cacert}/etc/ssl/certs/ca-bundle.crt" "certifi/cacert.pem"
   '';
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedNativeBuildInputs = [
     # propagate cacerts setup-hook to set up `NIX_SSL_CERT_FILE`
     cacert
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "certifi"
-  ];
+  pythonImportsCheck = [ "certifi" ];
 
   meta = with lib; {
     homepage = "https://github.com/certifi/python-certifi";

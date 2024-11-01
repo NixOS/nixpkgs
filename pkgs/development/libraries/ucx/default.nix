@@ -1,19 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
+, autoAddDriverRunpath
 , enableCuda ? config.cudaSupport
-, cudatoolkit
+, cudaPackages
 , enableRocm ? config.rocmSupport
 , rocmPackages
 }:
 
 let
-  # Needed for configure to find all libraries
-  cudatoolkit' = symlinkJoin {
-    inherit (cudatoolkit) name meta;
-    paths = [ cudatoolkit cudatoolkit.lib ];
-  };
-
   rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
 
   rocm = symlinkJoin {
@@ -24,18 +19,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.15.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-VxIxrk9qKM6Ncfczl4p2EhXiLNgPaYTmjhqi6/w2ZNY=";
+    sha256 = "sha256-Qd3c51LeF04haZA4wK6loNZwX2a3ju+ljwdPYPoUKCQ=";
   };
 
   outputs = [ "out" "doc" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    doxygen
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
   buildInputs = [
     libbfd
@@ -44,8 +47,16 @@ stdenv.mkDerivation rec {
     perl
     rdma-core
     zlib
-  ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optionals enableRocm rocmList;
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvml_dev
+
+  ] ++ lib.optionals enableRocm rocmList;
+
+  LDFLAGS = lib.optionals enableCuda [
+    # Fake libnvidia-ml.so (the real one is deployed impurely)
+    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
+  ];
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"
@@ -53,7 +64,7 @@ stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
-  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
+  ] ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   postInstall = ''

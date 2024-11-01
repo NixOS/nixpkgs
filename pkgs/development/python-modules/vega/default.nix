@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, altair
-, ipytablewidgets
-, ipywidgets
-, jupyter
-, jupyter-core
-, jupyterlab
-, pandas
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  pythonOlder,
+  altair,
+  ipytablewidgets,
+  ipywidgets,
+  jupyter,
+  jupyter-core,
+  jupyterlab,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v1/8taHdN1n9+gy7L+g/wAJ2x9FwYCaxZiEdFqLct1Y=";
+    hash = "sha256-8lrmhCvwczqBpiQRCkPjmiYsJPHEFnZab/Azkh+i7ls=";
   };
 
   patches = [
@@ -38,12 +38,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pandas"
-  ];
+  pythonRelaxDeps = [ "pandas" ];
 
   propagatedBuildInputs = [
     ipytablewidgets
@@ -52,13 +49,9 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
-    widget = [
-      ipywidgets
-    ];
-    jupyterlab = [
-      jupyterlab
-    ];
+  optional-dependencies = {
+    widget = [ ipywidgets ];
+    jupyterlab = [ jupyterlab ];
   };
 
   nativeCheckInputs = [
@@ -74,7 +67,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
-    description = "An IPython/Jupyter widget for Vega and Vega-Lite";
+    description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
 

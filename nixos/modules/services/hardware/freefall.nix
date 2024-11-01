@@ -1,7 +1,4 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.freefall;
@@ -10,27 +7,20 @@ in {
 
   options.services.freefall = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to protect HP/Dell laptop hard drives (not SSDs) in free fall.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freefall;
-      defaultText = literalExpression "pkgs.freefall";
-      description = lib.mdDoc ''
-        freefall derivation to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "freefall" { };
 
-    devices = mkOption {
-      type = types.listOf types.str;
+    devices = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "/dev/sda" ];
-      description = lib.mdDoc ''
+      description = ''
         Device paths to all internal spinning hard drives.
       '';
     };
@@ -42,7 +32,7 @@ in {
     mkService = dev:
       assert dev != "";
       let dev' = utils.escapeSystemdPath dev; in
-      nameValuePair "freefall-${dev'}" {
+      lib.nameValuePair "freefall-${dev'}" {
         description = "Free-fall protection for ${dev}";
         after = [ "${dev'}.device" ];
         wantedBy = [ "${dev'}.device" ];
@@ -53,7 +43,7 @@ in {
         };
       };
 
-  in mkIf cfg.enable {
+  in lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 

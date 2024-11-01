@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, rich
-, syrupy
-, tenacity
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  rich,
+  syrupy,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pytrydan";
-  version = "0.4.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,19 +27,14 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = "pytrydan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9PyRICtZ+0Ezinu28oFgFOSnOyCmD7zZbdc/chN+sCo=";
+    hash = "sha256-OHC+Ul64BYCsgoFDxI1hPjBGkd/pQ0j0c9Pt5lWg1E0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=pytrydan --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "tenacity" ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     orjson
     rich
@@ -47,14 +44,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "pytrydan"
-  ];
+  pythonImportsCheck = [ "pytrydan" ];
 
   meta = with lib; {
     description = "Library to interface with V2C EVSE Trydan";
@@ -62,5 +58,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pytrydan";
   };
 }

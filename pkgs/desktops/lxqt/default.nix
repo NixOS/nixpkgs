@@ -1,4 +1,5 @@
-{ pkgs, makeScope, libsForQt5, qt5 }:
+{ pkgs, makeScope, kdePackages }:
+
 let
   packages = self: with self; {
 
@@ -11,6 +12,7 @@ let
     libsysstat = callPackage ./libsysstat {};
     liblxqt = callPackage ./liblxqt {};
     qtxdg-tools = callPackage ./qtxdg-tools {};
+    libdbusmenu-lxqt = callPackage ./libdbusmenu-lxqt {};
 
     ### CORE 1
     libfm-qt = callPackage ./libfm-qt {};
@@ -37,23 +39,56 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./qterminal {};
-    compton-conf = callPackage ./compton-conf {};
+    compton-conf = callPackage ./compton-conf {
+      lxqt-build-tools = lxqt-build-tools_0_13;
+      inherit (pkgs.libsForQt5) qtbase qttools qtx11extras;
+    };
     obconf-qt = callPackage ./obconf-qt {};
     lximage-qt = callPackage ./lximage-qt {};
     qps = callPackage ./qps {};
     screengrab = callPackage ./screengrab {};
-    qlipper = callPackage ./qlipper {};
+    qlipper = callPackage ./qlipper {
+      inherit (pkgs.libsForQt5) qtbase qttools;
+    };
     lxqt-archiver = callPackage ./lxqt-archiver {};
     xdg-desktop-portal-lxqt = callPackage ./xdg-desktop-portal-lxqt {};
 
+    ### COMPATIBILITY
+    lxqt-build-tools_0_13 = callPackage ./lxqt-build-tools {
+      version = "0.13.0";
+      inherit (pkgs.libsForQt5) qtbase;
+    };
+    libqtxdg_3_12 = callPackage ./libqtxdg {
+      version = "3.12.0";
+      lxqt-build-tools = lxqt-build-tools_0_13;
+      inherit (pkgs.libsForQt5) qtbase qtsvg;
+    };
+    libfm-qt_1_4 = callPackage ./libfm-qt {
+      version = "1.4.0";
+      lxqt-build-tools = lxqt-build-tools_0_13;
+      inherit (pkgs.libsForQt5) qttools qtx11extras;
+    };
+    lxqt-qtplugin_1_4 = callPackage ./lxqt-qtplugin {
+      version = "1.4.1";
+      lxqt-build-tools = lxqt-build-tools_0_13;
+      libqtxdg = libqtxdg_3_12;
+      libfm-qt = libfm-qt_1_4;
+      inherit (pkgs.libsForQt5) qtbase qtsvg qttools libdbusmenu;
+    };
+    qtermwidget_1_4 = callPackage ./qtermwidget {
+      version = "1.4.0";
+      lxqt-build-tools = lxqt-build-tools_0_13;
+      inherit (pkgs.libsForQt5) qtbase qttools;
+    };
+
     preRequisitePackages = [
-      libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
-      libsForQt5.libkscreen # provides plugins for screen management software
+      kdePackages.kwindowsystem # provides some QT plugins needed by lxqt-panel
+      kdePackages.libkscreen # provides plugins for screen management software
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.menu-cache
       pkgs.openbox # default window manager
-      qt5.qtsvg # provides QT5 plugins for svg icons
+      kdePackages.qtsvg # provides QT plugins for svg icons
     ];
 
     corePackages = [
@@ -61,6 +96,8 @@ let
       libqtxdg
       libsysstat
       liblxqt
+      qtxdg-tools
+      libdbusmenu-lxqt
 
       ### CORE 1
       libfm-qt
@@ -97,7 +134,7 @@ let
       screengrab
 
       ### Default icon theme
-      libsForQt5.breeze-icons
+      kdePackages.breeze-icons
 
       ### Screen saver
       pkgs.xscreensaver
@@ -105,4 +142,4 @@ let
 
   };
 in
-makeScope libsForQt5.newScope packages
+makeScope kdePackages.newScope packages

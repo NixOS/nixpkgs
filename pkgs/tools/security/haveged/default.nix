@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haveged";
-  version = "1.9.18";
+  version = "1.9.19";
 
   src = fetchFromGitHub {
     owner = "jirka-h";
     repo = "haveged";
     rev = "v${version}";
-    hash = "sha256-fyL/J2A13ap582j4gdC8u63Ah67Old+BaO/CLyEeN/g=";
+    hash = "sha256-tq4OXLlyC6exJEZ80H1gQQRBgYGbu+3kGz99RxsyauI=";
   };
 
   strictDeps = true;
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple entropy daemon";
+    description = "Simple entropy daemon";
+    mainProgram = "haveged";
     longDescription = ''
       The haveged project is an attempt to provide an easy-to-use, unpredictable
       random number generator based upon an adaptation of the HAVEGE algorithm.

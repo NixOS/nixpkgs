@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, exempi
-, fetchFromGitHub
-, mock
-, pytz
-, lib, stdenv
+{
+  buildPythonPackage,
+  exempi,
+  fetchFromGitHub,
+  pytz,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage {
   pname = "python-xmp-toolkit";
   version = "2.0.2";
+  format = "setuptools";
 
   # PyPi has version 2.0.1; the tests fail
   # There are commits for a 2.0.2 release that was never published
@@ -33,7 +35,7 @@ buildPythonPackage {
   '';
 
   # hangs on darwin + sandbox
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     rm test/{test_exempi,test_files}.py
@@ -43,6 +45,6 @@ buildPythonPackage {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [ ];
   };
 }

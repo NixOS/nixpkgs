@@ -1,6 +1,5 @@
 { lib, stdenv
 , cmake
-, gettext
 , libSrc
 , stepreduce
 , parallel

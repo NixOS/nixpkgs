@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, base58
-, py-multibase
-, py-multicodec
-, morphys
-, py-multihash
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  base58,
+  py-multibase,
+  py-multicodec,
+  morphys,
+  py-multihash,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "py-cid";
   version = "0.3.0";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

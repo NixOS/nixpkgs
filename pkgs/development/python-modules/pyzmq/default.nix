@@ -1,34 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py
-, pytestCheckHook
-, python
-, pythonOlder
-, tornado
-, zeromq
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+
+  # build-system
+  cffi,
+  cython,
+  cmake,
+  ninja,
+  packaging,
+  pathspec,
+  scikit-build-core,
+
+  # checks
+  pytestCheckHook,
+  pythonOlder,
+  tornado,
+  libsodium,
+  zeromq,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "25.1.1";
-  format = "setuptools";
+  version = "26.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JZwiSFtxq6zfqL95cgzXvPS50SizDqVU8BrnH9v9qiM=";
+    hash = "sha256-BwZywlhYHI5PZAtRWSl1gKmXSwJgQ71KsEcL6e0yTx8=";
   };
 
+  build-system = [
+    cmake
+    ninja
+    packaging
+    pathspec
+    scikit-build-core
+  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+
+  dontUseCmakeConfigure = true;
+
   buildInputs = [
+    libsodium
     zeromq
   ];
 
-  propagatedBuildInputs = [
-    py
-  ];
+  dependencies = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,16 +57,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "zmq"
-  ];
+  pythonImportsCheck = [ "zmq" ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
-    # pytest.ini is missing in pypi's sdist
-    # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
-    "--asyncio-mode auto"
-  ];
+  preCheck = ''
+    rm -r zmq
+  '';
 
   disabledTests = [
     # Tests hang
@@ -67,7 +83,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [
+      bsd3 # or
+      lgpl3Only
+    ];
+    maintainers = [ ];
   };
 }

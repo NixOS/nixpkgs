@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, pijul }:
+{ lib, stdenvNoCC, pijul, cacert }:
 
 lib.makeOverridable (
 { url
@@ -17,7 +17,8 @@ if change != null && state != null then
 else
   stdenvNoCC.mkDerivation {
     inherit name;
-    nativeBuildInputs = [ pijul ];
+    nativeBuildInputs = [ pijul cacert ];
+    strictDeps = true;
 
     dontUnpack = true;
     dontConfigure = true;
@@ -44,13 +45,15 @@ else
       runHook postFixup
     '';
 
-    outputHashAlgo = if hash != "" then null else "sha256";
+    outputHashAlgo = null;
     outputHashMode = "recursive";
     outputHash = if hash != "" then
       hash
     else
-      lib.fakeSha256;
+      lib.fakeHash;
 
     inherit url change state channel;
+
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   }
 )

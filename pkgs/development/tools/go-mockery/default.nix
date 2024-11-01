@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "go-mockery";
-  version = "2.36.0";
+  version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-lJkxN0FtwfuOMCMGEISkZMMKULE5X5kTltIgDm7Ta0Y=";
+    sha256 = "sha256-qPE4hzdu5soGVfw6mLJLWvjiXxdkUAT+kpOCWMO1sL8=";
   };
 
   preCheck = ''
-    substituteInPlace ./pkg/generator_test.go --replace 0.0.0-dev ${version}
-    substituteInPlace ./pkg/logging/logging_test.go --replace v0.0 v${lib.versions.majorMinor version}
+    substituteInPlace ./pkg/generator_test.go --replace-fail 0.0.0-dev ${version}
+    substituteInPlace ./pkg/logging/logging_test.go --replace-fail v0.0 v${lib.versions.majorMinor version}
   '';
 
   ldflags = [
@@ -24,7 +24,9 @@ buildGoModule rec {
   CGO_ENABLED = false;
 
   proxyVendor = true;
-  vendorHash = "sha256-HxxtKtjc1EuONG4bYTZc9i40X6Q75bQzV1Wi6Qb/Id0=";
+  vendorHash = "sha256-1SzdVM1Ncpym6bPg1aSyfoAM1YiUGal3Glw0paz+buk=";
+
+  subPackages = [ "." ];
 
   passthru.tests = {
     generateMock = runCommand "${pname}-test" {
@@ -59,7 +61,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/vektra/mockery";
-    description = "A mock code autogenerator for Golang";
+    description = "Mock code autogenerator for Golang";
     maintainers = with maintainers; [ fbrs ];
     mainProgram = "mockery";
     license = licenses.bsd3;

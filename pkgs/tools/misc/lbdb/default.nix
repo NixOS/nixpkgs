@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl' ]
-    ++ lib.optional (!stdenv.isDarwin) bsd-finger
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
     ++ lib.optional withAbook abook
     ++ lib.optional withGnupg gnupg
     ++ lib.optional withGoobook goobook
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.spinnaker.de/lbdb/";
-    description = "The Little Brother's Database";
-    license = licenses.gpl2;
+    description = "Little Brother's Database";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kaiha bfortz ];
     platforms = platforms.all;
   };

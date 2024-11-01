@@ -5,6 +5,7 @@
 , fetchpatch
 , cmdliner
 , ctypes
+, ctypes-foreign
 , dune-configurator
 , npy
 , ocaml-compiler-libs
@@ -42,6 +43,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     cmdliner
     ctypes
+    ctypes-foreign
     npy
     ocaml-compiler-libs
     ppx_custom_printf
@@ -55,12 +57,13 @@ buildDunePackage rec {
 
   preBuild = "export LIBTORCH=${torch.dev}/";
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Pytorch";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.asl20;
+    broken = true; # Not compatible with libtorch ≥ 2.3.0
   };
 }

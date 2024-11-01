@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.8.19.14";
-  format = "setuptools";
+  version = "2.9.0.20240906";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H08QrJi7ixat6dvuNRjZrOAXgh2UsFekJbBp+DRzf0s=";
+    hash = "sha256-lwbDtoKEwlrf/Ecxnsx5R+W7hrN3P4Q8c5Bv1Zi8F24=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dateutil-stubs"
-  ];
+  pythonImportsCheck = [ "dateutil-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for python-dateutil";

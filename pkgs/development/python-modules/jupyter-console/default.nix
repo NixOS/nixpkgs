@@ -1,48 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, ipykernel
-, exceptiongroup
-, ipython
-, jupyter-client
-, jupyter-core
-, prompt-toolkit
-, pygments
-, pyzmq
-, traitlets
-, flaky
-, pexpect
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  ipykernel,
+  ipython,
+  jupyter-client,
+  jupyter-core,
+  prompt-toolkit,
+  pygments,
+  pyzmq,
+  traitlets,
+
+  # tests
+  flaky,
+  pexpect,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-console";
   version = "6.6.3";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "jupyter_console";
-    inherit version;
-    hash = "sha256-VmpL8xyHrb+t8izfhG4wabWace1dpx1rpNiqrRSlNTk=";
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = "jupyter_console";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jdSeZCspcjEQVBpJyxVnwJ5SAq+SS1bW9kqp/F/zwCQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  postPatch =
+    # Use wrapped executable in tests
+    let
+      binPath = "${placeholder "out"}/bin/jupyter-console";
+    in
+    ''
+      substituteInPlace jupyter_console/tests/test_console.py \
+        --replace-fail "'-m', 'jupyter_console', " "" \
+        --replace-fail "sys.executable" "'${binPath}'"
+    '';
 
-  postPatch = ''
-    # use wrapped executable in tests
-    substituteInPlace jupyter_console/tests/test_console.py \
-      --replace "args = ['-m', 'jupyter_console', '--colors=NoColor']" "args = ['--colors=NoColor']" \
-      --replace "cmd = sys.executable" "cmd = '${placeholder "out"}/bin/jupyter-console'" \
-      --replace "check_output([sys.executable, '-m', 'jupyter_console'," "check_output(['${placeholder "out"}/bin/jupyter-console',"
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipykernel
     ipython
     jupyter-client
@@ -51,13 +56,9 @@ buildPythonPackage rec {
     pygments
     pyzmq
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
   ];
 
-  pythonImportsCheck = [
-    "jupyter_console"
-  ];
+  pythonImportsCheck = [ "jupyter_console" ];
 
   nativeCheckInputs = [
     flaky
@@ -69,8 +70,17 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  disabledTests = [
+    # Flaky: pexpect.exceptions.TIMEOUT: Timeout exceeded
+    "test_console_starts"
+    "test_display_text"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Jupyter terminal console";
+    mainProgram = "jupyter-console";
     homepage = "https://github.com/jupyter/jupyter_console";
     changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
     license = lib.licenses.bsd3;

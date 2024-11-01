@@ -5,16 +5,21 @@
 
 buildGoModule rec {
   pname = "ldapnomnom";
-  version = "1.1.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
-    repo = pname;
+    repo = "ldapnomnom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o29vcPKRX8TWRCpa20DVsh/4K7d3IbaLS3B+jJGBEmo=";
+    hash = "sha256-JYpwk7ShLH9fPTFYzLecD+iPekFMnHOlzusizCYo8dA=";
   };
 
-  vendorHash = "sha256-3ucnLD+qhBSWY2wLtBcsOcuEf1woqHP17qQg7LlERA8=";
+  vendorHash = "sha256-lm801UM7JOYsGRe92FErY2jonrqRRjLKojN5YyytqvY=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
     description = "Tool to anonymously bruteforce usernames from Domain controllers";

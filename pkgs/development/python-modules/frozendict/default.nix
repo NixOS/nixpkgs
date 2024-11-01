@@ -1,41 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.3.8";
-  format = "setuptools";
+  version = "2.4.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4a0DvZOzNJqpop7wi+FagUR+8oaekz4EDNIYdUaAWC8=";
+    hash = "sha256-cdKI0wIr0w6seV12cigqyJL6PSkLVzwVxASUB8n7lFY=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "frozendict"
-  ];
-
-  preCheck = ''
-    pushd test
+  # build C version if it exists
+  preBuild = ''
+    version_str=$(python -c 'import sys; print("_".join(map(str, sys.version_info[:2])))')
+    if test -f src/frozendict/c_src/$version_str/frozendictobject.c; then
+      export CIBUILDWHEEL=1
+      export FROZENDICT_PURE_PY=0
+    else
+      export CIBUILDWHEEL=0
+      export FROZENDICT_PURE_PY=1
+    fi
   '';
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/Marco-Sulla/python-frozendict/issues/68
-    "test_c_extension"
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "frozendict" ];
 
   meta = with lib; {
     description = "Module for immutable dictionary";

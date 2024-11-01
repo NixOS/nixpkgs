@@ -1,291 +1,446 @@
-/* Copied from http://bakefile.sourceforge.net/, which appears
-   licensed under the GNU GPL. */
-
-
-/***************************************************************************
-                             Basic headers and text:
- ***************************************************************************/
-
-body
-{
-    font-family: "Nimbus Sans L", sans-serif;
-    font-size: 1em;
-    background: white;
-    margin: 2em 1em 2em 1em;
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
 }
 
-h1, h2, h3, h4
-{
-    color: #005aa0;
+body {
+    margin: 0;
 }
 
-h1 /* title */
-{
-    font-size: 200%;
-}
-
-h2 /* chapters, appendices, subtitle */
-{
-    font-size: 180%;
-}
-
-div.book
-{
-    text-align: center;
-}
-
-div.book > div
-{
-    /*
-     * based on https://medium.com/@zkareemz/golden-ratio-62b3b6d4282a
-     * we do 70 characters per line to fit code listings better
-     * 70 * (font-size / 1.618)
-     * expression for emacs:
-     * (* 70 (/ 1 1.618))
-     */
-    max-width: 43.2em;
-    text-align: left;
+.book {
     margin: auto;
+    width: 100%;
 }
 
-/* Extra space between chapters, appendices. */
-div.chapter > div.titlepage h2, div.appendix > div.titlepage h2
-{
-    margin-top: 1.5em;
+@media screen and (min-width: 768px) {
+    .book {
+        max-width: 46rem;
+    }
 }
 
-div.section > div.titlepage h2 /* sections */
-{
-    font-size: 150%;
-    margin-top: 1.5em;
+@media screen and (min-width: 992px) {
+    .book {
+        max-width: 60rem;
+    }
 }
 
-h3 /* subsections */
-{
-    font-size: 125%;
+@media screen and (min-width: 1200px) {
+    .book {
+        max-width: 73rem;
+    }
 }
 
-div.simplesect h2
-{
-    font-size: 110%;
+.book .list-of-examples {
+    display: none;
 }
 
-div.appendix h3
-{
-    font-size: 150%;
-    margin-top: 1.5em;
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
 }
 
-div.refnamediv h2, div.refsynopsisdiv h2, div.refsection h2 /* refentry parts */
-{
-    margin-top: 1.4em;
-    font-size: 125%;
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
 }
 
-div.refsection h3
-{
-    font-size: 110%;
+pre {
+    font-family: monospace, monospace;
+    font-size: 1em;
 }
 
-
-/***************************************************************************
-                               Examples:
- ***************************************************************************/
-
-div.example
-{
-    border: 1px solid #b0b0b0;
-    padding: 6px 6px;
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-    background: #f4f4f8;
-    border-radius: 0.4em;
-    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+a {
+    background-color: transparent;
 }
 
-div.example p.title
-{
-    margin-top: 0em;
+strong {
+    font-weight: bolder;
 }
 
-div.example pre
-{
-    box-shadow: none;
+code {
+    font-family: monospace, monospace;
+    font-size: 1em;
 }
 
-
-/***************************************************************************
-                            Screen dumps:
- ***************************************************************************/
-
-pre.screen, pre.programlisting
-{
-    border: 1px solid #b0b0b0;
-    padding: 3px 3px;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-
-    background: #f4f4f8;
-    font-family: monospace;
-    border-radius: 0.4em;
-    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
 }
 
-div.example pre.programlisting
-{
-    border: 0px;
-    padding: 0 0;
-    margin: 0 0 0 0;
+sup {
+    top: -0.5em;
 }
 
-/***************************************************************************
-                               Notes, warnings etc:
- ***************************************************************************/
-
-.note, .warning
-{
-    border: 1px solid #b0b0b0;
-    padding: 3px 3px;
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-    margin-bottom: 1em;
-    padding: 0.3em 0.3em 0.3em 0.3em;
-    background: #fffff5;
-    border-radius: 0.4em;
-    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
 }
 
-div.note, div.warning
-{
-    font-style: italic;
+pre {
+    overflow: auto;
 }
 
-div.note h3, div.warning h3
-{
-    color: red;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
     font-size: 100%;
-    padding-right: 0.5em;
-    display: inline;
+    line-height: 1.77777778;
 }
 
-div.note p, div.warning p
-{
-    margin-bottom: 0em;
+@media screen and (min-width: 4000px) {
+    html {
+        background: #000;
+    }
+
+    html body {
+        margin: auto;
+        max-width: 250rem;
+    }
 }
 
-div.note h3 + p, div.warning h3 + p
-{
-    display: inline;
+@media screen and (max-width: 320px) {
+    html {
+        font-size: calc(16 / 320 * 100vw);
+    }
 }
 
-div.note h3
-{
-    color: blue;
-    font-size: 100%;
+body {
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #000000;
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-div.navfooter *
-{
-    font-size: 90%;
+@media screen and (max-width: 767.9px) {
+    body {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
-
-/***************************************************************************
-                        Links colors and highlighting:
- ***************************************************************************/
-
-a { text-decoration: none; }
-a:hover { text-decoration: underline; }
-a:link { color: #0048b3; }
-a:visited { color: #002a6a; }
-
-
-/***************************************************************************
-                              Table of contents:
- ***************************************************************************/
-
-div.toc
-{
-    font-size: 90%;
+a {
+    text-decoration: none;
+    border-bottom: 1px solid;
+    color: #405d99;
 }
 
-div.toc dl
-{
-    margin-top: 0em;
-    margin-bottom: 0em;
+ul {
+    padding: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
 }
 
-
-/***************************************************************************
-                               Special elements:
- ***************************************************************************/
-
-tt, code
-{
-    color: #400000;
-}
-
-.term
-{
-    font-weight: bold;
-
-}
-
-div.variablelist dd p, div.glosslist dd p
-{
-    margin-top: 0em;
-}
-
-div.variablelist dd, div.glosslist dd
-{
-    margin-left: 1.5em;
-}
-
-div.glosslist dt
-{
-    font-style: italic;
-}
-
-.varname
-{
-    color: #400000;
-}
-
-span.command strong
-{
-    font-weight: normal;
-    color: #400000;
-}
-
-div.calloutlist table
-{
-    box-shadow: none;
-}
-
-table
-{
+table {
     border-collapse: collapse;
-    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
-table.simplelist
-{
+thead th {
     text-align: left;
-    color: #005aa0;
-    border: 0;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-weight: 800;
+    line-height: 110%;
+    font-size: 200%;
+    margin-bottom: 1rem;
+    color: #6586c8;
+}
+
+h2 {
+    font-weight: 800;
+    line-height: 110%;
+    font-size: 170%;
+    margin-bottom: 0.625rem;
+    color: #6586c8;
+}
+
+h2:not(:first-child) {
+    margin-top: 1rem;
+}
+
+h3 {
+    font-weight: 800;
+    line-height: 110%;
+    margin-bottom: 1rem;
+    font-size: 150%;
+    color: #6586c8;
+}
+
+.note h3,
+.tip h3,
+.warning h3,
+.caution h3,
+.important h3 {
+    font-size: 120%;
+}
+
+h4 {
+    font-weight: 800;
+    line-height: 110%;
+    margin-bottom: 1rem;
+    font-size: 140%;
+    color: #6586c8;
+}
+
+h5 {
+    font-weight: 800;
+    line-height: 110%;
+    margin-bottom: 1rem;
+    font-size: 130%;
+    color: #6a6a6a;
+}
+
+h6 {
+    font-weight: 800;
+    line-height: 110%;
+    margin-bottom: 1rem;
+    font-size: 120%
+}
+
+strong {
+    font-weight: bold;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+dt>*:first-child,
+dd>*:first-child {
+    margin-top: 0;
+}
+
+dt>*:last-child,
+dd>*:last-child {
+    margin-bottom: 0;
+}
+
+pre,
+code {
+    font-family: monospace;
+}
+
+code {
+    color: #ff8657;
+    background: #f4f4f4;
+    display: inline-block;
+    padding: 0 0.5rem;
+    border: 1px solid #d8d8d8;
+    border-radius: 0.5rem;
+    line-height: 1.57777778;
+}
+
+div.book .programlisting,
+div.appendix .programlisting {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow: auto;
+    background: #f2f8fd;
+    color: #000000;
+}
+
+div.book .note,
+div.book .tip,
+div.book .warning,
+div.book .caution,
+div.book .important,
+div.appendix .note,
+div.appendix .tip,
+div.appendix .warning,
+div.appendix .caution,
+div.appendix .important {
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    overflow: auto;
+    background: #f4f4f4;
+}
+
+div.book .note>.title,
+div.book .tip>.title,
+div.book .warning>.title,
+div.book .caution>.title,
+div.book .important>.title,
+div.appendix .note>.title,
+div.appendix .tip>.title,
+div.appendix .warning>.title,
+div.appendix .caution>.title,
+div.appendix .important>.title {
+    font-weight: 800;
+    /* font-family: 'Overpass', serif; */
+    line-height: 110%;
+    margin-bottom: 1rem;
+    color: inherit;
+    margin-bottom: 0;
+}
+
+div.book .note> :first-child,
+div.book .tip> :first-child,
+div.book .warning> :first-child,
+div.book .caution> :first-child,
+div.book .important> :first-child,
+div.appendix .note> :first-child,
+div.appendix .tip> :first-child,
+div.appendix .warning> :first-child,
+div.appendix .caution> :first-child,
+div.appendix .important> :first-child {
+    margin-top: 0;
+}
+
+div.book .note> :last-child,
+div.book .tip> :last-child,
+div.book .warning> :last-child,
+div.book .caution> :last-child,
+div.book .important> :last-child,
+div.appendix .note> :last-child,
+div.appendix .tip> :last-child,
+div.appendix .warning> :last-child,
+div.appendix .caution> :last-child,
+div.appendix .important> :last-child {
+    margin-bottom: 0;
+}
+
+div.book .note,
+div.book .tip,
+div.appendix .note,
+div.appendix .tip {
+    color: #5277c3;
+    background: #f2f8fd;
+}
+
+div.book .warning,
+div.book .caution,
+div.appendix .warning,
+div.appendix .caution {
+    color: #cc3900;
+    background-color: #fff5e1;
+}
+
+div.book .section,
+div.appendix .section {
+    margin-top: 2em;
+}
+
+div.book div.example,
+div.appendix div.example {
+    margin-top: 1.5em;
+}
+
+div.book div.example details,
+div.appendix div.example details {
     padding: 5px;
-    background: #fffff5;
-    font-weight: normal;
-    font-style: italic;
-    box-shadow: none;
-    margin-bottom: 1em;
 }
 
-div.navheader table, div.navfooter table {
-    box-shadow: none;
+div.book div.example details[open],
+div.appendix div.example details[open] {
+    border: 1px solid #aaa;
+    border-radius: 4px;
 }
 
-div.affiliation
-{
-    font-style: italic;
+div.book div.example details>summary,
+div.appendix div.example details>summary {
+    cursor: pointer;
+}
+
+div.book br.example-break,
+div.appendix br.example-break {
+    display: none;
+}
+
+div.book div.footnotes>hr,
+div.appendix div.footnotes>hr {
+    border-color: #d8d8d8;
+}
+
+div.book div.footnotes>br,
+div.appendix div.footnotes>br {
+    display: none;
+}
+
+div.book dt,
+div.appendix dt {
+    margin-top: 1em;
+}
+
+div.book .toc dt,
+div.appendix .toc dt {
+    margin-top: 0;
+}
+
+div.book .list-of-examples dt,
+div.appendix .list-of-examples dt {
+    margin-top: 0;
+}
+
+div.book code,
+div.appendix code {
+    padding: 0;
+    border: 0;
+    background-color: inherit;
+    color: inherit;
+    font-size: 100%;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    hyphens: none;
+}
+
+div.book div.toc,
+div.appendix div.toc {
+    margin-bottom: 3em;
+    border-bottom: 0.0625rem solid #d8d8d8;
+}
+
+div.book div.toc dd,
+div.appendix div.toc dd {
+    margin-left: 2em;
+}
+
+div.book span.command,
+div.appendix span.command {
+    font-family: monospace;
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    hyphens: none;
+}
+
+div.book .informaltable th,
+div.book .informaltable td,
+div.appendix .informaltable th,
+div.appendix .informaltable td {
+    padding: 0.5rem;
+}
+
+div.book .variablelist .term,
+div.appendix .variablelist .term {
+    font-weight: 500;
+}
+
+/*
+  This relies on highlight.js applying certain classes on the prompts.
+  For more details, see https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#stylable-scopes
+*/
+.hljs-meta.prompt_ {
+    user-select: none;
+    -webkit-user-select: none;
 }

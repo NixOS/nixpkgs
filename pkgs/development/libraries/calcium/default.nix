@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A C library for exact computation with real and complex numbers";
+    description = "C library for exact computation with real and complex numbers";
     homepage = "https://fredrikj.net/calcium/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ smasher164 ];

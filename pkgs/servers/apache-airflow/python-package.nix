@@ -61,7 +61,6 @@
 , python-slugify
 , python3-openid
 , pythonOlder
-, pythonRelaxDepsHook
 , pyyaml
 , rich
 , rich-argparse
@@ -227,7 +226,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     airflow-frontend
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -246,7 +244,7 @@ buildPythonPackage rec {
     # https://github.com/apache/airflow/issues/33854
     substituteInPlace pyproject.toml \
       --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
@@ -265,7 +263,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
     # Needed for pythonImportsCheck below
     export HOME=$(mktemp -d)
   '';
@@ -289,7 +287,7 @@ buildPythonPackage rec {
     "tests/core/test_core.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "bash_operator_kill" # psutil.AccessDenied
   ];
 
@@ -332,5 +330,9 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple gbpdt ingenieroariel ];
+    knownVulnerabilities = [
+      "CVE-2023-50943"
+      "CVE-2023-50944"
+    ];
   };
 }

@@ -1,41 +1,41 @@
-{ lib
-, aiofiles
-, aiohttp
-, async-generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
-, wheel
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async-timeout,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.5.2";
-  format = "pyproject";
+  version = "1.6.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyinsteon";
+    repo = "pyinsteon";
     rev = "refs/tags/${version}";
-    hash = "sha256-7iiB/a8E8E2TSkGuAWR08ESExDz8DKTMjqp4Xnp3wHU=";
+    hash = "sha256-SyhPM3NS7iJX8jwTJ4YWZ72eYLn9JT6eESekPf5eCKI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
     pyserial-asyncio
@@ -47,9 +47,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyinsteon"
+  disabledTests = [
+    # RuntimeError: BUG: Dead Listener called, still subscribed!
+    "test_linking_with_i1_device"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # Tests are blocking or failing
+    "tests/test_handlers/"
+  ];
+
+  pythonImportsCheck = [ "pyinsteon" ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
@@ -62,5 +70,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }

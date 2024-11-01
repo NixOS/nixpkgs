@@ -1,63 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, astroid
-, anyascii
-, jinja2
-, pyyaml
-, sphinx
+  # dependencies
+  astroid,
+  jinja2,
+  pyyaml,
+  sphinx,
+  stdlib-list,
 
-# tests
-, beautifulsoup4
-, mock
-, pytestCheckHook
+  # tests
+  beautifulsoup4,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "3.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+625bnkCDWsOxF2IhRe/gW1rWHotNA++HsMRNeMApsg=";
+    pname = "sphinx_autoapi";
+    inherit version;
+    hash = "sha256-6/i0Sy66tcKPAmPsbC+KzdFW6bLVOaWOyjnS82hEUXM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    anyascii
-    astroid
-    jinja2
-    pyyaml
-    sphinx
-  ];
+  dependencies =
+    [
+      astroid
+      jinja2
+      pyyaml
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      stdlib-list
+    ];
 
   nativeCheckInputs = [
     beautifulsoup4
-    mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # failing typing assertions
+    # require network access
     "test_integration"
-    "test_annotations"
   ];
 
-  pythonImportsCheck = [
-    "autoapi"
-  ];
+  pythonImportsCheck = [ "autoapi" ];
 
   meta = with lib; {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";

@@ -3,13 +3,13 @@
 , pkg-config
 , intltool
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , libxml2
 , libxslt
 , sqlite
-, libsoup
-, webkitgtk
+, libsoup_3
+, webkitgtk_4_1
 , json-glib
 , gst_all_1
 , libnotify
@@ -24,15 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.4";
+  version = "1.15.8";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-twczHU41xXJvBg4nTQyJrmNCCSoJWAnRLs4DV0uKpjE=";
+    hash = "sha256-eBnysEppgYar2QEHq4P+5blmBgrW4H0jHPmYMXri8f8=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.wrapPython
     intltool
     pkg-config
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     libxml2
     libxslt
     sqlite
-    libsoup
+    libsoup_3
     libpeas
     gsettings-desktop-schemas
     json-glib
@@ -60,14 +60,11 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [
-    pygobject3
-    pycairo
-  ];
+  enableParallelBuilding = true;
 
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+  postFixup = ''
+    buildPythonPath ${python3Packages.pycairo}
+    patchPythonScript $out/lib/liferea/plugins/trayicon.py
   '';
 
   passthru.updateScript = gitUpdater {
@@ -76,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GTK-based news feed aggregator";
+    description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ romildo yayayayaka ];

@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Plotting directly in the terminal";
+    mainProgram = "plotext";
     homepage = "https://github.com/piccolomo/plotext";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];

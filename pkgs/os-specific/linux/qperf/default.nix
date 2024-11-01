@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Measure RDMA and IP performance";
+    mainProgram = "qperf";
     homepage = "https://github.com/linux-rdma/qperf";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

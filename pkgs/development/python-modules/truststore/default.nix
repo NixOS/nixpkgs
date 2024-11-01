@@ -1,34 +1,33 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, httpx
-, pyopenssl
-, pythonOlder
-, requests
-, trustme
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  httpx,
+  pyopenssl,
+  pythonOlder,
+  requests,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "truststore";
-  version = "0.8.0";
-  format = "pyproject";
+  version = "0.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
-    repo = pname;
+    repo = "truststore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K11nHzpckNR8pqmgLOo/yCJ2cNQnqPHgjMDPQkpeRkQ=";
+    hash = "sha256-BSJneLxwgnD8IJ8IJM43WhmlII5N3qic96SBquMdMnc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     httpx
     pyopenssl
@@ -36,16 +35,14 @@ buildPythonPackage rec {
     trustme
   ];
 
-  # tests requires networking
+  # Tests requires networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "truststore"
-  ];
+  pythonImportsCheck = [ "truststore" ];
 
   meta = with lib; {
-    homepage = "https://github.com/sethmlarson/truststore";
     description = "Verify certificates using native system trust stores";
+    homepage = "https://github.com/sethmlarson/truststore";
     changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ anthonyroussel ];

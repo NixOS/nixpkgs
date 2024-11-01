@@ -36,8 +36,8 @@
 , wayland-protocols
 , wayland-scanner
 , zlib
-, wrapGAppsHook
-, withPolkit ? stdenv.isLinux
+, wrapGAppsHook3
+, withPolkit ? stdenv.hostPlatform.isLinux
 }:
 
 # If this package is built with polkit support (withPolkit=true),
@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     python3.pkgs.six
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withPolkit [
     polkit
     acl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
     libdrm
     wayland-protocols
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
   ] ++ lib.optionals (!withPolkit) [
     "-Dpolkit=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dlibcap-ng=disabled"
     "-Degl=disabled"
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [

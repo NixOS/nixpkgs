@@ -1,9 +1,9 @@
 { lib
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
-, gnome
+, adwaita-icon-theme
 , mkCoqDerivation
 , coq
 , version ? null }:
@@ -26,10 +26,10 @@ mkCoqDerivation rec {
 
   buildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     coq.ocamlPackages.lablgtk3-sourceview3
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   buildPhase = ''
@@ -43,18 +43,21 @@ mkCoqDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = makeDesktopItem {
-    name = "coqide";
-    exec = "coqide";
-    icon = "coq";
-    desktopName = "CoqIDE";
-    comment = "Graphical interface for the Coq proof assistant";
-    categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "coqide";
+      exec = "coqide";
+      icon = "coq";
+      desktopName = "CoqIDE";
+      comment = "Graphical interface for the Coq proof assistant";
+      categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://coq.inria.fr";
-    description = "The CoqIDE user interface for the Coq proof assistant";
+    description = "CoqIDE user interface for the Coq proof assistant";
+    mainProgram = "coqide";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.Zimmi48 ];
   };

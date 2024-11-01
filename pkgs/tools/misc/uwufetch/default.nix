@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # fix command_path for package manager (nix-store)
     substituteInPlace fetch.c \
       --replace "/usr/bin" "/run/current-system/sw/bin"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace "local/bin" "bin" \
       --replace "local/lib" "lib" \
@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A meme system info tool for Linux";
+    description = "Meme system info tool for Linux";
     homepage = "https://github.com/TheDarkBug/uwufetch";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
+    mainProgram = "uwufetch";
   };
 }

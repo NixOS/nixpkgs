@@ -4,8 +4,9 @@
 , fetchYarnDeps
 , makeWrapper
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
   ];
 
@@ -57,13 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --production install
 
     mkdir -p "$out/lib/node_modules/gitmoji-cli"
-    cp -r lib node_modules "$out/lib/node_modules/gitmoji-cli"
+    cp -r lib node_modules package.json "$out/lib/node_modules/gitmoji-cli"
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/gitmoji" \
       --add-flags "$out/lib/node_modules/gitmoji-cli/lib/cli.js"
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Gitmoji client for using emojis on commit messages";

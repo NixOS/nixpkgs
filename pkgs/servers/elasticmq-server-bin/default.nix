@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elasticmq-server";
-  version = "1.4.5";
+  version = "1.6.9";
 
   src = fetchurl {
-    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${finalAttrs.pname}-${finalAttrs.version}.jar";
-    sha256 = "sha256-ep/Je83rUE2mcRqIBbgNH+7uFYf0EoHuRo7JOgT2aIs=";
+    url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/elasticmq-server-${finalAttrs.version}.jar";
+    sha256 = "sha256-yUjwvBLSfxP5bW6mhf3q9uzkhRoOwLYk3lkwEedqflA=";
   };
 
   # don't do anything?
@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ peterromfeldhk ];
+    mainProgram = "elasticmq-server";
   };
 })

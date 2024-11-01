@@ -1,8 +1,18 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitLab, pythonOlder, pytestCheckHook, pybind11, numpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  numpy,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.32.0";
+  version = "0.35.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -10,19 +20,23 @@ buildPythonPackage rec {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
-    rev = "ducc0_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-D+Gt5RrzljZQHBijaPuCuNsK08VxxJoWhqxSDu4bjH0=";
+    rev = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-LfN+rwJp5euVpR/5sUBG3XqBhF7/KbgW/485eufJtMQ=";
   };
 
   buildInputs = [ pybind11 ];
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    setuptools
+  ];
   pytestFlagsArray = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
+  DUCC0_OPTIMIZATION = "portable-strip";
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
     description = "Efficient algorithms for Fast Fourier transforms and more";
     license = licenses.gpl2Plus;

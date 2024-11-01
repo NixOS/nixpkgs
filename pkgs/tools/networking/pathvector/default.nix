@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://pathvector.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matthewpi ];
+    mainProgram = "pathvector";
   };
 }

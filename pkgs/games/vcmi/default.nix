@@ -20,6 +20,7 @@
 , tbb
 , unshield
 , wrapQtAppsHook
+, xz
 , zlib
 , testers
 , vcmi
@@ -27,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.3.2";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-dwTQRpu+IrKhuiiw/uYBt8i/BYlQ5XCy/jUhDAo6aa4=";
+    hash = "sha256-Op5cnp/gO3PPv/QyrashFDBCyqwlO6wkv5Ni5jpRWd8=";
   };
 
   nativeBuildInputs = [
@@ -58,15 +59,16 @@ stdenv.mkDerivation rec {
     qtbase
     qttools
     tbb
+    xz
     zlib
   ];
 
   cmakeFlags = [
     "-DENABLE_LUA:BOOL=ON"
-    "-DENABLE_ERM:BOOL=OFF"
-    "-DENABLE_GITVERSION:BOOL=OFF"
+    "-DENABLE_ERM:BOOL=ON"
+    "-DENABLE_GOLDMASTER:BOOL=ON"
     "-DENABLE_PCH:BOOL=OFF"
-    "-DENABLE_TEST:BOOL=OFF"
+    "-DENABLE_TEST:BOOL=OFF" # Tests require HOMM3 data files.
     "-DFORCE_BUNDLED_MINIZIP:BOOL=OFF"
     "-DFORCE_BUNDLED_FL:BOOL=OFF"
     "-DCMAKE_INSTALL_RPATH:STRING=$out/lib/vcmi"
@@ -80,21 +82,19 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ innoextract ffmpeg unshield ]}"
   '';
 
-  doCheck = true;
-
   passthru.tests.version = testers.testVersion {
     package = vcmi;
     command = ''
-      XDG_DATA_HOME=$PWD XDG_CACHE_HOME=$PWD XDG_CONFIG_HOME=$PWD \
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
         vcmiclient --version
     '';
   };
 
   meta = with lib; {
-    description = "An open-source engine for Heroes of Might and Magic III";
+    description = "Open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
-    changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog";
-    license = with licenses; [ gpl2Only cc-by-sa-40 ];
+    changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog.md";
+    license = with licenses; [ gpl2Plus cc-by-sa-40 ];
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
     mainProgram = "vcmilauncher";

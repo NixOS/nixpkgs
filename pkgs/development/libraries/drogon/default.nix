@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib, fetchpatch
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib
 # optional but of negligible size
 , openssl, brotli, c-ares
 # optional databases
@@ -9,21 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.0";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KZRW/ra84RegCCT6J0k+N7XqZF+xW+Ecq2TVdPZnM7M=";
+    hash = "sha256-vQ9d3l++waYTYt+bvt/ShatBVxTfA7LmYIXV5VSraNQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
-    "-DBUILD_EXAMPLES=OFF"
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
+    (lib.cmakeBool "BUILD_EXAMPLES" false)
   ];
 
   propagatedBuildInputs = [

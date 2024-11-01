@@ -1,77 +1,66 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, importlib-metadata
-, typing-extensions
-, cloudpathlib
-, azure-storage-blob
-, google-cloud-storage
-, boto3
-, psutil
-, pydantic
-, pytestCheckHook
-, pytest-cases
-, pytest-cov
-, pytest-xdist
-, python-dotenv
-, shortuuid
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  typing-extensions,
+  azure-storage-blob,
+  azure-storage-file-datalake,
+  google-cloud-storage,
+  boto3,
+  psutil,
+  pydantic,
+  pytestCheckHook,
+  pytest-cases,
+  pytest-cov-stub,
+  pytest-xdist,
+  python-dotenv,
+  shortuuid,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.16.0";
+  version = "0.19.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "v${version}";
-    hash = "sha256-d4CbzPy3H5HQ4YmSRCRMEYaTpwB7F0Bznd26aKWiHTA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VjoQc9nzwcMh9kiqWXsJNE5X7e7/sVGId5jgFTLZQy4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-    typing-extensions
-  ];
+  dependencies = lib.optional (pythonOlder "3.11") typing-extensions;
 
-  passthru.optional-dependencies = {
-    all = [
-      cloudpathlib
-    ];
+  optional-dependencies = {
+    all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;
     azure = [
       azure-storage-blob
+      azure-storage-file-datalake
     ];
-    gs = [
-      google-cloud-storage
-    ];
-    s3 = [
-      boto3
-    ];
+    gs = [ google-cloud-storage ];
+    s3 = [ boto3 ];
   };
 
   pythonImportsCheck = [ "cloudpathlib" ];
 
   nativeCheckInputs = [
-    azure-storage-blob
-    boto3
-    google-cloud-storage
     psutil
     pydantic
     pytestCheckHook
     pytest-cases
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     python-dotenv
     shortuuid
-  ];
+    tenacity
+  ] ++ optional-dependencies.all;
 
   meta = with lib; {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";

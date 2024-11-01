@@ -1,73 +1,97 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, appdirs
-, cffi
-, decorator
-, mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, oldest-supported-numpy
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytestCheckHook
-, pytools
-, setuptools
-, six
-, wheel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  darwin,
+  ocl-icd,
+
+  # dependencies
+  platformdirs,
+  pytools,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
   os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.4";
-  format = "pyproject";
+  version = "2024.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IgF078qQDp1d5a7yqht3pvJVBQHekrA1qRATrq5NTF4=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    rev = "refs/tags/v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-HE7dARgKnZxqjAXX4iI1ml0N2BalyTo+ZAzjC2ThEN8=";
   };
 
-  nativeBuildInputs = [
-    oldest-supported-numpy
-    setuptools
-    wheel
+  build-system = [
+    cmake
+    nanobind
+    ninja
+    numpy
+    scikit-build-core
   ];
 
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    mako
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
+
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
+
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
+  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
+  # tests are all the tests that are available.
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.compyte"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ld: symbol(s) not found for architecture arm64
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

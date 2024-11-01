@@ -41,26 +41,19 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to synchronise your machine's time using chrony.
           Make sure you disable NTP if you enable this service.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.chrony;
-        defaultText = literalExpression "pkgs.chrony";
-        description = lib.mdDoc ''
-          Which chrony package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "chrony" { };
 
       servers = mkOption {
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The set of NTP servers from which to synchronise.
         '';
       };
@@ -68,7 +61,7 @@ in
       serverOption = mkOption {
         default = "iburst";
         type = types.enum [ "iburst" "offline" ];
-        description = lib.mdDoc ''
+        description = ''
           Set option for server directives.
 
           Use "iburst" to rapidly poll on startup. Recommended if your machine
@@ -83,7 +76,7 @@ in
         type = types.bool;
         default = config.environment.memoryAllocator.provider != "graphene-hardened";
         defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened"'';
-        description = lib.mdDoc ''
+        description = ''
           Whether to add the `-m` flag to lock memory.
         '';
       };
@@ -91,7 +84,7 @@ in
       enableRTCTrimming = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable tracking of the RTC offset to the system clock and automatic trimming.
           See also [](#opt-services.chrony.autotrimThreshold)
 
@@ -118,7 +111,7 @@ in
       enableNTS = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Network Time Security authentication.
           Make sure it is supported by your selected NTP server(s).
         '';
@@ -128,7 +121,7 @@ in
         enabled = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Allow chronyd to make a rapid measurement of the system clock error
             at boot time, and to correct the system clock by stepping before
             normal operation begins.
@@ -138,7 +131,7 @@ in
         threshold = mkOption {
           type = types.either types.float types.int;
           default = 1000; # by default, same threshold as 'ntpd -g' (1000s)
-          description = lib.mdDoc ''
+          description = ''
             The threshold of system clock error (in seconds) above which the
             clock will be stepped. If the correction required is less than the
             threshold, a slew is used instead.
@@ -149,13 +142,13 @@ in
       directory = mkOption {
         type = types.str;
         default = "/var/lib/chrony";
-        description = lib.mdDoc "Directory where chrony state is stored.";
+        description = "Directory where chrony state is stored.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration directives that should be added to
           `chrony.conf`
         '';
@@ -165,7 +158,7 @@ in
         default = [ ];
         example = [ "-s" ];
         type = types.listOf types.str;
-        description = lib.mdDoc "Extra flags passed to the chronyd command.";
+        description = "Extra flags passed to the chronyd command.";
       };
     };
   };

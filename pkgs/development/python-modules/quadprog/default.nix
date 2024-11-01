@@ -1,47 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython
-, numpy
-, pytestCheckHook
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  setuptools,
+  numpy,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "quadprog";
-  version = "0.1.11";
-  format = "setuptools";
+  version = "0.1.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "quadprog";
+    repo = "quadprog";
     rev = "v${version}";
-    hash = "sha256-/suv1KbG3HbiYqEiuCtB/ia3xbxAO5AMuWx1Svy0rMw=";
+    hash = "sha256-8gPuqDY3ajw/+B6kJdtpq+HL+Oq2Nsy/O7m+IWzxP38=";
   };
 
   nativeBuildInputs = [
     cython
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
-
-  preBuild = ''
-    cython quadprog/quadprog.pyx
-  '';
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
     scipy
-  ];
-
-  pytestFlagsArray = [
-    # test fails on aarch64-darwin
-    "--deselect=tests/test_1.py::test_5"
   ];
 
   meta = with lib; {

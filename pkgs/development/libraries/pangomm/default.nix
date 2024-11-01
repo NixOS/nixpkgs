@@ -3,16 +3,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.46.3";
+  version= "2.46.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-QQ/gTUcaYI8/AnPToX2EAkHZEe0P8sdYqYWcZsbyQ3k=";
+    sha256 = "sha256-uSAWZhUmQk3kuTd/FRL1l4H0H7FsnAJn1hM7oc1o2yI=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
   ];
   propagatedBuildInputs = [ pango glibmm cairomm ];

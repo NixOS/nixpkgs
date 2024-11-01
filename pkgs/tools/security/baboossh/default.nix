@@ -1,40 +1,34 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "baboossh";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cybiere";
     repo = "baboossh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dorIqnJuAS/y9W6gyt65QjwGwx4bJHKLmdqRPzY25yA=";
+    hash = "sha256-E/a6dL6BpQ6D8v010d8/qav/fkxpCYNvSvoPAZsm0Hk=";
   };
 
-  patches = fetchpatch {
-    name = "py3compat-utils.patch";
-    url = "https://github.com/cybiere/baboossh/commit/f7a75ebeda0c69ab5b119894b9e1488fc0a935a8.patch";
-    hash = "sha256-gctuu/Qd3nmJIWv2mTyrGwjlQD1U+OhGK6Zh/Un06/E=";
-  };
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     cmd2
-    tabulate
     paramiko
     python-libnmap
+    tabulate
   ];
 
   # No tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "baboossh"
-  ];
+  pythonImportsCheck = [ "baboossh" ];
 
   meta = with lib; {
     description = "Tool to do SSH spreading";
@@ -42,5 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/cybiere/baboossh/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "baboossh";
   };
 }

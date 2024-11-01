@@ -66,5 +66,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ trepetti tmarkus ];
     platforms = platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
+    mainProgram = "noaa-apt";
   };
 }

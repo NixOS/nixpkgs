@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   cfg = config.virtualisation.waydroid;
+  kCfg = config.lib.kernelConfig;
   kernelPackages = config.boot.kernelPackages;
   waydroidGbinderConf = pkgs.writeText "waydroid.conf" ''
     [Protocol]
@@ -22,19 +20,19 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = mkEnableOption (lib.mdDoc "Waydroid");
+    enable = lib.mkEnableOption "Waydroid";
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+  config = lib.mkIf cfg.enable {
+    assertions = lib.singleton {
+      assertion = lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.18";
       message = "Waydroid needs user namespace support to work properly";
     };
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isEnabled "ANDROID_BINDER_IPC")
-      (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
+    system.requiredKernelConfig = [
+      (kCfg.isEnabled "ANDROID_BINDER_IPC")
+      (kCfg.isEnabled "ANDROID_BINDERFS")
+      (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
@@ -57,15 +55,18 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "dbus";
+        UMask = "0022";
         ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
-        ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
-        ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
+        BusName = "id.waydro.Container";
       };
     };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
+
+    services.dbus.packages = with pkgs; [ waydroid ];
   };
 
 }

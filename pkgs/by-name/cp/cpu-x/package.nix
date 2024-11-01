@@ -1,12 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper
-, opencl-headers, ocl-icd
-, vulkan-headers, vulkan-loader, glfw
-, libXdmcp, pcre, util-linux
-, libselinux, libsepol
-, libthai, libdatrie, libxkbcommon, libepoxy
-, dbus, at-spi2-core
-, libXtst
+{
+  lib,
+  testers,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtk3,
+  ncurses,
+  libcpuid,
+  pciutils,
+  procps,
+  wrapGAppsHook3,
+  nasm,
+  opencl-headers,
+  ocl-icd,
+  vulkan-headers,
+  vulkan-loader,
+  glfw,
+  libXdmcp,
+  pcre,
+  util-linux,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  dbus,
+  at-spi2-core,
+  libXtst,
+  gtkmm3,
 }:
 
 # Known issues:
@@ -14,40 +37,69 @@
 #   registered in /etc/shells. The nix's bash is not in there when running
 #   cpu-x from nixpkgs.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
-    rev = "v${version}";
-    sha256 = "sha256-g3k9P7EevVeDHvnc1dG8cI4C7xhjrDy7gwdoWj6G6zA=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-4wW8elGsU3EhDDMPxa5di01NlB0dJ8MN8TiaIBo2qxo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    nasm
+  ];
+
   buildInputs = [
-    gtk3 ncurses libcpuid pciutils procps
-    vulkan-headers vulkan-loader glfw
-    opencl-headers ocl-icd
-    libXdmcp pcre util-linux
-    libselinux libsepol
-    libthai libdatrie libxkbcommon libepoxy
-    dbus at-spi2-core
+    gtk3
+    gtkmm3
+    ncurses
+    libcpuid
+    pciutils
+    procps
+    vulkan-headers
+    vulkan-loader
+    glfw
+    opencl-headers
+    ocl-icd
+    libXdmcp
+    pcre
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    libxkbcommon
+    libepoxy
+    dbus
+    at-spi2-core
     libXtst
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cpu-x \
-      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    )
   '';
 
-  meta = with lib; {
-    description = "Free software that gathers information on CPU, motherboard and more";
-    homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
-    license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ viraptor ];
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
   };
-}
+
+  meta = {
+    description = "Free software that gathers information on CPU, motherboard and more";
+    mainProgram = "cpu-x";
+    homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
+    license = lib.licenses.gpl3Plus;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ viraptor ];
+  };
+})

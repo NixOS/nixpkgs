@@ -19,20 +19,35 @@
 , ffmpeg
 , libvorbis
 , libmad
+, testers
+, vkdt
+, xxd
+, alsa-lib
+, cargo
+, rustPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Au0S+9Y+H0FuoHZacnN4azQFQB0tarT2bHNsLxujfLw=";
+    hash = "sha256-LXUTDwUjlfyhtXkYW4Zivqt8vyctoz+ID5AQ7gg+d9A=";
   };
 
   strictDeps = true;
 
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rawler-0.6.3" = "sha256-EJ0uWc3pp7ixRxDIdTIVVaT2ph3P2IvuK+ecBSB5HYw=";
+    };
+  };
+  cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
+
   nativeBuildInputs = [
+    cargo
     clang
     cmake
     glslang
@@ -40,9 +55,12 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
     pkg-config
     rsync
+    rustPlatform.cargoSetupHook
+    xxd
   ];
 
   buildInputs = [
+    alsa-lib
     exiv2
     ffmpeg
     freetype
@@ -61,8 +79,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
+  passthru.tests.version = testers.testVersion {
+    package = vkdt;
+  };
+
   meta = with lib; {
-    description = "A vulkan-powered raw image processor";
+    description = "Vulkan-powered raw image processor";
     homepage = "https://github.com/hanatos/vkdt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ paperdigits ];

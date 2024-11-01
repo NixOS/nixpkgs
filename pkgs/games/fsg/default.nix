@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
+    mainProgram = "fsg";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };

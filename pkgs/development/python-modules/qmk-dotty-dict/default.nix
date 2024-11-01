@@ -1,15 +1,23 @@
-{ buildPythonPackage, fetchPypi, lib, setuptools-scm }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  poetry-core,
+}:
 
 buildPythonPackage rec {
   pname = "qmk_dotty_dict";
-  version = "1.3.0.post1";
+  version = "1.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O2EeOTZgv6poNcaOlHhLroD+B7hJCXi17KsDoNL8fqI=";
+  src = fetchFromGitHub {
+    owner = "pawelzny";
+    repo = "dotty_dict";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kY7o9wgfsV7oc5twOeuhG47C0Js6JzCt02S9Sd8dSGc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [ poetry-core ];
 
   doCheck = false;
 
@@ -22,6 +30,6 @@ buildPythonPackage rec {
       some non-UTF8 locale settings.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = [ ];
   };
 }

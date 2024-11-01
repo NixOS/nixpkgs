@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.taskserver;
 
   taskd = "${pkgs.taskserver}/bin/taskd";
 
-  mkManualPkiOption = desc: mkOption {
-    type = types.nullOr types.path;
+  mkManualPkiOption = desc: lib.mkOption {
+    type = lib.types.nullOr lib.types.path;
     default = null;
-    description = lib.mdDoc ''
+    description = ''
       ${desc}
 
       ::: {.note}
@@ -37,7 +34,7 @@ let
     '';
   };
 
-  mkAutoDesc = preamble: lib.mdDoc ''
+  mkAutoDesc = preamble: ''
     ${preamble}
 
     ::: {.note}
@@ -46,8 +43,8 @@ let
     :::
   '';
 
-  mkExpireOption = desc: mkOption {
-    type = types.nullOr types.int;
+  mkExpireOption = desc: lib.mkOption {
+    type = lib.types.nullOr lib.types.int;
     default = null;
     example = 365;
     apply = val: if val == null then -1 else val;
@@ -58,8 +55,8 @@ let
   };
 
   autoPkiOptions = {
-    bits = mkOption {
-      type = types.int;
+    bits = lib.mkOption {
+      type = lib.types.int;
       default = 4096;
       example = 2048;
       description = mkAutoDesc "The bit size for generated keys.";
@@ -75,32 +72,32 @@ let
 
   needToCreateCA = let
     notFound = path: let
-      dotted = concatStringsSep "." path;
+      dotted = lib.concatStringsSep "." path;
     in throw "Can't find option definitions for path `${dotted}'.";
     findPkiDefinitions = path: attrs: let
       mkSublist = key: val: let
-        newPath = path ++ singleton key;
-      in if isOption val
-         then attrByPath newPath (notFound newPath) cfg.pki.manual
+        newPath = path ++ lib.singleton key;
+      in if lib.isOption val
+         then lib.attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
-    in flatten (mapAttrsToList mkSublist attrs);
-  in all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
+    in lib.flatten (lib.mapAttrsToList mkSublist attrs);
+  in lib.all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
 
   orgOptions = { ... }: {
-    options.users = mkOption {
-      type = types.uniq (types.listOf types.str);
+    options.users = lib.mkOption {
+      type = lib.types.uniq (lib.types.listOf lib.types.str);
       default = [];
       example = [ "alice" "bob" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of user names that belong to the organization.
       '';
     };
 
-    options.groups = mkOption {
-      type = types.listOf types.str;
+    options.groups = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "workers" "slackers" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of group names that belong to the organization.
       '';
     };
@@ -137,116 +134,116 @@ let
 in {
   options = {
     services.taskserver = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = let
           url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
-        in lib.mdDoc ''
-          Whether to enable the Taskwarrior server.
+        in ''
+          Whether to enable the Taskwarrior 2 server.
 
           More instructions about NixOS in conjunction with Taskserver can be
           found [in the NixOS manual](${url}).
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "taskd";
-        description = lib.mdDoc "User for Taskserver.";
+        description = "User for Taskserver.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "taskd";
-        description = lib.mdDoc "Group for Taskserver.";
+        description = "Group for Taskserver.";
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/taskserver";
-        description = lib.mdDoc "Data directory for Taskserver.";
+        description = "Data directory for Taskserver.";
       };
 
-      ciphers = mkOption {
-        type = types.nullOr (types.separatedString ":");
+      ciphers = lib.mkOption {
+        type = lib.types.nullOr (lib.types.separatedString ":");
         default = null;
         example = "NORMAL:-VERS-SSL3.0";
         description = let
           url = "https://gnutls.org/manual/html_node/Priority-Strings.html";
-        in lib.mdDoc ''
+        in ''
           List of GnuTLS ciphers to use. See the GnuTLS documentation about
           priority strings at <${url}> for full details.
         '';
       };
 
-      organisations = mkOption {
-        type = types.attrsOf (types.submodule orgOptions);
+      organisations = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule orgOptions);
         default = {};
         example.myShinyOrganisation.users = [ "alice" "bob" ];
         example.myShinyOrganisation.groups = [ "staff" "outsiders" ];
         example.yetAnotherOrganisation.users = [ "foo" "bar" ];
-        description = lib.mdDoc ''
+        description = ''
           An attribute set where the keys name the organisation and the values
           are a set of lists of {option}`users` and
           {option}`groups`.
         '';
       };
 
-      confirmation = mkOption {
-        type = types.bool;
+      confirmation = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Determines whether certain commands are confirmed.
         '';
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Logs debugging information.
         '';
       };
 
-      extensions = mkOption {
-        type = types.nullOr types.path;
+      extensions = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Fully qualified path of the Taskserver extension scripts.
           Currently there are none.
         '';
       };
 
-      ipLog = mkOption {
-        type = types.bool;
+      ipLog = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Logs the IP addresses of incoming requests.
         '';
       };
 
-      queueSize = mkOption {
-        type = types.int;
+      queueSize = lib.mkOption {
+        type = lib.types.int;
         default = 10;
-        description = lib.mdDoc ''
+        description = ''
           Size of the connection backlog, see {manpage}`listen(2)`.
         '';
       };
 
-      requestLimit = mkOption {
-        type = types.int;
+      requestLimit = lib.mkOption {
+        type = lib.types.int;
         default = 1048576;
-        description = lib.mdDoc ''
+        description = ''
           Size limit of incoming requests, in bytes.
         '';
       };
 
-      allowedClientIDs = mkOption {
-        type = with types; either str (listOf str);
+      allowedClientIDs = lib.mkOption {
+        type = with lib.types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of regular expressions that are matched against the reported
           client id (such as `task 2.3.0`).
 
@@ -256,11 +253,11 @@ in {
         '';
       };
 
-      disallowedClientIDs = mkOption {
-        type = with types; either str (listOf str);
+      disallowedClientIDs = lib.mkOption {
+        type = with lib.types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of regular expressions that are matched against the reported
           client id (such as `task 2.3.0`).
 
@@ -270,44 +267,44 @@ in {
         '';
       };
 
-      listenHost = mkOption {
-        type = types.str;
+      listenHost = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         example = "::";
-        description = lib.mdDoc ''
+        description = ''
           The address (IPv4, IPv6 or DNS) to listen on.
         '';
       };
 
-      listenPort = mkOption {
-        type = types.int;
+      listenPort = lib.mkOption {
+        type = lib.types.int;
         default = 53589;
-        description = lib.mdDoc ''
+        description = ''
           Port number of the Taskserver.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the firewall for the specified Taskserver port.
         '';
       };
 
-      fqdn = mkOption {
-        type = types.str;
+      fqdn = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The fully qualified domain name of this server, which is also used
           as the common name in the certificates.
         '';
       };
 
-      trust = mkOption {
-        type = types.enum [ "allow all" "strict" ];
+      trust = lib.mkOption {
+        type = lib.types.enum [ "allow all" "strict" ];
         default = "strict";
-        description = lib.mdDoc ''
+        description = ''
           Determines how client certificates are validated.
 
           The value `allow all` performs no client
@@ -320,14 +317,14 @@ in {
       pki.manual = manualPkiOptions;
       pki.auto = autoPkiOptions;
 
-      config = mkOption {
-        type = types.attrs;
+      config = lib.mkOption {
+        type = lib.types.attrs;
         example.client.cert = "/tmp/debugging.cert";
-        description = lib.mdDoc ''
+        description = ''
           Configuration options to pass to Taskserver.
 
           The options here are the same as described in
-          {manpage}`taskdrc(5)`, but with one difference:
+          {manpage}`taskdrc(5)` from the `taskwarrior2` package, but with one difference:
 
           The `server` option is
           `server.listen` here, because the
@@ -340,23 +337,23 @@ in {
         '';
         apply = let
           mkKey = path: if path == ["server" "listen"] then "server"
-                        else concatStringsSep "." path;
+                        else lib.concatStringsSep "." path;
           recurse = path: attrs: let
             mapper = name: val: let
               newPath = path ++ [ name ];
               scalar = if val == true then "true"
                        else if val == false then "false"
                        else toString val;
-            in if isAttrs val then recurse newPath val
+            in if lib.isAttrs val then recurse newPath val
                else [ "${mkKey newPath}=${scalar}" ];
-          in concatLists (mapAttrsToList mapper attrs);
+          in lib.concatLists (lib.mapAttrsToList mapper attrs);
         in recurse [];
       };
     };
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "taskserver" "extraConfig"] ''
+    (lib.mkRemovedOptionModule ["services" "taskserver" "extraConfig"] ''
       This option was removed in favor of `services.taskserver.config` with
       different semantics (it's now a list of attributes instead of lines).
 
@@ -366,11 +363,11 @@ in {
     '')
   ];
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.systemPackages = [ nixos-taskserver ];
 
-      users.users = optionalAttrs (cfg.user == "taskd") {
+      users.users = lib.optionalAttrs (cfg.user == "taskd") {
         taskd = {
           uid = config.ids.uids.taskd;
           description = "Taskserver user";
@@ -378,7 +375,7 @@ in {
         };
       };
 
-      users.groups = optionalAttrs (cfg.group == "taskd") {
+      users.groups = lib.optionalAttrs (cfg.group == "taskd") {
         taskd.gid = config.ids.gids.taskd;
       };
 
@@ -413,7 +410,7 @@ in {
         } else {
           cert = "${cfg.pki.manual.server.cert}";
           key = "${cfg.pki.manual.server.key}";
-          ${mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
+          ${lib.mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
         });
 
         ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert"
@@ -449,7 +446,7 @@ in {
       };
 
       systemd.services.taskserver = {
-        description = "Taskwarrior Server";
+        description = "Taskwarrior 2 Server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -464,8 +461,8 @@ in {
 
         serviceConfig = {
           ExecStart = let
-            mkCfgFlag = flag: escapeShellArg "--${flag}";
-            cfgFlags = concatMapStringsSep " " mkCfgFlag cfg.config;
+            mkCfgFlag = flag: lib.escapeShellArg "--${flag}";
+            cfgFlags = lib.concatMapStringsSep " " mkCfgFlag cfg.config;
           in "@${taskd} taskd server ${cfgFlags}";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
           Restart = "on-failure";
@@ -477,7 +474,7 @@ in {
         };
       };
     })
-    (mkIf (cfg.enable && needToCreateCA) {
+    (lib.mkIf (cfg.enable && needToCreateCA) {
       systemd.services.taskserver-ca = {
         wantedBy = [ "taskserver.service" ];
         after = [ "taskserver-init.service" ];
@@ -561,7 +558,7 @@ in {
         '';
       };
     })
-    (mkIf (cfg.enable && cfg.openFirewall) {
+    (lib.mkIf (cfg.enable && cfg.openFirewall) {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
   ];

@@ -132,43 +132,43 @@ let
 in {
   options.services.writefreely = {
     enable =
-      lib.mkEnableOption (lib.mdDoc "Writefreely, build a digital writing community");
+      lib.mkEnableOption "Writefreely, build a digital writing community";
 
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.writefreely;
       defaultText = lib.literalExpression "pkgs.writefreely";
-      description = lib.mdDoc "Writefreely package to use.";
+      description = "Writefreely package to use.";
     };
 
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/writefreely";
-      description = lib.mdDoc "The state directory where keys and data are stored.";
+      description = "The state directory where keys and data are stored.";
     };
 
     user = mkOption {
       type = types.str;
       default = "writefreely";
-      description = lib.mdDoc "User under which Writefreely is ran.";
+      description = "User under which Writefreely is ran.";
     };
 
     group = mkOption {
       type = types.str;
       default = "writefreely";
-      description = lib.mdDoc "Group under which Writefreely is ran.";
+      description = "Group under which Writefreely is ran.";
     };
 
     host = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc "The public host name to serve.";
+      description = "The public host name to serve.";
       example = "example.com";
     };
 
     settings = mkOption {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Writefreely configuration ({file}`config.ini`). Refer to
         <https://writefreely.org/docs/latest/admin/config>
         for details.
@@ -182,7 +182,7 @@ in {
             theme = mkOption {
               type = types.str;
               default = "write";
-              description = lib.mdDoc "The theme to apply.";
+              description = "The theme to apply.";
             };
           };
 
@@ -191,7 +191,7 @@ in {
               type = types.port;
               default = if cfg.nginx.enable then 18080 else 80;
               defaultText = "80";
-              description = lib.mdDoc "The port WriteFreely should listen on.";
+              description = "The port WriteFreely should listen on.";
             };
           };
         };
@@ -202,58 +202,56 @@ in {
       type = mkOption {
         type = types.enum [ "sqlite3" "mysql" ];
         default = "sqlite3";
-        description = lib.mdDoc "The database provider to use.";
+        description = "The database provider to use.";
       };
 
       name = mkOption {
         type = types.str;
         default = "writefreely";
-        description = lib.mdDoc "The name of the database to store data in.";
+        description = "The name of the database to store data in.";
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = if cfg.database.type == "mysql" then "writefreely" else null;
         defaultText = "writefreely";
-        description = lib.mdDoc "The database user to connect as.";
+        description = "The database user to connect as.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "The file to load the database password from.";
+        description = "The file to load the database password from.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "The database host to connect to.";
+        description = "The database host to connect to.";
       };
 
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = lib.mdDoc "The port used when connecting to the database host.";
+        description = "The port used when connecting to the database host.";
       };
 
       tls = mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc "Whether or not TLS should be used for the database connection.";
+        description = "Whether or not TLS should be used for the database connection.";
       };
 
       migrate = mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc "Whether or not to automatically run migrations on startup.";
+        description = "Whether or not to automatically run migrations on startup.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           When {option}`services.writefreely.database.type` is set to
           `"mysql"`, this option will enable the MySQL service locally.
         '';
@@ -263,13 +261,13 @@ in {
     admin = {
       name = mkOption {
         type = types.nullOr types.str;
-        description = lib.mdDoc "The name of the first admin user.";
+        description = "The name of the first admin user.";
         default = null;
       };
 
       initialPasswordFile = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to a file containing the initial password for the admin user.
           If not provided, the default password will be set to `nixos`.
         '';
@@ -282,14 +280,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc "Whether or not to enable and configure nginx as a proxy for WriteFreely.";
+        description = "Whether or not to enable and configure nginx as a proxy for WriteFreely.";
       };
 
       forceSSL = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether or not to force the use of SSL.";
+        description = "Whether or not to force the use of SSL.";
       };
     };
 
@@ -297,8 +294,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc "Whether or not to automatically fetch and configure SSL certs.";
+        description = "Whether or not to automatically fetch and configure SSL certs.";
       };
     };
   };
@@ -334,8 +330,10 @@ in {
         optionalAttrs (cfg.group == "writefreely") { writefreely = { }; };
     };
 
-    systemd.tmpfiles.rules =
-      [ "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -" ];
+    systemd.tmpfiles.settings."10-writefreely".${cfg.stateDir}.d = {
+      inherit (cfg) user group;
+      mode = "0750";
+    };
 
     systemd.services.writefreely = {
       after = [ "network.target" ]

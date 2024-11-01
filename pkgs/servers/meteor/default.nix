@@ -20,7 +20,7 @@ in
 stdenv.mkDerivation {
   inherit version;
   pname = "meteor";
-  src = srcs.${system};
+  src = srcs.${system} or (throw "unsupported system ${system}");
 
   #dontStrip = true;
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/meteor
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch Meteor to dynamically fixup shebangs and ELF metadata where
     # necessary.
     pushd $out
@@ -97,6 +97,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "meteor";
   };
 }

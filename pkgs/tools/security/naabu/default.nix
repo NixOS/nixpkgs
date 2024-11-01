@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.1.9";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MxIAWVcMiLLmddvyjPNprJWseOw+9ZEYV+LSMeH2Igo=";
+    hash = "sha256-zGZpXnMQ8KvY4oBn0729WmG80AQ4748Gz6UO/+O8i3o=";
   };
 
-  vendorHash = "sha256-4lTik5POzK4aE3c1gGi3NuefEdbMdTLvJIkvTRSPraI=";
+  vendorHash = "sha256-Mcp3sfaCNTsBOiDYn3iVolSd9cK2LAGNscoUtYhsRkA=";
 
   buildInputs = [
     libpcap
@@ -27,8 +27,14 @@ buildGoModule rec {
     "cmd/naabu/"
   ];
 
+  ldflags = [
+    "-w"
+    "-s"
+  ];
+
   meta = with lib; {
     description = "Fast SYN/CONNECT port scanner";
+    mainProgram = "naabu";
     longDescription = ''
       Naabu is a port scanning tool written in Go that allows you to enumerate
       valid ports for hosts in a fast and reliable manner. It is a really simple

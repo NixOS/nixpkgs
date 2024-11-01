@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,25 +24,20 @@ buildPythonPackage rec {
       --replace "'pytest_runner'," ""
   '';
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
     "-m 'not packaging'"
   ];
 
-  pythonImportsCheck = [
-    "diceware"
-  ];
+  pythonImportsCheck = [ "diceware" ];
 
   meta = with lib; {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
+    mainProgram = "diceware";
     homepage = "https://github.com/ulif/diceware";
     changelog = "https://github.com/ulif/diceware/blob/v${version}/CHANGES.rst";
     license = licenses.gpl3;

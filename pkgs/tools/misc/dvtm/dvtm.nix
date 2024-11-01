@@ -3,7 +3,7 @@ stdenv.mkDerivation {
 
   inherit pname version src patches;
 
-  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   postPatch = lib.optionalString (customConfig != null) ''
     cp ${builtins.toFile "config.h" customConfig} ./config.h
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

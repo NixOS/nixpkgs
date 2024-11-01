@@ -11,10 +11,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma-bigscreen-x11";
+    services.displayManager.sddm.enable = true;
+    services.displayManager.defaultSession = "plasma-bigscreen-x11";
     services.xserver.desktopManager.plasma5.bigscreen.enable = true;
-    services.xserver.displayManager.autoLogin = {
+    services.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };

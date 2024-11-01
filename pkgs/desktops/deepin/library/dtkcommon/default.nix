@@ -1,42 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qtbase
-, qttools
-, wrapQtAppsHook
-, glib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkcommon";
-  version = "5.6.9";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FHXwgFTevCGTNUPlb/oeltE2//Sjwz7YVvko7QPOsRo=";
+    hash = "sha256-e+8kG9bB6iby2RgD8jn75GyefLRHNnjD+n04hXbi5ec=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    qttools
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qtbase ];
-
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
-
-  preFixup = ''
-    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
-  '';
+  dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "A public project for building DTK Library";
+    description = "Public project for building DTK Library";
     homepage = "https://github.com/linuxdeepin/dtkcommon";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

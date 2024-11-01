@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +28,11 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pcodedmp"
-  ];
+  pythonImportsCheck = [ "pcodedmp" ];
 
   meta = with lib; {
     description = "Python VBA p-code disassembler";
+    mainProgram = "pcodedmp";
     homepage = "https://github.com/bontchev/pcodedmp";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

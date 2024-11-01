@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "aws-iam-authenticator";
-  version = "0.6.12";
+  version = "0.6.27";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IIlAsxxEYjR7+wdWExdsQAH0x4yOXZ+bVQWwn7mrhRw=";
+    hash = "sha256-8WLuz3+pn6BMnhZGUfRYj0IwOm6xuqd6zj+J2XbCPy4=";
   };
 
-  vendorHash = "sha256-RcZqnyZtonE4qeu+llL1OPGPG93/Rx8ESWM5wapZ1BM=";
+  vendorHash = "sha256-xCNuFO+J0NXq8CPZXB0R2RmLLH27Vh/GMrBKk+mGk04=";
 
   ldflags = let PKG = "sigs.k8s.io/aws-iam-authenticator"; in [
     "-s"
@@ -29,6 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
     description = "AWS IAM credentials for Kubernetes authentication";
+    mainProgram = "aws-iam-authenticator";
     changelog = "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ srhb ];

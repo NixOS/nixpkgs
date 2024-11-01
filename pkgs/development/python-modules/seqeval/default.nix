@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scikit-learn
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scikit-learn,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests call perl script and get stuck in there
@@ -40,9 +39,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python framework for sequence labeling evaluation";
+    description = "Python framework for sequence labeling evaluation";
     homepage = "https://github.com/chakki-works/seqeval";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

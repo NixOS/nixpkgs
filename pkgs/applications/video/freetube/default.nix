@@ -1,20 +1,25 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  electron,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.19.1";
+  version = "0.22.0";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "add96ad3509d4d5c6d8658b005dfd046963cd6bb0a4e1f3e88f726a86c05810f";
+    hash = "sha256-YRXKL09XXX6HxC1lsk0iQnTGmPHFwfNL5XRA+u/crus=";
   };
 
   passthru.tests = nixosTests.freetube;
 
-  appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
-  };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
   dontUnpack = true;
   dontConfigure = true;
@@ -39,14 +44,20 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar
+      --add-flags $out/share/${pname}/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
   '';
 
-  meta = with lib; {
-    description = "An Open Source YouTube app for privacy";
+  meta = {
+    description = "Open Source YouTube app for privacy";
     homepage = "https://freetubeapp.io/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ryneeverett alyaeanyx ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      ryneeverett
+      alyaeanyx
+      ryand56
+    ];
     inherit (electron.meta) platforms;
+    mainProgram = "freetube";
   };
 }

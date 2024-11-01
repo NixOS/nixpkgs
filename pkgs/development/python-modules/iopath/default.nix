@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, tqdm
-, portalocker
-, boto3
-# check inputs
-, pytestCheckHook
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  tqdm,
+  portalocker,
+  boto3,
+  # check inputs
+  pytestCheckHook,
+  torch,
 }:
 let
   pname = "iopath";
@@ -50,16 +50,14 @@ buildPythonPackage {
     "tests/async_writes_test.py"
   ];
 
-  pythonImportsCheck = [
-    "iopath"
-  ];
+  pythonImportsCheck = [ "iopath" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [ boto3 ];
   };
 
   meta = with lib; {
-    description = "A python library that provides common I/O interface across different storage backends.";
+    description = "Python library that provides common I/O interface across different storage backends";
     homepage = "https://github.com/facebookresearch/iopath";
     changelog = "https://github.com/facebookresearch/iopath/releases/tag/v${version}";
     license = licenses.mit;

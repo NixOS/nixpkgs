@@ -1,16 +1,20 @@
-{ lib, stdenvNoCC, fetchurl, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, imagemagick, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.40.1";
+  version = "1.42.3";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-4F1BneQMatAxRaygfgjPmV0coWZ9l3k7tzlw4sEbCgQ=";
+    hash = "sha256-4FVjA/HYRnnNk5sykMyrP4nLxp02B/8dRJymxZU7ILw=";
   };
 
   postPatch = ''
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
+
+    # fix generating previews for SVGs
+    substituteInPlace includes/config-schema.php \
+      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
   '';
 
   installPhase = ''
@@ -30,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The collaborative editing software that runs Wikipedia";
+    description = "Collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;

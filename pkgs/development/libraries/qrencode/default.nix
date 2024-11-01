@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv, libobjc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "qrencode";
   version = "4.1.1";
 
@@ -14,15 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libiconv libpng ]
-    ++ lib.optionals stdenv.isDarwin [ libobjc ];
-
-  configureFlags = [
-    "--with-tests"
-  ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
 
   nativeCheckInputs = [ SDL2 ];
 
-  doCheck = true;
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck
@@ -34,6 +30,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  passthru.tests = finalAttrs.finalPackage.overrideAttrs (_: {
+    configureFlags = [ "--with-tests" ];
+    doCheck = true;
+  });
+
   meta = with lib; {
     homepage = "https://fukuchi.org/works/qrencode/";
     description = "C library for encoding data in a QR Code symbol";
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
       such as a mobile phone with CCD.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ adolfogc yana ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "qrencode";
   };
-}
+})

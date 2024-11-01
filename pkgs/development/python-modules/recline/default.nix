@@ -1,26 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pudb
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pudb,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2023.5";
+  version = "2024.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
-    rev = "v${version}";
-    sha256 = "sha256-jsWOPkzhN4D+Q/lK5yWg1kTgFkmOEIQY8O7oAXq5Nak=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pudb
@@ -33,6 +32,6 @@ buildPythonPackage rec {
     description = "This library helps you quickly implement an interactive command-based application";
     homepage = "https://github.com/NetApp/recline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

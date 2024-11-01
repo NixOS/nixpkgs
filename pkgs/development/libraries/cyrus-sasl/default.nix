@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     ./cyrus-sasl-ac-try-run-fix.patch
     # make compatible with openssl3. can probably be dropped with any release after 2.1.28
     (fetchpatch {
-      url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...c2bd3afbca57f176d8c650670ce371444bb7fcc0.patch";
-      hash = "sha256-bYeIkvle1Ms7Lnoob4eLd4RbPFHtPkKRZvfHNCBJY/s=";
+      url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...dfaa62392e7caecc6ecf0097b4d73738ec4fc0a8.patch";
+      hash = "sha256-pc0cZqj1QoxDqgd/j/5q3vWONEPrTm4Pr6MzHlfjRCc=";
     })
   ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ openssl db gettext libkrb5 libxcrypt ]
     ++ lib.optional enableLdap openldap
-    ++ lib.optional stdenv.isLinux pam;
+    ++ lib.optional stdenv.hostPlatform.isLinux pam;
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -41,9 +41,17 @@ stdenv.mkDerivation rec {
     "--with-saslauthd=/run/saslauthd"
     "--enable-login"
     "--enable-shared"
-  ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
+  ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
+    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+      "--disable-sample"
+      "CFLAGS=-DTIME_WITH_SYS_TIME"
+    ];
 
-  installFlags = lib.optionals stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
+  installFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   passthru.tests = {
     inherit (nixosTests) parsedmarc postfix;

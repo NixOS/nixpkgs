@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://repo.or.cz/tennix.git";
     rev = "refs/tags/tennix-${version}";
-    sha256 = "sha256-U5+S1jEeg+7gdM1++dln6ePTqxZu2Zt0oUrH3DIlkgk=";
+    hash = "sha256-U5+S1jEeg+7gdM1++dln6ePTqxZu2Zt0oUrH3DIlkgk=";
   };
 
   nativeBuildInputs = [ which ];
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
+    mainProgram = "tennix";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

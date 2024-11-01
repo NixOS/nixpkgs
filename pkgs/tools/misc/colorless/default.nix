@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
   version = "109";
 
   src = fetchurl {
-    url = "http://software.kimmo.suominen.com/${pname}-${version}.tar.gz";
+    url = "http://software.kimmo.suominen.com/colorless-${version}.tar.gz";
     sha256 = "039a140fa11cf153cc4d03e4f753b7ff142cab88ff116b7600ccf9edee81927c";
   };
 
@@ -43,5 +43,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ suominen ];
     platforms = platforms.unix;
+    mainProgram = "colorless";
   };
 }

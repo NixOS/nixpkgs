@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nethogs";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "nethogs";
     rev = "v${version}";
-    sha256 = "10shdwvfj90lp2fxz9260342a1c2n1jbw058qy5pyq5kh3xwr9b8";
+    sha256 = "sha256-+yVMyGSBIBWYjA9jaGWvrcsNPbJ6S4ax9H1BhWHYUUU=";
   };
 
   buildInputs = [ ncurses libpcap ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "sbin=$(out)/bin" ];
 
   meta = with lib; {
-    description = "A small 'net top' tool, grouping bandwidth by process";
+    description = "Small 'net top' tool, grouping bandwidth by process";
     longDescription = ''
       NetHogs is a small 'net top' tool. Instead of breaking the traffic down
       per protocol or per subnet, like most tools do, it groups bandwidth by
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raboof/nethogs#readme";
     platforms = platforms.linux;
     maintainers = [ maintainers.rycee ];
+    mainProgram = "nethogs";
   };
 }

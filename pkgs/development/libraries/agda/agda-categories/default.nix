@@ -1,14 +1,14 @@
 { lib, mkDerivation, fetchFromGitHub, standard-library }:
 
 mkDerivation rec {
-  version = "0.1.7.2";
+  version = "0.2.0";
   pname = "agda-categories";
 
   src = fetchFromGitHub {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "sha256-lQzAfPqkdb0pG5seYVODPngSLrJxhbH1jf0K6qqoj3c=";
+    sha256 = "sha256-GQuQxzYSQxAIVSJ1vf0blRC0juoxAqD1AHW66H/6NSk=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A new Categories library";
+    description = "New Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ alexarice turion ];

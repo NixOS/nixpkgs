@@ -1,10 +1,12 @@
 diff --git a/platformio/exception.py b/platformio/exception.py
-index ef1d3bab..445174fc 100644
+index 80ffb496..ea064f97 100644
 --- a/platformio/exception.py
 +++ b/platformio/exception.py
-@@ -57,6 +57,7 @@ class MissedUdevRules(InvalidUdevRules):
+@@ -49,6 +49,7 @@ class MissedUdevRules(InvalidUdevRules):
      MESSAGE = (
          "Warning! Please install `99-platformio-udev.rules`. \nMore details: "
          "https://docs.platformio.org/en/latest/core/installation/udev-rules.html"
-+        "On NixOS add the platformio-core.udev package to services.udev.packages"
++        "On NixOS set `services.udev.packages = with pkgs; [ platformio-core.udev ];`."
      )
+ 
+ 

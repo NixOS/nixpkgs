@@ -1,10 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 buildPythonPackage rec {
   pname = "banal";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,9 +16,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "banal"
-  ];
+  pythonImportsCheck = [ "banal" ];
 
   meta = with lib; {
     description = "Commons of banal micro-functions for Python";

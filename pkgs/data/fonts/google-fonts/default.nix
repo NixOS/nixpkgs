@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2023-10-20";
+  version = "unstable-2024-06-21";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "990be3ed8f77e31c26bf07b148d6a74b8e6241cf";
-    sha256 = "sha256-ffLXzaniHkWxGQpvlJpiO6/SAdbI3FONgTaq8Xu+WY0=";
+    rev = "d5ea3092960d3d5db0b7a9890c828bafbf159c51";
+    hash = "sha256-jQVwAgrZzdCVD4aaX4vYJLqj67t9vn60bYPuBWWMbBg=";
   };
 
   postPatch = ''
@@ -40,12 +40,10 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
-  # The font files are in the fonts directory and use two naming schemes:
-  # FamilyName-StyleName.ttf and FamilyName[param1,param2,...].ttf
-  # This installs all fonts if fonts is empty and otherwise only
-  # the specified fonts by FamilyName. To do this, it invokes
-  # `find` 2 times for every font, anyone is free to do this
-  # in a more efficient way.
+  # The font files are in the fonts directory and use three naming schemes:
+  # FamilyName-StyleName.ttf, FamilyName[param1,param2,...].ttf, and
+  # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
+  # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [" "] [""] font) fonts;
   installPhase = ''
     adobeBlankDest=$adobeBlank/share/fonts/truetype
@@ -56,8 +54,7 @@ stdenvNoCC.mkDerivation {
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '' else ''
     for font in $fonts; do
-      find . -name "$font-*.ttf" -exec install -m 444 -Dt $dest '{}' +
-      find . -name "$font[*.ttf" -exec install -m 444 -Dt $dest '{}' +
+      find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
     done
   '');
 

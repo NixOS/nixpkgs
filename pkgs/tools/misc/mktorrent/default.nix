@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "USE_PTHREADS=1" "USE_OPENSSL=1" "USE_LONG_OPTIONS=1" ]
-    ++ lib.optional stdenv.isi686 "USE_LARGE_FILES=1"
-    ++ lib.optional stdenv.isLinux "CFLAGS=-lgcc_s";
+    ++ lib.optional stdenv.hostPlatform.isi686 "USE_LARGE_FILES=1"
+    ++ lib.optional stdenv.hostPlatform.isLinux "CFLAGS=-lgcc_s";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch winter ];
     platforms = platforms.all;
+    mainProgram = "mktorrent";
   };
 }

@@ -1,28 +1,29 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pybind11
-, tiledb
-, numpy
-, wheel
-, isPy3k
-, setuptools-scm
-, psutil
-, pandas
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pybind11,
+  tiledb,
+  numpy,
+  wheel,
+  isPy3k,
+  setuptools-scm,
+  psutil,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.23.0";
+  version = "0.32.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     rev = "refs/tags/${version}";
-    hash = "sha256-QxqUYu8y+k5SLRFtxpcs57gnAHgXIre0smURlqUzC1s=";
+    hash = "sha256-9UgT09KnCqQ7ip7sSp64Yy8Pstf1GCOVYOG0WM2P840=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    tiledb
-  ];
+  buildInputs = [ tiledb ];
 
   propagatedBuildInputs = [
     numpy
@@ -47,8 +46,6 @@ buildPythonPackage rec {
   ];
 
   TILEDB_PATH = tiledb;
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 
@@ -80,7 +77,6 @@ buildPythonPackage rec {
     description = "Python interface to the TileDB storage manager";
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh ];
     # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
     broken = true;
   };

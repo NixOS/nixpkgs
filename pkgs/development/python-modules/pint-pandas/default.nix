@@ -1,49 +1,49 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, wheel
-, pint
-, pandas
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pint,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pint-pandas";
-  version = "0.4";
-  format = "pyproject";
+  version = "0.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
-    rev = version;
-    hash = "sha256-FuH6wksSCkkL2AyQN46hwTnfeAZFwkWRl6KEEhsxmUY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5/Qk6HZlfeKkfSqnVA8aADjJ99SUiurYCqSIUBPFIzc=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pint
     pandas
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Pandas support for pint";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

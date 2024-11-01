@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cplex";
-  version = "128";
+  version = "22.11";
 
   src =
     if releasePath == null then
       throw ''
         This nix expression requires that the cplex installer is already
         downloaded to your machine. Get it from IBM:
-        https://developer.ibm.com/docloud/blog/2017/12/20/cplex-optimization-studio-12-8-now-available/
+        https://www.ibm.com/support/pages/downloading-ibm-ilog-cplex-optimization-studio-2211
 
         Set `cplex.releasePath = /path/to/download;` in your
         ~/.config/nixpkgs/config.nix for `nix-*` commands, or
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    sh $name -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
+     export JAVA_TOOL_OPTIONS=-Djdk.util.zip.disableZip64ExtraFieldValidation=true
+     sh $name LAX_VM ${openjdk}/bin/java -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
   '';
 
   installPhase = ''

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.factorio;
   name = "Factorio";
@@ -37,61 +34,87 @@ let
     autosave_only_on_server = true;
     non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
-  serverSettingsString = builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings);
+  serverSettingsString = builtins.toJSON (lib.filterAttrsRecursive (n: v: v != null) serverSettings);
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
-  serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
+  playerListOption = name: list:
+    lib.optionalString (list != [])
+      "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {
   options = {
     services.factorio = {
-      enable = mkEnableOption (lib.mdDoc name);
-      port = mkOption {
-        type = types.port;
+      enable = lib.mkEnableOption name;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 34197;
-        description = lib.mdDoc ''
+        description = ''
           The port to which the service should bind.
         '';
       };
 
-      bind = mkOption {
-        type = types.str;
+      bind = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc ''
+        description = ''
           The address to which the service should bind.
         '';
       };
 
-      admins = mkOption {
-        type = types.listOf types.str;
+      allowedPlayers = lib.mkOption {
+        # I would personally prefer for `allowedPlayers = []` to mean "no-one
+        # can connect" but Factorio seems to ignore empty whitelists (even with
+        # --use-server-whitelist) so we can't implement that behaviour, so we
+        # might as well match theirs.
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        example = [ "Rseding91" "Oxyd" ];
+        description = ''
+          If non-empty, only these player names are allowed to connect. The game
+          will not be able to save any changes made in-game with the /whitelist
+          console command, though they will still take effect until the server
+          is restarted.
+
+          If empty, the whitelist defaults to open, but can be managed with the
+          in-game /whitelist console command (see: /help whitelist), which will
+          cause changes to be saved to the game's state directory (see also:
+          `stateDirName`).
+        '';
+      };
+      # Opting not to include the banlist in addition the the whitelist because:
+      # - banlists are not as often known in advance,
+      # - losing banlist changes on restart seems much more of a headache.
+
+      admins = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "username" ];
-        description = lib.mdDoc ''
+        description = ''
           List of player names which will be admin.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open the specified UDP port in the firewall.
         '';
       };
-      saveName = mkOption {
-        type = types.str;
+      saveName = lib.mkOption {
+        type = lib.types.str;
         default = "default";
-        description = lib.mdDoc ''
+        description = ''
           The name of the savegame that will be used by the server.
 
           When not present in /var/lib/''${config.services.factorio.stateDirName}/saves,
           a new map with default settings will be generated before starting the service.
         '';
       };
-      loadLatestSave = mkOption {
-        type = types.bool;
+      loadLatestSave = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Load the latest savegame on startup. This overrides saveName, in that the latest
           save will always be used even if a saved game of the given name exists. It still
           controls the 'canonical' name of the savegame.
@@ -104,11 +127,11 @@ in
       # TODO XXX The server tries to copy a newly created config file over the old one
       #   on shutdown, but fails, because it's in the nix store. When is this needed?
       #   Can an admin set options in-game and expect to have them persisted?
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = configFile;
-        defaultText = literalExpression "configFile";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "configFile";
+        description = ''
           The server's configuration file.
 
           The default file generated by this module contains lines essential to
@@ -116,10 +139,10 @@ in
           customizations.
         '';
       };
-      extraSettingsFile = mkOption {
-        type = types.nullOr types.path;
+      extraSettingsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           File, which is dynamically applied to server-settings.json before
           startup.
 
@@ -133,19 +156,19 @@ in
           ```
         '';
       };
-      stateDirName = mkOption {
-        type = types.str;
+      stateDirName = lib.mkOption {
+        type = lib.types.str;
         default = "factorio";
-        description = lib.mdDoc ''
+        description = ''
           Name of the directory under /var/lib holding the server's data.
 
           The configuration and map will be stored here.
         '';
       };
-      mods = mkOption {
-        type = types.listOf types.package;
+      mods = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Mods the server should install and activate.
 
           The derivations in this list must "build" the mod by simply copying
@@ -154,113 +177,107 @@ in
           derivations via nixos-channel. Until then, this is for experts only.
         '';
       };
-      mods-dat = mkOption {
-        type = types.nullOr types.path;
+      mods-dat = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Mods settings can be changed by specifying a dat file, in the [mod
           settings file
           format](https://wiki.factorio.com/Mod_settings_file_format).
         '';
       };
-      game-name = mkOption {
-        type = types.nullOr types.str;
+      game-name = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "Factorio Game";
-        description = lib.mdDoc ''
+        description = ''
           Name of the game as it will appear in the game listing.
         '';
       };
-      description = mkOption {
-        type = types.nullOr types.str;
+      description = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Description of the game that will appear in the listing.
         '';
       };
-      extraSettings = mkOption {
-        type = types.attrs;
+      extraSettings = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
-        example = { admins = [ "username" ];};
-        description = lib.mdDoc ''
+        example = { max_players = 64; };
+        description = ''
           Extra game configuration that will go into server-settings.json
         '';
       };
-      public = mkOption {
-        type = types.bool;
+      public = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Game will be published on the official Factorio matching server.
         '';
       };
-      lan = mkOption {
-        type = types.bool;
+      lan = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Game will be broadcast on LAN.
         '';
       };
-      username = mkOption {
-        type = types.nullOr types.str;
+      username = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Your factorio.com login credentials. Required for games with visibility public.
 
           This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.factorio-headless;
-        defaultText = literalExpression "pkgs.factorio-headless";
-        example = literalExpression "pkgs.factorio-headless-experimental";
-        description = lib.mdDoc ''
-          Factorio version to use. This defaults to the stable channel.
-        '';
+      package = lib.mkPackageOption pkgs "factorio-headless" {
+        example = "factorio-headless-experimental";
       };
-      password = mkOption {
-        type = types.nullOr types.str;
+      password = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Your factorio.com login credentials. Required for games with visibility public.
 
           This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      token = mkOption {
-        type = types.nullOr types.str;
+      token = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Authentication token. May be used instead of 'password' above.
         '';
       };
-      game-password = mkOption {
-        type = types.nullOr types.str;
+      game-password = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Game password.
 
           This option is insecure. Use extraSettingsFile instead.
         '';
       };
-      requireUserVerification = mkOption {
-        type = types.bool;
+      requireUserVerification = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           When set to true, the server will only allow clients that have a valid factorio.com account.
         '';
       };
-      autosave-interval = mkOption {
-        type = types.nullOr types.int;
+      autosave-interval = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 10;
-        description = lib.mdDoc ''
+        description = ''
           Autosave interval in minutes.
         '';
       };
-      nonBlockingSaving = mkOption {
-        type = types.bool;
+      nonBlockingSaving = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Highly experimental feature, enable only at your own risk of losing your saves.
           On UNIX systems, server will fork itself to create an autosave.
           Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
@@ -269,7 +286,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.factorio = {
       description   = "Factorio headless server";
       wantedBy      = [ "multi-user.target" ];
@@ -282,9 +299,9 @@ in
           "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
-          (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
         ])
-        + (optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
+        + (lib.optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
           + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
           + " > ${stateDir}/server-settings.json"));
 
@@ -299,15 +316,17 @@ in
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
           "--bind=${cfg.bind}"
-          (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
+          (lib.optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${
             if (cfg.extraSettingsFile != null)
             then "${stateDir}/server-settings.json"
             else serverSettingsFile
           }"
-          (optionalString cfg.loadLatestSave "--start-server-load-latest")
-          (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-          (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
+          (lib.optionalString cfg.loadLatestSave "--start-server-load-latest")
+          (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (playerListOption "server-adminlist" cfg.admins)
+          (playerListOption "server-whitelist" cfg.allowedPlayers)
+          (lib.optionalString (cfg.allowedPlayers != []) "--use-server-whitelist")
         ];
 
         # Sandboxing
@@ -326,6 +345,6 @@ in
       };
     };
 
-    networking.firewall.allowedUDPPorts = optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedUDPPorts = lib.optional cfg.openFirewall cfg.port;
   };
 }

@@ -19,12 +19,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Upstram fix for builds on GCC 13. Should be removable with next release after 0.5.1
+    (fetchpatch {
+      name = "add-cstdint-include.patch";
+      url = "https://github.com/facebookincubator/fbjni/commit/59461eff6c7881d58e958287481e1f1cd99e08d3.patch";
+      hash = "sha256-r27C+ODTCZdd1tEz3cevnNNyZlrRhq1jOzwnIYlkglM=";
+    })
+
     # Part of https://github.com/facebookincubator/fbjni/pull/76
     # fix cmake file installation directory
     (fetchpatch {
       url = "https://github.com/facebookincubator/fbjni/commit/ab02e60b5da28647bfcc864b0bb1b9a90504cdb1.patch";
       sha256 = "sha256-/h6kosulRH/ZAU2u0zRSaNDK39jsnFt9TaSxyBllZqM=";
     })
+
     # install headers
     (fetchpatch {
       url = "https://github.com/facebookincubator/fbjni/commit/74e125caa9a815244f1e6bd08eaba57d015378b4.patch";
@@ -46,9 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A library designed to simplify the usage of the Java Native Interface";
+    description = "Library designed to simplify the usage of the Java Native Interface";
     homepage = "https://github.com/facebookincubator/fbjni";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

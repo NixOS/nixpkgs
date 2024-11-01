@@ -1,31 +1,34 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pastedeploy
-, pyquery
-, pytestCheckHook
-, pythonOlder
-, six
-, waitress
-, webob
-, wsgiproxy2
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pastedeploy,
+  pyquery,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  waitress,
+  webob,
+  wsgiproxy2,
 }:
 
 buildPythonPackage rec {
   pname = "webtest";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "WebTest";
-    inherit version;
-    hash = "sha256-VL2WlyWDjZhhqfon+Nlx950nXZSuJV9cUB9Tu22ZKes=";
+    inherit pname version;
+    hash = "sha256-STtcgC+JSKZbXjoa1bJSTuXhq2DNcT2aPaO42ggsBv4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     six
     waitress
@@ -41,9 +44,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "webtest"
-  ];
+  pythonImportsCheck = [ "webtest" ];
 
   meta = with lib; {
     description = "Helper to test WSGI applications";

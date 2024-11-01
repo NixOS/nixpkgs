@@ -86,7 +86,7 @@ nix log $(nix path-info --derivation nixpkgs#<package>)
 (please share the relevant fragment of the diffoscope output here, and any
 additional analysis you may have done)
 
-### Priorities
+---
 
 Add a :+1: [reaction] to [issues you find important].
 

@@ -1,40 +1,46 @@
-{ lib
-, allpairspy
-, approval-utilities
-, beautifulsoup4
-, buildPythonPackage
-, empty-files
-, fetchFromGitHub
-, mock
-, mrjob
-, numpy
-, pyperclip
-, pytest
-, pytestCheckHook
-, pythonOlder
-, testfixtures
-, typing-extensions
+{
+  lib,
+  allpairspy,
+  approval-utilities,
+  beautifulsoup4,
+  buildPythonPackage,
+  empty-files,
+  fetchFromGitHub,
+  mock,
+  mrjob,
+  numpy,
+  pyperclip,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testfixtures,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.0.0";
-  format = "setuptools";
+  version = "14.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3KorHpJUeWSJKVN/4IN0AqKOIL0sT5MaxkvQqpeilhw=";
+    hash = "sha256-BTTmmtmFjYBfzbVf/Fi8PwnpVJBcOOBTdFBmGowGez4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
@@ -43,13 +49,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     numpy
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
-    # Tests expects paths below ApprovalTests.Python directory
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
@@ -64,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

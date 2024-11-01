@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 
 import json
-import importlib_metadata
+import os
 import sys
 
-from packaging.requirements import Requirement
+import importlib_metadata
+from packaging.requirements import InvalidRequirement, Requirement
+
+
+def error(msg: str, ret: bool = False) -> None:
+    print(f"  - {msg}", file=sys.stderr)
+    return ret
 
 
 def check_requirement(req: str):
     # https://packaging.pypa.io/en/stable/requirements.html
-    requirement = Requirement(req)
+    try:
+        requirement = Requirement(req)
+    except InvalidRequirement:
+        return error(f"{req} could not be parsed", ret=True)
+
     try:
         version = importlib_metadata.distribution(requirement.name).version
     except importlib_metadata.PackageNotFoundError:
-        print(f"  - Dependency {requirement.name} is missing", file=sys.stderr)
-        return False
+        return error(f"{requirement.name}{requirement.specifier} not present")
 
     # https://packaging.pypa.io/en/stable/specifiers.html
-    if not version in requirement.specifier:
-        print(
-            f"  - {requirement.name}{requirement.specifier} expected, but got {version}",
-            file=sys.stderr,
+    if version not in requirement.specifier:
+        return error(
+            f"{requirement.name}{requirement.specifier} expected, but got {version}"
         )
-        return False
 
     return True
 
@@ -30,13 +37,24 @@ def check_requirement(req: str):
 def check_manifest(manifest_file: str):
     with open(manifest_file) as fd:
         manifest = json.load(fd)
+
+    ok = True
+
+    derivation_domain = os.environ.get("domain")
+    manifest_domain = manifest["domain"]
+    if derivation_domain != manifest_domain:
+        ok = False
+        error(
+            f"Derivation attribute domain ({derivation_domain}) must match manifest domain ({manifest_domain})"
+        )
+
     if "requirements" in manifest:
-        ok = True
         for requirement in manifest["requirements"]:
             ok &= check_requirement(requirement)
-        if not ok:
-            print("Manifest requirements are not met", file=sys.stderr)
-            sys.exit(1)
+
+    if not ok:
+        error("Manifest check failed.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

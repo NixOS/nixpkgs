@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchPypi
-, cython_3
-, numpy
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  numpy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     numpy
     setuptools
     wheel

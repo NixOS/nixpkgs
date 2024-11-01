@@ -3,27 +3,26 @@
 , fetchurl
 , undmg
 , writeScript
-, callPackage
 }:
 
 let
   appName = "LibreOffice.app";
   scriptName = "soffice";
-  version = "7.5.5";
+  version = "7.6.7";
 
   dist = {
     aarch64-darwin = rec {
       arch = "aarch64";
       archSuffix = arch;
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "75a7d64aa5d08b56c9d9c1c32484b9aff07268c1642cc01a03e45b7690500745";
+      sha256 = "17686aff42734ea4feef08e1189bab3011220000f7784061314c1ae9e5942531";
     };
 
     x86_64-darwin = rec {
       arch = "x86_64";
       archSuffix = "x86-64";
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "4aad9f08ef7a4524b85fc46b3301fdf4f5ab8ab63dd01d01c297f96ff474804a";
+      sha256 = "42d2eeaeee7bcb0e76e9decdcb8f5a4beebf133ad31f7d42a5e96ea770860110";
     };
   };
 in
@@ -44,7 +43,7 @@ stdenvNoCC.mkDerivation {
     cp -R . $out/Applications/${appName}
     cat > $out/bin/${scriptName} << EOF
     #!${stdenvNoCC.shell}
-    open -na $out/Applications/${appName} --args "$@"
+    open -na $out/Applications/${appName} --args "\$@"
     EOF
     chmod +x $out/bin/${scriptName}
     runHook postInstall
@@ -63,11 +62,8 @@ stdenvNoCC.mkDerivation {
         #!nix-shell -i bash --argstr aarch64Url ${aarch64Url} --argstr x86_64Url ${x86_64Url} --argstr version ${version} ${updateNix}
         set -eou pipefail
 
-        # reset version first so that both platforms are always updated and in sync
-        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${defaultNixFile} --system=aarch64-darwin
-        update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin
-        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${defaultNixFile} --system=x86_64-darwin
-        update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin
+        update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin --ignore-same-version
+        update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin --ignore-same-version
       '';
 
   meta = with lib; {
@@ -75,6 +71,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://libreoffice.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ tricktron ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }

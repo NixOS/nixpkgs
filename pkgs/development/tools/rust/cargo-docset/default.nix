@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand to generate a Dash/Zeal docset for your Rust packages";
+    mainProgram = "cargo-docset";
     homepage = "https://github.com/Robzz/cargo-docset";
     changelog = "https://github.com/Robzz/cargo-docset/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

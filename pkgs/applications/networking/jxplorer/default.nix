@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, ant, jdk8, copyDesktopItems, makeWrapper }:
+{ lib, stdenv, fetchurl, makeDesktopItem, jdk8, copyDesktopItems, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "jxplorer";
@@ -41,10 +41,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Java Ldap Browser";
+    description = "Java Ldap Browser";
     homepage    = "https://sourceforge.net/projects/jxplorer/";
     license     = lib.licenses.caossl;
     maintainers = with maintainers; [ benwbooth ];
     platforms   = platforms.linux;
+    mainProgram = "jxplorer";
   };
 }

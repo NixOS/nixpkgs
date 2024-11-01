@@ -1,11 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, sonobuoy }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
-let rev = "bd5465d6b2b2b92b517f4c6074008d22338ff509";
+# The update script can update this automatically, the comment is used to find the line.
+let rev = "cc22d58f4c8b5a155bd1778cd3702eca5ad43e05"; # update-commit-sha
 in
 buildGoModule rec {
   pname = "sonobuoy";
-  version = "0.56.14"; # Do not forget to update `rev` above
+  version = "0.57.2"; # Do not forget to update `rev` above
 
   ldflags =
     let t = "github.com/vmware-tanzu/sonobuoy";
@@ -20,18 +21,24 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
     rev = "v${version}";
-    sha256 = "sha256-YiVCdAdwdK9PcQ6VQQNAjLQq2X54vJmZfbHRjV2d8VQ=";
+    hash = "sha256-QRHCAnZwz90ZVaZUbg7Jv1VlobbcY5mbFQbMQJfHsfU=";
   };
 
-  vendorHash = "sha256-Fqxkyl9AKZ7H4QSp2V/yztpeXHt57+LjpzzGtOPndX0=";
+  vendorHash = "sha256-QUKdCsbxobusyaPWLMJujPgmWIT3mBajgy98BUAgPyk=";
 
   subPackages = [ "." ];
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = sonobuoy;
+      command = "sonobuoy version";
+      version = "v${version}";
+    };
+  };
+
   meta = with lib; {
-    description = ''
-      Diagnostic tool that makes it easier to understand the
-      state of a Kubernetes cluster.
-    '';
+    description = "Diagnostic tool that makes it easier to understand the state of a Kubernetes cluster";
     longDescription = ''
       Sonobuoy is a diagnostic tool that makes it easier to understand the state of
       a Kubernetes cluster by running a set of Kubernetes conformance tests in an
@@ -39,7 +46,9 @@ buildGoModule rec {
     '';
 
     homepage = "https://sonobuoy.io";
+    changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "sonobuoy";
     maintainers = with maintainers; [ carlosdagos saschagrunert wilsonehusin ];
   };
 }

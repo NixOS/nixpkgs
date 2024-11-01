@@ -1,44 +1,47 @@
-{ lib
-, buildPythonPackage
-, enum-compat
-, fetchFromGitHub
-, pytestCheckHook
-, unicodecsv
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  unicodecsv,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
-    repo = pname;
-    rev = version;
-    sha256 = "0gwx5jcribgmmbz0ikhz8iphz7yj2d2nmk24nkdrjd3y5irly11s";
+    repo = "python-registry";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OgRPcyx+NJnbtETMakUT0p8Pb0Qfzgj+qvWtmJksnT8=";
   };
 
-  propagatedBuildInputs = [
-    enum-compat
-    unicodecsv
-  ];
+  pythonRemoveDeps = [ "enum-compat" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ unicodecsv ];
 
   nativeCheckInputs = [
     pytestCheckHook
     six
   ];
 
-  disabledTestPaths = [
-    "samples"
-  ];
+  disabledTestPaths = [ "samples" ];
 
-  pythonImportsCheck = [
-    "Registry"
-  ];
+  pythonImportsCheck = [ "Registry" ];
 
   meta = with lib; {
-    description = "Pure Python parser for Windows Registry hives";
+    description = "Module to parse the Windows Registry hives";
     homepage = "https://github.com/williballenthin/python-registry";
+    changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ ];
   };

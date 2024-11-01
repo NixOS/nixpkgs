@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "clair";
-  version = "4.7.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qnZLVt9pIrfZSCK0blNp5JHbaC4A8m6YicvL4hs2554=";
+    hash = "sha256-itIjDdTKQ0PCfOkefXxqu6MpdWK3F1j6ArvaInQd/hc=";
   };
 
-  vendorHash = "sha256-mzrMiycW+kWtooCMWGLOHXPYJQ+y3wLMB2V+f4u4wtY=";
+  vendorHash = "sha256-CpIOQiEjQGC6qeoxRS/jFohUnELefAX0KOERudL6BGM=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -44,6 +44,6 @@ buildGoModule rec {
     homepage = "https://github.com/quay/clair";
     changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

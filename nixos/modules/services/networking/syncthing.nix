@@ -147,13 +147,12 @@ in {
   options = {
     services.syncthing = {
 
-      enable = mkEnableOption
-        (lib.mdDoc "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync");
+      enable = mkEnableOption "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync";
 
       cert = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc ''
+        description = ''
           Path to the `cert.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
         '';
@@ -162,7 +161,7 @@ in {
       key = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc ''
+        description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
         '';
@@ -171,7 +170,7 @@ in {
       overrideDevices = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to delete the devices which are not configured via the
           [devices](#opt-services.syncthing.settings.devices) option.
           If set to `false`, devices added via the web
@@ -182,7 +181,7 @@ in {
       overrideFolders = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to delete the folders which are not configured via the
           [folders](#opt-services.syncthing.settings.folders) option.
           If set to `false`, folders added via the web
@@ -197,7 +196,7 @@ in {
             # global options
             options = mkOption {
               default = {};
-              description = mdDoc ''
+              description = ''
                 The options element contains all other global configuration options
               '';
               type = types.submodule ({ name, ... }: {
@@ -206,7 +205,7 @@ in {
                   localAnnounceEnabled = mkOption {
                     type = types.nullOr types.bool;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       Whether to send announcements to the local LAN, also use such announcements to find other devices.
                     '';
                   };
@@ -214,7 +213,7 @@ in {
                   localAnnouncePort = mkOption {
                     type = types.nullOr types.int;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       The port on which to listen and send IPv4 broadcast announcements to.
                     '';
                   };
@@ -222,7 +221,7 @@ in {
                   relaysEnabled = mkOption {
                     type = types.nullOr types.bool;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       When true, relays will be connected to and potentially used for device to device connections.
                     '';
                   };
@@ -230,7 +229,7 @@ in {
                   urAccepted = mkOption {
                     type = types.nullOr types.int;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       Whether the user has accepted to submit anonymous usage data.
                       The default, 0, mean the user has not made a choice, and Syncthing will ask at some point in the future.
                       "-1" means no, a number above zero means that that version of usage reporting has been accepted.
@@ -240,7 +239,7 @@ in {
                   limitBandwidthInLan = mkOption {
                     type = types.nullOr types.bool;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       Whether to apply bandwidth limits to devices in the same broadcast domain as the local device.
                     '';
                   };
@@ -248,7 +247,7 @@ in {
                   maxFolderConcurrency = mkOption {
                     type = types.nullOr types.int;
                     default = null;
-                    description = lib.mdDoc ''
+                    description = ''
                       This option controls how many folders may concurrently be in I/O-intensive operations such as syncing or scanning.
                       The mechanism is described in detail in a [separate chapter](https://docs.syncthing.net/advanced/option-max-concurrency.html).
                     '';
@@ -260,7 +259,7 @@ in {
             # device settings
             devices = mkOption {
               default = {};
-              description = mdDoc ''
+              description = ''
                 Peers/devices which Syncthing should communicate with.
 
                 Note that you can still add devices manually, but those changes
@@ -280,14 +279,14 @@ in {
                   name = mkOption {
                     type = types.str;
                     default = name;
-                    description = lib.mdDoc ''
+                    description = ''
                       The name of the device.
                     '';
                   };
 
                   id = mkOption {
                     type = types.str;
-                    description = mdDoc ''
+                    description = ''
                       The device ID. See <https://docs.syncthing.net/dev/device-ids.html>.
                     '';
                   };
@@ -295,7 +294,7 @@ in {
                   autoAcceptFolders = mkOption {
                     type = types.bool;
                     default = false;
-                    description = mdDoc ''
+                    description = ''
                       Automatically create or share folders that this device advertises at the default path.
                       See <https://docs.syncthing.net/users/config.html?highlight=autoaccept#config-file-format>.
                     '';
@@ -308,7 +307,7 @@ in {
             # folder settings
             folders = mkOption {
               default = {};
-              description = mdDoc ''
+              description = ''
                 Folders which should be shared by Syncthing.
 
                 Note that you can still add folders manually, but those changes
@@ -330,7 +329,7 @@ in {
                   enable = mkOption {
                     type = types.bool;
                     default = true;
-                    description = lib.mdDoc ''
+                    description = ''
                       Whether to share this folder.
                       This option is useful when you want to define all folders
                       in one place, but not every machine should share all folders.
@@ -345,7 +344,7 @@ in {
                       description = types.str.description + " starting with / or ~/";
                     };
                     default = name;
-                    description = lib.mdDoc ''
+                    description = ''
                       The path to the folder which should be shared.
                       Only absolute paths (starting with `/`) and paths relative to
                       the [user](#opt-services.syncthing.user)'s home directory
@@ -356,7 +355,7 @@ in {
                   id = mkOption {
                     type = types.str;
                     default = name;
-                    description = lib.mdDoc ''
+                    description = ''
                       The ID of the folder. Must be the same on all devices.
                     '';
                   };
@@ -364,15 +363,24 @@ in {
                   label = mkOption {
                     type = types.str;
                     default = name;
-                    description = lib.mdDoc ''
+                    description = ''
                       The label of the folder.
+                    '';
+                  };
+
+                  type = mkOption {
+                    type = types.enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
+                    default = "sendreceive";
+                    description = ''
+                      Controls how the folder is handled by Syncthing.
+                      See <https://docs.syncthing.net/users/config.html#config-option-folder.type>.
                     '';
                   };
 
                   devices = mkOption {
                     type = types.listOf types.str;
                     default = [];
-                    description = mdDoc ''
+                    description = ''
                       The devices this folder should be shared with. Each device must
                       be defined in the [devices](#opt-services.syncthing.settings.devices) option.
                     '';
@@ -380,7 +388,7 @@ in {
 
                   versioning = mkOption {
                     default = null;
-                    description = mdDoc ''
+                    description = ''
                       How to keep changed/deleted files with Syncthing.
                       There are 4 different types of versioning with different parameters.
                       See <https://docs.syncthing.net/users/versioning.html>.
@@ -426,7 +434,7 @@ in {
                       options = {
                         type = mkOption {
                           type = enum [ "external" "simple" "staggered" "trashcan" ];
-                          description = mdDoc ''
+                          description = ''
                             The type of versioning.
                             See <https://docs.syncthing.net/users/versioning.html>.
                           '';
@@ -438,7 +446,7 @@ in {
                   copyOwnershipFromParent = mkOption {
                     type = types.bool;
                     default = false;
-                    description = mdDoc ''
+                    description = ''
                       On Unix systems, tries to copy file/folder ownership from the parent directory (the directory it’s located in).
                       Requires running Syncthing as a privileged user, or granting it additional capabilities (e.g. CAP_CHOWN on Linux).
                     '';
@@ -450,7 +458,7 @@ in {
           };
         };
         default = {};
-        description = mdDoc ''
+        description = ''
           Extra configuration options for Syncthing.
           See <https://docs.syncthing.net/users/config.html>.
           Note that this attribute set does not exactly match the documented
@@ -486,7 +494,7 @@ in {
       guiAddress = mkOption {
         type = types.str;
         default = "127.0.0.1:8384";
-        description = lib.mdDoc ''
+        description = ''
           The address to serve the web interface at.
         '';
       };
@@ -494,7 +502,7 @@ in {
       systemService = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to auto-launch Syncthing as a system service.
         '';
       };
@@ -503,7 +511,7 @@ in {
         type = types.str;
         default = defaultUser;
         example = "yourUser";
-        description = mdDoc ''
+        description = ''
           The user to run Syncthing as.
           By default, a user named `${defaultUser}` will be created whose home
           directory is [dataDir](#opt-services.syncthing.dataDir).
@@ -514,7 +522,7 @@ in {
         type = types.str;
         default = defaultGroup;
         example = "yourGroup";
-        description = mdDoc ''
+        description = ''
           The group to run Syncthing under.
           By default, a group named `${defaultGroup}` will be created.
         '';
@@ -524,7 +532,7 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "socks5://address.com:1234";
-        description = mdDoc ''
+        description = ''
           Overwrites the all_proxy environment variable for the Syncthing process to
           the given value. This is normally used to let Syncthing connect
           through a SOCKS5 proxy server.
@@ -536,7 +544,7 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         example = "/home/yourUser";
-        description = lib.mdDoc ''
+        description = ''
           The path where synchronised directories will exist.
         '';
       };
@@ -545,7 +553,7 @@ in {
         cond = versionAtLeast config.system.stateVersion "19.03";
       in mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path where the settings and keys will exist.
         '';
         default = cfg.dataDir + optionalString cond "/.config/syncthing";
@@ -559,11 +567,20 @@ in {
         '';
       };
 
+      databaseDir = mkOption {
+        type = types.path;
+        description = ''
+          The directory containing the database and logs.
+        '';
+        default = cfg.configDir;
+        defaultText = literalExpression "config.${opt.configDir}";
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "--reset-deltas" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra flags passed to the syncthing command in the service definition.
         '';
       };
@@ -572,7 +589,7 @@ in {
         type = types.bool;
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
@@ -583,14 +600,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syncthing;
-        defaultText = literalExpression "pkgs.syncthing";
-        description = lib.mdDoc ''
-          The Syncthing package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "syncthing" { };
     };
   };
 
@@ -667,7 +677,7 @@ in {
               -no-browser \
               -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
               -config=${cfg.configDir} \
-              -data=${cfg.dataDir} \
+              -data=${cfg.databaseDir} \
               ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
@@ -703,10 +713,6 @@ in {
           Type = "oneshot";
           ExecStart = updateConfig;
         };
-      };
-
-      syncthing-resume = {
-        wantedBy = [ "suspend.target" ];
       };
     };
   };

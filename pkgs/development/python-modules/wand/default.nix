@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, imagemagickBig
-, py
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  imagemagickBig,
+  py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wand";
   version = "0.6.13";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Wand";
@@ -42,6 +44,6 @@ buildPythonPackage rec {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ infinisil dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

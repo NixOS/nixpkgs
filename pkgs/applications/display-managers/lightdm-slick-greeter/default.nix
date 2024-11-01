@@ -1,13 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, meson
+, ninja
 , pkg-config
 , python3
 , vala
-, intltool
-, autoreconfHook
-, wrapGAppsHook
-, cinnamon
+, wrapGAppsHook3
+, xapp
 , lightdm
 , gtk3
 , pixman
@@ -22,27 +22,27 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "1.8.2";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-OSL4Ls3bCua5ut8zWodeIH1SfevCbsS7BgBJYdcJaVE=";
+    sha256 = "sha256-Q6V4axKlGhX1/uaugNkjoynHSL5jWA/eqzAsbJYcRSo=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     vala
-    intltool
-    autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     python3.pkgs.wrapPython
   ];
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     lightdm
     gtk3
     pixman
@@ -58,43 +58,28 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/slick-greeter.vala \
-      --replace "/usr/bin/numlockx" "${numlockx}/bin/numlockx" \
-      --replace "/usr/share/xsessions/" "/run/current-system/sw/share/xsessions/" \
-      --replace "/usr/share/wayland-sessions/" "/run/current-system/sw/share/wayland-sessions/" \
-      --replace "/usr/bin/slick-greeter" "${placeholder "out"}/bin/slick-greeter"
+      --replace-fail "/usr/bin/numlockx" "${numlockx}/bin/numlockx" \
+      --replace-fail "/usr/share/xsessions/" "/run/current-system/sw/share/xsessions/" \
+      --replace-fail "/usr/share/wayland-sessions/" "/run/current-system/sw/share/wayland-sessions/" \
+      --replace-fail "/usr/bin/slick-greeter" "${placeholder "out"}/bin/slick-greeter"
 
     substituteInPlace src/session-list.vala \
-      --replace "/usr/share" "${placeholder "out"}/share"
+      --replace-fail "/usr/share" "${placeholder "out"}/share"
 
     # We prefer stable path here.
     substituteInPlace data/x.dm.slick-greeter.gschema.xml \
-      --replace "/usr/share/onboard" "/run/current-system/sw/share/onboard"
+      --replace-fail "/usr/share/onboard" "/run/current-system/sw/share/onboard"
 
     patchShebangs files/usr/bin/*
   '';
 
-  preAutoreconf = ''
-    # intltoolize fails during autoreconfPhase unless this
-    # directory is created manually.
-    mkdir m4
-  '';
-
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
+  mesonFlags = [
     "--sbindir=${placeholder "out"}/bin"
-  ];
-
-  installFlags = [
-    "localstatedir=\${TMPDIR}"
-    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
     substituteInPlace "$out/share/xgreeters/slick-greeter.desktop" \
-      --replace "Exec=slick-greeter" "Exec=$out/bin/slick-greeter"
-
-    cp -r files/usr/* $out
+      --replace-fail "Exec=slick-greeter" "Exec=$out/bin/slick-greeter"
   '';
 
   preFixup = ''
@@ -110,7 +95,7 @@ stdenv.mkDerivation rec {
   }];
 
   meta = with lib; {
-    description = "A slick-looking LightDM greeter";
+    description = "Slick-looking LightDM greeter";
     homepage = "https://github.com/linuxmint/slick-greeter";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ water-sucks bobby285271 ];

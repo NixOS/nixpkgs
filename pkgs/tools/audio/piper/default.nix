@@ -66,9 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
-    description = "A fast, local neural text to speech system";
+    description = "Fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "piper";
   };
 })

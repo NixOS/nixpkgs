@@ -1,61 +1,54 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, jre
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, jpype1
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  jre,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  jpype1,
 }:
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chezou";
     repo = "tabula-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MGv2n8DoSjumD3lRcqwI0sEsaEDgs1n+st8DwZuZauo=";
+    hash = "sha256-PQbwm9ho3XtpmZ7N7ASkrV8gk9Jom+yQKlt2fUa948s=";
   };
 
   postPatch = ''
     substituteInPlace tabula/backend.py \
-      --replace '"java"' '"${lib.getExe jre}"'
+      --replace-fail '"java"' '"${lib.getExe jre}"'
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    jre
-  ];
+  buildInputs = [ jre ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distro
     numpy
     pandas
     jpype1
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tabula"
-  ];
+  pythonImportsCheck = [ "tabula" ];
 
   disabledTests = [
     # Tests require network access

@@ -20,11 +20,12 @@ perlPackages.buildPerlPackage {
       --replace "#!${perl}/bin/perl" "#!${perl}/bin/perl -I $out/${perl.libPrefix}"
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Perl extension for renaming multiple files";
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "rename";
   };
 }

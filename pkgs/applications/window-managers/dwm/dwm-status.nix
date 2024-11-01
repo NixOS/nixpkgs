@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "sha256-eRfXUnyzOfVSEiwjLCaNbETUPXVU2Ed2VUNM9FjS5YE=";
+  cargoHash = "sha256-eRfXUnyzOfVSEiwjLCaNbETUPXVU2Ed2VUNM9FjS5YE=";
 
   postInstall = lib.optionalString (bins != [])  ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Gerschtli/dwm-status/blob/master/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
-    mainProgram = pname;
+    mainProgram = "dwm-status";
     platforms = platforms.linux;
   };
 }

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://sigaev.ru/smlar.git";
     rev = "f2522d5f20a46a3605a761d34a3aefcdffb94e71";
-    sha256 = "sha256-AC6w7uYw0OW70pQpWbK1A3rkCnMvTJzTCAdFiY3rO7A=";
+    hash = "sha256-AC6w7uYw0OW70pQpWbK1A3rkCnMvTJzTCAdFiY3rO7A=";
   };
 
   buildInputs = [ postgresql ];
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
+    # Broken on darwin and linux (JIT) with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
   };
 }

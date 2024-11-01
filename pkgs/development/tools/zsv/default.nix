@@ -16,15 +16,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ jq ];
 
   configureFlags = [
-    "--jq-prefix=${jq.lib}"
+    "--jq-prefix=${lib.getLib jq}"
   ];
 
   meta = with lib; {
     description = "World's fastest (simd) CSV parser, with an extensible CLI";
+    mainProgram = "zsv";
     homepage = "https://github.com/liquidaty/zsv";
     changelog = "https://github.com/liquidaty/zsv/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -3,11 +3,10 @@
 let
   inherit (lib)
     literalExpression
-    mdDoc
     mkEnableOption
     mkIf
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     mkRemovedOptionModule
     types
     ;
@@ -23,14 +22,14 @@ in
 
   options = {
     services.plantuml-server = {
-      enable = mkEnableOption (mdDoc "PlantUML server");
+      enable = mkEnableOption "PlantUML server";
 
-      package = mkPackageOptionMD pkgs "plantuml-server" { };
+      package = mkPackageOption pkgs "plantuml-server" { };
 
       packages = {
-        jdk = mkPackageOptionMD pkgs "jdk" { };
-        jetty = mkPackageOptionMD pkgs "jetty" {
-          default = "jetty_11";
+        jdk = mkPackageOption pkgs "jdk" { };
+        jetty = mkPackageOption pkgs "jetty" {
+          default = [ "jetty_11" ];
           extraDescription = ''
             At the time of writing (v1.2023.12), PlantUML Server does not support
             Jetty versions higher than 12.x.
@@ -45,51 +44,51 @@ in
       user = mkOption {
         type = types.str;
         default = "plantuml";
-        description = mdDoc "User which runs PlantUML server.";
+        description = "User which runs PlantUML server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "plantuml";
-        description = mdDoc "Group which runs PlantUML server.";
+        description = "Group which runs PlantUML server.";
       };
 
       home = mkOption {
         type = types.path;
         default = "/var/lib/plantuml";
-        description = mdDoc "Home directory of the PlantUML server instance.";
+        description = "Home directory of the PlantUML server instance.";
       };
 
       listenHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = mdDoc "Host to listen on.";
+        description = "Host to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8080;
-        description = mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
       plantumlLimitSize = mkOption {
         type = types.int;
         default = 4096;
-        description = mdDoc "Limits image width and height.";
+        description = "Limits image width and height.";
       };
 
-      graphvizPackage = mkPackageOptionMD pkgs "graphviz" { };
+      graphvizPackage = mkPackageOption pkgs "graphviz" { };
 
       plantumlStats = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
+        description = "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
       };
 
       httpAuthorization = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
+        description = "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
     };
   };

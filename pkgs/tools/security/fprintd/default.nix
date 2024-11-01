@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , pkg-config
 , gobject-introspection
 , meson
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fprintd";
-  version = "1.94.2";
+  version = "1.94.4";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -32,16 +31,8 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ePhcIZyXoGr8XlBuzKjpibU9D/44iCXYBlpVR9gcswQ=";
+    sha256 = "sha256-B2g2d29jSER30OUqCkdk3+Hv5T3DA4SUKoyiqHb8FeU=";
   };
-
-  patches = [
-    # backport upstream patch fixing tests
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/ae04fa989720279e5558c3b8ff9ebe1959b1cf36.patch";
-      sha256 = "sha256-jW5vlzrbZQ1gUDLBf7G50GnZfZxhlnL2Eu+9Bghdwdw=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -91,6 +82,17 @@ stdenv.mkDerivation rec {
   LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
 
   doCheck = true;
+
+  mesonCheckFlags = [
+    # PAM related checks are timing out
+    "--no-suite" "fprintd:TestPamFprintd"
+  ];
+
+  patches = [
+    # Skip flaky test "test_removal_during_enroll"
+    # https://gitlab.freedesktop.org/libfprint/fprintd/-/issues/129
+    ./skip-test-test_removal_during_enroll.patch
+  ];
 
   postPatch = ''
     patchShebangs \

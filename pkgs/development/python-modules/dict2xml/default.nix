@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.3";
-  format = "pyproject";
+  version = "1.7.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "delfick";
     repo = "python-dict2xml";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-0Ahc+8pb1gHvcpnYhKAJYLIaQ5Wbp7Q8clzMVcnVdYs=";
+    hash = "sha256-5GnIVpG2xHKYv27sSjjmm8JsZ1YR9Mvc3SqE4SnE84o=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   # Tests are inplemented in a custom DSL (RSpec)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dict2xml"
-  ];
+  pythonImportsCheck = [ "dict2xml" ];
 
   meta = with lib; {
     description = "Library to convert a Python dictionary into an XML string";

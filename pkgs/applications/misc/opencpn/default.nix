@@ -7,15 +7,18 @@
 , cmake
 , curl
 , dbus
+, elfutils
 , fetchFromGitHub
-, fetchpatch
 , flac
+, gitMinimal
 , gtk3
+, glew
+, gtest
 , jasper
+, lame
 , libGLU
 , libarchive
 , libdatrie
-, libelf
 , libepoxy
 , libexif
 , libogg
@@ -30,46 +33,42 @@
 , libxkbcommon
 , lsb-release
 , lz4
+, libmpg123
 , makeWrapper
 , pcre
+, pcre2
 , pkg-config
 , portaudio
+, rapidjson
 , sqlite
 , tinyxml
-, udev
 , util-linux
 , wxGTK32
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.6.2";
+  version = "5.10.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "Release_${version}";
-    hash = "sha256-sNZYf/2gtjRrrGPuazVnKTgcuIQpKPazhexqlK21T4g=";
+    rev = "Release_${finalAttrs.version}";
+    hash = "sha256-VuMClQ5k1mTMF5yWstTi9YTF4tEN68acH5OPhjdzIwM=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/OpenCPN/OpenCPN/commit/30fa16850ba97d3df0622273947e3e3975b8e6c0.patch";
-      sha256 = "sha256-Sb4FE9QJA5kMJi52/x1Az6rMTS3WSURPx4QAhcv2j9E=";
-    })
-  ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i '/fixup_bundle/d' CMakeLists.txt
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+    gtest
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
     makeWrapper
   ];
@@ -79,16 +78,16 @@ stdenv.mkDerivation rec {
     curl
     dbus
     flac
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    # gtk3 propagates AppKit from the 10.12 SDK
+    gitMinimal
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
   ] ++ [
     gtk3
+    glew
     jasper
     libGLU
     libarchive
     libdatrie
-    libelf
     libepoxy
     libexif
     libogg
@@ -100,28 +99,39 @@ stdenv.mkDerivation rec {
     libvorbis
     libxkbcommon
     lz4
+    libmpg123
     pcre
+    pcre2
     portaudio
+    rapidjson
     sqlite
     tinyxml
     wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-utils
     libselinux
     libsepol
-    udev
     util-linux
     xorg.libXdmcp
     xorg.libXtst
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lame
   ];
 
-  cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (!stdenv.hostPlatform.isx86) [
     "-DSQUISH_USE_SSE=0"
   ]);
 
-  postInstall = lib.optionals stdenv.isDarwin ''
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/OpenCPN.app $out/Applications
     makeWrapper $out/Applications/OpenCPN.app/Contents/MacOS/OpenCPN $out/bin/opencpn
@@ -130,10 +140,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A concise ChartPlotter/Navigator";
+    description = "Concise ChartPlotter/Navigator";
     maintainers = with maintainers; [ kragniz lovesegfault ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
-}
+})

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, fftw
-, fftwSinglePrec
-, hdf5
-, ilmbase
-, libjpeg
-, libpng
-, libtiff
-, openexr
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  fftw,
+  fftwSinglePrec,
+  hdf5,
+  ilmbase,
+  libjpeg,
+  libpng,
+  libtiff,
+  openexr,
+  python3,
 }:
 
 let
@@ -44,17 +45,22 @@ stdenv.mkDerivation rec {
     python
   ];
 
-  preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
-
-  cmakeFlags = [ "-DWITH_OPENEXR=1" ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
-    [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
+  cmakeFlags =
+    [
+      "-DWITH_OPENEXR=1"
+      "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      "-DCMAKE_CXX_FLAGS=-fPIC"
+      "-DCMAKE_C_FLAGS=-fPIC"
+    ];
 
   meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
+    mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = licenses.mit;
-    maintainers = [ maintainers.viric ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

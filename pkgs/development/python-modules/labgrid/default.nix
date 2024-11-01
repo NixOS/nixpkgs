@@ -1,53 +1,50 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, wheel
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.3";
+  version = "24.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-yhlBqqCLOt6liw4iv8itG6E4QfIa7cW76QJqefUM5dw=";
+    hash = "sha256-rW9peT4zoPzVR6Kl/E8G4qBig/x/lvxpCtvNtwIIL+U=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  pyproject = true;
-
-  propagatedBuildInputs = [
+  dependencies = [
     ansicolors
     attrs
     autobahn
     jinja2
-    packaging
     pexpect
     pyserial
     pyudev
@@ -57,21 +54,27 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
+
+  pythonImportsCheck = [ "labgrid" ];
 
   nativeCheckInputs = [
     mock
+    openssh
     psutil
     pytestCheckHook
     pytest-mock
     pytest-dependency
   ];
 
+  disabledtests = [
+    # flaky, timing sensitive
+    "test_timing"
+  ];
+
   meta = with lib; {
     description = "Embedded control & testing library";
-    homepage = "https://labgrid.org";
+    homepage = "https://github.com/labgrid-project/labgrid";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;

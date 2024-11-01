@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, gevent
-, twisted
-, tornado
+  # dependencies
+  gevent,
+  twisted,
+  tornado,
 
-# tests
-, nose2
-, mock
+  # tests
+  nose2,
+  mock,
 
 }:
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-60Z+y3YXazUghfnOy4e7HzM18iju5m5OEt4I3Wg6ty4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     gevent
@@ -69,6 +68,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

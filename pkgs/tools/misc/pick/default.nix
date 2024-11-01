@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "pick";
   };
 
 }

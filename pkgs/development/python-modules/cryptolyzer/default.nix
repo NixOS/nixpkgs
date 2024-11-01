@@ -1,43 +1,60 @@
-{ lib
-, attrs
-, buildPythonPackage
-, certvalidator
-, cryptoparser
-, fetchPypi
-, pythonOlder
-, requests
-, six
-, urllib3
+{
+  lib,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  certvalidator,
+  colorama,
+  cryptoparser,
+  dnspython,
+  fetchPypi,
+  pathlib2,
+  pyfakefs,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.10.3";
-  format = "setuptools";
+  version = "0.12.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "CryptoLyzer";
-    inherit version;
-    hash = "sha256-8jpWDd/+eEaAp8L4ySpNK91fma005cPMLgzAsSAIpKg=";
+    inherit pname version;
+    hash = "sha256-Qc1L4F2U/nk37s/mIa2YgJZqC2dkPsB/Si84SEl576Q=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
+      --replace-warn "bs4" "beautifulsoup4"
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    certvalidator
     attrs
-    six
-    urllib3
+    beautifulsoup4
+    certvalidator
+    colorama
     cryptoparser
+    dnspython
+    pathlib2
+    pyfakefs
+    python-dateutil
     requests
+    urllib3
   ];
 
   # Tests require networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cryptolyzer"
-  ];
+  pythonImportsCheck = [ "cryptolyzer" ];
 
   meta = with lib; {
     description = "Cryptographic protocol analyzer";

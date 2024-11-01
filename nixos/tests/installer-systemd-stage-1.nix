@@ -19,9 +19,10 @@
     luksroot
     luksroot-format1
     luksroot-format2
-    # lvm
+    lvm
     separateBoot
     separateBootFat
+    separateBootZfs
     simple
     simpleLabels
     simpleProvided
@@ -32,6 +33,15 @@
     stratisRoot
     swraid
     zfsroot
+    clevisLuks
+    clevisLuksFallback
+    clevisZfs
+    clevisZfsFallback
+    clevisZfsParentDataset
+    clevisZfsParentDatasetFallback
+    gptAutoRoot
+    clevisBcachefs
+    clevisBcachefsFallback
     ;
 
 }

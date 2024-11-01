@@ -1,27 +1,35 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyemby";
-  version = "1.9";
+  version = "1.10";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mezz64";
-    repo = pname;
-    rev = version;
-    hash = "sha256-4mOQLfPbRzZzpNLvekJHVKiqdGGKPhW6BpKkyRfk2Pc=";
+    repo = "pyemby";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+A/SNMCUqo9TwWsQXwOKJCqmYhbilIdHYazLNQY+NkU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyemby" ];
@@ -29,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Emby API";
     homepage = "https://github.com/mezz64/pyemby";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

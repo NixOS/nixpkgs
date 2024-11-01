@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
   version = "1.4.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mozman";
@@ -27,9 +29,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library to create SVG drawings";
+    description = "Python library to create SVG drawings";
     homepage = "https://github.com/mozman/svgwrite";
     license = licenses.mit;
   };
-
 }

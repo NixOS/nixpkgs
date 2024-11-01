@@ -1,55 +1,51 @@
 { lib
-, pkg-config
 , buildGoModule
-, fetchFromGitHub
-, makeWrapper
+, callPackage
+, cdrkit
 , coreutils
+, debootstrap
+, fetchFromGitHub
 , gnupg
 , gnutar
+, hivex
+, makeWrapper
+, nixosTests
+, pkg-config
 , squashfsTools
-, debootstrap
-, fetchpatch
+, stdenv
+, wimlib
 }:
 
 let
   bins = [
     coreutils
+    debootstrap
     gnupg
     gnutar
     squashfsTools
-    debootstrap
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
   ];
 in
 buildGoModule rec {
   pname = "distrobuilder";
-  version = "2.1";
+  version = "3.1";
 
-  vendorHash = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
+  vendorHash = "sha256-3oHLvOdHbOdaL2FTo+a5HmayNi/i3zoAsU/du9h1N30=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
-    rev = "distrobuilder-${version}";
-    sha256 = "sha256-t3ECLtb0tvIzTWgjmVQDFza+kcm3abTZZMSGYjvw1qQ=";
+    rev = "refs/tags/distrobuilder-${version}";
+    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
     fetchSubmodules = false;
   };
 
   buildInputs = bins;
 
-  patches = [
-    # go.mod update: needed to to include a newer lxd which contains
-    # https://github.com/canonical/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
-    # which is needed to fix the build w/glibc-2.36.
-    (fetchpatch {
-      url = "https://github.com/lxc/distrobuilder/commit/5346bcc77dd7f141a36a8da851f016d0b929835e.patch";
-      sha256 = "sha256-H6cSbY0v/FThx72AvoAvUCs2VCYN/PQ0W4H82mQQ3SI=";
-    })
-    # Fixup to keep it building after go.mod update.
-    (fetchpatch {
-      url = "https://github.com/lxc/distrobuilder/commit/2c8cbfbf603e7446efce9f30812812336ccf4f2c.patch";
-      sha256 = "sha256-qqofghcHGosR2qycGb02c8rwErFyRRhsRKdQfyah8Ds=";
-    })
-  ];
 
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;
@@ -63,11 +59,21 @@ buildGoModule rec {
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      incus-legacy-init = nixosTests.incus.container-legacy-init;
+      incus-systemd-init = nixosTests.incus.container-systemd-init;
+    };
+
+    generator = callPackage ./generator.nix { inherit src version; };
+  };
+
+  meta = {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ megheaiulian ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.lxc.members;
+    platforms = lib.platforms.linux;
+    mainProgram = "distrobuilder";
   };
 }

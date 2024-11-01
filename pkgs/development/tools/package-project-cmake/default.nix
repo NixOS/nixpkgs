@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "package-project-cmake";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "TheLartians";
     repo = "PackageProject.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-41cJm6eO5Q6xhARJbshi6Tesk/IxEQNsMShmDcjVqzs=";
+    hash = "sha256-TMf9nA0V1qTXpzEJ0A6b3mIVN0MIogn5WlZeVY+Q2bg=";
   };
 
   dontConfigure = true;
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/TheLartians/PackageProject.cmake";
-    description = "A CMake script for packaging C/C++ projects";
+    description = "CMake script for packaging C/C++ projects";
     longDescription = ''
       Help other developers use your project. A CMake script for packaging
       C/C++ projects for simple project installation while employing
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       packaging process into a single, easy-to-use command.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ken-matsui ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

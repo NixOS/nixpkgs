@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "6.0.2";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "sha256-JCGYmtzuain0io9ycvcZ7b6VTWbC6G46Uuecrhd/iHw=";
+    hash = "sha256-ZOOlK9mfZVrfxvgFREgqcRcSs18EMpADD8Y4Ev391Bw=";
   };
 
   strictDeps = true;
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     file
     flex
     python
+    swig
   ];
 
   buildInputs = [
@@ -55,12 +56,11 @@ stdenv.mkDerivation rec {
     libpcap
     ncurses
     openssl
-    swig
     zlib
     python
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libkqueue
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gettext
   ];
 
@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
     "-DDISABLE_JAVASCRIPT=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pSub marsam tobim ];
+    maintainers = with maintainers; [ pSub tobim ];
     platforms = platforms.unix;
   };
 }

@@ -1,32 +1,45 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.hyperv;
+in
+{
 
-in {
+  imports = [
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "hyperv"
+        "baseImageSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
+
   options = {
     hyperv = {
-      baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 2048;
-        description = lib.mdDoc ''
-          The size of the hyper-v base image in MiB.
-        '';
-      };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-hyperv-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-        description = lib.mdDoc ''
+        description = ''
           The name of the derivation for the hyper-v appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vhdx";
-        description = lib.mdDoc ''
+        description = ''
           The file name of the hyper-v appliance.
         '';
       };
@@ -34,6 +47,10 @@ in {
   };
 
   config = {
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
+
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''
@@ -41,7 +58,7 @@ in {
         rm $diskImage
       '';
       format = "raw";
-      diskSize = cfg.baseImageSize;
+      inherit (config.virtualisation) diskSize;
       partitionTableType = "efi";
       inherit config lib pkgs;
     };
@@ -60,7 +77,6 @@ in {
     boot.growPartition = true;
 
     boot.loader.grub = {
-      version = 2;
       device = "nodev";
       efiSupport = true;
       efiInstallAsRemovable = true;

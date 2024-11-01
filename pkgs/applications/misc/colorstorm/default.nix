@@ -20,10 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A color theme generator for editors and terminal emulators";
+    description = "Color theme generator for editors and terminal emulators";
     homepage = "https://github.com/benbusby/colorstorm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (zig_0_9.meta) platforms;
+    mainProgram = "colorstorm";
   };
 })

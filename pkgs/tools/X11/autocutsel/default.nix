@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Tracks changes in the server's cutbuffer and CLIPBOARD selection";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; all;
+    mainProgram = "autocutsel";
   };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , gtk3
 , ncurses
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GStreamer based command line media player";
     homepage = "https://space.twc.de/~stefan/gst123.php";
     license = lib.licenses.lgpl2Plus;

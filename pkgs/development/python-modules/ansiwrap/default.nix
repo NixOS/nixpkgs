@@ -1,50 +1,52 @@
-{ lib
-, ansicolors
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, textwrap3
+{
+  lib,
+  ansicolors,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  textwrap3,
 }:
-
 buildPythonPackage rec {
   pname = "ansiwrap";
   version = "0.8.4";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ca0c740734cde59bf919f8ff2c386f74f9a369818cdc60efe94893d01ea8d9b7";
+    hash = "sha256-ygx0BzTN5Zv5Gfj/LDhvdPmjaYGM3GDv6UiT0B6o2bc=";
   };
 
   postPatch = ''
     # https://github.com/jonathaneunice/ansiwrap/issues/18
     substituteInPlace test/test_ansiwrap.py \
-      --replace "set(range(20, 120)).difference(LINE_LENGTHS)" "sorted(set(range(20, 120)).difference(LINE_LENGTHS))" \
-      --replace "set(range(120, 400)).difference(LINE_LENGTHS)" "sorted(set(range(120, 400)).difference(LINE_LENGTHS))"
+      --replace-fail "set(range(20, 120)).difference(LINE_LENGTHS)" "sorted(set(range(20, 120)).difference(LINE_LENGTHS))" \
+      --replace-fail "set(range(120, 400)).difference(LINE_LENGTHS)" "sorted(set(range(120, 400)).difference(LINE_LENGTHS))"
   '';
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [ textwrap3 ];
+
+  nativeCheckInputs = [
     ansicolors
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    textwrap3
-  ];
-
-  pythonImportsCheck = [
-    "ansiwrap"
-  ];
+  pythonImportsCheck = [ "ansiwrap" ];
 
   meta = with lib; {
     description = "Textwrap, but savvy to ANSI colors and styles";
     homepage = "https://github.com/jonathaneunice/ansiwrap";
     changelog = "https://github.com/jonathaneunice/ansiwrap/blob/master/CHANGES.yml";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+
+    broken = true;
   };
 }

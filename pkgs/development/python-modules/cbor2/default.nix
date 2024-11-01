@@ -1,51 +1,50 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # tests
+  hypothesis,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.4.6";
-  format = "setuptools";
+  version = "5.6.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uJNQDbD+Az5XDDrclWr27vxX4oACa9LYb9U9qfHllNc=";
+    hash = "sha256-HFM8UN3oa+8caVBgIFSg/6PDduiw4gx7j1sQh5P2mD4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
+  pythonImportsCheck = [ "cbor2" ];
+
   nativeCheckInputs = [
+    hypothesis
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  # https://github.com/agronholm/cbor2/issues/99
-  disabledTests = lib.optionals stdenv.is32bit [
-    "test_huge_truncated_bytes"
-    "test_huge_truncated_string"
-  ];
-
-  pythonImportsCheck = [
-    "cbor2"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     description = "Python CBOR (de)serializer with extensive tag support";
+    mainProgram = "cbor2";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
-    maintainers = with maintainers; [ taneb ];
+    maintainers = [ ];
   };
 }

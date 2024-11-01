@@ -1,0 +1,42 @@
+diff --git a/nix/libstore/build.cc b/nix/libstore/build.cc
+index c5383bc..50d1abc 100644
+--- a/nix/libstore/build.cc
++++ b/nix/libstore/build.cc
+@@ -2312,15 +2312,6 @@ void DerivationGoal::registerOutputs()
+         Path actualPath = path;
+         if (useChroot) {
+             actualPath = chrootRootDir + path;
+-            if (pathExists(actualPath)) {
+-                /* Move output paths from the chroot to the store. */
+-                if (buildMode == bmRepair)
+-                    replaceValidPath(path, actualPath);
+-                else
+-                    if (buildMode != bmCheck && rename(actualPath.c_str(), path.c_str()) == -1)
+-                        throw SysError(format("moving build output `%1%' from the chroot to the store") % path);
+-            }
+-            if (buildMode != bmCheck) actualPath = path;
+         } else {
+             Path redirected = redirectedOutputs[path];
+             if (buildMode == bmRepair
+@@ -2360,6 +2351,21 @@ void DerivationGoal::registerOutputs()
+                something like that. */
+             canonicalisePathMetaData(actualPath, buildUser.enabled() ? buildUser.getUID() : -1, inodesSeen);
+ 
++            if (useChroot) {
++                if (pathExists(actualPath)) {
++                    /* Now that output paths have been canonicalized (in particular
++                    there are no setuid files left), move them outside of the
++                    chroot and to the store. */
++                    if (buildMode == bmRepair)
++                        replaceValidPath(path, actualPath);
++                    else
++                        if (buildMode != bmCheck && rename(actualPath.c_str(), path.c_str()) == -1)
++                            throw SysError(format("moving build output `%1%' from the chroot to the store") % path);
++                }
++                if (buildMode != bmCheck) actualPath = path;
++            }
++
++
+             /* FIXME: this is in-memory. */
+             StringSink sink;
+             dumpPath(actualPath, sink);

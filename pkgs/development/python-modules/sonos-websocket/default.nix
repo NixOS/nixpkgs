@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sonos-websocket";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,12 +19,10 @@ buildPythonPackage rec {
     owner = "jjlawren";
     repo = "sonos-websocket";
     rev = "refs/tags/${version}";
-    hash = "sha256-QUX724Q8HtOiWuCfKouy7be0gTn6Vo3QHnw3MXJcMZo=";
+    hash = "sha256-1sgYLwIW7VWnHJGsfIQ95AGZ5j/DPMKQr5n7F+/MsuY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sonos_websocket"
-  ];
+  pythonImportsCheck = [ "sonos_websocket" ];
 
   meta = with lib; {
     description = "Library to communicate with Sonos devices over websockets";

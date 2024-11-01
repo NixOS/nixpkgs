@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchFromGitHub
-, numpy
-, pybind11
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pybind11,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "skogler";
     repo = "mapbox_earcut_python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+Vxvo++bkoCsJFmt/u1eaqhgpz8Uddz06iIi66ju+MQ=";
+    hash = "sha256-xR+nO5xdoDUhWZM19DOid3lsEXBood5NofQ0SezJ9OE=";
   };
 
   nativeBuildInputs = [
@@ -28,17 +28,11 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mapbox_earcut"
-  ];
+  pythonImportsCheck = [ "mapbox_earcut" ];
 
   meta = with lib; {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
@@ -50,6 +44,6 @@ buildPythonPackage rec {
       library, which provides very fast and quite robust triangulation of 2D
       polygons.
     '';
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = [ ];
   };
 }

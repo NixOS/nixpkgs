@@ -7,34 +7,43 @@
 , pkg-config
 , ffmpeg
 , dbus
+, libpulseaudio
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "songrec";
-  version = "0.3.3";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = pname;
     rev = version;
-    hash = "sha256-K80uoMfwkyH/K8t6zdkq1ZYTpI0dAIvO2K2kzpzDoN0=";
+    hash = "sha256-pTonrxlYvfuLRKMXW0Lao4KCoNFlMzE9rH+hwpa60JY=";
   };
 
-  cargoHash = "sha256-Xmey+goHGTWMgKIJRzKMi9Y1bv677Yo2sfDaMauvZsM=";
+  cargoHash = "sha256-2BXUZD63xzHpUi8lk2fV5qBmeq6Gzpq0uEcKfbReANI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsa-lib dbus gtk3 openssl ffmpeg ];
+  buildInputs = [
+    alsa-lib
+    dbus
+    gtk3
+    openssl
+    ffmpeg
+    libpulseaudio
+  ];
 
   postInstall = ''
     mv packaging/rootfs/usr/share $out/share
   '';
 
   meta = with lib; {
-    description = "An open-source Shazam client for Linux, written in Rust";
+    description = "Open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tcbravo ];
+    mainProgram = "songrec";
   };
 }

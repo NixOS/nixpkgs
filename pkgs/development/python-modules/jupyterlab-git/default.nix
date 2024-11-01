@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, git
-, jupyter-server
-, hatch-jupyter-builder
-, hatch-nodejs-version
-, hatchling
-, jupyterlab
-, nbdime
-, nbformat
-, pexpect
-, pytest-asyncio
-, pytest-jupyter
-, pytest-tornasync
-, pytestCheckHook
-, pythonOlder
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  jupyter-server,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jupyterlab,
+  nbdime,
+  nbformat,
+  pexpect,
+  pytest-asyncio,
+  pytest-jupyter,
+  pytest-tornasync,
+  pytestCheckHook,
+  pythonOlder,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.50.0";
+  version = "0.50.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    hash = "sha256-CYWVRtOQE067kYqWXCw/4mBf6v4yfPYWFb592Qtb37s=";
+    hash = "sha256-zu/chWMsr0maBItDRFnQO15iFmWAHp23GXvUhvXTNDM=";
   };
 
   nativeBuildInputs = [
@@ -73,9 +74,7 @@ buildPythonPackage rec {
     "test_Git_get_nbdiff_dict"
   ];
 
-  pythonImportsCheck = [
-    "jupyterlab_git"
-  ];
+  pythonImportsCheck = [ "jupyterlab_git" ];
 
   __darwinAllowLocalNetworking = true;
 

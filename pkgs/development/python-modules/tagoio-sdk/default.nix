@@ -1,20 +1,20 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, python-dateutil
-, python-socketio
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  python-dateutil,
+  python-socketio,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "tagoio-sdk";
-  version = "4.2.1";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,16 +23,13 @@ buildPythonPackage rec {
     owner = "tago-io";
     repo = "sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R7qJIgL8/zejIuT6YMnC3bdm8lKLBTK5eVjVDEjvRKs=";
+    hash = "sha256-37/fg2vbwYPhYPvSJ2YxWAPrfspqTE3thIL/VR1+AkI=";
   };
 
-  pythonRelaxDeps = [
-    "requests"
-  ];
+  pythonRelaxDeps = [ "requests" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -47,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "tagoio_sdk"
-  ];
+  pythonImportsCheck = [ "tagoio_sdk" ];
 
   meta = with lib; {
     description = "Module for interacting with Tago.io";

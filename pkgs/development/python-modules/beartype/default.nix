@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.16.4";
-  format = "setuptools";
+  version = "0.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GtqJzy1usw624Vbu0utUkzV3gpN5ENdDgJGOU8Lq4L8=";
+    hash = "sha256-3kLfwbpcNxD95sMALjvSytI27U0qq+h2NFqwtCNKZXM=";
   };
+
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "beartype"
-  ];
+  pythonImportsCheck = [ "beartype" ];
 
   meta = with lib; {
     description = "Fast runtime type checking for Python";

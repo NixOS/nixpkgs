@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.33.2";
+  version = "1.35.0";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    sha256 = "sha256-FIndxRyGDgXinP8ZX0o6LEJgGNNw84tCPw5FdVAU3TI=";
+    sha256 = "sha256-VeuvaxdA+l+jKg4bUv79hNnOXgLXKJdiMYsmpTvX4og=";
   };
 
   dontUnpack = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   libraries = lib.makeLibraryPath [ gtk2 curl ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     install -m 644 -D $src $out/bin/ckan.exe
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mod manager for Kerbal Space Program";
+    mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
     license = licenses.mit;
     maintainers = with maintainers; [ Baughn ymarkus ];

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiocoap
-, dtlssocket
-, pydantic
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiocoap,
+  dtlssocket,
+  pydantic,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,25 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-CWv3ebDulZuiFP+nJ2Xr7U/HTDFTqA9VYC0USLkpWR0=";
   };
 
-  propagatedBuildInputs = [
-    pydantic
-  ];
+  propagatedBuildInputs = [ pydantic ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 
-  pythonImportsCheck = [
-    "pytradfri"
-  ];
+  pythonImportsCheck = [ "pytradfri" ];
 
   meta = with lib; {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
@@ -48,5 +42,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    # https://github.com/home-assistant-libs/pytradfri/issues/720
+    broken = versionAtLeast pydantic.version "2";
   };
 }

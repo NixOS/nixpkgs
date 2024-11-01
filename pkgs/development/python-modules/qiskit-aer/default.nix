@@ -1,37 +1,35 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
   # C Inputs
-, blas
-, catch2
-, cmake
-, cython
-, fmt
-, muparserx
-, ninja
-, nlohmann_json
-, spdlog
+  blas,
+  catch2,
+  cmake,
+  cython,
+  fmt,
+  muparserx,
+  ninja,
+  nlohmann_json,
+  spdlog,
   # Python Inputs
-, cvxpy
-, numpy
-, pybind11
-, scikit-build
+  cvxpy,
+  numpy,
+  pybind11,
+  scikit-build,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, fixtures
-, pytest-timeout
-, qiskit-terra
-, setuptools
-, testtools
+  pytestCheckHook,
+  ddt,
+  fixtures,
+  pytest-timeout,
+  qiskit-terra,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.12.2";
+  version = "0.15.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -40,7 +38,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = "refs/tags/${version}";
-    hash = "sha256-K8Avh1j9j5CGdEYIeJJRF+PjUFXvVILkZLqX1QClInE=";
+    hash = "sha256-TrGoeyn6K5MGtkenEE9zz4S1xdOthskdRykzppfkZag=";
   };
 
   postPatch = ''
@@ -69,7 +67,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
     pybind11
   ];
@@ -147,7 +145,7 @@ buildPythonPackage rec {
   postCheck = "popd";
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = true;
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";

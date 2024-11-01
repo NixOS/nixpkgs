@@ -2,20 +2,22 @@
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
-  version = "unstable-2023-10-11";
+  version = "4.0.10-unstable-2024-09-24";
 
   src = fetchFromGitHub {
     owner = "libcxxrt";
     repo = "libcxxrt";
-    rev = "03c83f5a57be8c5b1a29a68de5638744f17d28ba";
-    sha256 = "ldwE0j9P9h5urWIUCRdY6qrJqKe45hid+NrSNeKEixE=";
+    rev = "40e4fa2049930412a2c43cdf0c39b6b5aa735341";
+    sha256 = "2rEbRTr8RLl8EKrDq210baCPDt9OppdL7zloNjGOZME=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  outputs = [ "out" "dev" ];
+
   installPhase = ''
-    mkdir -p $out/include $out/lib
-    cp ../src/cxxabi.h $out/include
+    mkdir -p $dev/include $out/lib
+    cp ../src/cxxabi.h $dev/include
     cp lib/libcxxrt${stdenv.hostPlatform.extensions.library} $out/lib
   '';
 

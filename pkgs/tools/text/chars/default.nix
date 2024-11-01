@@ -17,10 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wqyExG4haco6jg1zpbouz3xMR7sjiVIAC16PnDU2tc8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Commandline tool to display information about unicode characters";
+    mainProgram = "chars";
     homepage = "https://github.com/antifuchs/chars";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];

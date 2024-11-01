@@ -1,41 +1,56 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, cython_3
-, ninja
-, scikit-build
-, setuptools
-, numpy
-, hypothesis
-, pandas
-, pytestCheckHook
-, rapidfuzz-cpp
-, taskflow
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  cython,
+  ninja,
+  scikit-build-core,
+  setuptools,
+  numpy,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  rapidfuzz-cpp,
+  taskflow,
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.4.0";
-  format = "pyproject";
+  version = "3.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JgTmhnKVzv9m8//GMQjvCFPNJQM/7dalCD5bk6fWBPc=";
+    hash = "sha256-hLYidU09nCSOi42zgSh7dW83glxIjFY4C6BTmy/sf60=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # https://github.com/rapidfuzz/RapidFuzz/pull/414
+    (fetchpatch2 {
+      name = "support-taskflow-3.8.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/8f0429bbd970ccc036018b87108845c384911ff7.patch";
+      hash = "sha256-1wizdCkXYEMe5JWXUHCOCuDdS0z76FKimR47B3s2oVU=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
+  '';
+
+  build-system = [
     cmake
-    cython_3
+    cython
     ninja
-    scikit-build
-    setuptools
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -45,18 +60,16 @@ buildPythonPackage rec {
     taskflow
   ];
 
-  preBuild = ''
-    export RAPIDFUZZ_BUILD_EXTENSION=1
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
-  '';
+  preBuild =
+    ''
+      export RAPIDFUZZ_BUILD_EXTENSION=1
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
+    '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
-    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
-  ]);
-
-  passthru.optional-dependencies = {
-    full = [ numpy ];
+  optional-dependencies = {
+    all = [ numpy ];
   };
 
   preCheck = ''
@@ -69,7 +82,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # segfaults
     "test_cdist"
   ];

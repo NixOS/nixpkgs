@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exempi";
-  version = "2.6.4";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://libopenraw.freedesktop.org/download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-p1FJyWth45zcsEb9XlbYjP7qtuCPiU4V6//ZlECSv9A=";
+    sha256 = "sha256-6fmj1Cv/c7XrD3fsIs0BY8PiGUnMQUrR8ZoEZd3kH/4=";
   };
 
   configureFlags = [
@@ -16,15 +16,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ expat zlib boost ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
-  doCheck = stdenv.isLinux && stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit;
   dontDisableStatic = doCheck;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
+    description = "Implementation of XMP (Adobe's Extensible Metadata Platform)";
+    mainProgram = "exempi";
     homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;

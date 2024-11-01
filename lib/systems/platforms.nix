@@ -201,8 +201,9 @@ rec {
       target = "zImage";
     };
     gcc = {
-      arch = "armv6";
-      fpu = "vfp";
+      # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
+      arch = "armv6kz";
+      fpu = "vfpv2";
     };
   };
 
@@ -535,11 +536,9 @@ rec {
       name = "riscv-multiplatform";
       target = "Image";
       autoModules = true;
+      preferBuiltin = true;
       baseConfig = "defconfig";
       DTB = true;
-      extraConfig = ''
-        SERIAL_OF_PLATFORM y
-      '';
     };
   };
 

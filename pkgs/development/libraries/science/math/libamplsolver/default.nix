@@ -1,4 +1,4 @@
-{ lib, stdenv, substitute, fetchurl, fetchpatch }:
+{ lib, stdenv, substitute, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libamplsolver";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substitute {
       src = ./libamplsolver-sharedlib.patch;
-      replacements = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
+      substitutions = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
     })
   ];
 
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     install -D -m 0644 *${stdenv.hostPlatform.extensions.sharedLibrary}* -t $out/lib
     install -D -m 0644 *.a -t $out/lib
     popd
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libamplsolver.dylib $out/lib/libamplsolver.dylib
   '' + ''
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A library of routines that help solvers work with AMPL";
+    description = "Library of routines that help solvers work with AMPL";
     homepage = "https://ampl.com/netlib/ampl/";
     license = [ licenses.mit ];
     platforms = platforms.unix;

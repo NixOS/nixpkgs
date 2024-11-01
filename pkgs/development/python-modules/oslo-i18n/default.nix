@@ -1,20 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oslotest
-, pbr
-, testscenarios
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oslotest,
+  pbr,
+  setuptools,
+  testscenarios,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.1.0";
+  version = "6.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.i18n";
     inherit version;
-    hash = "sha256-4rgp8gW/HrYgR1bMNAJ9EZSUti0nH+7oYL+BbKegfq0=";
+    hash = "sha256-ZuBMBB6f8X0H4T7H9IKV+8NhaRQ8csojUqPvzJjntgg=";
   };
 
   postPatch = ''
@@ -23,7 +26,10 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  build-system = [
+    pbr
+    setuptools
+  ];
 
   nativeCheckInputs = [
     oslotest

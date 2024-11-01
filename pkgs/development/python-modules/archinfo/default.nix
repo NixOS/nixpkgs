@@ -1,41 +1,34 @@
-{ lib
-, backports-strenum
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  backports-strenum,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.78";
+  version = "9.2.126";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "archinfo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0OElwNcrywIRS4EjHGS4pQtWOWwPr4Od3wk9yGX1ONA=";
+    hash = "sha256-LMRZMZeQZVDnIUyqtE90WI9uFHIPSm5d0duWw5ew054=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    backports-strenum
-  ];
+  dependencies = lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "archinfo"
-  ];
+  pythonImportsCheck = [ "archinfo" ];
 
   meta = with lib; {
     description = "Classes with architecture-specific information";

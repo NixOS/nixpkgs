@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7CZC29y9dLpyanolO+epKd0KwmRc1iGY+sPM9f/j5hk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rraval/git-nomad/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ rraval ];
+    mainProgram = "git-nomad";
   };
 }

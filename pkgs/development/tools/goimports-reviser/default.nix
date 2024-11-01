@@ -5,15 +5,15 @@
 
 buildGoModule rec {
   pname = "goimports-reviser";
-  version = "3.5.6";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
     rev = "v${version}";
-    hash = "sha256-OMCmW2GhByuVN8+Kuaw9o2oCrdA6C9fK/C7yl7wI2Ls=";
+    hash = "sha256-46s6A1sGqoJR3XihaCkVCxTpManl330mMcJ8hv66zDc=";
   };
-  vendorHash = "sha256-aYhUsO3Z0uue66XB+/oSVYLG9QGyVcFeZ0ngzhpBZxo=";
+  vendorHash = "sha256-z+FeAXPXKi653im2X2WOP1R9gRl/x7UBnndoEXoxdwA=";
 
   CGO_ENABLED = 0;
 
@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Right imports sorting & code formatting tool (goimports alternative)";
+    mainProgram = "goimports-reviser";
     homepage = "https://github.com/incu6us/goimports-reviser";
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];

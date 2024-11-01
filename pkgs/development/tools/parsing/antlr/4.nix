@@ -15,7 +15,8 @@ let
   mkAntlr = {
     version, sourceSha256, jarSha256,
     extraCppBuildInputs ? [],
-    extraCppCmakeFlags ? []
+    extraCppCmakeFlags ? [],
+    extraPatches ? [ ]
   }: rec {
     source = fetchFromGitHub {
       owner = "antlr";
@@ -37,7 +38,7 @@ let
 
       installPhase = ''
         mkdir -p "$out"/{share/java,bin}
-        cp "$src" "$out/share/java/antlr-${version}-complete.jar"
+        ln -s "$src" "$out/share/java/antlr-${version}-complete.jar"
 
         echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
@@ -57,7 +58,7 @@ let
 
       passthru = {
         inherit runtime;
-        jarLocation = "${antlr}/share/java/antlr-${version}-complete.jar";
+        jarLocation = antlr.src;
       };
 
       meta = with lib; {
@@ -81,14 +82,17 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
-        sourceRoot = "${source.name}/runtime/Cpp";
+
+        patches = extraPatches;
 
         outputs = [ "out" "dev" "doc" ];
 
         nativeBuildInputs = [ cmake ninja pkg-config ];
         buildInputs =
-          lib.optional stdenv.isDarwin CoreFoundation ++
+          lib.optional stdenv.hostPlatform.isDarwin CoreFoundation ++
           extraCppBuildInputs;
+
+        cmakeDir = "../runtime/Cpp";
 
         cmakeFlags = extraCppCmakeFlags;
 
@@ -149,7 +153,7 @@ in {
     version = "4.10.1";
     sourceSha256 = "sha256-Z1P81L0aPbimitzrHH/9rxsMCA6Qn3i42jFbUmVqu1E=";
     jarSha256 = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
-    extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
+    extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
     extraCppCmakeFlags = [
       "-DANTLR4_INSTALL=ON"
       "-DANTLR_BUILD_CPP_TESTS=OFF"
@@ -161,14 +165,20 @@ in {
     sourceSha256 = "1af3cfqwk7lq1b5qsh1am0922fyhy7wmlpnrqdnvch3zzza9n1qm";
     jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
     extraCppBuildInputs = [ utf8cpp ]
-      ++ lib.optional stdenv.isLinux libuuid;
+      ++ lib.optional stdenv.hostPlatform.isLinux libuuid;
+    extraCppCmakeFlags = [
+      "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
+    ];
+    extraPatches = [
+      ./utf8cpp.patch
+    ];
   }).antlr;
 
   antlr4_8 = (mkAntlr {
     version = "4.8";
     sourceSha256 = "1qal3add26qxskm85nk7r758arladn5rcyjinmhlhznmpbbv9j8m";
     jarSha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
-    extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
+    extraCppBuildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
     extraCppCmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
   }).antlr;
 }

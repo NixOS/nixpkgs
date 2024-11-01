@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, flask, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "flask-script";
   version = "2.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Script";

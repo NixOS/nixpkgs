@@ -18,12 +18,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5eS+OMaNAVNyDMKFNfb0J0rLsikw2LCXhWk7MS9UV2k=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
   meta = with lib; {
     description = "Minimal command line calendar, similar to cal";
+    mainProgram = "rusti-cal";
     homepage = "https://github.com/arthurhenrique/rusti-cal";
     license = [ licenses.mit ];
     maintainers = [ maintainers.detegr ];

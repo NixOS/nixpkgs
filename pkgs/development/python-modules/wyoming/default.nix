@@ -1,41 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# tests
-, wyoming-faster-whisper
-, wyoming-openwakeword
-, wyoming-piper
+  # build-system
+  setuptools,
+
+  # optional-dependencies
+  zeroconf,
+
+  # tests
+  wyoming-faster-whisper,
+  wyoming-openwakeword,
+  wyoming-piper,
 }:
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.5.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mgNhc8PMRrwfvGZEcgIvQ/P2dysdDo2juvZccvb2C/g=";
+  src = fetchFromGitHub {
+    owner = "rhasspy";
+    repo = "wyoming";
+    rev = "refs/tags/${version}";
+    hash = "sha256-gx9IbFkwR5fiFFAZTiQKzBbVBJ/RYz29sztgbvAEeRQ=";
   };
 
-  pythonImportsCheck = [
-    "wyoming"
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  optional-dependencies = {
+    zeroconf = [ zeroconf ];
+  };
+
+  pythonImportsCheck = [ "wyoming" ];
 
   # no tests
   doCheck = false;
 
   passthru.tests = {
-    inherit
-      wyoming-faster-whisper
-      wyoming-openwakeword
-      wyoming-piper
-    ;
+    inherit wyoming-faster-whisper wyoming-openwakeword wyoming-piper;
   };
 
   meta = with lib; {
+    changelog = "https://github.com/rhasspy/wyoming/releases/tag/${version}";
     description = "Protocol for Rhasspy Voice Assistant";
-    homepage = "https://pypi.org/project/wyoming/";
+    homepage = "https://github.com/rhasspy/wyoming";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

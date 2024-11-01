@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WU3lgGJH6qVDI1Un3HBqg0edqiP5sobTsAIXdnjeNTU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Access the rust playground right in terminal";
+    mainProgram = "rustycli";
     homepage = "https://github.com/pwnwriter/rustycli";
     changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${version}";
     license = licenses.mit;

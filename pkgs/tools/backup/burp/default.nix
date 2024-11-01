@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # use openssl_legacy due to burp-2.4.0 not supporting file encryption with openssl 3.0
   # replace with 'openssl' once burp-3.x has been declared stable and this package upgraded
   buildInputs = [ librsync ncurses openssl_legacy zlib uthash ]
-    ++ lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "BURP - BackUp and Restore Program";
     homepage    = "https://burp.grke.org";
-    license     = licenses.agpl3;
+    license     = licenses.agpl3Plus;
     maintainers = with maintainers; [ arjan-s ];
     platforms   = platforms.all;
   };

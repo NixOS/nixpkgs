@@ -6,17 +6,17 @@
 }:
 buildGoModule rec {
   pname = "rimgo";
-  version = "1.2.1";
+  version = "1.2.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "rimgo";
     repo = "rimgo";
     rev = "v${version}";
-    hash = "sha256-C6xixULZCDs+rIP7IWBVQNo34Yk/8j9ell2D0nUoHBg=";
+    hash = "sha256-PBzbCiRIDrtKH3j6jxmylPpwafR5qgRYDHgYP1m/+Ok=";
   };
 
-  vendorHash = "sha256-u5N7aI9RIQ3EmiyHv0qhMcKkvmpp+5G7xbzdQcbhybs=";
+  vendorHash = "sha256-nk1Pl9K62RjmBUgTlbp3u6cCoiEwpUHavfT3Oy0iyGU=";
 
   nativeBuildInputs = [ tailwindcss ];
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "An alternative frontend for Imgur";
+    description = "Alternative frontend for Imgur";
     homepage = "https://codeberg.org/rimgo/rimgo";
     license = licenses.agpl3Only;
     mainProgram = "rimgo";

@@ -58,7 +58,7 @@ in mkDerivation rec {
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
-  nativeBuildInputs = with lib; [
+  nativeBuildInputs = [
     autoreconfHook
     curl
     git
@@ -121,7 +121,7 @@ in mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A QT based application for the Digital Bitbox hardware wallet";
+    description = "QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
       Digital Bitbox provides dbb-app, a GUI tool, and dbb-cli, a CLI tool, to manage Digital Bitbox devices.
 

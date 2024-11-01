@@ -1,22 +1,46 @@
-{ buildPythonPackage
-, cryptography
-, fetchPypi
-, lib
-, pythonOlder
-, protobuf
-, pycryptodome
-, requests
+{
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  lib,
+  protobuf,
+  pycryptodome,
+  requests,
+  protobuf_27,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.4.4";
   pname = "gpapi";
-  disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
+    sha256 = "sha256-HA06ie25ny7AXI7AvZgezvowfZ3ExalY8HDkk7betyo=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'PROTOC_EXEC = "protoc"' 'PROTOC_EXEC = "${lib.getExe protobuf_27}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    protobuf_27
+  ];
+
+  dependencies = [
+    cryptography
+    protobuf
+    pycryptodome
+    requests
+  ];
+
+  preBuild = ''
+    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION="python"
+  '';
 
   # package doesn't contain unit tests
   # scripts in ./test require networking
@@ -24,12 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gpapi.googleplay" ];
 
-  propagatedBuildInputs = [ cryptography protobuf pycryptodome requests ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NoMore201/googleplay-api";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     description = "Google Play Unofficial Python API";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.x.org/";
     description = "Allows testing the fonts available in an X server";
-    license = licenses.free;
-    maintainers = with maintainers; [ viric ];
+    mainProgram = "xfontsel";
+    license = with licenses; [ x11 smlnj mit ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

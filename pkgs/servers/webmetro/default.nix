@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };
 
-  cargoSha256 = "1n4498byy2m2f928hamfn959abrrn693wcc323ifqqrvnbkckdz8";
+  cargoHash = "sha256-6LfJ5rI7Y+ziEIMxPpKxOS+VSrKuKohEcqIK7xdKhNg=";
 
   meta = with lib; {
     description = "Simple relay server for broadcasting a WebM stream";
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "webmetro";
   };
 }

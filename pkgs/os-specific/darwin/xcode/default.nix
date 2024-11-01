@@ -3,7 +3,7 @@
 let requireXcode = version: sha256:
   let
     xip = "Xcode_" + version +  ".xip";
-    # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
+
     unxip = if stdenv.buildPlatform.isDarwin
             then ''
               open -W ${xip}
@@ -14,7 +14,9 @@ let requireXcode = version: sha256:
               rm -rf ${xip}
               pbzx -n Content | cpio -i
               rm Content Metadata
+              rcodesign verify Xcode.app/Contents/MacOS/Xcode
             '';
+
     app = requireFile rec {
       name     = "Xcode.app";
       url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
@@ -36,6 +38,7 @@ let requireXcode = version: sha256:
       description = "Apple's XCode SDK";
       license = licenses.unfree;
       platforms = platforms.darwin ++ platforms.linux;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
     };
 
   in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
@@ -79,6 +82,13 @@ in lib.makeExtensible (self: {
   xcode_13_4_1 = requireXcode "13.4.1" "sha256-Jk8fLgvnODoIhuVJqfV0KrpBBL40fRrHJbFmm44NRKE=";
   xcode_14 = requireXcode "14" "sha256-E+wjPgQx/lbYAsauksdmGsygL5VPBA8R9pHB93eA7T0=";
   xcode_14_1 = requireXcode "14.1" "sha256-QJGAUVIhuDYyzDNttBPv5lIGOfvkYqdOFSUAr5tlkfs=";
+  xcode_15 = requireXcode "15" "sha256-ffqISt2Ayccln5BArKIjSdzbEgoSoNwq8TPLGysAE0c=";
+  xcode_15_0_1 = requireXcode "15.0.1" "sha256-ZJFCA2HUNmw8NxW3wyIyIsMr8k6z50BHqu9IE2VjuOg=";
+  xcode_15_1 = requireXcode "15.1" "sha256-0djqoSamU87rCpjo50Un3cFg9wKf+pSczRko6uumGM0=";
+  xcode_15_2 = requireXcode "15.2" "sha256-9B/4Tdyb3QGAzm579QGn5Iq/hA2hscD8OcoSJ5BFFXs=";
+  xcode_15_3 = requireXcode "15.3" "sha256-FyVA8EEPCI12Z4sJ4RQRZlMMpFmi7S8VYLcyvad3swM=";
+  xcode_15_4 = requireXcode "15.4" "sha256-yeo+sf6bBIJy9/1sQiMuPEMPniwGXMB6/FXXL0UrI5U=";
+  xcode_16 = requireXcode "16" "sha256-i/MMcEi5wCpe5+nGo6gUTsFFCoorORydAn7D/GClEdo=";
+  xcode_16_1 = requireXcode "16.1" "sha256-yYg6NRRnYM/5X3hhVMfcXcdoiOV36fIongJNQ5nviD8=";
   xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })
-

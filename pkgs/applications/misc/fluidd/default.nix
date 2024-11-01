@@ -1,13 +1,13 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "fluidd";
-  version = "1.26.0";
+  version = "1.30.5";
 
   src = fetchurl {
     name = "fluidd-v${version}.zip";
-    url = "https://github.com/cadriel/fluidd/releases/download/v${version}/fluidd.zip";
-    sha256 = "sha256-Y0d3TgSLrxA2kPWlHrNC8GlEcD7s4VZR2YZlderZ3gI=";
+    url = "https://github.com/fluidd-core/fluidd/releases/download/v${version}/fluidd.zip";
+    sha256 = "sha256-Ry9aD8pSFw076yIywik0ov+ZPNRsI9srM4YJBW/1bY8=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -24,6 +24,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/fluidd
     cp -r fluidd $out/share/fluidd/htdocs
   '';
+
+  passthru.tests = { inherit (nixosTests) fluidd; };
 
   meta = with lib; {
     description = "Klipper web interface";

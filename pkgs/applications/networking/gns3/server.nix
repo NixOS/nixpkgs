@@ -1,18 +1,22 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3
-, fetchFromGitHub
-, pkgsStatic
-, stdenv
-, testers
-, gns3-server
+{
+  fetchFromGitHub,
+  gns3-server,
+  lib,
+  nixosTests,
+  pkgsStatic,
+  python3Packages,
+  stdenv,
+  testers,
+  util-linux,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -28,7 +32,9 @@ python3.pkgs.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     aiofiles
     aiohttp
     aiohttp-cors
@@ -42,10 +48,8 @@ python3.pkgs.buildPythonApplication {
     psutil
     py-cpuinfo
     sentry-sdk
-    setuptools
     truststore
     yarl
-    zipstream
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
@@ -53,6 +57,9 @@ python3.pkgs.buildPythonApplication {
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/gns3loopback
   '';
+
+  # util-linux (script program) is required for Docker support
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ util-linux ]}" ];
 
   doCheck = true;
 
@@ -62,7 +69,7 @@ python3.pkgs.buildPythonApplication {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
     pytestCheckHook
@@ -75,12 +82,15 @@ python3.pkgs.buildPythonApplication {
     "--reruns 3"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gns3-server;
-    command = "${lib.getExe gns3-server} --version";
+  passthru.tests = {
+    inherit (nixosTests) gns3-server;
+    version = testers.testVersion {
+      package = gns3-server;
+      command = "${lib.getExe gns3-server} --version";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Network Simulator 3 server (${channel} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
@@ -89,9 +99,9 @@ python3.pkgs.buildPythonApplication {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3server";
   };
 }

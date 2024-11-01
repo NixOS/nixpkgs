@@ -1,34 +1,43 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromSourcehut
 , pkg-config
 , river
 , wayland
-, zig_0_9
+, wayland-protocols
+, wayland-scanner
+, zig_0_12
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rivercarro";
-  version = "0.1.4";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = "rivercarro";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-eATbbwIt5ytEVLPodyq9vFF9Rs5S1xShpvNYQnfwdV4=";
+    hash = "sha256-nDKPv/roweW7ynEROsipUJPvs6VMmz3E4JzEFRBzE6s=";
   };
 
   nativeBuildInputs = [
     pkg-config
     river
     wayland
-    zig_0_9.hook
+    wayland-protocols
+    wayland-scanner
+    zig_0_12.hook
   ];
+
+  postPatch = ''
+    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+  '';
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~novakane/rivercarro";
-    description = "A layout generator for river Wayland compositor, fork of rivertile";
+    description = "Layout generator for river Wayland compositor, fork of rivertile";
     longDescription = ''
       A slightly modified version of rivertile layout generator for river.
 
@@ -42,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~novakane/rivercarro/refs/v${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
-    inherit (zig_0_9.meta) platforms;
+    inherit (zig_0_12.meta) platforms;
+    mainProgram = "rivercarro";
   };
 })

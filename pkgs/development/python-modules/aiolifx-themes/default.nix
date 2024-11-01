@@ -1,19 +1,20 @@
-{ lib
-, aiolifx
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, typer
+{
+  lib,
+  aiolifx,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.4.9";
-  format = "pyproject";
+  version = "0.5.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,38 +22,21 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8t0yRia/grSSEqySV57QoB3lgU9iwqiVOvVLE5Jd2pM=";
+    hash = "sha256-Q4PlEnbdEUWYG/odD+xSG975lsRQqhOgFb//hk+PWIw=";
   };
 
-  prePatch = ''
-    # Don't run coverage, or depend on typer for no reason.
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
-      --replace "typer = " "# unused: typer = "
-  '';
+  build-system = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiolifx
-  ];
+  dependencies = [ aiolifx ];
 
   nativeCheckInputs = [
     async-timeout
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
-  pythonImportsCheck = [
-    "aiolifx_themes"
-  ];
+  pythonImportsCheck = [ "aiolifx_themes" ];
 
   meta = with lib; {
     description = "Color themes for LIFX lights running on aiolifx";

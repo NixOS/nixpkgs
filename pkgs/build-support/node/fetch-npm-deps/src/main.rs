@@ -8,7 +8,7 @@ use std::{
     collections::HashMap,
     env, fs,
     path::{Path, PathBuf},
-    process::{self, Command},
+    process,
 };
 use tempfile::tempdir;
 use url::Url;
@@ -244,9 +244,9 @@ fn main() -> anyhow::Result<()> {
     cache.init()?;
 
     packages.into_par_iter().try_for_each(|package| {
-        eprintln!("{}", package.name);
-
-        let tarball = package.tarball()?;
+        let tarball = package
+            .tarball()
+            .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
         let integrity = package.integrity().map(ToString::to_string);
 
         cache
@@ -264,10 +264,7 @@ fn main() -> anyhow::Result<()> {
     fs::write(out.join("package-lock.json"), lock_content)?;
 
     if print_hash {
-        Command::new("nix")
-            .args(["--experimental-features", "nix-command", "hash", "path"])
-            .arg(out.as_os_str())
-            .status()?;
+        println!("{}", util::make_sri_hash(out)?);
     }
 
     Ok(())

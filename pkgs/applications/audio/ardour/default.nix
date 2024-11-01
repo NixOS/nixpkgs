@@ -64,14 +64,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "8.1";
+  version = "8.8";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-T1o1E5+974dNUwEFW/Pw0RzbGifva2FdJPrCusWMk0E=";
+    hash = "sha256-S96hlk4M+38OjjF3T6lhDm3cBjN5t4y6EeYRmvAmVfE=";
   };
 
   bundledContent = fetchzip {
@@ -169,7 +169,12 @@ stdenv.mkDerivation rec {
     "--ptformat"
     "--run-tests"
     "--test"
-    "--use-external-libs"
+    # since we don't have https://github.com/agfline/LibAAF yet,
+    # we need to use some of ardours internal libs, see:
+    # https://discourse.ardour.org/t/ardour-8-2-released/109615/6
+    # and
+    # https://discourse.ardour.org/t/ardour-8-2-released/109615/8
+    # "--use-external-libs"
   ] ++ lib.optional optimize "--optimize";
 
   postInstall = ''
@@ -209,6 +214,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     mainProgram = "ardour8";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
+    maintainers = with maintainers; [ magnetophon mitchmindtree ];
   };
 }

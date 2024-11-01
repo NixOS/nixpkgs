@@ -19,5 +19,6 @@ buildPythonApplication rec {
     description = "Command line Cryptocurrency Portfolio";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ bhipple ];
+    mainProgram = "cryptop";
   };
 }

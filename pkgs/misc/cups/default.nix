@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.7";
+  version = "2.4.11";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-3VQijdkDUmQozn43lhr67SMK0xB4gUHadc66oINiz2w=";
+    hash = "sha256-moj+HaOimpF8P8Z85usxeDmdaOGlSMbYbHDZsTZR/XE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -48,21 +48,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
-    ++ lib.optionals stdenv.isLinux [ avahi pam dbus acl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi pam dbus acl ]
     ++ lib.optional enableSystemd systemd
-    ++ lib.optionals stdenv.isDarwin (with darwin; [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
 
   propagatedBuildInputs = [ gmp ];
 
-  configurePlatforms = lib.optionals stdenv.isLinux [ "build" "host" ];
+  configurePlatforms = lib.optionals stdenv.hostPlatform.isLinux [ "build" "host" ];
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--enable-raw-printing"
     "--enable-threads"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
       "--with-systemd=$out/lib/systemd/system"
 
-      ${lib.optionalString stdenv.isDarwin ''
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         "--with-bundledir=$out"
       ''}
     )
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-      libexec=${if stdenv.isDarwin then "libexec/cups" else "lib/cups"}
+      libexec=${if stdenv.hostPlatform.isDarwin then "libexec/cups" else "lib/cups"}
       moveToOutput $libexec "$out"
 
       # $lib contains references to $out/share/cups.
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
       for f in "$out"/lib/systemd/system/*; do
         substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
       done
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Use xdg-open when on Linux
       substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
@@ -138,14 +138,17 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests)
+      cups-pdf
       printing-service
       printing-socket
+      printing-service-notcp
+      printing-socket-notcp
     ;
   };
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
-    description = "A standards-based printing system for UNIX";
+    description = "Standards-based printing system for UNIX";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;

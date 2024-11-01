@@ -12,15 +12,15 @@ diff --git a/lib/rubygems/path_support.rb b/lib/rubygems/path_support.rb
 index ed680d65..749b9ea6 100644
 --- a/lib/rubygems/path_support.rb
 +++ b/lib/rubygems/path_support.rb
-@@ -23,7 +23,7 @@ class Gem::PathSupport
+@@ -24,7 +24,7 @@ class Gem::PathSupport
    # hashtable, or defaults to ENV, the system environment.
    #
    def initialize(env)
--    @home = env["GEM_HOME"] || Gem.default_dir
-+    @home = env["GEM_HOME"] || Gem.user_dir
+-    @home = normalize_home_dir(env["GEM_HOME"] || Gem.default_dir)
++    @home = normalize_home_dir(env["GEM_HOME"] || Gem.user_dir || Gem.default_dir)
+     @path = split_gem_path env["GEM_PATH"], @home
  
-     if File::ALT_SEPARATOR
-       @home = @home.gsub(File::ALT_SEPARATOR, File::SEPARATOR)
+     @spec_cache_dir = env["GEM_SPEC_CACHE"] || Gem.default_spec_cache_dir
 -- 
 2.21.0
 

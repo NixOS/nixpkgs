@@ -1,45 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, pluggy
-, py
-, six
-, virtualenv
-, setuptools-scm
-, toml
-, tomli
-, filelock
-, hatchling
-, hatch-vcs
-, platformdirs
-, pyproject-api
-, colorama
-, chardet
-, cachetools
-, testers
-, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  pluggy,
+  py,
+  six,
+  virtualenv,
+  toml,
+  tomli,
+  filelock,
+  hatchling,
+  hatch-vcs,
+  platformdirs,
+  pyproject-api,
+  colorama,
+  chardet,
+  cachetools,
+  testers,
+  tox,
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.11.3";
+  version = "4.18.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     rev = "refs/tags/${version}";
-    hash = "sha256-VLoWRAiQ1TP9S0f8TKwQ0H2Lgemd+dTzSM+TjhioDMk=";
+    hash = "sha256-p3pghGQwCBIvkFI6pYuzoGSwAwfaz4vKpteh8nhXOhE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "packaging>=22" "packaging"
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
@@ -59,9 +57,7 @@ buildPythonPackage rec {
     six
     toml
     virtualenv
-  ]  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   doCheck = false; # infinite recursion via devpi-client
 
@@ -71,9 +67,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/tox-dev/tox/releases/tag/${version}";
-    description = "A generic virtualenv management and test command line tool";
+    description = "Generic virtualenv management and test command line tool";
+    mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

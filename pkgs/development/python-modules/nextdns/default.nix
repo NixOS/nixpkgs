@@ -1,32 +1,37 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "2.0.1";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
     rev = "refs/tags/${version}";
-    hash = "sha256-NJjnk/FadD4QUqPYxbbS7gsIKVxwR5tpnBth1HFLkr0=";
+    hash = "sha256-WNdS8sAW7Ci8w8diYIsrVADvpgMSDuM0NLBTw7irzKg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    orjson
+    tenacity
   ];
 
   nativeCheckInputs = [
@@ -34,11 +39,16 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "nextdns"
+  disabledTests = [
+    # mocked object called too many times
+    "test_retry_error"
+    "test_retry_success"
   ];
+
+  pythonImportsCheck = [ "nextdns" ];
 
   meta = with lib; {
     description = "Module for the NextDNS API";

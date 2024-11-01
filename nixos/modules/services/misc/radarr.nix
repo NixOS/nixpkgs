@@ -9,46 +9,41 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption (lib.mdDoc "Radarr");
+      enable = mkEnableOption "Radarr, a UsetNet/BitTorrent movie downloader";
 
-      package = mkOption {
-        description = lib.mdDoc "Radarr package to use";
-        default = pkgs.radarr;
-        defaultText = literalExpression "pkgs.radarr";
-        example = literalExpression "pkgs.radarr";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "radarr" { };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/radarr/.config/Radarr";
-        description = lib.mdDoc "The directory where Radarr stores its data files.";
+        description = "The directory where Radarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the Radarr web interface.";
+        description = "Open ports in the firewall for the Radarr web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "radarr";
-        description = lib.mdDoc "User account under which Radarr runs.";
+        description = "User account under which Radarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "radarr";
-        description = lib.mdDoc "Group under which Radarr runs.";
+        description = "Group under which Radarr runs.";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.radarr = {
       description = "Radarr";

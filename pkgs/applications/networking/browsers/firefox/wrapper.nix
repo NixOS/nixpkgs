@@ -4,7 +4,7 @@
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
-, gnome/*.gnome-shell*/
+, adwaita-icon-theme
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx-cast-bridge
@@ -15,9 +15,11 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
-, speechd
+, speechd-minimal
+, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -49,7 +51,7 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -66,7 +68,7 @@ let
       deprecatedNativeMessagingHost = option: pkg:
         if (cfg.${option} or false)
           then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts.packages` instead"
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
             [pkg]
           else [];
 
@@ -85,7 +87,7 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -97,7 +99,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -238,7 +240,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -321,7 +323,7 @@ let
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
+            --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
             --set-default MOZ_ENABLE_WAYLAND 1 \
             "''${oldWrapperArgs[@]}"
         #############################
@@ -413,11 +415,14 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-
+      postInstall = ''
+        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
+        mainProgram = launcherName;
         hydraPlatforms = [];
-        priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
+        priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     };
 in lib.makeOverridable wrapper

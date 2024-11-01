@@ -1,8 +1,8 @@
-{ python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: rec {
+  newPackageOverrides =
+    self: super: {
       poetry = self.callPackage ./unwrapped.nix { };
 
       # The versions of Poetry and poetry-core need to match exactly,
@@ -12,21 +12,27 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.8.1";
+        version = "1.9.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
-          rev = version;
-          hash = "sha256-RnCJ67jaL2knwv+Uo7p0zOejHAT73f40weaJnfqOYoM=";
+          rev = "refs/tags/${version}";
+          hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
         };
+        patches = [ ];
       });
     } // (plugins self);
-  };
+  python = python3.override (old: {
+    self = python;
+    packageOverrides = lib.composeManyExtensions
+      ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
+  });
 
   plugins = ps: with ps; {
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
     poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
     poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
+    poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
   };
 
   # selector is a function mapping pythonPackages to a list of plugins
@@ -34,7 +40,7 @@ let
   withPlugins = selector: let
     selected = selector (plugins python.pkgs);
   in python.pkgs.toPythonApplication (python.pkgs.poetry.overridePythonAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
+    dependencies = old.dependencies ++ selected;
 
     # save some build time when adding plugins by disabling tests
     doCheck = selected == [ ];

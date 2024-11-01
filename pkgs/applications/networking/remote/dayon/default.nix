@@ -6,17 +6,18 @@
 , jre
 , makeWrapper
 , copyDesktopItems
+, stripJavaArchivesHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "13.0.0";
+  version = "14.0.2";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
-    rev = "v${version}";
-    hash = "sha256-2Fo+LQvsrDvqEudZxzQBtJHGxrRYUyNyhrPV1xS49pQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nRNqubR44ydZwwuQG3q6TRm+MHTRgRbeLI9dsk83wq4=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     jdk
     makeWrapper
     copyDesktopItems
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''
@@ -32,15 +34,10 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  desktopItems = [
-    "resources/deb/dayon_assisted.desktop"
-    "resources/deb/dayon_assistant.desktop"
-  ];
-
   installPhase = ''
     runHook preInstall
+
     install -Dm644 build/dayon.jar $out/share/dayon/dayon.jar
-    mkdir -p $out/bin
     # jre is in PATH because dayon needs keytool to generate certificates
     makeWrapper ${jre}/bin/java $out/bin/dayon \
       --prefix PATH : "${lib.makeBinPath [ jre ]}" \
@@ -52,14 +49,26 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assistant.AssistantRunner"
     install -Dm644 resources/dayon.png $out/share/icons/hicolor/128x128/apps/dayon.png
+
     runHook postInstall
   '';
 
+  desktopItems = [
+    "resources/deb/dayon_assisted.desktop"
+    "resources/deb/dayon_assistant.desktop"
+  ];
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/*.desktop \
+        --replace "/usr/bin/dayon/dayon.png" "dayon"
+  '';
+
   meta = with lib; {
+    description = "Easy to use, cross-platform remote desktop assistance solution";
     homepage = "https://retgal.github.io/Dayon/index.html";
-    description = "An easy to use, cross-platform remote desktop assistance solution";
     license = licenses.gpl3Plus; # https://github.com/RetGal/Dayon/issues/59
-    platforms = platforms.all;
+    mainProgram = "dayon";
     maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
-}
+})

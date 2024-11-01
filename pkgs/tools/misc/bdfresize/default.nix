@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.5";
 
   src = fetchurl {
-    url = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/${pname}-${version}.tar.gz";
+    url = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/bdfresize-${version}.tar.gz";
     hash = "sha256-RAz8BiCgI35GNSwUoHdMqj8wWXWbCiDe/vyU6EkIl6Y=";
   };
 
@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = "http://openlab.ring.gr.jp/efont/dist/tools/bdfresize/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ malte-v ];
+    mainProgram = "bdfresize";
   };
 }

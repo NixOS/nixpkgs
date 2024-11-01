@@ -9,27 +9,20 @@
 , gtk2-x11
 , withGTK3 ? true
 , gtk3
+, libglvnd
 , libXt
 , libpulseaudio
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
+, writeScript
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.5.0";
+  version = "33.4.0.1";
 
-  src = fetchzip {
-    urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-    ];
-    hash = if withGTK3 then
-      "sha256-1MJ5K9Zc/BHeQwwlq3XyUV8XTFEpPytNyTnsDpE1tBI="
-    else
-      "sha256-xXunZTqoc2A+ilosRUUluxDwewD3xwITF5nb5Lbyv7Y=";
-  };
+  src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
   preferLocalBuild = true;
 
@@ -38,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -147,19 +140,58 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ffmpeg
+        libglvnd
         libpulseaudio
       ]}"
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    sources = let
+      urlRegionVariants = buildVariant: map
+        (region: "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz")
+        [
+          "eu"
+          "us"
+        ];
+    in {
+      gtk3 = fetchzip {
+        urls = urlRegionVariants "gtk3";
+        hash = "sha256-34x9L0L42KO7mUDaW41I71ln5xyHGAKBoAJ6HcDC//g=";
+      };
+      gtk2 = fetchzip {
+        urls = urlRegionVariants "gtk2";
+        hash = "sha256-TRIgfqKsJxueZ/Oazw7kTLjVyxdh+IUiR+XDaemow9A=";
+      };
+    };
+
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = writeScript "update-palemoon-bin" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+      set -eu -o pipefail
+
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+
+      for variant in gtk3 gtk2; do
+        update-source-version palemoon-bin "$version" --ignore-same-version --source-key="sources.$variant"
+      done
+    '';
   };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
@@ -171,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
       licenses.mpl20
       {
@@ -180,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];

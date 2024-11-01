@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pkg-config
-, pango
-, cython
-, AppKit
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pkg-config,
+  pango,
+  cython,
+  AppKit,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,26 +23,16 @@ buildPythonPackage rec {
     owner = "ManimCommunity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-EBSbvjQyQIXOzvQMbuTwOoV8xSAOYDlCBZ56NLneuQI=";
+    hash = "sha256-nN+XOnki8fG7URMy2Fhs2X+yNi8Y7wDo53d61xaRa3w=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
-  propagatedBuildInputs = [
-    cython
-  ];
+  propagatedBuildInputs = [ cython ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -52,9 +43,7 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
-  pythonImportsCheck = [
-    "manimpango"
-  ];
+  pythonImportsCheck = [ "manimpango" ];
 
   meta = with lib; {
     description = "Binding for Pango";

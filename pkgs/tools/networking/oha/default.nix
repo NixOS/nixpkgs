@@ -9,24 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "1.0.0";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QZEDp+XCc3ZWQ1UTlMUpdvJCbuO6VCYnJj1Jj9o+Ovs=";
+    hash = "sha256-9nyQvzxOwBFsh6TzczYZ5Tlu7LyxuFYVECBXL5IX6TY=";
   };
 
-  cargoSha256 = "sha256-JEbsAJ9NbWw03qYUQqLx7sA04Xq990zdBuludVbxoIg=";
+  cargoHash = "sha256-EPF/NU6qFTS4K3UWd2c2poshZkACljrxfCHyDahDWxY=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "oha";
   };
 }

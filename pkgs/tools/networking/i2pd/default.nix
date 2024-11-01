@@ -3,18 +3,17 @@
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc
 , aesniSupport ? stdenv.hostPlatform.aesSupport
-, avxSupport   ? stdenv.hostPlatform.avxSupport
 }:
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.49.0";
+  version = "2.54.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-y2+V+p/EZS90cwNl/gavclJ1TyJa/CdNnjKLMuwe7q0=";
+    sha256 = "sha256-neoIDZNBBDq3tqz1ET3/CS/zb0Lret9niyuU7iWoNIE=";
   };
 
   buildInputs = [ boost zlib openssl ]
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
     [ (ynf "USE_AESNI" aesniSupport)
-      (ynf "USE_AVX"   avxSupport)
       (ynf "USE_UPNP"  upnpSupport)
     ];
 
@@ -45,5 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;
+    mainProgram = "i2pd";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

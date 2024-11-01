@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.8";
+  version = "2.5.10";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-VuuqR5fj0YvqIfVPH7N3rpAfIbcTwOx9W3H60saCToQ=";
+    sha256 = "sha256-WTrw7WaSqC2fp76fPvfogWTibev0Hg0LW2x4umc3+1Q=";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   autoreconfFlags = [ "-I" "tools" "-v" ];
 
   buildInputs = [ ncurses readline git ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bjornfor domenkozar qknight globin ma27 ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "tig";
   };
 }

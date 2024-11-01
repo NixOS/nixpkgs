@@ -1,0 +1,41 @@
+From 74b93c1edba00c2601e20b8acdcc78e29bd3f092 Mon Sep 17 00:00:00 2001
+From: Robert Hensing <robert@roberthensing.nl>
+Date: Thu, 3 Oct 2024 12:50:27 +0200
+Subject: [PATCH 3/4] local-derivation-goal: Refactor
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This works because the `builder` and `args` variables are only used
+in the non-builtin code path.
+
+Co-Authored-By: Théophane Hufschmitt <theophane.hufschmitt@tweag.io>
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libstore/build/local-derivation-goal.cc | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/src/libstore/build/local-derivation-goal.cc b/src/libstore/build/local-derivation-goal.cc
+index e6f4c397d..e81818fa8 100644
+--- a/src/libstore/build/local-derivation-goal.cc
++++ b/src/libstore/build/local-derivation-goal.cc
+@@ -2143,15 +2143,12 @@ void LocalDerivationGoal::runChild()
+                 _exit(1);
+             }
+         }
++#endif
+ 
+-        builder = drv->builder;
+-        args.push_back(std::string(baseNameOf(drv->builder)));
+-#else
+         if (!drv->isBuiltin()) {
+             builder = drv->builder;
+             args.push_back(std::string(baseNameOf(drv->builder)));
+         }
+-#endif
+ 
+         for (auto & i : drv->args)
+             args.push_back(rewriteStrings(i, inputRewrites));
+-- 
+2.46.1
+

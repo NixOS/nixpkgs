@@ -21,6 +21,7 @@
 , libXtst
 , libxshmfence
 , libXi
+, cups
 , fontconfig
 , freetype
 , harfbuzz
@@ -49,7 +50,7 @@
 , systemd
 , pipewire
 , gn
-, ffmpeg_4
+, ffmpeg
 , lib
 , stdenv
 , glib
@@ -60,34 +61,10 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
+, autoSignDarwinBinariesHook
 , bootstrap_cmds
 , cctools
 , xcbuild
-, AGL
-, AVFoundation
-, Accelerate
-, Cocoa
-, CoreLocation
-, CoreML
-, ForceFeedback
-, GameController
-, ImageCaptureCore
-, LocalAuthentication
-, MediaAccessibility
-, MediaPlayer
-, MetalKit
-, Network
-, OpenDirectory
-, Quartz
-, ReplayKit
-, SecurityInterface
-, Vision
-, openbsm
-, libunwind
-, cups
-, libpm
-, sandbox
-, xnu
 }:
 
 qtModule {
@@ -104,7 +81,9 @@ qtModule {
     which
     gn
     nodejs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     bootstrap_cmds
     cctools
     xcbuild
@@ -119,9 +98,6 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # removes macOS 12+ dependencies
-    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
-    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
@@ -155,20 +131,18 @@ qtModule {
       --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
       --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace "\$sysroot/usr" "${xnu}"
   '';
 
   cmakeFlags = [
@@ -181,20 +155,23 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_gif=ON"
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
-    "-DQT_FEATURE_webengine_system_icu=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
-    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
   ];
 
   propagatedBuildInputs = [
@@ -218,17 +195,15 @@ qtModule {
 
     # Text rendering
     harfbuzz
-    icu
 
     openssl
     glib
-    libxml2
     libxslt
     lcms2
 
     libevent
-    ffmpeg_4
-  ] ++ lib.optionals stdenv.isLinux [
+    ffmpeg
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib
     minizip
@@ -236,6 +211,9 @@ qtModule {
     nss
     protobuf
     jsoncpp
+
+    icu
+    libxml2
 
     # Audio formats
     alsa-lib
@@ -268,36 +246,10 @@ qtModule {
 
     libkrb5
     mesa
-  ] ++ lib.optionals stdenv.isDarwin [
-    AGL
-    AVFoundation
-    Accelerate
-    Cocoa
-    CoreLocation
-    CoreML
-    ForceFeedback
-    GameController
-    ImageCaptureCore
-    LocalAuthentication
-    MediaAccessibility
-    MediaPlayer
-    MetalKit
-    Network
-    OpenDirectory
-    Quartz
-    ReplayKit
-    SecurityInterface
-    Vision
-
-    openbsm
-    libunwind
   ];
 
   buildInputs = [
     cups
-  ] ++ lib.optionals stdenv.isDarwin [
-    libpm
-    sandbox
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -306,9 +258,12 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
+  # Debug info is too big to link with LTO.
+  separateDebugInfo = false;
+
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
-    platforms = platforms.unix;
+    description = "Web engine based on the Chromium web browser";
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

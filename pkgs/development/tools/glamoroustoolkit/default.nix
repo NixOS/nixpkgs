@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchzip
-, wrapGAppsHook
+, fetchurl
+, patchelf
+, wrapGAppsHook3
 , cairo
 , dbus
 , fontconfig
@@ -14,28 +16,36 @@
 , libXi
 , libXrandr
 , libXrender
+, libgit2
 , libglvnd
 , libuuid
 , libxcb
+, harfbuzz
+, libsoup_3
+, webkitgtk_4_1
+, zenity
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.0.2";
+  version = "1.1.4";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-a+B+uAxFXlWVn8b0M17TtP4WTKhMmR6//smV1nmZyxU=";
+    hash = "sha256-/p/oCE1fmlPjy1Xg36rsczZ74L0M7qWsdcFm6cHPVVY=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ];
 
   sourceRoot = ".";
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
@@ -47,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-preFixup = let
+  preFixup = let
     libPath = lib.makeLibraryPath [
       cairo
       dbus
@@ -64,7 +74,13 @@ preFixup = let
       libglvnd
       libuuid
       libxcb
+      harfbuzz        # libWebView.so
+      libsoup_3       # libWebView.so
+      webkitgtk_4_1   # libWebView.so
       stdenv.cc.cc.lib
+    ];
+    binPath = lib.makeBinPath [
+      zenity          # File selection dialog
     ];
   in ''
     chmod +x $out/lib/*.so
@@ -91,12 +107,17 @@ preFixup = let
 
     ln -s $out/lib/libcrypto.so $out/lib/libcrypto.so.1.1
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
-    ln -s $out/lib/libgit2.so $out/lib/libgit2.so.1.1
+    rm $out/lib/libgit2.so
+    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
+
+    gappsWrapperArgs+=(
+      --prefix PATH : ${binPath}
+    )
   '';
 
   meta = {
     homepage = "https://gtoolkit.com";
-    description = "The GlamorousToolkit Development Environment";
+    description = "GlamorousToolkit Development Environment";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.akgrant43 ];
     platforms = [ "x86_64-linux" ];

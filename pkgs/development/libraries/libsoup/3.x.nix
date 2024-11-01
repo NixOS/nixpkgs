@@ -8,7 +8,6 @@
 , gnome
 , libsysprof-capture
 , sqlite
-, glib-networking
 , buildPackages
 , gobject-introspection
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.4.4";
+  version = "3.6.0";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KRxncl827ZDqQ+//JQZLacWi0ZgUiEd8BcSBo7Swxao=";
+    sha256 = "sha256-YpWfeR6OhEL4wTztrIxJGdePkSDVu1MBvmel5TMYtKM=";
   };
 
   depsBuildBuild = [
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     glib.out
     brotli
     libnghttp2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
   ];
 
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
 
     (lib.mesonEnable "docs" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "sysprof" stdenv.isLinux)
+    (lib.mesonEnable "sysprof" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "vapi" withIntrospection)
   ];
 
@@ -93,9 +92,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
       packageName = pname;
@@ -105,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client/server library for GNOME";
-    homepage = "https://wiki.gnome.org/Projects/libsoup";
+    homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
   };

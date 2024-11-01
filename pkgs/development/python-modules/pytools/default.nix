@@ -1,35 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, decorator
-, numpy
-, platformdirs
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2023.1.1";
-  disabled = pythonOlder "3.6";
+  version = "2024.1.14";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gGN4c9IG9rzt9820atk+horLTqIlbbBS38yocr3QMh8=";
+    hash = "sha256-OeW7r4H6Qy5oi4LdCYAhLRj5eyPlGox6/nWSJJ/kCrE=";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    numpy
+  build-system = [ setuptools ];
+
+  dependencies = [
     platformdirs
-  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    numpy = [ numpy ];
+    # siphash = [ siphash ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "pytools"
@@ -37,9 +42,18 @@ buildPythonPackage rec {
     "pytools.lex"
   ];
 
+  disabledTests = [
+    # siphash is not available
+    "test_class_hashing"
+    "test_dataclass_hashing"
+    "test_datetime_hashing"
+    "test_hash_function"
+  ];
+
   meta = {
+    description = "Miscellaneous Python lifesavers";
     homepage = "https://github.com/inducer/pytools/";
-    description = "Miscellaneous Python lifesavers.";
+    changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artuuge ];
   };

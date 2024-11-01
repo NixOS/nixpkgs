@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.4.6";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-zCivxYHhaVqzPe3qBUKXgMgEE6niGqkHJM77rfEUoFo=";
+    hash = "sha256-bQYKOo11zVIXNHdoD60oEdzSSYeLKppPJBen6wdrXq8=";
   };
 
-  cargoHash = "sha256-O8X+oLKhKeQGeUrsRVeakZjaMKPiXdIns48rV8Q9JA8=";
+  cargoHash = "sha256-Tr++ui715adP1taqj+Sms2yO3hF5SZl7zCrAkPYlSdY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     bzip2
     xz
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -55,7 +55,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool for installing rust binaries as an alternative to building from source";
+    description = "Tool for installing rust binaries as an alternative to building from source";
+    mainProgram = "cargo-binstall";
     homepage = "https://github.com/cargo-bins/cargo-binstall";
     changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
     license = licenses.gpl3Only;

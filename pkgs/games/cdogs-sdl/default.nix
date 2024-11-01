@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cdogs-sdl";
-  version = "1.5.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-XSq0TK3ZuLOa8JJnp/Qxt16Ru3p35tq5FOo4+tv+c60=";
+    sha256 = "sha256-bFHygaL0UrrprSZRPTdYIzO78IhMjiqhLCGr7TTajqc=";
   };
 
   postPatch = ''
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nixinator ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
 }

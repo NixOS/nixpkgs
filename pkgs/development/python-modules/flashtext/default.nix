@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "flashtext";
   version = "2.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

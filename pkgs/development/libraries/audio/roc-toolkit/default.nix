@@ -9,19 +9,21 @@
   openfecSupport ? true,
   openfec,
   speexdsp,
-  libunwindSupport ? true,
+  libunwindSupport ? lib.meta.availableOn stdenv.hostPlatform libunwind,
   libunwind,
   pulseaudioSupport ? true,
   libpulseaudio,
   opensslSupport ? true,
   openssl,
   soxSupport ? true,
-  sox
+  sox,
+  libsndfileSupport ? true,
+  libsndfile
 }:
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
-  version = "0.2.5";
+  version = "0.4.0";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "roc-streaming";
     repo = "roc-toolkit";
     rev = "v${version}";
-    hash = "sha256-vosw4H3YTTCXdDOnQQYRNZgufPo1BxUtfg6jutArzTI=";
+    hash = "sha256-53irDq803dTg0YqtC1SOXmYNGypSMAEK+9HJ65pR5PA=";
   };
 
   nativeBuildInputs = [
@@ -46,16 +48,18 @@ stdenv.mkDerivation rec {
     ++ lib.optional libunwindSupport libunwind
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional opensslSupport openssl
-    ++ lib.optional soxSupport sox;
+    ++ lib.optional soxSupport sox
+    ++ lib.optional libsndfileSupport libsndfile;
 
-  sconsFlags =
+  sconsFlags = lib.optionals (!stdenv.hostPlatform.isDarwin)
     [ "--build=${stdenv.buildPlatform.config}"
-      "--host=${stdenv.hostPlatform.config}"
-      "--prefix=${placeholder "out"}" ] ++
+      "--host=${stdenv.hostPlatform.config}" ] ++
+    [ "--prefix=${placeholder "out"}" ] ++
     lib.optional (!opensslSupport) "--disable-openssl" ++
     lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
+    lib.optional (!libsndfileSupport) "--disable-sndfile" ++
     (if (!openfecSupport)
        then ["--disable-openfec"]
        else [ "--with-libraries=${openfec}/lib"

@@ -18,20 +18,24 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.20";
+  version = "0.24.24";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-T7CCubiyhuqSu7cb3mt1Ykzsq23wzGOe51oqCWIS7rw=";
+    hash = "sha256-a7a+n4hQQXbQZC8S3oCbK54txVYhporbjH7bma76u08=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
   buildInputs = [ libsndfile serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 
-  mesonFlags = [ "-Ddocs=disabled" ];
+  mesonFlags = [
+    "-Ddocs=disabled"
+    # Tests require building a shared library.
+    (lib.mesonEnable "tests" (!stdenv.hostPlatform.isStatic))
+  ];
 
   passthru = {
     tests = {
@@ -45,9 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/lilv";
-    description = "A C library to make the use of LV2 plugins";
+    description = "C library to make the use of LV2 plugins";
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

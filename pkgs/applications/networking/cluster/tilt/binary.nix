@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
+    mainProgram = "tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];

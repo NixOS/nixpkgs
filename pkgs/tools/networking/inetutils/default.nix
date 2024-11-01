@@ -1,21 +1,21 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , ncurses
 , perl
 , help2man
 , apparmorRulesFromClosure
 , libxcrypt
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
+    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
   };
 
   outputs = ["out" "apparmor"];
@@ -23,18 +23,13 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-    (fetchpatch {
-      name = "CVE-2023-40303.patch";
-      url = "https://git.savannah.gnu.org/cgit/inetutils.git/patch/?id=e4e65c03f4c11292a3e40ef72ca3f194c8bffdd6";
-      hash = "sha256-I5skN537owfpFpAZr4vDKPHuERI6+oq5/hFW2RQeUxI=";
-    })
   ];
 
   strictDeps = true;
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
   buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.
     # A commit to revert this change will be included in the fix PR targeting staging.
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -55,7 +50,7 @@ stdenv.mkDerivation rec {
     "--disable-rsh"
     "--disable-rlogin"
     "--disable-rexec"
-  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin  "--disable-servers";
 
   doCheck = true;
 
@@ -81,17 +76,24 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of common network programs";
 
-    longDescription =
-      '' The GNU network utilities suite provides the
-         following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
-         rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
-         traceroute, uucpd, and whois.
-      '';
+    longDescription = ''
+      The GNU network utilities suite provides the
+      following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
+      rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
+      traceroute, uucpd, and whois.
+    '';
 
     homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;
 
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+
+    /**
+      The `logger` binary from `util-linux` is preferred over `inetutils`.
+      To instead prioritize this package, set a _lower_ `meta.priority`, or
+      use e.g. `lib.setPrio 5 inetutils`.
+    */
+    priority = (util-linux.meta.priority or lib.meta.defaultPriority) + 1;
   };
 }

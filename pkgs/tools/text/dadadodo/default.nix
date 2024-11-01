@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Markov chain-based text generator";
+    mainProgram = "dadadodo";
     homepage = "http://www.jwz.org/dadadodo";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.all;

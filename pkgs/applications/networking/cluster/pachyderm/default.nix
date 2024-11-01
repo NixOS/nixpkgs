@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pachyderm";
-  version = "2.7.6";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "pachyderm";
     repo = "pachyderm";
     rev = "v${version}";
-    hash = "sha256-h0xr94DNmqjpRcas0F+UxQEnCHt5VGU2CRtv+GzJl00=";
+    hash = "sha256-8bNPUqJrhcTslclhCwNE9SIfTdBXoF14/GI5x+d3s64=";
   };
 
-  vendorHash = "sha256-UBuCAIwx1UOh9bsk3eNlTOozB55RIvuKQ0P1WRkJNaI=";
+  vendorHash = "sha256-d2MSMucGMGGPLE0wh8Y27AUVPkeyOCkCa0JSPawYQmc=";
 
   subPackages = [ "src/server/cmd/pachctl" ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Containerized Data Analytics";
     homepage = "https://www.pachyderm.com/";
-    license = licenses.unfree;
+    license = licenses.asl20;
     maintainers = with maintainers; [ offline ];
     mainProgram = "pachctl";
   };

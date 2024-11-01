@@ -23,7 +23,7 @@ let p2 = buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The simple and easy way to embed static files into Go binaries";
+    description = "Simple and easy way to embed static files into Go binaries";
     homepage = "https://github.com/gobuffalo/packr";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
@@ -34,7 +34,7 @@ let p2 = buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 };
 p1 = buildGoModule rec {
@@ -55,7 +55,7 @@ p1 = buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The simple and easy way to embed static files into Go binaries";
+    description = "Simple and easy way to embed static files into Go binaries";
     homepage = "https://github.com/gobuffalo/packr";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
@@ -66,7 +66,7 @@ p1 = buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 };
 in

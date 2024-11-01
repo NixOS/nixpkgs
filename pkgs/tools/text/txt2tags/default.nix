@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     changelog = "https://github.com/txt2tags/txt2tags/blob/${src.rev}/CHANGELOG.md";
     description = "Convert between markup languages";
+    mainProgram = "txt2tags";
     homepage = "https://txt2tags.org/";
     license  = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dotlambda kovirobi ];

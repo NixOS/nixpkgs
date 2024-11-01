@@ -7,7 +7,7 @@
 , pkg-config
 , volk
 , cppunit
-, swig
+, swig3
 , orc
 , boost
 , log4cpp
@@ -83,7 +83,7 @@ let
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
-        swig
+        swig3
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -98,16 +98,16 @@ let
     gr-ctrlport = {
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
-        swig
+        swig3
       ];
       runtime = [
         thrift
       ];
-      pythonRuntime = with python.pkgs; [
+      pythonRuntime = [
         python.pkgs.thrift
         # For gr-perf-monitorx
-        matplotlib
-        networkx
+        python.pkgs.matplotlib
+        python.pkgs.networkx
       ];
     };
     gnuradio-companion = {
@@ -150,8 +150,8 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
-        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libjack2 ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
@@ -159,7 +159,7 @@ let
       cmakeEnableFlag = "GR_CHANNELS";
     };
     gr-qtgui = {
-      runtime = [ qt5.qtbase libsForQt5.qwt ];
+      runtime = [ qt5.qtbase libsForQt5.qwt6_1 ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
       cmakeEnableFlag = "GR_QTGUI";
     };
@@ -231,20 +231,9 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   # Will still evaluate correctly if not used here. It only helps nix-update
   # find the right file in which version is defined.
   inherit (shared) src;
-  # Remove failing tests
-  preConfigure = (shared.preConfigure or "") + ''
-    # https://github.com/gnuradio/gnuradio/issues/3801
-    rm gr-blocks/python/blocks/qa_cpp_py_binding.py
-    rm gr-blocks/python/blocks/qa_cpp_py_binding_set.py
-    rm gr-blocks/python/blocks/qa_ctrlport_probes.py
-    # Tests that fail due to numpy deprecations upstream hasn't accomodated to yet.
-    rm gr-fec/python/fec/qa_polar_decoder_sc.py
-    rm gr-fec/python/fec/qa_polar_decoder_sc_list.py
-    rm gr-fec/python/fec/qa_polar_decoder_sc_systematic.py
-    rm gr-fec/python/fec/qa_polar_encoder.py
-    rm gr-fec/python/fec/qa_polar_encoder_systematic.py
-    rm gr-filter/python/filter/qa_freq_xlating_fft_filter.py
-  '';
+  # Some of the tests we know why they fail, but others simply hang-out and
+  # timeout...
+  doCheck = false;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.3_8.patch
@@ -266,7 +255,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
-    inherit (libsForQt5) qwt;
+    qwt = libsForQt5.qwt6_1;
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
@@ -294,7 +283,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
 }))

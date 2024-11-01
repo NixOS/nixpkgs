@@ -2,6 +2,8 @@
 , stdenv
 , fetchgit
 , fetchzip
+, fetchpatch
+, fetchpatch2
 , alsa-lib
 , aubio
 , boost
@@ -79,6 +81,18 @@ stdenv.mkDerivation rec {
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
     ./default-plugin-search-paths.patch
+
+    # Fix build with libxml2 2.12.
+    (fetchpatch {
+      url = "https://github.com/Ardour/ardour/commit/e995daa37529715214c6c4a2587e4134aaaba02f.patch";
+      hash = "sha256-EpXOIIObOwwcNgNma0E3nvaBad3930sagDjBpa+78WI=";
+    })
+
+    # Work around itstools bug #9648
+    (fetchpatch2 {
+      url = "https://github.com/Ardour/ardour/commit/338cd09a4aa1b36b8095dfc14ab534395f9a4a92.patch?full_index=1";
+      hash = "sha256-AvV4aLdkfrxPkE4NX2ETSagq4GjEC+sHCEqdcYvL+CY=";
+    })
   ];
 
   # Ardour's wscript requires git revision and date to be available.
@@ -200,6 +214,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     mainProgram = "ardour7";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
+    maintainers = with maintainers; [ magnetophon mitchmindtree ];
   };
 }

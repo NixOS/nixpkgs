@@ -1,61 +1,53 @@
-{ lib
-, stdenv
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fido2
-, gssapi
-, libnacl
-, libsodium
-, nettle
-, openssh
-, openssl
-, pyopenssl
-, pytestCheckHook
-, python-pkcs11
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  fido2,
+  gssapi,
+  libnacl,
+  libsodium,
+  nettle,
+  openssh,
+  openssl,
+  pyopenssl,
+  pytestCheckHook,
+  python-pkcs11,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.14.1";
-  format = "setuptools";
+  version = "2.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GsMcMzoNg8iIMVIyRVAMqoFFA0I3QbDkZTOe9tpbXik=";
+    hash = "sha256-OxWcEFqjiMHiJFxPr0g/VArajK2ZQCKBEZEAFm5e2zw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    libsodium
     nettle
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    bcrypt = [
-      bcrypt
-    ];
-    fido2 = [
-      fido2
-    ];
-    gssapi = [
-      gssapi
-    ];
-    libnacl = [
-      libnacl
-    ];
-    pkcs11 = [
-      python-pkcs11
-    ];
-    pyOpenSSL = [
-      pyopenssl
-    ];
+  buildInputs = [ libsodium ];
+
+  optional-dependencies = {
+    bcrypt = [ bcrypt ];
+    fido2 = [ fido2 ];
+    gssapi = [ gssapi ];
+    libnacl = [ libnacl ];
+    pkcs11 = [ python-pkcs11 ];
+    pyOpenSSL = [ pyopenssl ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -64,7 +56,7 @@ buildPythonPackage rec {
     openssh
     openssl
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -90,15 +82,13 @@ buildPythonPackage rec {
     "test_forward_remote"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

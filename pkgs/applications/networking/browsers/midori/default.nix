@@ -5,11 +5,11 @@
 , pkg-config
 , intltool
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , gcr
 , libpeas
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , sqlite
 , gsettings-desktop-schemas
 , libsoup
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk3
     libpeas
     sqlite
-    webkitgtk
+    webkitgtk_4_0
     json-glib
     libarchive
   ];
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
+    mainProgram = "midori";
     homepage = "https://www.midori-browser.org/";
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;

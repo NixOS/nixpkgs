@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xsos";
-  version = "0.7.19";
+  version = "0.7.33";
 
   src = fetchFromGitHub {
     owner = "ryran";
     repo = "xsos";
     rev = "v${version}";
-    sha256 = "11cc8z3pz4gl0mwl2fc701mn4cgx50fybygx0rvs9bhvb0jnphay";
+    sha256 = "sha256-VEOY422/+4veMlN9HOtPB/THDiFLNnRfbUJpKjc/cqE=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Summarize system info from sosreports";
+    mainProgram = "xsos";
     homepage = "https://github.com/ryran/xsos";
     license = licenses.gpl3;
     platforms = [ "i686-linux" "x86_64-linux" ];

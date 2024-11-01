@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook, abcmidi, abcm2ps, ghostscript }:
+{ lib, fetchFromGitHub, fetchPypi, substituteAll, python39, fluidsynth, soundfont-fluid, wrapGAppsHook3, abcmidi, abcm2ps, ghostscript }:
 
 let
   # requires python39 due to https://stackoverflow.com/a/71902541 https://github.com/jwdj/EasyABC/issues/52
@@ -7,7 +7,7 @@ let
     packageOverrides = self: super: {
       # currently broken with 4.2.1
       # https://github.com/jwdj/EasyABC/issues/75
-      wxPython_4_2 = super.wxPython_4_2.overrideAttrs (args: rec {
+      wxpython = super.wxpython.overrideAttrs (args: rec {
         version = "4.2.0";
         src = fetchPypi {
           inherit version;
@@ -28,11 +28,11 @@ in python.pkgs.buildPythonApplication {
     hash = "sha256-leC3A4HQMeJNeZXArb3YAYr2mddGPcws618NrRh2Q1Y=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   propagatedBuildInputs = with python.pkgs; [
     cx-freeze
-    wxPython_4_2
+    wxpython
     pygame
   ];
 
@@ -73,6 +73,7 @@ in python.pkgs.buildPythonApplication {
 
   meta = {
     description = "ABC music notation editor";
+    mainProgram = "easyabc";
     homepage = "https://easyabc.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

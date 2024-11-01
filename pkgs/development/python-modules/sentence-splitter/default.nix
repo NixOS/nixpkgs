@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, pytestCheckHook
-, regex
+  pytestCheckHook,
+  regex,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-splitter";
   version = "1.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -20,22 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-FxRi8fhKB9++lCTFpCAug0fxjkSVTKChLY84vkshR34=";
   };
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sentence_splitter"
-  ];
+  pythonImportsCheck = [ "sentence_splitter" ];
 
   meta = with lib; {
     description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
     homepage = "https://github.com/mediacloud/sentence-splitter";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = [ ];
   };
 }

@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "xedit";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xorg/app";
     repo = "xedit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-WF+4avzRRL0+OA3KxzK7JwmArkPu9fEl+728R6ouXmg=";
+    sha256 = "sha256-0vP+aR8QBXAqbULOLEs7QXsehk18BJ405qoelrcepwE=";
   };
 
   # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for i in $(find . -type f -name "*.c"); do
       substituteInPlace $i --replace "finite" "isfinite"
     done
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "xedit";
   };
 }

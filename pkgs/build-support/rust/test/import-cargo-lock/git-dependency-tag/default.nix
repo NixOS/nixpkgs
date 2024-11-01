@@ -1,10 +1,19 @@
-{ rustPlatform }:
-
+{ lib, rustPlatform }:
+let
+  fs = lib.fileset;
+in
 rustPlatform.buildRustPackage {
   pname = "git-dependency-tag";
   version = "0.1.0";
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./Cargo.toml
+      ./Cargo.lock
+      ./src
+    ];
+  };
 
   cargoLock = {
     lockFile = ./Cargo.lock;

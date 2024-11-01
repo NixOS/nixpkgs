@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, xlsxwriter
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  xlsxwriter,
+  pillow,
 }:
 buildPythonPackage rec {
   pname = "python-pptx";
   version = "0.6.23";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scanny/python-pptx";
     description = "Create Open XML PowerPoint documents in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    maintainers = with maintainers; [ happysalada ];
   };
 }

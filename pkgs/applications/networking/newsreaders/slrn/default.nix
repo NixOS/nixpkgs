@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ slang ncurses openssl ];
 
   meta = with lib; {
-    description = "The slrn (S-Lang read news) newsreader";
+    description = "Slrn (S-Lang read news) newsreader";
     homepage = "https://slrn.sourceforge.net/index.html";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
     platforms = with platforms; linux;
   };

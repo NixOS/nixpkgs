@@ -1,11 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi
-, jinja2
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "jinja2-ansible-filters";
   version = "1.3.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,6 +30,6 @@ buildPythonPackage rec {
     description = "Jinja2 Ansible Filters";
     homepage = "https://pypi.org/project/jinja2-ansible-filters/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

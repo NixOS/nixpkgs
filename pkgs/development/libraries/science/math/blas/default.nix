@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blas";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
-    sha256 = "sha256-LZ/e59NhlU/uUyEApQ5gKCbJzBFT+M0Fe6pl7VfpAoM=";
+    sha256 = "sha256-zMQbXQiOUNsAMDF66bDJrzdXEME5KsrR/iCWAtpaWq0=";
   };
 
   passthru = { inherit blas64; };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libblas64${canonicalExtension} $out/lib/libblas${canonicalExtension}
   '';
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for fn in $(find $out/lib -name "*.so*"); do
       if [ -L "$fn" ]; then continue; fi
       install_name_tool -id "$fn" "$fn"

@@ -8,16 +8,9 @@ let
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
 in {
   options.services.nginx.sso = {
-    enable = mkEnableOption (lib.mdDoc "nginx-sso service");
+    enable = mkEnableOption "nginx-sso service";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.nginx-sso;
-      defaultText = literalExpression "pkgs.nginx-sso";
-      description = lib.mdDoc ''
-        The nginx-sso package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "nginx-sso" { };
 
     configuration = mkOption {
       type = types.attrsOf types.unspecified;
@@ -40,7 +33,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         nginx-sso configuration
         ([documentation](https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration))
         as a Nix attribute set.

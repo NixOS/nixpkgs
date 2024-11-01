@@ -24,12 +24,13 @@
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
+, fftwSupport ? true, fftw
 , potrace
+, coreutils
 , curl
 , ApplicationServices
 , Foundation
 , testers
-, imagemagick
 , nixos-icons
 , perlPackages
 , python3
@@ -49,13 +50,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-21";
+  version = "7.1.1-39";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-DqVonNh6bFNK91Pd6MwIO1yMrshfGAWNWPpHHQUA2sQ=";
+    hash = "sha256-3NUl0q/j3dBdNBtLH+69vh0elobBnTOvqQpC/2KwGBU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -64,14 +65,19 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = [
+    # specify delegates explicitly otherwise `convert` will invoke the build
+    # coreutils for filetypes it doesn't natively support.
+    "MVDelegate=${lib.getExe' coreutils "mv"}"
+    "RMDelegate=${lib.getExe' coreutils "rm"}"
     "--with-frozenpaths"
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
-    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
+    (lib.withFeature fftwSupport "fftw")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
     "--enable-static" "--disable-shared"
@@ -97,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
     ]
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];
@@ -109,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional lcms2Support lcms2
     ++ lib.optional libX11Support libX11
     ++ lib.optional libXtSupport libXt
-    ++ lib.optional libwebpSupport libwebp;
+    ++ lib.optional libwebpSupport libwebp
+    ++ lib.optional fftwSupport fftw;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -129,17 +136,20 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
     inherit nixos-icons;
     inherit (perlPackages) ImageMagick;
-    inherit (python3.pkgs) img2pdf;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    inherit (python3.pkgs) img2pdf willow;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      version = lib.head (lib.splitString "-" finalAttrs.version);
+    };
   };
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
     changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric bloxx12 ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

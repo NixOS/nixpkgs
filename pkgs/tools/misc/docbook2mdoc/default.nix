@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.0.9";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/docbook2mdoc/snapshots/${pname}-${version}.tgz";
+    url = "http://mdocml.bsd.lv/docbook2mdoc/snapshots/docbook2mdoc-${version}.tgz";
     sha256 = "07il80sg89xf6ym4bry6hxdacfzqgbwkxzyf7bjaihmw5jj0lclk";
   };
 
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ ramkromberg ];
+    mainProgram = "docbook2mdoc";
   };
 }

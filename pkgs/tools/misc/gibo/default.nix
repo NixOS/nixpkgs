@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/simonwhitaker/gibo";
     license = lib.licenses.publicDomain;
-    description = "A shell script for easily accessing gitignore boilerplates";
+    description = "Shell script for easily accessing gitignore boilerplates";
     platforms = lib.platforms.unix;
+    mainProgram = "gibo";
   };
 }

@@ -1,82 +1,82 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, gtest
-, nbval
-, numpy
-, parameterized
-, protobuf
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, tabulate
-, typing-extensions
-, abseil-cpp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  pybind11,
+  setuptools,
+
+  # buildInputs
+  abseil-cpp,
+  protobuf,
+  gtest,
+
+  # dependencies
+  numpy,
+
+  google-re2,
+  nbval,
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  tabulate,
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "onnx";
+    repo = "onnx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    pybind11
+    protobuf
+    setuptools
   ];
 
   buildInputs = [
     abseil-cpp
+    gtestStatic
+    pybind11
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     protobuf
     numpy
-    typing-extensions
   ];
 
   nativeCheckInputs = [
+    google-re2
     nbval
     parameterized
+    pillow
     pytestCheckHook
     tabulate
   ];
 
   postPatch = ''
+    rm -r third_party
+
     chmod +x tools/protoc-gen-mypy.sh.in
     patchShebangs tools/protoc-gen-mypy.sh.in
-
-    substituteInPlace setup.py \
-      --replace 'setup_requires.append("pytest-runner")' ""
-
-    # prevent from fetching & building own gtest
-    substituteInPlace CMakeLists.txt \
-      --replace 'include(googletest)' ""
-    substituteInPlace cmake/unittest.cmake \
-      --replace 'googletest)' ')'
-  '' + ''
-      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
-      substituteInPlace CMakeLists.txt \
-        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
   '';
 
   preConfigure = ''
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
     export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
+    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
     export ONNX_BUILD_TESTS=1
   '';
 
@@ -101,35 +101,7 @@ in buildPythonPackage rec {
 
   pytestFlagsArray = [
     "onnx/test"
-    "onnx/examples"
-  ];
-
-  disabledTests = [
-    # attempts to fetch data from web
-    "test_bvlc_alexnet_cpu"
-    "test_densenet121_cpu"
-    "test_inception_v1_cpu"
-    "test_inception_v2_cpu"
-    "test_resnet50_cpu"
-    "test_shufflenet_cpu"
-    "test_squeezenet_cpu"
-    "test_vgg19_cpu"
-    "test_zfnet512_cpu"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # AssertionError: Output 0 of test 0 in folder
-    "test__pytorch_converted_Conv2d_depthwise_padded"
-    "test__pytorch_converted_Conv2d_dilated"
-    "test_dft"
-    "test_dft_axis"
-    # AssertionError: Mismatch in test 'test_Conv2d_depthwise_padded'
-    "test_xor_bcast4v4d"
-    # AssertionError: assert 1 == 0
-    "test_ops_tested"
-  ];
-
-  disabledTestPaths = [
-    # Unexpected output fields from running code: {'stderr'}
-    "onnx/examples/np_array_tensorproto.ipynb"
+    "examples"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -139,14 +111,13 @@ in buildPythonPackage rec {
     .setuptools-cmake-build/onnx_gtests
   '';
 
-  pythonImportsCheck = [
-    "onnx"
-  ];
+  pythonImportsCheck = [ "onnx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ acairncross ];
+    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ acairncross ];
   };
 }

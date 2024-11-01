@@ -40,7 +40,6 @@ makeScopeWithSplicing' {
     attrs = {
       inherit libsForQt5;
       inherit (pkgs) config lib fetchurl;
-      gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
   in (lib.makeOverridable mkPlasma5 attrs);
@@ -80,6 +79,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   ### LIBRARIES
 
+  accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
+
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
   alkimia = callPackage ../development/libraries/alkimia { };
@@ -95,6 +96,18 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   drumstick = callPackage ../development/libraries/drumstick { };
 
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+
+  fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
+
+  fcitx5-configtool = callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+
+  fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
+
+  fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
+
+  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+
+  futuresql = callPackage ../development/libraries/futuresql { };
 
   qgpgme = callPackage ../development/libraries/gpgme { };
 
@@ -140,13 +153,14 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+  libopenshot = callPackage ../development/libraries/libopenshot {
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    python3 = pkgs.python311;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-  libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
+  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
@@ -156,11 +170,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqofono = callPackage ../development/libraries/libqofono { };
 
-  libqtav = callPackage ../development/libraries/libqtav { };
+  libquotient = callPackage ../development/libraries/libquotient { };
 
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
-
-  kpmcore = callPackage ../development/libraries/kpmcore { };
 
   mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
 
@@ -171,7 +183,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
   mlt = pkgs.mlt.override {
-    enableQt = true;
+    qt = qt5;
   };
 
   phonon = callPackage ../development/libraries/phonon { };
@@ -192,10 +204,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+  qca = callPackage ../development/libraries/qca {
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
+  qca-qt5 = self.qca;
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
@@ -224,7 +237,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
@@ -234,9 +247,13 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  quickflux = callPackage ../development/libraries/quickflux { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
@@ -245,6 +262,12 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
+
+  qzxing = callPackage ../development/libraries/qzxing { };
+
+  rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
+
+  sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   soqt = callPackage ../development/libraries/soqt { };
 
@@ -264,10 +287,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
+  xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
+
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
-  # remove after 23.11 branch-off and backport removal to 23.11
-  # 23.11 will have a warning for this in `makeScope` itself
-  overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+  # Remove completely before 24.11
+  overrideScope' = builtins.throw "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
 }));
 }

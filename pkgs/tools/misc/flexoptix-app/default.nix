@@ -1,11 +1,11 @@
 { lib, appimageTools, fetchurl, asar }: let
   pname = "flexoptix-app";
-  version = "5.16.0-latest";
+  version = "5.21.2-latest";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-A10r8IUB3zWKWmjen90vLXPF7V/Cgo+DhFn/Hsc1Nhg=";
+    hash = "sha256-BnNRwD09CE1EZDg3Hn3khN4FZ8Hj5LLAunk+NKU5BJo=";
   };
 
   udevRules = fetchurl {
@@ -19,7 +19,7 @@
 
       # Get rid of the autoupdater
       ${asar}/bin/asar extract $out/resources/app.asar app
-      sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
+      patch -p0 < ${./disable-autoupdate.patch}
       ${asar}/bin/asar pack app $out/resources/app.asar
     '';
   });
@@ -28,14 +28,10 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.hidapi
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = pkgs: [ pkgs.hidapi ];
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
-    mv $out/bin/{${pname}-*,${pname}}
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/flexoptix-app.desktop \

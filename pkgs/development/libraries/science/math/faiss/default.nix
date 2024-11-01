@@ -1,160 +1,120 @@
-{ lib
-, config
-, fetchFromGitHub
-, symlinkJoin
-, stdenv
-, cmake
-, cudaPackages ? { }
-, cudaSupport ? config.cudaSupport
-, nvidia-thrust
-, useThrustSourceBuild ? true
-, pythonSupport ? true
-, pythonPackages
-, llvmPackages
-, boost
-, blas
-, swig
-, addOpenGLRunpath
-, optLevel ? let
-    optLevels =
-      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
-      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
-      ++ [ "generic" ];
-  in
-  # Choose the maximum available optimization level
-  builtins.head optLevels
-, faiss # To run demos in the tests
-, runCommand
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  cudaPackages ? { },
+  cudaSupport ? config.cudaSupport,
+  pythonSupport ? true,
+  pythonPackages,
+  llvmPackages,
+  blas,
+  swig,
+  autoAddDriverRunpath,
+  optLevel ?
+    let
+      optLevels =
+        lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
+        ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
+        ++ [ "generic" ];
+    in
+    # Choose the maximum available optimization level
+    builtins.head optLevels,
 }@inputs:
-
-assert cudaSupport -> nvidia-thrust.cudaSupport;
 
 let
   pname = "faiss";
-  version = "1.7.4";
+  version = "1.9.0";
 
-  inherit (cudaPackages) cudaFlags backendStdenv;
-  inherit (cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages) flags backendStdenv;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
-  cudaJoined = symlinkJoin {
-    name = "cuda-packages-unsplit";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      libcublas
-      libcurand
-    ] ++ lib.optionals useThrustSourceBuild [
-      nvidia-thrust
-    ] ++ lib.optionals (!useThrustSourceBuild) [
-      cuda_cccl
-    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
-      cuda_profiler_api # cuda_profiler_api.h
-    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
-      cuda_nvprof # cuda_profiler_api.h
-    ];
-  };
+  cudaComponents = with cudaPackages; [
+    cuda_cudart # cuda_runtime.h
+    libcublas
+    libcurand
+    cuda_cccl
+
+    # cuda_profiler_api.h
+    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  outputs = [ "out" "demos" ];
+  outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
+    repo = "faiss";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P8TynU6jz5NbcWLdI7n4LX5Gdz0Ks72bmOzQ3LGjQCQ=";
   };
 
-  buildInputs = [
-    blas
-    swig
-  ] ++ lib.optionals pythonSupport [
-    pythonPackages.setuptools
-    pythonPackages.pip
-    pythonPackages.wheel
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport [
-    cudaJoined
-  ];
+  postPatch = lib.optionalString pythonSupport ''
+    substituteInPlace faiss/python/loader.py \
+      --replace-fail \
+      "# platform-dependent legacy fallback using numpy.distutils.cpuinfo" \
+      "return False"
+  '';
 
-  propagatedBuildInputs = lib.optionals pythonSupport [
-    pythonPackages.numpy
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ]
+    ++ lib.optionals pythonSupport [
+      pythonPackages.python
+      pythonPackages.setuptools
+      pythonPackages.pip
+    ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    addOpenGLRunpath
-  ] ++ lib.optionals pythonSupport [
-    pythonPackages.python
-  ];
+  buildInputs =
+    [
+      blas
+      swig
+    ]
+    ++ lib.optionals pythonSupport [ pythonPackages.numpy ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+    ++ lib.optionals cudaSupport cudaComponents;
 
-  passthru.extra-requires.all = [
-    pythonPackages.numpy
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
+      (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
+      (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
+    ];
 
-  cmakeFlags = [
-    "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
-    "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
-    "-DFAISS_OPT_LEVEL=${optLevel}"
-  ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
-    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
-  ];
-
+  buildFlags = [ "faiss" ] ++ lib.optionals pythonSupport [ "swigfaiss" ];
 
   # pip wheel->pip install commands copied over from opencv4
 
-  buildPhase = ''
-    make -j faiss
-    make demo_ivfpq_indexing
-  '' + lib.optionalString pythonSupport ''
-    make -j swigfaiss
+  postBuild = lib.optionalString pythonSupport ''
     (cd faiss/python &&
      python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
   '';
 
-  installPhase = ''
-    make install
-    mkdir -p $demos/bin
-    cp ./demos/demo_ivfpq_indexing $demos/bin/
-  '' + lib.optionalString pythonSupport ''
-    mkdir -p $out/${pythonPackages.python.sitePackages}
-    (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
+  postInstall = lib.optionalString pythonSupport ''
+    mkdir "$dist"
+    cp faiss/python/dist/*.whl "$dist/"
   '';
-
-  fixupPhase = lib.optionalString (pythonSupport && cudaSupport) ''
-    addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
-    addOpenGLRunpath $demos/bin/*
-  '';
-
-  # Need buildPythonPackage for this one
-  # pythonImportsCheck = [
-  #   "faiss"
-  # ];
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
-
-    tests = {
-      runDemos = runCommand "${pname}-run-demos"
-        { buildInputs = [ faiss.demos ]; }
-        # There are more demos, we run just the one that documentation mentions
-        ''
-          demo_ivfpq_indexing && touch $out
-        '';
-    } // lib.optionalAttrs pythonSupport {
-      pytest = pythonPackages.callPackage ./tests.nix { };
-    };
   };
 
-  meta = with lib; {
-    description = "A library for efficient similarity search and clustering of dense vectors by Facebook Research";
+  meta = {
+    description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
+    mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

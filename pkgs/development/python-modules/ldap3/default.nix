@@ -1,8 +1,16 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage, dos2unix, pyasn1 }:
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  dos2unix,
+  pyasn1,
+}:
 
 buildPythonPackage rec {
   pname = "ldap3";
   version = "2.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,8 +39,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ldap3";
-    description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library";
+    description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

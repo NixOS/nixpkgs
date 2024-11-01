@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/MJVL/slowlorust";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "slowlorust";
   };
 }

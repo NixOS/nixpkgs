@@ -1,40 +1,40 @@
-{ lib
-, aiohttp
-, asyncio-throttle
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-aiohttp
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  asyncio-throttle,
+  awesomeversion,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.7.0";
+  version = "4.7.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "aiohue";
     rev = "refs/tags/${version}";
-    hash = "sha256-t48rUPAM0XpbDreCwHU/smoyhPtxhwrpDkb1170GkQM=";
+    hash = "sha256-uS6pyJOntjbGa9UU1g53nuzgfP6AKAzN4meHrZY6Uic=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awesomeversion
     aiohttp
     asyncio-throttle

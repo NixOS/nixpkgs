@@ -1,18 +1,18 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index fb8fae3..998211f 100644
+index 93b3f40..e34ff5d 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -1,7 +1,7 @@
  # SPDX-License-Identifier: MIT
  
  [build-system]
--requires = ["hatchling", "hatch-vcs", "hatch-fancy-pypi-readme"]
+-requires = ["hatchling", "hatch-vcs", "hatch-fancy-pypi-readme>=23.2.0"]
 +requires = ["hatchling"]
  build-backend = "hatchling.build"
  
  
-@@ -26,7 +26,8 @@ classifiers = [
-     "Typing :: Typed",
+@@ -27,7 +27,8 @@ classifiers = [
+   "Typing :: Typed",
  ]
  dependencies = ["importlib_metadata;python_version<'3.8'"]
 -dynamic = ["version", "readme"]
@@ -20,8 +20,8 @@ index fb8fae3..998211f 100644
 +version = "@version@"
  
  [project.optional-dependencies]
- tests-no-zope = [
-@@ -67,50 +68,9 @@ Changelog = "https://www.attrs.org/en/stable/changelog.html"
+ tests-mypy = [
+@@ -76,54 +77,9 @@ GitHub = "https://github.com/python-attrs/attrs"
  Funding = "https://github.com/sponsors/hynek"
  Tidelift = "https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
  
@@ -65,10 +65,14 @@ index fb8fae3..998211f 100644
 -
 ----
 -
--[Full changelog](https://www.attrs.org/en/stable/changelog.html)
+-[Full changelog →](https://www.attrs.org/en/stable/changelog.html)
 -"""
 -
+-# Point sponsor image URLs to versions.
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+-pattern = 'docs\/_static\/sponsors'
+-replacement = 'https://www.attrs.org/en/$HFPR_VERSION/_static/sponsors'
 -
- # Make coverage play nicely with pytest-xdist.
- [tool.hatch.build.targets.wheel.hooks.autorun]
- dependencies = ["hatch-autorun"]
+ [[tool.sponcon.sponsors]]
+ title = "Variomedia AG"
+ url = "https://www.variomedia.de/"

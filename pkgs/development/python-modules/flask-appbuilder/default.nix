@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, apispec
-, colorama
-, click
-, email-validator
-, flask
-, flask-babel
-, flask-limiter
-, flask-login
-, flask-openid
-, flask-sqlalchemy
-, flask-wtf
-, flask-jwt-extended
-, jsonschema
-, marshmallow
-, marshmallow-enum
-, marshmallow-sqlalchemy
-, python-dateutil
-, pythonOlder
-, prison
-, pyjwt
-, pyyaml
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  apispec,
+  colorama,
+  click,
+  email-validator,
+  flask,
+  flask-babel,
+  flask-limiter,
+  flask-login,
+  flask-openid,
+  flask-sqlalchemy,
+  flask-wtf,
+  flask-jwt-extended,
+  jsonschema,
+  marshmallow,
+  marshmallow-sqlalchemy,
+  python-dateutil,
+  pythonOlder,
+  prison,
+  pyjwt,
+  pyyaml,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.3.6";
+  version = "4.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-jKlxD6fScEdH0ZXhG0h9RaVx9AVZ2DmdnV36QuofPHg=";
+    hash = "sha256-S2EmfYgCmZFZUcbNEghW4Qc0TO6KEb6DJyXCH5vcX1k=";
   };
 
   propagatedBuildInputs = [
@@ -53,7 +53,6 @@ buildPythonPackage rec {
     flask-jwt-extended
     jsonschema
     marshmallow
-    marshmallow-enum
     marshmallow-sqlalchemy
     python-dateutil
     prison
@@ -74,16 +73,14 @@ buildPythonPackage rec {
   # Majority of tests require network access or mongo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flask_appbuilder"
-  ];
+  pythonImportsCheck = [ "flask_appbuilder" ];
 
   meta = with lib; {
     description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
     broken = true;
   };

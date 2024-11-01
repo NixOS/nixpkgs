@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
-, capabilitiesSupport ? stdenv.isLinux
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
+, capabilitiesSupport ? stdenv.hostPlatform.isLinux
 , libcap_ng
 , libxcrypt
 , ncursesSupport ? true
@@ -12,24 +12,29 @@
 , translateManpages ? true
 , po4a
 , installShellFiles
-, writeSupport ? stdenv.isLinux
-, shadowSupport ? stdenv.isLinux
+, writeSupport ? stdenv.hostPlatform.isLinux
+, shadowSupport ? stdenv.hostPlatform.isLinux
 , memstreamHook
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.39.2";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-h6vfqo5JD4vm3el298gLm1/58wHhtn44meHwWlmhUx8=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    ./bcachefs-patch-set.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=77454e58d58f904cfdc02d3ca5bb65f1bd8739fc";
+      hash = "sha256-ELWC4bYN3rvn9XIN0XgCo55pXNfS2VpbZWuwzRLfO/0=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
   # the greater util-linux toolset.
   # Compatibility is maintained by symlinking the binaries from the
   # smaller outputs in the bin output.
-  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -92,7 +97,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     moveToOutput bin/mount "$mount"
     moveToOutput bin/umount "$mount"
     ln -svf "$mount/bin/"* $bin/bin/
@@ -102,13 +107,16 @@ stdenv.mkDerivation rec {
     moveToOutput sbin/sulogin "$login"
     prefix=$login _moveSbin
     ln -svf "$login/bin/"* $bin/bin/
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     moveToOutput sbin/swapon "$swap"
     moveToOutput sbin/swapoff "$swap"
     prefix=$swap _moveSbin
     ln -svf "$swap/bin/"* $bin/bin/
     '' + ''
+
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
     installShellCompletion --bash bash-completion/*
   '';
@@ -124,7 +132,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
-    description = "A set of system utilities for Linux";
+    description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];

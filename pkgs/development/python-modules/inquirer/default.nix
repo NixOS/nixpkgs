@@ -1,43 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# native
-, poetry-core
+  # native
+  poetry-core,
 
-# propagated
-, blessed
-, python-editor
-, readchar
+  # propagated
+  blessed,
+  editor,
+  readchar,
 
-# tests
-, pytest-mock
-, pytestCheckHook
-, pexpect
+  # tests
+  pytest-mock,
+  pytestCheckHook,
+  pexpect,
 }:
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.1.3";
-  format = "pyproject";
+  version = "3.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7GfHsCQgnDUdiM1z9YNdDuwMNy6rLjR1UTnZMgpQ5k4=";
+    hash = "sha256-vIW/rD22PFND9EPjS0YPbIauKgh9KHh1gXf1L8g/f10=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blessed
-    python-editor
+    editor
     readchar
   ];
 
@@ -47,13 +46,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
-  pythonImportsCheck = [
-    "inquirer"
-  ];
+  pythonImportsCheck = [ "inquirer" ];
 
   meta = with lib; {
-    description = "A collection of common interactive command line user interfaces, based on Inquirer.js";
+    description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
     homepage = "https://github.com/magmax/python-inquirer";
     changelog = "https://github.com/magmax/python-inquirer/releases/tag/v${version}";
     license = licenses.mit;

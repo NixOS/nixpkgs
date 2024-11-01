@@ -2,29 +2,16 @@
 , stdenv
 , vdr
 , fetchFromGitHub
-, graphicsmagick
-, pcre
-, xorgserver
 , ffmpeg
-, libiconv
-, boost
-, libgcrypt
-, perl
-, util-linux
-, groff
-, libva
-, xorg
-, ncurses
-, callPackage
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";
-  version = "3.3.6";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     repo = "vdr-plugin-markad";
     owner = "kfb77";
-    sha256 = "sha256-aHhQljWE1om/mILM+TXB9uPTrUwNNc4Loiejbakj9NU=";
+    sha256 = "sha256-O958GNQI6Z+m4sIJfGQzLaCrzyrdpn+ZY8COx7RoUZs=";
     rev = "V${version}";
   };
 
@@ -51,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Plugin for VDR that marks advertisements";
+    mainProgram = "markad";
     maintainers = [ maintainers.ck3d ];
     license = licenses.gpl2;
     inherit (vdr.meta) platforms;

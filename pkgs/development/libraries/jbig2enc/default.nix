@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, python3
 , leptonica
 , zlib
 , libwebp
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     leptonica
     zlib
     libwebp

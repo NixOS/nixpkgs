@@ -12,53 +12,52 @@
 , menhir
 , menhirLib
 , menhirSdk
+  # Each releases of Merlin support a limited range of versions of OCaml.
+, version ? {
+    "4.12.0" = "4.7-412";
+    "4.12.1" = "4.7-412";
+    "4.13.0" = "4.7-413";
+    "4.13.1" = "4.7-413";
+    "4.14.0" = "4.17.1-414";
+    "4.14.1" = "4.17.1-414";
+    "4.14.2" = "4.17.1-414";
+    "5.0.0" = "4.14-500";
+    "5.1.0" = "4.17.1-501";
+    "5.1.1" = "4.17.1-501";
+    "5.2.0" = "5.2.1-502";
+  }."${ocaml.version}"
 }:
 
 let
-  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.12" else "4.7";
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
     "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
-    "4.8-414" = "sha256-HMXWhcVOXW058y143rNBcfEOmjt2tZJXcXKHmKZ5i68=";
-    "4.8-500" = "sha256-n5NHKuo0/lZmfe7WskqnW3xm1S0PmXKSS93BDKrpjCI=";
-    "4.9-414" = "sha256-4j/EeBNZEmn/nSfIIJiOUgpmLIndCvfqZSshUXSZy/0=";
-    "4.9-500" = "sha256-uQfGazoxTxclHSiTfjji+tKJv8MKqRdHMPD/xfMZlSY=";
-    "4.10-414" = "sha256-/a1OqASISpb06eh2gsam1rE3wovM4CT8ybPV86XwR2c=";
-    "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
-    "4.12-414" = "sha256-tgMUT4KyFeJubYVY1Sdv9ZvPB1JwcqEGcCuwuMqXHRQ=";
-    "4.12-500" = "sha256-j49R7KVzNKlXDL7WibTHxPG4VSOVv0uaz5/yMZZjkH8=";
-    "4.12-501" = "sha256-zMwzI1SXQDWQ9PaKL4o3J6JlRjmEs7lkXrwauy+QiMA=";
+    "4.14-500" = "sha256-7CPzJPh1UgzYiX8wPMbU5ZXz1wAJFNQQcp8WuGrR1w4=";
+    "4.16-414" = "sha256-xekZdfPfVoSeGzBvNWwxcJorE519V2NLjSHkcyZvzy0=";
+    "4.16-501" = "sha256-2lvzCbBAZFwpKuRXLMagpwDb0rz8mWrBPI5cODbCHiY=";
+    "4.17.1-414" = "sha256-vz+AbvSGMgU4YdVLc73vlTm6QhivAh2LCsrY435kX8Y=";
+    "4.17.1-501" = "sha256-N2cHqocfCeljlFbT++S4miHJrXXHdOlMu75n+EKwpQA=";
+    "5.2.1-502" = "sha256-XALccbLTG2GYUcFKlluRxlCk281Jv1YATu5h4MWNWEw=";
   };
 
-  ocamlVersionShorthand =
-    let
-      v = lib.splitVersion ocaml.version;
-      major = builtins.elemAt v 0;
-      minor = builtins.elemAt v 1;
-      minor_prefix = if builtins.stringLength minor < 2 then "0" else "";
-    in "${toString major}${minor_prefix}${toString minor}";
-
-  version = "${merlinVersion}-${ocamlVersionShorthand}";
 in
-
-if !lib.hasAttr version hashes
-then builtins.throw "merlin ${merlinVersion} is not available for OCaml ${ocaml.version}"
-else
 
 buildDunePackage {
   pname = "merlin";
   inherit version;
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
     sha256 = hashes."${version}";
   };
 
-  patches = [
+  patches = let
+    old-patch = lib.versionOlder version "4.17";
+  in
+  [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = if old-patch then ./fix-paths.patch else ./fix-paths2.patch;
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_3}/bin/dune";
     })
@@ -89,7 +88,7 @@ buildDunePackage {
   '';
 
   meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
+    description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl maintainers.sternenseemann ];

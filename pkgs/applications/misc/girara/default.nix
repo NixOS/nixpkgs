@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.4.0";
+  version = "0.4.3";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "pwmt";
     repo = "girara";
     rev = version;
-    sha256 = "sha256-dzWdiFGJ45JcH+wNwq2P3NZeWwHXAvXR1eJC85mYy7M=";
+    hash = "sha256-/bJXdLXksTxUFC3w7zuBZY6Zh7tJxUJVbS87ENDQbDE=";
   };
 
   nativeBuildInputs = [
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.mesonEnable "tests" ((stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.hostPlatform.isDarwin)))
   ];
 
   checkPhase = ''

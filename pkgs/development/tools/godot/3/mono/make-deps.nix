@@ -9,7 +9,7 @@ godot3-mono.overrideAttrs (self: base: {
   nugetSource = null;
   nugetConfig = null;
 
-  shouldConfigureNuget = false;
+  keepNugetConfig = true;
 
   outputs = [ "out" ];
   buildPhase = " ";

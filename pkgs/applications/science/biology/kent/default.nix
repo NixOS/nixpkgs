@@ -13,27 +13,23 @@
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
-  version = "446";
+  version = "468";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = pname;
     rev = "v${version}_base";
-    hash = "sha256-d8gcoyMwINdHoD6xaNKt4rCKrKir99+i4KIzJ2YnxRw=";
+    hash = "sha256-OM/noraW2X8WV5wqWEFiI5/JPOBmsp0fTeDdcZoXxAA=";
   };
 
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
       --replace "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
       --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
-
-    runHook postPatch
   '';
 
   buildPhase = ''

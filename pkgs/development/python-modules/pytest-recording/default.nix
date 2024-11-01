@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-# install dependencies
-, pytest
-, vcrpy
-# test dependencies
-, hatchling
-, pytestCheckHook
-, pytest-httpbin
-, pytest-mock
-, requests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # install dependencies
+  pytest,
+  vcrpy,
+  # test dependencies
+  hatchling,
+  pytestCheckHook,
+  pytest-httpbin,
+  pytest-mock,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.13.0";
+  version = "0.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
-    rev = "v${version}";
-    hash = "sha256-SCHdzii6GYVWVY7MW/IW6CNZMuu5h/jXEj49P0jvhoE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-C6uNp3knKKY0AX7fQYU85N82L6kyyO4HcExTz1bBtpE=";
   };
 
   buildInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
-    vcrpy
-  ];
+  propagatedBuildInputs = [ vcrpy ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -43,23 +42,19 @@ buildPythonPackage rec {
     requests
   ];
 
-  disabledTests = [
-    "test_block_network_with_allowed_hosts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Missing socket.AF_NETLINK
-    "test_other_socket"
-  ];
+  disabledTests =
+    [ "test_block_network_with_allowed_hosts" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Missing socket.AF_NETLINK
+      "test_other_socket"
+    ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "pytest_recording"
-  ];
+  pythonImportsCheck = [ "pytest_recording" ];
 
   meta = with lib; {
-    description = "A pytest plugin that allows you recording of network interactions via VCR.py";
+    description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
     license = licenses.mit;
     maintainers = with maintainers; [ jbgosselin ];

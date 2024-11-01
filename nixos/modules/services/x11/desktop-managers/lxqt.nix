@@ -18,14 +18,14 @@ in
     services.xserver.desktopManager.lxqt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the LXQt desktop manager";
+      description = "Enable the LXQt desktop manager";
     };
 
     environment.lxqt.excludePackages = mkOption {
       default = [];
       example = literalExpression "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which LXQt packages to exclude from the default environment";
+      description = "Which LXQt packages to exclude from the default environment";
     };
 
   };
@@ -62,14 +62,16 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+
     # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
 
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
-    xdg.portal.lxqt.enable = true;
+    xdg.portal.lxqt.enable = mkDefault true;
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
     xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];

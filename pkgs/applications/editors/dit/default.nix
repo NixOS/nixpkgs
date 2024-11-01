@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses lua ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   # fix paths
   prePatch = ''
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A console text editor for Unix that you already know how to use";
+    description = "Console text editor for Unix that you already know how to use";
     homepage = "https://hisham.hm/dit/";
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ davidak ];
+    mainProgram = "dit";
   };
 }

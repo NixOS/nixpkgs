@@ -7,18 +7,18 @@
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.8.4";
+  version = "3.11.6";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    hash = "sha256-YfqIWPciFyPIpQypSDNEK2yXV1Ah9TiLiEzEFA/KcMw=";
+    hash = "sha256-jHACiSTZHNHj61kN8zEjGb3NpkhRJrJ7Mp0pNmJXDXY=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-HgUHxfFchqarVMmxbEg1gRN9vSkEx48aSy1yreux9fs=";
+    hash = "sha256-h4i27yNnVU+h5/oboAq6S4+dqjkvJ6TFqtljM3ffgTI=";
   };
 
   packageJSON = ./package.json;
@@ -59,7 +59,8 @@ mkYarnPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/grafana/grafana-image-renderer";
-    description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
+    description = "Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
+    mainProgram = "grafana-image-renderer";
     license = licenses.asl20;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.all;

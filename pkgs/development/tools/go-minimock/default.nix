@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "go-minimock";
-  version = "3.1.3";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "gojuno";
     repo = "minimock";
     rev = "v${version}";
-    sha256 = "sha256-6n5FOHTfsLYqnhlDO3etMnrypeOElmwdvoFQb3aSBts=";
+    hash = "sha256-YwaC+saod1IoVj6fc6Zucwy83XhnPgqaOp1IcxEmlaw=";
   };
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-fiSU2NB9rWIPQLdnui5CB5VcadTVUg2JaO3ma7DAYqo=";
+  vendorHash = "sha256-0dqbDG/fKaznxeVMSVCEtkQn76dOso6XBiw6xlKqgwM=";
 
   doCheck = true;
 
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/gojuno/minimock";
-    description = "A golang mock generator from interfaces";
+    description = "Golang mock generator from interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ svrana ];
     mainProgram = "minimock";

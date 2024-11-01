@@ -1,22 +1,25 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, trufflehog
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  trufflehog,
 }:
 
 buildGoModule rec {
   pname = "trufflehog";
-  version = "3.63.1";
+  version = "3.82.13";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YZH3f5m/7RFf8acmDCw4wQY6LgI98I+5kTIwEFkTwiI=";
+    hash = "sha256-QAo6BvkqG0EklyKLRMExNv+AZZeuTELYY0FdP8LDbZs=";
   };
 
-  vendorHash = "sha256-+Boe/bzCsmihspGqmiJ3jOcRJ9KPjkzu6MBmgtAgwjE=";
+  vendorHash = "sha256-P/Kt/ZLdjiULcRIXRVfUT9nkDGpl46VHRkeqt0mwaWc=";
+
+  proxyVendor = true;
 
   ldflags = [
     "-s"
@@ -32,9 +35,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = trufflehog;
-    };
+    tests.version = testers.testVersion { package = trufflehog; };
   };
 
   meta = with lib; {

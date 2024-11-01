@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diamond";
-  version = "2.1.8";
+  version = "2.1.10";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
-    sha256 = "sha256-6L/eS3shfJ33bsXo1BaCO4lKklh2KbOIO2tZsvwcjnA=";
+    sha256 = "sha256-rNwoHb2jbQwL1bnP5KsI/SsHNN9EeXzsGnMpFhXrc1o=";
   };
 
 
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Accelerated BLAST compatible local sequence aligner";
+    mainProgram = "diamond";
     longDescription = ''
       DIAMOND is a sequence aligner for protein and translated DNA searches, designed for high performance analysis of big sequence data. The key features are:
       - Pairwise alignment of proteins and translated DNA at 100x-10,000x speed of BLAST.

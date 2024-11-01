@@ -1,63 +1,71 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, isPyPy
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  isPyPy,
 
-# propagates
-, markupsafe
+  # build-system
+  setuptools,
 
-# extras: Babel
-, babel
+  # propagates
+  markupsafe,
 
-# tests
-, mock
-, pytestCheckHook
-, lingua
-, chameleon
+  # optional-dependencies
+  babel,
+  lingua,
+
+  # tests
+  chameleon,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.2.4";
+  version = "1.3.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Mako";
     inherit version;
-    hash = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
+    hash = "sha256-SNvCBWjB0naiaYs22Wj6dhYb8ScZSQfqb8WU+oH5Q7w=";
   };
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    babel = [
-      babel
-    ];
+  propagatedBuildInputs = [ markupsafe ];
+
+  optional-dependencies = {
+    babel = [ babel ];
+    lingua = [ lingua ];
   };
 
   nativeCheckInputs = [
     chameleon
-    lingua
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.babel;
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = lib.optionals isPyPy [
-    # https://github.com/sqlalchemy/mako/issues/315
-    "test_alternating_file_names"
-    # https://github.com/sqlalchemy/mako/issues/238
-    "test_file_success"
-    "test_stdin_success"
-    # fails on pypy2.7
-    "test_bytestring_passthru"
-  ];
+  disabledTests =
+    lib.optionals isPyPy [
+      # https://github.com/sqlalchemy/mako/issues/315
+      "test_alternating_file_names"
+      # https://github.com/sqlalchemy/mako/issues/238
+      "test_file_success"
+      "test_stdin_success"
+      # fails on pypy2.7
+      "test_bytestring_passthru"
+    ]
+    # https://github.com/sqlalchemy/mako/issues/408
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "test_future_import";
 
   meta = with lib; {
     description = "Super-fast templating language";
+    mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
     license = licenses.mit;

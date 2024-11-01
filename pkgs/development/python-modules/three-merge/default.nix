@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, diff-match-patch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  diff-match-patch,
+}:
 
 buildPythonPackage rec {
   pname = "three-merge";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +25,6 @@ buildPythonPackage rec {
     description = "Simple library for merging two strings with respect to a base one";
     homepage = "https://github.com/spyder-ide/three-merge";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

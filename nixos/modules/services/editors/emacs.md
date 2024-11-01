@@ -172,17 +172,17 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 :::
 
 If you are on NixOS, you can install this particular Emacs for all users by
-adding it to the list of system packages (see
-[](#sec-declarative-package-mgmt)). Simply modify your file
-{file}`configuration.nix` to make it contain:
+putting the `emacs.nix` file in `/etc/nixos` and adding it to the list of
+system packages (see [](#sec-declarative-package-mgmt)). Simply modify your
+file {file}`configuration.nix` to make it contain:
 ::: {.example #module-services-emacs-configuration-nix}
 ### Custom Emacs in `configuration.nix`
 
-```
+```nix
 {
  environment.systemPackages = [
    # [...]
-   (import /path/to/emacs.nix { inherit pkgs; })
+   (import ./emacs.nix { inherit pkgs; })
   ];
 }
 ```
@@ -197,16 +197,16 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
 -->
 
 If you are not on NixOS or want to install this particular Emacs only for
-yourself, you can do so by adding it to your
-{file}`~/.config/nixpkgs/config.nix` (see
+yourself, you can do so by putting `emacs.nix` in `~/.config/nixpkgs` and
+adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 [Nixpkgs manual](https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides)):
 ::: {.example #module-services-emacs-config-nix}
 ### Custom Emacs in `~/.config/nixpkgs/config.nix`
 
-```
+```nix
 {
   packageOverrides = super: let self = super.pkgs; in {
-    myemacs = import /path/to/emacs.nix { pkgs = self; };
+    myemacs = import ./emacs.nix { pkgs = self; };
   };
 }
 ```
@@ -228,7 +228,7 @@ only use {command}`emacsclient`), you can change your file
 ::: {.example #ex-emacsGtk3Nix}
 ### Custom Emacs build
 
-```
+```nix
 { pkgs ? import <nixpkgs> {} }:
 let
   myEmacs = (pkgs.emacs.override {
@@ -242,7 +242,7 @@ let
       rm $out/share/applications/emacs.desktop
     '';
   });
-in [...]
+in [ /* ... */ ]
 ```
 :::
 
@@ -262,9 +262,10 @@ with the user's login session.
 
 To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
-```
-services.emacs.enable = true;
-services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
+```nix
+{
+  services.emacs.enable = true;
+}
 ```
 
 The {var}`services.emacs.package` option allows a custom
@@ -324,9 +325,11 @@ In general, {command}`systemd` user services are globally enabled
 by symlinks in {file}`/etc/systemd/user`. In the case where
 Emacs daemon is not wanted for all users, it is possible to install the
 service but not globally enable it:
-```
-services.emacs.enable = false;
-services.emacs.install = true;
+```nix
+{
+  services.emacs.enable = false;
+  services.emacs.install = true;
+}
 ```
 
 To enable the {command}`systemd` user service for just the
@@ -363,44 +366,3 @@ convenient if you regularly edit Nix files.
 You can use `woman` to get completion of all available
 man pages. For example, type `M-x woman <RET> nixos-rebuild <RET>.`
 
-### Editing DocBook 5 XML Documents {#sec-emacs-docbook-xml}
-
-Emacs includes
-[nXML](https://www.gnu.org/software/emacs/manual/html_node/nxml-mode/Introduction.html),
-a major-mode for validating and editing XML documents. When editing DocBook
-5.0 documents, such as [this one](#book-nixos-manual),
-nXML needs to be configured with the relevant schema, which is not
-included.
-
-To install the DocBook 5.0 schemas, either add
-{var}`pkgs.docbook5` to [](#opt-environment.systemPackages)
-([NixOS](#sec-declarative-package-mgmt)), or run
-`nix-env -f '<nixpkgs>' -iA docbook5`
-([Nix](#sec-ad-hoc-packages)).
-
-Then customize the variable {var}`rng-schema-locating-files` to
-include {file}`~/.emacs.d/schemas.xml` and put the following
-text into that file:
-::: {.example #ex-emacs-docbook-xml}
-### nXML Schema Configuration (`~/.emacs.d/schemas.xml`)
-
-```xml
-<?xml version="1.0"?>
-<!--
-  To let emacs find this file, evaluate:
-  (add-to-list 'rng-schema-locating-files "~/.emacs.d/schemas.xml")
--->
-<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
-  <!--
-    Use this variation if pkgs.docbook5 is added to environment.systemPackages
-  -->
-  <namespace ns="http://docbook.org/ns/docbook"
-             uri="/run/current-system/sw/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
-  <!--
-    Use this variation if installing schema with "nix-env -iA pkgs.docbook5".
-  <namespace ns="http://docbook.org/ns/docbook"
-             uri="../.nix-profile/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
-  -->
-</locatingRules>
-```
-:::

@@ -1,54 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, numpy
-, setuptools
-, setuptools-scm
-, six
-, glibcLocales
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glibcLocales,
+  importlib-metadata,
+  packaging,
+  htslib,
+  fsspec,
+  pytestCheckHook,
+  biopython,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.7.2.2";
-  format = "pyproject";
+  version = "0.8.1.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O3aTwFLIJpEAD+SpJHXbgv/DtachoSsQ37yHEZxLTTA=";
+  src = fetchFromGitHub {
+    owner = "mdshw5";
+    repo = "pyfaidx";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PKcopIu/0ko4Jl2+G0ZivZXvMwACeIFFFlPt5dlDDfQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    six
+  dependencies = [
+    importlib-metadata
+    packaging
   ];
 
   nativeCheckInputs = [
-    glibcLocales
-    nose
-    numpy
     pytestCheckHook
+    biopython
+    htslib
+    fsspec
+    glibcLocales
   ];
 
-  disabledTestPaths = [
-    # FileNotFoundError: [Errno 2] No such file or directory: 'data/genes.fasta.gz'
-    "tests/test_Fasta_bgzip.py"
-  ];
+  pythonImportsCheck = [ "pyfaidx" ];
 
-  pythonImportsCheck = [
-    "pyfaidx"
-  ];
+  preCheck = ''
+    bgzip --keep tests/data/genes.fasta
+  '';
 
-  meta = with lib; {
-    homepage = "https://github.com/mdshw5/pyfaidx";
+  meta = {
     description = "Python classes for indexing, retrieval, and in-place modification of FASTA files using a samtools compatible index";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jbedo ];
+    homepage = "https://github.com/mdshw5/pyfaidx";
+    changelog = "https://github.com/mdshw5/pyfaidx/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jbedo ];
+    mainProgram = "faidx";
   };
 }

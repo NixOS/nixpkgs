@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , pkg-config
@@ -22,14 +23,17 @@
 , libXinerama
 , libXcursor
 , libXpresent
+, libXdmcp
 
 , wayland
 , wayland-protocols
+, wayland-scanner
 
 , pipewire
 , pulseaudio
 , libsamplerate
 
+, openGLSupport ? true
 , xorgSupport ? true
 , waylandSupport ? true
 , pipewireSupport ? true
@@ -43,38 +47,46 @@ let
     type = "Application";
     exec = "looking-glass-client";
     icon = "lg-logo";
-    terminal = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "looking-glass-client";
-  version = "B6";
+  version = "B7-rc1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
-    rev = version;
-    sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
+    rev = finalAttrs.version;
+    hash = "sha256-ne1Q+67+P8RHcTsqdiSSwkFf0g3pSNT91WN/lsSzssU=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  patches = [
+    # Fix failing cmake assertion when disabling X11 whithout explicitly enabling Wayland.
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/20972cfd9b940fddf9e7f3d2887a271d16398979.patch";
+      hash = "sha256-CqB8AmOZ4YxnEsQkyu/ZEaun6ywpSh4B7PM+MFJF0qU=";
+      stripLen = 1;
+    })
+  ];
 
-  buildInputs = [ libGL libX11 freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
-    ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr ]
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
+
+  buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
+    ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]
     ++ lib.optionals waylandSupport [ libxkbcommon wayland wayland-protocols ]
     ++ lib.optionals pipewireSupport [ pipewire libsamplerate ]
     ++ lib.optionals pulseSupport [ pulseaudio libsamplerate ];
 
   cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ]
-    ++ lib.optional (!xorgSupport) "-DENABLE_X11=no"
-    ++ lib.optional (!waylandSupport) "-DENABLE_WAYLAND=no"
-    ++ lib.optional (!pulseSupport) "-DENABLE_PULSEAUDIO=no"
-    ++ lib.optional (!pipewireSupport) "-DENABLE_PIPEWIRE=no";
-
+    ++ lib.optionals (!openGLSupport) [ "-DENABLE_OPENGL=no" ]
+    ++ lib.optionals (!xorgSupport) [ "-DENABLE_X11=no" ]
+    ++ lib.optionals (!waylandSupport) [ "-DENABLE_WAYLAND=no" ]
+    ++ lib.optionals (!pulseSupport) [ "-DENABLE_PULSEAUDIO=no" ]
+    ++ lib.optionals (!pipewireSupport) [ "-DENABLE_PIPEWIRE=no" ];
 
   postUnpack = ''
-    echo ${src.rev} > source/VERSION
+    echo ${finalAttrs.src.rev} > source/VERSION
     export sourceRoot="source/client"
   '';
 
@@ -85,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A KVM Frame Relay (KVMFR) implementation";
+    description = "KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
       (Kernel-based Virtual Machine) configured for VGA PCI Pass-through
@@ -99,4 +111,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ alexbakker babbaj j-brn ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

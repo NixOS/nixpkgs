@@ -5,6 +5,8 @@
 , meson
 , ninja
 , pkg-config
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 , gi-docgen
 , python3
@@ -23,15 +25,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.4.8";
+  version = "0.4.9";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libgusb";
     rev = "refs/tags/${version}";
-    hash = "sha256-xhWx45uOh8Yokd3/32CQ6tsdkgGaYUOvaylrq/jmoP0=";
+    hash = "sha256-piIPNLc3deToyQaajXFvM+CKh9ni8mb0P3kb+2RoJOs=";
   };
 
   patches = [
@@ -51,6 +54,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     gi-docgen
     vala
@@ -64,7 +68,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    (lib.mesonBool "docs" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "tests" doCheck)
+    (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonOption "usb_ids" "${hwdata}/share/hwdata/usb.ids")
   ];
 
@@ -76,12 +83,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    ls -la "$out/share/doc"
     moveToOutput "share/doc" "$devdoc"
   '';
 
   meta = with lib; {
     description = "GLib libusb wrapper";
+    mainProgram = "gusbcmd";
     homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;
     maintainers = [ maintainers.marcweber ];

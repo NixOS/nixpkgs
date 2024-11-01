@@ -54,7 +54,7 @@ mkYarnPackage rec {
   };
 
   meta = with lib; {
-    description = "A moderation tool for Matrix";
+    description = "Moderation tool for Matrix";
     homepage = "https://github.com/matrix-org/mjolnir";
     longDescription = ''
       As an all-in-one moderation tool, it can protect your server from
@@ -72,5 +72,6 @@ mkYarnPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "mjolnir";
   };
 }

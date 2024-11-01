@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, libnotify
-, gdk-pixbuf, libnotifySupport ? stdenv.isLinux, debug ? false }:
+, gdk-pixbuf, libnotifySupport ? stdenv.hostPlatform.isLinux, debug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "cmusfm";
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ CharlesHD mudri ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "cmusfm";
   };
 }

@@ -9,14 +9,14 @@
 import ./make-test-python.nix {
   name = "avahi";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes = let
     cfg = { ... }: {
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish.addresses = true;
         publish.domain = true;
         publish.enable = true;
@@ -75,5 +75,7 @@ import ./make-test-python.nix {
     one.succeed("test `wc -l < out` -gt 0")
     two.succeed("avahi-browse -r -t _ssh._tcp | tee out >&2")
     two.succeed("test `wc -l < out` -gt 0")
+
+    one.log(one.execute("systemd-analyze security avahi-daemon.service | grep -v ✓")[1])
   '';
 } args

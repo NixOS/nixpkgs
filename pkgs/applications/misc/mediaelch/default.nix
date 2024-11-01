@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , qttools
@@ -24,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.10.4";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    hash = "sha256-gNpnmyUKDXf40+1JmJzNyEPIv/DO8b3CdJAphheEvTU=";
+    hash = "sha256-m2d4lnyD8HhhqovMdeG36dMK+4kJA7rlPHE2tlhfevo=";
     fetchSubmodules = true;
   };
 
@@ -70,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
+    mainProgram = "MediaElch";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;

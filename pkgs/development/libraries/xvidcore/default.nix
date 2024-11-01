@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Configure script is not in the root of the source directory
     cd build/generic
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Undocumented darwin hack
     substituteInPlace configure --replace "-no-cpp-precomp" ""
   '';
@@ -20,27 +20,32 @@ stdenv.mkDerivation rec {
   configureFlags = [ ]
     # Undocumented darwin hack (assembly is probably disabled due to an
     # issue with nasm, however yasm is now used)
-    ++ lib.optional stdenv.isDarwin "--enable-macosx_module --disable-assembly";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-macosx_module --disable-assembly";
 
   nativeBuildInputs = [ ]
-    ++ lib.optional (!stdenv.isDarwin) yasm;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) yasm;
 
   buildInputs = [ ]
     # Undocumented darwin hack
-    ++ lib.optionals stdenv.isDarwin [ autoconf automake libtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ autoconf automake libtool ];
 
   # Don't remove static libraries (e.g. 'libs/*.a') on darwin.  They're needed to
   # compile ffmpeg (and perhaps other things).
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     rm $out/lib/*.a
+  '';
+
+  # Dependants of xvidcore don't know to look in bin for dependecies. Link them
+  # in lib so other depedants of xvidcore can find the dlls.
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
   '';
 
   meta = with lib; {
     description = "MPEG-4 video codec for PC";
-    homepage    = "https://www.xvid.com/";
-    license     = licenses.gpl2;
+    homepage = "https://www.xvid.com/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
-

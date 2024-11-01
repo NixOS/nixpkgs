@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dwm-status;
 
-  order = concatMapStringsSep "," (feature: ''"${feature}"'') cfg.order;
+  order = lib.concatMapStringsSep "," (feature: ''"${feature}"'') cfg.order;
 
   configFile = pkgs.writeText "dwm-status.toml" ''
     order = [${order}]
@@ -22,29 +19,23 @@ in
 
     services.dwm-status = {
 
-      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
+      enable = lib.mkEnableOption "dwm-status user service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.dwm-status;
-        defaultText = literalExpression "pkgs.dwm-status";
-        example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = lib.mdDoc ''
-          Which dwm-status package to use.
-        '';
+      package = lib.mkPackageOption pkgs "dwm-status" {
+        example = "dwm-status.override { enableAlsaUtils = false; }";
       };
 
-      order = mkOption {
-        type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = lib.mdDoc ''
+      order = lib.mkOption {
+        type = lib.types.listOf (lib.types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
+        description = ''
           List of enabled features in order.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra config in TOML format.
         '';
       };
@@ -56,9 +47,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.upower.enable = elem "battery" cfg.order;
+    services.upower.enable = lib.elem "battery" cfg.order;
 
     systemd.user.services.dwm-status = {
       description = "Highly performant and configurable DWM status service";

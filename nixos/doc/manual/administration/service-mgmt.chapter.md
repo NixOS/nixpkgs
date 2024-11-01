@@ -82,7 +82,9 @@ In order to enable a systemd *system* service with provided upstream
 package, use (e.g):
 
 ```nix
-systemd.packages = [ pkgs.packagekit ];
+{
+  systemd.packages = [ pkgs.packagekit ];
+}
 ```
 
 Usually NixOS modules written by the community do the above, plus take

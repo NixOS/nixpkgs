@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     "TestNoResponseFailure"
     "TestProcessMonitor"
     "TestSocketConnection"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_time_repeater"
   ];
 
@@ -56,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Network protocol fuzzing tool";
+    mainProgram = "boo";
     homepage = "https://github.com/jtpereyda/boofuzz";
     changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ gpl2Plus ];

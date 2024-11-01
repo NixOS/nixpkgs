@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-scrollkeeper" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unused-but-set-variable";
+
   nativeBuildInputs = [
     pkg-config bison flex autoreconfHook txt2man which
   ];
@@ -26,8 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = ".mdb (MS Access) format tools";
-    license = with licenses; [ gpl2 lgpl2 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [ gpl2Plus lgpl2 ];
+    maintainers = [ ];
     platforms = platforms.unix;
     inherit (src.meta) homepage;
   };

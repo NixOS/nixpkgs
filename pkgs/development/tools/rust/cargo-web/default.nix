@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, perl, pkg-config, rustPlatform
-, CoreServices, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  perl,
+  pkg-config,
+  rustPlatform,
+  CoreServices,
+  Security,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,15 +22,34 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1dl5brj5fnmxmwl130v36lvy4j64igdpdvjwmxw3jgg2c6r6b7cd";
   };
 
-  cargoSha256 = "0q7yxvvngfvn4s889qzp1qnsw2c6qy2ryv9vz9cxhmqidx4dg4va";
+  patches = [
+    (fetchpatch {
+      name = "fix-qualified-path.patch";
+      url = "https://github.com/koute/cargo-web/commit/c9584542163d60d0aae6d6890509794e838e257f.patch";
+      hash = "sha256-w59fXmrszptKt0llqGt0AF+0b3r9N6xUY6zQkpZnemE=";
+    })
+  ];
 
-  nativeBuildInputs = [ openssl perl pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  cargoHash = "sha256-apPXSG8RV9hZ+jttn4XHhgmuLQ7344SQJna7Z/fu/mA=";
+
+  nativeBuildInputs = [
+    openssl
+    perl
+    pkg-config
+  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreServices
+    Security
+  ];
 
   meta = with lib; {
-    description = "A Cargo subcommand for the client-side Web";
+    description = "Cargo subcommand for the client-side Web";
+    mainProgram = "cargo-web";
     homepage = "https://github.com/koute/cargo-web";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ kevincox ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ clevor ];
   };
 }

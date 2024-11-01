@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.13";
+  version = "0.14.17";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-PU9Yfanmyr4nAQMQu/unBQSQCvV2hyo0i8lR0MnuFcA=";
+    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
   };
 
   configureFlags = [
@@ -70,13 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libiconv
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   passthru = {
     # So it will be easier to inspect this environment, in comparison to others
     inherit luaEnv;
     # Copied from Makefile.am
-    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
+    tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
       runCommand "sile-test"
         {
           nativeBuildInputs = [ poppler_utils sile ];
@@ -90,11 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs build-aux/*.sh
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
       if isELF "$f"; then
         patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    description = "A typesetting system";
+    description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
       printed documents. Conceptually, SILE is similar to TeX—from

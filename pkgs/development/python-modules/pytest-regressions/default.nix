@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, matplotlib
-, numpy
-, pandas
-, pillow
-, pytest
-, pytest-datadir
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  matplotlib,
+  numpy,
+  pandas,
+  pillow,
+  pytest,
+  pytest-datadir,
+  pytestCheckHook,
+  pyyaml,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -25,34 +26,45 @@ buildPythonPackage rec {
     hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    numpy
-    pandas
-    pillow
     pytest-datadir
     pyyaml
   ];
 
-
   nativeCheckInputs = [
-    pytestCheckHook
     matplotlib
+    pandas
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
   ];
+
+  optional-dependencies = {
+    dataframe = [
+      pandas
+      numpy
+    ];
+    image = [
+      numpy
+      pillow
+    ];
+    num = [
+      numpy
+      pandas
+    ];
+  };
 
   meta = with lib; {
     description = "Pytest fixtures to write regression tests";
@@ -64,6 +76,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

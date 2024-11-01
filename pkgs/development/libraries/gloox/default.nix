@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec{
   pname = "gloox";
-  version = "1.0.27";
+  version = "1.0.28";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "sha256-C4tzcUObxY2eUThLYWyWSxi3tBuHrxt4VRBDgO2ob/s=";
+    sha256 = "sha256-WRvRLCSe3gtQoe9rmawN6O+cG6T9Lhhvl6dAIVzFlmw=";
   };
 
   # needed since gcc12
@@ -27,10 +27,11 @@ stdenv.mkDerivation rec{
     ++ lib.optional idnSupport libidn;
 
   meta = with lib; {
-    description = "A portable high-level Jabber/XMPP library for C++";
+    description = "Portable high-level Jabber/XMPP library for C++";
+    mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,65 +1,41 @@
 { buildPackages
 , db
 , fetchurl
-, fetchpatch
 , groff
 , gzip
 , lib
 , libiconv
+, libiconvReal
 , libpipeline
 , makeWrapper
 , nixosTests
 , pkg-config
 , stdenv
 , zstd
-, autoreconfHook
 }:
 
+let
+  libiconv' = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
+in
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.11.2";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-z/oe5Ol0vnhkbEZQjm3S8358WJqqspOMwQZPBY/vn40=";
+    hash = "sha256-gvBzn09hqrXrk30jTeOwFOd3tVOKKMvTFDPEWuCa77k=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeBuildInputs = [ groff makeWrapper pkg-config zstd ];
+  buildInputs = [ libpipeline db groff libiconv' ]; # (Yes, 'groff' is both native and build input)
+  nativeCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
-    # Remove the patches below when updating to the next man-db release.
-    # Patches addressing https://gitlab.com/man-db/man-db/-/issues/25 ...
-    (fetchpatch {
-      name = "update-warning-regex";
-      url = "https://gitlab.com/man-db/man-db/-/commit/b12ffb9df7.patch";
-      hash = "sha256-F+whRppaMZwgmGPKTXu2j1vZMNAm3vGNzNZcz9pg8Jc=";
-    })
-    (fetchpatch {
-      name = "fix-test-failures-when-iconv-not-available";
-      url = "https://gitlab.com/man-db/man-db/-/commit/26f46a60e5.patch";
-      hash = "sha256-W1a6GkYn4J3py7GLZc37xmQBQR18Xvcvj4fJoZ21+0k=";
-      # The following files are excluded from the patch as they fail to apply
-      # cleanly on the 2.11.2 sources and are deemed irrelevant for building man-db.
-      excludes = [ "NEWS.md" ];
-    })
-    # ... and https://gitlab.com/man-db/man-db/-/issues/26.
-    (fetchpatch {
-      name = "improve-lexgrog-portability";
-      url = "https://gitlab.com/man-db/man-db/-/commit/bbf7701c4f.patch";
-      hash = "sha256-QLOVgV0S2NxxTBObD8bJFR1QDH0p2RGMJXLVNagfddc=";
-    })
-    (fetchpatch {
-      name = "avoid-translation-fallout-from-lexgrog-fix";
-      url = "https://gitlab.com/man-db/man-db/-/commit/043c3cb83c.patch";
-      hash = "sha256-w12/LOGN9gO85zmqX7zookA55w3WUxBMJgWInpH5wms=";
-    })
   ];
 
   postPatch = ''
@@ -86,6 +62,8 @@ stdenv.mkDerivation rec {
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
   ];
 
   preConfigure = ''
@@ -116,8 +94,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
-    description = "An implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2;
+    description = "Implementation of the standard Unix documentation system accessed using the man command";
+    license = licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };

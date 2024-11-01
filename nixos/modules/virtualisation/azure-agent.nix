@@ -11,7 +11,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -19,15 +18,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
+      description = "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable verbose logging.";
+      description = "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 
@@ -35,13 +34,9 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [{
-      assertion = pkgs.stdenv.hostPlatform.isx86;
-      message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-    }
-      {
-        assertion = config.networking.networkmanager.enable == false;
-        message = "Windows Azure Linux Agent is not compatible with NetworkManager";
-      }];
+      assertion = config.networking.networkmanager.enable == false;
+      message = "Windows Azure Linux Agent is not compatible with NetworkManager";
+    }];
 
     boot.initrd.kernelModules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];
@@ -202,6 +197,13 @@ in
 
     services.udev.packages = [ pkgs.waagent ];
 
+    # Provide waagent-shipped udev rules in initrd too.
+    boot.initrd.services.udev.packages = [ pkgs.waagent ];
+    # udev rules shell out to chmod, cut and readlink, which are all
+    # provided by pkgs.coreutils, which is in services.udev.path, but not
+    # boot.initrd.services.udev.binPackages.
+    boot.initrd.services.udev.binPackages = [ pkgs.coreutils ];
+
     networking.dhcpcd.persistent = true;
 
     services.logrotate = {
@@ -244,6 +246,27 @@ in
       path = [
         pkgs.e2fsprogs
         pkgs.bash
+
+        pkgs.findutils
+        pkgs.gnugrep
+        pkgs.gnused
+        pkgs.iproute2
+        pkgs.iptables
+
+        # for hostname
+        pkgs.nettools
+
+        pkgs.openssh
+        pkgs.openssl
+        pkgs.parted
+
+        # for pidof
+        pkgs.procps
+
+        # for useradd, usermod
+        pkgs.shadow
+
+        pkgs.util-linux # for (u)mount, fdisk, sfdisk, mkswap
 
         # waagent's Microsoft.OSTCExtensions.VMAccessForLinux needs Python 3
         pkgs.python39

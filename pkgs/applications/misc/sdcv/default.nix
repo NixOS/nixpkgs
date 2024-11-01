@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib gettext readline ];
 
+  postPatch = ''
+    # https://github.com/Dushistov/sdcv/pull/104
+    substituteInPlace src/stardict_lib.cpp --replace-fail \
+      "gchar *nextchar = g_utf8_next_char(sWord)" \
+      "gchar *nextchar = const_cast<gchar*>(g_utf8_next_char(sWord))"
+  '';
+
   preInstall = ''
     mkdir locale
   '';
@@ -27,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "sdcv";
   };
 }

@@ -13,17 +13,18 @@
 , autoreconfHook
 , pkg-config
 , diffutils
-, glibc ? !stdenv.isDarwin
+, glibc ? !stdenv.hostPlatform.isDarwin
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.1";
+  version = "1.22.10";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-63XRO3Img+XS2F5Krb5DAw0LMhtxB+eJi754O03Lx8Q=";
+    hash = "sha256-D/9nQXwzgLo+odn72WHuCJDjipfWdim2ZdSLTI2VlgE=";
   };
 
   configureFlags = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
-  ] ++ lib.optional stdenv.isDarwin "--disable-linker-optimisations";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -66,12 +67,13 @@ stdenv.mkDerivation rec {
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
        --replace '"diff"' \"${diffutils}/bin/diff\"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace src/main/help.c \
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd libmd ];
+  buildInputs = [ perl zlib bzip2 xz zstd libmd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
   nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "The Debian package manager";
+    description = "Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -2,17 +2,16 @@
 , fetchFromGitHub
 , gitUpdater
 , glibcLocales
-, gnome
+, adwaita-icon-theme
 , gobject-introspection
 , gtk3
 , intltool
-, python3
-, python3Packages
-, wrapGAppsHook
+, python311Packages
+, wrapGAppsHook3
 , xdg-utils
 }:
 
-python3Packages.buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "gpodder";
   version = "3.11.4";
   format = "other";
@@ -28,39 +27,38 @@ python3Packages.buildPythonApplication rec {
     ./disable-autoupdate.patch
   ];
 
-  postPatch = with lib; ''
+  postPatch = ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     glibcLocales
     gobject-introspection
   ];
 
   buildInputs = [
-    python3
     gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python311Packages; [
     minimock
     pytest
     pytest-httpserver
-    pytest-cov
+    pytest-cov-stub
   ];
 
   doCheck = true;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python311Packages; [
     feedparser
     dbus-python
     mygpoclient
     requests
     pygobject3
-    eyeD3
+    eyed3
     podcastparser
     html5lib
     mutagen
@@ -87,7 +85,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
-    description = "A podcatcher written in python";
+    description = "Podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.

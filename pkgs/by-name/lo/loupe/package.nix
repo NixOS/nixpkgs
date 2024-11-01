@@ -15,17 +15,18 @@
 , lcms2
 , libadwaita
 , libgweather
+, libseccomp
 , glycin-loaders
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "45.1";
+  version = "47.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/loupe/${lib.versions.major version}/loupe-${version}.tar.xz";
-    hash = "sha256-nX+ieKEASHKUQZoopvCo1ZGL2XnRy0tGqF6Pfe0U0+w=";
+    url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9gNWmpThcwHy2sNLAsEsbY48pq65vmq1uYM5P5Ve2Ho=";
   };
 
   patches = [
@@ -51,13 +52,14 @@ stdenv.mkDerivation rec {
     lcms2
     libadwaita
     libgweather
+    libseccomp
   ];
 
   postPatch = ''
     # Replace hash of file we patch in vendored glycin.
     jq \
-      --arg hash "$(sha256sum vendor/glycin/src/dbus.rs | cut -d' ' -f 1)" \
-      '.files."src/dbus.rs" = $hash' \
+      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
+      '.files."src/sandbox.rs" = $hash' \
       vendor/glycin/.cargo-checksum.json \
       | sponge vendor/glycin/.cargo-checksum.json
   '';
@@ -76,10 +78,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
-    description = "A simple image viewer application written with GTK4 and Rust";
+    changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    description = "Simple image viewer application written with GTK4 and Rust";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jk ] ++ teams.gnome.members;
     platforms = platforms.unix;
     mainProgram = "loupe";
   };
-}
+})

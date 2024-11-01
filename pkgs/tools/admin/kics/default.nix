@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, kics
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  kics,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "kics";
-  version = "1.7.11";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
-    rev = "v${version}";
-    hash = "sha256-knNPaxd9/ozQ1LU3O1AYeeRWrM4G7f5NdagD1zcwvQo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/trhDDY2jyN0o92fjy/ScEbYpcuBPPIaHx+wNW3cWA0=";
   };
 
-  vendorHash = "sha256-psyFivwS9d6+7S+1T7vonhofxHc0y2btXgc5HSu94Dg=";
+  vendorHash = "sha256-coX8BenRrGijErDNheD9+vZLOKzMXkcwhIa3BuxrOCM=";
 
   subPackages = [ "cmd/console" ];
 
@@ -25,9 +26,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/Checkmarx/kics/internal/constant.SCMCommits=${version}"
-    "-X github.com/Checkmarx/kics/internal/constants.Version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/Checkmarx/kics/v2/internal/constants.SCMCommit=${version}"
+    "-X=github.com/Checkmarx/kics/v2/internal/constants.Version=${version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -36,12 +38,16 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = ''
-      Find security vulnerabilities, compliance issues, and infrastructure misconfigurations early in the development
-      cycle of your infrastructure-as-code with KICS by Checkmarx.
+    description = "Tool to check for vulnerabilities and other issues";
+    longDescription = ''
+      Find security vulnerabilities, compliance issues, and
+      infrastructure misconfigurations early in the development
+      cycle of your infrastructure-as-code.
     '';
     homepage = "https://github.com/Checkmarx/kics";
+    changelog = "https://github.com/Checkmarx/kics/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ patryk4815 ];
+    mainProgram = "kics";
   };
 }

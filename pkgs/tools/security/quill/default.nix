@@ -41,12 +41,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   meta = with lib; {
     homepage = "https://github.com/dfinity/quill";
     changelog = "https://github.com/dfinity/quill/releases/tag/v${version}";
-    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer.";
+    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer";
+    mainProgram = "quill";
     license = licenses.asl20;
     maintainers = with maintainers; [ imalison ];
   };

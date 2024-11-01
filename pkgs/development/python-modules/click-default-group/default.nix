@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "click-default-group";
-  version = "1.2.2";
+  version = "1.2.4";
+  pyproject = true;
 
-  # No tests in Pypi tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-default-group";
-    rev = "v${version}";
-    sha256 = "0nk39lmkn208w8kvq6f4h3a6qzxrrvxixahpips6ik3zflbkss86";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9Vk4LdgLDAWG2YCQPLKR6PIVnULmpOoe7RtS8DgWARo=";
   };
 
-  patches = [
-    # make tests compatible with click 8
-    (fetchpatch {
-      url = "https://github.com/click-contrib/click-default-group/commit/9415c77d05cf7d16876e7d70a49a41a6189983b4.patch";
-      sha256 = "1czzma8nmwyxhwhnr8rfw5bjw6d46b3s5r5bfb8ly3sjwqjlwhw2";
-    })
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ click ];
 
@@ -33,8 +31,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "click_default_group" ];
 
   meta = with lib; {
-    homepage = "https://github.com/click-contrib/click-default-group";
     description = "Group to invoke a command without explicit subcommand name";
+    homepage = "https://github.com/click-contrib/click-default-group";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

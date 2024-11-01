@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg }:
+{ lib, stdenv, fetchFromGitHub, libbsd, pkg-config, xorg }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectrwm";
-  version = "unstable-2023-05-07";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
-    rev = "06e3733175969c307a6fd47240a7a37b29d60513";
-    sha256 = "QcEwFg9QTi+cCl2JghKOzEZ19LP/ZFMbZJAMJ0BLH9M=";
+    rev = "SPECTRWM_${lib.replaceStrings ["."] ["_"] finalAttrs.version}";
+    hash = "sha256-Dnn/iIrceiAVuMR8iMGcc7LqNhWC496eT5gNrYOInRU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with xorg; [
+  buildInputs = (with xorg; [
     libXrandr
     libXcursor
     libXft
@@ -20,18 +20,18 @@ stdenv.mkDerivation {
     xcbutil
     xcbutilkeysyms
     xcbutilwm
-  ];
+  ] ++ [ libbsd ]);
 
   prePatch = let
-    subdir = if stdenv.isDarwin then "osx" else "linux";
+    subdir = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
   in "cd ${subdir}";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "A tiling window manager";
+    description = "Tiling window manager";
     homepage    = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ christianharke ];
+    maintainers = with maintainers; [ rake5k ];
     license     = licenses.isc;
     platforms   = platforms.all;
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

@@ -1,24 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-core
-, azure-identity
-, opencensus
-, psutil
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-core,
+  azure-identity,
+  opencensus,
+  psutil,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "opencensus-ext-azure";
-  version = "1.1.11";
+  version = "1.1.13";
   format = "setuptools";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IdTU0FGdSCOdBBQskLalH17MBDaE64DPoKcBqiM0YHM=";
+    hash = "sha256-rsMEchdwBTebpWpwKgl9YYxfV1WOG7ZnbsdflIEwaSo=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +35,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure";
     description = "OpenCensus Azure Monitor Exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang evilmav ];
+    maintainers = with maintainers; [
+      billhuang
+      evilmav
+    ];
   };
 }

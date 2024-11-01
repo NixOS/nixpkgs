@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , bison
 , libevent
@@ -9,7 +10,8 @@
 , runCommand
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
-, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
+, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl, libutempter
+, withSixel ? true
 }:
 
 let
@@ -25,7 +27,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.3a";
+  version = "3.5a";
 
   outputs = [ "out" "man" ];
 
@@ -33,12 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     rev = finalAttrs.version;
-    sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
+    hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
   };
-
-  patches = [
-    ./CVE-2022-47016.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -57,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals withSixel [ "--enable-sixel" ]
   ++ lib.optionals withUtempter [ "--enable-utempter" ]
   ++ lib.optionals withUtf8proc [ "--enable-utf8proc" ];
 
@@ -65,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
 
   passthru = {
-    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.isDarwin then ''
+    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/share/terminfo/74
       cp -v ${ncurses}/share/terminfo/74/tmux $out/share/terminfo/74
       # macOS ships an old version (5.7) of ncurses which does not include tmux-256color so we need to provide it from our ncurses.

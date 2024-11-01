@@ -1,34 +1,29 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{
+  lib,
+  fetchgit,
+  php,
+}:
 
-let
-  pname = "phing";
-  version = "2.17.4";
-in
-mkDerivation {
-  inherit pname version;
+(php.withExtensions ({ enabled, all }: enabled ++ (with all; [ xsl ]))).buildComposerProject2
+  (finalAttrs: {
+    pname = "phing";
+    version = "3.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/phingofficial/phing/releases/download/v${version}/phing-${version}.phar";
-    sha256 = "sha256-3QZsl5QJkFX5Z4RovMtw2ELCp8Zl4xiZsIBikakJ474=";
-  };
+    # Upstream no longer provides the composer.lock in their release artifact
+    src = fetchgit {
+      url = "https://github.com/phingofficial/phing";
+      rev = "refs/tags/${finalAttrs.version}";
+      hash = "sha256-PEJuEsVl6H4tdqOUvkuazVmyvsRvhBD5AA7EWkMHmFk=";
+    };
 
-  dontUnpack = true;
+    vendorHash = "sha256-P829cADIJ5Hl5gHXbgTkpWHGF1pCtUKvx1GMrbPLkik=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phing/phing.phar
-    makeWrapper ${php}/bin/php $out/bin/phing \
-      --add-flags "$out/libexec/phing/phing.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "PHing Is Not GNU make; it's a PHP project build system or build tool based on Apache Ant";
-    license = licenses.lgpl3;
-    homepage = "https://github.com/phingofficial/phing";
-    maintainers = with maintainers; teams.php.members;
-  };
-}
+    meta = {
+      description = "PHing Is Not GNU make; it's a PHP project build system or build tool based on Apache Ant";
+      changelog = "https://github.com/phingofficial/phing/releases/tag/${finalAttrs.version}";
+      homepage = "https://github.com/phingofficial/phing";
+      license = lib.licenses.lgpl3;
+      mainProgram = "phing";
+      maintainers = lib.teams.php.members;
+    };
+  })

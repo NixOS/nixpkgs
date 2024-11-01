@@ -17,6 +17,52 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  nginxArguments = let
+    nginxPort = "80";
+    nginxConf = pkgs.writeText "nginx.conf" ''
+      user nobody nobody;
+      daemon off;
+      error_log /dev/stdout info;
+      pid /dev/null;
+      events {}
+      http {
+        access_log /dev/stdout;
+        server {
+          listen ${nginxPort};
+          index index.html;
+          location / {
+            root ${nginxWebRoot};
+          }
+        }
+      }
+    '';
+    nginxWebRoot = pkgs.writeTextDir "index.html" ''
+      <html><body><h1>Hello from NGINX</h1></body></html>
+    '';
+  in
+  { name = "nginx-container";
+    tag = "latest";
+    contents = [
+      fakeNss
+      pkgs.nginx
+    ];
+
+    extraCommands = ''
+      mkdir -p tmp/nginx_client_body
+
+      # nginx still tries to read this directory even if error_log
+      # directive is specifying another file :/
+      mkdir -p var/log/nginx
+    '';
+
+    config = {
+      Cmd = [ "nginx" "-c" nginxConf ];
+      ExposedPorts = {
+        "${nginxPort}/tcp" = {};
+      };
+    };
+  };
+
 in
 
 rec {
@@ -60,52 +106,10 @@ rec {
   };
 
   # 3. another service example
-  nginx = let
-    nginxPort = "80";
-    nginxConf = pkgs.writeText "nginx.conf" ''
-      user nobody nobody;
-      daemon off;
-      error_log /dev/stdout info;
-      pid /dev/null;
-      events {}
-      http {
-        access_log /dev/stdout;
-        server {
-          listen ${nginxPort};
-          index index.html;
-          location / {
-            root ${nginxWebRoot};
-          }
-        }
-      }
-    '';
-    nginxWebRoot = pkgs.writeTextDir "index.html" ''
-      <html><body><h1>Hello from NGINX</h1></body></html>
-    '';
-  in
-  buildLayeredImage {
-    name = "nginx-container";
-    tag = "latest";
-    contents = [
-      fakeNss
-      pkgs.nginx
-    ];
+  nginx = buildLayeredImage nginxArguments;
 
-    extraCommands = ''
-      mkdir -p tmp/nginx_client_body
-
-      # nginx still tries to read this directory even if error_log
-      # directive is specifying another file :/
-      mkdir -p var/log/nginx
-    '';
-
-    config = {
-      Cmd = [ "nginx" "-c" nginxConf ];
-      ExposedPorts = {
-        "${nginxPort}/tcp" = {};
-      };
-    };
-  };
+  # Used to demonstrate how virtualisation.oci-containers.imageStream works
+  nginxStream = pkgs.dockerTools.streamLayeredImage nginxArguments;
 
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
@@ -480,6 +484,22 @@ rec {
     layerC = layerOnTopOf layerB "c";
   in layerC;
 
+  bashUncompressed = pkgs.dockerTools.buildImage {
+    name = "bash-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
+  bashZstdCompressed = pkgs.dockerTools.buildImage {
+    name = "bash-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
@@ -493,7 +513,23 @@ rec {
     contents = pkgs.bashInteractive;
   };
 
-  # buildImage without explicit tag
+  # buildLayeredImage without compression
+  bashLayeredUncompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with zstd compression
+  bashLayeredZstdCompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    contents = pkgs.bashInteractive;
+  };
+
+  # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
     contents = pkgs.bashInteractive;
@@ -587,10 +623,14 @@ rec {
     fakeRootCommands = ''
       mkdir -p ./home/alice
       chown 1000 ./home/alice
-      ln -s ${pkgs.hello.overrideAttrs (o: {
+      ln -s ${pkgs.hello.overrideAttrs (finalAttrs: prevAttrs: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
+        configureFlags = prevAttrs.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
+        versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+        meta = prevAttrs.meta // {
+          mainProgram = "layeredImageWithFakeRootCommands-hello";
+        };
       })} ./hello
     '';
   };
@@ -612,6 +652,12 @@ rec {
   mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
     bash
     layeredImageWithFakeRootCommands
+  ];
+
+  mergeVaryingCompressor = pkgs.dockerTools.mergeImages [
+    redis
+    bashUncompressed
+    bashZstdCompressed
   ];
 
   helloOnRoot = pkgs.dockerTools.streamLayeredImage {
@@ -637,6 +683,20 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
+  };
+
+  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+    enableFakechroot = true;
   };
 
   etc =
@@ -843,6 +903,18 @@ rec {
       buildDerivation
       $out/bin/hello
     '';
+  };
+
+  nix-layered = pkgs.dockerTools.streamLayeredImage  {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [ pkgs.nix pkgs.bash ];
+    includeNixDB = true;
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+      ];
+    };
   };
 
 }

@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libiconv ];
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
 
   meta = with lib; {
-    description = "A iconv based simplified-traditional chinese conversion tool";
+    description = "Iconv based simplified-traditional chinese conversion tool";
+    mainProgram = "cconv";
     homepage = "https://github.com/xiaoyjy/cconv";
     license = licenses.mit;
     platforms = platforms.all;

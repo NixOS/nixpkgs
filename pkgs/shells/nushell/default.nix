@@ -13,7 +13,6 @@
 , Security
 , nghttp2
 , libgit2
-, doCheck ? true
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -22,7 +21,7 @@
 }:
 
 let
-  version = "0.87.1";
+  version = "0.99.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,30 +31,39 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
-    rev = version;
-    hash = "sha256-lPfP0bnMTb+IQoWdf7oHaj96/l68Ic6OmB/Ur9Q65g8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-amPQJW8ofSMh2cQQrqPNOp/p33KwPNX7fpZ4SiJGQHU=";
   };
 
-  cargoHash = "sha256-2xc0IiPCmhFtVXWEpDpRny27/bJZAh/Ke9+LVsrcWF0=";
+  cargoHash = "sha256-AblXOeSJGqrZY5aRzdst9F+ZB++/3Adu7Kri5lDsDH8=";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib Libsystem Security ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  inherit doCheck;
+  doCheck = ! stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo test"
-    HOME=$(mktemp -d) cargo test
+    (
+      # The skipped tests all fail in the sandbox because in the nushell test playground,
+      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
+      # user (/var/empty). The assertions however do respect the set $HOME.
+      set -x
+      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
+        --test-threads=$NIX_BUILD_CORES \
+        --skip=repl::test_config_path::test_default_config_path \
+        --skip=repl::test_config_path::test_xdg_config_bad \
+        --skip=repl::test_config_path::test_xdg_config_empty
+    )
     runHook postCheck
   '';
 
@@ -68,10 +76,10 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A modern shell written in Rust";
+    description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
     mainProgram = "nu";
   };
 }

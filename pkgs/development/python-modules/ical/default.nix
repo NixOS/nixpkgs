@@ -1,46 +1,37 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, freezegun
-, tzdata
-, pyparsing
-, pydantic
-, pytest-asyncio
-, pytest-benchmark
-, pytest-golden
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, python-dateutil
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  freezegun,
+  tzdata,
+  pyparsing,
+  pydantic,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "6.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
+    repo = "ical";
     rev = "refs/tags/${version}";
-    hash = "sha256-1tf/R9CridAdNkS6/G0C1v+lZghS7WV5MVnVuBv1zvI=";
+    hash = "sha256-9mnyhDKcZTZAGRxojQN9I9ZAgBmsSSsBPzCMZO6Rl5k=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "tzdata"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
     pydantic
@@ -50,16 +41,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     emoji
     freezegun
-    pytest-asyncio
     pytest-benchmark
-    pytest-golden
     pytestCheckHook
-    pyyaml
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "ical"
-  ];
+  pythonImportsCheck = [ "ical" ];
 
   meta = with lib; {
     description = "Library for handling iCalendar";

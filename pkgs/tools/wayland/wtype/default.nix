@@ -8,6 +8,7 @@
 
 , libxkbcommon
 , wayland
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ libxkbcommon wayland ];
 
   meta = with lib; {

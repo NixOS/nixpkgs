@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, flit-core
-, pytestCheckHook
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  defusedxml,
+  pytestCheckHook,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -26,23 +28,24 @@ buildPythonPackage rec {
       hash = "sha256-dc9bhr/af3NmrIfoVabM1lNpXbGVsJoj7jq0E1BAtHw=";
     })
     (fetchpatch {
-      name = "fix-tests-with-sphinx7.2.patch";
-      url = "https://github.com/sphinx-contrib/jquery/commit/03f1595b3793e087a407933fbcb757bdd3f558fc.patch";
-      hash = "sha256-4gNG1DL/63N2FwXDy5fMApZpf/AGOGBruwPuVqgnVkc=";
+      # https://github.com/sphinx-contrib/jquery/pull/28
+      name = "fix-tests-with-sphinx7.2-and-python312.patch";
+      url = "https://github.com/sphinx-contrib/jquery/commit/3318a82854fccec528cd73e12ab2ab96d8e71064.patch";
+      hash = "sha256-pNeKE50sm4b/KhNDAEQ3oJYGV4I8CVHnbR76z0obT3E=";
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.jquery"
+  pythonImportsCheck = [ "sphinxcontrib.jquery" ];
+
+  dependencies = [
+    sphinx
   ];
 
   nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
-    sphinx
   ];
 
   pythonNamespaces = [ "sphinxcontrib" ];

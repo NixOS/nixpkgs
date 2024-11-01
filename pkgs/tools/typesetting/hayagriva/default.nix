@@ -5,20 +5,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hayagriva";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-d4T+GF0bdMjpjwcN56yYpEw4aZCvJ19P1cbPuVhFR0A=";
+    hash = "sha256-ic1ohp0zmiFgfNSfI6XRL/3CJ2p+afW4IAEz2l4CL8Q=";
   };
 
-  cargoHash = "sha256-mRKvCnW4XVXYzOKQ5rASwiwpLdqpEgGlq8W4gB7hHco=";
+  cargoHash = "sha256-G3rBvFzlp3Dg/k6BILNH6xNX+i9mEv9muZOiGkcad38=";
 
   buildFeatures = [ "cli" ];
 
   checkFlags = [
     # requires internet access
     "--skip=try_archive"
+    "--skip=always_archive"
 
     # requires a separate large repository
     "--skip=csl::tests::test_csl"

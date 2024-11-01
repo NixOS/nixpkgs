@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , fetchurl
 
 , config
@@ -9,27 +8,18 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
-
-, copyDesktopItems
-, makeDesktopItem
-
-, glib
 , ncurses5
 
-, dotnet-sdk_6
+, dotnet-sdk_8
 , dotnetSupport ? false
 
 , alsa-lib
-, gtk2
-, libXdamage
-, libXtst
-, libXScrnSaver
+, gtk3
+, libdrm
+, libGL
+, mesa
 , nss
 , htmlRendererSupport ? false
-
-, R
-, rPackages
-, rSupport ? false
 
 , unixODBC
 , sqaplSupport ? false
@@ -42,37 +32,7 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  rscproxy = rPackages.buildRPackage {
-    name = "rscproxy";
-    src = fetchFromGitHub {
-      owner = "Dyalog";
-      repo = "rscproxy";
-      rev = "31de3323fb8596ff5ecbf4bacd030e542cfd8133";
-      hash = "sha256-SVoBoAWUmQ+jWaTG7hdmyRq6By4RnmmgWZXoua19/Kg=";
-    };
-  };
-
-  makeWrapperArgs = [
-    "--set DYALOG ${dyalogHome}"
-    # also needs to be set when the `-script` flag is used
-    "--add-flags DYALOG=${dyalogHome}"
-    # needed for default user commands to work
-    "--add-flags SESSION_FILE=${dyalogHome}/default.dse"
-  ]
-  ++ lib.optionals dotnetSupport [
-    # needs to be set to run .NET Bridge
-    "--set DOTNET_ROOT ${dotnet-sdk_6}"
-    # .NET Bridge files are runtime dependencies, but cannot be patchelf'd
-    "--prefix LD_LIBRARY_PATH : ${dyalogHome}"
-  ]
-  ++ lib.optionals rSupport [
-    # RConnect resolves R from PATH
-    "--prefix PATH : ${R}/bin"
-    # RConnect uses `ldd` to find `libR.so`
-    "--prefix LD_LIBRARY_PATH : ${R}/lib/R/lib"
-    # RConnect uses `rscproxy` to communicate with R
-    "--prefix R_LIBS_SITE : ${rscproxy}/library"
-  ];
+  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnet-sdk_8}";
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -91,14 +51,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "18.2.45405";
+  version = "19.0.50027";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
     fetchurl {
       url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      sha256 = "sha256-pA/WGTA6YvwG4MgqbiPBLKSKPtLGQM7BzK6Bmyz5pmM=";
+      hash = "sha256-3uB102Hr0dmqAZj2ezLhsAdBotY24PWJfE7g5wSmKMA=";
     };
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
@@ -107,64 +67,54 @@ stdenv.mkDerivation (finalAttrs: {
     sourceRoot=$sourceRoot/opt/mdyalog/${finalAttrs.shortVersion}/64/unicode
   '';
 
-  patches = [ ./dyalogscript.patch ./mapl.patch ];
-
-  postPatch = lib.optionalString dotnetSupport ''
-    # Patch to use .NET 6.0 instead of .NET Core 3.1 (can be removed when Dyalog 19.0 releases)
-    substituteInPlace Dyalog.Net.Bridge.*.json --replace "3.1" "6.0"
-  '';
+  patches = [ ./dyalogscript.patch ];
 
   nativeBuildInputs = [
     autoPatchelfHook
-    copyDesktopItems
     dpkg
     makeWrapper
   ];
 
   buildInputs = [
-    glib # Used by Conga and .NET Bridge
-    ncurses5 # Used by the dyalog binary
+    stdenv.cc.cc.lib # Used by Conga and .NET Bridge
+    ncurses5 # Used by the dyalog binary to correctly display in the terminal
   ]
   ++ lib.optionals htmlRendererSupport [
     alsa-lib
-    gtk2
-    libXdamage
-    libXtst
-    libXScrnSaver
+    gtk3
+    libdrm
+    libGL
+    mesa
     nss
   ]
-  ++ lib.optionals sqaplSupport [
-    unixODBC
-  ];
+  ++ lib.optional sqaplSupport unixODBC;
 
   # See which files are not really important: `https://github.com/Dyalog/DyalogDocker/blob/master/rmfiles.sh`
   installPhase = ''
     runHook preInstall
 
     mkdir -p ${dyalogHome}
-    cp -r aplfmt aplkeys apltrans fonts Library PublicCACerts SALT StartupSession ${dyalogHome}
-    cp aplkeys.sh default.dse dyalog dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl startup.dyalog ${dyalogHome}
+    cp -r aplfmt aplkeys apltrans Experimental fonts Library PublicCACerts SALT StartupSession ${dyalogHome}
+    cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga34_64.so,dyalog64.so,libconga34ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
     cp ws/{conga,dfns,isolate,loaddata,salt,sharpplot,util}.dws ${dyalogHome}/ws
   ''
   + lib.optionalString dotnetSupport ''
-    cp libnethost.so Dyalog.Net.Bridge.* ${dyalogHome}
+    cp libnethost.so Dyalog.Net.Bridge.* Lokad.ILPack.dll ${dyalogHome}
   ''
   + lib.optionalString htmlRendererSupport ''
-    cp -r locales swiftshader ${dyalogHome}
-    cp libcef.so libEGL.so libGLESv2.so chrome-sandbox natives_blob.bin snapshot_blob.bin icudtl.dat v8_context_snapshot.bin *.pak ${dyalogHome}
+    cp -r locales ${dyalogHome}
+    cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
+    cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
-  + lib.optionalString rSupport ''
-    cp ws/rconnect.dws ${dyalogHome}/ws
-  ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya64u64u.so ${dyalogHome}/lib
+    cp lib/cxdya65u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
@@ -177,10 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $doc/share/doc/dyalog ${dyalogHome}/help
   ''
   + ''
-    install -Dm644 dyalog.svg $out/share/icons/hicolor/scalable/apps/dyalog.svg
+    install -Dm644 dyalog.svg -t $out/share/icons/hicolor/scalable/apps
+    install -Dm644 dyalog.desktop -t $out/share/applications
 
-    makeWrapper ${dyalogHome}/dyalog $out/bin/dyalog ${lib.concatStringsSep " " makeWrapperArgs}
-    makeWrapper ${dyalogHome}/mapl $out/bin/mapl ${lib.concatStringsSep " " makeWrapperArgs}
+    for exec in "dyalog" "mapl"; do
+        makeWrapper ${dyalogHome}/$exec $out/bin/$exec ${toString makeWrapperArgs}
+    done
 
     install -Dm755 scriptbin/dyalogscript $out/bin/dyalogscript
     substituteInPlace $out/bin/dyalogscript \
@@ -190,27 +142,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString htmlRendererSupport ''
-    # `libudev.so` is a runtime dependency of CEF
-    patchelf ${dyalogHome}/libcef.so --add-needed libudev.so
+  # Register some undeclared runtime dependencies to be patched in by autoPatchelfHook
+  # Note: dyalog.rt is used internally to run child APL processes in
+  preFixup = ''
+    for exec in "dyalog" "dyalog.rt"; do
+        patchelf ${dyalogHome}/$exec --add-needed libncurses.so
+    done
+  ''
+  + lib.optionalString htmlRendererSupport ''
+    patchelf ${dyalogHome}/libcef.so --add-needed libudev.so --add-needed libGL.so
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "dyalog";
-      desktopName = "Dyalog";
-      exec = finalAttrs.meta.mainProgram;
-      comment = finalAttrs.meta.description;
-      icon = "dyalog";
-      categories = [ "Development" ];
-      genericName = "APL interpreter";
-      terminal = true;
-    })
-  ];
 
   meta = {
     changelog = "https://dyalog.com/dyalog/dyalog-versions/${lib.replaceStrings [ "." ] [ "" ] finalAttrs.shortVersion}.htm";
-    description = "The Dyalog APL interpreter";
+    description = "Dyalog APL interpreter";
     homepage = "https://www.dyalog.com";
     license = {
       fullName = "Dyalog License";

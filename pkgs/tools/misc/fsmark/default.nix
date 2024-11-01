@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Synchronous write workload file system benchmark";
     homepage = "https://sourceforge.net/projects/fsmark/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
+    mainProgram = "fs_mark";
   };
 }

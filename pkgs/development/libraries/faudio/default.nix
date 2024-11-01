@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "faudio";
-  version = "23.11";
+  version = "24.10";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
     rev = version;
-    sha256 = "sha256-iK0cjhq16DU/77p0cM3SMk+gE1PQV0zd96a3kxwXNLk=";
+    sha256 = "sha256-BUR/zFYOaEoa4pUUgzIcrWrpDX4AP9cySIelralb/t0=";
   };
 
   nativeBuildInputs = [cmake];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FNA-XNA/FAudio";
     changelog = "https://github.com/FNA-XNA/FAudio/releases/tag/${version}";
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.marius851000 ];
   };
 }

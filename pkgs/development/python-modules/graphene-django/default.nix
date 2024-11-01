@@ -1,28 +1,28 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, graphene
-, graphql-core
-, django
-, djangorestframework
-, promise
-, text-unidecode
+  graphene,
+  graphql-core,
+  django,
+  djangorestframework,
+  promise,
+  text-unidecode,
 
-, django-filter
-, mock
-, py
-, pytest-django
-, pytest-random-order
-, pytestCheckHook
+  django-filter,
+  mock,
+  py,
+  pytest-django,
+  pytest-random-order,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "graphene-django";
-  version = "3.1.5";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1vl1Yj9MVBej5aFND8A63JMIog8aIW9SdwiOLIUwXxI=";
+    hash = "sha256-12ue7Pq7TFMSBAfaj8Si6KrpuKYp5T2EEesJpc8wRho=";
   };
 
   postPatch = ''
@@ -58,19 +58,21 @@ buildPythonPackage rec {
     py
     pytest-django
     pytest-random-order
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # Python 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
-    "test_django_objecttype_convert_choices_enum_naming_collisions"
-    "test_django_objecttype_choices_custom_enum_name"
-    "test_django_objecttype_convert_choices_enum_list"
-    "test_schema_representation"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # this test touches files in the "/" directory and fails in darwin sandbox
-    "test_should_filepath_convert_string"
-  ];
+  disabledTests =
+    [
+      # https://github.com/graphql-python/graphene-django/issues/1510
+      "test_should_filepath_convert_string"
+      "test_should_choice_convert_enum"
+      "test_should_multiplechoicefield_convert_to_list_of_enum"
+      "test_perform_mutate_success_with_enum_choice_field"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # this test touches files in the "/" directory and fails in darwin sandbox
+      "test_should_filepath_convert_string"
+    ];
 
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";

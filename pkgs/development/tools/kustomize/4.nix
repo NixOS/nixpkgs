@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
+    mainProgram = "kustomize";
     longDescription = ''
       kustomize lets you customize raw, template-free YAML files for
       multiple purposes, leaving the original YAML untouched and usable

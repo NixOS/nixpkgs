@@ -1,9 +1,8 @@
-{ lib, buildGo120Module, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
 
 let
   pname = "atomic-swap";
-  version = "0.4.2";
-  buildGoModule = buildGo120Module;
+  version = "0.4.3";
 in
 buildGoModule {
   inherit pname version;
@@ -12,10 +11,10 @@ buildGoModule {
     owner = "AthanorLabs";
     repo = "atomic-swap";
     rev = "v${version}";
-    hash = "sha256-JnbKaGmpTDwQMSDR4Y8Q2JTtuQV5GGuovxeIYs0KgQI=";
+    hash = "sha256-MOylUZ6BrvlxUrsZ5gg3JzW9ROG5UXeGhq3YoPZKdHs=";
   };
 
-  vendorHash = "sha256-acBnXGy1kVBwB+j8VqGyinabnI/boTtbFNyjE6EHVes=";
+  vendorHash = "sha256-fGQ6MI+3z7wRL0y7AUERVtN0V2rcRa+vqeB8+3FMzzc=";
 
   subPackages = [
     "cmd/swapcli"
@@ -36,6 +35,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
+    changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${version}";
     description = "ETH-XMR atomic swap implementation";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ happysalada lord-valen ];

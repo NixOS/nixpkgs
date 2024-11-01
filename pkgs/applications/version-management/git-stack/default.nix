@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MEhUmy4ijR/zHm/qMt4PqNGYnCfIgjNaL9SlMmXCMmc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ stehessel ];
+    mainProgram = "git-stack";
   };
 }

@@ -10,6 +10,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       environment.systemPackages = [ pkgs.nebula ];
       users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
       services.openssh.enable = true;
+      networking.firewall.enable = true; # Implicitly true, but let's make sure.
       networking.interfaces.eth1.useDHCP = false;
 
       services.nebula.networks.smoke = {
@@ -17,7 +18,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
         ca = "/etc/nebula/ca.crt";
         cert = "/etc/nebula/${name}.crt";
         key = "/etc/nebula/${name}.key";
-        listen = { host = "0.0.0.0"; port = 4242; };
+        listen = {
+          host = "0.0.0.0";
+          port = if (config.services.nebula.networks.smoke.isLighthouse || config.services.nebula.networks.smoke.isRelay) then 4242 else 0;
+        };
       };
     }
     extraConfig
@@ -132,9 +136,9 @@ in
       ${name}.start()
       ${name}.succeed(
           "mkdir -p /root/.ssh",
-          "chown 700 /root/.ssh",
+          "chmod 700 /root/.ssh",
           "cat '${snakeOilPrivateKey}' > /root/.ssh/id_snakeoil",
-          "chown 600 /root/.ssh/id_snakeoil",
+          "chmod 600 /root/.ssh/id_snakeoil",
           "mkdir -p /root"
       )
     '';

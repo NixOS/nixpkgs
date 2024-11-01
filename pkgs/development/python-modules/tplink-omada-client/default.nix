@@ -1,31 +1,29 @@
-{ lib
-, aiohttp
-, awesomeversion
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  awesomeversion,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
-  version = "1.3.6";
-  format = "pyproject";
+  version = "1.4.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
-    hash = "sha256-8NP+5qBdWiBUPf5DJWMrHJfZwpRNkCewjrjTbvgD3AA=";
+    hash = "sha256-REzjeZs2Ddhw2TLD4Vp75XT2iLaxxzDK/F3UmrC1deo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
   ];
@@ -33,9 +31,7 @@ buildPythonPackage rec {
   # Module have no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tplink_omada_client"
-  ];
+  pythonImportsCheck = [ "tplink_omada_client" ];
 
   meta = with lib; {
     description = "Library for the TP-Link Omada SDN Controller API";
@@ -43,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/MarkGodwin/tplink-omada-api/releases/tag/release%2Fv${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "omada";
   };
 }

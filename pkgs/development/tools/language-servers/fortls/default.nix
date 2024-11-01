@@ -8,26 +8,25 @@
 
 buildPythonApplication rec {
   pname = "fortls";
-  version = "2.13.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kFk2Dlnb0FXM3Ysvsy+g2AAMgpWmwzxuyJPovDm/FJU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mOYPtysPj+JczRPTeM1DUckAH0XC9cO1ssP8pviYa0E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ json5 packaging ];
 
-  preBuild = "export SETUPTOOLS_SCM_PRETEND_VERSION=${version}";
-
   doCheck = true;
   checkPhase = "$out/bin/fortls --help 1>/dev/null";
 
   meta = with lib; {
-    description = "Fortran Language Server ";
+    description = "Fortran Language Server";
+    mainProgram = "fortls";
     homepage = "https://github.com/fortran-lang/fortls";
     license = [ licenses.mit ];
     maintainers = [ maintainers.sheepforce ];

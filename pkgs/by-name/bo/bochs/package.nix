@@ -1,35 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL2
-, curl
-, darwin
-, docbook_xml_dtd_45
-, docbook_xsl
-, gtk3
-, libGL
-, libGLU
-, libX11
-, libXpm
-, libtool
-, ncurses
-, pkg-config
-, readline
-, wget
-, wxGTK32
-, enableSDL2 ? true
-, enableTerm ? true
-, enableWx ? !stdenv.isDarwin
-, enableX11 ? !stdenv.isDarwin
+{
+  lib,
+  SDL2,
+  curl,
+  darwin,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchurl,
+  gtk3,
+  libGL,
+  libGLU,
+  libX11,
+  libXpm,
+  libtool,
+  ncurses,
+  pkg-config,
+  readline,
+  stdenv,
+  wget,
+  wxGTK32,
+  # Boolean flags
+  enableSDL2 ? true,
+  enableTerm ? true,
+  enableWx ? !stdenv.hostPlatform.isDarwin,
+  enableX11 ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
+    hash = "sha256-qFsTr/fYQR96nzVrpsM7X13B+7EH61AYzCOmJjnaAFk=";
   };
 
   nativeBuildInputs = [
@@ -39,104 +41,116 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    readline
-    wget
-  ] ++ lib.optionals enableSDL2 [
-    SDL2
-  ] ++ lib.optionals enableTerm [
-    ncurses
-  ] ++ lib.optionals enableWx [
-    gtk3
-    wxGTK32
-  ] ++ lib.optionals enableX11 [
-    libGL
-    libGLU
-    libX11
-    libXpm
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-  ];
+  buildInputs =
+    [
+      curl
+      readline
+      wget
+    ]
+    ++ lib.optionals enableSDL2 [
+      SDL2
+    ]
+    ++ lib.optionals enableTerm [
+      ncurses
+    ]
+    ++ lib.optionals enableWx [
+      gtk3
+      wxGTK32
+    ]
+    ++ lib.optionals enableX11 [
+      libGL
+      libGLU
+      libX11
+      libXpm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.libobjc
+    ];
 
-  configureFlags = [
-    "--with-rfb=no"
-    "--with-vncsrv=no"
-    "--with-nogui"
+  configureFlags =
+    [
+      (lib.withFeature false "rfb")
+      (lib.withFeature false "vncsrv")
+      (lib.withFeature true "nogui")
 
-    # These will always be "yes" on NixOS
-    "--enable-ltdl-install=yes"
-    "--enable-readline=yes"
-    "--enable-all-optimizations=yes"
-    "--enable-logging=yes"
-    "--enable-xpm=yes"
+      # These will always be "yes" on NixOS
+      (lib.enableFeature true "ltdl-install")
+      (lib.enableFeature true "readline")
+      (lib.enableFeature true "all-optimizations")
+      (lib.enableFeature true "logging")
+      (lib.enableFeature true "xpm")
 
-    # ... whereas these, always "no"!
-    "--enable-cpp=no"
-    "--enable-instrumentation=no"
+      # ... whereas these, always "no"!
+      (lib.enableFeature false "cpp")
+      (lib.enableFeature false "instrumentation")
 
-    "--enable-docbook=no" # Broken - it requires docbook2html
+      (lib.enableFeature false "docbook") # Broken - it requires docbook2html
 
-    # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
-    "--enable-3dnow=no"
-    "--enable-monitor-mwait=no"
-    "--enable-raw-serial=no"
+      # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
+      (lib.enableFeature false "3dnow")
+      (lib.enableFeature false "monitor-mwait")
+      (lib.enableFeature false "raw-serial")
 
-    # These are completely configurable, and they don't depend of external tools
-    "--enable-a20-pin"
-    "--enable-avx"
-    "--enable-busmouse"
-    "--enable-cdrom"
-    "--enable-clgd54xx"
-    "--enable-configurable-msrs"
-    "--enable-cpu-level=6" # from 3 to 6
-    "--enable-debugger" #conflicts with gdb-stub option
-    "--enable-debugger-gui"
-    "--enable-evex"
-    "--enable-fpu"
-    "--enable-gdb-stub=no" # conflicts with debugger option
-    "--enable-handlers-chaining"
-    "--enable-idle-hack"
-    "--enable-iodebug"
-    "--enable-large-ramfile"
-    "--enable-largefile"
-    "--enable-pci"
-    "--enable-repeat-speedups"
-    "--enable-show-ips"
-    "--enable-smp"
-    "--enable-vmx=2"
-    "--enable-svm"
-    "--enable-trace-linking"
-    "--enable-usb"
-    "--enable-usb-ehci"
-    "--enable-usb-ohci"
-    "--enable-usb-xhci"
-    "--enable-voodoo"
-    "--enable-x86-64"
-    "--enable-x86-debugger"
-  ] ++ lib.optionals enableSDL2 [
-    "--with-sdl2"
-  ] ++ lib.optionals enableTerm [
-    "--with-term"
-  ] ++ lib.optionals enableWx [
-    "--with-wx"
-  ] ++ lib.optionals enableX11 [
-    "--with-x"
-    "--with-x11"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "--enable-e1000"
-    "--enable-es1370"
-    "--enable-ne2000"
-    "--enable-plugins"
-    "--enable-pnic"
-    "--enable-sb16"
-  ];
+      # These are completely configurable, and they don't depend of external tools
+      (lib.enableFeature true "a20-pin")
+      (lib.enableFeature true "avx")
+      (lib.enableFeature true "busmouse")
+      (lib.enableFeature true "cdrom")
+      (lib.enableFeature true "clgd54xx")
+      (lib.enableFeature true "configurable-msrs")
+      (lib.enableFeatureAs true "cpu-level" "6") # from 3 to 6
+      (lib.enableFeature true "debugger") # conflicts with gdb-stub option
+      (lib.enableFeature true "debugger-gui")
+      (lib.enableFeature true "evex")
+      (lib.enableFeature true "fpu")
+      (lib.enableFeature false "gdb-stub") # conflicts with debugger option
+      (lib.enableFeature true "handlers-chaining")
+      (lib.enableFeature true "idle-hack")
+      (lib.enableFeature true "iodebug")
+      (lib.enableFeature true "large-ramfile")
+      (lib.enableFeature true "largefile")
+      (lib.enableFeature true "pci")
+      (lib.enableFeature true "repeat-speedups")
+      (lib.enableFeature true "show-ips")
+      (lib.enableFeature true "smp")
+      (lib.enableFeatureAs true "vmx" "2")
+      (lib.enableFeature true "svm")
+      (lib.enableFeature true "trace-linking")
+      (lib.enableFeature true "usb")
+      (lib.enableFeature true "usb-ehci")
+      (lib.enableFeature true "usb-ohci")
+      (lib.enableFeature true "usb-xhci")
+      (lib.enableFeature true "voodoo")
+      (lib.enableFeature true "x86-64")
+      (lib.enableFeature true "x86-debugger")
+    ]
+    ++ lib.optionals enableSDL2 [
+      (lib.withFeature true "sdl2")
+    ]
+    ++ lib.optionals enableTerm [
+      (lib.withFeature true "term")
+    ]
+    ++ lib.optionals enableWx [
+      (lib.withFeature true "wx")
+    ]
+    ++ lib.optionals enableX11 [
+      (lib.withFeature true "x")
+      (lib.withFeature true "x11")
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      (lib.enableFeature true "e1000")
+      (lib.enableFeature true "es1370")
+      (lib.enableFeature true "ne2000")
+      (lib.enableFeature true "plugins")
+      (lib.enableFeature true "pnic")
+      (lib.enableFeature true "sb16")
+    ];
 
   enableParallelBuilding = true;
 
   meta = {
     homepage = "https://bochs.sourceforge.io/";
-    description = "An open-source IA-32 (x86) PC emulator";
+    description = "Open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written
       in C++, that runs on most popular platforms. It includes emulation of the

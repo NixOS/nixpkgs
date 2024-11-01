@@ -1,0 +1,15 @@
+diff --git a/src/effects/multitaskview/multitaskview.cpp b/src/effects/multitaskview/multitaskview.cpp
+index 268bc42..d41f7bf 100644
+--- a/src/effects/multitaskview/multitaskview.cpp
++++ b/src/effects/multitaskview/multitaskview.cpp
+@@ -50,8 +50,8 @@
+ #define SCISSOR_HOFFD 400
+ 
+ const char screen_recorder[] = "deepin-screen-recorder deepin-screen-recorder";
+-const char fallback_background_name[] = "file:///usr/share/wallpapers/deepin/desktop.jpg";
+-const char previous_default_background_name[] = "file:///usr/share/backgrounds/default_background.jpg";
++const char fallback_background_name[] = "file:///run/current-system/sw/share/wallpapers/deepin/desktop.jpg";
++const char previous_default_background_name[] = "file:///run/current-system/sw/share/backgrounds/default_background.jpg";
+ const char add_workspace_png[] = ":/effects/multitaskview/buttons/add-light.png";//":/resources/themes/add-light.svg";
+ const char delete_workspace_png[] = ":/effects/multitaskview/buttons/workspace_delete.png";
+ 

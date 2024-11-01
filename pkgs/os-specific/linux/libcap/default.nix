@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
+{ stdenv, lib, buildPackages, fetchurl, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 
@@ -19,11 +19,11 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.69";
+  version = "2.70";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8xH489rYRpnQVm0db37JQ6kpiyj3FMrjyTHf1XSS1+s=";
+    sha256 = "sha256-I6bviq2vHj6HX2M7stEWz++JUtunvHxWmxNFjhlSsw8=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
@@ -33,15 +33,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional usePam pam;
 
-  propagatedBuildInputs = [ attr ];
-
   makeFlags = [
     "lib=lib"
     "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optional isStatic "SHARED=no";
+  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh

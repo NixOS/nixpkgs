@@ -4,8 +4,8 @@
 , halibut
 }:
 let
-  date = "20211129";
-  rev = "8cd63c5";
+  date = "20241013";
+  rev = "3622eda";
 in
 stdenv.mkDerivation {
   pname = "agedu";
@@ -15,13 +15,13 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.tartarus.org/simon/agedu.git";
     inherit rev;
-    hash = "sha256-5wqpL7wrFwIf6lxVte+GXLsXYY0/36EIAUepVNDCnSE=";
+    hash = "sha256-ZU2bVVo//mAVtVtrKPQ20wZHip/AZPmlL2uaCBcc7rw=";
   };
 
   nativeBuildInputs = [ cmake halibut ];
 
   meta = with lib; {
-    description = "A Unix utility for tracking down wasted disk space";
+    description = "Unix utility for tracking down wasted disk space";
     longDescription = ''
        Most Unix file systems, in their default mode, helpfully record when a
        file was last accessed. So if you generated a large amount of data years
@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.unix;
+    mainProgram = "agedu";
   };
 }

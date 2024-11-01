@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, py4j
-, pyarrow
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pandas,
+  py4j,
+  pyarrow,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "3.5.0";
+  version = "3.5.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Bqbdr0qyjcKYQDQdcAp4iukTFlAknh36UNaOpxWZVg=";
+    hash = "sha256-aLfMDAxXCn2GRPSfQNLahwmwHTDJEmzIz5O0+E89l0c=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -28,17 +29,22 @@ buildPythonPackage rec {
       --replace py4j== 'py4j>='
   '';
 
-  propagatedBuildInputs = [
-    py4j
-  ];
+  postFixup = ''
+    # find_python_home.py has been wrapped as a shell script
+    substituteInPlace $out/bin/find-spark-home \
+        --replace 'export SPARK_HOME=$($PYSPARK_DRIVER_PYTHON "$FIND_SPARK_HOME_PYTHON_SCRIPT")' \
+                  'export SPARK_HOME=$("$FIND_SPARK_HOME_PYTHON_SCRIPT")'
+    # patch PYTHONPATH in pyspark so that it properly looks at SPARK_HOME
+    substituteInPlace $out/bin/pyspark \
+        --replace 'export PYTHONPATH="''${SPARK_HOME}/python/:$PYTHONPATH"' \
+                  'export PYTHONPATH="''${SPARK_HOME}/..:''${SPARK_HOME}/python/:$PYTHONPATH"'
+  '';
 
-  passthru.optional-dependencies = {
-    ml = [
-      numpy
-    ];
-    mllib = [
-      numpy
-    ];
+  propagatedBuildInputs = [ py4j ];
+
+  optional-dependencies = {
+    ml = [ numpy ];
+    mllib = [ numpy ];
     sql = [
       numpy
       pandas
@@ -49,9 +55,7 @@ buildPythonPackage rec {
   # Tests assume running spark instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyspark"
-  ];
+  pythonImportsCheck = [ "pyspark" ];
 
   meta = with lib; {
     description = "Python bindings for Apache Spark";

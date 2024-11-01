@@ -4,23 +4,25 @@
 , pkg-config
 , libgit2
 , zlib
+, cmake
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gql";
-  version = "0.8.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
     rev = version;
-    hash = "sha256-+f/OMU8fwwnlm8zTyE5XyIzfFwIB917tH9jaqSW8Skg=";
+    hash = "sha256-BA94Q8nRf4NptVBHSMYLMEklB9vHaXRU1+o7shXhkZQ=";
   };
 
-  cargoHash = "sha256-A3o9OE8VO7z04WmbZL2rvlZRN/ZHOIGklKZQgiFSfxE=";
+  cargoHash = "sha256-L+o0ZhTI7x01DpGuhWrvzvSZDYHc++31svWTJ41qx90=";
 
   nativeBuildInputs = [
     pkg-config
+    cmake
   ];
 
   buildInputs = [
@@ -29,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A SQL like query language to perform queries on .git files";
+    description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
     changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
     license = licenses.mit;

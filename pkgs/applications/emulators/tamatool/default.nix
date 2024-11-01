@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     SDL2
     SDL2_image
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
@@ -69,10 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A cross-platform Tamagotchi P1 explorer";
+    description = "Cross-platform Tamagotchi P1 explorer";
     homepage = "https://github.com/jcrona/tamatool";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "tamatool";
   };
 })

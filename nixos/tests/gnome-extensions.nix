@@ -2,7 +2,7 @@ import ./make-test-python.nix (
 { pkgs, lib, ...}:
 {
   name = "gnome-extensions";
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:
@@ -45,7 +45,7 @@ import ./make-test-python.nix (
               # Eval API is now internal so Shell needs to run in unsafe mode.
               # TODO: improve test driver so that it supports openqa-like manipulation
               # that would allow us to drop this mess.
-              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+              "${pkgs.gnome-shell}/bin/gnome-shell --unsafe-mode"
             ];
           };
         };
@@ -84,9 +84,8 @@ import ./make-test-python.nix (
       "dash-to-dock"
       "dash-to-panel"
       "ddterm"
-      "emoji-selector"
       "gsconnect"
-      "system-monitor"
+      "system-monitor-next"
       "desktop-icons-ng-ding"
       "workspace-indicator"
       "vitals"
@@ -138,11 +137,11 @@ import ./make-test-python.nix (
             # Enable and optionally disable
 
             machine.succeed(f"${run "gnome-extensions enable {extension}"}")
-            checkState("ENABLED", extension)
+            checkState("ACTIVE", extension)
 
             if disable:
                 machine.succeed(f"${run "gnome-extensions disable {extension}"}")
-                checkState("DISABLED", extension)
+                checkState("INACTIVE", extension)
     ''
     + lib.concatLines (map (e: ''checkExtension("${e}", False)'') alwaysOnExtensions)
     + lib.concatLines (map (e: ''checkExtension("${e}", True)'') testExtensions)

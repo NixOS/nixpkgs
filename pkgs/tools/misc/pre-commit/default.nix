@@ -10,6 +10,7 @@
 , go
 , nodejs
 , perl
+, cabal-install
 , testers
 , pre-commit
 }:
@@ -17,21 +18,22 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.3.3";
+  version = "4.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    rev = "v${version}";
-    hash = "sha256-6FKf4jLHUt2c7LSxFcq53IsfHOWeUSI+P9To0eh48+o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
     ./hook-tmpl.patch
+    ./pygrep-pythonpath.patch
   ];
 
   propagatedBuildInputs = [
@@ -58,6 +60,7 @@ buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     re-assert
+    cabal-install
   ];
 
   # i686-linux: dotnet-sdk not available
@@ -78,7 +81,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''
@@ -128,9 +131,7 @@ buildPythonApplication rec {
     "test_dart"
     "test_dart_additional_deps"
     "test_dart_additional_deps_versioned"
-    "test_docker_hook"
-    "test_docker_image_hook_via_args"
-    "test_docker_image_hook_via_entrypoint"
+    "test_during_commit_all"
     "test_golang_default_version"
     "test_golang_hook"
     "test_golang_hook_still_works_when_gobin_is_set"
@@ -156,16 +157,22 @@ buildPythonApplication rec {
     "test_run_versioned_node_hook"
     "test_rust_cli_additional_dependencies"
     "test_swift_language"
+    "test_run_example_executable"
+    "test_run_dep"
 
     # i don't know why these fail
     "test_install_existing_hooks_no_overwrite"
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
     "test_dotnet_"
+    "test_health_check_"
 
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
     # but we use an absolute path so it's not an issue.
     "test_environment_not_sourced"
+
+    # Docker required
+    "test_docker_"
   ];
 
   pythonImportsCheck = [
@@ -177,9 +184,10 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A framework for managing and maintaining multi-language pre-commit hooks";
+    description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];
+    mainProgram = "pre-commit";
   };
 }

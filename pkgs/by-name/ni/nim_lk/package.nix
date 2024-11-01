@@ -1,20 +1,45 @@
-{ lib, buildPackages, nim2Packages, fetchFromSourcehut, openssl }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromSourcehut,
+  nim,
+  nix-prefetch,
+  nix-prefetch-git,
+  openssl,
+  makeWrapper,
+}:
 
-nim2Packages.buildNimPackage (finalAttrs: {
+let
+  nim' = nim.passthru.nim;
+in
+buildNimPackage (finalAttrs: {
   pname = "nim_lk";
-  version = "20231031";
-  nimBinOnly = true;
+  version = "20240527";
 
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
     rev = finalAttrs.version;
-    hash = "sha256-dXm3dfXAxgucek19f1KdRShOsJyELPTB32qgGSKId6A=";
+    hash = "sha256-r8K9HRGEgqlFZJPdDeOYienmfzfNOeCdqMhshjr72Ok=";
   };
 
-  buildInputs = [ openssl ];
+  lockFile = ./lock.json;
 
-  nimFlags = finalAttrs.passthru.nimFlagsFromLockFile ./lock.json;
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  nimFlags = [ "--path:${nim'}/nim" ];
+
+  postFixup = ''
+    wrapProgram $out/bin/nim_lk \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          nim'
+          nix-prefetch
+          nix-prefetch-git
+        ]
+      }
+  '';
 
   meta = finalAttrs.src.meta // {
     description = "Generate Nix specific lock files for Nim packages";
@@ -24,29 +49,4 @@ nim2Packages.buildNimPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ehmry ];
   };
-
-  passthru.nimFlagsFromLockFile = let
-    fetchDependency = let
-      methods = {
-        fetchzip = { url, sha256, ... }:
-          buildPackages.fetchzip {
-            name = "source";
-            inherit url sha256;
-          };
-        git = { fetchSubmodules, leaveDotGit, rev, sha256, url, ... }:
-          buildPackages.fetchgit {
-            inherit fetchSubmodules leaveDotGit rev sha256 url;
-          };
-      };
-    in attrs@{ method, ... }: methods.${method} attrs // attrs;
-  in lockFile:
-  with builtins;
-  lib.pipe lockFile [
-    readFile
-    fromJSON
-    (getAttr "depends")
-    (map fetchDependency)
-    (map ({ outPath, srcDir, ... }: ''--path:"${outPath}/${srcDir}"''))
-  ];
-
 })

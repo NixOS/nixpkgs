@@ -1,8 +1,10 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchurl
+, runCommand
 , cmake
-, ffmpeg_4
+, ffmpeg
+, glslang
 , libdrm
 , libglvnd
 , libffi
@@ -12,10 +14,14 @@
 , libXdmcp
 , libxcb
 , makeWrapper
+, mesa
 , ninja
 , pkg-config
 , python3
+, spirv-headers
+, vulkan-headers
 , vulkan-loader
+, vulkan-utility-libraries
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -37,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.7.0";
+  version = "1.3.9.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-f7i7gytk3cKeFQD0FR+nrUR2o0FWaJWKG7OpDz9u42E=";
+    rev = "vulkan-cts-${finalAttrs.version}";
+    hash = "sha256-JCepNBVHaN4KXRcLOZ2z7toBMri90tV7kjNWHRXRESE=";
   };
 
   prePatch = ''
@@ -53,11 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${sources.prePatch}
 
+    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
+      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
+
     chmod u+w -R external
   '';
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg
     libdrm
     libffi
     libglvnd
@@ -66,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXau
     libXdmcp
     libxcb
+    vulkan-headers
+    vulkan-utility-libraries
     wayland
     wayland-protocols
     zlib
@@ -80,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   cmakeFlags = [
     # Fix cts cmake not coping with absolute install dirs
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -87,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
 
     "-DWAYLAND_SCANNER=wayland-scanner"
+    # For vulkan-validation-layers
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
   ];
 
   postInstall = ''
@@ -104,11 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" {
+    nativeBuildInputs = [ finalAttrs.finalPackage mesa.llvmpipeHook ];
+  } ''
+    deqp-vk -n dEQP-VK.api.smoke.triangle
+    touch $out
+  '';
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
-    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/${finalAttrs.pname}-${finalAttrs.version}";
+    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };

@@ -1,5 +1,4 @@
 { stdenv
-, bash
 , buildPackages
 , buildBazelPackage
 , fetchFromGitHub
@@ -8,7 +7,7 @@
 let
   buildPlatform = stdenv.buildPlatform;
   hostPlatform = stdenv.hostPlatform;
-  pythonEnv = buildPackages.python3.withPackages (ps: [ ps.numpy ]);
+  pythonEnv = buildPackages.python3.withPackages (ps: with ps; [ distutils numpy ]);
   bazelDepsSha256ByBuildAndHost = {
     x86_64-linux = {
       x86_64-linux = "sha256-61qmnAB80syYhURWYJOiOnoGOtNa1pPkxfznrFScPAo=";
@@ -84,6 +83,10 @@ buildBazelPackage rec {
 
   postPatch = ''
     rm .bazelversion
+
+    # Fix gcc-13 build failure by including missing include headers
+    sed -e '1i #include <cstdint>' -i \
+      tensorflow/lite/kernels/internal/spectrogram.cc
   '';
 
   preConfigure = ''
@@ -95,7 +98,7 @@ buildBazelPackage rec {
   configurePlatforms = [];
 
   meta = with lib; {
-    description = "An open source deep learning framework for on-device inference.";
+    description = "Open source deep learning framework for on-device inference";
     homepage = "https://www.tensorflow.org/lite";
     license = licenses.asl20;
     maintainers = with maintainers; [ mschwaig cpcloud ];

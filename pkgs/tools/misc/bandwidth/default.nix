@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.11.2d";
 
   src = fetchurl {
-    url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
+    url = "https://zsmith.co/archives/bandwidth-${version}.tar.gz";
     hash = "sha256-7IrNiCXKf1vyRGl73Ccu3aYMqPVc4PpEr6lnSqIa4Q8=";
   };
 
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
     maintainers = with maintainers; [ r-burns ];
+    mainProgram = "bandwidth";
   };
 }

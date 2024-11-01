@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nkeys";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sgj4+akOs/3fnpP0YDoRY9WwSk4uwtIPyPilutDXOlE=";
+    hash = "sha256-ui/vSa2TGe6Pe2aAzitBa1Pd2vKgTMuHoBhYYy2p6Rw=";
   };
 
-  vendorHash = "sha256-8EfOtCiYCGmhGtZdPiFyNzBj+QsPx67vwFDMZ6ATidc=";
+  vendorHash = "sha256-SiSqmj6ktfiGsJOSu/pBY53e3vnN+RBfTkGwUuW52uo=";
 
   meta = with lib; {
     description = "Public-key signature system for NATS";

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "xq";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "sibprogrammer";
     repo = "xq";
     rev = "v${version}";
-    hash = "sha256-Zg1ARyDXklKBR5WhqRakWT/KcG5796h2MxsBjPCWSjs=";
+    hash = "sha256-g1d5sS3tgxP2VRogWG/5OXezDsJuQ6e724te+Oj3r24=";
   };
 
-  vendorHash = "sha256-NNhndc604B0nGnToS7MtQzpn3t3xPl5DlkCafc/EyKE=";
+  vendorHash = "sha256-Oy/BBE6qCKJQRNDn6UiBr+/Psgi3A9Eaytmbmjt7eq8=";
 
   ldflags = [
     "-s"
@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line XML and HTML beautifier and content extractor";
+    mainProgram = "xq";
     homepage = "https://github.com/sibprogrammer/xq";
     changelog = "https://github.com/sibprogrammer/xq/releases/tag/${src.rev}";
     license = licenses.mit;

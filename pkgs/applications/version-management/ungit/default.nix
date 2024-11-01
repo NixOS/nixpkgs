@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "ungit";
-  version = "1.5.24";
+  version = "1.5.28";
 
   src = fetchFromGitHub {
     owner = "FredrikNoren";
     repo = "ungit";
     rev = "v${version}";
-    hash = "sha256-4hDg153CVZidmnIGUwxfzL45Yt+GlMyepfMLJbcjdqo=";
+    hash = "sha256-zLc+qzbbaQs6Y3NJFHupxyZ0QfuM/VW97dFESR+5dVQ=";
   };
 
-  npmDepsHash = "sha256-Z/vPqJ70NqjABKKa8r24t0sWoPYRVwxH02BNr1yCVNQ=";
+  npmDepsHash = "sha256-pYOBdCb6G24JBGWOhd4fyVEEUn19D9t/GxjjIi/2ya0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
@@ -27,6 +27,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/FredrikNoren/ungit";
     license = lib.licenses.mit;
     mainProgram = "ungit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -62,10 +62,14 @@ in stdenv.mkDerivation rec {
   preBuildPhase = ''
     mkdir -p import/{flre,synapse,pasdblstrutils} rcmdline internettools
     cp -R ${flreSrc}/. import/flre
-    cp -R ${synapseSrc}/. import/synapse
     cp -R ${pasdblstrutilsSrc}/. import/pasdblstrutils
     cp -R ${rcmdlineSrc}/. rcmdline
     cp -R ${internettoolsSrc}/. internettools
+
+    cp -R ${synapseSrc}/. import/synapse
+    substituteInPlace import/synapse/ssl_openssl{,11}_lib.pas \
+      --replace-fail 'libcrypto.dylib' '${lib.getLib openssl}/lib/libcrypto.dylib' \
+      --replace-fail 'libssl.dylib' '${lib.getLib openssl}/lib/libssl.dylib'
   '';
 
   buildPhase = ''
@@ -87,9 +91,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
+    mainProgram = "xidel";
     homepage = "https://www.videlibri.de/xidel.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
 }

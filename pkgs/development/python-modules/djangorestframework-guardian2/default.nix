@@ -1,19 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django-guardian
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django-guardian,
+  djangorestframework,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian2";
-  version = "0.5.0";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johnthagen";
     repo = "django-rest-framework-guardian2";
-    rev = "v${version}";
-    hash = "sha256-aW20xEmVTAgwayWMJsabmyKNW65NftJyQANtT6JV74U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LrIhOoBWC3HttjAGbul4zof++OW35pGMyFGZzUpG1Tk=";
   };
 
   postPatch = ''
@@ -21,7 +24,9 @@ buildPythonPackage rec {
     patchShebangs manage.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django-guardian
     djangorestframework
   ];

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zope_interface
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zope-interface,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,25 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-UNT7iHK5UuV6SOEmEOVQ+jBm7rV8bGx1tqUUJBi6wZw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    zope_interface
-  ];
+  propagatedBuildInputs = [ zope-interface ];
 
-  pythonImportsCheck = [
-    "lazr.delegates"
-  ];
+  pythonImportsCheck = [ "lazr.delegates" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonNamespaces = [
-    "lazr"
-  ];
+  pythonNamespaces = [ "lazr" ];
 
   meta = with lib; {
     description = "Easily write objects that delegate behavior";

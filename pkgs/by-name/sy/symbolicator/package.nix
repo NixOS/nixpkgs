@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "23.11.0";
+  version = "24.7.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-eXMMk12ZxRs5k3DaRhGADwLbE62L8e4N3R5Rw8kZMKI=";
+    hash = "sha256-thc1VXKtOc+kgIMHGDBp4InaSFG9mK9WYS7g90b5Fzs=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "cpp_demangle-0.4.1" = "sha256-9QopX2TOJc8bZ+UlSOFdjoe8NTJLVGrykyFL732tE3A=";
-      "reqwest-0.11.18" = "sha256-t6fs2bbBfgcspCrGfWIFCYbYZ7GPcBWI0dy68YdklOQ=";
+      "reqwest-0.12.2" = "sha256-m46NyzsgXsDxb6zwVXP0wCdtCH+rb5f0x+oPNHuBF8s=";
     };
   };
 
@@ -38,17 +38,15 @@ rustPlatform.buildRustPackage rec {
     bzip2
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
     SYMBOLICATOR_GIT_VERSION = src.rev;
     SYMBOLICATOR_RELEASE = version;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   # tests require network access

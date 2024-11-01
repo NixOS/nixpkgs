@@ -4,16 +4,18 @@
 lib.fix (self:
 stdenv.mkDerivation rec {
   pname = "xmlsec";
-  version = "1.2.34";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "sha256-Us7UlD81vX0IGKOCmMFSjKSsilRED9cRNKB9LRNwomI=";
+    sha256 = "sha256-L/1K0fhg7JPkemgDEKsryUlovQdWbnGXa9lhM9lQSRc=";
   };
 
   patches = [
     ./lt_dladdsearchdir.patch
-  ] ++ lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
+    ./remove_bsd_base64_decode_flag.patch
+  ];
+
   postPatch = ''
     substituteAllInPlace src/dl.c
   '';
@@ -33,9 +35,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ nss.tools ];
   preCheck = ''
-    substituteInPlace tests/testrun.sh \
-      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    export TMPFOLDER=$(mktemp -d)
+    substituteInPlace tests/testrun.sh --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000'
   '';
 
   # enable deprecated soap headers required by lasso
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     license = licenses.mit;
     mainProgram = "xmlsec1";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

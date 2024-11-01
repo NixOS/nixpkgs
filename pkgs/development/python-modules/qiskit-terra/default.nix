@@ -1,46 +1,49 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, rustPlatform
-, rustc
+{
+  stdenv,
+  lib,
+  pythonAtLeast,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  libiconv,
   # Python requirements
-, dill
-, numpy
-, networkx
-, ply
-, psutil
-, python-constraint
-, python-dateutil
-, rustworkx
-, scipy
-, scikit-quant ? null
-, setuptools-rust
-, stevedore
-, symengine
-, sympy
-, tweedledum
-, withVisualization ? false
+  dill,
+  numpy,
+  networkx,
+  ply,
+  psutil,
+  python-constraint,
+  python-dateutil,
+  rustworkx,
+  scipy,
+  scikit-quant ? null,
+  setuptools-rust,
+  stevedore,
+  symengine,
+  sympy,
+  tweedledum,
+  withVisualization ? false,
   # Python visualization requirements, optional
-, ipywidgets
-, matplotlib
-, pillow
-, pydot
-, pygments
-, pylatexenc
-, seaborn
+  ipywidgets,
+  matplotlib,
+  pillow,
+  pydot,
+  pygments,
+  pylatexenc,
+  seaborn,
   # Crosstalk-adaptive layout pass
-, withCrosstalkPass ? false
-, z3
+  withCrosstalkPass ? false,
+  z3-solver,
   # test requirements
-, ddt
-, hypothesis
-, nbformat
-, nbconvert
-, pytestCheckHook
-, python
+  ddt,
+  hypothesis,
+  nbformat,
+  nbconvert,
+  pytestCheckHook,
+  python,
 }:
 
 let
@@ -53,14 +56,15 @@ let
     pylatexenc
     seaborn
   ];
-  crosstalkPackages = [ z3 ];
+  crosstalkPackages = [ z3-solver ];
 in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
   version = "0.25.1";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "qiskit";
@@ -69,31 +73,40 @@ buildPythonPackage rec {
     hash = "sha256-4/LVKDNxKsRztCtU/mMfKMVHHJqfadZXmxeOlnlz9Tc=";
   };
 
-  nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];
+  nativeBuildInputs = [
+    setuptools-rust
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-SXC0UqWjWqLlZvKCRBylSX73r4Vale130KzS0zM8gjQ=";
+    hash = "sha256-f5VLNxv9DKwfRy5zacydfz4Zrkbiee7JecOAbVelSto=";
   };
 
-  propagatedBuildInputs = [
-    dill
-    numpy
-    networkx
-    ply
-    psutil
-    python-constraint
-    python-dateutil
-    rustworkx
-    scipy
-    scikit-quant
-    stevedore
-    symengine
-    sympy
-    tweedledum
-  ] ++ lib.optionals withVisualization visualizationPackages
-  ++ lib.optionals withCrosstalkPass crosstalkPackages;
+  propagatedBuildInputs =
+    [
+      dill
+      numpy
+      networkx
+      ply
+      psutil
+      python-constraint
+      python-dateutil
+      rustworkx
+      scipy
+      scikit-quant
+      stevedore
+      symengine
+      sympy
+      tweedledum
+    ]
+    ++ lib.optionals withVisualization visualizationPackages
+    ++ lib.optionals withCrosstalkPass crosstalkPackages;
 
   # *** Tests ***
   nativeCheckInputs = [
@@ -116,65 +129,72 @@ buildPythonPackage rec {
     "test/randomized/"
     # These tests consistently fail on GitHub Actions build
     "test/python/quantum_info/operators/test_random.py"
+    # Too many floating point arithmetic errors
+    "test/visual/mpl/circuit/test_circuit_matplotlib_drawer.py"
   ];
   pytestFlagsArray = [ "--durations=10" ];
-  disabledTests = [
-    "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
-    # matplotlib tests seems to fail non-deterministically
-    "TestMatplotlibDrawer"
-    "TestGraphMatplotlibDrawer"
-    "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
+  disabledTests =
+    [
+      "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
+      # matplotlib tests seems to fail non-deterministically
+      "TestMatplotlibDrawer"
+      "TestGraphMatplotlibDrawer"
+      "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
 
-    # Flaky tests
-    "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
-    "test_cx_equivalence"  # Fails due to flaky test
-    "test_two_qubit_synthesis_not_pulse_optimal" # test of random circuit, seems to randomly fail depending on seed
-    "test_qv_natural" # fails due to sign error. Not sure why
-  ] ++ lib.optionals (lib.versionAtLeast matplotlib.version "3.4.0") [
-    "test_plot_circuit_layout"
-  ]
-  # Disabling slow tests for build constraints
-  ++ [
-    "test_all_examples"
-    "test_controlled_random_unitary"
-    "test_controlled_standard_gates_1"
-    "test_jupyter_jobs_pbars"
-    "test_lookahead_swap_higher_depth_width_is_better"
-    "test_move_measurements"
-    "test_job_monitor"
-    "test_wait_for_final_state"
-    "test_multi_controlled_y_rotation_matrix_basic_mode"
-    "test_two_qubit_weyl_decomposition_abc"
-    "test_isometry"
-    "test_parallel"
-    "test_random_state"
-    "test_random_clifford_valid"
-    "test_to_matrix"
-    "test_block_collection_reduces_1q_gate"
-    "test_multi_controlled_rotation_gate_matrices"
-    "test_block_collection_runs_for_non_cx_bases"
-    "test_with_two_qubit_reduction"
-    "test_basic_aer_qasm"
-    "test_hhl"
-    "test_H2_hamiltonian"
-    "test_max_evals_grouped_2"
-    "test_qaoa_qc_mixer_4"
-    "test_abelian_grouper_random_2"
-    "test_pauli_two_design"
-    "test_shor_factoring"
-    "test_sample_counts_memory_ghz"
-    "test_two_qubit_weyl_decomposition_ab0"
-    "test_sample_counts_memory_superposition"
-    "test_piecewise_polynomial_function"
-    "test_piecewise_chebyshev_mutability"
-    "test_bit_conditional_no_cregbundle"
-    "test_gradient_wrapper2"
-    "test_two_qubit_weyl_decomposition_abmb"
-    "test_two_qubit_weyl_decomposition_abb"
-    "test_vqe_qasm"
-    "test_dag_from_networkx"
-    "test_defaults_to_dict_46"
-  ];
+      "test_bound_pass_manager" # AssertionError: 0 != 2
+      "test_complex_parameter_bound_to_real" # qiskit.circuit.exceptions.CircuitError: "Invalid param type <class 'complex'> for gate rx."
+      "test_expressions_of_parameter_with_constant" # Floating point arithmetic error
+      "test_handle_measurement" # AssertionError: The two circuits are not equal
+
+      # Flaky tests
+      "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
+      "test_cx_equivalence" # Fails due to flaky test
+      "test_two_qubit_synthesis_not_pulse_optimal" # test of random circuit, seems to randomly fail depending on seed
+      "test_qv_natural" # fails due to sign error. Not sure why
+    ]
+    ++ lib.optionals (lib.versionAtLeast matplotlib.version "3.4.0") [ "test_plot_circuit_layout" ]
+    # Disabling slow tests for build constraints
+    ++ [
+      "test_all_examples"
+      "test_controlled_random_unitary"
+      "test_controlled_standard_gates_1"
+      "test_jupyter_jobs_pbars"
+      "test_lookahead_swap_higher_depth_width_is_better"
+      "test_move_measurements"
+      "test_job_monitor"
+      "test_wait_for_final_state"
+      "test_multi_controlled_y_rotation_matrix_basic_mode"
+      "test_two_qubit_weyl_decomposition_abc"
+      "test_isometry"
+      "test_parallel"
+      "test_random_state"
+      "test_random_clifford_valid"
+      "test_to_matrix"
+      "test_block_collection_reduces_1q_gate"
+      "test_multi_controlled_rotation_gate_matrices"
+      "test_block_collection_runs_for_non_cx_bases"
+      "test_with_two_qubit_reduction"
+      "test_basic_aer_qasm"
+      "test_hhl"
+      "test_H2_hamiltonian"
+      "test_max_evals_grouped_2"
+      "test_qaoa_qc_mixer_4"
+      "test_abelian_grouper_random_2"
+      "test_pauli_two_design"
+      "test_shor_factoring"
+      "test_sample_counts_memory_ghz"
+      "test_two_qubit_weyl_decomposition_ab0"
+      "test_sample_counts_memory_superposition"
+      "test_piecewise_polynomial_function"
+      "test_piecewise_chebyshev_mutability"
+      "test_bit_conditional_no_cregbundle"
+      "test_gradient_wrapper2"
+      "test_two_qubit_weyl_decomposition_abmb"
+      "test_two_qubit_weyl_decomposition_abb"
+      "test_vqe_qasm"
+      "test_dag_from_networkx"
+      "test_defaults_to_dict_46"
+    ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
   # cythonized modules and expecting to find some resource files in the test directory.
@@ -193,10 +213,8 @@ buildPythonPackage rec {
     popd
   '';
 
-
   meta = with lib; {
-    broken = true; # tests segfault python
-    description = "Provides the foundations for Qiskit.";
+    description = "Provides the foundations for Qiskit";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
     '';

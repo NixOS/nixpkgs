@@ -7,14 +7,16 @@ There are generally two ways of enabling Kubernetes on NixOS. One way is
 to enable and configure cluster components appropriately by hand:
 
 ```nix
-services.kubernetes = {
-  apiserver.enable = true;
-  controllerManager.enable = true;
-  scheduler.enable = true;
-  addonManager.enable = true;
-  proxy.enable = true;
-  flannel.enable = true;
-};
+{
+  services.kubernetes = {
+    apiserver.enable = true;
+    controllerManager.enable = true;
+    scheduler.enable = true;
+    addonManager.enable = true;
+    proxy.enable = true;
+    flannel.enable = true;
+  };
+}
 ```
 
 Another way is to assign cluster roles ("master" and/or "node") to
@@ -22,20 +24,26 @@ the host. This enables apiserver, controllerManager, scheduler,
 addonManager, kube-proxy and etcd:
 
 ```nix
-services.kubernetes.roles = [ "master" ];
+{
+  services.kubernetes.roles = [ "master" ];
+}
 ```
 
 While this will enable the kubelet and kube-proxy only:
 
 ```nix
-services.kubernetes.roles = [ "node" ];
+{
+  services.kubernetes.roles = [ "node" ];
+}
 ```
 
 Assigning both the master and node roles is usable if you want a single
 node Kubernetes cluster for dev or testing purposes:
 
 ```nix
-services.kubernetes.roles = [ "master" "node" ];
+{
+  services.kubernetes.roles = [ "master" "node" ];
+}
 ```
 
 Note: Assigning either role will also default both

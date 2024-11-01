@@ -1,50 +1,62 @@
-{ lib
-, brotlicffi
-, buildPythonPackage
-, decorator
-, fetchPypi
-, flask
-, flask-limiter
-, flasgger
-, itsdangerous
-, markupsafe
-, raven
-, six
-, pytestCheckHook
-, setuptools
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  brotlicffi,
+  decorator,
+  flasgger,
+  flask,
+  greenlet,
+  six,
+  werkzeug,
+
+  # optional-dependencies
+  gunicorn,
+  gevent,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.10.1";
+  version = "0.10.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e4WWvrDnWntlPDnR888mPW1cR20p4d9ve7K3C/nwaj0=";
+    hash = "sha256-YyFIaYJhyGhOotK2JM3qhFtAKx/pFzbonfiGQIxjF6k=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
+  pythonRelaxDeps = [ "greenlet" ];
+
   propagatedBuildInputs = [
     brotlicffi
     decorator
     flask
-    flask-limiter
     flasgger
-    itsdangerous
-    markupsafe
-    raven
+    greenlet
     six
     werkzeug
-  ] ++ raven.optional-dependencies.flask;
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
+
+  optional-dependencies = {
+    mainapp = [
+      gunicorn
+      gevent
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests seems to be outdated
@@ -57,14 +69,12 @@ buildPythonPackage rec {
     "test_relative_redirect_n_higher_than_1"
   ];
 
-  pythonImportsCheck = [
-    "httpbin"
-  ];
+  pythonImportsCheck = [ "httpbin" ];
 
   meta = with lib; {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

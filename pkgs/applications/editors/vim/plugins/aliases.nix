@@ -6,16 +6,16 @@ final: prev:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias: with lib;
+  removeRecurseForDerivations = alias:
     if alias.recurseForDerivations or false then
-      removeAttrs alias ["recurseForDerivations"]
+      lib.removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
     else alias;
 
   # Make sure that we are not shadowing something from
@@ -93,10 +93,13 @@ mapAliases (with prev; {
   neoinclude          = neoinclude-vim;
   neomru              = neomru-vim;
   neosnippet          = neosnippet-vim;
+  nvim-ts-rainbow     = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
+  nvim-ts-rainbow2    = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
+  peskcolor-vim       = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
   polyglot            = vim-polyglot;
   prettyprint         = vim-prettyprint;
   quickrun            = vim-quickrun;
@@ -114,6 +117,7 @@ mapAliases (with prev; {
   solidity            = vim-solidity;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = vim-stylish-haskell; # backwards compat, added 2014-10-18
+  suda-vim            = vim-suda; # backwards compat, added 2024-05-16
   Supertab            = supertab;
   Syntastic           = syntastic;
   SyntaxRange         = vim-SyntaxRange;

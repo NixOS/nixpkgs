@@ -1,32 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, protobuf
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  protobuf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-proto";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
-  format = "pyproject";
+  pythonRelaxDeps = [ "protobuf" ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  dependencies = [ protobuf ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "opentelemetry.proto" ];
 

@@ -16,9 +16,10 @@ stdenv.mkDerivation {
   buildInputs = [ SDL ];
 
   meta = with lib; {
-    description = "Visual Interface heXadecimal dump ";
+    description = "Visual Interface heXadecimal dump";
     homepage = "http://actinid.org/vix/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ehmry ];
+    mainProgram = "vix";
   };
 }

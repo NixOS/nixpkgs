@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "logzero";
   version = "1.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

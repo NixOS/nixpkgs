@@ -1,26 +1,25 @@
-{ lib
-, stdenv
-, substituteAll
-, buildPythonPackage
-, fetchPypi
-, joblib
-, segments
-, attrs
-, dlinfo
-, typing-extensions
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  dlinfo,
+  typing-extensions,
+  espeak-ng,
 }:
 
 buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
+    hash = "sha256-Xgw4Ei7/4LMxok5nSv8laHTs4WnXCpzxEgM3tW+OPQw=";
   };
 
   postPatch = ''
@@ -51,7 +50,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
+    mainProgram = "phonemize";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

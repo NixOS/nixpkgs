@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbcsr";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "dbcsr";
     rev = "v${version}";
-    hash = "sha256-+xSxfrzsxBdb424F/3mIETleEPoETxU0LB0OBJrR7gw=";
+    hash = "sha256-QEO7f27DLsCvKXgFJnneHs1kO+5V9xiURpbQuGg1P0M=";
   };
 
   postPatch = ''
@@ -49,10 +49,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ blas lapack libxsmm ];
 
   propagatedBuildInputs = [ mpi ];
-
-  preConfigure = ''
-    export PKG_CONFIG_PATH=${libxsmm}/lib
-  '';
 
   cmakeFlags = [
     "-DUSE_OPENMP=ON"

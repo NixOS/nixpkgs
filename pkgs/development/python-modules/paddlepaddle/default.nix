@@ -1,38 +1,47 @@
-{ stdenv
-, config
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
-, pythonAtLeast
-, openssl_1_1
-, zlib
-, setuptools
-, cudaSupport ? config.cudaSupport or false
-, cudaPackages_11 ? {}
-, addOpenGLRunpath
-# runtime dependencies
-, httpx
-, numpy
-, protobuf
-, pillow
-, decorator
-, astor
-, paddle-bfloat
-, opt-einsum
+{
+  stdenv,
+  config,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
+  pythonAtLeast,
+  openssl_1_1,
+  zlib,
+  setuptools,
+  cudaSupport ? config.cudaSupport or false,
+  cudaPackages_11 ? { },
+  addDriverRunpath,
+  # runtime dependencies
+  httpx,
+  numpy,
+  protobuf,
+  pillow,
+  decorator,
+  astor,
+  paddle-bfloat,
+  opt-einsum,
 }:
 
 let
   pname = "paddlepaddle" + lib.optionalString cudaSupport "-gpu";
   version = "2.5.0";
   format = "wheel";
-  pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
+  pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
   allHashAndPlatform = import ./binary-hashes.nix;
-  hash = allHashAndPlatform."${stdenv.system}"."${if cudaSupport then "gpu" else "cpu"}"."${pyShortVersion}";
+  hash =
+    allHashAndPlatform."${stdenv.system}"."${cpuOrGpu}"."${pyShortVersion}"
+      or (throw "${pname} has no binary-hashes.nix entry for '${stdenv.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
   platform = allHashAndPlatform."${stdenv.system}".platform;
   src = fetchPypi ({
-    inherit version format hash platform;
+    inherit
+      version
+      format
+      hash
+      platform
+      ;
     pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
     dist = pyShortVersion;
     python = pyShortVersion;
@@ -40,7 +49,12 @@ let
   });
 in
 buildPythonPackage {
-  inherit pname version format src;
+  inherit
+    pname
+    version
+    format
+    src
+    ;
 
   disabled = pythonOlder "3.9" || pythonAtLeast "3.11";
 
@@ -48,27 +62,32 @@ buildPythonPackage {
     # TODO: remove openssl_1_1 and zlib, maybe by building paddlepaddle from
     # source as suggested in the following comment:
     # https://github.com/NixOS/nixpkgs/pull/243583#issuecomment-1641450848
-    [ openssl_1_1 zlib ] ++ lib.optionals cudaSupport (with cudaPackages_11; [
-      cudatoolkit.lib
-      cudatoolkit.out
-      cudnn
-    ])
+    [
+      openssl_1_1
+      zlib
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages_11;
+      [
+        cudatoolkit.lib
+        cudatoolkit.out
+        cudnn
+      ]
+    )
   );
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
       ${lib.optionalString cudaSupport ''
-        addOpenGLRunpath $1
+        addDriverRunpath $1
       ''}
     }
     fixRunPath $out/${python.sitePackages}/paddle/fluid/libpaddle.so
   '';
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ addDriverRunpath ];
 
   propagatedBuildInputs = [
     setuptools
@@ -92,6 +111,11 @@ buildPythonPackage {
     homepage = "https://github.com/PaddlePaddle/Paddle";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" ] ++ optionals (!cudaSupport) [ "x86_64-darwin" "aarch64-darwin" ];
+    platforms =
+      [ "x86_64-linux" ]
+      ++ optionals (!cudaSupport) [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
   };
 }

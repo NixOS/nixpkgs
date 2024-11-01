@@ -1,13 +1,13 @@
 { lib, stdenv, python, perl, fetchFromGitHub, installShellFiles }:
 stdenv.mkDerivation rec {
   pname = "git-publish";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "stefanha";
     repo = "git-publish";
     rev = "v${version}";
-    sha256 = "14rz5kli6sz171cvdc46z3z0nnpd57rliwr6nn6vjjc49yyfwgl4";
+    hash = "sha256-jjpbr+ZqG4U8/z0PurnXR+IUKQkG3QB8YqhDkH8uu2Y=";
   };
 
   nativeBuildInputs = [ perl installShellFiles ];
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Prepare and store patch revisions as git tags";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [ ];
     homepage = "https://github.com/stefanha/git-publish";
+    mainProgram = "git-publish";
   };
 }

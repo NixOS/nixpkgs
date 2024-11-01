@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , zlib
 , stdenv
@@ -27,19 +27,20 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
   env = {
+    LIBGIT2_NO_VENDOR = 1;
     OPENSSL_NO_VENDOR = true;
   };
 
   meta = with lib; {
-    description = "A TUI file manager built for projects";
+    description = "TUI file manager built for projects";
     homepage = "https://github.com/dzfrias/projectable";
     changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
     license = licenses.mit;

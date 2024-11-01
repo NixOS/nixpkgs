@@ -1,10 +1,10 @@
 { lib, appimageTools, fetchurl, asar }: let
   pname = "todoist-electron";
-  version = "8.9.3";
+  version = "9.8.0";
 
   src = fetchurl {
-    url = "https://electron-dl.todoist.com/linux/Todoist-linux-x86_64-${version}.AppImage";
-    hash = "sha256-L1uH5bnJ66QxAXs7yywG4H/FaunwTX1l+tVtRe2nxdc=";
+    url = "https://electron-dl.todoist.com/linux/Todoist-linux-${version}-x86_64-latest.AppImage";
+    hash = "sha256-ZuoeeQ7SusRhr5BXBYEWCZ9pjdcWClKoR0mnom1XkPg=";
   };
 
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
@@ -22,13 +22,10 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.hidapi
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = pkgs: [ pkgs.hidapi ];
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
-    mv $out/bin/{${pname}-*,${pname}}
     install -Dm444 ${appimageContents}/todoist.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/todoist.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/todoist.desktop \
@@ -37,9 +34,10 @@ in appimageTools.wrapAppImage {
 
   meta = with lib; {
     homepage = "https://todoist.com";
-    description = "The official Todoist electron app";
+    description = "Official Todoist electron app";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kylesferrazza pokon548 ];
+    mainProgram = "todoist-electron";
   };
 }

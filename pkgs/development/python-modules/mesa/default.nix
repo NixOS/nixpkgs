@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, cookiecutter
-, networkx
-, pandas
-, tornado
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cookiecutter,
+  networkx,
+  pandas,
+  tornado,
+  tqdm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mesa";
-  version = "2.1.1";
+  version = "2.4.0";
   format = "setuptools";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;
 
   src = fetchPypi {
-    pname = "Mesa";
+    pname = "mesa";
     inherit version;
-    hash = "sha256-1wyXndB7xQy1jnfHsIqMQgsvmGYUhjDuSBB2M0GcXC4=";
+    hash = "sha256-FlQlyNvtMXRSFT3kMwCEAjAH4b+ZCsxliUiPgbRsSgc=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_examples"
@@ -44,8 +43,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
-    description = "An agent-based modeling (or ABM) framework in Python";
+    description = "Agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;
     maintainers = [ maintainers.dpaetzel ];
+    broken = true; # missing dependencies
   };
 }

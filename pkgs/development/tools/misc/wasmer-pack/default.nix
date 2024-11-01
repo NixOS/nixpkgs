@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nyhjwEZyT8IEb0pTbou/EtN47gehge3fUCQVPs2TkIY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Import your WebAssembly code just like any other dependency";
+    mainProgram = "wasmer-pack";
     homepage = "https://github.com/wasmerio/wasmer-pack";
     changelog = "https://github.com/wasmerio/wasmer-pack/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

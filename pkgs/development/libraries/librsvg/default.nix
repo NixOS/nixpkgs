@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.57.0";
+  version = "2.58.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -50,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M1/i4MLL8be/BmhlEiSiPhNUUfCxeTzYE2Sb4r/6dOg=";
+    hash = "sha256-SfKaCpL0wtGaLLQelqsvzn61veQYUMipFPz2VeMRCUQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-P8W4z/MwSpP0xqrxoVZPAip7ymdIUL2+uP88Q2Y3hVU=";
+    hash = "sha256-pTd3H4ZYwsCb4C6gijE0gRWZ4Mq6gGGmwXE3nKGILhw=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     libintl
     vala # for share/vala/Makefile.vapigen
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Foundation
     libobjc
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withIntrospection "vala")
 
     "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-Bsymbolic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
@@ -113,11 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
-  # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
-  # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    NIX_LDFLAGS = "-lobjc";
-  };
+  # librsvg only links Foundation, but it also requiers libobjc.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-lobjc"; };
 
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
@@ -184,14 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
                 jq
                 nix
               ]}
-              # update-source-version does not allow updating to the same version so we need to clear it temporarily.
-              # Get the current version so that we can restore it later.
-              latestVersion=$(nix-instantiate --eval -A librsvg.version | jq --raw-output)
-              # Clear the version. Provide hash so that we do not need to do pointless TOFU.
-              # Needs to be a fake SRI hash that is non-zero, since u-s-v uses zero as a placeholder.
-              # Also cannot be here verbatim or u-s-v would be confused what to replace.
-              update-source-version librsvg 0 "sha256-${lib.fixedWidthString 44 "B" "="}" --source-key=cargoDeps > /dev/null
-              update-source-version librsvg "$latestVersion" --source-key=cargoDeps > /dev/null
+              update-source-version librsvg --ignore-same-version --source-key=cargoDeps > /dev/null
             ''
           ];
           # Experimental feature: do not copy!
@@ -216,8 +206,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A small library to render SVG images to Cairo surfaces";
-    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
+    description = "Small library to render SVG images to Cairo surfaces";
+    homepage = "https://gitlab.gnome.org/GNOME/librsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     mainProgram = "rsvg-convert";

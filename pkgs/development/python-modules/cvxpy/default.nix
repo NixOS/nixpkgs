@@ -1,45 +1,57 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cvxopt
-, ecos
-, fetchPypi
-, numpy
-, osqp
-, pytestCheckHook
-, pythonOlder
-, scipy
-, scs
-, setuptools
-, wheel
-, pybind11
-, useOpenmp ? (!stdenv.isDarwin)
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  numpy,
+  pybind11,
+  setuptools,
+
+  # dependencies
+  clarabel,
+  cvxopt,
+  ecos,
+  osqp,
+  scipy,
+  scs,
+
+  # checks
+  pytestCheckHook,
+
+  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.4.1";
-  format = "pyproject";
+  version = "1.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ep7zTjxX/4yETYbwo4NPtVda8ZIzlHY53guld8YSLj4=";
+  src = fetchFromGitHub {
+    owner = "cvxpy";
+    repo = "cvxpy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6RaEyFckvF3WhbfeffysMB/zt+aU1NU6B7Nm06znt9k=";
   };
 
   # we need to patch out numpy version caps from upstream
   postPatch = ''
-    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [
+    numpy
     pybind11
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    clarabel
     cvxopt
     ecos
     numpy
@@ -48,9 +60,7 @@ buildPythonPackage rec {
     scs
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
@@ -58,32 +68,24 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [
-    "cvxpy"
-  ];
+  pytestFlagsArray = [ "cvxpy" ];
 
   disabledTests = [
-   # Disable the slowest benchmarking tests, cuts test time in half
+    # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
-    # https://github.com/cvxpy/cvxpy/issues/2174
-    "test_scipy_mi_time_limit_reached"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_ecos_bb_mi_lp_2" # https://github.com/cvxpy/cvxpy/issues/1241#issuecomment-780912155
   ];
 
-  pythonImportsCheck = [
-    "cvxpy"
-  ];
+  pythonImportsCheck = [ "cvxpy" ];
 
-  meta = with lib; {
-    description = "A domain-specific language for modeling convex optimization problems in Python";
+  meta = {
+    description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
     changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

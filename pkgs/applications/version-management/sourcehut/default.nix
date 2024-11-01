@@ -1,11 +1,11 @@
 { lib
-, stdenv
 , python3
 , callPackage
 , recurseIntoAttrs
 , nixosTests
 , config
 , fetchPypi
+, fetchpatch
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -13,6 +13,7 @@
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       srht = self.callPackage ./core.nix { };
 
@@ -29,19 +30,9 @@ let
       scmsrht = self.callPackage ./scm.nix { };
 
       # sourcehut is not (yet) compatible with SQLAlchemy 2.x
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.46";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-        nativeCheckInputs = with super; [ pytestCheckHook mock ];
-        disabledTestPaths = []
-          # Disable incompatible tests on Darwin.
-          ++ lib.optionals stdenv.isDarwin [ "test/aaa_profiling" ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
 
+      # sourcehut is not (yet) compatible with flask-sqlalchemy 3.x
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.1";
         format = "setuptools";
@@ -56,6 +47,33 @@ let
         ];
       });
 
+      # flask-sqlalchemy 2.x requires flask 2.x
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.3";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
+        };
+      });
+
+      # flask 2.x requires werkzeug 2.x
+      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.8";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
+        };
+        # Fixes a test failure with Pytest 8
+        patches = (oldAttrs.patches or []) ++ [
+          (fetchpatch {
+            url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
+            hash = "sha256-83doVvfdpymlAB0EbfrHmuoKE5B2LJbFq+AY2xGpnl4=";
+          })
+        ];
+      });
+
       # sourcehut is not (yet) compatible with factory-boy 3.x
       factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
         version = "2.12.0";
@@ -66,11 +84,11 @@ let
         };
         nativeCheckInputs = (with super; [
           django
-          flask
           mongoengine
           pytestCheckHook
         ]) ++ (with self; [
           sqlalchemy
+          flask
           flask-sqlalchemy
         ]);
         postPatch = "";

@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 
@@ -21,22 +21,23 @@
 , pkg-config
 , qtbase
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-05-24";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "5e2f37bf9ec17627ae33558d99f90b7608ace422";
-    hash = "sha256-55RqdRu/Hi2OTiLjAFJ6Gdgg9iO5NIIJCsOkUQjR9hk=";
+    rev = "v${version}";
+    hash = "sha256-YkBHvwN573qqQWe/p0n4C2NlyNQHSZNz2jyMKGPITF4=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 wrapQtAppsHook qttools ];
   buildInputs = [
     curl qtbase avahi
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM
@@ -55,7 +56,7 @@ mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/share/applications/input-leap.desktop \
+    substituteInPlace $out/share/applications/io.github.input_leap.InputLeap.desktop \
       --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 

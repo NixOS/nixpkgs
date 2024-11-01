@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -15,7 +16,7 @@
 , c-ares
 , json_c
 , libcap
-, libelf
+, elfutils
 , libunwind
 , libyang
 , net-snmp
@@ -26,6 +27,7 @@
 , readline
 , rtrlib
 , protobufc
+, zeromq
 
 # tests
 , nettools
@@ -44,7 +46,6 @@
 , numMultipath ? 64
 , watchfrrSupport ? true
 , cumulusSupport ? false
-, datacenterSupport ? true
 , rtadvSupport ? true
 , irdpSupport ? true
 , routeReplacementSupport ? true
@@ -83,16 +84,24 @@
 lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   "cannot enable SNMP support due to cross-compilation issues with net-snmp-config"
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "9.0.1";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-o0AVx7sDRowQz6NpKPQThC8NcGA3QN8xFzfE0k4AIVg=";
+    repo = finalAttrs.pname;
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-pmFdxL8QpyXvpX2YiSOZ+KIoNaj1OOH6/qnVAWZLE9s=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-44070.patch";
+      url = "https://github.com/FRRouting/frr/commit/fea4ed5043b4a523921f970a39a565d2c1ca381f.patch";
+      hash = "sha256-X9FjQeOvo92+mL1z3u5W0LBhhePDAyhFAqh8sAtNNm8=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -108,20 +117,22 @@ stdenv.mkDerivation rec {
   buildInputs = [
     c-ares
     json_c
-    libelf
     libunwind
     libyang
     openssl
     pam
     pcre2
+    protobufc
     python3
     readline
     rtrlib
-    protobufc
-  ] ++ lib.optionals stdenv.isLinux [
+    zeromq
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
@@ -131,7 +142,7 @@ stdenv.mkDerivation rec {
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
   # navigation in dependency hell
-  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = version; frrSource = src; };
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = finalAttrs.version; frrSource = finalAttrs.src; };
 
   configureFlags = [
     "--disable-silent-rules"
@@ -143,9 +154,9 @@ stdenv.mkDerivation rec {
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
-    "--sbindir=$(out)/libexec/frr"
+    "--sbindir=${placeholder "out"}/libexec/frr"
     "--sysconfdir=/etc/frr"
-    "--with-clippy=${clippy-helper}/bin/clippy"
+    "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
     # general options
     (lib.strings.enableFeature snmpSupport "snmp")
     (lib.strings.enableFeature rpkiSupport "rpki")
@@ -183,13 +194,12 @@ stdenv.mkDerivation rec {
     (lib.strings.enableFeature ospfApi "ospfapi")
     # Cumulus options
     (lib.strings.enableFeature cumulusSupport "cumulus")
-    # Datacenter options
-    (lib.strings.enableFeature datacenterSupport "datacenter")
   ];
 
   postPatch = ''
     substituteInPlace tools/frr-reload \
-      --replace /usr/lib/frr/ $out/libexec/frr/
+      --replace-quiet /usr/lib/frr/ $out/libexec/frr/
+    sed -i '/^PATH=/ d' tools/frr.in tools/frrcommon.sh.in
   '';
 
   doCheck = true;
@@ -233,4 +243,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests = { inherit (nixosTests) frr; };
-}
+})

@@ -1,27 +1,53 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5, gitUpdater }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3Packages
+, gettext
+, git
+, qt5
+, gitUpdater
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.4.0";
+  version = "4.8.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-LNzsG6I4InygpfbzTikJ1gxTFkVrkDV1eS0CJwKT26A=";
+    hash = "sha256-8OErZ6uKTWE245BoBu9lQyTLA43DfWaYDv3wbPWaufg=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    qt5.qtwayland
+  ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
-  propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
-  nativeBuildInputs = with python3Packages; [ setuptools-scm gettext qt5.wrapQtAppsHook ];
-  nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];
+  propagatedBuildInputs = with python3Packages; [
+    setuptools
+    git
+    pyqt5
+    qtpy
+    send2trash
+    polib
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+    gettext
+    qt5.wrapQtAppsHook
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    git
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "cola/inotify.py"
   ];
 
@@ -35,8 +61,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";
-    description = "A sleek and powerful Git GUI";
+    description = "Sleek and powerful Git GUI";
     license = licenses.gpl2;
     maintainers = [ maintainers.bobvanderlinden ];
+    mainProgram = "git-cola";
   };
 }

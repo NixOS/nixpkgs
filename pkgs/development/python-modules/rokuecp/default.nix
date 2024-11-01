@@ -1,24 +1,25 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, cachetools
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, xmltodict
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.18.2";
-  format = "pyproject";
+  version = "0.19.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -26,14 +27,18 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = "refs/tags/${version}";
-    hash = "sha256-fgnR3TZh+cHvC8qJnvwfrrtxCdEr89Uw8ciACzaQPYE=";
+    hash = "sha256-GotVSRSMdbAtDmVEXNizf5Pf/02sva1R/6ULL6h7ciY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     backoff
     cachetools
@@ -49,12 +54,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
-
   disabledTests = [
     # Network related tests are having troube in the sandbox
     "test_resolve_hostname"
@@ -66,9 +65,7 @@ buildPythonPackage rec {
     "test_get_tv_channels_single_channel"
   ];
 
-  pythonImportsCheck = [
-    "rokuecp"
-  ];
+  pythonImportsCheck = [ "rokuecp" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for Roku (ECP)";

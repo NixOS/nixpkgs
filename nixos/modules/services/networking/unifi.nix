@@ -2,8 +2,8 @@
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = lib.escapeShellArgs ([ "@${cfg.jrePackage}/bin/java" "java" ]
-    ++ lib.optionals (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16") [
+  cmd = lib.escapeShellArgs ([
+      "@${cfg.jrePackage}/bin/java" "java"
       "--add-opens=java.base/java.lang=ALL-UNNAMED"
       "--add-opens=java.base/java.time=ALL-UNNAMED"
       "--add-opens=java.base/sun.security.util=ALL-UNNAMED"
@@ -22,42 +22,30 @@ in
     services.unifi.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to enable the unifi controller service.
       '';
     };
 
-    services.unifi.jrePackage = lib.mkOption {
-      type = lib.types.package;
-      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
-      defaultText = lib.literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
-      description = lib.mdDoc ''
-        The JRE package to use. Check the release notes to ensure it is supported.
+    services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
+      default = "jdk17_headless";
+      extraDescription = ''
+        Check the UniFi controller release notes to ensure it is supported.
       '';
     };
 
-    services.unifi.unifiPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.unifi5;
-      defaultText = lib.literalExpression "pkgs.unifi5";
-      description = lib.mdDoc ''
-        The unifi package to use.
-      '';
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" {
+      default = "unifi8";
     };
 
-    services.unifi.mongodbPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.mongodb-4_4;
-      defaultText = lib.literalExpression "pkgs.mongodb";
-      description = lib.mdDoc ''
-        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
-      '';
+    services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
+      default = "mongodb-7_0";
     };
 
     services.unifi.openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -70,7 +58,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 1024;
-      description = lib.mdDoc ''
+      description = ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -80,7 +68,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 4096;
-      description = lib.mdDoc ''
+      description = ''
         Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -90,7 +78,7 @@ in
       type = with lib.types; listOf str;
       default = [ ];
       example = lib.literalExpression ''["-Xlog:gc"]'';
-      description = lib.mdDoc ''
+      description = ''
         Set extra options to pass to the JVM.
       '';
     };
@@ -98,6 +86,29 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = lib.versionAtLeast config.system.stateVersion "24.11"
+        || (
+          options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
+          && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
+        );
+        message = ''
+          Support for UniFi < 8 has been dropped; please explicitly set
+          `services.unifi.unifiPackage` and `services.unifi.mongodbPackage`.
+
+          Note that the previous default MongoDB version was 5.0 and MongoDB
+          only supports migrating one major version at a time; therefore, you
+          may wish to set `services.unifi.mongodbPackage = pkgs.mongodb-6_0;`
+          and activate your configuration before upgrading again to the default
+          `mongodb-7_0` supported by `unifi8`.
+
+          For more information, see the MongoDB upgrade notes:
+          <https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/#upgrade-recommendations-and-checklists>
+        '';
+      }
+    ];
 
     users.users.unifi = {
       isSystemUser = true;

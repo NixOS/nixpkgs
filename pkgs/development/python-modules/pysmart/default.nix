@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, chardet
-, humanfriendly
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, smartmontools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  chardet,
+  humanfriendly,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  smartmontools,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-1k+5XnIT/AfZmzKUxkyU/uc0eW05CvugpY6OdJCoALc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pySMART/utils.py \
       --replace "which('smartctl')" '"${smartmontools}/bin/smartctl"'
@@ -35,17 +34,11 @@ buildPythonPackage rec {
     humanfriendly
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pySMART"
-  ];
+  pythonImportsCheck = [ "pySMART" ];
 
   meta = with lib; {
     description = "Wrapper for smartctl (smartmontools)";

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makefile =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       "ClangOSX64.mak"
     else
       "gccLinux64.mak";
@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.terraspace.co.uk/uasm.html";
-    description = "A free MASM-compatible assembler based on JWasm";
+    description = "Free MASM-compatible assembler based on JWasm";
+    mainProgram = "uasm";
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;

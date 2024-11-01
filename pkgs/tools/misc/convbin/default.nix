@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zCRM62xwaPaN8+cg+CeaqK/9hKpZmSBBeUOQqAvQGYw=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace "-flto" ""
   '';
 
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "convbin";
   };
 }

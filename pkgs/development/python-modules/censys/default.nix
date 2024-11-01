@@ -1,25 +1,25 @@
-{ lib
-, argcomplete
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, responses
-, rich
+{
+  lib,
+  argcomplete,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  parameterized,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.9";
-  format = "pyproject";
+  version = "2.2.16";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,15 +27,19 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q6Ii2fsJYNABhuaRK4nZ6bjjvNsoIcgNVFBXdBgTXIo=";
+    hash = "sha256-OP7+jSt4xS71Kcjy5hFzeZ5rlTPtDx22rPr3UwjI5dk=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov" ""
+  '';
+
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argcomplete
     backoff
     requests
@@ -57,20 +61,13 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov" ""
-  '';
-
   # The tests want to write a configuration file
   preCheck = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [
-    "censys"
-  ];
+  pythonImportsCheck = [ "censys" ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
@@ -78,5 +75,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "censys";
   };
 }

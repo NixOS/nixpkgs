@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kalign";
-  version = "3.3.5";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "TimoLassmann";
     repo = "kalign";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-QufTiaiRcNOnLhOO4cnOE9bNcj9mlCg/ERFIHJB8KOU=";
+    hash = "sha256-QcFNaCTqj6CFiOzQ6ezfBL0mu8PDU11hyNdkcsLOPzA=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "A fast multiple sequence alignment program";
+    description = "Fast multiple sequence alignment program";
+    mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
-    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;

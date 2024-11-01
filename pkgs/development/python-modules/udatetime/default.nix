@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "udatetime";
   version = "0.0.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Fast RFC3339 compliant Python date-time library";
+    mainProgram = "bench_udatetime.py";
     homepage = "https://github.com/freach/udatetime";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin ];

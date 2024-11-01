@@ -2,10 +2,10 @@
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.3-44-g8983b11f";
+  version = "2.3-160-g97a1f15b";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "TUWACKQz4wEGv2VKqKsuQLjtJZr24gtVZ4l7LCXe7VE=";
+    sha256 = "fxAmpsScNTwSrITZYE2dsKTlGqlMcAAf8RVixpmcqvI=";
   };
 in
 stdenv.mkDerivation {
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A WebRTC compatible video router";
+    description = "WebRTC compatible video router";
     longDescription = ''
       Jitsi Videobridge is an XMPP server component that allows for multiuser video communication.
       Unlike the expensive dedicated hardware videobridges, Jitsi Videobridge does not mix the video
@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.linux;
+    mainProgram = "jitsi-videobridge";
   };
 }

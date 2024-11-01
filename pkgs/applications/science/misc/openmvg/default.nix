@@ -1,34 +1,63 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, cereal, openmp
-, libjpeg ? null
-, zlib ? null
-, libpng ? null
-, eigen ? null
-, libtiff ? null
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
+, cereal
 , ceres-solver
+, clp
+, coin-utils
+, eigen
+, lemon-graph
+, libjpeg
+, libpng
+, libtiff
+, nix-update-script
+, openmp
+, osi
+, zlib
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableExamples ? false
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2022-12-30";
+  version = "2.1";
   pname = "openmvg";
 
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    rev = "e1bbfe801986cd7171f36443a1573b0f69f3702d";
-    sha256 = "sha256-DngfmejNFw5pogTo7Ec5aUey2LUQIojvJybLmtCfvVY=";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    hash = "sha256-vG+tW9Gl/DAUL8DeY+rJVDJH/oMPH3XyZMUgzjtwFv0=";
   };
 
-  buildInputs = [ libjpeg zlib libpng eigen libtiff cereal openmp ceres-solver ];
+  # Pretend we checked out the dependency submodules
+  postPatch = ''
+    mkdir src/dependencies/cereal/include
+  '';
+
+  buildInputs = [
+    cereal
+    ceres-solver
+    clp
+    coin-utils
+    eigen
+    lemon-graph
+    libjpeg
+    libpng
+    libtiff
+    openmp
+    osi
+    zlib
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # flann is missing because the lz4 dependency isn't propagated: https://github.com/openMVG/openMVG/issues/1265
   cmakeFlags = [
     "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
     "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
     "-DTARGET_ARCHITECTURE=generic"
+    "-DCLP_INCLUDE_DIR_HINTS=${lib.getDev clp}/include"
+    "-DCOINUTILS_INCLUDE_DIR_HINTS=${lib.getDev coin-utils}/include"
+    "-DLEMON_INCLUDE_DIR_HINTS=${lib.getDev lemon-graph}/include"
+    "-DOSI_INCLUDE_DIR_HINTS=${lib.getDev osi}/include"
   ] ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
 
   cmakeDir = "./src";
@@ -41,9 +70,11 @@ stdenv.mkDerivation rec {
   # Without hardeningDisable, certain flags are passed to the compile that break the build (primarily string format errors)
   hardeningDisable = [ "all" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    broken = stdenv.isDarwin && stdenv.isx86_64;
-    description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    description = "Library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;

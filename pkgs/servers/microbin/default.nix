@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     oniguruma
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -77,10 +77,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tiny, self-contained, configurable paste bin and URL shortener written in Rust";
+    description = "Tiny, self-contained, configurable paste bin and URL shortener written in Rust";
     homepage = "https://github.com/szabodanika/microbin";
     changelog = "https://github.com/szabodanika/microbin/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dit7ya figsoda ];
+    mainProgram = "microbin";
   };
 }

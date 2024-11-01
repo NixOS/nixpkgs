@@ -1,4 +1,6 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
+, pythonAtLeast
 , fetchpatch
 , meson
 , ninja
@@ -15,6 +17,7 @@
 , toml-f
 , multicharge
 , dftd4
+, setuptools
 }:
 
 buildPythonPackage {
@@ -27,6 +30,8 @@ buildPythonPackage {
     pkg-config
     gfortran
     mctc-lib
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    setuptools
   ];
 
   buildInputs = [

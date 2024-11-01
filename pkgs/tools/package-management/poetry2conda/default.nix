@@ -39,9 +39,10 @@ with python3.pkgs; buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A script to convert a Python project declared on a pyproject.toml to a conda environment";
+    description = "Script to convert a Python project declared on a pyproject.toml to a conda environment";
     homepage = "https://github.com/dojeda/poetry2conda";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "poetry2conda";
   };
 }

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "rain";
-  version = "1.6.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sAqWVGzEQJwf7ioQjOFs+1hAn69LmDCMSu0ym59aDsU=";
+    sha256 = "sha256-J0ZRJ05MDO92Oa/82FPM69Xrge1ATHF4kgNUd5YISFc=";
   };
 
-  vendorHash = "sha256-xmpjoNfz+4d7Un0J6yEhkQG2Ax8hL0dw4OQmwrKq3QI=";
+  vendorHash = "sha256-M5LbB71fcEhXoDFd17TSruzl9y9tqiQpREwV/ZgvdQ4=";
 
   subPackages = [ "cmd/rain" ];
 
@@ -29,7 +29,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A development workflow tool for working with AWS CloudFormation";
+    description = "Development workflow tool for working with AWS CloudFormation";
+    mainProgram = "rain";
     homepage = "https://github.com/aws-cloudformation/rain";
     license = licenses.asl20;
     maintainers = with maintainers; [ jiegec ];

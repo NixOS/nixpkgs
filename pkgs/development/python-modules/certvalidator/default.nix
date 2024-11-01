@@ -1,11 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, asn1crypto, oscrypto
-, cacert
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asn1crypto,
+  oscrypto,
+  cacert,
 }:
 
 buildPythonPackage rec {
   pname = "certvalidator";
   version = "0.11.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wbond";
@@ -14,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
   };
 
-  propagatedBuildInputs = [ asn1crypto oscrypto ];
+  propagatedBuildInputs = [
+    asn1crypto
+    oscrypto
+  ];
 
   nativeCheckInputs = [ cacert ];
   checkPhase = ''

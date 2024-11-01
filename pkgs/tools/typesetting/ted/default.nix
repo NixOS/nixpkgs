@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
       Acrobat PDF converter.
     '';
     homepage    = "https://nllgg.nl/Ted/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.all;
-    broken      = stdenv.isDarwin;
+    broken      = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ obadz ];
   };
 }

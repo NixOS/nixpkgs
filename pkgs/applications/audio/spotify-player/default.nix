@@ -24,6 +24,7 @@
 , withImage ? true
 , withNotify ? true
 , withSixel ? true
+, withFuzzy ? true
 , stdenv
 , darwin
 , makeBinaryWrapper
@@ -33,22 +34,22 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaud
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.15.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYn8xuJE0mILF7poiTbHCmFswP/xG+BbL+AASrLpbAs=";
+    hash = "sha256-heycCm2Nwyo+DegMKeXZ+dF+ZqiFT/6P08/28buJc6I=";
   };
 
-  cargoHash = "sha256-/q7xrsuRym5oDCGJRpBTdBach2CAbhCCC3cPFzCT4PU=";
+  cargoHash = "sha256-U3a/6uF7vOV3QnxqPnooBdvjyyIPLnQXiXtTwKeHAxA=";
 
   nativeBuildInputs = [
     pkg-config
     cmake
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
   ];
 
@@ -60,14 +61,14 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withSixel [ libsixel ]
     ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.isLinux) [ alsa-lib ]
+    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
     ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
     ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
     ++ lib.optionals (withAudioBackend == "rodiojack") [ alsa-lib libjack2 ]
     ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
     ++ lib.optionals (withAudioBackend == "gstreamer") [ gst_all_1.gstreamer gst_all_1.gst-devtools gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ]
-    ++ lib.optionals (stdenv.isDarwin && withMediaControl) [ darwin.apple_sdk.frameworks.MediaPlayer ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withMediaControl) [ darwin.apple_sdk.frameworks.MediaPlayer ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       AppKit
       AudioUnit
       Cocoa
@@ -83,20 +84,21 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withDaemon [ "daemon" ]
     ++ lib.optionals withNotify [ "notify" ]
     ++ lib.optionals withStreaming [ "streaming" ]
-    ++ lib.optionals withSixel [ "sixel" ];
+    ++ lib.optionals withSixel [ "sixel" ]
+    ++ lib.optionals withFuzzy [ "fzf" ];
 
   # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionals (stdenv.isDarwin && withSixel) ''
+  postInstall = lib.optionals (stdenv.hostPlatform.isDarwin && withSixel) ''
     wrapProgram $out/bin/spotify_player \
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
   '';
 
   meta = {
-    description = "A terminal spotify player that has feature parity with the official client";
+    description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
     changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya xyven1 ];
+    maintainers = with lib.maintainers; [ dit7ya xyven1 _71zenith ];
   };
 }

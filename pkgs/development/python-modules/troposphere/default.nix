@@ -1,16 +1,17 @@
-{ lib
-, awacs
-, buildPythonPackage
-, cfn-flip
-, fetchFromGitHub
-, pythonOlder
-, typing-extensions
-, unittestCheckHook
+{
+  lib,
+  awacs,
+  buildPythonPackage,
+  cfn-flip,
+  fetchFromGitHub,
+  pythonOlder,
+  typing-extensions,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.5.2";
+  version = "4.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,29 +20,21 @@ buildPythonPackage rec {
     owner = "cloudtools";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LLky4lSSMUmLEf+qHwgPvDu0DZhG4WWZ1aFSXqFm1BA=";
+    hash = "sha256-Mz6n7QjNvK2HEQeWCySdxioA1dD5CLUh7jCQb1Q6mdc=";
   };
 
-  propagatedBuildInputs = [
-    cfn-flip
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ cfn-flip ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     awacs
     unittestCheckHook
   ];
 
-  passthru.optional-dependencies = {
-    policy = [
-      awacs
-    ];
+  optional-dependencies = {
+    policy = [ awacs ];
   };
 
-  pythonImportsCheck = [
-    "troposphere"
-  ];
+  pythonImportsCheck = [ "troposphere" ];
 
   meta = with lib; {
     description = "Library to create AWS CloudFormation descriptions";

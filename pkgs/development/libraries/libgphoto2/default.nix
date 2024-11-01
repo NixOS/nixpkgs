@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   hardeningDisable = [ "format" ];
 
   postInstall =
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.gphoto.org/proj/libgphoto2/";
-    description = "A library for accessing digital cameras";
+    description = "Library for accessing digital cameras";
     longDescription = ''
       This is the library backend for gphoto2. It contains the code for PTP,
       MTP, and other vendor specific protocols for controlling and transferring data

@@ -1,15 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, orderedmultidict
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  flake8,
+  orderedmultidict,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "furl";
   version = "2.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +34,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flake8
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert '//////path' == '////path'
+    # https://github.com/gruns/furl/issues/176
+    "test_odd_urls"
   ];
 
   pythonImportsCheck = [ "furl" ];

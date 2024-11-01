@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 , desktopToDarwinBundle
-, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook, yelp-tools
+, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook3, yelp-tools
 , curl, gdk-pixbuf, gtk3, json-glib, libxml2
 , gpsbabel
 , withGeoClue ? true, geoclue2
@@ -10,7 +10,7 @@
 , withMBTiles ? true, sqlite
 , withMd5Hash ? true, nettle
 , withOAuth ? true, liboauth
-, withRealtimeGPSTracking ? (!stdenv.isDarwin), gpsd
+, withRealtimeGPSTracking ? (!stdenv.hostPlatform.isDarwin), gpsd
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook3 yelp-tools ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]
     ++ lib.optional withGeoClue geoclue2
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GPS data editor and analyzer";
+    mainProgram = "viking";
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You
       can import and plot tracks and waypoints, show Openstreetmaps

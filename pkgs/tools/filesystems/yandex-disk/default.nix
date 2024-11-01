@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, writeText, zlib, rpmextract, patchelf, which }:
 
 let
-  p = if stdenv.is64bit then {
+  p = if stdenv.hostPlatform.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
       sha256 = "sha256-HH/pLZmDr6m/B3e6MHafDGnNWR83oR2y1ijVMR/LOF0=";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://help.yandex.com/disk/cli-clients.xml";
-    description = "A free cloud file storage service";
+    description = "Free cloud file storage service";
     maintainers = with lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
        * faster syncing with Disk's server;
        * no need to be constantly connected to work with files.
     '';
+    mainProgram = "yandex-disk";
   };
 }

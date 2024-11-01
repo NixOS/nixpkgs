@@ -1,34 +1,37 @@
-{ lib
-, fetchFromGitHub
-, bech32
-, buildPythonPackage
-, cryptography
-, ed25519
-, ecdsa
-, gnupg
-, semver
-, mnemonic
-, unidecode
-, mock
-, pytest
-, backports-shutil-which
-, configargparse
-, python-daemon
-, pymsgbox
-, pynacl
+{
+  lib,
+  fetchFromGitHub,
+  bech32,
+  buildPythonPackage,
+  setuptools,
+  cryptography,
+  ed25519,
+  ecdsa,
+  gnupg,
+  semver,
+  mnemonic,
+  unidecode,
+  mock,
+  pytestCheckHook,
+  backports-shutil-which,
+  configargparse,
+  python-daemon,
+  pymsgbox,
+  pynacl,
 }:
 
-# XXX: when changing this package, please test the package onlykey-agent.
+# When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.5";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "v${version}";
-    hash = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
   # hardcode the path to gpgconf in the libagent library
@@ -38,7 +41,9 @@ buildPythonPackage rec {
       --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     unidecode
     backports-shutil-which
     configargparse
@@ -53,11 +58,17 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  nativeCheckInputs = [ mock pytest ];
+  pythonImportsCheck = [ "libagent" ];
 
-  checkPhase = ''
-    py.test libagent/tests
-  '';
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test fails in sandbox
+    "test_get_agent_sock_path"
+  ];
 
   meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";

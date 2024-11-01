@@ -9,7 +9,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_115
+, spidermonkey_128
 , pango
 , cairo
 , readline
@@ -23,21 +23,22 @@
 , which
 , xvfb-run
 , nixosTests
+, installTests ? true
 }:
 
 let
   testDeps = [
-    gtk3 atk pango.out gdk-pixbuf harfbuzz
+    gtk3 atk pango.out gdk-pixbuf harfbuzz glib.out
   ];
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.78.0";
+  version = "1.82.0";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+6og4JF2aIMIAPkpUWiPn8CPASlq/9XNtLNfdQvifck=";
+    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FEkCNoaNC/gi96p884/NMz52IHYP3PUOkyQjYR9iZiM=";
   };
 
   patches = [
@@ -46,6 +47,10 @@ in stdenv.mkDerivation rec {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
+
+    # Disable introspection test in installed tests
+    # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
+    ./disable-introspection-test.patch
   ];
 
   nativeBuildInputs = [
@@ -65,7 +70,7 @@ in stdenv.mkDerivation rec {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_115
+    spidermonkey_128
   ];
 
   nativeCheckInputs = [
@@ -78,11 +83,11 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -99,20 +104,20 @@ in stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
-    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/subprojects/gobject-introspection-tests/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/subprojects/gobject-introspection-tests/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
+    ln -s $PWD/subprojects/gobject-introspection-tests/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
     ln -s $PWD/installed-tests/js/libgjstesttools/libgjstesttools.so $installedTests/libexec/installed-tests/gjs/libgjstesttools.so
-    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
-    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
 
   postInstall = ''
     # TODO: make the glib setup hook handle moving the schemas in other outputs.
-    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
+    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/gjs-${finalAttrs.version}"
     mkdir -p "$installedTestsSchemaDatadir"
     mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString installTests ''
     wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" testDeps}"
@@ -125,7 +130,7 @@ in stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = {
     tests = {
@@ -145,4 +150,4 @@ in stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

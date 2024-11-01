@@ -5,12 +5,12 @@
 , llvm
 , pkg-config
 , makeWrapper
+, elfutils
 , file
 , hyperscan
 , jansson
 , libbpf
 , libcap_ng
-, libelf
 , libevent
 , libmaxminddb
 , libnet
@@ -33,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.1";
+  version = "7.0.6";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-YEfHX555qbDMbWx2MgJKQSaBK8IS9SrPXTyBPMfJ+ws=";
+    hash = "sha256-IYJPf/Egh8DJud4gcZmnWpwxsDA2aIx8ucF48KO1f40=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
+  propagatedBuildInputs = with python.pkgs; [
+    pyyaml
+  ];
+
   buildInputs = [
+    elfutils
     jansson
     libbpf
     libcap_ng
-    libelf
     libevent
     libmagic
     libmaxminddb
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = lib.optional stdenv.is64bit ./bpf_stubs_workaround.patch;
+  patches = lib.optional stdenv.hostPlatform.is64bit ./bpf_stubs_workaround.patch;
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -121,7 +125,10 @@ stdenv.mkDerivation rec {
     sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
-  hardeningDisable = [ "stackprotector" ];
+  # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
+
+  doCheck = true;
 
   installFlags = [
     "e_datadir=\${TMPDIR}"
@@ -147,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free and open source, mature, fast and robust network threat detection engine";
+    description = "Free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;

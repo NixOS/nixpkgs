@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gVYDvda+6ZJkShJXUxUEVxq4enkRrhdvlTTxYWq4Aho=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool texinfo ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A cross-platform file change monitor with multiple backends";
+    description = "Cross-platform file change monitor with multiple backends";
+    mainProgram = "fswatch";
     homepage = "https://github.com/emcrisostomo/fswatch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

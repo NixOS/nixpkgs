@@ -1,0 +1,19 @@
+diff --git a/crates/c/build.rs b/crates/c/build.rs
+index 8d822e5..8b7e371 100644
+--- a/crates/c/build.rs
++++ b/crates/c/build.rs
+@@ -1,9 +1,13 @@
+ fn main() {
+     println!("cargo:rerun-if-changed=src/f16.h");
+     println!("cargo:rerun-if-changed=src/f16.c");
++    println!("cargo:rerun-if-env-changed=BINDGEN_EXTRA_CLANG_ARGS");
+     cc::Build::new()
+-        .compiler("clang-16")
++        .compiler("@clang@")
+         .file("./src/f16.c")
++        // read env var set by rustPlatform.bindgenHook
++        .try_flags_from_environment("BINDGEN_EXTRA_CLANG_ARGS")
++        .expect("the BINDGEN_EXTRA_CLANG_ARGS environment variable must be specified and UTF-8")
+         .opt_level(3)
+         .debug(true)
+         .compile("vectorsc");

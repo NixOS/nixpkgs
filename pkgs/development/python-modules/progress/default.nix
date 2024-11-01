@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   version = "1.6";
+  format = "setuptools";
   pname = "progress";
 
   src = fetchPypi {

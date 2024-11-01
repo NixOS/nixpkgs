@@ -1,18 +1,37 @@
-{ lib, python, buildPythonPackage, fetchFromGitHub, libmilter, bsddb3, pydns, iana-etc, libredirect }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libmilter,
+  berkeleydb,
+  py3dns,
+  iana-etc,
+  libredirect,
+  pyasyncore,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "pymilter";
-  version = "1.0.5";
+  version = "1.0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdgathman";
-    repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-gZUWEDVZfDRiOOdG3lpiQldHxm/93l8qYVOHOEpHhzQ=";
+    repo = "pymilter";
+    rev = "refs/tags/pymilter-${version}";
+    hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
+  build-system = [
+    setuptools
+  ];
   buildInputs = [ libmilter ];
-  propagatedBuildInputs = [ bsddb3 pydns ];
+  nativeCheckInputs = [ pyasyncore ];
+  dependencies = [
+    berkeleydb
+    py3dns
+  ];
 
   preBuild = ''
     sed -i 's/import thread/import _thread as thread/' Milter/greylist.py

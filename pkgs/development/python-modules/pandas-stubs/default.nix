@@ -1,58 +1,72 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, matplotlib
-, odfpy
-, openpyxl
-, pandas
-, poetry-core
-, pyarrow
-, pyreadstat
-, pytestCheckHook
-, pythonOlder
-, scipy
-, sqlalchemy
-, tables
-, tabulate
-, types-pytz
-, typing-extensions
-, xarray
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  numpy,
+  types-pytz,
+
+  # tests
+  pytestCheckHook,
+  beautifulsoup4,
+  html5lib,
+  jinja2,
+  lxml,
+  matplotlib,
+  odfpy,
+  openpyxl,
+  pandas,
+  pyarrow,
+  pyreadstat,
+  python-calamine,
+  scipy,
+  sqlalchemy,
+  tables,
+  tabulate,
+  typing-extensions,
+  xarray,
+  xlsxwriter,
 }:
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.0.3.230814";
-  format = "pyproject";
+  version = "2.2.2.240909";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
-    repo = pname;
+    repo = "pandas-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V/igL+vPJADOL7LwBJljqs2a1BB3vDVYTWXIkK/ImYY=";
+    hash = "sha256-Dt2a4l5WAOizUeaDa80CRuvyPT9mWfFz+zGZMm3vQP4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pandas
+  dependencies = [
+    numpy
     types-pytz
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    html5lib
     jinja2
+    lxml
     matplotlib
     odfpy
     openpyxl
+    pandas
     pyarrow
     pyreadstat
-    pytestCheckHook
     scipy
     sqlalchemy
     tables
@@ -60,66 +74,31 @@ buildPythonPackage rec {
     typing-extensions
     xarray
     xlsxwriter
+    python-calamine
   ];
 
-  disabledTests = [
-    # AttributeErrors, missing dependencies, error and warning checks
-    "test_aggregate_frame_combinations"
-    "test_aggregate_series_combinations"
-    "test_all_read_without_lxml_dtype_backend"
-    "test_arrow_dtype"
-    "test_attribute_conflict_warning"
-    "test_categorical_conversion_warning"
-    "test_clipboard_iterator"
-    "test_clipboard"
-    "test_closed_file_error"
-    "test_compare_150_changes"
-    "test_crosstab_args"
-    "test_css_warning"
-    "test_data_error"
-    "test_database_error"
-    "test_dummies"
-    "test_from_dummies_args"
-    "test_hdf_context_manager"
-    "test_hdfstore"
-    "test_incompatibility_warning"
-    "test_index_astype"
-    "test_indexing_error"
-    "test_invalid_column_name"
-    "test_isetframe"
-    "test_join"
-    "test_numexpr_clobbering_error"
-    "test_orc_buffer"
-    "test_orc_bytes"
-    "test_orc_columns"
-    "test_orc_path"
-    "test_orc"
-    "test_possible_data_loss_error"
-    "test_possible_precision_loss"
-    "test_pyperclip_exception"
-    "test_quantile_150_changes"
-    "test_read_hdf_iterator"
-    "test_read_sql_via_sqlalchemy_connection"
-    "test_read_sql_via_sqlalchemy_engine"
-    "test_resample_150_changes"
-    "test_reset_index_150_changes"
-    "test_reset_index"
-    "test_rolling_step_method"
-    "test_setting_with_copy_error"
-    "test_setting_with_copy_warning"
-    "test_show_version"
-    "test_specification_error"
-    "test_types_assert_series_equal"
-    "test_types_rank"
-    "test_undefined_variable_error"
-    "test_value_label_type_mismatch"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_plotting" # Fatal Python error: Illegal instruction
-  ];
+  disabledTests =
+    [
+      # Missing dependencies, error and warning checks
+      "test_all_read_without_lxml_dtype_backend" # pyarrow.orc
+      "test_orc" # pyarrow.orc
+      "test_plotting" # UserWarning: No artists with labels found to put in legend.
+      "test_spss" # FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
+      "test_show_version"
+      # FutureWarning: In the future `np.bool` will be defined as the corresponding...
+      "test_timedelta_cmp"
+      "test_timestamp_cmp"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Disable tests for types that are not supported on aarch64 in `numpy` < 2.0
+      "test_astype_float" # `f16` and `float128`
+      "test_astype_complex" # `c32` and `complex256`
+    ];
 
-  pythonImportsCheck = [
-    "pandas"
-  ];
+  pythonImportsCheck = [ "pandas" ];
 
   meta = with lib; {
     description = "Type annotations for Pandas";

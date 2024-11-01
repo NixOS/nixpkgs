@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
   };
 
-  hardeningDisable = lib.optional stdenv.isi686 "pic";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "pic";
 
   patchPhase = ''
     sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" src/Pl2Wam/check_boot

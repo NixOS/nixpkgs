@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small utility to dump info about DRM devices";
+    mainProgram = "drm_info";
     homepage = "https://github.com/ascent12/drm_info";
     license = licenses.mit;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

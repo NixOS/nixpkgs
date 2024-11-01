@@ -1,19 +1,16 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dnscache;
 
   dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
     mkdir -p $out/{servers,ip}
 
-    ${concatMapStrings (ip: ''
+    ${lib.concatMapStrings (ip: ''
       touch "$out/ip/"${lib.escapeShellArg ip}
     '') cfg.clientIps}
 
-    ${concatStrings (mapAttrsToList (host: ips: ''
-      ${concatMapStrings (ip: ''
+    ${lib.concatStrings (lib.mapAttrsToList (host: ips: ''
+      ${lib.concatMapStrings (ip: ''
         echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
       '') ips}
     '') cfg.domainServers)}
@@ -35,33 +32,33 @@ in {
   options = {
     services.dnscache = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc "Whether to run the dnscache caching dns server.";
+        type = lib.types.bool;
+        description = "Whether to run the dnscache caching dns server.";
       };
 
-      ip = mkOption {
+      ip = lib.mkOption {
         default = "0.0.0.0";
-        type = types.str;
-        description = lib.mdDoc "IP address on which to listen for connections.";
+        type = lib.types.str;
+        description = "IP address on which to listen for connections.";
       };
 
-      clientIps = mkOption {
+      clientIps = lib.mkOption {
         default = [ "127.0.0.1" ];
-        type = types.listOf types.str;
-        description = lib.mdDoc "Client IP addresses (or prefixes) from which to accept connections.";
+        type = lib.types.listOf lib.types.str;
+        description = "Client IP addresses (or prefixes) from which to accept connections.";
         example = ["192.168" "172.23.75.82"];
       };
 
-      domainServers = mkOption {
+      domainServers = lib.mkOption {
         default = { };
-        type = types.attrsOf (types.listOf types.str);
-        description = lib.mdDoc ''
+        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+        description = ''
           Table of {hostname: server} pairs to use as authoritative servers for hosts (and subhosts).
           If entry for @ is not specified predefined list of root servers is used.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "@" = ["8.8.8.8" "8.8.4.4"];
             "example.com" = ["192.168.100.100"];
@@ -69,10 +66,10 @@ in {
         '';
       };
 
-      forwardOnly = mkOption {
+      forwardOnly = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Whether to treat root servers (for @) as caching
           servers, requesting addresses the same way a client does. This is
           needed if you want to use e.g. Google DNS as your upstream DNS.
@@ -84,9 +81,13 @@ in {
 
   ###### implementation
 
-  config = mkIf config.services.dnscache.enable {
+  config = lib.mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
-    users.users.dnscache.isSystemUser = true;
+    users.users.dnscache = {
+        isSystemUser = true;
+        group = "dnscache";
+    };
+    users.groups.dnscache = {};
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";
@@ -100,7 +101,7 @@ in {
       '';
       script = ''
         cd /var/lib/dnscache/
-        ${optionalString cfg.forwardOnly "export FORWARDONLY=1"}
+        ${lib.optionalString cfg.forwardOnly "export FORWARDONLY=1"}
         exec ./run
       '';
     };

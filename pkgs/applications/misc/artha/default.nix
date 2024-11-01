@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ dbus-glib gtk2 wordnet ];
 
   meta = with lib; {
-    description = "An offline thesaurus based on WordNet";
+    description = "Offline thesaurus based on WordNet";
     homepage = "https://artha.sourceforge.net";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "artha";
   };
 }

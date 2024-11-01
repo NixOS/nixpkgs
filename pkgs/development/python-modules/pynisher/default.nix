@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "1.0.9";
+  version = "1.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hlN5uUlgmcipQqmr22rB245oEXOUe5WB9jWo7MXXViE=";
+    hash = "sha256-JyK3ldIhKd3VJHA4u6cnrgbs2zpZQgcIF758jUpoDjE=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # No tests in the Pypi archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pynisher"
-  ];
+  pythonImportsCheck = [ "pynisher" ];
 
   meta = with lib; {
     description = "Module intended to limit a functions resources";

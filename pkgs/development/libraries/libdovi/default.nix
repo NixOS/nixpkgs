@@ -8,12 +8,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libdovi";
-  version = "3.1.2";
+  version = "3.3.1";
 
   src = fetchCrate {
     pname = "dolby_vision";
     inherit version;
-    hash = "sha256-eLmGswgxtmqGc9f8l/9qvwSm+8bi06q+Ryvo7Oyr7s0=";
+    hash = "sha256-ecd+r0JWZtP/rxt4Y3Cj2TkygXIMy5KZhZpXBwJNPx4=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

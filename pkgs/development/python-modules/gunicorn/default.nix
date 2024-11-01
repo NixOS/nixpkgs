@@ -1,47 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pythonOlder
-, eventlet
-, gevent
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  packaging,
+
+  # optional-dependencies
+  eventlet,
+  gevent,
+  tornado,
+  setproctitle,
+
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "21.2.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "23.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    rev = version;
-    hash = "sha256-xP7NNKtz3KNrhcAc00ovLZRx2h6ZqHbwiFOpCiuwf98=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Dq/mrQwo3II6DBvYfD1FHsKHaIlyHlJCZ+ZyrM4Efe0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=gunicorn --cov-report=xml" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  dependencies = [ packaging ];
 
-  nativeCheckInputs = [
-    eventlet
-    gevent
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    gevent = [ gevent ];
+    eventlet = [ eventlet ];
+    tornado = [ tornado ];
+    gthread = [ ];
+    setproctitle = [ setproctitle ];
+  };
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/benoitc/gunicorn";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  meta = {
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/benoitc/gunicorn";
+    changelog = "https://github.com/benoitc/gunicorn/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "gunicorn";
   };
 }

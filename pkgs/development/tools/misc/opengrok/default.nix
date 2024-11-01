@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
-  version = "1.12.21";
+  version = "1.13.23";
 
   # binary distribution
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-SjA5J9fILU/FBNXRS/cvGZVWAK2qqOyMsd6wC/CJYaE=";
+    hash = "sha256-Fe4K6nBVg0l4Z3CW+k0OpUF8JEu+uINsA+jdAFJGmx8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Source code search and cross reference engine";
+    mainProgram = "opengrok";
     homepage = "https://opengrok.github.io/OpenGrok/";
     changelog = "https://github.com/oracle/opengrok/releases/tag/${version}";
     license = licenses.cddl;

@@ -1,65 +1,79 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, doxygen
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, qtimageformats
-, lxqt
-, librsvg
-, freeimage
-, libraw
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  doxygen,
+  libsForQt5,
+  dtkcore,
+  lxqt,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dtkgui";
-  version = "5.6.10";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4NHt/hLtt99LhWvBX9e5ueB5G86SXx553G6fyHZBXcE=";
+    hash = "sha256-F3tuLV1hWoUZle0O66MQ+Ew9LRnP6N++HaqS88xBLRY=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/util/dsvgrenderer.cpp \
+      --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+  '';
 
   nativeBuildInputs = [
     cmake
-    qttools
     doxygen
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lxqt.libqtxdg
     librsvg
-    freeimage
-    libraw
   ];
 
   propagatedBuildInputs = [
     dtkcore
-    qtimageformats
+    libsForQt5.qtimageformats
   ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${libsForQt5.qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
+  '';
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  postFixup = ''
+    for binary in $out/libexec/dtk5/DGui/bin/*; do
+      wrapQtApp $binary
+    done
   '';
 
   meta = with lib; {

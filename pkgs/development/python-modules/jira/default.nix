@@ -1,45 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, defusedxml
-, flaky
-, keyring
-, requests-mock
-, requests-oauthlib
-, requests-toolbelt
-, setuptools-scm
-, setuptools-scm-git-archive
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  defusedxml,
+  flaky,
+  ipython,
+  keyring,
+  packaging,
+  pillow,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-futures,
+  requests-mock,
+  requests-oauthlib,
+  requests-toolbelt,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.5.2";
-  format = "pyproject";
+  version = "3.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
+    hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     defusedxml
-    keyring
+    packaging
+    requests
     requests-oauthlib
     requests-toolbelt
+    pillow
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    cli = [
+      ipython
+      keyring
+    ];
+    opt = [
+      # filemagic
+      pyjwt
+      # requests-jwt
+      # requests-keyberos
+    ];
+    async = [ requests-futures ];
+  };
 
   nativeCheckInputs = [
     flaky
@@ -52,9 +75,7 @@ buildPythonPackage rec {
       --replace "--cov-report=xml --cov jira" ""
   '';
 
-  pythonImportsCheck = [
-    "jira"
-  ];
+  pythonImportsCheck = [ "jira" ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
@@ -64,6 +85,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycontribs/jira";
     changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "jirashell";
   };
 }

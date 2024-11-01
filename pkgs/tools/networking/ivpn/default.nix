@@ -41,6 +41,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ataraxiasjel ];
+    mainProgram = "ivpn";
   };
 })) {
   ivpn = {
@@ -68,7 +69,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
       substituteInPlace daemon/service/platform/platform_linux_release.go \
         --replace 'installDir := "/opt/ivpn"' "installDir := \"$out\"" \
         --replace 'obfsproxyStartScript = path.Join(installDir, "obfsproxy/obfs4proxy")' \
-        'obfsproxyStartScript = "${obfs4}/bin/obfs4proxy"' \
+        'obfsproxyStartScript = "${lib.getExe obfs4}"' \
         --replace 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
         'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
         --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \

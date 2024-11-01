@@ -7,7 +7,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.2.2";
+  version = "2.2.5";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -16,12 +16,12 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t7rkWHSAd3DaTCXaGfL9NcIQYT+f4Od9D6huuZlwhWk=";
+    hash = "sha256-o3P7oTizO2l2WkB4LormZ/Ses5jZOpgQ1r1zB1Y3Bjs=";
   };
 
   postPatch = ''
     substituteInPlace src/lang/dune \
-      --replace "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+      --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
   '';
 
   dontConfigure = true;
@@ -72,10 +72,12 @@ stdenv.mkDerivation {
     ocamlPackages.duppy
     ocamlPackages.mm
     ocamlPackages.ocurl
+    ocamlPackages.ocaml_pcre
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
     ocamlPackages.fileutils
+    ocamlPackages.magic-mime
     ocamlPackages.menhir # liquidsoap-lang
     ocamlPackages.menhirLib
     ocamlPackages.metadata
@@ -97,9 +99,9 @@ stdenv.mkDerivation {
     ocamlPackages.fdkaac
     ocamlPackages.flac
     ocamlPackages.frei0r
-    ocamlPackages.gd4o
+    ocamlPackages.gd
     ocamlPackages.graphics
-    ocamlPackages.gstreamer
+    # ocamlPackages.gstreamer # Broken but advertised feature
     ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa
@@ -108,7 +110,6 @@ stdenv.mkDerivation {
     ocamlPackages.lilv
     ocamlPackages.lo
     ocamlPackages.mad
-    ocamlPackages.magic
     ocamlPackages.ogg
     ocamlPackages.opus
     ocamlPackages.portaudio
@@ -130,11 +131,13 @@ stdenv.mkDerivation {
     ocamlPackages.yaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Swiss-army knife for multimedia streaming";
+    mainProgram = "liquidsoap";
     homepage = "https://www.liquidsoap.info/";
-    maintainers = with maintainers; [ dandellion ehmry ];
-    license = licenses.gpl2Plus;
+    changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
+    maintainers = with lib.maintainers; [ dandellion ehmry ];
+    license = lib.licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [];
   };
 }

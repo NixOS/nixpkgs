@@ -1,0 +1,116 @@
+From eb36791f873dd645b1cbfa693b9c246943647190 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Tue, 3 Sep 2024 08:57:26 +0200
+Subject: [PATCH 1/3] Use wrapped binaries instead of Python interpreter
+
+Rather than calling ukify and mkosi with sys.executable, which doesn't use the Python wrappers for PATH and PYTHONPATH, we call the wrapped binaries directly.
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ mkosi/__init__.py | 19 ++++---------------
+ mkosi/run.py      |  8 ++++----
+ 2 files changed, 8 insertions(+), 19 deletions(-)
+
+diff --git a/mkosi/__init__.py b/mkosi/__init__.py
+index cc8482c4..ba44ad31 100644
+--- a/mkosi/__init__.py
++++ b/mkosi/__init__.py
+@@ -2059,16 +2059,7 @@ def join_initrds(initrds: Sequence[Path], output: Path) -> Path:
+
+
+ def python_binary(config: Config, *, binary: Optional[PathString]) -> PathString:
+-    tools = (
+-        not binary or
+-        not (path := config.find_binary(binary)) or
+-        not any(path.is_relative_to(d) for d in config.extra_search_paths)
+-    )
+-
+-    # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
+-    # tree, just use the default python3 interpreter.
+-    exe = Path(sys.executable)
+-    return "python3" if (tools and config.tools_tree) or not exe.is_relative_to("/usr") else exe
++    return "@PYTHON_PEFILE@"
+
+
+ def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:
+@@ -2135,11 +2126,10 @@ def build_uki(
+     if not (arch := context.config.architecture.to_efi()):
+         die(f"Architecture {context.config.architecture} does not support UEFI")
+
+-    if not (ukify := context.config.find_binary("ukify", "/usr/lib/systemd/ukify")):
++    if not (ukify := context.config.find_binary("ukify", "@UKIFY@")):
+         die("Could not find ukify")
+
+     cmd: list[PathString] = [
+-        python_binary(context.config, binary=ukify),
+         ukify,
+         *(["--cmdline", f"@{context.workspace / 'cmdline'}"] if cmdline else []),
+         "--os-release", f"@{context.root / 'usr/lib/os-release'}",
+@@ -2213,7 +2203,6 @@ def build_uki(
+         # new .ucode section support?
+         if (
+             systemd_tool_version(
+-                python_binary(context.config, binary=ukify),
+                 ukify,
+                 sandbox=context.sandbox,
+             ) >= "256" and
+@@ -2303,7 +2292,7 @@ def want_uki(context: Context) -> bool:
+             context.config.unified_kernel_images == ConfigFeature.enabled or (
+                 context.config.unified_kernel_images == ConfigFeature.auto and
+                 systemd_stub_binary(context).exists() and
+-                context.config.find_binary("ukify", "/usr/lib/systemd/ukify") is not None
++                context.config.find_binary("ukify", "@UKIFY@") is not None
+             )
+     )
+
+@@ -2914,7 +2903,7 @@ def check_ukify(
+     reason: str,
+     hint: Optional[str] = None,
+ ) -> None:
+-    ukify = check_tool(config, "ukify", "/usr/lib/systemd/ukify", reason=reason, hint=hint)
++    ukify = check_tool(config, "ukify", "@UKIFY@", reason=reason, hint=hint)
+
+     v = systemd_tool_version(python_binary(config, binary=ukify), ukify, sandbox=config.sandbox)
+     if v < version:
+diff --git a/mkosi/run.py b/mkosi/run.py
+index fd3bc98e..de47349a 100644
+--- a/mkosi/run.py
++++ b/mkosi/run.py
+@@ -450,7 +450,7 @@ def sandbox_cmd(
+ ) -> Iterator[list[PathString]]:
+     cmdline: list[PathString] = [
+         *setup,
+-        sys.executable, "-SI", mkosi.sandbox.__file__,
++        @MKOSI_SANDBOX@,
+         "--proc", "/proc",
+         # We mounted a subdirectory of TMPDIR to /var/tmp so we unset TMPDIR so that /tmp or /var/tmp are used instead.
+         "--unsetenv", "TMPDIR",
+@@ -563,7 +563,7 @@ def apivfs_options(*, root: Path = Path("/buildroot")) -> list[PathString]:
+ def apivfs_script_cmd(*, tools: bool, options: Sequence[PathString] = ()) -> list[PathString]:
+     exe = Path(sys.executable)
+     return [
+-        "python3" if tools or not exe.is_relative_to("/usr") else exe, "-SI", "/sandbox.py",
++        @MKOSI_SANDBOX@,
+         "--bind", "/", "/",
+         "--same-dir",
+         "--bind", "/var/tmp", "/buildroot/var/tmp",
+@@ -597,7 +597,7 @@ def chroot_cmd(
+     options: Sequence[PathString] = (),
+ ) -> Iterator[list[PathString]]:
+     cmdline: list[PathString] = [
+-        sys.executable, "-SI", mkosi.sandbox.__file__,
++        @MKOSI_SANDBOX@,
+         "--bind", root, "/",
+         # We mounted a subdirectory of TMPDIR to /var/tmp so we unset TMPDIR so that /tmp or /var/tmp are used instead.
+         "--unsetenv", "TMPDIR",
+@@ -619,7 +619,7 @@ def chroot_cmd(
+ def chroot_script_cmd(*, tools: bool, network: bool = False, work: bool = False) -> list[PathString]:
+     exe = Path(sys.executable)
+     return [
+-        "python3" if tools or not exe.is_relative_to("/usr") else exe, "-SI", "/sandbox.py",
++        @MKOSI_SANDBOX@,
+         "--bind", "/buildroot", "/",
+         "--bind", "/var/tmp", "/var/tmp",
+         *apivfs_options(root=Path("/")),
+--
+2.45.2

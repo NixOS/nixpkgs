@@ -10,8 +10,7 @@
 , libgit2-glib
 , gi-docgen
 , gobject-introspection
-, enchant
-, icu
+, gom
 , gtk4
 , gtksourceview5
 , json-glib
@@ -21,12 +20,12 @@
 , libpanel
 , libpeas2
 , libportal-gtk4
+, libspelling
 , libsysprof-capture
 , libxml2
 , meson
 , ninja
 , ostree
-, d-spy
 , pcre2
 , pkg-config
 , python3
@@ -40,15 +39,15 @@
 , xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "45.0";
+  version = "47.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JC2gJZMpPUVuokEIpFk0cwoeMW2NxbGNnfDoZNt7pZY=";
+    url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5vduvPbFXMmC1EYAWdPRVtm0ESf7erZg7LqdyWBok8U=";
   };
 
   patches = [
@@ -73,7 +72,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.wrapPython
     wrapGAppsHook4
   ];
 
@@ -86,8 +84,7 @@ stdenv.mkDerivation rec {
     libpeas2
     libportal-gtk4
     vte-gtk4
-    enchant
-    icu
+    gom
     gtk4
     gtksourceview5
     json-glib
@@ -95,10 +92,10 @@ stdenv.mkDerivation rec {
     libadwaita
     libdex
     libpanel
+    libspelling
     libsysprof-capture
     libxml2
     ostree
-    d-spy
     pcre2
     python3
     template-glib
@@ -137,12 +134,8 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
-
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
       # For sysprof-agent
       --prefix PATH : "${sysprof}/bin"
     )
@@ -159,11 +152,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gnome.updateScript {
-    packageName = pname;
+    packageName = "gnome-builder";
   };
 
   meta = with lib; {
-    description = "An IDE for writing GNOME-based software";
+    description = "IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
       reference, and other features expected in an IDE, but with a focus
@@ -174,9 +167,10 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = "https://wiki.gnome.org/Apps/Builder";
+    homepage = "https://apps.gnome.org/Builder/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "gnome-builder";
   };
-}
+})

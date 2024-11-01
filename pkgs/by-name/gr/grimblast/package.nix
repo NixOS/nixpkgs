@@ -11,17 +11,18 @@
 , libnotify
 , slurp
 , wl-clipboard
+, bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "unstable-2023-10-03";
+  version = "unstable-2024-01-11";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "2e3f8ac2a3f1334fd2e211b07ed76b4215bb0542";
-    hash = "sha256-rb954Rc+IyUiiXoIuQOJRp0//zH/WeMYZ3yJ5CccODA=";
+    rev = "89c56351e48785070b60e224ea1717ac50c3befb";
+    hash = "sha256-EjdQsk5VIQs7INBugbgX1I9Q3kPAOZSwkXXqEjZL0E0=";
   };
 
   strictDeps = true;
@@ -30,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     scdoc
   ];
+
+  buildInputs = [ bash ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -52,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A helper for screenshots within Hyprland, based on grimshot";
+    description = "Helper for screenshots within Hyprland, based on grimshot";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ donovanglover ];

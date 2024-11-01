@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl readline zlib libidn2 gmp libiconv libunistring gettext ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Required to build with clang 16 or `configure` will fail to detect several standard functions.
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A file transfer program supporting a number of network protocols";
+    description = "File transfer program supporting a number of network protocols";
     homepage = "https://lftp.yar.ru/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

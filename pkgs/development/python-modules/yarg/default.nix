@@ -1,27 +1,44 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, nose, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  requests,
+  setuptools,
+  pytestCheckHook,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "yarg";
-  version = "0.1.9";
+  version = "0.1.9-unstable-2022-02-06";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kura";
-    repo = pname;
-    rev = version;
-    sha256 = "1isq02s404fp9whkm8w2kvb2ik1sz0r258iby0q532zw81lga0d0";
+    repo = "yarg";
+    # Latest commit to yarg, which is more up-to-date than the latest release.
+    rev = "46e2371906bde6e19116664d4841abab414c54fd";
+    hash = "sha256-N/NDc9GqqwqU9vD1BU6udthzewBMDji9Np/HKRffLxI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  patches = [
+    # Python 3.12 compatibility patch
+    (fetchpatch2 {
+      url = "https://github.com/kura/yarg/commit/8d5532e4da11ab0e9a4453658cf0591dcf80a616.patch?full_index=1";
+      hash = "sha256-2lbOzEfWTtoZYuRjCQJAFeYUsJoQhhEohflvYOwLXnI=";
+    })
+  ];
 
-  nativeCheckInputs = [ nose mock ];
-  checkPhase = ''
-    nosetests
-  '';
+  dependencies = [ requests ];
 
-  meta = with lib; {
-    description = "An easy to use PyPI client";
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    description = "Easy to use PyPI client";
     homepage = "https://yarg.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

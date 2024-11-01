@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "goeland";
-  version = "0.16.0";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "slurdge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bjPmhNJFkN0N0Mx3Q4RJuNfeqFy9v8KphiAU1WyKCo4=";
+    sha256 = "sha256-4xhw6L6CuwW2MepwGvpVLVafMcU/g0bn/2M/8ZSRF/U=";
   };
 
-  vendorHash = "sha256-jYrPsVagGgvpQ9Zj3o2kB82xgw/yaJS9BXxuqMkNjEA=";
+  vendorHash = "sha256-TZIHYFE4kJu5EOQ9oT8S0Tp/r38d5RhoLdmIrus8Ibc=";
 
   ldflags = [
     "-s"
@@ -23,7 +23,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "An alternative to rss2email written in golang with many filters";
+    description = "Alternative to rss2email written in golang with many filters";
+    mainProgram = "goeland";
     longDescription = ''
       Goeland excels at creating beautiful emails from RSS feeds,
       tailored for daily or weekly digest. It includes a number of

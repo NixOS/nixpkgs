@@ -11,16 +11,16 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
-  version = "3.34";
+  version = "3.35";
 
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    hash = "sha256-KuDNngHOoeEHJExEHoLdNO95ZUvLx8TWiAOTmRKHtmQ=";
+    hash = "sha256-fqzrgmtqy7dlmGEaTXAqpdt9HqZCVooJ0Vf6/JUKihw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP LWPProtocolHttps XMLLibXML Mojolicious
@@ -35,21 +35,22 @@ perlPackages.buildPerlPackage rec {
 
     install -D get_iplayer -t $out/bin
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg ]} --prefix PERL5LIB : $PERL5LIB
-    install -D get_iplayer.1 -t $out/share/man/man1
+    install -Dm444 get_iplayer.1 -t $out/share/man/man1
 
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/.get_iplayer-wrapped
   '';
 
   meta = with lib; {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
+    mainProgram = "get_iplayer";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = platforms.all;
-    maintainers = with maintainers; [ rika jgarcia ];
+    maintainers = with maintainers; [ rika chewblacka ];
   };
 
 }

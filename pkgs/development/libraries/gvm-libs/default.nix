@@ -1,36 +1,42 @@
-{ lib
-, stdenv
-, cmake
-, doxygen
-, fetchFromGitHub
-, glib
-, glib-networking
-, gnutls
-, gpgme
-, hiredis
-, libgcrypt
-, libnet
-, libpcap
-, libssh
-, libuuid
-, libxcrypt
-, libxml2
-, paho-mqtt-c
-, pkg-config
-, zlib
-, freeradius
+{
+  lib,
+  stdenv,
+  cmake,
+  doxygen,
+  fetchFromGitHub,
+  glib,
+  glib-networking,
+  gnutls,
+  gpgme,
+  hiredis,
+  libgcrypt,
+  libnet,
+  libpcap,
+  libssh,
+  libuuid,
+  libxcrypt,
+  libxml2,
+  openldap,
+  paho-mqtt-c,
+  pkg-config,
+  radcli,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.7.3";
+  version = "22.11.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "gvm-libs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vo+lFUGLeGPKq3aUCiiBcBYu6BZ4KQI5vCtnQyRUUiU=";
+    hash = "sha256-VYFAy6VVASNOBLs39qukePYr5pV0IR1qjztv+veNCVc=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -45,20 +51,19 @@ stdenv.mkDerivation rec {
     gpgme
     hiredis
     libgcrypt
-    freeradius
     libnet
     libpcap
     libssh
     libuuid
     libxcrypt
     libxml2
+    openldap
     paho-mqtt-c
+    radcli
     zlib
   ];
 
-  cmakeFlags = [
-    "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
-  ];
+  cmakeFlags = [ "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm" ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];

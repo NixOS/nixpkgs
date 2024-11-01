@@ -52,21 +52,13 @@ in
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
     ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+    ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
       "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
       "hv_storvsc"
     ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
-      # Most of the following falls into two categories:
-      #  - early KMS / early display
-      #  - early storage (e.g. USB) support
-
-      # Allows using framebuffer configured by the initial boot firmware
-      "simplefb"
-
       # Allwinner support
-
       # Required for early KMS
       "sun4i-drm"
       "sun8i-mixer" # Audio, but required for kms
@@ -75,9 +67,8 @@ in
       "pwm-sun4i"
 
       # Broadcom
-
       "vc4"
-    ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [
       # Most of the following falls into two categories:
       #  - early KMS / early display
       #  - early storage (e.g. USB) support

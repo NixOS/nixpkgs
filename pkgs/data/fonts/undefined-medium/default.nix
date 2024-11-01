@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "undefined-medium";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchzip {
-    url = "https://github.com/andirueckel/undefined-medium/archive/v1.1.zip";
-    hash = "sha256-iquxt7lo92y4AQZf23Ij5Qzg2U7buL3kGLksQSR6vac=";
+    url = "https://github.com/andirueckel/undefined-medium/archive/v1.3.zip";
+    hash = "sha256-cVdk6a0xijAQ/18W5jalqRS7IiPufMJW27Scns+nbEY=";
   };
 
   installPhase = ''
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://undefined-medium.com/";
-    description = "A pixel grid-based monospace typeface";
+    description = "Pixel grid-based monospace typeface";
     longDescription = ''
       undefined medium is a free and open-source pixel grid-based
       monospace typeface suitable for programming, writing, and

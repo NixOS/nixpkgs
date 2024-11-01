@@ -1,28 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, msgpack
-, numpy
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  msgpack,
+  numpy,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "msgpack-numpy";
   version = "0.4.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-xmfTGAUTQi+cdUW+XuxdKW3Ls1fgb3LtOcxoN5dVbmk=";
   };
 
-  buildInputs = [
-    cython
-  ];
+  buildInputs = [ cython ];
 
   propagatedBuildInputs = [
-   msgpack
-   numpy
+    msgpack
+    numpy
   ];
 
   checkPhase = ''

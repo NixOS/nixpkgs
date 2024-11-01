@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ltratt";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "multitime";
+    rev = "multitime-${version}";
     sha256 = "1p6m4gyy6dw7nxnpsk32qiijagmiq9vwch0fbc25qvmybwqp8qc0";
   };
 
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     homepage = "https://tratt.net/laurie/src/multitime/";
     platforms = lib.platforms.unix;
+    mainProgram = "multitime";
   };
 }

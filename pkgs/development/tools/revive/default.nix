@@ -1,14 +1,14 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, go, lib, makeWrapper }:
 
 buildGoModule rec {
   pname = "revive";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TNmxS9LoOOWHGAFrBdCKmVEWCEoIpic84L66dIFQWJg=";
+    hash = "sha256-ViYNXZXvlOOpBjQuMAQXwcDtu1HoF+NstrOZzQcBOuQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -18,7 +18,7 @@ buildGoModule rec {
       rm -rf $out/.git
     '';
   };
-  vendorHash = "sha256-iCd4J37wJbTkKiWRD6I7qNr5grNhWZLx5ymcOOJlNKg=";
+  vendorHash = "sha256-btuAXaJL8URkJvzPy+9tci5gOAqSkkNZn3mN2ox1Vfk=";
 
   ldflags = [
     "-s"
@@ -33,19 +33,18 @@ buildGoModule rec {
     ldflags+=" -X 'github.com/mgechev/revive/cli.date=$(cat DATE)'"
   '';
 
-  # The following tests fail when built by nix:
-  #
-  # $ nix log /nix/store/build-revive.1.3.4.drv | grep FAIL
-  #
-  # --- FAIL: TestAll (0.01s)
-  # --- FAIL: TestTimeEqual (0.00s)
-  # --- FAIL: TestTimeNaming (0.00s)
-  # --- FAIL: TestUnhandledError (0.00s)
-  # --- FAIL: TestUnhandledErrorWithBlacklist (0.00s)
-  doCheck = false;
+  allowGoReference = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/revive \
+      --prefix PATH : ${lib.makeBinPath [ go ]}
+  '';
 
   meta = with lib; {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
+    mainProgram = "revive";
     homepage = "https://revive.run";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani ];

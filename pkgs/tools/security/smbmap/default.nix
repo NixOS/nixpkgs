@@ -1,21 +1,24 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbmap";
-  version = "1.9.2";
-  format = "setuptools";
+  version = "1.10.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShawnDEvans";
     repo = "smbmap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n0cLj1K9Xt/1TlHOh9Kp/xIXYaUhmGSxrHL/yxDbfk4=";
+    hash = "sha256-xeQ3o0Pt4eDeMnSJKdEJfHhA0oPiD7tmX9TQAb3b9I8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     impacket
     pyasn1
     pycrypto
@@ -26,9 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "smbmap"
-  ];
+  pythonImportsCheck = [ "smbmap" ];
 
   meta = with lib; {
     description = "SMB enumeration tool";
@@ -36,5 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/ShawnDEvans/smbmap/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "smbmap";
   };
 }

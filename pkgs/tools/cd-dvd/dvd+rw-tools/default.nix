@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
   buildInputs = [ cdrtools ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "CXX=${stdenv.cc.targetPrefix}c++"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     # error: invalid suffix on literal; C++11 requires a space between literal and identifier
     "-Wno-reserved-user-defined-literal"
     # error: non-constant-expression cannot be narrowed from type 'size_t' (aka 'unsigned long') to 'IOByteCount' (aka 'unsigned int') in initializer list
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fy.chalmers.se/~appro/linux/DVD+RW/tools";
     description = "Tools for mastering Blu-ray and DVD+-RW/+-R media";
     platforms = platforms.unix;
-    license = with licenses; [ gpl2 publicDomain ];
+    license = with licenses; [ gpl2Only publicDomain ];
   };
 }

@@ -1,4 +1,5 @@
 { mkDerivation
+, substituteAll
 , lib
 , extra-cmake-modules
 , breeze-icons
@@ -33,9 +34,15 @@
 , rttr
 , kpurpose
 , kdeclarative
-, wrapGAppsHook
+, wrapGAppsHook3
+, glaxnimate
 }:
 
+let
+  mlt-full = mlt.override {
+    ffmpeg = ffmpeg-full;
+  };
+in
 mkDerivation {
   pname = "kdenlive";
   nativeBuildInputs = [
@@ -60,7 +67,7 @@ mkDerivation {
     kplotting
     ktextwidgets
     mediainfo
-    mlt
+    mlt-full
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
@@ -74,21 +81,27 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
+
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./dependency-paths.patch ];
-
-  inherit mlt mediainfo;
-  ffmpeg = ffmpeg-full;
+  patches = [
+    (
+      substituteAll {
+        src = ./dependency-paths.patch;
+        inherit mediainfo glaxnimate;
+        ffmpeg = ffmpeg-full;
+        mlt = mlt-full;
+      }
+    )
+  ];
 
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''
       sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
-      substituteAllInPlace src/kdenlivesettings.kcfg
     '';
 
   dontWrapGApps = true;

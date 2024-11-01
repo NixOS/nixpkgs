@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mapcidr";
-  version = "1.1.14";
+  version = "1.1.34";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vhh/OS61dfArsowXMogr/bu/gg354nte9PuobD9lCaU=";
+    hash = "sha256-/bZ6LimkdbR7nG7XcetNshk0KXw1FGbuaTXP+DH7hQg=";
   };
 
-  vendorHash = "sha256-wqbAOoRQEE7CDmaH5MRzsSKOdyrxwBY/1wDz3MCfsBc=";
+  vendorHash = "sha256-tbMCXNBND9jc0C1bA9Rmz1stYKtJPmMzTlbGc3vcmE4=";
 
   modRoot = ".";
   subPackages = [
@@ -31,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
+    mainProgram = "mapcidr";
   };
 }

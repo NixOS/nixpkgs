@@ -5,6 +5,8 @@
 , gtk3
 , gtksourceview4
 , gspell
+, libxfce4ui
+, xfconf
 , enablePolkit ? true
 , polkit
 }:
@@ -12,10 +14,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.6.1";
+  version = "0.6.3";
   odd-unstable = false;
 
-  sha256 = "sha256-MLdexhIsQa4XuVaLgtQ2aVJ00+pwkhAP3qMj0XXPqh0=";
+  sha256 = "sha256-L1txMS86lOEE9tOPTIOr1Gh4lwH7krnAeq4f3yS5kN0=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
@@ -24,6 +26,8 @@ mkXfceDerivation {
     gtk3
     gtksourceview4
     gspell
+    libxfce4ui # for shortcut plugin
+    xfconf # required by libxfce4kbd-private-3
   ] ++ lib.optionals enablePolkit [
     polkit
   ];
@@ -33,6 +37,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Simple text editor for Xfce";
+    mainProgram = "mousepad";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

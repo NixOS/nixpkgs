@@ -30,6 +30,7 @@ let
       meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
+        mainProgram = "ragel";
         inherit broken license;
         platforms = platforms.unix;
         maintainers = with maintainers; [ pSub ];
@@ -49,6 +50,6 @@ in
     version = "7.0.0.12";
     sha256 = "0x3si355lv6q051lgpg8bpclpiq5brpri5lv3p8kk2qhzfbyz69r";
     license = lib.licenses.mit;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

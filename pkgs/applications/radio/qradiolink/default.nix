@@ -19,17 +19,18 @@
 , speex
 , speexdsp
 , cppzmq
+, uhd
 }:
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  version = "0.8.11-1";
+  version = "0.9.0-1";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
-    sha256 = "sha256-62+eKaLt9DlTebbnLPVJFx68bfWb7BrdQHocyJTfK28=";
+    sha256 = "sha256-Js6DzmUG8O9c9VvjE6hc7JGuFmgc1Wq41zVJb8Us/yI=";
   };
 
   preBuild = ''
@@ -67,6 +68,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
     libsndfile
     cppzmq
     gnuradio3_8.qwt
+    uhd
   ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
     thrift
     gnuradio3_8.unwrapped.python.pkgs.thrift
@@ -79,8 +81,9 @@ gnuradio3_8.pkgs.mkDerivation rec {
 
   meta = with lib; {
     description = "SDR transceiver application for analog and digital modes";
+    mainProgram = "qradiolink";
     homepage = "http://qradiolink.org/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
   };

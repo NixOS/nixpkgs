@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "kubesec";
-  version = "2.13.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9WhY1mJawMkSgqM50DO0y9bxGYW89N14gLirO5zVuzc=";
+    sha256 = "sha256-FYYMCouZuG0EqvganPLSrLgaDZ+JowUcYXTnKMJ+6Us=";
   };
-  vendorHash = "sha256-xcIFveR0MwpYGYhHKXwQPHF08620yilEtb+BdKZWrdw=";
+  vendorHash = "sha256-KTmsCbFRHMd1KnBYxwWWuETaTP0G3NYCK/ttgrFy59I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,6 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Security risk analysis tool for Kubernetes resources";
+    mainProgram = "kubesec";
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];

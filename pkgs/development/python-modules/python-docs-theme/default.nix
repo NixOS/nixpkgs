@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2023.9";
+  version = "2024.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,20 +18,14 @@ buildPythonPackage rec {
     owner = "python";
     repo = "python-docs-theme";
     rev = "refs/tags/${version}";
-    hash = "sha256-XVwMEfprTNdNnaW38HMCAu4CswdVjBXYtNWBgqXfbno=";
+    hash = "sha256-YKKF2e1La8jsCRS3M+LT+KmK0HxCRGQOof3MlVkMAuY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-   sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  pythonImportsCheck = [
-    "python_docs_theme"
-  ];
+  pythonImportsCheck = [ "python_docs_theme" ];
 
   meta = with lib; {
     description = "Sphinx theme for CPython project";

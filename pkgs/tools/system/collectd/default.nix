@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     libtool
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] ++ plugins.buildInputs;
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
   };

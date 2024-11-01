@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform, testers, ttags }:
-let version = "0.3.0";
+let version = "0.4.1";
 in rustPlatform.buildRustPackage {
   pname = "ttags";
   inherit version;
@@ -8,10 +8,10 @@ in rustPlatform.buildRustPackage {
     owner = "npezza93";
     repo = "ttags";
     rev = "${version}";
-    hash = "sha256-yqrCcA/+FyGPpX3hhULiwhMfrDWjq+rzT04M+o9ry5s=";
+    hash = "sha256-yKg0KUA/Wa7B/sU1uxgGQR0Wat/bFv3ascqnUCdWKw0=";
   };
 
-  cargoHash = "sha256-jW3xIlo2cN5aoEUp3FxN4pwGFvlg50i5RMNgQopGb88=";
+  cargoHash = "sha256-MZ9QRF5yNw+YtSEu+Qc/J3Ap7+nRDZT7aitunk+x38Y=";
 
   passthru.tests.version = testers.testVersion {
     package = ttags;
@@ -21,6 +21,7 @@ in rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Generate tags using tree-sitter";
+    mainProgram = "ttags";
     longDescription = ''
       ttags generates tags (similar to ctags) for various
       languages, using tree-sitter.

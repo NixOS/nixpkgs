@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tar-compatible block-based archiver";
+    mainProgram = "btar";
     license = lib.licenses.gpl3Plus;
     homepage = "https://viric.name/cgi-bin/btar";
     platforms = platforms.all;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

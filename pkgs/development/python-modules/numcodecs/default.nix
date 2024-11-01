@@ -1,54 +1,60 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools
-, setuptools-scm
-, cython
-, entrypoints
-, numpy
-, msgpack
-, py-cpuinfo
-, pytestCheckHook
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  cython,
+  numpy,
+  msgpack,
+  py-cpuinfo,
+  pytestCheckHook,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.11.0";
-  format ="pyproject";
-  disabled = isPy27;
+  version = "0.13.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
+    hash = "sha256-uk+scDbqWgeMev4dTf/rloUIDULxnJwWsS2thmcDqi4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     cython
     py-cpuinfo
   ];
 
-  propagatedBuildInputs = [
-    entrypoints
-    numpy
-    msgpack
-  ];
+  dependencies = [ numpy ];
 
-  preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
-    export DISABLE_NUMCODECS_AVX2=
-  '' else null;
+  optional-dependencies = {
+    msgpack = [ msgpack ];
+    # zfpy = [ zfpy ];
+  };
+
+  preBuild =
+    if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then
+      ''
+        export DISABLE_NUMCODECS_AVX2=
+      ''
+    else
+      null;
 
   nativeCheckInputs = [
     pytestCheckHook
+    msgpack
   ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/numcodecs"
-  ];
+  pytestFlagsArray = [ "$out/${python.sitePackages}/numcodecs" ];
 
   disabledTests = [
     "test_backwards_compatibility"
@@ -62,7 +68,7 @@ buildPythonPackage rec {
     "test_non_numpy_inputs"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";

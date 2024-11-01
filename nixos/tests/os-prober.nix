@@ -95,7 +95,7 @@ in {
           ntp
           perlPackages.ListCompare
           perlPackages.XMLLibXML
-          python3Minimal
+          python3
           shared-mime-info
           stdenv
           sudo

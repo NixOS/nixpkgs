@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, nixosTests
+
+# updater
+, git
+, coreutils
+, gawk
+, gnused
+, writeScript
+, nix-update
+}:
 
 stdenv.mkDerivation rec {
   pname = "mailcap";
-  version = "2.1.53";
+  version = "2.1.54";
 
   src = fetchurl {
     url = "https://releases.pagure.org/mailcap/mailcap-${version}.tar.xz";
-    sha256 = "sha256-Xuou8XswSXe6PsuHr61DGfoEQPgl5Pb7puj6L/64h4U=";
+    hash = "sha256-mkAyIC/A0rCFj0GxZzianP5SrCTsKC5kebkHZTGd4RM=";
   };
 
   installPhase = ''
@@ -21,6 +33,19 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = writeScript "update-mailcap" ''
+    export PATH=${lib.makeBinPath [ git coreutils gawk gnused nix-update ]}:$PATH
+    VERSION="$(git ls-remote --tags --sort="v:refname" https://pagure.io/mailcap.git | \
+      awk '{ print $2 }' | \
+      grep "refs/tags/r" | \
+      sed -E -e "s,refs/tags/r(.*)$,\1," -e "s/-/./g" | \
+      sort --version-sort --reverse | \
+      head -n1)"
+    exec nix-update --version "$VERSION" "$@"
+  '';
+
+  passthru.tests.nginx-mime = nixosTests.nginx-mime;
 
   meta = with lib; {
     description = "Helper application and MIME type associations for file types";

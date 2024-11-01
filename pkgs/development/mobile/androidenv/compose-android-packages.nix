@@ -2,20 +2,20 @@
 , licenseAccepted ? false
 }:
 
-{ cmdLineToolsVersion ? "11.0"
+{ cmdLineToolsVersion ? "13.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "34.0.5"
-, buildToolsVersions ? [ "34.0.0" ]
+, platformToolsVersion ? "35.0.2"
+, buildToolsVersions ? [ "35.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "34.1.9"
+, emulatorVersion ? "35.1.4"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
-, systemImageTypes ? [ "google_apis_playstore" ]
-, abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
+, systemImageTypes ? [ "google_apis" "google_apis_playstore" ]
+, abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "26.1.10909125"
+, ndkVersion ? "27.0.12077973"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -27,8 +27,8 @@
 
 let
   # Determine the Android os identifier from Nix's system identifier
-  os = if stdenv.system == "x86_64-linux" then "linux"
-    else if stdenv.system == "x86_64-darwin" then "macosx"
+  os = if stdenv.hostPlatform.isLinux then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx"
     else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Uses mkrepo.rb to create a repo spec.
@@ -151,7 +151,7 @@ rec {
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugin { name = "patcher"; plugin = patcher; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
     '';
   };
 
@@ -171,14 +171,14 @@ rec {
     }
   ) buildToolsVersions;
 
-  emulator = callPackage ./emulator.nix {
+  emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
     package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
     '';
-  };
+  });
 
   platforms = map (version:
     deployAndroidPackage {
@@ -373,9 +373,11 @@ rec {
           ln -s $i $out/bin
       done
 
-      for i in ${emulator}/bin/*; do
-          ln -s $i $out/bin
-      done
+      ${lib.optionalString includeEmulator ''
+        for i in ${emulator}/bin/*; do
+            ln -s $i $out/bin
+        done
+      ''}
 
       find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
           ln -s $i $out/bin

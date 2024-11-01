@@ -9,8 +9,6 @@
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
-with lib;
-
 let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
@@ -40,8 +38,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "7c105277a9ca";
-    sha256 = "eiObn5Kw7dS+oxdQiJ8NhSC4P7EvILIOEnMoxCWIFro=";
+    rev = "d3a72777f149";
+    hash = "sha256-qLuhEdvtOMfu78oxLUZKWZDb/AME1+IRnk0jkQNxTU8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -64,13 +62,17 @@ stdenv.mkDerivation rec {
     make -C tools/migration
   '';
 
+  buildFlags = [
+    # don't search for configs in the nix store when running prosodyctl
+    "INSTALLEDCONFIG=/etc/prosody"
+    "INSTALLEDDATA=/var/lib/prosody"
+  ];
+
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
-      ${concatMapStringsSep "\n" (module: ''
+      ${lib.concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
     '';
 
@@ -79,11 +81,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ toastal ];
   };
 }

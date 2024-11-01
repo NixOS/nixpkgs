@@ -1,43 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ninja
-, ignite
-, numpy
-, pybind11
-, torch
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  ninja,
+  numpy,
+  packaging,
+  pybind11,
+  torch,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.0";
-  disabled = pythonOlder "3.8";
+  version = "1.4.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-h//igmSV1cPAFifE1woIluSyGwZBRByYMLqeY3oLHnk=";
+    hash = "sha256-PovYyRLgoYwxqGeCBpWxX/kdClYtYK1bgy8yRa9eue8=";
+    # note: upstream consistently seems to modify the tag shortly after release,
+    # so best to wait a few days before updating
   };
-
-  # Ninja is not detected by setuptools for some reason even though it's present:
-  postPatch = ''
-    substituteInPlace "setup.cfg" --replace "    ninja" ""
-  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [ ninja which ];
+  build-system = [
+    ninja
+    which
+  ];
+
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy torch ignite ];
 
-  BUILD_MONAI = 1;
+  dependencies = [
+    numpy
+    packaging
+    torch
+  ];
 
-  doCheck = false;  # takes too long; tries to download data
+  env.BUILD_MONAI = 1;
+
+  doCheck = false; # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"

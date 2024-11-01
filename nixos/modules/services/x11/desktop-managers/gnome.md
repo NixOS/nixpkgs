@@ -8,9 +8,11 @@ All of the core apps, optional apps, games, and core developer tools from GNOME 
 
 To enable the GNOME desktop use:
 
-```
-services.xserver.desktopManager.gnome.enable = true;
-services.xserver.displayManager.gdm.enable = true;
+```nix
+{
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+}
 ```
 
 ::: {.note}
@@ -23,8 +25,10 @@ The default applications used in NixOS are very minimal, inspired by the default
 
 If you’d like to only use the GNOME desktop and not the apps, you can disable them with:
 
-```
-services.gnome.core-utilities.enable = false;
+```nix
+{
+  services.gnome.core-utilities.enable = false;
+}
 ```
 
 and none of them will be installed.
@@ -35,52 +39,62 @@ Note that this mechanism can only exclude core utilities, games and core develop
 
 ### Disabling GNOME services {#sec-gnome-disabling-services}
 
-It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable Tracker with:
+It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable TinySPARQL with:
 
-```
-services.gnome.tracker-miners.enable = false;
-services.gnome.tracker.enable = false;
+```nix
+{
+  services.gnome.localsearch.enable = false;
+  services.gnome.tinysparql.enable = false;
+}
 ```
 
-Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without Tracker.
+Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without TinySPARQL.
 
 ### GNOME games {#sec-gnome-games}
 
 You can install all of the GNOME games with:
 
-```
-services.gnome.games.enable = true;
+```nix
+{
+  services.gnome.games.enable = true;
+}
 ```
 
 ### GNOME core developer tools {#sec-gnome-core-developer-tools}
 
 You can install GNOME core developer tools with:
 
-```
-services.gnome.core-developer-tools.enable = true;
+```nix
+{
+  services.gnome.core-developer-tools.enable = true;
+}
 ```
 
 ## Enabling GNOME Flashback {#sec-gnome-enable-flashback}
 
 GNOME Flashback provides a desktop environment based on the classic GNOME 2 architecture. You can enable the default GNOME Flashback session, which uses the Metacity window manager, with:
 
-```
-services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
+```nix
+{
+  services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
+}
 ```
 
 It is also possible to create custom sessions that replace Metacity with a different window manager using [](#opt-services.xserver.desktopManager.gnome.flashback.customSessions).
 
 The following example uses `xmonad` window manager:
 
-```
-services.xserver.desktopManager.gnome.flashback.customSessions = [
-  {
-    wmName = "xmonad";
-    wmLabel = "XMonad";
-    wmCommand = "${pkgs.haskellPackages.xmonad}/bin/xmonad";
-    enableGnomePanel = false;
-  }
-];
+```nix
+{
+  services.xserver.desktopManager.gnome.flashback.customSessions = [
+    {
+      wmName = "xmonad";
+      wmLabel = "XMonad";
+      wmCommand = "${pkgs.haskellPackages.xmonad}/bin/xmonad";
+      enableGnomePanel = false;
+    }
+  ];
+}
 ```
 
 ## Icons and GTK Themes {#sec-gnome-icons-and-gtk-themes}
@@ -100,16 +114,18 @@ in `dconf-editor`
 ## Shell Extensions {#sec-gnome-shell-extensions}
 
 Most Shell extensions are packaged under the `gnomeExtensions` attribute.
-Some packages that include Shell extensions, like `gnome.gpaste`, don’t have their extension decoupled under this attribute.
+Some packages that include Shell extensions, like `gpaste`, don’t have their extension decoupled under this attribute.
 
 You can install them like any other package:
 
-```
-environment.systemPackages = [
-  gnomeExtensions.dash-to-dock
-  gnomeExtensions.gsconnect
-  gnomeExtensions.mpris-indicator-button
-];
+```nix
+{
+  environment.systemPackages = [
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.gsconnect
+    gnomeExtensions.mpris-indicator-button
+  ];
+}
 ```
 
 Unfortunately, we lack a way for these to be managed in a completely declarative way.
@@ -136,23 +152,25 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
 
 ### Example {#sec-gnome-gsettings-overrides-example}
 
-```
-services.xserver.desktopManager.gnome = {
-  extraGSettingsOverrides = ''
-    # Change default background
-    [org.gnome.desktop.background]
-    picture-uri='file://${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}'
+```nix
+{
+  services.xserver.desktopManager.gnome = {
+    extraGSettingsOverrides = ''
+      # Change default background
+      [org.gnome.desktop.background]
+      picture-uri='file://${pkgs.nixos-artwork.wallpapers.mosaic-blue.gnomeFilePath}'
 
-    # Favorite apps in gnome-shell
-    [org.gnome.shell]
-    favorite-apps=['org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop']
-  '';
+      # Favorite apps in gnome-shell
+      [org.gnome.shell]
+      favorite-apps=['org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop']
+    '';
 
-  extraGSettingsOverridePackages = [
-    pkgs.gsettings-desktop-schemas # for org.gnome.desktop
-    pkgs.gnome.gnome-shell # for org.gnome.shell
-  ];
-};
+    extraGSettingsOverridePackages = [
+      pkgs.gsettings-desktop-schemas # for org.gnome.desktop
+      pkgs.gnome-shell # for org.gnome.shell
+    ];
+  };
+}
 ```
 
 ## Frequently Asked Questions {#sec-gnome-faq}

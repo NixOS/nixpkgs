@@ -1,24 +1,25 @@
-{ lib
-, aioredis
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, lupa
-, poetry-core
-, pybloom-live
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, six
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  jsonpath-ng,
+  lupa,
+  poetry-core,
+  pyprobables,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  redis-server,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.20.0";
-  format = "pyproject";
+  version = "2.25.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,16 +27,13 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pRvUgK4OXVP2GR+Iu4ddqwApw0gYN4FkKjTpwbC1oWM=";
+    hash = "sha256-HjId4SueqkbC319Eel8G85ZOj72ZKEVEH2D8V/GfXi4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     redis
-    six
     sortedcontainers
   ];
 
@@ -46,27 +44,37 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
-    lua = [
-      lupa
-    ];
-    aioredis = [
-      aioredis
-    ];
-    bf = [
-      pybloom-live
-    ];
+  optional-dependencies = {
+    lua = [ lupa ];
+    json = [ jsonpath-ng ];
+    bf = [ pyprobables ];
+    cf = [ pyprobables ];
+    probabilistic = [ pyprobables ];
   };
 
-  pythonImportsCheck = [
-    "fakeredis"
+  pythonImportsCheck = [ "fakeredis" ];
+
+  pytestFlagsArray = [ "-m 'not slow'" ];
+
+  preCheck = ''
+    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
+
+  disabledTests = [
+    # AssertionError
+    "test_command"
   ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
     changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

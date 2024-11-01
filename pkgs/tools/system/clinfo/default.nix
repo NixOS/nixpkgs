@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1jZP4SnLIHh3vQJLBp+j/eQ1c8XBGFR2hjYxflhpWAU=";
   };
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     ocl-icd
     opencl-headers
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ];
 
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.cc0;
     maintainers = with maintainers; [ athas r-burns ];
     platforms = platforms.unix;
+    mainProgram = "clinfo";
   };
 }

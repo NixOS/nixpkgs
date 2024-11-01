@@ -20,14 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yguUMEX0tn75wKrPKyqlCYbBFaEwC5b1s3k9xept1Fw=";
   };
 
-  sourceRoot =
-    if stdenv.isDarwin
-    then "source/build/mac/release"
-    else "source/build/linux/release";
+  sourceRoot = "${finalAttrs.src.name}/build/${
+    if stdenv.hostPlatform.isDarwin then "mac"
+    else "linux"
+  }/release";
 
   buildInputs = [
     boost'
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     glibc.static
   ];
 

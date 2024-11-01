@@ -1,41 +1,39 @@
-{ lib
-, buildPythonPackage
-, deprecation
-, fetchFromGitHub
-, ghostscript
-, hypothesis
-, img2pdf
-, importlib-resources
-, jbig2enc
-, packaging
-, pdfminer-six
-, pikepdf
-, pillow
-, pluggy
-, pngquant
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rich
-, reportlab
-, setuptools
-, setuptools-scm
-, substituteAll
-, tesseract
-, tqdm
-, typing-extensions
-, unpaper
-, wheel
-, installShellFiles
+{
+  lib,
+  buildPythonPackage,
+  deprecation,
+  fetchFromGitHub,
+  ghostscript,
+  hatch-vcs,
+  hatchling,
+  hypothesis,
+  img2pdf,
+  jbig2enc,
+  packaging,
+  pdfminer-six,
+  pillow-heif,
+  pikepdf,
+  pillow,
+  pluggy,
+  pngquant,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  reportlab,
+  substituteAll,
+  tesseract,
+  unpaper,
+  installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "15.4.0";
+  version = "16.5.0";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -47,12 +45,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-cbKqisaRAeT8ljANbYiUDrptAoQmmIkMu1ya8O6nXvQ=";
+    hash = "sha256-jqe4BRW0U7gqcf+FtDWjDDvRStAqaEPTuU+B+BrFR5Y=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   patches = [
+    ./use-pillow-heif.patch
     (substituteAll {
       src = ./paths.patch;
       gs = lib.getExe ghostscript;
@@ -63,36 +60,33 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-    wheel
-    installShellFiles
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  dependencies = [
     deprecation
     img2pdf
     packaging
     pdfminer-six
+    pillow-heif
     pikepdf
     pillow
     pluggy
-    reportlab
     rich
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
+    reportlab
   ];
 
-  pythonImportsCheck = [
-    "ocrmypdf"
-  ];
+  pythonImportsCheck = [ "ocrmypdf" ];
 
   postInstall = ''
     installShellCompletion --cmd ocrmypdf \
@@ -103,8 +97,14 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [ mpl20 mit ];
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    license = with licenses; [
+      mpl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      dotlambda
+    ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    mainProgram = "ocrmypdf";
   };
 }

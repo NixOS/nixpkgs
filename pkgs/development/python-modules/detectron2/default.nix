@@ -1,42 +1,42 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, ninja
-, which
-# build inputs
-, pillow
-, matplotlib
-, pycocotools
-, termcolor
-, yacs
-, tabulate
-, cloudpickle
-, tqdm
-, tensorboard
-, fvcore
-, iopath
-, omegaconf
-, hydra-core
-, packaging
-, torch
-, pydot
-, black
-# optional dependencies
-, fairscale
-, timm
-, scipy
-, shapely
-, pygments
-, psutil
-# check inputs
-, pytestCheckHook
-, torchvision
-, av
-, opencv4
-, pytest-mock
-, pybind11
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ninja,
+  which,
+  # build inputs
+  pillow,
+  matplotlib,
+  pycocotools,
+  termcolor,
+  yacs,
+  tabulate,
+  cloudpickle,
+  tqdm,
+  tensorboard,
+  fvcore,
+  iopath,
+  omegaconf,
+  hydra-core,
+  packaging,
+  torch,
+  pydot,
+  black,
+  # optional dependencies
+  fairscale,
+  timm,
+  scipy,
+  shapely,
+  pygments,
+  psutil,
+  # check inputs
+  pytestCheckHook,
+  torchvision,
+  av,
+  opencv4,
+  pytest-mock,
+  pybind11,
 }:
 
 let
@@ -71,16 +71,13 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     ninja
     which
   ];
 
   buildInputs = [ pybind11 ];
 
-  pythonRelaxDeps = [
-    "black"
-  ];
+  pythonRelaxDeps = [ "black" ];
 
   propagatedBuildInputs = [
     pillow
@@ -102,7 +99,7 @@ buildPythonPackage {
     pydot # no idea why this is not in their setup.py
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   nativeCheckInputs = [
     av
@@ -136,40 +133,42 @@ buildPythonPackage {
     "tests/data/test_coco_evaluation.py"
   ];
 
-  disabledTests = [
-    # fails for some reason
-    "test_checkpoint_resume"
-    "test_map_style"
-    # requires shapely
-    "test_resize_and_crop"
-    # require caffe2
-    "test_predict_boxes_tracing"
-    "test_predict_probs_tracing"
-    "testMaskRCNN"
-    "testRetinaNet"
-    # require coco dataset
-    "test_default_trainer"
-    "test_unknown_category"
-    "test_build_dataloader_train"
-    "test_build_iterable_dataloader_train"
-    # require network access
-    "test_opencv_exif_orientation"
-    "test_read_exif_orientation"
-    # use deprecated api, numpy.bool
-    "test_BWmode_nomask"
-    "test_draw_binary_mask"
-    "test_draw_empty_mask_predictions"
-    "test_draw_instance_predictions"
-    "test_draw_no_metadata"
-    "test_overlay_instances"
-    "test_overlay_instances_no_boxes"
-    "test_get_bounding_box"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    "test_build_batch_dataloader_inference"
-    "test_build_dataloader_inference"
-    "test_build_iterable_dataloader_inference"
-    "test_to_iterable"
-  ];
+  disabledTests =
+    [
+      # fails for some reason
+      "test_checkpoint_resume"
+      "test_map_style"
+      # requires shapely
+      "test_resize_and_crop"
+      # require caffe2
+      "test_predict_boxes_tracing"
+      "test_predict_probs_tracing"
+      "testMaskRCNN"
+      "testRetinaNet"
+      # require coco dataset
+      "test_default_trainer"
+      "test_unknown_category"
+      "test_build_dataloader_train"
+      "test_build_iterable_dataloader_train"
+      # require network access
+      "test_opencv_exif_orientation"
+      "test_read_exif_orientation"
+      # use deprecated api, numpy.bool
+      "test_BWmode_nomask"
+      "test_draw_binary_mask"
+      "test_draw_empty_mask_predictions"
+      "test_draw_instance_predictions"
+      "test_draw_no_metadata"
+      "test_overlay_instances"
+      "test_overlay_instances_no_boxes"
+      "test_get_bounding_box"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      "test_build_batch_dataloader_inference"
+      "test_build_dataloader_inference"
+      "test_build_iterable_dataloader_inference"
+      "test_to_iterable"
+    ];
 
   pythonImportsCheck = [ "detectron2" ];
 

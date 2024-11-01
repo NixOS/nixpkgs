@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [fuse glib neon];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook to
     # take effect.
     substituteInPlace configure.ac --replace \
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     description = "User-space filesystem that allows to mount a webdav share";
     platforms = platforms.unix;
+    mainProgram = "wdfs";
   };
 }

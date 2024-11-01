@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.k40-whisperer;
   pkg = cfg.package.override {
@@ -10,28 +8,20 @@ let
 in
 {
   options.programs.k40-whisperer = {
-    enable = mkEnableOption (lib.mdDoc "K40-Whisperer");
+    enable = lib.mkEnableOption "K40-Whisperer";
 
-    group = mkOption {
-      type = types.str;
-      description = lib.mdDoc ''
+    group = lib.mkOption {
+      type = lib.types.str;
+      description = ''
         Group assigned to the device when connected.
       '';
       default = "k40";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.k40-whisperer;
-      defaultText = literalExpression "pkgs.k40-whisperer";
-      example = literalExpression "pkgs.k40-whisperer";
-      description = lib.mdDoc ''
-        K40 Whisperer package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "k40-whisperer" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.${cfg.group} = {};
 
     environment.systemPackages = [ pkg ];

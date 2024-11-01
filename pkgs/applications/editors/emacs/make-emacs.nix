@@ -16,14 +16,12 @@
 , dbus
 , emacsPackagesFor
 , fetchpatch
-, gconf
 , gettext
 , giflib
 , glib-networking
 , gnutls
 , gpm
 , gsettings-desktop-schemas
-, gtk2-x11
 , gtk3
 , gtk3-x11
 , harfbuzz
@@ -31,7 +29,6 @@
 , jansson
 , libXaw
 , libXcursor
-, libXft
 , libXi
 , libXpm
 , libgccjit
@@ -45,6 +42,7 @@
 , libxml2
 , llvmPackages_14
 , m17n_lib
+, mailutils
 , makeWrapper
 , motif
 , ncurses
@@ -57,8 +55,9 @@
 , systemd
 , tree-sitter
 , texinfo
-, webkitgtk
-, wrapGAppsHook
+, webkitgtk_4_0
+, wrapGAppsHook3
+, zlib
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -68,31 +67,33 @@
 , withAlsaLib ? false
 , withAthena ? false
 , withCsrc ? true
-, withGTK2 ? false
+, withDbus ? stdenv.hostPlatform.isLinux
 , withGTK3 ? withPgtk && !noGui
-, withGconf ? false
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
-, withGpm ? stdenv.isLinux
+, withGpm ? stdenv.hostPlatform.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+# Emacs 30+ has native JSON support
+, withJansson ? lib.versionOlder version "30"
+, withMailutils ? true
 , withMotif ? false
-, withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
+, withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
+, withSelinux ? stdenv.hostPlatform.isLinux
 , withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
 , withTreeSitter ? lib.versionAtLeast version "29"
 , withWebP ? lib.versionAtLeast version "29"
-, withX ? !(stdenv.isDarwin || noGui || withPgtk)
+, withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
-, withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
+, withXwidgets ? !stdenv.hostPlatform.isDarwin && !noGui && (withGTK3 || withPgtk) && (lib.versionOlder version "30") # XXX: upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
 , withSmallJaDic ? false
 , withCompressInstall ? true
 
 # Options
 , siteStart ? ./site-start.el
 , toolkit ? (
-  if withGTK2 then "gtk2"
-  else if withGTK3 then "gtk3"
+  if withGTK3 then "gtk3"
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
@@ -113,17 +114,13 @@
 , WebKit
 }:
 
-assert (withGTK2 && !withNS && variant != "macport") -> withX;
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
 
-assert noGui -> !(withX || withGTK2 || withGTK3 || withNS || variant == "macport");
-assert withAcl -> stdenv.isLinux;
-assert withAlsaLib -> stdenv.isLinux;
-assert withGTK2 -> !(withGTK3 || withPgtk);
-assert withGTK3 -> !withGTK2 || withPgtk;
-assert withGconf -> withX;
-assert withGpm -> stdenv.isLinux;
-assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
+assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
+assert withAcl -> stdenv.hostPlatform.isLinux;
+assert withAlsaLib -> stdenv.hostPlatform.isLinux;
+assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
 
@@ -131,8 +128,8 @@ let
   libGccJitLibraryPaths = [
     "${lib.getLib libgccjit}/lib/gcc"
     "${lib.getLib stdenv.cc.libc}/lib"
-  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
-    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.lib.libgcc) [
+    "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
 
   inherit (if variant == "macport"
@@ -145,7 +142,6 @@ mkDerivation (finalAttrs: {
              else if variant == "macport" then "-macport"
              else if withPgtk then "-pgtk"
              else if withGTK3 then "-gtk3"
-             else if withGTK2 then "-gtk2"
              else "");
   inherit version;
 
@@ -155,7 +151,9 @@ mkDerivation (finalAttrs: {
     (substituteAll {
       src = if lib.versionOlder finalAttrs.version "29"
             then ./native-comp-driver-options-28.patch
-            else ./native-comp-driver-options.patch;
+            else if lib.versionOlder finalAttrs.version "30"
+            then ./native-comp-driver-options.patch
+            else ./native-comp-driver-options-30.patch;
       backendPath = (lib.concatStringsSep " "
         (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:
@@ -210,33 +208,32 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+  ] ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
   buildInputs = [
     gettext
     gnutls
-    harfbuzz.dev
+    (lib.getDev harfbuzz)
+  ] ++ lib.optionals withJansson [
     jansson
+  ] ++ [
     libxml2
     ncurses
-  ] ++ lib.optionals withGconf [
-    gconf
   ] ++ lib.optionals withAcl [
     acl
   ] ++ lib.optionals withAlsaLib [
     alsa-lib
   ] ++ lib.optionals withGpm [
     gpm
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withDbus [
     dbus
+  ] ++ lib.optionals withSelinux [
     libselinux
-  ] ++ lib.optionals (!stdenv.isDarwin && withGTK3) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withGTK3) [
     gsettings-desktop-schemas
-  ] ++ lib.optionals (stdenv.isLinux && withX) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withX) [
     libotf
     m17n_lib
-  ] ++ lib.optionals (withX && withGTK2) [
-    gtk2-x11
   ] ++ lib.optionals (withX && withGTK3) [
     gtk3-x11
   ] ++ lib.optionals (withX && withMotif) [
@@ -245,6 +242,7 @@ mkDerivation (finalAttrs: {
     glib-networking
   ] ++ lib.optionals withNativeCompilation [
     libgccjit
+    zlib
   ] ++ lib.optionals withImageMagick [
     imagemagick
   ] ++ lib.optionals withPgtk [
@@ -276,8 +274,8 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals withXinput2 [
     libXi
   ] ++ lib.optionals withXwidgets [
-    webkitgtk
-  ] ++ lib.optionals stdenv.isDarwin [
+    webkitgtk_4_0
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
   ] ++ lib.optionals withNS [
     librsvg
@@ -293,51 +291,63 @@ mkDerivation (finalAttrs: {
     OSAKit
     Quartz
     QuartzCore
-    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
     ImageCaptureCore
     ImageIO
+  ] ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
+    UniformTypeIdentifiers
+  ];
+
+  # Emacs needs to find movemail at run time, see info (emacs) Movemail
+  propagatedUserEnvPkgs = lib.optionals withMailutils [
+    mailutils
   ];
 
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--disable-build-details" # for a (more) reproducible build
-    "--with-modules"
+    (lib.enableFeature false "build-details") # for a (more) reproducible build
+    (lib.withFeature true "modules")
   ] ++ (if withNS then [
-    "--disable-ns-self-contained"
+    (lib.enableFeature false "ns-self-contained")
   ] else if withX then [
-    "--with-x-toolkit=${toolkit}"
-    "--with-xft"
-    "--with-cairo"
+    (lib.withFeatureAs true "x-toolkit" toolkit)
+    (lib.withFeature true "cairo")
+    (lib.withFeature true "xft")
   ] else if withPgtk then [
-    "--with-pgtk"
+    (lib.withFeature true "pgtk")
   ] else [
-    "--with-gif=no"
-    "--with-jpeg=no"
-    "--with-png=no"
-    "--with-tiff=no"
-    "--with-x=no"
-    "--with-xpm=no"
+    (lib.withFeature false "gif")
+    (lib.withFeature false "jpeg")
+    (lib.withFeature false "png")
+    (lib.withFeature false "tiff")
+    (lib.withFeature false "x")
+    (lib.withFeature false "xpm")
   ])
   ++ lib.optionals (variant == "macport") [
-    "--enable-mac-app=$$out/Applications"
-    "--with-gnutls=yes"
-    "--with-mac"
-    "--with-xml2=yes"
+    (lib.enableFeatureAs true "mac-app" "$$out/Applications")
+    (lib.withFeature true "gnutls")
+    (lib.withFeature true "mac")
+    (lib.withFeature true "xml2")
   ]
-  ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
-  ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
-  ++ lib.optional withNativeCompilation "--with-native-compilation"
-  ++ lib.optional withImageMagick "--with-imagemagick"
-  ++ lib.optional withTreeSitter "--with-tree-sitter"
-  ++ lib.optional withXinput2 "--with-xinput2"
-  ++ lib.optional withXwidgets "--with-xwidgets"
-  ++ lib.optional withSmallJaDic "--with-small-ja-dic"
-  ++ lib.optional (!withCompressInstall) "--without-compress-install"
-  ;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.withFeature withNS "ns")
+  ]
+  ++ [
+    (lib.withFeature withCompressInstall "compress-install")
+    (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
+    (lib.withFeature withNativeCompilation "native-compilation")
+    (lib.withFeature withImageMagick "imagemagick")
+    (lib.withFeature withMailutils "mailutils")
+    (lib.withFeature withSmallJaDic "small-ja-dic")
+    (lib.withFeature withTreeSitter "tree-sitter")
+    (lib.withFeature withXinput2 "xinput2")
+    (lib.withFeature withXwidgets "xwidgets")
+    (lib.withFeature withDbus "dbus")
+    (lib.withFeature withSelinux "selinux")
+  ];
 
   env = lib.optionalAttrs withNativeCompilation {
     NATIVE_FULL_AOT = "1";
@@ -389,7 +399,7 @@ mkDerivation (finalAttrs: {
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
-  postFixup = lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withX && toolkit == "lucid") ''
       patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';

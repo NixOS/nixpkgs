@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, agate
-, dbt-core
-, google-cloud-bigquery
-, google-cloud-storage
-, google-cloud-dataproc
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  agate,
+  buildPythonPackage,
+  dbt-core,
+  fetchFromGitHub,
+  google-cloud-bigquery,
+  google-cloud-dataproc,
+  google-cloud-storage,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.6.4";
-  format = "setuptools";
+  version = "1.8.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m458gg5TQ7jznhA9QNi8KQ+ICxdQn58mS0jvyZ88Fmg=";
+    hash = "sha256-SYQAFvu7nw54X4jxicEA9+lnvMgj/Yp460xz3BFGYCM=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  pythonRelaxDeps = [ "agate" ];
+
+  build-system = [
+    setuptools
   ];
 
-  pythonRelaxDeps = [
-    "agate"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     agate
     dbt-core
     google-cloud-bigquery
@@ -38,17 +40,11 @@ buildPythonPackage rec {
     google-cloud-dataproc
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "dbt.adapters.bigquery"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.bigquery" ];
 
   meta = with lib; {
     description = "Plugin enabling dbt to operate on a BigQuery database";

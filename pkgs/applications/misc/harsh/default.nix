@@ -5,22 +5,23 @@
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.8.30";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-X9YCxDgxIuJyTUurDQ574nKBAUsdKHNx1T6DkcygYS4=";
+    hash = "sha256-XkOdW6ewout69A1ovth1iQR36nRtkdsbDI9CWibSHXs=";
   };
 
-  vendorHash = "sha256-zkz7X/qj8FwtQZXGuq4Oaoe5G9a4AJE1kv3j7wwQEp4=";
+  vendorHash = "sha256-4Sa8/mVD7t4uR8Wq4n+fvot7LZfraphFobrG6rteQeI=";
 
   meta = with lib; {
     description = "CLI habit tracking for geeks";
     homepage = "https://github.com/wakatara/harsh";
     changelog = "https://github.com/wakatara/harsh/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ laurailway ];
+    maintainers = [ ];
+    mainProgram = "harsh";
   };
 }

@@ -38,12 +38,17 @@ let
         hash = "sha256-adU5SctH+H54UaAmr5BZInytD3wjUzLtQbCwngAWs4o=";
       })
     ];
-    postPatch = prev.postPatch + lib.optionalString stdenv.isAarch64 ''
+    postPatch = prev.postPatch + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       # https://github.com/igraph/igraph/issues/1694
       substituteInPlace tests/CMakeLists.txt \
         --replace "igraph_scg_grouping3" "" \
         --replace "igraph_scg_semiprojectors2" ""
     '';
+    NIX_CFLAGS_COMPILE = (prev.NIX_CFLAGS_COMPILE or []) ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-strict-prototypes"
+      "-Wno-unused-but-set-parameter"
+      "-Wno-unused-but-set-variable"
+    ];
     # general options brought back from the old 0.9.x package
     buildInputs = prev.buildInputs ++ [ suitesparse ];
     cmakeFlags = prev.cmakeFlags ++ [ "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF" ];
@@ -72,6 +77,12 @@ in stdenv.mkDerivation rec {
       # https://github.com/emsec/hal/pull/530
       url = "https://github.com/emsec/hal/commit/b639a56b303141afbf6731b70b7cc7452551f024.patch";
       hash = "sha256-a7AyDEKkqdbiHpa4OHTRuP9Yewb3Nxs/j6bwez5m0yU=";
+    })
+    (fetchpatch {
+      name = "fix-gcc-13-build.patch";
+      # https://github.com/emsec/hal/pull/557
+      url = "https://github.com/emsec/hal/commit/831b1a7866aa9aabd55ff288c084862dc6a138d8.patch";
+      hash = "sha256-kB/sJJtLGl5PUv+mmWVpee/okkJzp5HF0BCiCRCcTKw=";
     })
   ];
 
@@ -125,15 +136,15 @@ in stdenv.mkDerivation rec {
   cmakeBuildType = "MinSizeRel";
 
   # some plugins depend on other plugins and need to be able to load them
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib/hal_plugins -name '*.so*' | while read -r f ; do
       patchelf --set-rpath "$(patchelf --print-rpath "$f"):$out/lib/hal_plugins" "$f"
     done
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
+    description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
+    mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-local-registry";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
-    rev = version;
-    hash = "sha256-2tSO82XRCUekEBrd9wDzxeg2r2C+F9wgz3ffYFG7+q8=";
+    rev = "v${version}";
+    hash = "sha256-hG6OSi0I7Y6KZacGR9MCC+e7YcDcvaVfR3LSOjqz23A=";
   };
 
-  cargoHash = "sha256-vxdQLfr4G73MpPrrcbcQRZGbTHJztUP3FwShj6zFhEY=";
+  cargoHash = "sha256-lTtxCRK4J3dQ6fwjOwYvKa0ykr28guAwVN/J8pfLn9s=";
 
   nativeBuildInputs = [
     curl
@@ -33,22 +33,18 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # tests require internet access
   doCheck = false;
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
-    description = "A cargo subcommand to manage local registries";
+    description = "Cargo subcommand to manage local registries";
+    mainProgram = "cargo-local-registry";
     homepage = "https://github.com/dhovart/cargo-local-registry";
     changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];

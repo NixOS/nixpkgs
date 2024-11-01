@@ -8,7 +8,7 @@
 , appstream-glib
 , desktop-file-utils
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gdk-pixbuf
 , pango
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
     gettext
     itstool
@@ -62,7 +62,8 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   meta = with lib; {
-    description = "A free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
+    description = "Free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
+    mainProgram = "drawing";
     homepage = "https://maoschanz.github.io/drawing/";
     changelog = "https://github.com/maoschanz/drawing/releases/tag/${version}";
     maintainers = with maintainers; [ mothsart ];

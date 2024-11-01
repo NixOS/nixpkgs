@@ -1,15 +1,17 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, voluptuous
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "hatasmota";
-  version = "0.7.3";
-  format = "setuptools";
+  version = "0.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -17,8 +19,10 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-lsb92JsqIhq7zaNaolgV8dtSFIq+Enklb6hlBvT7/Ig=";
+    hash = "sha256-m40ZK1+cfWgrwWftFqExUZidCrbDMC1Sfshugqrp5QM=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -28,9 +32,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hatasmota"
-  ];
+  pythonImportsCheck = [ "hatasmota" ];
 
   meta = with lib; {
     description = "Python module to help parse and construct Tasmota MQTT messages";

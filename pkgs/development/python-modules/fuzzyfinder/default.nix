@@ -1,25 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fuzzyfinder";
-  version = "2.1.0";
+  version = "2.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c56d86f110866becad6690c7518f7036c20831c0f82fc87eba8fdb943132f04b";
+  src = fetchFromGitHub {
+    owner = "amjith";
+    repo = "fuzzyfinder";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QWUABljgtzsZONl1klCrxEh0tPYodMOXokEb3YvWsyg=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "fuzzyfinder" ];
 
   meta = with lib; {
+    changelog = "https://github.com/amjith/fuzzyfinder/blob/${src.rev}/CHANGELOG.rst";
     description = "Fuzzy Finder implemented in Python";
     homepage = "https://github.com/amjith/fuzzyfinder";
     license = licenses.bsd3;

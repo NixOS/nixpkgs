@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sentinels";
   version = "1.0.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -17,13 +19,9 @@ buildPythonPackage rec {
     sha256 = "1cglkxph47pki4db4kjx5g4ikxp2milqdlcjgqwmx4p1gx6p1q3v";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sentinels" ];
 

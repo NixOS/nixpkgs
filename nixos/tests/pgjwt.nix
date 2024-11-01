@@ -11,15 +11,16 @@ with pkgs; {
     {
       services.postgresql = {
         enable = true;
-        extraPlugins = [ pgjwt pgtap ];
+        extraPlugins = ps: with ps; [ pgjwt pgtap ];
       };
     };
   };
 
   testScript = { nodes, ... }:
   let
-    sqlSU = "${nodes.master.config.services.postgresql.superUser}";
+    sqlSU = "${nodes.master.services.postgresql.superUser}";
     pgProve = "${pkgs.perlPackages.TAPParserSourceHandlerpgTAP}";
+    inherit (nodes.master.services.postgresql.package.pkgs) pgjwt;
   in
   ''
     start_all()

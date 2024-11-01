@@ -4,7 +4,7 @@
 , autoreconfHook
 , pkg-config
 , fftw
-, withFftw3 ? true
+, withFftw3 ? (!stdenv.hostPlatform.isMinGW)
 }:
 
 stdenv.mkDerivation rec {
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals withFftw3 [ fftw ];
 
   configureFlags = lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
-    ++ lib.optional stdenv.isAarch64 "--disable-neon";
+    ++ lib.optional stdenv.hostPlatform.isAarch64 "--disable-neon";
 
   meta = with lib; {
     homepage = "https://www.speex.org/";
-    description = "An Open Source/Free Software patent-free audio compression format designed for speech";
+    description = "Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

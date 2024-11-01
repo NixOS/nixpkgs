@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ruamel-base
-, ruamel-yaml-clib
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ruamel-base,
+  ruamel-yaml-clib,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
   pname = "ruamel-yaml";
-  version = "0.17.32";
+  version = "0.18.6";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "ruamel.yaml";
     inherit version;
-    hash = "sha256-7JOQY3YZFOFFQpcqXLptM8I7CFmrY0L2HPBwz8YA78I=";
+    hash = "sha256-iyfmohfnhsb75WNNjz8RvGPg+A9qWJDyiGPZxFqsMRs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Tests use relative paths
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel-base ]
-    ++ lib.optional (!isPyPy) ruamel-yaml-clib;
+  propagatedBuildInputs = [ ruamel-base ] ++ lib.optional (!isPyPy) ruamel-yaml-clib;
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 
@@ -29,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     changelog = "https://sourceforge.net/p/ruamel-yaml/code/ci/default/tree/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

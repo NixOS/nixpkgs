@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.1.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/texi2mdoc/snapshots/${pname}-${version}.tgz";
+    url = "http://mdocml.bsd.lv/texi2mdoc/snapshots/texi2mdoc-${version}.tgz";
     sha256 = "1zjb61ymwfkw6z5g0aqmsn6qpw895zdxv7fv3059gj3wqa3zsibs";
   };
 
@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ ramkromberg ];
+    mainProgram = "texi2mdoc";
   };
 }

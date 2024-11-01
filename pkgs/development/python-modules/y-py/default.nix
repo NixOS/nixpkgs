@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, cargo
-, rustc
-, libiconv
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  cargo,
+  rustc,
+  libiconv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,11 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   pythonImportsCheck = [ "y_py" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python bindings for Y-CRDT";

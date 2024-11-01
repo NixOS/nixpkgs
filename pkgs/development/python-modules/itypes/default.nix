@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "itypes";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     description = "Simple immutable types for python";
     homepage = "https://github.com/tomchristie/itypes";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

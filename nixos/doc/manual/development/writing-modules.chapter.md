@@ -28,7 +28,7 @@ NixOS modules:
 ```nix
 { config, pkgs, ... }:
 
-{ option definitions
+{ # option definitions
 }
 ```
 
@@ -43,15 +43,15 @@ is shown in [Example: Structure of NixOS Modules](#ex-module-syntax).
 
 {
   imports =
-    [ paths of other modules
+    [ # paths of other modules
     ];
 
   options = {
-    option declarations
+    # option declarations
   };
 
   config = {
-    option definitions
+    # option definitions
   };
 }
 ```
@@ -104,9 +104,8 @@ functions system environment substitution should *not* be disabled explicitly.
 ```nix
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) concatStringsSep mkIf mkOption optionalString types;
   cfg = config.services.locate;
 in {
   options.services.locate = {
@@ -141,7 +140,8 @@ in {
         path  = [ pkgs.su ];
         script =
           ''
-            mkdir -m 0755 -p $(dirname ${toString cfg.output})
+            mkdir -p $(dirname ${toString cfg.output})
+            chmod 0755 $(dirname ${toString cfg.output})
             exec updatedb \
               --localuser=${cfg.localuser} \
               ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
@@ -163,9 +163,7 @@ in {
 ::: {#exec-escaping-example .example}
 ### Escaping in Exec directives
 ```nix
-{ config, lib, pkgs, utils, ... }:
-
-with lib;
+{ config, pkgs, utils, ... }:
 
 let
   cfg = config.services.echo;

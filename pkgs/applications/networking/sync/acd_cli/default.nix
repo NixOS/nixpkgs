@@ -18,7 +18,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ appdirs colorama python-dateutil fusepy requests
                             requests-toolbelt setuptools sqlalchemy ];
 
-  makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${fuse}/lib/libfuse.so" ];
+  makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${lib.getLib fuse}/lib/libfuse.so" ];
 
   postFixup = ''
     function lnOverBin() {
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
+    description = "Command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];

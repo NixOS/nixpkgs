@@ -12,21 +12,21 @@
 , glib
 , libgee
 , libhandy
+, libportal-gtk3
 , granite
 , pango
-, elementary-dock
 , bamf
 , sqlite
 , zeitgeist
 , libcloudproviders
 , libgit2-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.5.2";
+  version = "7.1.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-YwXyqZ0exwQ3Qx+VWWyTTmhqCVr6be8tqzS1k3Luo8o=";
+    hash = "sha256-KGp1qhUhig4h8iQljJTBdwZT3P2prB/pFyfJWXjtPLk=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     bamf
-    elementary-dock
     glib
     granite
     gtk3
@@ -57,6 +56,7 @@ stdenv.mkDerivation rec {
     libgee
     libgit2-glib
     libhandy
+    libportal-gtk3
     pango
     sqlite
     systemd

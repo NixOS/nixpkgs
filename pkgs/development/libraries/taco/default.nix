@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enablePython pyEnv;
 
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Computes sparse tensor expressions on CPUs and GPUs";
+    mainProgram = "taco";
     license = licenses.mit;
     homepage = "https://github.com/tensor-compiler/taco";
     maintainers = [ maintainers.sheepforce ];

@@ -10,17 +10,17 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 buildGoModule {
   pname = "boringssl";
-  version = "unstable-2023-09-27";
+  version = "unstable-2024-09-20";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
-    rev = "d24a38200fef19150eef00cad35b138936c08767";
-    hash = "sha256-FBQ7y4N2rCM/Cyd6LBnDUXpSa2O3osUXukECTBjZL6s=";
+    rev = "718900aeb84c601523e71abbd18fd70c9e2ad884";
+    hash = "sha256-TdSObRECiGRQcgz6N2LhKvSi9yRYOZYJdK6MyfJX2Bo=";
   };
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorHash = "sha256-EJPcx07WuvHPAgiS1ASU6WHlHkxjUOO72if4TkmrqwY=";
+  vendorHash = "sha256-GlhLsPD+yp2LdqsIsfXNEaNKKlc76p0kBCyu4rlEmMg=";
   proxyVendor = true;
 
   # hack to get both go and cmake configure phase
@@ -41,7 +41,7 @@ buildGoModule {
   '';
 
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     mkdir -p $bin/bin $dev $out/lib
@@ -59,6 +59,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";
+    mainProgram = "bssl";
     homepage    = "https://boringssl.googlesource.com";
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];

@@ -1,14 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
   pname = "azure-mgmt-botservice";
-  disabled = isPy27;
+  version = "2.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,22 +22,27 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
-    msrestazure
   ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.botservice" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.botservice"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure API Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/botservice/azure-mgmt-botservice";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-botservice_${version}/sdk/botservice/azure-mgmt-botservice";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -25,28 +25,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rpTc0gq8HquDow4NEkRSjyESEMrv8dAhX98yKKu/Fsk=";
+    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = with lib;
-    concatLists (
-      mapAttrsToList (feat: enabled:
-        optionals enabled (featureDeps."${feat}" or [])
+  buildInputs = lib.concatLists (
+      lib.mapAttrsToList (feat: enabled:
+        lib.optionals enabled (featureDeps."${feat}" or [])
       ) features
     );
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib;
-    mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
+  configureFlags = lib.mapAttrsToList (feat: enabled: lib.strings.enableFeature enabled feat) features;
 
   meta = with lib; {
     description = "Universal configuration library parser";

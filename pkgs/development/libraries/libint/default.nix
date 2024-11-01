@@ -109,13 +109,13 @@ assert (builtins.elem shellSet [ "standard" "orca" ]);
 
 let
   pname = "libint";
-  version = "2.7.2";
+  version = "2.9.0";
 
-  meta = with lib; {
+  meta = {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
     homepage = "https://github.com/evaleev/libint";
-    license = with licenses; [ lgpl3Only gpl3Only ];
-    maintainers = with maintainers; [ markuskowa sheepforce ];
+    license = with lib.licenses; [ lgpl3Only gpl3Only ];
+    maintainers = with lib.maintainers; [ markuskowa sheepforce ];
     platforms = [ "x86_64-linux" ];
   };
 
@@ -126,7 +126,7 @@ let
       owner = "evaleev";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-lX+DVnhdOb8d7MX9umf33y88CNiGb3TYYlMZtQXfx+8=";
+      hash = "sha256-y+Mo8J/UWDrkkNEDAoostb/k6jrhYYeU0u9Incrd2cE=";
     };
 
     # Replace hardcoded "/bin/rm" with normal "rm"
@@ -139,7 +139,7 @@ let
         tests/eri/Makefile \
         tests/hartree-fock/Makefile \
         tests/unit/Makefile; do
-          substituteInPlace $f --replace "/bin/rm" "rm"
+          substituteInPlace $f --replace-warn "/bin/rm" "rm"
       done
     '';
 
@@ -155,31 +155,31 @@ let
 
     buildInputs = [ boost eigen ];
 
-    configureFlags = with lib; [
+    configureFlags = [
       "--with-max-am=${builtins.toString maxAm}"
-      "--with-eri-max-am=${concatStringsSep "," (builtins.map builtins.toString eriAm)}"
-      "--with-eri3-max-am=${concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
-      "--with-eri2-max-am=${concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
-      "--with-eri-opt-am=${concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
-      "--with-eri3-opt-am=${concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
-      "--with-eri2-opt-am=${concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
+      "--with-eri-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriAm)}"
+      "--with-eri3-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
+      "--with-eri2-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
+      "--with-eri-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
+      "--with-eri3-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
+      "--with-eri2-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
       "--with-cartgauss-ordering=${cartGaussOrd}"
       "--with-shgauss-ordering=${shGaussOrd}"
       "--with-shell-set=${shellSet}"
     ]
-    ++ optional enableFMA "--enable-fma"
-    ++ optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
-    ++ optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
-    ++ optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
-    ++ lists.optionals enableOneBody [
+    ++ lib.optional enableFMA "--enable-fma"
+    ++ lib.optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
+    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
+    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
+    ++ lib.optionals enableOneBody [
       "--enable-1body=${builtins.toString oneBodyDerivOrd}"
       "--enable-1body-property-derivs"
     ]
-    ++ optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
-    ++ optional enableGeneric "--enable-generic"
-    ++ optional enableContracted "--enable-contracted-ints"
-    ++ optional eri3PureSh "--enable-eri3-pure-sh"
-    ++ optional eri2PureSh "--enable-eri2-pure-sh"
+    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
+    ++ lib.optional enableGeneric "--enable-generic"
+    ++ lib.optional enableContracted "--enable-contracted-ints"
+    ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
+    ++ lib.optional eri2PureSh "--enable-eri2-pure-sh"
     ;
 
     preConfigure = ''
@@ -211,7 +211,7 @@ let
     buildInputs = [ boost eigen ];
 
     # Default is just "double", but SSE2 is available on all x86_64 CPUs.
-    # AVX support is advertised, but does not work in 2.6 (possibly in 2.7).
+    # AVX support is advertised, but does not work.
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
     cmakeFlags = [
       "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"

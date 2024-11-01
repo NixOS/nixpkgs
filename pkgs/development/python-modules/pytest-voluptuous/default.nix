@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytestCheckHook
-, pythonOlder
-, six
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -22,29 +23,21 @@ buildPythonPackage rec {
     hash = "sha256-xdj4qCSSJQI9Rb1WyUYrAg1I5wQ5o6IJyIjJAafP/LY=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    voluptuous
-  ];
+  propagatedBuildInputs = [ voluptuous ];
 
   nativeCheckInputs = [
     pytestCheckHook
     six
   ];
 
-  pythonImportsCheck = [
-    "pytest_voluptuous"
-  ];
+  pythonImportsCheck = [ "pytest_voluptuous" ];
 
-  pytestFlagsArray = [
-    "tests/test_plugin.py"
-  ];
+  pytestFlagsArray = [ "tests/test_plugin.py" ];
 
   meta = with lib; {
-    description = "A pytest plugin for asserting data against voluptuous schema";
+    description = "Pytest plugin for asserting data against voluptuous schema";
     homepage = "https://github.com/F-Secure/pytest-voluptuous";
     changelog = "https://github.com/F-Secure/pytest-voluptuous/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

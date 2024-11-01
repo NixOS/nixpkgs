@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
 
 buildPythonPackage rec {
   pname = "pymemoize";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -26,4 +28,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mmai ];
   };
 }
-

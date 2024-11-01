@@ -1,0 +1,7 @@
+{
+  imports = [
+    ./types
+    ./manifests
+    ./releases
+  ];
+}

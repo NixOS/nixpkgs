@@ -19,7 +19,7 @@ mkDerivation rec {
     lrelease GPXLab/locale/*.ts
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GPXLab/GPXLab.app $out/Applications
   '';
@@ -27,6 +27,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BourgeoisLab/GPXLab";
     description = "Program to show and manipulate GPS tracks";
+    mainProgram = "gpxlab";
     longDescription = ''
       GPXLab is an application to display and manage GPS tracks
       previously recorded with a GPS tracker.

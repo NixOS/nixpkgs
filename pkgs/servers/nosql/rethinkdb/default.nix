@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
-    hash = "sha256-w3iMeicPu0nj2kV4e2vlAHY8GQ+wWeObfe+UVPmkZ08=";
+    hash = "sha256-UJEjdgK2KDDbLLParKarNGMjI3QeZxDC8N5NhPRCcR8=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "rethinkdb" ];
 
   buildInputs = [ protobuf boost zlib curl openssl icu ]
-    ++ lib.optional (!stdenv.isDarwin) jemalloc
-    ++ lib.optional stdenv.isDarwin libtool;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
+    ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
 
   nativeBuildInputs = [ which m4 python3Packages.python makeWrapper ];
 
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source distributed database built with love";
+    description = "Open-source distributed database built with love";
+    mainProgram = "rethinkdb";
     longDescription = ''
       RethinkDB is built to store JSON documents, and scale to
       multiple machines with very little effort. It has a pleasant

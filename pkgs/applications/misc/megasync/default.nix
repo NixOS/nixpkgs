@@ -8,7 +8,6 @@
 , doxygen
 , fetchFromGitHub
 , ffmpeg
-, freeimage
 , libmediainfo
 , libraw
 , libsodium
@@ -28,13 +27,13 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.9.0.0";
+  version = "4.9.1.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "sha256-s0E8kJ4PJmhaxVcWPCyCk/KbcX4V3IESdZhSosPlZuM=";
+    hash = "sha256-Y1nfY5iP64iSCYwzqxbjZAQNHyj4yVbSudSInm+yJzY=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +53,6 @@ mkDerivation rec {
     cryptopp
     curl
     ffmpeg
-    freeimage
     libmediainfo
     libraw
     libsodium
@@ -72,7 +70,6 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
-    ./ffmpeg_44.patch
   ];
 
   postPatch = ''
@@ -98,7 +95,7 @@ mkDerivation rec {
     "--with-cryptopp"
     "--with-curl"
     "--with-ffmpeg"
-    "--with-freeimage"
+    "--without-freeimage"
     "--without-readline"
     "--without-termcap"
     "--with-sodium"
@@ -111,10 +108,10 @@ mkDerivation rec {
   '';
 
   preBuild = ''
-    qmake CONFIG+="release" MEGA.pro
+    qmake CONFIG+="nofreeimage release" MEGA.pro
     pushd MEGASync
       lrelease MEGASync.pro
-      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+=release
+      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+="nofreeimage release"
     popd
   '';
 
@@ -124,6 +121,6 @@ mkDerivation rec {
     homepage = "https://mega.nz/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ maintainers.michojel ];
+    maintainers = [ ];
   };
 }

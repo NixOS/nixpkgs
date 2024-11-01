@@ -16,25 +16,25 @@
 , waylandSupport ? false
 }:
 
-assert waylandSupport -> stdenv.isLinux;
+assert waylandSupport -> stdenv.hostPlatform.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.8.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-rNM3kQrEkqLAW6Dia+VsEi9etUG218AL8tO0amWXb34=";
+    hash = "sha256-hJLooKH5jketvPTfTtkNBQL1F9lzBEhDZuUXZRFEcWo=";
   };
 
-  vendorHash = "sha256-I4ZZmQfYTMtNT+3WCs6/g42uF4EKGSjGHCqG8Du5rCo=";
+  vendorHash = "sha256-wT1WvwUUAnMIKa+RlRDD2QGJpZMtoecQCxSJekM6PdM=";
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -44,20 +44,20 @@ buildGoModule rec {
   buildInputs = [
     libglvnd
     mpv-unwrapped
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libXxf86vm
     xorg.libX11
-  ] ++ lib.optionals (stdenv.isLinux && !waylandSupport) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXcursor
     xorg.libXi
     xorg.libXext
-  ] ++ lib.optionals (stdenv.isLinux && waylandSupport) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
     wayland
     wayland-protocols
     libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.Kernel
     darwin.apple_sdk_11_0.frameworks.OpenGL

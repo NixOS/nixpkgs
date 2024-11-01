@@ -11,9 +11,9 @@ in
 
   options = {
     services.sing-box = {
-      enable = lib.mkEnableOption (lib.mdDoc "sing-box universal proxy platform");
+      enable = lib.mkEnableOption "sing-box universal proxy platform";
 
-      package = lib.mkPackageOptionMD pkgs "sing-box" { };
+      package = lib.mkPackageOption pkgs "sing-box" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {
@@ -24,7 +24,7 @@ in
                 type = lib.types.path;
                 default = "${pkgs.sing-geoip}/share/sing-box/geoip.db";
                 defaultText = lib.literalExpression "\${pkgs.sing-geoip}/share/sing-box/geoip.db";
-                description = lib.mdDoc ''
+                description = ''
                   The path to the sing-geoip database.
                 '';
               };
@@ -32,7 +32,7 @@ in
                 type = lib.types.path;
                 default = "${pkgs.sing-geosite}/share/sing-box/geosite.db";
                 defaultText = lib.literalExpression "\${pkgs.sing-geosite}/share/sing-box/geosite.db";
-                description = lib.mdDoc ''
+                description = ''
                   The path to the sing-geosite database.
                 '';
               };
@@ -40,7 +40,7 @@ in
           };
         };
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           The sing-box configuration, see https://sing-box.sagernet.org/configuration/ for documentation.
 
           Options containing secret data should be set to an attribute set
@@ -55,11 +55,17 @@ in
     systemd.packages = [ cfg.package ];
 
     systemd.services.sing-box = {
-      preStart = ''
-        umask 0077
-        mkdir -p /etc/sing-box
-        ${utils.genJqSecretsReplacementSnippet cfg.settings "/etc/sing-box/config.json"}
-      '';
+      preStart = utils.genJqSecretsReplacementSnippet cfg.settings "/run/sing-box/config.json";
+      serviceConfig = {
+        StateDirectory = "sing-box";
+        StateDirectoryMode = "0700";
+        RuntimeDirectory = "sing-box";
+        RuntimeDirectoryMode = "0700";
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
+        ];
+      };
       wantedBy = [ "multi-user.target" ];
     };
   };

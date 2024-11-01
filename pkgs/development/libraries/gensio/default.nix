@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.7.7";
+  version = "2.8.9";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fm850eDqKhvjwU5RwdwAro4R23yRn41ePn5++8MXHZ0=";
+    sha256 = "sha256-xW3I1OfL+AfbeKf/kwBdsZRoCsPPZ7oLMppeIepn/P0=";
   };
 
   passthru = {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
   meta = with lib; {
     description = "General Stream I/O";

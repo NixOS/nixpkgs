@@ -1,58 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pexpect
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pexpect,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygatt";
-  version = "4.0.5";
-  disabled = pythonOlder "3.5";
+  version = "5.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "peplin";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1zdfxidiw0l8n498sy0l33n90lz49n25x889cx6jamjr7frlcihd";
+    repo = "pygatt";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TMIqC+JvNOLU38a9jkacRAbdmAAd4UekFUDRoAWhHFo=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setup_requires" "test_requires"
+  '';
 
-  passthru.optional-dependencies.GATTTOOL = [
-    pexpect
-  ];
+  pythonRemoveDeps = [ "enum-compat" ];
 
-  nativeBuildInputs = [
-    # For cross compilation the doCheck is false and therefor the
-    # nativeCheckInputs not included. We have to include nose here, since
-    # setup.py requires nose unconditionally.
-    nose
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial ];
+
+  optional-dependencies.GATTTOOL = [ pexpect ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.GATTTOOL;
-
-  postPatch = ''
-    # Not support for Python < 3.4
-    substituteInPlace setup.py --replace "'enum-compat'" ""
-  '';
+  ] ++ optional-dependencies.GATTTOOL;
 
   pythonImportsCheck = [ "pygatt" ];
 
   meta = with lib; {
     description = "Python wrapper the BGAPI for accessing Bluetooth LE Devices";
     homepage = "https://github.com/peplin/pygatt";
-    license = with licenses; [ asl20 mit ];
+    changelog = "https://github.com/peplin/pygatt/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

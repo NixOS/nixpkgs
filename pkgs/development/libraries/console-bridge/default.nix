@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake validatePkgConfig ];
 
   meta = with lib; {
-    description = "A ROS-independent package for logging that seamlessly pipes into rosconsole/rosout for ROS-dependent packages";
+    description = "ROS-independent package for logging that seamlessly pipes into rosconsole/rosout for ROS-dependent packages";
     homepage = "https://github.com/ros/console_bridge";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lopsided98 ];

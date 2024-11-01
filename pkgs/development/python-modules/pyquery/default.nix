@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
-, webob
-, webtest
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  lxml,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  webob,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "2.0.0";
+  version = "2.0.1";
   disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
+    hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
   };
 
   # https://github.com/gawel/pyquery/issues/248
@@ -52,8 +54,13 @@ buildPythonPackage rec {
     "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/gawel/pyquery/issues/249
+    "pyquery.pyquery.PyQuery.serialize_dict"
+  ];
+
   meta = with lib; {
-    description = "A jquery-like library for Python";
+    description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;

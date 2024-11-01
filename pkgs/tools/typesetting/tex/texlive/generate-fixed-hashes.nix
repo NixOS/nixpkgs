@@ -1,10 +1,23 @@
-with import ../../../../.. { };
+{ pkgs ? (import ../../../../.. { }) }:
 
-with lib; let
-  getFods = drv: lib.optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
-    ++ lib.optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; })
-    ++ lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
-    ++ lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; });
+let
+  inherit (pkgs) runCommand writeText texlive nix;
+  inherit (pkgs.lib)
+    attrValues
+    concatMap
+    concatMapStrings
+    isDerivation
+    filter
+    optional
+    optionalString
+    sort
+    strings
+    ;
+
+  getFods = drv: optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
+    ++ optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; })
+    ++ optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
+    ++ optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; });
 
   sorted = sort (a: b: a.pname < b.pname) (attrValues texlive.pkgs);
   fods = concatMap getFods sorted;

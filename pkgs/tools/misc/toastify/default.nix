@@ -13,19 +13,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ps2pRLpPxw+OS1ungQtVQ8beoKpc8pjzQEndMNni08k=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
   ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
-    description = "A commandline tool that shows desktop notifications using notify-rust";
+    description = "Commandline tool that shows desktop notifications using notify-rust";
     homepage = "https://github.com/hoodie/toastify";
     changelog = "https://github.com/hoodie/toastify/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
+    mainProgram = "toastify";
   };
 }

@@ -3,19 +3,19 @@
 , cppunit
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "5.9";
+  version = "6.10";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
-    hash = "sha256-P+XCAH2idXRGr5G275dPFUsggSCpo5OW6mgeXEq7BLU=";
+    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Cwexh+cj8Edw3SW+uJrsEgMKFYaWqoiS2HyLJoU0CKc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap pam systemd ];
 
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-delay-pools"
     "--enable-x-accelerator-vary"
     "--enable-htcp"
-  ] ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
     "--enable-linux-netfilter";
 
   doCheck = true;
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
+    description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
     knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
   };
-}
+})

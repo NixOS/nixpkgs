@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -27,8 +27,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Acizza/anup";
-    description = "An anime tracker for AniList featuring a TUI";
+    description = "Anime tracker for AniList featuring a TUI";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ natto1784 ];
+    mainProgram = "anup";
   };
 }

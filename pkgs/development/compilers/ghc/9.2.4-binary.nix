@@ -222,7 +222,7 @@ stdenv.mkDerivation rec {
         ])
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -236,6 +236,8 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     ''
@@ -245,7 +247,7 @@ stdenv.mkDerivation rec {
       # we need to modify the package db directly for hadrian bindists
       find . -name 'ghc-bignum*.conf' \
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib gmpUsed}/lib' -i {} \;
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # we need to modify the package db directly for hadrian bindists
       # (all darwin bindists are hadrian-based for 9.2.2)
       find . -name 'base*.conf' \
@@ -264,7 +266,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '';
@@ -279,7 +281,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-includes=${lib.getDev gmpUsed}/include"
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-  ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
@@ -314,7 +316,7 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString (stdenv.isLinux && !(binDistUsed.isStatic or false))
+  postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && !(binDistUsed.isStatic or false))
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
@@ -342,7 +344,7 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
         fi
       done
-    '') + lib.optionalString stdenv.isDarwin ''
+    '') + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -420,7 +422,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     # HACK: since we can't encode the libc / abi in platforms, we need
     # to make the platform list dependent on the evaluation platform

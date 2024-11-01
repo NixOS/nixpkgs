@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         filesystem in Linux kernel versions 2.5+ that exposes a system's
         device tree.
       '';
-    license = with lib.licenses; [ gpl2 lgpl21 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21 ];
     platforms = lib.platforms.linux;
   };
 }

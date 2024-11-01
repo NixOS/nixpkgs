@@ -1,21 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fiona
-, packaging
-, pandas
-, pyproj
-, pytestCheckHook
-, pythonOlder
-, rtree
-, shapely
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+
+  packaging,
+  pandas,
+  pyogrio,
+  pyproj,
+  rtree,
+  shapely,
+
+  # optional-dependencies
+  folium,
+  geoalchemy2,
+  geopy,
+  mapclassify,
+  matplotlib,
+  psycopg,
+  pyarrow,
+  sqlalchemy,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.14.1";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,23 +37,45 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mQ13fjhtFXvUnBok5bDz+zkbgfXEUmwiv77rBpYS5oo=";
+    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
   };
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
-    fiona
     packaging
     pandas
+    pyogrio
     pyproj
     shapely
   ];
 
+  optional-dependencies = {
+    all = [
+      # prevent infinite recursion
+      (folium.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      geoalchemy2
+      geopy
+      # prevent infinite recursion
+      (mapclassify.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      matplotlib
+      psycopg
+      pyarrow
+      sqlalchemy
+      xyzservices
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ];
+  ] ++ optional-dependencies.all;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -50,13 +86,9 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [
-    "geopandas"
-  ];
+  pytestFlagsArray = [ "geopandas" ];
 
-  pythonImportsCheck = [
-    "geopandas"
-  ];
+  pythonImportsCheck = [ "geopandas" ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";

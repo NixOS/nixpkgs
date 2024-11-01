@@ -1,25 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, hkdf, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  cryptography,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "spake2";
-  version = "0.8";
+  version = "0.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c17a614b29ee4126206e22181f70a406c618d3c6c62ca6d6779bce95e9c926f4";
+  src = fetchFromGitHub {
+    owner = "warner";
+    repo = "python-spake2";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WPMGH1OzG+5O+2lNl2sv06/dNardY+BHYDS290Z36vQ=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ hkdf ];
+  dependencies = [ cryptography ];
 
-  checkPhase = ''
-    py.test $out
-  '';
+  pythonImportsCheck = [ "spake2" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
+    changelog = "https://github.com/warner/python-spake2/blob/v${version}/NEWS";
     description = "SPAKE2 password-authenticated key exchange library";
     homepage = "https://github.com/warner/python-spake2";
     license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

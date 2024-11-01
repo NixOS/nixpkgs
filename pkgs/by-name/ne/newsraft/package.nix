@@ -8,24 +8,27 @@
 , ncurses
 , sqlite
 , yajl
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.21";
+  version = "0.27";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "grisha";
+    owner = "newsraft";
     repo = "newsraft";
-    rev = "newsraft-${version}";
-    hash = "sha256-vnLlozzPIk3F2U2ZvOClHnpmkXx4fc0pM1X4hFXM2Pg=";
+    rev = "newsraft-${finalAttrs.version}";
+    hash = "sha256-MtdFnoB6Dc3xvTCc2PMIp5VsZiU5JE58q6WctM3mDZw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl expat gumbo ncurses sqlite yajl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "Feed reader for terminal";
@@ -35,4 +38,4 @@ stdenv.mkDerivation rec {
     mainProgram = "newsraft";
     platforms = platforms.all;
   };
-}
+})

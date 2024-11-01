@@ -1,57 +1,52 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, gssapi
-, kafka-python
-, lz4
-, packaging
-, python-snappy
-, pythonOlder
-, zlib
-, zstandard
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cramjam,
+  cython,
+  fetchFromGitHub,
+  gssapi,
+  packaging,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiokafka";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O5cDP0PWFrxNSdwWqUUkErUKf1Tt9agKJqWIjd4jGqk=";
+    hash = "sha256-OU/Kept3TvMfGvVCjSthfZnfTX6/T0Fy3PS/ynrV3Cg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    setuptools
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
-    kafka-python
     packaging
+    typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    snappy = [
-      python-snappy
-    ];
-    lz4 = [
-      lz4
-    ];
-    zstd = [
-      zstandard
-    ];
-    gssapi = [
+  optional-dependencies = {
+    snappy = [ cramjam ];
+    lz4 = [ cramjam ];
+    zstd = [ cramjam ];
+    gssapi = [ gssapi ];
+    all = [
+      cramjam
       gssapi
     ];
   };
@@ -59,15 +54,13 @@ buildPythonPackage rec {
   # Checks require running Kafka server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiokafka"
-  ];
+  pythonImportsCheck = [ "aiokafka" ];
 
   meta = with lib; {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

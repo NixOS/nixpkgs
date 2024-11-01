@@ -12,18 +12,18 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
   pname = "osmo-iuh";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-iuh";
     rev = version;
-    hash = "sha256-rAU2+NxD+j2jntZ7dHvakv2aTsfzAg0+SFDHtSJNpn8=";
+    hash = "sha256-3ADn0GSoXPXL1gD79JjD2hXNBN/v8aaEKgf5qFNGEJs=";
   };
 
   prePatch = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom IuH library";
     homepage = "https://osmocom.org/projects/osmohnbgw/wiki";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

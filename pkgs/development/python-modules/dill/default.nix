@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
 
-# passthru tests
-, apache-beam
-, datasets
+  # passthru tests
+  apache-beam,
+  datasets,
 }:
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.7";
+  version = "0.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,13 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "refs/tags/dill-${version}";
-    hash = "sha256-1cRGA5RuNjlpc3jq9SAsUYgmPauIV8zRF9SxOmveljI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-p+W0ppNMfSgplKsQjaTnTrMvQ5poF/E/xSzsiLf9h58=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck

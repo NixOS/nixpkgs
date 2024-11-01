@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchurl {
-    url = "https://www.muppetlabs.com/~breadbox/pub/software/${pname}-${version}.tar.gz";
+    url = "https://www.muppetlabs.com/~breadbox/pub/software/xcd-${version}.tar.gz";
     sha256 = "1cgwspy08q05rhxbp7m1yrrix252i9jzfcfbzmhdvlgf5bfpl25g";
   };
 
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.xfnw ];
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "xcd";
   };
 }

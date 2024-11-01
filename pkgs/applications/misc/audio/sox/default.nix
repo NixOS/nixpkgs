@@ -31,7 +31,7 @@
 , enableAMR ? false
 , amrnb
 , amrwb
-, enableLibpulseaudio ? stdenv.isLinux
+, enableLibpulseaudio ? stdenv.hostPlatform.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
 , libpulseaudio
 }:
 
@@ -59,15 +59,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-  ] ++ lib.optionals enableOpusfile [
-    # configure.ac uses pkg-config only to locate libopusfile
     pkg-config
   ];
 
   patches = [ ./0001-musl-rewind-pipe-workaround.patch ];
 
   buildInputs =
-    lib.optional (enableAlsa && stdenv.isLinux) alsa-lib
+    lib.optional (enableAlsa && stdenv.hostPlatform.isLinux) alsa-lib
     ++ lib.optional enableLibao libao
     ++ lib.optional enableLame lame
     ++ lib.optional enableLibmad libmad
@@ -79,7 +77,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableWavpack wavpack
     ++ lib.optionals enableAMR [ amrnb amrwb ]
     ++ lib.optional enableLibpulseaudio libpulseaudio
-    ++ lib.optional stdenv.isDarwin CoreAudio;
+    ++ lib.optional stdenv.hostPlatform.isDarwin CoreAudio;
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";

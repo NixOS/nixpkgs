@@ -1,68 +1,60 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, blosc2
-, bzip2
-, c-blosc
-, cython
-, hdf5
-, lzo
-, numpy
-, numexpr
-, packaging
-, sphinx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  blosc2,
+  bzip2,
+  c-blosc,
+  cython,
+  hdf5,
+  lzo,
+  numpy,
+  numexpr,
+  packaging,
+  setuptools,
+  sphinx,
+  typing-extensions,
   # Test inputs
-, python
-, pytest
-, py-cpuinfo
+  python,
+  pytest,
+  py-cpuinfo,
 }:
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.8.0";
+  version = "3.10.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
+    hash = "sha256-SqB6xzS5wDe66vRK7GTskCrSR/V4EbWfMMTjHTHxJs8=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "numpy-1.25-compatibility.patch";
-      url = "https://github.com/PyTables/PyTables/commit/337792561e5924124efd20d6fea6bbbd2428b2aa.patch";
-      hash = "sha256-pz3A/jTPWXXlzr+Yl5PRUvdSAinebFsoExfek4RUHkc=";
-    })
-    (fetchpatch {
-      name = "numexpr-2.8.5-compatibility.patch";
-      url = "https://github.com/PyTables/PyTables/commit/1a235490ebe1a138da1139cfa19829b5f0a2af37.patch";
-      includes = [ "tables/tests/test_queries.py" ];
-      hash = "sha256-uMS+Z2Zcz68ILMQaBdIDMnCyasozCaCGOiGIyw0+Evc=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     blosc2
     cython
+    setuptools
     sphinx
   ];
 
   buildInputs = [
     bzip2
     c-blosc
+    blosc2.c-blosc2
     hdf5
     lzo
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blosc2
     py-cpuinfo
     numpy
     numexpr
     packaging # uses packaging.version at runtime
+    typing-extensions
   ];
 
   # When doing `make distclean`, ignore docs
@@ -87,13 +79,13 @@ buildPythonPackage rec {
     "--lzo=${lib.getDev lzo}"
     "--bzip2=${lib.getDev bzip2}"
     "--blosc=${lib.getDev c-blosc}"
+    "--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     cd ..
   '';
 

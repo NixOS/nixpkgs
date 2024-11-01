@@ -4,15 +4,12 @@
 , lib
 , emptyDirectory
 , linkFarm
-, symlinkJoin
 , jam
-, libcxx
-, libcxxabi
 , openssl
-, xcbuild
 , CoreServices
 , Foundation
 , Security
+, testers
 }:
 
 let
@@ -33,28 +30,24 @@ let
       # cone-based Git sparse checkout, either.)
       { name = "contrib"; path = "${src}/contrib"; }
     ];
-  libcxxUnified = symlinkJoin {
-    inherit (libcxx) name;
-    paths = [ libcxx libcxxabi ];
-  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "p4";
-  version = "2022.2.2407422";
+  version = "2024.1/2596294";
 
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
-    url = "https://web.archive.org/web/20230512173806id_/https://ftp.perforce.com/perforce/r22.2/bin.tools/p4source.tgz";
-    sha256 = "4355375def3f3d2256d4a92ac1b9960173e7aa97404346c0c74caf23a0905e1b";
+    url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
+    sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
   nativeBuildInputs = [ jam ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Foundation Security ];
 
   outputs = [ "out" "bin" "dev" ];
 
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   jamFlags =
     [
@@ -66,21 +59,21 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
     ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.isLinux [ "-sOSVER=26" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
       "-sMACOSX_SDK=${emptyDirectory}"
-      "-sLIBC++DIR=${libcxxUnified}/lib"
+      "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =
     # The file contrib/optimizations/slide_hash_neon.h is missing from the
     # upstream distribution. It comes from the Android/Chromium sources.
-    lib.optionals stdenv.isAarch64 [ "-I${androidZlibContrib}" ];
+    lib.optionals stdenv.hostPlatform.isAarch64 [ "-I${androidZlibContrib}" ];
 
   "C++FLAGS" =
     # Avoid a compilation error that only occurs for 4-byte longs.
-    lib.optionals stdenv.isi686 [ "-Wno-narrowing" ]
+    lib.optionals stdenv.hostPlatform.isi686 [ "-Wno-narrowing" ]
     # See the "Header dependency changes" section of
     # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
     # information on why we need to include these.
@@ -99,10 +92,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $bin/bin $dev $out
     cp bin.unix/p4 $bin/bin
-    cp -r bin.unix/p4api-${version}/include $dev
-    cp -r bin.unix/p4api-${version}/lib $out
+    cp -r bin.unix/p4api-*/include $dev
+    cp -r bin.unix/p4api-*/lib $out
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "p4 -V";
+  };
 
   meta = with lib; {
     description = "Perforce Helix Core command-line client and APIs";
@@ -112,4 +110,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ corngood impl ];
   };
-}
+})

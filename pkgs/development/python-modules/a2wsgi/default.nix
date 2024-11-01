@@ -1,26 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asgiref
-, httpx
-, pdm-backend
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  asgiref,
+  httpx,
+  pdm-backend,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.10.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sgQ2uS8z25/xQ2vmS4boLhhwluu10aUt4nlKcNuYFRA=";
+    hash = "sha256-zkYv9+HarAvFcYPG+ADwmnHCp6mN3VzeyhSePqvzM44=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   nativeCheckInputs = [
     asgiref

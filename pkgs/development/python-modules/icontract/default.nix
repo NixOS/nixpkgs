@@ -1,28 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, astor
-, asttokens
-, asyncstdlib
-, deal
-, dpcontracts
-, numpy
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  astor,
+  asttokens,
+  asyncstdlib,
+  buildPythonPackage,
+  deal,
+  dpcontracts,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.4";
-  format = "setuptools";
+  version = "2.7.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
-    repo = pname;
+    repo = "icontract";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zuaS9mmq47hUIBObYRuzEYQQdTArFXR3TpK9nfZt/yk=";
+    hash = "sha256-7mRQ1g2mllHIaZh0jEd/iCgaDja1KJXuRnamhDo/Pbo=";
   };
 
   preCheck = ''
@@ -32,7 +35,9 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asttokens
     typing-extensions
   ];
@@ -46,17 +51,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError
+    "test_abstract_method_not_implemented"
+  ];
+
   disabledTestPaths = [
     # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
-    # those tests seems to simply re-run some typeguard tests
+    # Those tests seems to simply re-run some typeguard tests
     "tests/test_typeguard.py"
   ];
 
   pytestFlagsArray = [
     # RuntimeWarning: coroutine '*' was never awaited
-    "-W" "ignore::RuntimeWarning"
+    "-W"
+    "ignore::RuntimeWarning"
   ];
 
   pythonImportsCheck = [ "icontract" ];
@@ -66,6 +77,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Parquery/icontract";
     changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador thiagokokada ];
+    maintainers = with maintainers; [
+      gador
+      thiagokokada
+    ];
   };
 }

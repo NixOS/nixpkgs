@@ -9,9 +9,9 @@
 , zlib
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
-, pam, withPAM ? stdenv.isLinux
+, pam, withPAM ? stdenv.hostPlatform.isLinux
 , systemd, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, libcap, withCap ? stdenv.isLinux
+, libcap, withCap ? stdenv.hostPlatform.isLinux
 , python2, python3, ncurses
 , ruby, php
 , makeWrapper, fetchFromGitHub
@@ -71,13 +71,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.23";
+  version = "2.0.27";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     rev = finalAttrs.version;
-    hash = "sha256-gyYsgPF6eGa3D7bjmhhVER+uM0yPLfZiwSUzZ2mGcHg=";
+    hash = "sha256-GOI92fwTfO/XAvNUHJMX6BtGFSVVOPWa1Jjw/UCJGi4=";
   };
 
   patches = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =  [ jansson pcre libxcrypt ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ expat zlib ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ expat zlib ]
     ++ lib.optional withPAM pam
     ++ lib.optional withSystemd systemd
     ++ lib.optional withCap libcap
@@ -163,10 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
+    description = "Fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ abbradar schneefux globin ];
     platforms = lib.platforms.unix;
+    mainProgram = "uwsgi";
   };
 })

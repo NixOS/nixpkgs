@@ -46,6 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Terminal multiplexer inspired by i3";
+    mainProgram = "3mux";
     longDescription = ''
       Terminal multiplexer with out-of-the-box support for search,
       mouse-controlled scrollback, and i3-like keybindings

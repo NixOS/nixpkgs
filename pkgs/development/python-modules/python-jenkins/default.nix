@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, mock
-, pbr
-, pyyaml
-, setuptools
-, six
-, multi-key-dict
-, testscenarios
-, requests
-, requests-mock
-, stestr
-, multiprocess
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pbr,
+  pyyaml,
+  setuptools,
+  six,
+  multi-key-dict,
+  testscenarios,
+  requests,
+  requests-mock,
+  stestr,
+  multiprocess,
 }:
 
 buildPythonPackage rec {
   pname = "python-jenkins";
   version = "1.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,24 +28,31 @@ buildPythonPackage rec {
 
   # test uses timeout mechanism unsafe for use with the "spawn"
   # multiprocessing backend used on macos
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace tests/test_jenkins_sockets.py \
       --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-  pythonRelaxDeps = [
-    "setuptools"
-  ];
+  pythonRelaxDeps = [ "setuptools" ];
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml setuptools six multi-key-dict requests ];
+  propagatedBuildInputs = [
+    pbr
+    pyyaml
+    setuptools
+    six
+    multi-key-dict
+    requests
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ stestr testscenarios requests-mock multiprocess ];
+  nativeCheckInputs = [
+    stestr
+    testscenarios
+    requests-mock
+    multiprocess
+  ];
   checkPhase = ''
     # Skip tests that fail due to setuptools>=66.0.0 rejecting PEP 440
     # non-conforming versions. See
@@ -58,5 +66,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ gador ];
   };
-
 }

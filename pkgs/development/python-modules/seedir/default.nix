@@ -1,46 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, natsort
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  natsort,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "seedir";
-  version = "0.4.2";
-  format = "setuptools";
+  version = "0.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "earnestt1234";
-    repo = pname;
+    repo = "seedir";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ioez5lBNyiBK3poL2Px3KtCQeM+Gh2d4iD3SoAIHFAk=";
+    hash = "sha256-ilL2KKN5sJclVcStO/kZoacsPoMgcFW1/8M/PQjxw/U=";
   };
 
-  propagatedBuildInputs = [
-    natsort
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ natsort ];
 
-  pythonImportsCheck = [
-    "seedir"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/tests.py"
-  ];
+  pythonImportsCheck = [ "seedir" ];
 
   meta = with lib; {
     description = "Module for for creating, editing, and reading folder tree diagrams";
     homepage = "https://github.com/earnestt1234/seedir";
     changelog = "https://github.com/earnestt1234/seedir/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "seedir";
   };
 }

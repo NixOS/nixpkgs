@@ -1,31 +1,30 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, django
-, djangorestframework
-, fetchPypi
-, pyjwt
-, python-jose
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  django,
+  djangorestframework,
+  fetchPypi,
+  pyjwt,
+  python-jose,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
-  version = "5.3.0";
+  version = "5.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
     inherit version;
-    hash = "sha256-jkxd/KjRHAuKZt/YpOP8HGqn6hiNEJB/+RyUL0tS7WY=";
+    hash = "sha256-bEvTdTdEC8Q5Vk6/fWCF50xUEUhRlwc/UI69+jS8n64=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django
@@ -33,21 +32,15 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  passthru.optional-dependencies = {
-    python-jose = [
-      python-jose
-    ];
-    crypto = [
-      cryptography
-    ];
+  optional-dependencies = {
+    python-jose = [ python-jose ];
+    crypto = [ cryptography ];
   };
 
   # Test raises django.core.exceptions.ImproperlyConfigured
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rest_framework_simplejwt"
-  ];
+  pythonImportsCheck = [ "rest_framework_simplejwt" ];
 
   meta = with lib; {
     description = "JSON Web Token authentication plugin for Django REST Framework";

@@ -1,4 +1,4 @@
-{ lib, mkFranzDerivation, fetchurl, xorg, nix-update-script, stdenv }:
+{ lib, mkFranzDerivation, fetchurl, xorg, stdenv }:
 
 let
   arch = {
@@ -6,13 +6,14 @@ let
     aarch64-linux = "arm64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    amd64-linux_hash = "sha256-ZCyAz+XVp2NJVUuMWyv5ubjMaoYBsjPAye/1vO2jv/w=";
-    arm64-linux_hash = "sha256-prdVwEn6eynzjLQ+aw2CS4PJ/JgG4QFKs9WDbzjV5oo=";
+    amd64-linux_hash = "sha256-5OW10sABNNYQNUgorM634j5oiBhJJby1ymH6UcmknRg=";
+    arm64-linux_hash = "sha256-zbO/8RU2SDV1h4gKdxKbvNFFSj6p3ybmPkpKsrup4No=";
   }."${arch}-linux_hash";
-in mkFranzDerivation rec {
+in
+mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
-  version = "6.6.0";
+  version = "6.7.7";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-${arch}.deb";
     inherit hash;

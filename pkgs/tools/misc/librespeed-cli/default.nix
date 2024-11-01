@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/librespeed/speedtest-cli";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "speedtest-cli";
   };
 }

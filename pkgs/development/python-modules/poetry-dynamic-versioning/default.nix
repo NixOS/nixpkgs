@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, dunamai
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, poetry
-, pytestCheckHook
-, pythonOlder
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  dunamai,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  poetry,
+  pytestCheckHook,
+  pythonOlder,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "1.0.1";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BGAo3c0TzyhIiDtZjoEP+Eeu51WJB3Wg71poFMWJ+VM=";
+    hash = "sha256-2iC665bOCr5JEcuypgr57bHSRYc3PuetJ9uPvFLsgZM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dunamai
@@ -50,14 +49,13 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "poetry_dynamic_versioning"
-  ];
+  pythonImportsCheck = [ "poetry_dynamic_versioning" ];
 
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
+    mainProgram = "poetry-dynamic-versioning";
     homepage = "https://github.com/mtkennerly/poetry-dynamic-versioning";
     changelog = "https://github.com/mtkennerly/poetry-dynamic-versioning/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

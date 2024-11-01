@@ -1,62 +1,72 @@
-{ lib
-, asyncclick
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytest-socket
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, requests-mock
-, requests-oauthlib
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  asyncclick,
+  buildPythonPackage,
+  fetchPypi,
+  firebase-messaging,
+  freezegun,
+  hatchling,
+  oauthlib,
+  pytest-asyncio,
+  pytest-freezer,
+  pytest-mock,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  typing-extensions,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.8.1";
+  version = "0.9.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-A7FQeeYym0nAQlkbpejpZqd5ZgX2cw3/DbshDxlrivw=";
+    hash = "sha256-3OSD+L6+mZkkm0OU09hAFyEAxJZ3YA1+lRm2DjQ7Dl0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "requests-oauthlib" ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
+    aiofiles
+    aiohttp
     asyncclick
+    firebase-messaging
     oauthlib
     pytz
-    requests
-    requests-oauthlib
+    typing-extensions
+    websockets
   ];
 
   nativeCheckInputs = [
+    aioresponses
+    freezegun
     pytest-asyncio
+    pytest-freezer
     pytest-mock
     pytest-socket
     pytestCheckHook
-    requests-mock
   ];
 
-  pythonImportsCheck = [
-    "ring_doorbell"
-  ];
+  pythonImportsCheck = [ "ring_doorbell" ];
 
   meta = with lib; {
-    description = "Python library to communicate with Ring Door Bell";
+    description = "Library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
-    changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
+    changelog = "https://github.com/tchellomello/python-ring-doorbell/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ graham33 ];
+    mainProgram = "ring-doorbell";
   };
 }

@@ -1,36 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, wheel
-, pytz-deprecation-shim
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "5.0.1"; # version needs to be compatible with APScheduler
+  version = "5.2"; # version needs to be compatible with APScheduler
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RuuZrUvbcfP3K30k9CZ3U+JAlE7PwW8l0nGbqJgnqAM=";
+    hash = "sha256-jTmSBVePGpNCgWQJzB5GqT69V1XjnqLYUzS+qRG/Dm4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = [
-    pytz-deprecation-shim
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -41,7 +33,7 @@ buildPythonPackage rec {
     "test_conflicting"
     "test_noconflict"
     "test_symlink_localtime"
-  ] ++ lib.optional stdenv.isDarwin "test_assert_tz_offset";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "test_assert_tz_offset";
 
   pythonImportsCheck = [ "tzlocal" ];
 

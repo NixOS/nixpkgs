@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub
 , attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+, libglvnd, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.17.01";
+  version = "0.18.05";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-hTwA0BT8r54Gnyf/itP2onQE6zhNEoejseuIEwvx4D8=";
+    hash = "sha256-/mg+uCUWJJBymr1trnjBdi3mRD4Q7Ril+brokysnZXI=";
   };
 
   postPatch = ''
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   # All platforms inputs then Linux-only ones
   buildInputs = [ judy libbsd libgcrypt zlib ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools
+      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd mesa
     ];
 
   makeFlags = [
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   # install phase without checking the dependencies. This will prevent
   # triggering the rebuild. Why this only happens on i686 remains a
   # mystery, though. :-(
-  enableParallelBuilding = (!stdenv.isi686);
+  enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
   meta = with lib; {
     description = "Stress test a computer system";
@@ -70,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.unix;
+    mainProgram = "stress-ng";
   };
 }

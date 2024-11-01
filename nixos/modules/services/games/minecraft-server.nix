@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.minecraft-server;
 
@@ -13,13 +10,13 @@ let
 
   whitelistFile = pkgs.writeText "whitelist.json"
     (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+      (lib.mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
 
-  cfgToString = v: if builtins.isBool v then boolToString v else toString v;
+  cfgToString = v: if builtins.isBool v then lib.boolToString v else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (''
     # server.properties managed by NixOS configuration
-  '' + concatStringsSep "\n" (mapAttrsToList
+  '' + lib.concatStringsSep "\n" (lib.mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
   stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
@@ -51,20 +48,20 @@ in {
   options = {
     services.minecraft-server = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, start a Minecraft Server. The server
           data will be loaded from and saved to
           {option}`services.minecraft-server.dataDir`.
         '';
       };
 
-      declarative = mkOption {
-        type = types.bool;
+      declarative = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use a declarative Minecraft server configuration.
           Only if set to `true`, the options
           {option}`services.minecraft-server.whitelist` and
@@ -73,10 +70,10 @@ in {
         '';
       };
 
-      eula = mkOption {
-        type = types.bool;
+      eula = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether you agree to
           [
           Mojangs EULA](https://account.mojang.com/documents/minecraft_eula). This option must be set to
@@ -84,31 +81,31 @@ in {
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/minecraft";
-        description = lib.mdDoc ''
+        description = ''
           Directory to store Minecraft database and other state/data files.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open ports in the firewall for the server.
         '';
       };
 
-      whitelist = mkOption {
+      whitelist = lib.mkOption {
         type = let
-          minecraftUUID = types.strMatching
+          minecraftUUID = lib.types.strMatching
             "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
               description = "Minecraft UUID";
             };
-          in types.attrsOf minecraftUUID;
+          in lib.types.attrsOf minecraftUUID;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Whitelisted players, only has an effect when
           {option}`services.minecraft-server.declarative` is
           `true` and the whitelist is enabled
@@ -118,7 +115,7 @@ in {
           You can use <https://mcuuid.net/> to get a
           Minecraft UUID for a username.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
@@ -126,10 +123,10 @@ in {
         '';
       };
 
-      serverProperties = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
+      serverProperties = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ bool int str ]);
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             server-port = 43000;
             difficulty = 3;
@@ -141,7 +138,7 @@ in {
             "rcon.password" = "hunter2";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Minecraft server properties for the server.properties file. Only has
           an effect when {option}`services.minecraft-server.declarative`
           is set to `true`. See
@@ -150,27 +147,23 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.minecraft-server;
-        defaultText = literalExpression "pkgs.minecraft-server";
-        example = literalExpression "pkgs.minecraft-server_1_12_2";
-        description = lib.mdDoc "Version of minecraft-server to run.";
+      package = lib.mkPackageOption pkgs "minecraft-server" {
+        example = "minecraft-server_1_12_2";
       };
 
-      jvmOpts = mkOption {
-        type = types.separatedString " ";
+      jvmOpts = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
         example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
-        description = lib.mdDoc "JVM options for the Minecraft server.";
+        description = "JVM options for the Minecraft server.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.minecraft = {
       description     = "Minecraft server service user";
@@ -263,11 +256,11 @@ in {
       '');
     };
 
-    networking.firewall = mkIf cfg.openFirewall (if cfg.declarative then {
+    networking.firewall = lib.mkIf cfg.openFirewall (if cfg.declarative then {
       allowedUDPPorts = [ serverPort ];
       allowedTCPPorts = [ serverPort ]
-        ++ optional (queryPort != null) queryPort
-        ++ optional (rconPort != null) rconPort;
+        ++ lib.optional (queryPort != null) queryPort
+        ++ lib.optional (rconPort != null) rconPort;
     } else {
       allowedUDPPorts = [ defaultServerPort ];
       allowedTCPPorts = [ defaultServerPort ];

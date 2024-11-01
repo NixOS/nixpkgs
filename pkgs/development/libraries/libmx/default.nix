@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , libtool, pkg-config, automake, autoconf, intltool
-, glib, gobject-introspection, gtk2, gtk-doc
+, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
 
@@ -48,15 +48,17 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.clutter-project.org/";
-    description = "A Clutter-based toolkit";
-    longDescription =
-      ''Mx is a widget toolkit using Clutter that provides a set of standard
-        interface elements, including buttons, progress bars, scroll bars and
-        others. It also implements some standard managers. One other interesting
-        feature is the possibility setting style properties from a CSS format
-        file.'';
+    description = "Clutter-based toolkit";
+    mainProgram = "mx-create-image-cache";
+    longDescription = ''
+      Mx is a widget toolkit using Clutter that provides a set of standard
+      interface elements, including buttons, progress bars, scroll bars and
+      others. It also implements some standard managers. One other interesting
+      feature is the possibility setting style properties from a CSS format
+      file.
+    '';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

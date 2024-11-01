@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.13.4";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
     rev = "v${version}";
-    hash = "sha256-h6GxU7y6z5wyZjuK7wI6BG0aF2u6hqLsID7ijTNzifc=";
+    hash = "sha256-Tu4p0kY0UdU0++zLpj+6A5ky5OXEEN5iivHbiyvghw4=";
   };
 
   vendorHash = null;
@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Policy Controller for Kubernetes";
+    mainProgram = "gator";
     homepage = "https://github.com/open-policy-agent/gatekeeper";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];

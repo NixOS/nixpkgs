@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{
+  directoryListingUpdater,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-ucm-conf";
-  version = "1.2.10";
+  version = "1.2.12";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    hash = "sha256-nCHj8B/wC6p1jfF+hnzTbiTrtBpr7ElzfpkQXhbyrpc=";
+    url = "mirror://alsa/lib/alsa-ucm-conf-${version}.tar.bz2";
+    hash = "sha256-Fo58BUm3v4mRCS+iv7kDYx33edxMQ+6PQnf8t3LYwDU=";
   };
 
   dontBuild = true;
@@ -19,6 +24,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://www.alsa-project.org/files/pub/lib/";
+  };
 
   meta = with lib; {
     homepage = "https://www.alsa-project.org/";

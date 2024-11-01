@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
   pname = "dwmbar";
-  version = "unstable-2021-12-22";
+  version = "0-unstable-2021-12-22";
 
   src = fetchFromGitHub {
     owner = "thytom";
@@ -29,9 +29,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/thytom/dwmbar";
-    description = "A Modular Status Bar for dwm";
+    description = "Modular Status Bar for dwm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ baitinq ];
     platforms = platforms.linux;
+    mainProgram = "dwmbar";
   };
 }

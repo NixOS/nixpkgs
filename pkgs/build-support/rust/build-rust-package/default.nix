@@ -60,7 +60,7 @@
 
 assert cargoVendorDir == null && cargoLock == null
     -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
-    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
+    -> throw "cargoHash, cargoVendorDir, or cargoLock must be set";
 
 let
 
@@ -74,7 +74,7 @@ let
     } // lib.optionalAttrs (args ? cargoHash) {
       hash = args.cargoHash;
     } // lib.optionalAttrs (args ? cargoSha256) {
-      sha256 = args.cargoSha256;
+      sha256 = lib.warn "cargoSha256 is deprecated. Please use cargoHash with SRI hash instead" args.cargoSha256;
     } // depsExtraArgs);
 
   target = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -96,6 +96,11 @@ assert useSysroot -> !(args.doCheck or true);
 
 stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
+} // lib.optionalAttrs (stdenv.isDarwin && buildType == "debug") {
+  RUSTFLAGS =
+    "-C split-debuginfo=packed "
+    + lib.optionalString useSysroot "--sysroot ${sysroot} "
+    + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
 
@@ -149,21 +154,11 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  meta = {
+  meta = meta // {
+    badPlatforms = meta.badPlatforms or [] ++ rustc.badTargetPlatforms;
     # default to Rust's platforms
-    platforms = rustc.meta.platforms ++ [
-      # Platforms without host tools from
-      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-      "armv7a-darwin"
-      "armv5tel-linux" "armv7a-linux" "m68k-linux" "mipsel-linux"
-      "mips64el-linux" "riscv32-linux"
-      "armv6l-netbsd"
-      "x86_64-redox"
-      "wasm32-wasi"
-    ];
-    badPlatforms = [
-      # Rust is currently unable to target the n32 ABI
-      lib.systems.inspect.patterns.isMips64n32
-    ];
-  } // meta;
+    platforms = lib.intersectLists
+      meta.platforms or lib.platforms.all
+      rustc.targetPlatforms;
+  };
 })

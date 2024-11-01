@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, poetry-core
-, dataprep-ml
-, numpy
-, pandas
-, scikit-learn
-, type-infer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  poetry-core,
+  dataprep-ml,
+  numpy,
+  pandas,
+  scikit-learn,
+  type-infer,
 }:
 
 buildPythonPackage rec {
   pname = "mindsdb-evaluator";
-  version = "0.0.11";
+  version = "0.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mindsdb_evaluator";
     inherit version;
-    hash = "sha256-pEfY+ocLEE8qcDjf6AzJxtXo1cqD2LhcBmlLjN0llTA=";
+    hash = "sha256-/3xRPrKzYAdSlY+sQxwCUzKhf3NJBSyWG2Q0ZKb6v3U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dataprep-ml

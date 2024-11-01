@@ -12,7 +12,7 @@
 , libXrandr
 , libXrender
 , libjack2
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-    webkitgtk
+    webkitgtk_4_0
   ] ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
@@ -60,5 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ToneLib-Zoom";
   };
 }

@@ -1,54 +1,58 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pydantic
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  ciso8601,
+  click,
+  fetchFromGitHub,
+  mashumaro,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  typer,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.6.4";
-  format = "pyproject";
+  version = "0.9.22";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PFZ8B2Wtjg3xUFYcnthTW5QXLk//lFH25jwpF7hygxQ=";
+    hash = "sha256-n8wdHmWMnbgQF6I34ifmNFMv48XowE7JIOkX5kko/io=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "typer" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
+    ciso8601
     click
-    pydantic
+    mashumaro
+    rich
+    typer
     yarl
   ];
 
   nativeCheckInputs = [
     aioresponses
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiortm --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "aiortm"
-  ];
+  pythonImportsCheck = [ "aiortm" ];
 
   meta = with lib; {
     description = "Library for the Remember the Milk API";
@@ -56,5 +60,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/MartinHjelmare/aiortm/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiortm";
   };
 }

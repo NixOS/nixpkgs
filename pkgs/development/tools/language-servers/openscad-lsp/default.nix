@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A LSP (Language Server Protocol) server for OpenSCAD";
+    description = "LSP (Language Server Protocol) server for OpenSCAD";
+    mainProgram = "openscad-lsp";
     homepage = "https://github.com/Leathong/openscad-LSP";
     license = licenses.asl20;
     maintainers = with maintainers; [ c-h-johnson ];

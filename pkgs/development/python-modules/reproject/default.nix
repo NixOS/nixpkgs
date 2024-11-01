@@ -1,45 +1,45 @@
-{ lib
-, astropy
-, astropy-extension-helpers
-, astropy-healpix
-, buildPythonPackage
-, cloudpickle
-, cython
-, dask
-, fetchPypi
-, fsspec
-, numpy
-, oldest-supported-numpy
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools-scm
-, zarr
+{
+  lib,
+  astropy,
+  astropy-extension-helpers,
+  astropy-healpix,
+  buildPythonPackage,
+  cloudpickle,
+  cython,
+  dask,
+  fetchPypi,
+  fsspec,
+  numpy,
+  pytest-astropy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.12.0";
-  format = "pyproject";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jb4efKT5jMY0ECV+ab5rpUHEk+tT4T2MioCRxs92TbI=";
+    hash = "sha256-3TxPd2CEmKWDlE1nC2GnXBUASe/DNgZnS1GJoRo5u8A=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "cython==" "cython>="
+      --replace "cython==" "cython>=" \
+      --replace "numpy>=2.0.0rc1" "numpy"
   '';
 
   nativeBuildInputs = [
     astropy-extension-helpers
     cython
     numpy
-    oldest-supported-numpy
     setuptools-scm
   ];
 
@@ -65,16 +65,17 @@ buildPythonPackage rec {
     "-p no:warnings"
     # Uses network
     "--ignore build/lib*/reproject/interpolation/"
+    # prevent "'filterwarnings' not found in `markers` configuration option" error
+    "-o 'markers=filterwarnings'"
   ];
 
-  pythonImportsCheck = [
-    "reproject"
-  ];
+  pythonImportsCheck = [ "reproject" ];
 
   meta = with lib; {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
+    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
   };

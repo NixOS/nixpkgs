@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ekleog ];
     platforms = lib.platforms.linux;
+    mainProgram = "redsocks";
   };
 }

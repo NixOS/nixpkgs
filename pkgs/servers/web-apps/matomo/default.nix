@@ -3,15 +3,19 @@
 let
   versions = {
     matomo = {
-      version = "4.15.1";
-      hash = "sha256-XnfiprGLqFQqPk30gcAVLdBZ3pYMSdBPfnicm7V1PSc=";
+      version = "4.16.1";
+      hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
+    };
+    matomo_5 = {
+      version = "5.1.1";
+      hash = "sha256-xi6R9O/pOxBgga6+wwqziwDKK7Q1Ispldvxg+0mpdeQ=";
     };
     matomo-beta = {
       version = "5.0.0";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
-      beta = "rc3";
-      hash = "sha256-Q5GB4i0ew6+tr8Bsm9PYkzJ8U6DmVPwG2QCi8CTge5E=";
+      beta = "rc9";
+      hash = "sha256-OXxJCEXcrl6UXYh+jbNqLQGYphrSjxaOAZg3AZVPAqs=";
     };
   };
   common = pname: { version, hash, beta ? null }:
@@ -109,11 +113,12 @@ let
         };
 
         meta = with lib; {
-          description = "A real-time web analytics application";
+          description = "Real-time web analytics application";
+          mainProgram = "matomo-console";
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
           platforms = platforms.all;
-          maintainers = with maintainers; [ florianjacob kiwi sebbel twey boozedog ] ++ teams.flyingcircus.members;
+          maintainers = with maintainers; [ florianjacob sebbel twey boozedog ] ++ teams.flyingcircus.members;
         };
       };
 in

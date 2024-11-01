@@ -1,38 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cffi
-, enum34
-, construct
-, pytest
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  construct,
+  fetchPypi,
+  hypothesis,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "brotlipy";
   version = "0.7.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36def0b859beaf21910157b4c33eb3b06d8ce459c942102f16988cca6ea164df";
+    hash = "sha256-Nt7wuFm+ryGRAVe0wz6zsG2M5FnJQhAvFpiMym6hZN8=";
   };
 
-  propagatedBuildInputs = [ cffi enum34 construct ];
+  build-system = [ setuptools ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [ pytest hypothesis ];
+  dependencies = [
+    cffi
+    construct
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   # Missing test files
   doCheck = false;
+
+  pythonImportsCheck = [ "brotli" ];
 
   meta = {
     description = "Python bindings for the reference Brotli encoder/decoder";
     homepage = "https://github.com/python-hyper/brotlipy/";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

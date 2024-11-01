@@ -1,38 +1,31 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, flit-core
-, lxml
-, pyjwt
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  flit-core,
+  lxml,
+  pyjwt,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.3.8";
+  version = "1.3.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";
-    repo = pname;
+    repo = "skodaconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-Isnji6hXkTuTmbMpSuim9uG5ECSDX6A8QZ13sTCU9t0=";
+    hash = "sha256-Cy2sXj8+t8lIqrKmI9Aa7tNEIvRArynU/02ajJ+tYHg=";
   };
 
-  postPatch = ''
-    # https://github.com/skodaconnect/skodaconnect/pull/103
-    substituteInPlace pyproject.toml \
-      --replace "Bug Tracker" '"Bug Tracker"'
-  '';
-
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,9 +38,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "skodaconnect"
-  ];
+  pythonImportsCheck = [ "skodaconnect" ];
 
   meta = with lib; {
     description = "Python module to communicate with Skoda Connect";

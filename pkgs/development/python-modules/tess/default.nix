@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage {
   pname = "tess";
   version = "unstable-2019-05-07";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wackywendell";
@@ -19,10 +21,13 @@ buildPythonPackage {
 
   buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy scipy ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
   meta = with lib; {
-    description = "A module for calculating and analyzing Voronoi tessellations";
+    description = "Module for calculating and analyzing Voronoi tessellations";
     homepage = "https://tess.readthedocs.org";
     license = licenses.bsd3;
     maintainers = [ ];

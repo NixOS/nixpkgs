@@ -5,11 +5,14 @@ with lib;
 let
   cfg = config.services.soju;
   stateDir = "/var/lib/soju";
-  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") cfg.listen;
+  runtimeDir = "/run/soju";
+  listen = cfg.listen
+    ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
+  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
   tlsCfg = optionalString (cfg.tlsCertificate != null)
     "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
   logCfg = optionalString cfg.enableMessageLogging
-    "log fs ${stateDir}/logs";
+    "message-store fs ${stateDir}/logs";
 
   configFile = pkgs.writeText "soju.conf" ''
     ${listenCfg}
@@ -22,17 +25,23 @@ let
 
     ${cfg.extraConfig}
   '';
+
+  sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
+    exec ${cfg.package}/bin/sojuctl --config ${configFile} "$@"
+  '';
 in
 {
   ###### interface
 
   options.services.soju = {
-    enable = mkEnableOption (lib.mdDoc "soju");
+    enable = mkEnableOption "soju";
+
+    package = mkPackageOption pkgs "soju" { };
 
     listen = mkOption {
       type = types.listOf types.str;
       default = [ ":6697" ];
-      description = lib.mdDoc ''
+      description = ''
         Where soju should listen for incoming connections. See the
         `listen` directive in
         {manpage}`soju(1)`.
@@ -43,33 +52,41 @@ in
       type = types.str;
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
-      description = lib.mdDoc "Server hostname.";
+      description = "Server hostname.";
     };
 
     tlsCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/var/host.cert";
-      description = lib.mdDoc "Path to server TLS certificate.";
+      description = "Path to server TLS certificate.";
     };
 
     tlsCertificateKey = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/var/host.key";
-      description = lib.mdDoc "Path to server TLS certificate key.";
+      description = "Path to server TLS certificate key.";
     };
 
     enableMessageLogging = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc "Whether to enable message logging.";
+      description = "Whether to enable message logging.";
+    };
+
+    adminSocket.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Listen for admin connections from sojuctl at /run/soju/admin.
+      '';
     };
 
     httpOrigins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
         {manpage}`glob(7)`.
@@ -79,7 +96,7 @@ in
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*
         HTTP header fields). The special name "localhost" accepts the loopback
@@ -90,7 +107,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Lines added verbatim to the configuration file.";
+      description = "Lines added verbatim to the configuration file.";
     };
   };
 
@@ -107,15 +124,19 @@ in
       }
     ];
 
+    environment.systemPackages = [ sojuctl ];
+
     systemd.services.soju = {
       description = "soju IRC bouncer";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${pkgs.soju}/bin/soju -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
         StateDirectory = "soju";
+        RuntimeDirectory = "soju";
       };
     };
   };

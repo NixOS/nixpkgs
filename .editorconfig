@@ -17,6 +17,10 @@ end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
+# We want readFile .version to return the version without a newline.
+[.version]
+insert_final_newline = false
+
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
 # Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
@@ -39,6 +43,10 @@ indent_size = 4
 [Gemfile]
 indent_size = 2
 indent_style = space
+
+# Match package.json, which are generally pulled from upstream and accept them as they are
+[package.json]
+indent_style = unset
 
 # Disable file types or individual files
 # some of these files may be auto-generated and/or require significant changes
@@ -90,6 +98,9 @@ insert_final_newline = unset
 indent_style = unset
 trim_trailing_whitespace = unset
 
+[pkgs/misc/documentation-highlighter/**]
+insert_final_newline = unset
+
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 
@@ -105,3 +116,7 @@ charset = unset
 [lib/tests/*.plist]
 indent_style = tab
 insert_final_newline = unset
+
+[pkgs/kde/generated/**]
+insert_final_newline = unset
+end_of_line = unset

@@ -19,10 +19,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsass ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
-    description = "A front-end for libsass";
+    description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";
     license = licenses.mit;
+    mainProgram = "sassc";
     maintainers = with maintainers; [ codyopel pjones ];
     platforms = platforms.unix;
   };

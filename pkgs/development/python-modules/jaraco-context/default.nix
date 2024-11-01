@@ -1,40 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  backports-tarfile,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "4.3.0";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
+    hash = "sha256-WXZX2s9Qehp0F3bSv2c5lGxhhn6HKFkABbtYKizG1/8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonNamespaces = [ "jaraco" ];
 
-  pythonNamespaces = [
-    "jaraco"
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  dependencies = lib.optionals (pythonOlder "3.12") [ backports-tarfile ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "jaraco.context"
-  ];
+  pythonImportsCheck = [ "jaraco.context" ];
 
   meta = with lib; {
     description = "Python module for context management";

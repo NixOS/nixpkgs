@@ -13,7 +13,7 @@
 , libsoup
 , libxml2
 , taglib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     taglib
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/ario/plugins/*.dylib; do
       ln -s $file $out/lib/ario/plugins/$(basename $file .dylib).so
     done
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";
+    mainProgram = "ario";
     homepage = "https://ario-player.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.garrison ];

@@ -5,12 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.9.0";
-  disabled = python3Packages.pythonOlder "3.4";
+  version = "1.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ia8s+gg91N8ePMqiohFxKbXxchJ1b1luoJDilndsJ6E=";
+    hash = "sha256-YW3mjYfSuxi/XmaetrWmjVuTfqgaitQ5wfUaJdHIH1Y=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -35,6 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line interface for SQLite";
+    mainProgram = "litecli";
     longDescription = ''
       A command-line client for SQLite databases that has auto-completion and syntax highlighting.
     '';

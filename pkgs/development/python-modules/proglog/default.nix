@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, tqdm }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tqdm,
+}:
 
 buildPythonPackage rec {
   pname = "proglog";
   version = "0.1.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

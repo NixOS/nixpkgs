@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, alabaster
-, alsa-lib
-, buildPythonPackage
-, CoreAudio
-, CoreMIDI
-, CoreServices
-, Foundation
-, cython_3
-, fetchPypi
-, flake8
-, libjack2
-, meson-python
-, ninja
-, pkg-config
-, pythonOlder
-, tox
-, wheel
+{
+  lib,
+  stdenv,
+  alabaster,
+  alsa-lib,
+  buildPythonPackage,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Foundation,
+  cython,
+  fetchPypi,
+  flake8,
+  libjack2,
+  meson-python,
+  ninja,
+  pkg-config,
+  pythonOlder,
+  tox,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,23 +34,25 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     meson-python
     ninja
     pkg-config
     wheel
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals stdenv.isLinux [
-    libjack2
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-    CoreMIDI
-    CoreServices
-    Foundation
-  ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libjack2
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Foundation
+    ];
 
   nativeCheckInputs = [
     tox
@@ -57,15 +60,13 @@ buildPythonPackage rec {
     alabaster
   ];
 
-  pythonImportsCheck = [
-    "rtmidi"
-  ];
+  pythonImportsCheck = [ "rtmidi" ];
 
   meta = with lib; {
-    description = "A Python binding for the RtMidi C++ library implemented using Cython";
+    description = "Python binding for the RtMidi C++ library implemented using Cython";
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

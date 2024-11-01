@@ -1,5 +1,4 @@
-declare -a checkFlags
-declare -a cargoTestFlags
+# shellcheck shell=bash disable=SC2154,SC2164
 
 cargoNextestHook() {
     echo "Executing cargoNextestHook"
@@ -10,35 +9,34 @@ cargoNextestHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
+    local flagsArray=(
+        "--target" "@rustHostPlatformSpec@"
+        "--offline"
+    )
+
     if [[ -z ${dontUseCargoParallelTests-} ]]; then
-        threads=$NIX_BUILD_CORES
+        flagsArray+=("-j" "$NIX_BUILD_CORES")
     else
-        threads=1
+        flagsArray+=("-j" "1")
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
-        cargoCheckProfileFlag="--cargo-profile ${cargoCheckType}"
+        flagsArray+=("--cargo-profile" "${cargoCheckType}")
     fi
 
     if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
-        cargoCheckNoDefaultFeaturesFlag=--no-default-features
+        flagsArray+=("--no-default-features")
     fi
 
     if [ -n "${cargoCheckFeatures-}" ]; then
-        cargoCheckFeaturesFlag="--features=${cargoCheckFeatures// /,}"
+        flagsArray+=("--features=$(concatStringsSep "," cargoCheckFeatures)")
     fi
 
-    argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
-        --target @rustHostPlatformSpec@ --frozen ${cargoTestFlags}"
+    prependToVar checkFlags "--"
+    concatTo flagsArray cargoTestFlags checkFlags checkFlagsArray
 
-    (
-        set -x
-        cargo nextest run \
-              -j ${threads} \
-              ${argstr} -- \
-              ${checkFlags} \
-              ${checkFlagsArray+"${checkFlagsArray[@]}"}
-    )
+    echoCmd 'cargoNextestHook flags' "${flagsArray[@]}"
+    cargo nextest run "${flagsArray[@]}"
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd

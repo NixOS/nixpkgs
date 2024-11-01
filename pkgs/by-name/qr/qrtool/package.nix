@@ -1,25 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  asciidoctor,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.8.4";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    sha256 = "sha256-FoWUGhNfVILpYxmsnSzRIM1+R9/xFxCF7W1sdiHaAiA=";
+    hash = "sha256-ViDlY60iGNBwCDRgKiNKbsFSXozyzqlTzKpd9NCxrv0=";
   };
 
-  cargoSha256 = "sha256-mtejnHCkN2krgFAneyyBpvbv5PZO3GigM2DJqrbHim4=";
+  cargoHash = "sha256-Bcu5hyW0uUHkshlBoKNG/NL0XYnrPJa/P8bHdcGjFTc=";
+
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
+
+  postInstall =
+    ''
+      # Built by ./build.rs using `asciidoctor`
+      installManPage ./target/*/release/build/qrtool*/out/*.?
+
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd qrtool \
+        --bash <($out/bin/qrtool --generate-completion bash) \
+        --fish <($out/bin/qrtool --generate-completion fish) \
+        --zsh <($out/bin/qrtool --generate-completion zsh)
+    '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
-    description = "An utility for encoding or decoding QR code";
+    description = "Utility for encoding and decoding QR code images";
     license = licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
   pname = "kibi";
   version = "0.2.2";
 
-  cargoSha256 = "sha256-ebUCkcUACganeq5U0XU4VIGClKDZGhUw6K3WBgTUUUw=";
+  cargoHash = "sha256-ebUCkcUACganeq5U0XU4VIGClKDZGhUw6K3WBgTUUUw=";
 
   src = fetchFromGitHub {
     owner = "ilai-deutel";
@@ -25,9 +25,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A text editor in ≤1024 lines of code, written in Rust";
+    description = "Text editor in ≤1024 lines of code, written in Rust";
     homepage = "https://github.com/ilai-deutel/kibi";
     license = licenses.mit;
     maintainers = with maintainers; [ robertodr ];
+    mainProgram = "kibi";
   };
 }

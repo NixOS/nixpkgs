@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ipython
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipython,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-tW1zUfCgOGQ8TjrKo2lBzGb0MSe25dP0/P9Q6x3736E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    tornado
-  ];
+  propagatedBuildInputs = [ tornado ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -39,9 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "snakeviz"
-  ];
+  pythonImportsCheck = [ "snakeviz" ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -49,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Browser based viewer for profiling data";
+    mainProgram = "snakeviz";
     homepage = "https://jiffyclub.github.io/snakeviz";
     changelog = "https://github.com/jiffyclub/snakeviz/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;

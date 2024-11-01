@@ -1,8 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
 , gfortran
+, meson
+, ninja
+, pkg-config
+, python3
 , blas
 , lapack
 , mctc-lib
@@ -23,22 +26,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  patches = [
+    # Make sure fortran headers are installed directly in /include
+    ./fortran-module-dir.patch
+  ];
+
+  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ blas lapack mctc-lib mstore multicharge ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}/" ""
-  '';
+  outputs = [ "out" "dev" ];
 
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs --build \
+      config/install-mod.py \
+      app/tester.py
+  '';
+
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';
 
   meta = with lib; {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    mainProgram = "dftd4";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     homepage = "https://github.com/grimme-lab/dftd4";
     platforms = platforms.linux;

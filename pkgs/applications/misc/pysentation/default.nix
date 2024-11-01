@@ -15,9 +15,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-TwHDXWgGWuQVgatBDc1iympnb6dy4xYThLR5MouEZHA=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "click"
+    "rich"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "pysentation" ];
 
   meta = with lib; {
-    description = "A CLI for displaying Python presentations";
+    description = "CLI for displaying Python presentations";
     homepage = "https://github.com/mimseyedi/pysentation";
     changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${src.rev}";
     license = licenses.gpl3Only;

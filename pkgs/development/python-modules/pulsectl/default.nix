@@ -1,12 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, unittestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libpulseaudio,
+  glibc,
+  substituteAll,
+  stdenv,
+  pulseaudio,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "23.5.2";
+  version = "24.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6RHTmOrwU5zzxjtCFzV7UaPRt+SlBgfRWRzytJ9dLGo=";
+    hash = "sha256-sFFQbQ1z08xDV879PeF7uFnX7PAE6ZSw98+oeFG8cVY=";
   };
 
   patches = [
@@ -18,11 +29,12 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "pulsectl"
-  ];
+  pythonImportsCheck = [ "pulsectl" ];
 
-  nativeCheckInputs = [ unittestCheckHook pulseaudio ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    pulseaudio
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "chispa";
-  version = "0.9.4";
+  version = "0.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     owner = "MrPowers";
     repo = "chispa";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VF7k0u7QpoG3PXvU5M7jrM9pht6xeRUpYH9znMdLOxk=";
+    hash = "sha256-WPtn8YGlj67MEy2onxoU5SctQ7NcvTImaU0VgMoz2B4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   # Tests require a spark installation
   doCheck = false;

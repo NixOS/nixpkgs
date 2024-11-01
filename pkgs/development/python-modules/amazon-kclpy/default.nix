@@ -1,34 +1,50 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  mock,
+  boto3,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "amazon-kclpy";
-  version = "2.1.3";
+  version = "2.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-kinesis-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3BhccRJd6quElXZSix1aVIqWr9wdcTTziDhnIOLiPPo=";
+    hash = "sha256-kSboeg/fdg7hbiWyPzAAsYo+0vbQDfRoeJYHlrrFNrA=";
   };
 
-  # argparse is just required for python2.6
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "'argparse'," ""
-  '';
+  patches = [
+    (fetchpatch {
+      name = "remove-deprecated-boto.patch";
+      url = "https://github.com/awslabs/amazon-kinesis-client-python/commit/bd2c442cdd1b0e2c99d3471c1d3ffcc9161a7c42.patch";
+      hash = "sha256-5W0qItDGjx1F6IllzLH57XCpToKrAu9mTbzv/1wMXuY=";
+    })
+  ];
 
-  propagatedBuildInputs =  [ mock boto ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
+  dependencies = [
+    mock
+    boto3
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m pytest
-  '';
+  pythonImportsCheck = [ "amazon_kclpy" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Amazon Kinesis Client Library for Python";
     homepage = "https://github.com/awslabs/amazon-kinesis-client-python";
-    license = licenses.amazonsl;
+    license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
+    broken = true;
   };
 }

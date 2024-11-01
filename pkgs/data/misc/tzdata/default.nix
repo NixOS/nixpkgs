@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, buildPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2023c";
+  version = "2024b";
 
   srcs = [
     (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-      hash = "sha256-P1ELXRtK6bs45IWqMCp3azF/s2N722QExK33tsrdllw=";
+      url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
+      hash = "sha256-cOdU2xJqjQ2z0W1rTLX37B4E1fJhJV5FWKZ/6S055VA=";
     })
     (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-      hash = "sha256-RtF/K7Ga1zKQ8DogMAYVLg+g17EeW3FGfEqCOBGyFOc=";
+      url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
+      hash = "sha256-XkOPxEliSQavFqGP9Fc3OfDNqYYuXsKNO8sZy67Q9nI=";
     })
   ];
 
@@ -22,18 +22,19 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "out" "bin" "man" "dev" ];
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
   makeFlags = [
-    "TOPDIR=$(out)"
-    "TZDIR=$(out)/share/zoneinfo"
-    "BINDIR=$(bin)/bin"
-    "ZICDIR=$(bin)/bin"
+    "TOPDIR=${placeholder "out"}"
+    "TZDIR=${placeholder "out"}/share/zoneinfo"
+    "BINDIR=${placeholder "bin"}/bin"
+    "ZICDIR=${placeholder "bin"}/bin"
     "ETCDIR=$(TMPDIR)/etc"
     "TZDEFAULT=tzdefault-to-remove"
-    "LIBDIR=$(dev)/lib"
-    "MANDIR=$(man)/share/man"
+    "LIBDIR=${placeholder "dev"}/lib"
+    "MANDIR=${placeholder "man"}/share/man"
     "AWK=awk"
+    "CURL=:" # disable network access
     "CFLAGS=-DHAVE_LINK=0"
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
@@ -45,7 +46,10 @@ stdenv.mkDerivation rec {
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];
 
-  doCheck = false; # needs more tools
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  checkTarget = "check";
 
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"
@@ -59,6 +63,8 @@ stdenv.mkDerivation rec {
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
+      cp leap-seconds.list $out/share/zoneinfo
+
       mkdir -p "$dev/include"
       cp tzfile.h "$dev/include/tzfile.h"
     '';
@@ -68,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
-    changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
     license = with licenses; [
       bsd3 # tzcode
       publicDomain # tzdata
@@ -76,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ajs124 fpletz ];
   };
-}
+})

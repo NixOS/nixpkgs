@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/glotlabs/gdrive/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "gdrive";
   };
 }

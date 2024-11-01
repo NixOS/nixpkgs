@@ -1,0 +1,13 @@
+diff --git a/src/streamlink/stream/ffmpegmux.py b/src/streamlink/stream/ffmpegmux.py
+index 258b314a..c493e010 100644
+--- a/src/streamlink/stream/ffmpegmux.py
++++ b/src/streamlink/stream/ffmpegmux.py
+@@ -80,7 +80,7 @@ class MuxedStream(Stream, Generic[TSubstreams]):
+ 
+ 
+ class FFMPEGMuxer(StreamIO):
+-    __commands__: ClassVar[List[str]] = ["ffmpeg"]
++    __commands__: ClassVar[List[str]] = ["@ffmpeg@"]
+ 
+     DEFAULT_OUTPUT_FORMAT = "matroska"
+     DEFAULT_VIDEO_CODEC = "copy"

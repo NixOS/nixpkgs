@@ -23,10 +23,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  # clang warning: passing arguments to '...' without a prototype is deprecated
+  # in all versions of C and is not supported in C23.
+  CFLAGS = "-std=c99 -Wno-deprecated-non-prototype";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A collection of routines for representation theory and combinatorics";
+    description = "Collection of routines for representation theory and combinatorics";
     license = licenses.isc;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

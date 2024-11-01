@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchpatch
-, cmake
 , meson
 , ninja
 , pkg-config
@@ -53,7 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The GTK Libretro frontend framework";
+    description = "GTK Libretro frontend framework";
+    mainProgram = "retro-demo";
     longDescription = ''
       Libretro is a plugin format design to implement video game
       console emulators, video games and similar multimedia
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.DamienCassou ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/retro-gtk.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/retro-gtk.x86_64-darwin
   };
 }

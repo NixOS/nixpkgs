@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-  buildFlags = lib.optionals stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
+  buildFlags = lib.optionals stdenv.hostPlatform.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 
   meta = {
-    description = "A program to find rational points on hyperelliptic curves";
+    description = "Program to find rational points on hyperelliptic curves";
+    mainProgram = "ratpoints";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

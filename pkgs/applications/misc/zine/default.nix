@@ -16,7 +16,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
-  cargoHash = "sha256-dXq8O0jVpr0xxvLTrsLJbiyyOMXXtEz7OMINqDEfG4U=";
+  cargoHash = "sha256-B0yPTyZ+d+s0Mdgeb23IammuABpEYWvAksyP7d+MEig=";
+
+  cargoPatches = [
+    # fix build with rust 1.80+
+    ./update-time-crate.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -24,15 +29,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
   meta = with lib; {
-    description = "A simple and opinionated tool to build your own magazine";
+    description = "Simple and opinionated tool to build your own magazine";
     homepage = "https://github.com/zineland/zine";
     changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya figsoda ];
+    mainProgram = "zine";
   };
 }

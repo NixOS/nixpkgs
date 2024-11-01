@@ -1,6 +1,6 @@
 # Test configuration switching.
 
-import ./make-test-python.nix ({ lib, pkgs, ...} : let
+import ./make-test-python.nix ({ lib, pkgs, ng, ...} : let
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -48,6 +48,8 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
+      system.switch.enableNg = ng;
+
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
@@ -256,6 +258,15 @@ in {
         unitWithBackslashModified.configuration = {
           imports = [ unitWithBackslash.configuration ];
           systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
+        };
+
+        unitWithMultilineValue.configuration = {
+          systemd.services.test.serviceConfig.ExecStart = ''
+            ${pkgs.coreutils}/bin/true \
+            # ignored
+            ; ignored
+              blah blah
+          '';
         };
 
         unitStartingWithDash.configuration = {
@@ -589,6 +600,7 @@ in {
     };
 
     other = {
+      system.switch.enable = true;
       users.mutableUsers = true;
     };
   };
@@ -610,6 +622,11 @@ in {
     # Returns a comma separated representation of the given list in sorted
     # order, that matches the output format of switch-to-configuration.pl
     sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
+
+    dbusService = {
+      "dbus" = "dbus.service";
+      "broker" = "dbus-broker.service";
+    }.${nodes.machine.services.dbus.implementation};
   in /* python */ ''
     def switch_to_specialisation(system, name, action="test", fail=False):
         if name == "":
@@ -691,9 +708,9 @@ in {
     with subtest("continuing from an aborted switch"):
         # An aborted switch will write into a file what it tried to start
         # and a second switch should continue from this
-        machine.succeed("echo dbus.service > /run/nixos/start-list")
+        machine.succeed("echo ${dbusService} > /run/nixos/start-list")
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
-        assert_contains(out, "starting the following units: dbus.service\n")
+        assert_contains(out, "starting the following units: ${dbusService}\n")
 
     with subtest("fstab mounts"):
         switch_to_specialisation("${machine}", "")
@@ -732,7 +749,7 @@ in {
         out = switch_to_specialisation("${machine}", "")
         assert_contains(out, "stopping the following units: test.mount\n")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: ${dbusService}\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -740,7 +757,7 @@ in {
         out = switch_to_specialisation("${machine}", "storeMountModified")
         assert_lacks(out, "stopping the following units:")
         assert_contains(out, "NOT restarting the following changed units: -.mount")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: ${dbusService}\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -751,7 +768,7 @@ in {
         out = switch_to_specialisation("${machine}", "swap")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: ${dbusService}\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: swapfile.swap")
@@ -760,7 +777,7 @@ in {
         assert_contains(out, "stopping swap device: /swapfile")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_contains(out, "reloading the following units: ${dbusService}\n")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -781,7 +798,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -858,7 +875,7 @@ in {
         assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -866,9 +883,16 @@ in {
         machine.succeed("! test -e /run/current-system/dry-activate")
         machine.succeed("! test -e /run/current-system/bin/switch-to-configuration")
 
+        # Ensure units with multiline values work
+        out = switch_to_specialisation("${machine}", "unitWithMultilineValue")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "restarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_contains(out, "starting the following units: test.service")
+
         # Ensure \ works in unit names
         out = switch_to_specialisation("${machine}", "unitWithBackslash")
-        assert_contains(out, "stopping the following units: test.service\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")

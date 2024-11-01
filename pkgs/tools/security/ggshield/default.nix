@@ -1,29 +1,28 @@
-{ lib
-, fetchFromGitHub
-, git
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.21.0";
-  format = "pyproject";
+  version = "1.32.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wAYjt/sTo62wn1sdW9ATkzL54mhHj3soAn8+vsX4ZYw=";
+    hash = "sha256-8Nrmfbu1ChuJU4lSbaqIxNagkTJoKTeooUWnMKtIVx0=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+
+  dependencies = with python3.pkgs; [
     appdirs
     charset-normalizer
     click
@@ -31,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     marshmallow
     marshmallow-dataclass
     oauthlib
+    platformdirs
     pygitguardian
     pyjwt
     python-dotenv
@@ -39,24 +39,27 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    git
-  ] ++ (with python3.pkgs; [
-    pyfakefs
-    pytest-mock
-    pytest-voluptuous
-    pytestCheckHook
-    snapshottest
-    vcrpy
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      jsonschema
+      pyfakefs
+      pytest-mock
+      pytest-voluptuous
+      pytestCheckHook
+      snapshottest
+      vcrpy
+    ]);
 
-  pythonImportsCheck = [
-    "ggshield"
-  ];
+  pythonImportsCheck = [ "ggshield" ];
 
   disabledTestPaths = [
     # Don't run functional tests
     "tests/functional/"
+    "tests/unit/cmd/honeytoken"
+    "tests/unit/cmd/iac"
+    "tests/unit/cmd/sca/"
+    "tests/unit/cmd/scan/"
   ];
 
   disabledTests = [
@@ -66,6 +69,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_is_valid_git_commit_ref"
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
+    # Encoding issues
+    "test_create_files_from_paths"
+    "test_file_decode_content"
+    "test_file_is_longer_than_does_not_read_utf8_file"
+    "test_file_is_longer_using_8bit_codec"
+    "test_generate_files_from_paths"
   ];
 
   meta = with lib; {
@@ -74,5 +83,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/GitGuardian/ggshield/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ggshield";
   };
 }

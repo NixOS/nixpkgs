@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , libGL
 , glib
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-introspection"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--enable-kms-egl-platform"
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     # Force linking against libGL.
     # Otherwise, it tries to load it from the runtime library path.
     "LIBS=-lGL"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-glx"
     "--without-x"
   ] ++ lib.optionals gstreamerSupport [
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     glib
     gdk-pixbuf
     gobject-introspection
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     mesa
     libGL
@@ -83,10 +82,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals pangoSupport [ pango cairo harfbuzz ]
-    ++ lib.optionals stdenv.isDarwin [ OpenGL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
   env = {
-    COGL_PANGO_DEP_CFLAGS = toString (lib.optionals (stdenv.isDarwin && pangoSupport) [
+    COGL_PANGO_DEP_CFLAGS = toString (lib.optionals (stdenv.hostPlatform.isDarwin && pangoSupport) [
       "-I${pango.dev}/include/pango-1.0"
       "-I${cairo.dev}/include/cairo"
       "-I${harfbuzz.dev}/include/harfbuzz"
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small open source library for using 3D graphics hardware for rendering";
+    description = "Small open source library for using 3D graphics hardware for rendering";
     maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''

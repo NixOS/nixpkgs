@@ -25,7 +25,7 @@ in
     adminPasswordSha256 = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         SHA-256 of the desired administration password. Leave blank/unset for no password.
       '';
     };
@@ -33,10 +33,10 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/jirafeau/data/";
-      description = lib.mdDoc "Location of Jirafeau storage directory.";
+      description = "Location of Jirafeau storage directory.";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Jirafeau file upload application");
+    enable = mkEnableOption "Jirafeau file upload application";
 
     extraConfig = mkOption {
       type = types.lines;
@@ -48,8 +48,7 @@ in
       description =  let
         documentationLink =
           "https://gitlab.com/mojo42/Jirafeau/-/blob/${cfg.package.version}/lib/config.original.php";
-      in
-        lib.mdDoc ''
+      in ''
           Jirefeau configuration. Refer to <${documentationLink}> for supported
           values.
         '';
@@ -58,13 +57,13 @@ in
     hostName = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "URL of instance. Must have trailing slash.";
+      description = "URL of instance. Must have trailing slash.";
     };
 
     maxUploadSizeMegabytes = mkOption {
       type = types.int;
       default = 0;
-      description = lib.mdDoc "Maximum upload size of accepted files.";
+      description = "Maximum upload size of accepted files.";
     };
 
     maxUploadTimeout = mkOption {
@@ -72,8 +71,7 @@ in
       default = "30m";
       description = let
         nginxCoreDocumentation = "http://nginx.org/en/docs/http/ngx_http_core_module.html";
-      in
-        lib.mdDoc ''
+      in ''
           Timeout for reading client request bodies and headers. Refer to
           <${nginxCoreDocumentation}#client_body_timeout> and
           <${nginxCoreDocumentation}#client_header_timeout> for accepted values.
@@ -89,15 +87,10 @@ in
           serverAliases = [ "wiki.''${config.networking.domain}" ];
         }
       '';
-      description = lib.mdDoc "Extra configuration for the nginx virtual host of Jirafeau.";
+      description = "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.jirafeau;
-      defaultText = literalExpression "pkgs.jirafeau";
-      description = lib.mdDoc "Jirafeau package to use";
-    };
+    package = mkPackageOption pkgs "jirafeau" { };
 
     poolConfig = mkOption {
       type = with types; attrsOf (oneOf [ str int bool ]);
@@ -109,7 +102,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for Jirafeau PHP pool. See documentation on `php-fpm.conf` for
         details on configuration directives.
       '';

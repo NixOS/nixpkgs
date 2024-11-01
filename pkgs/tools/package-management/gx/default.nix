@@ -16,9 +16,10 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A packaging tool built around IPFS";
+    description = "Packaging tool built around IPFS";
     homepage = "https://github.com/whyrusleeping/gx";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
+    mainProgram = "gx";
   };
 }

@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/cheesecutter/example_tunes
     cp -r tunes/* $out/share/cheesecutter/example_tunes
+
+    install -Dm444 arch/fd/ccutter.desktop -t $out/share/applications
+    for res in $(ls icons | sed -e 's/cc//g' -e 's/.png//g'); do
+      install -Dm444 icons/cc$res.png $out/share/icons/hicolor/''${res}x''${res}/apps/cheesecutter.png
+    done
   '';
 
   postFixup =
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A tracker program for composing music for the SID chip";
+    description = "Tracker program for composing music for the SID chip";
     homepage = "https://github.com/theyamo/CheeseCutter/";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];

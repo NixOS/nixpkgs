@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, cheroot
-, colorama
-, fetchFromGitHub
-, fsspec
-, hatch-vcs
-, hatchling
-, httpx
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, wsgidav
+{
+  lib,
+  buildPythonPackage,
+  cheroot,
+  colorama,
+  fetchFromGitHub,
+  fsspec,
+  hatch-vcs,
+  hatchling,
+  httpx,
+  pytest-xdist,
+  pytestCheckHook,
+  pytest-cov-stub,
+  python-dateutil,
+  pythonOlder,
+  wsgidav,
 }:
 
 buildPythonPackage rec {
   pname = "webdav4";
-  version = "0.9.8";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,22 +27,15 @@ buildPythonPackage rec {
     owner = "skshetry";
     repo = "webdav4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
+    hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     python-dateutil
   ];
@@ -50,25 +45,20 @@ buildPythonPackage rec {
     colorama
     pytest-xdist
     pytestCheckHook
+    pytest-cov-stub
     wsgidav
-  ] ++ passthru.optional-dependencies.fsspec;
+  ] ++ optional-dependencies.fsspec;
 
-  passthru.optional-dependencies = {
-    fsspec = [
-      fsspec
-    ];
-    http2 = [
-      httpx.optional-dependencies.http2
-    ];
+  optional-dependencies = {
+    fsspec = [ fsspec ];
+    http2 = [ httpx.optional-dependencies.http2 ];
     all = [
       fsspec
       httpx.optional-dependencies.http2
     ];
   };
 
-  pythonImportsCheck = [
-    "webdav4"
-  ];
+  pythonImportsCheck = [ "webdav4" ];
 
   disabledTests = [
     # ValueError: Invalid dir_browser htdocs_path
@@ -80,7 +70,6 @@ buildPythonPackage rec {
     "test_cp_cli"
     "test_mv_cli"
     "test_sync_remote_to_local"
-
   ];
 
   disabledTestPaths = [
@@ -92,6 +81,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with WebDAV";
+    mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
     changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
     license = with licenses; [ mit ];

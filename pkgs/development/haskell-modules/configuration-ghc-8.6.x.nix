@@ -8,7 +8,8 @@ in
 
 self: super: {
 
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+  # Should be llvmPackages_6 which has been removed from nixpkgs
+  llvmPackages = null;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -38,17 +39,20 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
 
   # Needs Cabal 3.0.x.
   jailbreak-cabal = super.jailbreak-cabal.overrideScope (cself: _: { Cabal = cself.Cabal_3_2_1_0; });
@@ -65,7 +69,6 @@ self: super: {
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
-  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
@@ -83,23 +86,14 @@ self: super: {
   # cabal2spec needs a recent version of Cabal
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
-  # https://github.com/pikajude/stylish-cabal/issues/12
-  stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
-  haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
-
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_4;
-
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
+  exceptions = self.exceptions_0_10_8;
 
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
-
-  mmorph = super.mmorph_1_1_3;
 
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;

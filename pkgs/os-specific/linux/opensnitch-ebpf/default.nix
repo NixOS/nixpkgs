@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   inherit (opensnitch) src;
 
-  sourceRoot = "source/ebpf_prog";
+  sourceRoot = "${src.name}/ebpf_prog";
 
   nativeBuildInputs = with llvmPackages; [
     bc

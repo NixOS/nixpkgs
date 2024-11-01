@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.15";
-  format = "setuptools";
+  version = "1.28";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
-    repo = pname;
+    repo = "puremagic";
     rev = "refs/tags/${version}";
-    hash = "sha256-WnqDrVPTlNxz3SDt1wLdZmxtj0Vh6gLHDJlYGEHHxsg=";
+    hash = "sha256-a7jRQUSbH3E6eJiXNKr4ikdSXRZ6+/csl/EMiKXMzmk=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "puremagic"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "puremagic" ];
 
   meta = with lib; {
     description = "Implementation of magic file detection";

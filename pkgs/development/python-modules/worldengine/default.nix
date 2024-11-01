@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gdal
-, h5py
-, noise
-, numpy
-, protobuf
-, purepng
-, pyplatec
-, six
-, isPy27
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gdal,
+  h5py,
+  noise,
+  numpy,
+  protobuf,
+  purepng,
+  pyplatec,
+  six,
+  isPy27,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "worldengine";
   version = "0.19.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
@@ -63,9 +65,7 @@ buildPythonPackage rec {
   doCheck = !isPy27; # google namespace clash
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "TestSerialization"
-  ];
+  disabledTests = [ "TestSerialization" ];
 
   meta = with lib; {
     broken = true;

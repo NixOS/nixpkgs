@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Autostart and stop minecraft-server when players join/leave";
+    mainProgram = "msh";
     homepage = "https://github.com/gekware/minecraft-server-hibernation";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ squarepear ];

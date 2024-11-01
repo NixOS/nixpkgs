@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libpcap }:
+{ stdenv, lib, fetchurl, libpcap, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "ucarp";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   #     `__packed'; ucarp.o:/build/ucarp-1.5.2/src/ip_carp.h:73: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
+  passthru.tests = { inherit (nixosTests) ucarp; };
+
   meta = with lib; {
     description = "Userspace implementation of CARP";
     longDescription = ''
@@ -30,5 +32,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ isc bsdOriginal bsd2 gpl2Plus ];
     maintainers = with maintainers; [ oxzi ];
+    mainProgram = "ucarp";
   };
 }

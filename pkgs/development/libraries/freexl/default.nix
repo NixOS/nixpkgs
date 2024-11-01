@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     expat
     minizip
     zlib
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A library to extract valid data from within an Excel (.xls) spreadsheet";
+    description = "Library to extract valid data from within an Excel (.xls) spreadsheet";
     homepage = "https://www.gaia-gis.it/fossil/freexl";
     # They allow any of these
     license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];

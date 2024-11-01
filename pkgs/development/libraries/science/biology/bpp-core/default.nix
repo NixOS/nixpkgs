@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "bpp-core";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ma2cl677l7s0n5sffh66cy9lxp5wycm50f121g8rx85p95vkgwv";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/BioPP/bpp-core/commit/d450e8033b06e80dff9c2236fb7ce1f3ced5dcbb.patch";
+      hash = "sha256-9t68mrK7KNs5BxljKMaA+XskCcKDNv8DNCVUYunoNdw=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   postFixup = ''
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
   # of form /nix/store/.../nix/store/.../include,
   # probably due to relative vs absolute path issue
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://github.com/BioPP/bpp-core";

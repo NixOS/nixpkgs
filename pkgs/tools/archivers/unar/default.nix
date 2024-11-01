@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       substituteInPlace "./XADMaster.xcodeproj/project.pbxproj" \
         --replace "libstdc++.6.dylib" "libc++.1.dylib"
     '' else ''
@@ -43,27 +43,21 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs = [ bzip2 icu openssl wavpack zlib ] ++
-    lib.optionals stdenv.isLinux [ gnustep.base ] ++
-    lib.optionals stdenv.isDarwin [ Foundation AppKit ];
+    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.base ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ Foundation AppKit ];
 
   nativeBuildInputs = [ installShellFiles ] ++
-    lib.optionals stdenv.isLinux [ gnustep.make ] ++
-    lib.optionals stdenv.isDarwin [ xcbuildHook ];
+    lib.optionals stdenv.hostPlatform.isLinux [ gnustep.make ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ xcbuildHook ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  # xcbuild links with clang instead of clang++.
-  env = lib.optionalAttrs stdenv.isDarwin {
-    LD_FLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
-  xcbuildFlags = lib.optionals stdenv.isDarwin [
+  xcbuildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-target unar"
     "-target lsar"
     "-configuration Release"
     "MACOSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
-  makefile = lib.optionalString (!stdenv.isDarwin) "Makefile.linux";
+  makefile = lib.optionalString (!stdenv.hostPlatform.isDarwin) "Makefile.linux";
 
   enableParallelBuilding = true;
 
@@ -74,7 +68,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin ${lib.optionalString stdenv.isDarwin "Products/Release/"}{lsar,unar}
+    install -Dm555 -t $out/bin ${lib.optionalString stdenv.hostPlatform.isDarwin "Products/Release/"}{lsar,unar}
     for f in lsar unar; do
       installManPage ./Extra/$f.?
       installShellCompletion --bash --name $f ./Extra/$f.bash_completion
@@ -85,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://theunarchiver.com";
-    description = "An archive unpacker program";
+    description = "Archive unpacker program";
     longDescription = ''
       The Unarchiver is an archive unpacker program with support for the popular
       zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,
@@ -94,7 +88,8 @@ stdenv.mkDerivation rec {
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg thiagokokada ];
+    maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "unar";
     platforms = platforms.unix;
   };
 }

@@ -7,7 +7,7 @@
 , asio
 , nettle
 , gnutls
-, msgpack
+, msgpack-cxx
 , readline
 , libargon2
 , jsoncpp
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "2.5.5";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "v${version}";
-    sha256 = "sha256-OXLVuyPFlo7VD8f9wAN71p4PZpfM2ISq9UoUiAYEXUQ=";
+    hash = "sha256-s172Sj1EvV7Lmnmd+xyKmYF2cDEa8Bot10ovggEsOFg=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     asio
+    fmt
     nettle
     gnutls
-    msgpack
+    msgpack-cxx
     readline
     libargon2
   ] ++ lib.optionals enableProxyServerAndClient [
@@ -47,8 +48,7 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-    fmt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" ];
 
   meta = with lib; {
-    description = "A C++11 Kademlia distributed hash table implementation";
+    description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];

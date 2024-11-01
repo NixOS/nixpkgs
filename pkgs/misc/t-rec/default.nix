@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ imagemagick ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Foundation ];
 
   postInstall = ''
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${binPath}"
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sassman/t-rec-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ hoverbear matthiasbeyer ];
+    mainProgram = "t-rec";
   };
 }

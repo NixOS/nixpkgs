@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
@@ -53,40 +50,40 @@ in
 
     services.mlmmj = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Enable mlmmj";
+        description = "Enable mlmmj";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "mlmmj";
-        description = lib.mdDoc "mailinglist local user";
+        description = "mailinglist local user";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "mlmmj";
-        description = lib.mdDoc "mailinglist local group";
+        description = "mailinglist local group";
       };
 
-      listDomain = mkOption {
-        type = types.str;
+      listDomain = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc "Set the mailing list domain";
+        description = "Set the mailing list domain";
       };
 
-      mailLists = mkOption {
-        type = types.listOf types.str;
+      mailLists = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
-        description = lib.mdDoc "The collection of hosted maillists";
+        description = "The collection of hosted maillists";
       };
 
-      maintInterval = mkOption {
-        type = types.str;
+      maintInterval = lib.mkOption {
+        type = lib.types.str;
         default = "20min";
-        description = lib.mdDoc ''
+        description = ''
           Time interval between mlmmj-maintd runs, see
           {manpage}`systemd.time(7)` for format information.
         '';
@@ -98,7 +95,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${cfg.user} = {
       description = "mlmmj user";
@@ -143,11 +140,13 @@ in
 
     environment.systemPackages = [ pkgs.mlmmj ];
 
-    systemd.tmpfiles.rules = [
-      ''d "${stateDir}" -''
-      ''d "${spoolDir}/${cfg.listDomain}" -''
-      ''Z "${spoolDir}" - "${cfg.user}" "${cfg.group}" -''
-    ];
+    systemd.tmpfiles.settings."10-mlmmj" = {
+      ${stateDir}.d = { };
+      "${spoolDir}/${cfg.listDomain}".d = { };
+      ${spoolDir}.Z = {
+        inherit (cfg) user group;
+      };
+    };
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";

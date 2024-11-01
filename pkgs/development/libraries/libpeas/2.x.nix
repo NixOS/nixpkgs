@@ -1,29 +1,41 @@
 { stdenv
 , lib
 , fetchurl
+, substituteAll
 , pkg-config
 , gi-docgen
 , gobject-introspection
 , meson
 , ninja
+, vala
 , gjs
 , glib
 , lua5_1
 , python3
-, spidermonkey_115
+, spidermonkey_128
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.0";
+  version = "2.0.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-VAesvAwS95D3DJ0rmCJKzBvjrEScYGA7gZLKAgtJcBE=";
+    hash = "sha256-N28vc9cxtU4T3bqx2Rtjgs9qmAUk3vRN9irdFUid5t0=";
   };
+
+  patches = [
+    # Make PyGObject’s gi library available.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
+        python3.pkgs.pygobject3
+      ];
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -35,6 +47,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    vala
   ];
 
   buildInputs = [
@@ -44,7 +57,7 @@ stdenv.mkDerivation rec {
     lua5_1.pkgs.lgi
     python3
     python3.pkgs.pygobject3
-    spidermonkey_115
+    spidermonkey_128
   ];
 
   propagatedBuildInputs = [
@@ -54,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ];
 
   postPatch = ''
@@ -77,8 +91,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GObject-based plugins engine";
-    homepage = "https://wiki.gnome.org/Projects/Libpeas";
+    description = "GObject-based plugins engine";
+    homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

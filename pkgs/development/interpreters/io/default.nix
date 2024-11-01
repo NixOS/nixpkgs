@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, sqlite, gmp, libffi, cairo,
   ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline, libsndfile,
-  libxml2, freeglut, libsamplerate, pcre, libevent, libedit, yajl,
+  libxml2, libglut, libsamplerate, pcre, libevent, libedit, yajl,
   python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [
     zlib sqlite gmp libffi cairo ncurses freetype
     libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut libsamplerate pcre libevent libedit yajl
+    libglut libsamplerate pcre libevent libedit yajl
     glfw openssl libpthreadstubs libXdmcp
     libmemcached python3
   ];
@@ -66,7 +66,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       raskin
       maggesi
-      vrthra
     ];
     platforms = [ "x86_64-linux" ];
   };

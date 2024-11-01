@@ -14,7 +14,6 @@
 , brotli
 , gnomeSupport ? true
 , sqlite
-, glib-networking
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     libpsl
     glib.out
     brotli
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
   ];
 
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dsysprof=disabled"
   ];
 
@@ -85,9 +84,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
@@ -97,7 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client/server library for GNOME";
-    homepage = "https://wiki.gnome.org/Projects/libsoup";
+    homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
     pkgConfigModules = [

@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication rec {
     hatch-vcs
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python3Packages; [
     pykeepass
     pynput
@@ -44,6 +42,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/firecat53/keepmenu";
     description = "Dmenu/Rofi frontend for Keepass databases";
+    mainProgram = "keepmenu";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ elliot ];
     platforms = platforms.linux;

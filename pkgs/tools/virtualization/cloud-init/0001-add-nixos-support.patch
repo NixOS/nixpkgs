@@ -1,8 +1,8 @@
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
-index 7b83df8d..6d04de1a 100644
+index 79e26235..bdc32c52 100644
 --- a/cloudinit/distros/__init__.py
 +++ b/cloudinit/distros/__init__.py
-@@ -75,6 +75,7 @@ OSFAMILIES = {
+@@ -91,6 +91,7 @@ OSFAMILIES = {
      ],
      "openeuler": ["openeuler"],
      "OpenCloudOS": ["OpenCloudOS", "TencentOS"],
@@ -12,7 +12,7 @@ index 7b83df8d..6d04de1a 100644
  LOG = logging.getLogger(__name__)
 diff --git a/cloudinit/distros/nixos.py b/cloudinit/distros/nixos.py
 new file mode 100644
-index 00000000..954e564b
+index 00000000..67c049b8
 --- /dev/null
 +++ b/cloudinit/distros/nixos.py
 @@ -0,0 +1,109 @@
@@ -38,11 +38,11 @@ index 00000000..954e564b
 +#    You should have received a copy of the GNU General Public License
 +#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 +
++import logging
 +import os
 +
 +from cloudinit import distros
 +from cloudinit import helpers
-+from cloudinit import log as logging
 +from cloudinit import util
 +from cloudinit import atomic_helper
 +
@@ -93,7 +93,7 @@ index 00000000..954e564b
 +        return (self.hostname_conf_fn, sys_hostname)
 +
 +    def _read_hostname_conf(self, filename):
-+        conf = HostnameConf(util.load_file(filename))
++        conf = HostnameConf(util.load_text_file(filename))
 +        conf.parse()
 +        return conf
 +

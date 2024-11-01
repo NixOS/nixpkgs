@@ -4,20 +4,20 @@
 , adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.isDarwin, pinentry
-, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
+, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
+, withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal, tpm2-tss
 , nixosTests
 }:
 
-assert guiSupport -> enableMinimal == false;
+assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.1";
+  version = "2.4.5";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-drceWutEO/2RDOnLyCgbYXyDQWh6+2e65FWHeXK1neg=";
+    hash = "sha256-9o99ddBssWNcM2002ESvl0NsP2TqFLy3yGl4L5b0Qnc=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -33,13 +33,14 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
+    ./24-revert-rfc4880bis-defaults.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];
 
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
@@ -49,11 +50,11 @@ stdenv.mkDerivation rec {
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
-    "--with-npth-prefix=${npth}"
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional withTpm2Tss "--with-tss=intel"
-  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
   then ''
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz sgo ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

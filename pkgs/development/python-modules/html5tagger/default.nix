@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -16,23 +17,17 @@ buildPythonPackage rec {
     hash = "sha256-Or0EizZC9FMjTcbgecDvgGB09KNGyxHreSDojgB7ysg=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "html5tagger"
-  ];
+  pythonImportsCheck = [ "html5tagger" ];
 
   meta = with lib; {
     description = "Create HTML documents from Python";
     homepage = "https://github.com/sanic-org/html5tagger";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

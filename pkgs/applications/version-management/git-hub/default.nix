@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    mainProgram = "git-hub";
   };
 }

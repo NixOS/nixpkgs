@@ -46,23 +46,25 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Jailbreaks & Version Updates
 
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
-  lens-family-th = doJailbreak super.lens-family-th;  # template-haskell <2.19
 
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepends [
+    self.base-orphans
+  ] super.generically;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -76,15 +78,6 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
-
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
-
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
@@ -96,18 +89,13 @@ in {
 
   ghc-tags = self.ghc-tags_1_6;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
 
-  # requires newer versions to work with GHC 9.4
-  servant = doJailbreak super.servant;
-  servant-server = doJailbreak super.servant-server;
-  servant-auth = doJailbreak super.servant-auth;
-  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
-  servant-swagger = doJailbreak super.servant-swagger;
-  servant-client-core = doJailbreak super.servant-client-core;
-  servant-client = doJailbreak super.servant-client;
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
@@ -115,28 +103,38 @@ in {
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231014;
-          ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
-          Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
+          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        # Tests fail due to the newly-build fourmolu not being in PATH
-        # https://github.com/fourmolu/fourmolu/issues/231
-        fourmolu = dontCheck super.fourmolu_0_14_0_0;
-        ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-        hlint = super.hlint_3_6_1;
+        fourmolu = super.fourmolu;
+        ormolu = super.ormolu;
+        hlint = super.hlint;
         stylish-haskell = super.stylish-haskell;
       }
     )
     haskell-language-server
-    # HLS from 2.3 needs at least formolu 0.14.
-    # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
-    # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
     fourmolu
     ormolu
     hlint
     stylish-haskell
   ;
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    OneTuple
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
+
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 }

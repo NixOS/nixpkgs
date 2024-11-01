@@ -13,11 +13,12 @@
 , shared-mime-info
 , nixosTests
 , xz
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.10";
+  version = "0.3.19";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "sha256-uitnVqR2VVNAf8H1Q/u6LezhvfQJ/G2bE0Dv9dyP8+A=";
+    hash = "sha256-gXLWHkT+h/wvmmi7PyIx16gbeYznVOT7CwuBgF3bjOY=";
   };
 
   patches = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     xz
+    zstd
   ];
 
   mesonFlags = [
@@ -68,10 +70,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to help create and query binary XML blobs";
+    description = "Library to help create and query binary XML blobs";
+    mainProgram = "xb-tool";
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

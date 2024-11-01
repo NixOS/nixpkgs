@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymorphy2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymorphy2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pymorphy2 ];
-  pythonImportCheck = [ "yargy" ];
+  pythonImportsCheck = [ "yargy" ];
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
 

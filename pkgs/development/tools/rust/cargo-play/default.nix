@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
-  cargoSha256 = "sha256-I+keVi0fxUVttMHOGJQWVfIpHEQu/9aTbERa3qiHmnQ=";
+  cargoHash = "sha256-I+keVi0fxUVttMHOGJQWVfIpHEQu/9aTbERa3qiHmnQ=";
 
   # these tests require internet access
   checkFlags = [
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run your rust code without setting up cargo";
+    mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
     rev = "c0bdc68e6c56ef25";
-    sha256 = "sha256-VoDR5MlVlvar9wYA0kUhvDQVjxDwsZlqrNR3u4Tqw5c=";
+    hash = "sha256-VoDR5MlVlvar9wYA0kUhvDQVjxDwsZlqrNR3u4Tqw5c=";
   };
 
   buildInputs = [ openssl ];
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Althttpd webserver";
+    description = "Althttpd webserver";
     homepage = "https://sqlite.org/althttpd/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
+    mainProgram = "althttpd";
   };
 }

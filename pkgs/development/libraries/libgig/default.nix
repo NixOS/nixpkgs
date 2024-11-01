@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgig";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-oG0Jh4eAxsGd2NucM1RNU6kzV/niexSpg6qrpo//p5Q=";
+    sha256 = "sha256-/cie+rH5BhKObFRymWdXfo0EYgFwGLwSVRJX313+OqQ=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

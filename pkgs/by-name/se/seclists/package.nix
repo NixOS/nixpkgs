@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "seclists";
-  version = "2023.3";
+  version = "2024.3";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "SecLists";
-    rev = "2023.3";
-    hash = "sha256-mJgCzp8iKzSWf4Tud5xDpnuY4aNJmnEo/hTcuGTaOWM=";
+    rev = "2024.3";
+    hash = "sha256-Ffd4jpV8F6rtMQVqsu+8X/QU5rwbKXv0zkOCmUuhP8I=";
   };
 
   installPhase = ''
@@ -25,10 +25,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A collection of multiple types of lists used during security assessments, collected in one place";
+    description = "Collection of multiple types of lists used during security assessments, collected in one place";
     homepage = "https://github.com/danielmiessler/seclists";
     license = licenses.mit;
-    maintainers = with maintainers; [ tochiaha janik pamplemousse ];
+    maintainers = with maintainers; [ tochiaha pamplemousse ];
   };
 }
 

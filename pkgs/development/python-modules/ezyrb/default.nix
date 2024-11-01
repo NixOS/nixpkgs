@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, future
-, numpy
-, scipy
-, matplotlib
-, scikit-learn
-, torch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  future,
+  numpy,
+  scipy,
+  matplotlib,
+  scikit-learn,
+  torch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ezyrb";
-  version = "1.3.0.post2311";
+  version = "1.3.0.post2404";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "EZyRB";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qIH/cn+QdcjfNwvokbkC+euo6RD75DrqJ5Oj6Ji/9cY=";
+    hash = "sha256-nu75Geyeu1nTLoGaohXB9pmbUWKgdgch9Z5OJqz9xKQ=";
   };
 
   propagatedBuildInputs = [
@@ -35,13 +35,9 @@ buildPythonPackage rec {
     torch
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ezyrb"
-  ];
+  pythonImportsCheck = [ "ezyrb" ];
 
   disabledTestPaths = [
     # Exclude long tests

@@ -1,30 +1,38 @@
-{ fetchFromGitHub, lib, rustPlatform, pkg-config, openssl, stdenv, Security }:
+{ fetchCrate, installShellFiles, lib, rustPlatform, pkg-config, stdenv, Security, SystemConfiguration, buildPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vrc-get";
-  version = "1.1.3";
+  version = "1.8.2";
 
-  src = fetchFromGitHub {
-    owner = "anatawa12";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-CJBwW2QsLNLyNubawBPD+Cy74JrrdSUHe7JBSdbMnjY=";
-    fetchSubmodules = true;
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-4ZiN9sl4VImb3ufF6L9k5t45tmV1RUSvm3NL52waj0o=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
-  # Make openssl-sys use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  cargoHash = "sha256-uPx9sujuvBp6wJzzqVlS8Rq1S9Cb2su9/gp4pnNJ9zQ=";
 
-  cargoHash = "sha256-PnNo+MmBo/Ke7pL6KwRKXz3gycJmbYefTRMWOvlCQaQ=";
+  # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
+  # If no emulator is available, then give up on generating shell completions
+  postInstall =
+    let
+      vrc-get = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/vrc-get";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd vrc-get \
+        --bash <(${vrc-get} completion bash) \
+        --fish <(${vrc-get} completion fish) \
+        --zsh <(${vrc-get} completion zsh)
+    '';
 
   meta = with lib; {
     description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";
-    homepage = "https://github.com/anatawa12/vrc-get";
+    homepage = "https://github.com/vrc-get/vrc-get";
     license = licenses.mit;
     maintainers = with maintainers; [ bddvlpr ];
+    mainProgram = "vrc-get";
   };
 }

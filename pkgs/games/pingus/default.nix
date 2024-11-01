@@ -13,8 +13,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # Fix missing gcc-13 headers
+    sed -e '1i #include <cstdint>' -i src/util/pathname.hpp
+  '';
+
   meta = {
-    description = "A puzzle game with mechanics similar to Lemmings";
+    description = "Puzzle game with mechanics similar to Lemmings";
+    mainProgram = "pingus";
     platforms = lib.platforms.linux;
     maintainers = [lib.maintainers.raskin];
     license = lib.licenses.gpl3;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "The nice editor";
+    description = "Nice editor";
     homepage = "https://ne.di.unimi.it/";
     longDescription = ''
       ne is a free (GPL'd) text editor based on the POSIX standard that runs
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ geri1701 ];
+    mainProgram = "ne";
   };
 }

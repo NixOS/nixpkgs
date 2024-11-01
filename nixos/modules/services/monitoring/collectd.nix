@@ -29,11 +29,11 @@ let
 
 in {
   options.services.collectd = with types; {
-    enable = mkEnableOption (lib.mdDoc "collectd agent");
+    enable = mkEnableOption "collectd agent";
 
     validateConfig = mkOption {
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Validate the syntax of collectd configuration file at build time.
         Disable this if you use the Include directive on files unavailable in
         the build sandbox, or when cross-compiling.
@@ -41,18 +41,11 @@ in {
       type = types.bool;
     };
 
-    package = mkOption {
-      default = pkgs.collectd;
-      defaultText = literalExpression "pkgs.collectd";
-      description = lib.mdDoc ''
-        Which collectd package to use.
-      '';
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "collectd" { };
 
     buildMinimalPackage = mkOption {
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
       type = bool;
@@ -60,7 +53,7 @@ in {
 
     user = mkOption {
       default = "collectd";
-      description = lib.mdDoc ''
+      description = ''
         User under which to run collectd.
       '';
       type = nullOr str;
@@ -68,7 +61,7 @@ in {
 
     dataDir = mkOption {
       default = "/var/lib/collectd";
-      description = lib.mdDoc ''
+      description = ''
         Data directory for collectd agent.
       '';
       type = path;
@@ -76,7 +69,7 @@ in {
 
     autoLoadPlugin = mkOption {
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable plugin autoloading.
       '';
       type = bool;
@@ -84,7 +77,7 @@ in {
 
     include = mkOption {
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Additional paths to load config from.
       '';
       type = listOf str;
@@ -93,7 +86,7 @@ in {
     plugins = mkOption {
       default = {};
       example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of plugin names to plugin config segments
       '';
       type = attrsOf lines;
@@ -101,7 +94,7 @@ in {
 
     extraConfig = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration for collectd. Use mkBefore to add lines before the
         default config, and mkAfter to add them below.
       '';

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, chex
-, jaxlib
-, numpy
-, tensorflow-probability
-, dm-haiku
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  chex,
+  jaxlib,
+  numpy,
+  tensorflow-probability,
+  dm-haiku,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,12 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    pytest-xdist
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "distrax"
-  ];
+  pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
     # AssertionError on numerical values
@@ -73,6 +74,20 @@ buildPythonPackage rec {
     "distrax/_src/distributions/transformed_test.py"
     "distrax/_src/distributions/uniform_test.py"
     "distrax/_src/utils/transformations_test.py"
+    # https://github.com/google-deepmind/distrax/pull/270
+    "distrax/_src/distributions/deterministic_test.py"
+    "distrax/_src/distributions/epsilon_greedy_test.py"
+    "distrax/_src/distributions/gamma_test.py"
+    "distrax/_src/distributions/greedy_test.py"
+    "distrax/_src/distributions/gumbel_test.py"
+    "distrax/_src/distributions/logistic_test.py"
+    "distrax/_src/distributions/log_stddev_normal_test.py"
+    "distrax/_src/distributions/mvn_diag_test.py"
+    "distrax/_src/distributions/mvn_full_covariance_test.py"
+    "distrax/_src/distributions/mvn_tri_test.py"
+    "distrax/_src/distributions/one_hot_categorical_test.py"
+    "distrax/_src/distributions/softmax_test.py"
+    "distrax/_src/utils/hmm_test.py"
   ];
 
   meta = with lib; {

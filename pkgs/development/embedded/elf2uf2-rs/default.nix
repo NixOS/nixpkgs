@@ -2,28 +2,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
-  version = "1.3.7";
+  version = "2.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-2ZilZIYXCNrKJlkHBsz/2/pMtF+UDfjDlt53ylcwgus=";
+    hash = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.isLinux udev
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       DiskArbitration
       Foundation
     ];
 
-  cargoSha256 = "sha256-+3Rqlzkrw9XfM3PelGNbnRGaWQLbzVJ7iJgvGgVt5FE=";
+  cargoHash = "sha256-TBH3pLB6vQVGnfShLtFPNKjciuUIuTkvp3Gayzo+X9E=";
 
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
+    mainProgram = "elf2uf2-rs";
     homepage = "https://github.com/JoNil/elf2uf2-rs";
     license = with licenses; [ bsd0 ];
     platforms = platforms.linux ++ platforms.darwin;

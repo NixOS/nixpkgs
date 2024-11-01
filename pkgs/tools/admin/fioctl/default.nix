@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fioctl";
-  version = "0.38";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-MA7mMGZyRbQ4165qB+Q6/gQZP/yaUoZmMCVrPCPZoj4=";
+    sha256 = "sha256-UqUr57D5nZh+zanzCmxujLbA8eICKx0NUlP78YH8x/Q=";
   };
 
-  vendorHash = "sha256-OmukK6ecaiCRnK6fL238GhkxW4A4yrcR/xelBZzVwqI=";
+  vendorHash = "sha256-A5buz9JOAiXx9X4qmi7mTMJiy/E6XBaFlG/sXOG5AKw=";
 
   ldflags = [
     "-s" "-w"
@@ -34,9 +34,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A simple CLI to manage your Foundries Factory";
+    description = "Simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ nixinator matthewcroughan ];
+    mainProgram = "fioctl";
   };
 }

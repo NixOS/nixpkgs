@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, olm }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
-  version = "1.0.7531";
+  version = "1.0.8043";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
-    sha256 = "lSntX5MRnp0GuimiqYGiBwi5wI62omvAN1ioyIz+Upc=";
+    sha256 = "XJlfCMQXnHjfHQhK916RXsdPzrU2U2IaOMiXIHL1sCI=";
   };
 
   dontBuild = true;
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
+  # Test requires running Jitsi Videobridge and Jicofo which are Linux-only
+  passthru.tests = lib.optionalAttrs stdenv.isLinux {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 
@@ -34,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.all;
+    inherit (olm.meta) knownVulnerabilities;
   };
 }

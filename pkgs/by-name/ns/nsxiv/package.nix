@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libexif
     libwebp
-  ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-linotify";
 
   makeFlags = [ "CC:=$(CC)" ];
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://nsxiv.codeberg.page/";
     description = "New Suckless X Image Viewer";
+    mainProgram = "nsxiv";
     longDescription = ''
       nsxiv is a fork of now unmaintained sxiv with the purpose of being a
       drop-in replacement of sxiv, maintaining it and adding simple, sensible

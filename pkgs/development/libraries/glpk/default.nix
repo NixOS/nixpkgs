@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "The GNU Linear Programming Kit";
+    description = "GNU Linear Programming Kit";
 
-    longDescription =
-      '' The GNU Linear Programming Kit is intended for solving large
+    longDescription = ''
+         The GNU Linear Programming Kit is intended for solving large
          scale linear programming problems by means of the revised
          simplex method.  It is a set of routines written in the ANSI C
          programming language and organized in the form of a library.

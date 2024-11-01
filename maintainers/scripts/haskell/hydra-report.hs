@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra-unstable
+#! nix-shell -p hydra
 #! nix-shell -i runhaskell
 
 {-
@@ -78,12 +78,13 @@ import Network.HTTP.Req (
  )
 import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
+import System.Exit (die)
 import System.Process (readProcess)
 import Prelude hiding (id)
 import Data.List (sortOn)
 import Control.Concurrent.Async (concurrently)
 import Control.Exception (evaluate)
-import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntMap.Lazy as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Bifunctor (second)
 import Data.Data (Proxy)
@@ -155,17 +156,20 @@ data Build = Build
 data HydraSlownessWorkaroundFlag = HydraSlownessWorkaround | NoHydraSlownessWorkaround
 data RequestLogsFlag = RequestLogs | NoRequestLogs
 
+usage :: IO a
+usage = die "Usage: get-report [--slow] [EVAL-ID] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+
 main :: IO ()
 main = do
    args <- getArgs
    case args of
-      ["get-report", "--slow"] -> getBuildReports HydraSlownessWorkaround
-      ["get-report"] -> getBuildReports NoHydraSlownessWorkaround
+      "get-report":"--slow":id -> getBuildReports HydraSlownessWorkaround id
+      "get-report":id -> getBuildReports NoHydraSlownessWorkaround id
       ["ping-maintainers"] -> printMaintainerPing
       ["mark-broken-list", "--no-request-logs"] -> printMarkBrokenList NoRequestLogs
       ["mark-broken-list"] -> printMarkBrokenList RequestLogs
       ["eval-info"] -> printEvalInfo
-      _ -> putStrLn "Usage: get-report [--slow] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+      _ -> usage
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -173,23 +177,26 @@ reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
 showT :: Show a => a -> Text
 showT = Text.pack . show
 
-getBuildReports :: HydraSlownessWorkaroundFlag -> IO ()
-getBuildReports opt = runReq defaultHttpConfig do
-   evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
-   eval@Eval{id} <- maybe (liftIO $ fail "No Evaluation found") pure evalMay
+getBuildReports :: HydraSlownessWorkaroundFlag -> [String] -> IO ()
+getBuildReports opt args = runReq defaultHttpConfig do
+   eval@Eval{id} <- case args of
+      [id] -> hydraJSONQuery mempty ["eval", Text.pack id]
+      [] -> do
+         evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
+         maybe (liftIO $ fail "No Evaluation found") pure evalMay
+      _ -> liftIO usage
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports <- getEvalBuilds opt id
+   buildReports <- getEvalBuilds opt eval
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
 
-getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
-getEvalBuilds NoHydraSlownessWorkaround id =
+getEvalBuilds :: HydraSlownessWorkaroundFlag -> Eval -> Req (Seq Build)
+getEvalBuilds NoHydraSlownessWorkaround Eval{id} =
   hydraJSONQuery mempty ["eval", showT id, "builds"]
-getEvalBuilds HydraSlownessWorkaround id = do
-  Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
+getEvalBuilds HydraSlownessWorkaround Eval{builds} = do
   forM builds $ \buildId -> do
     liftIO $ putStrLn $ "Querying build " <> show buildId
     hydraJSONQuery mempty [ "build", showT buildId ]
@@ -299,7 +306,7 @@ calculateReverseDependencies depMap =
    Map.fromDistinctAscList $ zip keys (zip (rdepMap False) (rdepMap True))
  where
     -- This code tries to efficiently invert the dependency map and calculate
-    -- it’s transitive closure by internally identifying every pkg with it’s index
+    -- its transitive closure by internally identifying every pkg with its index
     -- in the package list and then using memoization.
     keys :: [PkgName]
     keys = Map.keys depMap
@@ -317,11 +324,11 @@ calculateReverseDependencies depMap =
     intDeps :: [(Int, (Bool, [Int]))]
     intDeps = zip [0..] (fmap depInfoToIdx depInfos)
 
-    rdepMap onlyUnbroken = IntSet.size <$> resultList
+    rdepMap onlyUnbroken = IntSet.size <$> IntMap.elems resultList
      where
-       resultList = go <$> [0..]
+       resultList = IntMap.fromDistinctAscList [(i, go i) | i <- [0..length keys - 1]]
        oneStepMap = IntMap.fromListWith IntSet.union $ (\(key,(_,deps)) -> (,IntSet.singleton key) <$> deps) <=< filter (\(_, (broken,_)) -> not (broken && onlyUnbroken)) $ intDeps
-       go pkg = IntSet.unions (oneStep:((resultList !!) <$> IntSet.toList oneStep))
+       go pkg = IntSet.unions (oneStep:((resultList IntMap.!) <$> IntSet.toList oneStep))
         where oneStep = IntMap.findWithDefault mempty pkg oneStepMap
 
 -- | Generate a mapping of Hydra job names to maintainer GitHub handles. Calls
@@ -382,22 +389,22 @@ data BuildState
 
 icon :: BuildState -> Text
 icon = \case
-   Failed -> ":x:"
-   DependencyFailed -> ":heavy_exclamation_mark:"
-   OutputLimitExceeded -> ":warning:"
+   Failed -> "❌"
+   DependencyFailed -> "❗"
+   OutputLimitExceeded -> "⚠️"
    Unknown x -> "unknown code " <> showT x
-   TimedOut -> ":hourglass::no_entry_sign:"
-   Canceled -> ":no_entry_sign:"
-   Unfinished -> ":hourglass_flowing_sand:"
-   HydraFailure -> ":construction:"
-   Success -> ":heavy_check_mark:"
+   TimedOut -> "⌛🚫"
+   Canceled -> "🚫"
+   Unfinished -> "⏳"
+   HydraFailure -> "🚧"
+   Success -> "✅"
 
 platformIcon :: Platform -> Text
 platformIcon (Platform x) = case x of
-   "x86_64-linux" -> ":penguin:"
-   "aarch64-linux" -> ":iphone:"
-   "x86_64-darwin" -> ":apple:"
-   "aarch64-darwin" -> ":green_apple:"
+   "x86_64-linux" -> "🐧"
+   "aarch64-linux" -> "📱"
+   "x86_64-darwin" -> "🍎"
+   "aarch64-darwin" -> "🍏"
    _ -> x
 
 platformIsOS :: OS -> Platform -> Bool
@@ -626,7 +633,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList (failedDeps summary))
          <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList (unknownErr summary))
          <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
-         <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
+         <> ["","*⤴️: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
          <> footer
   where
    footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.hs)*"]
@@ -651,7 +658,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
    brokenLine :: (PkgName, Int) -> Text
    brokenLine (PkgName name, rdeps) =
       "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <>
-      ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
+      ") ⤴️ " <> Text.pack (show rdeps) <> "  "
 
    numSummary = statusToNumSummary summary
 
@@ -733,7 +740,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          , Text.pack
             ( if summaryReverseDeps entry > 0
                then
-                  " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>
+                  " ⤴️ " <> show (summaryUnbrokenReverseDeps entry) <>
                   " | " <> show (summaryReverseDeps entry)
                else ""
             )
@@ -750,9 +757,9 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          )
 
    tldr = case (errors, warnings) of
-            ([],[]) -> [":green_circle: **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-            ([],_) -> [":yellow_circle: **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-            _ -> [":red_circle: **Branch not mergeable**"]
+            ([],[]) -> ["🟢 **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            ([],_) -> ["🟡 **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            _ -> ["🔴 **Branch not mergeable**"]
    warnings =
       if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
       if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>

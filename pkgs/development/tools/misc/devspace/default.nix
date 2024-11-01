@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "devspace";
-  version = "6.3.4";
+  version = "6.3.14";
 
   src = fetchFromGitHub {
     owner = "devspace-sh";
     repo = "devspace";
     rev = "v${version}";
-    hash = "sha256-AKEa9LDe1bLJxJH5k4axALoWkTh+bkBviCpof7x7+fY=";
+    hash = "sha256-Qdx7x42QKfyEu2PB350mek2MwYO/ClFAwKC9UHftaKE=";
   };
 
   vendorHash = null;
@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster";
+    description = "Open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster";
     homepage = "https://devspace.sh/";
     changelog = "https://github.com/devspace-sh/devspace/releases/tag/v${version}";
     license = licenses.asl20;

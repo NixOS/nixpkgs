@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stochas";
-  version = "1.3.9";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AnYViWterLBsTtd0wohff1CEwrSYA4CvOLGhJnPFUt8=";
+    hash = "sha256-GrYzsyezunFLFVzBfYCbNC53K695eYto9338iAALiSk=";
     fetchSubmodules = true;
   };
 

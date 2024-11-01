@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hut";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromSourcehut {
-    owner = "~emersion";
+    owner = "~xenrox";
     repo = "hut";
     rev = "v${version}";
-    sha256 = "sha256-kr5EWQ3zHUp/oNPZV2d3j9AyoEmHEX8/rETiMKTBi3s=";
+    sha256 = "sha256-wfnuGnO1aiK0D8P5nMCqD38DJ3RpcsK//02KaE5SkZE=";
   };
 
-  vendorHash = "sha256-aoqGb7g8UEC/ydmL3GbWGy3HDD1kfDJOMeUP4nO9waA=";
+  vendorHash = "sha256-6dIqcjtacxlmadnPzRlOJYoyOaO4zdjzrjO64KS2Bq0=";
 
   nativeBuildInputs = [
     scdoc
@@ -32,9 +32,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://sr.ht/~emersion/hut/";
-    description = "A CLI tool for Sourcehut / sr.ht";
+    homepage = "https://sr.ht/~xenrox/hut/";
+    description = "CLI tool for Sourcehut / sr.ht";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "hut";
   };
 }

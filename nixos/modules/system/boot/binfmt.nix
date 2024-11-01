@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption mkDefault types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString;
 
   cfg = config.boot.binfmt;
 
@@ -28,8 +28,6 @@ let
          ''
     else interpreter;
 
-  getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
-  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -141,6 +139,10 @@ let
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
     };
+    s390x-linux = {
+      magicOrExtension = ''\x7fELF\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x16'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+    };
     x86_64-windows.magicOrExtension = "MZ";
     i686-windows.magicOrExtension = "MZ";
   };
@@ -155,7 +157,7 @@ in {
       registrations = mkOption {
         default = {};
 
-        description = lib.mdDoc ''
+        description = ''
           Extra binary formats to register with the kernel.
           See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
         '';
@@ -164,30 +166,29 @@ in {
           options = {
             recognitionType = mkOption {
               default = "magic";
-              description = lib.mdDoc "Whether to recognize executables by magic number or extension.";
+              description = "Whether to recognize executables by magic number or extension.";
               type = types.enum [ "magic" "extension" ];
             };
 
             offset = mkOption {
               default = null;
-              description = lib.mdDoc "The byte offset of the magic number used for recognition.";
+              description = "The byte offset of the magic number used for recognition.";
               type = types.nullOr types.int;
             };
 
             magicOrExtension = mkOption {
-              description = lib.mdDoc "The magic number or extension to match on.";
+              description = "The magic number or extension to match on.";
               type = types.str;
             };
 
             mask = mkOption {
               default = null;
-              description =
-                lib.mdDoc "A mask to be ANDed with the byte sequence of the file before matching";
+              description = "A mask to be ANDed with the byte sequence of the file before matching";
               type = types.nullOr types.str;
             };
 
             interpreter = mkOption {
-              description = lib.mdDoc ''
+              description = ''
                 The interpreter to invoke to run the program.
 
                 Note that the actual registration will point to
@@ -199,7 +200,7 @@ in {
 
             preserveArgvZero = mkOption {
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to pass the original argv[0] to the interpreter.
 
                 See the description of the 'P' flag in the kernel docs
@@ -210,7 +211,7 @@ in {
 
             openBinary = mkOption {
               default = config.matchCredentials;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to pass the binary to the interpreter as an open
                 file descriptor, instead of a path.
               '';
@@ -219,7 +220,7 @@ in {
 
             matchCredentials = mkOption {
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to launch with the credentials and security
                 token of the binary, not the interpreter (e.g. setuid
                 bit).
@@ -234,7 +235,7 @@ in {
 
             fixBinary = mkOption {
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to open the interpreter file as soon as the
                 registration is loaded, rather than waiting for a
                 relevant file to be invoked.
@@ -247,7 +248,7 @@ in {
 
             wrapInterpreterInShell = mkOption {
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to wrap the interpreter in a shell script.
 
                 This allows a shell command to be set as the interpreter.
@@ -258,7 +259,7 @@ in {
             interpreterSandboxPath = mkOption {
               internal = true;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Path of the interpreter to expose in the build sandbox.
               '';
               type = types.nullOr types.path;
@@ -270,35 +271,57 @@ in {
       emulatedSystems = mkOption {
         default = [];
         example = [ "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];
-        description = lib.mdDoc ''
+        description = ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
         type = types.listOf (types.enum (builtins.attrNames magics));
       };
+
+      preferStaticEmulators = mkOption {
+        default = false;
+        description = ''
+          Whether to use static emulators when available.
+
+          This enables the kernel to preload the emulator binaries when
+          the binfmt registrations are added, obviating the need to make
+          the emulator binaries available inside chroots and chroot-like
+          sandboxes.
+        '';
+        type = types.bool;
+      };
     };
   };
 
   config = {
-    boot.binfmt.registrations = builtins.listToAttrs (map (system: {
+    assertions = lib.mapAttrsToList (name: reg: {
+      assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
+      message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
+    }) cfg.registrations;
+
+    boot.binfmt.registrations = builtins.listToAttrs (map (system: assert system != pkgs.stdenv.hostPlatform.system; {
       name = system;
       value = { config, ... }: let
-        interpreter = getEmulator system;
-        qemuArch = getQemuArch system;
+        elaborated = lib.systems.elaborate { inherit system; };
+        useStaticEmulator = cfg.preferStaticEmulators && elaborated.staticEmulatorAvailable pkgs;
+        interpreter = elaborated.emulator (if useStaticEmulator then pkgs.pkgsStatic else pkgs);
 
-        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+        inherit (elaborated) qemuArch;
+        isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
+
         interpreterReg = let
           wrapperName = "qemu-${qemuArch}-binfmt-P";
           wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
         in
-          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
+          if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}"
           else interpreter;
       in ({
-        preserveArgvZero = mkDefault preserveArgvZero;
+        preserveArgvZero = mkDefault isQemu;
 
         interpreter = mkDefault interpreterReg;
-        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        fixBinary = mkDefault useStaticEmulator;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
         interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
@@ -331,6 +354,7 @@ in {
           "proc-sys-fs-binfmt_misc.mount"
           "systemd-binfmt.service"
         ];
+        services.systemd-binfmt.after = [ "systemd-tmpfiles-setup.service" ];
         services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
       })
     ];

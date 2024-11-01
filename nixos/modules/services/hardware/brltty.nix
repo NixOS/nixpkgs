@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.brltty;
 
@@ -22,18 +19,19 @@ in {
 
   options = {
 
-    services.brltty.enable = mkOption {
-      type = types.bool;
+    services.brltty.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc "Whether to enable the BRLTTY daemon.";
+      description = "Whether to enable the BRLTTY daemon.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.brltty = {
       description = "BRLTTY daemon user";
       group = "brltty";
+      isSystemUser = true;
     };
     users.groups = {
       brltty = { };

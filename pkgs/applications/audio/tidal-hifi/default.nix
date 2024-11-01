@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -32,18 +33,19 @@
 , systemd
 , xdg-utils
 , xorg
+, libGL
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.7.1";
+  version = "5.16.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-7wBQgoglLS67aiQsF9iUeFoJDDqq0fJgu5BSyH+HI7M=";
+    sha256 = "sha256-gDinm7kILm4SKlWmaJ1grwRuketGs/aWlJfNEF+AIRo=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook3 ];
 
   buildInputs = [
     alsa-lib
@@ -84,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    libGL
   ];
 
   runtimeDependencies =
@@ -113,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
-    description = "The web version of Tidal running in electron with hifi support thanks to widevine";
+    description = "Web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbit spikespaz ];

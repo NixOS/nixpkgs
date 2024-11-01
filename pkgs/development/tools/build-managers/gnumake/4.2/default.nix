@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     # a second. So, tell Make to ignore nanoseconds in mtime here by
     # overriding the autoconf test for the struct.
     # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
   outputs = [ "out" "man" "info" ];
 
   meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
+    description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/make/";
 
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     mainProgram = "make";
     platforms = platforms.all;
   };

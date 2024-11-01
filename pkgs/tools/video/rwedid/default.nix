@@ -42,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/ral/rwedid";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
   };
 }

@@ -3,13 +3,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "bento4";
-  version = "1.6.0-640";
+  version = "1.6.0-641";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
     rev = "v${version}";
-    hash = "sha256-VhlFfNYw3xpAIyWqDyhgXIv3JtpFJH0BL97dFX8diRY=";
+    hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 
   patches = [
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_ARCHITECTURES="
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Patch binaries to use our dylib
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     find $out/bin -maxdepth 1 -executable -type f -exec install_name_tool -change @rpath/libap4.dylib $out/lib/libap4.dylib {} \;
   '';
 

@@ -1,0 +1,14 @@
+diff --git a/androguard/cli/main.py b/androguard/cli/main.py
+index 13bc1d0ab7..a79b4fe5fa 100644
+--- a/androguard/cli/main.py
++++ b/androguard/cli/main.py
+@@ -110,9 +110,7 @@
+ 
+     write_methods = dict(gml=_write_gml,
+                          gexf=nx.write_gexf,
+-                         gpickle=nx.write_gpickle,
+                          graphml=nx.write_graphml,
+-                         yaml=nx.write_yaml,
+                          net=nx.write_pajek,
+                          )
+ 

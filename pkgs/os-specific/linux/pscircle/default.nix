@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mildlyparallel";
     repo = "pscircle";
     rev = "v${version}";
-    sha256 = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
+    hash = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/mildlyparallel/pscircle";
     description = "Visualize Linux processes in a form of a radial tree";
-    license = licenses.gpl2;
+    mainProgram = "pscircle";
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.ldesgoui ];
     platforms = platforms.linux;
   };

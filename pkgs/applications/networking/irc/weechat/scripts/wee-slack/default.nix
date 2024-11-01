@@ -1,14 +1,14 @@
-{ lib, stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchpatch, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.10.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "sha256-J4s7+JFd/y1espp3HZCs48++fhN6lmpaglGkgomtf3o=";
+    sha256 = "sha256-xQO/yi4pJSnO/ldzVQkC7UhAfpy57xzO58NV7KZm4E8=";
   };
 
   patches = [

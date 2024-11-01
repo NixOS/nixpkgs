@@ -14,14 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 
   meta = {
-    description = "A program for calculating fuzzy hashes";
+    description = "Program for calculating fuzzy hashes";
+    mainProgram = "ssdeep";
     homepage    = "http://www.ssdeep.sf.net";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

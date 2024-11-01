@@ -3,7 +3,7 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt
 , withPdfReader      ? true
-, pipewireSupport    ? stdenv.isLinux
+, pipewireSupport    ? stdenv.hostPlatform.isLinux
 , pipewire
 , qtwayland
 , qtbase
@@ -18,23 +18,25 @@
 let
   isQt6 = lib.versions.major qtbase.version == "6";
   pdfjs = let
-    version = "3.9.179";
+    version = "4.2.67";
   in
   fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-    hash = "sha256-QoJFb7MlZN6lDe2Yalsd10sseukL6+tNRi6JzLPVBYw=";
+    hash = "sha256-7kfT3+ZwoGqZ5OwkO9h3DIuBFd0v8fRlcufxoBdcy8c=";
     stripRoot = false;
   };
 
-  pname = "qutebrowser";
-  version = "3.0.2";
+  version = "3.3.1";
 in
 
 python3.pkgs.buildPythonApplication {
-  inherit pname version;
+  pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
+  inherit version;
+  pyproject = true;
+
   src = fetchurl {
-    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
+    hash = "sha256-qttkrMxzC8mhXONByaBYCx82OD7Uh09U0xzh2r6U4Xo=";
   };
 
   # Needs tox
@@ -43,15 +45,21 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
+
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
   nativeBuildInputs = [
     wrapQtAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    python3.pkgs.pygments
   ];
 
-  propagatedBuildInputs = with python3.pkgs; ([
+  dependencies = with python3.pkgs; [
+    colorama
     pyyaml (if isQt6 then pyqt6-webengine else pyqtwebengine) jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
@@ -62,8 +70,8 @@ python3.pkgs.buildPythonApplication {
     adblock
     # for the qute-bitwarden user script to be able to copy the TOTP token to clipboard
     pyperclip
-  ] ++ lib.optional stdenv.isLinux qtwayland
-  );
+  ];
+
 
   patches = [
     ./fix-restart.patch
@@ -83,7 +91,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
+      PYTHON=${(python3.pythonOnBuildForHost.withPackages (ps: with ps; [ setuptools ])).interpreter} \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
@@ -117,6 +125,7 @@ python3.pkgs.buildPythonApplication {
         --set-default QSG_RHI_BACKEND vulkan
       ''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
+      --set QTWEBENGINE_RESOURCES_PATH "${qtwebengine}/resources"
     )
   '';
 

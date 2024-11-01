@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ pcsclite udev ]
-    ++ lib.optionals stdenv.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ PCSC IOKit CoreFoundation AppKit ];
 
   postInstall = ''
     install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "cli" ];
 
   meta = with lib; {
-    description = "A CLI tool for managing SoloKeys' Solo2 USB security keys.";
+    description = "CLI tool for managing SoloKeys' Solo2 USB security keys";
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];

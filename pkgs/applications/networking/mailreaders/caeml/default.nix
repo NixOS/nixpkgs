@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "cat eml files";
+    mainProgram = "caeml";
     longDescription = ''
       Reads an email file from either STDIN or from a file passed as the first
       argument, digests it and outputs it to STDOUT in a more human readable

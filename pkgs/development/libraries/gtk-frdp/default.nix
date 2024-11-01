@@ -8,21 +8,21 @@
 , gobject-introspection
 , glib
 , gtk3
-, freerdp
+, freerdp3
 , fuse3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2023-09-16";
+  version = "0-unstable-2024-07-03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "62fc62c5ccb7634f0bc87c57a4673877c24c94ed";
-    sha256 = "H+ebFWjpmp4Ua22Bd6K3LsxNHqEbtpawnzA5ry8+XFc=";
+    rev = "6cfdc840159bb349310c3b81cd2df949f1522760";
+    sha256 = "Fth2kaZEy5pOvaHu10Mr/6awWuAeyQ1T9JbNL9Sl8fU=";
   };
 
   nativeBuildInputs = [
@@ -36,15 +36,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    freerdp
+    freerdp3
     fuse3
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+      hardcodeZeroVersion = true;
+    };
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
   ]);

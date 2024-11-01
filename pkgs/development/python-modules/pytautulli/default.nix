@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,29 +27,28 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace-fail 'version="main",' 'version="${version}",'
+
+    # yarl 1.9.4 requires ports to be ints
+    substituteInPlace pytautulli/models/host_configuration.py \
+      --replace-fail "str(self.port)" "int(self.port)"
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     aresponses
     pytest-asyncio
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
+  disabledTests = [
+    # api url mismatch (port missing)
+    "test_api_url"
   ];
 
-  pythonImportsCheck = [
-    "pytautulli"
-  ];
+  pythonImportsCheck = [ "pytautulli" ];
 
   meta = with lib; {
     description = "Python module to get information from Tautulli";

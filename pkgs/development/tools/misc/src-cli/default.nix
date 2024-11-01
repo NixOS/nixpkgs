@@ -10,24 +10,24 @@
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "5.2.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-QUcN71Zvg9BSQHXu8ANye9BOX5cDgMgl2jfhUgz/GVE=";
+    hash = "sha256-3hj/nY66z3AjdvmdvkKTAXD8E6A4qPtLOuY7U6sKw9U=";
   };
 
-  vendorHash = "sha256-YhaxgEGYKrRZagnpoMi/mGWXVkbp5fUjQ73xDFdTElw=";
+  vendorHash = "sha256-F6TEw9hk8Fu7uY8/KW4etyZMqOb/GL/g4NV87JjfAsY=";
 
   subPackages = [
     "cmd/src"
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libX11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 

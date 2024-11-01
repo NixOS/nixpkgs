@@ -1,10 +1,11 @@
-diff -Naur cmake-3.27.7/Utilities/cmcurl/CMakeLists.txt cmake-3.27.7-new/Utilities/cmcurl/CMakeLists.txt
---- cmake-3.27.7/Utilities/cmcurl/CMakeLists.txt	2023-10-06 10:08:35.000000000 -0300
-+++ cmake-3.27.7-new/Utilities/cmcurl/CMakeLists.txt	2023-10-22 21:51:09.231609901 -0300
-@@ -414,13 +414,6 @@
+diff --git a/Utilities/cmcurl/CMakeLists.txt b/Utilities/cmcurl/CMakeLists.txt
+index b766aee425..ad50e64ce6 100644
+--- a/Utilities/cmcurl/CMakeLists.txt
++++ b/Utilities/cmcurl/CMakeLists.txt
+@@ -466,13 +466,6 @@ if(ENABLE_IPV6 AND NOT WIN32)
  
    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT ENABLE_ARES)
-     set(use_core_foundation ON)
+     set(use_core_foundation_and_core_services ON)
 -
 -    find_library(SYSTEMCONFIGURATION_FRAMEWORK "SystemConfiguration")
 -    if(NOT SYSTEMCONFIGURATION_FRAMEWORK)
@@ -14,57 +15,21 @@ diff -Naur cmake-3.27.7/Utilities/cmcurl/CMakeLists.txt cmake-3.27.7-new/Utiliti
 -    list(APPEND CURL_LIBS "-framework SystemConfiguration")
    endif()
  endif()
- 
-diff -Naur cmake-3.27.7/Utilities/cmcurl/lib/curl_setup.h cmake-3.27.7-new/Utilities/cmcurl/lib/curl_setup.h
---- cmake-3.27.7/Utilities/cmcurl/lib/curl_setup.h	2023-10-06 10:08:35.000000000 -0300
-+++ cmake-3.27.7-new/Utilities/cmcurl/lib/curl_setup.h	2023-10-22 21:52:00.214748294 -0300
-@@ -260,11 +260,7 @@
+ if(ENABLE_IPV6)
+diff --git a/Utilities/cmcurl/lib/curl_setup.h b/Utilities/cmcurl/lib/curl_setup.h
+index f7ba7e92a5..e4663cbf36 100644
+--- a/Utilities/cmcurl/lib/curl_setup.h
++++ b/Utilities/cmcurl/lib/curl_setup.h
+@@ -316,12 +316,6 @@
   * performing this task will result in a synthesized IPv6 address.
   */
  #if defined(__APPLE__) && !defined(USE_ARES)
 -#include <TargetConditionals.h>
- #define USE_RESOLVE_ON_IPS 1
--#  if defined(TARGET_OS_OSX) && TARGET_OS_OSX
--#    define CURL_OSX_CALL_COPYPROXIES 1
+-#define USE_RESOLVE_ON_IPS 1
+-#  if TARGET_OS_MAC && !(defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) && \
+-     defined(USE_IPV6)
+-#    define CURL_MACOS_CALL_COPYPROXIES 1
 -#  endif
  #endif
  
  #ifdef USE_LWIPSOCK
-diff -Naur cmake-3.27.7/Utilities/cmcurl/lib/hostip.c cmake-3.27.7-new/Utilities/cmcurl/lib/hostip.c
---- cmake-3.27.7/Utilities/cmcurl/lib/hostip.c	2023-10-06 10:08:35.000000000 -0300
-+++ cmake-3.27.7-new/Utilities/cmcurl/lib/hostip.c	2023-10-22 21:53:29.249989934 -0300
-@@ -67,10 +67,6 @@
- #include "curl_memory.h"
- #include "memdebug.h"
- 
--#if defined(ENABLE_IPV6) && defined(CURL_OSX_CALL_COPYPROXIES)
--#include <SystemConfiguration/SCDynamicStoreCopySpecific.h>
--#endif
--
- #if defined(CURLRES_SYNCH) &&                   \
-   defined(HAVE_ALARM) &&                        \
-   defined(SIGALRM) &&                           \
-@@ -743,23 +739,6 @@
-         return CURLRESOLV_ERROR;
-     }
- 
--#if defined(ENABLE_IPV6) && defined(CURL_OSX_CALL_COPYPROXIES)
--    {
--      /*
--       * The automagic conversion from IPv4 literals to IPv6 literals only
--       * works if the SCDynamicStoreCopyProxies system function gets called
--       * first. As Curl currently doesn't support system-wide HTTP proxies, we
--       * therefore don't use any value this function might return.
--       *
--       * This function is only available on a macOS and is not needed for
--       * IPv4-only builds, hence the conditions above.
--       */
--      CFDictionaryRef dict = SCDynamicStoreCopyProxies(NULL);
--      if(dict)
--        CFRelease(dict);
--    }
--#endif
--
- #ifndef USE_RESOLVE_ON_IPS
-     /* First check if this is an IPv4 address string */
-     if(Curl_inet_pton(AF_INET, hostname, &in) > 0)

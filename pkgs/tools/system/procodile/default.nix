@@ -13,5 +13,6 @@ bundlerApp {
     license     = with licenses; mit;
     maintainers = with maintainers; [ manveru nicknovitski ];
     platforms   = platforms.unix;
+    mainProgram = "procodile";
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-downward";
-  version = "23.06.0";
+  version = "24.06.0";
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-yNaMyS47yxc/p5Rs/kHwD/pgjGXnHBdybYdo1GIEmA4=";
+    sha256 = "sha256-iIBoJZCFd05bKUeftvl2YBTmSQuFvATIQAYMITDywWA=";
   };
 
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A domain-independent planning system";
+    description = "Domain-independent planning system";
+    mainProgram = "fast-downward";
     homepage = "https://www.fast-downward.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

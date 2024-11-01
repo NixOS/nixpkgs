@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   meta.maintainers = with lib.maintainers; [ ehmry ];
 
   nodes.server = {
-    environment.systemPackages = [ pkgs.eris-go pkgs.nim.pkgs.eris ];
+    environment.systemPackages = [ pkgs.eris-go pkgs.eriscmd ];
     services.eris-server = {
       enable = true;
       decode = true;

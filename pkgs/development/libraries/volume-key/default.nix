@@ -1,6 +1,5 @@
 { lib, stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
 , ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
-, autoconf, automake, libtool
 , buildPackages
 }:
 
@@ -36,13 +35,21 @@ stdenv.mkDerivation rec {
     "pythondir=$(py)/${python3.sitePackages}"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
   doCheck = false; # fails 1 out of 1 tests, needs `certutil`
 
   meta = with lib; {
-    description = "A library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
+    description = "Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
+    mainProgram = "volume_key";
     homepage = "https://pagure.io/volume_key/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

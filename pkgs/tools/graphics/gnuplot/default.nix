@@ -17,15 +17,15 @@
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
+  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.9";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oyigIfU9wFRZvmBmAg6acejqtiVdM4HiJpYSDUZcapc=";
+    sha256 = "sha256-6FpmDBoqGAj/JPfmmYH/y6xmpFydz3EbZWELJupxN5o=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
@@ -38,7 +38,7 @@ in
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
     ++ lib.optional withWxGTK wxGTK32
-    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
+    ++ lib.optional (withWxGTK && stdenv.hostPlatform.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
@@ -51,7 +51,7 @@ in
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ] ++ lib.optional withCaca "--with-caca";
 
-  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
+  CXXFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && withQt) "-std=c++11";
 
   # we'll wrap things ourselves
   dontWrapGApps = true;
@@ -76,7 +76,7 @@ in
 
   meta = with lib; {
     homepage = "http://www.gnuplot.info/";
-    description = "A portable command-line driven graphing utility for many platforms";
+    description = "Portable command-line driven graphing utility for many platforms";
     platforms = platforms.linux ++ platforms.darwin;
     license = {
       # Essentially a BSD license with one modifaction:

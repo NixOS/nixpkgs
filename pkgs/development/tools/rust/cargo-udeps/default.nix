@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
-  version = "0.1.43";
+  version = "0.1.52";
 
   src = fetchFromGitHub {
     owner = "est31";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aZzkVyRWxpSB0lPD7A8kbZc93h43OyPn0Pk9tCIZRnA=";
+    sha256 = "sha256-ArFQaQQU6lOT5wS9vxC+hCYpDWaq7D1DbQhjGzPQEjo=";
   };
 
-  cargoHash = "sha256-kQ1NQDvOBU8mmQQgNR4l1bBN0nr/ZSudJkL7Gf9hpgU=";
+  cargoHash = "sha256-fRTOhZVehGBwQcJQM/GWmLgfaDK7aJFYz772MPYhkn4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # TODO figure out how to use provided curl instead of compiling curl from curl-sys
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security libiconv SystemConfiguration ];
 
   # Requires network access
   doCheck = false;
@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/est31/cargo-udeps";
     license = licenses.mit;
     maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
+    mainProgram = "cargo-udeps";
   };
 }

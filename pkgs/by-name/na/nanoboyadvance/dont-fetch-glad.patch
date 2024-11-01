@@ -1,0 +1,14 @@
+diff --git a/src/platform/core/CMakeLists.txt b/src/platform/core/CMakeLists.txt
+index 2bc6d8c..3175c14 100644
+--- a/src/platform/core/CMakeLists.txt
++++ b/src/platform/core/CMakeLists.txt
+@@ -18,8 +18,7 @@ find_package(OpenGL REQUIRED)
+ 
+ include(FetchContent)
+ FetchContent_Declare(glad
+-  GIT_REPOSITORY https://github.com/Dav1dde/glad.git
+-  GIT_TAG        adc3d7a1d704e099581ca25bc5bbdf728c2db67b # v2.0.5-2-gadc3d7a
++  SOURCE_DIR @gladSrc@
+   SOURCE_SUBDIR  cmake
+ )
+ FetchContent_MakeAvailable(glad)

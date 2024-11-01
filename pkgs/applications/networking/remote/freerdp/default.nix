@@ -8,7 +8,7 @@
 , alsa-lib
 , faac
 , faad2
-, ffmpeg_5 # Depends on deprecated libav features
+, ffmpeg
 , glib
 , openh264
 , openssl
@@ -64,7 +64,7 @@ let
       dir = "libfreerdp/crypto/test";
       file = "Test_x509_cert_info.c";
     }
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     {
       dir = "winpr/libwinpr/sysinfo/test";
       file = "TestGetComputerName.c";
@@ -76,13 +76,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.11.2";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "sha256-buInsfjzpY4EF7bSojy42YNXssbNriSQGYBFE/DUJ7A=";
+    hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
 
   postPatch = ''
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     cairo
     cups
     faad2
-    ffmpeg_5
+    ffmpeg
     glib
     gst-plugins-base
     gst-plugins-good
@@ -140,11 +140,11 @@ stdenv.mkDerivation rec {
     pcre2
     pcsclite
     zlib
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     systemd
     wayland
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
@@ -167,7 +167,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
-    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ]
   ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
@@ -186,7 +185,7 @@ stdenv.mkDerivation rec {
     WITH_X11 = true;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
@@ -194,19 +193,20 @@ stdenv.mkDerivation rec {
     "-Wno-error=incompatible-function-pointer-types"
   ]);
 
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework AudioToolbox"
   ];
 
   meta = with lib; {
-    description = "A Remote Desktop Protocol Client";
+    description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg lheckemann ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 }

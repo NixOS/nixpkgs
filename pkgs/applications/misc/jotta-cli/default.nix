@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, nixosTests }:
 
 let
   arch = "amd64";
 in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.15.93226";
+  version = "0.15.107955";
   src = fetchzip {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-RMN/OQHnHCx/xbi/J9LiK6m0TkPvd34GtmR6lr66pKs=";
+      sha256 = "sha256-qCG3yi0ACmqOnn+gaCN8GedciUobpOww50Kz5AdknqU=";
       stripRoot = false;
     };
 
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jottad
     $out/bin/jotta-cli completion bash > $out/share/bash-completion/completions/jotta-cli.bash
   '';
+
+  passthru.tests = { inherit (nixosTests) jotta-cli; };
 
   meta = with lib; {
     description  = "Jottacloud CLI";

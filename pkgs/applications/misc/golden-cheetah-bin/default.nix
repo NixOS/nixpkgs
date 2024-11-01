@@ -14,10 +14,10 @@ in
 appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: with pkgs; [ R zlib libusb-compat-0_1 ];
+  extraPkgs = pkgs: [ pkgs.R pkgs.zlib pkgs.libusb-compat-0_1 ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/GoldenCheetah
+    mv $out/bin/${pname} $out/bin/GoldenCheetah
     mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/
@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "Performance software for cyclists, runners and triathletes. This version includes the API Tokens for e.g. Strava";
     platforms = lib.platforms.linux;
-    broken = !stdenv.isx86_64;
+    broken = !stdenv.hostPlatform.isx86_64;
     maintainers = with lib.maintainers; [ gador adamcstephens ];
     license = lib.licenses.gpl2Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

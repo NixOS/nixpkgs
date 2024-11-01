@@ -10,22 +10,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.15.1";
+  version = "1.17.3";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    hash = "sha256-22Nio6yfkL9HWNrI+kk5dGfojTtB/h0sizCWH9w9so8=";
+    hash = "sha256-DJ+5WoizFF3K9drFc955bDMXnlW+okYrZos/+dRVtjw=";
   };
 
-  cargoHash = "sha256-YfvcCnFXDoZXp/Aug0jVQkilsvSzS+JF90U0QvVFksE=";
+  cargoHash = "sha256-pQ95sS2dGVzZUOyuUpJPamW7RLiUTGu9KgpWLg4wn/w=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ iputils ];
 
   postInstall = ''
     installManPage gping.1
@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orf/gping";
     changelog = "https://github.com/orf/gping/releases/tag/gping-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ cafkafk ];
+    mainProgram = "gping";
   };
 }

@@ -1,17 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, krb5, xfsprogs, jemalloc, dbus, libcap
-, ntirpc, liburcu, bison, flex, nfs-utils, acl
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  sphinx,
+  krb5,
+  xfsprogs,
+  jemalloc,
+  dbus,
+  libcap,
+  ntirpc,
+  liburcu,
+  bison,
+  flex,
+  nfs-utils,
+  acl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "5.7";
+  version = "6.2";
+
+  outputs = [
+    "out"
+    "man"
+    "tools"
+  ];
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-4GYte9kPUR4kFHrUzHXtiMGbuRhZ+4iw1hmqi+geljc=";
+    hash = "sha256-wWN9E6QxipTh5ppEyEbhqG0uSVjd+DzWgY/oj5FIso0=";
   };
 
   preConfigure = "cd src";
@@ -22,6 +43,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_VFS_POSIX_ACL=ON"
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+    "-DUSE_MAN_PAGE=ON"
   ];
 
   nativeBuildInputs = [
@@ -29,6 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     bison
     flex
+    sphinx
   ];
 
   buildInputs = [
@@ -43,8 +66,16 @@ stdenv.mkDerivation rec {
     nfs-utils
   ];
 
+  postPatch = ''
+    substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
+  '';
+
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
+  '';
+
+  postInstall = ''
+    install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
   '';
 
   meta = with lib; {
@@ -53,5 +84,11 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
+    mainProgram = "ganesha.nfsd";
+    outputsToInstall = [
+      "out"
+      "man"
+      "tools"
+    ];
   };
 }

@@ -1,57 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, syrupy
-, pillow
-, rich
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pillow,
+  rich,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "rich-pixels";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "3.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
-    rev = version;
-    hash = "sha256-zI6jtEdmBAEGxyASo/6fiHdzwzoSwXN7A5x1CmYS5qc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Sqs0DOyxJBfZmm/SVSTMSmaaeRlusiSp6VBnJjKYjgQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ hatchling ];
 
-  checkInputs = [
-    syrupy
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
     rich
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "rich_pixels" ];
 
   meta = with lib; {
-    description = "A Rich-compatible library for writing pixel images and ASCII art to the terminal";
+    description = "Rich-compatible library for writing pixel images and ASCII art to the terminal";
     homepage = "https://github.com/darrenburns/rich-pixels";
-    changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${src.rev}";
-    # upstream has no license specified
-    # https://github.com/darrenburns/rich-pixels/issues/11
-    license = licenses.unfree;
+    changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };
 }

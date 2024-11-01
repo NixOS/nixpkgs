@@ -1,63 +1,80 @@
-{ alsa-lib
-, asio
-, cmake
-, curl
-, fetchFromGitHub
-, lib
-, libremidi
-, obs-studio
-, opencv
-, procps
-, qtbase
-, stdenv
-, websocketpp
-, xorg
+{
+  lib,
+  fetchFromGitHub,
+
+  cmake,
+  ninja,
+
+  alsa-lib,
+  asio,
+  curl,
+  libremidi,
+  nlohmann_json,
+  obs-studio,
+  opencv,
+  procps,
+  qtbase,
+  stdenv,
+  tesseract,
+  websocketpp,
+  libXScrnSaver,
 }:
 
+let
+  httplib-src = fetchFromGitHub {
+    owner = "yhirose";
+    repo = "cpp-httplib";
+    rev = "v0.17.3";
+    hash = "sha256-yvaPIbRqJGkiob3Nrv3H1ieFAC5b+h1tTncJWTy4dmk=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.23.1";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-rpZ/vR9QbWgr8n6LDv6iTRsKXSIDGy0IpPu1Uatb0zw=";
+    hash = "sha256-7IciHCe2KemKNJpD9QcYK4AtxHlYuWaPsBCcVuPVvgA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs = [
     alsa-lib
     asio
     curl
     libremidi
+    nlohmann_json
     obs-studio
     opencv
     procps
     qtbase
+    tesseract
     websocketpp
-    xorg.libXScrnSaver
+    libXScrnSaver
   ];
 
   dontWrapQtApps = true;
 
   postUnpack = ''
+    cp -r ${httplib-src}/* $sourceRoot/deps/cpp-httplib
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
+    chmod -R +w $sourceRoot/deps/cpp-httplib
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    mv $out/data $out/share/obs
-  '';
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow";
 
-  meta = {
-    description = "An automated scene switcher for OBS Studio";
+  meta = with lib; {
+    description = "Automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    maintainers = with lib.maintainers; [ paveloom ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ ];
   };
 }

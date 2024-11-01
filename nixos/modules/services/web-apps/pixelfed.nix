@@ -38,14 +38,14 @@ let
 in {
   options.services = {
     pixelfed = {
-      enable = mkEnableOption (lib.mdDoc "a Pixelfed instance");
-      package = mkPackageOptionMD pkgs "pixelfed" { };
-      phpPackage = mkPackageOptionMD pkgs "php81" { };
+      enable = mkEnableOption "a Pixelfed instance";
+      package = mkPackageOption pkgs "pixelfed" { };
+      phpPackage = mkPackageOption pkgs "php82" { };
 
       user = mkOption {
         type = types.str;
         default = "pixelfed";
-        description = lib.mdDoc ''
+        description = ''
           User account under which pixelfed runs.
 
           ::: {.note}
@@ -59,7 +59,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "pixelfed";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which pixelfed runs.
 
           ::: {.note}
@@ -72,14 +72,14 @@ in {
 
       domain = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           FQDN for the Pixelfed instance.
         '';
       };
 
       secretFile = mkOption {
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           A secret file to be sourced for the .env settings.
           Place `APP_KEY` and other settings that should not end up in the Nix store here.
         '';
@@ -87,7 +87,7 @@ in {
 
       settings = mkOption {
         type = with types; (attrsOf (oneOf [ bool int str ]));
-        description = lib.mdDoc ''
+        description = ''
           .env settings for Pixelfed.
           Secrets should use `secretFile` option instead.
         '';
@@ -108,7 +108,7 @@ in {
             forceHttps = true;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           With this option, you can customize an nginx virtual host which already has sensible defaults for Dolibarr.
           Set to {} if you do not need any customization to the virtual host.
           If enabled, then by default, the {option}`serverName` is
@@ -117,19 +117,16 @@ in {
         '';
       };
 
-      redis.createLocally = mkEnableOption
-        (lib.mdDoc "a local Redis database using UNIX socket authentication")
+      redis.createLocally = mkEnableOption "a local Redis database using UNIX socket authentication"
         // {
           default = true;
         };
 
       database = {
-        createLocally = mkEnableOption
-          (lib.mdDoc "a local database using UNIX socket authentication") // {
+        createLocally = mkEnableOption "a local database using UNIX socket authentication" // {
             default = true;
           };
-        automaticMigrations = mkEnableOption
-          (lib.mdDoc "automatic migrations for database schema and data") // {
+        automaticMigrations = mkEnableOption "automatic migrations for database schema and data" // {
             default = true;
           };
 
@@ -137,7 +134,7 @@ in {
           type = types.enum [ "mysql" "pgsql" ];
           example = "pgsql";
           default = "mysql";
-          description = lib.mdDoc ''
+          description = ''
             Database engine to use.
             Note that PGSQL is not well supported: https://github.com/pixelfed/pixelfed/issues/2727
           '';
@@ -146,14 +143,14 @@ in {
         name = mkOption {
           type = types.str;
           default = "pixelfed";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
       };
 
       maxUploadSize = mkOption {
         type = types.str;
         default = "8M";
-        description = lib.mdDoc ''
+        description = ''
           Max upload size with units.
         '';
       };
@@ -162,7 +159,7 @@ in {
         type = with types; attrsOf (oneOf [ int str bool ]);
         default = { };
 
-        description = lib.mdDoc ''
+        description = ''
           Options for Pixelfed's PHP-FPM pool.
         '';
       };
@@ -170,7 +167,7 @@ in {
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/pixelfed";
-        description = lib.mdDoc ''
+        description = ''
           State directory of the `pixelfed` user which holds
           the application's state and data.
         '';
@@ -179,7 +176,7 @@ in {
       runtimeDir = mkOption {
         type = types.str;
         default = "/run/pixelfed";
-        description = lib.mdDoc ''
+        description = ''
           Ruutime directory of the `pixelfed` user which holds
           the application's caches and temporary files.
         '';
@@ -188,7 +185,7 @@ in {
       schedulerInterval = mkOption {
         type = types.str;
         default = "1d";
-        description = lib.mdDoc "How often the Pixelfed cron task should run";
+        description = "How often the Pixelfed cron task should run";
       };
     };
   };
@@ -409,7 +406,7 @@ in {
         # is unnecessary as it's part of the installPhase of pixelfed.
 
         # Install Horizon
-        # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
+        # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
 
         # Perform the first migration.
         [[ ! -f ${cfg.dataDir}/.initial-migration ]] && pixelfed-manage migrate --force && touch ${cfg.dataDir}/.initial-migration

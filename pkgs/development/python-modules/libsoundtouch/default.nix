@@ -1,34 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, enum-compat
-, requests
-, websocket-client
-, zeroconf
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  websocket-client,
+  zeroconf,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname   = "libsoundtouch";
+  pname = "libsoundtouch";
   version = "0.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CharlesBlonde";
     repo = "libsoundtouch";
-    rev = version;
-    sha256 = "1wl2w5xfdkrv0qzsz084z2k6sycfyq62mqqgciycha3dywf2fvva";
+    rev = "refs/tags/${version}";
+    hash = "sha256-am8nHPdtKMh8ZA/jKgz2jnltpvgEga8/BjvP5nrhgvI=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'enum-compat>=0.0.2'," ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    enum-compat
     websocket-client
     zeroconf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # mock data order mismatch
@@ -36,9 +45,12 @@ buildPythonPackage rec {
     "test_snapshot_restore"
   ];
 
+  pythonImportsCheck = [ "libsoundtouch" ];
+
   meta = with lib; {
     description = "Bose Soundtouch Python library";
-    homepage    = "https://github.com/CharlesBlonde/libsoundtouch";
-    license     = licenses.asl20;
+    homepage = "https://github.com/CharlesBlonde/libsoundtouch";
+    license = licenses.asl20;
+    maintainers = [ ];
   };
 }

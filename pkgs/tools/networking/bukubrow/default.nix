@@ -18,7 +18,7 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
-  cargoSha256 = "sha256-mH76ODPKlKDEK9ckThPnL5Ar7p1l1gNd7zXfesLZlBM=";
+  cargoHash = "sha256-mH76ODPKlKDEK9ckThPnL5Ar7p1l1gNd7zXfesLZlBM=";
 
   buildInputs = [ sqlite ];
 
@@ -39,10 +39,11 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A WebExtension for Buku, a command-line bookmark manager";
+    description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
+    mainProgram = "bukubrow";
   };
 }
 

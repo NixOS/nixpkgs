@@ -1,52 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, distro
-, pysnmp
-, python-gnupg
-, qrcode
-, requests
-, sseclient-py
-, zfec
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  pyasyncore,
+  pysnmp,
+  pysnmplib,
+  pytestCheckHook,
+  python-gnupg,
+  pythonAtLeast,
+  pythonOlder,
+  qrcode,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "0.4.6";
-  format = "setuptools";
+  version = "2.4.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uANAMNoAC4HUoUuR5ldxoiy+LLzZVpKosU5JttXLnqg=";
+  src = fetchFromGitHub {
+    owner = "Blockstream";
+    repo = "satellite";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OmIQUrUH3kWgf+v+9Hl2OgDdGPwb3guNY0+H64CWkeg=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "pyasyncore" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     distro
     pysnmp
+    pysnmplib
     python-gnupg
     qrcode
     requests
-    sseclient-py
-    zfec
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # disable tests which require being connected to the satellite
-    "blocksatcli/test_satip.py"
-    "blocksatcli/api/test_listen.py"
-    "blocksatcli/api/test_msg.py"
-    "blocksatcli/api/test_net.py"
-    # disable tests which require being online
-    "blocksatcli/api/test_order.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_monitor_get_stats"
@@ -54,14 +50,14 @@ buildPythonPackage rec {
     "test_erasure_recovery"
   ];
 
-  pythonImportsCheck = [
-    "blocksatcli"
-  ];
+  pythonImportsCheck = [ "blocksatcli" ];
 
   meta = with lib; {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
+    changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "blocksat-cli";
   };
 }

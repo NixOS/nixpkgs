@@ -1,5 +1,6 @@
 { mkDerivation
 , extra-cmake-modules
+, wayland-scanner
 , breeze-qt5
 , kconfig
 , kconfigwidgets
@@ -18,7 +19,7 @@
 
 mkDerivation {
   pname = "plasma-integration";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules wayland-scanner ];
   buildInputs = [
     breeze-qt5
     kconfig
@@ -35,7 +36,7 @@ mkDerivation {
   ];
 
   meta = {
-    description = "A set of plugins responsible for better integration of Qt applications when running on a KDE Plasma workspace";
+    description = "Set of plugins responsible for better integration of Qt applications when running on a KDE Plasma workspace";
     homepage = "https://invent.kde.org/plasma/plasma-integration";
   };
 }

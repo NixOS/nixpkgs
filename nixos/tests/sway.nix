@@ -134,7 +134,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_file("/tmp/sway-ipc.sock")
 
     # Test XWayland (foot does not support X):
-    swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty")
+    swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty")
     wait_for_window("alice@machine")
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")

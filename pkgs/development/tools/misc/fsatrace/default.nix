@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jacereda/fsatrace";
     description = "filesystem access tracer";
+    mainProgram = "fsatrace";
     license = licenses.isc;
     platforms = platforms.linux;
   };

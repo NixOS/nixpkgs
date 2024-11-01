@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.0.17";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-s+D9+gHJLldTaMHr+XahppNHYL62V1J9iOgRZkr/p9Q=";
+    hash = "sha256-hcn076GADmduX30eyFNKoFrOP5DDv2HgMY0EbvJOwJE=";
   };
 
-  cargoHash = "sha256-NQ/s39x/LLQoiW7p2x65l1oBkDal46g5/G6r4Ttpgsw=";
+  cargoHash = "sha256-wNdf3LA9QHkbTrchpv5CHz7PMftkIMyc2tGLQxC+4Kg=";
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
-    description = "A suite of high-performance tools for JavaScript and TypeScript written in Rust";
+    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
     homepage = "https://github.com/web-infra-dev/oxc";
     changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
     license = licenses.mit;

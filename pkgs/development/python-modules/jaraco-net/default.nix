@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, more-itertools
-, beautifulsoup4
-, mechanize
-, keyring
-, requests
-, feedparser
-, jaraco-text
-, jaraco-logging
-, jaraco-email
-, jaraco-functools
-, jaraco-collections
-, path
-, python-dateutil
-, pathvalidate
-, jsonpickle
-, ifconfig-parser
-, pytestCheckHook
-, cherrypy
-, importlib-resources
-, pyparsing
-, requests-mock
-, nettools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  more-itertools,
+  beautifulsoup4,
+  mechanize,
+  keyring,
+  requests,
+  feedparser,
+  icmplib,
+  jaraco-text,
+  jaraco-logging,
+  jaraco-email,
+  jaraco-functools,
+  jaraco-collections,
+  path,
+  python-dateutil,
+  pathvalidate,
+  jsonpickle,
+  ifconfig-parser,
+  pytestCheckHook,
+  cherrypy,
+  importlib-resources,
+  pyparsing,
+  requests-mock,
+  nettools,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-net";
-  version = "9.3.1";
+  version = "10.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -41,15 +43,13 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.net";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aq5v4QlapmMTrqwNA0GtRi/xZCcyoR1giZECBsYwymw=";
+    hash = "sha256-z9+gz6Sos0uluU5icXJN9OMmWFErVrJXBvoBcKv6Wwg=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     more-itertools
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     keyring
     requests
     feedparser
+    icmplib
     jaraco-text
     jaraco-logging
     jaraco-email
@@ -67,9 +68,7 @@ buildPythonPackage rec {
     python-dateutil
     pathvalidate
     jsonpickle
-  ] ++ lib.optionals stdenv.isDarwin [
-    ifconfig-parser
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
 
   pythonImportsCheck = [ "jaraco.net" ];
 
@@ -79,9 +78,7 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     requests-mock
-  ] ++ lib.optionals stdenv.isDarwin [
-    nettools
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
 
   disabledTestPaths = [
     # doesn't actually contain tests

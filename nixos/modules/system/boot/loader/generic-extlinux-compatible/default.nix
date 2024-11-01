@@ -20,7 +20,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate an extlinux-compatible configuration file
           under `/boot/extlinux.conf`.  For instance,
           U-Boot's generic distro boot support uses this file format.
@@ -33,7 +33,7 @@ in
       useGenerationDeviceTree = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate Device Tree-related directives in the
           extlinux configuration.
 
@@ -49,15 +49,39 @@ in
         default = 20;
         example = 10;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of configurations in the boot menu.
         '';
+      };
+
+      mirroredBoots = mkOption {
+        default = [ { path = "/boot"; } ];
+        example = [
+          { path = "/boot1"; }
+          { path = "/boot2"; }
+        ];
+        description = ''
+          Mirror the boot configuration to multiple paths.
+        '';
+
+        type = with types; listOf (submodule {
+          options = {
+            path = mkOption {
+              example = "/boot1";
+              type = types.str;
+              description = ''
+                The path to the boot directory where the extlinux-compatible
+                configuration files will be written.
+              '';
+            };
+          };
+        });
       };
 
       populateCmd = mkOption {
         type = types.str;
         readOnly = true;
-        description = lib.mdDoc ''
+        description = ''
           Contains the builder command used to populate an image,
           honoring all options except the `-c <path-to-default-configuration>`
           argument.
@@ -72,11 +96,27 @@ in
     builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
       + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
+    installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (''
+      #!${pkgs.runtimeShell}
+      set -e
+    '' + flip concatMapStrings cfg.mirroredBoots (args: ''
+      ${builder} ${builderArgs} -d '${args.path}' -c "$@"
+    ''));
   in
     mkIf cfg.enable {
-      system.build.installBootLoader = "${builder} ${builderArgs} -c";
+      system.build.installBootLoader = installBootLoader;
       system.boot.loader.id = "generic-extlinux-compatible";
 
       boot.loader.generic-extlinux-compatible.populateCmd = "${populateBuilder} ${builderArgs}";
+
+      assertions = [
+        {
+          assertion = cfg.mirroredBoots != [ ];
+          message = ''
+            You must not remove all elements from option 'boot.loader.generic-extlinux-compatible.mirroredBoots',
+            otherwise the system will not be bootable.
+          '';
+        }
+      ];
     };
 }

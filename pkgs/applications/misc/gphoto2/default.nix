@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A ready to use set of digital camera software applications";
+    description = "Ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.jcumming ];
+    mainProgram = "gphoto2";
   };
 }

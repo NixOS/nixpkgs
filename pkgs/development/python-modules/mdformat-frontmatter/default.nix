@@ -1,13 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, linkify-it-py
-, markdown-it-py
-, mdformat
-, mdit-py-plugins
-, ruamel-yaml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  mdit-py-plugins,
+  ruamel-yaml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,28 +23,24 @@ buildPythonPackage rec {
     hash = "sha256-2heQw8LL/ILY36oItBeQq33qjVBGT51qGG4CcCEDutA=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
-
-  buildInputs = [
-    mdformat
-    mdit-py-plugins
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
+    mdformat
+    mdit-py-plugins
     ruamel-yaml
   ];
 
-  pythonImportsCheck = [
-    "mdformat_frontmatter"
-  ];
+  pythonImportsCheck = [ "mdformat_frontmatter" ];
 
   meta = with lib; {
-    description = "mdformat plugin to ensure frontmatter is respected";
+    description = "Mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
     changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero polarmutex ];
+    maintainers = with maintainers; [
+      aldoborrero
+      polarmutex
+    ];
   };
 }

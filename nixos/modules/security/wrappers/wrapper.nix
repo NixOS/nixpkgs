@@ -1,8 +1,8 @@
 { stdenv, unsecvars, linuxHeaders, sourceProg, debug ? false }:
 # For testing:
-# $ nix-build -E 'with import <nixpkgs> {}; pkgs.callPackage ./wrapper.nix { parentWrapperDir = "/run/wrappers"; debug = true; }'
+# $ nix-build -E 'with import <nixpkgs> {}; pkgs.callPackage ./wrapper.nix { sourceProg = "${pkgs.hello}/bin/hello"; debug = true; }'
 stdenv.mkDerivation {
-  name = "security-wrapper";
+  name = "security-wrapper-${baseNameOf sourceProg}";
   buildInputs = [ linuxHeaders ];
   dontUnpack = true;
   CFLAGS = [

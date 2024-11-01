@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
-  version = "2.5.1";
+  version = "4.0.0";
   outputs = [ "out" "cxx" "doc" "dev" ];
 
   src = fetchurl {
     url = "https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-${version}.tar.gz";
-    hash = "sha256-n5zUwEH5m1xJ/7e1nZ8S2VtoPYhYVgiqVqYwdmeysh8=";
+    hash = "sha256-lCRFwyRbInMP1Bpnp8XCMdEcsbmTa5wPdjNPt9C0Row=";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
 
@@ -50,6 +52,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ kaction ];
 
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

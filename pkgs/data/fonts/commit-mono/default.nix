@@ -4,11 +4,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "commit-mono";
-  version = "1.141";
+  version = "1.143";
 
   src = fetchzip {
     url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/v${version}/CommitMono-${version}.zip";
-    hash = "sha256-ErC4ZM17rYq+5FRW9m9nIbQOjQGTCCoNhXHxb7Swd84=";
+    hash = "sha256-JTyPgWfbWq+lXQU/rgnyvPG6+V3f+FB5QUkd+I1oFKE=";
     stripRoot = false;
   };
 
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An anonymous and neutral programming typeface focused on creating a better reading experience";
+    description = "Anonymous and neutral programming typeface focused on creating a better reading experience";
     homepage = "https://commitmono.com/";
     license = licenses.ofl;
     maintainers = [ maintainers.yoavlavi ];

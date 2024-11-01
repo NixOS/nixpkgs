@@ -13,14 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.1.8";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IxZPbcM52E1bzy6msGmka6Ykgc+OLWTMhWBCn0E4mFI=";
+    hash = "sha256-RqiZzbFsj8g6kptpztW7EsYYzIyHgM9kOCIsq1PiPD8=";
   };
+
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace Makefile \
+      --replace-fail "-std=c++17" "-std=c++14"
+  '';
 
   buildInputs = [
     boost
@@ -28,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"
@@ -54,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
+    mainProgram = "delly";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
     platforms = platforms.unix;

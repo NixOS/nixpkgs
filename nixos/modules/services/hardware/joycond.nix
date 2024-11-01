@@ -1,26 +1,15 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.joycond;
 in
-
-with lib;
-
 {
   options.services.joycond = {
-    enable = mkEnableOption (lib.mdDoc "support for Nintendo Pro Controllers and Joycons");
+    enable = lib.mkEnableOption "support for Nintendo Pro Controllers and Joycons";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.joycond;
-      defaultText = lib.literalExpression "pkgs.joycond";
-      description = lib.mdDoc ''
-        The joycond package to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "joycond" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];

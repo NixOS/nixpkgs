@@ -4,11 +4,11 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups-filters xdg-utils;
+  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
 
   cfg = config.services.printing;
+  cups = cfg.package;
 
-  avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
   additionalBackends = pkgs.runCommand "additional-cups-backends" {
@@ -98,7 +98,7 @@ let
       cupsdFile
       (writeConf "client.conf" cfg.clientConf)
       (writeConf "snmp.conf" cfg.snmpConf)
-    ] ++ optional avahiEnabled browsedFile
+    ] ++ optional cfg.browsed.enable browsedFile
       ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
@@ -135,15 +135,17 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable printing support through the CUPS daemon.
         '';
       };
 
+      package = lib.mkPackageOption pkgs "cups" {};
+
       stateless = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If set, all state directories relating to CUPS will be removed on
           startup of the service.
         '';
@@ -152,7 +154,7 @@ in
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           If set, CUPS is socket-activated; that is,
           instead of having it permanently running as a daemon,
           systemd will start it on the first incoming connection.
@@ -163,7 +165,7 @@ in
         type = types.listOf types.str;
         default = [ "localhost:631" ];
         example = [ "*:631" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of addresses and ports on which to listen.
         '';
       };
@@ -173,7 +175,7 @@ in
         default = [ "localhost" ];
         example = [ "all" ];
         apply = concatMapStringsSep "\n" (x: "Allow ${x}");
-        description = lib.mdDoc ''
+        description = ''
           From which hosts to allow unconditional access.
         '';
       };
@@ -182,8 +184,8 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to open the firewall for TCP/UDP ports specified in
-          listenAdrresses option.
+          Whether to open the firewall for TCP ports specified in
+          listenAddresses option.
         '';
       };
 
@@ -191,7 +193,7 @@ in
         type = types.lines;
         internal = true;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional commands executed while creating the directory
           containing the CUPS server binaries.
         '';
@@ -200,7 +202,7 @@ in
       defaultShared = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Specifies whether local printers are shared by default.
         '';
       };
@@ -208,7 +210,7 @@ in
       browsing = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Specifies whether shared printers are advertised.
         '';
       };
@@ -216,7 +218,7 @@ in
       webInterface = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Specifies whether the web interface is enabled.
         '';
       };
@@ -225,7 +227,7 @@ in
         type = types.str;
         default = "info";
         example = "debug";
-        description = lib.mdDoc ''
+        description = ''
           Specifies the cupsd logging verbosity.
         '';
       };
@@ -233,7 +235,7 @@ in
       extraFilesConf = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra contents of the configuration file of the CUPS daemon
           ({file}`cups-files.conf`).
         '';
@@ -247,7 +249,7 @@ in
             BrowsePoll cups.example.com
             MaxCopies 42
           '';
-        description = lib.mdDoc ''
+        description = ''
           Extra contents of the configuration file of the CUPS daemon
           ({file}`cupsd.conf`).
         '';
@@ -261,9 +263,18 @@ in
             ServerName server.example.com
             Encryption Never
           '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of the client configuration.
           ({file}`client.conf`)
+        '';
+      };
+
+      browsed.enable = mkOption {
+        type = types.bool;
+        default = config.services.avahi.enable;
+        defaultText = literalExpression "config.services.avahi.enable";
+        description = ''
+          Whether to enable the CUPS Remote Printer Discovery (browsed) daemon.
         '';
       };
 
@@ -274,7 +285,7 @@ in
           ''
             BrowsePoll cups.example.com
           '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of the configuration. file of the CUPS Browsed daemon
           ({file}`cups-browsed.conf`)
         '';
@@ -285,7 +296,7 @@ in
         default = ''
           Address @LOCAL
         '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of {file}`/etc/cups/snmp.conf`. See "man
           cups-snmp.conf" for a complete description.
         '';
@@ -295,7 +306,7 @@ in
         type = types.listOf types.path;
         default = [];
         example = literalExpression "with pkgs; [ gutenprint hplip splix ]";
-        description = lib.mdDoc ''
+        description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
           Gutenprint (i.e. a derivation with
@@ -309,7 +320,7 @@ in
         type = types.path;
         default = "/tmp";
         example = "/tmp/cups";
-        description = lib.mdDoc ''
+        description = ''
           CUPSd temporary directory.
         '';
       };
@@ -336,7 +347,7 @@ in
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     services.udev.packages = cfg.drivers;
 
-    # Allow asswordless printer admin for members of wheel group
+    # Allow passwordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
       polkit.addRule(function(action, subject) {
           if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
@@ -416,7 +427,7 @@ in
           serviceConfig.PrivateTmp = true;
       };
 
-    systemd.services.cups-browsed = mkIf avahiEnabled
+    systemd.services.cups-browsed = mkIf cfg.browsed.enable
       { description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];
@@ -482,7 +493,6 @@ in
       listenPorts = parsePorts cfg.listenAddresses;
     in mkIf cfg.openFirewall {
       allowedTCPPorts = listenPorts;
-      allowedUDPPorts = listenPorts;
     };
 
   };

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, requests
-, six
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  requests,
+  six,
+  pytestCheckHook,
+  requests-toolbelt,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "pushover-complete";
   version = "1.1.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pushover_complete" ];
 
   meta = with lib; {
-    description = "A Python package for interacting with *all* aspects of the Pushover API";
+    description = "Python package for interacting with *all* aspects of the Pushover API";
     homepage = "https://github.com/scolby33/pushover_complete";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];

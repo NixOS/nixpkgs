@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 59bbcfb7..dd75d4e2 100644
+index 4717bb2a..38d8693f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -80,6 +80,12 @@ if cc.has_function('clock_gettime', prefix: '#include <time.h>')
+@@ -70,6 +70,12 @@ if cc.has_function('clock_gettime', prefix: '#include <time.h>')
    conf_data.set10('HAVE_CLOCK_GETTIME', true)
  endif
  
@@ -12,15 +12,15 @@ index 59bbcfb7..dd75d4e2 100644
 +    argpdep = dependency('', required : false)
 +endif
 +
- # ************************ libcrystfel (subdir) ************************
- 
- subdir('libcrystfel')
-@@ -180,7 +186,7 @@ endif
+ if cc.has_function('sched_setaffinity',
+                    prefix: '#include <sched.h>',
+                    args: '-D_GNU_SOURCE')
+@@ -186,7 +192,7 @@ endif
  
  indexamajig = executable('indexamajig', indexamajig_sources,
                           dependencies: [mdep, libcrystfeldep, gsldep,
--                                        pthreaddep, zmqdep, asapodep],
-+                                        pthreaddep, zmqdep, asapodep, argpdep],
+-                                        pthreaddep, zmqdep, asapodep, asapoproddep],
++                                        pthreaddep, zmqdep, asapodep, asapoproddep, argpdep],
                           install: true,
-                          install_rpath: '$ORIGIN/../lib64/:$ORIGIN/../lib')
+                          install_rpath: crystfel_rpath)
  

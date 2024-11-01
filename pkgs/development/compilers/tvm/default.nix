@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tvm";
-  version = "0.13.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "incubator-tvm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-WG0vU3lxX5FNs0l37mTE1T7rSEEtfTEisE3cMphzeAk=";
+    hash = "sha256-5Jr+xubQoASNgy/UR/K5pvzMs4szP9LidFOLs3h+KSY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tvm.apache.org/";
-    description = "An End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
+    description = "End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ adelbertc ];

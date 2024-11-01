@@ -1,59 +1,65 @@
-{ lib
-, stdenv
-, autopep8
-, buildPythonPackage
-, docstring-to-markdown
-, fetchFromGitHub
-, flake8
-, flaky
-, importlib-metadata
-, jedi
-, matplotlib
-, mccabe
-, numpy
-, pandas
-, pluggy
-, pycodestyle
-, pydocstyle
-, pyflakes
-, pylint
-, pyqt5
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, pythonRelaxDepsHook
-, rope
-, setuptools
-, setuptools-scm
-, toml
-, ujson
-, websockets
-, whatthepatch
-, wheel
-, yapf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  docstring-to-markdown,
+  jedi,
+  pluggy,
+  python-lsp-jsonrpc,
+  setuptools,
+  ujson,
+  importlib-metadata,
+
+  # optional-dependencies
+  autopep8,
+  flake8,
+  mccabe,
+  pycodestyle,
+  pydocstyle,
+  pyflakes,
+  pylint,
+  rope,
+  toml,
+  whatthepatch,
+  yapf,
+
+  # checks
+  flaky,
+  matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  websockets,
+
+  testers,
+  python-lsp-server,
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
+    repo = "python-lsp-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9za0et/W+AwrjqUVoHwk8oqLXk4eqgRON8Z4F5GSKXM=";
+    hash = "sha256-oFqa7DtFpJmDZrw+GJqrFH3QqnMAu9159q3IWT9vRko=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" ""
+      --replace-fail "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
+      --replace-fail "--cov pylsp --cov test" ""
   '';
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "autopep8"
@@ -64,24 +70,18 @@ buildPythonPackage rec {
     "pyflakes"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
-    wheel
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docstring-to-markdown
     jedi
     pluggy
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       autopep8
       flake8
@@ -95,37 +95,19 @@ buildPythonPackage rec {
       whatthepatch
       yapf
     ];
-    autopep8 = [
-      autopep8
-    ];
-    flake8 = [
-      flake8
-    ];
-    mccabe = [
-      mccabe
-    ];
-    pycodestyle = [
-      pycodestyle
-    ];
-    pydocstyle = [
-      pydocstyle
-    ];
-    pyflakes = [
-      pyflakes
-    ];
-    pylint = [
-      pylint
-    ];
-    rope = [
-      rope
-    ];
+    autopep8 = [ autopep8 ];
+    flake8 = [ flake8 ];
+    mccabe = [ mccabe ];
+    pycodestyle = [ pycodestyle ];
+    pydocstyle = [ pydocstyle ];
+    pyflakes = [ pyflakes ];
+    pylint = [ pylint ];
+    rope = [ rope ];
     yapf = [
       whatthepatch
       yapf
     ];
-    websockets = [
-      websockets
-    ];
+    websockets = [ websockets ];
   };
 
   nativeCheckInputs = [
@@ -134,20 +116,16 @@ buildPythonPackage rec {
     numpy
     pandas
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all
-  # pyqt5 is broken on aarch64-darwin
-  ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [
-    pyqt5
-  ];
+  ] ++ optional-dependencies.all;
 
   disabledTests = [
     # Don't run lint tests
     "test_pydocstyle"
     # https://github.com/python-lsp/python-lsp-server/issues/243
-    "test_numpy_completions"
+    # "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # pyqt5 is broken on aarch64-darwin
+    "test_autoimport_code_actions_and_completions_for_notebook_document"
+    # avoid dependencies on many Qt things just to run one singular test
     "test_pyqt_completion"
   ];
 
@@ -160,12 +138,19 @@ buildPythonPackage rec {
     "pylsp.python_lsp"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      package = python-lsp-server;
+      version = "v${version}";
+    };
+  };
+
+  meta = {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/python-lsp/python-lsp-server";
     changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pylsp";
   };
 }

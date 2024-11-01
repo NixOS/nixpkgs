@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-tP1+Jm9hdvN/ZliuVHN8tqy24/tOK1LUUiJv1xUqRrY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pyImportCheck = [
-    "pwa"
-  ];
+  pythonImportsCheck = [ "pwa" ];
 
   checkPhase = ''
     runHook preCheck
@@ -40,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Django app to include a manifest.json and Service Worker instance to enable progressive web app behavoir";
+    description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavoir";
     homepage = "https://github.com/silviolleite/django-pwa";
     changelog = "https://github.com/silviolleite/django-pwa/releases/tag/v${version}";
     license = licenses.mit;

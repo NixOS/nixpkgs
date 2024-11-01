@@ -13,17 +13,27 @@
 , extraPythonPackages ? (_ : [])
 , nixosTests
 }:
-
+let
+  fs = lib.fileset;
+in
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
-  src = ./.;
-  format = "pyproject";
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./pyproject.toml
+      ./test_driver
+      ./extract-docstrings.py
+    ];
+  };
+  pyproject = true;
 
   propagatedBuildInputs = [
     coreutils
     netpbm
     python3Packages.colorama
+    python3Packages.junit-xml
     python3Packages.ptpython
     qemu_pkg
     socat
@@ -31,6 +41,10 @@ python3Packages.buildPythonApplication {
   ]
     ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
     ++ extraPythonPackages python3Packages;
+
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
 
   passthru.tests = {
     inherit (nixosTests.nixos-test-driver) driver-timeout;
@@ -42,7 +56,7 @@ python3Packages.buildPythonApplication {
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff\x1b[0m"
-    ruff .
+    ruff check .
     echo -e "\x1b[32m## run black\x1b[0m"
     black --check --diff .
   '';

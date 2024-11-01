@@ -46,7 +46,7 @@ in
       in attrsOf elemType;
 
     generate = name: value:
-      pkgs.runCommandLocal name
+      pkgs.runCommand name
         {
           # Requirements
           # ============
@@ -80,6 +80,7 @@ in
           #    libraries, but we can't rely on this in
           #    general.
 
+          preferLocalBuild = true;
           passAsFile = [ "value" ];
           value = builtins.toJSON value;
           nativeBuildInputs = [

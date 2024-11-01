@@ -16,19 +16,21 @@
 , pkg-config
 , udev
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "133";
+  version = "136";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KCpHiIdid5h5CU2uyMOo+p5h50h3Ki5/4mUpdTAPKQA=";
+    hash = "sha256-Hks/MWusPiBVdb5L+53qtR6VmXG/P4rDzsvHxLeA8Do=";
   };
 
   patches = [
@@ -38,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     which
-    wrapGAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
+    wrapGAppsHook3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libicns
   ];
 
   buildInputs = [
     SDL2
     libao
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     gtk3
     gtksourceview3
@@ -59,16 +62,18 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     openal
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.OpenAL
   ];
 
+  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
+
   enableParallelBuilding = true;
 
-  makeFlags = lib.optionals stdenv.isLinux [
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "hiro=gtk3"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "hiro=cocoa"
     "lto=false"
     "vulkan=false"
@@ -78,15 +83,16 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=$(out)"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.14";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.14";
 
   meta = {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
+    mainProgram = "ares";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
 # TODO: select between Qt and GTK3

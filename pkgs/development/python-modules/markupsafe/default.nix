@@ -1,31 +1,55 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
+
+  # reverse dependencies
+  jinja2,
+  mkdocs,
+  quart,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "markupsafe";
-  version = "2.1.3";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "MarkupSafe";
-    inherit version;
-    hash = "sha256-r1mO0y1q6G8bdHuCeDlYsaSrj2F7Bv5oeVx/Amq73K0=";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = "markupsafe";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YMvEfrIwGy5Ug4EjkiWOlijEWltWSjJGDrpseH86778=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "markupsafe" ];
 
+  passthru.tests = {
+    inherit
+      jinja2
+      mkdocs
+      quart
+      werkzeug
+      ;
+  };
+
   meta = with lib; {
-    changelog = "https://markupsafe.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
     license = licenses.bsd3;

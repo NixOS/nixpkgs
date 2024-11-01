@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     # nix-build -E 'with import ./. {}; pkgs.keyutils.override { stdenv = pkgs.clangStdenv; }'
     ./0001-Remove-unused-function-after_eq.patch
 
+    ./pkg-config-static.patch
+
     # Fix build for s390-linux, where size_t is different from ptrdiff_t.
     (fetchurl {
       url = "https://lore.kernel.org/keyrings/20230301134250.301819-1-hi@alyssa.is/raw";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [ "out" "lib" "dev" "man" ];
 
   postPatch = ''
     # https://github.com/archlinux/svntogit-packages/blob/packages/keyutils/trunk/reproducible.patch

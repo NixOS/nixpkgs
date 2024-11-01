@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfhummus";
-  version = "4.6.1";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "galkahana";
     repo = "PDF-Writer";
     rev = "v${version}";
-    hash = "sha256-4QJxYxLELBDg5GZISdO2xKzJej8F21BY+GD+KkrGXws=";
+    hash = "sha256-XOoMh1YL4wJQ6Uliy0sdcrlqJbbbnZ0gmjuaXS1h+qQ=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
+    description = "Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
     homepage = "https://www.pdfhummus.com";
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, numpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+}:
 
 buildPythonPackage rec {
   pname = "sgp4";
   version = "2.23";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

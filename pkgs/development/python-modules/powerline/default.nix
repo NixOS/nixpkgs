@@ -1,26 +1,28 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, socat
-, psutil
-, python-hglib
-, pygit2
-, pyuv
-, i3ipc
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  socat,
+  psutil,
+  python-hglib,
+  pygit2,
+  pyuv,
+  i3ipc,
+  stdenv,
 }:
 
 # TODO: bzr support is missing because nixpkgs switched to `breezy`
 
 buildPythonPackage rec {
-  version  = "2.8.3";
+  version = "2.8.4";
   pname = "powerline";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UIx9/IZg6Wv596wHzQb0CO6zwmQXUaFEPKBojo2LXmA=";
+    hash = "sha256-snJrfUvP11lBIy6F0WtqJt9fiYm5jxMwm9u3u5XFO84=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +31,7 @@ buildPythonPackage rec {
     python-hglib
     pygit2
     pyuv
-  ] ++ lib.optionals (!stdenv.isDarwin) [ i3ipc ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ i3ipc ];
 
   # tests are travis-specific
   doCheck = false;
@@ -48,8 +50,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage    = "https://github.com/powerline/powerline";
-    description = "The ultimate statusline/prompt utility";
-    license     = lib.licenses.mit;
+    homepage = "https://github.com/powerline/powerline";
+    description = "Ultimate statusline/prompt utility";
+    license = lib.licenses.mit;
   };
 }

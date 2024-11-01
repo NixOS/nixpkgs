@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-W7Lf9s689oJy4U5sQlkLt3INJwtvzU2pot3EFimp7Jw=";
 
   meta = with lib; {
-    description = "A Powerline like prompt for Bash, ZSH and Fish";
+    description = "Powerline like prompt for Bash, ZSH and Fish";
     homepage = "https://github.com/justjanne/powerline-go";
     changelog = "https://github.com/justjanne/powerline-go/releases/tag/v${version}";
     license = licenses.gpl3Plus;

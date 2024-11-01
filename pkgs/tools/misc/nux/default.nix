@@ -31,8 +31,9 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/NuxPackage/nux";
-    description = "A wrapper over the nix cli";
+    description = "Wrapper over the nix cli";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "nux";
   };
 }

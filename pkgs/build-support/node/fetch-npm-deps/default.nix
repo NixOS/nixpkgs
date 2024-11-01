@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, nix, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -20,7 +20,7 @@
     buildInputs = [ curl ];
 
     postInstall = ''
-      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip nix ]}
+      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
     '';
 
     passthru.tests =
@@ -125,11 +125,24 @@
 
           forceGitDeps = true;
         };
+
+        # This package has a lockfile v1 git dependency with no `dependencies` attribute, since it sementically has no dependencies.
+        jitsiMeet9111 = makeTest {
+          name = "jitsi-meet-9111";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/jitsi/jitsi-meet/stable/jitsi-meet_9111/package-lock.json";
+            hash = "sha256-NU+eQD4WZ4BMur8uX79uk8wUPsZvIT02KhPWHTmaihk=";
+          };
+
+          hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
+        };
       };
 
     meta = with lib; {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
-      maintainers = with maintainers; [ lilyinstarlight winter ];
+      mainProgram = "prefetch-npm-deps";
+      maintainers = with maintainers; [ winter ];
       license = licenses.mit;
     };
   };

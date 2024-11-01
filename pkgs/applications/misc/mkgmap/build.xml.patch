@@ -1,14 +1,6 @@
 --- a/build.xml	(revision 4555)
 +++ a/build.xml	(working copy)
-@@ -222,13 +222,13 @@
- 		<property name="svn.version.build" value="none"/>
- 
- 		<propertyfile file="${build.classes}/mkgmap-version.properties">
--			<entry key="svn.version" value="${svn.version.build}" />
--			<entry key="build.timestamp" value="${build.timestamp}" />
-+			<entry key="svn.version" value="@version@" />
-+			<entry key="build.timestamp" value="unknown" />
- 		</propertyfile>
+@@ -228,7 +228,7 @@
  	</target>
  
  	<!-- Compile the product itself (no tests). -->
@@ -35,12 +27,3 @@
  		<mkdir dir="tmp/report"/>
  		<junit printsummary="yes" failureproperty="junit.failure" forkmode="once">
  
-@@ -351,7 +351,7 @@
- 			ignoreerrors="true"/>
- 	</target>
- 
--	<target name="dist" depends="build, check-version, version-file"
-+	<target name="dist" depends="build, version-file"
- 					description="Make the distribution area">
- 
- 		<mkdir dir="${dist}"/>

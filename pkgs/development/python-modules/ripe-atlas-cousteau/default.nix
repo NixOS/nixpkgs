@@ -1,50 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, python-socketio
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
+  typing-extensions,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
   version = "2.0.0";
-  format = "setuptools";
-
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
-    repo = pname;
+    repo = "ripe-atlas-cousteau";
     rev = "refs/tags/v${version}";
     hash = "sha256-z8ZXOiCVYughrbmXfnwtks7NPmYpII2BA0+8mr1cdSQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "websocket-client~=1.3.1" "websocket-client"
-  '';
+  pythonRelaxDeps = [ "websocket-client" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     requests
-    python-socketio
+    typing-extensions
     websocket-client
-  ] ++ python-socketio.optional-dependencies.client;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     jsonschema
   ];
 
-  pythonImportsCheck = [
-    "ripe.atlas.cousteau"
-  ];
+  pythonImportsCheck = [ "ripe.atlas.cousteau" ];
 
   meta = with lib; {
     description = "Python client library for RIPE ATLAS API";

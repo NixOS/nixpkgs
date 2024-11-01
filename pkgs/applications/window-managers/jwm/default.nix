@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.3";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-HPcNXf+frYbT8lr5vU5xpUnyjGpQ5rc2G14EjDwpk3c=";
+    sha256 = "sha256-T0N9UMu+BLRzVWshUB4apiq8H2t1y09n4P1cLT5K/N8=";
   };
 
   nativeBuildInputs = [
@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "jwm";
   };
 }

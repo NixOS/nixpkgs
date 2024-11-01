@@ -1,9 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+  poetry-dynamic-versioning,
+
+  # dependencies
+  docutils,
+  pygments,
+  sphinx,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,10 +38,25 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [ sphinx ];
+  pythonRelaxDeps = [
+    "docutils"
+    "pygments"
+    "Sphinx"
+  ];
+
+  propagatedBuildInputs = [
+    docutils
+    pygments
+    sphinx
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # versions >=1.8.0 cannot be build from source
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    description = "A sphinx extension for creating unselectable prompt";
+    description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kaction ];

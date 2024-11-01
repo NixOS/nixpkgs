@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
+{ lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
 , pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   dontWrapQtApps = true;
 
-  cargoSha256 = "0vhcb3kw1zgchx3nrk8lyrz8p5071y99vsysxvi71klv7dcvn0am";
+  cargoHash = "sha256-VQG7WTubznDi7trrnZIPB5SLfvYUzWxHh+z9wOdYDG4=";
   doCheck = false;
 
   postInstall = ''
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
      '';
 
   meta = with lib; {
-    description = "A libre cross-platform disassembler";
+    description = "Libre cross-platform disassembler";
     longDescription = ''
       Panopticon is a cross platform disassembler for reverse
       engineering written in Rust. It can disassemble AMD64,
@@ -46,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ leenaars ];
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
+    broken = true; # Added 2024-03-16
   };
 }

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "scip";
-  version = "0.3.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     rev = "v${version}";
-    hash = "sha256-lZ3W2Z69P5QQN+PgF9+Apj/uEXWaTS+5QOg17m1mGPU=";
+    hash = "sha256-UXa5lMFenynHRIvA4MOXkjMVd705LBWs372s3MFAc+8=";
   };
 
-  vendorHash = "sha256-3Tq2cexcxHjaH6WIz2hneE1QeBSGoMINBncKbqxODxQ=";
+  vendorHash = "sha256-6vx3Dt0ZNR0rY5bEUF5X1hHj/gv21920bhfd+JJ9bYk=";
 
   ldflags = [
     "-s"
@@ -39,6 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "SCIP Code Intelligence Protocol CLI";
+    mainProgram = "scip";
     homepage = "https://github.com/sourcegraph/scip";
     changelog = "https://github.com/sourcegraph/scip/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

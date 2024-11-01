@@ -1,9 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, libdeflate, libpng, libtiff, zlib, lcms2, jpylyzer
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+, libpng, libtiff, zlib, lcms2, jpylyzer
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl, fcgi # JPIP Server
 , jdk
+
+# for passthru.tests
+, ffmpeg
+, gdal
+, gdcm
+, ghostscript
+, imagemagick
+, leptonica
+, mupdf
 , poppler
+, python3
+, vips
 }:
 
 let
@@ -12,31 +23,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openjpeg";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
     rev = "v${version}";
-    sha256 = "sha256-/0o3Fl6/jx5zu854TCqMyOz/8mnEyEC9lpZ6ij/tbHc=";
+    hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # modernise cmake files, also fixes them for multiple outputs
-    # https://github.com/uclouvain/openjpeg/pull/1424
-    (fetchpatch {
-      name = "uclouvain-openjpeg-pull-1424.patch";
-      url = "https://github.com/uclouvain/openjpeg/compare/52927287402a9f7353de8854c88f931051211e2f...9d4f70cfe99626f82f9c8dcbf45f07709e3511b2.patch";
-      sha256 = "sha256-CxVRt1u4HVOMUjWiZ2plmZC29t/zshCpSY+N4Wlrlvg=";
-    })
-    # fix cmake files cross compilation
-    (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/commit/c6ceb84c221b5094f1e8a4c0c247dee3fb5074e8.patch";
-      sha256 = "sha256-gBUtmO/7RwSWEl7rc8HGr8gNtvNFdhjEwm0Dd51p5O8=";
-    })
-  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
@@ -56,7 +52,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
     ++ lib.optional (jpipLibSupport) jdk;
 
-  doCheck = (!stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
+  doCheck = (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
   nativeCheckInputs = [ jpylyzer ];
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
@@ -67,7 +63,19 @@ stdenv.mkDerivation rec {
   passthru = {
     incDir = "openjpeg-${lib.versions.majorMinor version}";
     tests = {
-      inherit poppler;
+      ffmpeg = ffmpeg.override { withOpenjpeg = true; };
+      imagemagick = imagemagick.override { openjpegSupport = true; };
+      pillow = python3.pkgs.pillow;
+
+      inherit
+        gdal
+        gdcm
+        ghostscript
+        leptonica
+        mupdf
+        poppler
+        vips
+      ;
     };
   };
 

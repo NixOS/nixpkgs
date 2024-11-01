@@ -48,7 +48,7 @@ Reviewing process:
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
   - `mkRenamedOptionModuleWith` provides a way to make renamed option backward compatible.
-  - Use `lib.versionAtLeast config.system.stateVersion "23.11"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
+  - Use `lib.versionAtLeast config.system.stateVersion "24.05"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
 - Ensure that removed options are declared with `mkRemovedOptionModule`.
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.
@@ -80,6 +80,7 @@ Reviewing process:
 
 - Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
 - Ensure that the module tests, if any, are succeeding.
+- Ensure that new module tests are added to the package `passthru.tests`.
 - Ensure that the introduced options are correct.
   - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
@@ -95,7 +96,8 @@ Sample template for a new module review is provided below.
 ##### Reviewed points
 
 - [ ] module path fits the guidelines
-- [ ] module tests succeed on ARCHITECTURE
+- [ ] module tests, if any, succeed on ARCHITECTURE
+- [ ] module tests, if any, are added to package `passthru.tests`
 - [ ] options have appropriate types
 - [ ] options have default
 - [ ] options have example

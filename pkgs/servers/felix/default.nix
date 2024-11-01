@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
     cp -av * $out
   '';
   meta = with lib; {
-    description = "An OSGi gateway";
+    description = "OSGi gateway";
     homepage = "https://felix.apache.org";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.sander ];
+    mainProgram = "felix.jar";
   };
 }

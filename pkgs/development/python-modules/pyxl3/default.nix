@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "pyxl3";
   version = "1.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook, autoPatchelfHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook3, autoPatchelfHook
 , alsa-lib
 , curl
 , dbus-glib
@@ -20,7 +20,6 @@
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en_US"
 , patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
-, makeWrapper
 }:
 
 let
@@ -58,20 +57,6 @@ let
   source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
   pname = "firefox-${channel}-bin-unwrapped";
-
-  # FIXME: workaround for not being able to pass flags to patchelf
-  # Remove after https://github.com/NixOS/nixpkgs/pull/256525
-  wrappedPatchelf = stdenv.mkDerivation {
-    pname = "patchelf-wrapped";
-    inherit (patchelfUnstable) version;
-
-    nativeBuildInputs = [ makeWrapper ];
-
-    buildCommand = ''
-      mkdir -p $out/bin
-      makeWrapper ${patchelfUnstable}/bin/patchelf $out/bin/patchelf --append-flags "--no-clobber-old-sections"
-    '';
-  };
 in
 
 stdenv.mkDerivation {
@@ -79,7 +64,7 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook wrappedPatchelf ];
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook patchelfUnstable ];
   buildInputs = [
     gtk3
     adwaita-icon-theme
@@ -95,6 +80,8 @@ stdenv.mkDerivation {
   appendRunpaths = [
     "${pipewire}/lib"
   ];
+  # Firefox uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
 
   installPhase =
     ''
@@ -121,7 +108,7 @@ stdenv.mkDerivation {
     updateScript = import ./update.nix {
       inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
       baseUrl =
-        if channel == "devedition"
+        if channel == "developer-edition"
           then "https://archive.mozilla.org/pub/devedition/releases/"
           else "https://archive.mozilla.org/pub/firefox/releases/";
     };

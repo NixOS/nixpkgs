@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A simple tool written in bash to memorize stuff";
+    description = "Simple tool written in bash to memorize stuff";
     longDescription = ''
       A simple tool written in bash to memorize stuff.
       Memo organizes is structured through topics which are folders in ~/memo.
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.mrVanDalo ];
     platforms = lib.platforms.all;
+    mainProgram = "memo";
   };
 }

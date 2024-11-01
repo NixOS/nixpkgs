@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-zigbuild";
-  version = "0.17.5";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-x0TPbqwoCaXUlrjYQ47+x5KohsiK5yCrI2Q8yA2K8Zs=";
+    hash = "sha256-b1TzMqX+mt14rhOLQQHnHYN69peEfXGpyM4rR6EcxbU=";
   };
 
-  cargoHash = "sha256-FK6tTAbhP1f4VasG9HCahbMTDrJ9A6zXt/T6cs3HOZE=";
+  cargoHash = "sha256-NWP8jaQz4KzsZFFR9WAvdlecUI3ogPNN4pcyCUBSq6E=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to compile Cargo projects with zig as the linker";
+    description = "Tool to compile Cargo projects with zig as the linker";
+    mainProgram = "cargo-zigbuild";
     homepage = "https://github.com/messense/cargo-zigbuild";
     changelog = "https://github.com/messense/cargo-zigbuild/releases/tag/v${version}";
     license = licenses.mit;

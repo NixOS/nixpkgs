@@ -1,49 +1,66 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandas,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "alpha-vantage";
-  version = "2.3.1";
+  version = "3.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RomelTorres";
     repo = "alpha_vantage";
-    rev = version;
-    sha256 = "0cyw6zw7c7r076rmhnmg905ihwb9r7g511n6gdlph06v74pdls8d";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ae9WqEsAjJcD62NZOPh6a49g1wY4KMswzixDAZEtWkw=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Files are only linked
+    rm alpha_vantage/async_support/*
+    cp alpha_vantage/{cryptocurrencies.py,foreignexchange.py,techindicators.py,timeseries.py} alpha_vantage/async_support/
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     requests
   ];
 
+  optional-dependencies = {
+    pandas = [
+      pandas
+    ];
+  };
+
   nativeCheckInputs = [
     aioresponses
     requests-mock
-    pandas
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  disabledTestPaths = [
-    # Tests require network access
-    "test_alpha_vantage/test_integration_alphavantage.py"
-    "test_alpha_vantage/test_integration_alphavantage_async.py"
-  ];
+  # Starting with 3.0.0 most tests require an API key
+  doCheck = false;
 
   pythonImportsCheck = [ "alpha_vantage" ];
 
   meta = with lib; {
     description = "Python module for the Alpha Vantage API";
     homepage = "https://github.com/RomelTorres/alpha_vantage";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/RomelTorres/alpha_vantage/releases/tag/${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

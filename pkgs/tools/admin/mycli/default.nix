@@ -1,68 +1,64 @@
-{ lib
-, python3
-, fetchPypi
-, glibcLocales
+{
+  fetchPypi,
+  lib,
+  python3Packages,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.27.0";
+  version = "1.27.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-px21vZwafQAG9PL/AVSM51Y30/UMo6fne5ULW0av980=";
+    hash = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
-  propagatedBuildInputs = [
-    cli-helpers
-    click
-    configobj
-    importlib-resources
-    paramiko
-    prompt-toolkit
-    pyaes
-    pycrypto
-    pygments
-    pymysql
-    pyperclip
-    sqlglot
-    sqlparse
+  pythonRelaxDeps = [
+    "sqlparse"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      cli-helpers
+      click
+      configobj
+      cryptography
+      paramiko
+      prompt-toolkit
+      pyaes
+      pygments
+      pymysql
+      pyperclip
+      sqlglot
+      sqlparse
+    ]
+    ++ cli-helpers.optional-dependencies.styles;
+
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
-    export HOME=.
-    export LC_ALL="en_US.UTF-8"
+    export HOME="$(mktemp -d)"
   '';
 
   disabledTestPaths = [
     "mycli/packages/paramiko_stub/__init__.py"
   ];
 
-  disabledTests = [
-    # Note: test_auto_escaped_col_names is currently failing due to a bug upstream.
-    # TODO: re-enable this test once there is a fix upstream. See
-    # https://github.com/dbcli/mycli/issues/1103 for details.
-    "test_auto_escaped_col_names"
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cryptography == 36.0.2" "cryptography"
-  '';
-
-  meta = with lib; {
-    inherit version;
+  meta = {
     description = "Command-line interface for MySQL";
+    mainProgram = "mycli";
     longDescription = ''
       Rich command-line interface for MySQL with auto-completion and
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

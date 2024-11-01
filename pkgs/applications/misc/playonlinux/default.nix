@@ -3,10 +3,10 @@
 , fetchurl
 , cabextract
 , gettext
-, glxinfo
 , gnupg
 , icoutils
 , imagemagick
+, mesa-demos
 , netcat-gnu
 , p7zip
 , python3
@@ -26,7 +26,7 @@
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , hicolor-icon-theme
 }:
 
@@ -37,10 +37,10 @@ let
     cabextract
     python
     gettext
-    glxinfo
     gnupg
     icoutils
     imagemagick
+    mesa-demos
     netcat-gnu
     p7zip
     unzip
@@ -61,7 +61,7 @@ let
   libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
   python = python3.withPackages(ps: with ps; [
-    wxPython_4_2
+    wxpython
     setuptools
     natsort
   ]);
@@ -79,7 +79,7 @@ in stdenv.mkDerivation {
     ./0001-fix-locale.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
 
   preBuild = ''
     makeFlagsArray+=(PYTHON="python -m py_compile")
@@ -146,5 +146,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    mainProgram = "playonlinux";
   };
 }

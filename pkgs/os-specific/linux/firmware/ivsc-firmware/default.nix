@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "ivsc-firmware";
-  version = "unstable-2022-11-02";
+  version = "unstable-2024-06-14";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ivsc-firmware";
-    rev = "29c5eff4cdaf83e90ef2dcd2035a9cdff6343430";
-    hash = "sha256-GuD1oTnDEs0HslJjXx26DkVQIe0eS+js4UoaTDa77ME=";
+    rev = "74a01d1208a352ed85d76f959c68200af4ead918";
+    hash = "sha256-kHYfeftMtoOsOtVN6+XoDMDHP7uTEztbvjQLpCnKCh0=";
   };
 
   dontBuild = true;
@@ -23,6 +23,13 @@ stdenv.mkDerivation {
     cp --no-preserve=mode --recursive ./firmware/* $out/lib/firmware/vsc/
     install -D ./LICENSE $out/share/doc
 
+    mkdir -p $out/lib/firmware/vsc/soc_a1_prod
+    # According to Intel's documentation for prod platform the a1_prod postfix is need it (https://github.com/intel/ivsc-firmware)
+    # This fixes ipu6 webcams
+    for file in $out/lib/firmware/vsc/*.bin; do
+      ln -sf "$file" "$out/lib/firmware/vsc/soc_a1_prod/$(basename "$file" .bin)_a1_prod.bin"
+    done
+
     runHook postInstall
   '';
 
@@ -33,9 +40,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [
       binaryFirmware
     ];
-    maintainers = with maintainers; [
-      hexa
-    ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
+    mainProgram = "networkaudiod";
   };
 }

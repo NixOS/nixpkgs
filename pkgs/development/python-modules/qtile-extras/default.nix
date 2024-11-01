@@ -1,98 +1,85 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, xorgserver
-, imagemagick
-, pulseaudio
-, pytest-asyncio
-, pytest-lazy-fixture
-, qtile
-, keyring
-, requests
-, stravalib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  imagemagick,
+  keyring,
+  librsvg,
+  pulseaudio,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  python-dateutil,
+  qtile,
+  requests,
+  setuptools-scm,
+  xorgserver,
 }:
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.23.0";
-  format = "pyproject";
+  version = "0.29.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WI1z8vrbZiJw6fDHK27mKA+1FyZEQTMttIDNzSIX+PU=";
+    repo = "qtile-extras";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QkcLts2cqhA49/L9nuekf0n+ZRBxKdGL9Ql1sgtyTiw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    xorgserver
+    gobject-introspection
     imagemagick
-  ];
-  checkInputs = [
+    keyring
+    pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytestCheckHook
+    python-dateutil
     qtile
-    pulseaudio
-    keyring
     requests
-    stravalib
+    xorgserver
+    # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
+
   disabledTests = [
-    # AttributeError: 'ImgMask' object has no attribute '_default_size'. Did you mean: 'default_size'?
-    # cairocffi.pixbuf.ImageLoadingError: Pixbuf error: Unrecognized image file format
-    "test_draw"
-    "test_icons"
-    "1-x11-GithubNotifications-kwargs3"
-    "1-x11-SnapCast-kwargs8"
-    "1-x11-TVHWidget-kwargs10"
-    "test_tvh_widget_not_recording"
-    "test_tvh_widget_recording"
-    "test_tvh_widget_popup"
-    "test_snapcast_options"
-    "test_snapcast_icon"
-    "test_snapcast_icon_colour"
-    "test_snapcast_http_error"
-    "test_syncthing_not_syncing"
-    "test_syncthing_is_syncing"
-    "test_syncthing_http_error"
-    "test_githubnotifications_colours"
-    "test_githubnotifications_logging"
-    "test_githubnotifications_icon"
-    "test_githubnotifications_reload_token"
-    "test_image_size_horizontal"
-    "test_image_size_vertical"
-    "test_image_size_mask"
-    # ValueError: Namespace Gdk not available
-    # AssertionError: Window never appeared...
-    "test_statusnotifier_menu"
-    # AttributeError: 'str' object has no attribute 'canonical'
-    "test_strava_widget_display"
-    "test_strava_widget_popup"
     # Needs a running DBUS
     "test_brightness_power_saving"
-    "test_upower_all_batteries"
-    "test_upower_named_battery"
-    "test_upower_low_battery"
-    "test_upower_critical_battery"
-    "test_upower_charging"
-    "test_upower_show_text"
     "test_global_menu"
     "test_mpris2_popup"
+    "test_statusnotifier_menu"
     # No network connection
     "test_wifiicon_internet_check"
-    # AssertionErrors
-    "test_widget_init_config"
+    # Image difference is outside tolerance
     "test_decoration_output"
+    # Needs Github token
+    "test_githubnotifications_reload_token"
+    # AttributeError: 'NoneType' object has no attribute 'theta'
+    "test_image_size_horizontal"
+    "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
+
+  disabledTestPaths = [
+    # Needs a running DBUS
+    "test/widget/test_iwd.py"
+    "test/widget/test_upower.py"
+    # Marked as broken due to https://github.com/stravalib/stravalib/issues/379
+    "test/widget/test_strava.py"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
+    export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    sed -i 's#/usr/bin/sleep#sleep#' test/widget/test_snapcast.py
   '';
 
   pythonImportsCheck = [ "qtile_extras" ];

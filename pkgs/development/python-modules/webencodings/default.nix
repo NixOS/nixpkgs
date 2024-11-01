@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, pytest
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "webencodings";
   version = "0.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

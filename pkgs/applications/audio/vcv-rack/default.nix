@@ -4,11 +4,10 @@
 , curl
 , fetchFromBitbucket
 , fetchFromGitHub
-, fetchzip
 , ghc_filesystem
 , glew
 , glfw
-, gnome
+, zenity
 , gtk3-x11
 , imagemagick
 , jansson
@@ -19,15 +18,13 @@
 , libjack2
 , libpulseaudio
 , libsamplerate
-, libXext
-, libXi
 , makeDesktopItem
 , makeWrapper
 , pkg-config
 , rtmidi
 , speexdsp
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , zstd
 }:
 
@@ -39,8 +36,8 @@ let
   pffft-source = fetchFromBitbucket {
     owner = "jpommier";
     repo = "pffft";
-    rev = "38946c766c1afecfa4c5945af77913e38b3cec31";
-    sha256 = "1w6g9v9fy7bavqacb6qw1nxhcik2w36cvl2d7b0bh68w0pd70j5q";
+    rev = "fbc4058602803f40dc554b8a5d2bcc694c005f2f";
+    sha256 = "16biji3115232cr1j975hpxw68lfybajlspnhfjcwg8jz2d8ybrf";
   };
   fuzzysearchdatabase-source = fetchFromBitbucket {
     owner = "j_norberg";
@@ -67,28 +64,28 @@ let
     sha256 = "1d3058x6wgzw7b0wai792flk7s6ffw0z4n9sl016v91yjwv7ds3a";
   };
   oui-blendish-source = fetchFromGitHub {
-    owner = "AndrewBelt";
+    owner = "VCVRack";
     repo = "oui-blendish";
     rev = "2fc6405883f8451944ed080547d073c8f9f31898";
-    sha256 = "/QZFZuI5kSsEvSfMJlcqB1HiZ9Vcf3vqLqWIMEgxQK8=";
+    sha256 = "1bs0654312555vm7nzswsmky4l8759bjdk17pl22p49rw9k4a1px";
   };
   simde-source = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
-    rev = "b309d8951997201e493380a2fd09198c09ae1b4e";
-    sha256 = "1hz8mfbhbiafvim4qrkyvh1yndlhydqkxwhls7cfqa48wkpxfip8";
+    rev = "416091ebdb9e901b29d026633e73167d6353a0b0";
+    sha256 = "064ygc6c737yjx04rydwwhkr4n4s4rbvj27swxwyzvp1h8nka6xf";
   };
   tinyexpr-source = fetchFromGitHub {
     owner = "codeplea";
     repo = "tinyexpr";
-    rev = "74804b8c5d296aad0866bbde6c27e2bc1d85e5f2";
-    sha256 = "0z3r7wfw7p2wwl6wls2nxacirppr2147yz29whxmjaxy89ic1744";
+    rev = "9907207e5def0fabdb60c443517b0d9e9d521393";
+    sha256 = "0xbpd09zvrk2ppm1qm1skk6p50mqr9mzjixv3s0biqq6jpabs88l";
   };
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "962547d7651260fb6a04f4d8aafd7c27f0221bee"; # tip of branch v2
-    sha256 = "066gcjkni8ba98vv0di59x3f9piir0vyy5sb53cqrbrl51x853cg";
+    rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
+    sha256 = "0c6qpigyr0ppvra20hcy1fdcmqa212jckb9wkx4f6fgdby7565wv";
   };
   vcv-rtaudio = stdenv.mkDerivation rec {
     pname = "vcv-rtaudio";
@@ -114,8 +111,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "VCV-Rack";
-  version = "2.4.0";
+  pname = "vcv-rack";
+  version = "2.5.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +132,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "0azrqyx5as4jmk9dxb7cj7x9dha81i0mm9pkvdv944qyccqwg55i";
+    sha256 = "1q2bwjfn6crk9lyd6m3py0v754arw1xgpv5kkj6ka1bc2yz839qh";
   };
 
   patches = [
@@ -169,10 +166,14 @@ stdenv.mkDerivation rec {
     cp -r ${fundamental-source} plugins/Fundamental/
     chmod -R +rw plugins/Fundamental # will be used as build dir
     substituteInPlace plugin.mk --replace ":= all" ":= dist"
+    substituteInPlace plugins/Fundamental/src/Logic.cpp \
+      --replace \
+        "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
+        "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${zenity}/bin/zenity"'
   '';
 
   nativeBuildInputs = [
@@ -182,7 +183,7 @@ stdenv.mkDerivation rec {
     libicns
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     alsa-lib
@@ -190,7 +191,7 @@ stdenv.mkDerivation rec {
     ghc_filesystem
     glew
     glfw
-    gnome.zenity
+    zenity
     gtk3-x11
     jansson
     libarchive
@@ -249,6 +250,7 @@ stdenv.mkDerivation rec {
     # no-derivatives clause
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
+    mainProgram = "Rack";
     platforms = platforms.linux;
   };
 }

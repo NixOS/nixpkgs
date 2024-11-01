@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , boost
 , cairo
+, darwin
 , gettext
 , glibmm
 , gtk3
@@ -18,7 +19,7 @@
 , pango
 , imagemagick
 , intltool
-, gnome
+, adwaita-icon-theme
 , harfbuzz
 , freetype
 , fribidi
@@ -27,12 +28,12 @@
 }:
 
 let
-  version = "1.5.1";
+  version = "1.5.3";
   src = fetchFromGitHub {
     owner = "synfig";
     repo = "synfig";
     rev = "v${version}";
-    hash = "sha256-9vBYESaSgW/1FWH2uFBvPiYvxLlX0LLNnd4S7ACJcwI=";
+    hash = "sha256-D+FUEyzJ74l0USq3V9HIRAfgyJfRP372aEKDqF8+hsQ=";
   };
 
   ETL = stdenv.mkDerivation {
@@ -59,7 +60,13 @@ let
     configureFlags = [
       "--with-boost=${boost.dev}"
       "--with-boost-libdir=${boost.out}/lib"
+    ] ++ lib.optionals stdenv.cc.isClang [
+      # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+      # are removed in C++17. Setting the language version to C++14 allows it to build.
+      "CXXFLAGS=-std=c++14"
     ];
+
+    enableParallelBuilding = true;
 
     nativeBuildInputs = [
       pkg-config
@@ -82,6 +89,8 @@ let
       fribidi
       openexr
       fftw
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
     ];
   };
 in
@@ -99,12 +108,18 @@ stdenv.mkDerivation {
     ./bootstrap.sh
   '';
 
+  configureFlags = lib.optionals stdenv.cc.isClang [
+    # Newer versions of clang default to C++17, but synfig and some of its dependencies use deprecated APIs that
+    # are removed in C++17. Setting the language version to C++14 allows it to build.
+    "CXXFLAGS=-std=c++14"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
     gettext
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     ETL
@@ -119,7 +134,7 @@ stdenv.mkDerivation {
     libsigcxx
     libxmlxx
     mlt
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     openexr
     fftw
   ];
@@ -132,10 +147,10 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A 2D animation program";
+    description = "2D animation program";
     homepage = "http://www.synfig.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

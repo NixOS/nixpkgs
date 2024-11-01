@@ -1,14 +1,22 @@
 { lib, stdenv
 , fetchzip
+
+# update script
+, writeScript
+, coreutils
+, curl
+, gnugrep
+, htmlq
+, nix-update
 }:
 
 stdenv.mkDerivation rec {
   pname = "fasmg";
-  version = "j27m";
+  version = "kl0e";
 
   src = fetchzip {
     url = "https://flatassembler.net/fasmg.${version}.zip";
-    sha256 = "0qmklb24n3r0my2risid8r61pi88gqrvm1c0xvyd0bp1ans6d7zd";
+    sha256 = "sha256-qUhsUMwxgUduGz+D8+Dm4EXyh7aiE9lJ1mhvTjHP6Tw=";
     stripRoot = false;
   };
 
@@ -48,8 +56,21 @@ stdenv.mkDerivation rec {
     cp docs/*.txt $doc/share/doc/fasmg
   '';
 
+  passthru.updateScript = writeScript "update-fasmg.sh" ''
+    export PATH="${lib.makeBinPath [ coreutils curl gnugrep htmlq nix-update ]}:$PATH"
+    version=$(
+      curl 'https://flatassembler.net/download.php' \
+        | htmlq .links a.boldlink  -a href \
+        | grep -E '^fasmg\..*\.zip$' \
+        | head -n1 \
+        | cut -d. -f2
+    )
+    nix-update fasmg --version "$version"
+  '';
+
   meta = with lib; {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
+    mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej luc65r ];

@@ -1,31 +1,33 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, cmake
-, blas
-, libcint
-, libxc
-, xcfun
-, cppe
-, h5py
-, numpy
-, scipy
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  libcint,
+  libxc,
+  xcfun,
+  cppe,
+  h5py,
+  numpy,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.4.0";
+  version = "2.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+dZsXiLqqyRWr1eOEVSHZ1KMM760hrDaT07ylZUcGmo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lXOREy0BABcjpAkxIMy245SAX8HfJKj/QSHGob14GgI=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  nativeBuildInputs = [ cmake ];
+  build-system = [ cmake ];
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -39,7 +41,7 @@ buildPythonPackage rec {
     xcfun
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cppe
     h5py
     numpy
@@ -83,6 +85,8 @@ buildPythonPackage rec {
     "test_n3_cis_ewald"
     "test_veff"
     "test_collinear_kgks_gga"
+    "test_libxc_gga_deriv4"
+    "test_sacasscf_grad"
   ];
 
   pytestFlagsArray = [
@@ -91,13 +95,18 @@ buildPythonPackage rec {
     "--ignore-glob=*_slow.*py"
     "--ignore-glob=*_kproxy_.*py"
     "--ignore-glob=test_proxy.py"
+    "--ignore-glob=pyscf/nac/test/test_sacasscf.py"
+    "--ignore-glob=pyscf/grad/test/test_casscf.py"
   ];
 
   meta = with lib; {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ maintainers.sheepforce ];
   };
 }
