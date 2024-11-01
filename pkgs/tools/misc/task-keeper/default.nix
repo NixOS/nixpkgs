@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/linux-china/task-keeper";
-    description = "A cli to manage tasks from different task runners or package managers";
+    description = "CLI to manage tasks from different task runners or package managers";
     license = licenses.asl20;
     maintainers = with maintainers; [ tennox ];
     mainProgram = "tk";
