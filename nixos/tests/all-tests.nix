@@ -495,6 +495,7 @@ in {
   jotta-cli = handleTest ./jotta-cli.nix {};
   k3s = handleTest ./k3s {};
   kafka = handleTest ./kafka.nix {};
+  kanata = runTest ./kanata.nix;
   kanidm = handleTest ./kanidm.nix {};
   kanidm-provisioning = handleTest ./kanidm-provisioning.nix {};
   karma = handleTest ./karma.nix {};
