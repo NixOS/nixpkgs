@@ -15,14 +15,6 @@ DEPS_PATH: str = "./pkgs/by-name/ed/edopro/deps.nix"
 with GitHub(UnauthAuthStrategy()) as github:
     edopro: Tag = github.rest.repos.list_tags("edo9300", "edopro").parsed_data[0]
 
-    ocgcore_submodule: ContentSubmodule = github.rest.repos.get_content(
-        "edo9300", "edopro", "ocgcore"
-    ).parsed_data
-
-    ocgcore: Commit = github.rest.repos.get_commit(
-        "edo9300", "ygopro-core", ocgcore_submodule.sha
-    ).parsed_data
-
     # This dep is not versioned in anyway and is why we check below to see if this is a new version.
     irrlicht: Commit = github.rest.repos.list_commits(
         "edo9300", "irrlicht1-8-4"
@@ -64,8 +56,7 @@ def get_hash(owner: str, repo: str, rev: str, submodule: bool = False) -> str:
     return out_json["hash"]
 
 
-edopro_hash = get_hash("edo9300", "edopro", edopro.commit.sha, submodule=True)
-ocgcore_hash = get_hash("edo9300", "ygopro-core", ocgcore.sha)
+edopro_hash = get_hash("edo9300", "edopro", edopro.commit.sha)
 irrlicht_hash = get_hash("edo9300", "irrlicht1-8-4", irrlicht.sha)
 
 asset_legacy_hash: str = (
@@ -110,9 +101,6 @@ with open(DEPS_PATH, "w") as file:
   irrlicht-version = "{"1.9.0-unstable-" + irrlicht.commit.committer.date.split("T")[0]}";
   irrlicht-rev = "{irrlicht.sha}";
   irrlicht-hash = "{irrlicht_hash}";
-  ocgcore-version = "{"0-unstable-" + ocgcore.commit.committer.date.split("T")[0]}";
-  ocgcore-rev = "{ocgcore.sha}";
-  ocgcore-hash = "{ocgcore_hash}";
 }}
 """
 
