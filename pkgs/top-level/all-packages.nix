@@ -15751,6 +15751,7 @@ with pkgs;
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
+  tbbLatest = tbb_2021_11;
 
   terra = callPackage ../development/compilers/terra {
     inherit (darwin) libobjc;

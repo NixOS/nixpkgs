@@ -11,6 +11,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HKEh/UQzDQEOvJGHQlM6kEYVZrMaUBOcOGjjHWXSPoo=";
   };
 
+  # Modify the cmake export's installation path for cmake's setup hook to detect it
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace \
+        ' ''${CMAKE_INSTALL_DATAROOTDIR}/''${config_name}/cmake' \
+        ' ''${CMAKE_INSTALL_DATAROOTDIR}/cmake/''${config_name}'
+  '';
+
   nativeBuildInputs = [ cmake python3 ];
 
   postFixup = ''
