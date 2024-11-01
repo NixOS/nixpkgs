@@ -26827,6 +26827,8 @@ with pkgs;
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
 
+  cormorant-garamond = cormorant;
+
   d2coding = callPackage ../data/fonts/d2coding { };
 
   dosis = callPackage ../data/fonts/dosis { };
