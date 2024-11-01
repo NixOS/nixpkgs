@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
     install -D ${./ipa-priv-key.pem} src/ipa-priv-key.pem
   '';
 
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
+
   strictDeps = true;
 
   buildInputs = [
