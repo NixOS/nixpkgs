@@ -33072,6 +33072,11 @@ with pkgs;
 
     # VirtualBox uses wsimport, which was removed after JDK 8.
     jdk = jdk8;
+
+    # Opt out of building the guest BIOS sources with the problematic Open Watcom
+    # toolchain. People who need to build the BIOS from sources (for example to
+    # apply patches) can override this.
+    open-watcom-bin = null;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
