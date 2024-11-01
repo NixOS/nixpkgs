@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
 }:
 let
   version = "0.31.0";
@@ -18,6 +21,23 @@ buildGoModule {
   };
 
   vendorHash = "sha256-5RqAtnGioasbQxLltglCWitzb7mQgNYIE9IFkE0AOME=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let
+      csvtkBin =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out"
+        else
+          lib.getBin buildPackages.csvtk;
+    in
+    ''
+      for shell in bash zsh fish; do
+        ${csvtkBin}/bin/csvtk genautocomplete --shell $shell --file csvtk.$shell
+        installShellCompletion csvtk.$shell
+      done
+    '';
 
   meta = {
     description = "Cross-platform, efficient and practical CSV/TSV toolkit in Golang";
