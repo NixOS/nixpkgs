@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "mnc";
-  version = "0.4";
+  version = "0.5";
 
   vendorHash = "sha256-H0KmGTWyjZOZLIEWophCwRYPeKLxBC050RI7cMXNbPs=";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "~anjan";
     repo = "mnc";
     rev = version;
-    sha256 = "sha256-S7MBIxuYI+cc8OMQULt7VS7ouPqhq0Jk+rz6E5GyKac=";
+    sha256 = "sha256-eCj7wmHxPF2j2x4yHKN7TE122TCv1++azgdoQArabBM=";
   };
 
   meta = with lib; {

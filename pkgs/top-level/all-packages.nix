@@ -15323,7 +15323,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  ocaml-ng = callPackage ./ocaml-packages.nix { } // { __attrsFailEvaluation = true; };
+  ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
@@ -27202,8 +27202,6 @@ with pkgs;
   marwaita-icons = callPackage ../by-name/ma/marwaita-icons/package.nix {
     inherit (kdePackages) breeze-icons;
   };
-
-  marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
 
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 

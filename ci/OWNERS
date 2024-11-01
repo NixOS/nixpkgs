@@ -18,8 +18,8 @@
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
 /.github/workflows/codeowners-v2.yml @infinisil
-/ci/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
+/ci/OWNERS @infinisil @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
@@ -296,10 +296,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/kakoune     @philiptaron
 
 # Neovim
-/pkgs/applications/editors/neovim      @figsoda @teto
+/pkgs/applications/editors/neovim      @NixOS/neovim
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @figsoda
+/pkgs/applications/editors/vim/plugins         @NixOS/neovim
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions

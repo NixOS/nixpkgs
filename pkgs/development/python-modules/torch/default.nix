@@ -223,7 +223,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   outputs = [
@@ -239,7 +239,7 @@ buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-z41VAN4l/6hyHsxNOnJORy5EQK93kSMkDHRVQrdxv7k=";
+    hash = "sha256-17lgAcqJN+vir+Zvffy5cXRmNjd5Y80ev8b8pOj9F+g=";
   };
 
   patches =

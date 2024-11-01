@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "marwaita-pop_os";
-  version = "17.0";
+  pname = "marwaita-yellow";
+  version = "20.3.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
-    repo = pname;
-    rev = "1f3561f1231d0e9e931f93c5d59df19ed2205ce0";
-    hash = "sha256-WbCIMEWF5853TQyhq8aRoWzpsmjObm9hEc4I0pxDNOM=";
+    repo = "marwaita-yellow";
+    rev = version;
+    hash = "sha256-ClM2lvFFLNz+pF/pY7j/V5L24egB3oxpkH8cpZMSu5g=";
   };
 
   buildInputs = [
