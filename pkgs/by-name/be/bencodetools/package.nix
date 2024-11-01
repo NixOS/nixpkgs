@@ -12,13 +12,11 @@ stdenv.mkDerivation {
     owner = "heikkiorsila";
     repo = "bencodetools";
     rev = "384d78d297a561dddbbd0f4632f0c74c0db41577";
-    sha256 = "1d699q9r33hkmmqkbh92ax54mcdf9smscmc0dza2gp4srkhr83qm";
+    hash = "sha256-FQ+U4cya3CfUb4BVpqtOrrFKSlciwTVxrROOkRNOybQ=";
   };
 
   postPatch = ''
     patchShebangs configure
-    substituteInPlace configure \
-      --replace 'python_install_option=""' 'python_install_option="--prefix=$out"'
   '';
 
   enableParallelBuilding = true;
@@ -36,12 +34,12 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools for manipulating bencoded data";
     homepage = "https://gitlab.com/heikkiorsila/bencodetools";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "bencat";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
