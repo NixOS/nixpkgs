@@ -1,0 +1,332 @@
+Description: Use standard mutex and condition variable classes
+ Use std::recursive_mutex and std::condition_variable instead of custom classes
+ based on pthread.
+ .
+ Fixes FTBFS with recent GCC versions which defines the "mutex" class which
+ conflicts with seq24's version of "mutex".
+Author: James Cowgill <jcowgill@debian.org>
+Bug: https://bugs.launchpad.net/seq24/+bug/1647614
+Bug-Debian: https://bugs.debian.org/822394
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/src/Module.am
++++ b/src/Module.am
+@@ -31,8 +31,6 @@ bin_PROGRAMS = %D%/seq24
+   %D%/midibus_portmidi.h \
+   %D%/midifile.cpp \
+   %D%/midifile.h \
+-  %D%/mutex.cpp \
+-  %D%/mutex.h \
+   %D%/options.cpp \
+   %D%/options.h \
+   %D%/optionsfile.cpp \
+--- a/src/midibus.h
++++ b/src/midibus.h
+@@ -35,11 +35,11 @@ class midibus;
+ #    include <alsa/seq_midi_event.h>
+ #endif
+ 
++#include <mutex>
+ #include <string>
+ 
+ #include "event.h"
+ #include "sequence.h"
+-#include "mutex.h"
+ #include "globals.h"
+ 
+ const int c_midibus_output_size = 0x100000;
+@@ -90,7 +90,7 @@ class midibus
+ 
+ 
+     /* locking */
+-    mutex m_mutex;
++    std::recursive_mutex m_mutex;
+ 
+     /* mutex */
+     void lock();
+@@ -208,7 +208,7 @@ class mastermidibus
+     sequence *m_seq;
+ 
+     /* locking */
+-    mutex m_mutex;
++    std::recursive_mutex m_mutex;
+ 
+     /* mutex */
+     void lock();
+--- a/src/midibus_portmidi.h
++++ b/src/midibus_portmidi.h
+@@ -25,12 +25,12 @@ class mastermidibus;
+ 
+ #ifdef __WIN32__
+ 
++#include <mutex>
+ #include <string>
+ 
+ #include "portmidi.h"
+ #include "event.h"
+ #include "sequence.h"
+-#include "mutex.h"
+ #include "globals.h"
+ 
+ const int c_midibus_output_size = 0x100000;
+@@ -65,7 +65,7 @@ class midibus
+     long m_lasttick;
+ 
+     /* locking */
+-    mutex m_mutex;
++    std::recursive_mutex m_mutex;
+ 
+     /* mutex */
+     void lock();
+@@ -164,7 +164,7 @@ class mastermidibus
+     sequence *m_seq;
+ 
+     /* locking */
+-    mutex m_mutex;
++    std::recursive_mutex m_mutex;
+ 
+     /* mutex */
+     void lock();
+--- a/src/mutex.cpp
++++ /dev/null
+@@ -1,62 +0,0 @@
+-//----------------------------------------------------------------------------
+-//
+-//  This file is part of seq24.
+-//
+-//  seq24 is free software; you can redistribute it and/or modify
+-//  it under the terms of the GNU General Public License as published by
+-//  the Free Software Foundation; either version 2 of the License, or
+-//  (at your option) any later version.
+-//
+-//  seq24 is distributed in the hope that it will be useful,
+-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-//  GNU General Public License for more details.
+-//
+-//  You should have received a copy of the GNU General Public License
+-//  along with seq24; if not, write to the Free Software
+-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-//
+-//-----------------------------------------------------------------------------
+-
+-#include "mutex.h"
+-
+-const pthread_mutex_t mutex::recmutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+-const pthread_cond_t condition_var::cond  = PTHREAD_COND_INITIALIZER;
+-
+-mutex::mutex( )
+-{
+-    m_mutex_lock = recmutex;
+-}
+-
+-void
+-mutex::lock( )
+-{
+-    pthread_mutex_lock( &m_mutex_lock );
+-}
+-
+-
+-void
+-mutex::unlock( )
+-{
+-    pthread_mutex_unlock( &m_mutex_lock );
+-}
+-
+-condition_var::condition_var( )
+-{
+-    m_cond = cond;
+-}
+-
+-
+-void
+-condition_var::signal( )
+-{
+-    pthread_cond_signal( &m_cond );
+-}
+-
+-void
+-condition_var::wait( )
+-{
+-    pthread_cond_wait( &m_cond, &m_mutex_lock );
+-}
+-
+-
+--- a/src/mutex.h
++++ /dev/null
+@@ -1,63 +0,0 @@
+-//----------------------------------------------------------------------------
+-//
+-//  This file is part of seq24.
+-//
+-//  seq24 is free software; you can redistribute it and/or modify
+-//  it under the terms of the GNU General Public License as published by
+-//  the Free Software Foundation; either version 2 of the License, or
+-//  (at your option) any later version.
+-//
+-//  seq24 is distributed in the hope that it will be useful,
+-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-//  GNU General Public License for more details.
+-//
+-//  You should have received a copy of the GNU General Public License
+-//  along with seq24; if not, write to the Free Software
+-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-//
+-//-----------------------------------------------------------------------------
+-
+-#pragma once
+-
+-#include "globals.h"
+-
+-#include <pthread.h>
+-
+-class mutex {
+-
+-private:
+-
+-    static const pthread_mutex_t recmutex;
+-
+-protected:
+-
+-    /* mutex lock */
+-    pthread_mutex_t  m_mutex_lock;
+-
+-public:
+-
+-    mutex();
+-
+-    void lock();
+-    void unlock();
+-
+-};
+-
+-class condition_var : public mutex {
+-
+-private:
+-
+-    static const pthread_cond_t cond;
+-
+-    pthread_cond_t m_cond;
+-
+-public:
+-
+-    condition_var();
+-
+-    void wait();
+-    void signal();
+-
+-};
+-
+--- a/src/perform.cpp
++++ b/src/perform.cpp
+@@ -426,7 +426,7 @@ perform::~perform()
+     m_outputing = false;
+     m_running = false;
+ 
+-    m_condition_var.signal();
++    m_condition_var.notify_one();
+ 
+     if (m_out_thread_launched )
+         pthread_join( m_out_thread, NULL );
+@@ -1005,7 +1005,7 @@ void perform::stop()
+ 
+ void perform::inner_start(bool a_state)
+ {
+-    m_condition_var.lock();
++    std::lock_guard<std::mutex> lock(m_mutex);
+ 
+     if (!is_running()) {
+ 
+@@ -1015,10 +1015,8 @@ void perform::inner_start(bool a_state)
+             off_sequences();
+ 
+         set_running(true);
+-        m_condition_var.signal();
++        m_condition_var.notify_one();
+     }
+-
+-    m_condition_var.unlock();
+ }
+ 
+ 
+@@ -1262,18 +1260,18 @@ void perform::output_func()
+ 
+         //printf ("waiting for signal\n");
+ 
+-        m_condition_var.lock();
++        std::unique_lock<std::mutex> lock(m_mutex);
+ 
+         while (!m_running) {
+ 
+-            m_condition_var.wait();
++            m_condition_var.wait(lock);
+ 
+             /* if stopping, then kill thread */
+             if (!m_outputing)
+                 break;
+         }
+ 
+-        m_condition_var.unlock();
++        lock.unlock();
+ 
+         //printf( "signaled [%d]\n", m_playback_mode );
+ 
+--- a/src/perform.h
++++ b/src/perform.h
+@@ -32,6 +32,9 @@ class perform;
+ #endif
+ #include <pthread.h>
+ 
++#include <condition_variable>
++#include <mutex>
++
+ 
+ /* if we have jack, include the jack headers */
+ #ifdef JACK_SUPPORT
+@@ -152,7 +155,8 @@ class perform
+     int m_control_status;
+     int m_screen_set;
+ 
+-    condition_var m_condition_var;
++    std::condition_variable m_condition_var;
++    std::mutex m_mutex;
+ 
+     // do not access these directly, use set/lookup below
+     std::map<unsigned int,long> key_events;
+--- a/src/perfroll.h
++++ b/src/perfroll.h
+@@ -39,8 +39,6 @@
+ 
+ #include "globals.h"
+ #include "perform.h"
+-#include "mutex.h"
+-
+ 
+ using namespace Gtk;
+ 
+--- a/src/sequence.h
++++ b/src/sequence.h
+@@ -26,11 +26,11 @@ class sequence;
+ #include <string>
+ #include <list>
+ #include <stack>
++#include <mutex>
+ 
+ #include "event.h"
+ #include "midibus.h"
+ #include "globals.h"
+-#include "mutex.h"
+ 
+ enum draw_type
+ {
+@@ -153,7 +153,7 @@ class sequence
+     long m_rec_vol;
+ 
+     /* locking */
+-    mutex m_mutex;
++    std::recursive_mutex m_mutex;
+ 
+     /* used to idenfity which events are ours in the out queue */
+     //unsigned char m_tag;
+
