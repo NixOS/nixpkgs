@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-WMWT2os3ADQOc1ogoCFKBEWnb6/CxgtiWmY45bYomks=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     packaging
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     scipy
