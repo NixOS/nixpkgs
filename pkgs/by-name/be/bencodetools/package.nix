@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru = {
+    tests.python-module = python3Packages.bencodetools;
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "Collection of tools for manipulating bencoded data";
