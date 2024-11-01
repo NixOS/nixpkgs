@@ -1,4 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitLab }:
+{
+  buildNpmPackage,
+  callPackage,
+  fetchFromGitLab,
+  lib,
+  nix-update-script,
+}:
 
 buildNpmPackage rec {
   pname = "antora";
@@ -24,11 +30,22 @@ buildNpmPackage rec {
     ln -s $out/lib/node_modules/antora-build/packages/cli/bin/antora $out/bin/antora
   '';
 
+  passthru = {
+    tests.run = callPackage ./test { };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Modular documentation site generator. Designed for users of Asciidoctor";
-    mainProgram = "antora";
     homepage = "https://antora.org";
     license = licenses.mpl20;
-    maintainers = [ maintainers.ehllie ];
+    mainProgram = "antora";
+
+    maintainers = with maintainers; [
+      ehllie
+      naho
+    ];
+
+    platforms = lib.platforms.all;
   };
 }

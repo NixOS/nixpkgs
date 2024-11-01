@@ -2998,8 +2998,6 @@ with pkgs;
 
   ansifilter = callPackage ../tools/text/ansifilter { };
 
-  antora = callPackage ../development/tools/documentation/antora { };
-
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
@@ -9140,7 +9138,6 @@ with pkgs;
   lsdvd = callPackage ../tools/cd-dvd/lsdvd { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
-    inherit (darwin) xnu;
     lua = lua5_2_compat;
   };
 
@@ -9195,9 +9192,7 @@ with pkgs;
     nodejs = nodejs_18;
   };
 
-  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-  };
+  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
@@ -9312,9 +9307,7 @@ with pkgs;
 
   mitm6 = callPackage ../tools/security/mitm6 { };
 
-  mjolnir = callPackage ../servers/mjolnir {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-  };
+  mjolnir = callPackage ../servers/mjolnir { };
 
   mmutils = callPackage ../tools/X11/mmutils { };
 
@@ -9885,8 +9878,6 @@ with pkgs;
   mars-mips = callPackage ../development/tools/mars-mips { };
 
   mb2md = callPackage ../tools/text/mb2md { };
-
-  mbuffer = callPackage ../tools/misc/mbuffer { };
 
   mecab =
     let
@@ -11287,8 +11278,6 @@ with pkgs;
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
-
-  pritunl-client = callPackage ../tools/networking/pritunl-client { };
 
   pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
@@ -24917,7 +24906,7 @@ with pkgs;
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
-  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
+  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
@@ -28451,8 +28440,6 @@ with pkgs;
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
-  corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
-
   coreth = callPackage ../applications/networking/coreth { };
 
   cpeditor = libsForQt5.callPackage ../applications/editors/cpeditor { };
@@ -31648,8 +31635,6 @@ with pkgs;
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
   };
-
-  peazip = libsForQt5.callPackage ../tools/archivers/peazip { };
 
   peek = callPackage ../applications/video/peek { };
 
@@ -36175,8 +36160,6 @@ with pkgs;
 
   ginac = callPackage ../applications/science/math/ginac { };
 
-  glom = callPackage ../applications/misc/glom { };
-
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose {
     enableUnfree = true;
@@ -37895,7 +37878,7 @@ with pkgs;
   wamr = darwin.apple_sdk_11_0.callPackage ../development/interpreters/wamr { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
-    llvmPackages = llvmPackages_15;
+    llvmPackages = llvmPackages_18;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
 

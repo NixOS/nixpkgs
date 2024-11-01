@@ -97,7 +97,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         with subtest("Test unixd connection"):
             client.wait_for_unit("kanidm-unixd.service")
             client.wait_for_file("/run/kanidm-unixd/sock")
-            client.wait_until_succeeds("kanidm-unix status | grep working!")
+            client.wait_until_succeeds("kanidm-unix status | grep online")
 
         with subtest("Test user creation"):
             client.wait_for_unit("getty@tty1.service")
@@ -107,7 +107,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.send_chars("kanidm person posix set-password testuser\n")
             client.wait_until_tty_matches("1", "Enter new")
             client.send_chars("${testCredentials.password}\n")
-            client.wait_until_tty_matches("1", "Retype")
+            client.wait_until_tty_matches("1", "Reenter")
             client.send_chars("${testCredentials.password}\n")
             output = client.succeed("getent passwd testuser")
             assert "TestUser" in output
