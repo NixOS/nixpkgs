@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacentview";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-d4A26p1hmkYEZ+h6kRbHHr4QmAc3PMe3qYdkeKIRGkU=";
   };
 
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image and texture viewer";
     homepage = "https://github.com/bluescan/tacentview";
+    changelog = "https://github.com/bluescan/tacentview/releases/tag/v${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ PopeRigby ];
     mainProgram = "tacentview";

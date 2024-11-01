@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacent";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-z8VuJS8OaVw5CeO/udvBEmcURKIy1oWVYUv6Ai8lTI8=";
   };
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       containers, image loading/saving, image quantization/filtering, command-line parsing, etc.
     '';
     homepage = "https://github.com/bluescan/tacent";
+    changelog = "https://github.com/bluescan/tacent/releases/tag/v${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ PopeRigby ];
     platforms = lib.platforms.linux;
