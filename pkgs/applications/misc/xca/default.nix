@@ -36,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/xca.app" "$out/Applications/xca.app"
+  '';
+
   meta = with lib; {
     description = "X509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
     mainProgram = "xca";
