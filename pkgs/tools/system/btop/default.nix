@@ -5,14 +5,13 @@
   fetchFromGitHub,
   cmake,
   removeReferencesTo,
-  btop,
-  testers,
   autoAddDriverRunpath,
   apple-sdk_15,
+  darwinMinVersionHook,
+  versionCheckHook,
+  rocmPackages,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
-  rocmPackages,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,9 +49,9 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = btop;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Monitor of resources";
