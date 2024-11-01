@@ -79,6 +79,7 @@
   ./hardware/ledger.nix
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
+  ./hardware/memreserver.nix
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
   ./hardware/network/eg25-manager.nix
