@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
+  apple-sdk_11,
   llvmPackages,
   nix-update-script,
   ...
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "nufmt";
   version = "0-unstable-2024-10-20";
 
@@ -19,12 +19,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AurQGIZDYOkMMyAEXP01QziISQcSME3GFtvqjCDoeiw=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      IOKit
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+  ];
 
   env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${llvmPackages.libclang.lib}/lib";
 

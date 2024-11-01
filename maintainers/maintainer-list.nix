@@ -1070,6 +1070,12 @@
     githubId = 50754358;
     name = "Alex Winter";
   };
+  alexymantha = {
+    email = "alexy@mantha.dev";
+    github = "alexymantha";
+    githubId = 1365231;
+    name = "Alexy Mantha";
+  };
   alfarel = {
     email = "alfarelcynthesis@proton.me";
     github = "alfarelcynthesis";
@@ -7420,6 +7426,11 @@
     github = "freezeboy";
     githubId = 13279982;
     name = "freezeboy";
+  };
+  frenetic00 = {
+    github = "frenetic00";
+    githubId = 50942055;
+    name = "frenetic00";
   };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
@@ -21359,6 +21370,11 @@
     github = "Technical27";
     githubId = 38222826;
     name = "Aamaruvi Yogamani";
+  };
+  technobaboo = {
+    github = "technobaboo";
+    githubId = 4541968;
+    name = "Nova King";
   };
   teh = {
     email = "tehunger@gmail.com";
