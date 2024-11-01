@@ -11305,8 +11305,6 @@ with pkgs;
 
   prettyping = callPackage ../tools/networking/prettyping { };
 
-  pritunl-client = callPackage ../tools/networking/pritunl-client { };
-
   pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
