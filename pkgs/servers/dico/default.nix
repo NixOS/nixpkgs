@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, libtool, gettext, zlib, readline, gsasl
-, guile, python3, pcre, libffi, groff, libxcrypt }:
+, guile, python3, pcre, libffi, groff, libxcrypt, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "dico";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [ groff guile python3 pkg-config ];
 
   buildInputs =
     [ libtool gettext zlib readline gsasl guile python3 pcre libffi libxcrypt ];
@@ -21,6 +21,17 @@ stdenv.mkDerivation rec {
 
   # ERROR: All 188 tests were run, 90 failed unexpectedly.
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # So tests don't try to write compiled guile files to RO dir
+  GUILE_AUTO_COMPILE = 0;
+
+  doInstallCheck = true;
+
+  # Make sure those modules are built (no missing deps)
+  preInstallCheck = ''
+  test -f $out/lib/dico/python.so || ( echo "Python module was not built" >&2; exit 1 )
+  test -f $out/lib/dico/guile.so || ( echo "Guile module was not built" >&2; exit 1 )
+  '';
 
   meta = with lib; {
     description = "Flexible dictionary server and client implementing RFC 2229";
