@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEP 561 Typing Stubs for PyGObject";
     homepage = "https://github.com/pygobject/pygobject-stubs";
-    changelog = "https://github.com/pygobject/pygobject-stubs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pygobject/pygobject-stubs/blob/v${version}/CHANGELOG.md";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ hacker1024 ];
   };
