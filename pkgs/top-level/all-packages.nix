@@ -17724,6 +17724,8 @@ with pkgs;
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
+  kafdrop = callPackage ../development/tools/misc/kafdrop { };
+
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
   kamid = callPackage ../servers/ftp/kamid { };
