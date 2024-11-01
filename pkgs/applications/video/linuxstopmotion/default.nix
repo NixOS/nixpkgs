@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchgit,
   pkg-config,
   qmake,
@@ -10,9 +10,10 @@
   libvorbis,
   libtar,
   libxml2,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "0.8.5";
   pname = "linuxstopmotion";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
