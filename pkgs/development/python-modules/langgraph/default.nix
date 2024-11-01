@@ -59,6 +59,7 @@ buildPythonPackage rec {
     langgraph-sdk
   ];
 
+  pythonRelaxDeps = [ "langgraph-sdk" ];
   pythonImportsCheck = [ "langgraph" ];
 
   # postgresql doesn't play nicely with the darwin sandbox:
