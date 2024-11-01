@@ -19,7 +19,7 @@
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
 /.github/workflows/codeowners-v2.yml @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
-/ci/OWNERS @infinisil
+/ci/OWNERS @infinisil @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
