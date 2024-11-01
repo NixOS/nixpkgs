@@ -546,6 +546,7 @@ in {
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
   loki = handleTest ./loki.nix {};
+  lprint = handleTest ./lprint.nix {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
   lxc = handleTest ./lxc {};
