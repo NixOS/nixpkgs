@@ -2,25 +2,26 @@
   lib,
   stdenv,
   fetchgit,
+  cmake,
   pkg-config,
   qt5,
   libvorbis,
-  libtar,
+  libarchive,
   libxml2,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.5";
+  version = "0.8.7";
   pname = "stopmotion";
 
   src = fetchgit {
-    url = "https://git.code.sf.net/p/linuxstopmotion/code";
+    url = "https://invent.kde.org/multimedia/stopmotion";
     rev = version;
-    sha256 = "1612lkwsfzc59wvdj2zbj5cwsyw66bwn31jrzjrxvygxdh4ab069";
+    hash = "sha256-wqrB0mo7sI9ntWF9QlYmGiRiIoLkMzD+mQ6BzhbAKX8=";
   };
 
   nativeBuildInputs = [
-    qt5.qmake
+    cmake
     pkg-config
     qt5.wrapQtAppsHook
   ];
@@ -29,13 +30,9 @@ stdenv.mkDerivation rec {
     qt5.qttools
     qt5.qtmultimedia
     libvorbis
-    libtar
+    libarchive
     libxml2
   ];
-
-  postPatch = ''
-    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin'
-  '';
 
   meta = with lib; {
     description = "Create stop-motion animation movies";
