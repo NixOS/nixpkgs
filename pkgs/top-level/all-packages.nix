@@ -33497,8 +33497,6 @@ with pkgs;
 
   xfractint = callPackage ../applications/graphics/xfractint { };
 
-  xlsxgrep = callPackage ../applications/search/xlsxgrep { };
-
   xmind = callPackage ../applications/misc/xmind { };
 
   xneur = callPackage ../applications/misc/xneur { };

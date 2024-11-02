@@ -2694,6 +2694,23 @@ let
         };
       };
 
+      jroesch.lean = buildVscodeMarketplaceExtension rec {
+        mktplcRef = {
+          name = "lean";
+          publisher = "jroesch";
+          version = "0.16.59";
+          hash = "sha256-tXiAM2MBF+Axd0zB7Rlgx8b8FgwlLaZex0++H2DpBls=";
+        };
+        meta = {
+          changelog = "https://github.com/leanprover/vscode-lean/blob/v${mktplcRef.version}/README.md#release-notes";
+          description = "Lean 3 language support for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jroesch.lean";
+          homepage = "https://github.com/leanprover/vscode-lean";
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [ dotlambda ];
+        };
+      };
+
       julialang.language-julia = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-julia";
