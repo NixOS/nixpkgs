@@ -33,6 +33,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.atlassian.com/software/bamboo";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ techknowlogick ];
+    maintainers = with maintainers; [ ];
   };
 }
