@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, util-linux, coreutils }:
+{ lib, stdenv, fetchFromGitHub, util-linux, coreutils, glib }:
 
 stdenv.mkDerivation rec {
   pname = "profile-sync-daemon";
@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
     PREFIX=\"\" DESTDIR=$out make install
     substituteInPlace $out/bin/profile-sync-daemon \
       --replace "/usr/" "$out/" \
+      --replace "gdbus" "${glib}/bin/gdbus" \
       --replace "sudo " "/run/wrappers/bin/sudo "
+    substituteInPlace $out/bin/psd-suspend-sync \
+      --replace "gdbus" "${glib}/bin/gdbus"
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
