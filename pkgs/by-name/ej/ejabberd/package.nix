@@ -115,7 +115,7 @@ let
         buildInputs = [ sqlite ];
         buildPlugins = [ beamPackages.pc ];
       };
-      p1_mysql = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      p1_mysql = prev.p1_mysql.override { buildPlugins = [ beamPackages.pc ]; };
       epam = prev.epam.override {
         buildInputs = [ pam ];
         buildPlugins = [ beamPackages.pc ];
