@@ -69,7 +69,7 @@ let
     { rlfifo = import ./scx_rlfifo; }
     { rustland = import ./scx_rustland; }
     { rusty = import ./scx_rusty; }
-    { csheds = import ./scx_csheds.nix; }
+    { cscheds = import ./scx_cscheds.nix; }
     { full = import ./scx_full.nix; }
   ];
 in

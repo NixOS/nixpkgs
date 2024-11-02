@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.9.0";
+  version = "2024.10.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L6mTfLIx8kD/5s0Dfp24TEATmjxBXERQjynB0szH3DM=";
+    hash = "sha256-MCiCr00N7894DjckAw3vpxdiNtlgzqivlbSY4A/327E=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-zUui5tYINTDKA91WgRV51ilIPFBJpZ+S2fJwW85KJ9k=";
+    npmDepsHash = "sha256-PPcA6TBsU/gGk4wII+w7VZOm65nS7qGjZ/UoQs31s9M=";
 
     dontBuild = true;
 
@@ -87,18 +87,17 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
-
-    # TypeError: FakeServer.get_server() missing 1 required positional argument: 'server_type'
-    ./fakeredis-0.25-compat.patch
   ];
 
   pythonRelaxDeps = [
     "django-phonenumber-field"
+    "dnspython"
     "importlib-metadata"
     "kombu"
     "markdown"
     "pillow"
     "protobuf"
+    "pycryptodome"
     "pyjwt"
     "python-bidi"
     "qrcode"

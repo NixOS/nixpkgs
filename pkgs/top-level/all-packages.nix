@@ -2998,8 +2998,6 @@ with pkgs;
 
   ansifilter = callPackage ../tools/text/ansifilter { };
 
-  antora = callPackage ../development/tools/documentation/antora { };
-
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
@@ -6950,8 +6948,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  dq = callPackage ../tools/networking/dq { };
-
   dool = callPackage ../tools/system/dool { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -9140,7 +9136,6 @@ with pkgs;
   lsdvd = callPackage ../tools/cd-dvd/lsdvd { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
-    inherit (darwin) xnu;
     lua = lua5_2_compat;
   };
 
@@ -9195,9 +9190,7 @@ with pkgs;
     nodejs = nodejs_18;
   };
 
-  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-  };
+  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
@@ -9312,9 +9305,7 @@ with pkgs;
 
   mitm6 = callPackage ../tools/security/mitm6 { };
 
-  mjolnir = callPackage ../servers/mjolnir {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-  };
+  mjolnir = callPackage ../servers/mjolnir { };
 
   mmutils = callPackage ../tools/X11/mmutils { };
 
@@ -9885,8 +9876,6 @@ with pkgs;
   mars-mips = callPackage ../development/tools/mars-mips { };
 
   mb2md = callPackage ../tools/text/mb2md { };
-
-  mbuffer = callPackage ../tools/misc/mbuffer { };
 
   mecab =
     let
@@ -10723,8 +10712,6 @@ with pkgs;
 
   openvpn = callPackage ../tools/networking/openvpn {};
 
-  openvpn3 = callPackage ../tools/networking/openvpn3 { };
-
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
@@ -11287,8 +11274,6 @@ with pkgs;
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
-
-  pritunl-client = callPackage ../tools/networking/pritunl-client { };
 
   pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
@@ -15326,7 +15311,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  ocaml-ng = callPackage ./ocaml-packages.nix { } // { __attrsFailEvaluation = true; };
+  ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
@@ -24920,7 +24905,7 @@ with pkgs;
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
-  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
+  prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
@@ -27206,8 +27191,6 @@ with pkgs;
     inherit (kdePackages) breeze-icons;
   };
 
-  marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
-
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
@@ -28455,8 +28438,6 @@ with pkgs;
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
-
-  corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
   coreth = callPackage ../applications/networking/coreth { };
 
@@ -30954,12 +30935,6 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc {
-    inherit (python3Packages) sphinx;
-  };
-
-  clerk = callPackage ../applications/audio/clerk { };
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
@@ -31653,8 +31628,6 @@ with pkgs;
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
   };
-
-  peazip = libsForQt5.callPackage ../tools/archivers/peazip { };
 
   peek = callPackage ../applications/video/peek { };
 
@@ -33083,6 +33056,11 @@ with pkgs;
 
     # VirtualBox uses wsimport, which was removed after JDK 8.
     jdk = jdk8;
+
+    # Opt out of building the guest BIOS sources with the problematic Open Watcom
+    # toolchain. People who need to build the BIOS from sources (for example to
+    # apply patches) can override this.
+    open-watcom-bin = null;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
@@ -34930,8 +34908,6 @@ with pkgs;
 
   raylib-games = callPackage ../games/raylib-games { };
 
-  raycast = callPackage ../os-specific/darwin/raycast { };
-
   redeclipse = callPackage ../games/redeclipse { };
 
   rftg = callPackage ../games/rftg { };
@@ -36179,8 +36155,6 @@ with pkgs;
   giac-with-xcas = giac.override { enableGUI = true; };
 
   ginac = callPackage ../applications/science/math/ginac { };
-
-  glom = callPackage ../applications/misc/glom { };
 
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose {
@@ -37900,7 +37874,7 @@ with pkgs;
   wamr = darwin.apple_sdk_11_0.callPackage ../development/interpreters/wamr { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
-    llvmPackages = llvmPackages_15;
+    llvmPackages = llvmPackages_18;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
 

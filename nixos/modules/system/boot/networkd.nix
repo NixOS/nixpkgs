@@ -915,7 +915,9 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "SendHostname"
           "UseHostname"
+          "Hostname"
           "UseDomains"
           "RouteMetric"
           "RapidCommit"
@@ -936,6 +938,7 @@ let
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")

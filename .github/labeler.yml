@@ -210,6 +210,7 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/**/*
+        - pkgs/by-name/sw/switch-to-configuration-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: nim":

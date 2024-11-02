@@ -20,6 +20,7 @@
   pyqtgraph,
   pyqt5,
   pytestCheckHook,
+  yaffshiv,
   visualizationSupport ? false,
 }:
 
@@ -49,6 +50,7 @@ buildPythonPackage rec {
       squashfsTools
       xz
       pycrypto
+      yaffshiv
     ]
     ++ lib.optionals visualizationSupport [
       matplotlib

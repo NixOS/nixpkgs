@@ -19,6 +19,7 @@
   arrow-cpp,
   Cocoa,
   coc-clangd,
+  coc-css,
   coc-diagnostic,
   coc-pyright,
   code-minimap,
@@ -451,6 +452,11 @@ in
   coc-clangd = buildVimPlugin {
     inherit (coc-clangd) pname version meta;
     src = "${coc-clangd}/lib/node_modules/coc-clangd";
+  };
+
+  coc-css = buildVimPlugin {
+    inherit (coc-css) pname version meta;
+    src = "${coc-css}/lib/node_modules/coc-css";
   };
 
   coc-diagnostic = buildVimPlugin {
@@ -1665,6 +1671,10 @@ in
     }
   );
 
+  nvim-scissors = super.nvim-scissors.overrideAttrs {
+    nvimRequireCheck = "scissors";
+  };
+
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/tealmaker/init.lua \
@@ -2724,7 +2734,6 @@ in
   let
     nodePackageNames = [
       "coc-cmake"
-      "coc-css"
       "coc-docker"
       "coc-emmet"
       "coc-eslint"

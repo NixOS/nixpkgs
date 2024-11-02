@@ -9233,6 +9233,18 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
 
+  nvim-scissors = buildVimPlugin {
+    pname = "nvim-scissors";
+    version = "2024-10-30";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-scissors";
+      rev = "27213bd106239eeb8adbfdd4f346f76ccd50ce53";
+      sha256 = "sha256-8rOkXEhLNLLaYoBs5Ir3kIDYWPXyhmXL7PAsY2FiX2U=";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-scissors/";
+  };
+
   nvim-search-and-replace = buildVimPlugin {
     pname = "nvim-search-and-replace";
     version = "2022-09-06";
@@ -18766,5 +18778,17 @@ final: prev:
       sha256 = "1wpn6gfw1r89232d779lz8wy19asrribindlcsaikrsqvml3a0hr";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+  };
+
+  fastaction-nvim = buildVimPlugin {
+    pname = "fastaction.nvim";
+    version = "2024-10-24";
+    src = fetchFromGitHub {
+      owner = "Chaitanyabsprip";
+      repo = "fastaction.nvim";
+      rev = "77ae921e6fa6a8e2705768fa89b89b0e45840b94";
+      sha256 = "sha256-2UuEORFTj4+gbuEm1D2FHXrRiU3pDsS5NG50Q9I1wuk=";
+    };
+    meta.homepage = "https://github.com/Chaitanyabsprip/fastaction.nvim/";
   };
 }

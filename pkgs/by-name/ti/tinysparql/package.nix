@@ -185,5 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     pkgConfigModules = [ "tracker-sparql-3.0" "tinysparql-3.0" ];
+    # Not before <gio/gdesktopappinfo.h> is properly conditioned.
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
