@@ -83,7 +83,11 @@ buildPythonPackage rec {
     rm -rf venv/
   '';
 
-  pythonRelaxDeps = [ "tomlkit" ];
+  pythonRelaxDeps = [
+    "tomlkit"
+    "aiofiles"
+    "markupsafe"
+  ];
 
   pythonRemoveDeps = [
     # our package is presented as a binary, not a python lib - and
