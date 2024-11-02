@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.48.6";
+  version = "1.51.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7Or9rZGehejSYv0/5M7PNPNtoSt28DSHBiWXcJutD2I=";
+    hash = "sha256-jC5BiD4JFfsiyNOSlY6rH6l3Dk6AKKXJ8+Q6MTGYTpM=";
   };
 
   build-system = [ poetry-core ];
