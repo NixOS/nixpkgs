@@ -44,7 +44,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/josueBarretogit/manga-tui";
     changelog = "https://github.com/josueBarretogit/manga-tui/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      isabelroses
+      youwen5
+    ];
     mainProgram = "manga-tui";
   };
 }
