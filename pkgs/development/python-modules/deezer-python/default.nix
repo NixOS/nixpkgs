@@ -29,10 +29,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    httpx
-    tornado
-  ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     environs
@@ -40,6 +37,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-vcr
     pytestCheckHook
+    tornado
   ];
 
   pythonImportsCheck = [ "deezer" ];
