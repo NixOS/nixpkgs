@@ -16881,6 +16881,12 @@
     githubId = 943430;
     name = "David Hagege";
   };
+  peat-psuwit = {
+    name = "Ratchanan Srirattanamet";
+    email = "peat@peat-network.xyz";
+    github = "peat-psuwit";
+    githubId = 6771175;
+  };
   pedohorse = {
     github = "pedohorse";
     githubId = 13556996;
