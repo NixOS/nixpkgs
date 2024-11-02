@@ -10,7 +10,7 @@
   lmdb,
   lxml,
   numpy,
-  opencv4,
+  opencv-python,
   openpyxl,
   pdf2docx,
   pillow,
@@ -58,7 +58,6 @@ buildPythonPackage {
   pythonRemoveDeps = [
     "imgaug"
     "visualdl"
-    "opencv-python"
     "opencv-contrib-python"
   ];
 
@@ -71,7 +70,7 @@ buildPythonPackage {
     lmdb
     lxml
     numpy
-    opencv4
+    opencv-python
     openpyxl
     pdf2docx
     pillow
