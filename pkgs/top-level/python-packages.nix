@@ -6644,6 +6644,8 @@ self: super: with self; {
 
   jupyter-core = callPackage ../development/python-modules/jupyter-core { };
 
+  jupyter-docprovider = callPackage ../development/python-modules/jupyter-docprovider { };
+
   jupyter-events = callPackage ../development/python-modules/jupyter-events { };
 
   jupyter-highlight-selected-word = callPackage ../development/python-modules/jupyter-highlight-selected-word { };
