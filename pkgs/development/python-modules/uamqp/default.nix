@@ -3,8 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_0,
   fetchpatch2,
+  setuptools,
+  cython,
   certifi,
   CFNetwork,
   cmake,
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "uamqp";
   version = "1.6.11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
@@ -51,9 +52,13 @@ buildPythonPackage rec {
       src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
   '';
 
+  build-system = [
+    cython
+    setuptools
+  ];
+
   nativeBuildInputs = [
     cmake
-    cython_0
   ];
 
   buildInputs =
@@ -64,7 +69,7 @@ buildPythonPackage rec {
       Security
     ];
 
-  propagatedBuildInputs = [ certifi ];
+  dependencies = [ certifi ];
 
   dontUseCmakeConfigure = true;
 
