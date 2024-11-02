@@ -76,16 +76,21 @@ rec {
 
   };
 
-  yaml = {}: {
+  yaml = {multidoc ? false}: {
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
-      nativeBuildInputs = [ remarshal ];
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal, jq }: runCommand name {
+      nativeBuildInputs = [ remarshal ] ++ lib.optionals multidoc [ jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
       preferLocalBuild = true;
-    } ''
+    } (if multidoc then ''
+      jq -c '.[]' < "$valuePath" | while IFS= read -r line; do
+        echo "---"
+        echo "$line" | json2yaml
+      done > "$out"
+    '' else ''
       json2yaml "$valuePath" "$out"
-    '') {};
+    '')) {};
 
     type = let
       valueType = nullOr (oneOf [
