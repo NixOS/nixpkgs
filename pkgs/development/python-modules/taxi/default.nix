@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "taxi";
-  version = "6.2.0";
+  version = "6.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sephii";
     repo = "taxi";
     rev = version;
-    hash = "sha256-wtLlO/W+39kTPjb2U6c54bxWxAQB7CxGxBh8gur+RCQ=";
+    hash = "sha256-QB88RpgzrQy7DGeRdMHC2SV5Esp/r5LZtlaY5C8vJxw=";
   };
 
   propagatedBuildInputs = [
