@@ -3417,6 +3417,8 @@ self: super: with self; {
 
   django-celery-results = callPackage ../development/python-modules/django-celery-results { };
 
+  django-charid-field = callPackage ../development/python-modules/django-charid-field { };
+
   django-choices-field = callPackage ../development/python-modules/django-choices-field { };
 
   django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
