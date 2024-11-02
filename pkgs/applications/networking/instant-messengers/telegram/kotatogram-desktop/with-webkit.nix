@@ -1,9 +1,9 @@
-{ stdenv, lib, kotatogram-desktop, glib-networking, webkitgtk_4_1, makeWrapper }:
+{ stdenv, lib, kotatogram-desktop, glib-networking, webkitgtk_4_1, makeBinaryWrapper }:
 
 stdenv.mkDerivation {
   pname = "${kotatogram-desktop.pname}-with-webkit";
   version = kotatogram-desktop.version;
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   dontUnpack = true;
   installPhase = ''
     mkdir -p $out
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   '';
   postFixup = ''
     mkdir -p $out/bin
-    makeWrapper {${kotatogram-desktop},$out}/bin/${kotatogram-desktop.meta.mainProgram} \
+    makeBinaryWrapper {${kotatogram-desktop},$out}/bin/${kotatogram-desktop.meta.mainProgram} \
       --inherit-argv0 \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ webkitgtk_4_1 ]}
