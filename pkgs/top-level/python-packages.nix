@@ -1978,6 +1978,8 @@ self: super: with self; {
 
   busypie = callPackage ../development/python-modules/busypie { };
 
+  bx-django-utils = callPackage ../development/python-modules/bx-django-utils { };
+
   bx-py-utils = callPackage ../development/python-modules/bx-py-utils { };
 
   bx-python = callPackage ../development/python-modules/bx-python { };
