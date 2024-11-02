@@ -32,10 +32,6 @@
 , microsoft-gsl
 , boost
 , ada
-, withWebKitGTK ? true
-, wrapGAppsHook3
-, glib-networking
-, webkitgtk_4_1
 , libicns
 , apple-sdk_15
 , nix-update-script
@@ -48,7 +44,7 @@
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-stdenv.mkDerivation (finalAttrs: {
+(stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
   version = "5.6.3";
 
@@ -67,16 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
-    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace-fail '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
-
-  # Avoid double-wrapping
-  dontWrapGApps = true;
 
   # Wrapping the inside of the app bundles, avoiding double-wrapping
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
@@ -91,8 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     # to build bundled libdispatch
     clang
     gobject-introspection
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
-    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -120,9 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     hunspell
     jemalloc
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
-    glib-networking
-    webkitgtk_4_1
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libicns
@@ -140,15 +125,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
   passthru = {
+    with-webkit = callPackage ./with-webkit.nix {
+      telegram-desktop = finalAttrs.finalPackage;
+    };
+    without-webkit = finalAttrs.finalPackage;
     inherit tg_owt;
     updateScript = nix-update-script { };
   };
@@ -166,4 +151,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-})
+})).with-webkit

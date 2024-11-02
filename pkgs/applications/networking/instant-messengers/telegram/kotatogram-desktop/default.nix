@@ -10,7 +10,7 @@
 let
   version = "1.4.9";
 in
-(libsForQt5.callPackage ../telegram-desktop/default.nix {
+((libsForQt5.callPackage ../telegram-desktop/default.nix {
   inherit stdenv;
 
   tg_owt = (callPackage ../telegram-desktop/tg_owt.nix {
@@ -39,9 +39,7 @@ in
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
   });
-
-  withWebKitGTK = false;
-}).overrideAttrs {
+}).without-webkit.overrideAttrs {
   pname = "kotatogram-desktop";
   version = "${version}-unstable-2024-09-27";
 
@@ -77,4 +75,4 @@ in
     maintainers = with maintainers; [ ilya-fedin ];
     mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
   };
-}
+}).with-webkit

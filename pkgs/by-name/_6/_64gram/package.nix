@@ -6,7 +6,7 @@
 , nix-update-script
 }:
 
-telegram-desktop.overrideAttrs (old: rec {
+(telegram-desktop.without-webkit.overrideAttrs (old: rec {
   pname = "64gram";
   version = "1.1.43";
 
@@ -32,7 +32,7 @@ telegram-desktop.overrideAttrs (old: rec {
     (lib.cmakeBool "disable_autoupdate" true)
   ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru = (old.passthru or {}) // { updateScript = nix-update-script {}; };
 
   meta = with lib; {
     description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
@@ -43,4 +43,4 @@ telegram-desktop.overrideAttrs (old: rec {
     maintainers = with maintainers; [ clot27 ];
     mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-})
+})).with-webkit

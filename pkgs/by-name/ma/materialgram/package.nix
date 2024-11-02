@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
 }:
-telegram-desktop.overrideAttrs (
+(telegram-desktop.without-webkit.overrideAttrs (
   finalAttrs: previousAttrs: {
     pname = "materialgram";
     version = "5.6.1.1";
@@ -31,4 +31,4 @@ telegram-desktop.overrideAttrs (
       mainProgram = "materialgram";
     };
   }
-)
+)).with-webkit
