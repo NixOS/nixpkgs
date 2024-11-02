@@ -12852,10 +12852,6 @@ with pkgs;
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
 
-  trunk = callPackage ../development/tools/trunk {
-    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-  };
-
   trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
