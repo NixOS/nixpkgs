@@ -967,9 +967,9 @@
   },
   "stack-hci-vm": {
     "pname": "stack-hci-vm",
-    "version": "1.3.0",
-    "url": "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-1.3.0-py3-none-any.whl",
-    "hash": "sha256-GVU+UNWcr8wZFmvn6RvkPHJferrh2DOJFPjmBDhT/Ak=",
+    "version": "1.4.3",
+    "url": "https://hciarcvmsstorage.z13.web.core.windows.net/cli-extensions/stack_hci_vm-1.4.3-py3-none-any.whl",
+    "hash": "sha256-T1ulOOgw3O8ZUUfIunHHObK9SUy7moq1HoMcQLwfMyk=",
     "description": "Microsoft Azure Command-Line Tools Stack-HCi-VM Extension"
   },
   "standbypool": {
