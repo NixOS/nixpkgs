@@ -1,8 +1,19 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    concatStringsSep
+    filter
+    literalExpression
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionalAttrs
+    optionalString
+    showWarnings
+    types
+    ;
+
   systemBuilder =
     ''
       mkdir $out
@@ -21,7 +32,7 @@ let
 
       ln -s ${config.system.build.etc}/etc $out/etc
 
-      ${lib.optionalString config.system.etc.overlay.enable ''
+      ${optionalString config.system.etc.overlay.enable ''
         ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
         ln -s ${config.system.build.etcBasedir} $out/etc-basedir
       ''}
@@ -46,13 +57,15 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
+  topLevelName = "nixos-system-${config.system.name}-${config.system.nixos.label}";
+
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `bin/apply` that activates the configuration and
   # makes it bootable. See `activatable-system.nix` and `switchable-system.nix`.
   baseSystem = pkgs.stdenvNoCC.mkDerivation ({
-    name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
+    name = topLevelName;
     preferLocalBuild = true;
     allowSubstitutes = false;
     passAsFile = [ "extraDependencies" ];
@@ -94,6 +107,51 @@ let
       ln -sn $systemBuildClosure $out/build-closure
     '';
   });
+
+  /**
+   * The toplevel derivation may be produced either by replaceDependencies or by the normal toplevel derivation, or even `systemWithBuildDeps`.
+   *
+   * These are quite distinct implementations, and their implementation details leak onto the package attrset due to how `mkDerivation` works.
+   *
+   * This leaking creates a risk that some code may depend on an attribute that is only present in one of the derivations.
+   * Then, when a security issue is patched with `replaceDependencies`, the code may break.
+   *
+   * This is not the kind of thing you want to debug when you're already dealing with a security problem, so with `lazyDerivation` we remove anything that is not strictly necessary here, or not present on each possible derivation recipe.
+   *
+   * Finally, `lazyDerivation` may also improve evaluation performance when toplevels are taken out of their NixOS configuration context and type-tested to see that they're derivations, _but not fully evaluated_.
+   */
+  setPackageAttrs = drv: lib.lazyDerivation {
+    derivation = drv;
+    outputs = [ "out" ];
+    passthru = {
+      # For `stdenv.hostPlatform`, to provide the "runtime" system type.
+      # This info may or may not be available in `config.nixpkgs.hostPlatform` or a combination of `localSystem`,`crossSystem`, so historically `toplevel.stdenv.hostPlatform` has been the most reliable source.
+      inherit (pkgs) stdenv;
+      name = topLevelName;
+      # More attributes can be added here, but only if necessary.
+      # Generally we want to pass whole configurations around, not just `toplevel`, and doing so provides access to the whole configuration.
+    };
+    meta = {
+      description = ''A built NixOS configuration or "toplevel"'';
+      longDescription = ''
+        This provides all the configuration files, packages, and scripts that make up a NixOS system.
+
+        ${if config.system.switch.enable
+          then
+            "This configuration can be switched to with `nixos-rebuild switch` or `nix run <config>.config.system.build.toplevel`."
+          else
+            "This configuration can not be switched to at runtime."
+        }
+      '';
+      homepage = "https://nixos.org/nixos";
+      available = true;
+      name = topLevelName;
+      position = __curPos;
+      unsupported = false;
+    } // optionalAttrs config.system.switch.enable {
+      mainProgram = "apply";
+    };
+  };
 
 in
 
@@ -174,7 +232,7 @@ in
       internal = true;
       default = {};
       description = ''
-        `lib.mkDerivation` attributes that will be passed to the top level system builder.
+        `stdenv.mkDerivation` attributes that will be passed to the top level system builder.
       '';
     };
 
@@ -225,7 +283,7 @@ in
     system.replaceDependencies = {
       replacements = mkOption {
         default = [];
-        example = lib.literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
+        example = literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
         type = types.listOf (types.submodule (
           { ... }: {
             imports = [
@@ -323,7 +381,7 @@ in
             "$out/configuration.nix"
         '' +
       optionalString
-        (config.system.forbiddenDependenciesRegexes != []) (lib.concatStringsSep "\n" (map (regex: ''
+        (config.system.forbiddenDependenciesRegexes != []) (concatStringsSep "\n" (map (regex: ''
           if [[ ${regex} != "" && -n $closureInfo ]]; then
             if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
               echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
@@ -352,7 +410,7 @@ in
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
     }
-    // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
+    // optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
       closureInfo = pkgs.closureInfo { rootPaths = [
         # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
         (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
@@ -360,7 +418,13 @@ in
     };
 
 
-    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
+    system.build.toplevel =
+      setPackageAttrs
+        (
+          if config.system.includeBuildDependencies
+          then systemWithBuildDeps
+          else system
+        );
 
   };
 
