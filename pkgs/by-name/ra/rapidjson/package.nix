@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
-, gtest
-, valgrind
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  graphviz,
+  gtest,
+  valgrind,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda Madouura tobim ];
+    maintainers = with maintainers; [
+      dotlambda
+      Madouura
+      tobim
+    ];
   };
 })
