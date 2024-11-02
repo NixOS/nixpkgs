@@ -1023,10 +1023,10 @@
   },
   "subscription": {
     "pname": "subscription",
-    "version": "0.1.5",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/subscription-0.1.5-py2.py3-none-any.whl",
-    "hash": "sha256-/3iWrrxGhiptMKxfTPZL3UDLUOVDfOoplZCJbXXxAT4=",
-    "description": "Support for subscription management preview"
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/subscription-1.0.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-Pzu0+7dhF00ToPhjNit084i8ZI9/KW+bbiGRs1UHrk8=",
+    "description": "Microsoft Azure Command-Line Tools Subscription  Extension"
   },
   "support": {
     "pname": "support",
