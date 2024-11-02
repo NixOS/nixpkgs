@@ -1440,7 +1440,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  ares = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/ares { };
+  ares = callPackage ../applications/emulators/bsnes/ares { };
 
   bsnes-hd = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/bsnes-hd { };
 

@@ -17,7 +17,7 @@
 , udev
 , which
 , wrapGAppsHook3
-, darwin
+, apple-sdk_11
 , vulkan-loader
 , autoPatchelfHook
 }:
@@ -63,8 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     udev
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.OpenAL
+    apple-sdk_11
   ];
 
   appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
