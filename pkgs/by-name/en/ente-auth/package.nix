@@ -31,7 +31,7 @@ flutter324.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  patchPhase = ''
+  postPatch = ''
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
   '';
