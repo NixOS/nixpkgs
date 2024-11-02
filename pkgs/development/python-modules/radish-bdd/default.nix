@@ -41,6 +41,7 @@ buildPythonPackage rec {
     lxml
     parse-type
     pysingleton
+    pyyaml
     tag-expressions
   ];
 
@@ -48,7 +49,6 @@ buildPythonPackage rec {
     freezegun
     pytest-mock
     pytestCheckHook
-    pyyaml
   ];
 
   pythonImportsCheck = [ "radish" ];
@@ -60,6 +60,9 @@ buildPythonPackage rec {
     homepage = "https://radish-bdd.github.io/";
     changelog = "https://github.com/radish-bdd/radish/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [
+      kalbasit
+      l33tname
+    ];
   };
 }
