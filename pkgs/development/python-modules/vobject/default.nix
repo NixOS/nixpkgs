@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.7";
+  version = "0.9.8";
   format = "setuptools";
   pname = "vobject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q3J7+B3oiYStpcEfBm8eFkmQPT49fskfHOloFyr9UlY=";
+    hash = "sha256-2wCn9NtJOXFV3YpoceiioBdabrpaZUww6RD4KylRS1g=";
   };
 
   disabled = isPyPy;
