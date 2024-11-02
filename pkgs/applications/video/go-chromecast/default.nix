@@ -1,10 +1,11 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+# "go test" fails with go 1.23
+buildGo122Module rec {
   pname = "go-chromecast";
   version = "0.3.1";
 
