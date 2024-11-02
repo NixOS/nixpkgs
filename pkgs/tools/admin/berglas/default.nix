@@ -41,7 +41,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/GoogleCloudPlatform/berglas/internal/version.Version=${version}"
+    "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${version}"
   ];
 
   postPatch = skipTestsCommand;
