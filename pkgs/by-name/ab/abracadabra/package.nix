@@ -3,12 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtpositioning,
-  qtlocation,
+  qt6,
   faad2,
   mpg123,
   portaudio,
@@ -31,15 +26,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
-    qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qtlocation
-    qtpositioning
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtlocation
+    qt6.qtpositioning
     faad2
     mpg123
     portaudio
