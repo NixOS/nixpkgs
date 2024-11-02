@@ -1,4 +1,9 @@
-{ stdenv, rustPlatform, lib, fetchFromGitHub }:
+{
+  stdenv,
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lanzaboote-stub";
@@ -19,7 +24,10 @@ rustPlatform.buildRustPackage rec {
   RUSTFLAGS = "-Clinker=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}lld-link -Clinker-flavor=lld-link";
   # Does not support MSVC style options yet (?).
   auditable = false;
-  hardeningDisable = [ "relro" "bindnow" ];
+  hardeningDisable = [
+    "relro"
+    "bindnow"
+  ];
 
   meta = with lib; {
     description = "Lanzaboote UEFI stub for SecureBoot enablement on NixOS systems";
@@ -30,6 +38,10 @@ rustPlatform.buildRustPackage rec {
     # i686: Builtins errors
     # aarch64: compile fine but unable to test on real hardware
     broken = with stdenv.hostPlatform; isi686 || isAarch64;
-    maintainers = with maintainers; [ raitobezarius nikstur blitz ];
+    maintainers = with maintainers; [
+      raitobezarius
+      nikstur
+      blitz
+    ];
   };
 }
