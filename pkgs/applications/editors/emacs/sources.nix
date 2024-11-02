@@ -4,8 +4,8 @@
 }:
 
 let
-  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
-    inherit pname version variant patches;
+  mkArgs = { pname, version, variant, templateNativeCompDriverOptionsPatch, patches ? _: [ ], rev, hash }: {
+    inherit pname version variant templateNativeCompDriverOptionsPatch patches;
 
     src = {
       "mainline" = (fetchFromSavannah {
@@ -75,6 +75,12 @@ in
     variant = "mainline";
     rev = "28.2";
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    # We are using builtins.path because renaming the patch file triggers a rebuild
+    # See: https://nix.dev/guides/best-practices#reproducible-source-paths
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-28.patch;
+    };
     patches = fetchpatch: [
       # CVE-2022-45939
       (fetchpatch {
@@ -110,6 +116,12 @@ in
     variant = "mainline";
     rev = "29.4";
     hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
+    # We are using builtins.path because renaming the patch file triggers a rebuild
+    # See: https://nix.dev/guides/best-practices#reproducible-source-paths
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-29.patch;
+    };
   });
 
   emacs30 = import ./make-emacs.nix (mkArgs {
@@ -118,6 +130,12 @@ in
     variant = "mainline";
     rev = "30.0.92";
     hash = "sha256-V2TXLemSCIPTpg6RDChv4va7pHfVcqSMw/EWqvlRQ1o=";
+    # We are using builtins.path because renaming the patch file triggers a rebuild
+    # See: https://nix.dev/guides/best-practices#reproducible-source-paths
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-30.patch;
+    };
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {
@@ -126,6 +144,12 @@ in
     variant = "macport";
     rev = "emacs-28.2-mac-9.1";
     hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
+    # We are using builtins.path because renaming the patch file triggers a rebuild
+    # See: https://nix.dev/guides/best-practices#reproducible-source-paths
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-28.patch;
+    };
     patches = fetchpatch: [
       # CVE-2022-45939
       (fetchpatch {
@@ -155,5 +179,11 @@ in
     variant = "macport";
     rev = "emacs-29.1-mac-10.0";
     hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+    # We are using builtins.path because renaming the patch file triggers a rebuild
+    # See: https://nix.dev/guides/best-practices#reproducible-source-paths
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-29.patch;
+    };
   });
 }
