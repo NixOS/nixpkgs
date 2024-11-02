@@ -3647,6 +3647,8 @@ self: super: with self; {
 
   django-settings-holder = callPackage ../development/python-modules/django-settings-holder { };
 
+  django-signal-webhooks = callPackage ../development/python-modules/django-signal-webhooks { };
+
   django-silk = callPackage ../development/python-modules/django-silk { };
 
   django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
