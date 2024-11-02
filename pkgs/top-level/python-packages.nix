@@ -2844,6 +2844,8 @@ self: super: with self; {
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
 
+  daltonlens = callPackage ../development/python-modules/daltonlens { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   daqp = callPackage ../development/python-modules/daqp { };
