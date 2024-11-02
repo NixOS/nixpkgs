@@ -9910,6 +9910,15 @@
     githubId = 372912;
     name = "Justin Bedő";
   };
+  jbellerb = {
+    email = "jbellerb@vt.edu";
+    github = "jbellerb";
+    githubId = 25756846;
+    name = "Jared Beller";
+    keys = [{
+      fingerprint = "0D26 C33F 8A6F 273F EFD1  CC56 044B 207F 4820 E3AE";
+    }];
+  };
   jbgi = {
     email = "jb@giraudeau.info";
     github = "jbgi";
