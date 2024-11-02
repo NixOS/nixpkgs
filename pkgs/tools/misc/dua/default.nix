@@ -27,7 +27,13 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  doCheck = false;
+  checkFlags = [
+    # These tests fail because of the fixture removal above
+    "--skip=interactive::app::tests::journeys_readonly::simple_user_journey_read_only"
+    "--skip=interactive::app::tests::journeys_with_writes::basic_user_journey_with_deletion"
+    "--skip=interactive::app::tests::unit::it_can_handle_ending_traversal_reaching_top_but_skipping_levels"
+    "--skip=interactive::app::tests::unit::it_can_handle_ending_traversal_without_reaching_the_top"
+  ];
 
   meta = with lib; {
     description = "Tool to conveniently learn about the disk usage of directories";
