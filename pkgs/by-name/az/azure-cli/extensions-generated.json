@@ -666,9 +666,9 @@
   },
   "managementpartner": {
     "pname": "managementpartner",
-    "version": "0.1.3",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/managementpartner-0.1.3-py2.py3-none-any.whl",
-    "hash": "sha256-It30sc3HfpkmLLYInE2WBABlgoodOKJwn9uUXTyFGDk=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/managementpartner-1.0.0-py2.py3-none-any.whl",
+    "hash": "sha256-pdSiZGR4GLShnNw1arXm+N0bCPpnE8AKFSl9LFoFlJQ=",
     "description": "Support for Management Partner preview"
   },
   "mcc": {
