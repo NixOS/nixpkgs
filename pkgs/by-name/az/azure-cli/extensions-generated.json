@@ -104,6 +104,13 @@
     "hash": "sha256-f9ctJ+Sw7O2jsrTzAcegwwaP6ouW1w+fyq0UIkDefQ0=",
     "description": "Microsoft Azure Command-Line Tools App Service on Kubernetes Extension"
   },
+  "arcgateway": {
+    "pname": "arcgateway",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/arcgateway-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-Mw/R8ZdL7OFtySTjU3MbHw9EA6WONuM0dwXwHb2/A9E=",
+    "description": "Microsoft Azure Command-Line Tools Arcgateway Extension"
+  },
   "astronomer": {
     "pname": "astronomer",
     "version": "1.0.0",
