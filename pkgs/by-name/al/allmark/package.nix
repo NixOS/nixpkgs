@@ -1,10 +1,10 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "allmark";
   version = "0.10.0";
 
