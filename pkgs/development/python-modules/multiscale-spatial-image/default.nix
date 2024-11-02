@@ -9,7 +9,6 @@
   python-dateutil,
   spatial-image,
   xarray,
-  xarray-datatree,
   zarr,
   dask-image,
   fsspec,
@@ -43,7 +42,6 @@ buildPythonPackage rec {
     python-dateutil
     spatial-image
     xarray
-    xarray-datatree
     zarr
   ];
 
