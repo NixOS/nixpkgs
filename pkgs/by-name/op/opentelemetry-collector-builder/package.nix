@@ -24,8 +24,10 @@ buildGoModule rec {
     "-X go.opentelemetry.io/collector/cmd/builder/internal.version=${version}"
   ];
 
-  # The TestGenerateAndCompile tests download new dependencies for a modified go.mod. Nix doesn't allow network access so skipping.
-  checkFlags = [ "-skip TestGenerateAndCompile" ];
+  # Some tests download new dependencies for a modified go.mod. Nix doesn't allow network access so skipping.
+  checkFlags = [
+    "-skip TestGenerateAndCompile|TestReplaceStatementsAreComplete|TestVersioning"
+  ];
 
   # Rename to ocb (it's generated as "builder")
   postInstall = ''
