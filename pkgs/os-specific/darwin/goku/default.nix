@@ -1,18 +1,18 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   unzip,
   joker,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "goku";
   version = "0.7.2";
 
   src =
-    if stdenv.hostPlatform.isAarch64 then
+    if stdenvNoCC.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
         hash = "sha256-mjz1JD12U23Pi8kumELtT9ENhXpX8Db4LUS3DOtP5GM=";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ joker ];
 
-  sourceRoot = if stdenv.hostPlatform.isAarch64 then "goku" else ".";
+  sourceRoot = if stdenvNoCC.hostPlatform.isAarch64 then "goku" else ".";
 
   passthru.updateScript = nix-update-script { };
 
