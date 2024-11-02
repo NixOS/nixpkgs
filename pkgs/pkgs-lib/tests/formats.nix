@@ -145,6 +145,19 @@ in runBuildTests {
     '';
   };
 
+  yamlMultidoc = shouldPass {
+    format = formats.yaml {multidoc = true;};
+    input = [1 2 3];
+    expected = ''
+      ---
+      1
+      ---
+      2
+      ---
+      3
+    '';
+  };
+
   iniAtoms = shouldPass {
     format = formats.ini {};
     input = {
