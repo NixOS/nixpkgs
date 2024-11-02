@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "u3-tool";
@@ -6,10 +10,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "1p9c9kibd1pdbdfa0nd0i3n7bvzi3xg0chm38jg3xfl8gsn0390f";
+  src = fetchFromGitHub {
+    # original sourceforge mirror does not provide direct access to tag 1.0
+    owner = "marcusrugger";
+    repo = "u3-tool";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-c3cfWUUT5lwy8OedAtwvhuNEa5hgfwrKGJPY/zAlALw=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
 
   meta = with lib; {
