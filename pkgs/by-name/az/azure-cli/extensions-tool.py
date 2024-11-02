@@ -304,7 +304,7 @@ def main() -> None:
         extensions_local.remove(prev)
         extensions_local.add(new)
         commit_msg = (
-            f"azure-cli-extension.{prev.pname}: {prev.version} -> {new.version}"
+            f"azure-cli-extensions.{prev.pname}: {prev.version} -> {new.version}"
         )
         _write_extension_set(extension_file, extensions_local)
         if args.commit:
