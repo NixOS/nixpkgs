@@ -3688,6 +3688,10 @@ self: super: with self; {
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
 
+  docling-parse = callPackage ../development/python-modules/docling-parse {
+    loguru-cpp = pkgs.loguru;
+  };
+
   docloud = callPackage ../development/python-modules/docloud { };
 
   docstr-coverage = callPackage ../development/python-modules/docstr-coverage { };
