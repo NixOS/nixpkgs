@@ -34,7 +34,7 @@
 
   # Feature flags
 , withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux # Alsa in/output supporT
-, withAmf ? lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
+, withAmf ? withHeadlessDeps && lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AppKit framework
 , withAribb24 ? withFullDeps # ARIB text and caption decoding
