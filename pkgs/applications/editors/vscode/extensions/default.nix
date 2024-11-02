@@ -5069,8 +5069,8 @@ let
         mktplcRef = {
           name = "vscodeintellicode";
           publisher = "VisualStudioExptTeam";
-          version = "1.2.30";
-          hash = "sha256-f2Gn+W0QHN8jD5aCG+P93Y+JDr/vs2ldGL7uQwBK4lE=";
+          version = "1.3.2";
+          hash = "sha256-2zexyX1YKD5jgtsvDx7/z3luh5We71ys+XRlVcNywfs=";
         };
         meta = {
           description = "AI-assisted development";
