@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
-  version = "2.7.4";
+  version = "3.0.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "swagger_spec_validator";
     rev = "v${version}";
-    hash = "sha256-7+kFmtzeze0QlGf6z/M4J4F7z771a5NWewB1S3+bxn4=";
+    hash = "sha256-8T0973g8JZKLCTpYqyScr/JAiFdBexEReUJoMQh4vO4=";
   };
 
   propagatedBuildInputs = [
