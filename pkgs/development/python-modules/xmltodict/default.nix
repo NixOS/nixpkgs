@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "xmltodict";
-  version = "0.13.0";
+  version = "0.14.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NBWVpIjj4BqFqdiRHYkS/ZIu3l/sxNzkN+tLbI0DflY=";
+    hash = "sha256-IB58KLshDjdJmdHd5jgpI6sO0ail+u7OSKtSW3gQpVM=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
