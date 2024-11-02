@@ -17,6 +17,7 @@
   dataclasses-json,
   grandalf,
   httpx,
+  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
@@ -34,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.39";
+  version = "0.2.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-VZRGlE3MSOzur1TWC6swQjf/o5M62LsYncx2g8dtS+o=";
+    hash = "sha256-8xTjWBq6GSl6X2IId3roS3ZNM/h76EGPitS08YQ4e7Y=";
   };
 
   postgresqlTestSetupPost = ''
@@ -70,6 +71,7 @@ buildPythonPackage rec {
     dataclasses-json
     grandalf
     httpx
+    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
@@ -85,6 +87,8 @@ buildPythonPackage rec {
     postgresql
     postgresqlTestHook
   ];
+
+  pytestFlagsArray = [ "tests/unit_tests" ];
 
   disabledTests = [
     # test is flaky due to pydantic error on the exception
