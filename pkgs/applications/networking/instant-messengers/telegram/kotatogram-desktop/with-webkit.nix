@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   postFixup = ''
     mkdir -p $out/bin
     makeWrapper ${kotatogram-desktop}/bin/kotatogram-desktop $out/bin/kotatogram-desktop \
+      --inherit-argv0 \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ webkitgtk_4_1 ]}
   '';
