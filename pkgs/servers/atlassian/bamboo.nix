@@ -1,7 +1,10 @@
-{ stdenvNoCC, lib, fetchurl, mysql_jdbc
-, withMysql ? true
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  mysql_jdbc,
+  withMysql ? true,
 }:
-
 
 stdenvNoCC.mkDerivation rec {
   pname = "atlassian-bamboo";
@@ -12,16 +15,18 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-Gd4+rH/40s9AvJi/waEVfVwWtT0H3bSlknNV6wxGpNg=";
   };
 
-  buildPhase = ''
-    echo "bamboo.home=/run/bamboo/home" > atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
-    mv conf/server.xml conf/server.xml.dist
-    ln -sf /run/atlassian-bamboo/server.xml conf/server.xml
-    rm -r logs; ln -sf /run/atlassian-bamboo/logs/ .
-    rm -r temp; ln -sf /run/atlassian-bamboo/temp/ .
-    rm -r work; ln -sf /run/atlassian-bamboo/work/ .
-  '' + lib.optionalString withMysql ''
-    cp -v ${mysql_jdbc}/share/java/*jar atlassian-bamboo/lib/
-  '';
+  buildPhase =
+    ''
+      echo "bamboo.home=/run/bamboo/home" > atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
+      mv conf/server.xml conf/server.xml.dist
+      ln -sf /run/atlassian-bamboo/server.xml conf/server.xml
+      rm -r logs; ln -sf /run/atlassian-bamboo/logs/ .
+      rm -r temp; ln -sf /run/atlassian-bamboo/temp/ .
+      rm -r work; ln -sf /run/atlassian-bamboo/work/ .
+    ''
+    + lib.optionalString withMysql ''
+      cp -v ${mysql_jdbc}/share/java/*jar atlassian-bamboo/lib/
+    '';
 
   installPhase = ''
     cp -rva . $out
