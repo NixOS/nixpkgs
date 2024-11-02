@@ -1,0 +1,25 @@
+ndex cc30424..45badb6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -9,17 +9,17 @@ dependencies = [
+     "click>=8.1.7,<9.0.0",
+     "xdg-base-dirs>=6.0.1,<7.0.0",
+     "click-default-group>=1.2.4,<2.0.0",
+-    "httpx[brotli]>=0.27.2,<1.0.0",
++    "httpx[brotli]>=0.27.0,<1.0.0",
+     "pyperclip>=1.9.0,<2.0.0",
+-    "pydantic>=2.9.2,<3.0.0",
++    "pydantic>=2.8.2,<3.0.0",
+     "pyyaml>=6.0.2,<7.0.0",
+-    "pydantic-settings>=2.4.0,<3.0.0",
++    "pydantic-settings>=2.3.4,<3.0.0",
+     "python-dotenv>=1.0.1,<2.0.0",
+     "textual[syntax]==0.85.0",
+     # pinned intentionally
+     "textual-autocomplete==3.0.0a12",
+     # pinned intentionally
+-    "watchfiles>=0.24.0",
++    "watchfiles>=0.22.0",
+ ]
+ readme = "README.md"
+ requires-python = ">= 3.11"
