@@ -19547,6 +19547,8 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gettext-pseudolocale = callPackage ../development/libraries/gettext-pseudolocale { };
+
   gf2x = callPackage ../development/libraries/gf2x { };
 
   gfxstream = callPackage ../development/libraries/gfxstream { };
