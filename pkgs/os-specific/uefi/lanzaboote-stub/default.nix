@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/lanzaboote";
     license = licenses.gpl3Only;
     mainProgram = "lanzaboote_stub.efi";
-    platforms = [ "x86_64-uefi" "i686-uefi" "aarch64-uefi" ];
+    hydraPlatforms = [ lib.systems.inspect.platformPatterns.isUefi ];
     # i686: Builtins errors
-    # aarch64: compile fine but...
-    broken = stdenv.isi686 || stdenv.isAarch64;
+    # aarch64: compile fine but unable to test on real hardware
+    broken = with stdenv.hostPlatform; isi686 || isAarch64;
     maintainers = with maintainers; [ raitobezarius nikstur blitz ];
   };
 }
