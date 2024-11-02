@@ -321,6 +321,13 @@
     "hash": "sha256-8agBvQw46y6/nC+04LQ6mEcK57QLvNBesqpZbWlXnJ4=",
     "description": "Microsoft Azure Command-Line Tools DataShareManagementClient Extension"
   },
+  "deidservice": {
+    "pname": "deidservice",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/deidservice-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-FJw581LzrLlcttM70PuWJwMs8BoaoyCsud1xJ0RZfNA=",
+    "description": "Microsoft Azure Command-Line Tools Deidservice Extension"
+  },
   "deploy-to-azure": {
     "pname": "deploy-to-azure",
     "version": "0.2.0",
