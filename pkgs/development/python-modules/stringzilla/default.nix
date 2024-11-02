@@ -13,20 +13,20 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "3.10.5";
+  version = "3.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E7w6s813OGCld/GRTHMbjVAReTGb37HlB687gP9N9FA=";
+    hash = "sha256-36W7/PL8nRty8cHuMoTr73tQ4uvtjkwP9lyzNLCuhv0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-36LN9AoAWA//pldmQZtKMrck4EoGUW9G2vzdsRw08SA=";
+    hash = "sha256-qa03Jd0MMtDwkp2E81MacRMbzD/O7E29BT0tc2OjLiY=";
   };
 
   build-system = [
