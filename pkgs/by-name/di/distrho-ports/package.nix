@@ -20,14 +20,14 @@ let
     fftwFloat
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "distrho-ports";
-  version = "2021-03-15";
+  version = "2021-03-15-unstable-2024-05-01";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
-    rev = version;
+    rev = "b3596e6a690eb0556e69e8b6d943fee2dfbb04fb";
     sha256 = "00fgqwayd20akww3n2imyqscmyrjyc9jj0ar13k9dhpaxqk2jxbf";
   };
 
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     libXext
     libXrender
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   postFixup = ''
     for file in \
