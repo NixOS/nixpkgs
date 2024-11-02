@@ -3654,6 +3654,8 @@ with pkgs;
 
   himitsu-firefox = callPackage ../tools/security/himitsu-firefox { };
 
+  himitsu-ssh = callPackage ../tools/security/himitsu-ssh { };
+
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
   hostctl = callPackage ../tools/system/hostctl { };
