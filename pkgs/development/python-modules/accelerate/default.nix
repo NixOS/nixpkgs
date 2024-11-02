@@ -12,6 +12,7 @@
   setuptools,
 
   # dependencies
+  huggingface-hub,
   numpy,
   packaging,
   psutil,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    huggingface-hub
     numpy
     packaging
     psutil
