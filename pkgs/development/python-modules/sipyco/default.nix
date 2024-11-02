@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sipyco";
-  version = "1.4";
+  version = "1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "m-labs";
     repo = "sipyco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sEYWtp11piUIa8YyuTOdFIIJ2GfcrUb+HEzPVKr4hW8=";
+    hash = "sha256-PPnAyDedUQ7Og/Cby9x5OT9wMkNGTP8GS53V6N/dk4w=";
   };
 
   propagatedBuildInputs = [ numpy ];
