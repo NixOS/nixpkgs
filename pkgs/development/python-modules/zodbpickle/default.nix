@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "4.1";
+  version = "4.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-esg1awxi3HQA+b0mUyX2Fe7LJPFDWFnB4utEQ1ivt1c=";
+    hash = "sha256-38DJFe8Umd0GA5cPXBECxr1+t7asRkNLKabYQL8Cckg=";
   };
 
   # fails..
