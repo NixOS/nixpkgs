@@ -34,13 +34,6 @@
     "hash": "sha256-Yd8jThB1npkWwdRHqwK4JjfeEP2XwxoXJS4fUYOFOIM=",
     "description": "Microsoft Azure Command-Line Tools DomainServicesResourceProvider Extension"
   },
-  "adp": {
-    "pname": "adp",
-    "version": "0.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/adp-0.1.0-py3-none-any.whl",
-    "hash": "sha256-/WRRmDL0/TFEMfhxdlB+ECSbjRZVN/gdBcnqUYWuhOw=",
-    "description": "Microsoft Azure Command-Line Tools Adp Extension"
-  },
   "aem": {
     "pname": "aem",
     "version": "0.3.0",
