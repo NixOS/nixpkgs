@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eg25-manager";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     owner = "mobian1";
     repo = "eg25-manager";
     rev = finalAttrs.version;
-    hash = "sha256-hOOYrEM+W7nHc6AQMYg6XQj4dgkLoBQe9S1F65TWPUI=";
+    hash = "sha256-Zna+JplmYrxPYsXToJ3vKOPzPMZYB3bEdfT8GIAHATs=";
   };
 
   postPatch = ''
