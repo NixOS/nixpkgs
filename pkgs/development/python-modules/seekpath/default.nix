@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "giovannipizzi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x592650ynacmx5n5bilj5lja4iw0gf1nfypy82cmy5z363qhqxn";
+    sha256 = "sha256-8Nm8SKHda2qt1kncXZxC4T3cpicXpDZhxPzs78JICzE=";
   };
 
   LC_ALL = "en_US.utf-8";
