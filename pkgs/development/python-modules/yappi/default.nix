@@ -5,28 +5,33 @@
   gevent,
   python,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yappi";
   version = "1.6.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sumerc";
-    repo = pname;
+    repo = "yappi";
     rev = "refs/tags/${version}";
     hash = "sha256-3lGbFDu7sk83KrSHo6qZxHT2dxPWtT8yfXXQO1GbteU=";
   };
 
   patches = [ ./tests.patch ];
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ gevent ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} run_tests.py
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "yappi" ];
