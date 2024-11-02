@@ -3555,6 +3555,8 @@ self: super: with self; {
 
   django-ninja = callPackage ../development/python-modules/django-ninja { };
 
+  django-object-actions = callPackage ../development/python-modules/django-object-actions { };
+
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
   django-otp = callPackage ../development/python-modules/django-otp { };
