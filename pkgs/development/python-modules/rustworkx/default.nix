@@ -4,6 +4,7 @@
   cargo,
   rustPlatform,
   rustc,
+  setuptools,
   setuptools-rust,
   numpy,
   fixtures,
@@ -17,11 +18,11 @@
 buildPythonPackage rec {
   pname = "rustworkx";
   version = "0.15.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "rustworkx";
     rev = version;
     hash = "sha256-0WYgShihTBM0e+MIhON0dnhZug6l280tZcVp3KF1Jq0=";
   };
@@ -32,10 +33,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools-rust
     rustPlatform.cargoSetupHook
     cargo
     rustc
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-rust
   ];
 
   buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
