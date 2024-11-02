@@ -103,7 +103,7 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/openxr" ];
 
-    hardware.opengl.extraPackages = [ pkgs.monado-vulkan-layers ];
+    hardware.graphics.extraPackages = [ pkgs.monado-vulkan-layers ];
 
     environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
       source = "${cfg.package}/share/openxr/1/openxr_monado.json";
