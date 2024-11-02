@@ -39,10 +39,10 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for zkSNARKs";
     homepage = "https://github.com/scipr-lab/libsnark";
-    license = licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }
