@@ -1,7 +1,6 @@
 { lib
 , SDL2
 , alsa-lib
-, darwin
 , fetchFromGitHub
 , gtk3
 , gtksourceview3
@@ -51,13 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     openal
     udev
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon
-    Cocoa
-    OpenAL
-    OpenGL
-  ]);
+  ];
 
   patches = [
     # Includes cmath header
