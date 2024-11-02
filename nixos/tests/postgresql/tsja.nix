@@ -1,25 +1,29 @@
-{ pkgs
-, makeTest
+{
+  pkgs,
+  makeTest,
 }:
 
 let
   inherit (pkgs) lib;
 
-  makeTestFor = package:
+  makeTestFor =
+    package:
     makeTest {
       name = "tsja-${package.name}";
       meta = {
         maintainers = with lib.maintainers; [ chayleaf ];
       };
 
-      nodes.master = { ... }:
+      nodes.master =
+        { ... }:
         {
           services.postgresql = {
             inherit package;
             enable = true;
-            extraPlugins = ps: with ps; [
-              tsja
-            ];
+            extraPlugins =
+              ps: with ps; [
+                tsja
+              ];
           };
         };
 
@@ -37,7 +41,9 @@ let
     };
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.tsja.meta.broken) pkgs.postgresqlVersions)
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (_: p: !p.pkgs.tsja.meta.broken) pkgs.postgresqlVersions
+  )
   // {
     passthru.override = p: makeTestFor p;
   }

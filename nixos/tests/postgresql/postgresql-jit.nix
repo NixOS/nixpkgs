@@ -1,26 +1,30 @@
-{ pkgs
-, makeTest
+{
+  pkgs,
+  makeTest,
 }:
 
 let
   inherit (pkgs) lib;
 
-  makeTestFor = package:
+  makeTestFor =
+    package:
     makeTest {
       name = "postgresql-jit-${package.name}";
       meta.maintainers = with lib.maintainers; [ ma27 ];
 
-      nodes.machine = { pkgs, ... }: {
-        services.postgresql = {
-          inherit package;
-          enable = true;
-          enableJIT = true;
-          initialScript = pkgs.writeText "init.sql" ''
-            create table demo (id int);
-            insert into demo (id) select generate_series(1, 5);
-          '';
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          services.postgresql = {
+            inherit package;
+            enable = true;
+            enableJIT = true;
+            initialScript = pkgs.writeText "init.sql" ''
+              create table demo (id int);
+              insert into demo (id) select generate_series(1, 5);
+            '';
+          };
         };
-      };
 
       testScript = ''
         machine.start()
@@ -45,7 +49,9 @@ let
     };
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (n: _: lib.hasSuffix "_jit" n) pkgs.postgresqlVersions)
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (n: _: lib.hasSuffix "_jit" n) pkgs.postgresqlVersions
+  )
   // {
     passthru.override = p: makeTestFor p;
   }

@@ -1,5 +1,6 @@
-{ pkgs
-, makeTest
+{
+  pkgs,
+  makeTest,
 }:
 
 let
@@ -38,23 +39,28 @@ let
     SELECT * FROM sth;
   '';
 
-  makeTestFor = package:
+  makeTestFor =
+    package:
     makeTest {
       name = "timescaledb-${package.name}";
       meta = with lib.maintainers; {
         maintainers = [ typetetris ];
       };
 
-      nodes.machine = { ... }:
+      nodes.machine =
+        { ... }:
         {
           services.postgresql = {
             inherit package;
             enable = true;
-            extraPlugins = ps: with ps; [
-              timescaledb
-              timescaledb_toolkit
-            ];
-            settings = { shared_preload_libraries = "timescaledb, timescaledb_toolkit"; };
+            extraPlugins =
+              ps: with ps; [
+                timescaledb
+                timescaledb_toolkit
+              ];
+            settings = {
+              shared_preload_libraries = "timescaledb, timescaledb_toolkit";
+            };
           };
         };
 
@@ -85,7 +91,9 @@ in
 # To run these tests:
 #   NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.postgresql.timescaledb
 lib.dontRecurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (_: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions
+  )
   // {
     passthru.override = p: makeTestFor p;
   }

@@ -1,11 +1,13 @@
-{ pkgs
-, makeTest
+{
+  pkgs,
+  makeTest,
 }:
 
 let
   inherit (pkgs) lib;
 
-  makeTestFor = package:
+  makeTestFor =
+    package:
     makeTest {
       name = "wal2json-${package.name}";
       meta.maintainers = with pkgs.lib.maintainers; [ euank ];
@@ -41,7 +43,9 @@ let
     };
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.wal2json.meta.broken) pkgs.postgresqlVersions)
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
+    lib.filterAttrs (_: p: !p.pkgs.wal2json.meta.broken) pkgs.postgresqlVersions
+  )
   // {
     passthru.override = p: makeTestFor p;
   }

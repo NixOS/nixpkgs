@@ -1,11 +1,13 @@
-{ pkgs
-, makeTest
+{
+  pkgs,
+  makeTest,
 }:
 
 let
   inherit (pkgs) lib;
 
-  makeTestFor = package:
+  makeTestFor =
+    package:
     let
       postgresqlDataDir = "/var/lib/postgresql/${package.psqlSchema}";
       replicationUser = "wal_receiver_user";
@@ -19,41 +21,43 @@ let
       name = "postgresql-wal-receiver-${package.name}";
       meta.maintainers = with lib.maintainers; [ pacien ];
 
-      nodes.machine = { ... }: {
-        systemd.tmpfiles.rules = [
-          "d /var/cache/wals 0750 postgres postgres - -"
-        ];
+      nodes.machine =
+        { ... }:
+        {
+          systemd.tmpfiles.rules = [
+            "d /var/cache/wals 0750 postgres postgres - -"
+          ];
 
-        services.postgresql = {
-          inherit package;
-          enable = true;
-          settings = {
-            max_replication_slots = 10;
-            max_wal_senders = 10;
-            recovery_end_command = "touch recovery.done";
-            restore_command = "cp ${walBackupDir}/%f %p";
-            wal_level = "archive"; # alias for replica on pg >= 9.6
+          services.postgresql = {
+            inherit package;
+            enable = true;
+            settings = {
+              max_replication_slots = 10;
+              max_wal_senders = 10;
+              recovery_end_command = "touch recovery.done";
+              restore_command = "cp ${walBackupDir}/%f %p";
+              wal_level = "archive"; # alias for replica on pg >= 9.6
+            };
+            authentication = ''
+              host replication ${replicationUser} all trust
+            '';
+            initialScript = pkgs.writeText "init.sql" ''
+              create user ${replicationUser} replication;
+              select * from pg_create_physical_replication_slot('${replicationSlot}');
+            '';
           };
-          authentication = ''
-            host replication ${replicationUser} all trust
-          '';
-          initialScript = pkgs.writeText "init.sql" ''
-            create user ${replicationUser} replication;
-            select * from pg_create_physical_replication_slot('${replicationSlot}');
-          '';
-        };
 
-        services.postgresqlWalReceiver.receivers.main = {
-          postgresqlPackage = package;
-          connection = replicationConn;
-          slot = replicationSlot;
-          directory = walBackupDir;
+          services.postgresqlWalReceiver.receivers.main = {
+            postgresqlPackage = package;
+            connection = replicationConn;
+            slot = replicationSlot;
+            directory = walBackupDir;
+          };
+          # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
+          # default 60sec is fine for real system, but is too much for a test
+          systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = lib.mkForce 5;
+          systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/var/cache/wals" ];
         };
-        # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
-        # default 60sec is fine for real system, but is too much for a test
-        systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = lib.mkForce 5;
-        systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/var/cache/wals" ];
-      };
 
       testScript = ''
         # make an initial base backup
