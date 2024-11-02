@@ -21910,10 +21910,6 @@ with pkgs;
 
   microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
-  microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
-  microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
-  microsoft-edge-dev = callPackage (import ../applications/networking/browsers/microsoft-edge).dev { };
-
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
