@@ -3645,6 +3645,8 @@ self: super: with self; {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  django-settings-holder = callPackage ../development/python-modules/django-settings-holder { };
+
   django-silk = callPackage ../development/python-modules/django-silk { };
 
   django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
