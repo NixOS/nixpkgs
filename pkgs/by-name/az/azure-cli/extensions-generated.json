@@ -657,6 +657,13 @@
     "hash": "sha256-It30sc3HfpkmLLYInE2WBABlgoodOKJwn9uUXTyFGDk=",
     "description": "Support for Management Partner preview"
   },
+  "mcc": {
+    "pname": "mcc",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mcc-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-anNMf7Gdca1dIQFGSyR8e//doeWcJlHphUf/eesZ7U0=",
+    "description": "Microsoft Connected Cache CLI Commands"
+  },
   "mdp": {
     "pname": "mdp",
     "version": "1.0.0b2",
