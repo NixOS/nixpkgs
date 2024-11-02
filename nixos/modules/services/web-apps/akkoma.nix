@@ -452,8 +452,8 @@ in {
 
       extraPackages = mkOption {
         type = with types; listOf package;
-        default = with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ];
-        defaultText = literalExpression "with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ]";
+        default = with pkgs; [ exiftool ffmpeg-headless imagemagick ];
+        defaultText = literalExpression "with pkgs; [ exiftool ffmpeg-headless imagemagick ]";
         example = literalExpression "with pkgs; [ exiftool ffmpeg-full imagemagick ]";
         description = ''
           List of extra packages to include in the executable search path of the service unit.
