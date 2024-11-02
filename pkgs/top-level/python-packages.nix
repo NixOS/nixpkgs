@@ -123,6 +123,8 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aggregate6 = callPackage ../development/python-modules/aggregate6 { };
+
   ago = callPackage ../development/python-modules/ago { };
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
