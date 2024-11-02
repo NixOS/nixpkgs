@@ -27,18 +27,26 @@ let
 in
 buildNpmPackage' rec {
   pname = "jellyfin-web";
-  version = "10.9.11";
+  version = "10.10.0";
 
-  src =
-    assert version == jellyfin.version;
-    fetchFromGitHub {
-      owner = "jellyfin";
-      repo = "jellyfin-web";
-      rev = "v${version}";
-      hash = "sha256-zt0Exx/4B5gqiN3fxvQuVh1MqRNNtJG6/G0/reqVHRc=";
-    };
+  src = fetchFromGitHub {
+    owner = "jellyfin";
+    repo = "jellyfin-web";
+    rev = "v${version}";
+    hash = "sha256-BuAvdDIvW2mQ+MzVBPGCFV73P6GxR/I3U24kCu+lXbc=";
+  };
 
-  npmDepsHash = "sha256-kQxfh8o8NBshKmmjQrLdxiOQK83LG+lxhZwzDkEJwEo=";
+  postPatch = ''
+    substituteInPlace webpack.common.js \
+      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+  '';
+
+  npmDepsHash = "sha256-EAZm4UTc9+gW7uPiNEp2vLSKA2vOmLKKZ4/DrnGrvYQ=";
+
+  preBuild = ''
+    # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+    rm -r node_modules/sass-embedded*
+  '';
 
   npmBuildScript = [ "build:production" ];
 
