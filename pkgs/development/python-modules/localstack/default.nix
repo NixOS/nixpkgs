@@ -77,5 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/localstack/localstack";
     license = licenses.asl20;
     maintainers = [ ];
+    mainProgram = "localstack";
   };
 }
