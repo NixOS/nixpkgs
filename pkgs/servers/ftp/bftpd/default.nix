@@ -9,10 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lZGFsUV6LNjkBNUpV9UYedVt1yt1qTBJUorxGt4ApsI=";
   };
 
-  # utmp.h is deprecated on aarch64-darwin
-  postPatch = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  # utmp has been replaced by utmpx since Mac OS X 10.6 (Snow Leopard):
+  #
+  #   https://stackoverflow.com/a/37913019
+  #
+  # bftpd does not have support for this, so disable it.
+  #
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in login.*; do
-      substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
+      substituteInPlace $file --replace-fail "#ifdef HAVE_UTMP_H" "#if 0"
     done
   '';
 
