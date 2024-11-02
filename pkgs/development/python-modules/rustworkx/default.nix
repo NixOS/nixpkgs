@@ -13,6 +13,7 @@
   libiconv,
   stdenv,
   lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -45,11 +46,16 @@ buildPythonPackage rec {
 
   buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     networkx
+    pytestCheckHook
     testtools
   ];
+
+  preCheck = ''
+    rm -r rustworkx
+  '';
 
   pythonImportsCheck = [ "rustworkx" ];
 
