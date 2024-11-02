@@ -21910,10 +21910,6 @@ with pkgs;
 
   microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
-  microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
-  microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
-  microsoft-edge-dev = callPackage (import ../applications/networking/browsers/microsoft-edge).dev { };
-
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
@@ -23835,17 +23831,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_4_8 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.8"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_9 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.9"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_9;
+  sbcl_2_4_10 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.10"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_10;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -37832,7 +37828,7 @@ with pkgs;
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vips = callPackage ../tools/graphics/vips {
+  vips = callPackage ../by-name/vi/vips/package.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
 

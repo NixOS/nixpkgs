@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/checkpointpostgres==${version}";
-    hash = "sha256-5gKgCd0hl2iPLBfh94n8kMojECknhd0r+W4gt3m4g+M=";
+    hash = "sha256-E3gdHWUYelR/xI3Cv3T2uVwsyt+tOkw9MjX7I2RAuiQ=";
   };
 
   postgresqlTestSetupPost = ''

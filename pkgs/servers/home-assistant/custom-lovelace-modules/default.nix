@@ -41,6 +41,8 @@
 
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
+  weather-card = callPackage ./weather-card { };
+
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
 }
 // lib.optionalAttrs pkgs.config.allowAliases {
