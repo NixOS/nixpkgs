@@ -309,9 +309,9 @@
   },
   "dataprotection": {
     "pname": "dataprotection",
-    "version": "1.5.3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.5.3-py3-none-any.whl",
-    "hash": "sha256-RnHOieOQZWlfIWJjUN/K1UOL2+/HFM816F7l6rD5ZmE=",
+    "version": "1.5.4",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-1.5.4-py3-none-any.whl",
+    "hash": "sha256-vAyVrv0dte1KioEwriEF8oNqrEwN3WSKDC/hyTudQtg=",
     "description": "Microsoft Azure Command-Line Tools DataProtectionClient Extension"
   },
   "datashare": {
