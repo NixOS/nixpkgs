@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
 
       It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     homepage = "https://kotatogram.github.io";
     changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
