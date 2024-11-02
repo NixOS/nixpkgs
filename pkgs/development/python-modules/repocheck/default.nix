@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "repocheck";
-  version = "2015-08-05";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
