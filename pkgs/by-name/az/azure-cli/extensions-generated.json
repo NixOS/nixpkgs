@@ -974,9 +974,9 @@
   },
   "standbypool": {
     "pname": "standbypool",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/standbypool-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-RMA+MgyLSfUjkOPBHWGyWmev7/wY1iuqUiw3MULeDhU=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/standbypool-1.0.0-py3-none-any.whl",
+    "hash": "sha256-WlY5U30m/7sG845ovWyTntkJBdmssYwHFhgjcy+yfPk=",
     "description": "Microsoft Azure Command-Line Tools Standbypool Extension"
   },
   "staticwebapp": {
