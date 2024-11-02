@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "telegram-bot-api";
-  version = "7.10";
+  version = "7.11";
 
   src = fetchFromGitHub {
     repo = "telegram-bot-api";
     owner = "tdlib";
-    rev = "a186a9ae823d91678ace87ef5b920688c555f5b5";
-    hash = "sha256-1oGDR9WLWC/0QyAmTkMWkbkD+49/gU/nWBZq0mMOl8g=";
+    rev = "6d1b62b51bdc543c10f854aae751e160e5b7b9c5";
+    hash = "sha256-FLHAv9CQ90Jd2DnzQSRl5wHW6hnWUCz0Ap65Vjkgj0s=";
     fetchSubmodules = true;
   };
 
@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       Anillc
       Forden
+      nartsiss
     ];
     platforms = lib.platforms.all;
     mainProgram = "telegram-bot-api";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dq";
-  version = "20240101";
+  version = "20241027";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "dq";
     rev = "refs/tags/${version}";
-    hash = "sha256-dN2QpQU2jRkSVzaYh2MKbJvx0J1XACHHjsM/ePvZAp8=";
+    hash = "sha256-aXNj2JsSCxp3+zTF2/7SAffrzwQH+3NCppxpnPCLT4o=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
