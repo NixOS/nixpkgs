@@ -288,15 +288,6 @@ def main() -> None:
     for prev, new in updated:
         logger.info(f"  {prev.pname} {prev.version} -> {new.version}")
 
-    for ext in removed:
-        extensions_local.remove(ext)
-        # TODO: Add additional check why this is removed
-        # TODO: Add an alias to extensions manual?
-        commit_msg = f"azure-cli-extensions.{ext.pname}: remove"
-        _write_extension_set(extension_file, extensions_local)
-        if args.commit:
-            _commit(repo, commit_msg, [extension_file])
-
     for ext in init:
         extensions_local.add(ext)
         commit_msg = f"azure-cli-extensions.{ext.pname}: init at {ext.version}"
@@ -310,6 +301,15 @@ def main() -> None:
         commit_msg = (
             f"azure-cli-extension.{prev.pname}: {prev.version} -> {new.version}"
         )
+        _write_extension_set(extension_file, extensions_local)
+        if args.commit:
+            _commit(repo, commit_msg, [extension_file])
+
+    for ext in removed:
+        extensions_local.remove(ext)
+        # TODO: Add additional check why this is removed
+        # TODO: Add an alias to extensions manual?
+        commit_msg = f"azure-cli-extensions.{ext.pname}: remove"
         _write_extension_set(extension_file, extensions_local)
         if args.commit:
             _commit(repo, commit_msg, [extension_file])
