@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pymdstat";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01hj8vyd9f7610sqvzphpr033rvnazbwvl11gi18ia3yqlnlncp0";
+    sha256 = "sha256-ifQZXc+it/UTltHc1ZL2zxJu7GvAxYzzmB4D+mCqEoE=";
   };
 
   checkPhase = ''
