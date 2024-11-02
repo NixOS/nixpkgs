@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -38,6 +39,17 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-GC0waXxHRiXVXjhTGbet3HvDKmUBKzoufu/J4fmrM+k=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "opensearch-py-aiohttp-3.10.6-compat.patch";
+      url = "https://github.com/opensearch-project/opensearch-py/commit/0ccd4173cc49b8e15d2c2f1a5fa7459f6e390a86.patch";
+      excludes = [
+        "dev-requirements.txt"
+      ];
+      hash = "sha256-qqS3Nw03q6U3UW1sgQZV3l9SB/Y6Q/RllarTAANgj2A=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
