@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.18.0";
+  version = "1.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "OpenCyphal";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sn7KoJmJbr7Y+N9PAXyhJnts/hW+Gi06nrHj5VIDZMU=";
+    hash = "sha256-Q6Zt7qiFZvTK2pF4nWfHbjwQHZffzKOad6X/HQ94EUo=";
   };
 
   # allow for writable directory for darwin
