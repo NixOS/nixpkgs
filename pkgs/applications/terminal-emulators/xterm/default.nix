@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     "--enable-doublechars"
     "--enable-luit"
     "--enable-mini-luit"
+    "--enable-exec-xterm"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ lib.optional enableDecLocator "--enable-dec-locator";
