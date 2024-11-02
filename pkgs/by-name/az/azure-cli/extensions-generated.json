@@ -435,10 +435,10 @@
   },
   "express-route-cross-connection": {
     "pname": "express-route-cross-connection",
-    "version": "0.1.1",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/express_route_cross_connection-0.1.1-py2.py3-none-any.whl",
-    "hash": "sha256-uD9yO6rg6gRVeofzWPohMbrxXUXNOrp6mrQtFOyA3zg=",
-    "description": "Manage customer ExpressRoute circuits using an ExpressRoute cross-connection"
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/express_route_cross_connection-1.0.0-py3-none-any.whl",
+    "hash": "sha256-x1mbd/Y28BcYqEf+T1rZcOHT8wrq9VnWnCfw9rBnl80=",
+    "description": "Microsoft Azure Command-Line Tools ExpressRouteCrossConnection Extension"
   },
   "firmwareanalysis": {
     "pname": "firmwareanalysis",
