@@ -15013,6 +15013,10 @@ self: super: with self; {
 
   sqlbag = callPackage ../development/python-modules/sqlbag { };
 
+  sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 {};
+  sqlcipher3-binary = callPackage ../development/python-modules/sqlcipher3-binary {};
+  sqlcipher3-wheels = callPackage ../development/python-modules/sqlcipher3-wheels {};
+
   sqlfmt = callPackage ../development/python-modules/sqlfmt { };
 
   sqlglot = callPackage ../development/python-modules/sqlglot { };
