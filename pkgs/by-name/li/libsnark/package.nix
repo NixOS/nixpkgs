@@ -7,6 +7,7 @@
   openssl,
   boost,
   gmp,
+  withProcps ? false,
   procps,
 }:
 
@@ -22,10 +23,10 @@ stdenv.mkDerivation {
     openssl
     boost
     gmp
-  ] ++ lib.optional stdenv.hostPlatform.isLinux procps;
+  ] ++ lib.optional withProcps procps;
 
   cmakeFlags =
-    lib.optionals stdenv.hostPlatform.isDarwin [ "-DWITH_PROCPS=OFF" ]
+    lib.optionals (!withProcps) [ "-DWITH_PROCPS=OFF" ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin || !stdenv.hostPlatform.isx86) [
       "-DWITH_SUPERCOP=OFF"
     ]
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    broken = withProcps; # Despite procps having a valid pkg-config file, CMake doesn't seem to be able to find it.
     description = "C++ library for zkSNARKs";
     homepage = "https://github.com/scipr-lab/libsnark";
     license = lib.licenses.mit;
