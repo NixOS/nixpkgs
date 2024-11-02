@@ -1,0 +1,10 @@
+--- result/apps/desktop/scripts/after-pack.js	1970-01-01 01:00:01.000000000 +0100
++++ source/apps/desktop/scripts/after-pack.js	2024-11-02 21:38:58.691351376 +0100
+@@ -126,6 +126,7 @@
+     : context.packager.appInfo.productFilename; // .toLowerCase() to accomodate Linux file named `name` but productFileName is `Name` -- Replaces '-dev' because on Linux the executable name is `name` even for the DEV builds
+ 
+   const electronBinaryPath = path.join(context.appOutDir, `${executableName}${ext}`);
++  fse.chmodSync(electronBinaryPath, "755");
+ 
+   console.log("## Adding fuses to the electron binary", electronBinaryPath);
+ 

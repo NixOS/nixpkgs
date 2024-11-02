@@ -46,6 +46,7 @@ in buildNpmPackage rec {
 
   patches = [
     ./electron-builder-package-lock.patch
+    ./writable-electron-binary.patch
   ];
 
   postPatch = ''
