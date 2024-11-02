@@ -7,6 +7,9 @@
 , yasm
 }:
 
+let
+  version = "1.4.9";
+in
 (libsForQt5.callPackage ../telegram-desktop/default.nix {
   inherit stdenv;
 
@@ -30,7 +33,7 @@
   withWebKitGTK = false;
 }).overrideAttrs {
   pname = "kotatogram-desktop";
-  version = "1.4.9-unstable-2024-09-27";
+  version = "${version}-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
@@ -62,7 +65,7 @@
     license = licenses.gpl3Only;
     platforms = platforms.all;
     homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
+    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
     maintainers = with maintainers; [ ilya-fedin ];
     mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
   };
