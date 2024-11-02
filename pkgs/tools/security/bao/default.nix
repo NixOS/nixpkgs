@@ -13,7 +13,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+MjfqIg/aKPWhzxbPJ0dnS4egCj50Ib7ob3zXUSBXRg=";
   };
 
-  cargoHash = "sha256-SNsRN5XgchZq6/BZnMeahIqnkP4Jq6bZxbE5cDVpsQA=";
+  cargoPatches = [
+    # https://github.com/oconnor663/bao/pull/55
+    ./test-exe.patch
+  ];
+
+  cargoHash = "sha256-mmhTG3WXVjIKtaz2xP9aYI9GQNTbx4l3c6UgKSMgQJU=";
 
   meta = {
     description = "Implementation of BLAKE3 verified streaming";
