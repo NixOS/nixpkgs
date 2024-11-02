@@ -23969,11 +23969,6 @@ with pkgs;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
-  atlassian-bamboo = callPackage ../servers/atlassian/bamboo.nix { };
-  atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
-  atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
-  atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
-
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
   cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix {
