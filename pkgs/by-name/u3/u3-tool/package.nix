@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,13 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling the special features of a 'U3 smart drive' USB Flash disk";
     homepage = "https://sourceforge.net/projects/u3-tool/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "u3-tool";
   };
 })
