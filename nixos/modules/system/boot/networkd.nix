@@ -1033,6 +1033,7 @@ let
           "BootServerName"
           "BootFilename"
           "IPv6OnlyPreferredSec"
+          "PersistLeases"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1047,6 +1048,7 @@ let
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
+        (assertValueOneOf "PersistLeases" boolValues)
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
