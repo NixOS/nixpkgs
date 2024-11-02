@@ -15051,8 +15051,6 @@ with pkgs;
 
   jna = callPackage ../development/java-modules/jna { };
 
-  javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
-
   juniper = callPackage ../development/compilers/juniper { };
 
   inherit (callPackage ../development/compilers/julia { })
