@@ -1,31 +1,32 @@
-{ lib
-, bubblewrap
-, cacert
-, fetchFromGitLab
-, git
-, imagemagick
-, openmw
-, python3Packages
-, rustPlatform
-, tes3cmd
-, tr-patcher
+{
+  lib,
+  bubblewrap,
+  cacert,
+  fetchFromGitLab,
+  git,
+  imagemagick,
+  openmw,
+  python3Packages,
+  rustPlatform,
+  tes3cmd,
+  tr-patcher,
 }:
 
 let
-  version = "2.6.2";
+  version = "2.8.0";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
+    hash = "sha256-SV0nwUA72vBnaelbErmrSERCWSnZjKUv9LSH4aT8klA=";
   };
 
-  portmod-rust = rustPlatform.buildRustPackage rec {
+  portmod-rust = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-sAjgGVVjgXaWbmN/eGEvatYjkHeFTZNX1GXFcJqs3GI=";
+    cargoHash = "sha256-+JFfbXAjWo8Cx1W7tcPCEBh7qbINjOZtsTjjM8pYevQ=";
 
     nativeBuildInputs = [
       python3Packages.python
@@ -45,7 +46,7 @@ let
   ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";
@@ -84,9 +85,12 @@ python3Packages.buildPythonApplication rec {
     fasteners
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ] ++ bin-programs;
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+    ]
+    ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -113,13 +117,14 @@ python3Packages.buildPythonApplication rec {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    mainProgram = "portmod";
   };
 }
