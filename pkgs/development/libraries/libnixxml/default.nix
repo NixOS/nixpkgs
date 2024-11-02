@@ -29,7 +29,10 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = [ "--with-gd" "--with-glib" ];
-  CFLAGS = "-Wall";
+  CFLAGS = [
+    "-Wall"
+    "-std=c90"
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [
