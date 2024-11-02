@@ -3507,6 +3507,8 @@ self: super: with self; {
 
   django-htmx = callPackage ../development/python-modules/django-htmx { };
 
+  django-huey = callPackage ../development/python-modules/django-huey { };
+
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
   django-import-export = callPackage ../development/python-modules/django-import-export { };
