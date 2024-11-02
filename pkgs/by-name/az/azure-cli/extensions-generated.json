@@ -230,13 +230,6 @@
     "hash": "sha256-tzGoIcYJqui/q34EcLNCuReefgxlSC9KQypg2HpMOV8=",
     "description": "Microsoft Azure Command-Line Tools Connectedvmware Extension"
   },
-  "connection-monitor-preview": {
-    "pname": "connection-monitor-preview",
-    "version": "0.1.0",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/connection_monitor_preview-0.1.0-py2.py3-none-any.whl",
-    "hash": "sha256-mnltUYdXGZDSf+ue/u3eOMGU8T6iHL+ewGExGWv9gh0=",
-    "description": "Microsoft Azure Command-Line Connection Monitor V2 Extension"
-  },
   "cosmosdb-preview": {
     "pname": "cosmosdb-preview",
     "version": "1.0.1",
