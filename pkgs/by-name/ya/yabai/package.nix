@@ -3,15 +3,14 @@
   stdenv,
   fetchFromGitHub,
   fetchzip,
-  installShellFiles,
-  testers,
-  writeShellScript,
+  apple-sdk_15,
   common-updater-scripts,
   curl,
+  installShellFiles,
   jq,
+  versionCheckHook,
+  writeShellScript,
   xxd,
-  yabai,
-  apple-sdk_15,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
@@ -63,12 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "clang" "${stdenv.cc.targetPrefix}clang"
       '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = yabai;
-      version = "yabai-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
+  passthru = {
     sources = {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
