@@ -11,17 +11,18 @@
   hyprlang,
   sdbus-cpp_2,
   systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-20a3pg94dyLFflbBIN+EYJ04nWfWldTfd2YmB/rcrqY=";
+    hash = "sha256-esE2L7+9CsmlSjTIHwU9VAhzvsFSMC3kO7EiutCPQpg=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Hyprland's idle daemon";
