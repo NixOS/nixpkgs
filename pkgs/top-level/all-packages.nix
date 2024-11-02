@@ -6948,8 +6948,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  dq = callPackage ../tools/networking/dq { };
-
   dool = callPackage ../tools/system/dool { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -10713,8 +10711,6 @@ with pkgs;
   opentsdb = callPackage ../tools/misc/opentsdb { };
 
   openvpn = callPackage ../tools/networking/openvpn {};
-
-  openvpn3 = callPackage ../tools/networking/openvpn3 { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
@@ -30944,12 +30940,6 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc {
-    inherit (python3Packages) sphinx;
-  };
-
-  clerk = callPackage ../applications/audio/clerk { };
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
@@ -33071,6 +33061,11 @@ with pkgs;
 
     # VirtualBox uses wsimport, which was removed after JDK 8.
     jdk = jdk8;
+
+    # Opt out of building the guest BIOS sources with the problematic Open Watcom
+    # toolchain. People who need to build the BIOS from sources (for example to
+    # apply patches) can override this.
+    open-watcom-bin = null;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
@@ -34917,8 +34912,6 @@ with pkgs;
   randtype = callPackage ../games/randtype { };
 
   raylib-games = callPackage ../games/raylib-games { };
-
-  raycast = callPackage ../os-specific/darwin/raycast { };
 
   redeclipse = callPackage ../games/redeclipse { };
 
