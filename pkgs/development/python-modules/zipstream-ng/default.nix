@@ -4,12 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
   version = "1.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-mmPxzml+gaVg2IQ/Gql+3ru0hHosbyX4WjLCMxD/MJw=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "zipstream" ];
 
