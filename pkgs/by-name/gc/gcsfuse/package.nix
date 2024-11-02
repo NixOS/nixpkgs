@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, stdenv
 }:
 
 buildGoModule rec {
@@ -41,5 +42,7 @@ buildGoModule rec {
     changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ ];
+    # internal/cache/file/downloader/job.go:386:77: undefined: syscall.O_DIRECT
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
