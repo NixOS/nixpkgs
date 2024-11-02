@@ -1,21 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curlHTTP3, libev }:
 
 let
-  # https-dns-proxy supports HTTP3 if curl has support, but as of 2022-08 curl doesn't work with that enabled
-  # curl' = (curl.override { http3Support = true; });
-  curl' = curl;
-
+  curl' = curlHTTP3;
 in
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
-  version = "unstable-2022-05-05";
+  version = "unstable-2023-11-20";
 
   src = fetchFromGitHub {
     owner = "aarond10";
     repo = "https_dns_proxy";
-    rev = "d310a378795790350703673388821558163944de";
-    hash = "sha256-On4SKUeltPhzM/x+K9aKciKBw5lmVySxnmLi2tnKr3Y=";
+    rev = "489c57efd46983e688579974a2ab7aeaa7df8d83";
+    hash = "sha256-5sbBMQ+a95UOm9laWANhPx+KaXskisXlytc5KK5fHiY=";
   };
 
   postPatch = ''
