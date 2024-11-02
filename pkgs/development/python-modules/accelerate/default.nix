@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XVJqyhDSUPQDHdaB6GDxHhuC6EWCSZNArjzyLpvhQHI=";
+    hash = "sha256-GBNe4zomy8dmfvYrk/9Q77Z6r+JJA+2dgAhJx2opqAc=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
