@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchzip, writeText, conf ? null }:
+{ lib, stdenv, fetchpatch, fetchzip, writeText, darwin, conf ? null }:
 
 let
   rev = "8c32909a159aaa9484c82b71f05b7a73321eb491";
@@ -20,6 +20,10 @@ stdenv.mkDerivation {
 
   installFlags = [ "install-completion" ];
   CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
   patches = [
     # https://github.com/martanne/abduco/pull/22
