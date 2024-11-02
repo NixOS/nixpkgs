@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   pillow,
   pytestCheckHook,
   pythonOlder,
@@ -10,14 +11,18 @@
 buildPythonPackage rec {
   pname = "svg.path";
   version = "6.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6Td0CjFqf+yGrNIXq2Im4RL1EygHhSQSa7fqnb57Gt4=";
+  src = fetchFromGitHub {
+    owner = "regebro";
+    repo = "svg.path";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qes6cKw/Ok0WgcPO/NPuREVNUbnlhm82jF90dK7Ay8U=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pillow
@@ -34,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SVG path objects and parser";
     homepage = "https://github.com/regebro/svg.path";
+    changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = [ ];
   };
