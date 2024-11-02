@@ -228,10 +228,10 @@ in
   in [
     (mkToolModule { name = "nixos-build-vms"; })
     (mkToolModule { name = "nixos-enter"; })
-    (mkToolModule { name = "nixos-generate-config"; package = nixos-generate-config; })
-    (mkToolModule { name = "nixos-install"; package = nixos-install; })
+    (mkToolModule { name = "nixos-generate-config"; package = config.system.build.nixos-generate-config; })
+    (mkToolModule { name = "nixos-install"; package = config.system.build.nixos-install; })
     (mkToolModule { name = "nixos-option"; })
-    (mkToolModule { name = "nixos-rebuild"; package = nixos-rebuild; })
+    (mkToolModule { name = "nixos-rebuild"; package = config.system.build.nixos-rebuild; })
     (mkToolModule { name = "nixos-version"; package = nixos-version; })
   ];
 
