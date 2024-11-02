@@ -30264,7 +30264,7 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
+  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
@@ -32577,7 +32577,7 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
+  telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
