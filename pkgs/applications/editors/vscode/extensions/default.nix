@@ -5053,8 +5053,8 @@ let
         mktplcRef = {
           name = "intellicode-api-usage-examples";
           publisher = "VisualStudioExptTeam";
-          version = "0.2.8";
-          hash = "sha256-aXAS3QX+mrX0kJqf1LUsvguqRxxC0o+jj1bKQteXPNA=";
+          version = "0.2.9";
+          hash = "sha256-8xBD+WLBaxYt8v3+8lvV2SiqV89iE4jeQod2kH7LNHU=";
         };
         meta = {
           description = "See relevant code examples from GitHub for over 100K different APIs right in your editor";
