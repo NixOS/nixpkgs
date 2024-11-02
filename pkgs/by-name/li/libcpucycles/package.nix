@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ python3 ];
 
-  inherit (librandombytes) hardeningDisable configurePlatforms env;
+  inherit (librandombytes) hardeningDisable configurePlatforms env __structuredAttrs;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib"
