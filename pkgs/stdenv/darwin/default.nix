@@ -191,6 +191,7 @@ let
         shell = bash + "/bin/bash";
         initialPath = [
           bash
+          prevStage.file
           bootstrapTools
         ];
 
@@ -370,6 +371,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       ld64 = null;
 
       coreutils = null;
+      file = null;
       gnugrep = null;
 
       pbzx = null;
@@ -416,6 +418,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         coreutils = bootstrapTools;
         cpio = bootstrapTools;
+        file = null;
         gnugrep = bootstrapTools;
         pbzx = bootstrapTools;
 
