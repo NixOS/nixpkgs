@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "6.2";
+  version = "6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GiFZ+duJjfk8RjfP08yvfaH9Bz9Z+ppZUMc+RtSqGso=";
+    hash = "sha256-6Td0CjFqf+yGrNIXq2Im4RL1EygHhSQSa7fqnb57Gt4=";
   };
 
   nativeCheckInputs = [
