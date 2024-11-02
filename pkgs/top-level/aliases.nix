@@ -115,6 +115,10 @@ mapAliases {
   aria = aria2; # Added 2024-03-26
   armcord = throw "ArmCord was renamed to legcord by the upstream developers. Action is required to migrate configurations between the two applications. Please see this PR for more details: https://github.com/NixOS/nixpkgs/pull/347971"; # Added 2024-10-11
   aseprite-unfree = aseprite; # Added 2023-08-26
+  atlassian-bamboo = throw "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"; # Added 2024-11-02
+  atlassian-confluence = throw "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"; # Added 2024-11-02
+  atlassian-crowd = throw "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"; # Added 2024-11-02
+  atlassian-jira = throw "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"; # Added 2024-11-02
   audaciousQt5 = throw "'audaciousQt5' has been removed, since audacious is built with Qt 6 now"; # Added 2024-07-06
   auditBlasHook = throw "'auditBlasHook' has been removed since it never worked"; # Added 2024-04-02
   aumix = throw "'aumix' has been removed due to lack of maintenance upstream. Consider using 'pamixer' for CLI or 'pavucontrol' for GUI"; # Added 2024-09-14
@@ -273,6 +277,7 @@ mapAliases {
   dillong = throw "'dillong' has been removed, as upstream is abandoned since 2021-12-13. Use either 'dillo' or 'dillo-plus'. The latter integrates features from dillong."; # Added 2024-10-07
   dnnl = throw "'dnnl' has been renamed to/replaced by 'oneDNN'"; # Converted to throw 2024-10-17
   dnscrypt-wrapper = throw "dnscrypt-wrapper was removed because it has been effectively unmaintained since 2018. Use DNSCcrypt support in dnsdist instead"; # Added 2024-09-14
+  docear = throw "Docear was removed because it was unmaintained upstream. JabRef, Zotero, or Mendeley are potential replacements."; # Added 2024-11-02
   docker-compose_1 = throw "'docker-compose_1' has been removed because it has been unmaintained since May 2021. Use docker-compose instead."; # Added 2024-07-29
   docker-distribution = distribution; # Added 2023-12-26
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
@@ -536,6 +541,7 @@ mapAliases {
   jami-client-qt = jami-client; # Added 2022-11-06
   jami-client = jami; # Added 2023-02-10
   jami-daemon = jami.daemon; # Added 2023-02-10
+  javacard-devkit = throw "javacard-devkit was dropped due to having a dependency on the Oracle JDK, as well as being several years out-of-date."; # Added 2024-11-01
   jd-cli = throw "jd-cli has been removed due to upstream being unmaintained since 2019. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jd-gui = throw "jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jsawk = throw "'jsawk' has been removed because it is unmaintained upstream"; # Added 2028-08-07
@@ -894,6 +900,15 @@ mapAliases {
   onlyoffice-bin_7_2 = throw "onlyoffice-bin_7_2 has been removed. Please use the latest version available under onlyoffice-bin"; # Added 2024-07-03
   onlyoffice-bin_7_5 = throw "onlyoffice-bin_7_5 has been removed. Please use the latest version available under onlyoffice-bin"; # Added 2024-07-03
   openvswitch-lts = throw "openvswitch-lts has been removed. Please use the latest version available under openvswitch"; # Added 2024-08-24
+  oraclejdk = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  oraclejdk8 = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  oraclejre = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  oraclejre8 = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  jrePlugin = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  jre8Plugin = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  jdkdistro = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  oraclejdk8distro = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
+  oraclejdk11 = throw "All Oracle JDKs and JREs were dropped due to being unmaintained and heavily insecure. OpenJDK provides compatible replacements for JDKs and JREs."; # Added 2024-11-01
   OSCAR = oscar; # Added 2024-06-12
   osxfuse = throw "'osxfuse' has been renamed to/replaced by 'macfuse-stubs'"; # Converted to throw 2024-10-17
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
@@ -1112,6 +1127,7 @@ mapAliases {
   spidermonkey_102 = throw "'spidermonkey_102' is EOL since 2023/03"; # Added 2024-08-07
   spotify-unwrapped = spotify; # added 2022-11-06
   spring-boot = throw "'spring-boot' has been renamed to/replaced by 'spring-boot-cli'"; # Converted to throw 2024-10-17
+  sqldeveloper = throw "sqldeveloper was dropped due to being severely out-of-date and having a dependency on JavaFX for Java 8, which we do not support"; # Added 2024-11-02
   srvc = throw "'srvc' has been removed, as it was broken and unmaintained"; # Added 2024-09-09
   ssm-agent = amazon-ssm-agent; # Added 2023-10-17
   starspace = throw "starspace has been removed from nixpkgs, as it was broken"; # Added 2024-07-15
