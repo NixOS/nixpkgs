@@ -4,21 +4,24 @@
   fetchFromGitHub,
   pyperclip,
   urwid,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "upass";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kwpolska";
     repo = "upass";
     rev = "v${version}";
-    sha256 = "sha256-IlNqPmDaRZ3yRV8O6YKjQkZ3fKNcFgzJHtIX0ADrOyU=";
+    hash = "sha256-IlNqPmDaRZ3yRV8O6YKjQkZ3fKNcFgzJHtIX0ADrOyU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyperclip
     urwid
   ];
