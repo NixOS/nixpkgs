@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "upass";
-  version = "0.2.1";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Kwpolska";
     repo = "upass";
     rev = "v${version}";
-    sha256 = "0bgplq07dmlld3lp6jag1w055glqislfgwwq2k7cb2bzjgvysdnj";
+    sha256 = "sha256-IlNqPmDaRZ3yRV8O6YKjQkZ3fKNcFgzJHtIX0ADrOyU=";
   };
 
   propagatedBuildInputs = [
