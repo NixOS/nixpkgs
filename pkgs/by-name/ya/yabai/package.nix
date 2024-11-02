@@ -20,11 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  env = {
-    # silence service.h error
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
-
   nativeBuildInputs =
     [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
@@ -58,8 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
         --replace-fail "-arch arm64e" "" \
-        --replace-fail "-arch arm64" "" \
-        --replace-fail "clang" "${stdenv.cc.targetPrefix}clang"
+        --replace-fail "-arch arm64" ""
       '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
