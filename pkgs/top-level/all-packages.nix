@@ -19878,6 +19878,8 @@ with pkgs;
 
   gom = callPackage ../development/libraries/gom { };
 
+  langkit_support = callPackage ../development/libraries/ada/langkit_support { };
+
   ace = callPackage ../development/libraries/ace { };
 
   # Not moved to aliases while we decide if we should split the package again.
