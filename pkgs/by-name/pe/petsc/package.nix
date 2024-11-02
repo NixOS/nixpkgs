@@ -10,7 +10,6 @@
   mpiSupport ? true,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  openssh, # required for openmpi tests
   petsc-withp4est ? false,
   hdf5-support ? false,
   hdf5,
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     python3
     gfortran
     pkg-config
-  ] ++ lib.optional mpiSupport mpi ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh;
+  ] ++ lib.optional mpiSupport mpi;
   buildInputs = [
     blas
     lapack
