@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "widlparser";
-  version = "1.0.12";
+  version = "1.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,12 +18,9 @@ buildPythonPackage rec {
     owner = "plinss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-T17fDWYd1naza/ao7kXWGcRIl2fzL1/Z9SaJiutZzqk=";
+    hash = "sha256-G5N29K0/ByfKwP1XfxZH9u/5x361JD/8qAD6eZaySnU=";
   };
 
-  postPatch = ''
-    sed -i -e 's/0.0.0/${version}/' setup.py
-  '';
 
   propagatedBuildInputs = [ typing-extensions ];
 
