@@ -10302,10 +10302,19 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
   };
 
-  libunicode = callPackage ../development/libraries/libunicode {
-    catch2 = catch2_3;
-    fmt = fmt_9;
+  libunicode = callPackage ../by-name/li/libunicode/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   };
+
+  libusbgx = callPackage ../development/libraries/libusbgx { };
+
+  libusbsio = callPackage ../development/libraries/libusbsio { };
+
+  libucontext = callPackage ../development/libraries/libucontext { };
+
+  libutempter = callPackage ../development/libraries/libutempter { };
+
+  libuldaq = callPackage ../development/libraries/libuldaq { };
 
   libunwind =
     # Use the system unwinder in the SDK but provide a compatibility package to:
