@@ -10,7 +10,7 @@
   wayland-scanner,
   hyprlang,
   sdbus-cpp_2,
-  systemd,
+  systemdLibs,
   nix-update-script,
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyprlang
     hyprutils
     sdbus-cpp_2
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
