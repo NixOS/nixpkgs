@@ -16,6 +16,7 @@ openttd.overrideAttrs (oldAttrs: rec {
   meta = {
     homepage = "https://github.com/JGRennison/OpenTTD-patches";
     changelog = "https://github.com/JGRennison/OpenTTD-patches/blob/jgrpp-${version}/jgrpp-changelog.md";
+    mainProgram = "openttd";
   };
 
 })
