@@ -133,11 +133,20 @@
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
+
+  vm-repair = mkAzExtension rec {
+    pname = "vm-repair";
+    version = "2.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
+    hash = "sha256-mBa0SgKyGdxrTtrSVDp78Z0yXUMywL/9o0osKeUbhdU=";
+    description = "Support for repairing Azure Virtual Machines";
+    propagatedBuildInputs = with python3Packages; [ opencensus ];
+    meta.maintainers = with lib.maintainers; [ ];
+  };
 }
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
   adp = throw "The 'adp' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8038
-  blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
+  blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26, https://github.com/Azure/azure-cli-extensions/pull/7370
   connection-monitor-preview = throw "The 'connection-monitor-preview' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8194
-  vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06
 }
