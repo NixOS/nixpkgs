@@ -3,9 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   appdirs,
-  requests,
   click,
-  setuptools,
+  flit-core,
   pytestCheckHook,
   freezegun,
 }:
@@ -13,7 +12,7 @@
 buildPythonPackage rec {
   pname = "taxi";
   version = "6.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sephii";
@@ -22,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-QB88RpgzrQy7DGeRdMHC2SV5Esp/r5LZtlaY5C8vJxw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     appdirs
-    requests
     click
-    setuptools
   ];
 
   nativeCheckInputs = [
