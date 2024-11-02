@@ -380,6 +380,9 @@ py.pkgs.toPythonApplication (
             ${lib.getExe az} --version || exit 1
             touch $out
           '';
+
+        # Ensure the extensions-tool builds.
+        inherit (azure-cli) extensions-tool;
       };
 
       generate-extensions = writeScriptBin "${pname}-update-extensions" ''
