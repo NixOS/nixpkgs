@@ -32512,8 +32512,6 @@ with pkgs;
 
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs { };
 
-  tailor = callPackage ../applications/version-management/tailor { };
-
   tailor-gui = callPackage ../os-specific/linux/tailor-gui { };
 
   taizen = callPackage ../applications/misc/taizen { };
