@@ -41,7 +41,6 @@
   };
 
   patches = [
-    ./macos.patch
     ./macos-opengl.patch
     ./macos-qt5.patch
     (fetchpatch {
