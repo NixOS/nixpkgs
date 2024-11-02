@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goku";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src =
     if stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
-        hash = "sha256-TIoda2kDckK1FBLAmKudsDs3LXO4J0KWiAD2JlFb4rk=";
+        hash = "sha256-mjz1JD12U23Pi8kumELtT9ENhXpX8Db4LUS3DOtP5GM=";
       }
     else
       fetchurl {
