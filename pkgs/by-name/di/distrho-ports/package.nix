@@ -57,47 +57,47 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://distrho.sourceforge.net/ports";
     description = "Linux audio plugins and LV2 ports";
     longDescription = ''
       Includes:
-        arctican-function
-        arctican-pilgrim
-        dexed
-        drowaudio-distortion
-        drowaudio-distortionshaper
-        drowaudio-flanger
-        drowaudio-reverb
-        drowaudio-tremolo
-        drumsynth
-        easySSP
-        eqinox
-        HiReSam
-        juce-opl
-        klangfalter
-        LUFSMeter
-        LUFSMeter-Multi
-        luftikus
-        obxd
-        pitchedDelay
-        refine
-        stereosourceseparation
-        swankyamp
-        tal-dub-3
-        tal-filter
-        tal-filter-2
-        tal-noisemaker
-        tal-reverb
-        tal-reverb-2
-        tal-reverb-3
-        tal-vocoder-2
-        temper
-        vex
-        vitalium
-        wolpertinger
+      - arctican-function
+      - arctican-pilgrim
+      - dexed
+      - drowaudio-distortion
+      - drowaudio-distortionshaper
+      - drowaudio-flanger
+      - drowaudio-reverb
+      - drowaudio-tremolo
+      - drumsynth
+      - easySSP
+      - eqinox
+      - HiReSam
+      - juce-opl
+      - klangfalter
+      - LUFSMeter
+      - LUFSMeter-Multi
+      - luftikus
+      - obxd
+      - pitchedDelay
+      - refine
+      - stereosourceseparation
+      - swankyamp
+      - tal-dub-3
+      - tal-filter
+      - tal-filter-2
+      - tal-noisemaker
+      - tal-reverb
+      - tal-reverb-2
+      - tal-reverb-3
+      - tal-vocoder-2
+      - temper
+      - vex
+      - vitalium
+      - wolpertinger
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl3Only
       gpl2Plus
@@ -106,6 +106,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86;
   };
 }
