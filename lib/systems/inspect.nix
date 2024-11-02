@@ -114,7 +114,7 @@ rec {
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
-    isEfiEnvironment = [
+    isUefi = [
       { kernel = kernels.uefi; }
     ];
 

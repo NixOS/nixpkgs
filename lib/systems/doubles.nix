@@ -116,7 +116,7 @@ in {
   redox         = filterDoubles predicates.isRedox;
   windows       = filterDoubles predicates.isWindows;
   genode        = filterDoubles predicates.isGenode;
-  uefi          = filterDoubles predicates.isEfiEnvironment;
+  uefi          = filterDoubles predicates.isUefi;
 
   embedded      = filterDoubles predicates.isNone;
 }

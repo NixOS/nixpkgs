@@ -321,7 +321,6 @@ rec {
     linker = "lld";
   };
 
-
   aarch64-unknown-uefi = {
     config = "aarch64-unknown-uefi";
     libc = null;
