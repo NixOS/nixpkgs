@@ -1,7 +1,7 @@
 {
   ffmpeg_7-full,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   lib,
 }:
 
@@ -26,6 +26,14 @@ in
       "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
     ];
 
+    patches = [
+      # xeve got an update that broke builds of ffmpeg 7.0.2, is fixed upstream from 7.1 onwards.
+      (fetchpatch2 {
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3e6c7948626f19c46c1a630c788ea6bbd9e7fbcb";
+        hash = "sha256-HmijTDNqKaNpIMe3re4rIMKEo2udd7VFZdryV/+xiYM=";
+        excludes = [ "libavcodec/version.h" ];
+      })
+    ];
 
     postPatch = ''
       for file in $(cat debian/patches/series); do
