@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp gokuw $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.nikitavoloboev ];
-    platforms = platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.nikitavoloboev ];
+    platforms = lib.platforms.darwin;
   };
 })
