@@ -40,11 +40,11 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.AudioUnit
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible music player daemon written in Rust";
     homepage = "https://github.com/tsirysndr/music-player";
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "music-player";
   };
