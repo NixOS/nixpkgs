@@ -238,13 +238,13 @@ in
   config = lib.mkMerge [
     (lib.mkIf config.system.disableInstallerTools {
       system.tools = {
-        nixos-build-vms.enable = false;
-        nixos-enter.enable = false;
-        nixos-generate-config.enable = false;
-        nixos-install.enable = false;
-        nixos-option.enable = false;
-        nixos-rebuild.enable = false;
-        nixos-version.enable = false;
+        nixos-build-vms.enable = lib.mkDefault false;
+        nixos-enter.enable = lib.mkDefault false;
+        nixos-generate-config.enable = lib.mkDefault false;
+        nixos-install.enable = lib.mkDefault false;
+        nixos-option.enable = lib.mkDefault false;
+        nixos-rebuild.enable = lib.mkDefault false;
+        nixos-version.enable = lib.mkDefault false;
       };
     })
     {
