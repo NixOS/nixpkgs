@@ -3,11 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pkg-config,
+  setuptools,
   pango,
   cython,
   AppKit,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -15,13 +16,13 @@
 buildPythonPackage rec {
   pname = "manimpango";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
-    repo = pname;
+    repo = "manimpango";
     rev = "refs/tags/v${version}";
     hash = "sha256-nN+XOnki8fG7URMy2Fhs2X+yNi8Y7wDo53d61xaRa3w=";
   };
@@ -30,17 +31,18 @@ buildPythonPackage rec {
 
   buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
-  propagatedBuildInputs = [ cython ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --no-cov-on-fail" ""
-  '';
-
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
+  preCheck = ''
+    rm -r manimpango
   '';
 
   pythonImportsCheck = [ "manimpango" ];

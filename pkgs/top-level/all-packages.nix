@@ -7328,8 +7328,6 @@ with pkgs;
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
-  evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };
-
   evtest = callPackage ../applications/misc/evtest { };
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
@@ -32183,8 +32181,6 @@ with pkgs;
   shfmt = callPackage ../tools/text/shfmt { };
 
   shipments = callPackage ../applications/misc/shipments { };
-
-  shortwave = callPackage ../applications/audio/shortwave { };
 
   shotgun = callPackage ../tools/graphics/shotgun { };
 
