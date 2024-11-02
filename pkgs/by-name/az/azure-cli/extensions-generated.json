@@ -846,6 +846,13 @@
     "hash": "sha256-cGzCVQ+9B7i2djRcLybFumZVCQW8jsIkxsTlY3xJcmY=",
     "description": "Microsoft Azure Command-Line Tools PurviewManagementClient Extension"
   },
+  "quantum": {
+    "pname": "quantum",
+    "version": "1.0.0b4",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/quantum-1.0.0b4-py3-none-any.whl",
+    "hash": "sha256-c8KlBVlkh2jxI95wOayCiMJlzuTYjpTDzthc7LzmtVI=",
+    "description": "Microsoft Azure Command-Line Tools Quantum Extension"
+  },
   "qumulo": {
     "pname": "qumulo",
     "version": "1.0.0",
