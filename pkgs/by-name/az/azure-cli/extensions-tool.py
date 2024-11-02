@@ -101,6 +101,7 @@ def _write_extension_set(extensions_generated: Path, extensions: Set[Ext]) -> No
     ls.sort(key=lambda e: e.pname)
     with open(extensions_generated, "w") as f:
         json.dump({ext.pname: asdict(ext) for ext in ls}, f, indent=2)
+        f.write("\n")
 
 
 def _convert_hash_digest_from_hex_to_b64_sri(s: str) -> str:
