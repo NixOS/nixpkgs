@@ -5,23 +5,21 @@
 let
   inherit (pkgs) lib;
 
-  makePgjwtTest = postgresqlPackage:
+  makeTestFor = package:
     makeTest {
-      name = "pgjwt-${postgresqlPackage.name}";
+      name = "pgjwt-${package.name}";
       meta = with lib.maintainers; {
         maintainers = [ spinus willibutz ];
       };
 
-      nodes = {
-        master = { ... }:
+      nodes.master = { ... }:
         {
           services.postgresql = {
+            inherit package;
             enable = true;
-            package = postgresqlPackage;
             extraPlugins = ps: with ps; [ pgjwt pgtap ];
           };
         };
-      };
 
       testScript = { nodes, ... }:
       let
@@ -39,8 +37,8 @@ let
     };
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makePgjwtTest p; }) pkgs.postgresqlVersions
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.pgjwt.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makePgjwtTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

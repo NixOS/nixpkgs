@@ -3,27 +3,25 @@
 }:
 
 let
-  makeTsjaTest = postgresqlPackage:
+  inherit (pkgs) lib;
+
+  makeTestFor = package:
     makeTest {
-      name = "tsja-${postgresqlPackage.name}";
+      name = "tsja-${package.name}";
       meta = {
         maintainers = with lib.maintainers; [ chayleaf ];
       };
 
-      nodes = {
-        master =
-          { config, ... }:
-
-          {
-            services.postgresql = {
-              enable = true;
-              package = postgresqlPackage;
-              extraPlugins = ps: with ps; [
-                tsja
-              ];
-            };
+      nodes.master = { ... }:
+        {
+          services.postgresql = {
+            inherit package;
+            enable = true;
+            extraPlugins = ps: with ps; [
+              tsja
+            ];
           };
-      };
+        };
 
       testScript = ''
         start_all()
@@ -38,9 +36,9 @@ let
       '';
     };
 in
-pkgs.lib.recurseIntoAttrs (
-  pkgs.lib.concatMapAttrs (n: p: { ${n} = makeTsjaTest p; }) pkgs.postgresqlVersions
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.tsja.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makeTsjaTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

@@ -3,21 +3,20 @@
 }:
 
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
 
-  makePostgresqlWalReceiverTest = pkg:
+  makeTestFor = package:
     let
-      postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
+      postgresqlDataDir = "/var/lib/postgresql/${package.psqlSchema}";
       replicationUser = "wal_receiver_user";
       replicationSlot = "wal_receiver_slot";
       replicationConn = "postgresql://${replicationUser}@localhost";
       baseBackupDir = "/var/cache/wals/pg_basebackup";
       walBackupDir = "/var/cache/wals/pg_wal";
-
       recoveryFile = pkgs.writeTextDir "recovery.signal" "";
-
-    in makeTest {
-      name = "postgresql-wal-receiver-${pkg.name}";
+    in
+    makeTest {
+      name = "postgresql-wal-receiver-${package.name}";
       meta.maintainers = with lib.maintainers; [ pacien ];
 
       nodes.machine = { ... }: {
@@ -26,7 +25,7 @@ let
         ];
 
         services.postgresql = {
-          package = pkg;
+          inherit package;
           enable = true;
           settings = {
             max_replication_slots = 10;
@@ -45,7 +44,7 @@ let
         };
 
         services.postgresqlWalReceiver.receivers.main = {
-          postgresqlPackage = pkg;
+          postgresqlPackage = package;
           connection = replicationConn;
           slot = replicationSlot;
           directory = walBackupDir;
@@ -64,7 +63,7 @@ let
         # required only for 9.4
         machine.sleep(5)
         machine.succeed(
-            "${pkg}/bin/pg_basebackup --dbname=${replicationConn} --pgdata=${baseBackupDir}"
+            "${package}/bin/pg_basebackup --dbname=${replicationConn} --pgdata=${baseBackupDir}"
         )
 
         # create a dummy table with 100 records
@@ -105,8 +104,8 @@ let
     };
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makePostgresqlWalReceiverTest p; }) pkgs.postgresqlVersions
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) pkgs.postgresqlVersions
   // {
-    passthru.override = p: makePostgresqlWalReceiverTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

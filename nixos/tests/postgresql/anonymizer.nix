@@ -5,16 +5,16 @@
 let
   inherit (pkgs) lib;
 
-  makeAnonymizerTest = postgresqlPackage:
+  makeTestFor = package:
     makeTest {
-      name = "postgresql_anonymizer-${postgresqlPackage.name}";
+      name = "postgresql_anonymizer-${package.name}";
       meta.maintainers = lib.teams.flyingcircus.members;
 
       nodes.machine = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.pg-dump-anon ];
         services.postgresql = {
+          inherit package;
           enable = true;
-          package = postgresqlPackage;
           extraPlugins = ps: [ ps.anonymizer ];
           settings.shared_preload_libraries = [ "anon" ];
         };
@@ -102,9 +102,9 @@ let
       '';
     };
 in
-pkgs.lib.recurseIntoAttrs (
-  pkgs.lib.concatMapAttrs (n: p: { ${n} = makeAnonymizerTest p; }) pkgs.postgresqlVersions
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.anonymizer.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makeAnonymizerTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

@@ -2,9 +2,9 @@
 , makeTest
 }:
 
-with pkgs.lib;
-
 let
+  inherit (pkgs) lib;
+
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION timescaledb;
     CREATE EXTENSION timescaledb_toolkit;
@@ -38,55 +38,55 @@ let
     SELECT * FROM sth;
   '';
 
-  makeTimescaleDbTest = postgresqlPackage: makeTest {
-    name = "timescaledb-${postgresqlPackage.name}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ typetetris ];
-    };
-
-    nodes.machine = { ... }:
-      {
-        services.postgresql = {
-          enable = true;
-          package = postgresqlPackage;
-          extraPlugins = ps: with ps; [
-            timescaledb
-            timescaledb_toolkit
-          ];
-          settings = { shared_preload_libraries = "timescaledb, timescaledb_toolkit"; };
-        };
+  makeTestFor = package:
+    makeTest {
+      name = "timescaledb-${package.name}";
+      meta = with lib.maintainers; {
+        maintainers = [ typetetris ];
       };
 
-    testScript = ''
-      def check_count(statement, lines):
-          return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
-              statement, lines
-          )
+      nodes.machine = { ... }:
+        {
+          services.postgresql = {
+            inherit package;
+            enable = true;
+            extraPlugins = ps: with ps; [
+              timescaledb
+              timescaledb_toolkit
+            ];
+            settings = { shared_preload_libraries = "timescaledb, timescaledb_toolkit"; };
+          };
+        };
+
+      testScript = ''
+        def check_count(statement, lines):
+            return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+                statement, lines
+            )
 
 
-      machine.start()
-      machine.wait_for_unit("postgresql")
+        machine.start()
+        machine.wait_for_unit("postgresql")
 
-      with subtest("Postgresql with extensions timescaledb and timescaledb_toolkit is available just after unit start"):
-          machine.succeed(
-              "sudo -u postgres psql -f ${test-sql}"
-          )
+        with subtest("Postgresql with extensions timescaledb and timescaledb_toolkit is available just after unit start"):
+            machine.succeed(
+                "sudo -u postgres psql -f ${test-sql}"
+            )
 
-      machine.fail(check_count("SELECT * FROM sth;", 3))
-      machine.succeed(check_count("SELECT * FROM sth;", 5))
-      machine.fail(check_count("SELECT * FROM sth;", 4))
+        machine.fail(check_count("SELECT * FROM sth;", 3))
+        machine.succeed(check_count("SELECT * FROM sth;", 5))
+        machine.fail(check_count("SELECT * FROM sth;", 4))
 
-      machine.shutdown()
-    '';
-
-  };
+        machine.shutdown()
+      '';
+    };
 in
 # Not run by default, because this requires allowUnfree.
 # To run these tests:
 #   NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.postgresql.timescaledb
-dontRecurseIntoAttrs (
-  pkgs.lib.concatMapAttrs (n: p: { ${n} = makeTimescaleDbTest p; }) (filterAttrs (n: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
+lib.dontRecurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makeTimescaleDbTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

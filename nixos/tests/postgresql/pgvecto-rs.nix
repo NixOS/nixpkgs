@@ -2,9 +2,9 @@
 , makeTest
 }:
 
-with pkgs.lib;
-
 let
+  inherit (pkgs) lib;
+
   # Test cases from https://docs.pgvecto.rs/use-cases/hybrid-search.html
   test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION vectors;
@@ -22,53 +22,53 @@ let
       ('a thin dog sat on a mat and ate a thin rat', '[10, 11, 12]');
   '';
 
-  makePgVectorsTest = postgresqlPackage: makeTest {
-    name = "pgvecto-rs-${postgresqlPackage.name}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ diogotcorreia ];
-    };
-
-    nodes.machine = { ... }:
-      {
-        services.postgresql = {
-          enable = true;
-          package = postgresqlPackage;
-          extraPlugins = ps: with ps; [
-            pgvecto-rs
-          ];
-          settings.shared_preload_libraries = "vectors";
-        };
+  makeTestFor = postgresqlPackage:
+    makeTest {
+      name = "pgvecto-rs-${postgresqlPackage.name}";
+      meta = with lib.maintainers; {
+        maintainers = [ diogotcorreia ];
       };
 
-    testScript = { nodes, ... }:
-    let
-      inherit (nodes.machine.services.postgresql.package.pkgs) pgvecto-rs;
-    in
-    ''
-      def check_count(statement, lines):
-          return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
-              statement, lines
-          )
+      nodes.machine = { ... }:
+        {
+          services.postgresql = {
+            enable = true;
+            package = postgresqlPackage;
+            extraPlugins = ps: with ps; [
+              pgvecto-rs
+            ];
+            settings.shared_preload_libraries = "vectors";
+          };
+        };
+
+      testScript = { nodes, ... }:
+      let
+        inherit (nodes.machine.services.postgresql.package.pkgs) pgvecto-rs;
+      in
+      ''
+        def check_count(statement, lines):
+            return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+                statement, lines
+            )
 
 
-      machine.start()
-      machine.wait_for_unit("postgresql")
+        machine.start()
+        machine.wait_for_unit("postgresql")
 
-      with subtest("Postgresql with extension vectors is available just after unit start"):
-          machine.succeed(check_count("SELECT * FROM pg_available_extensions WHERE name = 'vectors' AND default_version = '${pgvecto-rs.version}';", 1))
+        with subtest("Postgresql with extension vectors is available just after unit start"):
+            machine.succeed(check_count("SELECT * FROM pg_available_extensions WHERE name = 'vectors' AND default_version = '${pgvecto-rs.version}';", 1))
 
-      machine.succeed("sudo -u postgres psql -f ${test-sql}")
+        machine.succeed("sudo -u postgres psql -f ${test-sql}")
 
-      machine.succeed(check_count("SELECT content, embedding FROM items WHERE to_tsvector('english', content) @@ 'cat & rat'::tsquery;", 2))
+        machine.succeed(check_count("SELECT content, embedding FROM items WHERE to_tsvector('english', content) @@ 'cat & rat'::tsquery;", 2))
 
-      machine.shutdown()
-    '';
-
-  };
+        machine.shutdown()
+      '';
+    };
 in
-recurseIntoAttrs (
-  concatMapAttrs (n: p: { ${n} = makePgVectorsTest p; }) (filterAttrs (n: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions)
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makePgVectorsTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

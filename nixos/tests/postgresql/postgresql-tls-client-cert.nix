@@ -3,43 +3,41 @@
 }:
 
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
 
-  makePostgresqlTlsClientCertTest = pkg:
-    let
-      runWithOpenSSL = file: cmd: pkgs.runCommand file
-        {
-          buildInputs = [ pkgs.openssl ];
-        }
-        cmd;
-      caKey = runWithOpenSSL "ca.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
-      caCert = runWithOpenSSL
-        "ca.crt"
-        ''
-          openssl req -new -x509 -sha256 -key ${caKey} -out $out -subj "/CN=test.example" -days 36500
-        '';
-      serverKey =
-        runWithOpenSSL "server.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
-      serverKeyPath = "/var/lib/postgresql";
-      serverCert =
-        runWithOpenSSL "server.crt" ''
-          openssl req -new -sha256 -key ${serverKey} -out server.csr -subj "/CN=db.test.example"
-          openssl x509 -req -in server.csr -CA ${caCert} -CAkey ${caKey} \
-            -CAcreateserial -out $out -days 36500 -sha256
-        '';
-      clientKey =
-        runWithOpenSSL "client.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
-      clientCert =
-        runWithOpenSSL "client.crt" ''
-          openssl req -new -sha256 -key ${clientKey} -out client.csr -subj "/CN=test"
-          openssl x509 -req -in client.csr -CA ${caCert} -CAkey ${caKey} \
-            -CAcreateserial -out $out -days 36500 -sha256
-        '';
-      clientKeyPath = "/root";
+  runWithOpenSSL = file: cmd: pkgs.runCommand file
+    {
+      buildInputs = [ pkgs.openssl ];
+    }
+    cmd;
+  caKey = runWithOpenSSL "ca.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
+  caCert = runWithOpenSSL
+    "ca.crt"
+    ''
+      openssl req -new -x509 -sha256 -key ${caKey} -out $out -subj "/CN=test.example" -days 36500
+    '';
+  serverKey =
+    runWithOpenSSL "server.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
+  serverKeyPath = "/var/lib/postgresql";
+  serverCert =
+    runWithOpenSSL "server.crt" ''
+      openssl req -new -sha256 -key ${serverKey} -out server.csr -subj "/CN=db.test.example"
+      openssl x509 -req -in server.csr -CA ${caCert} -CAkey ${caKey} \
+        -CAcreateserial -out $out -days 36500 -sha256
+    '';
+  clientKey =
+    runWithOpenSSL "client.key" "openssl ecparam -name prime256v1 -genkey -noout -out $out";
+  clientCert =
+    runWithOpenSSL "client.crt" ''
+      openssl req -new -sha256 -key ${clientKey} -out client.csr -subj "/CN=test"
+      openssl x509 -req -in client.csr -CA ${caCert} -CAkey ${caKey} \
+        -CAcreateserial -out $out -days 36500 -sha256
+    '';
+  clientKeyPath = "/root";
 
-    in
+  makeTestFor = package:
     makeTest {
-      name = "postgresql-tls-client-cert-${pkg.name}";
+      name = "postgresql-tls-client-cert-${package.name}";
       meta.maintainers = with lib.maintainers; [ erictapen ];
 
       nodes.server = { ... }: {
@@ -52,7 +50,7 @@ let
           '';
         };
         services.postgresql = {
-          package = pkg;
+          inherit package;
           enable = true;
           enableTCPIP = true;
           ensureUsers = [
@@ -102,7 +100,7 @@ let
             PGSSLKEY = "${clientKeyPath}/client.key";
             PGSSLROOTCERT = caCert;
           };
-          systemPackages = [ pkg ];
+          systemPackages = [ package ];
         };
         networking = {
           interfaces.eth1 = {
@@ -120,11 +118,10 @@ let
         client.succeed("psql -c \"SELECT 1;\"")
       '';
     };
-
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makePostgresqlTlsClientCertTest p; }) pkgs.postgresqlVersions
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) pkgs.postgresqlVersions
   // {
-    passthru.override = p: makePostgresqlTlsClientCertTest p;
+    passthru.override = p: makeTestFor p;
   }
 )

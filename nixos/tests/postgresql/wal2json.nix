@@ -5,17 +5,16 @@
 let
   inherit (pkgs) lib;
 
-  makePostgresqlWal2jsonTest =
-    postgresqlPackage:
+  makeTestFor = package:
     makeTest {
-      name = "wal2json-${postgresqlPackage.name}";
+      name = "wal2json-${package.name}";
       meta.maintainers = with pkgs.lib.maintainers; [ euank ];
 
       nodes.machine = {
         services.postgresql = {
-          package = postgresqlPackage;
+          inherit package;
           enable = true;
-          extraPlugins = with postgresqlPackage.pkgs; [ wal2json ];
+          extraPlugins = with package.pkgs; [ wal2json ];
           settings = {
             wal_level = "logical";
             max_replication_slots = "10";
@@ -40,11 +39,10 @@ let
         )
       '';
     };
-
 in
 lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makePostgresqlWal2jsonTest p; }) pkgs.postgresqlVersions
+  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (lib.filterAttrs (_: p: !p.pkgs.wal2json.meta.broken) pkgs.postgresqlVersions)
   // {
-    passthru.override = p: makePostgresqlWal2jsonTest p;
+    passthru.override = p: makeTestFor p;
   }
 )
