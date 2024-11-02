@@ -86,7 +86,7 @@ rec {
     } (if multidoc then ''
       jq -c '.[]' < "$valuePath" | while IFS= read -r line; do
         echo "---"
-        echo "$line" | json2yaml
+        json2yaml <<< "$line"
       done > "$out"
     '' else ''
       json2yaml "$valuePath" "$out"
