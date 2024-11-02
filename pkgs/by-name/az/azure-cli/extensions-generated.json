@@ -715,9 +715,9 @@
   },
   "monitor-pipeline-group": {
     "pname": "monitor-pipeline-group",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/monitor_pipeline_group-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-zzH54/qUWHFvDD0cFWmO95twfFvX0UZ3PSsq/kLmTCk=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/monitor_pipeline_group-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-skfHQJ7vGnKZtaDmAGmjPLtuxNfyHE44pxi1Usl9X9s=",
     "description": "Microsoft Azure Command-Line Tools MonitorPipelineGroup Extension"
   },
   "multicloud-connector": {
