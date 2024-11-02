@@ -1,0 +1,40 @@
+From 795d63d3c8b5c0dbb7e544954f75507b371b7228 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 24 Apr 2021 10:20:16 +0200
+Subject: [PATCH 2/2] remove impure dirs
+
+---
+ src/read.c   | 3 ---
+ src/remake.c | 2 --
+ 2 files changed, 5 deletions(-)
+
+diff --git a/src/read.c b/src/read.c
+index fa197fb..defacfb 100644
+--- a/src/read.c
++++ b/src/read.c
+@@ -109,9 +109,6 @@ static const char *default_include_directories[] =
+ #endif
+     INCLUDEDIR,
+ #ifndef _AMIGA
+-    "/usr/gnu/include",
+-    "/usr/local/include",
+-    "/usr/include",
+ #endif
+     0
+   };
+diff --git a/src/remake.c b/src/remake.c
+index fb237c5..94bff7d 100644
+--- a/src/remake.c
++++ b/src/remake.c
+@@ -1601,8 +1601,6 @@ library_search (const char *lib, FILE_TIMESTAMP *mtime_ptr)
+   static const char *dirs[] =
+     {
+ #ifndef _AMIGA
+-      "/lib",
+-      "/usr/lib",
+ #endif
+ #if defined(WINDOWS32) && !defined(LIBDIR)
+ /*
+-- 
+2.31.1
+

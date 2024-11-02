@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-javascript",
+  "rev": "b6f0624c1447bc209830b195999b78a56b10a579",
+  "date": "2024-09-02T05:16:11-04:00",
+  "path": "/nix/store/q6l4f361yzqcnsl29qhm1dcir75fk0hq-tree-sitter-javascript",
+  "sha256": "03lyqswy7h9iw2mhjlsa7an3g76hqi074c06pvdjb57h637zisf5",
+  "hash": "sha256-xen4zzDwlCXbvgYwckDE0Jw3rDpKUwmr4DHB47nGng4=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

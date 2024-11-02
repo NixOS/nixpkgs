@@ -1,0 +1,61 @@
+diff --git a/src/emu/cpu/m6502/m6502make.py b/src/emu/cpu/m6502/m6502make.py
+index da29fc722a..3de641dd69 100755
+--- a/src/emu/cpu/m6502/m6502make.py
++++ b/src/emu/cpu/m6502/m6502make.py
+@@ -16,7 +16,7 @@ def load_opcodes(fname):
+     opcodes = []
+     logging.info("load_opcodes: %s", fname)
+     try:
+-        f = open(fname, "rU")
++        f = open(fname, "r")
+     except Exception:
+         err = sys.exc_info()[1]
+         logging.error("cannot read opcodes file %s [%s]", fname, err)
+@@ -39,7 +39,7 @@ def load_disp(fname):
+     logging.info("load_disp: %s", fname)
+     states = []
+     try:
+-        f = open(fname, "rU")
++        f = open(fname, "r")
+     except Exception:
+         err = sys.exc_info()[1]
+         logging.error("cannot read display file %s [%s]", fname, err)
+diff --git a/src/emu/cpu/m6809/m6809make.py b/src/emu/cpu/m6809/m6809make.py
+index c3d5b0f66e..79f6f90cdd 100644
+--- a/src/emu/cpu/m6809/m6809make.py
++++ b/src/emu/cpu/m6809/m6809make.py
+@@ -14,7 +14,7 @@ def load_file(fname, lines):
+ 	if path != "":
+ 		path += '/'
+ 	try:
+-		f = open(fname, "rU")
++		f = open(fname, "r")
+ 	except Exception:
+ 		err = sys.exc_info()[1]
+ 		sys.stderr.write("Cannot read opcodes file %s [%s]\n" % (fname, err))
+diff --git a/src/emu/cpu/mcs96/mcs96make.py b/src/emu/cpu/mcs96/mcs96make.py
+index ec5ec37a78..7ab806a653 100644
+--- a/src/emu/cpu/mcs96/mcs96make.py
++++ b/src/emu/cpu/mcs96/mcs96make.py
+@@ -71,7 +71,7 @@ def __init__(self, fname, is_196):
+         self.ea = {}
+         self.macros = {}
+         try:
+-            f = open(fname, "rU")
++            f = open(fname, "r")
+         except Exception:
+             err = sys.exc_info()[1]
+             sys.stderr.write("Cannot read opcodes file %s [%s]\n" % (fname, err))
+diff --git a/src/emu/cpu/tms57002/tmsmake.py b/src/emu/cpu/tms57002/tmsmake.py
+index 62092097d9..78f9fe43cd 100755
+--- a/src/emu/cpu/tms57002/tmsmake.py
++++ b/src/emu/cpu/tms57002/tmsmake.py
+@@ -326,7 +326,7 @@ def ins_cmp_dasm(a, b):
+ def LoadLst(filename):
+     instructions = []
+     ins = None
+-    for n, line in enumerate(open(filename, "rU")):
++    for n, line in enumerate(open(filename, "r")):
+         line = line.rstrip()
+         if not line and ins:
+             # new lines separate intructions

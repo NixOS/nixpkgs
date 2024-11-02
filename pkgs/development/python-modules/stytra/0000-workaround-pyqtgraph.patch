@@ -1,0 +1,26 @@
+diff --git a/stytra/gui/fishplots.py b/stytra/gui/fishplots.py
+index 49ef1fe..fd1cc50 100644
+--- a/stytra/gui/fishplots.py
++++ b/stytra/gui/fishplots.py
+@@ -13,7 +13,7 @@ from lightparam.gui import ParameterGui
+ from scipy.ndimage.filters import gaussian_filter1d
+ 
+ 
+-class StreamingPositionPlot(pg.GraphicsWindow):
++class StreamingPosition(pg.GraphicsView):
+     """Plot that displays the virtual position of the fish"""
+ 
+     def __init__(self, *args, data_accumulator, n_points=500, **kwargs):
+diff --git a/stytra/utilities.py b/stytra/utilities.py
+index f79c4db..feaa7ef 100644
+--- a/stytra/utilities.py
++++ b/stytra/utilities.py
+@@ -239,7 +239,7 @@ def recursive_update(d, u):
+     :return:
+     """
+     for k, v in u.items():
+-        if isinstance(v, collections.Mapping):
++        if isinstance(v, collections.ChainMap):
+             d[k] = recursive_update(d.get(k, {}), v)
+         else:
+             d[k] = v

@@ -1,0 +1,10 @@
+--- a/test_expected_output.txt	2024-05-07 05:47:13.184419240 +0200
++++ b/test_expected_output.txt	2024-05-07 05:48:38.980122345 +0200
+@@ -26,7 +26,6 @@
+ 	options
+ 	create (-c), nocreate
+ 	prompt, noprompt (-q)
+-	interactive (-i), nointeractive
+ 	ritchie (-r), preansi (-p), ansi (-a) or cplusplus (-+)
+ 
+ Current set values are:

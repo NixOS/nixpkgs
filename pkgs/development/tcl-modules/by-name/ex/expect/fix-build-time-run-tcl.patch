@@ -1,0 +1,11 @@
+--- a/Makefile.in	2022-09-07 21:46:37.090519258 +0200
++++ b/Makefile.in	2022-09-07 21:46:21.462592279 +0200
+@@ -380,7 +380,7 @@
+ 	cp $(DIST_ROOT)/$(PKG_DIR).tar.gz $(top_builddir)
+ 
+ $(SCRIPTS):
+-	$(TCLSH) $(srcdir)/fixline1 $(SHORT_BINDIR) < $(srcdir)/example/$@ > $@
++	@tcl@ $(srcdir)/fixline1 $(SHORT_BINDIR) < $(srcdir)/example/$@ > $@
+ 
+ ## We cannot use TCL_LIBS below (after TCL_LIB_SPEC) because its
+ ## expansion references the contents of LIBS, which contains linker

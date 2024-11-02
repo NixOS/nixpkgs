@@ -1,0 +1,12 @@
+--- a/lib/Xm/XmP.h
++++ b/lib/Xm/XmP.h
+@@ -1437,7 +1437,7 @@ extern void _XmDestroyParentCallback(
+ 
+ #endif /* NO_XM_1_2_BC */
+ 
+-#if __GNUC__
++#if __GNUC__ && ! __APPLE__
+ #  define XM_DEPRECATED  __attribute__((__deprecated__))
+ #  define XM_ALIAS(sym)  __attribute__((__weak__,alias(#sym)))
+ #else
+

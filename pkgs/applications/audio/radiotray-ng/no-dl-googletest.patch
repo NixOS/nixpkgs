@@ -1,0 +1,55 @@
+From b6f7a9e2e0194c6baed63a33b7beff359080b8d9 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Sat, 16 Mar 2019 11:40:00 -0500
+Subject: [PATCH] don't download googletest
+
+---
+ CMakeLists.txt       | 18 ------------------
+ tests/CMakeLists.txt |  1 -
+ 2 files changed, 19 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ddba1be..3396705 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -70,25 +70,7 @@ endif()
+ 
+ # build tests? Then we need googletest...
+ if (BUILD_TESTS)
+-    include(ExternalProject)
+-
+-    ExternalProject_Add(googletest
+-        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/googletest"
+-        URL https://github.com/google/googletest/archive/release-1.8.1.tar.gz
+-        URL_HASH SHA256=9bf1fe5182a604b4135edc1a425ae356c9ad15e9b23f9f12a02e80184c3a249c
+-        TIMEOUT 30
+-        DOWNLOAD_NO_PROGRESS true
+-        INSTALL_COMMAND "")
+-
+-    ExternalProject_Get_Property(googletest SOURCE_DIR)
+-    include_directories(${SOURCE_DIR}/googlemock/include ${SOURCE_DIR}/googletest/include)
+-    ExternalProject_Get_Property(googletest BINARY_DIR)
+-    link_directories(${BINARY_DIR}/googlemock ${BINARY_DIR}/googlemock/gtest)
+     set(GMOCK_BOTH_LIBRARIES gmock_main gmock gtest)
+-    set_property(DIRECTORY PROPERTY CLEAN_NO_CUSTOM "${CMAKE_CURRENT_BINARY_DIR}/googletest")
+-    unset(SOURCE_DIR)
+-    unset(BINARY_DIR)
+-
+     enable_testing()
+     add_subdirectory(tests)
+     add_subdirectory(tests/runners/)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 859c048..58ab5c2 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -2,7 +2,6 @@ include(GoogleTest)
+ 
+ function(add_gmock_test target)
+     add_executable(${target} ${ARGN})
+-    add_dependencies(${target} googletest)
+     target_link_libraries(${target} config playlist bookmarks event_bus ${GMOCK_BOTH_LIBRARIES} ${XDG_BASEDIR_LIBRARIES} ${Boost_LIBRARIES} ${CURL_LIBRARIES} ${JSONCPP_LIBRARIES} pthread)
+     target_include_directories(${target} PRIVATE ${JSONCPP_INCLUDE_DIRS})
+     gtest_discover_tests(${target})
+-- 
+2.22.0
+

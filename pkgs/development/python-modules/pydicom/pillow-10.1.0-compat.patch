@@ -1,0 +1,29 @@
+diff --git a/pydicom/pixel_data_handlers/pillow_handler.py b/pydicom/pixel_data_handlers/pillow_handler.py
+index ff781025d..a44eb9a41 100644
+--- a/pydicom/pixel_data_handlers/pillow_handler.py
++++ b/pydicom/pixel_data_handlers/pillow_handler.py
+@@ -119,18 +119,12 @@ def _decompress_single_frame(
+     # space prior to compression, setting the value of "mode" to YCbCr
+     # signals Pillow to not apply any color transformation upon
+     # decompression.
+-    if (transfer_syntax in PillowJPEGTransferSyntaxes and
+-            photometric_interpretation == 'RGB'):
+-        if 'adobe_transform' not in image.info:
+-            color_mode = 'YCbCr'
+-            image.tile = [(
+-                'jpeg',
+-                image.tile[0][1],
+-                image.tile[0][2],
+-                (color_mode, ''),
+-            )]
+-            image.mode = color_mode
+-            image.rawmode = color_mode
++    if (
++        transfer_syntax in PillowJPEGTransferSyntaxes
++        and photometric_interpretation == 'RGB'
++        and "adobe_transform" not in image.info
++    ):
++        image.draft("YCbCr", image.size)
+     return image
+ 
+ 

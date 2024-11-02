@@ -1,0 +1,11 @@
+--- sawja-1.5-orig/configure.sh	2013-10-30 08:35:29.000000000 +0100
++++ sawja-1.5/configure.sh	2014-07-05 18:50:26.833798254 +0200
+@@ -39,7 +39,7 @@
+ DESTDIR=
+ # The ocamlpath variable for the compiler to locate the locally-installed
+ # packages (depends on LOCALDEST)
+-OCAMLPATH=
++#OCAMLPATH=
+ # The path to ocamlfind
+ FINDER=`which ocamlfind`
+ # The perl executable

@@ -1,0 +1,16 @@
+diff -Naur cairo-ocaml-1.2.0.ori/META cairo-ocaml-1.2.0/META
+--- cairo-ocaml-1.2.0.ori/META	1970-01-01 01:00:00.000000000 +0100
++++ cairo-ocaml-1.2.0/META	2013-06-04 03:31:32.000000000 +0200
+@@ -0,0 +1,12 @@
++name = "cairo-ocaml"
++description = "Bindings to the cairo library."
++version = "@VERSION@"
++archive(byte) = "cairo.cma"
++archive(native) = "cairo.cmxa"
++requires = "bigarray"
++
++package "lablgtk2" (
++        requires = "cairo lablgtk2"
++        archive(byte) = "cairo_lablgtk.cma"
++        archive(native) = "cairo_lablgtk.cmxa"
++)
