@@ -2,7 +2,7 @@
   lib,
   alsa-lib,
   audiofile,
-  darwin,
+  apple-sdk,
   dbus,
   fetchFromGitHub,
   ibus,
@@ -62,14 +62,6 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioUnit
-    Cocoa
-    CoreAudio
-    CoreServices
-    ForceFeedback
-    OpenGL
-    ;
   dlopenPropagatedBuildInputs =
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
     lib.optionals (openglSupport && !stdenv.isDarwin) [ libGL ]
@@ -155,12 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals ibusSupport [ ibus ]
     ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreAudio
-      CoreServices
-      ForceFeedback
-      OpenGL
+      apple-sdk
     ];
 
   configureFlags = [
