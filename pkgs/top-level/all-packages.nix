@@ -5814,6 +5814,8 @@ with pkgs;
 
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
+  shell-mommy = callPackage ../tools/misc/shell-mommy { };
+
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
 
   shellclear = callPackage ../tools/security/shellclear { };
