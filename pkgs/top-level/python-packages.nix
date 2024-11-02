@@ -6660,6 +6660,8 @@ self: super: with self; {
 
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 
+  jupyter-server-ydoc = callPackage ../development/python-modules/jupyter-server-ydoc { };
+
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
