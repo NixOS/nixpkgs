@@ -1030,9 +1030,9 @@
   },
   "support": {
     "pname": "support",
-    "version": "2.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/support-2.0.0-py2.py3-none-any.whl",
-    "hash": "sha256-Xd6X+PsS6qJYUw9o7CyuAKlX8wR5g16fXtBXlAMSdBo=",
+    "version": "2.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/support-2.0.1-py2.py3-none-any.whl",
+    "hash": "sha256-PwcBVPg5RkqiS1SZDYfS26mdbaYOw+8xSnS6IsJo/sQ=",
     "description": "Microsoft Azure Command-Line Tools Support Extension"
   },
   "terraform": {
