@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   installPhase = ''
-    chmod +x goku
-    chmod +x gokuw
-    mkdir -p $out/bin
-    cp goku $out/bin
-    cp gokuw $out/bin
+    runHook preInstall
+    mkdir -p "$out/bin"
+    chmod +x {goku,gokuw}
+    cp {goku,gokuw} "$out/bin"
+    runHook postInstall
   '';
 
   meta = {
