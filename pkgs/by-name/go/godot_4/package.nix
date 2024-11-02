@@ -232,6 +232,7 @@ let
       ] ++ lib.optional (!withMono) "i686-linux";
       maintainers = with lib.maintainers; [
         shiryel
+        corngood
       ];
       mainProgram = "godot4${suffix}";
     };
