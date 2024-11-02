@@ -6,6 +6,8 @@
 , stdenv
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, mimalloc
+, mimallocSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ] ++ lib.optionals systemdSupport [
     systemd
+  ] ++ lib.optionals mimallocSupport [
+    mimalloc
   ];
 
   configureFlags = [
