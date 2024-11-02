@@ -4368,6 +4368,12 @@
     githubId = 18414241;
     name = "Andreas Erdes";
   };
+  computerdane = {
+    email = "danerieber@gmail.com";
+    github = "computerdane";
+    githubId = 6487079;
+    name = "Dane Rieber";
+  };
   confus = {
     email = "con-f-use@gmx.net";
     github = "con-f-use";
@@ -4765,12 +4771,6 @@
     github = "daneads";
     githubId = 24708079;
     name = "Dan Eads";
-  };
-  danerieber = {
-    email = "danerieber@gmail.com";
-    github = "danerieber";
-    githubId = 6487079;
-    name = "Dane Rieber";
   };
   danid3v = {
     email = "sch220233@spengergasse.at";
