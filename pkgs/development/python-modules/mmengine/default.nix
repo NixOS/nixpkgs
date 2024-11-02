@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -40,6 +41,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-bZ6O4UOYUCwq11YmgRWepOIngYxYD/fNfM/VmcyUv9k=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "mmengine-torch-2.5-compat.patch";
+      url = "https://github.com/open-mmlab/mmengine/commit/4c22f78cdea2981a2b48a167e9feffe4721f8901.patch";
+      hash = "sha256-k+IFLeqTEVUGGiqmZg56LK64H/UTvpGN20GJT59wf4A=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
