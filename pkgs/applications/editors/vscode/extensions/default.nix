@@ -1724,8 +1724,8 @@ let
         mktplcRef = {
           name = "vsc-material-theme-icons";
           publisher = "Equinusocio";
-          version = "3.5.0";
-          hash = "sha256-XqtyZVlsPaPkKB9HdigKSXjCwqXe9wzJWeRcPpS6EVM=";
+          version = "3.8.8";
+          hash = "sha256-el2hQaq1gZBn2PZ+f+S1fHM/g3V0sX7Chyre04sds8k=";
         };
         meta = {
           description = "Material Theme Icons, the most epic icons theme for Visual Studio Code and Material Theme";
