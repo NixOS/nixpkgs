@@ -6938,8 +6938,6 @@ with pkgs;
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
-  docear = callPackage ../applications/office/docear { };
-
   dockbarx = callPackage ../applications/misc/dockbarx { };
 
   dog = callPackage ../tools/system/dog { };
