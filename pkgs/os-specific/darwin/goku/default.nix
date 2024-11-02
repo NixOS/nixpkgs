@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   joker,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ joker ];
 
   sourceRoot = if stdenv.hostPlatform.isAarch64 then "goku" else ".";
+
+  passthru.updateScript = nix-update-script { };
 
   installPhase = ''
     chmod +x goku
