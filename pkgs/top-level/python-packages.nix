@@ -3371,6 +3371,8 @@ self: super: with self; {
 
   djangocms-alias = callPackage ../development/python-modules/djangocms-alias { };
 
+  django-admin-data-views = callPackage ../development/python-modules/django-admin-data-views { };
+
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
