@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "ruff";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   outputs = [
@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-TPr6YdSb5JKltXHDi1PdGzPYjmmsbCFQKxIiJURrBMI=";
+    hash = "sha256-9zbLlQfDeqdUp1AKP/NRMZl9KeTyyTJz7JZVW/GGRM0=";
   };
 
   # Do not rely on path lookup at runtime to find the ruff binary
@@ -93,8 +93,8 @@ python3Packages.buildPythonPackage rec {
   # According to the maintainers, those tests are from an experimental crate that isn't actually
   # used by ruff currently and can thus be safely skipped.
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=add_search_path"
     "--skip=changed_file"
-    "--skip=changed_metadata"
     "--skip=changed_versions_file"
     "--skip=deleted_file"
     "--skip=directory_deleted"
@@ -109,7 +109,9 @@ python3Packages.buildPythonPackage rec {
     "--skip=new_ignored_file"
     "--skip=rename_file"
     "--skip=search_path"
+    "--skip=unix::changed_metadata"
     "--skip=unix::symlink_inside_workspace"
+    "--skip=unix::symlinked_module_search_path"
   ];
 
   nativeCheckInputs = [
