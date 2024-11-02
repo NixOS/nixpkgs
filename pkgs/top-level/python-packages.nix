@@ -7872,6 +7872,8 @@ self: super: with self; {
 
   mdp = callPackage ../development/python-modules/mdp { };
 
+  mean-average-precision = callPackage ../development/python-modules/mean-average-precision { };
+
   measurement = callPackage ../development/python-modules/measurement { };
 
   meater-python = callPackage ../development/python-modules/meater-python { };
