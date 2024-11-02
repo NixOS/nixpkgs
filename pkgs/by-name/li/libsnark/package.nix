@@ -10,9 +10,9 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsnark";
-  version = "unstable-2018-01-15";
+  version = "20140603-unstable-2024-02-23";
 
   nativeBuildInputs = [
     cmake
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.hostPlatform.isx86) [ "-DCURVE=ALT_BN128" ];
 
   src = fetchFromGitHub {
-    rev = "9e6b19ff15bc19fba5da1707ba18e7f160e5ed07";
     owner = "scipr-lab";
     repo = "libsnark";
-    sha256 = "13f02qp2fmfhvxlp4xi69m0l8r5nq913l2f0zwdk7hl46lprfdca";
+    rev = "6c705e3135f585c222813654caedc86520fda1f6";
+    hash = "sha256-5Gk24fwVaXBWEFmhTsN9Qm8x/Qpr1KjavI3staJidxQ=";
     fetchSubmodules = true;
   };
 
