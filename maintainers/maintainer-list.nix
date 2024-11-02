@@ -17673,6 +17673,12 @@
     githubId = 5636;
     name = "Steve Purcell";
   };
+  purpole = {
+    email = "mail@purpole.io";
+    github = "purpole";
+    githubId = 101905225;
+    name = "David Schneider";
+  };
   purrpurrn = {
     email = "scrcpynovideoaudiocodecraw+nixpkgs@gmail.com";
     github = "purrpurrn";
