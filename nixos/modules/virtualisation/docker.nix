@@ -173,6 +173,11 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
+  ];
+
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
@@ -271,10 +276,4 @@ in
       };
     }
   ]);
-
-  imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
-    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
-  ];
-
 }
