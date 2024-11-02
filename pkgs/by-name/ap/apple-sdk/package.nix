@@ -48,9 +48,13 @@ let
       (callPackage ./common/propagate-inputs.nix { })
       (callPackage ./common/propagate-xcrun.nix { })
     ]
-    ++ [
-      # These have to happen last.
+    # Older SDKs do not include the libraries re-exported from umbrella frameworks in the umbrellas’ stubs, which causes
+    # link failures for those libraries unless their paths have been rewritten to point to the store.
+    ++ lib.optionals (lib.versionOlder sdkVersion "11.0") [
       (callPackage ./common/rewrite-sdk-paths.nix { inherit sdkVersion; })
+    ]
+    # This has to happen last.
+    ++ [
       (callPackage ./common/run-build-phase-hooks.nix { })
     ]
   );
