@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    rev = "8f6d527a42f13c6bdcee2ca3f133dd19751fc37a";
-    hash = "sha256-llr+792hzifV5vP0e7AKWhW3OtYcyAhzXPR45Do62ug=";
+    rev = "81a8486ca31c86630c84c78285c49d16d7491328";
+    hash = "sha256-e0Ea2QSAMQqZRVPy5/5pblHfeG+L6oHEXHV5mepE5Z8=";
   };
 
   inherit gradleBuildTask gradleUpdateTask desktopItems;
