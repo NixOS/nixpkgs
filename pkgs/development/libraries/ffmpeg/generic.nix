@@ -462,6 +462,13 @@ stdenv.mkDerivation (
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
         })
       ]
+      ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.1") [
+        (fetchpatch2 {
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3e6c7948626f19c46c1a630c788ea6bbd9e7fbcb";
+          hash = "sha256-HmijTDNqKaNpIMe3re4rIMKEo2udd7VFZdryV/+xiYM=";
+          excludes = [ "libavcodec/version.h" ];
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "7.1") [
         ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
         ./fix-fate-ffmpeg-spec-disposition-7.1.patch
