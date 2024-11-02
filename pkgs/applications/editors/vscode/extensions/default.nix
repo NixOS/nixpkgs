@@ -2262,8 +2262,8 @@ let
         mktplcRef = {
           name = "HCL";
           publisher = "HashiCorp";
-          version = "0.3.2";
-          hash = "sha256-cxF3knYY29PvT3rkRS8SGxMn9vzt56wwBXpk2PqO0mo=";
+          version = "0.6.0";
+          hash = "sha256-Za2ODrsHR/y0X/FOhVEtbg6bNs439G6rlBHW84EZS60=";
         };
         meta = {
           description = "HashiCorp HCL syntax";
