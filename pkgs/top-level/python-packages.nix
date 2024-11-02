@@ -3517,6 +3517,8 @@ self: super: with self; {
 
   django-jquery-js = callPackage ../development/python-modules/django-jquery-js { };
 
+  django-jsonform = callPackage ../development/python-modules/django-jsonform { };
+
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
 
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
