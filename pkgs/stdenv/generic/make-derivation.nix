@@ -134,6 +134,7 @@ let
     "__darwinAllowLocalNetworking"
     "__impureHostDeps" "__propagatedImpureHostDeps"
     "sandboxProfile" "propagatedSandboxProfile"
+    "enabledHardeningOptions"
   ];
 
   # Turn a derivation into its outPath without a string context attached.
@@ -219,6 +220,7 @@ let
 
 , hardeningEnable ? []
 , hardeningDisable ? []
+, enabledHardeningOptions ? []
 
 , patches ? []
 
@@ -258,23 +260,6 @@ let
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
-  hardeningDisable' = if any (x: x == "fortify") hardeningDisable
-    # disabling fortify implies fortify3 should also be disabled
-    then unique (hardeningDisable ++ [ "fortify3" ])
-    else hardeningDisable;
-  defaultHardeningFlags =
-    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
-      # fallback safe-ish set of flags
-      (if with stdenv.hostPlatform; isOpenBSD && isStatic
-       then knownHardeningFlags # Need pie, in fact
-       else remove "pie" knownHardeningFlags);
-  enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable'
-    then []
-    else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
-  # hardeningDisable additionally supports "all".
-  erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
-
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps:
     imap1
@@ -283,11 +268,7 @@ let
         else if isList dep then checkDependencyList' ([index] ++ positions) name dep
         else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}")
       deps;
-in if builtins.length erroneousHardeningFlags != 0
-then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-  inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
-})
-else let
+in let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
   buildInputs' = buildInputs
@@ -412,7 +393,7 @@ else let
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
       enableParallelInstalling = attrs.enableParallelInstalling or true;
-    } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
+    } // optionalAttrs (! __structuredAttrs && (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl)) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
@@ -532,6 +513,9 @@ mkDerivationSimple = overrideAttrs:
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
 
+, hardeningEnable ? []
+, hardeningDisable ? []
+
 , env ? { }
 
 , ... } @ attrs:
@@ -549,6 +533,27 @@ assert attrs ? outputHash -> (
 
 let
   envIsExportable = isAttrs env && !isDerivation env;
+  hardeningDisable' = if any (x: x == "fortify") hardeningDisable
+    # disabling fortify implies fortify3 should also be disabled
+    then unique (hardeningDisable ++ [ "fortify3" ])
+    else hardeningDisable;
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (if with stdenv.hostPlatform; isOpenBSD && isStatic
+       then knownHardeningFlags # Need pie, in fact
+       else remove "pie" knownHardeningFlags);
+  enabledHardeningOptions =
+    if builtins.elem "all" hardeningDisable'
+    then []
+    else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
+
+  # hardeningDisable additionally supports "all".
+  erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
+
+  env = (attrs.env or {}) // lib.optionalAttrs __structuredAttrs {
+    NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
+  };
 
   derivationArg = makeDerivationArgument
     (removeAttrs
@@ -560,6 +565,7 @@ let
     // {
       cmakeFlags = makeCMakeFlags attrs;
       mesonFlags = makeMesonFlags attrs;
+      inherit enabledHardeningOptions;
     });
 
   meta = checkMeta.commonMeta {
@@ -591,7 +597,11 @@ let
   # would make it fixed-output.
   deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [ "outputHashAlgo" "outputHash" "outputHashMode" ];
 
-in
+in if builtins.length erroneousHardeningFlags != 0
+then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
+  inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
+})
+else
 
 extendDerivation
   validity.handled
