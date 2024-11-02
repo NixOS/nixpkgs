@@ -37924,6 +37924,10 @@ with pkgs;
     wineRelease = "wayland";
   });
 
+  wineserverHook = callPackage ../build-support/setup-hooks/wineserver-hook {
+    wine = wineWowPackages.minimal;
+  };
+
   wineasio = callPackage ../applications/emulators/wineasio { };
 
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
