@@ -5,6 +5,7 @@
   pythonOlder,
   fetchFromGitHub,
   which,
+  setuptools,
   # runtime dependencies
   numpy,
   torch,
@@ -34,7 +35,7 @@ in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -47,6 +48,8 @@ buildPythonPackage {
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
+
+  build-system = [ setuptools ];
 
   preBuild = ''
     cat << EOF > ./xformers/version.py
@@ -81,7 +84,7 @@ buildPythonPackage {
     which
   ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     torch
   ];
@@ -115,7 +118,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "XFormers: A collection of composable Transformer building blocks";
+    description = "Collection of composable Transformer building blocks";
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
