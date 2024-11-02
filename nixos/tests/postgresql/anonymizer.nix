@@ -1,16 +1,13 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
+{ pkgs
+, makeTest
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   inherit (pkgs) lib;
 
   makeAnonymizerTest = postgresqlPackage:
     makeTest {
-      name = "pg_anonymizer-${postgresqlPackage.name}";
+      name = "postgresql_anonymizer-${postgresqlPackage.name}";
       meta.maintainers = lib.teams.flyingcircus.members;
 
       nodes.machine = { pkgs, ... }: {
@@ -105,7 +102,9 @@ let
       '';
     };
 in
-pkgs.lib.concatMapAttrs (n: p: { ${n} = makeAnonymizerTest p; }) pkgs.postgresqlVersions
-// {
-  passthru.override = p: makeAnonymizerTest p;
-}
+pkgs.lib.recurseIntoAttrs (
+  pkgs.lib.concatMapAttrs (n: p: { ${n} = makeAnonymizerTest p; }) pkgs.postgresqlVersions
+  // {
+    passthru.override = p: makeAnonymizerTest p;
+  }
+)

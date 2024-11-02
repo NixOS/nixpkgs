@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = nixosTests.timescaledb.passthru.override postgresql;
+  passthru.tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";

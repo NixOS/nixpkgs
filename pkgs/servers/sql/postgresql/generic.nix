@@ -312,12 +312,12 @@ let
                      };
 
       tests = {
-        postgresql = nixosTests.postgresql.passthru.override finalAttrs.finalPackage;
-        postgresql-tls-client-cert = nixosTests.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
-        postgresql-wal-receiver = nixosTests.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
+        postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+        postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+        postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = nixosTests.postgresql-jit.passthru.override finalAttrs.finalPackage;
+        postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
       };
     };
 

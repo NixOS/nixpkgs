@@ -1,9 +1,7 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{ pkgs
+, makeTest
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -68,7 +66,9 @@ let
 
   };
 in
-concatMapAttrs (n: p: { ${n} = makePgVectorsTest p; }) (filterAttrs (n: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions)
-// {
-  passthru.override = p: makePgVectorsTest p;
-}
+recurseIntoAttrs (
+  concatMapAttrs (n: p: { ${n} = makePgVectorsTest p; }) (filterAttrs (n: p: !p.pkgs.pgvecto-rs.meta.broken) pkgs.postgresqlVersions)
+  // {
+    passthru.override = p: makePgVectorsTest p;
+  }
+)

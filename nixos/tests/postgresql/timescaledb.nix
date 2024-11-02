@@ -1,9 +1,7 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{ pkgs
+, makeTest
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -83,7 +81,12 @@ let
 
   };
 in
-pkgs.lib.concatMapAttrs (n: p: { ${n} = makeTimescaleDbTest p; }) (filterAttrs (n: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
-// {
-  passthru.override = p: makeTimescaleDbTest p;
-}
+# Not run by default, because this requires allowUnfree.
+# To run these tests:
+#   NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.postgresql.timescaledb
+dontRecurseIntoAttrs (
+  pkgs.lib.concatMapAttrs (n: p: { ${n} = makeTimescaleDbTest p; }) (filterAttrs (n: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions)
+  // {
+    passthru.override = p: makeTimescaleDbTest p;
+  }
+)

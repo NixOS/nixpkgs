@@ -25,7 +25,7 @@
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = nixosTests.timescaledb.passthru.override postgresql;
+    tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
   };
 
   # tests take really long

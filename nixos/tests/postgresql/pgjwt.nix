@@ -1,9 +1,6 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
+{ pkgs
+, makeTest
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   inherit (pkgs) lib;
@@ -41,7 +38,9 @@ let
       '';
     };
 in
-lib.concatMapAttrs (n: p: { ${n} = makePgjwtTest p; }) pkgs.postgresqlVersions
-// {
-  passthru.override = p: makePgjwtTest p;
-}
+lib.recurseIntoAttrs (
+  lib.concatMapAttrs (n: p: { ${n} = makePgjwtTest p; }) pkgs.postgresqlVersions
+  // {
+    passthru.override = p: makePgjwtTest p;
+  }
+)
