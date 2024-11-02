@@ -9213,6 +9213,8 @@ self: super: with self; {
 
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
+  python-lorem = callPackage ../development/python-modules/python-lorem { };
+
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
