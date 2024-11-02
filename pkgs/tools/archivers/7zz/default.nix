@@ -2,9 +2,8 @@
 , lib
 , fetchzip
 
-  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
-, uasm
-, useUasm ? false
+  # Only used on x86/x86_64 Linux
+, asmc
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -76,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
       "CC=${stdenv.cc.targetPrefix}cc"
       "CXX=${stdenv.cc.targetPrefix}c++"
     ]
-    ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
     # We need at minimum 10.13 here because of utimensat, however since
     # we need a bump anyway, let's set the same minimum version as the one in
     # aarch64-darwin so we don't need additional changes for it
@@ -85,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ "IS_MINGW=1" "MSYSTEM=1" ];
 
-  nativeBuildInputs = lib.optionals useUasm [ uasm ];
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86) [ asmc ];
 
   setupHook = ./setup-hook.sh;
 
