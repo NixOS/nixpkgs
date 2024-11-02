@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, yamlfmt }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  yamlfmt,
+}:
 
 buildGoModule rec {
   pname = "yamlfmt";
@@ -6,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
+    repo = "yamlfmt";
+    rev = "refs/tags/v${version}";
     hash = "sha256-l9PtVaAKjtP9apTrKCkC1KDR0IXqLqinpj1onzSrPnI=";
   };
 
@@ -16,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X=main.version=${version}"
+    "-X=main.commit=${src.rev}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -27,6 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Extensible command line tool or library to format yaml files";
     homepage = "https://github.com/google/yamlfmt";
+    changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sno2wman ];
     mainProgram = "yamlfmt";
