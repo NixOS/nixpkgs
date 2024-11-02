@@ -9313,6 +9313,8 @@ self: super: with self; {
 
   objexplore = callPackage ../development/python-modules/objexplore { };
 
+  objprint = callPackage ../development/python-modules/objprint { };
+
   objsize = callPackage ../development/python-modules/objsize { };
 
   objgraph = callPackage ../development/python-modules/objgraph {
