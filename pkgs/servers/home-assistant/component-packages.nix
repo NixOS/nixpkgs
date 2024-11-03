@@ -3828,7 +3828,8 @@
       zeroconf
     ];
     "sensoterra" = ps: with ps; [
-    ]; # missing inputs: sensoterra
+      sensoterra
+    ];
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
@@ -5660,6 +5661,7 @@
     "sensor"
     "sensorpro"
     "sensorpush"
+    "sensoterra"
     "sentry"
     "senz"
     "seventeentrack"

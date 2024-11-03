@@ -2844,6 +2844,8 @@ self: super: with self; {
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
 
+  daltonlens = callPackage ../development/python-modules/daltonlens { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   daqp = callPackage ../development/python-modules/daqp { };
@@ -9207,6 +9209,8 @@ self: super: with self; {
 
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
+  python-lorem = callPackage ../development/python-modules/python-lorem { };
+
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
@@ -14270,6 +14274,8 @@ self: super: with self; {
 
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
 
+  sensoterra = callPackage ../development/python-modules/sensoterra { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
@@ -15637,6 +15643,8 @@ self: super: with self; {
   textile = callPackage ../development/python-modules/textile { };
 
   textparser = callPackage ../development/python-modules/textparser { };
+
+  textstat = callPackage ../development/python-modules/textstat { };
 
   textual = callPackage ../development/python-modules/textual { };
 
@@ -17247,6 +17255,8 @@ self: super: with self; {
   usort = callPackage ../development/python-modules/usort { };
 
   utils = callPackage ../development/python-modules/utils { };
+
+  uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uv = toPythonModule (pkgs.uv.override {
     python3Packages = self;

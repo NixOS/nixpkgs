@@ -1,10 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcw-gmt";
   version = "2.1.2";
   src = fetchurl {
-    url = "ftp://ftp.soest.hawaii.edu/gmt/dcw-gmt-${version}.tar.gz";
+    url = "ftp://ftp.soest.hawaii.edu/gmt/dcw-gmt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-S7hA0HXIuj4UrrQc8XwkI2v/eHVmMU+f91irmXd0XZk=";
   };
 
@@ -29,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ tviti ]);
   };
 
-}
+})

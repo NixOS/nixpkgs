@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, vala
-, evolution-data-server-gtk4
-, gdk-pixbuf
-, glib
-, glib-networking
-, gnutls
-, gst_all_1
-, json-glib
-, libadwaita
-, libpeas2
-, libphonenumber
-, libportal-gtk4
-, pipewire
-, pulseaudio
-, tinysparql
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  vala,
+  evolution-data-server-gtk4,
+  gdk-pixbuf,
+  glib,
+  glib-networking,
+  gnutls,
+  gst_all_1,
+  json-glib,
+  libadwaita,
+  libpeas2,
+  libphonenumber,
+  libportal-gtk4,
+  pipewire,
+  pulseaudio,
+  tinysparql,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valent";
-  version = "1.0.0.alpha.46";
+  version = "1.0.0.alpha.46-unstable-2024-10-26";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-DpDHU1l8Pot0RwVR1rL9fIhMHo18eo7nTecnSa3hG2E=";
+    rev = "165a2791d4bf3e7dee69e3dd7885dbe4948265b9";
+    hash = "sha256-7klvOvwyAg+Xno6zWo8UByjaS9OkOuCceuZcAIEgdyU=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dplugin_bluez=true"
+    (lib.mesonBool "plugin_bluez" true)
   ];
 
   meta = {
@@ -88,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://valent.andyholmes.ca";
     changelog = "https://github.com/andyholmes/valent/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus cc0 cc-by-sa-30 ];
+    license = with lib.licenses; [
+      gpl3Plus
+      cc0
+      cc-by-sa-30
+    ];
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };

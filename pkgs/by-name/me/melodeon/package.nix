@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "melodeon";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "melodeon";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-k74iJ3tmkMGUh4f538tjD7cv4ZXxm3x6M/d5HU25yPQ=";
+    hash = "sha256-CwJd77FAEcfCvxHeh3V1SIsgSam3S5WtpSLj9WrOOyI=";
     fetchSubmodules = true;
   };
 
