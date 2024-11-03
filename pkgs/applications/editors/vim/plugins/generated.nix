@@ -18803,4 +18803,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/micangl/cmp-vimtex/";
   };
+
+  luasnip-latex-snippets-nvim = buildVimPlugin {
+    pname = "luasnip-latex-snippets.nvim";
+    version = "2024-09-16";
+    src = fetchFromGitHub {
+      owner = "evesdropper";
+      repo = "luasnip-latex-snippets.nvim";
+      rev = "c6b5b5367dd4bb8419389f5acf528acf296adcdd";
+      sha256 = "calv4nF1yxJyehQC+l0p4psI+f4Kg49K6XziCkH9I1Q=";
+    };
+    meta.homepage = "https://github.com/evesdropper/luasnip-latex-snippets.nvim/";
+  };
 }
