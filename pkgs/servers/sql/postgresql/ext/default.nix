@@ -54,6 +54,8 @@ self: super: {
 
     pgvector = super.callPackage ./pgvector.nix { };
 
+    pljava = super.callPackage ./pljava.nix { };
+
     plpgsql_check = super.callPackage ./plpgsql_check.nix { };
 
     plr = super.callPackage ./plr.nix { };

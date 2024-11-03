@@ -961,6 +961,7 @@ mapAliases {
   pgjwt = postgresqlPackages.pgjwt;
   pgroonga = postgresqlPackages.pgroonga;
   pgtap = postgresqlPackages.pgtap;
+  pljava = postgresqlPackages.pljava;
   plv8 = postgresqlPackages.plv8;
   postgis = postgresqlPackages.postgis;
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
