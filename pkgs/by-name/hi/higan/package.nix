@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "higan";
-  version = "115-unstable-2024-02-17";
+  version = "115-unstable-2024-09-04";
 
   src = fetchFromGitHub {
     owner = "higan-emu";
     repo = "higan";
-    rev = "ba4b918c0bbcc302e0d5d2ed70f2c56214d62681";
-    hash = "sha256-M8WaPrOPSRKxhYcf6ffNkDzITkCltNF9c/zl0GmfJrI=";
+    rev = "a03b2e94c620eb12ab6f9936aee50e4389bee2ff";
+    hash = "sha256-VpwHjA0LufKDnGRAS906Qh3R2pVt4uUGXxsRcca9SyM=";
   };
 
   nativeBuildInputs =
