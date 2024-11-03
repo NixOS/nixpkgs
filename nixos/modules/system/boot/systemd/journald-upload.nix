@@ -97,7 +97,7 @@ in
     systemd.additionalUpstreamSystemUnits = [ "systemd-journal-upload.service" ];
 
     systemd.services."systemd-journal-upload" = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Restart = "always";
         # To prevent flooding the server in case the server is struggling

@@ -138,7 +138,7 @@ in
       let
         mkBase = component: {
           description = "RKVM ${component}";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = {
             server = [ "network.target" ];
             client = [ "network-online.target" ];

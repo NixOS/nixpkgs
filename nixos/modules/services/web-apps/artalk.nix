@@ -92,7 +92,7 @@ in
 
     systemd.services.artalk = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart =
         ''
           umask 0077

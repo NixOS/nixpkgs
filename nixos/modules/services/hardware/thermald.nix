@@ -44,7 +44,7 @@ in
 
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         PrivateNetwork = true;
         ExecStart = ''

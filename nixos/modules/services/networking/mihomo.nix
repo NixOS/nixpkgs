@@ -61,7 +61,7 @@ in
       documentation = [ "https://wiki.metacubex.one/" ];
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
         {
           ExecStart = lib.concatStringsSep " " [

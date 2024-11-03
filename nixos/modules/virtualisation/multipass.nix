@@ -30,7 +30,7 @@ in
     systemd.services.multipass = {
       description = "Multipass orchestrates virtual Ubuntu instances.";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 

@@ -55,7 +55,7 @@ let cfg = config.services.victoriametrics; in
         # open /var/lib/victoriametrics/data/small/2021_08/[...]/values.bin: too many open files
         LimitNOFILE = 1048576;
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       postStart =
         let

@@ -53,7 +53,7 @@ in
       description = "SCION Daemon";
       after = [ "network-online.target" "scion-dispatcher.service" ];
       wants = [ "network-online.target" "scion-dispatcher.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${globalCfg.package}/bin/scion-daemon --config ${configFile}";

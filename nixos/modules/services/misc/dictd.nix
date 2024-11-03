@@ -57,7 +57,7 @@ in
 
     systemd.services.dictd = {
       description = "DICT.org Dictionary Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive"; };
       # Work around the fact that dictd doesn't handle SIGTERM; it terminates
       # with code 143 instead of exiting with code 0.

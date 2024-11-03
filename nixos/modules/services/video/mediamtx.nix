@@ -51,7 +51,7 @@ in
 
     systemd.services.mediamtx = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = cfg.env;
 

@@ -204,7 +204,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.code-server = {
       description = "Code server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;

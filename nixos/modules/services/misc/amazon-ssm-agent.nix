@@ -35,7 +35,7 @@ in {
       inherit (cfg.package.meta) description;
       wants    = [ "network-online.target" ];
       after    = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [
         fake-lsb-release

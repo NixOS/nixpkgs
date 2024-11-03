@@ -82,7 +82,7 @@ with lib;
 
     systemd.services.hitch = {
       description = "Hitch";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       preStart = ''
         ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}

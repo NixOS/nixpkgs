@@ -37,7 +37,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.meme-bingo-web = {
       description = "A web app for playing meme bingos";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         MEME_BINGO_BASE = cfg.baseUrl;

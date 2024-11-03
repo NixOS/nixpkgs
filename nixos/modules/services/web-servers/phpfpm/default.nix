@@ -245,7 +245,7 @@ in {
 
     systemd.targets.phpfpm = {
       description = "PHP FastCGI Process manager pools target";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services = mapAttrs' (pool: poolOpts:

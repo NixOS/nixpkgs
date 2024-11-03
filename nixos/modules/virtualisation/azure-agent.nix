@@ -239,7 +239,7 @@ in
       };
 
     systemd.services.waagent = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" "sshd.service" ];
       wants = [ "network-online.target" ];
 

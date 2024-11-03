@@ -173,7 +173,7 @@ in
       description = "stunnel TLS tunneling service";
       after = [ "network.target" ];
       wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ config.environment.etc."stunnel.cfg".source ];
       serviceConfig = {
         ExecStart = "${pkgs.stunnel}/bin/stunnel ${config.environment.etc."stunnel.cfg".source}";

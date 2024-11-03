@@ -31,7 +31,7 @@ in
     };
     systemd.services.evdevremapkeys = {
       description = "evdevremapkeys";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
         let
           config = format.generate "config.yaml" cfg.settings;

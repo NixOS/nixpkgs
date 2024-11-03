@@ -366,7 +366,7 @@ in
         ("tinc.${network}")
         (let version = getVersion data.package; in {
           description = "Tinc Daemon - ${network}";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           path = [ data.package ];
           reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
           restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];

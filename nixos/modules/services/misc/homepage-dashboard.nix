@@ -218,7 +218,7 @@ in
       systemd.services.homepage-dashboard = {
         description = "Homepage Dashboard";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         environment = {
           HOMEPAGE_CONFIG_DIR = configDir;

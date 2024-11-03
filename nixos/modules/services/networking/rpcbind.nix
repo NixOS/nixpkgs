@@ -34,7 +34,7 @@ with lib;
     systemd.packages = [ pkgs.rpcbind ];
 
     systemd.services.rpcbind = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # rpcbind performs a check for /var/run/rpcbind.lock at startup
       # and will crash if /var/run isn't present. In the stock NixOS
       # var.conf tmpfiles configuration file, /var/run is symlinked to

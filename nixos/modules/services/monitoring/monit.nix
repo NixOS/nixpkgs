@@ -31,7 +31,7 @@ in
     systemd.services.monit = {
       description = "Pro-active monitoring utility for unix systems";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.monit}/bin/monit -I -c /etc/monitrc";
         ExecStop = "${pkgs.monit}/bin/monit -c /etc/monitrc quit";

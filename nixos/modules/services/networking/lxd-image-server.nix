@@ -63,7 +63,7 @@ in
       ];
 
       systemd.services.lxd-image-server = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         description = "LXD Image Server";

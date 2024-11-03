@@ -66,7 +66,7 @@ in
 
     systemd.services.turn-rs = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Turn-rs Server Daemon";
       preStart =
         let

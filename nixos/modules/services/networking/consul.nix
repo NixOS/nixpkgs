@@ -176,7 +176,7 @@ in
       ];
 
       systemd.services.consul = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ] ++ systemdDevices;
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
@@ -247,7 +247,7 @@ in
 
     (lib.mkIf (cfg.alerts.enable) {
       systemd.services.consul-alerts = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "consul.service" ];
 
         path = [ cfg.package ];

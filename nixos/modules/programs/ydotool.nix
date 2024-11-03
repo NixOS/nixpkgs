@@ -33,7 +33,7 @@ in
 
     systemd.services.ydotoold = {
       description = "ydotoold - backend for ydotool";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       partOf = [ "multi-user.target" ];
       serviceConfig = {
         Group = config.programs.ydotool.group;

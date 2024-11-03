@@ -195,7 +195,7 @@ in
 
         after    = [ "network.target" "time-sync.target" ];
         requires = [ "time-sync.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         unitConfig.RequiresMountsFor = "/var/lib/cockroachdb";
 

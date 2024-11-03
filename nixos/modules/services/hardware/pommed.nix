@@ -40,7 +40,7 @@ in {
 
     systemd.services.pommed = {
       description = "Pommed Apple Hotkeys Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "${pkgs.pommed_light}/bin/pommed -f";
     };
   };

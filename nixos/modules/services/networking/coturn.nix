@@ -325,7 +325,7 @@ in {
         description = "coturn TURN server";
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         unitConfig = {
           Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";

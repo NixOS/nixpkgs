@@ -110,7 +110,7 @@ in {
 
     systemd.services.hbase = {
       description = "HBase Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         # JRE 15 removed option `UseConcMarkSweepGC` which is needed.

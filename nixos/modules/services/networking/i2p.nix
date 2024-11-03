@@ -20,7 +20,7 @@ in
     systemd.services.i2p = {
       description = "I2P router with administration interface for hidden services";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "i2p";
         WorkingDirectory = homeDir;

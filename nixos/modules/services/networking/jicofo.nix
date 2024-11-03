@@ -111,7 +111,7 @@ in
     in
     {
       description = "JItsi COnference FOcus";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       restartTriggers = [

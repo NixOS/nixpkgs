@@ -194,7 +194,7 @@ in {
     systemd.services.mpdscribble = {
       after = [ "network.target" ] ++ (optional localMpd "mpd.service");
       description = "mpdscribble mpd scrobble client";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "mpdscribble";

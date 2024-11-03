@@ -93,7 +93,7 @@ in
     systemd.services.trickster = {
       description = "Reverse proxy cache and time series dashboard accelerator";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = ''

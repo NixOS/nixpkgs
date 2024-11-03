@@ -32,7 +32,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.squeezelite = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "sound.target" ];
       description = "Software Squeezebox emulator";
       serviceConfig = {

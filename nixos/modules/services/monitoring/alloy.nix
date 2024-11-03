@@ -58,7 +58,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.alloy = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       reloadTriggers = [ config.environment.etc."alloy/config.alloy".source or null ];
       serviceConfig = {
         Restart = "always";

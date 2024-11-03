@@ -54,7 +54,7 @@ in
     systemd.services.alertmanager-irc-relay = {
       description = "Alertmanager IRC Relay";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
 
       serviceConfig = {

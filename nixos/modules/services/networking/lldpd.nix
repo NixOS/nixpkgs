@@ -29,7 +29,7 @@ in
     systemd.packages = [ pkgs.lldpd ];
 
     systemd.services.lldpd = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.LLDPD_OPTIONS = lib.concatStringsSep " " cfg.extraArgs;
     };
   };

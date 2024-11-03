@@ -51,7 +51,7 @@ in
     systemd.services.atftpd = {
       description = "TFTP Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # runs as nobody
       serviceConfig.ExecStart = "${pkgs.atftp}/sbin/atftpd --daemon --no-fork ${lib.concatStringsSep " " cfg.extraOptions} ${cfg.root}";
     };

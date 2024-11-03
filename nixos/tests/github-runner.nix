@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
 
     systemd.services.dummy-github-com = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "github-runner-test.service" ];
       script = "${pkgs.netcat}/bin/nc -Fl 443 | true && touch /tmp/registration-connect";
     };

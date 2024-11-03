@@ -53,7 +53,7 @@ in
     systemd.services.cfdyndns = {
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";

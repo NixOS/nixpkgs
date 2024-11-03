@@ -69,7 +69,7 @@ in {
     systemd.services.hoogle = {
       description = "Haskell documentation server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Restart = "always";

@@ -92,7 +92,7 @@ in
 
     systemd.services.incron = {
       description = "File System Events Scheduler";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = cfg.extraPackages;
       serviceConfig.PIDFile = "/run/incrond.pid";
       serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 710 -p /var/spool/incron";

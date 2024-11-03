@@ -72,7 +72,7 @@ with lib;
 
     systemd.services.print-host-key =
       { description = "Print SSH Host Key";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "sshd.service" ];
         script =
           ''

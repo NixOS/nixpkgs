@@ -81,7 +81,7 @@ in {
     # see https://github.com/mollyim/mollysocket/blob/main/mollysocket.service
     systemd.services.mollysocket = {
       description = "MollySocket";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       environment.RUST_LOG = cfg.logLevel;

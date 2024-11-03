@@ -96,7 +96,7 @@ in
       environment.etc."smallstep/ca.json".source = configFile;
 
       systemd.services."step-ca" = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartTriggers = [ configFile ];
         unitConfig = {
           ConditionFileNotEmpty = ""; # override upstream

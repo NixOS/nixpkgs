@@ -149,7 +149,7 @@ in
 
     systemd.services.diod = {
       description = "diod 9P file server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.diod}/sbin/diod -f -c ${diodConfig}";

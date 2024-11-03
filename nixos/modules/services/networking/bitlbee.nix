@@ -166,7 +166,7 @@ in
         environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
         description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           DynamicUser = true;

@@ -307,7 +307,7 @@ in
         in
         {
           description = "Authelia authentication and authorization server";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           environment =
             (lib.filterAttrs (_: v: v != null) {

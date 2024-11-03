@@ -59,7 +59,7 @@ in
       description = "Envoy reverse proxy";
       after = [ "network-online.target" ];
       requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/envoy -c ${validateConfig cfg.requireValidConfig conf}";
         CacheDirectory = [ "envoy" ];

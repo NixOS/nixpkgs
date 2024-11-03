@@ -39,7 +39,7 @@ in
     systemd.services.SystemdJournal2Gelf = {
       description = "SystemdJournal2Gelf";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/SystemdJournal2Gelf ${cfg.graylogServer} --follow ${cfg.extraOptions}";
         Restart = "on-failure";

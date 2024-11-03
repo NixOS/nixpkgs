@@ -33,7 +33,7 @@ in
     # Create a systemd service for the corefreq daemon
     systemd.services.corefreq = {
       description = "CoreFreq daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = lib.getExe' cfg.package "corefreqd";
       };

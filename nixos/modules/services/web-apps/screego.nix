@@ -81,7 +81,7 @@ in
       };
 
       systemd.services.screego = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         description = "screego screen-sharing for developers";
         environment = mergedConfig;

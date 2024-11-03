@@ -15,7 +15,7 @@ let
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
     requires = lib.optional cfg.database.createLocally "postgresql.service";
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
 
     serviceConfig = {
       RestartSec = "2s";
@@ -176,7 +176,7 @@ let
       description = "HTTP3 ytproxy for Invidious";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       script = ''
         mkdir -p socket
@@ -205,7 +205,7 @@ let
       script = ''
         exec ${lib.getExe cfg.sig-helper.package} --tcp "${cfg.sig-helper.listenAddress}"
       '';
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "invidious.service" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];

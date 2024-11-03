@@ -104,7 +104,7 @@ in
 
     systemd.services.matterbridge = {
       description = "Matterbridge chat platform bridge";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

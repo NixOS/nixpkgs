@@ -106,7 +106,7 @@ in {
     systemd.services.matrix-appservice-discord = {
       description = "A bridge between Matrix and Discord.";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 

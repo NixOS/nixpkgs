@@ -55,7 +55,7 @@ in
     systemd.services.mailcatcher = {
       description = "MailCatcher Service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         DynamicUser = true;

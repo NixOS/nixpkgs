@@ -91,7 +91,7 @@ in
         ];
         KillMode = "control-group";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 

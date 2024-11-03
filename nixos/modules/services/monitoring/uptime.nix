@@ -70,7 +70,7 @@ in {
   config = mkMerge [ (mkIf cfg.enableWebService {
     systemd.services.uptime = {
       description = "uptime web service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         NODE_CONFIG_DIR = configDir;
         NODE_ENV = cfg.nodeEnv;
@@ -84,7 +84,7 @@ in {
   }) (mkIf cfg.enableSeparateMonitoringService {
     systemd.services.uptime-monitor = {
       description = "uptime monitoring service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = optional cfg.enableWebService "uptime.service";
       after = optional cfg.enableWebService "uptime.service";
       environment = {

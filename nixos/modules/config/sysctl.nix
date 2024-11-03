@@ -68,7 +68,7 @@ in
       ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
       };
 

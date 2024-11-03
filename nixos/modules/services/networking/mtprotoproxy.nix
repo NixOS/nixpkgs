@@ -98,7 +98,7 @@ in
 
     systemd.services.mtprotoproxy = {
       description = "MTProto Proxy Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.mtprotoproxy}/bin/mtprotoproxy ${configFile}";
         DynamicUser = true;

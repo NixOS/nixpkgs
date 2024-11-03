@@ -66,7 +66,7 @@ in {
     systemd.services."snmpd" = {
       description = "Simple Network Management Protocol (SNMP) daemon.";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${lib.getExe' cfg.package "snmpd"} -f -Lo -c ${cfg.configFile} ${cfg.listenAddress}:${toString cfg.port}";

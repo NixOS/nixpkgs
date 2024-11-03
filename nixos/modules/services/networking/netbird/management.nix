@@ -365,7 +365,7 @@ in
       documentation = [ "https://netbird.io/docs/" ];
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ managementFile ];
 
       preStart = genJqSecretsReplacementSnippet managementConfig "${stateDir}/management.json";

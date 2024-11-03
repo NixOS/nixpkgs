@@ -45,7 +45,7 @@ in {
 
     systemd.services.govee2mqtt = {
       description = "Govee2MQTT Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       serviceConfig = {
         CacheDirectory = "govee2mqtt";

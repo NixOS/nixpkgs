@@ -106,7 +106,7 @@ in
 
       systemd.services.ocsinventory-agent = {
         description = "OCS Inventory Agent service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         reloadTriggers = [ configFile ];

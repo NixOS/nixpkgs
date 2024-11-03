@@ -30,7 +30,7 @@ let
       description = "pantalaimon instance ${name} - E2EE aware proxy daemon for matrix clients";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = ''${pkgs.pantalaimon-headless}/bin/pantalaimon --config ${mkConfigFile name instanceConfig} --data-path ${instanceConfig.dataPath}'';

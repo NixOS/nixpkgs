@@ -291,7 +291,7 @@ in {
         "man:slapd-config"
         "man:slapd-mdb"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {

@@ -116,7 +116,7 @@ in {
   config = lib.mkIf (cfg.ensurePrinters != [] && config.services.printing.enable) {
     systemd.services.ensure-printers = {
       description = "Ensure NixOS-configured CUPS printers";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "cups.service" ];
       after = [ "cups.service" ];
 

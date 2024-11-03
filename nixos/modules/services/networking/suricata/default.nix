@@ -200,7 +200,7 @@ in
       systemd.services = {
         suricata-update = {
           description = "Update Suricata Rules";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
 
@@ -237,7 +237,7 @@ in
         };
         suricata = {
           description = "Suricata";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "suricata-update.service" ];
           serviceConfig =
             let

@@ -47,7 +47,7 @@ in {
         After = [ "dbus.service" ];
       };
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

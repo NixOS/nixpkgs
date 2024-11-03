@@ -118,7 +118,7 @@ in {
 
     systemd.services.wasabibackend = {
       description = "wasabibackend server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {

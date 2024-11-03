@@ -508,7 +508,7 @@ in
         LOCAL_JMX = if cfg.remoteJmx then "no" else "yes";
         JMX_PORT = toString cfg.jmxPort;
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

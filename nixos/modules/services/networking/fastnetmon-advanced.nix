@@ -109,7 +109,7 @@ in {
     services.ferretdb.enable = true;
 
     systemd.services.fastnetmon-setup = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "ferretdb.service" ];
       path = with pkgs; [ fastnetmon-advanced config.systemd.package ];
       script = ''
@@ -122,7 +122,7 @@ in {
     };
 
     systemd.services.fastnetmon = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "ferretdb.service" "fastnetmon-setup.service" "polkit.service" ];
       path = with pkgs; [ iproute2 ];
       unitConfig = {
@@ -167,7 +167,7 @@ in {
     # version might not be compatible with fastnetmon. Also, the service name
     # _must_ be 'gobgp' and not 'gobgpd', so that fastnetmon can reload the config.
     systemd.services.gobgp = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "GoBGP Routing Daemon";
       unitConfig = {
@@ -206,7 +206,7 @@ in {
     environment.etc."fastnetmon/traffic_db.conf".text = builtins.toJSON cfg.traffic_db.settings;
 
     systemd.services.traffic_db = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.fastnetmon-advanced}/bin/traffic_db";

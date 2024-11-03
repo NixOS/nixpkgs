@@ -68,7 +68,7 @@ in
 
     systemd.services.litestream = {
       description = "Litestream";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       serviceConfig = {
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;

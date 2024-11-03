@@ -56,7 +56,7 @@ in {
 
     systemd.services.surrealdb = {
       description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

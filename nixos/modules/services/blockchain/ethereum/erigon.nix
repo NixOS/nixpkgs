@@ -87,7 +87,7 @@ in {
 
     systemd.services.erigon = {
       description = "Erigon ethereum implemenntation";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

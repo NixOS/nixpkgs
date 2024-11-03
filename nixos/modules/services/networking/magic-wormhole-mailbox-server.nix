@@ -24,7 +24,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.magic-wormhole-mailbox-server = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${python}/bin/twistd --nodaemon wormhole-mailbox";

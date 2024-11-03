@@ -366,7 +366,7 @@ in {
       description = "Tiny free proxy server";
       documentation = [ "https://github.com/z3APA3A/3proxy/wiki" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "3proxy";

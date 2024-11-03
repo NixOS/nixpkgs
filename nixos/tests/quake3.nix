@@ -43,7 +43,7 @@ rec {
         { pkgs, ... }:
 
         { systemd.services.quake3-server =
-            { wantedBy = [ "multi-user.target" ];
+            { autoStart = true;
               script =
                 "${pkgs.quake3demo}/bin/quake3-server +set g_gametype 0 " +
                 "+map q3dm7 +addbot grunt +addbot daemia 2> /tmp/log";

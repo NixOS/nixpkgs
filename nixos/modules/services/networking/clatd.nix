@@ -34,7 +34,7 @@ in
     systemd.services.clatd = {
       description = "464XLAT CLAT daemon";
       documentation = [ "man:clatd(8)" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       startLimitIntervalSec = 0;

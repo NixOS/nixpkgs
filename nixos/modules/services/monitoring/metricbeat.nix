@@ -125,7 +125,7 @@ in
 
     systemd.services.metricbeat = {
       description = "metricbeat metrics shipper";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/metricbeat \

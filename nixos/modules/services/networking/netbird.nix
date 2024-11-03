@@ -139,7 +139,7 @@ in
               documentation = [ "https://netbird.io/docs/" ];
 
               after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
 
               path = with pkgs; [ openresolv ];
 

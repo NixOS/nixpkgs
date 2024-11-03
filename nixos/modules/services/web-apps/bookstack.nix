@@ -362,7 +362,7 @@ in {
       description = "Preparation tasks for BookStack";
       before = [ "phpfpm-bookstack.service" ];
       after = optional db.createLocally "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

@@ -247,7 +247,7 @@ in
 
     systemd.services.mchprs = {
       description = "MCHPRS Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

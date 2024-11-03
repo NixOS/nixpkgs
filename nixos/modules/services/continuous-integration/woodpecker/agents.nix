@@ -65,7 +65,7 @@ let
     name = "woodpecker-agent-${name}";
     value = {
       description = "Woodpecker-Agent Service - ${name}";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {

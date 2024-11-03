@@ -64,7 +64,7 @@ in
     systemd.services.foldingathome = {
       description = "Folding@home client";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         exec ${lib.getExe cfg.package} ${lib.escapeShellArgs args}
       '';

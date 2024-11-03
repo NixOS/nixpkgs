@@ -89,7 +89,7 @@ in
 
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         reloadIfChanged = true;
         restartTriggers = [
           configFile

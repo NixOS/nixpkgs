@@ -53,7 +53,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.nixops-dns = {
       description = "nixops-dns: DNS server for resolving NixOps machines";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

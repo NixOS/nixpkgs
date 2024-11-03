@@ -50,7 +50,7 @@ in
 
     systemd.services.ihaskell = {
       description = "IHaskell notebook instance";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         User = config.users.users.ihaskell.name;

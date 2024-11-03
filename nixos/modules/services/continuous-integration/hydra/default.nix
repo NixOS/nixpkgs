@@ -316,7 +316,7 @@ in
     };
 
     systemd.services.hydra-init =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         requires = lib.optional haveLocalDB "postgresql.service";
         after = lib.optional haveLocalDB "postgresql.service";
         environment = env // {
@@ -379,7 +379,7 @@ in
       };
 
     systemd.services.hydra-server =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" ];
         environment = serverEnv // {
@@ -399,7 +399,7 @@ in
       };
 
     systemd.services.hydra-queue-runner =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" "network.target" ];
         path = [ hydra-package pkgs.nettools pkgs.openssh pkgs.bzip2 config.nix.package ];
@@ -423,7 +423,7 @@ in
       };
 
     systemd.services.hydra-evaluator =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         requires = [ "hydra-init.service" ];
         wants = [ "network-online.target" ];
         after = [ "hydra-init.service" "network.target" "network-online.target" ];
@@ -456,7 +456,7 @@ in
       };
 
     systemd.services.hydra-send-stats =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         after = [ "hydra-init.service" ];
         environment = env // {
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-send-stats";
@@ -469,7 +469,7 @@ in
       };
 
     systemd.services.hydra-notify =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" ];
         restartTriggers = [ hydraConf ];

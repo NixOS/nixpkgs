@@ -37,7 +37,7 @@ in {
     systemd.services.ngircd = {
       description = "The ngircd IRC server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig.ExecStart = "${cfg.package}/sbin/ngircd --config ${configFile} --nodaemon";
 

@@ -39,7 +39,7 @@ in
     systemd.services.bazarr = {
       description = "Bazarr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = rec {
         Type = "simple";

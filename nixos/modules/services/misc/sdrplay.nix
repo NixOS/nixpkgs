@@ -21,7 +21,7 @@ with lib;
     systemd.services.sdrplayApi = {
       description = "SDRplay API Service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.sdrplay}/bin/sdrplay_apiService";
         DynamicUser = true;

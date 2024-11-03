@@ -148,7 +148,7 @@ in
     systemd.services.ntpd = {
       description = "NTP Daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "time-sync.target" ];
       before = [ "time-sync.target" ];
 

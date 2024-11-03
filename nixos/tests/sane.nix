@@ -41,7 +41,7 @@ in
       extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
     };
     systemd.services.fake-webcam = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "fill /dev/video0 with ${image}";
       /* HACK: /dev/video0 is a v4l2 only device, it misses one single v4l1
       ioctl, VIDIOCSPICT. But sane only supports v4l1, so it will log that this

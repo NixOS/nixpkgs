@@ -352,7 +352,7 @@ in
       after = map (hostOpts: "acme-selfsigned-${hostOpts.useACMEHost}.service") acmeVHosts;
       before = map (hostOpts: "acme-${hostOpts.useACMEHost}.service") acmeVHosts;
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       reloadTriggers = optional cfg.enableReload cfg.configFile;

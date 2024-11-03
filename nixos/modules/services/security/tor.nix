@@ -903,7 +903,7 @@ in
       description = "Tor Daemon";
       path = [ pkgs.tor ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after    = [ "network.target" ];
       restartTriggers = [ torrc ];
 

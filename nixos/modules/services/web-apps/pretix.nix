@@ -527,7 +527,7 @@ in
           "redis-pretix.service"
           "postgresql.service"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         preStart = ''
           versionFile="${cfg.settings.pretix.datadir}/.version"
           version=$(cat "$versionFile" 2>/dev/null || echo 0)
@@ -568,7 +568,7 @@ in
           "redis-pretix.service"
           "postgresql.service"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
           Restart = "on-failure";

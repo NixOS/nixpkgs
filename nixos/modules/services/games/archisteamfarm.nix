@@ -181,7 +181,7 @@ in
       archisteamfarm = {
         description = "Archis-Steam-Farm Service";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = lib.mkMerge [
           (lib.mkIf (lib.hasPrefix "/var/lib/" cfg.dataDir) {

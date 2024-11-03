@@ -432,7 +432,7 @@ in
       after = [ "network.target" ] ++ wants ++ lib.optional hasLocalPostgresDB "postgresql.service";
       # all plugins get automatically disabled if maubot starts before synapse
       wants = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         if [ ! -f "${cfg.extraConfigFile}" ]; then

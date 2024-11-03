@@ -27,7 +27,7 @@ in
     systemd.services.handheld-daemon = {
       description = "Handheld Daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       restartIfChanged = true;
 

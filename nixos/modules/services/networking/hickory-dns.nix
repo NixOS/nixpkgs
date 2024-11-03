@@ -177,7 +177,7 @@ in
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
       };
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

@@ -136,7 +136,7 @@ in
     systemd.services.postfixadmin-postgres = let pgsql = config.services.postgresql; in lib.mkIf localDB {
       after = [ "postgresql.service" ];
       bindsTo = [ "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [
         pgsql.package
         pkgs.util-linux

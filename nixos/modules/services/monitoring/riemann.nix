@@ -86,7 +86,7 @@ in {
     );
 
     systemd.services.riemann = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ inetutils ];
       serviceConfig = {
         User = "riemann";

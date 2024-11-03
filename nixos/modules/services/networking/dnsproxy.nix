@@ -73,7 +73,7 @@ in
     systemd.services.dnsproxy = {
       description = "Simple DNS proxy with DoH, DoT, DoQ and DNSCrypt support";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${getExe cfg.package} ${escapeShellArgs finalFlags}";
         Restart = "always";

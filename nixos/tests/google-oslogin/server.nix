@@ -12,7 +12,7 @@ in {
     environment = {
       SNAKEOIL_PUBLIC_KEY = snakeOilPublicKey;
     };
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     after = [ "network.target" ];
   };
 

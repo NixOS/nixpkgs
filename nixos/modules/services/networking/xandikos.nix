@@ -90,7 +90,7 @@ in
         systemd.services.xandikos = {
           description = "A Simple Calendar and Contact Server";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
 
           serviceConfig = {
             User = "xandikos";

@@ -87,7 +87,7 @@ in {
     systemd.services.molly-brown = {
       description = "Molly Brown gemini server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         LogsDirectory = "molly-brown";

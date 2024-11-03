@@ -254,7 +254,7 @@ in
       bird-lg-frontend = lib.mkIf cfg.frontend.enable {
         enable = true;
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Bird Looking Glass Frontend Webserver";
         serviceConfig = {
           Type = "simple";
@@ -275,7 +275,7 @@ in
       bird-lg-proxy = lib.mkIf cfg.proxy.enable {
         enable = true;
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Bird Looking Glass Proxy";
         serviceConfig = {
           Type = "simple";

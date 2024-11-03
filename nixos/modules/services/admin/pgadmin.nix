@@ -135,7 +135,7 @@ in
     });
 
     systemd.services.pgadmin = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       requires = [ "network.target" ];
       # we're adding this optionally so just in case there's any race it'll be caught

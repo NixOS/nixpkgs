@@ -219,7 +219,7 @@ in
 
     systemd.services.ddclient = {
       description = "Dynamic DNS Client";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       restartTriggers = lib.optional (cfg.configFile != null) cfg.configFile;
       path = lib.optional (lib.hasPrefix "if," cfg.use || lib.hasPrefix "if," cfg.usev4 || lib.hasPrefix "if," cfg.usev6) pkgs.iproute2;

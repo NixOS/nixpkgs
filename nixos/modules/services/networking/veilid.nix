@@ -25,7 +25,7 @@ in
       description = "Veilid Headless Node";
       wants = [ "network-online.target" ];
       before = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ configFile ];
       environment = {
         RUST_BACKTRACE = "1";

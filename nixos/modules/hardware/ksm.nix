@@ -22,7 +22,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.enable-ksm = {
       description = "Enable Kernel Same-Page Merging";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script =
         ''
           echo 1 > /sys/kernel/mm/ksm/run

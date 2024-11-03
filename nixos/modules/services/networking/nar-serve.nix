@@ -52,7 +52,7 @@ in
     systemd.services.nar-serve = {
       description = "NAR server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment.PORT = toString cfg.port;
       environment.NAR_CACHE_URL = cfg.cacheURL;

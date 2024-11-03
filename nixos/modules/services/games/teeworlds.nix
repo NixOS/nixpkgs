@@ -405,7 +405,7 @@ in
 
     systemd.services.teeworlds = {
       description = "Teeworlds Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

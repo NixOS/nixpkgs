@@ -941,7 +941,7 @@ in
       description = "NSD authoritative only domain name service";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       startLimitBurst = 4;
       startLimitIntervalSec = 5 * 60;  # 5 mins

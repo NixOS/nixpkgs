@@ -806,7 +806,7 @@ in
 
     systemd.services.kanidm = mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = mkMerge [
         # Merge paths and ignore existing prefixes needs to sidestep mkMerge
@@ -851,7 +851,7 @@ in
 
     systemd.services.kanidm-unixd = mkIf cfg.enablePam {
       description = "Kanidm PAM daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       restartTriggers = [
         unixConfigFile
@@ -894,7 +894,7 @@ in
 
     systemd.services.kanidm-unixd-tasks = mkIf cfg.enablePam {
       description = "Kanidm PAM home management daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "network.target"
         "kanidm-unixd.service"

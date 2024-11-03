@@ -53,7 +53,7 @@ in
     systemd.services.readarr = {
       description = "Readarr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

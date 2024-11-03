@@ -67,7 +67,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.hddtemp = {
       description = "HDD/SSD temperature";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         ExecStart = wrapper;

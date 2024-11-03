@@ -24,7 +24,7 @@ in
     systemd.services.photonvision = {
       description = "PhotonVision, the free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

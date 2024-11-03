@@ -44,7 +44,7 @@ in
         ExecStart = "${getExe cfg.package} --config ${configFile}";
         AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

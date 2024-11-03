@@ -78,7 +78,7 @@ in
     systemd.services.endlessh-go = {
       description = "SSH tarpit";
       requires = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
         let
           needsPrivileges = cfg.port < 1024 || cfg.prometheus.port < 1024;

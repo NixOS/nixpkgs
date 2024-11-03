@@ -43,7 +43,7 @@ in
     systemd.services.endlessh = {
       description = "SSH tarpit";
       requires = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
         let
           needsPrivileges = cfg.port < 1024;

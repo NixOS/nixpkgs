@@ -189,7 +189,7 @@ in
         Asterisk PBX server
       '';
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       # Do not restart, to avoid disruption of running calls. Restart unit by yourself!
       restartIfChanged = false;

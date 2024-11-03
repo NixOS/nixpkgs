@@ -107,7 +107,7 @@ in
     systemd.services = lib.mkIf cfg.unprivilegedContainers {
       lxc-net = {
         enable = true;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ pkgs.iproute2 pkgs.iptables pkgs.getent pkgs.dnsmasq ];
       };
     };

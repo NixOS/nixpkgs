@@ -338,7 +338,7 @@ in
       description = "MySQL Server";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ cfg.configFile ];
 
       unitConfig.RequiresMountsFor = cfg.dataDir;

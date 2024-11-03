@@ -123,7 +123,7 @@ in
 
     systemd.services.honk = {
       description = "Honk server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       bindsTo = [ "honk-initdb.service" ];
       preStart = ''

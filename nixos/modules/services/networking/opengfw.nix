@@ -370,7 +370,7 @@ in
 
       systemd.services.opengfw = {
         description = "OpenGFW";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         path = with pkgs; [ iptables ];
 

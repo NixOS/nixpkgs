@@ -240,7 +240,7 @@ in
       after = [ "weblate-postgresql-setup.service" ];
       requires = [ "weblate-postgresql-setup.service" ];
       # We want this to be active on boot, not just on socket activation
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       inherit environment;
       path = weblatePath;
       serviceConfig = {
@@ -260,7 +260,7 @@ in
         "postgresql.service"
       ];
       # We want this to be active on boot, not just on socket activation
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = environment // {
         CELERY_WORKER_RUNNING = "1";
       };

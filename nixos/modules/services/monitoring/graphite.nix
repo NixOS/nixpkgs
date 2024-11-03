@@ -269,7 +269,7 @@ in {
     (lib.mkIf cfg.carbon.enableCache {
       systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
@@ -292,7 +292,7 @@ in {
       systemd.services.carbonAggregator = let name = "carbon-aggregator"; in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
@@ -309,7 +309,7 @@ in {
     (lib.mkIf cfg.carbon.enableRelay {
       systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
@@ -332,7 +332,7 @@ in {
     (lib.mkIf cfg.web.enable ({
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         path = [ pkgs.perl ];
         environment = {
@@ -393,7 +393,7 @@ in {
     (lib.mkIf cfg.seyren.enable {
       systemd.services.seyren = {
         description = "Graphite Alerting Dashboard";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" "mongodb.service" ];
         environment = seyrenConfig;
         serviceConfig = {

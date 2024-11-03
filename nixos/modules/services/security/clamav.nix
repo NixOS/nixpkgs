@@ -172,7 +172,7 @@ in
       description = "ClamAV daemon (clamd)";
       after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
       wants = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ clamdConfigFile ];
 
       serviceConfig = {
@@ -218,7 +218,7 @@ in
     };
 
     systemd.services.clamav-fangfrisch-init = mkIf cfg.fangfrisch.enable {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # if the sqlite file can be found assume the database has already been initialised
       script = ''
         db_url="${cfg.fangfrisch.settings.DEFAULT.db_url}"

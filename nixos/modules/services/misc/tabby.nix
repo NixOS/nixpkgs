@@ -161,7 +161,7 @@ in
       ];
     in {
       services.tabby = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Self-hosted AI coding assistant using large language models";
         after = [ "network.target" ];
         environment = serviceEnv;
@@ -175,7 +175,7 @@ in
       };
 
       services.tabby-scheduler = lib.mkIf (cfg.indexInterval != "never") {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Tabby repository indexing service";
         after = [ "network.target" ];
         environment = serviceEnv;

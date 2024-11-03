@@ -30,7 +30,7 @@ in
     systemd.services.logmein-hamachi = {
       description = "LogMeIn Hamachi Daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

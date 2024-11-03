@@ -322,7 +322,7 @@ in
         "postgresql.service"
       ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         MISSKEY_CONFIG_YML = "/run/misskey/default.yml";
       };

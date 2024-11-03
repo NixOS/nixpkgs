@@ -65,7 +65,7 @@ in
     };
 
     systemd.services.haste-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "network.target" ];
       after = [ "network.target" ];
 

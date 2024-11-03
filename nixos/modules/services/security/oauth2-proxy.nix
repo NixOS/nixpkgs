@@ -583,7 +583,7 @@ in
       in {
         description = "OAuth2 Proxy";
         path = [ cfg.package ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
         after = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
         restartTriggers = [ cfg.keyFile ];

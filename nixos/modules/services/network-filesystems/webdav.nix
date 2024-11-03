@@ -88,7 +88,7 @@ in
     systemd.services.webdav = {
       description = "WebDAV server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.webdav}/bin/webdav -c ${cfg.configFile}";
         Restart = "on-failure";

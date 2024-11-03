@@ -63,7 +63,7 @@ in
     };
 
     systemd.services.sachet = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "network-online.target" ];
       script = ''
         ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /tmp/sachet.yaml

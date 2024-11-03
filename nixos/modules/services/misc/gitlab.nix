@@ -1134,7 +1134,7 @@ in {
 
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     # Redis is required for the sidekiq queue runner.

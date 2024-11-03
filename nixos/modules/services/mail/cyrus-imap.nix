@@ -330,7 +330,7 @@ in
       description = "Cyrus IMAP server";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [
         "/etc/imapd.conf"
         "/etc/cyrus.conf"

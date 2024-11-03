@@ -47,7 +47,7 @@ in
     };
     systemd.services.salt-minion = {
       description = "Salt Minion";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = with pkgs; [
         util-linux

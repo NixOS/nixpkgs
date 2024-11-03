@@ -99,7 +99,7 @@ in
           path = with pkgs; [ procps openssh nettools ];
           description = "spark master service.";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           restartIfChanged = cfg.master.restartIfChanged;
           environment = cfg.master.extraEnvironment // {
             SPARK_MASTER_HOST = cfg.master.bind;
@@ -122,7 +122,7 @@ in
           path = with pkgs; [ procps openssh nettools rsync ];
           description = "spark master service.";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           restartIfChanged = cfg.worker.restartIfChanged;
           environment = cfg.worker.extraEnvironment // {
             SPARK_MASTER = cfg.worker.master;

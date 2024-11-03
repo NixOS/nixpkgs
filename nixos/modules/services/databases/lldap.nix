@@ -106,7 +106,7 @@ in
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
       # an attacker could create a valid admin jwt access token fairly trivially.
       # Because there are 3 different ways `jwt_secret` can be provided, we check if any one of them is present,

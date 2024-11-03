@@ -430,7 +430,7 @@ in
     systemd.services.cups-browsed = mkIf cfg.browsed.enable
       { description = "CUPS Remote Printer Discovery";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "avahi-daemon.service" ] ++ optional (!cfg.startWhenNeeded) "cups.service";
         bindsTo = [ "avahi-daemon.service" ] ++ optional (!cfg.startWhenNeeded) "cups.service";
         partOf = [ "avahi-daemon.service" ] ++ optional (!cfg.startWhenNeeded) "cups.service";

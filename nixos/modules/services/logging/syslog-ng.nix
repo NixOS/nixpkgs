@@ -72,7 +72,7 @@ in {
     systemd.services.syslog-ng = {
       description = "syslog-ng daemon";
       preStart = "mkdir -p /{var,run}/syslog-ng";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "multi-user.target" ]; # makes sure hostname etc is set
       serviceConfig = {
         Type = "notify";

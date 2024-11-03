@@ -126,7 +126,7 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

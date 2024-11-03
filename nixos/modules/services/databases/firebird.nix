@@ -90,7 +90,7 @@ in
     systemd.services.firebird =
       { description = "Firebird Super-Server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         # TODO: moving security2.fdb into the data directory works, maybe there
         # is a better way

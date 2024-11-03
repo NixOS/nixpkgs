@@ -201,7 +201,7 @@ in
         description = "onlyoffice converter";
         after = [ "network.target" "onlyoffice-docservice.service" "postgresql.service" ];
         requires = [ "network.target" "onlyoffice-docservice.service" "postgresql.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
           Group = "onlyoffice";
@@ -260,7 +260,7 @@ in
           description = "onlyoffice documentserver";
           after = [ "network.target" "postgresql.service" ];
           requires = [ "postgresql.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
             ExecStartPre = [ onlyoffice-prestart ];

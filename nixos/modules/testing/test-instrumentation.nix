@@ -81,7 +81,7 @@ in
     systemd.services.backdoor = lib.mkMerge [
       backdoorService
       {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       }
     ];
 

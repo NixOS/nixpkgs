@@ -74,7 +74,7 @@ in
     systemd.services.tika = {
       description = "Apache Tika Server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig =

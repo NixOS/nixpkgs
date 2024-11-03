@@ -79,7 +79,7 @@ in
       systemd.services.ntfy-sh = {
         description = "Push notifications server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         serviceConfig = {

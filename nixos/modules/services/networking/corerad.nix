@@ -55,7 +55,7 @@ in {
     systemd.services.corerad = {
       description = "CoreRAD IPv6 NDP RA daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         LimitNPROC = 512;
         LimitNOFILE = 1048576;

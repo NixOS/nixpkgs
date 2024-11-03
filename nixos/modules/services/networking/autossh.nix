@@ -86,7 +86,7 @@ in
               description = "AutoSSH session (" + s.name + ")";
 
               after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
 
               # To be able to start the service with no network connection
               environment.AUTOSSH_GATETIME="0";

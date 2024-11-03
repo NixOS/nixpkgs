@@ -31,7 +31,7 @@ in
 
     systemd.services.vector = {
       description = "Vector event and log aggregator";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       requires = [ "network-online.target" ];
       serviceConfig =

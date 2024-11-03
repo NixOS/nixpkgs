@@ -103,7 +103,7 @@ in
 
     systemd.services.distccd = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       description = "Distributed C, C++ and Objective-C compiler";
       documentation = [ "man:distccd(1)" ];

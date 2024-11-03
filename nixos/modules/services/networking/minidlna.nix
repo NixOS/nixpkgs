@@ -132,7 +132,7 @@ in
 
     systemd.services.minidlna = {
       description = "MiniDLNA Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

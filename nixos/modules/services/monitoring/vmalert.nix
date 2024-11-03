@@ -114,7 +114,7 @@ in
 
     systemd.services.vmalert = {
       description = "vmalert service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       reloadTriggers = [ config.environment.etc."vmalert/rules.yml".source ];
 

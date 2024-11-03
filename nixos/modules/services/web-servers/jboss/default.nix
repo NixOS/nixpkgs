@@ -82,7 +82,7 @@ in
     systemd.services.jboss = {
       description = "JBoss server";
       script = "${jbossService}/bin/control start";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

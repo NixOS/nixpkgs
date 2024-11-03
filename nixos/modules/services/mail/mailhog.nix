@@ -66,7 +66,7 @@ in
     systemd.services.mailhog = {
       description = "MailHog - Web and API based SMTP testing";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.mailhog}/bin/MailHog ${args}";

@@ -25,7 +25,7 @@ in {
         ExecStart = "${cfg.package}/bin/touchegg --daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     environment.systemPackages = [ cfg.package ];

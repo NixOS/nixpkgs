@@ -246,7 +246,7 @@ in
       systemd.services.redsocks = {
         description = "Redsocks";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         script = "${pkgs.redsocks}/bin/redsocks -c ${configfile}";
       };
 

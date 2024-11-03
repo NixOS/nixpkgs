@@ -58,7 +58,7 @@ in
       description = "SCION Dispatcher";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         Group = "scion";

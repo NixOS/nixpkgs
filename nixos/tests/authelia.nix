@@ -133,7 +133,7 @@ import ./make-test-python.nix ({ lib, ... }: {
         {
           script = "${pkgs.python3}/bin/python -m http.server --directory ${fakeWebPageDir} 8000";
           serviceConfig.Type = "simple";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
     };
   };

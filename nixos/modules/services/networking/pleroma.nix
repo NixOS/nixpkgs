@@ -156,7 +156,7 @@ in
           description = "Pleroma social network";
           wants = [ "pleroma-migrations.service" ];
           after = [ "pleroma-migrations.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
           environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
           serviceConfig = commonSystemdServiceConfig // {

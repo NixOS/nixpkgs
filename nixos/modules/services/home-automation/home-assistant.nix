@@ -723,7 +723,7 @@ in {
 
     systemd.targets.home-assistant = rec {
       description = "Home Assistant";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "home-assistant.service" ];
       after = wants;
     };

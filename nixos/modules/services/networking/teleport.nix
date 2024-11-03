@@ -81,7 +81,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.teleport = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''

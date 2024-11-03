@@ -48,7 +48,7 @@ in
     systemd.services.docuum = {
       after = [ "docker.socket" ];
       requires = [ "docker.socket" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ config.virtualisation.docker.package ];
       environment.HOME = "/var/lib/docuum";
 

@@ -63,7 +63,7 @@ in
         "phpfpm-nextcloud.service"
         "redis-nextcloud.service"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         NEXTCLOUD_URL = nextcloudUrl;
         SOCKET_PATH = cfg.socketPath;

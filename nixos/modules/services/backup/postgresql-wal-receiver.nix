@@ -161,7 +161,7 @@ in {
 
     systemd.services = lib.mapAttrs' (name: config: lib.nameValuePair "postgresql-wal-receiver-${name}" {
       description = "PostgreSQL WAL receiver (${name})";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       startLimitIntervalSec = 0; # retry forever, useful in case of network disruption
 
       serviceConfig = {

@@ -143,7 +143,7 @@ in
     systemd.services.dnsmasq = {
         description = "Dnsmasq Daemon";
         after = [ "network.target" "systemd-resolved.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ dnsmasq ];
         preStart = ''
           mkdir -m 755 -p ${stateDir}

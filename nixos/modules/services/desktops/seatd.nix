@@ -35,7 +35,7 @@ in
       description = "Seat management daemon";
       documentation = [ "man:seatd(1)" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartIfChanged = false;
 
       serviceConfig = {

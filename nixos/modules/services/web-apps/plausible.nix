@@ -191,7 +191,7 @@ in {
         plausible = {
           inherit (cfg.package.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = optional cfg.database.clickhouse.setup "clickhouse.service"
           ++ optionals cfg.database.postgres.setup [
               "postgresql.service"

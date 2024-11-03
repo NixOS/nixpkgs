@@ -88,7 +88,7 @@ in
         StateDirectory = dirname cfg.flags.database_path;
         Restart = "always";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
     systemd.tmpfiles.settings."10-osquery".${dirname (cfg.flags.pidfile)}.d = {
       user = "root";

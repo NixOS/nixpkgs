@@ -48,7 +48,7 @@ let
 
     systemd.services."hbase-${toLower name}" = {
       description = "HBase ${name}";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with cfg; [ hbase.package ] ++ optional
         (with cfg.hbase.master; enable && initHDFS) package;
       preStart = mkIf (with cfg.hbase.master; enable && initHDFS)

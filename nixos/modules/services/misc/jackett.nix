@@ -52,7 +52,7 @@ in
     systemd.services.jackett = {
       description = "Jackett";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

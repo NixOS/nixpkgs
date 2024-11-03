@@ -110,7 +110,7 @@ in
       systemd.services.conduit = {
         description = "Conduit Matrix Server";
         documentation = [ "https://gitlab.com/famedly/conduit/" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         environment = lib.mkMerge ([
           { CONDUIT_CONFIG = configFile; }
           cfg.extraEnvironment

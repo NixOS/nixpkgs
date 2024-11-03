@@ -893,7 +893,7 @@ in
       description = "Athens Go module proxy";
       documentation = [ "https://docs.gomods.io" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 

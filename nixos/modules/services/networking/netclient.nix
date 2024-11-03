@@ -13,7 +13,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.services.netclient = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       description = "Netclient Daemon";
       serviceConfig = {

@@ -325,7 +325,7 @@ in
         serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
         serviceConfig.Type = "oneshot";
         requires = [ "local-fs.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
       };
 

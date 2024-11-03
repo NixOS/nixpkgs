@@ -149,7 +149,7 @@ EOF
      windmill-server = {
         description = "Windmill server";
         after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = serviceConfig // { StateDirectory = "windmill";};
 
@@ -164,7 +164,7 @@ EOF
      windmill-worker = {
         description = "Windmill worker";
         after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = serviceConfig // { StateDirectory = "windmill-worker";};
 
@@ -180,7 +180,7 @@ EOF
      windmill-worker-native = {
         description = "Windmill worker native";
         after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = serviceConfig // { StateDirectory = "windmill-worker-native";};
 

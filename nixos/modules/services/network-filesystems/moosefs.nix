@@ -51,7 +51,7 @@ let
 
   # generic template for all daemons
   systemdService = name: extraConfig: configFile: {
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     wants = [ "network-online.target" ];
     after = [ "network.target" "network-online.target" ];
 

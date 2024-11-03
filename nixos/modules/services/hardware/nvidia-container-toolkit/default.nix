@@ -137,7 +137,7 @@
 
     systemd.services.nvidia-container-toolkit-cdi-generator = {
       description = "Container Device Interface (CDI) for Nvidia generator";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "systemd-udev-settle.service" ];
       serviceConfig = {
         RuntimeDirectory = "cdi";

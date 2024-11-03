@@ -281,7 +281,7 @@ in {
     systemd.services.snapserver = {
       after = [ "network.target" "nss-lookup.target" ];
       description = "Snapserver";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "mpd.service" "mopidy.service" ];
 
       serviceConfig = {

@@ -512,7 +512,7 @@ in
           wants = [ "public-inbox-init.service" ];
           requires = [ "public-inbox-init.service" ] ++
             optional (cfg.settings.publicinboxwatch.spamcheck == "spamc") "spamassassin.service";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             ExecStart = "${cfg.package}/bin/public-inbox-watch";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
@@ -523,7 +523,7 @@ in
           PI_CONFIG = gitIni.generate "public-inbox.ini"
             (filterAttrsRecursive (n: v: v != null) cfg.settings);
           in mkMerge [(serviceConfig "init") {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           restartIfChanged = true;
           restartTriggers = [ PI_CONFIG ];
           script = ''

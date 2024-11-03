@@ -166,7 +166,7 @@ in
       ];
       before = [ "sysinit.target" "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig = {
         Description="Load AppArmor policies";
         DefaultDependencies = "no";

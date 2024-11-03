@@ -130,7 +130,7 @@ in
         };
         schleuder-api-daemon = {
           after = [ "local-fs.target" "network.target" "schleuder-init.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           requires = [ "schleuder-init.service" ];
           serviceConfig = commonServiceConfig // {
             ExecStart = [ "${pkgs.schleuder}/bin/schleuder-api-daemon" ];

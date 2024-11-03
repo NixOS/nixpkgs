@@ -88,7 +88,7 @@ in
     systemd.services = mapAttrs' (
       name: cfg:
       nameValuePair "mailpit-${name}" {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         serviceConfig = {

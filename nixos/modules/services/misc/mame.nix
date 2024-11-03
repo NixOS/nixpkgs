@@ -51,7 +51,7 @@ in
     systemd.services.mame = {
       description = "MAME TUN/TAP Ethernet interface";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.iproute2 ];
       serviceConfig = {
         Type = "oneshot";

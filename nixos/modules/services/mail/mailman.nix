@@ -484,7 +484,7 @@ in {
           ++ lib.optional withPostgresql "postgresql.service";
         restartTriggers = [ mailmanCfgFile ];
         requires = lib.optional withPostgresql "postgresql.service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${mailmanEnv}/bin/mailman start";
           ExecStop = "${mailmanEnv}/bin/mailman stop";

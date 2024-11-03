@@ -154,7 +154,7 @@ in
         AmbientCapabilities = "CAP_NET_ADMIN";
         CapabilityBoundingSet = "CAP_NET_ADMIN";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
     networking.firewall.allowedUDPPorts =
       mkIf cfg.openFirewall [ cfg.settings.gossip_port ];

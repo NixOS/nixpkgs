@@ -69,7 +69,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.kavita = {
       description = "Kavita";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       preStart = ''
         install -m600 ${appsettings} ${lib.escapeShellArg cfg.dataDir}/config/appsettings.json

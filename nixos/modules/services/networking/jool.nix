@@ -79,7 +79,7 @@ let
       description = "Jool, NAT64 setup of instance ${name}";
       documentation = [ "https://nicmx.github.io/Jool/en/documentation.html" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -95,7 +95,7 @@ let
       description = "Jool, SIIT setup of instance ${name}";
       documentation = [ "https://nicmx.github.io/Jool/en/documentation.html" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

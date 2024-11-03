@@ -149,7 +149,7 @@ in
     systemd.services = lib.mkMerge (
       lib.mapAttrsToList (name: qtcfg: {
         "quicktun-${name}" = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           environment = {
             INTERFACE = name;

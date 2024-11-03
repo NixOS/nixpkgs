@@ -95,7 +95,7 @@ in {
     systemd.services.zwave-js = let
       configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
     in {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "Z-Wave JS Server";
       serviceConfig = {

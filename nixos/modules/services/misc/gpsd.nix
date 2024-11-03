@@ -118,7 +118,7 @@ in {
 
     systemd.services.gpsd = {
       description = "GPSD daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         Type = "forking";

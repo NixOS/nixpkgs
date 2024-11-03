@@ -70,7 +70,7 @@ in {
     systemd.services.mympd = {
       # upstream service config: https://github.com/jcorporation/myMPD/blob/master/contrib/initscripts/mympd.service.in
       after = [ "mpd.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = with lib; ''
         config_dir="/var/lib/mympd/config"
         mkdir -p "$config_dir"

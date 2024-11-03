@@ -111,7 +111,7 @@ in {
     systemd.services.wiki-js = {
       description = "A modern and powerful wiki app built on Node.js";
       documentation = [ "https://docs.requarks.io/" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = with pkgs; [
         # Needed for git storage.

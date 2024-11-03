@@ -302,7 +302,7 @@ in
 
     systemd.services.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "avahi-daemon.socket" ];
 
       # Make NSS modules visible so that `avahi_nss_support ()' can

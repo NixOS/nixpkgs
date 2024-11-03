@@ -43,7 +43,7 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.services.argononed = {
       description = "Argon One Raspberry Pi case Daemon Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         ExecStart = "${cfg.package}/bin/argononed";

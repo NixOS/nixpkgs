@@ -119,7 +119,7 @@ in {
     systemd.services.icecc-daemon = {
       description = "Icecream compile daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = escapeShellArgs ([

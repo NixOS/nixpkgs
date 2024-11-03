@@ -96,7 +96,7 @@ in {
 
     systemd.services.tremor-rs = {
       description = "Tremor event- or stream-processing system";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
 

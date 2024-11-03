@@ -251,7 +251,7 @@ in
 
     systemd.services.paperless-scheduler = {
       description = "Paperless Celery Beat";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "paperless-consumer.service" "paperless-web.service" "paperless-task-queue.service" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;

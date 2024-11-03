@@ -99,7 +99,7 @@ let
       before = [ "network.target" ];
       wants = [ "network.target" ];
       requires = deviceUnit;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       stopIfChanged = false;
 
       path = [ pkgs.wpa_supplicant ];

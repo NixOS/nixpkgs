@@ -11,7 +11,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.openwebrx = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [
         csdr
         digiham

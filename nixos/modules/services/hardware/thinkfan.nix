@@ -223,7 +223,7 @@ in {
       };
 
       # must be added manually, see issue #81138
-      thinkfan.wantedBy = [ "multi-user.target" ];
+      thinkfan.autoStart = true;
       thinkfan-wakeup.wantedBy = [ "sleep.target" ];
       thinkfan-sleep.wantedBy = [ "sleep.target" ];
     };

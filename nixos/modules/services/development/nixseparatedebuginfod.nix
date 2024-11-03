@@ -36,7 +36,7 @@ in
     } ];
 
     systemd.services.nixseparatedebuginfod = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "nix-daemon.service" ];
       after = [ "nix-daemon.service" ];
       path = [ cfg.nixPackage ];

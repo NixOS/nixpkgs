@@ -66,7 +66,7 @@ in
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         HOME = "/var/lib/music-assistant";

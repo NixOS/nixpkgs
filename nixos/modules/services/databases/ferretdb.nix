@@ -45,7 +45,7 @@ in
       systemd.services.ferretdb = {
         description = "FerretDB";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         environment = cfg.settings;
         serviceConfig = {
           Type = "simple";

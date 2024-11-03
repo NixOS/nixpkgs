@@ -37,7 +37,7 @@ in
 
     systemd.services.openarena = {
       description = "OpenArena";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

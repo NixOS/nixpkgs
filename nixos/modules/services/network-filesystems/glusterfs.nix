@@ -150,7 +150,7 @@ in
 
       description = "GlusterFS, a clustered file-system server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       requires = lib.optional cfg.useRpcbind "rpcbind.service";
       after = [ "network.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
@@ -186,7 +186,7 @@ in
 
       description = "Gluster Events Notifier";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       after = [ "network.target" ];
 

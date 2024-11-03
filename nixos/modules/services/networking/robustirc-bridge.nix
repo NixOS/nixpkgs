@@ -28,7 +28,7 @@ in
         "man:robustirc-bridge(1)"
         "https://robustirc.net/"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

@@ -1028,7 +1028,7 @@ in {
       # it because it requires access to the Internet to function properly.
       bindsTo = [ "akkoma-config.service" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "akkoma-config.target"
         "network.target"

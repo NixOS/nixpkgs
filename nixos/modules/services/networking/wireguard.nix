@@ -450,7 +450,7 @@ let
     nameValuePair "wireguard-${name}"
       rec {
         description = "WireGuard Tunnel - ${name}";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "wireguard-${name}.service" ] ++ map mkPeerUnit values.peers;
         after = wants;
       };

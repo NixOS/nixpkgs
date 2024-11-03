@@ -92,7 +92,7 @@ in
     systemd.services.silverbullet = {
       description = "Silverbullet service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = lib.mkIf (!lib.hasPrefix "/var/lib/" cfg.spaceDir) "mkdir -p '${cfg.spaceDir}'";
       serviceConfig = {

@@ -57,7 +57,7 @@ let
         systemd.services."hdfs-${toLower name}" = {
           inherit description preStart;
           environment = environment // serviceOptions.extraEnv;
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           inherit (serviceOptions) restartIfChanged;
           serviceConfig = {
             inherit User;

@@ -40,7 +40,7 @@ with lib;
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''

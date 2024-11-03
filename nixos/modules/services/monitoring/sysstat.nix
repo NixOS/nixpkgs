@@ -28,7 +28,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.sysstat = {
       description = "Resets System Activity Logs";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = "root";

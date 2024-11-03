@@ -93,7 +93,7 @@ in
 
     systemd.services.drone = {
       description = "Ostinato agent-controller";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         ${pkg}/bin/drone ${toString cfg.port} ${configFile}
       '';

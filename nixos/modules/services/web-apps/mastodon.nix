@@ -745,7 +745,7 @@ in {
 
     systemd.targets.mastodon = {
       description = "Target for all Mastodon services";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
     };
 

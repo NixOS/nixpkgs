@@ -127,7 +127,7 @@ in
         description = "Streaming relay for v4l2loopback using GStreamer";
 
         after = [ "modprobe@v4l2loopback.service" "systemd-logind.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           Type = "simple";

@@ -187,7 +187,7 @@ let
         # The service's only task is to ensure that the specified path exists
         Type = "oneshot";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
   mkAuthorizedKey = cfg: appendOnly: key:

@@ -66,7 +66,7 @@ in
 
     systemd.services.guacamole-server = {
       description = "Apache Guacamole server (guacd)";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = {
         HOME = "/run/guacamole-server";

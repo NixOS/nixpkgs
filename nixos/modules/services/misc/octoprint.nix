@@ -109,7 +109,7 @@ in
 
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ pluginsEnv ];
 

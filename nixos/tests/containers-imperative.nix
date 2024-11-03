@@ -44,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           systemd.services.foo = {
             serviceConfig.Type = "oneshot";
             script = "ls -al /foo";
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
           };
         }
       '';

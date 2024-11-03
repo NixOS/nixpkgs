@@ -154,7 +154,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.xonotic = {
       description = "Xonotic server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         # Required or else it tries to write the lock file into the nix store

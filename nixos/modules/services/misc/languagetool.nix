@@ -69,7 +69,7 @@ in
 
     systemd.services.languagetool = {
       description = "LanguageTool HTTP server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         DynamicUser = true;

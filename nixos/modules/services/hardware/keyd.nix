@@ -113,7 +113,7 @@ in
       description = "Keyd remapping daemon";
       documentation = [ "man:keyd(1)" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       restartTriggers = lib.mapAttrsToList
         (name: options:

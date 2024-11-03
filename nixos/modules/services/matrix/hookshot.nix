@@ -104,7 +104,7 @@ in
     systemd.services.matrix-hookshot = {
       description = "a bridge between Matrix and multiple project management services";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 

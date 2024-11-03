@@ -116,7 +116,7 @@ in
     systemd.services.aerospike = rec {
       description = "Aerospike server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

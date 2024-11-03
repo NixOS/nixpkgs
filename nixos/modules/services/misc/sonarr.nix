@@ -48,7 +48,7 @@ in
     systemd.services.sonarr = {
       description = "Sonarr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

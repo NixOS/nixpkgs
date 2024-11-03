@@ -342,7 +342,7 @@ in
 
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         serviceConfig = {

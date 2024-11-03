@@ -44,7 +44,7 @@ in
     users.groups.munge = {};
 
     systemd.services.munged = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [
         "network-online.target"
         "time-sync.target"

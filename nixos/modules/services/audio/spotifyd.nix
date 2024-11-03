@@ -49,7 +49,7 @@ in
     ];
 
     systemd.services.spotifyd = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "spotifyd, a Spotify playing daemon";

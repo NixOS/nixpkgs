@@ -84,7 +84,7 @@ in
       systemd.services.solanum = {
         description = "Solanum IRC daemon";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         reloadIfChanged = true;
         restartTriggers = [
           configFile

@@ -184,7 +184,7 @@ in {
     systemd.services.jenkins = {
       description = "Jenkins Continuous Integration Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment =
         let

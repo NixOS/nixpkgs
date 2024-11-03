@@ -67,7 +67,7 @@ in
       description = "devpi PyPI-compatible server";
       documentation = [ "https://devpi.net/docs/devpi/devpi/stable/+d/index.html" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       # Since at least devpi-server 6.10.0, devpi requires the secrets file to
       # have 0600 permissions.

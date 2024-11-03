@@ -134,7 +134,7 @@ in {
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
       path = [ pkgs.lottieconverter pkgs.ffmpeg-full ];

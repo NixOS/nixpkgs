@@ -245,7 +245,7 @@ in {
     systemd.services = let
       makeService = attrs: recursiveUpdate {
         path = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           User = "datadog";
           Group = "datadog";

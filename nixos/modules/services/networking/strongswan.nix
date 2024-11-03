@@ -145,7 +145,7 @@ in
 
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];

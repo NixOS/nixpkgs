@@ -113,7 +113,7 @@ in
     systemd.services.dragonflydb = {
       description = "DragonflyDB server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

@@ -135,7 +135,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.flannel = {
       description = "Flannel Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = {
         FLANNELD_PUBLIC_IP = cfg.publicIp;

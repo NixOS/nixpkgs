@@ -380,7 +380,7 @@ in {
             EnvironmentFile = cfg.secrets;
           };
           restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
         maddy-ensure-accounts = {
           script = ''
@@ -404,7 +404,7 @@ in {
             User= "maddy";
           };
           after = [ "maddy.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
 
       };

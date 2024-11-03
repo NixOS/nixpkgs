@@ -103,7 +103,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.pufferpanel = {
       description = "PufferPanel game management server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       path = cfg.extraPackages;

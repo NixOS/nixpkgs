@@ -156,7 +156,7 @@ in {
         description = "Jupyter development server";
 
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         # TODO: Patch notebook so we can explicitly pass in a shell
         path = [ pkgs.bash ]; # needed for sh in cell magic to work

@@ -89,7 +89,7 @@ in
 
     systemd.services."vmware-wrappers" = {
       description = "Create VMVare Wrappers";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [
         "vmware-authdlauncher.service"
         "vmware-networks-configuration.service"
@@ -129,7 +129,7 @@ in
         Type = "forking";
         ExecStart = [ "${cfg.package}/bin/vmware-authdlauncher" ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services."vmware-networks-configuration" = {
@@ -143,7 +143,7 @@ in
         Type = "oneshot";
         RemainAfterExit = "yes";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services."vmware-networks" = {
@@ -156,7 +156,7 @@ in
         ExecStart = [ "${cfg.package}/bin/vmware-networks --start" ];
         ExecStop = [ "${cfg.package}/bin/vmware-networks --stop" ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services."vmware-usbarbitrator" = {
@@ -164,7 +164,7 @@ in
       serviceConfig = {
         ExecStart = [ "${cfg.package}/bin/vmware-usbarbitrator -f" ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

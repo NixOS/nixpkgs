@@ -48,7 +48,7 @@ let cfg = config.services.networking.websockify; in {
       description = "Target to start all default websockify@ services";
       unitConfig.X-StopOnReconfiguration = true;
       wants = mapAttrsToList (name: value: "websockify@${name}:${toString value}.service") cfg.portMap;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

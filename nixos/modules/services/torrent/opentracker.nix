@@ -24,7 +24,7 @@ in {
     systemd.services.opentracker = {
       description = "opentracker server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartIfChanged = true;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/opentracker ${cfg.extraOptions}";

@@ -50,7 +50,7 @@ in {
       listenStreams = [ "" cfg.listen ];
     };
     systemd.services.static-web-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         # Remove upstream sample environment file; use config.toml exclusively
         EnvironmentFile = [ "" ];

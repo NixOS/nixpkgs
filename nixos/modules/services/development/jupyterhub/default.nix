@@ -184,7 +184,7 @@ in {
         description = "Jupyterhub development server";
 
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           Restart = "always";

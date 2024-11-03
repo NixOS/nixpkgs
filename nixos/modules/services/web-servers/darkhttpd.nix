@@ -64,7 +64,7 @@ in {
       description = "Dark HTTPd";
       wants = [ "network.target" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.darkhttpd}/bin/darkhttpd ${args}";

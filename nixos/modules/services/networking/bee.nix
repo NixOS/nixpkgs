@@ -85,7 +85,7 @@ in {
     ];
 
     systemd.services.bee = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Nice = cfg.daemonNiceLevel;

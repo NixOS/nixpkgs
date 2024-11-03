@@ -127,7 +127,7 @@ in
           {
             description = "iodine client - ${name}";
             after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${lib.optionalString (cfg.passwordFile != "") "< \"${builtins.toString cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
             serviceConfig = {
               RestartSec = "30s";
@@ -161,7 +161,7 @@ in
           iodined = lib.mkIf (cfg.server.enable) {
             description = "iodine, ip over dns server daemon";
             after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${lib.optionalString (cfg.server.passwordFile != "") "< \"${builtins.toString cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
             serviceConfig = {
               # Filesystem access

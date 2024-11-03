@@ -124,7 +124,7 @@ in
     in
     {
       description = "Jitsi Gateway to SIP";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       preStart = ''

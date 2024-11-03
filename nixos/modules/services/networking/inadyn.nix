@@ -195,7 +195,7 @@ in
           "file:${pkgs.inadyn}/share/doc/inadyn/README.md"
         ];
         requires = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         startAt = cfg.interval;
         serviceConfig = {
           Type = "oneshot";

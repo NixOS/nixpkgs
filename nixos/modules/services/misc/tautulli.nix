@@ -62,7 +62,7 @@ in
     systemd.services.tautulli = {
       description = "Tautulli Plex Monitor";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;

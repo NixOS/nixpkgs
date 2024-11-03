@@ -62,7 +62,7 @@ in
 
     systemd.services.uptermd = {
       description = "Upterm Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       path = [ pkgs.openssh ];

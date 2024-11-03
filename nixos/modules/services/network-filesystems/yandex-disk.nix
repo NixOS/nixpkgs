@@ -85,7 +85,7 @@ in
 
       after = [ "network.target" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       # FIXME: have to specify ${directory} here as well
       unitConfig.RequiresMountsFor = dir;

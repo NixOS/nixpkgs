@@ -12,7 +12,7 @@ let
       value = {
         after = [ "network-online.target" "sound.target" ];
         description = "${name} liquidsoap stream";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ pkgs.wget ];
         serviceConfig = {
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";

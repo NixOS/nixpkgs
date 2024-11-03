@@ -102,7 +102,7 @@ in
       in
       {
         description = "Intel Architectural Enclave Service Manager";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         after = [
           "auditd.service"

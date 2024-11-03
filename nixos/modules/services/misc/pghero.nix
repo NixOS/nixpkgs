@@ -86,7 +86,7 @@ in
 
     systemd.services.pghero = {
       description = "PgHero performance dashboard for PostgreSQL";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "pghero.socket" ];
       after = [ "pghero.socket" "network.target" ];
 

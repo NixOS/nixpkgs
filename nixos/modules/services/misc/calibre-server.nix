@@ -127,7 +127,7 @@ in
     systemd.services.calibre-server = {
       description = "Calibre Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Restart = "always";

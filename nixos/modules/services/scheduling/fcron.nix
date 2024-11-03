@@ -147,7 +147,7 @@ in
     };
     systemd.services.fcron = {
       description = "fcron daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ pkgs.fcron ];
 

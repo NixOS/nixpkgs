@@ -67,7 +67,7 @@ in
     systemd.services.nix-serve = {
       description = "nix-serve binary cache server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ config.nix.package.out pkgs.bzip2.bin ];
       environment.NIX_REMOTE = "daemon";

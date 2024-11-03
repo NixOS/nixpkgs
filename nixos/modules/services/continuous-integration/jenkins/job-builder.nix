@@ -128,7 +128,7 @@ in {
       # JJB can run either before or after jenkins. We chose after, so we can
       # always use curl to notify (running) jenkins to reload its config.
       after = [ "jenkins.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = with pkgs; [ jenkins-job-builder curl ];
 

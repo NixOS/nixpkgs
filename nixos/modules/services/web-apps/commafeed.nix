@@ -65,7 +65,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.commafeed = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = lib.mapAttrs (
         _: v: if lib.isBool v then lib.boolToString v else toString v
       ) cfg.environment;

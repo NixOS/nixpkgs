@@ -183,7 +183,7 @@ in {
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       preStart = lib.mkIf cfg.formatLogDirs
         (if cfg.formatLogDirsIgnoreFormatted then ''

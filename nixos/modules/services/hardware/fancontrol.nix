@@ -31,7 +31,7 @@ in
     systemd.services.fancontrol = {
       documentation = [ "man:fancontrol(8)" ];
       description = "software fan control";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "lm_sensors.service" ];
 
       serviceConfig = {

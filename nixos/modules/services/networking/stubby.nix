@@ -88,7 +88,7 @@ in {
       description = "Stubby local DNS resolver";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "notify";

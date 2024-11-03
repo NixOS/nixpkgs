@@ -63,7 +63,7 @@ in {
       paths = mapAttrs (_: opt:
         {
           description = "KVMGT VGPU ${opt.uuid} path";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           pathConfig = {
             PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create";
           };

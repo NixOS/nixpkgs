@@ -213,7 +213,7 @@ in
         in {
           description = "blockbook-frontend-${blockbookName} daemon";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           preStart = ''
             ln -sf ${cfg.templateDir} ${cfg.dataDir}/static/
             ln -sf ${cfg.cssDir} ${cfg.dataDir}/static/

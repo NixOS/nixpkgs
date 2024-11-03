@@ -244,7 +244,7 @@ in
       documentation = [ "https://github.com/rancher/rke2#readme" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = if cfg.role == "agent" then "exec" else "notify";
         EnvironmentFile = [

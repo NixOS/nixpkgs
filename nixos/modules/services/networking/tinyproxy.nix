@@ -81,7 +81,7 @@ in
     systemd.services.tinyproxy = {
       description = "TinyProxy daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "tinyproxy";
         Group = "tinyproxy";

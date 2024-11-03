@@ -20,7 +20,7 @@
       packages = [ pkgs.mcelog ];
 
       services.mcelog = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ProtectHome = true;
           PrivateNetwork = true;

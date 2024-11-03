@@ -144,7 +144,7 @@ in {
       }
     ];
     systemd.services.pushgateway = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after    = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/pushgateway" +

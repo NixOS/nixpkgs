@@ -613,7 +613,7 @@ in
           {
             after = databaseServices;
             bindsTo = databaseServices;
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             path = with pkgs; [
               keycloakBuild
               openssl

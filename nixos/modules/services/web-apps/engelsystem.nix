@@ -148,7 +148,7 @@ in {
     };
 
     systemd.services."engelsystem-init" = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = { Type = "oneshot"; };
       script =
         let
@@ -165,7 +165,7 @@ in {
       '';
     };
     systemd.services."engelsystem-migrate" = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         User = "engelsystem";

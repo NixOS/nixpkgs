@@ -21,7 +21,7 @@ in
           enable = true;
           description = "Tuxedo Tailor hardware control service";
           after = [ "systemd-logind.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
 
           serviceConfig = {
             Type = "dbus";

@@ -31,7 +31,7 @@ in
     services.dbus.enable = true;
 
     systemd.packages = [ pkgs.supergfxctl ];
-    systemd.services.supergfxd.wantedBy = [ "multi-user.target" ];
+    systemd.services.supergfxd.autoStart = true;
     systemd.services.supergfxd.path = [ pkgs.kmod pkgs.pciutils ];
 
     services.dbus.packages = [ pkgs.supergfxctl ];

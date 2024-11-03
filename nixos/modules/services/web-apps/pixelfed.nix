@@ -316,7 +316,7 @@ in {
       requires = [ "pixelfed-data-setup.service" ]
         ++ (lib.optional cfg.database.createLocally dbService)
         ++ (lib.optional cfg.redis.createLocally redisService);
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # Ensure image optimizations programs are available.
       path = extraPrograms;
 
@@ -360,7 +360,7 @@ in {
     systemd.services.pixelfed-data-setup = {
       description =
         "Pixelfed setup: migrations, environment file update, cache reload, data changes";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = lib.optional cfg.database.createLocally dbService;
       requires = lib.optional cfg.database.createLocally dbService;
       path = with pkgs; [ bash pixelfed-manage rsync ] ++ extraPrograms;

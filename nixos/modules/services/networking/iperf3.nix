@@ -66,7 +66,7 @@ let
     systemd.services.iperf3 = {
       description = "iperf3 daemon";
       unitConfig.Documentation = "man:iperf3(1) https://iperf.fr/iperf-doc.php";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

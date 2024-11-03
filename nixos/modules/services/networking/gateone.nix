@@ -50,7 +50,7 @@ config = lib.mkIf cfg.enable {
       WorkingDirectory = cfg.settingsDir;
     };
 
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     requires = [ "network.target" ];
   };
 };

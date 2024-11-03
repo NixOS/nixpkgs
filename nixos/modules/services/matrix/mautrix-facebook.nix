@@ -137,7 +137,7 @@ in {
     };
 
     systemd.services.mautrix-facebook = rec {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [
         "network-online.target"
       ] ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit

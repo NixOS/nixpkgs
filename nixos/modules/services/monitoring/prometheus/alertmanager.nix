@@ -173,7 +173,7 @@ in {
       networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
       systemd.services.alertmanager = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants    = [ "network-online.target" ];
         after    = [ "network-online.target" ];
         preStart = ''

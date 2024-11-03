@@ -108,7 +108,7 @@ in
       crabfit-api = {
         description = "The API for Crab Fit.";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "postgresql.service" ];
 
         serviceConfig = {
@@ -127,7 +127,7 @@ in
       crabfit-frontend = {
         description = "The frontend for Crab Fit.";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           # TODO: harden

@@ -127,7 +127,7 @@ in
     systemd.services.mongodb =
       { description = "MongoDB server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         serviceConfig = {

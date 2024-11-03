@@ -53,7 +53,7 @@ in {
         '';
         Nice = -20;
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

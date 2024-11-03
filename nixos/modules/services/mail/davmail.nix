@@ -80,7 +80,7 @@ in
       systemd.services.davmail = {
         description = "DavMail POP/IMAP/SMTP Exchange Gateway";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           Type = "simple";

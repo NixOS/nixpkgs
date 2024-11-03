@@ -38,7 +38,7 @@ in {
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
       wants = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

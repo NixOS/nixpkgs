@@ -37,7 +37,7 @@ in
       description = "SCION Router";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${globalCfg.package}/bin/scion-router --config ${configFile}";

@@ -116,7 +116,7 @@ in
     systemd.services.certspotter = {
       description = "Cert Spotter - Certificate Transparency Monitor";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.CERTSPOTTER_CONFIG_DIR = configDir;
       environment.SENDMAIL_PATH = if cfg.sendmailPath != null then cfg.sendmailPath else "/run/current-system/sw/bin/false";
       script = ''

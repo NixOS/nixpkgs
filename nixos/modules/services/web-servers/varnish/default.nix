@@ -66,7 +66,7 @@ in
 
     systemd.services.varnish = {
       description = "Varnish";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       preStart = mkIf (!(lib.hasPrefix "/run/" cfg.stateDir)) ''
         mkdir -p ${cfg.stateDir}

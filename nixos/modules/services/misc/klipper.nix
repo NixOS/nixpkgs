@@ -173,7 +173,7 @@ in
       in
       {
         description = "Klipper 3D Printer Firmware";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         preStart = ''
           mkdir -p ${cfg.mutableConfigFolder}

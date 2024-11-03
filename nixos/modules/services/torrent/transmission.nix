@@ -295,7 +295,7 @@ in
       description = "Transmission BitTorrent Service";
       after = [ "network.target" ] ++ optional apparmor.enable "apparmor.service";
       requires = optional apparmor.enable "apparmor.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
       environment.TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
 

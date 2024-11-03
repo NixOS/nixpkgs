@@ -135,7 +135,7 @@ in
         ++ lib.optional cfg.useIPv6CountryCode "--use-ipv6-countrycode"
         ++ cfg.extraFlags
       );
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

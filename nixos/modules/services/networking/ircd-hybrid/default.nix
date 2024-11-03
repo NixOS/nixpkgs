@@ -127,7 +127,7 @@ in
       description = "IRCD Hybrid server";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "${ircdService}/bin/control start";
     };
   };

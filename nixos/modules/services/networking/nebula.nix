@@ -218,7 +218,7 @@ in
             wants = [ "basic.target" ];
             after = [ "basic.target" "network.target" ];
             before = [ "sshd.service" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "notify";
               Restart = "always";

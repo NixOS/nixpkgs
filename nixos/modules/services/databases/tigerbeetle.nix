@@ -87,7 +87,7 @@ in
       {
         description = "TigerBeetle server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         preStart = ''

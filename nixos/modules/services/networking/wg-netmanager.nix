@@ -18,7 +18,7 @@ in
     # NOTE: wg-netmanager runs as root
     systemd.services.wg-netmanager = {
       description = "Wireguard network manager";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = with pkgs; [ wireguard-tools iproute2 wireguard-go ];
       serviceConfig = {

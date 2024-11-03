@@ -93,7 +93,7 @@ in {
 
         simpleService.configuration = {
           systemd.services.test = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -106,7 +106,7 @@ in {
         simpleServiceSeparateActivationScript.configuration = {
           system.activatable = false;
           systemd.services.test = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -152,7 +152,7 @@ in {
         autorestartService.configuration = {
           # A service that immediately goes into restarting (but without failing)
           systemd.services.autorestart = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "simple";
               Restart = "always";
@@ -245,7 +245,7 @@ in {
 
         unitWithBackslash.configuration = {
           systemd.services."escaped\\x2ddash" = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -271,7 +271,7 @@ in {
 
         unitStartingWithDash.configuration = {
           systemd.services."-" = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -290,7 +290,7 @@ in {
 
         unitWithRequirement.configuration = {
           systemd.services.required-service = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -299,7 +299,7 @@ in {
             };
           };
           systemd.services.test-service = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             requires = [ "required-service.service" ];
             serviceConfig = {
               Type = "oneshot";
@@ -329,11 +329,11 @@ in {
             ExecReload = "${pkgs.coreutils}/bin/true";
           };
           systemd.services."instantiated@one" = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             overrideStrategy = "asDropin";
           };
           systemd.services."instantiated@two" = {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             overrideStrategy = "asDropin";
           };
         };
@@ -376,12 +376,12 @@ in {
             "templated-no-restart-service@instance".overrideStrategy = "asDropin";
 
             reload-triggers = simple-service // {
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
             };
             "templated-reload-triggers@" = simple-service;
             "templated-reload-triggers@instance" = {
               overrideStrategy = "asDropin";
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
             };
 
             reload-triggers-and-restart-by-as = simple-service;
@@ -390,13 +390,13 @@ in {
 
             reload-triggers-and-restart = simple-service // {
               stopIfChanged = false; # easier to check for this
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
             };
             "templated-reload-triggers-and-restart@" = simple-service;
             "templated-reload-triggers-and-restart@instance" = {
               overrideStrategy = "asDropin";
               stopIfChanged = false; # easier to check for this
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
             };
           };
 
@@ -541,7 +541,7 @@ in {
         };
 
         target.configuration = {
-          systemd.targets.test-target.wantedBy = [ "multi-user.target" ];
+          systemd.targets.test-target.autoStart = true;
           # We use this service to figure out whether the target was modified.
           # This is the only way because targets are filtered and therefore not
           # printed when they are started/stopped.

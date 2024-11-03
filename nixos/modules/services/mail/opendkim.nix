@@ -109,7 +109,7 @@ in {
     systemd.services.opendkim = {
       description = "OpenDKIM signing and verification daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         cd "${cfg.keyPath}"

@@ -66,7 +66,7 @@ in
       services.gmediarender = {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "gmediarender server daemon";
         environment = {
           XDG_CACHE_HOME = "%t/gmediarender";

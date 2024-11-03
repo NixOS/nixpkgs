@@ -166,7 +166,7 @@ in {
     systemd.services.gocd-agent = {
       description = "GoCD Agent";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment =
         let

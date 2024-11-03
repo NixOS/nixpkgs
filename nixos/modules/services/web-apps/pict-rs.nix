@@ -109,7 +109,7 @@ in
         PICTRS__STORE__PATH = if cfg.storePath != null then cfg.storePath else "${cfg.dataDir}/files";
         PICTRS__SERVER__ADDRESS = "${cfg.address}:${toString cfg.port}";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "pict-rs";

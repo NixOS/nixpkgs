@@ -87,7 +87,7 @@ in
 
         requires = [ "syslog.socket" ];
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig =
           { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";

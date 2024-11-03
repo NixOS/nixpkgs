@@ -63,7 +63,7 @@ in
 
     systemd.services.journalbeat = {
       description = "Journalbeat log shipper";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "elasticsearch.service" ];
       after = [ "elasticsearch.service" ];
       preStart = ''

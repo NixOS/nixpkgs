@@ -88,7 +88,7 @@ let
     in
     mkIf (instance.enable) {
       description = "${flavour} daemon - ${name}";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ pkgs.getent ];
       startLimitIntervalSec = 60;

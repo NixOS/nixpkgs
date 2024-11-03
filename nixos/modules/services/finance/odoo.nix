@@ -105,7 +105,7 @@ in
     users.groups.odoo = {};
 
     systemd.services.odoo = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "postgresql.service" ];
 
       # pg_dump

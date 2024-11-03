@@ -177,7 +177,7 @@ in {
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "network-online.target"
         (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")

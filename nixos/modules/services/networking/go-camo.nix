@@ -49,7 +49,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.go-camo = {
       description = "go-camo service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = {
         GOCAMO_HMAC_FILE = "%d/hmac";

@@ -75,7 +75,7 @@ in
 
     systemd.services.radvd =
       { description = "IPv6 Router Advertisement Daemon";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig =
           { ExecStart = "@${cfg.package}/bin/radvd radvd -n -u radvd -d ${toString cfg.debugLevel} -C ${confFile}";

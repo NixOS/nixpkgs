@@ -231,7 +231,7 @@ in
           "systemd-sysctl.service"
         ];
         before = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         startLimitIntervalSec = 180;
         reloadIfChanged = true;
         restartTriggers = [

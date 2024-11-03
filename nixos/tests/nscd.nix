@@ -22,7 +22,7 @@ in
     '';
 
     systemd.services.sockdump = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [
         # necessary for bcc to unpack kernel headers and invoke modprobe
         pkgs.gnutar

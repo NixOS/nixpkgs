@@ -62,7 +62,7 @@ in
       disnix = lib.mkIf cfg.enableMultiUser {
         description = "Disnix server";
         wants = [ "dysnomia.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "dbus.service" ]
           ++ lib.optional config.services.httpd.enable "httpd.service"
           ++ lib.optional config.services.mysql.enable "mysql.service"

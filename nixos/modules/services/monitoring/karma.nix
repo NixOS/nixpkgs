@@ -107,7 +107,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.karma = {
       description = "Alert dashboard for Prometheus Alertmanager";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = cfg.environment;
       serviceConfig = {
         Type = "simple";

@@ -39,7 +39,7 @@ in
     systemd.services.lnms-api-init = {
       description = "LibreNMS API init";
       after = [ "librenms-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

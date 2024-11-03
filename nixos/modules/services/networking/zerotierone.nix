@@ -50,7 +50,7 @@ in
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       wants = [ "network-online.target" ];
 

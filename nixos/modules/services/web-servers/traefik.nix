@@ -146,7 +146,7 @@ in {
       description = "Traefik web server";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
       serviceConfig = {

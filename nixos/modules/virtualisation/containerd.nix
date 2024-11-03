@@ -66,7 +66,7 @@ in
 
     systemd.services.containerd = {
       description = "containerd - container runtime";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = with pkgs; [
         containerd

@@ -100,7 +100,7 @@ in
       packages = [ pkg ];
 
       services.hqplayerd = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "systemd-tmpfiles-setup.service" ];
 
         environment.HOME = "${stateDir}/home";

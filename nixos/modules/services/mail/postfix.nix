@@ -764,7 +764,7 @@ in
       systemd.services.postfix =
         { description = "Postfix mail server";
 
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" "postfix-setup.service" ];
           requires = [ "postfix-setup.service" ];
           path = [ pkgs.postfix ];

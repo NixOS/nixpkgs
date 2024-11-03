@@ -114,7 +114,7 @@ in
 
         systemd.services.zapret = {
           description = "DPI bypass service";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${lib.concatStringsSep " " cfg.params} ${whitelist} ${blacklist} --qnum=${toString cfg.qnum}";

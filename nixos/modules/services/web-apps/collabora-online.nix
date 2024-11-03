@@ -145,7 +145,7 @@ in
 
     systemd.services.coolwsd-systemplate-setup = {
       description = "Collabora Online WebSocket Daemon Setup";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs [
           "${cfg.package}/bin/coolwsd-systemplate-setup"
@@ -161,7 +161,7 @@ in
 
     systemd.services.coolwsd = {
       description = "Collabora Online WebSocket Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "network.target"
         "coolwsd-systemplate-setup.service"

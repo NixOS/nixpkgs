@@ -38,7 +38,7 @@ in
     systemd.services.tcpcrypt = {
       description = "tcpcrypt";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];

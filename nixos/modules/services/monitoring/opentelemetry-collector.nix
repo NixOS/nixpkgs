@@ -47,7 +47,7 @@ in
 
     systemd.services.opentelemetry-collector = {
       description = "Opentelemetry Collector Service Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig =
         let

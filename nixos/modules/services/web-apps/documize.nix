@@ -112,7 +112,7 @@ in {
     systemd.services.documize-server = {
       description = "Documize Wiki";
       documentation = [ "https://documize.com/" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = concatStringsSep " " [

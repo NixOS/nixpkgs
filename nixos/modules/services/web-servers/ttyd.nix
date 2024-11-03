@@ -209,7 +209,7 @@ in
     systemd.services.ttyd = {
       description = "ttyd Web Server Daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = cfg.user;

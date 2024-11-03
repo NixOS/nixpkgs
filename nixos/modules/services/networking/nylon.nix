@@ -114,7 +114,7 @@ let
     "nylon-${cfg.name}" = {
       description = "Nylon, a lightweight SOCKS proxy server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
       {
         User = "nylon";

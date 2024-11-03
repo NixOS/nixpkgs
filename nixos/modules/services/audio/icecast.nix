@@ -116,7 +116,7 @@ in {
     systemd.services.icecast = {
       after = [ "network.target" ];
       description = "Icecast Network Audio Streaming Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = "mkdir -p ${cfg.logDir} && chown ${cfg.user}:${cfg.group} ${cfg.logDir}";
       serviceConfig = {

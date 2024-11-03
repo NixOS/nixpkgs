@@ -73,7 +73,7 @@ in {
       description = "Croned NNCP TCP daemon caller.";
       documentation = [ "http://www.nncpgo.org/nncp_002dcaller.html" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${pkg}/bin/nncp-caller -noprogress -cfg "${nncpCfgFile}" ${
@@ -89,7 +89,7 @@ in {
       description = "NNCP TCP syncronization daemon.";
       documentation = [ "http://www.nncpgo.org/nncp_002ddaemon.html" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${pkg}/bin/nncp-daemon -noprogress -cfg "${nncpCfgFile}" ${

@@ -99,7 +99,7 @@ in
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
 
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           requires = [ "dev-vboxguest.device" ];
           after = [ "dev-vboxguest.device" ];
 

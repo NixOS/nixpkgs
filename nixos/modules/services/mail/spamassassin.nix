@@ -172,7 +172,7 @@ in
     systemd.services.spamd = {
       description = "SpamAssassin Server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "sa-update.service" ];
       after = [
         "network.target"

@@ -65,7 +65,7 @@ in {
     };
 
     systemd.services.riemann-dash = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "riemann.service" ];
       after = [ "riemann.service" ];
       preStart = ''

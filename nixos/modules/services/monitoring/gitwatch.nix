@@ -17,7 +17,7 @@ let
         inherit (cfg) enable;
         after = [ "network-online.target" ];
         wants = after;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "gitwatch for ${name}";
         path = with pkgs; [
           gitwatch

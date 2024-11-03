@@ -61,7 +61,7 @@ in {
 
     systemd.services.opentsdb = {
       description = "OpenTSDB Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "hbase.service" ];
 
       environment.JAVA_HOME = "${pkgs.jre}";

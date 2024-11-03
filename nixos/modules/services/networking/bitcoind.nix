@@ -200,7 +200,7 @@ in
         description = "Bitcoin daemon";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;

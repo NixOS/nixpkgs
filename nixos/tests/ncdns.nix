@@ -41,7 +41,7 @@ in
     # Fake namecoin RPC server because we can't
     # run a full node in a test.
     systemd.services.namecoind = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         while true; do
           echo -e "HTTP/1.1 200 OK\n\n $(<${fakeReply})\n" \

@@ -87,7 +87,7 @@ in
       description = "atuin server";
       requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
       after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} server start";

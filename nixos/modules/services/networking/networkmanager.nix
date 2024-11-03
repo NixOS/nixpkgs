@@ -606,7 +606,7 @@ in
 
     systemd.services.NetworkManager-ensure-profiles = mkIf (cfg.ensureProfiles.profiles != { }) {
       description = "Ensure that NetworkManager declarative profiles are created";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "network-online.target" ];
       after = [ "NetworkManager.service" ];
       script = let

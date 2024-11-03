@@ -214,7 +214,7 @@ in
     systemd.services.stargazer = {
       description = "Stargazer gemini server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.stargazer}/bin/stargazer ${configFile} ${lib.optionalString cfg.debugMode "-D"}";
         Restart = "always";

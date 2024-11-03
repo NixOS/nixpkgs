@@ -53,7 +53,7 @@ in {
     # https://github.com/lxc/distrobuilder/blob/f77300bf7d7d5707b08eaf8a434d647d1ba81b5d/generators/lxd-agent.go#L108-L125
     systemd.services.lxd-agent = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "shutdown.target" ] ++ lib.optionals config.services.cloud-init.enable [
         "cloud-init.target" "cloud-init.service" "cloud-init-local.service"
       ];
@@ -92,7 +92,7 @@ in {
 
     systemd.paths.lxd-agent = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       pathConfig.PathExists = "/dev/virtio-ports/org.linuxcontainers.lxd";
     };
   };

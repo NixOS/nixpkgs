@@ -415,7 +415,7 @@ in
     ];
 
     systemd.services.jitsi-meet-init-secrets = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service") ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
@@ -458,7 +458,7 @@ in
     systemd.services.jitsi-excalidraw = mkIf cfg.excalidraw.enable {
       description = "Excalidraw collaboration backend for Jitsi";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.PORT = toString cfg.excalidraw.port;
 
       serviceConfig = {

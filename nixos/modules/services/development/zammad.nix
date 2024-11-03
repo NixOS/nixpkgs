@@ -286,7 +286,7 @@ in
         "postgresql.service"
       ];
       description = "Zammad web";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         # Blindly copy the whole project here.
         chmod -R +w .
@@ -340,7 +340,7 @@ in
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
     };
 
@@ -349,7 +349,7 @@ in
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad background worker";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "./script/background-worker.rb start";
     };
   };

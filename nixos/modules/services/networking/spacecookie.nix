@@ -170,7 +170,7 @@ in {
 
     systemd.services.spacecookie = {
       description = "Spacecookie Gopher Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "spacecookie.socket" ];
 
       serviceConfig = {

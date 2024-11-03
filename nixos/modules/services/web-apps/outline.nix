@@ -628,7 +628,7 @@ in
       localPostgresqlUrl = "postgres://localhost/outline?host=/run/postgresql";
     in {
       description = "Outline wiki and knowledge base";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ]
         ++ lib.optional (cfg.databaseUrl == "local") "postgresql.service"
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";

@@ -91,7 +91,7 @@ in
         PrivateMounts = true;
         UMask = "0077";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
   meta.maintainers = with lib.maintainers; [ patrickdag ];

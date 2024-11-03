@@ -78,7 +78,7 @@ in
       value = {
         description = "ZeroTier DNS server for Network ${netname}";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [
           "network.target"
           "zerotierone.service"

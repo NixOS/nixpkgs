@@ -163,7 +163,7 @@ in
     in (
       lib.nameValuePair "geth-${gethName}" (lib.mkIf cfg.enable {
       description = "Go Ethereum node (${gethName})";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

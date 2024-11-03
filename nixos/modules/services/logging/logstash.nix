@@ -167,7 +167,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.logstash = {
       description = "Logstash Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';

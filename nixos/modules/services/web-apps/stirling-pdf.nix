@@ -63,7 +63,7 @@ in
         ]
         ++ lib.optional (cfg.environment.INSTALL_BOOK_AND_ADVANCED_HTML_OPS or "false" == "true") calibre;
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         BindReadOnlyPaths = [ "${pkgs.tesseract}/share/tessdata:/usr/share/tessdata" ];

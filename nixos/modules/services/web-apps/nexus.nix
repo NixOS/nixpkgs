@@ -110,7 +110,7 @@ in
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ cfg.home ];
 

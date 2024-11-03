@@ -63,7 +63,7 @@ in
     systemd.services = {
       eternal-terminal = {
         description = "Eternal Terminal server.";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = {
           Type = "forking";

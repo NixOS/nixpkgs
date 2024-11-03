@@ -71,7 +71,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.powerdns-admin = {
       description = "PowerDNS web interface";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
 
       environment.FLASK_CONF = builtins.toFile "powerdns-admin-config.py" configText;

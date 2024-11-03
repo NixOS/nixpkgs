@@ -213,7 +213,7 @@ in
     systemd.services.privoxy = {
       description = "Filtering web proxy";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "privoxy";
         Group = "privoxy";

@@ -31,7 +31,7 @@ in {
         };
       };
       systemd.automounts = lib.singleton
-        { wantedBy = [ "multi-user.target" ];
+        { autoStart = true;
           where = "/tmp2";
         };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };

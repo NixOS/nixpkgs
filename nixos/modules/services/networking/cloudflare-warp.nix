@@ -51,7 +51,7 @@ in
       # in the case that it detects collisions.
       path = [ pkgs.lsof ];
       requires = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig =
         let

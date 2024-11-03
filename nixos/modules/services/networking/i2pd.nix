@@ -683,7 +683,7 @@ in
     systemd.services.i2pd = {
       description = "Minimal I2P router";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
       {
         User = "i2pd";

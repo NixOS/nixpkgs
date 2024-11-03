@@ -76,7 +76,7 @@ in
         "network-online.target"
         "scion-dispatcher.service"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         Group = if (config.services.scion.scion-dispatcher.enable == true) then "scion" else null;

@@ -100,7 +100,7 @@ in
     systemd.services.rathole = {
       requires = [ "network.target" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Rathole ${cfg.role} Service";
 
       serviceConfig =

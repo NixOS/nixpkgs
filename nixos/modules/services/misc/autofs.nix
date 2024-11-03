@@ -77,7 +77,7 @@ in
       { description = "Automounts filesystems on demand";
         after = [ "network.target" "ypbind.service" "sssd.service" "network-online.target" ];
         wants = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         preStart = ''
           # There should be only one autofs service managed by systemd, so this should be safe.

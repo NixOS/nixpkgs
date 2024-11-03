@@ -69,7 +69,7 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.miredo = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "Teredo IPv6 Tunneling Daemon";
       serviceConfig = {

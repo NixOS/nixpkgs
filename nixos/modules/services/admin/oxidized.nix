@@ -93,7 +93,7 @@ in
     };
 
     systemd.services.oxidized = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       preStart = ''

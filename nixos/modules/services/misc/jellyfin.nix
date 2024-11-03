@@ -98,7 +98,7 @@ in
         description = "Jellyfin Media Server";
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
         # Upstream also disable some hardenings when running in LXC, we do the same with the isContainer option

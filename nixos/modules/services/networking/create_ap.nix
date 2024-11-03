@@ -28,7 +28,7 @@ in {
 
     systemd = {
       services.create_ap = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Create AP Service";
         after = [ "network.target" ];
         restartTriggers = [ configFile ];

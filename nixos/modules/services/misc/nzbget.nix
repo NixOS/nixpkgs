@@ -73,7 +73,7 @@ in
     systemd.services.nzbget = {
       description = "NZBGet Daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [
         unrar
         p7zip

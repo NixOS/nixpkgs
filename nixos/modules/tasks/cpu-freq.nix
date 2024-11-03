@@ -72,7 +72,7 @@ in
       systemd.services.cpufreq = {
         description = "CPU Frequency Setup";
         after = [ "systemd-modules-load.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ cpupower pkgs.kmod ];
         unitConfig.ConditionVirtualization = false;
         serviceConfig = {

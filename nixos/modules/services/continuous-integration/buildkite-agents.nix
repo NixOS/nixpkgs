@@ -168,7 +168,7 @@ in
   config.systemd.services = mapAgents (name: cfg: {
     "buildkite-agent-${name}" = {
       description = "Buildkite Agent";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
       environment = config.networking.proxy.envVars // {

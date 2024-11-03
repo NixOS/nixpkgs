@@ -154,7 +154,7 @@ in {
 
     (lib.mkIf cfg.abrmd.enable {
       systemd.services."tpm2-abrmd" = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Type = "dbus";
           Restart = "always";

@@ -94,7 +94,7 @@ in
         Description = "MUA configuration service";
         Documentation = "https://rseichter.github.io/automx2/";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     users = {

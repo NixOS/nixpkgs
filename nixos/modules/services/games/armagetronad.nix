@@ -207,7 +207,7 @@ in
             description = "Armagetron Advanced Dedicated Server for ${serverName}";
             wants = [ "basic.target" ];
             after = [ "basic.target" "network.target" "multi-user.target" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig =
               let
                 serverRoot = getServerRoot serverName;

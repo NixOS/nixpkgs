@@ -18,7 +18,7 @@ in
   config = mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
-    systemd.services.eg25-manager.wantedBy = [ "multi-user.target" ];
+    systemd.services.eg25-manager.autoStart = true;
   };
 
   meta = {

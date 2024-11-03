@@ -205,7 +205,7 @@ in
     systemd.services.autosuspend = {
       description = "A daemon to suspend your server in case of inactivity";
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {

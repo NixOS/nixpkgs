@@ -25,7 +25,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.jmusicbot = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       description = "Discord music bot that's easy to set up and run yourself!";

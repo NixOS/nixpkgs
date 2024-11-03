@@ -25,7 +25,7 @@ in {
     systemd.services.doh-proxy-rust = {
       description = "doh-proxy-rust";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${lib.escapeShellArgs cfg.flags}";
         Restart = "always";

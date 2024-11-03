@@ -137,7 +137,7 @@ in
     systemd.services.crio = {
       description = "Container Runtime Interface for OCI (CRI-O)";
       documentation = [ "https://github.com/cri-o/cri-o" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ cfg.package ];
       serviceConfig = {

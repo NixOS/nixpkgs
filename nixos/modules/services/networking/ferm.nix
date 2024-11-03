@@ -41,7 +41,7 @@ in {
       after = [ "ipset.target" ];
       before = [ "network-pre.target" ];
       wants = [ "network-pre.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       reloadIfChanged = true;
       serviceConfig = {
         Type="oneshot";

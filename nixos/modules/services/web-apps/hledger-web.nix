@@ -108,7 +108,7 @@ in {
     in {
       description = "hledger-web - web-app for the hledger accounting tool.";
       documentation = [ "https://hledger.org/hledger-web.html" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       serviceConfig = mkMerge [
         {

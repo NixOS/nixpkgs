@@ -133,7 +133,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.kthxbye = {
       description = "kthxbye Alertmanager ack management daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         ${cfg.package}/bin/kthxbye \
           -alertmanager.timeout ${cfg.alertmanager.timeout} \

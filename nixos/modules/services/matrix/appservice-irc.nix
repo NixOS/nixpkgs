@@ -186,7 +186,7 @@ in {
       after = lib.optionals (cfg.settings.database.engine == "postgres") [
         "postgresql.service"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         umask 077

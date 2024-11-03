@@ -76,7 +76,7 @@ in {
 
     systemd.services.metabase = {
       description = "Metabase server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {

@@ -99,7 +99,7 @@ in {
 
     systemd.services.connman = {
       description = "Connection service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "syslog.target" ] ++ lib.optional enableIwd "iwd.service";
       requires = lib.optional enableIwd "iwd.service";
       serviceConfig = {
@@ -118,7 +118,7 @@ in {
 
     systemd.services.connman-vpn = lib.mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "syslog.target" ];
       before = [ "connman.service" ];
       serviceConfig = {

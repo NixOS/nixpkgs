@@ -103,7 +103,7 @@ in
         # XXX: When using systemd.packages (which we do above) the [Install]
         # section of systemd units does not work (citation needed) so we manually
         # enforce it here.
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       services.tlp-sleep = {

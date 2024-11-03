@@ -201,7 +201,7 @@ in {
     };
 
     systemd.services.orangefs-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
 

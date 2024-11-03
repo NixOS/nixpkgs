@@ -173,7 +173,7 @@ in {
 
     systemd.services.couchdb = {
       description = "CouchDB Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         touch ${cfg.configFile}

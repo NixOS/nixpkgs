@@ -103,7 +103,7 @@ in {
 
     systemd.services.scollector = {
       description = "scollector metrics collector (part of Bosun)";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ pkgs.coreutils pkgs.iproute2 ];
 

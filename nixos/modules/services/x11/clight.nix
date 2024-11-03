@@ -92,7 +92,7 @@ in {
 
     systemd.services.clightd = {
       requires = [ "polkit.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       description = "Bus service to manage various screen related properties (gamma, dpms, backlight)";
       serviceConfig = {

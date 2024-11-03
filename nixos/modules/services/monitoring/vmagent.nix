@@ -81,7 +81,7 @@ in {
       ] ++ lib.optional (cfg.remoteWrite.basicAuthUsername != null) "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
         ++ lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) "-remoteWrite.basicAuth.passwordFile=\${CREDENTIALS_DIRECTORY}/remote_write_basic_auth_password");
     in {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "vmagent system service";
       serviceConfig = {

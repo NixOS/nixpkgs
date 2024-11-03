@@ -146,7 +146,7 @@ in
         chown -R "${cfg.user}" "${dataDir}"
         chmod -R 755 "${dataDir}"
       '';
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services.selfoss-update = {
@@ -156,7 +156,7 @@ in
       };
       startAt = "hourly";
       after = [ "selfoss-config.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
     };
 

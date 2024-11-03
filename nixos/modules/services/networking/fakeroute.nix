@@ -42,7 +42,7 @@ in
     systemd.services.fakeroute = {
       description = "Fakeroute Daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         User = "fakeroute";

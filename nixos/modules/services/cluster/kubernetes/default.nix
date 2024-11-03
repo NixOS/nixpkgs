@@ -279,7 +279,7 @@ in {
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       systemd.tmpfiles.rules = [

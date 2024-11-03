@@ -39,7 +39,7 @@ in
     };
     systemd.services.salt-master = {
       description = "Salt Master";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = with pkgs; [
         util-linux  # for dmesg

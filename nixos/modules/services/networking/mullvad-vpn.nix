@@ -52,7 +52,7 @@ with lib;
 
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network.target" "network-online.target" ];
       after = [
         "network-online.target"

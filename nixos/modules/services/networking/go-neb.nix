@@ -48,7 +48,7 @@ in {
     in {
       description = "Extensible matrix bot written in Go";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         BASE_URL = cfg.baseUrl;
         BIND_ADDRESS = cfg.bindAddress;

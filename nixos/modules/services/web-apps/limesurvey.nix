@@ -341,7 +341,7 @@ in
     ];
 
     systemd.services.limesurvey-init = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "phpfpm-limesurvey.service" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       environment.DBENGINE = "${cfg.database.dbEngine}";

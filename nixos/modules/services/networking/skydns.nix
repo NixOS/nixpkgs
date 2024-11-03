@@ -66,7 +66,7 @@ in {
 
   config = mkIf (cfg.enable) {
     systemd.services.skydns = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "etcd.service" ];
       description = "Skydns Service";
       environment = {

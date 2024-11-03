@@ -63,7 +63,7 @@ in
 
     systemd.services.amuled = {
       description = "AMule daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       preStart = ''

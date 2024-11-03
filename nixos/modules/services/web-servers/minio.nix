@@ -100,7 +100,7 @@ in
         description = "Minio Object Storage";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
           Type = "simple";
@@ -126,7 +126,7 @@ in
         # The service will not restart if the credentials file has
         # been changed. This can cause stale root credentials.
         paths.minio-root-credentials = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
 
           pathConfig = {
             PathChanged = [ cfg.rootCredentialsFile ];

@@ -93,7 +93,7 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.corosync = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         StateDirectory = "corosync";
         StateDirectoryMode = "0700";

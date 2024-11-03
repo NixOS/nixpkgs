@@ -33,7 +33,7 @@ in
     systemd.services.flaresolverr = {
       description = "FlareSolverr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         HOME = "/run/flaresolverr";

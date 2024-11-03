@@ -167,7 +167,7 @@ in {
     systemd.services.coder = {
       description = "Coder - Self-hosted developer workspaces on your infra";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = cfg.environment.extra // {
         CODER_ACCESS_URL = cfg.accessUrl;

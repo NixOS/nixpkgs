@@ -41,7 +41,7 @@ with lib;
           Type = "simple";
         };
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = with pkgs; [ iptables bash iproute2 ] ++ lib.optionals nftablesEnabled [ nftables ]; # required by v2rayA TProxy functionality
       };
   };

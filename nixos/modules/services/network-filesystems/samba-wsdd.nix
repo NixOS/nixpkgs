@@ -71,7 +71,7 @@ in {
     systemd.services.samba-wsdd = {
       description = "Web Services Dynamic Discovery host daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         Type = "simple";

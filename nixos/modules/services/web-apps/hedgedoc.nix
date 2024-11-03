@@ -244,7 +244,7 @@ in
     systemd.services.hedgedoc = {
       description = "HedgeDoc Service";
       documentation = [ "https://docs.hedgedoc.org/" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       preStart =
         let

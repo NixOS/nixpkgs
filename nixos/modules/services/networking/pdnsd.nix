@@ -73,7 +73,7 @@ in
     };
 
     systemd.services.pdnsd =
-      { wantedBy = [ "multi-user.target" ];
+      { autoStart = true;
         after = [ "network.target" ];
         preStart =
           ''

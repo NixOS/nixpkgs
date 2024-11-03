@@ -279,7 +279,7 @@ in
     systemd.services.zabbix-proxy = {
       description = "Zabbix Proxy";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;

@@ -106,7 +106,7 @@ in
     systemd.services.gatus = {
       description = "Automated developer-oriented status page";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         DynamicUser = true;

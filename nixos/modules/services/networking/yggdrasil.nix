@@ -142,7 +142,7 @@ in
       # This needs to be a separate service. The yggdrasil service fails if
       # this is put into its preStart.
       systemd.services.yggdrasil-persistent-keys = lib.mkIf cfg.persistentKeys {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         before = [ "yggdrasil.service" ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
@@ -163,7 +163,7 @@ in
         after = [ "network-pre.target" ];
         wants = [ "network.target" ];
         before = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         # This script first prepares the config file, then it starts Yggdrasil.
         # The preparation could also be done in ExecStartPre/preStart but only

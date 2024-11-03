@@ -93,7 +93,7 @@ in {
     systemd.services.alps = {
       description = "alps is a simple and extensible webmail.";
       documentation = [ "https://git.sr.ht/~migadu/alps" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 

@@ -79,7 +79,7 @@ in {
     systemd.services.c2fmzq-server = {
       description = "c2FmZQ-server";
       documentation = [ "https://github.com/c2FmZQ/c2FmZQ/blob/main/README.md" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 

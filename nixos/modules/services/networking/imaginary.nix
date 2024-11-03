@@ -61,7 +61,7 @@ in {
 
     systemd.services.imaginary = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = rec {
         ExecStart = let
           args = lib.mapAttrsToList (key: val:

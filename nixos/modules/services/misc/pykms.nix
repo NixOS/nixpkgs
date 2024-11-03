@@ -65,7 +65,7 @@ in
     systemd.services.pykms = {
       description = "Python KMS";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # python programs with DynamicUser = true require HOME to be set
       environment.HOME = libDir;
       serviceConfig = with pkgs; {

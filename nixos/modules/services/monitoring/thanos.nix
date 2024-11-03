@@ -753,7 +753,7 @@ in {
         }
       ];
       systemd.services.thanos-sidecar = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after    = [ "network.target" "prometheus.service" ];
         serviceConfig = {
           User = "prometheus";
@@ -768,7 +768,7 @@ in {
       (assertRelativeStateDir "store")
       {
         systemd.services.thanos-store = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after    = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
@@ -783,7 +783,7 @@ in {
 
     (mkIf cfg.query.enable {
       systemd.services.thanos-query = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after    = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
@@ -796,7 +796,7 @@ in {
 
     (mkIf cfg.query-frontend.enable {
       systemd.services.thanos-query-frontend = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after    = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
@@ -811,7 +811,7 @@ in {
       (assertRelativeStateDir "rule")
       {
         systemd.services.thanos-rule = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after    = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
@@ -829,7 +829,7 @@ in {
       {
         systemd.services.thanos-compact =
           let wait = cfg.compact.startAt == null; in {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             after    = [ "network.target" ];
             serviceConfig = {
               Type    = if wait then "simple" else "oneshot";
@@ -847,7 +847,7 @@ in {
       (assertRelativeStateDir "downsample")
       {
         systemd.services.thanos-downsample = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after    = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
@@ -864,7 +864,7 @@ in {
       (assertRelativeStateDir "receive")
       {
         systemd.services.thanos-receive = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after    = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;

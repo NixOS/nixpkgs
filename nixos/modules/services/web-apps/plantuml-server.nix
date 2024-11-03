@@ -96,7 +96,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.plantuml-server = {
       description = "PlantUML server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.home ];
 
       environment = {

@@ -619,7 +619,7 @@ let
               --readonlymacaroonpath=/var/lib/lnd/readonly.macaroon
           '';
           serviceConfig.StateDirectory = "lnd";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
         };
         # initialize wallet, creates macaroon needed by exporter

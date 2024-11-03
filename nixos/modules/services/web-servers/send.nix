@@ -214,7 +214,7 @@ in
           "redis-${cfg.redis.name}.service"
         ];
       description = "Send web service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         ${lib.optionalString (cfg.redis.passwordFile != null) ''
           export REDIS_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/redis-password)"

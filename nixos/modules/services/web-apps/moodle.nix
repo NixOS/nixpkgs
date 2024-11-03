@@ -261,7 +261,7 @@ in
     };
 
     systemd.services.moodle-init = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "phpfpm-moodle.service" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       environment.MOODLE_CONFIG = moodleConfig;

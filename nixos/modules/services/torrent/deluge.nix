@@ -214,7 +214,7 @@ in {
     systemd.services.deluged = {
       after = [ "network.target" ];
       description = "Deluge BitTorrent Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.package ] ++ cfg.extraPackages;
       serviceConfig = {
         ExecStart = ''
@@ -237,7 +237,7 @@ in {
       after = [ "network.target" "deluged.service"];
       requires = [ "deluged.service" ];
       description = "Deluge BitTorrent WebUI";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.package ];
       serviceConfig = {
         ExecStart = ''

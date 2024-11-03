@@ -141,7 +141,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.packages = [ cfg.package ];
     systemd.services.acme-dns = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = [ "" "${lib.getExe cfg.package} -c ${format.generate "acme-dns.toml" cfg.settings}" ];
         StateDirectory = "acme-dns";

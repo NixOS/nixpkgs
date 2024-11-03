@@ -156,7 +156,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.elasticsearch = {
       description = "Elasticsearch Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ pkgs.inetutils ];
       inherit (cfg) restartIfChanged;

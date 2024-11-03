@@ -73,12 +73,12 @@ in
 
   systemd.packages = [ pkgs.google-guest-agent ];
   systemd.services.google-guest-agent = {
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     restartTriggers = [ config.environment.etc."default/instance_configs.cfg".source ];
     path = optional config.users.mutableUsers pkgs.shadow;
   };
-  systemd.services.google-startup-scripts.wantedBy = [ "multi-user.target" ];
-  systemd.services.google-shutdown-scripts.wantedBy = [ "multi-user.target" ];
+  systemd.services.google-startup-scripts.autoStart = true;
+  systemd.services.google-shutdown-scripts.autoStart = true;
 
   security.sudo.extraRules = mkIf config.users.mutableUsers [
     { groups = [ "google-sudoers" ]; commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ]; }

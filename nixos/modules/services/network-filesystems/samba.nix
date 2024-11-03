@@ -185,7 +185,7 @@ in
             description = "Samba Server";
             after = [ "network.target" ];
             wants = [ "network-online.target" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
           };
           tmpfiles.rules = [
             "d /var/lock/samba - - - - -"

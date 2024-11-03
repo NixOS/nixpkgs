@@ -168,7 +168,7 @@ in {
     systemd = {
       packages = [ pkgs.opensnitch ];
       services.opensnitchd = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = [
             ""

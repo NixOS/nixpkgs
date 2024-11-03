@@ -67,7 +67,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.typesense = {
       description = "Typesense search engine";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       script = ''

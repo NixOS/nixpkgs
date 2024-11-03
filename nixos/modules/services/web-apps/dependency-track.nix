@@ -560,7 +560,7 @@ in
       in
       {
         description = "Dependency Track";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         requires = databaseServices;
         after = databaseServices;
         # provide settings via env vars to allow overriding default settings.

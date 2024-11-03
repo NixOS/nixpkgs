@@ -83,7 +83,7 @@ in
 
     systemd.services.wg-access-server = {
       description = "WG access server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''

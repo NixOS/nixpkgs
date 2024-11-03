@@ -137,7 +137,7 @@ in {
 
     systemd.services.ripple-data-api = {
       after = [ "couchdb.service" "redis.service" "ripple-data-api-importer.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         NODE_ENV = "production";
@@ -154,7 +154,7 @@ in {
 
     systemd.services.ripple-data-importer = {
       after = [ "couchdb.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.curl ];
 
       environment = {

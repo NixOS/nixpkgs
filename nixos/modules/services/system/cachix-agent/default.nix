@@ -52,7 +52,7 @@ in {
       wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ config.nix.package ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       # Cachix requires $USER to be set
       environment.USER = "root";

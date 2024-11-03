@@ -107,7 +107,7 @@ in with lib; {
       description = "Lokinet";
       after = [ "network-online.target" "network.target" ];
       wants = [ "network-online.target" "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         ln -sf ${cfg.package}/share/bootstrap.signed ${dataDir}

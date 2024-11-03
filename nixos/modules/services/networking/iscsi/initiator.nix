@@ -50,7 +50,7 @@ in
     systemd.packages = [ cfg.package ];
 
     systemd.services."iscsid" = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart =
         let
           extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''

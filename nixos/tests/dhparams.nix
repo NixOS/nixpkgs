@@ -17,7 +17,7 @@ import ./make-test-python.nix {
 
         systemd.services.foo = {
           description = "Check systemd Ordering";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           before = [ "shutdown.target" ];
           conflicts = [ "shutdown.target" ];
           unitConfig = {

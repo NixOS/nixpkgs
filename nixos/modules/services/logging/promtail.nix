@@ -38,7 +38,7 @@ in {
 
     systemd.services.promtail = {
       description = "Promtail log ingress";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       stopIfChanged = false;
 
       preStart = ''

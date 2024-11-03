@@ -355,7 +355,7 @@ in {
       # https://github.com/gerbera/gerbera/issues/1324
       wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;
       serviceConfig.Group = cfg.group;

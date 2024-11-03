@@ -249,7 +249,7 @@ in
     };
 
     systemd.services.firefox-syncserver = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = lib.mkIf dbIsLocal [ "mysql.service" ];
       after = lib.mkIf dbIsLocal [ "mysql.service" ];
       restartTriggers = lib.optional cfg.singleNode.enable setupScript;

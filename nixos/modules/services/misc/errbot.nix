@@ -85,7 +85,7 @@ in {
         "/var/lib/errbot/${name}";
     in {
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         mkdir -p ${dataDir}
         chown -R errbot:errbot ${dataDir}

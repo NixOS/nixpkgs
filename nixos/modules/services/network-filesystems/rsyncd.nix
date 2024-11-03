@@ -86,7 +86,7 @@ in {
           RestartSec = 1;
         };
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       services."rsync@" = {

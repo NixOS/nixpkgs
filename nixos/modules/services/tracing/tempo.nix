@@ -58,7 +58,7 @@ in {
 
     systemd.services.tempo = {
       description = "Grafana Tempo Service Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = let
         conf = if cfg.configFile == null

@@ -50,7 +50,7 @@ in
       systemd.services.hebbot = {
         description = "hebbot - a TWIM-style Matrix bot written in Rust";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         preStart = ''
           ln -sf ${cfg.templates.project} ./project_template.md

@@ -132,7 +132,7 @@ in
 
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ configFile ] ++ lib.mapAttrsToList (n: v: v.source) policyFiles;
       path = with pkgs; [
         libreswan

@@ -199,7 +199,7 @@ in
       {
         description = "chrony NTP daemon";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "time-sync.target" ];
         before = [ "time-sync.target" ];
         after = [ "network.target" "nss-lookup.target" ];

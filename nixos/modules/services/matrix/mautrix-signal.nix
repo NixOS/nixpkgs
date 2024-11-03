@@ -187,7 +187,7 @@ in
     systemd.services.mautrix-signal = {
       description = "mautrix-signal, a Matrix-Signal puppeting bridge.";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
       # ffmpeg is required for conversion of voice messages

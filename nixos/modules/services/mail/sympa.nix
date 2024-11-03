@@ -430,7 +430,7 @@ in
     systemd.services.sympa = {
       description = "Sympa mailing list manager";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = sympaSubServices ++ [ "network-online.target" ];
       before = sympaSubServices;
@@ -476,7 +476,7 @@ in
     };
 
     systemd.services.wwsympa = lib.mkIf usingNginx {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "sympa.service" ];
       serviceConfig = {
         Type = "forking";

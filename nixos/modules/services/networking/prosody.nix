@@ -910,7 +910,7 @@ in
       description = "Prosody XMPP server";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
       serviceConfig = mkMerge [
         {

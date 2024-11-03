@@ -57,7 +57,7 @@ in
 
     systemd.services.vdr = {
       description = "VDR";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = optional cfg.enableLirc "lircd.service";
       after = [ "network.target" ]
         ++ optional cfg.enableLirc "lircd.service";

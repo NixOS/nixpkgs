@@ -581,7 +581,7 @@ in
 
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {

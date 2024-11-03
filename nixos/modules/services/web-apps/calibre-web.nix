@@ -127,7 +127,7 @@ in
       {
         description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           Type = "simple";

@@ -98,7 +98,7 @@ in {
 
     systemd.services.hound = {
       description = "Hound Code Search";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         User = cfg.user;

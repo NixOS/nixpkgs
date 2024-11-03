@@ -2877,7 +2877,7 @@ let
         nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
         unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
       in {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         reloadTriggers = unitFileSources reloadableUnitFiles;
         restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
           config.environment.etc."systemd/networkd.conf".source

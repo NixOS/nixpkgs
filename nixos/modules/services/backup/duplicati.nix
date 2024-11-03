@@ -60,7 +60,7 @@ in
     systemd.services.duplicati = {
       description = "Duplicati backup";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = mkMerge [
         {
           User = cfg.user;

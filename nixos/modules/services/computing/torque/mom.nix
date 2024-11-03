@@ -45,7 +45,7 @@ in
     systemd.services.torque-mom = {
       path = [ torque ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "torque-mom-init.service" ];
       after = [ "torque-mom-init.service" "network.target" ];
 

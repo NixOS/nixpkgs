@@ -53,7 +53,7 @@ in
       alice-lg = {
         wants = [ "network.target" ];
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Alice Looking Glass";
         serviceConfig = {
           DynamicUser = true;

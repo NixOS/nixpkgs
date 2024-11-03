@@ -117,7 +117,7 @@ in
       };
     in {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [ unixtools.hostname ];
       preStart = ''
         # This detects old (i.e. <= 2022.3) installations that were not migrated yet

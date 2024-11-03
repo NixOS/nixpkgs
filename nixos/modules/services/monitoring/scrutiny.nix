@@ -169,7 +169,7 @@ in
 
       systemd.services.scrutiny = {
         description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ] ++ lib.optional cfg.influxdb.enable "influxdb2.service";
         wants = lib.optional cfg.influxdb.enable "influxdb2.service";
         environment = {

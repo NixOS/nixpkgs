@@ -53,7 +53,7 @@ in {
     systemd.services.serviio = {
       description = "Serviio Media Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.serviio ];
       serviceConfig = {
         User = "serviio";

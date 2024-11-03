@@ -43,7 +43,7 @@ in
     systemd.services.gpm =
       { description = "Console Mouse Daemon";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         requires = [ "dev-input-mice.device" ];
         after = [ "dev-input-mice.device" ];
 

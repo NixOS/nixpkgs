@@ -352,7 +352,7 @@ in
       path = with pkgs; [ wrappedSlurm coreutils ]
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "systemd-tmpfiles-clean.service"
         "munge.service"
@@ -382,7 +382,7 @@ in
       path = with pkgs; [ wrappedSlurm munge coreutils ]
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "munged.service" ];
       requires = [ "munged.service" ];
 
@@ -405,7 +405,7 @@ in
     in lib.mkIf (cfg.dbdserver.enable) {
       path = with pkgs; [ wrappedSlurm munge coreutils ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "munged.service" "mysql.service" ];
       requires = [ "munged.service" "mysql.service" ];
 

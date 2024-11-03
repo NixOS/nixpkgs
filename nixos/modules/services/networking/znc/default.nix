@@ -242,7 +242,7 @@ in
 
     systemd.services.znc = {
       description = "ZNC Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {

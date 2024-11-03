@@ -340,7 +340,7 @@ in
     systemd.services.munin-node = {
       description = "Munin Node";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [ munin smartmontools "/run/current-system/sw" "/run/wrappers" ];
       environment.MUNIN_LIBDIR = "${pkgs.munin}/lib";
       environment.MUNIN_PLUGSTATE = "/run/munin";

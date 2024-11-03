@@ -47,7 +47,7 @@ in
     systemd.services.beanstalkd = {
       description = "Beanstalk Work Queue";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";

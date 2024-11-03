@@ -281,7 +281,7 @@ in
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" "postgresql.service" ];
 
         preStart = ''
@@ -332,7 +332,7 @@ in
     (mkIf cfg.matterircd.enable {
       systemd.services.matterircd = {
         description = "Mattermost IRC bridge service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           User = "nobody";
           Group = "nogroup";

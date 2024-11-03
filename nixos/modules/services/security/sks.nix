@@ -106,7 +106,7 @@ in {
       sks-db = {
         description = "SKS database server";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         preStart = ''
           ${lib.optionalString (cfg.webroot != null)
             "ln -sfT \"${cfg.webroot}\" web"}

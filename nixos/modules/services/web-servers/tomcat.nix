@@ -192,7 +192,7 @@ in
 
     systemd.services.tomcat = {
       description = "Apache Tomcat server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       preStart = ''

@@ -65,7 +65,7 @@ in
 
     systemd.services.iwd = {
       path = [ config.networking.resolvconf.package ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ configFile ];
       serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };

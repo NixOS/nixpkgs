@@ -180,7 +180,7 @@ in
 
         systemd.services.reload-systemd-vconsole-setup =
           { description = "Reset console on configuration changes";
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             restartTriggers = [ vconsoleConf (consoleEnv pkgs.kbd) ];
             reloadIfChanged = true;
             serviceConfig =

@@ -36,7 +36,7 @@ in
         ${lib.strings.concatLines (mknodCmds cfg.fanoutDevices)}
       '';
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "oneshot";

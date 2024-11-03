@@ -150,7 +150,7 @@ in
     systemd = {
       services.ocis = {
         description = "ownCloud Infinite Scale Stack";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         environment = {
           PROXY_HTTP_ADDR = "${cfg.address}:${toString cfg.port}";
           OCIS_URL = cfg.url;

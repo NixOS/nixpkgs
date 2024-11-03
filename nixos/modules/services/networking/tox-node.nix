@@ -77,7 +77,7 @@ in {
       description = "Tox Node";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${pkg}/bin/tox-node config ${configFile}";

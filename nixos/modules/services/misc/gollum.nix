@@ -137,7 +137,7 @@ in
     systemd.services.gollum = {
       description = "Gollum wiki";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.git ];
 
       preStart = ''

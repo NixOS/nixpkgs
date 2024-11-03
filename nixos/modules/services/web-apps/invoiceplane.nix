@@ -310,7 +310,7 @@ in
             cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
           fi
         '') eachSite);
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     users.users.${user} = {

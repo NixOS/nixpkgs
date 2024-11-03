@@ -310,7 +310,7 @@ in
               description = "sourcehut ${srv}.sr.ht website service";
               before = optional cfg.nginx.enable "nginx.service";
               wants = optional cfg.nginx.enable "nginx.service";
-              wantedBy = [ "multi-user.target" ];
+              autoStart = true;
               path = optional cfg.postgresql.enable postgresql.package;
               # Beware: change in credentials' content will not trigger restart.
               restartTriggers = [ configIni ];

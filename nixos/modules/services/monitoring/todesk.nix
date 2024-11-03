@@ -21,7 +21,7 @@ in
     systemd.services.todeskd = {
       description = "ToDesk Daemon Service";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [
         "network-online.target"
         "display-manager.service"

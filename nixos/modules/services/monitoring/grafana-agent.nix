@@ -125,7 +125,7 @@ in
     };
 
     systemd.services.grafana-agent = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         set -euo pipefail
         shopt -u nullglob

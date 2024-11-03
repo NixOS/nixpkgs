@@ -85,7 +85,7 @@ let
 
             description = "Druid ${name}";
 
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
 
             inherit (serviceOptions) restartIfChanged;
 

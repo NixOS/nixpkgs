@@ -60,7 +60,7 @@ in
     systemd.services.sniproxy = {
       description = "sniproxy server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "forking";

@@ -147,7 +147,7 @@ in
     systemd.services.gnunet = {
       description = "GNUnet";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ config.environment.etc."gnunet.conf".source ];
       path = [ cfg.package pkgs.miniupnpc ];
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";

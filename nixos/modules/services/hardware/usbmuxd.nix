@@ -69,7 +69,7 @@ in
 
     systemd.services.usbmuxd = {
       description = "usbmuxd";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig.Documentation = "man:usbmuxd(8)";
       serviceConfig = {
         # Trigger the udev rule manually. This doesn't require replugging the

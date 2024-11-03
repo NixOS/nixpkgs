@@ -372,7 +372,7 @@ in
           };
 
         systemd.services.systemd-modules-load =
-          { wantedBy = [ "multi-user.target" ];
+          { autoStart = true;
             restartTriggers = [ kernelModulesConf ];
             serviceConfig =
               { # Ignore failed module loads.  Typically some of the

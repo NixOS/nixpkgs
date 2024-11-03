@@ -131,7 +131,7 @@ in
       after = [
         "network-online.target"
       ] ++ optional (cfg.database.dialect == "postgres") "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       script = ''
         exec ${getExe cfg.package} -config ${settingsFile}

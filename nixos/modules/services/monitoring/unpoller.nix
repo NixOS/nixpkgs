@@ -301,7 +301,7 @@ in {
     };
 
     systemd.services.unifi-poller = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.unpoller}/bin/unpoller --config ${configFile}";

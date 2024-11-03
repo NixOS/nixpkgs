@@ -57,7 +57,7 @@ in {
     };
 
     systemd.services.riemann-health = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ procps ];
       serviceConfig = {
         User = "riemanntools";

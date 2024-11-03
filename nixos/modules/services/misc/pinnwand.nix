@@ -73,7 +73,7 @@ in
     systemd.services.pinnwand = {
       description = "Pinnwannd HTTP Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       unitConfig.Documentation = "https://pinnwand.readthedocs.io/en/latest/";
 

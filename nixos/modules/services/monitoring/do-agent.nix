@@ -15,7 +15,7 @@ in
     systemd.packages = [ pkgs.do-agent ];
 
     systemd.services.do-agent = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = [ "" "${pkgs.do-agent}/bin/do-agent --syslog" ];
         DynamicUser = true;

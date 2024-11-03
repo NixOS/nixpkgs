@@ -448,7 +448,7 @@ in {
       systemd.services.taskserver = {
         description = "Taskwarrior 2 Server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         environment.TASKDDATA = cfg.dataDir;

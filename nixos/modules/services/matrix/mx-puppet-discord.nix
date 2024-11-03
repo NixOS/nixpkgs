@@ -78,7 +78,7 @@ in {
     systemd.services.mx-puppet-discord = {
       description = "Matrix to Discord puppeting bridge";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 

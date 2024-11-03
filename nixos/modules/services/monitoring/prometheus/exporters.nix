@@ -253,7 +253,7 @@ let
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig.Restart = mkDefault "always";
         serviceConfig.PrivateTmp = mkDefault true;

@@ -128,7 +128,7 @@ in
     systemd.services.galene = {
       description = "galene";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         ${optionalString (cfg.insecure != true) ''

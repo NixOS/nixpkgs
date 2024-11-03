@@ -107,7 +107,7 @@ let
   };
 
   mkService = name: keyboard: lib.nameValuePair (mkName name) {
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     serviceConfig = {
       Type = "notify";
       ExecStart = ''

@@ -310,7 +310,7 @@ in
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
       after = [ "network.target" "network-online.target" "syslog.target" ];
       requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       timerConfig = {
         OnActiveSec = "5s";
         Unit = "keepalived.service";

@@ -67,7 +67,7 @@ in {
       unitConfig.Documentation =
         "man:afp.conf(5) man:netatalk(8) man:afpd(8) man:cnid_metad(8) man:cnid_dbd(8)";
       after = [ "network.target" "avahi-daemon.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ pkgs.netatalk ];
 

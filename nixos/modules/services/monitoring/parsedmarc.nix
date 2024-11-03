@@ -483,7 +483,7 @@ in
         secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
       in
         {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
           path = with pkgs; [ replace-secret openssl shadow ];
           serviceConfig = {

@@ -26,7 +26,7 @@ with lib;
   config = mkIf config.services.oidentd.enable {
     systemd.services.oidentd = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig.Type = "forking";
       script = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
     };

@@ -247,7 +247,7 @@ in
     systemd.services.mobilizon = {
       description = "Mobilizon federated organization and mobilization platform";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = with pkgs; [
         gawk

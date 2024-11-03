@@ -332,7 +332,7 @@ in
     systemd.services.epgstation = {
       inherit description;
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ]
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";

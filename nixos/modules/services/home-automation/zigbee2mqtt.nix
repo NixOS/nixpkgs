@@ -64,7 +64,7 @@ in
 
     systemd.services.zigbee2mqtt = {
       description = "Zigbee2mqtt Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {

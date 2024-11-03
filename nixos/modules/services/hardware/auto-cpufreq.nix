@@ -30,7 +30,7 @@ in {
       packages = [ pkgs.auto-cpufreq ];
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = with pkgs; [ bash coreutils ];
 
         serviceConfig.WorkingDirectory = "";

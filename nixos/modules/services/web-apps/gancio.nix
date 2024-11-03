@@ -201,7 +201,7 @@ in
         description = "Gancio server";
         documentation = [ "https://gancio.org/" ];
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [
           "network.target"
         ] ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.service";

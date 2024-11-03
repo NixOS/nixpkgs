@@ -1180,7 +1180,7 @@ in {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services =
@@ -1197,7 +1197,7 @@ in {
             wants = [ "network-online.target" ];
             after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
             requires = optional hasLocalPostgresDB "postgresql.service";
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
           };
         baseServiceConfig = {
           environment = optionalAttrs (cfg.withJemalloc) {

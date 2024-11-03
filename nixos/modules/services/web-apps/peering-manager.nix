@@ -218,7 +218,7 @@ in {
 
     systemd.targets.peering-manager = {
       description = "Target for all Peering Manager services";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" "redis-peering-manager.service" ];
     };

@@ -95,7 +95,7 @@ with lib;
       systemd.services.digitalocean-set-root-password = mkIf cfg.setRootPassword {
         path = [ pkgs.shadow pkgs.jq ];
         description = "Set root password provided by Digitalocean";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         script = ''
           set -eo pipefail
           ROOT_PASSWORD=$(jq -er '.auth_key' ${doMetadataFile})
@@ -141,7 +141,7 @@ with lib;
       /* Fetch the ssh keys for root from Digital Ocean */
       systemd.services.digitalocean-ssh-keys = mkIf cfg.setSshKeys {
         description = "Set root ssh keys provided by Digital Ocean";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ pkgs.jq ];
         script = ''
           set -e

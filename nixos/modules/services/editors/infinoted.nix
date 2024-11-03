@@ -115,7 +115,7 @@ in {
     systemd.services.infinoted =
       { description = "Gobby Dedicated Server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         serviceConfig = {

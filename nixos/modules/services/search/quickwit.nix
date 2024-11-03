@@ -128,7 +128,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.quickwit = {
       description = "Quickwit";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       inherit (cfg) restartIfChanged;
       environment = {

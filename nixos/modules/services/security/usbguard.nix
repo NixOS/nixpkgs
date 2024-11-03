@@ -216,7 +216,7 @@ in
       usbguard-dbus = mkIf cfg.dbus.enable {
         description = "USBGuard D-Bus Service";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         requires = [ "usbguard.service" ];
 
         serviceConfig = {

@@ -31,7 +31,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.prometheus-xmpp-alerts = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {

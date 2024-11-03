@@ -241,7 +241,7 @@ in
 
       portunus = {
         description = "Self-contained authentication service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/portunus-orchestrator";

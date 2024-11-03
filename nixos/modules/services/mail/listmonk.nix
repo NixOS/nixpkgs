@@ -174,7 +174,7 @@ in {
       description = "Listmonk - newsletter and mailing list manager";
       after = [ "network.target" ]
         ++ lib.optional cfg.database.createLocally "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "exec";
         EnvironmentFile = lib.mkIf (cfg.secretFile != null) [ cfg.secretFile ];

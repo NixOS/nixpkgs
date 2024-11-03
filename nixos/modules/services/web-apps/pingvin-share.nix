@@ -174,7 +174,7 @@ in
     systemd.services.pingvin-share-frontend = {
       description = "Frontend service of Pingvin Share, a self-hosted file sharing platform.";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [
         "network-online.target"
         "pingvin-share-backend.service"

@@ -55,7 +55,7 @@ in
       description = "LANraragi main service";
       after = [ "network.target" "redis-lanraragi.service" ];
       requires = [ "redis-lanraragi.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
         DynamicUser = true;

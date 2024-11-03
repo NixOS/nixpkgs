@@ -123,7 +123,7 @@ in
     {
       systemd.services.wastebin = {
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
         serviceConfig = {
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

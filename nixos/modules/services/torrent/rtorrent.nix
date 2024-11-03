@@ -194,7 +194,7 @@ in {
           description = "rTorrent system service";
           after = [ "network.target" ];
           path = [ cfg.package pkgs.bash ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             User = cfg.user;
             Group = cfg.group;

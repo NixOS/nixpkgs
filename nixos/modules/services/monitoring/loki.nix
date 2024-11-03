@@ -93,7 +93,7 @@ in {
 
     systemd.services.loki = {
       description = "Loki Service Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = let

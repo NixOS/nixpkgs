@@ -172,7 +172,7 @@ in
 
       systemd.services.mirakurun = {
         description = mirakurun.meta.description;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = {
           ExecStart = "${mirakurun}/bin/mirakurun start";

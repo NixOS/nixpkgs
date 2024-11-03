@@ -621,7 +621,7 @@ in
     systemd = {
       services.movim-data-setup = {
         description = "Movim setup: .env file, databases init, cache reload";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         requiredBy = [ "${phpExecutionUnit}.service" ];
         before = [ "${phpExecutionUnit}.service" ];
         after = lib.optional cfg.database.createLocally dbService;
@@ -673,7 +673,7 @@ in
 
       services.movim = {
         description = "Movim daemon";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "movim-data-setup.service" ];
         requires = [ "movim-data-setup.service" ]
           ++ lib.optional cfg.database.createLocally dbService;

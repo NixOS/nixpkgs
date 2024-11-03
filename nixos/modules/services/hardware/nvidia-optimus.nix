@@ -29,7 +29,7 @@ let kernel = config.boot.kernelPackages; in
 
     systemd.services.bbswitch = {
       description = "Disable NVIDIA Card";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

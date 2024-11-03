@@ -171,7 +171,7 @@ in
     systemd.services.gerrit = {
       description = "Gerrit";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "gerrit.socket" ];
       after = [ "gerrit.socket" "network.target" ];
 

@@ -156,7 +156,7 @@ in
 
       systemd = {
         services.xrdp = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           description = "xrdp daemon";
           requires = [ "xrdp-sesman.service" ];
@@ -191,7 +191,7 @@ in
         };
 
         services.xrdp-sesman = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           description = "xrdp session manager";
           restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children

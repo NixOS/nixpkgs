@@ -171,7 +171,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.opensearch = {
       description = "OpenSearch Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ pkgs.inetutils ];
       inherit (cfg) restartIfChanged;

@@ -61,7 +61,7 @@ in
 
     systemd.services.heartbeat = with pkgs; {
       description = "heartbeat log shipper";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{data,logs}
       '';

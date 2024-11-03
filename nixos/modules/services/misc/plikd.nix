@@ -47,7 +47,7 @@ in
     systemd.services.plikd = {
       description = "Plikd file sharing server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         ExecStart = "${pkgs.plikd}/bin/plikd --config ${plikdCfg}";

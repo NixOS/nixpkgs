@@ -37,7 +37,7 @@ in
       enable = true;
       after = [ "network.target" "local-fs.target" ];
       requires = [ "sys-kernel-config.mount" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.python3.pkgs.rtslib}/bin/targetctl restore";

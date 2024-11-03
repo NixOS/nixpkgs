@@ -57,7 +57,7 @@ in
     systemd.services.tox-bootstrapd = {
       description = "Tox DHT bootstrap daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig =
         { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";

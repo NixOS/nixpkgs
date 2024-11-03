@@ -40,7 +40,7 @@ in
     systemd.services.gonic = {
       description = "Gonic Media Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart =
           let

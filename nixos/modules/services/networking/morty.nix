@@ -76,7 +76,7 @@ in
       {
         description = "Morty sanitizing proxy server.";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           User = "morty";
           ExecStart = ''${cfg.package}/bin/morty              \

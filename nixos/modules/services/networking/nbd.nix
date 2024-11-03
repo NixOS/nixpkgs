@@ -120,7 +120,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       before = [ "multi-user.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.nbd}/bin/nbd-server -C ${serverConfig}";
         Type = "forking";

@@ -52,7 +52,7 @@ in
 
     systemd.services.podgrab = {
       description = "Podgrab podcast manager";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         CONFIG = "${stateDir}/config";
         DATA = cfg.dataDirectory;

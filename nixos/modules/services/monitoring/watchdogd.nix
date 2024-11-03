@@ -118,7 +118,7 @@ in {
         "man:watchdogd(8)"
         "man:watchdogd.conf(5)"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Advanced system & process supervisor";
       serviceConfig = {
         Type = "simple";

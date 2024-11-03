@@ -151,7 +151,7 @@ in
 
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = optionals cfg.enableNotifications [ pkgs.dbus ];
       serviceConfig = {
         StandardError = "journal";

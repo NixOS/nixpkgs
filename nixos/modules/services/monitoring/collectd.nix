@@ -135,7 +135,7 @@ in {
     systemd.services.collectd = {
       description = "Collectd Monitoring Agent";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${package}/sbin/collectd -C ${conf} -f";

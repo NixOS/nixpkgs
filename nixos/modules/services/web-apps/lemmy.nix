@@ -256,7 +256,7 @@ in
           "https://join-lemmy.org/docs/en/"
         ];
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         after = [ "pict-rs.service" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
 
@@ -298,7 +298,7 @@ in
           "https://join-lemmy.org/docs/en/"
         ];
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         after = [ "lemmy.service" ];
 

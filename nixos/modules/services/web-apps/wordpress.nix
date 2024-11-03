@@ -463,7 +463,7 @@ in
     systemd.services = mkMerge [
       (mapAttrs' (hostName: cfg: (
         nameValuePair "wordpress-init-${hostName}" {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           before = [ "phpfpm-wordpress-${hostName}.service" ];
           after = optional cfg.database.createLocally "mysql.service";
           script = secretsScript (stateDir hostName);

@@ -315,7 +315,7 @@ in {
           psmisc
         ];
         after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartTriggers = [ defaultsFile configFile ];
         preStart = lib.optionalString useCustomDir ''
           install -dm775 -o ${user} -g ${group} ${cfg.storageDir}/{${lib.concatStringsSep "," libDirs}}

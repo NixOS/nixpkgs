@@ -32,7 +32,7 @@ let
         Restart = "on-failure";
       };
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 
@@ -51,7 +51,7 @@ let
         Type = "dbus";
         BusName = "com.system76.PowerDaemon";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 in {

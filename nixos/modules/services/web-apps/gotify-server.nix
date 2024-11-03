@@ -69,7 +69,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.gotify-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "Simple server for sending and receiving messages";
 

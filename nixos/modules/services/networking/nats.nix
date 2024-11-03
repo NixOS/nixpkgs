@@ -101,7 +101,7 @@ in {
 
     systemd.services.nats = {
       description = "NATS messaging system";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = mkMerge [

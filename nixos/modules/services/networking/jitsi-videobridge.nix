@@ -239,7 +239,7 @@ in
       aliases = [ "jitsi-videobridge.service" ];
       description = "Jitsi Videobridge";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
 

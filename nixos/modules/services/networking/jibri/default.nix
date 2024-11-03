@@ -362,7 +362,7 @@ in
 
       requires = [ "jibri-icewm.service" "jibri-xorg.service" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = with pkgs; [ chromedriver chromium ffmpeg-full ];
 

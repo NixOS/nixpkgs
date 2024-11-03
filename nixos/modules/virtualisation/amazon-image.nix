@@ -69,7 +69,7 @@ in
     '';
 
     systemd.services.fetch-ec2-metadata = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ pkgs.curl ];

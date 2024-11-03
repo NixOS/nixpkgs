@@ -71,7 +71,7 @@ in {
       inherit script;
       description = "Reconfigure the system from EC2 userdata on startup";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "multi-user.target" ];
       requires = [ "network-online.target" ];
 

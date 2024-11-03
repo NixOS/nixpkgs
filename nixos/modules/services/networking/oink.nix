@@ -78,7 +78,7 @@ in
     systemd.services.oink = {
       description = "Dynamic DNS client for Porkbun";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "${cfg.package}/bin/oink -c ${oinkConfig}";
     };
   };

@@ -138,7 +138,7 @@ in
       systemd.services.sslh = {
         description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           DynamicUser          = true;

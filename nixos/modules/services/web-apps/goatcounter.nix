@@ -53,7 +53,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.goatcounter = {
       description = "Easy web analytics. No tracking of personal data.";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = lib.escapeShellArgs (
           [

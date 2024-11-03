@@ -134,7 +134,7 @@ in
 
       environment.XDG_RUNTIME_DIR="${anboxloc}";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = let
         initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh

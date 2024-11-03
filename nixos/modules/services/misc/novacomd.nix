@@ -16,7 +16,7 @@ in {
 
     systemd.services.novacomd = {
       description = "Novacom WebOS daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${pkgs.webos.novacomd}/sbin/novacomd";

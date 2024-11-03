@@ -150,7 +150,7 @@ in
     systemd.services.zabbix-agent = {
       description = "Zabbix Agent";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       # https://www.zabbix.com/documentation/current/manual/config/items/userparameters
       # > User parameters are commands executed by Zabbix agent.

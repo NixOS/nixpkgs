@@ -62,7 +62,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.centrifugo = {
       description = "Centrifugo messaging server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

@@ -117,7 +117,7 @@ in
       path = [ pkgs.cgminer ];
 
       after = [ "network.target" "display-manager.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         LD_LIBRARY_PATH = "/run/opengl-driver/lib:/run/opengl-driver-32/lib";

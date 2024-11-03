@@ -44,7 +44,7 @@ in {
     systemd.services.slimserver = {
       after = [ "network.target" ];
       description = "Slim Server for Logitech Squeezebox Players";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = "slimserver";

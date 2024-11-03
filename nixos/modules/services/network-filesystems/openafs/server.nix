@@ -294,7 +294,7 @@ in {
       openafs-server = {
         description = "OpenAFS server";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartIfChanged = false;
         unitConfig.ConditionPathExists = [
           "|/etc/openafs/server/KeyFileExt"

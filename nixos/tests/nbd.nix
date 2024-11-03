@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       serviceConfig = {
         Type = "oneshot";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "nbd-server.service" ];
     };
   in

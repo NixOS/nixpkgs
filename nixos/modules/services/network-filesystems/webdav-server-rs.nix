@@ -113,7 +113,7 @@ in
     systemd.services.webdav-server-rs = {
       description = "WebDAV server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.webdav-server-rs}/bin/webdav-server ${lib.optionalString cfg.debug "--debug"} -c ${cfg.configFile}";
 

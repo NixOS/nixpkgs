@@ -14,7 +14,7 @@
 
       services.tetrd = {
         description = pkgs.tetrd.meta.description;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           ExecStart = "${pkgs.tetrd}/opt/Tetrd/bin/tetrd";

@@ -38,7 +38,7 @@ in {
     systemd.services.roon-server = {
       after = [ "network.target" ];
       description = "Roon Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment.ROON_DATAROOT = "/var/lib/${name}";
       environment.ROON_ID_DIR = "/var/lib/${name}";

@@ -186,7 +186,7 @@ in {
     systemd.packages = [ pkgs.pdns-recursor ];
 
     systemd.services.pdns-recursor = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = [ "" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}" ];

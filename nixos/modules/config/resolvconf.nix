@@ -154,7 +154,7 @@ in
 
         before = [ "network-pre.target" ];
         wants = [ "network-pre.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;

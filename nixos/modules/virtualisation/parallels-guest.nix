@@ -52,7 +52,7 @@ in
 
     systemd.services.prltoolsd = {
       description = "Parallels Tools Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ prl-tools ];
       serviceConfig = {
         ExecStart = "${prl-tools}/bin/prltoolsd -f";
@@ -63,7 +63,7 @@ in
 
     systemd.services.prlshprint = {
       description = "Parallels Printing Tool";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       bindsTo = [ "cups.service" ];
       path = [ prl-tools ];
       serviceConfig = {

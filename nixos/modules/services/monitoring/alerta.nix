@@ -86,7 +86,7 @@ in
 
     systemd.services.alerta = {
       description = "Alerta Monitoring System";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       environment = {
         ALERTA_SVR_CONF_FILE = alertaConf;

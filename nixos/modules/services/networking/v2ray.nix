@@ -84,7 +84,7 @@ with lib;
       restartTriggers = [ config.environment.etc."v2ray/config.json".source ];
 
       # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

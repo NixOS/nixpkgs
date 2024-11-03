@@ -1819,7 +1819,7 @@ in
       source = prometheusYml;
     };
     systemd.services.prometheus = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +

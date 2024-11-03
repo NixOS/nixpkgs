@@ -71,7 +71,7 @@ in
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" "time-sync.target" ];
       before = [ "time-sync.target" ];
       after = [ "dnsmasq.service" "bind.service" "network-online.target" ];

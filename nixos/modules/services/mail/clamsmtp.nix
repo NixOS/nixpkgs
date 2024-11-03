@@ -155,7 +155,7 @@ in
       systemd.services = lib.listToAttrs (lib.imap1 (i: conf:
         lib.nameValuePair "clamsmtp-${toString i}" {
           description = "ClamSMTP instance ${toString i}";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           script = "exec ${pkgs.clamsmtp}/bin/clamsmtpd -f ${configfile conf}";
           after = [ "clamav-daemon.service" ];
           requires = [ "clamav-daemon.service" ];

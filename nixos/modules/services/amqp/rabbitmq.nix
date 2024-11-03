@@ -183,7 +183,7 @@ in
     systemd.services.rabbitmq = {
       description = "RabbitMQ Server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "epmd.socket" ];
       wants = [ "network.target" "epmd.socket" ];
 

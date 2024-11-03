@@ -109,7 +109,7 @@ in
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
         ExecStart   = "!${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";

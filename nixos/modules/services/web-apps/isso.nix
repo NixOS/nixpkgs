@@ -47,7 +47,7 @@ in {
 
     systemd.services.isso = {
       description = "isso, a commenting server similar to Disqus";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = "isso";

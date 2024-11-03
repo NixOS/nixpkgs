@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     services.xserver.windowManager.wmderland.enable = true;
 
     systemd.services.setupWmderlandConfig = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "multi-user.target" ];
       environment = {
         HOME = "/home/alice";

@@ -63,7 +63,7 @@ in
       description = "Pomerium authenticating reverse proxy";
       wants = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
       after = [ "network.target" ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = optionalAttrs (cfg.useACMEHost != null) {
         CERTIFICATE_FILE = "fullchain.pem";
         CERTIFICATE_KEY_FILE = "key.pem";

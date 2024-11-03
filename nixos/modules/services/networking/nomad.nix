@@ -127,7 +127,7 @@ in
 
     systemd.services.nomad = {
       description = "Nomad";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       restartTriggers = [ config.environment.etc."nomad.json".source ];

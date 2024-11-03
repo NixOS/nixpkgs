@@ -32,7 +32,7 @@ in
         # These packages are required to manage encrypted volumes
         path = config.system.fsPackages;
         aliases = [ "dbus-org.freedesktop.home1.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       systemd-homed-activate = {

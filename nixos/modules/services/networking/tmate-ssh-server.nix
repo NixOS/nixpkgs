@@ -89,7 +89,7 @@ in
     systemd.services.tmate-ssh-server = {
       description = "tmate SSH Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/tmate-ssh-server -h ${cfg.host} -p ${toString cfg.port} -q ${toString cfg.advertisedPort} -k ${keysDir}";
       };

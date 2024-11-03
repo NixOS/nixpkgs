@@ -96,7 +96,7 @@ in
     systemd.services.babeld = {
       description = "Babel routing daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
         AmbientCapabilities = [ "CAP_NET_ADMIN" ];

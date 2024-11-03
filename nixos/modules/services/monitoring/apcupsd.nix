@@ -164,7 +164,7 @@ in
     # The message still gets through.
     systemd.services.apcupsd = {
       description = "APC UPS Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";

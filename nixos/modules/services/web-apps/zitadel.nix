@@ -198,7 +198,7 @@ in
       {
         description = "ZITADEL identity access management";
         path = [ cfg.package ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         script = ''
           zitadel start-from-init ${args}

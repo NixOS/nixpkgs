@@ -72,7 +72,7 @@ in {
           PrivateTmp = true;
           WorkingDirectory = toString cfg.homeDir;
         };
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       flexget-runner = mkIf cfg.systemScheduler {

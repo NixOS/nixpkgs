@@ -150,7 +150,7 @@ in
                     else configFile;
     in {
       description = "BigClown Gateway";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
       after = [ "network-online.target" ];
       preStart = lib.mkIf envConfig ''

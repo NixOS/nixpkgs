@@ -101,7 +101,7 @@ in {
 
     systemd.services.ejabberd = {
       description = "ejabberd server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 

@@ -51,7 +51,7 @@ in {
 
     systemd.services.prosody-filer = {
       description = "Prosody file upload server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

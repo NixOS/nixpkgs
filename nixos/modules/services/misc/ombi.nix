@@ -52,7 +52,7 @@ in {
     systemd.services.ombi = {
       description = "Ombi";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

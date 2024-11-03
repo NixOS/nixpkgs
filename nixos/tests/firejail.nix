@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
     systemd.services.setupFirejailTest = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "multi-user.target" ];
 
       environment = {

@@ -43,7 +43,7 @@ let
               ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
             users.users.alice.extraGroups = [ "pulse-access" ];
-            systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
+            systemd.services.pulseaudio.autoStart = true;
           };
 
         enableOCR = true;

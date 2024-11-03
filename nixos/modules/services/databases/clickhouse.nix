@@ -36,7 +36,7 @@ with lib;
     systemd.services.clickhouse = {
       description = "ClickHouse server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       after = [ "network.target" ];
 

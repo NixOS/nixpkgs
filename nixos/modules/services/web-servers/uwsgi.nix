@@ -192,7 +192,7 @@ in {
     '';
 
     systemd.services.uwsgi = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

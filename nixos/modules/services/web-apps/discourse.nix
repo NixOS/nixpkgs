@@ -700,7 +700,7 @@ in
         };
 
     systemd.services.discourse = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "redis-discourse.service"
         "postgresql.service"

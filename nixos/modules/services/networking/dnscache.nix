@@ -91,7 +91,7 @@ in {
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [ bash daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/dnscache

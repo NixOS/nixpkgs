@@ -93,7 +93,7 @@ in {
 
     systemd.services.q3ds = {
       description = "Quake 3 dedicated server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
 
       environment.HOME = if baseq3InStore then home else cfg.baseq3;

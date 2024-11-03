@@ -182,7 +182,7 @@ in
       description = "An Etebase (EteSync 2.0) server";
       after = [ "network.target" "systemd-tmpfiles-setup.service" ];
       path = [ cfg.package ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Restart = "always";

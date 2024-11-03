@@ -164,7 +164,7 @@ in {
       description = "NDP Proxy Daemon";
       documentation = [ "man:ndppd(1)" "man:ndppd.conf(5)" ];
       after = [ "network-pre.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.ndppd}/bin/ndppd -c ${ndppdConf}";
 

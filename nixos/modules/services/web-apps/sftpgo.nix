@@ -318,7 +318,7 @@ in
     systemd.services.sftpgo = {
       description = "SFTPGo daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         SFTPGO_CONFIG_FILE = mkDefault configFile;

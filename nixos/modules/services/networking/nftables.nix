@@ -265,7 +265,7 @@ in
       before = [ "network-pre.target" "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
       wants = [ "network-pre.target" "sysinit.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       reloadIfChanged = true;
       serviceConfig = let
         enabledTables = filterAttrs (_: table: table.enable) cfg.tables;

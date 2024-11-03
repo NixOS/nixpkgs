@@ -175,7 +175,7 @@ in
     systemd.services.biboumi = {
       description = "Biboumi, XMPP to IRC gateway";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "notify";

@@ -64,7 +64,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig = {
         # allow to restart indefinitely
         StartLimitIntervalSec = 0;

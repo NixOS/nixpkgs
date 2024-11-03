@@ -227,7 +227,7 @@ in
           cfg.storeDir
           cfg.stateDir
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       # This is based from Nix daemon socket unit from upstream Nix package.
@@ -362,7 +362,7 @@ in
             "CAP_SETGID"
           ];
         };
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       users.users.guix-publish = lib.mkIf (cfg.publish.user == "guix-publish") {

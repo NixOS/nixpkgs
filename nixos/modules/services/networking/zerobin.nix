@@ -86,7 +86,7 @@ in
       systemd.services.zerobin = {
         enable = true;
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig.ExecStart = "${pkgs.zerobin}/bin/zerobin ${cfg.listenAddress} ${toString cfg.listenPort} false ${cfg.user} ${cfg.group} ${zerobin_config}";
         serviceConfig.PrivateTmp="yes";
         serviceConfig.User = cfg.user;

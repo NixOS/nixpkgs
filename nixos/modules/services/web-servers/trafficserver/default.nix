@@ -278,7 +278,7 @@ in
     # therefore should be started as root
     systemd.services.trafficserver = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     # These directories can't be created by systemd because:

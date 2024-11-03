@@ -82,7 +82,7 @@ in
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ (parseBindPort cfg.settings.bind) ];
 
       systemd.services.gemstash = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = mkMerge [
           {

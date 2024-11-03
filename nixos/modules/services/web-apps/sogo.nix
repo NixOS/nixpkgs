@@ -85,7 +85,7 @@ in {
     systemd.services.sogo = {
       description = "SOGo groupware";
       after = [ "postgresql.service" "mysql.service" "memcached.service" "openldap.service" "dovecot2.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
 
       environment.LDAPTLS_CACERT = "/etc/ssl/certs/ca-certificates.crt";

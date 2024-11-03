@@ -40,7 +40,7 @@ in
     systemd.services.lambdabot = {
       description = "Lambdabot daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # Workaround for https://github.com/lambdabot/lambdabot/issues/117
       script = ''
         mkdir -p ~/.lambdabot

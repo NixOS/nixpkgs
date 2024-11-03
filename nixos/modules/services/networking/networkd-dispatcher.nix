@@ -70,7 +70,7 @@ in {
     systemd = {
       packages = [ pkgs.networkd-dispatcher ];
       services.networkd-dispatcher = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         # Override existing ExecStart definition
         serviceConfig.ExecStart = let
           scriptDir = pkgs.symlinkJoin {

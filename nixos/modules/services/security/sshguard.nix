@@ -105,7 +105,7 @@ in {
     systemd.services.sshguard = {
       description = "SSHGuard brute-force attacks protection system";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 

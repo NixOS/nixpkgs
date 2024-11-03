@@ -252,7 +252,7 @@ in
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         path = [ config.services.postgresql.package ];
         script = let

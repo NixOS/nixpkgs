@@ -254,7 +254,7 @@ in
     systemd.services.ncdns = {
       description = "ncdns daemon";
       after    = [ "namecoind.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = "ncdns";

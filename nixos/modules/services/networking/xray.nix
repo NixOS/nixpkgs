@@ -79,7 +79,7 @@ with lib;
     systemd.services.xray = {
       description = "xray Daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";

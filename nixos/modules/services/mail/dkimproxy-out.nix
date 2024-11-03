@@ -91,7 +91,7 @@ in
 
       systemd.services.dkimproxy-out = {
         description = "DKIMproxy_out";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         preStart = ''
           if [ ! -d "${keydir}" ]; then
             mkdir -p "${keydir}"

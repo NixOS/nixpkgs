@@ -340,7 +340,7 @@ in {
         ++ optional isSqlite "writefreely-sqlite-init.service"
         ++ optional isMysql "writefreely-mysql-init.service"
         ++ optional isMysqlLocal "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";
@@ -369,7 +369,7 @@ in {
     };
 
     systemd.services.writefreely-sqlite-init = mkIf isSqlite {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "oneshot";
@@ -404,7 +404,7 @@ in {
     };
 
     systemd.services.writefreely-mysql-init = mkIf isMysql {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = optional isMysqlLocal "mysql.service";
 
       serviceConfig = {

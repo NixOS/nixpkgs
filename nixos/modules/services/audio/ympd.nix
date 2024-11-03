@@ -49,7 +49,7 @@ in {
     systemd.services.ympd = {
       description = "Standalone MPD Web GUI written in C";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 

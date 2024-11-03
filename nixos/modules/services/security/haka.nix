@@ -136,7 +136,7 @@ in
 
     systemd.services.haka = {
       description = "Haka";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${haka}/bin/haka -c ${hakaConf}";

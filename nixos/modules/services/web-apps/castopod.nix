@@ -186,7 +186,7 @@ in
     systemd.services.castopod-setup = {
       after = lib.optional config.services.mysql.enable "mysql.service";
       requires = lib.optional config.services.mysql.enable "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.openssl phpPackage ];
       script =
         let
@@ -239,7 +239,7 @@ in
 
     systemd.services.castopod-scheduled = {
       after = [ "castopod-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ phpPackage ];
       script = ''
         php ${cfg.package}/share/castopod/spark tasks:run

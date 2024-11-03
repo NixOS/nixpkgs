@@ -135,7 +135,7 @@ in {
         description = "Clean Up Old Diffie-Hellman Parameters";
 
         # Clean up even when no DH params is set
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
@@ -170,7 +170,7 @@ in {
       description = "Generate Diffie-Hellman Parameters for ${name}";
       after = [ "dhparams-init.service" ];
       before = [ "${name}.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig.ConditionPathExists = "!${path}";
       serviceConfig.Type = "oneshot";
       script = ''

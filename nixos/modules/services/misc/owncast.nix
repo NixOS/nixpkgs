@@ -63,7 +63,7 @@ in {
 
     systemd.services.owncast = {
       description = "A self-hosted live video and web chat server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = lib.mkMerge [
         {

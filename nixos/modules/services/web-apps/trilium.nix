@@ -114,7 +114,7 @@ in
     };
 
     systemd.services.trilium-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.TRILIUM_DATA_DIR = cfg.dataDir;
       serviceConfig = {
         ExecStart = "${pkgs.trilium-server}/bin/trilium-server";

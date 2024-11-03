@@ -48,7 +48,7 @@ in {
           description = "The total uptime service";
           documentation = [ "man:tuptime(1)" ];
           after = [ "time-sync.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             StateDirectory = "tuptime";
             Type = "oneshot";

@@ -208,7 +208,7 @@ in
             nodedir = "/var/db/tahoe-lafs/introducer-${node}";
           in lib.nameValuePair "tahoe.introducer-${node}" {
             description = "Tahoe LAFS node ${node}";
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             path = [ settings.package ];
             restartTriggers = [
               config.environment.etc."tahoe-lafs/introducer-${node}.cfg".source ];
@@ -311,7 +311,7 @@ in
             nodedir = "/var/db/tahoe-lafs/${node}";
           in lib.nameValuePair "tahoe.${node}" {
             description = "Tahoe LAFS node ${node}";
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             path = [ settings.package ];
             restartTriggers = [
               config.environment.etc."tahoe-lafs/${node}.cfg".source ];

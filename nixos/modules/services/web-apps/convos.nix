@@ -35,7 +35,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.convos = {
       description = "Convos Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       environment = {
         CONVOS_HOME = "%S/convos";

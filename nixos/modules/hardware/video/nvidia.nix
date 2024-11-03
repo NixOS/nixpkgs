@@ -555,7 +555,7 @@ in
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";
-                  wantedBy = [ "multi-user.target" ];
+                  autoStart = true;
                   serviceConfig = {
                     Type = "forking";
                     Restart = "always";
@@ -571,7 +571,7 @@ in
                   path = [
                     pkgs.util-linux # nvidia-powerd wants lscpu
                   ];
-                  wantedBy = [ "multi-user.target" ];
+                  autoStart = true;
                   serviceConfig = {
                     Type = "dbus";
                     BusName = "nvidia.powerd.server";
@@ -662,7 +662,7 @@ in
                 nvidia-fabricmanager = {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
-                  wantedBy = [ "multi-user.target" ];
+                  autoStart = true;
                   unitConfig.After = [ "network-online.target" ];
                   unitConfig.Requires = [ "network-online.target" ];
                   serviceConfig = {
@@ -687,7 +687,7 @@ in
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";
-                  wantedBy = [ "multi-user.target" ];
+                  autoStart = true;
                   serviceConfig = {
                     Type = "forking";
                     Restart = "always";

@@ -409,7 +409,7 @@ in
           "phpfpm-davis.service"
           "davis-db-migrate.service"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -441,7 +441,7 @@ in
           lib.optional mysqlLocal "mysql.service"
           ++ lib.optional pgsqlLocal "postgresql.service"
           ++ [ "davis-env-setup.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = defaultServiceConfig // {
           Type = "oneshot";
           RemainAfterExit = true;

@@ -390,7 +390,7 @@ in
     systemd.services.rspamd = {
       description = "Rspamd Service";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       restartTriggers = [ rspamdDir ];
 

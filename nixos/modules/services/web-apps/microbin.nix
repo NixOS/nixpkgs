@@ -58,7 +58,7 @@ in
 
     systemd.services.microbin = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = lib.mapAttrs (_: v: if lib.isBool v then lib.boolToString v else toString v) cfg.settings;
       serviceConfig = {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

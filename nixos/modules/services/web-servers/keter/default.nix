@@ -174,7 +174,7 @@ Keep an old app running and swap the ports when the new one is booted
       systemd.services.load-keter-bundle = {
         description = "load keter bundle into incoming folder";
         after = [ "keter.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         # we can't override keter bundles because it'll stop the previous app
         # https://github.com/snoyberg/keter#deploying
         script = ''

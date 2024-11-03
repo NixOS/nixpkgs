@@ -64,7 +64,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       systemd.services.simplehttp = {
         script = "${pkgs.python3}/bin/python -m http.server 8000";
         serviceConfig.Type = "simple";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
 
       users.users.traefik.extraGroups = [ "docker" ];

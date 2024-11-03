@@ -267,7 +267,7 @@ in
     systemd.services.zabbix-server = {
       description = "Zabbix Server";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;

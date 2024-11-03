@@ -118,7 +118,7 @@ in {
         pathsToLink = [ "/libexec/opensmtpd" ];
       };
     in {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";

@@ -108,7 +108,7 @@ in
     systemd.services.gvpe = {
       description = "GNU Virtual Private Ethernet node";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         mkdir -p /var/gvpe

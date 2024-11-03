@@ -220,7 +220,7 @@ in
 
     systemd.services.filebeat = {
       description = "Filebeat log shipper";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "elasticsearch.service" ];
       after = [ "elasticsearch.service" ];
       serviceConfig = {

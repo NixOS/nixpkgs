@@ -124,7 +124,7 @@ in
     };
     systemd.services.bitmagnet = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [
         "network.target"
       ] ++ optional cfg.useLocalPostgresDB "postgresql.service";

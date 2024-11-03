@@ -49,7 +49,7 @@ in
 
     systemd.slices.system-kerberos-server = { };
     systemd.targets.kerberos-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 

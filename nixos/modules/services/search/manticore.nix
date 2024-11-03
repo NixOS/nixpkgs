@@ -83,7 +83,7 @@ in {
     systemd = {
       packages = [ pkgs.manticoresearch ];
       services.manticore = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = {
           ExecStart = [

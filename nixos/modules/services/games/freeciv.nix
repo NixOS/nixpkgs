@@ -106,7 +106,7 @@ in
     systemd.services.freeciv = {
       description = "Freeciv Service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.HOME = "/var/lib/freeciv";
       serviceConfig = {
         Restart = "on-failure";

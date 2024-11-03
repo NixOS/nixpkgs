@@ -31,7 +31,7 @@ in {
     systemd.services.rxe = {
       description = "RoCE interfaces";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "systemd-modules-load.service" "network-online.target" ];
       wants = [ "network-pre.target" "network-online.target" ];
 

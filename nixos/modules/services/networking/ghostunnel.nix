@@ -177,7 +177,7 @@ let
         systemd.services."ghostunnel-server-${name}" = {
           after = [ "network.target" ];
           wants = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             Restart = "always";
             AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];

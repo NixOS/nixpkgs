@@ -157,7 +157,7 @@ in {
 
     systemd.services.moonraker = {
       description = "Moonraker, an API web server for Klipper";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ]
         ++ lib.optional config.services.klipper.enable "klipper.service";
 

@@ -15,7 +15,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.preload = {
       description = "Loads data into ram during idle time of CPU.";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         EnvironmentFile = "${cfg.package}/etc/conf.d/preload";

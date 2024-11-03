@@ -161,7 +161,7 @@ in
         "network.target"
         "network-online.target"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [
         configFile
       ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);

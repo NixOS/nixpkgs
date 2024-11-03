@@ -161,7 +161,7 @@ in
 
     systemd.services.tayga = {
       description = "Stateless NAT64 implementation";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

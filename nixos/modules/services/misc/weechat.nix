@@ -47,7 +47,7 @@ in
         RemainAfterExit = "yes";
       };
       script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary}";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network.target" ];
     };
 

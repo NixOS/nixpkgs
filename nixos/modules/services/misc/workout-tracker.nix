@@ -62,7 +62,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.workout-tracker = {
       description = "A workout tracking web application for personal use (or family, friends), geared towards running and other GPX-based activities";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         WT_BIND = "${cfg.address}:${toString cfg.port}";
         WT_DATABASE_DRIVER = "sqlite";

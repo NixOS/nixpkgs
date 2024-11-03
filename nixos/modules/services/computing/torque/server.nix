@@ -62,7 +62,7 @@ in
     systemd.services.torque-server = {
       path = [ torque ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "torque-scheduler.service" "trqauthd.service" ];
       before = [ "trqauthd.service" ];
       requires = [ "torque-server-init.service" ];

@@ -57,7 +57,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.technitium-dns-server = {
       description = "Technitium DNS Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

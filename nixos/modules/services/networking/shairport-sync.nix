@@ -96,7 +96,7 @@ in
       {
         description = "shairport-sync";
         after = [ "network.target" "avahi-daemon.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;

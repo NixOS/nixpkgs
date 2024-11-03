@@ -298,7 +298,7 @@ in
     };
     systemd.services.logrotate-checkconf = {
       description = "Logrotate configuration check";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

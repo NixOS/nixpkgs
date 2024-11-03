@@ -347,7 +347,7 @@ in {
     systemd.services = mapAttrs' (name: conf: nameValuePair (redisName name) {
       description = "Redis Server - ${redisName name}";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

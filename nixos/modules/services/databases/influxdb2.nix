@@ -431,7 +431,7 @@ in
     systemd.services.influxdb2 = {
       description = "InfluxDB is an open-source, distributed, time series database";
       documentation = [ "https://docs.influxdata.com/influxdb/" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = {
         INFLUXD_CONFIG_PATH = configFile;

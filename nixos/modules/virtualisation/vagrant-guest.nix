@@ -44,7 +44,7 @@ in
     description = "Vagrant SSH key install (if needed)";
     after = [ "fs.target" ];
     wants = [ "fs.target" ];
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     serviceConfig = {
       ExecStart = "${install-vagrant-ssh-key}/bin/install-vagrant-ssh-key";
       User = "vagrant";

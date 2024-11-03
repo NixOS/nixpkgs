@@ -384,7 +384,7 @@ in
       targets = [
         { ceph = {
           description = "Ceph target allowing to start/stop all ceph service instances at once";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           unitConfig.StopWhenUnneeded = true;
         }; } ]
         ++ lib.optional cfg.mon.enable (makeTarget "mon")

@@ -125,7 +125,7 @@ in {
 
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''

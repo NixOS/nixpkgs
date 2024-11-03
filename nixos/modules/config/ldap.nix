@@ -267,7 +267,7 @@ in
 
       (mkIf cfg.daemon.enable {
         nslcd = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
 
           preStart = ''
             umask 0077

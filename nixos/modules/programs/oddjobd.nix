@@ -13,7 +13,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.oddjobd = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "dbus.service" ];
       description = "DBUS Odd-job Daemon";
       enable = true;

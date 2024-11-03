@@ -49,7 +49,7 @@ in
         frp = {
           wants = lib.optionals isClient [ "network-online.target" ];
           after = if isClient then [ "network-online.target" ] else [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           description = "A fast reverse proxy frp ${cfg.role}";
           serviceConfig = {
             Type = "simple";

@@ -229,7 +229,7 @@ in {
       after = [ "network.target" "suid-sgid-wrappers.service" ];
       # No wrapper means no "useful" netdata.
       requires = [ "suid-sgid-wrappers.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = (with pkgs; [
           curl
           gawk

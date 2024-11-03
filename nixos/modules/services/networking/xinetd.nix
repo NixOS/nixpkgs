@@ -138,7 +138,7 @@ in
     systemd.services.xinetd = {
       description = "xinetd server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.xinetd ];
       script = "exec xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
     };

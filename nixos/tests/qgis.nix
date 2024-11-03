@@ -53,7 +53,7 @@ import ./make-test-python.nix ({ pkgs, lib, package, ... }:
             ExecStart = "${qgisPackage}/lib/cgi-bin/qgis_mapserv.fcgi";
           };
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
 
         services.nginx = {

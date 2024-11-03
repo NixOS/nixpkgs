@@ -25,7 +25,7 @@ in {
     systemd.services.ecs-agent = {
       inherit (cfg.package.meta) description;
       after    = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = cfg.extra-environment;
 

@@ -79,7 +79,7 @@ in
       description = "Peroxide ProtonMail bridge";
       requires = [ "network.target" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       restartTriggers = [ config.environment.etc."peroxide.conf".source ];
 

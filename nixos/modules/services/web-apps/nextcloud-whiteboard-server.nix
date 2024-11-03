@@ -52,7 +52,7 @@ in
 
     systemd.services.nextcloud-whiteboard-server = {
       description = "Nextcloud backend server for the Whiteboard app";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       environment = cfg.settings;

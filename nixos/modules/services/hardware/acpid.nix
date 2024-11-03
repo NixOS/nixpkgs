@@ -129,7 +129,7 @@ in
       description = "ACPI Daemon";
       documentation = [ "man:acpid(8)" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = lib.escapeShellArgs

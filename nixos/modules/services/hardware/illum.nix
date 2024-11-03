@@ -23,7 +23,7 @@ in {
 
     systemd.services.illum = {
       description = "Backlight Adjustment Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig.ExecStart = "${pkgs.illum}/bin/illum-d";
       serviceConfig.Restart = "on-failure";
     };

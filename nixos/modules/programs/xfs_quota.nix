@@ -91,7 +91,7 @@ in
           ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'limit -p ${limitOptions opts} ${name}' ${opts.fileSystem}
         '';
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ ((builtins.replaceStrings [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
 
         restartTriggers = [ config.environment.etc.projects.source ];

@@ -14,7 +14,7 @@ in {
   config = mkIf (cfg.enable) {
     systemd.services = {
       powertop = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "multi-user.target" ];
         description = "Powertop tunings";
         path = [ pkgs.kmod ];

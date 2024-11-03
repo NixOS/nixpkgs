@@ -225,7 +225,7 @@ in
           {
             description = "Fedimint Server";
             documentation = [ "https://github.com/fedimint/fedimint/" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             environment = lib.mkMerge [
               {
                 FM_BIND_P2P = "${cfg.p2p.bind}:${toString cfg.p2p.port}";

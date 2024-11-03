@@ -173,7 +173,7 @@ in {
     systemd.services.quorum = {
       description = "Quorum daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         PRIVATE_CONFIG = "${cfg.privateconfig}";
       };

@@ -74,7 +74,7 @@ in
 
         description = "Komga is a free and open source comics/mangas media server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
 

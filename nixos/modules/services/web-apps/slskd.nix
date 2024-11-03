@@ -277,7 +277,7 @@ in {
     systemd.services.slskd = {
       description = "A modern client-server application for the Soulseek file sharing network";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;

@@ -76,7 +76,7 @@ in {
     systemd.services.icecc-scheduler = {
       description = "Icecream scheduling server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = escapeShellArgs ([

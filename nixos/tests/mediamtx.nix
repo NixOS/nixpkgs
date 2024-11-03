@@ -19,7 +19,7 @@ import ./make-test-python.nix (
           description = "Publish an RTMP stream to mediamtx";
           after = [ "mediamtx.service" ];
           bindsTo = [ "mediamtx.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             DynamicUser = true;
             Restart = "on-failure";
@@ -33,7 +33,7 @@ import ./make-test-python.nix (
           description = "Receive an RTMP stream from mediamtx";
           after = [ "rtmp-publish.service" ];
           bindsTo = [ "rtmp-publish.service" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             DynamicUser = true;
             Restart = "on-failure";

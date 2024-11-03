@@ -147,7 +147,7 @@ in
     systemd.services.aria2 = {
       description = "aria2 Service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         if [[ ! -e "${cfg.settings.save-session}" ]]
         then

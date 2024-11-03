@@ -23,7 +23,7 @@ in
 
     systemd.services.incus-agent = {
       enable = true;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [
         pkgs.kmod

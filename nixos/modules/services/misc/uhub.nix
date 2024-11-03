@@ -98,7 +98,7 @@ in {
       in {
         description = "high performance peer-to-peer hub for the ADC network";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         reloadIfChanged = true;
         serviceConfig = {
           Type = "notify";

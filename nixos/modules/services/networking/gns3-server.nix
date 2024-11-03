@@ -189,7 +189,7 @@ in {
       description = "GNS3 Server";
 
       after = [ "network.target" "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
 
       # configFile cannot be stored in RuntimeDirectory, because GNS3

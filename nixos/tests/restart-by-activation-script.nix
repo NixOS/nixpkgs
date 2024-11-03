@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     system.switch.enable = true;
 
     systemd.services.restart-me = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
     systemd.services.reload-me = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = rec {
         Type = "oneshot";
         RemainAfterExit = true;

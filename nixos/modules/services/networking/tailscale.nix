@@ -123,7 +123,7 @@ in {
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [
         (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
         pkgs.procps     # for collecting running services (opt-in feature)
@@ -155,7 +155,7 @@ in {
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
       after = ["tailscaled.service"];
       wants = ["tailscaled.service"];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
       };
@@ -185,7 +185,7 @@ in {
     systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != []) {
       after = ["tailscaled.service"];
       wants = ["tailscaled.service"];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
       };

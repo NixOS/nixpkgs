@@ -24,7 +24,7 @@ in
   config = lib.mkIf cfg.enable {
 
     systemd.services.ddns-updater = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = cfg.environment // {

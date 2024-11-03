@@ -37,7 +37,7 @@ in {
       services.tiddlywiki = {
         description = "TiddlyWiki nodejs server";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Type = "simple";
           Restart = "on-failure";

@@ -100,7 +100,7 @@ in {
     systemd = {
       packages = [ cfg.package ];
       services.stalwart-mail = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "local-fs.target" "network.target" ];
 
         preStart = if useLegacyStorage then ''

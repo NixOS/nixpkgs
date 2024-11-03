@@ -210,7 +210,7 @@ in {
     systemd.services.gammu-smsd = {
       description = "gammu-smsd daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       wants = with cfg.backend; [ ]
       ++ lib.optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];

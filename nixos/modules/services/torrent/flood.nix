@@ -36,7 +36,7 @@ in
     systemd.services.flood = {
       description = "A modern web UI for various torrent clients.";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig = {
         Documentation = "https://github.com/jesec/flood/wiki";
       };

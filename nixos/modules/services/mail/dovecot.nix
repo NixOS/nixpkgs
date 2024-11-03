@@ -590,7 +590,7 @@ in
       description = "Dovecot IMAP/POP3 server";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ cfg.configFile modulesDir ];
 
       startLimitIntervalSec = 60;  # 1 min

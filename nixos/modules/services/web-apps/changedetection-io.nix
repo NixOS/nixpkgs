@@ -127,7 +127,7 @@ in
       defaultStateDir = cfg.datastorePath == "/var/lib/changedetection-io";
     in {
       services.changedetection-io = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         preStart = ''
           mkdir -p ${cfg.datastorePath}

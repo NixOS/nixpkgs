@@ -571,7 +571,7 @@ in {
 
       systemd.services.neo4j = {
         description = "Neo4j Daemon";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         environment = {
           NEO4J_HOME = "${cfg.directories.home}";

@@ -75,7 +75,7 @@ in
     systemd.services.cloudflare-dyndns = {
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         CLOUDFLARE_DOMAINS = toString cfg.domains;

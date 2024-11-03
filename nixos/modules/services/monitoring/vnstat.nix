@@ -27,7 +27,7 @@ in {
       description = "vnStat network traffic monitor";
       path = [ pkgs.coreutils ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       documentation = [
         "man:vnstatd(1)"
         "man:vnstat(1)"

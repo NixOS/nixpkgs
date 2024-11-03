@@ -125,7 +125,7 @@ in
       lib.nameValuePair ("bepasty-server-${name}-gunicorn")
         ({
           description = "Bepasty Server ${name}";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           after = [ "network.target" ];
           restartIfChanged = true;
 

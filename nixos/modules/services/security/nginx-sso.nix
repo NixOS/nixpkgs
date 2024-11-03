@@ -45,7 +45,7 @@ in {
     systemd.services.nginx-sso = {
       description = "Nginx SSO Backend";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${pkg}/bin/nginx-sso \

@@ -85,7 +85,7 @@ in {
       packages = [ pkgs.below ];
       services.below = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartTriggers = [ cfgContents ];
 
         serviceConfig.ExecStart = [

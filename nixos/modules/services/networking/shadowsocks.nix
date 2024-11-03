@@ -150,7 +150,7 @@ in
     systemd.services.shadowsocks-libev = {
       description = "shadowsocks-libev Daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.shadowsocks-libev ] ++ optional (cfg.plugin != null) cfg.plugin ++ optional (cfg.passwordFile != null) pkgs.jq;
       serviceConfig.PrivateTmp = true;
       script = ''

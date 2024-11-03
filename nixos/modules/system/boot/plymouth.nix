@@ -148,13 +148,13 @@ in
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
     systemd.services.plymouth-halt.wantedBy = [ "halt.target" ];
-    systemd.services.plymouth-quit-wait.wantedBy = [ "multi-user.target" ];
-    systemd.services.plymouth-quit.wantedBy = [ "multi-user.target" ];
+    systemd.services.plymouth-quit-wait.autoStart = true;
+    systemd.services.plymouth-quit.autoStart = true;
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
-    systemd.services.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
-    systemd.paths.systemd-ask-password-plymouth.wantedBy = [ "multi-user.target" ];
+    systemd.services.systemd-ask-password-plymouth.autoStart = true;
+    systemd.paths.systemd-ask-password-plymouth.autoStart = true;
 
     # Prevent Plymouth taking over the screen during system updates.
     systemd.services.plymouth-start.restartIfChanged = false;
@@ -234,8 +234,8 @@ in
         plymouth-halt.wantedBy = [ "halt.target" ];
         plymouth-kexec.wantedBy = [ "kexec.target" ];
         plymouth-poweroff.wantedBy = [ "poweroff.target" ];
-        plymouth-quit-wait.wantedBy = [ "multi-user.target" ];
-        plymouth-quit.wantedBy = [ "multi-user.target" ];
+        plymouth-quit-wait.autoStart = true;
+        plymouth-quit.autoStart = true;
         plymouth-read-write.wantedBy = [ "sysinit.target" ];
         plymouth-reboot.wantedBy = [ "reboot.target" ];
         plymouth-start.wantedBy = [ "initrd-switch-root.target" "sysinit.target" ];

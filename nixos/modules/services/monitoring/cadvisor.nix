@@ -104,7 +104,7 @@ in {
 
     (mkIf cfg.enable {
       systemd.services.cadvisor = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" "docker.service" "influxdb.service" ];
 
         path = optionals config.boot.zfs.enabled [ pkgs.zfs ];

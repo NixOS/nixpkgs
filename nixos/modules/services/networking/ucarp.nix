@@ -155,7 +155,7 @@ in {
     systemd.services.ucarp = {
       description = "ucarp, userspace implementation of CARP";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

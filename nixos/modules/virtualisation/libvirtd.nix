@@ -477,7 +477,7 @@ in
     };
 
     systemd.services.libvirtd = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "libvirtd-config.service" ];
       after = [ "libvirtd-config.service" ]
         ++ optional vswitch.enable "ovs-vswitchd.service";
@@ -509,7 +509,7 @@ in
     };
 
     systemd.services.libvirt-guests = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = with pkgs; [ coreutils gawk cfg.package ];
       restartIfChanged = false;
 

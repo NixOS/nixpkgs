@@ -144,7 +144,7 @@ in
 
     systemd.services.graylog = {
       description = "Graylog Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         GRAYLOG_CONF = "${confFile}";
       };

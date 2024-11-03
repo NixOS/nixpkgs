@@ -151,7 +151,7 @@ in {
       description = "A Simple Calendar and Contact Server";
       after = [ "network.target" ];
       requires = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = concatStringsSep " " ([
           "${pkg}/bin/radicale" "-C" confFile

@@ -44,7 +44,7 @@ in {
 
     systemd = {
       services.go-autoconfig = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "IMAP/SMTP autodiscover server";
         after = [ "network.target" ];
         serviceConfig = {

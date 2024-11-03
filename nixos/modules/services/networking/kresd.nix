@@ -120,7 +120,7 @@ in {
     systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
 
     systemd.targets.kresd = { # configure units started by default
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "kres-cache-gc.service" ]
         ++ map (i: "kresd@${toString i}.service") (lib.range 1 cfg.instances);
     };

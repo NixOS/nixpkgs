@@ -43,7 +43,7 @@ in
     systemd.services.n8n = {
       description = "N8N service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         # This folder must be writeable as the application is storing
         # its data in it, so the StateDirectory is a good choice

@@ -286,7 +286,7 @@ in
       after = [
         "network.target"
       ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;

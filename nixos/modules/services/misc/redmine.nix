@@ -358,7 +358,7 @@ in
 
     systemd.services.redmine = {
       after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
       environment.REDMINE_LANG = "en";

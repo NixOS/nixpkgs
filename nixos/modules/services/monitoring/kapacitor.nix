@@ -166,7 +166,7 @@ in
 
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.kapacitor}/bin/kapacitord -config ${kapacitorConf}";

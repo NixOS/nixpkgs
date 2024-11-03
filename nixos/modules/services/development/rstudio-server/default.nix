@@ -64,7 +64,7 @@ in
         description = "Rstudio server";
 
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         restartTriggers = [ rserver-conf rsession-conf ];
 
         serviceConfig = {

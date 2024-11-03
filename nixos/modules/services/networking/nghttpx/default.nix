@@ -102,7 +102,7 @@ in
 
     systemd.services = {
       nghttpx = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after    = [ "network.target" ];
         script   = ''
           ${pkgs.nghttp2}/bin/nghttpx --conf=${configurationFile}

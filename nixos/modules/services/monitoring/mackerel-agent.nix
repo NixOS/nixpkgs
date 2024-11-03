@@ -86,7 +86,7 @@ in {
       description = "mackerel.io agent";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = {
         MACKEREL_PLUGIN_WORKDIR = mkDefault "%C/mackerel-agent";
       };

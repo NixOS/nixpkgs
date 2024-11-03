@@ -101,7 +101,7 @@ with lib;
       description = "xl2tpd server";
 
       requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         install -m 700 -d /etc/xl2tpd/ppp

@@ -524,7 +524,7 @@ in
       enable = cfg.upsmon.enable;
       description = "Uninterruptible Power Supplies (Monitor)";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         ExecStartPre = "${createUpsmonConf}";
@@ -543,7 +543,7 @@ in
       enable = cfg.upsd.enable;
       description = "Uninterruptible Power Supplies (Daemon)";
       after = [ "network.target" "upsmon.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         ExecStartPre = "${createUpsdUsers}";
@@ -563,7 +563,7 @@ in
       enable = cfg.upsd.enable;
       description = "Uninterruptible Power Supplies (Register all UPS)";
       after = [ "upsd.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;

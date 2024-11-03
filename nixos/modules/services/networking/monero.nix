@@ -215,7 +215,7 @@ in
     systemd.services.monero = {
       description = "monero daemon";
       after    = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User  = "monero";

@@ -282,7 +282,7 @@ in
     networking.firewall.allowedTCPPorts = [ cfg.port ];
     systemd.services.syncplay = {
       description = "Syncplay Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 

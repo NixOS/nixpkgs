@@ -107,7 +107,7 @@ in {
       enable = true;
       description = "a tiny socks server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

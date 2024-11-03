@@ -64,7 +64,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.confd = {
       description = "Confd Service.";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/confd";

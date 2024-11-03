@@ -58,7 +58,7 @@ in
       systemd.packages = [pkgs.hddfancontrol];
 
       systemd.services.hddfancontrol = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         environment.HDDFANCONTROL_ARGS = lib.escapeShellArgs args;
         serviceConfig = {
           # Hardening

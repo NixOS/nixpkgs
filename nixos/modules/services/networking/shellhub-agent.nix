@@ -70,7 +70,7 @@ in
     systemd.services.shellhub-agent = {
       description = "ShellHub Agent";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "local-fs.target" ];
       wants = [ "network-online.target" ];
       after = [

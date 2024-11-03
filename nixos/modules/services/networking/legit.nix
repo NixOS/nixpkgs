@@ -131,7 +131,7 @@ in
       description = "legit git frontend";
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ configFile ];
 
       serviceConfig = {

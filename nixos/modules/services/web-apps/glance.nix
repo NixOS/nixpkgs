@@ -100,7 +100,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.glance = {
       description = "Glance feed dashboard server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

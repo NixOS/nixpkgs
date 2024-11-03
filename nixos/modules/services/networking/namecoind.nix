@@ -163,7 +163,7 @@ in
     systemd.services.namecoind = {
       description = "Namecoind daemon";
       after    = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       startLimitIntervalSec = 120;
       startLimitBurst = 5;

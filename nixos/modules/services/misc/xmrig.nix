@@ -51,7 +51,7 @@ with lib;
     hardware.cpu.x86.msr.enable = true;
 
     systemd.services.xmrig = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "XMRig Mining Software Service";
       serviceConfig = {

@@ -58,7 +58,7 @@ in {
                         else "/var/run/telegraf/config.toml";
     in {
       description = "Telegraf Agent";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps

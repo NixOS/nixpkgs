@@ -266,7 +266,7 @@ in {
 
     systemd.targets.netbox = {
       description = "Target for all NetBox services";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" "redis-netbox.service" ];
     };
@@ -349,7 +349,7 @@ in {
         description = "NetBox housekeeping job";
         documentation = [ "https://docs.netbox.dev/" ];
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         after = [ "network-online.target" "netbox.service" ];
         wants = [ "network-online.target" ];
@@ -369,7 +369,7 @@ in {
       description = "Run NetBox housekeeping job";
       documentation = [ "https://docs.netbox.dev/" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       after = [ "network-online.target" "netbox.service" ];
       wants = [ "network-online.target" ];

@@ -204,7 +204,7 @@ in {
                 $locale = "UTF8";
             '';
           in {
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             before = [ "phpfpm-rutorrent.service" ];
             script = ''
               ln -sf ${pkgs.rutorrent}/{css,images,js,lang,index.html} ${cfg.dataDir}/

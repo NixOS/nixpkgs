@@ -42,7 +42,7 @@ in {
     systemd.services.merecat = {
       description = "Merecat HTTP server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.merecat}/bin/merecat -n -f ${configFile}";

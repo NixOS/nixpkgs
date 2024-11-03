@@ -115,7 +115,7 @@ in
       after = [ "network.target" ];
       wants = [ "nss-lookup.target" ];
       before = [ "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = rec {
         Type = "exec";
         DynamicUser = true;

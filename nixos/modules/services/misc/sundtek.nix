@@ -17,7 +17,7 @@ in
 
     systemd.services.sundtek = {
       description = "Sundtek driver";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "oneshot";

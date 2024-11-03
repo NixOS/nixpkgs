@@ -167,7 +167,7 @@ in {
 
     systemd.services.etcd = {
       description = "etcd key-value store";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ]
         ++ lib.optional config.networking.firewall.enable "firewall.service";
       wants = [ "network-online.target" ]

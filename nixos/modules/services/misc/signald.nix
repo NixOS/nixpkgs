@@ -44,7 +44,7 @@ in
     systemd.services.signald = {
       description = "A daemon for interacting with the Signal Private Messenger";
       wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

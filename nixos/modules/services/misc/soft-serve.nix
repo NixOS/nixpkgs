@@ -53,7 +53,7 @@ in
       documentation = [ docUrl ];
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment.SOFT_SERVE_DATA_PATH = stateDir;
 

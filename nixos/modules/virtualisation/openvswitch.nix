@@ -55,7 +55,7 @@ in {
 
     systemd.services.ovsdb = {
       description = "Open_vSwitch Database Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "systemd-udev-settle.service" ];
       path = [ cfg.package ];
       restartTriggers = [ db cfg.package ];
@@ -106,7 +106,7 @@ in {
 
     systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       bindsTo = [ "ovsdb.service" ];
       after = [ "ovsdb.service" ];
       path = [ cfg.package ];

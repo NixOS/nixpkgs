@@ -84,7 +84,7 @@ in
     systemd.services.polaris = {
       description = "Polaris Music Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = rec {
         User = cfg.user;

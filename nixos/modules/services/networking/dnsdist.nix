@@ -166,7 +166,7 @@ in {
     systemd.packages = [ pkgs.dnsdist ];
 
     systemd.services.dnsdist = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       startLimitIntervalSec = 0;
       serviceConfig = {

@@ -105,7 +105,7 @@ in
     systemd.services.cntlm = {
       description = "CNTLM is an NTLM / NTLM Session Response / NTLMv2 authenticating HTTP proxy";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "cntlm";
         ExecStart = ''

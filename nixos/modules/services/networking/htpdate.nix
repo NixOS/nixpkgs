@@ -56,7 +56,7 @@ in
 
     systemd.services.htpdate = {
       description = "htpdate daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         PIDFile = "/run/htpdate.pid";

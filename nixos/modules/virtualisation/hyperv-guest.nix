@@ -57,7 +57,7 @@ in {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
 
       targets.hyperv-daemons = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       };
     };
   };

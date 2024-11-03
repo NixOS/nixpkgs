@@ -66,7 +66,7 @@ in
           "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
         ];
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 

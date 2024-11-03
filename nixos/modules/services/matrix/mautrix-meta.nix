@@ -488,7 +488,7 @@ in {
 
         (lib.mapAttrs' (name: cfg: lib.nameValuePair "${metaName name}" {
           description = "Mautrix-Meta bridge - ${metaName name}";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
           after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 

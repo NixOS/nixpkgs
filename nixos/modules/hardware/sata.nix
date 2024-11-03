@@ -94,7 +94,7 @@ in
 
     systemd.targets.sata-timeout = {
       description = "SATA timeout";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
   };
 }

@@ -69,7 +69,7 @@ in {
 
     systemd.services.monetdb = {
       description = "MonetDB database server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path = [ cfg.package ];
       unitConfig.RequiresMountsFor = "${cfg.dataDir}";

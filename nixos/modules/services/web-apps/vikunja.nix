@@ -95,7 +95,7 @@ in {
     systemd.services.vikunja = {
       description = "vikunja";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.package ];
       restartTriggers = [ configFile ];
 

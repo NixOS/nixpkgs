@@ -17,7 +17,7 @@
     # TODO: extra user for gdomap?
     systemd.services.gdomap = {
       description = "gdomap server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       path  = [ pkgs.gnustep.base ];
       serviceConfig.ExecStart = "${pkgs.gnustep.base}/bin/gdomap -f";

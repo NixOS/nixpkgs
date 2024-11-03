@@ -432,7 +432,7 @@ in
       description = "Adds the mysql password to the mysql auth config files";
 
       before = [ "nscd.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "oneshot";

@@ -115,7 +115,7 @@ in
 
     systemd.services.isolate = {
       description = "Isolate control group hierarchy daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "notify";
         ExecStart = "${isolate}/bin/isolate-cg-keeper";

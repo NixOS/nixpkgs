@@ -226,7 +226,7 @@ in {
         Restart = "always";
         UMask = "0077";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
@@ -245,7 +245,7 @@ in {
         Group = lib.mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
@@ -255,7 +255,7 @@ in {
         Persistent = "true";
         Unit = "backup-vaultwarden.service";
       };
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {

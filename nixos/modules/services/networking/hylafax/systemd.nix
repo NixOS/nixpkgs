@@ -69,7 +69,7 @@ let
   sockets.hylafax-hfaxd = {
     description = "HylaFAX server socket";
     documentation = [ "man:hfaxd(8)" ];
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     listenStreams = [ "127.0.0.1:4559" ];
     socketConfig.FreeBind = true;
     socketConfig.Accept = true;
@@ -78,7 +78,7 @@ let
   paths.hylafax-faxq = {
     description = "HylaFAX queue manager sendq watch";
     documentation = [ "man:faxq(8)" "man:sendq(5)" ];
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     pathConfig.PathExistsGlob = [ "${cfg.spoolAreaPath}/sendq/q*" ];
   };
 

@@ -158,7 +158,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.openvscode-server = {
       description = "OpenVSCode server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;

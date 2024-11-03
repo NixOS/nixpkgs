@@ -63,7 +63,7 @@ in {
       unitConfig.Documentation = "https://github.com/goss-org/goss/blob/master/docs/manual.md";
 
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
 
       environment = {

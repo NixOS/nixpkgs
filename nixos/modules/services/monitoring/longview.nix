@@ -107,7 +107,7 @@ in {
     systemd.services.longview =
       { description = "Longview Metrics Collection";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig.Type = "forking";
         serviceConfig.ExecStop = "-${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         serviceConfig.ExecReload = "-${pkgs.coreutils}/bin/kill -HUP $MAINPID";

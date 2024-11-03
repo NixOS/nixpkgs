@@ -66,7 +66,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.private-gpt = {
       description = "Interact with your documents using the power of GPT, 100% privately, no data leaks";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       preStart =

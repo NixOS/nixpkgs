@@ -34,7 +34,7 @@ in
     systemd.services.torrentstream = {
       after = [ "network.target" ];
       description = "TorrentStream Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";

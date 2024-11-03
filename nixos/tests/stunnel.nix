@@ -38,7 +38,7 @@ let
       cert = "/test-key-and-cert.pem";
     };
     systemd.services.simple-webserver = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         cd /etc/webroot
         ${pkgs.python3}/bin/python -m http.server 80

@@ -103,7 +103,7 @@ in {
       description = "Mighttpd2 web server";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.haskellPackages.mighttpd2}/bin/mighty \

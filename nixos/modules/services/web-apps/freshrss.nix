@@ -289,7 +289,7 @@ in
         in
         {
           description = "Set up the state directory for FreshRSS before use";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = defaultServiceConfig // {
             RemainAfterExit = true;
           };

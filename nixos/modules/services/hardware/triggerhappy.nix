@@ -120,7 +120,7 @@ in
     };
 
     systemd.services.triggerhappy = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Global hotkey daemon";
       serviceConfig = {
         ExecStart = "${pkgs.triggerhappy}/bin/thd ${

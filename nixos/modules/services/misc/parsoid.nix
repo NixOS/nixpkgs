@@ -95,7 +95,7 @@ in
 
     systemd.services.parsoid = {
       description = "Bidirectional wikitext parser";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${parsoid}/lib/node_modules/parsoid/bin/server.js -c ${confFile} -n ${toString cfg.workers}";

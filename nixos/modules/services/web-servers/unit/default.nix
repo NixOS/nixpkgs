@@ -87,7 +87,7 @@ in {
     systemd.services.unit = {
       description = "Unit App Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         [ ! -e '${cfg.stateDir}/conf.json' ] || rm -f '${cfg.stateDir}/conf.json'
       '';

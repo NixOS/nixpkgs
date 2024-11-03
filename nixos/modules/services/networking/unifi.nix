@@ -134,7 +134,7 @@ in
 
     systemd.services.unifi = {
       description = "UniFi controller daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars

@@ -45,7 +45,7 @@ in
     systemd.services.uptime-kuma = {
       description = "Uptime Kuma";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = cfg.settings;
       path = with pkgs; [ unixtools.ping ] ++ lib.optional cfg.appriseSupport apprise;
       serviceConfig = {

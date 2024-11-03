@@ -58,7 +58,7 @@ in
         description = "etesync-dav - A CalDAV and CardDAV adapter for EteSync";
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = [ pkgs.etesync-dav ];
         environment = {
           ETESYNC_LISTEN_ADDRESS = cfg.host;

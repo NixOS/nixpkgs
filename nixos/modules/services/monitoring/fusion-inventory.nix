@@ -53,7 +53,7 @@ in {
 
     systemd.services.fusion-inventory = {
       description = "Fusion Inventory Agent";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${pkgs.fusionInventory}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";

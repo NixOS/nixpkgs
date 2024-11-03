@@ -79,7 +79,7 @@ in
         birdwatcher = {
           wants = [ "network.target" ];
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           description = "Birdwatcher";
           serviceConfig = {
             Type = "simple";

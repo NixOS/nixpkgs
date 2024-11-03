@@ -195,7 +195,7 @@ in
       {
         description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
 

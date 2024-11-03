@@ -66,7 +66,7 @@ in {
     };
     systemd.services.freeswitch-config-reload = lib.mkIf cfg.enableReload {
       before = [ "freeswitch.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ configDirectory ];
       serviceConfig = {
         ExecStart = "/run/current-system/systemd/bin/systemctl try-reload-or-restart freeswitch.service";
@@ -77,7 +77,7 @@ in {
     systemd.services.freeswitch = {
       description = "Free and open-source application server for real-time communication";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "freeswitch";

@@ -40,8 +40,8 @@ in
 
         # https://github.com/NixOS/nixpkgs/issues/81138
         services = {
-          coolercontrol-liqctld.wantedBy = [ "multi-user.target" ];
-          coolercontrold.wantedBy = [ "multi-user.target" ];
+          coolercontrol-liqctld.autoStart = true;
+          coolercontrold.autoStart = true;
         };
       };
     })

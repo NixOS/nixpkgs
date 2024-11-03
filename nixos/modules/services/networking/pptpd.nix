@@ -94,7 +94,7 @@ with lib;
       description = "pptpd server";
 
       requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         mkdir -p -m 700 /etc/ppp-pptpd

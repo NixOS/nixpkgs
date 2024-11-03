@@ -32,7 +32,7 @@ in
 
     systemd.services.vmware =
       { description = "VMWare Guest Service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "display-manager.service" ];
         unitConfig.ConditionVirtualization = "vmware";
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
@@ -48,7 +48,7 @@ in
         where = "/run/vmblock-fuse";
         type = "fuse";
         options = "subtype=vmware-vmblock,default_permissions,allow_other";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
       }
     ];
 

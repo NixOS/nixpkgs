@@ -50,7 +50,7 @@ in
     systemd.services.lidarr = {
       description = "Lidarr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

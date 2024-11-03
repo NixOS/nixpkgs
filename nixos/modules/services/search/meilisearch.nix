@@ -107,7 +107,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";

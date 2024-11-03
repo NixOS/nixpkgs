@@ -264,7 +264,7 @@ in {
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
       environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
 

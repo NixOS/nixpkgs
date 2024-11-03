@@ -29,7 +29,7 @@ in
     systemd.services.teamviewerd = {
       description = "TeamViewer remote control daemon";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" "network.target" "dbus.service" ];
       requires = [ "dbus.service" ];

@@ -47,7 +47,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
         systemd.services.shadowsocks-client = {
           description = "connect to shadowsocks";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           path = with pkgs; [ shadowsocks-libev ];
           script = ''
             exec ss-local \

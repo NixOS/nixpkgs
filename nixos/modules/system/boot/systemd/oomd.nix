@@ -32,7 +32,7 @@ in {
       "systemd-oomd.service"
       "systemd-oomd.socket"
     ];
-    systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
+    systemd.services.systemd-oomd.autoStart = true;
 
     environment.etc."systemd/oomd.conf".text = lib.generators.toINI {} {
       OOM = cfg.extraConfig;

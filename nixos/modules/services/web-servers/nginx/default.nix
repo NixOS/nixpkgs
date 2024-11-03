@@ -1235,7 +1235,7 @@ in
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
       after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
       # Nginx needs to be started in order to be able to request certificates

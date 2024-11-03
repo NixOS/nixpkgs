@@ -47,7 +47,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.redlib = {
         description = "Private front-end for Reddit";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;

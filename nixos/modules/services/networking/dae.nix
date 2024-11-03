@@ -129,7 +129,7 @@ in
             });
         in
         {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             LoadCredential = [ "config.dae:${configPath}" ];
             ExecStartPre = [ "" "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae" ]

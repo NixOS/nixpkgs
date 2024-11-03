@@ -177,7 +177,7 @@ in {
     systemd.services.nifi = {
       description = "Apache NiFi";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = env;
       path = [ pkgs.gawk ];

@@ -37,7 +37,7 @@ in {
     systemd.services.roon-bridge = {
       after = [ "network.target" ];
       description = "Roon Bridge";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment.ROON_DATAROOT = "/var/lib/${name}";
 

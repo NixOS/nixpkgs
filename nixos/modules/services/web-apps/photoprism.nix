@@ -131,7 +131,7 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = env;
 
       # reminder: easier password configuration will come in https://github.com/photoprism/photoprism/pull/2302

@@ -47,7 +47,7 @@ in
 
     systemd.services.cachefilesd = {
       description = "Local network file caching management daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.cachefilesd}/bin/cachefilesd -n -f ${cfgFile}";

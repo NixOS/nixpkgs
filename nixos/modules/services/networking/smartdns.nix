@@ -53,7 +53,7 @@ in {
     services.smartdns.settings.bind = mkDefault ":${toString cfg.bindPort}";
 
     systemd.packages = [ pkgs.smartdns ];
-    systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
+    systemd.services.smartdns.autoStart = true;
     systemd.services.smartdns.restartTriggers = [ confFile ];
     environment.etc."smartdns/smartdns.conf".source = confFile;
     environment.etc."default/smartdns".source =

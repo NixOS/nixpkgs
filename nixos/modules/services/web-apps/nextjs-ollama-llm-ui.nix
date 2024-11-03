@@ -68,7 +68,7 @@ in
     systemd.services = {
 
       nextjs-ollama-llm-ui = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         description = "Nextjs Ollama LLM Ui.";
         after = [ "network.target" ];
         environment = {

@@ -43,7 +43,7 @@ in {
     systemd.packages = [ pkgs.pdns ];
 
     systemd.services.pdns = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
 
       serviceConfig = {

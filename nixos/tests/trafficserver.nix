@@ -78,7 +78,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       systemd.services.httpbin = {
         enable = true;
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${python}/bin/gunicorn -b 0.0.0.0:80 httpbin:app -k gevent";
         };

@@ -34,7 +34,7 @@ in {
     systemd.services.coredns = {
       description = "Coredns dns server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         PermissionsStartOnly = true;
         LimitNPROC = 512;

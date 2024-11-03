@@ -43,7 +43,7 @@ in
     systemd.services.rdnssd = {
       description = "RDNSS daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         # Create the proper run directory

@@ -414,7 +414,7 @@ in
 
     systemd.services.rippled = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/rippled --fg --conf ${cfg.config}";

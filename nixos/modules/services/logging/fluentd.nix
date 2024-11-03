@@ -36,7 +36,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.fluentd = with pkgs; {
       description = "Fluentd Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config} ${pluginArgs}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

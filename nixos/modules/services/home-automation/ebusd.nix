@@ -134,7 +134,7 @@ in
   in mkIf cfg.enable {
     systemd.services.ebusd = {
       description = "EBUSd Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = let

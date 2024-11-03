@@ -30,7 +30,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "lxc.service" ];
       restartIfChanged = false;
       serviceConfig = {

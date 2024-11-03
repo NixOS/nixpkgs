@@ -664,7 +664,7 @@ in {
     systemd.services.bacula-fd = mkIf fd_cfg.enable {
       after = [ "network.target" ];
       description = "Bacula File Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.bacula ];
       serviceConfig = {
         ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
@@ -678,7 +678,7 @@ in {
     systemd.services.bacula-sd = mkIf sd_cfg.enable {
       after = [ "network.target" ];
       description = "Bacula Storage Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.bacula ];
       serviceConfig = {
         ExecStart = "${pkgs.bacula}/sbin/bacula-sd -f -u bacula -g bacula -c ${sd_conf}";
@@ -694,7 +694,7 @@ in {
     systemd.services.bacula-dir = mkIf dir_cfg.enable {
       after = [ "network.target" "postgresql.service" ];
       description = "Bacula Director Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ pkgs.bacula ];
       serviceConfig = {
         ExecStart = "${pkgs.bacula}/sbin/bacula-dir -f -u bacula -g bacula -c ${dir_conf}";

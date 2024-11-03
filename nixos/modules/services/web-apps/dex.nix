@@ -69,7 +69,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.dex = {
       description = "dex identity provider";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
       path = with pkgs; [ replace-secret ];
       serviceConfig = {

@@ -33,11 +33,11 @@ in
         };
 
         systemd.services."spiped@server" = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           overrideStrategy = "asDropin";
         };
         systemd.services."spiped@client" = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           overrideStrategy = "asDropin";
         };
         services.spiped = {

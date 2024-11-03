@@ -42,7 +42,7 @@ with lib;
     nameValuePair svcName {
       description = "GitHub Actions runner";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 

@@ -25,7 +25,7 @@ in
     systemd.services.prowlarr = {
       description = "Prowlarr";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

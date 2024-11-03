@@ -218,7 +218,7 @@ in
     systemd.services.nntp-proxy = {
       description = "NNTP proxy";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = { User="nntp-proxy"; };
       serviceConfig.ExecStart = "${nntp-proxy}/bin/nntp-proxy ${confFile}";
       preStart = ''

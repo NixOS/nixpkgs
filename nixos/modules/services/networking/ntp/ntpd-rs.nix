@@ -65,7 +65,7 @@ in
     };
 
     systemd.services.ntpd-rs = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "";
         Group = "";
@@ -75,7 +75,7 @@ in
     };
 
     systemd.services.ntpd-rs-metrics = lib.mkIf cfg.metrics.enable {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "";
         Group = "";

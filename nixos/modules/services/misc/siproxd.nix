@@ -167,7 +167,7 @@ in
 
     systemd.services.siproxd = {
       description = "SIP proxy/masquerading daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.siproxd}/sbin/siproxd -c ${confFile}";

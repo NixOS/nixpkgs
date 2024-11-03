@@ -45,7 +45,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.ulogd = {
       description = "Ulogd Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-pre.target" ];
       before = [ "network-pre.target" ];
 

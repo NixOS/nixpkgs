@@ -180,7 +180,7 @@ in
     systemd.timers.undervolt = lib.mkIf cfg.useTimer {
       description = "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       timerConfig = {
         OnBootSec = "2min";
         OnUnitActiveSec = "30";

@@ -122,7 +122,7 @@ in {
       enable = true;
       description = "Target designed to group RustDesk Signal & RustDesk Relay";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     systemd.services.rustdesk-signal =

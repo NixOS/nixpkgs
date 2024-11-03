@@ -87,7 +87,7 @@ in
 
     systemd.services.deconz = {
       description = "deCONZ Zigbee gateway";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         # The service puts a nix store path reference in here, and that path can
         # be garbage collected. Ensure the file gets "refreshed" on every start.

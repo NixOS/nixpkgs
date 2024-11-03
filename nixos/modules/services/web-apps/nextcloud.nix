@@ -971,7 +971,7 @@ in {
             '') ([ cfg.hostName ] ++ cfg.settings.trusted_domains));
 
         in {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           wants = [ "nextcloud-update-db.service" ];
           before = [ "phpfpm-nextcloud.service" ];
           after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";

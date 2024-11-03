@@ -119,7 +119,7 @@ in
 
     systemd.services.git-daemon = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = "${lib.getExe cfg.package} daemon --reuseaddr "
         + (lib.optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (lib.optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")

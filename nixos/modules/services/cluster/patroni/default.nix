@@ -202,7 +202,7 @@ in
       patroni = {
         description = "Runners to orchestrate a high-availability PostgreSQL";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         script = ''

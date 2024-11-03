@@ -252,7 +252,7 @@ in
     systemd.services.bind = {
       description = "BIND Domain Name Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         mkdir -m 0755 -p /etc/bind

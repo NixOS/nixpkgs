@@ -193,7 +193,7 @@ in {
     systemd.services.webhook = {
       description = "Webhook service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = config.networking.proxy.envVars // cfg.environment;
       script = let
         args = [ "-ip" cfg.ip "-port" (toString cfg.port) "-urlprefix" cfg.urlPrefix ]

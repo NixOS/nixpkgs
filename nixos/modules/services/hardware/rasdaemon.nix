@@ -133,7 +133,7 @@ in
       rasdaemon = {
         description = "the RAS logging daemon";
         documentation = [ "man:rasdaemon(1)" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           StateDirectory = lib.optionalString (cfg.record) "rasdaemon";
@@ -152,7 +152,7 @@ in
       ras-mc-ctl = lib.mkIf (cfg.labels != "") {
         description = "register DIMM labels on startup";
         documentation = [ "man:ras-mc-ctl(8)" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.rasdaemon}/bin/ras-mc-ctl --register-labels";

@@ -154,7 +154,7 @@ in
     systemd.services.teamspeak3-server = {
       description = "Teamspeak3 voice communication server daemon";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart = ''

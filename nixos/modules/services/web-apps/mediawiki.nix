@@ -598,7 +598,7 @@ in
     ];
 
     systemd.services.mediawiki-init = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "phpfpm-mediawiki.service" ];
       after = optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
               ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.service";

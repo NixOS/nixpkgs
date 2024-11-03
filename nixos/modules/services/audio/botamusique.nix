@@ -57,7 +57,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.botamusique = {
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       unitConfig.Documentation = "https://github.com/azlux/botamusique/wiki";
 

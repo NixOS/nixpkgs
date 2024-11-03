@@ -138,7 +138,7 @@ in
 
       requires = [ "dev-tpm0.device" ];
       after = [ "dev-tpm0.device" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = cfg.user;

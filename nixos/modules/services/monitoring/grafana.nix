@@ -1737,7 +1737,7 @@ in
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace

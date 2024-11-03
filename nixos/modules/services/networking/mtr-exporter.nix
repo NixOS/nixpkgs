@@ -89,7 +89,7 @@ in {
     };
 
     systemd.services.mtr-exporter = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       requires = [ "network.target" ];
       after = [ "network.target" ];
       serviceConfig = {

@@ -111,7 +111,7 @@ in
       };
       systemd.services.scgi_server = {
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ExecStart = "${scgi_server}/bin/scgi-server";
         };

@@ -39,7 +39,7 @@ let
     requires = [
       "network-online.target"
     ];
-    wantedBy = [ "multi-user.target" ];
+    autoStart = true;
     serviceConfig = lib.mkMerge [
       {
         BindReadOnlyPaths = [

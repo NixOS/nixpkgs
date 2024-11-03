@@ -69,7 +69,7 @@ in
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ at ];
 

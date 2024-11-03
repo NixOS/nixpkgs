@@ -122,7 +122,7 @@ in {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         # Install transcoders.

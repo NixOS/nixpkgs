@@ -27,7 +27,7 @@ in
 
     systemd.services.owamp = {
       description = "Owamp server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ExecStart="${pkgs.owamp}/bin/owampd -R /run/owamp -d /run/owamp -v -Z ";

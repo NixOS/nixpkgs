@@ -278,7 +278,7 @@ in
     users.groups = lib.optionalAttrs (cfg.group == defaultUser) { "${defaultUser}" = { }; };
 
     systemd.targets.seafile = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Seafile components";
     };
 

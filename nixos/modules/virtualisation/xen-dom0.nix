@@ -822,7 +822,7 @@ in
         xendriverdomain.enable = false;
 
         xenstored = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           preStart = ''
             export XENSTORED_ROOTDIR="/var/lib/xenstored"
             rm -f "$XENSTORED_ROOTDIR"/tdb* &>/dev/null
@@ -832,11 +832,11 @@ in
 
         xen-init-dom0 = {
           restartIfChanged = false;
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
 
         xen-qemu-dom0-disk-backend = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             PIDFile = cfg.qemu.pidFile;
             ExecStart = ''
@@ -849,10 +849,10 @@ in
           };
         };
 
-        xenconsoled.wantedBy = [ "multi-user.target" ];
+        xenconsoled.autoStart = true;
 
         xen-watchdog = {
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             RestartSec = "1";
             Restart = "on-failure";
@@ -866,7 +866,7 @@ in
             cfg.qemu.package
           ];
           preStart = "mkdir -p /var/lock/subsys -m 755";
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
         };
       };
     };

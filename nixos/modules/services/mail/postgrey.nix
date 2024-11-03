@@ -168,7 +168,7 @@ in {
         ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
     in {
       description = "Postfix Greylisting Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       before = [ "postfix.service" ];
       preStart = ''
         mkdir -p /var/postgrey

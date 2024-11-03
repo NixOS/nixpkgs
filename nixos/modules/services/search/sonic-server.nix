@@ -57,7 +57,7 @@ in {
     systemd.services.sonic-server = {
       description = "Sonic Search Index";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

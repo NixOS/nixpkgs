@@ -134,7 +134,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       script = ''
         ${cfg.package}/bin/registry serve ${configFile}

@@ -184,7 +184,7 @@ in
       path = mkIf (cfg.svcManager == "command") [ pkgs.bash ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       inherit preStart;
 
       serviceConfig = {

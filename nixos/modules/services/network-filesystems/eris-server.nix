@@ -88,7 +88,7 @@ in {
     in {
       description = "ERIS block server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.ERIS_STORE_URL = toString cfg.backends;
       script = lib.mkIf (cfg.mountpoint != null) ''
         export PATH=${config.security.wrapperDir}:$PATH

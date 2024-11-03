@@ -110,7 +110,7 @@ in
       {
         description = "hans client - ${name}";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.extraConfig} -c ${cfg.server} ${lib.optionalString (cfg.passwordFile != "") "-p $(cat \"${cfg.passwordFile}\")"}";
         serviceConfig = {
           RestartSec = "30s";
@@ -126,7 +126,7 @@ in
       hans = lib.mkIf (cfg.server.enable) {
         description = "hans, ip over icmp server daemon";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         script = "${pkgs.hans}/bin/hans -f -u ${hansUser} ${cfg.server.extraConfig} -s ${cfg.server.ip} ${lib.optionalString cfg.server.respondToSystemPings "-r"} ${lib.optionalString (cfg.server.passwordFile != "") "-p $(cat \"${cfg.server.passwordFile}\")"}";
       };
     };

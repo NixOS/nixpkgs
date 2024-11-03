@@ -191,7 +191,7 @@ in
     systemd.services.nagios = {
       description = "Nagios monitoring daemon";
       path     = [ pkgs.nagios ] ++ cfg.plugins;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after    = [ "network.target" ];
       restartTriggers = [ nagiosCfgFile ];
 

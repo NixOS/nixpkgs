@@ -56,7 +56,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.rimgo = {
       description = "Rimgo";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       environment = mapAttrs (_: toString) cfg.settings;
       serviceConfig = {

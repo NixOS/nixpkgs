@@ -35,7 +35,7 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.pacemaker = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         StateDirectory = "pacemaker";
         StateDirectoryMode = "0700";

@@ -464,7 +464,7 @@ in
     systemd.services.xtreemfs-dir = lib.mkIf cfg.dir.enable {
       description = "XtreemFS-DIR Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = "xtreemfs";
         ExecStart = "${startupScript "org.xtreemfs.dir.DIR" dirConfig}";

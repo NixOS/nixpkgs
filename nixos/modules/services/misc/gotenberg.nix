@@ -201,7 +201,7 @@ in
     systemd.services.gotenberg = {
       description = "Gotenberg API server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.package ];
       environment = {
         LIBREOFFICE_BIN_PATH = "${cfg.libreoffice.package}/lib/libreoffice/program/soffice.bin";

@@ -106,7 +106,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.syncthing-relay = {
       description = "Syncthing relay service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       serviceConfig = {

@@ -127,7 +127,7 @@ in {
     };
 
     systemd.services.grafana-image-renderer = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = " A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
 

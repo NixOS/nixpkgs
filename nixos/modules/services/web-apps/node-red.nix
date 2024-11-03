@@ -113,7 +113,7 @@ in
 
     systemd.services.node-red = {
       description = "Node-RED Service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "networking.target" ];
       environment = {
         HOME = cfg.userDir;

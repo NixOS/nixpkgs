@@ -232,7 +232,7 @@ in {
 
     systemd.services.system76-scheduler = {
       description = "Manage process priorities and CFS scheduler latencies for improved responsiveness on the desktop";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [
         # execsnoop needs those to extract kernel headers:
         pkgs.kmod

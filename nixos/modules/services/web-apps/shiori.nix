@@ -53,7 +53,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.services.shiori = {
       description = "Shiori simple bookmarks manager";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "postgresql.service" "mysql.service" ];
       environment = {
         SHIORI_DIR = "/var/lib/shiori";

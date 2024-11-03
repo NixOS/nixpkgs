@@ -26,7 +26,7 @@ in
     systemd.services.jellyseerr = {
       description = "Jellyseerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment.PORT = toString cfg.port;
       serviceConfig = {
         Type = "exec";

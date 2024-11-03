@@ -13,7 +13,7 @@ in
     environment.systemPackages = [ pkgs.picosnitch ];
     systemd.services.picosnitch = {
       description = "picosnitch";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "simple";
         Restart = "always";

@@ -532,7 +532,7 @@ in
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network.target" ];
 
         environment.PGDATA = cfg.dataDir;

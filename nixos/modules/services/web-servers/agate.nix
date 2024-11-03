@@ -70,7 +70,7 @@ in
 
     systemd.services.agate = {
       description = "Agate";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 

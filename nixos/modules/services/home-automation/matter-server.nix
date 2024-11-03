@@ -45,7 +45,7 @@ in
       after = [ "network-online.target" ];
       before = [ "home-assistant.service" ];
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       description = "Matter Server";
       environment.HOME = storagePath;
       serviceConfig = {

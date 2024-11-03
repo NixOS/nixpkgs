@@ -24,7 +24,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.hercules-ci-agent = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       path = [ config.nix.package ];

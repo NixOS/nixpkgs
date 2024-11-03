@@ -189,7 +189,7 @@ in
       description = "PgBouncer - PostgreSQL connection pooler";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       reloadTriggers = [ configFile ];
       serviceConfig = {
         Type = "notify-reload";

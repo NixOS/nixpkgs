@@ -524,7 +524,7 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
       requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
       # In older versions the secret naming for JWT was kind of confusing.

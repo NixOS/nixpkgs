@@ -13,7 +13,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services.twingate = {
       preStart = "cp -r --update=none ${cfg.package}/etc/twingate/. /etc/twingate/";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
     };
 
     networking.firewall.checkReversePath = lib.mkDefault "loose";

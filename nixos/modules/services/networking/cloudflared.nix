@@ -299,7 +299,7 @@ in
           lib.nameValuePair "cloudflared-tunnel-${name}" ({
             after = [ "network.target" "network-online.target" ];
             wants = [ "network.target" "network-online.target" ];
-            wantedBy = [ "multi-user.target" ];
+            autoStart = true;
             serviceConfig = {
               User = cfg.user;
               Group = cfg.group;

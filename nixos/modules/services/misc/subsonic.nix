@@ -110,7 +110,7 @@ in {
     systemd.services.subsonic = {
       description = "Personal media streamer";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         ${pkgs.jre8}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dsubsonic.home=${cfg.home} \

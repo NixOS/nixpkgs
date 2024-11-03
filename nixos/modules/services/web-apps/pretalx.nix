@@ -421,7 +421,7 @@ in
         ] ++ lib.optionals (cfg.settings.database.backend == "mysql") [
           "mysql.service"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         preStart = ''
           versionFile="${cfg.settings.filesystem.data}/.version"
           version=$(cat "$versionFile" 2>/dev/null || echo 0)
@@ -467,7 +467,7 @@ in
         ] ++ lib.optionals (cfg.settings.database.backend == "mysql") [
           "mysql.service"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
       });
 

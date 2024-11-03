@@ -51,7 +51,7 @@ in
     systemd.services = {
       woodpecker-server = {
         description = "Woodpecker-Server Service";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         serviceConfig = {

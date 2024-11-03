@@ -315,7 +315,7 @@ in
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       inherit (cfg) environment;
 
       serviceConfig = commonServiceConfig // {
@@ -337,7 +337,7 @@ in
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });

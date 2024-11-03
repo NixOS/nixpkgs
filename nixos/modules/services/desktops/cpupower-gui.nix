@@ -33,7 +33,7 @@ in {
     systemd.services = {
       cpupower-gui = {
         description = "Apply cpupower-gui config at boot";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui config";

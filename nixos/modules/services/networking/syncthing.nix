@@ -654,7 +654,7 @@ in {
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
         } // config.networking.proxy.envVars;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           Restart = "on-failure";
           SuccessExitStatus = "3 4";
@@ -704,7 +704,7 @@ in {
         description = "Syncthing configuration updater";
         requisite = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig = {
           User = cfg.user;

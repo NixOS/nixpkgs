@@ -43,7 +43,7 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.localtimed = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       partOf = [ "localtimed-geoclue-agent.service" ];
       after = [ "localtimed-geoclue-agent.service" ];
       serviceConfig = {
@@ -55,7 +55,7 @@ in {
     };
 
     systemd.services.localtimed-geoclue-agent = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       partOf = [ "geoclue.service" ];
       after = [ "geoclue.service" ];
       serviceConfig = {

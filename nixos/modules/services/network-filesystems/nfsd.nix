@@ -118,7 +118,7 @@ in
 
     systemd.services.nfs-server =
       { enable = true;
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         preStart =
           ''

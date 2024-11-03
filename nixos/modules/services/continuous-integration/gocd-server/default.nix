@@ -184,7 +184,7 @@ in {
     systemd.services.gocd-server = {
       description = "GoCD Server";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment =
         let

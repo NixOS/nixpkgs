@@ -53,7 +53,7 @@ in
 
     systemd.services.felix = {
       description = "Felix server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         # Initialise felix instance on first startup

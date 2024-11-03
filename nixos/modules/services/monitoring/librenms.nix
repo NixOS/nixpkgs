@@ -405,7 +405,7 @@ in
     systemd.services.rrdcached = lib.mkIf cfg.useDistributedPollers {
       description = "rrdcached";
       after = [ "librenms-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "forking";
         User = cfg.user;
@@ -498,7 +498,7 @@ in
       before = [ "phpfpm-librenms.service" ];
       after = [ "systemd-tmpfiles-setup.service" ]
         ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       restartTriggers = [ package configFile ];
       path = [ pkgs.mariadb pkgs.unixtools.whereis pkgs.gnused ];
       serviceConfig = {

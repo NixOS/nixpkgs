@@ -135,7 +135,7 @@ in
 
     systemd.services.gotosocial = {
       description = "ActivityPub social network server";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ]
         ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
       requires = lib.optional cfg.setupPostgresqlDB "postgresql.service";

@@ -94,7 +94,7 @@ in
         services.navidrome = {
           description = "Navidrome Media Server";
           after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
           serviceConfig = {
             ExecStart = ''
               ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}

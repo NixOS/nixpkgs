@@ -42,7 +42,7 @@ in
       description = "Internet Relay Chat (IRC) notification daemon";
       documentation = [ "man:irkerd(8)" "man:irkerhook(1)" "man:irk(1)" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = "${pkgs.irker}/bin/irkerd -H ${cfg.listenAddress} -n ${cfg.nick}";
         User = "irkerd";

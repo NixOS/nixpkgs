@@ -52,7 +52,7 @@ in
     systemd.services.waydroid-container = {
       description = "Waydroid Container";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "dbus";

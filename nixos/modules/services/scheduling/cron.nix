@@ -114,7 +114,7 @@ in
       systemd.services.cron =
         { description = "Cron Daemon";
 
-          wantedBy = [ "multi-user.target" ];
+          autoStart = true;
 
           preStart =
             ''

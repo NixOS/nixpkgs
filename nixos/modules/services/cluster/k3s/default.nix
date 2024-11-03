@@ -497,7 +497,7 @@ in
           "firewall.service"
           "network-online.target"
         ];
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
         serviceConfig = {
           # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197

@@ -21,7 +21,7 @@
 
     systemd.services.alsa-store = {
       description = "Store Sound Card State";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig = {
         RequiresMountsFor = "/var/lib/alsa";
         ConditionVirtualization = "!systemd-nspawn";

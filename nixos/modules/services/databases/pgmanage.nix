@@ -173,7 +173,7 @@ in {
       description = "pgmanage - PostgreSQL Administration for the web";
       wants    = [ "postgresql.service" ];
       after    = [ "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User         = pgmanage;
         Group        = pgmanage;

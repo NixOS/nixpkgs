@@ -708,7 +708,7 @@ in {
 
       requires = optional hasDocker "docker.service"
         ++ optional hasPodman "podman.service";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       environment = config.networking.proxy.envVars // {
         HOME = "/var/lib/gitlab-runner";
       };

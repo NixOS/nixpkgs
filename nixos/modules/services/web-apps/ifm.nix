@@ -53,7 +53,7 @@ in
       description = "Improved file manager, a single-file web based filemanager";
 
       after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);

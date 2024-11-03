@@ -38,7 +38,7 @@ in {
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         StateDirectory = "OpenRGB";
         WorkingDirectory = "/var/lib/OpenRGB";

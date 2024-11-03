@@ -132,7 +132,7 @@ in {
 
     systemd.services.x2goserver = {
       description = "X2Go Server Daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       unitConfig.Documentation = "man:x2goserver.conf(5)";
       serviceConfig = {
         Type = "forking";

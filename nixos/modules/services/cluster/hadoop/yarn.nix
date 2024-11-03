@@ -114,7 +114,7 @@ in
     (mkIf cfg.yarn.resourcemanager.enable {
       systemd.services.yarn-resourcemanager = {
         description = "Hadoop YARN ResourceManager";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         inherit (cfg.yarn.resourcemanager) restartIfChanged;
         environment = cfg.yarn.resourcemanager.extraEnv;
 
@@ -147,7 +147,7 @@ in
 
       systemd.services.yarn-nodemanager = {
         description = "Hadoop YARN NodeManager";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         inherit (cfg.yarn.nodemanager) restartIfChanged;
         environment = cfg.yarn.nodemanager.extraEnv;
 

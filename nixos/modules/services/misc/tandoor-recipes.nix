@@ -124,7 +124,7 @@ in
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       preStart = ''
         ln -sf ${manage} tandoor-recipes-manage

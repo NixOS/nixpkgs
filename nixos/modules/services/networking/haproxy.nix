@@ -52,7 +52,7 @@ in
     systemd.services.haproxy = {
       description = "HAProxy";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

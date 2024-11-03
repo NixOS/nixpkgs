@@ -54,7 +54,7 @@ in
 
       requires = [ "nix-daemon.socket" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       environment = {
         CONFIG_FILE = format.generate "harmonia.toml" cfg.settings;

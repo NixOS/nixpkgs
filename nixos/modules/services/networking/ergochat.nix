@@ -135,7 +135,7 @@ in {
 
     systemd.services.ergochat = {
       description = "Ergo IRC daemon";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       # reload is not applying the changed config. further investigation is needed
       # at some point this should be enabled, since we don't want to restart for
       # every config change

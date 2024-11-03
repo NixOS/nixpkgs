@@ -64,7 +64,7 @@ in
     systemd.services.osrm = {
       description = "OSRM service";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         User = config.users.users.osrm.name;

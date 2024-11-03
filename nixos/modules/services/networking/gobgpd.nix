@@ -45,7 +45,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.gobgpd ];
     systemd.services.gobgpd = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       description = "GoBGP Routing Daemon";
       serviceConfig = {

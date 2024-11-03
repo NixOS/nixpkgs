@@ -197,7 +197,7 @@ in
       description = "Rustus server";
       documentation = [ "https://s3rius.github.io/rustus/" ];
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       environment = {

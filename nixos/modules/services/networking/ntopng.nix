@@ -144,7 +144,7 @@ in
       description = "Ntopng Network Monitor";
       requires = optional createRedis redisService;
       after = [ "network.target" ] ++ optional createRedis redisService;
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig.ExecStart = "${pkgs.ntopng}/bin/ntopng ${configFile}";
       unitConfig.Documentation = "man:ntopng(8)";
     };

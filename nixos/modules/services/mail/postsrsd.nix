@@ -102,7 +102,7 @@ in {
       description = "PostSRSd SRS rewriting server";
       after = [ "network.target" ];
       before = [ "postfix.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       path = [ pkgs.coreutils ];
 

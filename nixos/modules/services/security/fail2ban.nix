@@ -339,7 +339,7 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];

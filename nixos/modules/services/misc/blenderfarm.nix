@@ -78,7 +78,7 @@ in
     };
 
     systemd.services.blendfarm-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       description = "blendfarm server";

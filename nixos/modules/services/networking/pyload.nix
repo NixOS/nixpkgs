@@ -69,7 +69,7 @@ in
 
     systemd.services.pyload = {
       description = "pyLoad download manager";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
 
       # NOTE: unlike what the documentation says, it looks like `HOME` is not

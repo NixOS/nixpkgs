@@ -67,7 +67,7 @@ in
       description = "Restic REST Server";
       after = [ "network.target" "restic-rest-server.socket" ];
       requires = [ "restic-rest-server.socket" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/rest-server \

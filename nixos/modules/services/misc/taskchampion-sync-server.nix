@@ -66,7 +66,7 @@ in
     };
 
     systemd.services.taskchampion-sync-server = {
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network.target" ];
       serviceConfig = {
         User = cfg.user;

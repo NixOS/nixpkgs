@@ -746,7 +746,7 @@ in
 
     systemd.services.httpd = {
         description = "Apache HTTPD";
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
         after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
         before = map (certName: "acme-${certName}.service") dependentCertNames;

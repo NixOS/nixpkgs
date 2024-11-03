@@ -43,7 +43,7 @@ in {
 
     systemd.services.eintopf = {
       description = "Community event calendar web app";
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       environment = cfg.settings;

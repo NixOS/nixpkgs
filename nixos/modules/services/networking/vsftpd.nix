@@ -314,7 +314,7 @@ in
       services.vsftpd = {
         description = "Vsftpd Server";
 
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
 
         serviceConfig.ExecStart = "@${vsftpd}/sbin/vsftpd vsftpd ${configFile}";
         serviceConfig.Restart = "always";

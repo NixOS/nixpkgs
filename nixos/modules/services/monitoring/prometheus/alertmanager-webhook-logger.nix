@@ -22,7 +22,7 @@ in
     systemd.services.alertmanager-webhook-logger = {
       description = "Alertmanager Webhook Logger";
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 

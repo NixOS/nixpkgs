@@ -17,7 +17,7 @@ let
     systemd.services.webserver = {
       description = "Mock webserver";
       wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       script = ''
         while true; do
         {

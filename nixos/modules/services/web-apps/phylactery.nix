@@ -32,7 +32,7 @@ in {
         PHYLACTERY_LIBRARY = "${cfg.library}";
       };
 
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         ConditionPathExists = cfg.library;

@@ -99,7 +99,7 @@ in
       description = "Supybot, an IRC bot";
       documentation = [ "https://limnoria.readthedocs.io/" ];
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       preStart = ''
         # This needs to be created afresh every time
         rm -f '${cfg.stateDir}/supybot.cfg.bak'

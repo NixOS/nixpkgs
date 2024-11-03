@@ -49,7 +49,7 @@ in {
     systemd.services.trezord = {
       description = "Trezor Bridge";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
       path = [];
       serviceConfig = {
         Type = "simple";

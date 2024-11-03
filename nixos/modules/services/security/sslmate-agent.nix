@@ -20,7 +20,7 @@ in {
     systemd = {
       packages = [ pkgs.sslmate-agent ];
       services.sslmate-agent = {
-        wantedBy = [ "multi-user.target" ];
+        autoStart = true;
         serviceConfig = {
           ConfigurationDirectory = "sslmate-agent";
           LogsDirectory = "sslmate-agent";

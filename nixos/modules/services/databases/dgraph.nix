@@ -108,7 +108,7 @@ in
     systemd.services.dgraph-zero = {
       description = "Dgraph native GraphQL database with a graph backend. Zero controls node clustering";
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         StateDirectory = "dgraph-zero";
@@ -123,7 +123,7 @@ in
       description = "Dgraph native GraphQL database with a graph backend. Alpha serves data";
       after = [ "network.target" "dgraph-zero.service" ];
       requires = [ "dgraph-zero.service" ];
-      wantedBy = [ "multi-user.target" ];
+      autoStart = true;
 
       serviceConfig = {
         StateDirectory = "dgraph-alpha";
