@@ -54,7 +54,7 @@ let
 
     function version_is_ignored() {
       local tag="$1"
-      [ -n "$ignored_versions" ] && ${grep} -E -e "$ignored_versions" <<< "$tag"
+      [ -n "$ignored_versions" ] && ${grep} -q -E -e "$ignored_versions" <<< "$tag"
     }
 
     function version_is_unstable() {
