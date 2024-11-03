@@ -134,6 +134,9 @@
   # must be lua51Packages
   luajitPackages,
   aider-chat,
+  # typst-preview dependencies
+  tinymist,
+  websocat,
 }:
 self: super:
 let
@@ -2728,6 +2731,16 @@ in
       substituteInPlace autoload/zoxide.vim \
         --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
+  };
+
+  typst-preview-nvim = super.typst-preview-nvim.overrideAttrs {
+    postPatch = ''
+      substituteInPlace lua/typst-preview/config.lua \
+       --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
+       --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
+    '';
+
+    nvimRequireCheck = "typst-preview";
   };
 }
 // (
