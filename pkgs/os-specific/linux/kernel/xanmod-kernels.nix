@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   buildLinux,
   variant,
   ...
@@ -36,7 +36,7 @@ let
         pname = "linux-xanmod";
         modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
 
-        src = fetchFromGitHub {
+        src = fetchFromGitLab {
           owner = "xanmod";
           repo = "linux";
           rev = modDirVersion;
