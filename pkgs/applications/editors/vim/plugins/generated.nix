@@ -18815,4 +18815,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/evesdropper/luasnip-latex-snippets.nvim/";
   };
+
+  typst-conceal-vim = buildVimPlugin {
+    pname = "typst-conceal.vim";
+    version = "2023-10-13";
+    src = fetchFromGitHub {
+      owner = "MrPicklePinosaur";
+      repo = "typst-conceal.vim";
+      rev = "b8862f2d5a015b838e4a0d361f30423c45e23425";
+      sha256 = "UHEVhlV/1cq6jaMhNNookeGPtHvSwy1AKLvb8FR6Rro=";
+    };
+    meta.homepage = "https://github.com/MrPicklePinosaur/typst-conceal.vim/";
+  };
 }
