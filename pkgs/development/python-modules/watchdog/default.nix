@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "4.0.2";
+  version = "6.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tN+7bEkiG+RTViPqRHSk1u4KnO9KgLIMKNtNhYtk4nA=";
+    hash = "sha256-nd98gv2jro4k3s2hM47eZuHJmIPbk3Edj7lB6qLYwoI=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
@@ -37,62 +37,33 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ optional-dependencies.watchmedo;
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=watchdog" "" \
-      --replace "--cov-report=term-missing" ""
-  '';
-
-  pytestFlagsArray =
-    [
-      "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
-      "--deselect=tests/test_emitter.py::test_close"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # fails to stop process in teardown
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
+      "test_auto_restart_subprocess_termination"
       # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
+      "test_auto_restart_on_file_change_debounce"
+      # segfaults
+      "test_delayed_get"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # FileCreationEvent != FileDeletionEvent
-      "--deselect=tests/test_emitter.py::test_separate_consecutive_moves"
-      "--deselect=tests/test_observers_polling.py::test___init__"
+      "test_separate_consecutive_moves"
+      "test___init__"
       # segfaults
-      "--deselect=tests/test_delayed_queue.py::test_delayed_get"
-      "--deselect=tests/test_emitter.py::test_delete"
-      # AttributeError: '_thread.RLock' object has no attribute 'key'"
-      "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
+      "test_delete"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # segfaults
-      "--deselect=tests/test_delayed_queue.py::test_delayed_get"
-      "--deselect=tests/test_0_watchmedo.py::test_tricks_from_file"
-      "--deselect=tests/test_fsevents.py::test_watcher_deletion_while_receiving_events_1"
-      "--deselect=tests/test_fsevents.py::test_watcher_deletion_while_receiving_events_2"
-      "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
-      "--deselect=tests/test_fsevents.py::test_recursive_check_accepts_relative_paths"
-      # fsevents:fsevents.py:318 Unhandled exception in FSEventsEmitter
-      "--deselect=tests/test_fsevents.py::test_watchdog_recursive"
-      # SystemError: Cannot start fsevents stream. Use a kqueue or polling observer...
-      "--deselect=tests/test_fsevents.py::test_add_watch_twice"
-      # fsevents:fsevents.py:318 Unhandled exception in FSEventsEmitter
-      "--deselect=ests/test_fsevents.py::test_recursive_check_accepts_relative_paths"
-      # gets stuck
-      "--deselect=tests/test_fsevents.py::test_converting_cfstring_to_pyunicode"
+      "test_tricks_from_file"
     ];
 
-  disabledTestPaths =
-    [
-      # tests timeout easily
-      "tests/test_inotify_buffer.py"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # segfaults the testsuite
-      "tests/test_emitter.py"
-      # unsupported on x86_64-darwin
-      "tests/test_fsevents.py"
-    ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # segfaults the testsuite
+    "tests/test_emitter.py"
+    # unsupported on x86_64-darwin
+    "tests/test_fsevents.py"
+  ];
 
   pythonImportsCheck = [ "watchdog" ];
 
