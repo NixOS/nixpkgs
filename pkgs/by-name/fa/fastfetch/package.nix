@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  apple-sdk_15,
   chafa,
   cmake,
-  darwin,
   dbus,
   dconf,
   ddcutil,
@@ -23,15 +23,14 @@
   nix-update-script,
   ocl-icd,
   opencl-headers,
-  overrideSDK,
   pcre,
   pcre2,
   pkg-config,
   python3,
   rpm,
   sqlite,
-  testers,
   util-linux,
+  versionCheckHook,
   vulkan-loader,
   wayland,
   xfce,
@@ -43,10 +42,7 @@
   waylandSupport ? true,
   x11Support ? true,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
   version = "2.28.0";
 
@@ -105,24 +101,10 @@ stdenv'.mkDerivation (finalAttrs: {
       xorg.libXext
     ]
     ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Apple80211
-        AppKit
-        AVFoundation
-        Cocoa
-        CoreDisplay
-        CoreVideo
-        CoreWLAN
-        DisplayServices
-        IOBluetooth
-        MediaRemote
-        OpenCL
-        SystemConfiguration
-        moltenvk
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_15
+      moltenvk
+    ]);
 
   cmakeFlags =
     [
@@ -158,14 +140,11 @@ stdenv'.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "fastfetch -v | cut -d '(' -f 1";
-      version = "fastfetch ${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
