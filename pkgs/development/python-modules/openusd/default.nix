@@ -52,6 +52,7 @@ in
 buildPythonPackage rec {
   pname = "openusd";
   version = "24.08";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
@@ -64,8 +65,6 @@ buildPythonPackage rec {
     if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
-
-  format = "other";
 
   patches = [
     (fetchpatch {
