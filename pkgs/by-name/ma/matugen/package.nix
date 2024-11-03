@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matugen";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
-    rev = "v${version}";
-    hash = "sha256-WFitpFF1Ah4HkzSe4H4aN/ZM0EEIcP5ozLMUWaDggFU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SN4m0ka5VHLIQYTszhlCIB+2D+nyWMzJM5n5bZdkG/I=";
   };
 
-  cargoHash = "sha256-pD1NKUJmvMTnYKWjRrGnvbA0zVvGpWRIlf/9ovP9Jq4=";
+  cargoHash = "sha256-FwQhhwlldDskDzmIOxhwRuUv8NxXCxd3ZmOwqcuWz64=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
