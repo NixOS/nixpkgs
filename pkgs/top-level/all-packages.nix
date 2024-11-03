@@ -248,6 +248,8 @@ with pkgs;
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
+ 
+ sublist3r = callPackage ../tools/networking/sublist3r { };
 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
 
