@@ -13663,8 +13663,6 @@ self: super: with self; {
 
   replicate = callPackage ../development/python-modules/replicate { };
 
-  repocheck = callPackage ../development/python-modules/repocheck { };
-
   reportlab = callPackage ../development/python-modules/reportlab { };
 
   reportlab-qrcode = callPackage ../development/python-modules/reportlab-qrcode { };
