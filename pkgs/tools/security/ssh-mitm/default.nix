@@ -53,6 +53,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     argcomplete
     colored
+    pynacl
     packaging
     paramiko
     pytz
