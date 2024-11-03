@@ -10470,6 +10470,10 @@ self: super: with self; {
 
   precisely = callPackage ../development/python-modules/precisely { };
 
+  pre-commit = toPythonModule (pkgs.pre-commit.override {
+    python3Packages = self;
+  });
+
   primp = callPackage ../development/python-modules/primp {
     inherit (pkgs.darwin.apple_sdk.frameworks) SystemConfiguration;
   };
