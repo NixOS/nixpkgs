@@ -2839,18 +2839,32 @@ self: super: {
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
-    # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
+    # 2022-12-02: Too strict bounds.
     doJailbreak
     # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
     (overrideSrc rec {
-      version = "12.0.2";
+      version = "12.0.3";
       src = pkgs.fetchFromGitHub {
         owner = "PostgREST";
         repo = "postgrest";
         rev = "v${version}";
-        hash = "sha256-fpGeL8R6hziEtIgHUMfWLF7JAjo3FDYQw3xPSeQH+to=";
+        hash = "sha256-peXM5/K034Phcy5vNhc5AT3/9oGXohVogFN9gRsSosY=";
       };
     })
+    # 2024-11-03: Needed for the patch below. Can be dropped after updating to 12.2+.
+    (appendPatches [
+      (fetchpatch {
+        url = "https://github.com/PostgREST/postgrest/commit/d311fb17c46ad2ab9064c7aba1954d3500ef0e54.patch";
+        hash = "sha256-O/bBm93V6GIPSB5dwhNUFgX3vXA01LPJapZQoeJmbIU=";
+      })
+    ])
+    # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
+    (appendPatches [
+      (fetchpatch {
+        url = "https://github.com/PostgREST/postgrest/commit/c045b261c4f7d2c2514e858120950be6b3ddfba8.patch";
+        hash = "sha256-6SeteL5sb+/K1y3f9XL7yNzXDdD1KQp91RNP4kutSLE=";
+      })
+    ])
   ];
 
   # Too strict bounds on hspec < 2.11
