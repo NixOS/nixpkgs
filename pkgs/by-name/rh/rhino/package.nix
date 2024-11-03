@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   # FIXME: Install javadoc as well.
   installPhase = ''
     mkdir -p "$out/share/java"
-    cp -v buildGradle/libs/source-${version}.jar buildGradle/libs/rhino-*.jar "$out/share/java/rhino-${version}.jar"
+    cp -v buildGradle/libs/source-${version}.jar buildGradle/libs/rhino-*.jar "$out/share/java"
     # FIXME: Unsure if this should be the desired behavior
-    ln -s "$out/share/java/source-${version}" "$out/share/java/rhino-${version}.jar"
+    ln -s "$out/share/java/source-${version}.jar" "$out/share/java/rhino-${version}.jar"
 
     makeWrapper "${jdk21}/bin/java" "$out/bin/rhino" \
       --add-flags "-jar $out/share/java/rhino-${version}.jar"
@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
       gpl2Plus
     ];
     platforms = jdk21.meta.platforms;
+    maintainers = with maintainers; [ tomodachi94 ];
   };
 }
