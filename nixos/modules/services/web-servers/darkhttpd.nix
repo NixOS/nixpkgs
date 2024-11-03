@@ -31,7 +31,7 @@ in {
       type = str;
       description = ''
         Address to listen on.
-        Pass `all` to listen on all interfaces.
+        Pass `::` to listen on all interfaces.
       '';
     };
 
