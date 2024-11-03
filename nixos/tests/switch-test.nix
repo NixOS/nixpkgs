@@ -541,7 +541,7 @@ in {
         };
 
         target.configuration = {
-          systemd.targets.test-target.autoStart = true;
+          systemd.targets.test-target.wantedBy = [ "multi-user.target" ];
           # We use this service to figure out whether the target was modified.
           # This is the only way because targets are filtered and therefore not
           # printed when they are started/stopped.

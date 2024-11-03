@@ -785,7 +785,7 @@ in
 
       systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
 
-      systemd.targets.zfs.autoStart = true;
+      systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
     (lib.mkIf (cfgZfs.enabled && cfgExpandOnBoot != "disabled") {
