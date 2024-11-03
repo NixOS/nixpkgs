@@ -16120,6 +16120,8 @@ self: super: with self; {
 
   truststore = callPackage ../development/python-modules/truststore { };
 
+  trx-python = callPackage ../development/python-modules/trx-python { };
+
   trytond = callPackage ../development/python-modules/trytond { };
 
   ts1-signatures = callPackage ../development/python-modules/ts1-signatures { };
