@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pulsectl-asyncio";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mhthies";
     repo = "pulsectl-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VmogNphVZNJSUKUqp7xADRl78Ooofhl1YYrtYz5MBYc=";
+    hash = "sha256-lHVLrkFdNM8Y4t6TcXYnX8sQ4COrW3vV2sTDWeI4xZU=";
   };
 
   build-system = [ setuptools ];
