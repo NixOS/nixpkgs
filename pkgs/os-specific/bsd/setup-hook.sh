@@ -1,4 +1,5 @@
-# shellcheck shell=bash disable=SC2154,SC2164
+# shellcheck source=stdenv.sh
+. /dev/null
 
 # BSD makefiles should be able to detect this
 # but without they end up using gcc on Darwin stdenv

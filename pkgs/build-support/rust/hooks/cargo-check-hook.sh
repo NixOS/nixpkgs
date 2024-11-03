@@ -1,4 +1,7 @@
-# shellcheck shell=bash disable=SC2154,SC2164
+# shellcheck source=stdenv.sh
+. /dev/null
+
+declare cargoCheckType
 
 cargoCheckHook() {
     echo "Executing cargoCheckHook"

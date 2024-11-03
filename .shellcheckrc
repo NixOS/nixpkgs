@@ -1,0 +1,8 @@
+# supports source=pkgs/stdenv/generic/setup.sh directives
+external-sources=true
+source-path=pkgs/stdenv/generic
+shell=bash
+
+# Otherwise all xxxPhase=... will fail this rule:
+#   xxxPhase appears unused. Verify use (...).
+disable=SC2034

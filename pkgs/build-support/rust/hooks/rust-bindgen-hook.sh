@@ -1,3 +1,6 @@
+# shellcheck source=stdenv.sh
+. /dev/null
+
 # populates LIBCLANG_PATH and BINDGEN_EXTRA_CLANG_ARGS for rust projects that
 # depend on the bindgen crate
 

@@ -1,6 +1,5 @@
-# shellcheck shell=bash
-# Variables we use here are set by the stdenv, no use complaining about them
-# shellcheck disable=SC2164
+# shellcheck source=stdenv.sh
+. /dev/null
 
 ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"

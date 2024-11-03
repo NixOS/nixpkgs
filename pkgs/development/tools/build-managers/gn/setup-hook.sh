@@ -1,4 +1,5 @@
-# shellcheck shell=bash
+# shellcheck source=stdenv.sh
+. /dev/null
 
 gnConfigurePhase() {
     runHook preConfigure
@@ -9,7 +10,6 @@ gnConfigurePhase() {
     echoCmd 'gn flags' "${flagsArray[@]}"
 
     gn gen out/Release --args="${flagsArray[*]}"
-    # shellcheck disable=SC2164
     cd out/Release/
 
     runHook postConfigure

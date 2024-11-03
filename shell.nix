@@ -26,5 +26,7 @@ pkgs.mkShellNoCC {
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
     nixpkgs-review
+    # Linter for shell scripts
+    shellcheck
   ];
 }

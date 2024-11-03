@@ -1,4 +1,4 @@
-name: "Check shell"
+name: "Check shell.nix"
 
 on:
   pull_request_target:
@@ -7,7 +7,7 @@ permissions: {}
 
 jobs:
   x86_64-linux:
-    name: shell-check-x86_64-linux
+    name: shell-nix-check-x86_64-linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -19,7 +19,7 @@ jobs:
         run: nix-build shell.nix
 
   aarch64-darwin:
-    name: shell-check-aarch64-darwin
+    name: shell-nix-check-aarch64-darwin
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

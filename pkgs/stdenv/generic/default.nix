@@ -57,6 +57,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
+    # Please match this list of .sh files with those in pkgs/stdenv/generic/stdenv.sh for shellcheck.
     [
       ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/compress-man-pages.sh

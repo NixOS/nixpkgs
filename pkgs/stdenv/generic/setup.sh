@@ -1,4 +1,6 @@
-# shellcheck shell=bash
+# shellcheck source=shellcheck.sh
+. /dev/null
+
 # shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
 __nixpkgs_setup_set_original=$-
 set -eu

@@ -1,4 +1,5 @@
-# shellcheck shell=bash disable=SC2034,SC2154,SC2164
+# shellcheck source=stdenv.sh
+. /dev/null
 
 # We replace these
 export dontCargoBuild=true

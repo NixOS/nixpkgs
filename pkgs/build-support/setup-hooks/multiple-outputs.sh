@@ -45,20 +45,30 @@ _overrideFirst() {
 # Setup chains of sane default values with easy overridability.
 # The variables are global to be usable anywhere during the build.
 # Typical usage in package is defining outputBin = "dev";
+# Each variable is declare'd to make shellcheck aware of it.
 
+declare outputDev
 _overrideFirst outputDev "dev" "out"
+declare outputBin
 _overrideFirst outputBin "bin" "out"
 
+declare outputInclude
 _overrideFirst outputInclude "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
+declare outputLib
 _overrideFirst outputLib "lib" "out"
 
+declare outputDoc
 _overrideFirst outputDoc "doc" "out"
+declare outputDevdoc
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
+declare outputMan
 _overrideFirst outputMan "man" "$outputBin"
+declare outputDevman
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
+declare outputInfo
 _overrideFirst outputInfo "info" "$outputBin"
 
 
