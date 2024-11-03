@@ -20679,6 +20679,8 @@ with pkgs;
 
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
+  libfprint-2-tod1-broadcom = callPackage ../development/libraries/libfprint-2-tod1-broadcom { };
+
   libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
 
   libfprint-2-tod1-goodix-550a = callPackage ../development/libraries/libfprint-2-tod1-goodix-550a { };
