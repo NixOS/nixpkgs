@@ -6,7 +6,6 @@
   cython,
   eventlet,
   fetchFromGitHub,
-  fetchpatch2,
   geomet,
   gevent,
   gremlinpython,
@@ -26,37 +25,15 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.29.1";
+  version = "3.29.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-pnNm5Pd5k4bt+s3GrUUDWRpSdqNSM89GiX8DZKYzW1E=";
+    hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
-
-  patches = [
-    # https://github.com/datastax/python-driver/pull/1201
-    # Also needed for below patch to apply
-    (fetchpatch2 {
-      name = "remove-mock-dependency.patch";
-      url = "https://github.com/datastax/python-driver/commit/9aca00be33d96559f0eabc1c8a26bb439dcebbd7.patch";
-      hash = "sha256-ZN95V8ebbjahzqBat2oKBJLfu0fqbWMvAu0DzfVGw8I=";
-    })
-    # https://github.com/datastax/python-driver/pull/1215
-    (fetchpatch2 {
-      name = "convert-to-pytest.patch";
-      url = "https://github.com/datastax/python-driver/commit/9952e2ab22c7e034b96cc89330791d73c221546b.patch";
-      hash = "sha256-xa2aV6drBcgkQT05kt44vwupg3oMHLbcbZSQ7EHKnko=";
-    })
-    # https://github.com/datastax/python-driver/pull/1195
-    (fetchpatch2 {
-      name = "remove-assertRaisesRegexp.patch";
-      url = "https://github.com/datastax/python-driver/commit/622523b83971e8a181eb4853b7d877420c0351ef.patch";
-      hash = "sha256-Q8pRhHBLKyenMfrITf8kDv3BbsSCDAmVisTr4jSAIvA=";
-    })
-  ];
 
   pythonRelaxDeps = [ "geomet" ];
 
