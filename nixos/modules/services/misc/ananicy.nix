@@ -167,7 +167,7 @@ in
     systemd = {
       packages = [ finalPackage ];
       services."${servicename}" = {
-        wantedBy = [ "default.target" ];
+        autoStart = true;
       };
     };
   };

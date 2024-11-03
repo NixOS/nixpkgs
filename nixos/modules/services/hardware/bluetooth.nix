@@ -145,7 +145,7 @@ in
     }
     // optionalAttrs cfg.hsphfpd.enable {
       telephony_client = {
-        wantedBy = [ "default.target" ];
+        autoStart = true;
 
         description = "telephony_client for hsphfpd";
         serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/telephony_client.pl";

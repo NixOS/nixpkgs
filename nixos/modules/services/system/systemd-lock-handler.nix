@@ -17,7 +17,7 @@ in
     systemd.packages = [ cfg.package ];
 
     # https://github.com/NixOS/nixpkgs/issues/81138
-    systemd.user.services.systemd-lock-handler.wantedBy = [ "default.target" ];
+    systemd.user.services.systemd-lock-handler.autoStart = true;
   };
 
   meta = {

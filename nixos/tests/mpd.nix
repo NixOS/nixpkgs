@@ -37,7 +37,7 @@ import ./make-test-python.nix (
         description = "Sets up the music file(s) for MPD to use.";
         requires = [ "mpd.service" ];
         after = [ "mpd.service" ];
-        wantedBy = [ "default.target" ];
+        autoStart = true;
         script = ''
           cp ${track} ${musicDirectory}
         '';

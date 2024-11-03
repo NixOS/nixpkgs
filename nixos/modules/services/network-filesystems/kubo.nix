@@ -369,7 +369,7 @@ in
         Sockets = [ "ipfs-gateway.socket" "ipfs-api.socket" ];
       } // lib.optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // lib.optionalAttrs (!cfg.startWhenNeeded) {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
     };
 
     systemd.sockets.ipfs-gateway = {

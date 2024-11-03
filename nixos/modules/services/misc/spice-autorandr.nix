@@ -15,7 +15,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.user.services.spice-autorandr = {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       after = [ "spice-vdagentd.service" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/spice-autorandr";

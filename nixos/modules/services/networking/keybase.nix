@@ -37,7 +37,7 @@ in {
         Restart = "on-failure";
         PrivateTmp = true;
       };
-      wantedBy = [ "default.target" ];
+      autoStart = true;
     };
 
     environment.systemPackages = [ pkgs.keybase ];

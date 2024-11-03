@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     systemd.services.ii = {
       requires = [ "network.target" ];
-      wantedBy = [ "default.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "simple";

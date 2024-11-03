@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     {
       cli = { ... }: common {
         systemd.user.services.maestral = {
-          wantedBy = [ "default.target" ];
+          autoStart = true;
           serviceConfig.ExecStart = "${pkgs.maestral}/bin/maestral start --foreground";
         };
       };

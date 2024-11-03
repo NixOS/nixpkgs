@@ -217,7 +217,7 @@ in
         # this should really be `partOf = [ "geoclue.service" ]`, but
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
-        wantedBy = [ "default.target" ];
+        autoStart = true;
         wants = lib.optionals cfg.enableWifi [ "network-online.target" ];
         after = lib.optionals cfg.enableWifi [ "network-online.target" ];
         unitConfig.ConditionUser = "!@system";

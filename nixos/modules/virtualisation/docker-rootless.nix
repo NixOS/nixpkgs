@@ -60,7 +60,7 @@ in
 
     # Taken from https://github.com/moby/moby/blob/master/contrib/dockerd-rootless-setuptool.sh
     systemd.user.services.docker = {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       description = "Docker Application Container Engine (Rootless)";
       # needs newuidmap from pkgs.shadow
       path = [ "/run/wrappers" ];

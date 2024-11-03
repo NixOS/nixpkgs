@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           ${pkgs.pulseaudio}/bin/pactl get-default-sink | tee /tmp/pulseaudio-sink
 
         '';
-        wantedBy = [ "default.target" ];
+        autoStart = true;
       };
 
       networking.firewall.allowedTCPPorts = [ 3389 ];

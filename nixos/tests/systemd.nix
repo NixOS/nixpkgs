@@ -60,7 +60,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     systemd.user.services.testservice2 = {
       description = "Test Service 2";
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       serviceConfig.Type = "oneshot";
       script = ''
         if [ "$XXX_USER" = bar ]; then

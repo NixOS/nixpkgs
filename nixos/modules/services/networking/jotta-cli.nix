@@ -28,7 +28,7 @@ in {
         Restart = "on-failure";
       };
 
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
     };

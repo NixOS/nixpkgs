@@ -22,7 +22,7 @@ in {
         ExecStart = "${lib.getExe cfg.package} daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "default.target" ];
+      autoStart = true;
     };
 
     environment.systemPackages = [ cfg.package ];

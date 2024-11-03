@@ -65,7 +65,7 @@ in
     };
 
     systemd.services.post-sysinit = {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
       environment = {

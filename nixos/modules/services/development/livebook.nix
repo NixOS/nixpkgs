@@ -99,7 +99,7 @@ in
         if lib.isBool value then lib.boolToString value else toString value)
         cfg.environment;
       path = [ pkgs.bash ] ++ cfg.extraPackages;
-      wantedBy = [ "default.target" ];
+      autoStart = true;
     };
   };
 

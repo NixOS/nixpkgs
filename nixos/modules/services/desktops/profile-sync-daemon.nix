@@ -32,7 +32,7 @@ in {
             enable = true;
             description = "Profile Sync daemon";
             wants = [ "psd-resync.service" ];
-            wantedBy = [ "default.target" ];
+            autoStart = true;
             path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
             unitConfig = {
               RequiresMountsFor = [ "/home/" ];
@@ -51,7 +51,7 @@ in {
             after = [ "psd.service" ];
             wants = [ "psd-resync.timer" ];
             partOf = [ "psd.service" ];
-            wantedBy = [ "default.target" ];
+            autoStart = true;
             path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
             serviceConfig = {
               Type = "oneshot";

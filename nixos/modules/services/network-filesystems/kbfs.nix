@@ -80,7 +80,7 @@ in {
           Restart = "on-failure";
           PrivateTmp = true;
         };
-        wantedBy = [ "default.target" ];
+        autoStart = true;
       };
 
       services.keybase.enable = true;
@@ -115,7 +115,7 @@ in {
           PrivateTmp = true;
         };
 
-        wantedBy = [ "default.target" ];
+        autoStart = true;
       };
     })
   ]);

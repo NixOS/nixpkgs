@@ -823,7 +823,7 @@ in
         in
         {
           description = "Expand specified ZFS pools";
-          wantedBy = [ "default.target" ];
+          autoStart = true;
           after = [ "zfs.target" ];
 
           serviceConfig = {

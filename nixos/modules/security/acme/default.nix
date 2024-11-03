@@ -1002,7 +1002,7 @@ in {
       systemd.targets = let
         # Create some targets which can be depended on to be "active" after cert renewals
         finishedTargets = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-finished-${cert}" {
-          wantedBy = [ "default.target" ];
+          autoStart = true;
           requires = [ "acme-${cert}.service" ];
           after = [ "acme-${cert}.service" ];
         }) certConfigs;

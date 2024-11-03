@@ -40,7 +40,7 @@ in
 
 
       systemd.services.setupOathSnakeoilFile = {
-        wantedBy = [ "default.target" ];
+        autoStart = true;
         before = [ "default.target" ];
         unitConfig = {
           type = "oneshot";

@@ -34,7 +34,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     # Wait for the PEMs to arrive
     systemd.services.systemd-journal-upload.wantedBy = lib.mkForce [];
     systemd.paths.systemd-journal-upload = {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       # This file must be copied last
       pathConfig.PathExists = [ "/run/secrets/ca.cert.pem" ];
     };

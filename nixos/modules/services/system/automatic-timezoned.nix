@@ -55,18 +55,19 @@ in
       automatic-timezoned = {
         description = "Automatically update system timezone based on location";
         requires = [ "automatic-timezoned-geoclue-agent.service" ];
+        autoStart = true;
         after = [ "automatic-timezoned-geoclue-agent.service" ];
         serviceConfig = {
           Type = "exec";
           User = "automatic-timezoned";
           ExecStart = "${cfg.package}/bin/automatic-timezoned";
         };
-        wantedBy = [ "default.target" ];
       };
 
       automatic-timezoned-geoclue-agent = {
         description = "Geoclue agent for automatic-timezoned";
         requires = [ "geoclue.service" ];
+        autoStart = true;
         after = [ "geoclue.service" ];
         serviceConfig = {
           Type = "exec";
@@ -75,7 +76,6 @@ in
           Restart = "on-failure";
           PrivateTmp = true;
         };
-        wantedBy = [ "default.target" ];
       };
 
     };

@@ -243,7 +243,7 @@ in
 
     services.dbus.packages = [ gdm ];
 
-    systemd.user.services.dbus.wantedBy = [ "default.target" ];
+    systemd.user.services.dbus.autoStart = true;
 
     programs.dconf.profiles.gdm.databases = lib.optionals (!cfg.gdm.autoSuspend) [{
       settings."org/gnome/settings-daemon/plugins/power" = {

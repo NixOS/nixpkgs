@@ -12,7 +12,7 @@ in {
   config = lib.mkIf cfg.enable {
     systemd.user.services.devmon = {
       description = "devmon automatic device mounting daemon";
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       path = [ pkgs.udevil pkgs.procps pkgs.udisks2 pkgs.which ];
       serviceConfig.ExecStart = "${pkgs.udevil}/bin/devmon";
     };

@@ -19,7 +19,7 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.user.services.playerctld = {
       description = "Playerctld daemon to track media player activity";
-      wantedBy = [ "default.target" ];
+      autoStart = true;
 
       serviceConfig = {
         Type = "exec";

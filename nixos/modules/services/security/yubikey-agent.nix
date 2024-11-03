@@ -39,7 +39,7 @@ in
     # yubikey-agent package
     systemd.user.services.yubikey-agent = mkIf (config.programs.gnupg.agent.pinentryPackage != null) {
       path = [ config.programs.gnupg.agent.pinentryPackage ];
-      wantedBy = [ "default.target" ];
+      autoStart = true;
     };
 
     # Yubikey-agent expects pcsd to be running in order to function.

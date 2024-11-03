@@ -57,7 +57,7 @@ in {
     };
 
     systemd.user.services.onedrive-launcher = {
-      wantedBy = [ "default.target" ];
+      autoStart = true;
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${onedriveLauncher}/bin/onedrive-launcher";
