@@ -5,7 +5,7 @@
 , dmenu
 }:
 
-python3Packages.buildPythonApplication rec{
+python3Packages.buildPythonApplication rec {
 
   pname = "dmenu-extended";
   version = "1.2.1";
