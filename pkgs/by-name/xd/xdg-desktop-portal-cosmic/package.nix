@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "xdg-desktop-portal-cosmic";
     rev = "epoch-${version}";
     hash = "sha256-IlMcgzhli61QWjdovj5BpOxOebV3RytBeHPhxzWNXqg=";
   };
