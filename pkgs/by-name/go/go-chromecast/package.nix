@@ -1,25 +1,24 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   stdenvNoCC,
   versionCheckHook,
 }:
 
-# "go test" fails with go 1.23
-buildGo122Module rec {
+buildGoModule rec {
   pname = "go-chromecast";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kzo8iWj4mtnX1Jxm2sLsnmEOmpzScxWHZ/sLYYm3vQI=";
+    hash = "sha256-R1VGgustsKRoVZFiH2wuYRRSOolWIYq33H0DyQXHDvg=";
   };
 
-  vendorHash = "sha256-cEUlCR/xtPJJSWplV1COwV6UfzSmVArF4V0pJRk+/Og=";
+  vendorHash = "sha256-EI37KPdNxPXdgmxvawTiRQ516dLxt5o0iYvGcAHXdUw=";
 
   CGO_ENABLED = 0;
 
