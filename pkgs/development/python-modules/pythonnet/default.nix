@@ -1,6 +1,6 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
   pycparser,
@@ -14,16 +14,19 @@
 let
   pname = "pythonnet";
   version = "3.0.4";
-  src = fetchPypi {
-    pname = "pythonnet";
-    inherit version;
-    hash = "sha256-yS+8/d0WV19+daZDMCJxZYtgbYVX338BMqwkDgPMOo8=";
+  src = fetchFromGitHub {
+    owner = "pythonnet";
+    repo = "pythonnet";
+    rev = "v${version}";
+    hash = "sha256-QdgcBFQDFxmFxuXsDlHcu+L/VWw2aKfyWDqPrawyhOs=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
   dotnet-build = buildDotnetModule {
     inherit pname version src;
+    projectFile = "src/runtime/Python.Runtime.csproj";
+    testProjectFile = "src/testing/Python.Test.csproj";
     nugetDeps = ./deps.nix;
   };
 in
@@ -58,14 +61,6 @@ buildPythonPackage {
     pytestCheckHook
     psutil # needed for memory leak tests
   ];
-
-  # Perform dotnet restore based on the nuget-source
-  preConfigure = ''
-    dotnet restore \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "$nugetSource"
-  '';
 
   # Rerun this when updating to refresh Nuget dependencies
   passthru.fetch-deps = dotnet-build.fetch-deps;
