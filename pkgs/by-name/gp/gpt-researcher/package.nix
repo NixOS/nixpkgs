@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpt-researcher";
-  version = "3.0.7";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "assafelovic";
     repo = "gpt-researcher";
     rev = "v${version}";
-    hash = "sha256-XCSZrN8pmiNg14umqOAR0zRHvVdQAN/symeYIlDOB4c=";
+    hash = "sha256-gVheOn0c+ua9KY3RWI7tgZ4+oobwR+Mh/HDd014l8Po=";
   };
 
   build-system = [
