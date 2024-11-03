@@ -6,6 +6,7 @@
   cppunit,
   curl,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   libsigcxx,
   libtool,
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
   };
+
+  patches = [
+    # fix: use fsync for osx builds
+    (fetchpatch {
+      url = "https://github.com/rakshasa/rtorrent/commit/5ce84929e44fbe3f8d6cf142e3133f43afa4071f.patch";
+      hash = "sha256-bFDxbpkTZ6nIUT2zMxKMgV94vWlVNzBbIbhx4Bpr8gw=";
+    })
+  ];
 
   outputs = [
     "out"
