@@ -2756,8 +2756,6 @@ with pkgs;
     boost = boost185;
   };
 
-  mucommander = callPackage ../applications/file-managers/mucommander { };
-
   nnn = callPackage ../applications/file-managers/nnn { };
 
   noice = callPackage ../applications/file-managers/noice { };
