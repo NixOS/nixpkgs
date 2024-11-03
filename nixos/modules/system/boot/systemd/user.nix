@@ -79,7 +79,7 @@ in {
 
     systemd.user.services = mkOption {
       default = {};
-      type = systemdUtils.types.services;
+      type = systemdUtils.types.userServices;
       description = "Definition of systemd per-user service units.";
     };
 

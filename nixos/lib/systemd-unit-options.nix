@@ -488,13 +488,34 @@ in rec {
 
   };
 
-  stage2ServiceOptions = {
+  stage2ServiceOptionsUser = {
+    config.defaultAutostartTarget = "default.target";
+  };
+
+  stage2ServiceOptions = {config, ...}: {
     imports = [
       stage2CommonUnitOptions
       serviceOptions
     ];
 
+    config.wantedBy = lib.mkIf config.autoStart [ config.defaultAutostartTarget ];
+
     options = {
+      autoStart = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to start the service on boot
+        '';
+      };
+      defaultAutostartTarget = mkOption {
+        type = types.str;
+        default = "multi-user.target";
+        internal = true;
+        description = ''
+          What is the name of the target that should be passed to wantedBy if autoStart is enabled.
+        '';
+      };
       restartIfChanged = mkOption {
         type = types.bool;
         default = true;

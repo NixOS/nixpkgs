@@ -30,6 +30,7 @@ let
     stage2MountOptions
     stage2PathOptions
     stage2ServiceOptions
+    stage2ServiceOptionsUser
     stage2SliceOptions
     stage2SocketOptions
     stage2TimerOptions
@@ -111,6 +112,7 @@ in
     };
   }));
 
+  userServices = attrsOf (submodule [ stage2ServiceOptions stage2ServiceOptionsUser unitConfig stage2ServiceConfig ]);
   services = attrsOf (submodule [ stage2ServiceOptions unitConfig stage2ServiceConfig ]);
   initrdServices = attrsOf (submodule [ stage1ServiceOptions unitConfig stage1ServiceConfig ]);
 
