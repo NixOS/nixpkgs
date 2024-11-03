@@ -125,8 +125,9 @@ python3Packages.buildPythonApplication {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }" \
-      "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath extra-libs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}" \
+      "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath extra-libs }" \
+      "--set-default" "OPENMW_VERSION_FILE" "${openmw}/share/games/openmw/resources/version")
   '';
 
   meta = with lib; {
