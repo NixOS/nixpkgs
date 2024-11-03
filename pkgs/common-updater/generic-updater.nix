@@ -42,7 +42,7 @@ let
     ignored_versions="$7"
     rev_prefix="$8"
     odd_unstable="$9"
-    patchlevel_unstable="$${10}"
+    patchlevel_unstable="''${10}"
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
