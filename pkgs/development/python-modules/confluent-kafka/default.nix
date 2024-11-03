@@ -13,12 +13,13 @@
   rdkafka,
   requests,
   requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
   version = "2.5.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,18 +32,24 @@ buildPythonPackage rec {
 
   buildInputs = [ rdkafka ];
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     avro = [
       avro
       fastavro
+      requests
     ];
     json = [
       jsonschema
       pyrsistent
+      requests
     ];
-    protobuf = [ protobuf ];
+    protobuf = [
+      protobuf
+      requests
+    ];
+    schema-registry = [ requests ];
   };
 
   nativeCheckInputs = [

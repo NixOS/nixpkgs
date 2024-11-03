@@ -28,6 +28,7 @@ telegram-desktop.overrideAttrs (old: rec {
   ];
 
   cmakeFlags = (old.cmakeFlags or []) ++ [
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
     (lib.cmakeBool "disable_autoupdate" true)
   ];
 
