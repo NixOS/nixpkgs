@@ -1,36 +1,37 @@
-{ config
-, lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, macdylibbundler
-, makeWrapper
-, darwin
-, codec2
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, lpcnetfreedv
-, portaudio
-, speexdsp
-, hamlib_4
-, wxGTK32
-, sioclient
-, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
-, AppKit
-, AVFoundation
-, Cocoa
-, CoreMedia
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  macdylibbundler,
+  makeWrapper,
+  darwin,
+  codec2,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  lpcnetfreedv,
+  portaudio,
+  speexdsp,
+  hamlib_4,
+  wxGTK32,
+  sioclient,
+  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  AppKit,
+  AVFoundation,
+  Cocoa,
+  CoreMedia,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
   version = "1.9.9.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
@@ -42,30 +43,34 @@ stdenv.mkDerivation rec {
     sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    macdylibbundler
-    makeWrapper
-    darwin.autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      macdylibbundler
+      makeWrapper
+      darwin.autoSignDarwinBinariesHook
+    ];
 
-  buildInputs = [
-    codec2
-    libsamplerate
-    libsndfile
-    lpcnetfreedv
-    speexdsp
-    hamlib_4
-    wxGTK32
-    sioclient
-  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    AVFoundation
-    Cocoa
-    CoreMedia
-  ];
+  buildInputs =
+    [
+      codec2
+      libsamplerate
+      libsndfile
+      lpcnetfreedv
+      speexdsp
+      hamlib_4
+      wxGTK32
+      sioclient
+    ]
+    ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      AVFoundation
+      Cocoa
+      CoreMedia
+    ];
 
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
@@ -74,9 +79,11 @@ stdenv.mkDerivation rec {
     "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-DAPPLE_OLD_XCODE"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      "-DAPPLE_OLD_XCODE"
+    ]
+  );
 
   doCheck = true;
 
@@ -86,12 +93,15 @@ stdenv.mkDerivation rec {
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ mvs wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
+      mvs
+      wegank
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };
-}
+})
