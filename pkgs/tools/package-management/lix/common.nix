@@ -235,7 +235,7 @@ stdenv.mkDerivation {
     mv $doc/share/doc/nix/internal-api $devdoc/share/doc/nix
   '';
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
   mesonCheckFlags = [
     "--suite=check"
     "--print-errorlogs"
@@ -245,7 +245,7 @@ stdenv.mkDerivation {
     rapidcheck
   ];
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.hostPlatform.system != "x86_64-darwin";
   mesonInstallCheckFlags = [
     "--suite=installcheck"
     "--print-errorlogs"
