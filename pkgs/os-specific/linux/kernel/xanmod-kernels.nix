@@ -18,8 +18,8 @@ let
     };
 
     main = {
-      version = "6.11.5";
-      hash = "sha256-G4u0LQtIeJ0dNAmjNH0OKihmbkivYVbrbXDB9vPw2xI=";
+      version = "6.11.6";
+      hash = "sha256-t0kuKK2f8D1vxoX5dJnodTu3aBmzCc8F7tHwVAUHP1M=";
     };
   };
 
