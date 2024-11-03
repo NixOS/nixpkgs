@@ -1440,7 +1440,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  bsnes-hd = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/bsnes-hd { };
+  bsnes-hd = callPackage ../applications/emulators/bsnes/bsnes-hd { };
 
   ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
 
