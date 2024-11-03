@@ -4,8 +4,8 @@
   stdenv,
   unzip,
   ant,
-  javac,
-  jvm,
+  jre8,
+  jre,
 }:
 
 let
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     ant
-    javac
-    jvm
+    jre8
+    jre
   ];
 
   buildPhase = "ant jar";

@@ -10955,11 +10955,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rhino = callPackage ../development/libraries/java/rhino {
-    javac = jdk8;
-    jvm = jre8;
-  };
-
   rocksdb_8_11 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.11.4";
