@@ -1,48 +1,44 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , callPackage
 , pkg-config
 , cmake
 , ninja
+, clang
+, lld
 , python3
-, gobject-introspection
-, wrapGAppsHook3
 , wrapQtAppsHook
-, extra-cmake-modules
+, tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; }
 , qtbase
-, qtwayland
-, qtsvg
 , qtimageformats
-, gtk3
-, glib-networking
-, boost
-, fmt
-, libdbusmenu
+, qtsvg
+, qtwayland
+, kcoreaddons
 , lz4
 , xxHash
 , ffmpeg
+, protobuf
 , openalSoft
 , minizip
 , libopus
 , alsa-lib
 , libpulseaudio
-, pipewire
 , range-v3
 , tl-expected
 , hunspell
-, webkitgtk_6_0
+, gobject-introspection
 , jemalloc
 , rnnoise
-, protobuf
-, abseil-cpp
-, xdg-utils
 , microsoft-gsl
-, rlottie
+, boost
 , ada
-, stdenv
-, darwin
-, lld
+, withWebKitGTK ? true
+, wrapGAppsHook3
+, glib-networking
+, webkitgtk_4_1
 , libicns
+, darwin
 , nix-update-script
 }:
 
@@ -53,14 +49,6 @@
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-let
-  tg_owt = callPackage ./tg_owt.nix {
-    inherit stdenv;
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "20";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
   version = "5.6.3";
@@ -75,10 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./macos.patch
-    # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
-    # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
-    # see https://github.com/NixOS/nixpkgs/issues/218370
-    ./scheme.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -88,16 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+      --replace-fail '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
-  # We want to run wrapProgram manually (with additional parameters)
+  # Avoid double-wrapping
   dontWrapGApps = true;
-  dontWrapQtApps = true;
+
+  # Wrapping the inside of the app bundles, avoiding double-wrapping
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     pkg-config
@@ -106,18 +93,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # to build bundled libdispatch
+    clang
     gobject-introspection
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
     wrapGAppsHook3
-    extra-cmake-modules
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
   ];
 
   buildInputs = [
     qtbase
-    qtsvg
     qtimageformats
-    boost
+    qtsvg
     lz4
     xxHash
     ffmpeg
@@ -127,23 +115,21 @@ stdenv.mkDerivation (finalAttrs: {
     range-v3
     tl-expected
     rnnoise
-    protobuf
     tg_owt
     microsoft-gsl
-    rlottie
+    boost
     ada
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
     qtwayland
-    gtk3
-    glib-networking
-    fmt
-    libdbusmenu
+    kcoreaddons
     alsa-lib
     libpulseaudio
-    pipewire
     hunspell
-    webkitgtk_6_0
     jemalloc
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
+    glib-networking
+    webkitgtk_4_1
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
@@ -185,18 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
-    # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
-    (lib.cmakeBool "DESKTOP_APP_USE_PACKAGED_FONTS" false)
   ];
-
-  preBuild = ''
-    # for cppgir to locate gir files
-    export GI_GIR_PATH="$XDG_DATA_DIRS"
-  '';
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
@@ -204,14 +182,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # This is necessary to run Telegram in a pure environment.
-    # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withWebKitGTK) ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/JacKeTUs/universal-pidff";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      danerieber
+      computerdane
       racci
     ];
     platforms = lib.platforms.linux;
