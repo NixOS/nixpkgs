@@ -1474,6 +1474,7 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
+  ./services/web-apps/fider.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
   ./services/web-apps/firefly-iii-data-importer.nix

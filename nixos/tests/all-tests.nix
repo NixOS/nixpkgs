@@ -336,6 +336,7 @@ in {
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
   ferretdb = handleTest ./ferretdb.nix {};
+  fider = runTest ./fider.nix;
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = handleTest ./firefly-iii.nix {};
