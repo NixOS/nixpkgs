@@ -5027,8 +5027,6 @@ with pkgs;
 
   gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
 
-  go-chromecast = callPackage ../applications/video/go-chromecast { };
-
   go-containerregistry = callPackage ../development/tools/go-containerregistry { };
   inherit (go-containerregistry) crane gcrane;
 
@@ -6938,8 +6936,6 @@ with pkgs;
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
-  docear = callPackage ../applications/office/docear { };
-
   dockbarx = callPackage ../applications/misc/dockbarx { };
 
   dog = callPackage ../tools/system/dog { };
@@ -7327,8 +7323,6 @@ with pkgs;
   evcc = callPackage ../servers/home-automation/evcc { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
-
-  evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };
 
   evtest = callPackage ../applications/misc/evtest { };
 
@@ -15017,34 +15011,11 @@ with pkgs;
 
   openspin = callPackage ../development/compilers/openspin { };
 
-  oraclejdk = jdkdistro true false;
-
-  oraclejdk8 = oraclejdk8distro true false;
-
-  oraclejre = lowPrio (jdkdistro false false);
-
-  oraclejre8 = lowPrio (oraclejdk8distro false false);
-
-  jrePlugin = jre8Plugin;
-
-  jre8Plugin = lowPrio (oraclejdk8distro false true);
-
-  jdkdistro = oraclejdk8distro;
-
-  oraclejdk8distro = installjdk: pluginSupport:
-    (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix {
-      inherit installjdk pluginSupport;
-    });
-
-  oraclejdk11 = callPackage ../development/compilers/oraclejdk/jdk11-linux.nix { };
-
   jasmin = callPackage ../development/compilers/jasmin { };
 
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper { };
 
   jna = callPackage ../development/java-modules/jna { };
-
-  javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
   juniper = callPackage ../development/compilers/juniper { };
 
@@ -15712,10 +15683,6 @@ with pkgs;
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
   spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
-
-  sqldeveloper = callPackage ../development/tools/database/sqldeveloper {
-    jdk = oraclejdk;
-  };
 
   sqlfluff = callPackage ../development/tools/database/sqlfluff { };
 
@@ -21915,10 +21882,6 @@ with pkgs;
 
   microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
-  microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
-  microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
-  microsoft-edge-dev = callPackage (import ../applications/networking/browsers/microsoft-edge).dev { };
-
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
@@ -23840,17 +23803,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_4_8 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.8"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_9 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.9"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_9;
+  sbcl_2_4_10 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.10"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_10;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -23979,11 +23942,6 @@ with pkgs;
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
-
-  atlassian-bamboo = callPackage ../servers/atlassian/bamboo.nix { };
-  atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
-  atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
-  atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
@@ -30273,7 +30231,7 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
+  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
@@ -32187,8 +32145,6 @@ with pkgs;
 
   shipments = callPackage ../applications/misc/shipments { };
 
-  shortwave = callPackage ../applications/audio/shortwave { };
-
   shotgun = callPackage ../tools/graphics/shotgun { };
 
   shot-scraper = callPackage ../tools/graphics/shot-scraper { };
@@ -32588,7 +32544,7 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
+  telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
@@ -33499,8 +33455,6 @@ with pkgs;
   xfig = callPackage ../applications/graphics/xfig { };
 
   xfractint = callPackage ../applications/graphics/xfractint { };
-
-  xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
   xmind = callPackage ../applications/misc/xmind { };
 
@@ -37841,7 +37795,7 @@ with pkgs;
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vips = callPackage ../tools/graphics/vips {
+  vips = callPackage ../by-name/vi/vips/package.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
 

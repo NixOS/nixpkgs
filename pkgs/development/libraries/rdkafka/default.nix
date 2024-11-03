@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-2AURPvhpgdIm034KEMm7Tmf8Zx/XER76aT6SiINs6wg=";
+    sha256 = "sha256-QjmVu9d/wlLjt5WWyZi+WEWibfDUynHGvTwLbH36T84=";
   };
 
   nativeBuildInputs = [ pkg-config python3 which ];

@@ -137,8 +137,8 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && !xevd.meta.broken # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && !xeve.meta.broken # MPEG-5 EVC encoding
+, withXevd ? withFullDeps && lib.versionAtLeast version "7.1" && !xevd.meta.broken # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7.1" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists

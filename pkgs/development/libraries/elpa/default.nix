@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
-, perl, mpi, blas, lapack, scalapack, openssh
+, perl, mpi, blas, lapack, scalapack
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !enableCuda;
 
-  nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   preCheck = ''
     #patchShebangs ./
 

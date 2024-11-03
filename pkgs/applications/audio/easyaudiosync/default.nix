@@ -15,18 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "easyaudiosync";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "EasyAudioSync";
     rev = "v${version}";
-    hash = "sha256-w98tj9BuixPhuDgwn74EYY0gvKH6kbfQmtg030RWRU0=";
+    hash = "sha256-UCOL4DzynKjNDvS0HZ4/K+Wn5lOqHZ0bNop0zqJl5kc=";
   };
 
   patches = [
     ./0001-fix-project-name.patch
-    ./0002-fix-qt67-deprecated-methods.patch
     ./0003-fix-darwin-app.patch
     ./0004-force-qt6.patch
   ];

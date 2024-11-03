@@ -49,6 +49,10 @@ stdenv.mkDerivation {
     cmakeFlagsArray+=("-DLOCAL_RAPIDJSON_LIB=OFF" "-DLOCAL_GTEST_LIB=OFF" "-DEXTRA_DATA_DIR=$out/share/ja2")
   '';
 
+  # error: 'uint64_t' does not name a type
+  # gcc13 and above don't automatically include cstdint
+  env.CXXFLAGS = "-include cstdint";
+
   doInstallCheck = true;
   installCheckPhase = ''
     HOME=/tmp $out/bin/ja2 -unittests
