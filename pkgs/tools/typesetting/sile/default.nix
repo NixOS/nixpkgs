@@ -1,20 +1,27 @@
 {
-  lib,
-  stdenv,
+  # Nix specific packaging and flake tooling
   darwin,
   fetchurl,
+  gitMinimal,
+  lib,
+  makeFontsConf,
   makeWrapper,
+  runCommand,
+  stdenv,
+
+  # Upstream build time dependencies
   pkg-config,
   poppler_utils,
-  gitMinimal,
+
+  # Upstream run time dependencies
+  fontconfig,
+  gentium,
   harfbuzz,
   icu,
-  fontconfig,
-  lua,
   libiconv,
-  makeFontsConf,
-  gentium,
-  runCommand,
+  lua,
+
+  # This package
   sile,
 }:
 
@@ -49,8 +56,8 @@ let
       compat53
     ]
   );
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
   version = "0.14.17";
@@ -60,43 +67,24 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
   };
 
+  nativeBuildInputs = [
+    gitMinimal
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    fontconfig
+    harfbuzz
+    icu
+    libiconv
+    luaEnv
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit;
+
   configureFlags = [
     "--with-system-luarocks"
     "--with-manual"
   ];
-
-  nativeBuildInputs = [
-    gitMinimal
-    pkg-config
-    makeWrapper
-  ];
-  buildInputs = [
-    luaEnv
-    harfbuzz
-    icu
-    fontconfig
-    libiconv
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit;
-  passthru = {
-    # So it will be easier to inspect this environment, in comparison to others
-    inherit luaEnv;
-    # Copied from Makefile.am
-    tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
-      runCommand "sile-test"
-        {
-          nativeBuildInputs = [
-            poppler_utils
-            sile
-          ];
-          inherit (finalAttrs) FONTCONFIG_FILE;
-        }
-        ''
-          output=$(mktemp -t selfcheck-XXXXXX.pdf)
-          echo "<sile>foo</sile>" | sile -o $output -
-          pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
-        ''
-    );
-  };
 
   postPatch =
     ''
@@ -121,6 +109,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+    # Copied from Makefile.am
+    tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
+      runCommand "sile-test"
+        {
+          nativeBuildInputs = [
+            poppler_utils
+            sile
+          ];
+          inherit (finalAttrs) FONTCONFIG_FILE;
+        }
+        ''
+          output=$(mktemp -t selfcheck-XXXXXX.pdf)
+          echo "<sile>foo</sile>" | sile -o $output -
+          pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
+        ''
+    );
+  };
+
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
@@ -138,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
+    mainProgram = "sile";
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -157,6 +167,5 @@ stdenv.mkDerivation (finalAttrs: {
       alerque
     ];
     license = licenses.mit;
-    mainProgram = "sile";
   };
 })
