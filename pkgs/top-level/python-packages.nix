@@ -13920,6 +13920,10 @@ self: super: with self; {
 
   refoss-ha = callPackage ../development/python-modules/refoss-ha { };
 
+  refurb = toPythonModule (pkgs.refurb.override {
+    python3Packages = self;
+  });
+
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
 
   regex = callPackage ../development/python-modules/regex { };
