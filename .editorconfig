@@ -39,6 +39,15 @@ indent_size = 2
 [*.{pl,pm,py,sh}]
 indent_size = 4
 
+# Picked up by shfmt, too.
+[*.sh]
+indent_style = space
+indent_size = 4
+shell_variant = bash
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+
 # Match gemfiles, set indent to spaces with width of two
 [Gemfile]
 indent_size = 2

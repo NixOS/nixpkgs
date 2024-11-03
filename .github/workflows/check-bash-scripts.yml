@@ -1,6 +1,6 @@
 # This file was copied from check-nix-format.yml for the logic to apply
 # this only to those files which are already conforming on the target branch.
-name: Check that shell scripts are shellcheck-ed
+name: Check that shell scripts are formatted and shellcheck-ed
 
 on:
   pull_request_target:
@@ -28,9 +28,9 @@ jobs:
           git worktree add "$base" "$baseRev"
           echo "baseRev=$baseRev" >> "$GITHUB_ENV"
           echo "base=$base" >> "$GITHUB_ENV"
-      - name: Get Nixpkgs revision for shellcheck
+      - name: Get Nixpkgs revision for shellcheck and shfmt
         run: |
-          # Pin to a commit from nixpkgs-unstable to avoid e.g. building shellcheck
+          # Pin to a commit from nixpkgs-unstable to avoid e.g. building shellcheck or shfmt
           # from staging.
           # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
@@ -40,10 +40,11 @@ jobs:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
           nix_path: nixpkgs=${{ env.url }}
-      - name: Install shellcheck
-        run: "nix-env -f '<nixpkgs>' -iAP shellcheck"
+      - name: Install shellcheck and shfmt
+        run: "nix-env -f '<nixpkgs>' -iAP shellcheck shfmt"
       - name: Check that shell scripts are conforming
         run: |
+          shfmtFiles=()
           shellcheckFiles=()
 
           # TODO: Make this more parallel
@@ -70,6 +71,13 @@ jobs:
                 continue
             esac
 
+            # Ignore files that weren't already formatted
+            if [[ -n "$source" ]] && ! shfmt --diff ${{ env.base }}/"$source" >/dev/null; then
+              echo "Ignoring file $file because it's not formatted in the base commit"
+            elif ! shfmt --diff "$dest"; then
+              shfmtFiles+=("$dest")
+            fi
+
             # Ignore files that weren't already shellcheck-ed
             if [[ -n "$source" ]] && ! shellcheck ${{ env.base }}/"$source" >/dev/null; then
               echo "Ignoring file $file because it's not shellcheck-ed in the base commit"
@@ -78,6 +86,13 @@ jobs:
             fi
           done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.sh')
 
+          if (( "${#shfmtFiles[@]}" > 0 )); then
+            echo "Some new/changed shell scripts are not properly formatted"
+            echo "Please go to the Nixpkgs root directory, run \`nix-shell\`, then:"
+            echo "shfmt -w ${shfmtFiles[*]@Q}"
+            echo
+          fi
+
           if (( "${#shellcheckFiles[@]}" > 0 )); then
             echo "Some new/changed shell scripts are not properly shellcheck-ed"
             echo "Please go to the Nixpkgs root directory, run \`nix-shell\`, then:"
@@ -85,6 +100,6 @@ jobs:
             echo
           fi
 
-          if (( "${#shellcheckFiles[@]}" > 0 ))
+          if (( "${#shfmtFiles[@]}" + "${#shellcheckFiles[@]}" > 0 ))
             exit 1
           fi
