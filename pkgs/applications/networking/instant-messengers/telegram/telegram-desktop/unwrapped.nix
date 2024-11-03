@@ -16,7 +16,7 @@
   kcoreaddons,
   lz4,
   xxHash,
-  ffmpeg,
+  ffmpeg_6,
   protobuf,
   openalSoft,
   minizip,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtsvg
       lz4
       xxHash
-      ffmpeg
+      ffmpeg_6
       openalSoft
       minizip
       libopus
