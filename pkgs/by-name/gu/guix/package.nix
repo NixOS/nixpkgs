@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  fetchDebianPatch,
   autoreconfHook,
   disarchive,
   git,
@@ -57,9 +58,19 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=ff1251de0bc327ec478fc66a562430fbf35aef42";
       hash = "sha256-f4KWDVrvO/oI+4SCUHU5GandkGtHrlaM1BWygM/Qlao=";
     })
-    # manual port of build user takeover remediation commit
     # see https://guix.gnu.org/en/blog/2024/build-user-takeover-vulnerability
-    ./guix-build-user-takeover-fix.patch
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "8";
+      patch = "security/0101-daemon-Sanitize-failed-build-outputs-prior-to-exposi.patch";
+      hash = "sha256-cbra/+K8+xHUJrCKRgzJCuhMBpzCSjgjosKAkJx7QIo=";
+    })
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "8";
+      patch = "security/0102-daemon-Sanitize-successful-build-outputs-prior-to-ex.patch";
+      hash = "sha256-mOnlYtpIuYL+kDvSNuXuoDLJP03AA9aI2ALhap+0NOM=";
+    })
   ];
 
   postPatch = ''
