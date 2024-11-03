@@ -1,22 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, callPackage
-, libsForQt5
-, yasm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  yasm,
 }:
 
 let
+  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
   version = "1.4.9";
-in
-(libsForQt5.callPackage ../telegram-desktop/default.nix {
-  inherit stdenv;
-
-  tg_owt = (callPackage ../telegram-desktop/tg_owt.nix {
-    # tg_owt should use the same compiler
-    inherit stdenv;
-  }).overrideAttrs(oldAttrs: {
+  tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
     version = "0-unstable-2024-06-15";
 
     src = fetchFromGitHub {
@@ -27,7 +21,7 @@ in
       fetchSubmodules = true;
     };
 
-    patches = (oldAttrs.patches or []) ++ [
+    patches = (oldAttrs.patches or [ ]) ++ [
       (fetchpatch {
         url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
         decode = "base64 -d";
@@ -39,42 +33,44 @@ in
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
   });
-
-  withWebKitGTK = false;
-}).overrideAttrs {
+in
+telegram-desktop.override {
   pname = "kotatogram-desktop";
-  version = "${version}-unstable-2024-09-27";
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+    pname = "kotatogram-desktop-unwrapped";
+    version = "${version}-unstable-2024-09-27";
 
-  src = fetchFromGitHub {
-    owner = "kotatogram";
-    repo = "kotatogram-desktop";
-    rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
-    hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "kotatogram";
+      repo = "kotatogram-desktop";
+      rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
+      hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
+      fetchSubmodules = true;
+    };
 
-  patches = [
-    ./macos-qt5.patch
-    (fetchpatch {
-      url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
-      stripLen = 1;
-      extraPrefix = "cmake/external/glib/cppgir/";
-      hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
-    })
-  ];
+    patches = [
+      ./macos-qt5.patch
+      (fetchpatch {
+        url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
+        stripLen = 1;
+        extraPrefix = "cmake/external/glib/cppgir/";
+        hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
+      })
+    ];
 
-  meta = with lib; {
-    description = "Kotatogram – experimental Telegram Desktop fork";
-    longDescription = ''
-      Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
+    meta = with lib; {
+      description = "Kotatogram – experimental Telegram Desktop fork";
+      longDescription = ''
+        Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 
-      It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
-    '';
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
-    maintainers = with maintainers; [ ilya-fedin ];
-    mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+        It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
+      '';
+      license = licenses.gpl3Only;
+      platforms = platforms.all;
+      homepage = "https://kotatogram.github.io";
+      changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
+      maintainers = with maintainers; [ ilya-fedin ];
+      mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+    };
   };
 }
