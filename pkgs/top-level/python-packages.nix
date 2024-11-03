@@ -2500,6 +2500,10 @@ self: super: with self; {
 
   codepy = callPackage ../development/python-modules/codepy { };
 
+  codespell = toPythonModule (pkgs.codespell.override {
+    python3Packages = self;
+  });
+
   cogapp = callPackage ../development/python-modules/cogapp { };
 
   coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
