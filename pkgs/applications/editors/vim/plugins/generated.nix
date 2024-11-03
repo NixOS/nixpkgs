@@ -18791,4 +18791,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/Chaitanyabsprip/fastaction.nvim/";
   };
+
+  cmp-vimtex = buildVimPlugin {
+    pname = "cmp-vimtex";
+    version = "2024-08-06";
+    src = fetchFromGitHub {
+      owner = "micangl";
+      repo = "cmp-vimtex";
+      rev = "5283bf9108ef33d41e704027b9ef22437ce7a15b";
+      sha256 = "pD2dPdpyn5A/uwonDdAxCX138yBeDqbXDdlG/IKjVTU=";
+    };
+    meta.homepage = "https://github.com/micangl/cmp-vimtex/";
+  };
 }
