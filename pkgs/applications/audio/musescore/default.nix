@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -88,12 +89,22 @@ in stdenv'.mkDerivation (finalAttrs: {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
     wrapQtAppsHook
     cmake
     qttools
     pkg-config
     ninja
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
   ];
 
   buildInputs = [
