@@ -25002,8 +25002,6 @@ with pkgs;
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
-  tailspin = callPackage ../tools/misc/tailspin { };
-
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
