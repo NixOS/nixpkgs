@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lampros ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lampros ];
     mainProgram = "matugen";
   };
 }
