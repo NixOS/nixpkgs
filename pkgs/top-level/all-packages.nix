@@ -29305,6 +29305,13 @@ with pkgs;
     };
   };
 
+  freedv_pre = freedv.overrideAttrs (prevAttrs: {
+    version = "2.0.0-20241018";
+    src = prevAttrs.src.override {
+      hash = "sha256-ZY5k30iQ/bnyoDBiwlXPZrXkspGYvimtzwenFzQr1Nk=";
+    };
+  });
+
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
