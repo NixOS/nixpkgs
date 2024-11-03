@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -49,22 +48,14 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.1";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eLtpLgXSc8L5y1Mg3s1wrxr09+/vBxNqJEtl9IoKYSM=";
+    sha256 = "sha256-bHpPhav9JBPkwJA9o+IFHRWbvxWnGkD1wHBHS4XJ/YE=";
   };
-  patches = [
-    # https://github.com/musescore/MuseScore/pull/24326
-    (fetchpatch {
-      name = "fix-menubar-with-qt6.5+.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
-      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
@@ -82,6 +73,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   qtWrapperArgs = [
