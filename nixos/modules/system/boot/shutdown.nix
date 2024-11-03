@@ -14,6 +14,7 @@ with lib;
       unitConfig = {
         DefaultDependencies = false;
         ConditionPathExists = "/dev/rtc";
+        ConditionPathIsReadWrite = "/etc/";
       };
 
       serviceConfig = {
