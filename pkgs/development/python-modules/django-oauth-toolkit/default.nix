@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 
   # propagates
   django,
@@ -18,28 +19,28 @@
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "2.4.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "django-oauth-toolkit";
     rev = "refs/tags/${version}";
-    hash = "sha256-nfLjjVp+6OsjFdJHUZ2gzZic/E/sCklj+YeFyb/EZdw=";
+    hash = "sha256-Ya0KlX+vtLXN2Fgk0Gv7KemJCUTwkaH+4GQA1ByUlBY=";
   };
 
   postPatch = ''
-    sed -i '/cov/d' tox.ini
+    sed -i '/cov/d' pyproject.toml
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     jwcrypto
     oauthlib
     requests
   ];
-
-  pythonRelaxDeps = [ "django" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
@@ -58,10 +59,11 @@ buildPythonPackage rec {
     "test_response_when_auth_server_response_return_404"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OAuth2 goodies for the Djangonauts";
     homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mmai ];
+    changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }
