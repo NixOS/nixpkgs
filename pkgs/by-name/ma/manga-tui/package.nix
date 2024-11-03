@@ -8,6 +8,7 @@
   sqlite,
   stdenv,
   darwin,
+  nix-update-script,
 }:
 let
   version = "0.4.0";
@@ -60,4 +61,6 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "manga-tui";
   };
+
+  passthru.updateScript = nix-update-script { };
 }
