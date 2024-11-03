@@ -1,7 +1,7 @@
 {
   lib,
-  aiohttp,
   aiohttp-retry,
+  aiohttp,
   aiounittest,
   buildPythonPackage,
   cryptography,
@@ -9,9 +9,10 @@
   fetchFromGitHub,
   mock,
   multidict,
-  pyngrok,
   pyjwt,
+  pyngrok,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pytz,
   requests,
@@ -43,9 +44,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  # aiounittest is not supported on 3.12
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = [
     aiounittest
     cryptography
@@ -61,11 +59,16 @@ buildPythonPackage rec {
     "test_set_user_agent_extensions"
   ];
 
-  disabledTestPaths = [
-    # Tests require API token
-    "tests/cluster/test_webhook.py"
-    "tests/cluster/test_cluster.py"
-  ];
+  disabledTestPaths =
+    [
+      # Tests require API token
+      "tests/cluster/test_webhook.py"
+      "tests/cluster/test_cluster.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      # aiounittest is not supported on Python 3.12
+      "tests/unit/http/test_async_http_client.py"
+    ];
 
   pythonImportsCheck = [ "twilio" ];
 
