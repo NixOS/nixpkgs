@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sipyco" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Simple Python Communications - used by the ARTIQ experimental control package";
     mainProgram = "sipyco_rpctool";
