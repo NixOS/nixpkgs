@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
   pythonOlder,
   altair,
@@ -26,15 +25,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-8lrmhCvwczqBpiQRCkPjmiYsJPHEFnZab/Azkh+i7ls=";
   };
-
-  patches = [
-    # https://github.com/vega/ipyvega/pull/507
-    (fetchpatch {
-      name = "replace-poetry-with-poetry-core.patch";
-      url = "https://github.com/vega/ipyvega/commit/1a5028ee5d54e24b9650b66685f54c42b72c7899.patch";
-      hash = "sha256-W8UmMit7DJGKCM9+/OSRLTuRvC0ZR42AP/b/frVEvsk=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
