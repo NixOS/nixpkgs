@@ -26189,7 +26189,7 @@ with pkgs;
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
 
   miniflux = callPackage ../servers/miniflux {
-    buildGoModule = buildGo122Module;
+    buildGoModule = buildGo123Module;
   };
 
   mir = callPackage ../servers/mir { };
