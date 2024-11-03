@@ -7847,6 +7847,8 @@ self: super: with self; {
 
   mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
 
+  manageprojects = callPackage ../development/python-modules/manageprojects { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   mando = callPackage ../development/python-modules/mando { };
