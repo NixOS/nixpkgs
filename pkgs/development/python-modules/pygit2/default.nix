@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.15.1";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4f6LhQU9lxMEPIHszHQTL55bYD8gnoBzPXlV6v0i650=";
+    hash = "sha256-eymmeWuqFfyJ1EOsjVF3VBHZseWwbcQNRYxWyFdrSKI=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
