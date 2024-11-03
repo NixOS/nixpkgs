@@ -181,7 +181,6 @@ runHook() {
     return 0
 }
 
-
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
@@ -201,7 +200,6 @@ runOneHook() {
 
     return "$ret"
 }
-
 
 # Run the named hook, either by calling the function with that name or
 # by evaluating the variable with that name. This allows convenient
@@ -228,7 +226,6 @@ _callImplicitHook() {
     # return trap is no good because it would affect nested returns.
 }
 
-
 # A function wrapper around ‘eval’ that ensures that ‘return’ inside
 # hooks exits the hook, not the caller. Also will only pass args if
 # command can take them
@@ -239,7 +236,6 @@ _eval() {
         eval "$1"
     fi
 }
-
 
 ######################################################################
 # Logging.
@@ -254,7 +250,6 @@ echoCmd() {
     printf ' %q' "$@"
     echo
 }
-
 
 ######################################################################
 # Error handling.
@@ -272,7 +267,7 @@ exitHandler() {
         echo "system time for all child processes ${buildTimes[3]}"
     fi
 
-    if (( "$exitCode" != 0 )); then
+    if (("$exitCode" != 0)); then
         runHook failureHook
 
         # If the builder had a non-zero exit code and
@@ -295,17 +290,14 @@ exitHandler() {
 
 trap "exitHandler" EXIT
 
-
 ######################################################################
 # Helper functions.
-
 
 addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
-    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
-          != *"${delimiter}${dir}${delimiter}"* ]]; then
+    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" != *"${delimiter}${dir}${delimiter}"* ]]; then
         export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
     fi
 }
@@ -337,18 +329,21 @@ prependToVar() {
         case "${type#* }" in
             -A*)
                 echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
-                return 1 ;;
+                return 1
+                ;;
             -a*)
-                useArray=true ;;
+                useArray=true
+                ;;
             *)
-                useArray=false ;;
+                useArray=false
+                ;;
         esac
     fi
 
     shift
 
     if $useArray; then
-        nameref=( "$@" ${nameref+"${nameref[@]}"} )
+        nameref=("$@" ${nameref+"${nameref[@]}"})
     else
         nameref="$* ${nameref-}"
     fi
@@ -370,18 +365,21 @@ appendToVar() {
         case "${type#* }" in
             -A*)
                 echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
-                return 1 ;;
+                return 1
+                ;;
             -a*)
-                useArray=true ;;
+                useArray=true
+                ;;
             *)
-                useArray=false ;;
+                useArray=false
+                ;;
         esac
     fi
 
     shift
 
     if $useArray; then
-        nameref=( ${nameref+"${nameref[@]}"} "$@" )
+        nameref=(${nameref+"${nameref[@]}"} "$@")
     else
         nameref="${nameref-} $*"
     fi
@@ -394,28 +392,31 @@ appendToVar() {
 concatTo() {
     local -
     set -o noglob
-    local -n targetref="$1"; shift
+    local -n targetref="$1"
+    shift
     local arg default name type
     for arg in "$@"; do
         IFS="=" read -r name default <<< "$arg"
         local -n nameref="$name"
         if [[ -z "${nameref[*]}" && -n "$default" ]]; then
-            targetref+=( "$default" )
+            targetref+=("$default")
         elif type=$(declare -p "$name" 2> /dev/null); then
             case "${type#* }" in
                 -A*)
                     echo "concatTo(): ERROR: trying to use concatTo on an associative array." >&2
-                    return 1 ;;
+                    return 1
+                    ;;
                 -a*)
-                    targetref+=( "${nameref[@]}" ) ;;
+                    targetref+=("${nameref[@]}")
+                    ;;
                 *)
                     if [[ "$name" = *"Array" ]]; then
                         nixErrorLog "concatTo(): $name is not declared as array, treating as a singleton. This will become an error in future"
                         # Reproduces https://github.com/NixOS/nixpkgs/pull/318614/files#diff-7c7ca80928136cfc73a02d5b28350bd900e331d6d304857053ffc9f7beaad576L359
-                        targetref+=( ${nameref+"${nameref[@]}"} )
+                        targetref+=(${nameref+"${nameref[@]}"})
                     else
                         # shellcheck disable=SC2206
-                        targetref+=( ${nameref-} )
+                        targetref+=(${nameref-})
                     fi
                     ;;
             esac
@@ -443,12 +444,15 @@ concatStringsSep() {
         case "${type#* }" in
             -A*)
                 echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
-                return 1 ;;
+                return 1
+                ;;
             -a*)
                 local IFS="$sep"
-                echo -n "${nameref[*]}" ;;
+                echo -n "${nameref[*]}"
+                ;;
             *)
-                echo -n "${nameref// /"${sep}"}" ;;
+                echo -n "${nameref// /"${sep}"}"
+                ;;
         esac
     fi
 }
@@ -489,15 +493,15 @@ isMachO() {
     # https://opensource.apple.com/source/lldb/lldb-310.2.36/examples/python/mach_o.py.auto.html
     if [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xcf") || "$magic" = $(echo -ne "\xcf\xfa\xed\xfe") ]]; then
         # MH_MAGIC_64 || MH_CIGAM_64
-        return 0;
+        return 0
     elif [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xce") || "$magic" = $(echo -ne "\xce\xfa\xed\xfe") ]]; then
         # MH_MAGIC || MH_CIGAM
-        return 0;
+        return 0
     elif [[ "$magic" = $(echo -ne "\xca\xfe\xba\xbe") || "$magic" = $(echo -ne "\xbe\xba\xfe\xca") ]]; then
         # FAT_MAGIC || FAT_CIGAM
-        return 0;
+        return 0
     else
-        return 1;
+        return 1
     fi
 }
 
@@ -515,12 +519,12 @@ isScript() {
 
 # printf unfortunately will print a trailing newline regardless
 printLines() {
-    (( "$#" > 0 )) || return 0
+    (("$#" > 0)) || return 0
     printf '%s\n' "$@"
 }
 
 printWords() {
-    (( "$#" > 0 )) || return 0
+    (("$#" > 0)) || return 0
     printf '%s ' "$@"
 }
 
@@ -535,7 +539,6 @@ if [[ -n $__structuredAttrs ]]; then
     done
 fi
 
-
 # Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools
 # to provide a deterministic substitute for the "current" time. Note that
 # 315532800 = 1980-01-01 12:00:00. We use this date because python's wheel
@@ -544,12 +547,10 @@ fi
 export SOURCE_DATE_EPOCH
 : "${SOURCE_DATE_EPOCH:=315532800}"
 
-
 # Wildcard expansions that don't match should expand to an empty list.
 # This ensures that, for instance, "for i in *; do ...; done" does the
 # right thing.
 shopt -s nullglob
-
 
 # Set up the initial path.
 PATH=
@@ -571,21 +572,21 @@ unset i
 nixWarnLog "initial path: $PATH"
 
 # Check that the pre-hook initialised SHELL.
-if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
+if [ -z "${SHELL:-}" ]; then
+    echo "SHELL not set"
+    exit 1
+fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
-
 
 # Execute the pre-hook.
 if [ -z "${shell:-}" ]; then export shell="$SHELL"; fi
 runHook preHook
 
-
 # Allow the caller to augment buildInputs (it's not always possible to
 # do this before the call to setup.sh, since the PATH is empty at that
 # point; here we have a basic Unix environment).
 runHook addInputsHook
-
 
 # Package accumulators
 
@@ -598,7 +599,6 @@ declare -a pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
 declare -a pkgTargetAccumVars=(pkgsTargetTarget)
 
 declare -a pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
-
 
 # Hooks
 
@@ -626,7 +626,6 @@ addEnvHooks() {
     done
 }
 
-
 # Propagated dep files
 
 declare -a propagatedBuildDepFiles=(
@@ -650,7 +649,6 @@ declare -a propagatedDepFilesVars=(
 # Platform offsets: build = -1, host = 0, target = 1
 declare -a allPlatOffsets=(-1 0 1)
 
-
 # Mutually-recursively find all build inputs. See the dependency section of the
 # stdenv chapter of the Nixpkgs manual for the specification this algorithm
 # implements.
@@ -660,7 +658,7 @@ findInputs() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit 1
+    ((hostOffset <= targetOffset)) || exit 1
 
     # shellcheck disable=SC1087
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
@@ -694,7 +692,7 @@ findInputs() {
     function mapOffset() {
         local -r inputOffset="$1"
         local -n outputOffset="$2"
-        if (( inputOffset <= 0 )); then
+        if ((inputOffset <= 0)); then
             outputOffset=$((inputOffset + hostOffset))
         else
             outputOffset=$((inputOffset - 1 + targetOffset))
@@ -715,13 +713,13 @@ findInputs() {
 
         # Ensure we're in bounds relative to the package currently
         # being built.
-        (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
+        ((-1 <= hostOffsetNext && hostOffsetNext <= 1)) || continue
 
         # Target offset relative to the *host* offset of the package
         # whose immediate dependencies we are currently exploring.
         local relTargetOffset
         for relTargetOffset in "${allPlatOffsets[@]}"; do
-            (( "$relHostOffset" <= "$relTargetOffset" )) || continue
+            (("$relHostOffset" <= "$relTargetOffset")) || continue
 
             local fileRef="${files}[$relTargetOffset - $relHostOffset]"
             local file="${!fileRef}"
@@ -734,7 +732,7 @@ findInputs() {
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
-            (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
+            ((-1 <= hostOffsetNext && hostOffsetNext <= 1)) || continue
 
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
@@ -763,26 +761,26 @@ for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
 done
 for pkg in ${nativeBuildInputs[@]} ${propagatedNativeBuildInputs[@]}; do
-    findInputs "$pkg" -1  0
+    findInputs "$pkg" -1 0
 done
 for pkg in ${depsBuildTarget[@]} ${depsBuildTargetPropagated[@]}; do
-    findInputs "$pkg" -1  1
+    findInputs "$pkg" -1 1
 done
 for pkg in ${depsHostHost[@]} ${depsHostHostPropagated[@]}; do
-    findInputs "$pkg"  0  0
+    findInputs "$pkg" 0 0
 done
-for pkg in ${buildInputs[@]} ${propagatedBuildInputs[@]} ; do
-    findInputs "$pkg"  0  1
+for pkg in ${buildInputs[@]} ${propagatedBuildInputs[@]}; do
+    findInputs "$pkg" 0 1
 done
 for pkg in ${depsTargetTarget[@]} ${depsTargetTargetPropagated[@]}; do
-    findInputs "$pkg"  1  1
+    findInputs "$pkg" 1 1
 done
 # Default inputs must be processed last
 for pkg in ${defaultNativeBuildInputs[@]}; do
-    findInputs "$pkg" -1  0
+    findInputs "$pkg" -1 0
 done
 for pkg in ${defaultBuildInputs[@]}; do
-    findInputs "$pkg"  0  1
+    findInputs "$pkg" 0 1
 done
 
 # Add package to the future PATH and run setup hooks
@@ -792,7 +790,7 @@ activatePackage() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit 1
+    ((hostOffset <= targetOffset)) || exit 1
 
     if [ -f "$pkg" ]; then
         nixTalkativeLog "sourcing setup hook '$pkg'"
@@ -810,7 +808,7 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if (( hostOffset <= -1 )); then
+    if ((hostOffset <= -1)); then
         addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
@@ -831,7 +829,7 @@ _activatePkgs() {
     for hostOffset in "${allPlatOffsets[@]}"; do
         local pkgsVar="${pkgAccumVarVars[hostOffset + 1]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
-            (( hostOffset <= targetOffset )) || continue
+            ((hostOffset <= targetOffset)) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
@@ -860,7 +858,7 @@ _addToEnv() {
         local hookVar="${pkgHookVarVars[depHostOffset + 1]}"
         local pkgsVar="${pkgAccumVarVars[depHostOffset + 1]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
-            (( depHostOffset <= depTargetOffset )) || continue
+            ((depHostOffset <= depTargetOffset)) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
 
@@ -877,8 +875,7 @@ _addToEnv() {
                     "${pkgsBuildTarget[@]}" \
                     "${pkgsHostHost[@]}" \
                     "${pkgsHostTarget[@]}" \
-                    "${pkgsTargetTarget[@]}"
-                do
+                    "${pkgsTargetTarget[@]}"; do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
                     fi
@@ -899,34 +896,29 @@ _addToEnv() {
 # Run the package-specific hooks set by the setup-hook scripts.
 _addToEnv
 
-
 # Unset setup-specific declared variables
 unset allPlatOffsets
 unset pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars pkgAccumVarVars
 unset pkgBuildHookVars pkgHostHookVars pkgTargetHookVars pkgHookVarVars
 unset propagatedDepFilesVars
 
-
 _addRpathPrefix "$out"
-
 
 # Set the TZ (timezone) environment variable, otherwise commands like
 # `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
 # be set--see zic manual page 2004').
 export TZ=UTC
 
-
 # Set the prefix.  This is generally $out, but it can be overriden,
 # for instance if we just want to perform a test build/install to a
 # temporary location and write a build report to $out.
 if [ -z "${prefix:-}" ]; then
-    prefix="$out";
+    prefix="$out"
 fi
 
 if [ "${useTempPrefix:-}" = 1 ]; then
-    prefix="$NIX_BUILD_TOP/tmp_prefix";
+    prefix="$NIX_BUILD_TOP/tmp_prefix"
 fi
-
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
@@ -940,29 +932,26 @@ unset _PATH
 unset _HOST_PATH
 unset _XDG_DATA_DIRS
 
-
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
 
 NIX_BUILD_CORES="${NIX_BUILD_CORES:-1}"
 if ((NIX_BUILD_CORES <= 0)); then
-  guess=$(nproc 2>/dev/null || true)
-  ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
+    guess=$(nproc 2> /dev/null || true)
+    ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
 fi
 export NIX_BUILD_CORES
-
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
 if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
-  export NIX_SSL_CERT_FILE=/no-cert-file.crt
+    export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
 if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
-  export SSL_CERT_FILE=/no-cert-file.crt
+    export SSL_CERT_FILE=/no-cert-file.crt
 fi
-
 
 ######################################################################
 # Textual substitution functions.
@@ -975,7 +964,7 @@ substituteStream() {
     local description=$2
     shift 2
 
-    while (( "$#" )); do
+    while (("$#")); do
         local replace_mode="$1"
         case "$1" in
             --replace)
@@ -987,7 +976,7 @@ substituteStream() {
                 fi
                 replace_mode='--replace-warn'
                 ;&
-            --replace-quiet|--replace-warn|--replace-fail)
+            --replace-quiet | --replace-warn | --replace-fail)
                 pattern="$2"
                 replacement="$3"
                 shift 3
@@ -1044,7 +1033,7 @@ substituteStream() {
 # fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -d '' "$1" ; then
+    if IFS='' read -r -d '' "$1"; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -1115,17 +1104,14 @@ substituteAll() {
     substitute "$input" "$output" "${args[@]}"
 }
 
-
 substituteAllInPlace() {
     local fileName="$1"
     shift
     substituteAll "$fileName" "$fileName" "$@"
 }
 
-
 ######################################################################
 # What follows is the generic builder.
-
 
 # This function is useful for debugging broken Nix builds.  It dumps
 # all environment variables to a file `env-vars' in the build
@@ -1138,12 +1124,11 @@ dumpVars() {
         # so first we create the file and then write to it
         # See https://github.com/NixOS/nixpkgs/issues/335016
         {
-            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
-            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
+            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" \
+                && export 2> /dev/null >| "$NIX_BUILD_TOP/env-vars"
         } || true
     fi
 }
-
 
 # Utility function: echo the base name of the given path, with the
 # prefix `HASH-' removed, if present.
@@ -1158,9 +1143,8 @@ stripHash() {
     else
         echo "$strippedName"
     fi
-    if (( casematchOpt )); then shopt -s nocasematch; fi
+    if ((casematchOpt)); then shopt -s nocasematch; fi
 }
-
 
 recordPropagatedDependencies() {
     # Propagate dependencies into the development output.
@@ -1193,7 +1177,6 @@ recordPropagatedDependencies() {
         printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
     done
 }
-
 
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
@@ -1228,7 +1211,10 @@ _defaultUnpack() {
                 # disregard the error code from the xz invocation. Otherwise,
                 # it can happen that tar exits earlier, causing xz to fail
                 # from a SIGPIPE.
-                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --mode=+w --warning=no-timestamp
+                (
+                    XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"
+                    true
+                ) | tar xf - --mode=+w --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
@@ -1243,7 +1229,6 @@ _defaultUnpack() {
     fi
 }
 
-
 unpackFile() {
     curSrc="$1"
     echo "unpacking source archive $curSrc"
@@ -1252,7 +1237,6 @@ unpackFile() {
         exit 1
     fi
 }
-
 
 unpackPhase() {
     runHook preUnpack
@@ -1296,8 +1280,7 @@ unpackPhase() {
         for i in *; do
             if [ -d "$i" ]; then
                 case $dirsBefore in
-                    *\ $i\ *)
-                        ;;
+                    *\ $i\ *) ;;
                     *)
                         if [ -n "$sourceRoot" ]; then
                             echo "unpacker produced multiple directories"
@@ -1326,7 +1309,6 @@ unpackPhase() {
 
     runHook postUnpack
 }
-
 
 patchPhase() {
     runHook prePatch
@@ -1362,7 +1344,6 @@ patchPhase() {
     runHook postPatch
 }
 
-
 fixLibtool() {
     local search_path
     for flag in $NIX_LDFLAGS; do
@@ -1377,7 +1358,6 @@ fixLibtool() {
         -e "s^eval \(sys_lib_search_path=\).*^\1'${search_path:-}'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
 }
-
 
 configurePhase() {
     runHook preConfigure
@@ -1403,13 +1383,13 @@ configurePhase() {
         # autoreconf'ing themselves
         CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
         find . \
-          -executable \
-          -type f \
-          -name configure \
-          -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
-          -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
-          -exec sed -i s_/usr/bin/file_file_g {} \;    \
-          -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+            -executable \
+            -type f \
+            -name configure \
+            -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+            -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+            -exec sed -i s_/usr/bin/file_file_g {} \; \
+            -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
         rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 
@@ -1452,11 +1432,10 @@ configurePhase() {
     runHook postConfigure
 }
 
-
 buildPhase() {
     runHook preBuild
 
-    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! (-e Makefile || -e makefile || -e GNUmakefile) ]]; then
         echo "no Makefile or custom buildPhase, doing nothing"
     else
         foundMakefile=1
@@ -1476,7 +1455,6 @@ buildPhase() {
     runHook postBuild
 }
 
-
 checkPhase() {
     runHook preCheck
 
@@ -1488,9 +1466,9 @@ checkPhase() {
 
     if [[ -z "${checkTarget:-}" ]]; then
         #TODO(@oxij): should flagsArray influence make -n?
-        if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
+        if make -n ${makefile:+-f $makefile} check > /dev/null 2>&1; then
             checkTarget="check"
-        elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
+        elif make -n ${makefile:+-f $makefile} test > /dev/null 2>&1; then
             checkTarget="test"
         fi
     fi
@@ -1516,12 +1494,11 @@ checkPhase() {
     runHook postCheck
 }
 
-
 installPhase() {
     runHook preInstall
 
     # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
-    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! (-e Makefile || -e makefile || -e GNUmakefile) ]]; then
         echo "no Makefile or custom installPhase, doing nothing"
         runHook postInstall
         return
@@ -1548,7 +1525,6 @@ installPhase() {
     runHook postInstall
 }
 
-
 # The fixup phase performs generic, package-independent stuff, like
 # stripping binaries, running patchelf and setting
 # propagated-build-inputs.
@@ -1567,7 +1543,6 @@ fixupPhase() {
     for output in $(getAllOutputNames); do
         prefix="${!output}" runHook fixupOutput
     done
-
 
     # record propagated dependencies & setup hook into the development output.
     recordPropagatedDependencies
@@ -1604,7 +1579,6 @@ fixupPhase() {
     runHook postFixup
 }
 
-
 installCheckPhase() {
     runHook preInstallCheck
 
@@ -1612,7 +1586,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" >/dev/null 2>&1; then
+        && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" > /dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         # Old bash empty array hack
@@ -1623,7 +1597,7 @@ installCheckPhase() {
         )
 
         concatTo flagsArray makeFlags makeFlagsArray \
-          installCheckFlags installCheckFlagsArray installCheckTarget=installcheck
+            installCheckFlags installCheckFlagsArray installCheckTarget=installcheck
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1632,7 +1606,6 @@ installCheckPhase() {
 
     runHook postInstallCheck
 }
-
 
 distPhase() {
     runHook preDist
@@ -1655,7 +1628,6 @@ distPhase() {
     runHook postDist
 }
 
-
 showPhaseHeader() {
     local phase="$1"
     echo "Running phase: $phase"
@@ -1668,23 +1640,21 @@ showPhaseHeader() {
     printf "@nix { \"action\": \"setPhase\", \"phase\": \"%s\" }\n" "$phase" >&"$NIX_LOG_FD"
 }
 
-
 showPhaseFooter() {
     local phase="$1"
     local startTime="$2"
     local endTime="$3"
-    local delta=$(( endTime - startTime ))
-    (( delta < 30 )) && return
+    local delta=$((endTime - startTime))
+    ((delta < 30)) && return
 
-    local H=$((delta/3600))
-    local M=$((delta%3600/60))
-    local S=$((delta%60))
+    local H=$((delta / 3600))
+    local M=$((delta % 3600 / 60))
+    local S=$((delta % 60))
     echo -n "$phase completed in "
-    (( H > 0 )) && echo -n "$H hours "
-    (( M > 0 )) && echo -n "$M minutes "
+    ((H > 0)) && echo -n "$H hours "
+    ((M > 0)) && echo -n "$M minutes "
     echo "$S seconds"
 }
-
 
 runPhase() {
     local curPhase="$*"
@@ -1720,7 +1690,6 @@ runPhase() {
     fi
 }
 
-
 genericBuild() {
     # variable used by our gzip wrapper to add -n.
     # gzip is in common-path.nix and is added to nix-shell but we only want to change its behaviour in nix builds. do not move to a setupHook in gzip.
@@ -1739,7 +1708,7 @@ genericBuild() {
         phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
             configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
             ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
-            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}"
     fi
 
     # The use of ${phases[*]} gives the correct behavior both with and
@@ -1751,19 +1720,15 @@ genericBuild() {
     done
 }
 
-
 # Execute the post-hooks.
 runHook postHook
-
 
 # Execute the global user hook (defined through the Nixpkgs
 # configuration option ‘stdenv.userHook’).  This can be used to set
 # global compiler optimisation flags, for instance.
 runHook userHook
 
-
 dumpVars
-
 
 # Restore the original options for nix-shell
 [[ $__nixpkgs_setup_set_original == *e* ]] || set +e
