@@ -10,6 +10,7 @@
   setuptools-changelog-shortener,
   setuptools,
   tomli,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "devpi_common" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";
