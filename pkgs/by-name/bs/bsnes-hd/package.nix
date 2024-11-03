@@ -17,18 +17,19 @@
   pkg-config,
   stdenv,
   udev,
+  unstableGitUpdater,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
   pname = "bsnes-hd";
-  version = "10.6-beta";
+  version = "10.6-unstable-2024-10-21";
 
   src = fetchFromGitHub {
     owner = "DerKoun";
     repo = "bsnes-hd";
-    rev = "beta_10_6";
-    hash = "sha256-kPB4OmQrk8QNupPJpi/ATK9W/w2MoST/1JiC5hJqbDg=";
+    rev = "0bb7b8645e22ea2476cabd58f32e987b14686601";
+    hash = "sha256-YzWSZMn6v5hWIHnp6KmmpevCsf35Vi2BCcmFMnrFPH0=";
   };
 
   patches = [
@@ -44,14 +45,6 @@ stdenv.mkDerivation {
     # to $out, so this will result in the .app ending up in the Applications
     # directory in the current nix profile.
     ./patches/0001-macos-copy-app-to-prefix.patch
-
-    # Fix build against gcc-13:
-    #   https://github.com/DerKoun/bsnes-hd/pull/124
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/DerKoun/bsnes-hd/commit/587e496f667970d60b6ea29976c171da1681388e.patch";
-      hash = "sha256-7KBXh8b4xGTzgV2Pt8B1eFZHOaXcCKXKzqGOf0rFG0c=";
-    })
   ];
 
   nativeBuildInputs =
@@ -100,6 +93,10 @@ stdenv.mkDerivation {
       --prefix GDK_BACKEND : x11
     )
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = {
     homepage = "https://github.com/DerKoun/bsnes-hd";
