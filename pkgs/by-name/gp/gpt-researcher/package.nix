@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  nodejs,
+  nodePackages,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,6 +20,11 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = [
     python3.pkgs.poetry-core
+  ];
+
+  nativeBuildInputs = [
+    nodejs
+    nodePackages.npm
   ];
 
   dependencies = with python3.pkgs; [
@@ -46,12 +53,23 @@ python3.pkgs.buildPythonApplication rec {
     python-multipart
     pyyaml
     requests
+    selenium
     sqlalchemy
     tavily-python
     tiktoken
     unstructured
     uvicorn
+    webdriver-manager
   ];
+
+  preBuild = ''
+    cd frontend
+    npm install
+    npm run build
+    cd ..
+    mkdir -p gpt_researcher/static
+    cp -r frontend/dist/* gpt_researcher/static/
+  '';
 
   pythonImportsCheck = [
     "gpt_researcher"
