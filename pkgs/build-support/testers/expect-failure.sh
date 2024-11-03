@@ -37,7 +37,7 @@ echo "testBuildFailure: Original builder produced exit code: $r"
 #
 # # from stdenv setup.sh
 getAllOutputNames() {
-    if [ -n "$__structuredAttrs" ]; then
+    if [ -v "__structuredAttrs" ]; then
         echo "${!outputs[*]}"
     else
         echo "$outputs"
