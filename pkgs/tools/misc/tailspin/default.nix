@@ -16,6 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ohfza2ti7Ar/9TV/WoTL5g6CPaONrxtr7nW0qmLdB/8=";
 
+  postPatch = ''
+    substituteInPlace tests/utils.rs --replace-fail \
+      'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/debug"
+  '';
+
   meta = with lib; {
     description = "Log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
