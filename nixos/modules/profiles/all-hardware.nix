@@ -51,12 +51,13 @@ in
 
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
-    ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
-      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
       "hv_storvsc"
+
+    ] ++ lib.optional platform.isx86 "vmw_balloon"
+    ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
+      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
     ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
       # Allwinner support
       # Required for early KMS
