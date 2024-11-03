@@ -2,8 +2,8 @@
 , stdenv
 , buildPackages
 , mkDerivation
-, apple-sdk_14
-, apple-sdk_for_qt ? apple-sdk_14
+, apple-sdk_13
+, darwinMinVersionHook
 , perl
 , qmake
 , patches
@@ -28,7 +28,9 @@ mkDerivation (args // {
   buildInputs =
     args.buildInputs or [ ]
     # Per https://doc.qt.io/qt-5/macos.html#supported-versions
-    ++ lib.optionals stdenv.isDarwin [ apple-sdk_for_qt ];
+    ++ lib.optionals stdenv.isDarwin [
+      apple-sdk_13
+    ];
 
   nativeBuildInputs =
     (args.nativeBuildInputs or []) ++ [
