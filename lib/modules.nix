@@ -1055,21 +1055,30 @@ let
       inherit priority content;
     };
 
+  # This set contains the conventional override priority values that can be
+  # applied to definitions using `mkOverride`. Pre-applied `mkOverride`
+  # functions following the pattern of `mkPriorityName` also exist for
+  # convenience.
   priorities = {
-    # Priority of options' default values
+    # Priority of options' default values. They get overridden by everything.
     optionDefault = 1500;
-    # Used in config sections of non-user modules to set a default.
-    # (This is not the default priority assigned to values!)
+    # This priority exists to facilitate providing default values inside of
+    # config sections. These may get overridden if they are set with a greater
+    # priority definition elsewhere in much the same way as the optionDefault
+    # priority would but do override optionDefault values. This is *not* the
+    # default priority assigned to values when you don't explicitly provide one.
     configDefault = 1000;
-    # The priority that values get assigned by default around which other
-    # priorities scale. This is the true "default" priority.
+    # This is the priority which definitions get assigned by default in config
+    # sections if you don't explicitly provide an override priority. This is the
+    # true "default" priority. The other priorities scale around this value.
     baseline = 100;
-    # image media profiles can be derived by inclusion into host config, hence
-    # needing to override host config, but do allow user to mkForce
+    # Image media profiles need to override host config in some regards but
+    # should still allow the user to forcibly override them.
     mediaOverride = 60;
     # Forcefully override a value
     force = 50;
-    # Used by ‘nixos-rebuild build-vm’
+    # VM profiles (i.e. `nixos-rebuild build-vm`) need to override some
+    # definitions regardless of the user's config.
     vmOverride = 10;
   };
   mkOptionDefault = mkOverride priorities.optionDefault;
