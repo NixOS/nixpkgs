@@ -341,8 +341,6 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
-  bloom = qt6Packages.callPackage ../development/tools/bloom { };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   bodyclose = callPackage ../development/tools/bodyclose { };
@@ -32496,8 +32494,6 @@ with pkgs;
   tagger = callPackage ../applications/audio/tagger { };
 
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs { };
-
-  tailor = callPackage ../applications/version-management/tailor { };
 
   tailor-gui = callPackage ../os-specific/linux/tailor-gui { };
 
