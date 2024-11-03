@@ -1,33 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fmt,
+  glaze,
+}:
 
 stdenv.mkDerivation {
   pname = "termbench-pro";
-  version = "unstable-2023-01-26";
+  version = "unstable-2024-10-05";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "termbench-pro";
-    rev = "a4feadd3a698e4fe2d9dd5b03d5f941534a25a91";
-    hash = "sha256-/zpJY9Mecalk7dneYZYzmFOroopFGklWw62a+LbiUVs=";
+    rev = "22a0c42f78dc2e522eb1089bf9976a9ff0ecdcad";
+    hash = "sha256-Yyvlu/yx/yGc9Ci9Pn098YfTdywLZEaowQZeLM4WGjQ";
   };
 
+  # don't fetch glaze from CMakeLists.txt
+  patches = [ ./dont-fetchcontent.diff ];
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fmt ];
+  buildInputs = [
+    fmt
+    glaze
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     mkdir -p $out/lib
-    mv termbenchpro/tbp $out/bin
-    mv libtermbench/libtermbench.a $out/lib
+    mv tb/tb $out/bin
+    mv libtermbench/libtermbench.* $out/lib
 
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "Terminal Benchmarking as CLI and library";
-    mainProgram = "tbp";
+    mainProgram = "tb";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ moni ];
