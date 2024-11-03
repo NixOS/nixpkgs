@@ -144,6 +144,29 @@ in stdenv'.mkDerivation (finalAttrs: {
     ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
+  # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
+  # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".
+  # We need to ensure this in two cases:
+  #
+  # 1) when the user invokes MuseScore as "mscore" on the command line or from
+  #    the .desktop file, and the normal argv0 is "mscore" (no "/");
+  # 2) when MuseScore invokes itself via File -> New, and the normal argv0 is
+  #    the target of /proc/self/exe, which in Nixpkgs was "{...}/.mscore-wrapped"
+  #
+  # In order to achieve (2) we install the final binary as $out/libexec/mscore, and
+  # in order to achieve (1) we use makeWrapper without --inherit-argv0.
+  #
+  # wrapQtAppsHook uses wrapQtApp -> wrapProgram -> makeBinaryWrapper --inherit-argv0
+  # so we disable it and explicitly use makeQtWrapper.
+  #
+  # TODO: check if something like this is also needed for macOS.
+  dontWrapQtApps = stdenv.isLinux;
+  postFixup = lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/libexec
+    mv $out/bin/mscore $out/libexec
+    makeQtWrapper $out/libexec/mscore $out/bin/mscore
+  '';
+
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
