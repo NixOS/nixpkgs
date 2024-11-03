@@ -6237,6 +6237,8 @@ self: super: with self; {
 
   iopath = callPackage ../development/python-modules/iopath { };
 
+  iosbackup = callPackage ../development/python-modules/iosbackup { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iottycloud = callPackage ../development/python-modules/iottycloud { };
@@ -7847,6 +7849,8 @@ self: super: with self; {
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
+  medallion = callPackage ../development/python-modules/medallion { };
+
   mediafile = callPackage ../development/python-modules/mediafile { };
 
   mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
@@ -9132,6 +9136,8 @@ self: super: with self; {
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
+
+  nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
@@ -15152,6 +15158,8 @@ self: super: with self; {
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
+
+  stix2 = callPackage ../development/python-modules/stix2 { };
 
   stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
