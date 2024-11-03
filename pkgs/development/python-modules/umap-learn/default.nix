@@ -5,6 +5,7 @@
   colorcet,
   datashader,
   fetchFromGitHub,
+  setuptools,
   holoviews,
   matplotlib,
   numba,
@@ -12,7 +13,6 @@
   pandas,
   pynndescent,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   scikit-learn,
   scipy,
@@ -25,9 +25,7 @@
 buildPythonPackage rec {
   pname = "umap-learn";
   version = "0.5.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
@@ -36,7 +34,9 @@ buildPythonPackage rec {
     hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numba
     numpy
     pynndescent
@@ -91,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
     license = licenses.bsd3;
     maintainers = [ ];
   };
