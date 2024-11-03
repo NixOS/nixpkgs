@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wayland stacking compositor, inspired by Openbox";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "labwc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })
