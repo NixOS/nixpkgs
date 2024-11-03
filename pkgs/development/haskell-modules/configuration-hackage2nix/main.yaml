@@ -73,7 +73,6 @@ extra-packages:
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0, needed for HLS
   - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
-  - http2 < 3.3                         # 2023-08-24: Needed for twain <https://github.com/alexmingoia/twain/issues/5>
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
   - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
@@ -90,7 +89,6 @@ extra-packages:
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: Needed for hls on ghc 9.2
   - stylish-haskell == 0.14.4.0         # 2022-09-19: needed for hls on ghc 9.2
   - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
-  - warp < 3.3.31                       # 2024-03-20: for twain, which requires http2 3.0.3
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
