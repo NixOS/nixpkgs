@@ -1,57 +1,58 @@
 {
-  fetchurl,
+  fetchFromGitHub,
   lib,
   stdenv,
-  unzip,
-  ant,
-  jre8,
-  jre,
+  gradle,
+  jdk21,
+  makeWrapper,
 }:
 
-let
-  xbeans = fetchurl {
-    url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
-    sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "rhino";
-  version = "1.7R2";
+  version = "1.7.15";
 
-  src = fetchurl {
-    url = "mirror://mozilla/js/rhino1_7R2.zip";
-    sha256 = "1p32hkghi6bkc3cf2dcqyaw5cjj7403mykcp0fy8f5bsnv0pszv7";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "rhino";
+    # Replace dots in the version with underscores
+    rev = "Rhino${builtins.replaceStrings [ "." ] [ "_" ] version}_Release";
+    hash = "sha256-L0+ur7wKFSpHT5f6HB4Rj/aoGvRORZRLi+WwVCkVkjE=";
   };
 
-  patches = [ ./gcj-type-mismatch.patch ];
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
+  __darwinAllowLocalNetworking = true;
+
+  gradleBuildTask = "assembleDist";
+
+  # A number of tests fail
+  # TODO: Enable this once tests pass upstream
+  doCheck = false;
+
+  # FIXME(tomodachi94): Still necessary?
   hardeningDisable = [
     "fortify"
     "format"
   ];
 
-  preConfigure = ''
-    find -name \*.jar -or -name \*.class -exec rm -v {} \;
-
-    # The build process tries to download it by itself.
-    mkdir -p "build/tmp-xbean"
-    ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
-  '';
-
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [
-    ant
-    jre8
-    jre
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
   ];
-
-  buildPhase = "ant jar";
-  doCheck = false;
+  buildInputs = [ jdk21 ];
 
   # FIXME: Install javadoc as well.
   installPhase = ''
     mkdir -p "$out/share/java"
-    cp -v *.jar "$out/share/java"
+    cp -v buildGradle/libs/source-${version}.jar buildGradle/libs/rhino-*.jar "$out/share/java/rhino-${version}.jar"
+    # FIXME: Unsure if this should be the desired behavior
+    ln -s "$out/share/java/source-${version}" "$out/share/java/rhino-${version}.jar"
+
+    makeWrapper "${jdk21}/bin/java" "$out/bin/rhino" \
+      --add-flags "-jar $out/share/java/rhino-${version}.jar"
   '';
 
   meta = with lib; {
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
       mpl11 # or
       gpl2Plus
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = jdk21.meta.platforms;
   };
 }

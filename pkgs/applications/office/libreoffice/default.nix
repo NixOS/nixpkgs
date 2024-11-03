@@ -526,7 +526,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--enable-gtk3-kde5"
   ] ++ (if variant == "fresh" then [
     "--with-system-rhino"
-    "--with-rhino-jar=${rhino}/share/java/js.jar"
+    "--with-rhino-jar=${rhino}/share/java/rhino-${rhino.version}.jar"
   ] else [
     # our Rhino is too new for older versions
     "--without-system-rhino"
