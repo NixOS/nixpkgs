@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0006-Add-libcd_is_blob_a_linker_signature-implementation.patch
     # Add OpenSSL implementation of CoreCrypto digest functions. Avoids use of private and non-free APIs.
     ./0007-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
+    ./remove-unused-and-incomplete-blob-clone.diff
   ];
 
   postPatch = ''
