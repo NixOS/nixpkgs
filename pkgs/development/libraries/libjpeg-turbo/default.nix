@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       dvgrab
       epeg
-      freeimage
       gd
       graphicsmagick
       imagemagick
