@@ -1,12 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config
-, wrapGAppsHook3
-, libX11, libXv
-, udev
-, SDL2
-, gtk3, gtksourceview3
-, alsa-lib, libao, openal, libpulseaudio
-, libicns, makeWrapper, apple-sdk_11
+{
+  lib,
+  SDL2,
+  alsa-lib,
+  apple-sdk_11,
+  fetchFromGitHub,
+  fetchpatch,
+  gtk3,
+  gtksourceview3,
+  libX11,
+  libXv,
+  libao,
+  libicns,
+  libpulseaudio,
+  makeWrapper,
+  openal,
+  pkg-config,
+  stdenv,
+  udev,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +28,7 @@ stdenv.mkDerivation {
     owner = "DerKoun";
     repo = "bsnes-hd";
     rev = "beta_10_6";
-    sha256 = "0f3cd89fd0lqskzj98cc1pzmdbscq0psdjckp86w94rbchx7iw4h";
+    hash = "sha256-kPB4OmQrk8QNupPJpi/ATK9W/w2MoST/1JiC5hJqbDg=";
   };
 
   patches = [
@@ -25,14 +36,14 @@ stdenv.mkDerivation {
     # while assembling the .app directory hierarchy in the macos build. The
     # `sips` executable isn't in our environment during the build, but
     # `png2icns` is available by way of the dependency on libicns.
-    ./macos-replace-sips-with-png2icns.patch
+    ./patches/0000-macos-replace-sips-with-png2icns.patch
 
     # During `make install` on macos the Makefile wants to move the .app into
-    # the current user's home directory. This patches the Makefile such that
-    # the .app ends up in $(prefix)/Applications. The $(prefix) variable will
-    # be set to $out, so this will result in the .app ending up in the
-    # Applications directory in the current nix profile.
-    ./macos-copy-app-to-prefix.patch
+    # the current user's home directory. This patches the Makefile such that the
+    # .app ends up in $(prefix)/Applications. The $(prefix) variable will be set
+    # to $out, so this will result in the .app ending up in the Applications
+    # directory in the current nix profile.
+    ./patches/0001-macos-copy-app-to-prefix.patch
 
     # Fix build against gcc-13:
     #   https://github.com/DerKoun/bsnes-hd/pull/124
@@ -43,19 +54,40 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs =
+    [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns makeWrapper ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libicns
+      makeWrapper
+    ];
 
-  buildInputs = [ SDL2 libao ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
+  buildInputs =
+    [
+      SDL2
+      libao
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXv
+      udev
+      gtk3
+      gtksourceview3
+      alsa-lib
+      openal
+      libpulseaudio
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
-  enableParallelBuilding = true;
-
-  makeFlags = [ "-C" "bsnes" "prefix=$(out)" ]
+  makeFlags =
+    [
+      "-C bsnes"
+      "prefix=$(out)"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
+
+  enableParallelBuilding = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
@@ -69,12 +101,15 @@ stdenv.mkDerivation {
     )
   '';
 
-  meta = with lib; {
-    description = "Fork of bsnes that adds HD video features";
+  meta = {
     homepage = "https://github.com/DerKoun/bsnes-hd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ stevebob ];
-    platforms = platforms.unix;
+    description = "Fork of bsnes that adds HD video features";
+    license = lib.licenses.gpl3Only;
     mainProgram = "bsnes";
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      stevebob
+    ];
+    platforms = lib.platforms.unix;
   };
 }
