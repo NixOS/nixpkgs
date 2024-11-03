@@ -1,18 +1,19 @@
-{ lib
-, bubblewrap
-, cacert
-, fetchFromGitLab
-, git
-, openmw
-, jre
-, perl
-, python3Packages
-, rustPlatform
-, fontconfig
-, freetype
-, libX11
-, harfbuzz
-, fribidi
+{
+  lib,
+  bubblewrap,
+  cacert,
+  fetchFromGitLab,
+  git,
+  openmw,
+  jre,
+  perl,
+  python3Packages,
+  rustPlatform,
+  fontconfig,
+  freetype,
+  libX11,
+  harfbuzz,
+  fribidi,
 }:
 
 let
@@ -96,9 +97,12 @@ python3Packages.buildPythonApplication {
     distutils
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ] ++ bin-programs;
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+    ]
+    ++ bin-programs;
 
   preCheck = ''
     cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
@@ -126,14 +130,15 @@ python3Packages.buildPythonApplication {
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}" \
-      "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath extra-libs }" \
+      "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath extra-libs}" \
       "--set-default" "OPENMW_VERSION_FILE" "${openmw}/share/games/openmw/resources/version")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    mainProgram = "portmod";
   };
 }
