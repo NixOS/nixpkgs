@@ -86,6 +86,12 @@ let
 
         inherit patches;
 
+        # allow using any msgpack-cxx version
+        postPatch = ''
+          substituteInPlace cmake/GetMsgpack.cmake \
+            --replace-warn 'find_package(msgpack-cxx 6 QUIET CONFIG)' 'find_package(msgpack-cxx QUIET CONFIG)'
+        '';
+
         # the install phase for cmake is pretty wonky right now since it's not designed to
         # coherently install packages as most linux distros expect -- it's designed to build
         # packaged artifacts that are shipped in RPMs, etc. we need to add some extra code to
