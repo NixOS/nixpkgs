@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-2gPDcFcu1kGIDubguL38Z0K+k7WGFf7DX8yZteedcNg=";
   };
 
+  patches = [
+    # Fix build with latest ffmpeg
+    # Backport of https://github.com/any1/neatvnc/commit/7e008743bf872598b4fcdb2a821041064ce5dd01
+    # FIXME: remove in next update
+    ./fix-ffmpeg.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
