@@ -5,6 +5,8 @@
   callPackage,
   esbuild,
   buildGoModule,
+  nixosTests,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -86,6 +88,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) fider;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open platform to collect and prioritize feedback";
