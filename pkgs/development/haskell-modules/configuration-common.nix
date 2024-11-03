@@ -2851,6 +2851,20 @@ self: super: {
         hash = "sha256-peXM5/K034Phcy5vNhc5AT3/9oGXohVogFN9gRsSosY=";
       };
     })
+    # 2024-11-03: Needed for the patch below. Can be dropped after updating to 12.2+.
+    (appendPatches [
+      (fetchpatch {
+        url = "https://github.com/PostgREST/postgrest/commit/d311fb17c46ad2ab9064c7aba1954d3500ef0e54.patch";
+        hash = "sha256-O/bBm93V6GIPSB5dwhNUFgX3vXA01LPJapZQoeJmbIU=";
+      })
+    ])
+    # 2024-11-03: Fixes build on aarch64-darwin. Can be removed after updating to 13+.
+    (appendPatches [
+      (fetchpatch {
+        url = "https://github.com/PostgREST/postgrest/commit/c045b261c4f7d2c2514e858120950be6b3ddfba8.patch";
+        hash = "sha256-6SeteL5sb+/K1y3f9XL7yNzXDdD1KQp91RNP4kutSLE=";
+      })
+    ])
   ];
 
   # Too strict bounds on hspec < 2.11
