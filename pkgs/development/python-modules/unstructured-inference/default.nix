@@ -6,7 +6,7 @@
   layoutparser,
   python-multipart,
   huggingface-hub,
-  opencv,
+  opencv-python,
   onnxruntime,
   transformers,
   detectron2,
@@ -33,17 +33,12 @@ buildPythonPackage rec {
     hash = "sha256-2k7gFlBUevVnz2A5pvUE4eIGmXwEr5s4F8BbX6j5lzc=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements/base.in \
-      --replace "opencv-python" "opencv"
-  '';
-
   propagatedBuildInputs =
     [
       layoutparser
       python-multipart
       huggingface-hub
-      opencv
+      opencv-python
       onnxruntime
       transformers
       detectron2
