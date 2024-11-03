@@ -4719,6 +4719,12 @@
     github = "d4ilyrun";
     githubId = 34611103;
   };
+  d4rk = {
+    name = "Anoop Menon";
+    email = "d4rk@blackvoltage.org";
+    github = "d4rk";
+    githubId = 22163;
+  };
   d4rkstar = {
     name = "Bruno Salzano";
     email = "d4rkstar@gmail.com";
