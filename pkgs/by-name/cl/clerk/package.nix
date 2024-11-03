@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "clerk";
-  version = "4.0.5-unstable-2023-10-07";
+  version = "0-unstable-2024-02-20";
 
   src = fetchFromGitHub {
     owner = "carnager";
     repo = "clerk";
-    rev = "907138d8fc2b1709fb49d062d0b663a48eb210bd";
-    hash = "sha256-V2nDLq2ViC5Twve0EILBEYOdEavqgYB/TQq/T+ftfmk=";
+    rev = "a3c4a0b88597e8194a5b29a20bc9eab1a12f4de9";
+    hash = "sha256-UlACMlH4iYj1l/GIpBf6Pb7MuRHWlgxLPgAqzc+Zol8=";
   };
 
   nativeBuildInputs = [
