@@ -7065,6 +7065,12 @@
     name = "Felix Albrigtsen";
     matrix = "@felixalb:feal.no";
   };
+  felixdorn = {
+    name = "Félix";
+    matrix = "@d:xfe.li";
+    github = "felixdorn";
+    githubId = 55788595;
+  };
   felixscheinost = {
     name = "Felix Scheinost";
     email = "felix.scheinost@posteo.de";
