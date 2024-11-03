@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ae90d4e..1f658fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,10 +56,6 @@ set(MODULES_TO_CHECK ${MODULES_TO_CHECK} udisks2)
+ 
+ pkg_check_modules(DEPS REQUIRED ${MODULES_TO_CHECK})
+ 
+-if ( (NOT EXISTS "/usr/bin/rsync"))
+-	message(FATAL_ERROR "Can't find any of the files /usr/bin/rsync")
+-endif()
+-
+ find_program ( WHERE_gtk_update_icon_cache gtk-update-icon-cache )
+ if ( NOT WHERE_gtk_update_icon_cache )
+ 	find_program ( WHERE_gtk_update_icon_cache gtk-update-icon-cache.3.0 )
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index a73a639..b57bcee 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -6,7 +6,7 @@ install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.sh DESTINATION ${
+ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_preferences.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications/ )
+ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete_restore.desktop DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications/ )
+ if( NOT ( ${CMAKE_INSTALL_PREFIX} MATCHES "^/home/" ) )
+-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop DESTINATION /etc/xdg/autostart/ )
++	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cronopete.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+ else()
+ 	MESSAGE(STATUS "[33mAutostart file data/cronopete.desktop will not be installed. You must create your own .desktop file and put it at ~/.config/autostart[39m")
+ endif()

@@ -6647,6 +6647,8 @@ with pkgs;
 
   cron = isc-cron;
 
+  cronopete = callPackage ../tools/backup/cronopete { };
+
   ctlptl = callPackage ../development/tools/ctlptl { };
 
   dumpnar = callPackage ../tools/archivers/dumpnar { };
