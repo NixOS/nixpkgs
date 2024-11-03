@@ -18372,7 +18372,9 @@ with pkgs;
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
-  teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
+  teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   tytools = libsForQt5.callPackage ../development/embedded/tytools { };
 

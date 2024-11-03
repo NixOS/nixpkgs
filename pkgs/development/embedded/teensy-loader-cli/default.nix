@@ -4,6 +4,8 @@
 , go-md2man
 , installShellFiles
 , libusb-compat-0_1
+, IOKit
+, xcbuild
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
-    libusb-compat-0_1
-  ];
+  buildInputs =
+    if stdenv.isDarwin then [
+      IOKit
+      xcbuild
+    ] else [
+      libusb-compat-0_1
+    ];
+
+  patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   installPhase = ''
     runHook preInstall
