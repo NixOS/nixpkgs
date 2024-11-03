@@ -7,7 +7,6 @@
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
-  imagemagick,
   makeWrapper,
 }:
 let
@@ -46,7 +45,6 @@ flutter324.buildFlutterApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    imagemagick
     makeWrapper
   ];
 
@@ -77,15 +75,8 @@ flutter324.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    FAV=$out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png
-    ICO=$out/share/icons
-
-    install -D $FAV $ICO/ente-auth.png
-    for size in 24 32 42 64 128 256 512; do
-      D=$ICO/hicolor/''${size}x''${size}/apps
-      mkdir -p $D
-      magick $FAV -resize ''${size}x''${size} $D/ente-auth.png
-    done
+    mkdir -p $out/share/pixmaps
+    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/pixmaps/ente-auth.png
 
     install -Dm444 linux/packaging/ente_auth.appdata.xml -t $out/share/metainfo
   '';
