@@ -13751,12 +13751,6 @@
     githubId = 2971615;
     name = "Marius Bergmann";
   };
-  mcaju = {
-    email = "cajum.bugs@yandex.com";
-    github = "CajuM";
-    githubId = 10420834;
-    name = "Mihai-Drosi Caju";
-  };
   mccartykim = {
     email = "mccartykim@zoho.com";
     github = "mccartykim";
