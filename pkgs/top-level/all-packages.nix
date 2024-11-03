@@ -30218,11 +30218,7 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
-    stdenv = if stdenv.hostPlatform.isDarwin
-      then overrideSDK stdenv "11.0"
-      else stdenv;
-  };
+  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
 
@@ -32531,7 +32527,7 @@ with pkgs;
 
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
-      then overrideSDK stdenv "11.0"
+      then llvmPackages_19.stdenv
       else stdenv;
   };
 

@@ -54,8 +54,6 @@ in
   };
 
   patches = [
-    ./macos.patch
-    ./macos-opengl.patch
     ./macos-qt5.patch
     (fetchpatch {
       url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";

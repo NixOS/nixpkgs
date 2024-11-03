@@ -27,7 +27,7 @@
   mesa,
   libdrm,
   libGL,
-  darwin,
+  apple-sdk_15,
   unstableGitUpdater,
 }:
 
@@ -89,26 +89,9 @@ stdenv.mkDerivation {
       libdrm
       libGL
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-        AppKit
-        IOKit
-        IOSurface
-        Foundation
-        AVFoundation
-        CoreMedia
-        VideoToolbox
-        CoreGraphics
-        CoreVideo
-        OpenGL
-        Metal
-        MetalKit
-        CoreFoundation
-        ApplicationServices
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+    ];
 
   passthru.updateScript = unstableGitUpdater { };
 

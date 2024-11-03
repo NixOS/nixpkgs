@@ -6,7 +6,6 @@
 , cmake
 , ninja
 , clang
-, lld
 , python3
 , wrapQtAppsHook
 , tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; }
@@ -38,7 +37,7 @@
 , glib-networking
 , webkitgtk_4_1
 , libicns
-, darwin
+, apple-sdk_15
 , nix-update-script
 }:
 
@@ -60,10 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-frz425V5eRulNVxCf457TWQAzU/f9/szD/sx3/LYQ2Y=";
   };
-
-  patches = [
-    ./macos.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
@@ -98,8 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    lld
   ];
 
   buildInputs = [
@@ -130,45 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWebKitGTK) [
     glib-networking
     webkitgtk_4_1
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
-    Cocoa
-    CoreFoundation
-    CoreServices
-    CoreText
-    CoreGraphics
-    CoreMedia
-    OpenGL
-    AudioUnit
-    ApplicationServices
-    Foundation
-    AGL
-    Security
-    SystemConfiguration
-    Carbon
-    AudioToolbox
-    VideoToolbox
-    VideoDecodeAcceleration
-    AVFoundation
-    CoreAudio
-    CoreVideo
-    CoreMediaIO
-    QuartzCore
-    AppKit
-    CoreWLAN
-    WebKit
-    IOKit
-    GSS
-    MediaPlayer
-    IOSurface
-    Metal
-    NaturalLanguage
-    LocalAuthentication
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
     libicns
-  ]);
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+  ];
 
   cmakeFlags = [
     # We're allowed to used the API ID of the Snap package:
