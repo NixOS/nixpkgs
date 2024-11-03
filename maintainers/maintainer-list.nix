@@ -9617,6 +9617,11 @@
     githubId = 4035835;
     name = "Iwan";
   };
+  ixi2101 = {
+    github = "ixi2101";
+    githubId = 77992676;
+    name = "ixi2101";
+  };
   ixmatus = {
     email = "parnell@digitalmentat.com";
     github = "ixmatus";
