@@ -39,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
       # this feature is not used in lua-language-server
       sed -i /filewatch/d 3rd/bee.lua/test/test.lua
 
+      # flaky tests on linux
+      # https://github.com/LuaLS/lua-language-server/issues/2926
+      sed -i /load-relative-library/d test/tclient/init.lua
+
       pushd 3rd/luamake
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
