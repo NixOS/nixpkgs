@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -10,6 +9,8 @@
   qt6Packages,
   febio,
   glew,
+  apple-sdk_11,
+  darwinMinVersionHook,
   sshSupport ? true,
   openssl,
   libssh,
@@ -23,18 +24,7 @@
   withCadFeatures ? false,
 }:
 
-let
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin then
-      overrideSDK stdenv {
-        darwinSdkVersion = "11.0";
-        darwinMinVersion = "10.15";
-      }
-    else
-      stdenv;
-in
-
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "febio-studio";
   version = "2.7";
 
@@ -76,7 +66,11 @@ stdenv'.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional tetgenSupport tetgen
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optional dicomSupport dcmtk;
+    ++ lib.optional dicomSupport dcmtk
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "10.15")
+    ];
 
   meta = {
     description = "FEBio Suite Solver";
