@@ -1,5 +1,5 @@
 { lib
-, python310
+, python3
 , fetchFromGitHub
 , gdk-pixbuf
 , adwaita-icon-theme
@@ -17,7 +17,7 @@
 }:
 
 let
-  python = python310.override {
+  python = python3.override {
     self = python;
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
