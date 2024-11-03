@@ -21687,6 +21687,12 @@
     githubId = 71843723;
     keys = [ { fingerprint = "EEFB CC3A C529 CFD1 943D  A75C BDD5 7BE9 9D55 5965"; } ];
   };
+  theoparis = {
+    email = "theo@tinted.dev";
+    github = "theparis";
+    githubId = 11761863;
+    name = "Theo Paris";
+  };
   thepuzzlemaker = {
     name = "ThePuzzlemaker";
     email = "tpzker@thepuzzlemaker.info";
