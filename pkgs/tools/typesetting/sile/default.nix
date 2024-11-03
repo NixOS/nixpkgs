@@ -2,16 +2,20 @@
   # Nix specific packaging and flake tooling
   darwin,
   fetchurl,
-  gitMinimal,
   lib,
   makeFontsConf,
   makeWrapper,
   runCommand,
+  rustPlatform,
   stdenv,
+  zstd,
 
   # Upstream build time dependencies
+  cargo,
+  jq,
   pkg-config,
   poppler_utils,
+  rustc,
 
   # Upstream run time dependencies
   fontconfig,
@@ -32,7 +36,6 @@ let
     [
       cassowary
       cldr
-      cosmo
       fluent
       linenoise
       loadkit
@@ -60,18 +63,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.17";
+  version = "0.15.5";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
+    sha256 = "sha256-0gE3sC0WMC0odnD9KFrSisO406+RZGCqa8jL/5Mhufk=";
   };
 
   nativeBuildInputs = [
-    gitMinimal
+    cargo
+    jq
     makeWrapper
     pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
+    zstd
   ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    dontConfigure = true;
+    hash = "sha256-cMQijWUtjW8dNTwAcJ2NMaxsmydpyjGCE7NYUyqUlWk=";
+  };
 
   buildInputs = [
     fontconfig
@@ -81,18 +94,33 @@ stdenv.mkDerivation (finalAttrs: {
     luaEnv
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit;
 
-  configureFlags = [
-    "--with-system-luarocks"
-    "--with-manual"
-  ];
+  configureFlags =
+    [
+      # Build SILE's internal VM against headers from the Nix supplied Lua
+      "--with-system-lua-sources"
 
-  postPatch =
-    ''
-      patchShebangs build-aux/*.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
-    '';
+      # Nix will supply all the Lua dependencies, so stop the build system from
+      # bundling vendored copies of them.
+      "--with-system-luarocks"
+
+      # The automake check target uses pdfinfo to confirm the output of a test
+      # run, and uses autotools to discover it. Nix builds have to that test
+      # because it is run from the source directory with a binary already built
+      # with system paths, so it can't be checked under Nix until after install.
+      # After install the Makefile isn't available of course, so we have our own
+      # copy of it with a hard coded path to `pdfinfo`. By specifying some binary
+      # here we skip the configure time test for `pdfinfo`, by using `false` we
+      # make sure that if it is expected during build time we would fail to build
+      # since we only provide it at test time.
+      "PDFINFO=false"
+    ]
+    ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+      "--without-luajit"
+    ];
+
+  postPatch = ''
+    patchShebangs build-aux/*.sh
+  '';
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 
