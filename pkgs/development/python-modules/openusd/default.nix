@@ -175,7 +175,7 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.asl20;
+    license = lib.licenses.tost;
     maintainers = with lib.maintainers; [ shaddydc ];
   };
 }
