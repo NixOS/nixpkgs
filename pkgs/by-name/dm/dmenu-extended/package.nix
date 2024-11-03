@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec{
   meta = with lib; {
     description = "An extension to dmenu for quickly opening files and folders";
     homepage = "https://github.com/MarkHedleyJones/dmenu-extended";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "dmenu-extended";
     platforms = platforms.unix;
