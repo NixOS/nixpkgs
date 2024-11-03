@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       checkFailed
     fi
 
-    exec $out/share/keybase/Keybase "\$@"
+    exec $out/share/keybase/Keybase \''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} "\$@"
     EOF
     chmod +x $out/bin/keybase-gui
 
