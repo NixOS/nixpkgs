@@ -28161,19 +28161,34 @@ with pkgs;
 
   json-plot = callPackage ../applications/graphics/json-plot { };
 
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
+  libbitcoin            = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
   };
-  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix {
+  libbitcoin-protocol   = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix {
     boost = boost175;
   };
-  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix {
+  libbitcoin-client     = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix {
     boost = boost175;
   };
-  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix {
+  libbitcoin-network    = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix {
     boost = boost175;
   };
-  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
+  libbitcoin-explorer   = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
+    boost = boost175;
+  };
+  libbitcoin-blockchain = callPackage ../by-name/li/libbitcoin-blockchain/package.nix {
+    boost = boost175;
+  };
+  libbitcoin-consensus  = callPackage ../by-name/li/libbitcoin-consensus/package.nix {
+    boost = boost175;
+  };
+  libbitcoin-database   = callPackage ../by-name/li/libbitcoin-database/package.nix {
+    boost = boost175;
+  };
+  libbitcoin-node       = callPackage ../by-name/li/libbitcoin-node/package.nix {
+    boost = boost175;
+  };
+  libbitcoin-server     = callPackage ../by-name/li/libbitcoin-server/package.nix {
     boost = boost175;
   };
 
