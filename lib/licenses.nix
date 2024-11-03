@@ -1212,6 +1212,11 @@ lib.mapAttrs mkLicense ({
     fullName = "TCL/TK License";
   };
 
+  tost = {
+    fullName = "Tomorrow Open Source Technology License 1.0";
+    url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+  };
+
   ucd = {
     fullName = "Unicode Character Database License";
     url = "https://fedoraproject.org/wiki/Licensing:UCD";
