@@ -6,12 +6,9 @@
 , SDL2
 , gtk3, gtksourceview3
 , alsa-lib, libao, openal, libpulseaudio
-, libicns, makeWrapper, darwin
+, libicns, makeWrapper, apple-sdk_11
 }:
 
-let
-  inherit (darwin.apple_sdk_11_0.frameworks) Cocoa OpenAL;
-in
 stdenv.mkDerivation {
   pname = "bsnes-hd";
   version = "10.6-beta";
@@ -52,7 +49,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL2 libao ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenAL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   enableParallelBuilding = true;
 
