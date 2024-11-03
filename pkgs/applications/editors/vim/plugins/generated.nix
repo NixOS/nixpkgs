@@ -18839,4 +18839,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/chomosuke/typst-preview.nvim";
   };
+
+  follow-md-links-nvim = buildVimPlugin {
+    pname = "follow-md-links.nvim";
+    version = "2024-09-29";
+    src = fetchFromGitHub {
+      owner = "jghauser";
+      repo = "follow-md-links.nvim";
+      rev = "41a6d74636b4209571680d40f20f59a0bf30bf57";
+      sha256 = "ULQTE57SRA8uTuvg5LLJzcI5hOlXDrUwrHfm9+1pbe8=";
+    };
+    meta.homepage = "https://github.com/jghauser/follow-md-links.nvim/";
+  };
 }
