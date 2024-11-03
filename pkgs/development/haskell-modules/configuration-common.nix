@@ -2839,7 +2839,7 @@ self: super: {
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
-    # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
+    # 2022-12-02: Too strict bounds.
     doJailbreak
     # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
     (overrideSrc rec {
