@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , aml
-, ffmpeg
+, ffmpeg_6
 , gnutls
 , libjpeg_turbo
 , mesa
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     aml
-    ffmpeg
+    ffmpeg_6
     gnutls
     libjpeg_turbo
     mesa
