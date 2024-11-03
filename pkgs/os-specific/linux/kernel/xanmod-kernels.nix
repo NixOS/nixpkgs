@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   buildLinux,
   ...
 }@args:
@@ -35,7 +35,7 @@ let
         inherit version;
         modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
 
-        src = fetchFromGitHub {
+        src = fetchFromGitLab {
           owner = "xanmod";
           repo = "linux";
           rev = modDirVersion;
