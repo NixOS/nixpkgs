@@ -27,6 +27,16 @@ in
       fetchSubmodules = true;
     };
 
+    patches = (oldAttrs.patches or []) ++ [
+      (fetchpatch {
+        url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "src/";
+        hash = "sha256-goxnuRRbwcdfIk1jFaKGiKCTCYn2saEj7En1Iyglzko=";
+      })
+    ];
+
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
   });
 
