@@ -82,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/includes.patch
     # Prevent xcrun from recursively invoking itself but still find native toolchain binaries
     ./patches/Use-system-toolchain-for-usr-bin.patch
+    # Suppress warnings due to newer SDKs with unknown keys
+    ./patches/Suppress-unknown-key-warnings.patch
   ];
 
   prePatch = ''
