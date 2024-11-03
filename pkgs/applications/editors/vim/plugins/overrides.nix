@@ -38,6 +38,7 @@
   languagetool,
   llvmPackages,
   meson,
+  notmuch,
   neovim-unwrapped,
   nim1,
   nodePackages,
@@ -1779,6 +1780,8 @@ in
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "null-ls";
   };
+
+  notmuch-vim = notmuch.vim;
 
   NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
     nvimRequireCheck = "notebook-navigator";
