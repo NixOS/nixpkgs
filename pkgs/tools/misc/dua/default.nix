@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
-  version = "2.29.2";
+  version = "2.29.3";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
     rev = "v${version}";
-    hash = "sha256-tmlf5heOZ3UyFh8ZfwXXZhQO3vlSWwyvxL9/euQ2Fn4=";
+    hash = "sha256-cxMims1b4zOmpRZSn9rovUCnUT66omgNYjDJWuIDnSk=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-bqWYXcry+mCUNgYS+7+MWfiV+u+3oZZg1o3Q6Mac+vE=";
+  cargoHash = "sha256-/7A1XW6EbOQpXeAlsOe1YoY6MdBQ3kC98TTBMs3Zfy8=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
