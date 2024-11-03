@@ -381,7 +381,7 @@ let
             rm renewed
             ${data.postRun}
             ${lib.optionalString (data.reloadServices != [])
-                "systemctl --no-block try-reload-or-restart ${lib.escapeShellArgs data.reloadServices}"
+                "systemctl --no-block try-reload-or-restart ${lib.escapeShellArgs (lib.unique data.reloadServices)}"
             }
           fi
         '');
