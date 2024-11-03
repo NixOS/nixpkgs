@@ -10,13 +10,13 @@ telegram-desktop.override {
   pname = "64gram";
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.1.43";
+    version = "1.1.45";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       rev = "v${version}";
-      hash = "sha256-vRiAIGY3CU5+hsdn8xiNbgvSM3eGRVwnvsSmSoaDN/k=";
+      hash = "sha256-bDe4tmJRWnussa5QrBh2oStvIF7R5/nbPfljb3us3nk=";
       fetchSubmodules = true;
     };
 
