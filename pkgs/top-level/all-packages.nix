@@ -13527,6 +13527,8 @@ with pkgs;
 
   uptime-kuma = callPackage ../servers/monitoring/uptime-kuma { };
 
+  uptrace = callPackage ../servers/monitoring/uptrace { };
+
   vul = callPackage ../applications/misc/vul { };
 
   vuls = callPackage ../by-name/vu/vuls/package.nix {
