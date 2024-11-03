@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "tools" ];
+  propagatedBuildOutputs = [ "out" "tools" ]; # provide also .tools by default
 
   buildPhase =
     let
