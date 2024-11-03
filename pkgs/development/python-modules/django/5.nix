@@ -114,7 +114,10 @@ buildPythonPackage rec {
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
+    # pywatchman depends on folly which does not support 32bits
+    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported
