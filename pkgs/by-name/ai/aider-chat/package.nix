@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.60.0";
+  version = "0.61.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication {
     owner = "Aider-AI";
     repo = "aider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0jAdUcGGJzxvTKY/56an0oLEghZHz6fdNLg8cPer1Qc=";
+    hash = "sha256-C1VMdLRb+FVN8zwWRa7RCkRxZgdUPNUfBdAjMi9efjQ=";
   };
 
   pythonRelaxDeps = true;
@@ -113,6 +113,13 @@ python3.pkgs.buildPythonApplication {
     wcwidth
     yarl
     zipp
+
+    # Not listed in requirements
+    mixpanel
+    monotonic
+    posthog
+    propcache
+    python-dateutil
   ];
 
   buildInputs = [ portaudio ];
@@ -150,6 +157,15 @@ python3.pkgs.buildPythonApplication {
     export HOME=$(mktemp -d)
     export AIDER_CHECK_UPDATE=false
   '';
+
+  optional-dependencies = with python3.pkgs; {
+    playwright = [
+      greenlet
+      playwright
+      pyee
+      typing-extensions
+    ];
+  };
 
   meta = {
     description = "AI pair programming in your terminal";
