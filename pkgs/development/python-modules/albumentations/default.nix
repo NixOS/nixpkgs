@@ -11,7 +11,7 @@
   albucore,
   eval-type-backport,
   numpy,
-  opencv4,
+  opencv-python,
   pydantic,
   pyyaml,
   scikit-image,
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     ./dont-check-for-updates.patch
   ];
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     albucore
     eval-type-backport
     numpy
-    opencv4
+    opencv-python
     pydantic
     pyyaml
     scikit-image
