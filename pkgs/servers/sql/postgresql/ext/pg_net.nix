@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_net";
-  version = "0.8.0";
+  version = "0.11.0";
 
   buildInputs = [ curl postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "supabase";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    hash   = "sha256-ZPsRPWV1G3lMM2mT+H139Wvgoy8QnmeUbzEnGeDJmZA=";
+    hash   = "sha256-XN441jXK1q+I/LZRNwvzbSsebXHgZ8iYsslZvcPFlAs=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Async networking for Postgres";
     homepage    = "https://github.com/supabase/pg_net";
     changelog   = "https://github.com/supabase/pg_net/releases/tag/v${version}";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice samrose ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
   };
