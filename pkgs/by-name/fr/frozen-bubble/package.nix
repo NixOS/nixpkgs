@@ -9,7 +9,9 @@
   glib,
   copyDesktopItems,
   makeDesktopItem,
+  fetchpatch,
 }:
+
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";
   version = "2.212";
@@ -19,7 +21,14 @@ perlPackages.buildPerlModule {
     hash = "sha256-ch4E/2nFIzBgZWv79AAqoa6t2WyVNR8MV7uFtto1owU=";
   };
 
-  patches = [ ./fix-compilation.patch ];
+  patches = [
+    ./fix-compilation.patch
+    (fetchpatch {
+      # https://github.com/kthakore/frozen-bubble/pull/82
+      url = "https://github.com/kthakore/frozen-bubble/commit/1aacc67254a0aafd856086cc306e9f7b389c6bf4.patch?full_index=1";
+      hash = "sha256-RqJ+/UFv4esKWZBk0fttsEXhPMislEBTAl2oj4pLAZY=";
+    })
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -34,6 +43,7 @@ perlPackages.buildPerlModule {
     perlPackages.SDL
     perlPackages.FileSlurp
   ];
+
   propagatedBuildInputs = with perlPackages; [
     AlienSDL
     CompressBzip2
