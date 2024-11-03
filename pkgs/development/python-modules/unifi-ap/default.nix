@@ -4,8 +4,8 @@
   fetchFromGitHub,
   setuptools,
   paramiko,
+  pythonRelaxDepsHook,
 }:
-
 buildPythonPackage rec {
   pname = "unifi-ap";
   version = "0.0.1";
@@ -18,19 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-dEaDRcQEx+n+zvxVHD58B1AdFj004L76AtVDesnP+gQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "paramiko" ];
 
-  dependencies = [
-    paramiko
-  ];
+  dependencies = [ paramiko ];
 
-  pythonImportsCheck = [
-    "unifi_ap"
-  ];
+  pythonImportsCheck = [ "unifi_ap" ];
 
   doCheck = false; # no tests
 
