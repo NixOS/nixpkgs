@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/rhino-${version}.jar"
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
     description = "Implementation of JavaScript written in Java";
     longDescription = ''
