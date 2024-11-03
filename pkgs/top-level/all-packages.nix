@@ -11216,7 +11216,9 @@ with pkgs;
     harfbuzz = harfbuzzFull;
   };
 
-  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_8; };
+  termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
+  };
 
   texpresso = callPackage ../tools/typesetting/tex/texpresso {
     texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
