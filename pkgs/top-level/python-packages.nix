@@ -6237,6 +6237,8 @@ self: super: with self; {
 
   iopath = callPackage ../development/python-modules/iopath { };
 
+  iosbackup = callPackage ../development/python-modules/iosbackup { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iottycloud = callPackage ../development/python-modules/iottycloud { };
@@ -6905,7 +6907,9 @@ self: super: with self; {
     inherit (pkgs) lammps;
   };
 
-  lancedb = callPackage ../development/python-modules/lancedb { };
+  lancedb = callPackage ../development/python-modules/lancedb {
+    inherit (pkgs) protobuf;
+  };
 
   langchain = callPackage ../development/python-modules/langchain { };
 
@@ -7844,6 +7848,8 @@ self: super: with self; {
   mechanicalsoup = callPackage ../development/python-modules/mechanicalsoup { };
 
   mechanize = callPackage ../development/python-modules/mechanize { };
+
+  medallion = callPackage ../development/python-modules/medallion { };
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
@@ -9130,6 +9136,8 @@ self: super: with self; {
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
+
+  nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
@@ -15150,6 +15158,8 @@ self: super: with self; {
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
+
+  stix2 = callPackage ../development/python-modules/stix2 { };
 
   stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
