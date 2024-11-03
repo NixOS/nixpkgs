@@ -32725,8 +32725,6 @@ with pkgs;
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
 
-  toot = callPackage ../applications/misc/toot { };
-
   toipe = callPackage ../applications/misc/toipe { };
 
   toxiproxy = callPackage ../development/tools/toxiproxy { };
