@@ -1,4 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, openssl, openjdk, maven, postgresql, libkrb5, makeWrapper, gcc, pkg-config, which }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  openssl,
+  openjdk,
+  maven,
+  postgresql,
+  libkrb5,
+  makeWrapper,
+  gcc,
+  pkg-config,
+  which,
+}:
 
 maven.buildMavenPackage rec {
   pname = "pljava";
@@ -17,9 +30,22 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-lcxRduh/nKcPL6YQIVTsNH0L4ga0LgJpQKgX5IPkRzs=";
 
-  nativeBuildInputs = [ makeWrapper maven openjdk postgresql openssl postgresql gcc libkrb5 pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    maven
+    openjdk
+    postgresql
+    openssl
+    postgresql
+    gcc
+    libkrb5
+    pkg-config
+  ];
 
-  buildInputs = [ stdenv.cc.cc.lib which];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    which
+  ];
 
   buildPhase = ''
     export PATH=$(lib.makeBinPath [ postgresql ]):$PATH
@@ -47,7 +73,7 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     description = "PL/Java extension for PostgreSQL";
-    homepage = https://github.com/tada/pljava;
+    homepage = "https://github.com/tada/pljava";
     license = licenses.bsd3;
     platforms = postgresql.meta.platforms;
     maintainers = [ maintainers.samrose ];
