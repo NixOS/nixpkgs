@@ -22025,8 +22025,6 @@ with pkgs;
 
   neardal = callPackage ../development/libraries/neardal { };
 
-  neatvnc = callPackage ../development/libraries/neatvnc { };
-
   neon = callPackage ../development/libraries/neon { };
 
   nettle = import ../development/libraries/nettle { inherit callPackage fetchurl; };
