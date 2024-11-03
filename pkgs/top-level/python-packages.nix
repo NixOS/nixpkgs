@@ -14269,6 +14269,8 @@ self: super: with self; {
 
   sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
 
+  sensoterra = callPackage ../development/python-modules/sensoterra { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
