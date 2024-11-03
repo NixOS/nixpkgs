@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, coreutils, makeWrapper }:
+{ fetchurl, lib, stdenv, coreutils, makeWrapper, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "ant";
@@ -77,6 +77,13 @@ stdenv.mkDerivation rec {
 
       chmod +x $out/bin/ant
     ''; # */
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "rel/";
+      url = "https://gitbox.apache.org/repos/asf/ant";
+    };
+  };
 
   meta = {
     homepage = "https://ant.apache.org/";
