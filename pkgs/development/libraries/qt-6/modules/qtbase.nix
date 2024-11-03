@@ -67,8 +67,7 @@
 , unixODBCDrivers
   # darwin
 , moveBuildTree
-, apple-sdk_qt
-, darwinDeploymentTargetDeps
+, darwinVersionInputs
 , xcbuild
   # mingw
 , pkgsBuildBuild
@@ -155,8 +154,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinDeploymentTargetDeps
-  ++ lib.optionals libGLSupported [
+  ] ++ lib.optionals libGLSupported [
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
@@ -167,9 +165,7 @@ stdenv.mkDerivation rec {
     at-spi2-core
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_qt
-  ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
