@@ -1,20 +1,27 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "repocheck";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    sha256 = "1jc4v5zy7z7xlfmbfzvyzkyz893f5x2k6kvb3ni3rn2df7jqhc81";
-    rev = "ee48d0e88d3f5814d24a8d1f22d5d83732824688";
-    repo = "repocheck";
     owner = "kynikos";
+    repo = "repocheck";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pCz+oAfDFyDeuXumfNzLTXnftM9+IG+lZzWSKtbZ9dg=";
   };
+
+  build-system = [ python3Packages.setuptools ];
+
+  pythonImportsCheck = [ "repocheck" ];
+
+  # no tests
+  doCheck = false;
 
   meta = with lib; {
     inherit (src.meta) homepage;
