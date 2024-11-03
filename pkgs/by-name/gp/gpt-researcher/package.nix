@@ -1,10 +1,19 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  nodejs,
-  nodePackages,
+{ lib
+, python3
+, fetchFromGitHub
+, nodejs
+, mkYarnModules
 }:
+
+let
+  frontendDeps = mkYarnModules {
+    pname = "gpt-researcher-frontend-deps";
+    version = "3.1.3";
+    packageJSON = ./frontend/package.json;
+    yarnLock = ./frontend/yarn.lock;
+    yarnNix = ./frontend/yarn.nix;
+  };
+in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpt-researcher";
@@ -24,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     nodejs
-    nodePackages.npm
   ];
 
   dependencies = with python3.pkgs; [
@@ -63,8 +71,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preBuild = ''
+    ln -s ${frontendDeps}/node_modules frontend/node_modules
     cd frontend
-    npm install
     npm run build
     cd ..
     mkdir -p gpt_researcher/static
