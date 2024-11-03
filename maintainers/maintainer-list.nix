@@ -12193,6 +12193,11 @@
     github = "lenivaya";
     githubId = 49302467;
   };
+  lenny = {
+    name = "Lenny.";
+    matrix = "lenny@flipdot.org";
+    keys = [ { fingerprint = "6D63 2D4D 0CFE 8D53 F5FD  C7ED 738F C800 6E9E A634"; } ];
+  };
   leo248 = {
     github = "leo248";
     githubId = 95365184;
