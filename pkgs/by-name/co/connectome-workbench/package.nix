@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "connectome-workbench";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Washington-University";
     repo = "workbench";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-d0J5bXp6mJlUQBmInxPXPkd5P5H+3F6fE9fc8pD1fUc=";
+    hash = "sha256-M5iverVDhBI/ijbgwfa6gHrthY4wrUi+/2A/443jBqg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   # tests are minimal and test_driver fails to link (also -DBUILD_TESTING=... is ignored):
   # ld: ../Brain/libBrain.a(BrainOpenGLVolumeObliqueSliceDrawing.cxx.o): undefined reference to symbol 'glGetFloatv'
   # ld: /nix/store/a5vcvrkh1c2ng5kr584g3zw3991vnhks-libGL-1.7.0/lib/libGL.so.1: error adding symbols: DSO missing from command line
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   nativeBuildInputs = [
     cmake
