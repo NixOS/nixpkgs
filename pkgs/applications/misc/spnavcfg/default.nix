@@ -5,6 +5,7 @@
   fetchpatch,
   pkg-config,
   libspnav,
+  libX11,
 
   # Qt6 support is close: https://github.com/FreeSpacenav/spnavcfg/issues/43
   libsForQt5,
@@ -32,9 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libsForQt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     libsForQt5.qtbase
     libspnav
+    libX11
   ];
 
   meta = with lib; {
