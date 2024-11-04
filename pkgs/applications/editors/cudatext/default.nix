@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, coreutils
 , lazarus
 , fpc
 , libX11
@@ -53,6 +54,8 @@ stdenv.mkDerivation rec {
     substituteInPlace app/proc_globdata.pas \
       --subst-var out \
       --subst-var-by python3 ${python3}
+    substituteInPlace app/proc_editor_saving.pas \
+      --replace-fail '/bin/cp' "${coreutils}/bin/cp"
   '';
 
   nativeBuildInputs = [ lazarus fpc ]

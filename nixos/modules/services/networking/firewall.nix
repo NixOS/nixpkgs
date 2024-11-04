@@ -274,7 +274,10 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
+    environment.systemPackages = [
+      cfg.package
+      pkgs.nixos-firewall-tool
+    ] ++ cfg.extraPackages;
 
     boot.kernelModules = (lib.optional cfg.autoLoadConntrackHelpers "nf_conntrack")
       ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;

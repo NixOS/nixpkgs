@@ -36,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.4";
+  version = "18.6";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-BoEFh0lCd2pCIod5sFafnOs/TQHj/SlIAU8P4o+cjyE=";
+    hash = "sha256-thAB7QtR23j39ORK1YT2Idp4J7GffbNV7snbLAnYzMI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-1MJ5cP4lyRSZ7VRED8RL5scnqpcy8/avmBKW1Zmt6FU=";
+    hash = "sha256-/kCsAZP9cwUQFcNnk5/eYMzw80Bh4JnwPXd299p1JEU=";
   };
 
   nativeBuildInputs = [
@@ -92,13 +92,6 @@ stdenv.mkDerivation rec {
     Security
   ]);
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ddnet/ddnet/pull/8517/commits/c840bf45016a30e629f7684df5fab5d07b2c70d5.patch";
-      hash = "sha256-UG7pi0Xh/nAHFEF1RIyNZLewF+NFilTLARbV5oUlftc=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
@@ -120,6 +113,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/applications
     rm -rf $out/share/icons
     rm -rf $out/share/metainfo
+  '';
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
+    install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
   '';
 
   meta = with lib; {

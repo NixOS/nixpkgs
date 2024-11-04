@@ -50,6 +50,7 @@ buildPythonPackage rec {
     "httpx"
     "iso8601"
     "pydantic"
+    "tenacity"
   ];
 
   build-system = [ poetry-core ];

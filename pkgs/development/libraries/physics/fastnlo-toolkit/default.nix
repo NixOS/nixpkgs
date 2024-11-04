@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
+  patches = [
+    # Compatibility with YODA 2.x
+    ./yoda2_support.patch
+  ];
+
   buildInputs = [
     boost
     gfortran

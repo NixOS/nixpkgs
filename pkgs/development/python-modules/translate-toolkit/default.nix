@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.13.2";
+  version = "3.13.4";
 
   pyproject = true;
   build-system = [ setuptools-scm ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "translate_toolkit";
     inherit version;
-    hash = "sha256-95zIAelFSNK5+f1GY8DUgHPDQBS5K+9ULjXaSaa0wWM=";
+    hash = "sha256-d0q4xpN37xeLSmQMBrDGZlGjAj4hHfkazGUHzl89UHI=";
   };
 
   dependencies = [

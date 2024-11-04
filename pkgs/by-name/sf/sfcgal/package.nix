@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfcgal";
-  version = "1.5.2";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "SFCGAL";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fK1PfLm6n05PhH/sT6N/hQtH5Z6+Xc1nUCS1NYpLDcY=";
+    hash = "sha256-cx0QJCtAPR/WkWPpH+mZvq2803eDT7b+qlI5ma+CveE=";
   };
 
   buildInputs = [

@@ -103,8 +103,8 @@ in buildGoModule rec {
     cp -R $src/pkg/status/templates $out/share/datadog-agent
 
     wrapProgram "$out/bin/agent" \
-      --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
+      --set PYTHONPATH "$out/${python.sitePackages}"''
+      + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ (lib.getLib systemd) rtloader ]}";
 
   passthru.tests.version = testers.testVersion {
     package = datadog-agent;
@@ -120,6 +120,9 @@ in buildGoModule rec {
     license     = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    # broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+
+    # Upstream does not support Go > 1.21; for update refer to https://github.com/NixOS/nixpkgs/issues/351119
+    broken = true;
   };
 }

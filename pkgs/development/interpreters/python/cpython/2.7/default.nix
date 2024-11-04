@@ -8,10 +8,10 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, tix ? null, libX11 ? null, x11Support ? false
+, tcl ? null, tk ? null, tclPackages, libX11 ? null, x11Support ? false
 , zlib
 , self
-, configd, coreutils
+, coreutils
 , autoreconfHook
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
@@ -239,8 +239,7 @@ let
   buildInputs =
     lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
-    ++ lib.optionals x11Support [ tcl tk libX11 ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && configd != null) configd;
+    ++ lib.optionals x11Support [ tcl tk libX11 ];
   nativeBuildInputs =
     [ autoreconfHook ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -273,8 +272,8 @@ in with passthru; stdenv.mkDerivation ({
 
     setupHook = python-setup-hook sitePackages;
 
-    postPatch = lib.optionalString (x11Support && (tix != null)) ''
-          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    postPatch = lib.optionalString (x11Support && ((tclPackages.tix or null) != null)) ''
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
     '';
 
     postInstall =

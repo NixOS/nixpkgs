@@ -176,126 +176,138 @@ When needed, each convention explain why it exists, so you can make a decision w
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
-- Put each sentence in its own line.
-  This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
-  It also helps identifying long sentences at a glance.
+### One sentence per line
 
-- Use the [admonition syntax](#admonitions) for callouts and examples.
+Put each sentence in its own line.
+This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
+It also helps identifying long sentences at a glance.
 
-- Provide at least one example per function, and make examples self-contained.
-  This is easier to understand for beginners.
-  It also helps with testing that it actually works – especially once we introduce automation.
+### Callouts and examples
 
-  Example code should be such that it can be passed to `pkgs.callPackage`.
-  Instead of something like:
+Use the [admonition syntax](#admonitions) for callouts and examples.
 
-  ```nix
-  pkgs.dockerTools.buildLayeredImage {
-    name = "hello";
-    contents = [ pkgs.hello ];
-  }
-  ```
+### Provide self-contained examples
 
-  Write something like:
+Provide at least one example per function, and make examples self-contained.
+This is easier to understand for beginners.
+It also helps with testing that it actually works – especially once we introduce automation.
 
-  ```nix
-  { dockerTools, hello }:
-  dockerTools.buildLayeredImage {
-    name = "hello";
-    contents = [ hello ];
-  }
-  ```
+Example code should be such that it can be passed to `pkgs.callPackage`.
+Instead of something like:
 
-- When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
-  This means that for a shell, you should use a format like the following:
-  ```shell
-  $ nix-build -A hello '<nixpkgs>' \
-    --option require-sigs false \
-    --option trusted-substituters file:///tmp/hello-cache \
-    --option substituters file:///tmp/hello-cache
-  /nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
-  ```
-  Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
+```nix
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ pkgs.hello ];
+}
+```
 
-  For the Nix REPL, you should use a format like the following:
-  ```shell
-  nix-repl> builtins.attrNames { a = 1; b = 2; }
-  [ "a" "b" ]
-  ```
-  Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
+Write something like:
 
-- When documenting functions or anything that has inputs/outputs and example usage, use nested headings to clearly separate inputs, outputs, and examples.
-  Keep examples as the last nested heading, and link to the examples wherever applicable in the documentation.
+```nix
+{ dockerTools, hello }:
+dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ hello ];
+}
+```
 
-  The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
-  An example:
-  ```
-  ## buildImage
+### REPLs
 
-  Some explanation about the function here.
-  Describe a particular scenario, and point to [](#ex-dockerTools-buildImage), which is an example demonstrating it.
+When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
+This means that for a shell, you should use a format like the following:
+```shell
+$ nix-build -A hello '<nixpkgs>' \
+  --option require-sigs false \
+  --option trusted-substituters file:///tmp/hello-cache \
+  --option substituters file:///tmp/hello-cache
+/nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
+```
+Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
 
-  ### Inputs
+For the Nix REPL, you should use a format like the following:
+```shell
+nix-repl> builtins.attrNames { a = 1; b = 2; }
+[ "a" "b" ]
+```
+Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
 
-  Documentation for the inputs of `buildImage`.
-  Perhaps even point to [](#ex-dockerTools-buildImage) again when talking about something specifically linked to it.
+### Headings for inputs, outputs and examples
 
-  ### Passthru outputs
+When documenting functions or anything that has inputs/outputs and example usage, use nested headings to clearly separate inputs, outputs, and examples.
+Keep examples as the last nested heading, and link to the examples wherever applicable in the documentation.
 
-  Documentation for any passthru outputs of `buildImage`.
+The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
+An example:
+```
+## buildImage
 
-  ### Examples
+Some explanation about the function here.
+Describe a particular scenario, and point to [](#ex-dockerTools-buildImage), which is an example demonstrating it.
 
-  Note that this is the last nested heading in the `buildImage` section.
+### Inputs
 
-  :::{.example #ex-dockerTools-buildImage}
+Documentation for the inputs of `buildImage`.
+Perhaps even point to [](#ex-dockerTools-buildImage) again when talking about something specifically linked to it.
 
-  # Using `buildImage`
+### Passthru outputs
 
-  Example of how to use `buildImage` goes here.
+Documentation for any passthru outputs of `buildImage`.
 
-  :::
-  ```
+### Examples
 
-- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
-  For example:
+Note that this is the last nested heading in the `buildImage` section.
 
-  ```markdown
-  # pkgs.coolFunction {#pkgs.coolFunction}
+:::{.example #ex-dockerTools-buildImage}
 
-  `pkgs.coolFunction` *`name`* *`config`*
+# Using `buildImage`
 
-  Description of what `callPackage` does.
+Example of how to use `buildImage` goes here.
+
+:::
+```
+
+### Function arguments
+
+Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+For example:
+
+```markdown
+# pkgs.coolFunction {#pkgs.coolFunction}
+
+`pkgs.coolFunction` *`name`* *`config`*
+
+Description of what `callPackage` does.
 
 
-  ## Inputs {#pkgs-coolFunction-inputs}
+## Inputs {#pkgs-coolFunction-inputs}
 
-  If something's special about `coolFunction`'s general argument handling, you can say so here.
-  Otherwise, just describe the single argument or start the arguments' definition list without introduction.
+If something's special about `coolFunction`'s general argument handling, you can say so here.
+Otherwise, just describe the single argument or start the arguments' definition list without introduction.
 
-  *`name`* (String)
+*`name`* (String)
 
-  : The name of the resulting image.
+: The name of the resulting image.
 
-  *`config`* (Attribute set)
+*`config`* (Attribute set)
 
-  : Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
+: Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
 
-    `outputHash` (String; _optional_)
+  `outputHash` (String; _optional_)
 
-    : A brief explanation including when and when not to pass this attribute.
+  : A brief explanation including when and when not to pass this attribute.
 
-    : _Default:_ the output path's hash.
-  ```
+  : _Default:_ the output path's hash.
+```
 
-  Checklist:
-  - Start with a synopsis, to show the order of positional arguments.
-  - Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
-  - Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
-  - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
-  - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
-  - Nix types aren't in code spans, because they are not code
-  - Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
+Checklist:
+- Start with a synopsis, to show the order of positional arguments.
+- Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
+- Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+- _optional_ attributes have a _`Default:`_ if it's easily described as a value.
+- _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
+- Nix types aren't in code spans, because they are not code
+- Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
 #### Examples
 

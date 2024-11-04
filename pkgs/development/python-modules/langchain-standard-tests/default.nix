@@ -21,12 +21,11 @@
 
 buildPythonPackage rec {
   pname = "langchain-standard-tests";
-  version = "0.1.1";
   pyproject = true;
 
   # this is an internal library, so there are no tags
   # sync source with langchain-core for easy updates
-  inherit (langchain-core) src;
+  inherit (langchain-core) src version;
   sourceRoot = "${src.name}/libs/standard-tests";
 
   build-system = [ poetry-core ];
@@ -51,6 +50,9 @@ buildPythonPackage rec {
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

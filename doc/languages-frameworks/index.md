@@ -93,6 +93,7 @@ ruby.section.md
 rust.section.md
 scheme.section.md
 swift.section.md
+tcl.section.md
 texlive.section.md
 titanium.section.md
 vim.section.md

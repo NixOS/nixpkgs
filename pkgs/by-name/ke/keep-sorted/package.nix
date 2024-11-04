@@ -7,13 +7,13 @@
 
 buildGo123Module rec {
   pname = "keep-sorted";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
     rev = "v${version}";
-    hash = "sha256-jqSb/lcdeQMa1XpzaopDBbkKymp+HubLeAx3d6x5pns=";
+    hash = "sha256-xvSEREEOiwft3fPN+xtdMCh+z3PknjJ962Nb+pw715U=";
   };
 
   vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";
@@ -22,10 +22,10 @@ buildGo123Module rec {
 
   ldflags = [ "-s" ];
 
-  checkFlags = [
-    # Test tries to find files using git
-    "-skip=^TestGoldens"
-  ];
+  preCheck = ''
+    # Test tries to find files using git in init func.
+    rm goldens/*_test.go
+  '';
 
   passthru.updateScript = nix-update-script { };
 

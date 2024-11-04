@@ -2,16 +2,24 @@
   appimageTools,
   lib,
   fetchurl,
+  stdenv,
 }:
 
 appimageTools.wrapType2 rec {
   pname = "httpie-desktop";
   version = "2024.1.2";
 
-  src = fetchurl {
-    url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
-    hash = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
-  };
+  src =
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
+        hash = "sha256-RhIyLakCkMUcXvu0sgl5MtV4YXXkqqH1UUS7bptUzww=";
+      }
+    else
+      fetchurl {
+        url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
+        hash = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
+      };
 
   extraInstallCommands =
     let
@@ -32,6 +40,9 @@ appimageTools.wrapType2 rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ luftmensch-luftmensch ];
     mainProgram = "httpie-desktop";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

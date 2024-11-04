@@ -194,9 +194,13 @@ with lib.maintainers;
   };
 
   darwin = {
-    members = [ toonn ];
-    githubTeams = [ "darwin-maintainers" ];
-    scope = "Maintain Darwin compatibility of packages and Darwin-only packages.";
+    members = [
+      emily
+      reckenrode
+      toonn
+    ];
+    githubTeams = [ "darwin-core" ];
+    scope = "Maintain core platform support and packages for macOS and other Apple platforms.";
     shortName = "Darwin";
     enableFeatureFreezePing = true;
   };
@@ -499,7 +503,6 @@ with lib.maintainers;
       ryantm
       lassulus
       yayayayaka
-      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -749,6 +752,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  ngi = {
+    members = [
+      eljamm
+      fricklerhandwerk
+      wegank
+    ];
+    scope = "Maintain NGI-supported software.";
+    shortName = "NGI";
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
@@ -952,6 +965,21 @@ with lib.maintainers;
     members = [ balsoft ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";
+  };
+
+  stdenv = {
+    members = [
+      artturin
+      emily
+      ericson2314
+      philiptaron
+      reckenrode
+      RossComputerGuy
+    ];
+    scope = "Maintain the standard environment and its surrounding logic.";
+    shortName = "stdenv";
+    enableFeatureFreezePing = true;
+    githubTeams = [ "stdenv" ];
   };
 
   steam = {

@@ -265,8 +265,8 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.tracker-miners.enable = mkDefault true;
-      services.gnome.tracker.enable = mkDefault true;
+      services.gnome.localsearch.enable = mkDefault true;
+      services.gnome.tinysparql.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
       # services.packagekit.enable = mkDefault true;
@@ -383,6 +383,7 @@ in
             pkgs.gnome-menus
             pkgs.gtk3.out # for gtk-launch program
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+            pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
           ];
         in
         mandatoryPackages

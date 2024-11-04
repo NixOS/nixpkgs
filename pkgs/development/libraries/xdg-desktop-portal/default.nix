@@ -27,6 +27,7 @@
 , runCommand
 , wrapGAppsHook3
 , xmlto
+, bash
 , enableGeoLocation ? true
 , enableSystemd ? true
 }:
@@ -63,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
     ./trash-test.patch
+
+    # Install files required to be in XDG_DATA_DIR of the installed tests
+    # Merged PR https://github.com/flatpak/xdg-desktop-portal/pull/1444
+    ./installed-tests-share.patch
   ];
 
   # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
@@ -102,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (pp: with pp; [
       pygobject3
     ]))
+    bash
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ] ++ lib.optionals enableSystemd [
@@ -140,6 +146,21 @@ stdenv.mkDerivation (finalAttrs: {
     # flakes:
     #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
     export TEST_IN_CI=1
+  '';
+
+  postFixup = let
+    documentFuse = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-document-fuse.py";
+    testPortals = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-portals";
+
+  in ''
+    if [ -x '${documentFuse}' ] ; then
+      wrapGApp '${documentFuse}'
+      wrapGApp '${testPortals}'
+      # (xdg-desktop-portal:995): xdg-desktop-portal-WARNING **: 21:21:55.673: Failed to get GeoClue client: Timeout was reached
+      # xdg-desktop-portal:ERROR:../tests/location.c:22:location_cb: 'res' should be TRUE
+      # https://github.com/flatpak/xdg-desktop-portal/blob/1d6dfb57067dec182b546dfb60c87aa3452c77ed/tests/location.c#L21
+      rm $installedTests/share/installed-tests/xdg-desktop-portal/test-portals-location.test
+    fi
   '';
 
   passthru = {

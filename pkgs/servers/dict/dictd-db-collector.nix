@@ -13,7 +13,7 @@
 
 let
   link_arguments = map
-    (x: '' "${x.filename}" '')
+    (x: ''"${x.filename}" '')
     dictlist;
   databases = lib.concatStrings (map
     (x:

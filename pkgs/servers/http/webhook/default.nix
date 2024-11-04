@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "webhook";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "adnanh";
     repo = "webhook";
     rev = version;
-    sha256 = "sha256-8OpVpm9nEroUlr41VgnyM6sxd/FlSvoQK5COOWvo4Y4=";
+    sha256 = "sha256-3Ew72ADGTlvp6w37nYbCng7HHCZ0a7kVf3DNRNyCkZU=";
   };
 
   vendorHash = null;

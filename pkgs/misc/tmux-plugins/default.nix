@@ -378,14 +378,14 @@ in rec {
     };
   };
 
-  nord = mkTmuxPlugin rec {
+  nord = mkTmuxPlugin {
     pluginName = "nord";
-    version = "0.3.0";
+    version = "0.3.0-unstable-2023-03-03";
     src = pkgs.fetchFromGitHub {
       owner = "nordtheme";
       repo = "tmux";
-      rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+      rev = "f7b6da07ab55fe32ee5f7d62da56d8e5ac691a92";
+      hash = "sha256-mcmVYNWOUoQLiu4eM/EUudRg67Gcou13xuC6zv9aMKA=";
     };
     meta = {
       homepage = "https://www.nordtheme.com/ports/tmux";
@@ -399,6 +399,7 @@ in rec {
           theme in order to work properly.
       '';
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sigmasquadron ];
     };
   };
 
@@ -863,12 +864,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2021-06-20";
+    version = "unstable-2023-07-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
-      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+      rev = "acfd36e4fcba99f8310a7dfb432111c242fe7392";
+      sha256 = "sha256-/5HPaoOx2U2d8lZZJo5dKmemu6hKgHJYq23hxkddXpA=";
     };
   };
 

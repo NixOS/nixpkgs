@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "2024-09-30";
+  version = "2024-10-18";
 
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "0705234991d03170a72582085dc508600a03a779";
-    hash = "sha256-tAigYqS3ZAtZJp7RaarbXrDxrjiYu2wjNHq6GP/BMfk=";
+    rev = "36b23cef16c2c624c34bea213f01c06782d2ca40";
+    hash = "sha256-QUFcJMbfr5BAS04ig1IHLCMLACeQhFVH9ZCH/VD8i8Y=";
   };
 
   meta = with lib; {
@@ -71,6 +71,5 @@ vimUtils.buildVimPlugin {
     '';
 
   doInstallCheck = true;
-  # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-  # nvimRequireCheck = "avante";
+  nvimRequireCheck = "avante";
 }

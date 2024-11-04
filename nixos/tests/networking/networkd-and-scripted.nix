@@ -133,8 +133,12 @@ let
               client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q 'fd00:1234:5678:2:'")
 
           with subtest("Wait until we have received the nameservers"):
-              client.wait_until_succeeds("grep -q 2001:db8::1 /etc/resolv.conf")
-              client.wait_until_succeeds("grep -q 192.168.2.1 /etc/resolv.conf")
+            if "${builtins.toJSON networkd}" == "true":
+              client.wait_until_succeeds("resolvectl status enp2s0 | grep -q 2001:db8::1")
+              client.wait_until_succeeds("resolvectl status enp2s0 | grep -q 192.168.2.1")
+            else:
+              client.wait_until_succeeds("resolvconf -l | grep -q 2001:db8::1")
+              client.wait_until_succeeds("resolvconf -l | grep -q 192.168.2.1")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")

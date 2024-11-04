@@ -97,7 +97,7 @@ let
     # Following XDG spec [1], XDG_DATA_DIRS should default to "/usr/local/share:/usr/share".
     # In nix, it is commonly set without containing these values, so we add them as fallback.
     #
-    # [1] <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>
+    # [1] <https://specifications.freedesktop.org/basedir-spec/latest>
     case ":$XDG_DATA_DIRS:" in
       *:/usr/local/share:*) ;;
       *) export XDG_DATA_DIRS="$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/usr/local/share" ;;
@@ -245,7 +245,7 @@ let
     done
     cd ..
 
-    for i in var etc opt; do
+    for i in etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mvn23";
     repo = "pyotgw";
     rev = "refs/tags/${version}";
-    hash = "sha256-jms7uSeafLxq26E9pyVVXtnW7yYD0OrU4KrXxTXoC4M=";
+    hash = "sha256-BQgRWXBSmB9AzpPeTJP7motJeKF2G0tyqJpbwIwnxwk=";
   };
 
   build-system = [ setuptools ];

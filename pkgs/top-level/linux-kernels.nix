@@ -181,14 +181,6 @@ in {
       ];
     };
 
-    linux_6_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.10";
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.11";
       kernelPatches = [
@@ -280,6 +272,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8 = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -290,6 +283,7 @@ in {
     linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -405,6 +399,8 @@ in {
 
     new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
+    zenergy = callPackage ../os-specific/linux/zenergy { };
+
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
@@ -516,17 +512,15 @@ in {
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
 
-    system76-power = callPackage ../os-specific/linux/system76-power { };
-
     system76-io = callPackage ../os-specific/linux/system76-io { };
-
-    system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
 
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
+
+    corefreq = callPackage ../os-specific/linux/corefreq { };
 
     trelay = callPackage ../os-specific/linux/trelay { };
 
@@ -610,6 +604,8 @@ in {
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
+    system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
+    system76-scheduler = lib.warn "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
@@ -621,7 +617,6 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-    linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
     linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -631,6 +626,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
     linux_6_8 = throw "linux 6.8 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
   };
 
   rtPackages = {

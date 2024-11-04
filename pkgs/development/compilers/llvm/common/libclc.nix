@@ -22,11 +22,17 @@ stdenv.mkDerivation rec {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" { } ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${pname} "$out"
-  '';
+  src = runCommand "${pname}-src-${version}" { } (
+    ''
+      mkdir -p "$out"
+    ''
+    + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
+    ''
+    + ''
+      cp -r ${monorepoSrc}/${pname} "$out"
+    ''
+  );
 
   sourceRoot = "${src.name}/${pname}";
 

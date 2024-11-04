@@ -114,6 +114,15 @@ in
         '';
       };
 
+      subscriberFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+        description = ''
+          Files written by resolvconf updates
+        '';
+        internal = true;
+      };
+
     };
 
   };
@@ -134,6 +143,8 @@ in
     (lib.mkIf cfg.enable {
       users.groups.resolvconf = {};
 
+      networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];
+
       networking.resolvconf.package = pkgs.openresolv;
 
       environment.systemPackages = [ cfg.package ];
@@ -145,12 +156,17 @@ in
         wants = [ "network-pre.target" ];
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
+        serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
 
         script = ''
           ${lib.getExe cfg.package} -u
-          chgrp -R resolvconf /etc/resolv.conf /run/resolvconf
-          chmod -R g=u /etc/resolv.conf /run/resolvconf
+          chgrp resolvconf ${lib.escapeShellArgs cfg.subscriberFiles}
+          chmod g=u ${lib.escapeShellArgs cfg.subscriberFiles}
+          ${lib.getExe' pkgs.acl "setfacl"} -R \
+            -m group:resolvconf:rwx \
+            -m default:group:resolvconf:rwx \
+            /run/resolvconf
         '';
       };
 

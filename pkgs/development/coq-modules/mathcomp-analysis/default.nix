@@ -9,6 +9,7 @@ let
   repo  = "analysis";
   owner = "math-comp";
 
+  release."1.5.0".sha256 = "sha256-EWogrkr5TC5F9HjQJwO3bl4P8mij8U7thUGJNNI+k88=";
   release."1.4.0".sha256 = "sha256-eDggeuEU0fMK7D5FbxvLkbAgpLw5lwL/Rl0eLXAnJeg=";
   release."1.2.0".sha256 = "sha256-w6BivDM4dF4Iv4rUTy++2feweNtMAJxgGExPfYGhXxo=";
   release."1.1.0".sha256 = "sha256-wl4kZf4mh9zbFfGcqaFEgWRyp0Bj511F505mYodpS6o=";
@@ -33,7 +34,7 @@ let
 
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.19" "8.20") (range "2.1.0" "2.2.0") ];   out = "1.4.0"; }
+      { cases = [ (range "8.19" "8.20") (range "2.1.0" "2.2.0") ];   out = "1.5.0"; }
       { cases = [ (range "8.17" "8.20") (range "2.0.0" "2.2.0") ];   out = "1.1.0"; }
       { cases = [ (range "8.17" "8.19") (range "1.17.0" "1.19.0") ]; out = "0.7.0"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.7"; }
@@ -50,14 +51,26 @@ let
     ] null;
 
   # list of analysis packages sorted by dependency order
-  packages = [ "classical" "analysis" ];
+  packages = {
+    "classical" = [];
+    "reals" = [ "classical" ];
+    "altreals" = [ "reals" ];
+    "analysis" = [ "reals" ];
+    "reals-stdlib" = [ "reals" ];
+    "analysis-stdlib" = [ "analysis" "reals-stdlib" ];
+  };
 
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
+      altreals-deps = [ mathcomp-bigenough ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
-      intra-deps = lib.optionals (package != "single") (map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
-      pkgpath = if package == "single" then "."
-        else if package == "analysis" then "theories" else "${package}";
+      intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
+      pkgpath = lib.switch package [
+        { case = "single"; out = "."; }
+        { case = "analysis"; out = "theories"; }
+        { case = "reals-stdlib"; out = "reals_stdlib"; }
+        { case = "analysis-stdlib"; out = "analysis_stdlib"; }
+      ] package;
       pname = if package == "single" then "mathcomp-analysis-single"
         else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
@@ -68,6 +81,7 @@ let
         propagatedBuildInputs =
           intra-deps
           ++ lib.optionals (lib.elem package [ "classical" "single" ]) classical-deps
+          ++ lib.optionals (lib.elem package [ "altreals" "single" ]) altreals-deps
           ++ lib.optionals (lib.elem package [ "analysis" "single" ]) analysis-deps;
 
         preBuild = ''
@@ -80,7 +94,7 @@ let
           license     = lib.licenses.cecill-c;
         };
 
-        passthru = lib.genAttrs packages mathcomp_;
+        passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
       });
     # split packages didn't exist before 0.6, so bulding nothing in that case
     patched-derivation1 = derivation.overrideAttrs (o:
@@ -93,7 +107,13 @@ let
          o.version != null && o.version != "dev" && lib.versions.isLt "0.6" o.version)
       { preBuild = ""; }
     );
-    patched-derivation = patched-derivation2.overrideAttrs (o:
+    # only packages classical and analysis existed before 1.7, so bulding nothing in that case
+    patched-derivation3 = patched-derivation2.overrideAttrs (o:
+      lib.optionalAttrs (o.pname != null && o.pname != "mathcomp-classical" && o.pname != "mathcomp-analysis" &&
+         o.version != null && o.version != "dev" && lib.versions.isLt "1.7" o.version)
+      { preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+    );
+    patched-derivation = patched-derivation3.overrideAttrs (o:
       lib.optionalAttrs (o.version != null
         && (o.version == "dev" || lib.versions.isGe "0.3.4" o.version))
       {

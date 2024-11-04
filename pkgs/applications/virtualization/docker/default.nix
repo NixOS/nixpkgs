@@ -24,6 +24,16 @@ rec {
       , knownVulnerabilities ? []
     }:
   let
+    docker-meta = {
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        offline
+        vdemeester
+        periklis
+        teutat3s
+      ];
+    };
+
     docker-runc = runc.overrideAttrs {
       pname = "docker-runc";
       inherit version;
@@ -160,6 +170,11 @@ rec {
         ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
         ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
+
+      meta = docker-meta // {
+          homepage = "https://mobyproject.org/";
+          description = "A collaborative project for the container ecosystem to assemble container-based systems.";
+        };
     });
 
     plugins = lib.optional buildxSupport docker-buildx
@@ -254,10 +269,10 @@ rec {
     passthru = {
       # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
       inherit moby-src;
-      tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+      tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
     };
 
-    meta = with lib; {
+    meta = docker-meta // {
       homepage = "https://www.docker.com/";
       description = "Open source project to pack, ship and run any application as a lightweight container";
       longDescription = ''
@@ -265,8 +280,6 @@ rec {
 
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
-      license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
       inherit knownVulnerabilities;
     };
@@ -323,9 +336,9 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.3.0";
+    version = "27.3.1";
     cliRev = "v${version}";
-    cliHash = "sha256-1z2MmWq+HD2fhpZqXu0G7oBL3Mc0NN/fR69aMWRelns=";
+    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
     mobyRev = "v${version}";
     mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
     runcRev = "v1.1.14";

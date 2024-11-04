@@ -17,33 +17,24 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BdkaQzcz5+7yaNfoDsImoCMtokQolhSo84JpAa7BCY4=";
+    hash = "sha256-uk+scDbqWgeMev4dTf/rloUIDULxnJwWsS2thmcDqi4=";
   };
 
-  patches = [
-    # https://github.com/zarr-developers/numcodecs/pull/487
-    (fetchpatch {
-      name = "fix-tests.patch";
-      url = "https://github.com/zarr-developers/numcodecs/commit/4896680087d3ff1f959401c51cf5aea0fd56554e.patch";
-      hash = "sha256-+lMWK5IsNzJ7H2SmLckgxbSSRIIcC7FtGYSBKQtuo+Y=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     cython
     py-cpuinfo
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   optional-dependencies = {
     msgpack = [ msgpack ];

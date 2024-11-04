@@ -4,6 +4,7 @@
   substituteAll,
   lib,
   stdenv,
+  docutils,
   meson,
   ninja,
   pkg-config,
@@ -56,7 +57,6 @@
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
-  asciidoc,
   bash-completion,
   mesa,
   libGL,
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "46.4";
+  version = "47.0";
 
   outputs = [
     "out"
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-GIRo/nLpCsSyNOnU0HB9YH/q85oT0lvTqj63XlWj4FI=";
+    hash = "sha256-eiB3DGKQrWmpqCyEl8sn4b+GPzh9sl6Y5ULk9sXwbe0=";
   };
 
   patches = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man
     meson
     ninja
     pkg-config
@@ -122,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     desktop-file-utils
     libxslt.bin
-    asciidoc
     gobject-introspection
   ];
 

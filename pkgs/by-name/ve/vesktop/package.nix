@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-rizJu6v04wFEpJtakC2tfPg/uylz7gAOzJiXvUwdDI4=";
+    hash = "sha256-BOVjbaDbZw6H6X8o945M0Bx6fqnRQjFBviOLkTYVJ1I=";
   };
 
   nativeBuildInputs =
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
-      mv dist/mac*/Vesktop.App $out/Applications
+      mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
     ''
     + ''
       runHook postInstall

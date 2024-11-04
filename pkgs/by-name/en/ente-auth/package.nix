@@ -78,7 +78,7 @@ flutter324.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    FAV=$out/app/data/flutter_assets/assets/icons/auth-icon.png
+    FAV=$out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/ente-auth.png

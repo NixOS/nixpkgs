@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gradle,
   binutils,
-  dpkg,
   fakeroot,
   jdk17,
   fontconfig,
@@ -17,31 +16,42 @@
   cups,
   lcms2,
   alsa-lib,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 let
-  gradleBuildTask = ":desktopApp:packageDeb";
+  gradleBuildTask = ":desktopApp:createDistributable";
   gradleUpdateTask = gradleBuildTask;
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Keyguard";
+      exec = "Keyguard";
+      icon = "Keyguard";
+      comment = "Keyguard";
+      desktopName = "Keyguard";
+    })
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    rev = "25b505f7679e40bd42f5ff59218deb0f2aac2083";
-    hash = "sha256-+WXeHcILukCheUzD59ffP+eMLXF8T5qm3NWNUugWIqg=";
+    rev = "81a8486ca31c86630c84c78285c49d16d7491328";
+    hash = "sha256-e0Ea2QSAMQqZRVPy5/5pblHfeG+L6oHEXHV5mepE5Z8=";
   };
 
-  inherit gradleBuildTask gradleUpdateTask;
+  inherit gradleBuildTask gradleUpdateTask desktopItems;
 
   nativeBuildInputs = [
     gradle
     binutils
-    dpkg
     fakeroot
     jdk17
     autoPatchelfHook
+    copyDesktopItems
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -75,13 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/
-    dpkg -x ./desktopApp/build/compose/binaries/main/deb/*.deb $out
-    mv $out/opt/keyguard/* -t $out/
-    rm -r $out/opt
-    install -Dm0644 $out/lib/*-Keyguard.desktop $out/share/applications/Keyguard.desktop
-    substituteInPlace $out/share/applications/Keyguard.desktop \
-      --replace-fail 'Exec=/opt/keyguard/bin/Keyguard' 'Exec=Keyguard' \
-      --replace-fail 'Icon=/opt/keyguard/lib/Keyguard.png' 'Icon=Keyguard'
+    cp -a ./desktopApp/build/compose/binaries/main/app/*/* $out/
     install -Dm0644 $out/lib/Keyguard.png $out/share/pixmaps/Keyguard.png
 
     runHook postInstall

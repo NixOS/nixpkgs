@@ -17,7 +17,7 @@
   cacert,
   unzip,
   # runtime deps
-  ffmpeg-headless,
+  jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
   libraw,
   libheif,
@@ -101,8 +101,8 @@ let
 
   web = buildNpmPackage' {
     pname = "immich-web";
-    inherit version;
-    src = "${src}/web";
+    inherit version src;
+    sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
     preBuild = ''
@@ -155,7 +155,7 @@ buildNpmPackage' {
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    jellyfin-ffmpeg
     imagemagick
     libraw
     libheif
@@ -198,7 +198,7 @@ buildNpmPackage' {
       --suffix PATH : "${
         lib.makeBinPath [
           perl
-          ffmpeg-headless
+          jellyfin-ffmpeg
         ]
       }"
 
@@ -225,7 +225,12 @@ buildNpmPackage' {
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jvanbruegge
+      Scrumplex
+      titaniumtown
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "server";
   };

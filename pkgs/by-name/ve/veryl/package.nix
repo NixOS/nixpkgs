@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  installShellFiles,
   dbus,
   stdenv,
   darwin,
@@ -10,20 +11,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-U4ikR2jRmHUwRycAL/t2XJtvHQniKu6skRKWn8XDIgM=";
+    hash = "sha256-YcYP7JO27Fv/LTrxbQ0vNqwBE6anGjeTFS31MAp2ip4=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-t2q3rbY84+0ayxt7a/TCD0exCm7KEs+8UbQjCtqZPoE=";
+  cargoHash = "sha256-HvT56jBmFTWUdzHjyPVaJ3wuMD01omCFEIEJ53JrKY4=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs =
@@ -36,6 +38,13 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd veryl \
+      --bash <($out/bin/veryl metadata --completion bash) \
+      --fish <($out/bin/veryl metadata --completion fish) \
+      --zsh <($out/bin/veryl metadata --completion zsh)
+  '';
 
   checkFlags = [
     # takes over an hour
@@ -53,7 +62,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=analyzer::test_68_std"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
-
   ];
 
   meta = {

@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-g6O6YE1irE3Hy+Xu7MeH97Oc4bq32IDnfP1VLSiF/U4=";
+    hash = "sha256-ZaurLQlM81lCGdMwvl/1YDzpC/mU08Wlgx4/MAm6un4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";

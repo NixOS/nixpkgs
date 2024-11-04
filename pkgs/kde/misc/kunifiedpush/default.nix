@@ -1,21 +1,18 @@
 {
   lib,
   mkKdeDerivation,
-  fetchFromGitLab,
+  fetchurl,
   qtwebsockets,
   kdeclarative,
   kpackage,
 }:
-mkKdeDerivation {
+mkKdeDerivation rec {
   pname = "kunifiedpush";
-  version = "unstable-2024-02-19";
+  version = "1.0.0";
 
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "libraries";
-    repo = "kunifiedpush";
-    rev = "b89a31fb4f333a4e5d6c475a030147c8bdcffec6";
-    hash = "sha256-bhlsEP7cLuA6Rj6nrpp5iC3uolc02twNMLsWl+d/BXo=";
+  src = fetchurl {
+    url = "mirror://kde/stable/kunifiedpush/kunifiedpush-${version}.tar.xz";
+    sha256 = "sha256-Ld66ITBtAwcRTsUKLDgVnsYjWfn8bN1Y2jCjafvVUM8=";
   };
 
   extraBuildInputs = [

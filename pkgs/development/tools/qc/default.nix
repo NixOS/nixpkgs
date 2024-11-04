@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "qc";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qc";
     rev = "v${version}";
-    hash = "sha256-+Mkg8x9f6oqPqPrk6iCHH69+k0jhQGfjtbJwJPLc7Dw=";
+    hash = "sha256-D45uJk1Hb7k2qOLIbRdo0gQlPovUwcQ3rnYqhouhow0=";
   };
 
   vendorHash = "sha256-Cg1Op/4okIi2UTtqWnR0N3iMWzrYEaYxmXzvWIibftg=";

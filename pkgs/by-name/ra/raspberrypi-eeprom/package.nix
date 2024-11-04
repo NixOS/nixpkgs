@@ -5,6 +5,7 @@
 , python3
 , binutils-unwrapped
 , findutils
+, flashrom
 , gawk
 , kmod
 , pciutils
@@ -52,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
           findutils
+          flashrom
           gawk
           kmod
           pciutils

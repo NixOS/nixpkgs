@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "wez";
-    repo = pname;
+    repo = "wezterm";
     rev = version;
     fetchSubmodules = true;
     hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
@@ -49,6 +49,13 @@ rustPlatform.buildRustPackage rec {
 
     # tests are failing with: Unable to exchange encryption keys
     rm -r wezterm-ssh/tests
+
+    # hash does not work well with NixOS
+    substituteInPlace assets/shell-integration/wezterm.sh \
+      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
   '';
 
   cargoLock = {
@@ -123,18 +130,40 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
+    # the headless variant is useful when deploying wezterm's mux server on remote severs
+    headless = rustPlatform.buildRustPackage {
+      pname = "${pname}-headless";
+      inherit version src postPatch cargoLock meta;
+
+      nativeBuildInputs = [ pkg-config ];
+
+      buildInputs = [ openssl ];
+
+      cargoBuildFlags = [
+        "--package" "wezterm"
+        "--package" "wezterm-mux-server"
+      ];
+
+      doCheck = false;
+
+      postInstall = ''
+        install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
+        install -Dm644 ${passthru.terminfo}/share/terminfo/w/wezterm -t $out/share/terminfo/w
+      '';
+    };
+
+    terminfo = runCommand "wezterm-terminfo" {
+      nativeBuildInputs = [ ncurses ];
+    } ''
+      mkdir -p $out/share/terminfo $out/nix-support
+      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+    '';
+
     tests = {
       all-terminfo = nixosTests.allTerminfo;
       # the test is commented out in nixos/tests/terminal-emulators.nix
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
-    terminfo = runCommand "wezterm-terminfo"
-      {
-        nativeBuildInputs = [ ncurses ];
-      } ''
-      mkdir -p $out/share/terminfo $out/nix-support
-      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
-    '';
   };
 
   meta = with lib; {

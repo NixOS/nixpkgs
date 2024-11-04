@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-Q74t00na/+AW3RQAxdEShYKMIv6jXKUQnyHz7VBgUIA=";
   };
 
+  patches = [
+    # Drop use of deprecated libxml2 HTTP API.
+    # From: https://www.gaia-gis.it/fossil/libspatialite/info/7c452740fe
+    # see also: https://github.com/NixOS/nixpkgs/issues/347085
+    ./xmlNanoHTTPCleanup.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     validatePkgConfig
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     freexl
     geos
     librttopo
-    (libxml2.override { enableHttp = true; })
+    libxml2
     minizip
     proj
     sqlite

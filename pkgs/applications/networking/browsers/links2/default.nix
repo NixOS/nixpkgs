@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.29";
+  version = "2.30";
   pname = "links2";
 
   src = fetchurl {
     url = "http://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
+    hash = "sha256-xGMca1oRUnzcPLeHL8I7fyslwrAh1Za+QQ2ttAMV8WY=";
   };
 
   buildInputs =

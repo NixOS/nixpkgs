@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sttr";
-  version = "0.2.23";
+  version = "0.2.24";
 
   src = fetchFromGitHub {
     owner = "abhimanyu003";
     repo = "sttr";
     rev = "v${version}";
-    hash = "sha256-BO6R41FtpPS3GBuKifm+gEnkkQodQDtbjZWtsGtuvms=";
+    hash = "sha256-9p4h30iM3SZDCAn08KQjJLJGbQND13gbWK5rhW+Knok=";
   };
 
-  vendorHash = "sha256-n+B/e3M+S46vATq9eVXiYcO2s5WNGSvSE2Ci2rpigog=";
+  vendorHash = "sha256-GJtnwnT+dJAjnAlGcoealsiKcLu0bBBHOE8xRjJQaVs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

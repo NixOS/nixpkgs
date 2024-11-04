@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python311,
   pkg-config,
   SDL2,
@@ -86,7 +87,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  patches = [ ./shutup-erofs-errors.patch ];
+  patches = [
+    ./shutup-erofs-errors.patch
+    ./5687.patch
+  ];
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}

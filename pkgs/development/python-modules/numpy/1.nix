@@ -155,7 +155,11 @@ buildPythonPackage rec {
 
   # https://github.com/numpy/numpy/issues/24548
   disabledTests =
-    lib.optionals stdenv.hostPlatform.isi686 [
+    [
+      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+      "test_api_importable"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isi686 [
       "test_new_policy" # AssertionError: assert False
       "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
       "test_float_remainder_overflow" # AssertionError: FloatingPointError not raised by divmod

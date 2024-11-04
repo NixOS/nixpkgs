@@ -14,6 +14,7 @@ let
     postgresql_14 = ./14.nix;
     postgresql_15 = ./15.nix;
     postgresql_16 = ./16.nix;
+    postgresql_17 = ./17.nix;
   };
 
   mkAttributes = jitSupport:

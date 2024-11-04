@@ -25,7 +25,7 @@ let
     update-source-version synology-drive-client "$version"
   '';
 
-  linux = qt5.mkDerivation {
+  linux = stdenv.mkDerivation {
     inherit pname version meta passthru;
 
     src = fetchurl {
@@ -33,7 +33,7 @@ let
       sha256 = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook dpkg ];
+    nativeBuildInputs = [ qt5.wrapQtAppsHook autoPatchelfHook dpkg ];
 
     buildInputs = [ glibc gtk3 pango libxcb ];
 

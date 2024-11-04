@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl, ncurses, libiconv }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "stfl";
-  version = "0.24";
+  version = "0.24-unstable-2021-11-29";
 
-  src = fetchurl {
-    url = "http://www.clifford.at/stfl/stfl-${version}.tar.gz";
-    sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
+  src = fetchFromGitHub {
+    owner ="newsboat";
+    repo = "stfl";
+    rev = "c2c10b8a50fef613c0aacdc5d06a0fa610bf79e9";
+    hash = "sha256-os1yQ6o4m7yBiEZQIPP64diRleIr7FtuQucUbWs4A6k=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  buildInputs = [ ncurses libiconv ];
+  buildInputs = [ ncurses ];
 
   # Silence warnings related to use of implicitly declared library functions and implicit ints.
   # TODO: Remove and/or fix with patches the next time this package is updated.
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=implicit-int"
     ];
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
   };
 
   preBuild = ''
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.clifford.at/stfl/";
+    homepage = "https://web.archive.org/web/20211113222004/http://www.clifford.at/stfl/";
     description = "Library which implements a curses-based widget set for text terminals";
     maintainers = with lib.maintainers; [ lovek323 ];
     license = lib.licenses.lgpl3;

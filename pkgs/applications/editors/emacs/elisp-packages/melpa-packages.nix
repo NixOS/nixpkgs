@@ -757,15 +757,20 @@ let
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 
-        # https://github.com/melpa/melpa/pull/9185
-        alectryon = super.alectryon.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --recursive --verbose etc/elisp/screenshot
-            '';
-        });
+        alectryon = super.alectryon.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9185
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20241006.1902" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --recursive --verbose etc/elisp/screenshot
+                ''
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         # https://github.com/gergelypolonkai/alert-termux/issues/2
         alert-termux = addPackageRequires super.alert-termux [ self.alert ];
@@ -801,17 +806,26 @@ let
         boa-mode = ignoreCompilationError super.boa-mode; # elisp error
 
         # missing optional dependencies
-        boogie-friends = addPackageRequires super.boogie-friends [ self.lsp-mode ];
+        # https://github.com/boogie-org/boogie-friends/issues/42
+        boogie-friends = ignoreCompilationError (addPackageRequires super.boogie-friends [ self.lsp-mode ]);
 
-        # https://github.com/melpa/melpa/pull/9181
-        bpr = super.bpr.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --verbose --force test-bpr.el
-            '';
-        });
+        # this package probably should not be compiled in nix build sandbox
+        borg = ignoreCompilationError super.borg;
+
+        bpr = super.bpr.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9181
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20241013.1803" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --verbose --force test-bpr.el
+                ''
+              else
+                previousAttrs;
+          }
+        );
 
         bts = ignoreCompilationError super.bts; # elisp error
 
@@ -853,13 +867,31 @@ let
         # one optional dependency spark is removed in https://github.com/melpa/melpa/pull/9151
         chronometrist = ignoreCompilationError super.chronometrist;
 
-        # https://github.com/melpa/melpa/pull/9184
-        chronometrist-key-values = super.chronometrist-key-values.overrideAttrs (old: {
-          recipe = ''
-            (chronometrist-key-values :fetcher git :url ""
-             :files (:defaults "elisp/chronometrist-key-values.*"))
-          '';
-        });
+        chronometrist-key-values = super.chronometrist-key-values.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9184
+            recipe =
+              if lib.versionOlder finalAttrs.version "20241006.1831" then
+                ''
+                  (chronometrist-key-values :fetcher git :url ""
+                   :files (:defaults "elisp/chronometrist-key-values.*"))
+                ''
+              else
+                previousAttrs.recipe;
+          }
+        );
+
+        clingo-mode = super.clingo-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "add-missing-end-parenthesis.patch";
+                url = "https://github.com/llaisdy/clingo-mode/pull/3/commits/063445a24afb176c3f16af7a2763771dbdc4ecf6.patch";
+                hash = "sha256-OYP5LaZmCUJFgFk1Pf30e7sml8fC+xI4HSyDz7lck7E=";
+              })
+            ];
+          }
+        );
 
         # https://github.com/atilaneves/cmake-ide/issues/176
         cmake-ide = addPackageRequires super.cmake-ide [ self.dash ];
@@ -901,6 +933,12 @@ let
 
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
+
+        consult-gh = super.consult-gh.overrideAttrs (old: {
+          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+        });
+
+        consult-gh-forge = buildWithGit super.consult-gh-forge;
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
@@ -1060,15 +1098,20 @@ let
 
         fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
 
-        # https://github.com/melpa/melpa/pull/9182
-        frontside-javascript = super.frontside-javascript.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --verbose packages/javascript/test-suppport.el
-            '';
-        });
+        frontside-javascript = super.frontside-javascript.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9182
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20240929.1858" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --verbose packages/javascript/test-suppport.el
+                ''
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         fxrd-mode = ignoreCompilationError super.fxrd-mode; # elisp error
 
@@ -1079,6 +1122,8 @@ let
         ];
 
         gh-notify = buildWithGit super.gh-notify;
+
+        "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
 
         # https://github.com/nlamirault/emacs-gitlab/issues/68
         gitlab = addPackageRequires super.gitlab [ self.f ];
@@ -1195,6 +1240,23 @@ let
         # missing optional dependencies: vterm or eat
         julia-snail = addPackageRequires super.julia-snail [ self.eat ];
 
+        kanagawa-themes = super.kanagawa-themes.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches =
+              if lib.versionOlder finalAttrs.version "20241015.2237" then
+                previousAttrs.patches or [ ]
+                ++ [
+                  (pkgs.fetchpatch {
+                    name = "fix-compilation-error.patch";
+                    url = "https://github.com/Fabiokleis/kanagawa-emacs/commit/83c2b5c292198b46a06ec0ad62619d83fd965433.patch";
+                    hash = "sha256-pB1ht03XCh+BWKHhxBAp701qt/KWAMJ2SQQaN3FgMjU=";
+                  })
+                ]
+              else
+                previousAttrs.patches or null;
+          }
+        );
+
         kite = ignoreCompilationError super.kite; # elisp error
 
         # missing optional dependencies
@@ -1303,6 +1365,11 @@ let
         org-change = ignoreCompilationError super.org-change; # elisp error
 
         org-edit-latex = mkHome super.org-edit-latex;
+
+        # https://github.com/GuiltyDolphin/org-evil/issues/24
+        # hydra has that error: https://hydra.nixos.org/build/274852065
+        # but I cannot reproduce that locally
+        org-evil = ignoreCompilationError super.org-evil;
 
         org-gnome = ignoreCompilationError super.org-gnome; # elisp error
 

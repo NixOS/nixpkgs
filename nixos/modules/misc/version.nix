@@ -22,21 +22,26 @@ let
     {
       NAME = "${cfg.distroName}";
       ID = "${cfg.distroId}";
+      ID_LIKE = optionalString (!isNixos) "nixos";
+      VENDOR_NAME = cfg.vendorName;
       VERSION = "${cfg.release} (${cfg.codeName})";
       VERSION_CODENAME = toLower cfg.codeName;
       VERSION_ID = cfg.release;
       BUILD_ID = cfg.version;
       PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
+      CPE_NAME = "cpe:/o:${cfg.vendorId}:${cfg.distroId}:${cfg.release}";
       LOGO = "nix-snowflake";
       HOME_URL = optionalString isNixos "https://nixos.org/";
+      VENDOR_URL = optionalString isNixos "https://nixos.org/";
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
       SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
       ANSI_COLOR = optionalString isNixos "1;34";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
       IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
-    } // lib.optionalAttrs (cfg.variant_id != null) {
-      VARIANT_ID = cfg.variant_id;
+      VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
+      VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
+      DEFAULT_HOSTNAME = config.networking.fqdnOrHostName;
     };
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
@@ -115,6 +120,27 @@ in
         default = null;
         description = "A lower-case string identifying a specific variant or edition of the operating system";
         example = "installer";
+      };
+
+      variantName = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "A string identifying a specific variant or edition of the operating system suitable for presentation to the user";
+        example = "NixOS Installer Image";
+      };
+
+      vendorId = mkOption {
+        internal = true;
+        type = types.str;
+        default = "nixos";
+        description = "The id of the operating system vendor";
+      };
+
+      vendorName = mkOption {
+        internal = true;
+        type = types.str;
+        default = "NixOS";
+        description = "The name of the operating system vendor";
       };
     };
 

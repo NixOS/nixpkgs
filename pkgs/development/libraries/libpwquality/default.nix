@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ python ];
+  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ (python.withPackages (ps: with ps; [ distutils ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags = lib.optionals (!enablePython) [ "--disable-python-bindings" ];

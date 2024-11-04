@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.10.2";
+  version = "2024.10.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -754,8 +754,9 @@
     ];
     "deako" = ps: with ps; [
       ifaddr
+      pydeako
       zeroconf
-    ]; # missing inputs: pydeako
+    ];
     "debugpy" = ps: with ps; [
       debugpy
     ];
@@ -1940,12 +1941,13 @@
       home-assistant-intents
       ifaddr
       mutagen
+      py-improv-ble-client
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: py-improv-ble-client
+    ];
     "incomfort" = ps: with ps; [
       incomfort-client
     ];
@@ -2332,13 +2334,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      leaone-ble
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: leaone-ble
+    ];
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -2597,13 +2600,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      melnor-bluetooth
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: melnor-bluetooth
+    ];
     "meraki" = ps: with ps; [
     ];
     "mercury_nz" = ps: with ps; [
@@ -3824,7 +3828,8 @@
       zeroconf
     ];
     "sensoterra" = ps: with ps; [
-    ]; # missing inputs: sensoterra
+      sensoterra
+    ];
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
@@ -4958,7 +4963,8 @@
       xmltodict
     ];
     "zeversolar" = ps: with ps; [
-    ]; # missing inputs: zeversolar
+      zeversolar
+    ];
     "zha" = ps: with ps; [
       aiohasupervisor
       pillow
@@ -5125,6 +5131,7 @@
     "datadog"
     "date"
     "datetime"
+    "deako"
     "debugpy"
     "deconz"
     "default_config"
@@ -5341,6 +5348,7 @@
     "image_upload"
     "imap"
     "imgw_pib"
+    "improv_ble"
     "incomfort"
     "influxdb"
     "inkbird"
@@ -5395,6 +5403,7 @@
     "lawn_mower"
     "lcn"
     "ld2410_ble"
+    "leaone"
     "led_ble"
     "lektrico"
     "lg_netcast"
@@ -5442,6 +5451,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melnor"
     "meraki"
     "met"
     "met_eireann"
@@ -5651,6 +5661,7 @@
     "sensor"
     "sensorpro"
     "sensorpush"
+    "sensoterra"
     "sentry"
     "senz"
     "seventeentrack"
@@ -5878,6 +5889,7 @@
     "zamg"
     "zeroconf"
     "zerproc"
+    "zeversolar"
     "zha"
     "zodiac"
     "zone"

@@ -11,15 +11,15 @@
 # - There is no need for user/team listed here to have write access.
 # - No reviews will be requested for PRs that target the wrong base branch.
 #
-# Processing of this file is implemented in workflows/codeowners.yml
+# Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
-/.github/workflows/codeowners.yml @infinisil
-/ci/OWNERS @infinisil
+/.github/workflows/codeowners-v2.yml @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
+/ci/OWNERS @infinisil @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
@@ -27,7 +27,7 @@
 
 # Libraries
 /lib                        @infinisil
-/lib/systems                @alyssais @ericson2314
+/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
 /lib/generators.nix         @infinisil @Profpatsch
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
@@ -49,16 +49,16 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
-/pkgs/stdenv                                     @philiptaron
-/pkgs/stdenv/generic                             @Ericson2314
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314
-/pkgs/stdenv/cross                               @Ericson2314
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
-/pkgs/build-support/setup-hooks/auto-patchelf.py @layus
+/pkgs/by-name/au/auto-patchelf                   @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
 /pkgs/pkgs-lib/formats/libconfig                 @h7x4
@@ -128,6 +128,18 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco
 /nixos/modules/installer/sd-card/
 
+# Amazon
+/nixos/modules/virtualisation/amazon-init.nix     @arianvp
+/nixos/modules/virtualisation/ec2-data.nix        @arianvp
+/nixos/modules/virtualisation/amazon-options.nix  @arianvp
+/nixos/modules/virtualisation/amazon-image.nix    @arianvp
+/nixos/maintainers/scripts/ec2/                   @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix @arianvp
+/nixos/tests/amazon-ssm-agent.nix                 @arianvp
+/nixos/modules/system/boot/grow-partition.nix     @arianvp
+
+
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar
@@ -161,13 +173,20 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
+# Tcl
+/pkgs/development/interpreters/tcl  @fgaz
+/pkgs/development/libraries/tk      @fgaz
+/pkgs/top-level/tcl-packages.nix    @fgaz
+/pkgs/development/tcl-modules       @fgaz
+/doc/languages-frameworks/tcl.section.md @fgaz
+
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy
+/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -277,10 +296,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/kakoune     @philiptaron
 
 # Neovim
-/pkgs/applications/editors/neovim      @figsoda @teto
+/pkgs/applications/editors/neovim      @NixOS/neovim
 
 # VimPlugins
-/pkgs/applications/editors/vim/plugins         @figsoda
+/pkgs/applications/editors/vim/plugins         @NixOS/neovim
 
 # VsCode Extensions
 /pkgs/applications/editors/vscode/extensions
@@ -319,8 +338,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/by-name/ne/nemo          @mkg20001
 /pkgs/by-name/ne/nemo-*        @mkg20001
 
+# Xfce
+/doc/hooks/xfce4-dev-tools.section.md @NixOS/xfce
+
 # nim
-/pkgs/development/compilers/nim   @ehmry
+/doc/languages-frameworks/nim.section.md  @ehmry
+/pkgs/build-support/build-nim-package.nix @ehmry
+/pkgs/top-level/nim-overrides.nix         @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
@@ -339,6 +363,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
+/pkgs/development/tools/pnpm                    @Scrumplex @gepbird
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
@@ -393,3 +418,8 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/in/installShellFiles/*     @Ericson2314
 /pkgs/test/install-shell-files/*         @Ericson2314
 /doc/hooks/installShellFiles.section.md  @Ericson2314
+
+# Darwin
+/pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
+/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/stdenv/darwin                            @NixOS/darwin-core

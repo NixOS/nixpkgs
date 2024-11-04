@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   asciidoc,
@@ -60,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     rm $out/lib/*.a
+
+    ln -s $out/bin/sfsmount $out/bin/mount.saunafs
   '';
+
+  passthru.tests = nixosTests.saunafs;
 
   meta = with lib; {
     description = "Distributed POSIX file system";

@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-7az1wJ6BK9nPKirtW/fmXo3013JCPf+TNk/aG/mGTfo=";
+    hash = "sha256-+RxTTm5t0/0hLKxhWILzb0qf6aZzbOZJYJenRpX8UdA=";
   };
 
   buildInputs = [ nodejs ];
@@ -101,9 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    maintainers = lib.teams.ngi.members;
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
   };

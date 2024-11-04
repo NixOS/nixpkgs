@@ -14,7 +14,6 @@
   openpyxl,
   pdf2docx,
   pillow,
-  premailer,
   pyclipper,
   pymupdf,
   python-docx,
@@ -28,7 +27,7 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.8.1";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -39,7 +38,7 @@ buildPythonPackage {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8mnSV4ga6G2cbYCX84XJRFiLCoXstTAtqvg9QqVN6GI=";
+    hash = "sha256-TLNpb+CwLKvtmPppDuUbGyJorhmkVVW01J61+XUICYk=";
   };
 
   patches = [
@@ -76,7 +75,6 @@ buildPythonPackage {
     openpyxl
     pdf2docx
     pillow
-    premailer
     pyclipper
     pymupdf
     python-docx

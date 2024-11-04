@@ -16,17 +16,18 @@
   mariadb,
   openssl,
   bash,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tkWbX/RGx+SbJn+vqPTgyStBwdhldd5hGuRj8wTwY9M=";
+    hash = "sha256-pw/qlYVw1ofYDrTWTQVdx/N9U2JjkB05c7IUXURd4B8=";
     fetchSubmodules = true;
   };
 
@@ -102,6 +103,8 @@ buildGoModule rec {
   '';
 
   vendorHash = "sha256-j5AXZqup0nPUlGWvb4PCLKJFoQx/c4I3PxZB99TTTWA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Capture SSL/TLS text content without CA certificate Using eBPF";

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "mactop";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "context-labs";
     repo = "mactop";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BcBUOI5EE04ZTPoHGrNQjctsDFbMoe/6MZaLj/58c34=";
+    hash = "sha256-r9je+oeedQJsFBWWbOUcUls/EX0JZveUkmsXXtC8O0Q=";
   };
 
   vendorHash = "sha256-/KecVx4Gp776t8gFSO29E1q9v29nwrKIWZYCpj7IlSo=";

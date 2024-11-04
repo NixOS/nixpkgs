@@ -1,13 +1,14 @@
 {
   lib,
-  bleak,
   bleak-retry-connector,
+  bleak,
   bluetooth-data-tools,
   bluetooth-sensor-state-data,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
   home-assistant-bluetooth,
+  orjson,
   poetry-core,
   pycryptodomex,
   pytestCheckHook,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dZJsB40BMPo0tOFq0vLILrwfezf5dnspFK/aZWOV4uc=";
+    hash = "sha256-7/4Ea8IiRPxhgMiazSylYZAmznqIula2yCEUAyIHBBg=";
   };
 
   postPatch = ''
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     bluetooth-sensor-state-data
     cryptography
     home-assistant-bluetooth
+    orjson
     pycryptodomex
     sensor-state-data
   ];

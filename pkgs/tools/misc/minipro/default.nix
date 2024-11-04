@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minipro";
-  version = "0.7";
+  version = "0.7.2";
 
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
     rev = version;
-    hash = "sha256-suMGR1vgM2tXsPHInZ6HEDKhDSPlC1ss+wCgbION/rE=";
+    hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

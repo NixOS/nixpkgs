@@ -1,28 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, pkg-config, cairo, glib, gdk-pixbuf, libjpeg
-, libpng, libtiff, libxml2, openjpeg, sqlite, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  cairo,
+  doxygen,
+  glib,
+  gdk-pixbuf,
+  libdicom,
+  libjpeg,
+  libpng,
+  libtiff,
+  libxml2,
+  openjpeg,
+  sqlite,
+  zlib,
+  zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openslide";
-  version = "3.4.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide";
-    rev = "v${version}";
-    sha256 = "1g4hhjr4cbx754cwi9wl84k33bkg232w8ajic7aqhzm8x182hszp";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-9LvQ7FG/0E0WpFyIUyrL4Fvn60iYWejjbgdKHMVOFdI=";
   };
 
-  buildInputs = [ cairo glib gdk-pixbuf libjpeg libpng libtiff libxml2 openjpeg sqlite zlib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    doxygen
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    cairo
+    glib
+    gdk-pixbuf
+    libdicom
+    libjpeg
+    libpng
+    libtiff
+    libxml2
+    openjpeg
+    sqlite
+    zlib
+    zstd
+  ];
 
   meta = with lib; {
     homepage = "https://openslide.org";
     description = "C library that provides a simple interface to read whole-slide images";
     license = licenses.lgpl21;
+    changelog = "https://github.com/openslide/openslide/releases/tag/v${finalAttrs.version}";
     platforms = platforms.unix;
     maintainers = with maintainers; [ lromor ];
+    mainProgram = "slidetool";
   };
-}
+})

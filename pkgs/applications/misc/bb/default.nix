@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, darwin, aalib, ncurses, xorg, libmikmod }:
+{ stdenv, lib, fetchurl, autoreconfHook, aalib, ncurses, xorg, libmikmod }:
 
 stdenv.mkDerivation rec {
   pname = "bb";
@@ -9,18 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "1i411glxh7g4pfg4gw826lpwngi89yrbmxac8jmnsfvrfb48hgbr";
   };
 
+  patches = [
+    # add / update include files to get function prototypes
+    ./included-files-updates.diff
+  ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [
     aalib ncurses libmikmod
     xorg.libXau xorg.libXdmcp xorg.libX11
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreAudio;
+  ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e '/^#include <malloc.h>$/d' *.c
+  # regparm attribute is not supported by clang
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace config.h \
+      --replace-fail "__attribute__ ((regparm(n)))" ""
   '';
-
-  # error: 'regparm' is not valid on this platform
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    "-D__STRICT_ANSI__";
 
   meta = with lib; {
     homepage    = "http://aa-project.sourceforge.net/bb";

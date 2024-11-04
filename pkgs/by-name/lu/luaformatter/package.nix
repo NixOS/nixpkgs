@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-lib-paths.patch;
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
-      inherit libargs catch2 yaml-cpp;
+      yamlCpp = yaml-cpp;
+      inherit libargs catch2;
     })
   ];
 

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.8";
+  version = "1.6.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L4E7nnsVZ/VrOM0t4KtztU9ALmtGfi1vDzUi0ogtZOc=";
+    hash = "sha256-sDRIM41zey1F6/x1ZioJJBAQCVyf1NKzhS82Ew08pgM=";
   };
 
   patches =

@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      khaneliman
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,24 +15,17 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.22.3";
+  version = "0.23.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uqKxMYaqAWIuS4LyfC9I9Nr7SORXprGPzamakl4NwnA=";
+    hash = "sha256-uA6t2MqV0ru8+r594Vy+AawRey50Z3FzdN5Ge62TVws=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ siosocks ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     socks = [ siosocks ];
@@ -40,6 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     async-timeout
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     trustme
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);

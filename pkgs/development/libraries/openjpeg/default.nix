@@ -3,7 +3,18 @@
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl, fcgi # JPIP Server
 , jdk
+
+# for passthru.tests
+, ffmpeg
+, gdal
+, gdcm
+, ghostscript
+, imagemagick
+, leptonica
+, mupdf
 , poppler
+, python3
+, vips
 }:
 
 let
@@ -52,7 +63,19 @@ stdenv.mkDerivation rec {
   passthru = {
     incDir = "openjpeg-${lib.versions.majorMinor version}";
     tests = {
-      inherit poppler;
+      ffmpeg = ffmpeg.override { withOpenjpeg = true; };
+      imagemagick = imagemagick.override { openjpegSupport = true; };
+      pillow = python3.pkgs.pillow;
+
+      inherit
+        gdal
+        gdcm
+        ghostscript
+        leptonica
+        mupdf
+        poppler
+        vips
+      ;
     };
   };
 
