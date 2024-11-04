@@ -35,11 +35,13 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "mpi4py" ];
 
-  # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
-  # see: https://github.com/NixOS/nixpkgs/issues/327941
+  # avoid strict pinning of numpy and mpi4py, can't be replaced with
+  # pythonRelaxDepsHook, see: https://github.com/NixOS/nixpkgs/issues/327941
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0, <3" "numpy"
+    substituteInPlace setup.py \
+      --replace-fail "mpi4py ==3.1.6" "mpi4py"
   '';
 
   env = {
