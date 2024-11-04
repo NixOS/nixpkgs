@@ -1,20 +1,27 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchurl,
-  makeWrapper,
-  pkg-config,
-  poppler_utils,
+
+  # nativeBuildInputs
   gitMinimal,
+  pkg-config,
+  makeWrapper,
+
+  # buildInputs
+  lua,
   harfbuzz,
   icu,
   fontconfig,
-  lua,
   libiconv,
+  darwin,
+  # FONTCONFIG_FILE
   makeFontsConf,
   gentium,
+
+  # passthru.tests
   runCommand,
+  poppler_utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
