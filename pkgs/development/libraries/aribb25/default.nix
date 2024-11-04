@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = if stdenv.hostPlatform.isDarwin then [ PCSC ] else [ pcsclite ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ PCSC ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-deprecated-non-prototype";
 
   patches =
     let
@@ -46,8 +50,6 @@ stdenv.mkDerivation rec {
         sha256 = "1283kqv1r4rbaba0sv2hphkhcxgjkmh8ndlcd24fhx43nn63hd28";
       })
     ];
-
-  buildFlags = lib.optional stdenv.hostPlatform.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   meta = with lib; {
     description = "Sample implementation of the ARIB STD-B25 standard";
