@@ -293,6 +293,7 @@
       - any-glob-to-any-file:
         - nixos/**/*
         - pkgs/by-name/sw/switch-to-configuration-ng/**/*
+        - pkgs/by-name/ni/nixos-rebuild-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: nixos-container":
