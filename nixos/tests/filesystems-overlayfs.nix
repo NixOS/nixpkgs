@@ -38,6 +38,14 @@ in
           };
           neededForBoot = true;
         };
+        "/initrd-real-root-overlay" = {
+          overlay = {
+            lowerdir = [ userspaceLowerdir ];
+            upperdir = "/run/upper"; # from initrd
+            workdir = "/run/work"; # from initrd
+            useStage1BaseDirectories = false;
+          };
+        };
         "/userspace-overlay" = {
           overlay = {
             lowerdir = [ userspaceLowerdir ];
@@ -68,6 +76,11 @@ in
       machine.wait_for_file("/initrd-overlay/initrd.txt", 5)
       machine.succeed("touch /initrd-overlay/writable.txt")
       machine.succeed("findmnt --kernel --types overlay /initrd-overlay")
+
+    with subtest("Userspace overlay with upper/workdir in initrd"):
+      machine.wait_for_file("/initrd-real-root-overlay/userspace.txt", 5)
+      machine.succeed("touch /initrd-real-root-overlay/writable.txt")
+      machine.succeed("findmnt --kernel --types overlay /initrd-real-root-overlay")
 
     with subtest("Userspace overlay"):
       machine.wait_for_file("/userspace-overlay/userspace.txt", 5)
