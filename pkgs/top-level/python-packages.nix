@@ -5119,6 +5119,8 @@ self: super: with self; {
 
   git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
+  git-dummy = callPackage ../development/python-modules/git-dummy { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   githubkit = callPackage ../development/python-modules/githubkit { };
