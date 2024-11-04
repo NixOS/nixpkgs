@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -151,12 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://sile-typesetter.org";
     changelog = "https://github.com/sile-typesetter/sile/raw/v${finalAttrs.version}/CHANGELOG.md";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       doronbehar
       alerque
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sile";
   };
 })
