@@ -652,6 +652,8 @@ package-maintainers:
     - minio-hs
     - smtp-mail
     - pdftotext
+  wolfgangwalther:
+    - postgrest
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]

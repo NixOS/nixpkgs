@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-UWZWm6wDiQqUNcWV1nDUWXVhWgqoVUCDWz09cRkiPKg=";
 
-  nativeBuildInputs = [
+  nativeCheckInputs = [
     # ncurses provides the tput command needed for integration tests
     # https://github.com/mgunyho/tere/issues/93#issuecomment-2029624187
     ncurses
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Unexplained fail
     # https://github.com/NixOS/nixpkgs/pull/298527#issuecomment-2053758845
-    "--skip=first_run_prompt_accept"
+    "--skip=first_run_prompt"
   ];
 
   # NOTE: workaround for build fail on aarch64

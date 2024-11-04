@@ -27,19 +27,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
   };
 
-  buildInputs = [
-    llvmPackages.libcxx
-    llvmPackages.libunwind
-    musl
-    xorg.libX11
-  ];
+  buildInputs =
+    [
+      llvmPackages.libcxx
+      llvmPackages.libunwind
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      musl # not used, but requires extra work to remove
+      xorg.libX11 # for the clipboardy package
+    ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    nodejs
-    pnpm_9.configHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      nodejs
+      pnpm_9.configHook
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      autoPatchelfHook
+    ];
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
@@ -91,10 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
       ryand56
     ];
     mainProgram = "wrangler";
-    # cpp is required for building workerd.
-    # workerd is used for some wrangler subcommands.
-    # non-linux platforms may experience errors
-    # on certain subcommands due to this issue.
-    platforms = [ "x86_64-linux" ];
+    # Tunneling and other parts of wrangler, which require workerd won't run on
+    # other systems where precompiled binaries are not provided, but most
+    # commands are will still work everywhere.
+    # Potential improvements: build workerd from source instead.
+    inherit (nodejs.meta) platforms;
   };
 })
