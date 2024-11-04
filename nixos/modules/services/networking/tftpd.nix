@@ -6,11 +6,7 @@
 }:
 
 {
-
-  ###### interface
-
   options = {
-
     services.tftpd.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -27,13 +23,9 @@
         Where the tftp server files are stored.
       '';
     };
-
   };
 
-  ###### implementation
-
   config = lib.mkIf config.services.tftpd.enable {
-
     services.xinetd.enable = true;
 
     services.xinetd.services = lib.singleton {
@@ -42,7 +34,5 @@
       server = "${pkgs.netkittftp}/sbin/in.tftpd";
       serverArgs = "${config.services.tftpd.path}";
     };
-
   };
-
 }
