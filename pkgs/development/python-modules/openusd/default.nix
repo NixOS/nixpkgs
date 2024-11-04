@@ -176,6 +176,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://openusd.org/";
     license = lib.licenses.tost;
-    maintainers = with lib.maintainers; [ shaddydc ];
+    maintainers = with lib.maintainers; [
+      shaddydc
+      gador
+    ];
   };
 }
