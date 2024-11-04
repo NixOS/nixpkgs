@@ -69,7 +69,10 @@ stdenv.mkDerivation rec {
       mit
       cc-by-40
     ];
-    maintainers = with lib.maintainers; [ lambda-11235 ];
+    maintainers = with lib.maintainers; [
+      lambda-11235
+      Gliczy
+    ];
     platforms = lib.platforms.all;
   };
 }
