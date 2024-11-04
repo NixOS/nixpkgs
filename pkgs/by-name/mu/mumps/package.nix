@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString stdenv.hostPlatform.isDarwin "export DYLD_LIBRARY_PATH=$out/lib\n"}
     ${lib.optionalString mpiSupport "export MPIRUN='mpirun -n 2'\n"}
     cd examples
-    make all
     $MPIRUN ./ssimpletest <input_simpletest_real
     $MPIRUN ./dsimpletest <input_simpletest_real
     $MPIRUN ./csimpletest <input_simpletest_cmplx
