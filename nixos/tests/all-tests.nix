@@ -1048,6 +1048,7 @@ in {
   tika = runTest ./tika.nix;
   timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTestOn ["aarch64-linux" "x86_64-linux"] ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinyproxy = handleTest ./tinyproxy.nix {};

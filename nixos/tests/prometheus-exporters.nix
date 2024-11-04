@@ -1610,7 +1610,7 @@ let
     varnish = {
       exporterConfig = {
         enable = true;
-        instance = "/var/spool/varnish/varnish";
+        instance = "/run/varnish/varnish";
         group = "varnish";
       };
       metricProvider = {
@@ -1619,6 +1619,7 @@ let
         ];
         services.varnish = {
           enable = true;
+          stateDir = "/run/varnish/varnish";
           config = ''
             vcl 4.0;
             backend default {

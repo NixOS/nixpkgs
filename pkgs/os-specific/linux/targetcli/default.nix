@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
     license = licenses.asl20;
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
