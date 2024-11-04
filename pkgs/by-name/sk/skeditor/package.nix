@@ -38,7 +38,7 @@ buildDotnetModule rec {
     (makeDesktopItem {
       name = pname;
       desktopName = "SkEditor";
-      exec = meta.main-program;
+      exec = meta.mainProgram;
       icon = "SkEditor";
       startupWMClass = "SkEditor";
       genericName = "Skript Editor";
@@ -62,7 +62,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/SkEditorTeam/SkEditor";
     changelog = "https://github.com/SkEditorTeam/SkEditor/releases/tag/v${version}";
     license = lib.licenses.mit;
-    main-program = "SkEditor";
+    mainProgram = "SkEditor";
     maintainers = with lib.maintainers; [ eveeifyeve ];
   };
 }
