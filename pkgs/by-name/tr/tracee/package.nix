@@ -14,6 +14,7 @@
   testers,
   tracee,
   makeWrapper,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -98,7 +99,9 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://aquasecurity.github.io/tracee/latest/";
     changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
     description = "Linux Runtime Security and Forensics using eBPF";
@@ -110,13 +113,13 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # general license
       asl20
       # pkg/ebpf/c/*
       gpl2Plus
     ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with lib.maintainers; [ jk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
