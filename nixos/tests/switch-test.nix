@@ -53,11 +53,8 @@ in {
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
-      # For boot/switch testing
-      system.build.installBootLoader = lib.mkForce (pkgs.writeShellScript "install-dummy-loader" ''
-        echo "installing dummy bootloader"
-        touch /tmp/bootloader-installed
-      '');
+      # Test that no boot loader still switches, e.g. in the ISO
+      boot.loader.grub.enable = false;
 
       specialisation = rec {
         brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
@@ -672,22 +669,18 @@ in {
         "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
     )
 
+    boot_loader_text = "Warning: do not know how to make this configuration bootable; please enable a boot loader."
 
     with subtest("actions"):
         # boot action
-        machine.fail("test -f /tmp/bootloader-installed")
         out = switch_to_specialisation("${machine}", "simpleService", action="boot")
-        assert_contains(out, "installing dummy bootloader")
+        assert_contains(out, boot_loader_text)
         assert_lacks(out, "activating the configuration...")  # good indicator of a system activation
-        machine.succeed("test -f /tmp/bootloader-installed")
-        machine.succeed("rm /tmp/bootloader-installed")
 
         # switch action
-        machine.fail("test -f /tmp/bootloader-installed")
         out = switch_to_specialisation("${machine}", "", action="switch")
-        assert_contains(out, "installing dummy bootloader")
+        assert_contains(out, boot_loader_text)
         assert_contains(out, "activating the configuration...")  # good indicator of a system activation
-        machine.succeed("test -f /tmp/bootloader-installed")
 
         # test and dry-activate actions are tested further down below
 
@@ -795,7 +788,7 @@ in {
 
         # Start a simple service
         out = switch_to_specialisation("${machine}", "simpleService")
-        assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
+        assert_lacks(out, boot_loader_text)  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
@@ -872,7 +865,7 @@ in {
         # Ensure the service can be started when the activation script isn't in toplevel
         # This is a lot like "Start a simple service", except activation-only deps could be gc-ed
         out = run_switch("${nodes.machine.specialisation.simpleServiceSeparateActivationScript.configuration.system.build.separateActivationScript}/bin/switch-to-configuration");
-        assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
+        assert_lacks(out, boot_loader_text)  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
