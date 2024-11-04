@@ -159,9 +159,10 @@ stdenv.mkDerivation rec {
   noAuditTmpdir = true;
 
   postFixup = ''
-    # Wrong store path in shebang (no Python pkgs), force re-patching
-    sed -i "1s:/.*:/usr/bin/env python:" $out/bin/pymolcas
-    patchShebangs $out/bin
+    # Wrong store path in shebang (bare Python, no Python pkgs), force manual re-patching
+    for exe in $(find $out/bin/ -type f -name "*.py"); do
+      sed -i "1s:.*:#!${python}/bin/python:" "$exe"
+    done
 
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
