@@ -2225,8 +2225,6 @@ with pkgs;
 
   git-fame = callPackage ../applications/version-management/git-fame { };
 
-  git-fast-export = callPackage ../applications/version-management/fast-export { };
-
   git-fire = callPackage ../applications/version-management/git-fire { };
 
   git-ftp = callPackage ../applications/version-management/git-ftp { };
