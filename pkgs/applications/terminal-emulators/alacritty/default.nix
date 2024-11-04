@@ -21,14 +21,7 @@
 , wayland
 , xdg-utils
 
-  # Darwin Frameworks
-, AppKit
-, CoreGraphics
-, CoreServices
-, CoreText
-, Foundation
-, libiconv
-, OpenGL
+, apple-sdk_11
 }:
 let
   rpathLibs = [
@@ -72,13 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = rpathLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    libiconv
-    OpenGL
+    apple-sdk_11
   ];
 
   outputs = [ "out" "terminfo" ];
