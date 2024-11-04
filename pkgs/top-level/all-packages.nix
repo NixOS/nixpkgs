@@ -341,8 +341,6 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
-  bloom = qt6Packages.callPackage ../development/tools/bloom { };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   bodyclose = callPackage ../development/tools/bodyclose { };
@@ -2756,8 +2754,6 @@ with pkgs;
     boost = boost185;
   };
 
-  mucommander = callPackage ../applications/file-managers/mucommander { };
-
   nnn = callPackage ../applications/file-managers/nnn { };
 
   noice = callPackage ../applications/file-managers/noice { };
@@ -2927,8 +2923,6 @@ with pkgs;
   tvnamer = callPackage ../tools/misc/tvnamer { };
 
   twine = with python3Packages; toPythonApplication twine;
-
-  abracadabra = qt6Packages.callPackage ../applications/radio/abracadabra { };
 
   accelergy = callPackage ../applications/science/computer-architecture/accelergy { };
 
@@ -7587,10 +7581,6 @@ with pkgs;
   fping = callPackage ../tools/networking/fping { };
 
   fpm = callPackage ../tools/package-management/fpm { };
-
-  fprintd = callPackage ../tools/security/fprintd { };
-
-  fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
@@ -18147,8 +18137,6 @@ with pkgs;
 
   riff = callPackage ../development/tools/misc/riff { };
 
-  riffdiff = callPackage ../tools/text/riffdiff {};
-
   rman = callPackage ../development/tools/misc/rman { };
 
   rnginline = with python3Packages; toPythonApplication rnginline;
@@ -19455,8 +19443,6 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../development/tools/garble { };
-
   gcab = callPackage ../development/libraries/gcab { };
 
   gcovr = with python3Packages; toPythonApplication gcovr;
@@ -20680,8 +20666,6 @@ with pkgs;
     extraOnly = true;
   };
 
-  libfprint = callPackage ../development/libraries/libfprint { };
-
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
   libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
@@ -21367,8 +21351,6 @@ with pkgs;
   libsndfile = callPackage ../development/libraries/libsndfile {
     inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
-
-  libsnark = callPackage ../development/libraries/libsnark { };
 
   libsodium = callPackage ../development/libraries/libsodium { };
 
@@ -26460,8 +26442,6 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  upscayl = callPackage ../applications/graphics/upscayl { };
-
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
@@ -27757,15 +27737,6 @@ with pkgs;
 
   ### APPLICATIONS / GIS
 
-  gmt = callPackage ../applications/gis/gmt {
-    inherit (darwin.apple_sdk.frameworks)
-      Accelerate CoreGraphics CoreVideo;
-  };
-
-  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
-
-  dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
-
   grass = callPackage ../applications/gis/grass {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
@@ -28544,8 +28515,6 @@ with pkgs;
   };
 
   dirt = callPackage ../applications/audio/dirt { };
-
-  distrho = callPackage ../applications/audio/distrho { };
 
   dit = callPackage ../applications/editors/dit { };
 
@@ -30231,11 +30200,7 @@ with pkgs;
 
   kondo = callPackage ../applications/misc/kondo { };
 
-  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
-    stdenv = if stdenv.hostPlatform.isDarwin
-      then overrideSDK stdenv "11.0"
-      else stdenv;
-  };
+  kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
 
@@ -32504,8 +32469,6 @@ with pkgs;
 
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs { };
 
-  tailor = callPackage ../applications/version-management/tailor { };
-
   tailor-gui = callPackage ../os-specific/linux/tailor-gui { };
 
   taizen = callPackage ../applications/misc/taizen { };
@@ -32546,7 +32509,7 @@ with pkgs;
 
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
-      then overrideSDK stdenv "11.0"
+      then llvmPackages_19.stdenv
       else stdenv;
   };
 
@@ -32729,8 +32692,6 @@ with pkgs;
   tonelib-noisereducer = callPackage ../applications/audio/tonelib-noisereducer { };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
-
-  toot = callPackage ../applications/misc/toot { };
 
   toipe = callPackage ../applications/misc/toipe { };
 
@@ -34439,8 +34400,6 @@ with pkgs;
   frotz = callPackage ../games/frotz { };
 
   frogatto = callPackage ../games/frogatto { };
-
-  frozen-bubble = callPackage ../games/frozen-bubble { };
 
   fsg = callPackage ../games/fsg { };
 
@@ -37758,8 +37717,6 @@ with pkgs;
   unicode-paracode = callPackage ../tools/misc/unicode { };
 
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
-
-  valent = callPackage ../applications/misc/valent { };
 
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 

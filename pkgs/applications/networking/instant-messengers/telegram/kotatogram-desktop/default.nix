@@ -7,6 +7,9 @@
 , yasm
 }:
 
+let
+  version = "1.4.9";
+in
 (libsForQt5.callPackage ../telegram-desktop/default.nix {
   inherit stdenv;
 
@@ -24,13 +27,23 @@
       fetchSubmodules = true;
     };
 
+    patches = (oldAttrs.patches or []) ++ [
+      (fetchpatch {
+        url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "src/";
+        hash = "sha256-goxnuRRbwcdfIk1jFaKGiKCTCYn2saEj7En1Iyglzko=";
+      })
+    ];
+
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
   });
 
   withWebKitGTK = false;
 }).overrideAttrs {
   pname = "kotatogram-desktop";
-  version = "1.4.9-unstable-2024-09-27";
+  version = "${version}-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
@@ -41,8 +54,6 @@
   };
 
   patches = [
-    ./macos.patch
-    ./macos-opengl.patch
     ./macos-qt5.patch
     (fetchpatch {
       url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
@@ -59,10 +70,10 @@
 
       It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
+    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
     maintainers = with maintainers; [ ilya-fedin ];
     mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
   };

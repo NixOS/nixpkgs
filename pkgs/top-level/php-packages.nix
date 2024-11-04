@@ -650,8 +650,6 @@ in {
           name = "snmp";
           buildInputs = [ net-snmp openssl ];
           configureFlags = [ "--with-snmp" ];
-          # net-snmp doesn't build on darwin.
-          meta.broken = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {

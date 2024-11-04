@@ -84,6 +84,10 @@ in {
           docbook5
           docbook_xsl_ns
           grub2
+          nixos-artwork.wallpapers.simple-dark-gray-bootloader
+          perlPackages.FileCopyRecursive
+          perlPackages.XMLSAX
+          perlPackages.XMLSAXBase
           kbd
           kbd.dev
           kmod.dev
@@ -92,16 +96,20 @@ in {
           libxml2.bin
           libxslt.bin
           nixos-artwork.wallpapers.simple-dark-gray-bottom
-          ntp
+          perlPackages.ConfigIniFiles
+          perlPackages.FileSlurp
+          perlPackages.JSON
           perlPackages.ListCompare
           perlPackages.XMLLibXML
-          python3
+          # make-options-doc/default.nix
+          (python3.withPackages (p: [ p.mistune ]))
           shared-mime-info
-          stdenv
           sudo
+          switch-to-configuration-ng
           texinfo
           unionfs-fuse
           xorg.lndir
+          os-prober
 
           # add curl so that rather than seeing the test attempt to download
           # curl's tarball, we see what it's trying to download
