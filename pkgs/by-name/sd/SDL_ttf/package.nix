@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    (lib.enableFeature enableSdltest "-sdltest")
+    (lib.enableFeature enableSdltest "sdltest")
   ];
 
   strictDeps = true;
