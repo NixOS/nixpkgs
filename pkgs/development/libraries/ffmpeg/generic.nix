@@ -100,6 +100,7 @@
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
+, withRist ? withHeadlessDeps # Reliable Internet Stream Transport (RIST) protocol
 , withRtmp ? withFullDeps # RTMP[E] support
 , withRubberband ? withFullDeps && withGPL # Rubberband filter
 , withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3 # Samba protocol
@@ -278,6 +279,7 @@
 , libplacebo_5
 , libpulseaudio
 , libraw1394
+, librist
 , librsvg
 , libssh
 , libtensorflow
@@ -639,6 +641,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withQuirc "libquirc")
   ] ++ [
     (enableFeature withRav1e "librav1e")
+    (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
     (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
@@ -792,6 +795,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withQrencode [ qrencode ]
   ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
+  ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
