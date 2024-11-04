@@ -7582,10 +7582,6 @@ with pkgs;
 
   fpm = callPackage ../tools/package-management/fpm { };
 
-  fprintd = callPackage ../tools/security/fprintd { };
-
-  fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
-
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -18138,8 +18134,6 @@ with pkgs;
 
   riff = callPackage ../development/tools/misc/riff { };
 
-  riffdiff = callPackage ../tools/text/riffdiff {};
-
   rman = callPackage ../development/tools/misc/rman { };
 
   rnginline = with python3Packages; toPythonApplication rnginline;
@@ -19446,8 +19440,6 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../development/tools/garble { };
-
   gcab = callPackage ../development/libraries/gcab { };
 
   gcovr = with python3Packages; toPythonApplication gcovr;
@@ -20670,8 +20662,6 @@ with pkgs;
   libfm-extra = libfm.override {
     extraOnly = true;
   };
-
-  libfprint = callPackage ../development/libraries/libfprint { };
 
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
@@ -26448,8 +26438,6 @@ with pkgs;
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
-
-  upscayl = callPackage ../applications/graphics/upscayl { };
 
   usbguard = callPackage ../os-specific/linux/usbguard { };
 

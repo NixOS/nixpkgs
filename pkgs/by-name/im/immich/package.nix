@@ -17,7 +17,7 @@
   cacert,
   unzip,
   # runtime deps
-  jellyfin-ffmpeg,
+  jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
   libraw,
   libheif,
