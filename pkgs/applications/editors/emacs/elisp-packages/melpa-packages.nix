@@ -1385,6 +1385,13 @@ let
 
         org-trello = ignoreCompilationError super.org-trello; # elisp error
 
+        # Requires xwidgets compiled into emacs, so mark this package
+        # as broken if emacs hasn't been compiled with the flag.
+        org-xlatex =
+          if self.emacs.withXwidgets
+          then super.org-xlatex
+          else markBroken super.org-xlatex;
+
         # Optimizer error: too much on the stack
         orgnav = ignoreCompilationError super.orgnav;
 
