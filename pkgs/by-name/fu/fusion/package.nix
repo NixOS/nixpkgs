@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   buildGoModule,
   mockgen,
+  nixosTests,
   nix-update-script,
 }:
 buildGoModule rec {
@@ -55,7 +57,13 @@ buildGoModule rec {
     mv $out/bin/server $out/bin/fusion
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) fusion;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Lightweight, self-hosted friendly RSS aggregator and reader";
