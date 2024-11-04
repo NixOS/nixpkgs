@@ -16,11 +16,14 @@ buildGoModule rec {
     hash = "sha256-flxEp9iXLLm/FPP8udlnpbHQpGnqxAhgyOIUUJAJgog=";
   };
 
-  postPatch = ''
-    go mod init github.com/mailhog/MailHog
-  '';
+  patches = [
+    # Generate by go mod init github.com/mailhog/MailHog && go mod tidy
+    ./0001-Add-go.mod-go.sum.patch
+  ];
 
-  vendorHash = null;
+  vendorHash = "sha256-yYMgNpthBwmDeD4pgnVj88OJWiPNWuwzxDzC6eejabU=";
+
+  deleteVendor = true;
 
   ldflags = [
     "-s"
