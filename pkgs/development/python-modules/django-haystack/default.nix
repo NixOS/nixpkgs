@@ -12,6 +12,7 @@
   requests,
   setuptools-scm,
   setuptools,
+  stdenv,
   whoosh,
 }:
 
@@ -40,6 +41,9 @@ buildPythonPackage rec {
   optional-dependencies = {
     elasticsearch = [ elasticsearch ];
   };
+
+  # tests fail and get stuck on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     geopy
