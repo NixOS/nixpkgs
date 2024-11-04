@@ -451,6 +451,10 @@ let
       orga = "glehmann";
       repo = "tree-sitter-earthfile";
     };
+    "tree-sitter-river" = {
+      orga = "grafana";
+      repo = "tree-sitter-river";
+    };
   };
 
   allGrammars =
