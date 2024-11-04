@@ -7,7 +7,6 @@
   pkg-config,
   pcsclite,
   PCSC,
-  xcbuild,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ];
+
   buildInputs = if stdenv.hostPlatform.isDarwin then [ PCSC ] else [ pcsclite ];
 
   patches =
