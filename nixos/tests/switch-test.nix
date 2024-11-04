@@ -742,7 +742,7 @@ in {
         out = switch_to_specialisation("${machine}", "")
         assert_contains(out, "stopping the following units: test.mount\n")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -750,7 +750,7 @@ in {
         out = switch_to_specialisation("${machine}", "storeMountModified")
         assert_lacks(out, "stopping the following units:")
         assert_contains(out, "NOT restarting the following changed units: -.mount")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -761,7 +761,7 @@ in {
         out = switch_to_specialisation("${machine}", "swap")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: swapfile.swap")
@@ -770,7 +770,7 @@ in {
         assert_contains(out, "stopping swap device: /swapfile")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
@@ -791,7 +791,7 @@ in {
         assert_lacks(out, boot_loader_text)  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
@@ -868,7 +868,7 @@ in {
         assert_lacks(out, boot_loader_text)  # test does not install a bootloader
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: ${dbusService}\n")  # huh
+        assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_lacks(out, "\nstarting the following units:")
         assert_contains(out, "the following new units were started: test.service\n")
