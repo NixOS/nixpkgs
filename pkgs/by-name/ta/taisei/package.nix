@@ -1,13 +1,18 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   # Build depends
   docutils,
   meson,
   ninja,
   pkg-config,
-  python3,
+  python3Packages,
+  opusfile,
+  openssl,
+  gamemode,
+  shaderc,
+  ensureNewerSourcesForZipFilesHook,
   # Runtime depends
   glfw,
   SDL2,
@@ -18,15 +23,22 @@
   libwebp,
   libzip,
   zlib,
+  zstd,
+  spirv-cross,
+
+  gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";
-  version = "1.3.2";
+  version = "1.4.2";
 
-  src = fetchurl {
-    url = "https://github.com/taisei-project/${pname}/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    sha256 = "1g53fcyrlzmvlsb40pw90gaglysv6n1w42hk263iv61ibhdmzh6v";
+  src = fetchFromGitHub {
+    owner = "taisei-project";
+    repo = "taisei";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rThLz8o6IYhIBUc0b1sAQi2aF28btajcM1ScTv+qn6c=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -34,7 +46,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
+    python3Packages.python
+    python3Packages.zstandard
+    ensureNewerSourcesForZipFilesHook
+    shaderc
   ];
 
   buildInputs = [
@@ -47,16 +62,27 @@ stdenv.mkDerivation rec {
     libwebp
     libzip
     zlib
-  ];
+    zstd
+    opusfile
+    openssl
+    spirv-cross
+  ] ++ lib.optional gamemodeSupport gamemode;
 
-  mesonFlags = [ "-Db_lto=false" ];
+  mesonFlags = [
+    (lib.mesonBool "b_lto" false)
+    (lib.mesonEnable "install_macos_bundle" false)
+    (lib.mesonEnable "install_relocatable" false)
+    (lib.mesonEnable "shader_transpiler" false)
+    (lib.mesonEnable "gamemode" gamemodeSupport)
+  ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
+  strictDeps = true;
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Free and open-source Touhou Project clone and fangame";
     mainProgram = "taisei";
     longDescription = ''
@@ -75,4 +101,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
