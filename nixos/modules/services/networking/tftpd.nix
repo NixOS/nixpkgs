@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
   ###### interface
 
   options = {
 
-    services.tftpd.enable = mkOption {
-      type = types.bool;
+    services.tftpd.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable tftpd, a Trivial File Transfer Protocol server.
@@ -17,8 +15,8 @@ with lib;
       '';
     };
 
-    services.tftpd.path = mkOption {
-      type = types.path;
+    services.tftpd.path = lib.mkOption {
+      type = lib.types.path;
       default = "/srv/tftp";
       description = ''
         Where the tftp server files are stored.
@@ -30,11 +28,11 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.tftpd.enable {
+  config = lib.mkIf config.services.tftpd.enable {
 
     services.xinetd.enable = true;
 
-    services.xinetd.services = singleton
+    services.xinetd.services = lib.singleton
       { name = "tftp";
         protocol = "udp";
         server = "${pkgs.netkittftp}/sbin/in.tftpd";
