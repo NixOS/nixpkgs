@@ -170,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       apple-psl20
       gpl2 # GNU as
     ];
-    maintainers = with lib.maintainers; [ reckenrode ];
+    maintainers = lib.teams.darwin.members;
     platforms = lib.platforms.darwin;
   };
 })
