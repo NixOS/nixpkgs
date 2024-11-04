@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (lib.strings.enableFeature stdenv.hostPlatform.isLinux "platform")
+    (lib.enableFeature stdenv.hostPlatform.isLinux "platform")
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
     "--enable-examples=no"
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--x-includes=${lib.getDev libX11}/include"
