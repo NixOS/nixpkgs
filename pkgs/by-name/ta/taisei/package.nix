@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  patches = [ ./0001-lto-fix.patch ];
+  mesonFlags = [ "-Db_lto=false" ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Free and open-source Touhou Project clone and fangame";
     mainProgram = "taisei";
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
       folklore.
     '';
     homepage = "https://taisei-project.org/";
-    license = [
-      licenses.mit
-      licenses.cc-by-40
+    license = with lib.licenses; [
+      mit
+      cc-by-40
     ];
-    maintainers = [ maintainers.lambda-11235 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ lambda-11235 ];
+    platforms = lib.platforms.all;
   };
 }
