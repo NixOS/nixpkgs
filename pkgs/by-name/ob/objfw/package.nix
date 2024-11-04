@@ -9,13 +9,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.1.7";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "ObjFW";
     repo = "ObjFW";
-    rev = "refs/tags/1.1.7-release";
-    hash = "sha256-0ylG/2ZSO3b8zdh6W9QJH5OJW9V344CCik1DduV5mhI=";
+    rev = "refs/tags/1.2-release";
+    hash = "sha256-nGajiLYwkIDyJujN2zWULkQXKV2A2wzjYl9IoZBU/N4=";
   };
 
   nativeBuildInputs = [
