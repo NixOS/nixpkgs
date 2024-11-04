@@ -4119,6 +4119,18 @@ self: super: with self; {
 
   esig = callPackage ../development/python-modules/esig { };
 
+  esp-coredump = callPackage ../development/python-modules/esp-coredump { };
+
+  esp-idf-kconfig = callPackage ../development/python-modules/esp-idf-kconfig { };
+
+  esp-idf-monitor = callPackage ../development/python-modules/esp-idf-monitor { };
+
+  esp-idf-nvs-partition-gen = callPackage ../development/python-modules/esp-idf-nvs-partition-gen { };
+
+  esp-idf-panic-decoder = callPackage ../development/python-modules/esp-idf-panic-decoder { };
+
+  esp-idf-size = callPackage ../development/python-modules/esp-idf-size { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esper = callPackage ../development/python-modules/esper { };
@@ -4126,6 +4138,8 @@ self: super: with self; {
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
   esprima = callPackage ../development/python-modules/esprima { };
+
+  esptool = toPythonModule pkgs.esptool;
 
   escapism = callPackage ../development/python-modules/escapism { };
 
@@ -6034,6 +6048,8 @@ self: super: with self; {
   id = callPackage ../development/python-modules/id { };
 
   identify = callPackage ../development/python-modules/identify { };
+
+  idf-component-manager = callPackage ../development/python-modules/idf-component-manager { };
 
   idna = callPackage ../development/python-modules/idna { };
 
@@ -11162,6 +11178,8 @@ self: super: with self; {
 
   pychromecast = callPackage ../development/python-modules/pychromecast { };
 
+  pyclang = callPackage ../development/python-modules/pyclang { };
+
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 
   pyclip = callPackage ../development/python-modules/pyclip { };
@@ -14847,7 +14865,11 @@ self: super: with self; {
 
   sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
 
+  sphinx-click = callPackage ../development/python-modules/sphinx-click { };
+
   sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
+
+  sphinx-collapse = callPackage ../development/python-modules/sphinx-collapse { };
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
