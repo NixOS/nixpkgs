@@ -1,9 +1,14 @@
 { lib
 , stdenv
+, runCommand
+, callPackage
+, writeShellScript
 , fetchFromGitHub
+, fetchFromGitea
 , fetchpatch
 , buildPackages
 , cmake
+, lndir
 , zlib
 , c-ares
 , pkg-config
@@ -19,6 +24,29 @@
 , arrow-cpp
 }:
 
+let
+  git-unroll = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "gm6k";
+    repo = "git-unroll";
+    rev = "9243bb8a6a9f6875e21a5c64320b66f7fdaf9b3f";
+    hash = "sha256-1MjbB1EVgmU0HlUibrKOkjmxQ8wseocSJENiAqyHcjU=";
+  };
+
+  unroll-src = writeShellScript "unroll-src" ''
+    echo "{
+      version,
+      fetchFromGitHub,
+      runCommand,
+      lndir,
+    }:
+    assert version == "'"'$1'"'";"
+    ${git-unroll}/unroll --lndir https://github.com/grpc/grpc v$1
+    echo
+    echo "# Update using: unroll-src [version]"
+  '';
+in
+
 # This package should be updated together with all related python grpc packages
 # to ensure compatibility.
 # nixpkgs-update: no auto update
@@ -33,12 +61,13 @@ stdenv.mkDerivation rec {
     # pythonPackages.grpcio-testing
     # pythonPackages.grpcio-tools
 
-  src = fetchFromGitHub {
-    owner = "grpc";
-    repo = "grpc";
-    rev = "v${version}";
-    hash = "sha256-CmQUUbIYPWRS7q7OX+TmkTvoqtJAUEwhL/lev8JdB8U=";
-    fetchSubmodules = true;
+  src = callPackage ./src.nix {
+    inherit
+      version
+      fetchFromGitHub
+      runCommand
+      lndir
+      ;
   };
 
   patches = [
@@ -107,9 +136,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
-    inherit arrow-cpp;
+  passthru = {
+    inherit unroll-src;
+    tests = {
+      inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
+      inherit arrow-cpp;
+    };
   };
 
   meta = with lib; {
