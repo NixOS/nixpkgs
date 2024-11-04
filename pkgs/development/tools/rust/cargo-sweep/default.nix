@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sweep";
@@ -25,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-sweep";
     homepage = "https://github.com/holmgr/cargo-sweep";
     license = licenses.mit;
-    maintainers = with maintainers; [ xrelkd matthiasbeyer ];
+    maintainers = with maintainers; [
+      xrelkd
+      matthiasbeyer
+    ];
   };
 }
