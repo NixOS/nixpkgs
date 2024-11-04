@@ -48,7 +48,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
 
-  doCheck = false;
+  doCheck = true;
+  preCheck =
+    ''
+      # Needed by the tests to be able to find libstdc++
+      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+    ''
+    + (lib.optionalString (!withGoolm) ''
+      # When using libolm, the tests need explicit linking to libstdc++
+      export CGO_LDFLAGS="-lstdc++"
+    '');
+
+  postCheck = ''
+    unset LD_LIBRARY_PATH
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
