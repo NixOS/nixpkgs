@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
-    (lib.enableFeature (!stdenv.isDarwin) "sdltest")
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
   ];
 
   buildInputs = [ SDL ];
