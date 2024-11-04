@@ -19,6 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-SKNFViwoMzZ1hKKZSvTm0/kKro1IaUVsC+0Pbv7FoAU=";
 
+  ldflags = [
+   "-X main.version=${version}"
+  ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   meta = with lib; {
