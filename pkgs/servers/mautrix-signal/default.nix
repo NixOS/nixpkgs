@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   fetchpatch,
@@ -32,12 +33,18 @@ buildGoModule rec {
     })
   ];
 
-  buildInputs = (lib.optional (!withGoolm) olm) ++ [
-    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
-    # see https://github.com/mautrix/signal/issues/401
-    libsignal-ffi
-  ];
+  buildInputs =
+    (lib.optional (!withGoolm) olm)
+    ++ (lib.optional withGoolm stdenv.cc.cc.lib)
+    ++ [
+      # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+      # see https://github.com/mautrix/signal/issues/401
+      libsignal-ffi
+    ];
+
   tags = lib.optional withGoolm "goolm";
+
+  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
 
   vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
 
