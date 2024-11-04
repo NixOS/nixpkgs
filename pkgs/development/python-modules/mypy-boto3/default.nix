@@ -434,8 +434,8 @@ rec {
       "sha256-OgK+ZM7wn7Elp6xzb1YnZtYP+eARgsP+BIYkQb+E4YE=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.24"
-      "sha256-Vb+Jeh0ONUV57bBQAfS8T0crlFK63Z2ySHbDG98/cqE=";
+    buildMypyBoto3Package "dynamodb" "1.35.54"
+      "sha256-qzd/6OxI0XBt8Z1s5bzlRbM27o/O1ZDfR98uqsH69sA=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.0"
@@ -1322,8 +1322,8 @@ rec {
       "sha256-aTKMQz0w0d0WOWHGU3HIqSb3z6PvbuSqtX+saBIIRog=";
 
   mypy-boto3-stepfunctions =
-    buildMypyBoto3Package "stepfunctions" "1.35.46"
-      "sha256-crU3Xc5EkSSrhBqNVS/LIQa4ssiMNtI1gNoCvhBedWs=";
+    buildMypyBoto3Package "stepfunctions" "1.35.54"
+      "sha256-LueUCqK9oEYZfilqW6nA58zFNQtQn9eog/BmfBg+O/4=";
 
   mypy-boto3-storagegateway =
     buildMypyBoto3Package "storagegateway" "1.35.50"

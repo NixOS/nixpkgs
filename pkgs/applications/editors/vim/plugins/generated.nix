@@ -18791,4 +18791,64 @@ final: prev:
     };
     meta.homepage = "https://github.com/Chaitanyabsprip/fastaction.nvim/";
   };
+
+  cmp-vimtex = buildVimPlugin {
+    pname = "cmp-vimtex";
+    version = "2024-08-06";
+    src = fetchFromGitHub {
+      owner = "micangl";
+      repo = "cmp-vimtex";
+      rev = "5283bf9108ef33d41e704027b9ef22437ce7a15b";
+      sha256 = "pD2dPdpyn5A/uwonDdAxCX138yBeDqbXDdlG/IKjVTU=";
+    };
+    meta.homepage = "https://github.com/micangl/cmp-vimtex/";
+  };
+
+  luasnip-latex-snippets-nvim = buildVimPlugin {
+    pname = "luasnip-latex-snippets.nvim";
+    version = "2024-09-16";
+    src = fetchFromGitHub {
+      owner = "evesdropper";
+      repo = "luasnip-latex-snippets.nvim";
+      rev = "c6b5b5367dd4bb8419389f5acf528acf296adcdd";
+      sha256 = "calv4nF1yxJyehQC+l0p4psI+f4Kg49K6XziCkH9I1Q=";
+    };
+    meta.homepage = "https://github.com/evesdropper/luasnip-latex-snippets.nvim/";
+  };
+
+  typst-conceal-vim = buildVimPlugin {
+    pname = "typst-conceal.vim";
+    version = "2023-10-13";
+    src = fetchFromGitHub {
+      owner = "MrPicklePinosaur";
+      repo = "typst-conceal.vim";
+      rev = "b8862f2d5a015b838e4a0d361f30423c45e23425";
+      sha256 = "UHEVhlV/1cq6jaMhNNookeGPtHvSwy1AKLvb8FR6Rro=";
+    };
+    meta.homepage = "https://github.com/MrPicklePinosaur/typst-conceal.vim/";
+  };
+
+  typst-preview-nvim = buildVimPlugin {
+    pname = "typst-preview.nvim";
+    version = "2024-10-24";
+    src = fetchFromGitHub {
+      owner = "chomosuke";
+      repo = "typst-preview.nvim";
+      rev = "06778d1b3d4d29c34f1faf80947b586f403689ba";
+      sha256 = "oBJ+G4jTQw6+MF/SMwaTkGlLQuYLbaAFqJkexf45I1g=";
+    };
+    meta.homepage = "https://github.com/chomosuke/typst-preview.nvim";
+  };
+
+  follow-md-links-nvim = buildVimPlugin {
+    pname = "follow-md-links.nvim";
+    version = "2024-09-29";
+    src = fetchFromGitHub {
+      owner = "jghauser";
+      repo = "follow-md-links.nvim";
+      rev = "41a6d74636b4209571680d40f20f59a0bf30bf57";
+      sha256 = "ULQTE57SRA8uTuvg5LLJzcI5hOlXDrUwrHfm9+1pbe8=";
+    };
+    meta.homepage = "https://github.com/jghauser/follow-md-links.nvim/";
+  };
 }

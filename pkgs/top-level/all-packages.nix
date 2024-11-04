@@ -23207,8 +23207,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
-  intel-vaapi-driver = callPackage ../development/libraries/intel-vaapi-driver { };
-
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
   libva-vdpau-driver = callPackage ../development/libraries/libva-vdpau-driver { };
@@ -32591,6 +32589,13 @@ with pkgs;
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
 
+  thunderbird-latest-unwrapped = thunderbirdPackages.thunderbird-latest;
+  thunderbird-latest = wrapThunderbird thunderbird-latest-unwrapped { };
+
+  thunderbird-esr-unwrapped = thunderbirdPackages.thunderbird-esr;
+  thunderbird-esr = wrapThunderbird thunderbird-esr-unwrapped { };
+
+  thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
