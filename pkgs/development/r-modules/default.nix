@@ -340,6 +340,7 @@ let
     animation = [ pkgs.which ];
     Apollonius = with pkgs; [ pkg-config gmp.dev mpfr.dev ];
     arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ intltool ];
+    alcyon = with pkgs; [ cmake which ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
@@ -1082,6 +1083,12 @@ let
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
         '';
+    });
+
+    alcyon = old.alcyon.overrideAttrs (attrs: {
+      configureFlags = [
+        "--enable-force-openmp"
+      ];
     });
 
     sf = old.sf.overrideAttrs (attrs: {
