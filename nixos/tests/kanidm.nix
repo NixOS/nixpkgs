@@ -26,14 +26,17 @@ import ./make-test-python.nix (
       { pkgs, ... }:
       {
         services.kanidm = {
-          enableServer = true;
-          serverSettings = {
-            origin = "https://${serverDomain}";
-            domain = serverDomain;
-            bindaddress = "[::]:443";
-            ldapbindaddress = "[::1]:636";
-            tls_chain = "${certsPath}/snakeoil.crt";
-            tls_key = "${certsPath}/snakeoil.key";
+          server = {
+            enable = true;
+            address = "[::]";
+            port = 443;
+            settings = {
+              origin = "https://${serverDomain}";
+              domain = serverDomain;
+              ldapbindaddress = "[::1]:636";
+              tls_chain = "${certsPath}/snakeoil.crt";
+              tls_key = "${certsPath}/snakeoil.key";
+            };
           };
         };
 
@@ -55,15 +58,19 @@ import ./make-test-python.nix (
       { nodes, ... }:
       {
         services.kanidm = {
-          enableClient = true;
-          clientSettings = {
-            uri = "https://${serverDomain}";
-            verify_ca = true;
-            verify_hostnames = true;
+          client = {
+            enable = true;
+            settings = {
+              uri = "https://${serverDomain}";
+              verify_ca = true;
+              verify_hostnames = true;
+            };
           };
-          enablePam = true;
-          unixSettings = {
-            pam_allowed_login_groups = [ "shell" ];
+          unix = {
+            enable = true;
+            settings = {
+              pam_allowed_login_groups = [ "shell" ];
+            };
           };
         };
 
@@ -82,7 +89,7 @@ import ./make-test-python.nix (
         # We need access to the config file in the test script.
         filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
           _: v: v != null
-        )) nodes.server.services.kanidm.serverSettings;
+        )) nodes.server.services.kanidm.server.settings;
         serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
       in
       ''
