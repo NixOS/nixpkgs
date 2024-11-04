@@ -2,9 +2,9 @@
 , tiles ? true
 , debug ? false
 , useXdgDir ? false
-, version ? "2024-07-28"
-, rev ? "bfeb1fffc4179fed242a042f24b1c97f6cfaff3d"
-, sha256 ? "sha256-IodXEA+pWfDdR9huRXieP3+J3WZJO19C8PUPT18dFBw="
+, version ? "2024-12-11"
+, rev ? "b871679a2d54dbc6bf3e6566033fadd2dc651592"
+, sha256 ? "sha256-t9R0QPky7zvjgGMq4kV8DdQFToJ/qngbJCw+8FlQztM="
 }:
 
 let
@@ -24,7 +24,7 @@ let
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path.patch
+      ./locale-path-git.patch
     ];
 
     makeFlags = common.makeFlags ++ [
