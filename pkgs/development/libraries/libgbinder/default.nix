@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mer-hybris/libgbinder";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mcaju ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
