@@ -15,24 +15,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.40.1";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    hash = "sha256-n8cwsCeKWzTw/psvLL3chBr8EcwGoeKB8JeiLSLna1k=";
+    hash = "sha256-EUoJHM0Jm0uFKFeHhtzon/ZRC615SHfYa1gr4RnCNBw=";
   };
 
-  cargoHash = "sha256-TyIQaovmpiu7USURA//+IQWNT95rrVk0x9TRspXYUNk=";
+  cargoHash = "sha256-rI3pa0dvC/OVJz8gzD1bM0Q+8OWwvGj+jGDEMSbSb2I=";
+
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     mandown
     installShellFiles
     pkg-config
   ];
-
-  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [
     openssl
