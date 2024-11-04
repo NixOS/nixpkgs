@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     # If Sublist3r includes any additional files to install, you can handle them here.
   '';
 
-  # Disable tests if necessary; otherwise, configure `checkPhase` for running tests.
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
