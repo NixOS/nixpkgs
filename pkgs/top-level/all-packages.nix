@@ -597,8 +597,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  edge-runtime = callPackage ../development/web/edge-runtime { };
-
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
   eludris = callPackage ../tools/misc/eludris {
