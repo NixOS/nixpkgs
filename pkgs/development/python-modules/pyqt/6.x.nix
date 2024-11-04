@@ -25,15 +25,17 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.8.0.dev2410141303";
+  version = "6.8.0.dev2410211537";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  # This is dangerous, how can we get web archive to archive the URL?
   src = fetchurl {
-    url = "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz";
-    hash = "sha256-eHYqj22us07uFkErJD2d0y0wueZxtQTwTFW9cI7yoK4=";
+    urls = [
+      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+      "https://web.archive.org/web/20241104143645if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
+    ];
+    hash = "sha256-yzkM1nRsU0KOz7l1eFB6unU/NC8Wee26vydIDTZA70w=";
   };
 
   patches = [
