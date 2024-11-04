@@ -13,15 +13,16 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "hap-python";
   version = "4.9.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
@@ -30,7 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-mBjVUfNHuGSeLRisqu9ALpTDwpxHir+6X0scq+HrzxA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     chacha20poly1305-reuseable
     cryptography
