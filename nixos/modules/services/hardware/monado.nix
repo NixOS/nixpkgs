@@ -1,10 +1,18 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption mkPackageOption types;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
 
   cfg = config.services.monado;
 
@@ -27,7 +35,8 @@ in
       example = true;
     };
 
-    highPriority = mkEnableOption "high priority capability for monado-service"
+    highPriority =
+      mkEnableOption "high priority capability for monado-service"
       // mkOption { default = true; };
   };
 
@@ -61,9 +70,10 @@ in
 
         serviceConfig = {
           ExecStart =
-            if cfg.highPriority
-            then "${config.security.wrapperDir}/monado-service"
-            else lib.getExe' cfg.package "monado-service";
+            if cfg.highPriority then
+              "${config.security.wrapperDir}/monado-service"
+            else
+              lib.getExe' cfg.package "monado-service";
           Restart = "no";
         };
 
@@ -93,7 +103,7 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.pathsToLink = [ "/share/openxr" ];
 
-    hardware.opengl.extraPackages = [ pkgs.monado-vulkan-layers ];
+    hardware.graphics.extraPackages = [ pkgs.monado-vulkan-layers ];
 
     environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
       source = "${cfg.package}/share/openxr/1/openxr_monado.json";

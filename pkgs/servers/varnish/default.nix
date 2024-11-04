@@ -56,11 +56,6 @@ in
     version = "6.0.13";
     hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
   };
-  # EOL 2024-09-15
-  varnish74 = common {
-    version = "7.4.3";
-    hash = "sha256-655DUH+Dbu8uMoAtRt08+S7KPVR7pLZA/aWbQHzbG4g=";
-  };
   # EOL 2025-03-15
   varnish75 = common {
     version = "7.5.0";
