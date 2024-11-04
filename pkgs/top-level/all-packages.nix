@@ -4704,8 +4704,6 @@ with pkgs;
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  dua = callPackage ../tools/misc/dua { };
-
   duf = callPackage ../tools/misc/duf { };
 
   dum = callPackage ../development/tools/dum { };
