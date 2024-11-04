@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ];
 
+  # error: incompatible function pointer types assigning to 'GPU_Image *(*)(GPU_Renderer *, SDL_Surface *, GPU_Rect *)'...
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
+
   cmakeFlags = [
     (lib.cmakeBool "SDL_gpu_BUILD_DEMOS" false)
     (lib.cmakeBool "SDL_gpu_BUILD_TOOLS" false)
