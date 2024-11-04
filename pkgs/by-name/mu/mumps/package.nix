@@ -21,43 +21,37 @@ assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
 let
   profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
-  metisFlags =
-    if withParmetis then
-      ''
-        IMETIS="-I${parmetis}/include -I${metis}/include" \
-        LMETIS="-L${parmetis}/lib -lparmetis -L${metis}/lib -lmetis"
-      ''
-    else
-      ''
-        IMETIS=-I${metis}/include \
-        LMETIS="-L${metis}/lib -lmetis"
-      '';
-  scotchFlags =
+  LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
+  LSCOTCH = toString (
     if withPtScotch then
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lptscotch -lptesmumps -lptscotcherr"
-      ''
+      [
+        "-lptscotch"
+        "-lptesmumps"
+        "-lptscotcherr"
+      ]
     else
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lesmumps -lscotch -lscotcherr"
-      '';
-  macroFlags =
-    "-Dmetis -Dpord -Dscotch"
-    + lib.optionalString withParmetis " -Dparmetis"
-    + lib.optionalString withPtScotch " -Dptscotch";
-  # Optimized options
-  # Disable -fopenmp in lines below to benefit from OpenMP
-  optFlags = ''
-    OPTF="-O3 -fallow-argument-mismatch" \
-    OPTL="-O3" \
-    OPTC="-O3"
-  '';
+      [
+        "-lesmumps"
+        "-lscotch"
+        "-lscotcherr"
+      ]
+  );
+  ORDERINGSF = toString (
+    [
+      "-Dmetis"
+      "-Dpord"
+      "-Dscotch"
+    ]
+    ++ lib.optional withParmetis "-Dparmetis"
+    ++ lib.optional withPtScotch "-Dptscotch"
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
   version = "5.7.3";
+  # makeFlags contain space and one should use makeFlagsArray+
+  # Setting this magic var is an optional solution
+  __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
@@ -76,16 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    makeFlagsArray+=(${metisFlags} ${scotchFlags} ORDERINGSF="${macroFlags}" ${optFlags})
-  '';
-
   makeFlags =
     lib.optionals stdenv.hostPlatform.isDarwin [
       "SONAME="
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
+      "ISCOTCH=-I${scotch.dev}/include"
+      "LMETIS=${LMETIS}"
+      "LSCOTCH=${LSCOTCH}"
+      "ORDERINGSF=${ORDERINGSF}"
+      "OPTF=-O3 -fallow-argument-mismatch"
+      "OPTC=-O3"
+      "OPTL=-O3"
       "SCALAP=-lscalapack"
       "allshared"
     ];
