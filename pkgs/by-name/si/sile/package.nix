@@ -43,13 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    finalAttrs.finalPackage.passthru.luaEnv
-    harfbuzz
-    icu
-    fontconfig
-    libiconv
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit;
+  buildInputs =
+    [
+      finalAttrs.finalPackage.passthru.luaEnv
+      harfbuzz
+      icu
+      fontconfig
+      libiconv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ];
   passthru = {
     luaEnv = lua.withPackages (
       ps:
