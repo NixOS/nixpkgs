@@ -4394,7 +4394,7 @@
     githubId = 2083950;
   };
   conni2461 = {
-    email = "simon.hauser@outlook.com";
+    email = "simon-hauser@outlook.com";
     github = "Conni2461";
     name = "Simon Hauser";
     githubId = 15233006;
@@ -8673,6 +8673,12 @@
     github = "hellwolf";
     githubId = 186660;
     name = "Miao, ZhiCheng";
+  };
+  helsinki-Jo = {
+    email = "joachim.ernst@helsinki-systems.de";
+    github = "helsinki-Jo";
+    githubId = 155722885;
+    name = "Joachim Ernst";
   };
   henkery = {
     email = "jim@reupload.nl";
