@@ -15,7 +15,6 @@
   makeFontsConf,
   gentium,
   runCommand,
-  sile,
 }:
 
 let
@@ -86,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           nativeBuildInputs = [
             poppler_utils
-            sile
+            finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;
         }
