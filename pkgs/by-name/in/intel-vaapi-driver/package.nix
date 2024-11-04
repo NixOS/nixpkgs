@@ -1,19 +1,34 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, gnum4, pkg-config, python3, wayland-scanner
-, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
-, enableHybridCodec ? false, vaapi-intel-hybrid
-, enableGui ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gnum4,
+  pkg-config,
+  python3,
+  wayland-scanner,
+  intel-gpu-tools,
+  libdrm,
+  libva,
+  libX11,
+  libGL,
+  wayland,
+  libXext,
+  enableHybridCodec ? false,
+  vaapi-intel-hybrid,
+  enableGui ? true,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "intel-vaapi-driver";
-  version = "2.4.1";
+  version = "2.4.1-unstable-2024-10-27";
 
   src = fetchFromGitHub {
-    owner  = "intel";
-    repo   = "intel-vaapi-driver";
-    rev    = version;
-    sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
+    owner = "intel";
+    repo = "intel-vaapi-driver";
+    rev = "d30e01329344858f3c84d0ef9c2b68cbde37bb9a";
+    hash = "sha256-hMXFLXXTe2qvdk8svVlJ0sWJUIv8lu5DXk53SlBO0Cg=";
   };
 
   # Set the correct install path:
@@ -29,14 +44,30 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [
-    autoreconfHook gnum4 pkg-config python3 wayland-scanner
+    autoreconfHook
+    gnum4
+    pkg-config
+    python3
+    wayland-scanner
   ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva ]
-    ++ lib.optionals enableGui [ libX11 libXext libGL wayland ]
+  buildInputs =
+    [
+      intel-gpu-tools
+      libdrm
+      libva
+    ]
+    ++ lib.optionals enableGui [
+      libX11
+      libXext
+      libGL
+      wayland
+    ]
     ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     homepage = "https://01.org/linuxmedia";
@@ -52,7 +83,10 @@ stdenv.mkDerivation rec {
       processing. It consists of a main library and driver-specific acceleration
       backends for each supported hardware vendor.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
