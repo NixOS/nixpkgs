@@ -593,6 +593,19 @@ in {
           imports = [ slice.configuration ];
           systemd.slices.testslice.sliceConfig.MemoryMax = lib.mkForce null;
         };
+
+        dbusReload.configuration = { config, ... }: let
+          dbusService = {
+            "dbus" = "dbus";
+            "broker" = "dbus-broker";
+          }.${config.services.dbus.implementation};
+        in {
+          # We want to make sure that stc catches this as a reload,
+          # not a restart.
+          systemd.services.${dbusService}.restartTriggers = [
+            (pkgs.writeText "dbus-reload-dummy" "dbus reload dummy")
+          ];
+        };
       };
     };
 
@@ -1422,5 +1435,15 @@ in {
         assert_lacks(out, "the following new units were started:")
         machine.succeed("systemctl start testservice.service")
         machine.succeed("echo 1 > /proc/sys/vm/panic_on_oom")  # disallow OOMing
+
+    with subtest("dbus reloads"):
+        out = switch_to_specialisation("${machine}", "")
+        out = switch_to_specialisation("${machine}", "dbusReload")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: ${dbusService}\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
   '';
 })
