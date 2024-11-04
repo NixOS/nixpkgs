@@ -4394,7 +4394,7 @@
     githubId = 2083950;
   };
   conni2461 = {
-    email = "simon.hauser@outlook.com";
+    email = "simon-hauser@outlook.com";
     github = "Conni2461";
     name = "Simon Hauser";
     githubId = 15233006;
