@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
 
   # nativeBuildInputs
-  gitMinimal,
   pkg-config,
-  makeWrapper,
+  jq,
+  cargo,
+  rustc,
+  rustPlatform,
 
   # buildInputs
   lua,
@@ -14,6 +16,8 @@
   icu,
   fontconfig,
   libiconv,
+  stylua,
+  typos,
   darwin,
   # FONTCONFIG_FILE
   makeFontsConf,
@@ -26,23 +30,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.17";
+  version = "0.15.5";
 
-  src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
+  src = fetchzip {
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.zip";
+    sha256 = "sha256-zP+MGCXGEg19U6tMrHIdgAAfKQT21vFtmoEROXgxUB0=";
   };
 
-  configureFlags = [
-    "--with-system-luarocks"
-    "--with-manual"
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    dontConfigure = true;
+    hash = "sha256-hmgDG29C5JfQX2acMr8c3lmswa1u5XHauRWFd4QGmOo=";
+  };
 
   nativeBuildInputs = [
-    gitMinimal
     pkg-config
-    makeWrapper
+    jq
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
   ];
+
   buildInputs =
     [
       finalAttrs.finalPackage.passthru.luaEnv
@@ -50,10 +58,55 @@ stdenv.mkDerivation (finalAttrs: {
       icu
       fontconfig
       libiconv
+      stylua
+      typos
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
     ];
+
+  configureFlags =
+    [
+      # Nix will supply all the Lua dependencies, so stop the build system from
+      # bundling vendored copies of them.
+      "--with-system-lua-sources"
+      "--with-system-luarocks"
+      # The automake check target uses pdfinfo to confirm the output of a test
+      # run, and uses autotools to discover it. This flake build eschews that
+      # test because it is run from the source directory but the binary is
+      # already built with system paths, so it can't be checked under Nix until
+      # after install. After install the Makefile isn't available of course, so
+      # we have our own copy of it with a hard coded path to `pdfinfo`. By
+      # specifying some binary here we skip the configure time test for
+      # `pdfinfo`, by using `false` we make sure that if it is expected during
+      # build time we would fail to build since we only provide it at test time.
+      "PDFINFO=false"
+    ]
+    ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+      "--without-luajit"
+    ];
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+    "dev"
+  ];
+
+  # TODO: At some point, upstream should support installing the pre-built
+  # manual automatically
+  postInstall = ''
+    install -Dm0644 documentation/sile.pdf $out/share/doc/sile/manual.pdf
+  '';
+
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [
+      gentium
+    ];
+  };
+
+  enableParallelBuilding = true;
+
   passthru = {
     luaEnv = lua.withPackages (
       ps:
@@ -61,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
       [
         cassowary
         cldr
-        cosmo
         fluent
         linenoise
         loadkit
@@ -77,6 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
         luautf8
         penlight
         vstruct
+        # lua packages needed for testing
+        busted
+        luacheck
+        # packages needed for building api docs
+        ldoc
+        # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
       ]
       ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
         bit32
@@ -85,9 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
         compat53
       ]
     );
+
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
-      runCommand "sile-test"
+      runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
             poppler_utils
@@ -102,45 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
         ''
     );
   };
-
-  postPatch =
-    ''
-      patchShebangs build-aux/*.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
-    '';
-
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
-
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [
-      gentium
-    ];
-  };
-
-  enableParallelBuilding = true;
-
-  preBuild = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace libtexpdf/dpxutil.c \
-      --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
-  '';
-
-  # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    for f in "$out"/bin/*; do
-      if isELF "$f"; then
-        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
-      fi
-    done
-  '';
-
-  outputs = [
-    "out"
-    "doc"
-    "man"
-    "dev"
-  ];
 
   meta = {
     description = "Typesetting system";
