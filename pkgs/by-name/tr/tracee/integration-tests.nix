@@ -18,6 +18,8 @@ tracee.overrideAttrs (oa: {
         --replace-fail 'syscallerAbsPath := filepath.Join("..", "..", "dist", "syscaller")' "syscallerAbsPath := filepath.Join(\"$out/bin/syscaller\")"
       substituteInPlace tests/integration/exec_test.go \
         --replace-fail "/usr/bin" "/run/current-system/sw/bin"
+      substituteInPlace tests/testutils/tracee.go \
+        --replace-fail "../../dist/tracee" "${lib.getExe tracee}"
     '';
   nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ makeWrapper ];
   buildPhase = ''

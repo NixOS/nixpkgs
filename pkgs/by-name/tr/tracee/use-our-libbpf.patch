@@ -1,16 +1,17 @@
+From 7b906fec4be0f1cba028dc528c356f7ace99ccc8 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Mon, 4 Nov 2024 09:08:31 +0800
+Subject: [PATCH] use our libbpf
+
+---
+ Makefile | 38 --------------------------------------
+ 1 file changed, 38 deletions(-)
+
 diff --git a/Makefile b/Makefile
-index 29be1ae71..b88f31cba 100644
+index 66c47ba22..7befc9a2b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -54,6 +54,7 @@ CMD_CONTROLLER_GEN ?= controller-gen
- # libs
- #
- 
-+LIB_BPF ?= libbpf
- LIB_ELF ?= libelf
- LIB_ZLIB ?= zlib
- 
-@@ -299,8 +300,6 @@ OUTPUT_DIR = ./dist
+@@ -338,8 +338,6 @@ OUTPUT_DIR = ./dist
  $(OUTPUT_DIR):
  #
  	@$(CMD_MKDIR) -p $@
@@ -19,30 +20,91 @@ index 29be1ae71..b88f31cba 100644
  
  #
  # embedded btfhub
-@@ -353,7 +352,6 @@ TRACEE_EBPF_OBJ_HEADERS = $(shell find pkg/ebpf/c -name *.h)
+@@ -350,35 +348,6 @@ $(OUTPUT_DIR)/btfhub:
+ 	@$(CMD_MKDIR) -p $@
+ 	$(CMD_TOUCH) $@/.place-holder
+ 
+-#
+-# libbpf (statically linked)
+-#
+-
+-LIBBPF_CFLAGS = "-fPIC"
+-LIBBPF_LDFLAGS =
+-LIBBPF_SRC = ./3rdparty/libbpf/src
+-LIBBPF_INCLUDE_UAPI = $(abspath ./3rdparty/libbpf/include/uapi)
+-LIBBPF_DESTDIR = $(OUTPUT_DIR)/libbpf
+-LIBBPF_OBJDIR = $(LIBBPF_DESTDIR)/obj
+-LIBBPF_OBJ = $(LIBBPF_OBJDIR)/libbpf.a
+-
+-$(LIBBPF_OBJ): \
+-	$(LIBBPF_SRC) \
+-	$(wildcard $(LIBBPF_SRC)/*.[ch]) \
+-	| .checkver_$(CMD_CLANG) $(OUTPUT_DIR)
+-#
+-	CC="$(CMD_CLANG)" \
+-		CFLAGS="$(LIBBPF_CFLAGS)" \
+-		LD_FLAGS="$(LIBBPF_LDFLAGS)" \
+-		$(MAKE) \
+-		-C $(LIBBPF_SRC) \
+-		BUILD_STATIC_ONLY=1 \
+-		DESTDIR=$(abspath $(LIBBPF_DESTDIR)) \
+-		OBJDIR=$(abspath $(LIBBPF_OBJDIR)) \
+-		LIBDIR=$(abspath $(LIBBPF_OBJDIR)) \
+-		INCLUDEDIR= UAPIDIR= prefix= libdir= \
+-		install install_uapi_headers
+-
+ .ONESHELL:
+ .eval_goenv: $(LIBBPF_OBJ)
+ #
+@@ -418,7 +387,6 @@ TRACEE_EBPF_OBJ_HEADERS = $(shell find pkg/ebpf/c -name *.h)
  bpf: $(OUTPUT_DIR)/tracee.bpf.o
  
  $(OUTPUT_DIR)/tracee.bpf.o: \
--	$(OUTPUT_DIR)/libbpf/libbpf.a \
+-	$(LIBBPF_OBJ) \
  	$(TRACEE_EBPF_OBJ_SRC) \
  	$(TRACEE_EBPF_OBJ_HEADERS)
  #
-@@ -391,8 +389,8 @@ endif
- TRACEE_SRC_DIRS = ./cmd/ ./pkg/ ./signatures/
+@@ -427,7 +395,6 @@ $(OUTPUT_DIR)/tracee.bpf.o: \
+ 		-D__BPF_TRACING__ \
+ 		-DCORE \
+ 		-I./pkg/ebpf/c/ \
+-		-I$(OUTPUT_DIR)/libbpf/ \
+ 		-I ./3rdparty/include \
+ 		-target bpf \
+ 		-O2 -g \
+@@ -449,8 +416,6 @@ TRACEE_SRC_DIRS = ./cmd/ ./pkg/ ./signatures/
  TRACEE_SRC = $(shell find $(TRACEE_SRC_DIRS) -type f -name '*.go' ! -name '*_test.go')
+ GO_TAGS_EBPF = core,ebpf
+ CGO_EXT_LDFLAGS_EBPF =
+-CUSTOM_CGO_CFLAGS = "-I$(abspath $(OUTPUT_DIR)/libbpf) -I$(LIBBPF_INCLUDE_UAPI)"
+-PKG_CONFIG_PATH = $(LIBBPF_OBJDIR)
+ PKG_CONFIG_FLAG =
  
--CUSTOM_CGO_CFLAGS = "-I$(abspath $(OUTPUT_DIR)/libbpf)"
--CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB))) $(abspath $(OUTPUT_DIR)/libbpf/libbpf.a)"
-+CUSTOM_CGO_CFLAGS = ""
-+CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_BPF))) $(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB)))"
- 
- GO_ENV_EBPF =
- GO_ENV_EBPF += GOOS=linux
-@@ -437,6 +435,7 @@ $(OUTPUT_DIR)/tracee: \
- 	$(OUTPUT_DIR)/tracee.bpf.o \
+ TRACEE_PROTOS = ./api/v1beta1/*.proto
+@@ -490,7 +455,6 @@ $(OUTPUT_DIR)/tracee: \
  	$(TRACEE_SRC) \
- 	| .checkver_$(CMD_GO) \
-+	.checklib_$(LIB_BPF) \
- 	.checklib_$(LIB_ELF) \
- 	.checklib_$(LIB_ZLIB) \
+ 	| .eval_goenv \
+ 	.checkver_$(CMD_GO) \
+-	.checklib_$(LIB_BPF) \
  	btfhub \
+ 	signatures
+ #
+@@ -523,7 +487,6 @@ $(OUTPUT_DIR)/tracee-ebpf: \
+ 	$(TRACEE_SRC) \
+ 	| .eval_goenv \
+ 	.checkver_$(CMD_GO) \
+-	.checklib_$(LIB_BPF) \
+ 	btfhub
+ #
+ 	$(MAKE) $(OUTPUT_DIR)/btfhub
+@@ -663,7 +626,6 @@ $(OUTPUT_DIR)/tracee-gptdocs: \
+ 	$(TRACEE_GPTDOCS_SRC) \
+ 	| .eval_goenv \
+ 	.checkver_$(CMD_GO) \
+-	.checklib_$(LIB_BPF) \
+ 	$(OUTPUT_DIR)
+ #
+ 	$(MAKE) $(OUTPUT_DIR)/btfhub
+-- 
+2.46.1
+

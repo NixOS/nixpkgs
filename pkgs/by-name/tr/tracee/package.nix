@@ -19,28 +19,26 @@
 
 buildGoModule rec {
   pname = "tracee";
-  version = "0.20.0";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    # project has branches and tags of the same name
     rev = "refs/tags/v${version}";
-    hash = "sha256-OnOayDxisvDd802kDKGctaQc5LyoyFfdfvC+2JpRjHY=";
+    hash = "sha256-fD8JJdM6hB/6b03oTLjIhuesyD66Qr0V7a0lwcT6nFE=";
   };
-  vendorHash = "sha256-26sAKTJQ7Rf5KRlu7j5XiZVr6CkAC6fm60Pam7KH0uA=";
+  vendorHash = "sha256-8KKrEzgLqjh+Zjq1ZmkW6HH49p9VmyiyGw1X73trIJU=";
 
   patches = [
     ./use-our-libbpf.patch
-    # can not vendor dependencies with old pyroscope
-    # remove once https://github.com/aquasecurity/tracee/pull/3927
-    # makes it to a release
-    ./update-pyroscope.patch
   ];
 
   enableParallelBuilding = true;
   # needed to build bpf libs
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
     pkg-config
