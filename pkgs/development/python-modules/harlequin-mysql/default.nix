@@ -29,7 +29,6 @@ buildPythonPackage rec {
     "mysql-connector-python"
   ];
 
-
   # To prevent circular dependency
   # as harlequin-mysql requires harlequin which requires harlequin-mysql
   doCheck = false;
