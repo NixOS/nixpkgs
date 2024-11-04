@@ -456,6 +456,7 @@ let
     RcppGSL = [ pkgs.gsl ];
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
+    resultant = with pkgs; [ gmp.dev mpfr.dev pkg-config ];
     rgdal = with pkgs; [ proj.dev gdal ];
     Rhisat2 = [ pkgs.which pkgs.hostname ];
     gdalcubes = [ pkgs.pkg-config ];
