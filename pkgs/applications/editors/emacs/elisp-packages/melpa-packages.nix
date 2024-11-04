@@ -1381,6 +1381,22 @@ let
         # TODO report to upstream
         org-kindle = addPackageRequires super.org-kindle [ self.dash ];
 
+        # Requires xwidgets compiled into emacs and so fails with the
+        # default, non-GTK package. Override the package to ensure
+        # that xwidgets are available and the package can build.
+        org-xlatex = let
+          org-xlatex = super.org-xlatex.overrideAttrs (old: {
+            nativeBuildInputs = builtins.map
+              (p: if p.pname == "emacs" then pkgs.emacs-gtk else p)
+              old.nativeBuildInputs;
+          });
+          in
+          # Similarly, we can't build in xwidgets on Darwin, so mark
+          # it broken in that case.
+          if pkgs.stdenv.hostPlatform.isDarwin
+          then markBroken org-xlatex
+          else org-xlatex;
+
         org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
 
         org-trello = ignoreCompilationError super.org-trello; # elisp error
