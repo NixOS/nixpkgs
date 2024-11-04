@@ -105,12 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames ++ lib.optional mpiSupport mpi;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
-  buildInputs =
+  propagatedBuildInputs =
     lib.optional withParmetis parmetis
-    ++ lib.optional mpiSupport scalapack
+    ++ lib.optionals mpiSupport [
+      mpi
+      scalapack
+    ]
     ++ [
       blas
       lapack
