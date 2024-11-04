@@ -2,7 +2,7 @@
   cmake,
   darwin,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_6,
   fontconfig,
   git,
   lib,
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
-      ffmpeg
+      ffmpeg_6
       fontconfig
       libGL
       libxkbcommon
