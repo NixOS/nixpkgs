@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+  dontPatchelf = true;
 
   # SDK contains libraries and build-system to develop projects for RP2040 chip
   # We only need to compile pioasm binary
@@ -39,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a ../../../* $out/lib/pico-sdk/
     chmod 755 $out/lib/pico-sdk/tools/pioasm/build/pioasm
     runHook postInstall
+  '';
+
+  postInstall = ''
+    mkdir $out/nix-support
+    echo "export PICO_SDK_PATH=$out/lib/pico-sdk" > $out/nix-support/setup-hook
   '';
 
   meta = with lib; {
