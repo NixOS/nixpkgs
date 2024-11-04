@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fSlakjZbY8jrFkCqVxPr3UKwf1Oq4yPhLmVbzsksSeg=";
+    hash = "sha256-WbTxy8ijXez1x2G7NGGVMcyjgE7J7MDsGgGRpb4jKXQ=";
   };
 
-  cargoHash = "sha256-WT0uXmchhapss3AU4+e2wA3nBVjzikfRNRyAvQnpJfY=";
+  cargoHash = "sha256-rlWNrkzUDs3rbQ5ZV4fKU/EKEy4fVbxEP0+wNwXi7Ag=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
