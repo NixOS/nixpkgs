@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
     cp -vrt "$out/share/doc/john" ../doc/*
     cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
+  '' + lib.optionalString withOpenCL ''
+    cp -vrt "$out/share/john" ../run/opencl
   '';
 
   postFixup = ''
