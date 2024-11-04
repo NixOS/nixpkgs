@@ -1,18 +1,19 @@
 {
   lib,
-  stdenv,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
-  version = "0.6.1";
+  version = "0.6.1-unstable-2024-02-25";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EweNKe6i+aTKAfBWdsMwnq1eNB2rBH4NUcRvI9S3+7Q=";
+  src = fetchFromGitHub {
+    owner = "infothrill";
+    repo = "python-dyndnsc";
+    rev = "75f82ce64a91b9fd25cd362d295095be4dab72b5";
+    hash = "sha256-2SWtYQ3TaFbuHxABBUeXSqgfCA/T8lCAB+9mAIyjySU=";
   };
 
   postPatch = ''
@@ -20,10 +21,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '"pytest-runner"' ""
   '';
 
-  pythonRelaxDeps = [ "bottle" ];
-
   build-system = with python3Packages; [ setuptools ];
-
 
   dependencies = with python3Packages; [
     daemonocle
@@ -32,31 +30,21 @@ python3Packages.buildPythonApplication rec {
     netifaces
     requests
     setuptools
+    responses
   ];
 
   nativeCheckInputs = with python3Packages; [
-    bottle
     pytest-console-scripts
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # dnswanip connects to an external server to discover the
-      # machine's IP address.
-      "dnswanip"
-      # AssertionError
-      "test_null_dummy"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # The tests that spawn a server using Bottle cannot be run on
-      # macOS or Windows as the default multiprocessing start method
-      # on those platforms is 'spawn', which requires the code to be
-      # run to be picklable, which this code isn't.
-      # Additionaly, other start methods are unsafe and prone to failure
-      # on macOS; see https://bugs.python.org/issue33725.
-      "BottleServer"
-    ];
+  disabledTests = [
+    # dnswanip connects to an external server to discover the
+    # machine's IP address.
+    "dnswanip"
+    # AssertionError
+    "test_null_dummy"
+  ];
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
 
