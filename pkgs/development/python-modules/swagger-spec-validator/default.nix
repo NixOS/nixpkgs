@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyyaml,
   jsonschema,
-  six,
+  importlib-resources,
+  typing-extensions,
   pytestCheckHook,
   mock,
 }:
@@ -12,7 +14,7 @@
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
   version = "3.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
@@ -21,10 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-8T0973g8JZKLCTpYqyScr/JAiFdBexEReUJoMQh4vO4=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
+  build-system = [ setuptools ];
+
+  dependencies = [
+    importlib-resources
     jsonschema
-    six
+    pyyaml
+    typing-extensions
   ];
 
   nativeCheckInputs = [
