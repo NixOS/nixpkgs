@@ -4,12 +4,13 @@
   fetchFromGitHub,
   pytestCheckHook,
   six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ush";
   version = "4.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tarruda";
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-a6ICbd8647DRtuHl2vs64bsChUjlpuWHV1ipBdFA600=";
   };
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "ush" ];
 
   nativeCheckInputs = [
     pytestCheckHook
