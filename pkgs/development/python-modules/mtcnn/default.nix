@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  opencv4,
+  opencv-python,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -28,7 +28,6 @@ buildPythonPackage {
     substituteInPlace setup.py \
       --replace-fail "setup, setuptools" "setup, find_packages"\
       --replace-fail "setuptools.find_packages" "find_packages"\
-      --replace-fail "opencv-python>=4.1.0" ""\
       --replace-fail "keras>=2.0.0" ""\
       --replace-fail "tests_require=['nose']," ""
   '';
@@ -36,7 +35,7 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   dependencies = [
-    opencv4
+    opencv-python
     tensorflow
   ];
 
