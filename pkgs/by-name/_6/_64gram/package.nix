@@ -4,10 +4,12 @@
   fetchFromGitHub,
   fetchpatch,
   telegram-desktop,
+  withWebkit ? true,
 }:
 
 telegram-desktop.override {
   pname = "64gram";
+  inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
     version = "1.1.45";

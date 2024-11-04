@@ -2,10 +2,12 @@
   lib,
   telegram-desktop,
   fetchFromGitHub,
+  withWebkit ? true,
 }:
 
 telegram-desktop.override {
   pname = "materialgram";
+  inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "materialgram-unwrapped";

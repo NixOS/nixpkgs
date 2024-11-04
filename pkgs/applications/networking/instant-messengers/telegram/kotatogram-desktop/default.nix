@@ -5,6 +5,7 @@
   fetchpatch,
   libsForQt5,
   yasm,
+  withWebkit ? true,
 }:
 
 let
@@ -36,6 +37,7 @@ let
 in
 telegram-desktop.override {
   pname = "kotatogram-desktop";
+  inherit withWebkit;
   unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
     pname = "kotatogram-desktop-unwrapped";
     version = "${version}-unstable-2024-09-27";
