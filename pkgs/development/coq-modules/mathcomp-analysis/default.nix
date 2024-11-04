@@ -54,7 +54,7 @@ let
   packages = {
     "classical" = [];
     "reals" = [ "classical" ];
-    "altreals" = [ "reals" ];
+    "experimental-reals" = [ "reals" ];
     "analysis" = [ "reals" ];
     "reals-stdlib" = [ "reals" ];
     "analysis-stdlib" = [ "analysis" "reals-stdlib" ];
@@ -62,12 +62,13 @@ let
 
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
-      altreals-deps = [ mathcomp-bigenough ];
+      experimental-reals-deps = [ mathcomp-bigenough ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = lib.switch package [
         { case = "single"; out = "."; }
         { case = "analysis"; out = "theories"; }
+        { case = "experimental-reals"; out = "experimental_reals"; }
         { case = "reals-stdlib"; out = "reals_stdlib"; }
         { case = "analysis-stdlib"; out = "analysis_stdlib"; }
       ] package;
@@ -81,7 +82,7 @@ let
         propagatedBuildInputs =
           intra-deps
           ++ lib.optionals (lib.elem package [ "classical" "single" ]) classical-deps
-          ++ lib.optionals (lib.elem package [ "altreals" "single" ]) altreals-deps
+          ++ lib.optionals (lib.elem package [ "experimental-reals" "single" ]) experimental-reals-deps
           ++ lib.optionals (lib.elem package [ "analysis" "single" ]) analysis-deps;
 
         preBuild = ''
