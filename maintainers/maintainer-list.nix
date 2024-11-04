@@ -9746,6 +9746,13 @@
     githubId = 2179419;
     name = "Arseniy Seroka";
   };
+  jakecleary = {
+    email = "shout@jakecleary.net";
+    github = "jakecleary";
+    githubId = 4572429;
+    name = "Jake Cleary";
+    keys = [ { fingerprint = "6192 E5CC 28B8 FA7E F5F3  775F 3726 5B1E 496C 92A2"; } ];
+  };
   jakedevs = {
     email = "work@jakedevs.net";
     github = "jakedevs";
@@ -11567,11 +11574,11 @@
   };
   kloenk = {
     email = "me@kloenk.dev";
-    matrix = "@kloenk:petabyte.dev";
-    name = "Finn Behrens";
-    github = "Kloenk";
+    matrix = "@kloenk:kloenk.eu";
+    name = "Fiona Behrens";
+    github = "kloenk";
     githubId = 12898828;
-    keys = [ { fingerprint = "6881 5A95 D715 D429 659B  48A4 B924 45CF C954 6F9D"; } ];
+    keys = [ { fingerprint = "B44A DFDF F869 A66A 3FDF  DD8B 8609 A7B5 19E5 E342"; } ];
   };
   kmcopper = {
     email = "kmcopper@danwin1210.me";
@@ -13743,12 +13750,6 @@
     github = "mbrgm";
     githubId = 2971615;
     name = "Marius Bergmann";
-  };
-  mcaju = {
-    email = "cajum.bugs@yandex.com";
-    github = "CajuM";
-    githubId = 10420834;
-    name = "Mihai-Drosi Caju";
   };
   mccartykim = {
     email = "mccartykim@zoho.com";
