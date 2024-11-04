@@ -145,8 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableQt6 (with qt6Packages; [ qttools qtbase qtsvg ])
   ++ optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
   ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-  ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Foundation ];
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor
