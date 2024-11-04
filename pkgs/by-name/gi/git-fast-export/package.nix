@@ -5,17 +5,18 @@
   git,
   mercurial,
   makeWrapper,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "fast-export";
   version = "221024";
 
   src = fetchFromGitHub {
     owner = "frej";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
+    repo = "fast-export";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     binPath=$out/bin
-    libexecPath=$out/libexec/${pname}
+    libexecPath=$out/libexec/fast-export
     sitepackagesPath=$out/${mercurial.python.sitePackages}
     mkdir -p $binPath $libexecPath $sitepackagesPath
 
@@ -67,11 +68,13 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.koral ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.koral ];
+    platforms = lib.platforms.unix;
   };
-}
+})
