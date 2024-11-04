@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [ fuse ];
+
+  patches = [ ./001-darwin-fdatasync.patch ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed
