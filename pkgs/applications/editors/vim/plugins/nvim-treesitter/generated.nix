@@ -2386,6 +2386,17 @@
     };
     meta.homepage = "https://github.com/rescript-lang/tree-sitter-rescript";
   };
+  river = buildGrammar {
+    language = "river";
+    version = "0.0.0+rev=eafcdc5";
+    src = fetchFromGitHub {
+      owner = "grafana";
+      repo = "tree-sitter-river";
+      rev = "eafcdc5147f985fea120feb670f1df7babb2f79e";
+      hash = "sha256-fhuIO++hLr5DqqwgFXgg8QGmcheTpYaYLMo7117rjyk=";
+    };
+    meta.homepage = "https://github.com/grafana/tree-sitter-river";
+  };
   rnoweb = buildGrammar {
     language = "rnoweb";
     version = "0.0.0+rev=1a74dc0";
