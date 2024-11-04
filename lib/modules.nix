@@ -1088,10 +1088,15 @@ let
   mkVMOverride = mkOverride priorities.vmOverride;
 
   # Legacy aliases
-  mkDefault = mkConfigDefault;
-  defaultOverridePriority = priorities.baseline; # Deprecated! Please use priorities.baseline instead.
-
-  defaultPriority = warnIf (oldestSupportedReleaseIsAtLeast 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
+  mkDefault =
+    warnIf (oldestSupportedReleaseIsAtLeast 2505)
+      "`lib.modules.mkDefault` is deprecated, please use `lib.modules.mkConfigDefault` instead."
+      mkConfigDefault;
+  defaultOverridePriority =
+    warnIf (oldestSupportedReleaseIsAtLeast 2505)
+      "`lib.modules.defaultOverridePriority` is deprecated, please use `lib.modules.priorities.baseline` instead."
+      priorities.baseline;
+  defaultPriority = warnIf (oldestSupportedReleaseIsAtLeast 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.priorities.baseline instead." lib.modules.priorities.baseline;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
