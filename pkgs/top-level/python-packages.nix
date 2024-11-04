@@ -5119,6 +5119,8 @@ self: super: with self; {
 
   git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
+  git-dummy = callPackage ../development/python-modules/git-dummy { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   githubkit = callPackage ../development/python-modules/githubkit { };
@@ -13658,8 +13660,6 @@ self: super: with self; {
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
 
   replicate = callPackage ../development/python-modules/replicate { };
-
-  repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 
