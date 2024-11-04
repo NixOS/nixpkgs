@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "MailHog";
@@ -17,16 +22,24 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-X main.version=${version}"
+  ];
 
-  passthru.tests = { inherit (nixosTests) mailhog; };
+  passthru.tests = {
+    inherit (nixosTests) mailhog;
+  };
 
   meta = with lib; {
     description = "Web and API based SMTP testing";
     mainProgram = "MailHog";
     homepage = "https://github.com/mailhog/MailHog";
     changelog = "https://github.com/mailhog/MailHog/releases/tag/v${version}";
-    maintainers = with maintainers; [ disassembler jojosch ];
+    maintainers = with maintainers; [
+      disassembler
+      jojosch
+    ];
     license = licenses.mit;
   };
 }
