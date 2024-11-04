@@ -407,6 +407,7 @@ mkDerivation (finalAttrs: {
   passthru = {
     inherit withNativeCompilation;
     inherit withTreeSitter;
+    inherit withXwidgets;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
