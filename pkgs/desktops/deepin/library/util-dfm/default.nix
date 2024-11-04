@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "util-dfm";
-  version = "1.2.24";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-7MuQVkb+xRMtcbB5PQBv6Au/i3ONA0c1whnZ9bMrA/8=";
+    hash = "sha256-ngDjjdwuYqvyhaUcMNV5PRmGKC3lmY/nJQGOQgRMIQE=";
   };
 
   nativeBuildInputs = [

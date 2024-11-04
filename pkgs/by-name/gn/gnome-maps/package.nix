@@ -5,7 +5,6 @@
   meson,
   ninja,
   gettext,
-  python3,
   pkg-config,
   gnome,
   glib,
@@ -30,14 +29,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "46.11";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lAtBuXQLCBMyXjkWdYcWz4+g7k4MkZHyYM7AbZITWDU=";
+    hash = "sha256-TwLtLo44GeWdptm0rIgA6GY1349GpHzyqv2ThsgwEwM=";
   };
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     gettext
@@ -75,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
-        --replace "Exec=@pkgdatadir@/@app-id@" \
-                  "Exec=$out/bin/gnome-maps"
+      --replace-fail "Exec=@pkgdatadir@/@app-id@" \
+                     "Exec=$out/bin/gnome-maps"
   '';
 
   preCheck = ''
@@ -95,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postCheck = ''
     rm $out/lib/gnome-maps/libgnome-maps.so.0
+  '';
+
+  preFixup = ''
+    substituteInPlace "$out/share/applications/org.gnome.Maps.desktop" \
+      --replace-fail "Exec=gapplication launch org.gnome.Maps" \
+                     "Exec=gnome-maps"
   '';
 
   passthru = {

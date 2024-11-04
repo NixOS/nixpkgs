@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ]
-    ++ lib.optional stdenv.isLinux systemd;
+    ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
   meta = with lib; {
     description = "Brand new release of the Djbdns";

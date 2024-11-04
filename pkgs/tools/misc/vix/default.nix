@@ -13,6 +13,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  configureFlags = [
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
+  ];
+
   buildInputs = [ SDL ];
 
   meta = with lib; {
@@ -21,5 +25,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = [ maintainers.ehmry ];
     mainProgram = "vix";
+    # sys/io.h missing on other platforms
+    platforms = [ "x86_64-linux" ];
   };
 }

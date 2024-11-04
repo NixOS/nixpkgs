@@ -1,18 +1,19 @@
-{ lib
-, fetchurl
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
+{
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
 }:
 let
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.16.0";
+  version = "0.17.0";
 
   web-assets = fetchurl {
     url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-aZQpd5KvoZvXEMVzGbWrtGsc+P1JStjZ6U5mX6q7Vb0=";
+    hash = "sha256-ASqPIf98qdnkh3j72ifQN3mWnzNCTRcUegmrStvQ08Q=";
   };
 in
 buildGoModule rec {
@@ -22,7 +23,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner repo;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QoG09+jmq5e5vxDVtkhY35098W/9B1HsYTuUnz43LV4=";
+    hash = "sha256-uyqP3zhjcXKejGFAwZoTn2kY8IpX0QAAXNzb1VG6ve8=";
   };
 
   vendorHash = null;
@@ -33,6 +34,10 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  tags = [
+    "kvformat"
+  ];
+
   postInstall = ''
     tar xf ${web-assets}
     mkdir -p $out/share/gotosocial
@@ -40,7 +45,7 @@ buildGoModule rec {
   '';
 
   # tests are working only on x86_64-linux
-  # doCheck = stdenv.isLinux && stdenv.isx86_64;
+  # doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64;
   # checks are currently very unstable in our setup, so we should test manually for now
   doCheck = false;
 

@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.3";
+  version = "2.13.0";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    hash = "sha256-F8vDPPwO0PnGXhqt0EeT4m/+d8w/rjMHWRV3RYC/wVQ=";
+    hash = "sha256-uYWKu9M/5PcHV4WdMSi0f29S7KnQft67dgjdN0AS1d8=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
   makeFlags = kernel.makeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  patches = [
-    # https://github.com/amzn/amzn-drivers/issues/313
-    ./0001-workaround-patch-for-kernel-6.10.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure

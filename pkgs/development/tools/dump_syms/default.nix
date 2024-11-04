@@ -17,7 +17,7 @@
 
 let
   pname = "dump_syms";
-  version = "2.3.3";
+  version = "2.3.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pZlWA7LZeMb+ZhnfQh9MzvDDlre1kkPc6aSVNZcVi/w=";
+    hash = "sha256-6VDuZ5rw2N4z6wOVbaOKO6TNaq8QA5RstsIzmuE3QrI=";
   };
 
-  cargoHash = "sha256-srphb7jFSJB08hSShk3f5QYPoYu8UwbUzkzn0zpMqyg=";
+  cargoHash = "sha256-ndRw5z4CfuX0KNqNgpA4yohG8p/cUR/Op2fIunuO6GM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     Security
     SystemConfiguration
   ];

@@ -66,14 +66,14 @@ buildPythonPackage rec {
     watchdog
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ] ++ passthru.optional-dependencies.i18n;
+  ] ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"

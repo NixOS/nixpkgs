@@ -54,7 +54,7 @@ let
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
 
     buildInputs = [ openssl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
     nativeBuildInputs = [ pkg-config ];
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
@@ -144,22 +144,17 @@ buildGoModule rec {
     ++ lib.optional withRdpClient "desktop_access_rdp";
 
   buildInputs = [ openssl libfido2 ]
-    ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-    (if lib.versionAtLeast version "16" then ./tsh_16.patch else ./tsh.patch)
+    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
-
-  prePatch = ''
-    # TODO: remove after https://github.com/NixOS/nixpkgs/pull/332852 merges
-    sed -i 's/go 1.22.6/go 1.22.5/' go.mod
-  '';
 
   preBuild = ''
     cp -r ${webassets} webassets

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "legit";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
     rev = "v${version}";
-    hash = "sha256-C6PzZFYGjQs1BbYuEwcTpLQ3bNVb1rXTd0zXosF1kaE=";
+    hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
   };
 
-  vendorHash = "sha256-G4Wij0UCiXyVtb+66yU3FY2WbpPfqo0SA7OOcywnKU0=";
+  vendorHash = "sha256-4XplNx+Pyv6dn+ophBFxQ3lv3xAf1jP2DpLYX1RenvQ=";
 
   postInstall = ''
     mkdir -p $out/lib/legit/templates

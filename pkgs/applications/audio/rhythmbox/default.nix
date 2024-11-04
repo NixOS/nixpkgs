@@ -21,7 +21,7 @@
 , libgpod
 , libmtp
 , lirc
-, brasero
+, brasero-unwrapped # libdvdcss is not needed for rhythmbox
 , grilo
 , tdb
 , json-glib
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libgpod
     libmtp
     lirc
-    brasero
+    brasero-unwrapped
     grilo
 
     python3.pkgs.pygobject3

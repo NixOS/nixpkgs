@@ -8,19 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
     rev = "refs/tags/${version}";
-    hash = "sha256-AtIaWwE1pEIP1SJN9dYgHRP1GX4LTmetIPztHbsBXto=";
+    hash = "sha256-BYYqvPJu/eFJ9lt07A0p7pd8pGFccUe/okFqGEObhY4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rustpython-ast-0.3.1" = "sha256-dT0x4E8k/FcSP/q0uwwBWniT1n9HGmFF/HV6hAE6bGU=";
       "rustpython-doc-0.3.0" = "sha256-34ERuLFKzUD9Xmf1zlafe42GLWZfUlw17ejf/NN6yH4=";
     };
   };
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -41,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     #       "_utimensat", referenced from:
     #           rustpython_vm::function::builtin::IntoPyNativeFn::into_func::... in
     #           rustpython-10386d81555652a7.rustpython_vm-f0b5bedfcf056d0b.rustpython_vm.7926b68e665728ca-cgu.08.rcgu.o.rcgu.o
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

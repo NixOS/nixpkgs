@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   # Most tests fail on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "daphne" ];
 

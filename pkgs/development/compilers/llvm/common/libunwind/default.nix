@@ -12,13 +12,16 @@
 , python3
 , libcxx
 , enableShared ? !stdenv.hostPlatform.isStatic
+, devExtraCmakeFlags ? []
 }:
 let
   pname = "libunwind";
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${pname} "$out"
       mkdir -p "$out/libcxx"
       cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
@@ -68,7 +71,8 @@ stdenv.mkDerivation (rec {
   ];
 
   cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
-    ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
+    ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+    ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.3.0";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-nfL+cUwdw6zPc8J81dCEFoLpcCIKMBNNeCXkzvZgsdQ=";
+    hash = "sha256-Vt9uGIcIGvRSL57DK+LUYy2NTyYZ9yqnHqYJZiMeVKA=";
   };
 
   build-system = [ poetry-core ];

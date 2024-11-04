@@ -29,7 +29,7 @@ def test_entities(doc_en_core_web_sm):
         ('Google', 'ORG'),
         ('2007', 'DATE'),
         ('American', 'NORP'),
-        ('Thrun', 'PERSON'),
+        ('Thrun', 'GPE'),
         ('Recode', 'ORG'),
         ('earlier this week', 'DATE'),
     ]

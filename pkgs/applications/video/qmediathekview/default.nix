@@ -37,7 +37,7 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "QMediathekView";
   };
 }

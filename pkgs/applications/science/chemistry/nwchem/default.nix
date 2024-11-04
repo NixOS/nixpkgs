@@ -164,6 +164,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/nwchem
 
     cp $NWCHEM_TOP/bin/LINUX64/nwchem $out/bin/nwchem
@@ -186,12 +188,14 @@ stdenv.mkDerivation rec {
     charmm_s $out/share/nwchem/data/charmm_s/
     charmm_x $out/share/nwchem/data/charmm_x/
     EOF
+
+    runHook postInstall
   '';
 
   doCheck = false;
 
   doInstallCheck = true;
-  nativeCheckInputs = [ mpiCheckPhaseHook ];
+  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -207,7 +211,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ sheepforce markuskowa ];
     homepage = "https://nwchemgit.github.io";
     license = licenses.ecl20;

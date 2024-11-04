@@ -9,13 +9,15 @@
   autoPatchelfHook,
   wrapGAppsHook3,
   gtk3,
-  swt,
   glib,
+  webkitgtk_4_0,
+  glib-networking,
+  override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.2.0";
+  version = "24.2.3";
 
   src =
     let
@@ -28,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-N4r2immlH6B6rWluFX9abU5gnavPFY1ZoNtKpzCxwh4=";
-        aarch64-linux = "sha256-oRU+0iMLno1xIVI3NzeJfDrz5CuPlccICM/zpxRvV40=";
-        x86_64-darwin = "sha256-oUUof1HYeULP3qPr9mB69ZU83VuI4hJ09w03fjc+1Y4=";
-        aarch64-darwin = "sha256-JZfj0dgaqEndzyLgBwFrFebWxz7O/53qA9aTeOEWvLE=";
+        x86_64-linux = "sha256-TvDpoEcnZBS8ORggFwLM80FXsJ8EXKvRSPUn+VtNTk8=";
+        aarch64-linux = "sha256-59khU3VQzpNeZv69pbeeE4ZAFajyI5gUUw9baOWPIFM=";
+        x86_64-darwin = "sha256-/YyN5daeoxq0oii6qYRpZ8cb43u6n8HuVc2JqVOhrxs=";
+        aarch64-darwin = "sha256-Stb76QpLnpmpBYDm+6fgkcx+TlY8hVkNtvGgdMWbaHg=";
       };
     in
     fetchurl {
@@ -39,22 +41,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "dbeaver.app";
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
       gnused
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
 
   dontConfigure = true;
   dontBuild = true;
 
+  prePatch = ''
+    substituteInPlace dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  '';
+
   installPhase =
-    if !stdenvNoCC.isDarwin then
+    if !stdenvNoCC.hostPlatform.isDarwin then
       ''
         runHook preInstall
 
@@ -63,12 +70,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
           --prefix PATH : "${openjdk17}/bin" \
           --set JAVA_HOME "${openjdk17.home}" \
-          --prefix CLASSPATH : "$out/dbeaver/plugins/*:${swt}/jars/swt.jar" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
-              swt
               gtk3
               glib
+              webkitgtk_4_0
+              glib-networking
             ]
           }"
 

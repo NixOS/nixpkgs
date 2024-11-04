@@ -32,7 +32,7 @@ mkDerivation rec {
   buildInputs = [
     openexr zlib imagemagick6 fftwFloat
     fftw gsl libexif perl qtbase netpbm
-  ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
+  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
     libGLU libGL libglut

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kerberos = pyspnego.optional-dependencies.kerberos;
   };
 

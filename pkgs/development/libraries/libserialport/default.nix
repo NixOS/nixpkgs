@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libserialport";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchurl {
     url = "https://sigrok.org/download/source/libserialport/${pname}-${version}.tar.gz";
-    sha256 = "17ajlwgvyyrap8z7f16zcs59pksvncwbmd3mzf98wj7zqgczjaja";
+    sha256 = "sha256-XeuStcpywDR7B7eGhINQ3sotz9l1zmE7jg4dlHpLTKk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.isLinux udev
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   meta = with lib; {
     description = "Cross-platform shared library for serial port access";

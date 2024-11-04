@@ -15,7 +15,7 @@
   jinja2,
   lxml,
   numpy,
-  opencv4,
+  opencv-python,
   pillow,
   pydantic,
   pydantic-extra-types,
@@ -35,7 +35,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.1.7";
+  version = "5.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,15 +44,13 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     rev = "refs/tags/v${version}";
-    hash = "sha256-egQYL4Qvs1fQcJ5WEM461TSYqs2XN39wbyfx9uEFeIs=";
+    hash = "sha256-0csCUJpIeq3EyER9gqiUgqrfHL9WSzX144Y0djL3dqQ=";
   };
 
   build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
-
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonRelaxDeps = [
     "rtoml"
@@ -67,7 +65,7 @@ buildPythonPackage rec {
       jinja2
       lxml
       numpy
-      opencv4
+      opencv-python
       pillow
       pydantic
       pydantic-extra-types

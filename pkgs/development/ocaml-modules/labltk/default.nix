@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib makeWrapper ];
-  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;

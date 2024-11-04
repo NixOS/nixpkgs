@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
   buildInputs = [ gnutls c-ares libxml2 sqlite zlib libssh2 ] ++
-    lib.optional stdenv.isDarwin Security;
+    lib.optional stdenv.hostPlatform.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://aria2.github.io";
+    changelog = "https://github.com/aria2/aria2/releases/tag/release-${version}";
     description = "Lightweight, multi-protocol, multi-source, command-line download utility";
     mainProgram = "aria2c";
     license = licenses.gpl2Plus;

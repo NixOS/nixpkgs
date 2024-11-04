@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-applets";
     description = "Applets for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [ qyliss nyabinary ];
     platforms = platforms.linux;
   };
 }

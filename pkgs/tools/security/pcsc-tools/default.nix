@@ -8,7 +8,7 @@
 , pkg-config
 , wrapGAppsHook3
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, dbusSupport ? stdenv.isLinux, dbus
+, dbusSupport ? stdenv.hostPlatform.isLinux, dbus
 , pcsclite
 , PCSC
 , wget
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
   ] ++ [
     perlPackages.perl pcsclite
-  ] ++ lib.optional stdenv.isDarwin PCSC
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
     ++ lib.optional systemdSupport systemd;
 
   nativeBuildInputs = [

@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     mv devilutionx.app $out/Applications
   '' else ''

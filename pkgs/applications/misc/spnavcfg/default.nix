@@ -5,19 +5,20 @@
   fetchpatch,
   pkg-config,
   libspnav,
-  qtbase,
-  wrapQtAppsHook,
+
+  # Qt6 support is close: https://github.com/FreeSpacenav/spnavcfg/issues/43
+  libsForQt5,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spnavcfg";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
-    repo = pname;
-    rev = "v${version}";
+    repo = "spnavcfg";
+    rev = "refs/tags/v${finalAttrs.version}";
     fetchLFS = true;
-    sha256 = "sha256-P3JYhZnaCxzJETwC4g5m4xAGBk28/Va7Z/ybqwacIaA=";
+    hash = "sha256-P3JYhZnaCxzJETwC4g5m4xAGBk28/Va7Z/ybqwacIaA=";
   };
 
   patches = [
@@ -29,10 +30,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libspnav
   ];
 
@@ -44,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gebner ];
     mainProgram = "spnavcfg";
   };
-}
+})

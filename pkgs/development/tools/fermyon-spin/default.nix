@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

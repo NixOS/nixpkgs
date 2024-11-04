@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQVQFHrTqBzaJPC6GlxAIa3BYBCAvQDhka581v7s1q0=";
+    hash = "sha256-7PNQJkP6k6q+XwvfI477WWCVF8TWCoEWMtMfzc6GwtI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
+      --replace-fail "numpy>=2.0.0,<3" "numpy"
   '';
 
   build-system = [

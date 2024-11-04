@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -24,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -36,13 +41,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_get_anchor_version_from_commit"
   ];
 
-
   meta = with lib; {
     description = "Solana Sealevel Framework";
     homepage = "https://github.com/coral-xyz/anchor";
     changelog = "https://github.com/coral-xyz/anchor/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ];
+    maintainers = [ ];
     mainProgram = "anchor";
   };
 }

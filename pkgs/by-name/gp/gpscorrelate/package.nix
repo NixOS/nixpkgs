@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gpscorrelate";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
     repo = "gpscorrelate";
     rev = version;
-    sha256 = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
+    hash = "sha256-H1kqOzL79/Y1kHVEQ5y9JRWTDCBMbtEPo75drm8+7Qo=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2

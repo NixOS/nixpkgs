@@ -57,7 +57,7 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sqlserver = [ pyodbc ];
     sparql = [ sparqlwrapper ];
   };

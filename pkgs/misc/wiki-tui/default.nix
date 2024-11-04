@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ncurses
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cargoHash = "sha256-XovbT+KC0va7yC5j7kf6t1SnXe1uyy1KI8FRV1AwkS0=";
 

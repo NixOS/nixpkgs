@@ -4,7 +4,7 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter319
+, flutter324
 , pulseaudio
 , makeDesktopItem
 , zenity
@@ -17,15 +17,15 @@ let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter319.buildFlutterApplication (rec {
+flutter324.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eHwzvWKWJ9Q2OgCvgZTt+Bcph2w2pTqyOtwXFbZ4LEg=";
+    hash = "sha256-biFoRcMss3JVrMoilc8BzJ+R6f+e4RYpZ5dbxDpnfTk=";
   };
 
   inherit pubspecLock;
@@ -66,7 +66,7 @@ flutter319.buildFlutterApplication (rec {
   };
 
   postInstall = ''
-    FAV=$out/app/data/flutter_assets/assets/favicon.png
+    FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -78,7 +78,7 @@ flutter319.buildFlutterApplication (rec {
       convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
 
-    patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
+    patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
   '';
 } // lib.optionalAttrs (targetFlutterPlatform == "web") {
   prePatch =

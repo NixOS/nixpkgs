@@ -19,36 +19,36 @@ let
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2024.3.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-BGN+t9Caw5n/NN1E5Oi/ruMLjoVh0jUlpzYR6vodHbw=";
+    hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
   # robotjs node-gyp dependencies
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
     libX11
     libXi
     libXtst
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     CoreFoundation
     ApplicationServices
     OpenGL
   ];
 
-  npmDepsHash = "sha256-KanG8y+tYzswCCXjSkOlk+p9XKaouP2Z7IhsD5bDtRk=";
+  npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
 
   makeCacheWritable = true;
 
@@ -84,7 +84,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/jitsi-meet-electron
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/jitsi-meet-electron
 
@@ -97,7 +97,7 @@ buildNpmPackage rec {
       install -Dm644 resources/icons/512x512.png $out/share/icons/hicolor/512x512/apps/jitsi-meet-electron.png
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Jitsi Meet.app" $out/Applications
       makeWrapper "$out/Applications/Jitsi Meet.app/Contents/MacOS/Jitsi Meet" $out/bin/jitsi-meet-electron

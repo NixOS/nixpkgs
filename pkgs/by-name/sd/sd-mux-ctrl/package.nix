@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.tizen.org/cgit/tools/testlab/sd-mux";
     rev = "9dd189d973da64e033a0c5c2adb3d94b23153d94";
-    sha256 = "0fxl8m1zkkyxkc2zi8930m0njfgnd04a22acny6vljnzag2shjvg";
+    hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];

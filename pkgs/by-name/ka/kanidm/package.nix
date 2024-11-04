@@ -24,20 +24,20 @@
 }:
 
 let
-  arch = if stdenv.isx86_64 then "x86_64" else "generic";
+  arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-W5G7osV4du6w/BfyY9YrDzorcLNizRsoz70RMfO2AbY=";
+    hash = "sha256-hRYHr4r3+LRiaZoJgs3MA5YtDEoKyeg/ohPAIw3OMyo=";
   };
 
-  cargoHash = "sha256-gJrzOK6vPPBgsQFkKrbMql00XSfKGjgpZhYJLTURxoI=";
+  cargoHash = "sha256-DfTalKTOiReQCreAzbkSjbhMSW5cdOGGg04i/QKPonE=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -51,18 +51,16 @@ rustPlatform.buildRustPackage rec {
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
         admin_bind_path = "/run/kanidmd/sock";
-        cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
+        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
         default_config_path = "/etc/kanidm/server.toml";
         default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
         htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
-        web_ui_pkg_path = "@web_ui_pkg_path@";
       };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace '@htmx_ui_pkg_path@' "${placeholder "out"}/ui/hpkg" \
-        --replace '@web_ui_pkg_path@' "${placeholder "out"}/ui/pkg"
+        --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
     '';
 
   nativeBuildInputs = [
@@ -80,15 +78,14 @@ rustPlatform.buildRustPackage rec {
 
   # The UI needs to be in place before the tests are run.
   postBuild = ''
-    # We don't compile the wasm-part form source, as there isn't a rustc for
-    # wasm32-unknown-unknown in nixpkgs yet.
     mkdir -p $out/ui
-    cp -r server/web_ui/pkg $out/ui/pkg
     cp -r server/core/static $out/ui/hpkg
   '';
 
-  # Otherwise build breaks on some unused code
-  env.RUSTFLAGS = "-A dead_code";
+  # Upstream runs with the Rust equivalent of -Werror,
+  # which breaks when we upgrade to new Rust before them.
+  # Just allow warnings. It's fine, really.
+  env.RUSTFLAGS = "--cap-lints warn";
 
   # Not sure what pathological case it hits when compiling tests with LTO,
   # but disabling it takes the total `cargo check` time from 40 minutes to
@@ -131,6 +128,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
+    maintainers = with maintainers; [ adamcstephens Flakebi ];
   };
 }

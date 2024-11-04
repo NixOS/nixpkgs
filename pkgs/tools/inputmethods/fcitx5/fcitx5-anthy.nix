@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-anthy";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/fcitx5-anthy/${pname}-${version}.tar.zst";
-    hash = "sha256-e0X00plXfRgoSkhTDVJfububin8h+NiGzrnOSIaSa7g=";
+    hash = "sha256-heSO2eArdSnOmIg7JG8vOo5y3g5dSPOuXkUfeNqKzSA=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config zstd ];

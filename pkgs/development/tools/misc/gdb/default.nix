@@ -30,14 +30,14 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "15.1";
+  version = "15.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
+    hash = "sha256-gzUMzTW1taDLprM0xBKU6paBWMVzlAkE8AuS92NFMU0=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # darwin build fails with format hardening since v7.12
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "format" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 

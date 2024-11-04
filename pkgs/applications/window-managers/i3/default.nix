@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   # xvfb-run is available only on Linux
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     test_failed=

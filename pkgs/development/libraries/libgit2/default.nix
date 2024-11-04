@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib libssh2 openssl pcre llhttp ]
     ++ lib.optional withGssapi krb5
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
+  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   doCheck = true;
   checkPhase = ''

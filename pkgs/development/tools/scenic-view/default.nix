@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, makeWrapper }:
 let
-  jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
+  jdk = openjdk.override (lib.optionalAttrs stdenv.hostPlatform.isLinux {
     enableJavaFX = true;
-    openjfx = openjfx.override { withWebKit = true; };
+    openjfx_jdk = openjfx.override { withWebKit = true; };
   });
 
   pname = "scenic-view";
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications";
     mainProgram = "scenic-view";
     longDescription = ''

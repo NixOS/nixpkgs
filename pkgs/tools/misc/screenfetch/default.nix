@@ -7,11 +7,11 @@ let
   path = lib.makeBinPath ([
     coreutils gawk gnused findutils
     gnugrep ncurses bc pciutils
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     procps
     xdpyinfo
     xprop
-  ] ++ lib.optionals stdenv.isDarwin (with darwin; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin; [
     adv_cmds
     DarwinTools
     system_cmds

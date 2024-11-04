@@ -18,7 +18,7 @@
 , doxygen
 , python3
 , lcms2
-, enablePlugins ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, enablePlugins ? true
 }:
 
 let
@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.10.3";
+  version = "0.11.0";
 
   outputs = [ "out" "dev" ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-zk/fI1C26K5WC9QBfzS6MqPT9PiR4wmWURjOOIiNsg4=";
+    hash = "sha256-lBc0zP+f44YadwOU9+I+YYWzTrAg7FSfF3IQuh4LjM4=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -118,15 +118,22 @@ stdenv.mkDerivation rec {
     "-DJPEGXL_FORCE_NEON=ON"
   ];
 
+  # the second substitution fix regex for a2x script
+  # https://github.com/libjxl/libjxl/pull/3842
   postPatch = ''
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
+    substituteInPlace CMakeLists.txt \
+      --replace 'sh$' 'sh( -e$|$)'
   '';
 
   postInstall = lib.optionalString enablePlugins ''
     GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
     GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
       gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$out/bin"
     makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"

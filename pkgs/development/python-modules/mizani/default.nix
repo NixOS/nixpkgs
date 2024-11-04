@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,22 +12,20 @@
   pandas,
   scipy,
 
-  # checks
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "mizani";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a/+yZ7oUZG0fKgBUMwIf3XHUjac8Gsh3AosDVuUVoJU=";
+    hash = "sha256-UzedAhYGgGLOMUyZe3ew4a2gh1UgYHaLsIe9k85rOkg=";
   };
 
   build-system = [ setuptools-scm ];

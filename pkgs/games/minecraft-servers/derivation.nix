@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
     makeWrapper ${lib.getExe jre_headless} $out/bin/minecraft-server \
       --append-flags "-jar $out/lib/minecraft/server.jar nogui" \
-      ${lib.optionalString stdenv.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
 
     runHook postInstall
   '';

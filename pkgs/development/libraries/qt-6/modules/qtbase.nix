@@ -67,15 +67,9 @@
 , unixODBCDrivers
   # darwin
 , moveBuildTree
+, apple-sdk_qt
+, darwinDeploymentTargetDeps
 , xcbuild
-, AGL
-, AVFoundation
-, AppKit
-, Contacts
-, CoreBluetooth
-, EventKit
-, GSS
-, MetalKit
   # mingw
 , pkgsBuildBuild
   # optional dependencies
@@ -161,32 +155,22 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    AppKit
-    Contacts
-    CoreBluetooth
-    EventKit
-    GSS
-    MetalKit
-  ] ++ lib.optionals libGLSupported [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinDeploymentTargetDeps
+  ++ lib.optionals libGLSupported [
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
     vulkan-loader
-  ];
+  ] ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    AppKit
-    CoreBluetooth
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_qt
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 
@@ -243,6 +227,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   moveToDev = false;
 
@@ -250,7 +235,7 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     # FIXME: not sure why this isn't added automatically?
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so

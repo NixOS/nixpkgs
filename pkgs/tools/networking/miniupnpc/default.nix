@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
   ];
 
-  doCheck = !stdenv.isFreeBSD;
+  doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   postInstall = ''
     mv $out/bin/upnpc-* $out/bin/upnpc

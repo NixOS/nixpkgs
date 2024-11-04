@@ -21,7 +21,7 @@ buildDunePackage {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     AudioToolbox
     AVFoundation

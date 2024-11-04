@@ -3,7 +3,6 @@
 , rustPlatform
 , stdenv
 , installShellFiles
-, perl
 , pkg-config
 , libiconv
 , openssl
@@ -30,13 +29,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     mandown
     installShellFiles
-    perl
     pkg-config
   ];
 
+  OPENSSL_NO_VENDOR = 1;
+
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     DiskArbitration
     Foundation

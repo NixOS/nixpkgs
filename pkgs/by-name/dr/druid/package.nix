@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   mysqlConnector = fetchurl {
-    url = "https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar";
+    url = "mirror://maven/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar";
     hash = "sha256-VuJsqqOCH1rkr0T5x09mz4uE6gFRatOAPLsOkEm27Kg=";
   };
 

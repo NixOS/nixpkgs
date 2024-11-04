@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   fetchpatch2,
   setuptools,
   pytestCheckHook,
   pytest-mock,
-  ffmpeg_7,
+  ffmpeg,
 }:
 
 buildPythonPackage {
@@ -23,10 +23,7 @@ buildPythonPackage {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-location.patch;
-      ffmpeg = ffmpeg_7;
-    })
+    (replaceVars ./ffmpeg-location.patch { inherit ffmpeg; })
 
     # Remove dependency on `future`
     # https://github.com/kkroening/ffmpeg-python/pull/795

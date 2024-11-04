@@ -779,6 +779,12 @@
     "project_path": "unmaintained/cutepaste",
     "repo_path": "unmaintained/cutepaste"
   },
+  "cxx-kde-frameworks": {
+    "description": "Extension Crate for cxx-qt which allows the use of KDE Frameworks in Rust software",
+    "name": "cxx-kde-frameworks",
+    "project_path": "playground/libs/cxx-kde-frameworks",
+    "repo_path": "libraries/cxx-kde-frameworks"
+  },
   "cxx11-cmake-modules": {
     "description": "CMake modules for detecting C++11 features supported by the compiler",
     "name": "cxx11-cmake-modules",
@@ -2694,7 +2700,7 @@
     "repo_path": "system/kio-fuse"
   },
   "kio-gdrive": {
-    "description": "KIO Slave to access Google Drive",
+    "description": "KIO Worker to access Google Drive",
     "name": "kio-gdrive",
     "project_path": "kde/kdenetwork/kio-gdrive",
     "repo_path": "network/kio-gdrive"
@@ -4811,6 +4817,12 @@
     "project_path": "kde/pim/mbox-importer",
     "repo_path": "pim/mbox-importer"
   },
+  "md4qt": {
+    "description": "Header-only C++ library for parsing Markdown.",
+    "name": "md4qt",
+    "project_path": "playground/libs/md4qt",
+    "repo_path": "libraries/md4qt"
+  },
   "melon": {
     "description": "Desktop QML file manager",
     "name": "melon",
@@ -5042,7 +5054,7 @@
   "nongurigaeru": {
     "description": "The missing Foundation library for Qt GUI apps.",
     "name": "nongurigaeru",
-    "project_path": "kdereview/nongurigaeru",
+    "project_path": "playground/libs/nongurigaeru",
     "repo_path": "libraries/nongurigaeru"
   },
   "nota": {
@@ -5464,6 +5476,12 @@
     "name": "plasma-mediacenter",
     "project_path": "unmaintained/plasma-mediacenter",
     "repo_path": "unmaintained/plasma-mediacenter"
+  },
+  "plasma-meetings": {
+    "description": "Project to track the bi-weekly Plasma team meetings",
+    "name": "plasma-meetings",
+    "project_path": "playground/workspace/plasma-meetings",
+    "repo_path": "plasma/plasma-meetings"
   },
   "plasma-mobile": {
     "description": "Plasma shell for mobile devices",
@@ -6740,7 +6758,7 @@
   "trojita": {
     "description": "Fast, lightweight and standard-compliant IMAP e-mail client",
     "name": "trojita",
-    "project_path": "extragear/pim/trojita",
+    "project_path": "playground/pim/trojita",
     "repo_path": "pim/trojita"
   },
   "tupi": {
@@ -6959,6 +6977,12 @@
     "project_path": "websites/amarok-kde-org",
     "repo_path": "websites/amarok-kde-org"
   },
+  "websites-api-kde-org": {
+    "description": "API Documentation Website",
+    "name": "websites-api-kde-org",
+    "project_path": "websites/api-kde-org",
+    "repo_path": "websites/api-kde-org"
+  },
   "websites-apps-kde-org": {
     "description": "KDE application catalog \u2014 apps.kde.org",
     "name": "websites-apps-kde-org",
@@ -7108,6 +7132,12 @@
     "name": "websites-docs-kde-org",
     "project_path": "websites/docs-kde-org",
     "repo_path": "websites/docs-kde-org"
+  },
+  "websites-dot-kde-org": {
+    "description": "KDE Dot News Website",
+    "name": "websites-dot-kde-org",
+    "project_path": "websites/dot-kde-org",
+    "repo_path": "websites/dot-kde-org"
   },
   "websites-download-kde-org": {
     "description": "MirrorBrain configuration, templates, etc. \u2014 download.kde.org",
@@ -7372,6 +7402,12 @@
     "name": "websites-kdemail-net",
     "project_path": "websites/kdemail-net",
     "repo_path": "websites/kdemail-net"
+  },
+  "websites-kdenlive-org": {
+    "description": "Website for Kdenlive - Kdenlive.org",
+    "name": "websites-kdenlive-org",
+    "project_path": "websites/kdenlive-org",
+    "repo_path": "websites/kdenlive-org"
   },
   "websites-kdesrc-build-kde-org": {
     "description": "Website for kdesrc-build \u2014 kdesrc-build.kde.org",

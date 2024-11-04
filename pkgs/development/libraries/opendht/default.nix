@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

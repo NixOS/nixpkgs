@@ -31,7 +31,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/ful1e5/apple_cursor";
     license = [
       licenses.gpl3Only
-    
       # Potentially a derivative work of copyrighted Apple designs
       licenses.unfree
     ];

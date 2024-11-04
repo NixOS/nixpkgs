@@ -15,11 +15,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticktick";
-  version = "6.0.0";
+  version = "6.0.10";
 
   src = fetchurl {
     url = "https://d2atcrkye2ik4e.cloudfront.net/download/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
-    hash = "sha256-yoskJ7v0RgRZ16gs9UY1xf/PunLoFkNGKmVMkPJDPmM=";
+    hash = "sha256-/SaQJFaz8quuFk4bLmRrvfYpqyDNTV/dJBrAJpOT4S4=";
   };
 
   nativeBuildInputs = [

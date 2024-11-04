@@ -29,7 +29,7 @@
   # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
   enablePrefix ? false,
   # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
-  fabricSupport ? stdenv.isLinux && stdenv.isx86_64,
+  fabricSupport ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
   # Enable Fortran support
   fortranSupport ? true,
   # AVX/SSE options. See passthru.defaultAvxOptions for the available options.
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs =
     [ "out" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "man"
       "dev"
     ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       libevent
       hwloc
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libnl
       numactl
       pmix
@@ -95,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
       prrte
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals (stdenv.isLinux || stdenv.isFreeBSD) [ rdma-core ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
     # needed for internal pmix
-    ++ lib.optionals (!stdenv.isLinux) [ python3 ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
     ++ lib.optionals fabricSupport [
       libpsm2
       libfabric
@@ -115,11 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
-    (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
+    (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
     "--with-pmix=${lib.getDev pmix}"
     "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
-    (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
+    (lib.withFeatureAs stdenv.hostPlatform.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
@@ -175,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
         // lib.optionalAttrs fortranSupport {
           "fort" = [
             "gfortran"
-            "${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran"
+            "${targetPackages.gfortran or gfortran}/bin/${
+              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+            }gfortran"
           ];
         };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
@@ -217,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
           # we currently don't perform these substitutions on other platforms,
           # until a Darwin user will care enough about this cross platform
           # related substitution.
-          lib.optionalString stdenv.isLinux ''
+          lib.optionalString stdenv.hostPlatform.isLinux ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
@@ -238,11 +240,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
     ''
     + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
       remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
       # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
       wrapProgram "''${!outputDev}/bin/opal_wrapper" \

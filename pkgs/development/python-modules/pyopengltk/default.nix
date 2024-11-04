@@ -46,6 +46,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.mit;
     # not supported yet, see: https://github.com/jonwright/pyopengltk/issues/12
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

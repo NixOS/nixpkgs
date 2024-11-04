@@ -10,7 +10,7 @@
 
   setuptools,
   pyclipper,
-  opencv4,
+  opencv-python,
   numpy,
   six,
   shapely,
@@ -90,7 +90,7 @@ buildPythonPackage {
 
   dependencies = [
     pyclipper
-    opencv4
+    opencv-python
     numpy
     six
     shapely
@@ -98,9 +98,6 @@ buildPythonPackage {
     pillow
     onnxruntime
   ];
-
-  # Remove because we have adopted the `opencv4` as an attribute name.
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonImportsCheck = [ "rapidocr_onnxruntime" ];
 
@@ -115,7 +112,7 @@ buildPythonPackage {
   meta = {
     # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
     # Also some related issue: https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/v${version}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";

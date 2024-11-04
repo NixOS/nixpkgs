@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  getconf,
   dbus,
   libseccomp,
   systemd,
@@ -12,18 +13,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "youki";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dkVnNtBfvjf47p1N5/syHqjlDVnbKRDqNJ98ym5B+mg=";
+    hash = "sha256-vXYoLjmPiK2f6Yg5YGTp76hmawnbfcnMOOppsWwKtAk=";
   };
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    getconf
   ];
 
   buildInputs = [
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     "youki"
   ];
 
-  cargoHash = "sha256-Nv1LAkWYwWb0Izvd7UlKU4wx3vVkmO9Rcpt6AuTwObU=";
+  cargoHash = "sha256-s8L/L3be5fRahDiLKnHQcU52F+AJVr7Q3uL8mcloVv8=";
 
   meta = with lib; {
     description = "Container runtime written in Rust";

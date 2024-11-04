@@ -22,7 +22,7 @@
 , pname ? "kicad"
 , stable ? true
 , testing ? false
-, withNgspice ? !stdenv.isDarwin
+, withNgspice ? !stdenv.hostPlatform.isDarwin
 , libngspice
 , withScripting ? true
 , python3
@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
-      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
+      bin = if stdenv.hostPlatform.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
@@ -286,7 +286,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "kicad";
   };
 }

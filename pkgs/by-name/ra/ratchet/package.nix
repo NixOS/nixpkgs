@@ -6,7 +6,7 @@
 }:
 buildGoModule rec {
   pname = "ratchet";
-  version = "0.9.2";
+  version = "0.10.0";
 
   # ratchet uses the git sha-1 in the version string, e.g.
   #
@@ -19,8 +19,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sethvargo";
     repo = "ratchet";
-    rev = "d57cc1a53c022d3f87c4820bc6b64384a06c8a07";
-    hash = "sha256-gQ98uD9oPUsECsduv/lqGdYNmtHetU49ETfWCE8ft8U=";
+    rev = "ebb7f24e0cbc288ab913b635480412934a2a5371";
+    hash = "sha256-Wt1/ahKQ8DOquXU5u6p+an9FJ5kYRl7F2EXOv/2rHlA=";
   };
 
   proxyVendor = true;

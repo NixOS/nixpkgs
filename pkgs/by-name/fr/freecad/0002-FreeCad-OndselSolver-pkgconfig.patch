@@ -1,0 +1,7 @@
+--- a/src/3rdParty/OndselSolver/OndselSolver.pc.in
++++ b/src/3rdParty/OndselSolver/OndselSolver.pc.in
+@@ -3,2 +3,2 @@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@

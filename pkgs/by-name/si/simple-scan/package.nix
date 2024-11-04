@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

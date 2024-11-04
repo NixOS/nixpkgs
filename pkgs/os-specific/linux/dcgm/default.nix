@@ -16,18 +16,10 @@
 , symlinkJoin
 , tclap_1_4
 , yaml-cpp
+
+, static ? gcc11Stdenv.hostPlatform.isStatic
 }:
 let
-  # Flags copied from DCGM's libevent build script
-  libevent-nossl = libevent.override { sslSupport = false; };
-  libevent-nossl-static = libevent-nossl.overrideAttrs (super: {
-    CFLAGS = "-Wno-cast-function-type -Wno-implicit-fallthrough -fPIC";
-    CXXFLAGS = "-Wno-cast-function-type -Wno-implicit-fallthrough -fPIC";
-    configureFlags = super.configureFlags ++ [ "--disable-shared" "--with-pic" ];
-  });
-
-  jsoncpp-static = jsoncpp.override { enableStatic = true; };
-
   # DCGM depends on 3 different versions of CUDA at the same time.
   # The runtime closure, thankfully, is quite small because most things
   # are statically linked.
@@ -86,13 +78,13 @@ let
 # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
 in gcc11Stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "3.2.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
+  version = "3.3.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iMyYOr3dSpdRV2S/TlB/tEOAWYhK09373ZRbd5vzogQ=";
+    hash = "sha256-n/uWvgvxAGfr1X51XgtHfFGDOO5AMBSV5UWQQpsylpg=";
   };
 
   # Add our paths to the CUDA paths so FindCuda.cmake can find them.
@@ -117,14 +109,18 @@ in gcc11Stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    plog.dev # header-only
-    tclap_1_4 # header-only
-
+    # Header-only
     catch2
-    fmt_9
-    jsoncpp-static
-    libevent-nossl-static
-    yaml-cpp
+    plog.dev
+    tclap_1_4
+
+    # Dependencies that can be either static or dynamic.
+    (fmt_9.override { enableShared = !static; }) # DCGM's build uses the static outputs regardless of enableShared
+    (yaml-cpp.override { inherit static; stdenv = gcc11Stdenv; })
+
+    # TODO: Dependencies that DCGM's CMake hard-codes to be static-only.
+    (jsoncpp.override { enableStatic = true; })
+    (libevent.override { sslSupport = false; static = true; })
   ];
 
   disallowedReferences = lib.concatMap (x: x.pkgSet) cudaPackageSetByVersion;

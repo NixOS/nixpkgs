@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   # Upstream install is mostly defunct. It hardcodes target.path and doesn't
   # install anything but the binary.
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p "$out"/{Applications,bin}
     mv qMasterPassword.app "$out"/Applications/
     ln -s ../Applications/qMasterPassword.app/Contents/MacOS/qMasterPassword "$out"/bin/qMasterPassword

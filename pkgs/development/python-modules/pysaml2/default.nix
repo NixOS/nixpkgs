@@ -66,7 +66,7 @@ buildPythonPackage rec {
     xmlschema
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     s2repoze = [
       paste
       repoze-who

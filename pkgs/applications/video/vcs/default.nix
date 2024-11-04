@@ -5,7 +5,7 @@
 }:
 let
   version = "1.13.4";
-  gopt = if stdenv.isLinux then util-linux else getopt;
+  gopt = if stdenv.hostPlatform.isLinux then util-linux else getopt;
   runtimeDeps = [
     coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer gopt
   ];

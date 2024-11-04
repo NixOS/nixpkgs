@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb
   ] ++ lib.optionals (!useQt6) [
     qt5.qtx11extras

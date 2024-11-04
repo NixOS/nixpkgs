@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   pname = "sqitch";
   version = sqitch.version;
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   src = sqitch;
   dontBuild = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
         ln -s ${sqitch}/$d $out/$d
       fi
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/sqitch
   '';
   dontStrip = true;

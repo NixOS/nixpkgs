@@ -15,6 +15,7 @@
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -27,6 +28,7 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
@@ -37,8 +39,8 @@
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -46,12 +48,11 @@
   typing-extensions,
   uvicorn,
   zstd,
-  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.5";
+  version = "0.5.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,13 +61,13 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-e6ZctUFeq9hHXWaxGdVTiqFpwaU7A+EKn2EdQPI7DHE=";
+    hash = "sha256-ui4wUV9jIvgPtnY5L8mHg9k3l3ccL4u1rir426wwuMg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
+    hash = "sha256-lF+TpoQF6vZoxjPX3CN6TnWiY72qoxrVu2hilWgNx2E=";
   };
 
   pythonRelaxDeps = [
@@ -90,7 +91,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   dependencies = [
     bcrypt
@@ -126,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
@@ -147,6 +149,8 @@ buildPythonPackage rec {
     # Tests are laky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
     "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
   ];
 
   disabledTestPaths = [
@@ -173,6 +177,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "chroma";
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

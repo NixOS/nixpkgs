@@ -4,18 +4,18 @@
 , postgresql
 , openssl
 , libxcrypt
-, withPam ? stdenv.isLinux
+, withPam ? stdenv.hostPlatform.isLinux
 , pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    hash = "sha256-SArCPwHNfWyFayk4a/F6hIcS+0tAV9TIq9XIv4Gb3wY=";
+    hash = "sha256-0TkudM4oB/iuYohyyxq3kUJJkhGA3JnfQKHWAmR6EP0=";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  patches = lib.optionals (stdenv.isDarwin) [
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # Build checks for strlcpy being available in the system, but doesn't
     # actually exclude its own copy from being built
     ./darwin-strlcpy.patch

@@ -26,7 +26,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/arduino/arduino-language-server/version.versionString=${version}"
     "-X github.com/arduino/arduino-language-server/version.commit=unknown"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
   ];
 

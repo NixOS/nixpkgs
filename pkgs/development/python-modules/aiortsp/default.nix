@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aiortsp";
-  version = "1.3.7";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marss";
     repo = "aiortsp";
-    rev = version;
-    hash = "sha256-bxfnKAzMYh0lhS3he617eGhO7hmNbiwEYHh8k/PZ6r4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/ydsu+53WOocdWk3AW0/cXBEx1qAlhIC0LUDy459pbQ=";
   };
 
   nativeBuildInputs = [ setuptools ];

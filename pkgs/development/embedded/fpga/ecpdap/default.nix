@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ]
-    ++ lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d

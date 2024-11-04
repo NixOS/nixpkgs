@@ -1,20 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, libX11, fixDarwinDylibNames }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libX11,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.1";
   pname = "libspnav";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "libspnav";
-    rev = "v${version}";
-    sha256 = "sha256-qBewSOiwf5iaGKLGRWOQUoHkUADuH8Q1mJCLiWCXmuQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qBewSOiwf5iaGKLGRWOQUoHkUADuH8Q1mJCLiWCXmuQ=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ libX11 ];
 
-  configureFlags = [ "--disable-debug"];
+  configureFlags = [ "--disable-debug" ];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"

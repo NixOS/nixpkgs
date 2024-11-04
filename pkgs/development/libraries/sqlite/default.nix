@@ -2,7 +2,7 @@
 , updateAutotoolsGnuConfigScriptsHook
 
 # for tests
-, python3Packages, sqldiff, sqlite-analyzer, tracker
+, python3Packages, sqldiff, sqlite-analyzer, tinysparql
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
@@ -16,17 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.46.0";
+  version = "3.46.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-b45qezNSc3SIFvmztiu9w3Koid6HgtfwSMZTpEdBen0=";
+    hash = "sha256-Z9P+bSaObq3crjcn/OWPzI6cU4ab3Qegxh443fKWUHE=";
   };
 
   outputs = [ "bin" "dev" "out" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
-      inherit sqldiff sqlite-analyzer tracker;
+      inherit sqldiff sqlite-analyzer tinysparql;
     };
 
     updateScript = gitUpdater {

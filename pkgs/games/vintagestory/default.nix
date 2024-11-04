@@ -46,16 +46,19 @@ stdenv.mkDerivation rec {
   ] ++ (with xorg; [
     libX11
     libXi
+    libXcursor
   ]));
 
-  desktopItems = makeDesktopItem {
-    name = "vintagestory";
-    desktopName = "Vintage Story";
-    exec = "vintagestory";
-    icon = "vintagestory";
-    comment = "Innovate and explore in a sandbox world";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vintagestory";
+      desktopName = "Vintage Story";
+      exec = "vintagestory";
+      icon = "vintagestory";
+      comment = "Innovate and explore in a sandbox world";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

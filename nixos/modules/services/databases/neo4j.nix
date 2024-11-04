@@ -52,11 +52,9 @@ let
     server.directories.run=${cfg.directories.home}/run
 
     # HTTP Connector
-    ${lib.optionalString (cfg.http.enable) ''
-      server.http.enabled=${lib.boolToString cfg.http.enable}
-      server.http.listen_address=${cfg.http.listenAddress}
-      server.http.advertised_address=${cfg.http.listenAddress}
-    ''}
+    server.http.enabled=${lib.boolToString cfg.http.enable}
+    server.http.listen_address=${cfg.http.listenAddress}
+    server.http.advertised_address=${cfg.http.listenAddress}
 
     # HTTPS Connector
     server.https.enabled=${lib.boolToString cfg.https.enable}

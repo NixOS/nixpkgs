@@ -9,21 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.4";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P6blu3EIBzmK1zikFPiV+tvFLfiQhK+cRdClQOhcBSU=";
+    hash = "sha256-vQ9d3l++waYTYt+bvt/ShatBVxTfA7LmYIXV5VSraNQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
-    "-DBUILD_EXAMPLES=OFF"
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
+    (lib.cmakeBool "BUILD_EXAMPLES" false)
   ];
 
   propagatedBuildInputs = [

@@ -68,6 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "edgar";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

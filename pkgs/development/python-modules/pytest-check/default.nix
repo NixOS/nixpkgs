@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.3.1";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-UbjxiozKpCbF2RPE4ORvAUqqdXlIHqA9Itfh9Jj2ibI=";
+    hash = "sha256-UiTvzvBZv38M2iU/jQ9icEtIGf9IyT9RxnWupqAU9lA=";
   };
 
   nativeBuildInputs = [ flit-core ];

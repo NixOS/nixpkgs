@@ -15,8 +15,8 @@
   stdenv,
   timidity,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
-  enableSmpegtest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+  enableSmpegtest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 let
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AudioUnit
     CoreServices

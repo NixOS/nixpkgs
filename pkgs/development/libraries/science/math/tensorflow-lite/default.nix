@@ -7,7 +7,7 @@
 let
   buildPlatform = stdenv.buildPlatform;
   hostPlatform = stdenv.hostPlatform;
-  pythonEnv = buildPackages.python3.withPackages (ps: [ ps.numpy ]);
+  pythonEnv = buildPackages.python3.withPackages (ps: with ps; [ distutils numpy ]);
   bazelDepsSha256ByBuildAndHost = {
     x86_64-linux = {
       x86_64-linux = "sha256-61qmnAB80syYhURWYJOiOnoGOtNa1pPkxfznrFScPAo=";

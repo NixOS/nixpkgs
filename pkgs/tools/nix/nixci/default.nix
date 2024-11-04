@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , fetchFromGitHub
-, libiconv
 , openssl
 , pkg-config
 , Security
@@ -26,9 +25,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles nix ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     Security
     SystemConfiguration

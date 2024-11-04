@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-59XDh+TA4UYzfLJtbTiMC6Wz7EvUW22ONM4JQw5t/5o=";
+    hash = "sha256-8ODhDuc4jaLtrLZYd1yJlpYygO6KaguyR/yLWb/rMR4=";
   };
 
   postPatch = ''
@@ -95,7 +95,7 @@ buildPythonPackage rec {
       # https://github.com/postlund/pyatv/issues/2365
       "test_simple_dispatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
       "test_stream_retransmission"
     ];

@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
       libiconv
     ]
@@ -107,7 +107,7 @@ buildPythonPackage rec {
       # save compute time by not running benchmarks
       "tests/bench"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # aarch64-darwin forbids W+X memory, but this tests depends on it:
       # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
       "tests/hazmat/backends/test_openssl_memleak.py"

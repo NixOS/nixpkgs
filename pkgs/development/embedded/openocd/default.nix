@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals notWindows [ hidapi jimtcl libftdi1 libjaylink ]
     ++
     # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
-    lib.optional stdenv.isLinux libgpiod_1;
+    lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     "--enable-remote-bitbang"
     (lib.enableFeature notWindows "buspirate")
     (lib.enableFeature (notWindows && enableFtdi) "ftdi")
-    (lib.enableFeature stdenv.isLinux "linuxgpiod")
-    (lib.enableFeature stdenv.isLinux "sysfsgpio")
+    (lib.enableFeature stdenv.hostPlatform.isLinux "linuxgpiod")
+    (lib.enableFeature stdenv.hostPlatform.isLinux "sysfsgpio")
     (lib.enableFeature isWindows "internal-jimtcl")
     (lib.enableFeature isWindows "internal-libjaylink")
   ] ++
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
   ]);
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
     rules="$out/share/openocd/contrib/60-openocd.rules"
     if [ ! -f "$rules" ]; then

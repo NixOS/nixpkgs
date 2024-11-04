@@ -30,16 +30,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
-        version = "2.1.1";
-        src = fetchFromGitHub {
-          owner = "timmo001";
-          repo = "aioazuredevops";
-          rev = "refs/tags/${version}";
-          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
-        };
-      });
-
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -51,16 +41,6 @@ let
         nativeCheckInputs = with self; [
           aresponses
         ];
-      });
-
-      aiolyric = super.aiolyric.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.1";
-        src = fetchFromGitHub {
-          owner = "timmo001";
-          repo = "aiolyric";
-          rev = "refs/tags/${version}";
-          hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
-        };
       });
 
       aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
@@ -120,22 +100,6 @@ let
         ];
       });
 
-      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
-        # tests are deadlocking too often
-        # https://github.com/NixOS/nixpkgs/issues/262000
-        doCheck = false;
-      });
-
-      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
-        };
-        doCheck = false;
-      });
-
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
@@ -149,24 +113,11 @@ let
         ];
       });
 
-      intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2.2";
-        src = fetchFromGitHub {
-          owner = "jeeftor";
-          repo = "intellifire4py";
-          rev = "refs/tags/${version}";
-          hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
-        };
-        nativeBuildInputs = with self; [
-          setuptools
+      inline-snapshot = super.inline-snapshot.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # fixture does not expect pydantic<2
+          "test_pydantic_repr"
         ];
-        propagatedBuildInputs = with self; [
-          aenum
-          aiohttp
-          pydantic
-          requests
-        ];
-        doCheck = false; # requires asynctest, which does not work on python 3.11
       });
 
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
@@ -220,15 +171,6 @@ let
         };
       });
 
-      pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.8";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-rvd8n7lKOsWI6HhBIIvexGRHHZhxvVBQoofMmkdc0Lo=";
-        };
-      });
-
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -275,23 +217,6 @@ let
         ];
       });
 
-      pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28.2";
-        src = fetchFromGitHub {
-          owner = "Danielhiversen";
-          repo = "pyTibber";
-          rev = "refs/tags/${version}";
-          hash = "sha256-vi5f4V0nPb9K3nwdmwMDoNE85Or6haOWjMY4d/2Fj2s=";
-        };
-        dependencies = with self; [
-          aiohttp
-          async-timeout
-          gql
-          python-dateutil
-          websockets
-        ];
-      });
-
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -318,6 +243,16 @@ let
           repo = "pysnooz";
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
+      # newer versions require pydantic>=2
+      python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
+        version = "0.72.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oKI7zXfoUVmJXLQvyoDEmoCL4AwaYgaFcLKNlFFrC9o=";
         };
       });
 
@@ -386,6 +321,7 @@ let
         doCheck = false; # Tests changed a lot for > 3
       });
 
+      # pinned for sigstore
       tuf = super.tuf.overridePythonAttrs rec {
         version = "2.1.0";
         src = fetchFromGitHub {
@@ -397,10 +333,6 @@ let
         disabledTests = [
           "test_sign_failures"
         ];
-      };
-
-      versioningit = super.versioningit.overridePythonAttrs {
-        doCheck = false;
       };
 
       # Pinned due to API changes ~1.0
@@ -471,7 +403,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.8.3";
+  hassVersion = "2024.10.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -489,13 +421,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-4UQ2+MpcngkAKQxfA9y0JUKQ3/m0Y7t2K80ujLoJUvU=";
+    hash = "sha256-uaGGt5qCdyFXuEtg20MzmFd4PXkdPP8h4HJBvRV6sz8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-iGAH6hxLgqAEovI82W0FREw7nqgX+4J+gm4cCGIS7h4=";
+    hash = "sha256-al45WS8SIgOM2TqGPIptZU7iNMapYUg+fK2MLh68lxs=";
   };
 
   build-system = with python.pkgs; [
@@ -513,11 +445,15 @@ in python.pkgs.buildPythonApplication rec {
     "httpx"
     "orjson"
     "pillow"
+    "pyjwt"
     "pyopenssl"
+    "pyyaml"
     "requests"
     "sqlalchemy"
     "typing-extensions"
     "urllib3"
+    "uv"
+    "yarl"
   ];
 
   # extract translations from pypi sdist
@@ -533,7 +469,7 @@ in python.pkgs.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
+      ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];
 
@@ -549,6 +485,7 @@ in python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiohasupervisor
     aiohttp
     aiohttp-cors
     aiohttp-fast-zlib
@@ -572,7 +509,6 @@ in python.pkgs.buildPythonApplication rec {
     orjson
     packaging
     pillow
-    pip
     psutil-home-assistant
     pyjwt
     pyopenssl
@@ -583,6 +519,7 @@ in python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
+    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -590,14 +527,12 @@ in python.pkgs.buildPythonApplication rec {
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
     pyotp
     pyqrcode
-    # Implicit dependency via homeassistant/requirements.py
-    packaging
   ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   # upstream only tests on Linux, so do we.
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
@@ -623,10 +558,7 @@ in python.pkgs.buildPythonApplication rec {
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
-    "debugpy"
     "hue"
-    "qwikswitch"
-    "sentry"
   ];
 
   pytestFlagsArray = [
@@ -650,6 +582,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_script.py::test_parallel_error"
     "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
     "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
+    # checks whether pip is installed
+    "--deselect=tests/util/test_package.py::test_check_package_fragment"
     # tests are located in tests/
     "tests"
   ];
@@ -659,6 +593,8 @@ in python.pkgs.buildPythonApplication rec {
     "tests/hassfest"
     # we don't care about code quality
     "tests/pylint"
+    # redundant component import test, which would make debugpy & sentry expensive to review
+    "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
   ];

@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "berg";
     maintainers = with lib.maintainers; [ ehmry ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

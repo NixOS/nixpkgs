@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     "TestNoResponseFailure"
     "TestProcessMonitor"
     "TestSocketConnection"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_time_repeater"
   ];
 

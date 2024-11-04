@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
     # error: no member named 'aligned_alloc' in the global namespace
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

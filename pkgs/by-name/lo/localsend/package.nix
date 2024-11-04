@@ -3,8 +3,9 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter313,
+  flutter324,
   makeDesktopItem,
+  copyDesktopItems,
   nixosTests,
   pkg-config,
   libayatana-appindicator,
@@ -16,14 +17,15 @@ let
   pname = "localsend";
   version = "1.15.4";
 
-  linux = flutter313.buildFlutterApplication rec {
-    inherit pname version;
+  linux = flutter324.buildFlutterApplication rec {
+    inherit pname;
+    version = "1.15.4-unstable-2024-10-26";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-kfqLYe15NIRH12+AastWkLBk4L0MKEV5XZ/klE+pK7g=";
+      rev = "d0e864ddf6ebe1c55188b33f8fdccd534d203c75";
+      hash = "sha256-qaW9LoRQge4K/CAQwbjNxmlUkQmxvaZyBJdAjXbbTw4=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -31,11 +33,14 @@ let
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = {
-      "permission_handler_windows" = "sha256-a7bN7/A65xsvnQGXUvZCfKGtslbNWEwTWR8fAIjMwS0=";
-      "tray_manager" = "sha256-eF14JGf5jclsKdXfCE7Rcvp72iuWd9wuSZ8Bej17tjg=";
+      permission_handler_windows = "sha256-+TP3neqlQRZnW6BxHaXr2EbmdITIx1Yo7AEn5iwAhwM=";
+      pasteboard = "sha256-lJA5OWoAHfxORqWMglKzhsL1IFr9YcdAQP/NVOLYB4o=";
     };
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+      copyDesktopItems
+    ];
 
     buildInputs = [ libayatana-appindicator ];
 
@@ -43,22 +48,21 @@ let
       for s in 32 128 256 512; do
         d=$out/share/icons/hicolor/''${s}x''${s}/apps
         mkdir -p $d
-        ln -s $out/app/data/flutter_assets/assets/img/logo-''${s}.png $d/localsend.png
+        cp ./assets/img/logo-''${s}.png $d/localsend.png
       done
-      mkdir -p $out/share/applications
-      cp $desktopItem/share/applications/*.desktop $out/share/applications
-      substituteInPlace $out/share/applications/*.desktop --subst-var out
     '';
 
-    desktopItem = makeDesktopItem {
-      name = "LocalSend";
-      exec = "@out@/bin/localsend_app";
-      icon = "localsend";
-      desktopName = "LocalSend";
-      startupWMClass = "localsend_app";
-      genericName = "An open source cross-platform alternative to AirDrop";
-      categories = [ "Network" ];
-    };
+    desktopItems = [
+      (makeDesktopItem {
+        name = "LocalSend";
+        exec = "localsend_app";
+        icon = "localsend";
+        desktopName = "LocalSend";
+        startupWMClass = "localsend_app";
+        genericName = "An open source cross-platform alternative to AirDrop";
+        categories = [ "Network" ];
+      })
+    ];
 
     passthru = {
       updateScript = ./update.sh;
@@ -112,4 +116,4 @@ let
     ];
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

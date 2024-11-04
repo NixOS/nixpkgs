@@ -3,15 +3,15 @@
 , libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection, wayland-scanner
 , gtk3, python, pygobject3, pyxdg
 
-, withQuartz ? stdenv.isDarwin, ApplicationServices
-, withRandr ? stdenv.isLinux, libxcb
-, withDrm ? stdenv.isLinux, libdrm
-, withVidmode ? stdenv.isLinux, libXxf86vm
+, withQuartz ? stdenv.hostPlatform.isDarwin, ApplicationServices
+, withRandr ? stdenv.hostPlatform.isLinux, libxcb
+, withDrm ? stdenv.hostPlatform.isLinux, libdrm
+, withVidmode ? stdenv.hostPlatform.isLinux, libXxf86vm
 
 , withGeolocation ? true
-, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
-, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
-, withAppIndicator ? stdenv.isLinux, libappindicator, libayatana-appindicator
+, withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin, CoreLocation, Foundation, Cocoa
+, withGeoclue ? withGeolocation && stdenv.hostPlatform.isLinux, geoclue
+, withAppIndicator ? stdenv.hostPlatform.isLinux, libappindicator, libayatana-appindicator
 }:
 
 let
@@ -146,7 +146,7 @@ rec {
         + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ eclairevoyant primeos ]) ++ redshift.meta.maintainers;
+      maintainers = (with lib.maintainers; [ primeos ]) ++ redshift.meta.maintainers;
     };
   };
 }

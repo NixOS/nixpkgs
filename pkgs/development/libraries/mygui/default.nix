@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     ois
   ] ++ lib.optionals withOgre [
     ogre
-  ] ++ lib.optionals (!withOgre && stdenv.isLinux) [
+  ] ++ lib.optionals (!withOgre && stdenv.hostPlatform.isLinux) [
     libGL
     libGLU
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

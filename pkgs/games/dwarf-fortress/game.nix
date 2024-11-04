@@ -67,7 +67,7 @@ let
     if hasAttr dfPlatform game
     then getAttr dfPlatform game
     else throw "Unsupported dfPlatform: ${dfPlatform}";
-  exe = if stdenv.isLinux then
+  exe = if stdenv.hostPlatform.isLinux then
     if baseVersion >= 50 then "dwarfort" else "libs/Dwarf_Fortress"
   else
     "dwarfort.exe";
@@ -86,8 +86,8 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     directory=${
-      if stdenv.isLinux then "df_linux"
-      else if stdenv.isDarwin then "df_osx"
+      if stdenv.hostPlatform.isLinux then "df_linux"
+      else if stdenv.hostPlatform.isDarwin then "df_osx"
       else throw "Unsupported system"
     }
     if [ -d "$directory" ]; then
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs = optionals isAtLeast50 [ SDL2 SDL2_image SDL2_mixer ]
     ++ optional (!isAtLeast50) SDL
     ++ optional enableUnfuck dwarf-fortress-unfuck
@@ -124,7 +124,7 @@ stdenv.mkDerivation {
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
     echo "Original MD5: $(<$out/hash.md5.orig)" >&2
-  '' + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.hostPlatform.isDarwin ''
     # My custom unfucked dwarfort.exe for macOS. Can't use
     # absolute paths because original doesn't have enough
     # header space. Someone plz break into Tarn's house & put

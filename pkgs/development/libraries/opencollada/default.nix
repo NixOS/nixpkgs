@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AGL ]);
 
   propagatedBuildInputs = [ libxml2 pcre ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     # Drop blanket -Werror as it tends to fail on newer toolchain for
     # minor warnings. In this case it was gcc-13 build failure.
     substituteInPlace DAEValidator/CMakeLists.txt --replace-fail ' -Werror"' '"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
       --replace math.h cmath
   '';

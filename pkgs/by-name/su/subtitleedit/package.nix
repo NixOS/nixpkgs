@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "4.0.7";
+  version = "4.0.8";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${
       lib.replaceStrings [ "." ] [ "" ] version
     }.zip";
-    hash = "sha256-7BTW0wqlxyxtXu4aBVQXMQ1mUdSINn+S6W7XPL5pcSI=";
+    hash = "sha256-pUCuAxCljRu1fXPQIBDWtkC17RBD+Bv6Nx5Tw/ACuXw=";
     stripRoot = false;
   };
 

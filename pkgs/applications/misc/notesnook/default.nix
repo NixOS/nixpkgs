@@ -2,7 +2,7 @@
 
 let
   pname = "notesnook";
-  version = "3.0.11";
+  version = "3.0.19";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
-      x86_64-linux = "sha256-QnjfeN6CoLiyZvJY4mAZFJ58LxHhe/QUzpI4Fbz5Etg=";
-      x86_64-darwin = "sha256-uT4xo4LT70jq7bHmiYu4FL8Fldppc2ai8yEZzGMzM6Q=";
-      aarch64-darwin = "sha256-D5KIXHhzXXBOEcoOn2QKKUbVGMWhRW+L7fgxRxLpX/0=";
+      x86_64-linux = "sha256-yCzREyFyGoAPXVVnNX6GUrr83oaPtoNOgZOOd6vJD1Q=";
+      x86_64-darwin = "sha256-WciEpt0vUuXS6YeZkbyFGqQaotXoZkWnkkn5B6/JXwE=";
+      aarch64-darwin = "sha256-iP3Xd/otYEVwU85U2dlFcX9QjDq2CbIqHmcDYVxzqzI=";
     }.${system} or throwSystem;
   };
 
@@ -74,6 +74,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

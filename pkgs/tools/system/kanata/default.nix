@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , jq
 , moreutils
+, versionCheckHook
 , nix-update-script
 , withCmd ? false
 }:
@@ -43,13 +44,18 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -62,6 +68,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ bmanuel linj ];
     platforms = platforms.unix;
     mainProgram = "kanata";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

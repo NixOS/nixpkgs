@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , pkg-config
-, ffmpeg_7
+, ffmpeg
 }:
 
 buildOctavePackage rec {
@@ -22,7 +22,7 @@ buildOctavePackage rec {
   ];
 
   propagatedBuildInputs = [
-    ffmpeg_7
+    ffmpeg
   ];
 
   meta = with lib; {

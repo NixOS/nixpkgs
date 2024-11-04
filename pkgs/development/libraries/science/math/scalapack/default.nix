@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, openssh, mpiCheckPhaseHook, mpi, blas, lapack
+, mpiCheckPhaseHook, mpi, blas, lapack
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -39,14 +39,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
 
   # xslu and xsllt tests seem to time out on x86_64-darwin.
   # this line is left so those who force installation on x86_64-darwin can still build
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ costrouc markuskowa gdinh ];
     # xslu and xsllt tests fail on x86 darwin
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/lincity";
     maintainers = [ ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -18,26 +18,17 @@
 , wxGTK32
 , makeWrapper
 , stdenv
-, AppKit
-, Cocoa
-, Foundation
-, IOKit
-, Kernel
-, AVFoundation
-, Carbon
-, QTKit
-, AVKit
-, WebKit
-, System
+, apple-sdk_11
+, darwinMinVersionHook
 , waylandSupport ? false
-, x11Support ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
 , testers
 , espanso
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
-assert stdenv.isLinux -> x11Support != waylandSupport;
-assert stdenv.isDarwin -> !x11Support;
-assert stdenv.isDarwin -> !waylandSupport;
+assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
+assert stdenv.hostPlatform.isDarwin -> !x11Support;
+assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
@@ -69,31 +60,22 @@ rustPlatform.buildRustPackage rec {
     "modulo"
   ] ++ lib.optionals waylandSupport [
     "wayland"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "vendored-tls"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "native-tls"
   ];
 
   buildInputs = [
     wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
     dbus
     libnotify
     libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    IOKit
-    Kernel
-    AVFoundation
-    Carbon
-    QTKit
-    AVKit
-    WebKit
-    System
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+    (darwinMinVersionHook "10.13")
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
@@ -104,7 +86,7 @@ rustPlatform.buildRustPackage rec {
     xdotool
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
       --replace-fail target/mac/ $out/Applications/ \
       --replace-fail /bin/echo ${coreutils}/bin/echo
@@ -119,12 +101,12 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
     '' else ''
       wrapProgram $out/bin/espanso \
         --prefix PATH : ${lib.makeBinPath (
-          lib.optionals stdenv.isLinux [
+          lib.optionals stdenv.hostPlatform.isLinux [
             libnotify
             setxkbmap
           ] ++ lib.optionals waylandSupport [
@@ -148,13 +130,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat pyrox0 n8henrie ];
     platforms = platforms.unix;
-    # With apple_sdk_10_12,
-    # kCFURLVolumeAvailableCapacityForImportantUsageKey
-    # is undefined.
-    # With apple_sdk_11_0, there is an issue with
-    # kColorSyncGenericGrayProfile.
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
-
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.

@@ -60,14 +60,14 @@ rustPlatform.buildRustPackage rec {
       pango
       vulkan-loader
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreGraphics
       darwin.apple_sdk.frameworks.Foundation
       darwin.apple_sdk.frameworks.Metal
       darwin.apple_sdk.frameworks.QuartzCore
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
     ];
 
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
       vulkan-loader
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
     ];
 
@@ -105,6 +105,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [vinnymeller];
     mainProgram = "bite";
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

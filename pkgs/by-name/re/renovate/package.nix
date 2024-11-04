@@ -7,7 +7,6 @@
   overrideSDK,
   pnpm_9,
   python3,
-  renovate,
   testers,
   xcbuild,
   nixosTests,
@@ -21,13 +20,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "38.62.0";
+  version = "38.105.2";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Wv7kSKuiyqVpl0EQIygF0R8h9PMH6yI5ezXhz1hbzd8=";
+    hash = "sha256-gF8bxzNF1AUJJDxFdNfa+sr/TP0S4uLCXyu3tjRuBjc=";
   };
 
   postPatch = ''
@@ -44,7 +43,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n2CnyjabKQ9D72OBdEqeHoxOJsKlLD2rJPRs50AWCXU=";
+    hash = "sha256-AdNleEe1wVBfhhoM6xit06ql1xEz/TLhZ7qpofwQ874=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -91,7 +90,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      version = testers.testVersion { package = renovate; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
       vm-test = nixosTests.renovate;
     };
     updateScript = nix-update-script { };

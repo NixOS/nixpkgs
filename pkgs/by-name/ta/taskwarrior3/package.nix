@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       rustc
       rustPlatform.cargoSetupHook
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # darwin dependencies
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration

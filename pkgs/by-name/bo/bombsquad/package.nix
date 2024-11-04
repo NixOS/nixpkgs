@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  targetPlatform,
   fetchurl,
   python312,
   SDL2,
@@ -23,14 +22,14 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-ICjaNZSCUbslB5pELbI4e+1zXWrZzkCkv69jLRx4dr0=";
+        hash = "sha256-jrExsqaM6uhnKMGPkJJTsKt2Imek+YDI2soSP/kfPj0=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-w42qhioZ9JRm004WEKzsJ3G1u09tLuPvTy8qV3DuglI=";
+        hash = "sha256-o1Yg0C5k07NZzc9jQrHXR+kkQl8HZ55U9/fqcpe3Iyw=";
       };
     }
-    .${targetPlatform.system} or (throw "${targetPlatform.system} is unsupported.");
+    .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bombsquad";

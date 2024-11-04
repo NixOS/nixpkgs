@@ -10,7 +10,7 @@ alephone.makeWrapper rec {
   zip = fetchurl {
     url =
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/MarathonInfinity-${version}-Data.zip";
-    sha256 = "sha256-+FPym4Avqzyo4cZtfYPHXCS+q21+g9AIdKOImkd/UjU=";
+    hash = "sha256-+FPym4Avqzyo4cZtfYPHXCS+q21+g9AIdKOImkd/UjU=";
   };
 
   meta = {

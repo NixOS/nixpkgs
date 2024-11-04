@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl' ]
-    ++ lib.optional (!stdenv.isDarwin) bsd-finger
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) bsd-finger
     ++ lib.optional withAbook abook
     ++ lib.optional withGnupg gnupg
     ++ lib.optional withGoobook goobook

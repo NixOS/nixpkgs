@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
       dnspython
       docopt
       publicsuffixlist
-      pydns
+      py3dns
       pyspf
       requests
     ]

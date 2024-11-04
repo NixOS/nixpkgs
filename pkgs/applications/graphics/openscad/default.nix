@@ -26,7 +26,7 @@
 , mkDerivation
 , qtmacextras
 , qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
+, spacenavSupport ? stdenv.hostPlatform.isLinux, libspnav
 , wayland
 , wayland-protocols
 , wrapGAppsHook3
@@ -66,8 +66,8 @@ mkDerivation rec {
     eigen boost glew opencsg cgal_4 mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla cairo
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
-    ++ lib.optional stdenv.isDarwin qtmacextras
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
   ;
 
@@ -88,7 +88,7 @@ mkDerivation rec {
     make objects/parser.cxx
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true

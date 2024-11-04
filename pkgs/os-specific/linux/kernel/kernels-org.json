@@ -1,42 +1,30 @@
 {
     "testing": {
-        "version": "6.11-rc6",
-        "hash": "sha256:15lx6da4kdsipxlv7my8wamss5i001r4cc2ab1icvw1ms207b5in"
+        "version": "6.12-rc5",
+        "hash": "sha256:18zh3nwhsz1hpyhmlim9a2hz8yvx5psrrav4346k46x9ybfardqy"
     },
     "6.1": {
-        "version": "6.1.107",
-        "hash": "sha256:1s5h51r41l0d3k1h9i4mya7nz53jd6i200s06w5gl49hsz8jjcpl"
+        "version": "6.1.115",
+        "hash": "sha256:0vxs6zj4p0ihcp11h3svqy3wa1yph0f1vzc8dlvqh60zgs1bmn0g"
     },
     "5.15": {
-        "version": "5.15.165",
-        "hash": "sha256:1zn627gid0dik3r5k61r9ff4sz7md1jnbwiixpyllqzb5kld6vd3"
+        "version": "5.15.170",
+        "hash": "sha256:1ag7fvixhdcyxv6rqfsvq2wh02g64r4rx8izvfb33nfnld2nangx"
     },
     "5.10": {
-        "version": "5.10.224",
-        "hash": "sha256:06nivms93yjbddv3gl88m7bdrr0676nm3p12iqvsdfr4fg39kc0r"
+        "version": "5.10.228",
+        "hash": "sha256:0wkvn49sdy9ykyz6cqdqd9yplqfhc6b255w6wc17ky182mzqvk3n"
     },
     "5.4": {
-        "version": "5.4.282",
-        "hash": "sha256:1q3xvl4c5dlql6jh0g8kn01aljgl946gmq4ljjzvffykfq4pg0jm"
-    },
-    "4.19": {
-        "version": "4.19.320",
-        "hash": "sha256:18a723djyq3y2jhjazwgiwqslh1yz954wb82cg7bf083n091lrwx"
+        "version": "5.4.284",
+        "hash": "sha256:0axkwfhvq3w2072xjqww476qa3rjglxyqmf72mlp9b5ymswil8kp"
     },
     "6.6": {
-        "version": "6.6.48",
-        "hash": "sha256:0a90fx0r25nkcr5b16dn1j7vwyndnshaxn6ziyviccds59xxy5kb"
+        "version": "6.6.59",
+        "hash": "sha256:0vd76ccd4li4wsg04gc4nai9f4y1nknz967qby0i53y0v046hq93"
     },
-    "6.8": {
-        "version": "6.8.12",
-        "hash": "sha256:0fb0m0fv4521g63gq04d7lm6hy8169s1rykiav5bkd99s9b1kcqr"
-    },
-    "6.9": {
-        "version": "6.9.12",
-        "hash": "sha256:08ngskni7d9wi93vlwcmbdg7sb2jl1drhhzn62k9nsrg1r7crrss"
-    },
-    "6.10": {
-        "version": "6.10.7",
-        "hash": "sha256:1adkbn6dqbpzlr3x87a18mhnygphmvx3ffscwa67090qy1zmc3ch"
+    "6.11": {
+        "version": "6.11.6",
+        "hash": "sha256:1kiky6viwrgm47slpv234lfq1wrwj29p5rx168gix3q0jw0zcm69"
     }
 }

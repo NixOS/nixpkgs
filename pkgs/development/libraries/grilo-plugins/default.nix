@@ -6,6 +6,7 @@
 , pkg-config
 , gettext
 , gperf
+, glib
 , sqlite
 , libarchive
 , libdmapsharing
@@ -22,7 +23,7 @@
 , gom
 , json-glib
 , avahi
-, tracker
+, tinysparql
 , dleyna-server
 , itstool
 , totem-pl-parser
@@ -52,6 +53,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -59,6 +66,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     gperf # for lua-factory
+    glib # glib-compile-resources
   ];
 
   buildInputs = [
@@ -78,7 +86,7 @@ stdenv.mkDerivation rec {
     json-glib
     avahi
     libmediaart
-    tracker
+    tinysparql
     dleyna-server
     gst_all_1.gstreamer
   ];

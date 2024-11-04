@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    sha256 = "sha256-rXWBTPM3dCGON1DvpCOsA4C4mAuVDqV9YbrvP5yDCa0=";
+    hash = "sha256-rXWBTPM3dCGON1DvpCOsA4C4mAuVDqV9YbrvP5yDCa0=";
   };
 
   ldflags = [
@@ -31,7 +31,7 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/velero completion bash > velero.bash
     $out/bin/velero completion zsh > velero.zsh
     installShellCompletion velero.{bash,zsh}

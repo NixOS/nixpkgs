@@ -368,6 +368,33 @@ in
           '';
         };
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/var/lib/teeworlds/teeworlds.env";
+        description = ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
+
+          Secrets may be passed to the service without adding them to the world-readable
+          Nix store, by specifying placeholder variables as the option value in Nix and
+          setting these variables accordingly in the environment file.
+
+          ```
+            # snippet of teeworlds-related config
+            services.teeworlds.password = "$TEEWORLDS_PASSWORD";
+          ```
+
+          ```
+            # content of the environment file
+            TEEWORLDS_PASSWORD=verysecretpassword
+          ```
+
+          Note that this file needs to be available on the host on which
+          `teeworlds` is running.
+        '';
+      };
+
     };
   };
 
@@ -383,7 +410,15 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/teeworlds_srv -f ${teeworldsConf}";
+        RuntimeDirectory = "teeworlds";
+        RuntimeDirectoryMode = "0700";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        ExecStartPre = ''
+          ${pkgs.envsubst}/bin/envsubst \
+            -i ${teeworldsConf} \
+            -o /run/teeworlds/teeworlds.yaml
+        '';
+        ExecStart = "${lib.getExe cfg.package} -f /run/teeworlds/teeworlds.yaml";
 
         # Hardening
         CapabilityBoundingSet = false;

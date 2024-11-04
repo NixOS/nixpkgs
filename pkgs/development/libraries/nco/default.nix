@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nco";
-  version = "5.2.7";
+  version = "5.2.8";
 
   src = fetchFromGitHub {
     owner = "nco";
     repo = "nco";
     rev = finalAttrs.version;
-    hash = "sha256-RtjLCs+1HI2tJsSzMwoKq09teILvxFapZCxeZAZ4iCM=";
+    hash = "sha256-FTaXgBmDlQv75roeJo4dJyJCpzOj9ilJo2hdxDnyjno=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/bin/mv" "${coreutils}/bin/mv"
   '';
 
-  makeFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
 
   enableParallelBuilding = true;
 

@@ -94,6 +94,6 @@ buildPythonPackage rec {
     license = [ lib.licenses.gpl3 ];
     maintainers = [ lib.maintainers.lucasew ];
     # Segmentation fault during tests
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

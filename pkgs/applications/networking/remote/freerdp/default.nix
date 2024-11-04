@@ -64,7 +64,7 @@ let
       dir = "libfreerdp/crypto/test";
       file = "Test_x509_cert_info.c";
     }
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     {
       dir = "winpr/libwinpr/sysinfo/test";
       file = "TestGetComputerName.c";
@@ -140,11 +140,11 @@ stdenv.mkDerivation rec {
     pcre2
     pcsclite
     zlib
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     systemd
     wayland
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
@@ -185,7 +185,7 @@ stdenv.mkDerivation rec {
     WITH_X11 = true;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
@@ -193,7 +193,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=incompatible-function-pointer-types"
   ]);
 
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework AudioToolbox"
   ];
 

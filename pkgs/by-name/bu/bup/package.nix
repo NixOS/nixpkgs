@@ -23,7 +23,7 @@ let
       setuptools
       tornado
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       pyxattr
       pylibacl
       fuse

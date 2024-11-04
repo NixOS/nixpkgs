@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "apr24a";
-  version = "20240401_a";
+  srcVersion = "sep24a";
+  version = "20240901_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,23 +16,23 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "sha256-Eq6S5S8xrhkCo6O2wUaHnoMDVG9WeiSurGvOc+2JKbM=";
+    sha256 = "sha256-dZ03J3I1dgoSgSc9yGfO13ZvNawCSYKN3+SGvp1eyGA=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
 
   patches = [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.isDarwin ([ ./clang.patch ./cpp-darwin.patch ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([ ./clang.patch ./cpp-darwin.patch ]);
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
-  env.GAG_CPP = lib.optionalString stdenv.isDarwin "${gfortran.outPath}/bin/cpp";
+  env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out

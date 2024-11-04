@@ -1,6 +1,6 @@
 { callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
+  automake, autoconf, libiconv, libtool, intltool, gettext, gzip, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress, updateAutotoolsGnuConfigScriptsHook,
@@ -11,7 +11,7 @@
 }:
 
 let
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -87,7 +87,7 @@ self: super:
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
+    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.hostPlatform.isDarwin
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
 
@@ -164,15 +164,13 @@ self: super:
       # Remove useless DocBook XML files.
       rm -rf $out/share/doc
     '';
-    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
+    CPP = lib.optionalString stdenv.hostPlatform.isDarwin "clang -E -";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xorgproto ];
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
-    preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
-    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
   });
 
   libXau = super.libXau.overrideAttrs (attrs: {
@@ -263,7 +261,7 @@ self: super:
       ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
     outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
   });
@@ -397,6 +395,8 @@ self: super:
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
     XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
+    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
+    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
     meta = attrs.meta // { mainProgram = "sxpm"; };
   });
 
@@ -794,7 +794,7 @@ self: super:
           ./dont-create-logdir-during-build.patch
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -926,7 +926,7 @@ self: super:
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
-    ] ++ lib.optional stdenv.isDarwin [
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [
       "--without-dtrace"
     ];
 
@@ -935,7 +935,7 @@ self: super:
       xorg.libXfont2
       xorg.xtrans
       xorg.libxcvt
-    ] ++ lib.optional stdenv.isDarwin [ Xplugin ];
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [ Xplugin ];
   });
 
   lndir = super.lndir.overrideAttrs (attrs: {
@@ -1083,7 +1083,7 @@ self: super:
   xmore = addMainProgram super.xmore { };
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
   });
@@ -1121,6 +1121,15 @@ self: super:
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
+  xtrans = super.xtrans.overrideAttrs (attrs: {
+    patches = [
+      # https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/merge_requests/22
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/commit/ae99ac32f61e0db92a45179579030a23fe1b5770.patch";
+        hash = "sha256-QnTTcZPd9QaHS5up4Ne7iuNL/OBu+DnzXprovWnW4cw=";
+      })
+    ];
+  });
   xwd = addMainProgram super.xwd { };
   xwininfo = addMainProgram super.xwininfo { };
   xwud = addMainProgram super.xwud { };

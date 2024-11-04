@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Go language implementation of gRPC. HTTP/2 based RPC";
     mainProgram = "protoc-gen-go-grpc";
     license = licenses.asl20;
-    maintainers = [ maintainers.raboof ];
+    maintainers = [ ];
   };
 }

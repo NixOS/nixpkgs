@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.10.6";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    hash = "sha256-qc7HaCMAmALY9MoIKmaCWF0cnwBBFDAXwqiBzwzu2bU=";
+    hash = "sha256-m2d4lnyD8HhhqovMdeG36dMK+4kJA7rlPHE2tlhfevo=";
     fetchSubmodules = true;
   };
 

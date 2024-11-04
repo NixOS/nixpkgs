@@ -36,18 +36,9 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  bower2nix = prev.bower2nix.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
-      done
-    '';
-  };
-
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
+    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.hostPlatform.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
   });
 
   fast-cli = prev.fast-cli.override {
@@ -92,7 +83,7 @@ final: prev: {
     nativeBuildInputs = [
       pkgs.pkg-config
       (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pkgs.xcbuild
     ];
     buildInputs = with pkgs; [
@@ -107,7 +98,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
@@ -128,7 +119,7 @@ final: prev: {
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
-      broken = stdenv.isDarwin; # still broken on darwin
+      broken = stdenv.hostPlatform.isDarwin; # still broken on darwin
     };
   });
 
@@ -151,7 +142,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -160,12 +151,8 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
-  };
-
-  node-red = prev.node-red.override {
-    buildInputs = [ pkgs.node-pre-gyp ];
   };
 
   node2nix = prev.node2nix.override {
@@ -210,7 +197,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
+        sha512 = "sha512-EV6+ovTsEXCPAp58g2dD68LxoP/wK5pRvgy0J/HxPGB009omFPv3Yet0HiaqvrIrgPTBuC6wCH1LTOY91EO5hQ==";
       };
     };
     esbuild-linux-arm64 = {
@@ -219,7 +206,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==";
+        sha512 = "sha512-/93bf2yxencYDnItMYV/v116zff6UyTjo4EtEQjUBeGiVpMmffDNUyD9UN2zV+V3LRV3/on4xdZ26NKzn6754g==";
       };
     };
     esbuild-darwin-x64 = {
@@ -228,7 +215,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==";
+        sha512 = "sha512-aClqdgTDVPSEGgoCS8QDG37Gu8yc9lTHNAQlsztQ6ENetKEO//b8y31MMu2ZaPbn4kVsIABzVLXYLhCGekGDqw==";
       };
     };
     esbuild-darwin-arm64 = {
@@ -237,16 +224,16 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-DwqXqZyuk5AiWWf3UfLiRDJ5EDd49zg6O9wclZ7kUMv2WRFr4HKjXp/5t8JZ11QbQfUS6/cRCKGwYhtNAY88kQ==";
+        sha512 = "sha512-YsS2e3Wtgnw7Wq53XXBLcV6JhRsEq8hkfg91ESVadIrzr9wO6jJDMZnCQbHm1Guc5t/CdDiFSSfWP58FNuvT3Q==";
       };
     };
   in{
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     dependencies = oldAttrs.dependencies
-      ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) esbuild-linux-x64
-      ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) esbuild-linux-arm64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) esbuild-darwin-x64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) esbuild-darwin-arm64;
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) esbuild-linux-x64
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) esbuild-linux-arm64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) esbuild-darwin-x64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) esbuild-darwin-arm64;
     postInstall = ''
       wrapProgram "$out/bin/postcss" \
         --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
@@ -353,7 +340,7 @@ final: prev: {
       cairo
       pango
       libjpeg
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -383,7 +370,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };

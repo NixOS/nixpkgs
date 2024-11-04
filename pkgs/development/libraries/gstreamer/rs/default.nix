@@ -57,15 +57,15 @@ let
     mp4 = [ ];
 
     # net
-    aws = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+    aws = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
     hlssink3 = [ ];
     ndi = [ ];
     onvif = [ pango ];
     raptorq = [ ];
-    reqwest = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+    reqwest = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
     rtp = [ ];
-    webrtc = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
-    webrtchttp = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    webrtc = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+    webrtchttp = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
     # text
     textahead = [ ];
@@ -110,9 +110,9 @@ let
     [
       "csound" # tests have weird failure on x86, does not currently work on arm or darwin
       "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
-    ] ++ lib.optionals stdenv.isAarch64 [
+    ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       "raptorq" # pointer alignment failure in tests on aarch64
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
@@ -200,13 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cargo-c'
     nasm
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   buildInputs = [
     gstreamer

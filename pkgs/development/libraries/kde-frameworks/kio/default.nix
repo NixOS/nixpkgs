@@ -15,14 +15,14 @@ mkDerivation {
     karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
     ktextwidgets kwallet kwidgetsaddons kwindowsystem qtscript qtx11extras
     kcrash libkrb5
-  ] ++ lib.lists.optionals stdenv.isLinux [
+  ] ++ lib.lists.optionals stdenv.hostPlatform.isLinux [
     acl attr # both are needed for ACL support
     util-linux # provides libmount
   ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfig kcoreaddons kitemviews kjobwidgets kservice
     kxmlgui qtbase qttools solid
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     kded
   ];
   outputs = [ "out" "dev" ];

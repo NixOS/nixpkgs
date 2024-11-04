@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
     "-X main.GitSha=v${version}"
     "-X main.DefaultInstallationName=earthly"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
   ];
 

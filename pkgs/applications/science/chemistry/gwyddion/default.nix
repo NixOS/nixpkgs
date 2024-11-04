@@ -11,7 +11,7 @@
   zlibSupport ? true, zlib,
   libuniqueSupport ? true, libunique,
   libpngSupport ? true, libpng,
-  openglSupport ? !stdenv.isDarwin, libGL
+  openglSupport ? !stdenv.hostPlatform.isDarwin, libGL
 }:
 
 stdenv.mkDerivation rec {
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

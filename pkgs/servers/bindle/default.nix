@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Tests require a network
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   cargoHash = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
 

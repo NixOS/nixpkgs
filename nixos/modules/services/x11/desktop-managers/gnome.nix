@@ -255,7 +255,6 @@ in
 
     (lib.mkIf serviceCfg.core-os-services.enable {
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       programs.dconf.enable = true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -266,8 +265,8 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
-      services.gnome.tracker-miners.enable = mkDefault true;
-      services.gnome.tracker.enable = mkDefault true;
+      services.gnome.localsearch.enable = mkDefault true;
+      services.gnome.tinysparql.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
       # services.packagekit.enable = mkDefault true;
@@ -282,10 +281,7 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-gnome
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
       xdg.portal.configPackages = mkDefault [ pkgs.gnome-session ];
 
@@ -358,6 +354,8 @@ in
         isSystem = true;
       };
 
+      services.orca.enable = notExcluded pkgs.orca;
+
       fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
@@ -381,11 +379,11 @@ in
             pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
-            pkgs.orca
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
             pkgs.gtk3.out # for gtk-launch program
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+            pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
           ];
         in
         mandatoryPackages

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   #     gpshare.o:(.bss+0x0): first defined here
   env.NIX_CFLAGS_COMPILE = toString ([ "-fcommon" ]
     # these are required for the configure script to work with clang
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-implicit-int"
       "-Wno-implicit-function-declaration"
     ]);

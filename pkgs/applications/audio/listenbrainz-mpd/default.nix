@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
 
-  buildInputs = [ sqlite ] ++ (if stdenv.isDarwin then [
+  buildInputs = [ sqlite ] ++ (if stdenv.hostPlatform.isDarwin then [
     libiconv
     Security
     SystemConfiguration
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [
     "shell_completion"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "systemd"
   ];
 

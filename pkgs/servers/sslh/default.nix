@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.isLinux [ libcap tcp_wrappers ];
+  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap tcp_wrappers ];
 
-  makeFlags = lib.optionals stdenv.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
 
   postInstall = ''
     # install all flavours

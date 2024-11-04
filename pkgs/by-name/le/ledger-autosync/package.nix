@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch2,
   ledger,
   hledger,
 }:

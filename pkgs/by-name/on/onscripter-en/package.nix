@@ -62,6 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "onscripter-en";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

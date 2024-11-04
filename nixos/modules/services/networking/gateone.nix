@@ -1,25 +1,24 @@
 { config, lib, pkgs, ...}:
-with lib;
 let
   cfg = config.services.gateone;
 in
 {
 options = {
     services.gateone = {
-      enable = mkEnableOption "GateOne server";
-      pidDir = mkOption {
+      enable = lib.mkEnableOption "GateOne server";
+      pidDir = lib.mkOption {
         default = "/run/gateone";
-        type = types.path;
+        type = lib.types.path;
         description = "Path of pid files for GateOne.";
       };
-      settingsDir = mkOption {
+      settingsDir = lib.mkOption {
         default = "/var/lib/gateone";
-        type = types.path;
+        type = lib.types.path;
         description = "Path of configuration files for GateOne.";
       };
     };
 };
-config = mkIf cfg.enable {
+config = lib.mkIf cfg.enable {
   environment.systemPackages = with pkgs.pythonPackages; [
     gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
 

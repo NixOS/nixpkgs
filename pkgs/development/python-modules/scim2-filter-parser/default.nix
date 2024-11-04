@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sly ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     django-query = [ django ];
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.django-query;
+  ] ++ optional-dependencies.django-query;
 
   meta = with lib; {
     description = "Customizable parser/transpiler for SCIM2.0 filters";

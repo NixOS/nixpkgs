@@ -40,8 +40,9 @@ let
     exec ${cfg.package}/bin/paperless-ngx "$@"
   '';
 
-  # Secure the services
   defaultServiceConfig = {
+    Slice = "system-paperless.slice";
+    # Secure the services
     ReadWritePaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -232,6 +233,11 @@ in
   config = mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
+    systemd.slices.system-paperless = {
+      description = "Paperless Document Management System Slice";
+      documentation = [ "https://docs.paperless-ngx.com" ];
+    };
+
     systemd.tmpfiles.settings."10-paperless" = let
       defaultRule = {
         inherit (cfg) user;
@@ -284,11 +290,12 @@ in
       ''
       + optionalString (cfg.passwordFile != null) ''
         export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        export PAPERLESS_ADMIN_PASSWORD=$(cat $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD)
+        PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
+        export PAPERLESS_ADMIN_PASSWORD
         superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
         superuserStateFile="${cfg.dataDir}/superuser-state"
 
-        if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
+        if [[ $(cat "$superuserStateFile" 2>/dev/null) != "$superuserState" ]]; then
           ${cfg.package}/bin/paperless-ngx manage_superuser
           echo "$superuserState" > "$superuserStateFile"
         fi
@@ -347,7 +354,8 @@ in
             tr -dc A-Za-z0-9 < /dev/urandom | head -c64 | ${pkgs.moreutils}/bin/sponge '${secretKeyFile}'
           )
         fi
-        export PAPERLESS_SECRET_KEY=$(cat '${secretKeyFile}')
+        PAPERLESS_SECRET_KEY="$(cat '${secretKeyFile}')"
+        export PAPERLESS_SECRET_KEY
         if [[ ! $PAPERLESS_SECRET_KEY ]]; then
           echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
           exit 1

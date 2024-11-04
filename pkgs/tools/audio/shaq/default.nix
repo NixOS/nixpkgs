@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     shazamio
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     dev = [
       build
       shaq

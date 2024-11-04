@@ -1,26 +1,33 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  langchain-core,
+  langgraph-checkpoint,
+  langgraph-sdk,
+
+  # tests
   aiosqlite,
   dataclasses-json,
-  fetchFromGitHub,
   grandalf,
   httpx,
-  langchain-core,
-  langgraph-sdk,
-  langgraph-checkpoint,
+  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
-  psycopg,
   langsmith,
-  poetry-core,
+  psycopg,
   pydantic,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   postgresql,
   postgresqlTestHook,
@@ -28,16 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.4";
+  version = "0.2.43";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-jUBaWXrHCXAph8EGEJnH7lbKIyjQ8oPt4eDMyIkbURo=";
+    hash = "sha256-8xTjWBq6GSl6X2IId3roS3ZNM/h76EGPitS08YQ4e7Y=";
   };
 
   postgresqlTestSetupPost = ''
@@ -52,19 +57,26 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   pythonImportsCheck = [ "langgraph" ];
+
+  # postgresql doesn't play nicely with the darwin sandbox:
+  # FATAL:  could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     aiosqlite
     dataclasses-json
     grandalf
     httpx
+    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
     psycopg
+    psycopg.pool
     pydantic
     pytest-asyncio
     pytest-mock
@@ -76,8 +88,13 @@ buildPythonPackage rec {
     postgresqlTestHook
   ];
 
+  pytestFlagsArray = [ "tests/unit_tests" ];
+
   disabledTests = [
-    "test_doesnt_warn_valid_schema" # test is flaky due to pydantic error on the exception
+    # test is flaky due to pydantic error on the exception
+    "test_doesnt_warn_valid_schema"
+    "test_tool_node_inject_store"
+
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
     "test_cancel_graph_astream_events_v2"
@@ -91,6 +108,12 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+  ];
+
+  disabledTestPaths = [
+    # psycopg.errors.InsufficientPrivilege: permission denied to create database
+    "tests/test_pregel_async.py"
+    "tests/test_pregel.py"
   ];
 
   passthru = {

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5/UgEzkJw9XDgtS1jKyWh5ijTp3L+UQLuE5CXcyIgTs=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = with lib; {
     description = "High performance code minimap render";

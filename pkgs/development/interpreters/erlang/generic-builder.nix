@@ -19,11 +19,11 @@
 , libGLU ? null
 , wxGTK ? null
 , xorg ? null
-, exdoc ? null
+, ex_doc ? null
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, exdocSupport ? false
+, ex_docSupport ? false
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
@@ -64,7 +64,7 @@
 , installPhase ? ""
 , preInstall ? ""
 , postInstall ? ""
-, installTargets ? [ "install" "install-docs" ]
+, installTargets ? if ((lib.versionOlder version "27.0") || ex_docSupport) then [ "install" "install-docs" ] else [ "install" ]
 , checkPhase ? ""
 , preCheck ? ""
 , postCheck ? ""
@@ -74,17 +74,17 @@
 , meta ? { }
 }:
 
-assert wxSupport -> (if stdenv.isDarwin
+assert wxSupport -> (if stdenv.hostPlatform.isDarwin
 then wxGTK != null
 else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
-assert exdocSupport -> exdoc != null;
+assert ex_docSupport -> ex_doc != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
-  wxPackages2 = if stdenv.isDarwin then [ wxGTK ] else wxPackages;
+  wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
 
 in
 stdenv.mkDerivation ({
@@ -98,6 +98,8 @@ stdenv.mkDerivation ({
 
   inherit src version;
 
+  LANG = "C.UTF-8";
+
   nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
   buildInputs = [ ncurses opensslPackage ]
@@ -105,7 +107,7 @@ stdenv.mkDerivation ({
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
     ++ optional systemdSupport systemd
-    ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
+    ++ optionals stdenv.hostPlatform.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
 
   debugInfo = enableDebugInfo;
 
@@ -122,15 +124,15 @@ stdenv.mkDerivation ({
   '';
 
   # For OTP 27+ we need ex_doc to build the documentation
-  # When exdocSupport is enabled, grab the raw ex_doc executable from the exdoc
+  # When ex_docSupport is enabled, grab the raw ex_doc executable from the ex_doc
   # derivation. Next, patch the first line to use the escript that will be
   # built during the build phase of this derivation. Finally, building the
   # documentation requires the erlang-logo.png asset.
   preConfigure = ''
     ./otp_build autoconf
-  '' + optionalString exdocSupport ''
+  '' + optionalString ex_docSupport ''
     mkdir -p $out/bin
-    cp ${exdoc}/bin/.ex_doc-wrapped $out/bin/ex_doc
+    cp ${ex_doc}/bin/.ex_doc-wrapped $out/bin/ex_doc
     sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
     export EX_DOC=$out/bin/ex_doc
 
@@ -148,9 +150,9 @@ stdenv.mkDerivation ({
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
     ++ optional systemdSupport "--enable-systemd"
-    ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
     # make[3]: *** [yecc.beam] Segmentation fault: 11
-    ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs

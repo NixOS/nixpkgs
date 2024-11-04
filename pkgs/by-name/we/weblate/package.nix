@@ -28,7 +28,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.7.1";
+  version = "5.7.2";
 
   pyproject = true;
 
@@ -41,8 +41,15 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     rev = "refs/tags/weblate-${version}";
-    hash = "sha256-h5+0lOMD+H0ehtZ0bngA9bI5va1I5KjZH9boaEtXJPo=";
+    hash = "sha256-cIwCNYXbg7l6z9OAkMAGJ783QI/nCOyrhLPURDcDv+Y=";
   };
+
+  pythonRelaxDeps = [
+    # https://github.com/WeblateOrg/weblate/commit/9695f912b0d24ae999d9442bb49719b4bb552696
+    "qrcode"
+    # https://github.com/WeblateOrg/weblate/commit/1cf2a423b20fcd2dde18a43277311334e38208e7
+    "rapidfuzz"
+  ];
 
   patches = [
     # FIXME This shouldn't be necessary and probably has to do with some dependency mismatch.

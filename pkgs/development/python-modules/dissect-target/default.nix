@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.18";
+  version = "3.19";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-jR+f4t0QXmm007lrGdMyF9vFa3NW35gZxs7pe9sdjfg=";
+    hash = "sha256-D5YgCAKcnPyBrZTpcSuvKfWfIIcCxKGxn+mj8Jqzmws=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       asn1crypto
       dissect-btrfs
@@ -102,12 +102,12 @@ buildPythonPackage rec {
       yara-python
       zstandard
     ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-    yara = [ yara-python ] ++ passthru.optional-dependencies.full;
-    smb = [ impacket ] ++ passthru.optional-dependencies.full;
-    mqtt = [ paho-mqtt ] ++ passthru.optional-dependencies.full;
+    yara = [ yara-python ] ++ optional-dependencies.full;
+    smb = [ impacket ] ++ optional-dependencies.full;
+    mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "dissect.target" ];
 
@@ -138,6 +138,8 @@ buildPythonPackage rec {
       "test_systemd_basic_syntax"
       "test_target_cli_unicode_argparse"
       "test_target_query"
+      "test_target_info"
+      "test_yara"
     ]
     ++
     # test is broken on Darwin

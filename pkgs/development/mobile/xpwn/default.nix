@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libpng bzip2 libusb-compat-0_1 openssl ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";
     license     = licenses.gpl3Plus;

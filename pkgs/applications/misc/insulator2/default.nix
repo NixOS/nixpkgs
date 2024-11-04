@@ -8,62 +8,62 @@
 , freetype
 , libsoup
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , perl
 , cyrus_sasl
 , stdenv
-, fixup_yarn_lock
-, yarn
+, yarnConfigHook
 , nodejs-slim
 , cargo-tauri
 , cargo
 , rustPlatform
 , rustc
+, jq
+, moreutils
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "insulator2";
-  version = "2.12.2";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Bi9GCQr7yox5Plc7o0svRKYi1XoK/HDGj1VbW1z4jac=";
+    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
+
+  patches = [
+    # see: https://github.com/andrewinci/insulator2/pull/733
+    ./fix-rust-1.80.0.patch
+  ];
+
+  # Yarn *really* wants us to use corepack if this is set
+  postPatch = ''
+    jq 'del(.packageManager)' package.json | sponge package.json
+  '';
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ih5NSOvYje981SkVfPHm/u2sS1B36kgxpfe9LmQaxdo=";
+    hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "apache-avro-0.15.0" = "sha256-bjA/x/IDzAYugsc1vn9fBVKaCiLOJYdA1Q9H2pffBh0=";
-      "openssl-src-111.25.0+1.1.1t" = "sha256-1BEtb38ilJJAw35KW+NOIe1rhxxOPsnz0gA2zJnof8c=";
-      "rdkafka-0.29.0" = "sha256-a739Fc+qjmIrK754GT22Gb/Ftd82lLSUzv53Ej7Khu4=";
+      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
       "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
     };
   };
 
-  configurePhase = ''
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup_yarn_lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-    yarn run postinstall --offline
-  '';
-
-  preBuild = ''
-    yarn tauri build -b deb
-  '';
-
   cargoRoot = "backend/";
+  buildAndTestSubdir = cargoRoot;
+
+  dontUseCmakeConfigure = true;
 
   preInstall = ''
-    mv backend/target/release/bundle/deb/*/data/usr/ "$out"
+    mkdir -p "$out"
   '';
 
   nativeBuildInputs = [
@@ -73,11 +73,12 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
-    fixup_yarn_lock
-    yarn
+    cargo-tauri.hook
+    yarnConfigHook
     nodejs-slim
     cyrus_sasl
+    jq
+    moreutils # for sponge
   ];
 
   buildInputs = [
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
     freetype
     libsoup
     gtk3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   meta = with lib; {
@@ -96,5 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
-
 }

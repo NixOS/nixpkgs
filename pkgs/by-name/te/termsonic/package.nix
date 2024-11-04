@@ -7,14 +7,14 @@
 }:
 buildGoModule rec {
   name = "termsonic";
-  version = "0-unstable-2024-02-02";
+  version = "0-unstable-2024-09-15";
 
   src = fetchzip {
-    url = "https://git.sixfoisneuf.fr/termsonic/snapshot/termsonic-7a3aabee59e1a427aff755fc69759265ad9d0adc.zip";
-    hash = "sha256-C5/4679qw4CAdUt9lXpPIR3yejrPdddvmjgbpLF3SvA=";
+    url = "https://git.sixfoisneuf.fr/termsonic/snapshot/termsonic-93328e0ca6c0ed2424550c7a164b4b1212a554b6.zip";
+    hash = "sha256-qn0EB1lCU8nvgwcIuZ0Xt9yGTBz5bSnJelPF8mG6D1k=";
   };
 
-  vendorHash = "sha256-wCtQD9f1mbN/0qUZnamPoVn9p4Ra5dQ34vlT+XjPF3k=";
+  vendorHash = "sha256-hBYgRKL9ZFzYy/wLCWacw8I6aqtD5O7lLsB9U5RmLjw=";
 
   nativeBuildInputs = [ pkg-config ];
 

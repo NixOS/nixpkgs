@@ -18,18 +18,18 @@
   libevdev,
   gtk3,
   libsoup,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mouse-actions-gui";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "jersou";
     repo = "mouse-actions";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-02E4HrKIoBV3qZPVH6Tjz9Bv/mh5C8amO1Ilmd+YO5g=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/config-editor";
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
   ];
@@ -53,36 +53,25 @@ stdenv.mkDerivation (finalAttrs: {
     # Tauri deps
     gtk3
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-Rnr5jRupdUu6mIsWvdN6AnQnsxB5h31n/24pYslGs5g=";
+    hash = "sha256-amDTYAvEoDHb7+dg39+lUne0dv0M9vVe1vHoXk2agZA=";
   };
 
   cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.sourceRoot}/${finalAttrs.cargoRoot}";
-    hash = "sha256-VQFRatnxzmywAiMLfkVgB7g8AFoqfWFYjt/vezpE1o8=";
+    hash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
   };
 
-  buildPhase = ''
-    runHook preBuild
-    cargo-tauri build -b deb
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules
-    cp -r src-tauri/target/release/bundle/deb/*/data/usr/* $out
-
-    runHook postInstall
   '';
 
   meta = {

@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.8";
+  version = "1.6.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L4E7nnsVZ/VrOM0t4KtztU9ALmtGfi1vDzUi0ogtZOc=";
+    hash = "sha256-sDRIM41zey1F6/x1ZioJJBAQCVyf1NKzhS82Ew08pgM=";
   };
 
   patches =
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       ./darwin-azure-c-shared-utility-corefoundation.patch
     ]
     ++ [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       ./clang-fix-incompatible-function-pointer-conversion.patch
     ];
 
-  postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isx86_64) ''
     # force darwin aarch64 to use openssl instead of applessl, removing
     # some quirks upstream thinks they need to use openssl on macos
     sed -i \
@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       CFNetwork
       Security

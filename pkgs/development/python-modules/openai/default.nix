@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.43.0";
+  version = "1.52.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cB+ToAFWRy5oaHVHYdmTcr0MRddg+xvZQglheX2hCdE=";
+    hash = "sha256-TTbwhs7rXWIJWOU5bC0wGjXZkBpfBAXb4ycOR9xjTpw=";
   };
 
   build-system = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     datalib = [
       numpy
       pandas

@@ -2,8 +2,7 @@
 , buildNpmPackage
 , cargo
 , copyDesktopItems
-, dbus
-, electron_31
+, electron_32
 , fetchFromGitHub
 , glib
 , gnome-keyring
@@ -13,6 +12,7 @@
 , makeDesktopItem
 , makeWrapper
 , napi-rs-cli
+, nix-update-script
 , nodejs_20
 , patchutils_0_4_2
 , pkg-config
@@ -20,21 +20,28 @@
 , runCommand
 , rustc
 , rustPlatform
+, stdenv
 }:
 
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_31;
+  electron = electron_32;
+
+  bitwardenDesktopNativeArch = {
+    aarch64 = "arm64";
+    x86_64  = "x64";
+  }.${stdenv.hostPlatform.parsed.cpu.name} or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
+
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.8.1";
+  version = "2024.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-FBNqgPjWSY8SCIGyKpoOl7I3pWQxDbWiFtcPZScDE4A=";
+    hash = "sha256-o5nRG2j73qheDOyeFfSga64D8HbTn1EUrCiN0W+Xn0w=";
   };
 
   patches = [
@@ -51,7 +58,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-8cxhor90GqgO34AD8Jhd3N7PCnBnbhg8h7agVq0i3jk=";
+  npmDepsHash = "sha256-L7/frKCNlq0xr6T+aSqyEQ44yrIXwcpdU/djrhCJNNk=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -67,7 +74,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-zc5AarCbrJixcin8t+Ws8fH0ULM9rp3sUFsDb0htPuM=";
+    hash = "sha256-y+6vaESiOeVrFJpZoOJ75onOpldqSsT2kqkMMzTDUmM=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -121,7 +128,7 @@ in buildNpmPackage rec {
     pushd apps/desktop
 
     # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-x64-musl.node
+    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-${bitwardenDesktopNativeArch}-musl.node
 
     npm exec electron-builder -- \
       --dir \
@@ -134,7 +141,6 @@ in buildNpmPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    dbus
     (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
@@ -145,14 +151,12 @@ in buildNpmPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    pushd ${cargoRoot}
-    export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
-    export cargoCheckType=release
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      -- bash -e -c cargoCheckHook
-    popd
+    (
+      cd ${cargoRoot}
+      HOME=$(mktemp -d)
+      cargoCheckType=release
+      cargoCheckHook
+    )
 
     runHook postCheck
   '';
@@ -162,7 +166,7 @@ in buildNpmPackage rec {
 
     mkdir $out
 
-    pushd apps/desktop/dist/linux-unpacked
+    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
@@ -192,8 +196,15 @@ in buildNpmPackage rec {
       comment = description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/bitwarden" ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^desktop-v(.*)$" ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
@@ -201,7 +212,7 @@ in buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "bitwarden";
   };
 }

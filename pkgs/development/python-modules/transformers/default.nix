@@ -58,14 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.44.2";
+  version = "4.46.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2nMt1orhQCTkHG0HKwqVyB7mQeJh7O6I3Eftv2bnnIc=";
+    hash = "sha256-lVpzOjBb92EZpNLSPBSWrpkENgdovCDSoMp6R13nzsM=";
   };
 
   build-system = [ setuptools ];
@@ -173,7 +173,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [

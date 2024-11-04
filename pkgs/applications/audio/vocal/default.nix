@@ -12,7 +12,7 @@
 , glib
 , glib-networking
 , libxml2
-, webkitgtk
+, webkitgtk_4_0
 , clutter-gtk
 , clutter-gst
 , libunity
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libunity
     pantheon.granite
     sqlite
-    webkitgtk
+    webkitgtk_4_0
     glib-networking
   ];
 

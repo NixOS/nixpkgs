@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs =
     [installShellFiles]
-    ++ lib.optional stdenv.isLinux pkg-config;
+    ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs =
-    lib.optional stdenv.isLinux openssl
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

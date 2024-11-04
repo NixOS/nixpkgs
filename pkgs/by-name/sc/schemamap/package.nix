@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.3.0";
+  version = "0.4.0";
 in
 rustPlatform.buildRustPackage rec {
   pname = "schemamap";
@@ -19,16 +19,16 @@ rustPlatform.buildRustPackage rec {
     owner = "schemamap";
     repo = "schemamap";
     rev = "v${version}";
-    hash = "sha256-49i2zyOy/yngSgvKd66RsOhF6OlYfgDnEtPEbmhEcIo=";
+    hash = "sha256-L5p7Kh5sQAlDHrXgWUuiYZb3sV0Mp2ODEOMQsaB0iMs=";
   };
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-ILgvS96D6yF4Teaa5on6jHZlVoxRLSk8A523PzH1b5Y=";
+  cargoHash = "sha256-rwAujQC/zV5nH5YQdjPRyf1L7SYSbdS3FJ5SAVMlhRE=";
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk;
       [
         frameworks.Security

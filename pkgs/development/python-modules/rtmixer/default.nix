@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rtmixer";
-  version = "0.1.4";
+  version = "0.1.7";
   format = "setuptools";
   disabled = isPy27;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "spatialaudio";
     repo = "python-rtmixer";
     rev = "refs/tags/${version}";
-    hash = "sha256-S8aVfxoG0o5GarDX5ZIDQ3GKOT32NtttQJ449FI9Fy0=";
+    hash = "sha256-K5w6XWnDdA5HrzDOMhqinlxrg/09AF6c5CWZEsfVHb4=";
     fetchSubmodules = true;
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # it doesn't.
   disallowedReferences = [ stdenv.cc.cc ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 

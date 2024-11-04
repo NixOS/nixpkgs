@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     goocanvas
     libxml2
     libsndfile
-  ] ++ lib.optional stdenv.isLinux alsa-lib;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   meta = with lib; {
     description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";

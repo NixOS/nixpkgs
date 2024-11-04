@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     zlib
     mbedtls
     cacert
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   autoreconfPhase = ''
     ./DIST gen

@@ -12,21 +12,21 @@
   stdenv,
   darwin,
 
+  versionCheckHook,
+
   # passthru
   nix-update-script,
-  testers,
-  rye,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.39.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-qDXD5vNoIppe1EWKxr1tssgAelEKoMdZ/y7Dq979PwI=";
+    hash = "sha256-f+yVuyoer0bn38iYR94TUKRT5VzQHDZQyowtas+QOK0=";
   };
 
   cargoLock = {
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk;
       [
         frameworks.CoreServices
@@ -85,19 +85,28 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_config_show_path"
     "--skip=test_dotenv"
     "--skip=test_empty_sync"
+    "--skip=test_exclude_hashes"
     "--skip=test_fetch"
+    "--skip=test_generate_hashes"
     "--skip=test_init_default"
     "--skip=test_init_lib"
     "--skip=test_init_script"
     "--skip=test_lint_and_format"
+    "--skip=test_list_never_overwrite"
     "--skip=test_list_not_rye_managed"
+    "--skip=test_lockfile"
     "--skip=test_publish_outside_project"
     "--skip=test_version"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = rye; };
   };
 
   meta = {

@@ -18,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GNsyXP/O56Y+8QhoSfMm+ig5lK/K3Cm085jxRt9ZRmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    perl # pod2man
+  ];
 
   buildInputs = [ perl ];
 

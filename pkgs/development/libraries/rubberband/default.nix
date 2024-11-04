@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.isDarwin
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin
     (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
   makeFlags = [ "AR:=$(AR)" ];
 

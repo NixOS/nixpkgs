@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     gfortran.cc.lib
     lapack
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

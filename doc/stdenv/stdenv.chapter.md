@@ -518,8 +518,10 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
+The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
+
 It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}
 
@@ -580,7 +582,7 @@ After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSour
 If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
 You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
 
-For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
+For example, if you want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
@@ -1135,6 +1137,12 @@ Example removing all references to the compiler in the output:
   '';
 }
 ```
+
+### `runHook` \<hook\> {#fun-runHook}
+
+Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+
+For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 

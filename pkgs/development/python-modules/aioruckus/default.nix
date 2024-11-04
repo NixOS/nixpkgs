@@ -26,11 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-acu0EWP/k0qyylPtM8IBxhJhhQhXpbG2NheYpD8RTG8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=68.1" "setuptools"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [

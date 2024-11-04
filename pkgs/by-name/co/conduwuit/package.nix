@@ -6,7 +6,8 @@
   bzip2,
   zstd,
   stdenv,
-  darwin,
+  apple-sdk_15,
+  darwinMinVersionHook,
   rocksdb,
   nix-update-script,
   testers,
@@ -14,17 +15,17 @@
   # upstream conduwuit enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
-  enableLiburing ? stdenv.isLinux,
+  enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.isDarwin;
+    unprefixed = !stdenv.hostPlatform.isDarwin;
   };
   rocksdb' = rocksdb.override {
     inherit enableLiburing;
     # rocksdb does not support prefixed jemalloc, which is required on darwin
-    enableJemalloc = enableJemalloc && !stdenv.isDarwin;
+    enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
     jemalloc = rust-jemalloc-sys';
   };
 in
@@ -62,8 +63,10 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
     ++ lib.optional enableLiburing liburing
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Security
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
+      (darwinMinVersionHook "10.15")
     ];
 
   env = {

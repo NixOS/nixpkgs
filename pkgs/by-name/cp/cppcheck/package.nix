@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.15.0";
+  version = "2.16.0";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     rev = finalAttrs.version;
-    hash = "sha256-6AI3sy4D+YhUOpy02UHJWyhelbqcoEW+Tw/ADCPEbuM=";
+    hash = "sha256-u+/rlQksCyNjLOkLHiRfLKWfVSEU+LerYuT6lAp/Wrs=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   doInstallCheck = true;
 
   postPatch = ''

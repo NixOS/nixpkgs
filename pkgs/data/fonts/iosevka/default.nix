@@ -55,21 +55,21 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "31.5.0";
+  version = "31.8.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-kjydpYLOw1uZGmedemZKey0go8DRmgnUq5nrVM0NfxY=";
+    hash = "sha256-GGtbW4Y/02ubdufTXmywGS4jyMfm8RfOMvmUNoUcLQg=";
   };
 
-  npmDepsHash = "sha256-PpoSzHQMqdlGfcWvIH34ATcf4HZB+VbA6X7zqzV9xZk=";
+  npmDepsHash = "sha256-/zLWtIIPNOMrICKaj5SY1Bo3Pdso6a776fIYY/7X0U4=";
 
   nativeBuildInputs = [
     remarshal
     ttfautohint-nox
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
     cctools
   ];

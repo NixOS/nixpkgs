@@ -9,8 +9,7 @@
   makeDesktopItem,
   openjdk17,
   stdenvNoCC,
-  swt,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -29,17 +28,16 @@ let
     glib-networking
     gtk3
     libsecret
-    swt
-    webkitgtk
+    webkitgtk_4_0
   ];
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.70.4";
+  version = "0.71.2";
 
   src = fetchurl {
-    url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-4L2hoWUFAmxyUCbQFWoIQlIhbdyncN0fGFmahPMk0FU=";
+    url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
+    hash = "sha256-TVrxYz6hFWn2C0CrBnNCPxkfQkTjCXkNSeQp6eC/fjc=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +54,6 @@ stdenvNoCC.mkDerivation rec {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
       --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item
@@ -68,12 +65,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.epl10;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [
       kilianar
       oyren
       shawn8901
@@ -81,4 +78,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

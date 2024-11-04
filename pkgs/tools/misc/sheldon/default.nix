@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+yTX1wUfVVjsM42X0QliL+0xbzTPheADZibPh/5Czh8=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security curl ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   # Needs network connection
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "sheldon";
   };
 }

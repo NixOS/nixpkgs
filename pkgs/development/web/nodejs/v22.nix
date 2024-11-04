@@ -1,19 +1,15 @@
-{ callPackage, openssl, python3, enableNpm ? true }:
+{ callPackage, fetchpatch2, openssl, python3, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
     python = python3;
   };
-
-  gypPatches = callPackage ./gyp-patches.nix { } ++ [
-    ./gyp-patches-v22-import-sys.patch
-  ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.6.0";
-  sha256 = "37259d618d5565ca55acc2585045c7e1c5b9965a3d4eb44c0a237fdae84b9d44";
+  version = "22.10.0";
+  sha256 = "3180710d3130ad9df01466abf010e408d41b374be54301d1480d10eca73558e0";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -22,5 +18,5 @@ buildNodejs {
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
-  ] ++ gypPatches;
+  ];
 }

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     go
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # expects a FFExecutableNotFoundError, gets a NotADirectoryError raised by os
     "test_invalid_executable_path"
   ];

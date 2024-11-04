@@ -38,26 +38,26 @@ let
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.3";
-  build = "509.11";
+  javaVersion = "21.0.4";
+  build = "598.4";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git checkout jbr-release-${javaVersion}b${build}
   # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-21.0.2+13";
+  openjdkTag = "jbr-21.0.4+8";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-zTstmrH4KteR40BVDRfxOrl8aUQ26acE+ywscBd8sw8=";
+    hash = "sha256-YF5Z1A4qmD9Z4TE6f2i8wv9ZD+NqHGY5Q0oIVQiC3Bg=";
   };
 
   BOOT_JDK = jdk.home;
   # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1723453663;
+  SOURCE_DATE_EPOCH = 1726275531;
 
   patches = [ ];
 
@@ -147,7 +147,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     inherit (jdk.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
 
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru = oldAttrs.passthru // {

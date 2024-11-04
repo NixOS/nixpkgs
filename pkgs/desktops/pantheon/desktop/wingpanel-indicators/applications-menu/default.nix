@@ -13,7 +13,6 @@
 , libgee
 , gettext
 , gtk3
-, gnome-menus
 , json-glib
 , elementary-dock
 , bamf

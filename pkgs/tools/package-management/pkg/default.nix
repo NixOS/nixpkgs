@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ m4 pkg-config tcl ];
   buildInputs = [ bzip2 elfutils libarchive openssl xz zlib ]
-    ++ lib.optional stdenv.isLinux libbsd;
+    ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 

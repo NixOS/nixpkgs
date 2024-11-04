@@ -51,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.8.0";
+  version = "2024.10.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3flZoDzS3SI7nAi1skEqVPXJM9vSBrGN+F0esbYKQDw=";
+    hash = "sha256-MCiCr00N7894DjckAw3vpxdiNtlgzqivlbSY4A/327E=";
   };
 
   npmDeps = buildNpmPackage {
@@ -65,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-ZS+80LLyS2UBnVGRclYhwVwF1BR17D/79F2moQtqh80=";
+    npmDepsHash = "sha256-PPcA6TBsU/gGk4wII+w7VZOm65nS7qGjZ/UoQs31s9M=";
 
     dontBuild = true;
 
@@ -91,13 +91,17 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-phonenumber-field"
+    "dnspython"
     "importlib-metadata"
     "kombu"
     "markdown"
     "pillow"
     "protobuf"
+    "pycryptodome"
     "pyjwt"
     "python-bidi"
+    "qrcode"
+    "redis"
     "requests"
     "sentry-sdk"
   ];

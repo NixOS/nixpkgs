@@ -37,6 +37,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           };
           networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
         };
+        nginx-sig-helper.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            domain = "invidious.example.com";
+            sig-helper.enable = true;
+            settings.log_level = "Trace";
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
         nginx-scale.configuration = {
           services.invidious = {
             nginx.enable = true;
@@ -115,6 +128,14 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # this should error out as no internet connectivity is available in the test
     curl_assert_status_code("http://invidious.example.com/vi/dQw4w9WgXcQ/mqdefault.jpg", 502)
     machine.succeed("journalctl -eu http3-ytproxy.service | grep -o 'dQw4w9WgXcQ'")
+
+    activate_specialisation("nginx-sig-helper")
+    machine.wait_for_unit("invidious-sig-helper.service")
+    # we can't really test the sig helper that well without internet connection...
+    # invidious does connect to the sig helper though and crashes when the sig helper is not available
+    machine.wait_for_open_port(80)
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    machine.succeed("journalctl -eu invidious.service | grep -o \"SigHelper: Using helper at 'tcp://127.0.0.1:2999'\"")
 
     postgres_tcp.wait_for_unit("postgresql.service")
     activate_specialisation("postgres-tcp")

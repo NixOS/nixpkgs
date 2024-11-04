@@ -92,6 +92,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  ampas = {
+    spdxId = "AMPAS";
+    fullName = "Academy of Motion Picture Arts and Sciences BSD";
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
@@ -554,6 +559,13 @@ lib.mapAttrs mkLicense ({
     redistributable = true;
   };
 
+  fsl11Asl20 = {
+    fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+    url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+    free = false;
+    redistributable = true;
+  };
+
   ftl = {
     spdxId = "FTL";
     fullName = "Freetype Project License";
@@ -658,7 +670,7 @@ lib.mapAttrs mkLicense ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
+    fullName = "Intel ACPI Software License Agreement";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
@@ -877,7 +889,7 @@ lib.mapAttrs mkLicense ({
     spdxId = "MIT";
     fullName = "MIT License";
   };
-  # https://spdx.org/licenses/MIT-feh.html
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
@@ -928,6 +940,11 @@ lib.mapAttrs mkLicense ({
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
     url = "https://license.coscl.org.cn/MulanPSL2";
+  };
+
+  naist-2003 = {
+    spdxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
   };
 
   nasa13 = {
@@ -1085,7 +1102,7 @@ lib.mapAttrs mkLicense ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
@@ -1195,6 +1212,11 @@ lib.mapAttrs mkLicense ({
     fullName = "TCL/TK License";
   };
 
+  tost = {
+    fullName = "Tomorrow Open Source Technology License 1.0";
+    url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+  };
+
   ucd = {
     fullName = "Unicode Character Database License";
     url = "https://fedoraproject.org/wiki/Licensing:UCD";
@@ -1273,6 +1295,15 @@ lib.mapAttrs mkLicense ({
   watcom = {
     spdxId = "Watcom-1.0";
     fullName = "Sybase Open Watcom Public License 1.0";
+    # Despite being OSI‐approved, this licence is not considered FOSS
+    # by Debian, Fedora, or the FSF, due to an onerous restriction that
+    # requires publication of even privately‐deployed modifications.
+    # This violates the FSF’s freedom 3 and Debian’s “desert island
+    # test” and “dissident test”.
+    #
+    # See: <https://en.wikipedia.org/wiki/Sybase_Open_Watcom_Public_License>
+    free = false;
+    redistributable = true;
   };
 
   w3c = {

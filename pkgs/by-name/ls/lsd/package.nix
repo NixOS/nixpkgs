@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     pandoc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1

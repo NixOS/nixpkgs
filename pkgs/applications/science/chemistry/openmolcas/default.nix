@@ -1,37 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cmake
-, gfortran
-, perl
-, blas-ilp64
-, hdf5-cpp
-, python3
-, texliveMinimal
-, armadillo
-, libxc
-, makeWrapper
-, gsl
-, boost180
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  perl,
+  blas-ilp64,
+  hdf5-cpp,
+  python3,
+  texliveMinimal,
+  armadillo,
+  libxc,
+  makeWrapper,
+  gsl,
+  boost180,
+  autoPatchelfHook,
+  enableQcmaquis ? false,
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
-, enableMpi ? false
-, mpi
-, globalarrays
+  enableMpi ? false,
+  mpi,
+  globalarrays,
 }:
 
 assert blas-ilp64.isILP64;
-assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
+assert lib.elem blas-ilp64.passthru.implementation [
+  "openblas"
+  "mkl"
+];
+assert enableQcmaquis -> lib.elem blas-ilp64.passthru.implementation "mkl";
 
 let
-  python = python3.withPackages (ps: with ps; [ six pyparsing numpy h5py ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      six
+      pyparsing
+      numpy
+      h5py
+    ]
+  );
   qcmaquisSrc = fetchFromGitHub {
     owner = "qcscine";
     repo = "qcmaquis";
-    rev = "release-3.1.1"; # Must match tag in cmake/custom/qcmaquis.cmake
-    hash = "sha256-diLDWj/Om6EHrVp+Hd24jsN6R9vV2vRl0y9gqyRWhkI=";
+    rev = "release-3.1.4"; # Must match tag in cmake/custom/qcmaquis.cmake
+    hash = "sha256-vhC5k+91IPFxdCi5oYt1NtF9W08RxonJjPpA0ls4I+o=";
   };
   nevtp2Src = fetchFromGitHub {
     owner = "qcscine";
@@ -43,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openmolcas";
-  version = "24.06";
+  version = "24.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${version}";
-    hash = "sha256-/y6vEvA1Zf+p7Z0WpcN4P5voLN8MmfbKz1FuthgVQp0=";
+    hash = "sha256-LXxr/xqBHG7a0rOBrb8IMZ4IjZak3NsBw40Qf+z1fic=";
   };
 
   patches = [
@@ -82,41 +95,48 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    blas-ilp64.passthru.provider
-    hdf5-cpp
-    python
-    armadillo
-    libxc
-    gsl.dev
-    boost180
-  ] ++ lib.optionals enableMpi [
-    mpi
-    globalarrays
-  ];
+  buildInputs =
+    [
+      blas-ilp64.passthru.provider
+      hdf5-cpp
+      python
+      armadillo
+      libxc
+      gsl.dev
+      boost180
+    ]
+    ++ lib.optionals enableMpi [
+      mpi
+      globalarrays
+    ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
-  cmakeFlags = [
-    "-DOPENMP=ON"
-    "-DLINALG=OpenBLAS"
-    "-DTOOLS=ON"
-    "-DHDF5=ON"
-    "-DFDE=ON"
-    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
-    "-DDMRG=ON"
-    "-DNEVPT2=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
-    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
-    "-DLINALG=OpenBLAS"
-  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
-    "-DMKLROOT=${blas-ilp64.passthru.provider}"
-    "-DLINALG=MKL"
-  ] ++ lib.optionals enableMpi [
-    "-DGA=ON"
-    "-DMPI=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DOPENMP=ON"
+      "-DTOOLS=ON"
+      "-DHDF5=ON"
+      "-DFDE=ON"
+      "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
+      (lib.strings.cmakeBool "DMRG" enableQcmaquis)
+      (lib.strings.cmakeBool "NEVPT2" enableQcmaquis)
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+      (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+      (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    ]
+    ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
+      "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}"
+      "-DLINALG=OpenBLAS"
+    ]
+    ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
+      "-DMKLROOT=${blas-ilp64.passthru.provider}"
+      "-DLINALG=MKL"
+    ]
+    ++ lib.optionals enableMpi [
+      "-DGA=ON"
+      "-DMPI=ON"
+    ];
 
   preConfigure = lib.optionalString enableMpi ''
     export GAROOT=${globalarrays};
@@ -146,13 +166,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced quantum chemistry software package";
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
-    maintainers = [ maintainers.markuskowa ];
-    license = with licenses; [ lgpl21Only bsd3 ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    maintainers = [ lib.maintainers.markuskowa ];
+    license = with lib.licenses; [
+      lgpl21Only
+      bsd3
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "pymolcas";
   };
 }
-

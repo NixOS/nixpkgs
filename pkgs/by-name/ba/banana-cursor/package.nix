@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "ful1e5";
     repo = "banana-cursor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PI7381xf/GctQTnfcE0W3M3z2kqbX4VexMf17C61hT8=";
+    hash = "sha256-PI7381xf/GctQTnfcE0W3M3z2kqbX4VexMf17C61hT8=";
   };
 
   nativeBuildInputs = [

@@ -7,7 +7,7 @@
 , curlMinimal
 , openssl
 , libsecret
-, webkitgtk
+, webkitgtk_4_0
 , libsoup
 , gtk3
 , atk
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
           curlMinimal
           openssl
           libsecret
-          webkitgtk
+          webkitgtk_4_0
           libsoup
           gtk3
           atk

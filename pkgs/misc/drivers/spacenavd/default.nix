@@ -6,21 +6,21 @@
   libX11,
   IOKit,
 }:
-stdenv.mkDerivation rec {
-  version = "1.3";
+stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-26geQYOXjMZZ/FpPpav7zfql0davTBwB4Ir+X1oep9Q=";
   };
 
   buildInputs = [
     libX11
     libXext
-  ] ++ lib.optional stdenv.isDarwin IOKit;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sohalt ];
   };
-}
+})

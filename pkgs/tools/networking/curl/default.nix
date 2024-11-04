@@ -21,7 +21,7 @@
 , opensslSupport ? zlibSupport, openssl
 , pslSupport ? false, libpsl
 , rtmpSupport ? false, rtmpdump
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2
+, scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin, libssh2
 , wolfsslSupport ? false, wolfssl
 , rustlsSupport ? false, rustls-ffi
 , zlibSupport ? true, zlib
@@ -49,21 +49,15 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.9.1";
+  version = "8.10.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-8pL2zAUdW7q/cl74XUMt/qzIcR3XF+qXYSrlkGQ4AeU=";
+    hash = "sha256-c6Sw6ZWWoJ+lkkpPt+S5lahf2g0YosAquc8TS+vOBO4=";
   };
-
-  patches = [
-    # fixes https://github.com/curl/curl/issues/14344
-    # https://github.com/curl/curl/pull/14390
-    ./fix-sigpipe-leak.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -73,11 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   enableParallelBuilding = true;
 
   strictDeps = true;
+
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+    # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
+    # some of curl’s propagated inputs need libiconv.
+    NIX_LDFLAGS = "-liconv";
+  };
 
   nativeBuildInputs = [ pkg-config perl ];
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional rustlsSupport rustls-ffi ++
     lib.optional zlibSupport zlib ++
     lib.optional zstdSupport zstd ++
-    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation
       CoreServices
       SystemConfiguration
@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
+      "--enable-versioned-symbols"
       # Build without manual
       "--disable-manual"
       (lib.enableFeature c-aresSupport "ares")
@@ -145,19 +146,16 @@ stdenv.mkDerivation (finalAttrs: {
        # For the 'urandom', maybe it should be a cross-system option
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "--disable-shared"
-      "--enable-static"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
       # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
       "--without-ca-bundle"
       "--without-ca-path"
     ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
-    ] ++ lib.optionals (rustlsSupport && !stdenv.isDarwin) [
+    ] ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
-    ] ++ lib.optionals (gnutlsSupport && !stdenv.isDarwin) [
+    ] ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
       "--with-ca-path=/etc/ssl/certs"
     ];
 
@@ -170,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
   preCheck = ''
     patchShebangs tests/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # bad interaction with sandbox if enabled?
     rm tests/data/test1453
     rm tests/data/test1086
@@ -198,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;
@@ -209,10 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    } // lib.optionalAttrs (stdenv.hostPlatform.system != "x86_64-darwin") {
       static = pkgsStatic.curl;
-    } // lib.optionalAttrs (!stdenv.isDarwin) {
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };
   };
 
@@ -224,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin");
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };

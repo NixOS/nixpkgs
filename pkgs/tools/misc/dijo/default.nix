@@ -3,7 +3,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "dijo";
   version = "0.2.7";
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
   src = fetchFromGitHub {
     owner = "NerdyPepper";
     repo = "dijo";

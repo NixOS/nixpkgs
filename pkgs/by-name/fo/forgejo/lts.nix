@@ -1,7 +1,7 @@
 import ./generic.nix {
-  version = "7.0.8";
-  hash = "sha256-m6yToQQFM+4g8xhs572O4n4r06xeS3DozYHtAKwMjUg=";
-  npmDepsHash = "sha256-OqtYRjftwGxgW1JgMxyWd+9DndpEkd3LdQHSECc40yU=";
+  version = "7.0.10";
+  hash = "sha256-shPrbWuNmoSYXcL0QcgNjapdoWnO3/2h6eUFdMnteR4=";
+  npmDepsHash = "sha256-RR1FVbyXgeXAWkNYjgleAE7hPqVur00bO1jF3WhGYKA=";
   vendorHash = "sha256-hfbNyCQMQzDzJxFc2MPAR4+v/qNcnORiQNbwbbIA4Nw=";
   lts = true;
   nixUpdateExtraArgs = [

@@ -2,7 +2,7 @@
 
 let
   bits =
-    if stdenv.is64bit then "64"
+    if stdenv.hostPlatform.is64bit then "64"
     else "32";
 
   libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
