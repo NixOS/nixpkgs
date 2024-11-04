@@ -6,18 +6,26 @@
   mercurial,
   makeWrapper,
   nix-update-script,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "fast-export";
-  version = "221024";
+  version = "231118";
 
   src = fetchFromGitHub {
     owner = "frej";
     repo = "fast-export";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
+    hash = "sha256-JUy0t2yzd4bI7WPGG1E8L1topLfR5leV/WTU+u0bCyM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/frej/fast-export/commit/a3d0562737e1e711659e03264e45cb47a5a2f46d.patch?full_index=1";
+      hash = "sha256-vZOHnb5lXO22ElCK4oWQKCcPIqRyZV5axWfZqa84V1Y=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
