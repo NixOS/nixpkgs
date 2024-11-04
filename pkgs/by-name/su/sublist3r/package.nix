@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
       data sources and provides a quick overview of the target's surface area.
     '';
     homepage = "https://github.com/aboul3la/Sublist3r";
-    license = licenses.gpl3Plus;
+    license = licenses.gpl2Only;
     maintainers = with maintainers;
       [ PNP-MA ]; # Replace with your Nixpkgs username
     platforms = platforms.all;
