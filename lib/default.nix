@@ -137,7 +137,7 @@ let
       mergeModules' mergeOptionDecls mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
-      mkOptionDefault mkDefault mkImageMediaOverride mkForce mkVMOverride
+      mkOptionDefault mkDefault mkBaseline mkImageMediaOverride mkForce mkVMOverride
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkRenamedOptionModuleWith

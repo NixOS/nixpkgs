@@ -1083,6 +1083,7 @@ let
   };
   mkOptionDefault = mkOverride priorities.optionDefault;
   mkConfigDefault = mkOverride priorities.configDefault;
+  mkBaseline = mkOverride priorities.baseline;
   mkImageMediaOverride = mkOverride priorities.mediaOverride;
   mkForce = mkOverride priorities.force;
   mkVMOverride = mkOverride priorities.vmOverride;
@@ -1646,6 +1647,7 @@ private //
     mkAliasOptionModule
     mkAliasOptionModuleMD
     mkAssert
+    mkBaseline
     mkBefore
     mkChangedOptionModule
     mkConfigDefault
