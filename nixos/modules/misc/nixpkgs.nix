@@ -356,7 +356,7 @@ in
         # which is somewhat costly for Nixpkgs. With an explicit priority, we only
         # evaluate the wrapper to find out that the priority is lower, and then we
         # don't need to evaluate `finalPkgs`.
-        lib.mkOverride lib.modules.defaultOverridePriority finalPkgs.__splicedPackages;
+        lib.mkOverride lib.modules.priorities.baseline finalPkgs.__splicedPackages;
     };
 
     assertions =
@@ -367,7 +367,7 @@ in
           # We set it with default priority and it can not be merged, so if the
           # pkgs module argument has that priority, it's from us.
           (lib.modules.mergeAttrDefinitionsWithPrio options._module.args).pkgs.highestPrio
-          == lib.modules.defaultOverridePriority
+          == lib.modules.priorities.baseline
           # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
           && !opt.pkgs.isDefined;
       in

@@ -191,7 +191,7 @@ in
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
-        lib.mkOverride lib.modules.defaultOverridePriority
+        lib.mkOverride lib.modules.priorities.baseline
           config.hostPkgs.__splicedPackages;
     };
 
