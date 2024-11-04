@@ -17,39 +17,6 @@
   runCommand,
 }:
 
-let
-  luaEnv = lua.withPackages (
-    ps:
-    with ps;
-    [
-      cassowary
-      cldr
-      cosmo
-      fluent
-      linenoise
-      loadkit
-      lpeg
-      lua-zlib
-      lua_cliargs
-      luaepnf
-      luaexpat
-      luafilesystem
-      luarepl
-      luasec
-      luasocket
-      luautf8
-      penlight
-      vstruct
-    ]
-    ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
-      bit32
-    ]
-    ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
-      compat53
-    ]
-  );
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
   version = "0.14.17";
@@ -70,15 +37,43 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
   buildInputs = [
-    luaEnv
+    finalAttrs.finalPackage.passthru.luaEnv
     harfbuzz
     icu
     fontconfig
     libiconv
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AppKit;
   passthru = {
-    # So it will be easier to inspect this environment, in comparison to others
-    inherit luaEnv;
+    luaEnv = lua.withPackages (
+      ps:
+      with ps;
+      [
+        cassowary
+        cldr
+        cosmo
+        fluent
+        linenoise
+        loadkit
+        lpeg
+        lua-zlib
+        lua_cliargs
+        luaepnf
+        luaexpat
+        luafilesystem
+        luarepl
+        luasec
+        luasocket
+        luautf8
+        penlight
+        vstruct
+      ]
+      ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+        bit32
+      ]
+      ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+        compat53
+      ]
+    );
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
       runCommand "sile-test"
