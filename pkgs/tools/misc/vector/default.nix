@@ -22,6 +22,7 @@
   git,
   nixosTests,
   nix-update-script,
+  darwin,
 }:
 
 let
@@ -57,7 +58,9 @@ rustPlatform.buildRustPackage {
     perl
     git
     rustPlatform.bindgenHook
-  ];
+  ]
+    # Provides the mig command used by the build scripts
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
   buildInputs =
     [
       oniguruma
