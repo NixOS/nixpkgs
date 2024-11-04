@@ -31,13 +31,7 @@
 , rio
 }:
 let
-  rlinkLibs = if stdenv.hostPlatform.isDarwin then [
-    darwin.libobjc
-    darwin.apple_sdk_11_0.frameworks.AppKit
-    darwin.apple_sdk_11_0.frameworks.AVFoundation
-    darwin.apple_sdk_11_0.frameworks.MetalKit
-    darwin.apple_sdk_11_0.frameworks.Vision
-  ] else [
+  rlinkLibs = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.getLib gcc-unwrapped)
     fontconfig
     libGL
@@ -76,7 +70,9 @@ rustPlatform.buildRustPackage rec {
 
   runtimeDependencies = rlinkLibs;
 
-  buildInputs = rlinkLibs;
+  buildInputs = rlinkLibs ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libutil
+  ];
 
   outputs = [ "out" "terminfo" ];
 
