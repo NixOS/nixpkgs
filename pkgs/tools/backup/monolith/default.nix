@@ -6,6 +6,7 @@
 , libiconv
 , Security
 , SystemConfiguration
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
 
   checkFlags = [ "--skip=tests::cli" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
