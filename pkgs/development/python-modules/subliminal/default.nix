@@ -84,10 +84,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # Too many tests fail ever since a certain python-updates merge, see:
-    # https://github.com/Diaoul/subliminal/issues/1062 . Disabling tests
-    # alltogether may produce a not completly failing executable, but that
-    # executable apparently isn't able to download subtitles at all.
-    broken = true;
   };
 }
