@@ -1,34 +1,35 @@
-{ lib, stdenv, fetchurl, zstd }:
+{ lib, stdenv, fetchzip, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "geolite-legacy";
-  version = "20230901";
+  version = "20240720";
 
   # We use Arch Linux package as a snapshot, because upstream database is updated in-place.
-  geoip = fetchurl {
+  geoip = fetchzip {
     url = "https://archive.archlinux.org/packages/g/geoip-database/geoip-database-${version}-1-any.pkg.tar.zst";
-    sha256 = "sha256-H6tv0OEf04TvbhbWsm5vwq+lBj4GSyOezd258VOT8yQ=";
+    hash = "sha256-9rPp1Lu6Q4+Cb4N4e/ezHacpLuUwbGQefEPuSrH8O6o=";
+    nativeBuildInputs = [ zstd ];
+    stripRoot = false;
   };
 
-  extra = fetchurl {
+  extra = fetchzip {
     url = "https://archive.archlinux.org/packages/g/geoip-database-extra/geoip-database-extra-${version}-1-any.pkg.tar.zst";
-    sha256 = "sha256-Zb5m5TLJ1vcPKypZ3NliaL9oluz97ukTVGlOehuzyPU=";
+    hash = "sha256-sb06yszstKalc+b9rSuStRuY3YRebAL1Q4jEJkbGiMI=";
+    nativeBuildInputs = [ zstd ];
+    stripRoot = false;
   };
-
-  nativeBuildInputs = [ zstd ];
 
   buildCommand = ''
-    tar -xaf ${geoip}
-    tar -xaf ${extra}
-    mkdir -p $out/share
-    mv usr/share/GeoIP $out/share
+    mkdir -p $out/share/GeoIP
+    cp ${geoip}/usr/share/GeoIP/*.dat $out/share/GeoIP
+    cp ${extra}/usr/share/GeoIP/*.dat $out/share/GeoIP
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GeoLite Legacy IP geolocation databases";
     homepage = "https://mailfud.org/geoip-legacy/";
-    license = licenses.cc-by-sa-40;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.cc-by-sa-40;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }
