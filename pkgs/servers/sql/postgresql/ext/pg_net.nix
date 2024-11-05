@@ -36,10 +36,7 @@ stdenv.mkDerivation rec {
     description = "Async networking for Postgres";
     homepage = "https://github.com/supabase/pg_net";
     changelog = "https://github.com/supabase/pg_net/releases/tag/v${version}";
-    maintainers = with maintainers; [
-      thoughtpolice
-      samrose
-    ];
+    maintainers = with maintainers; [ thoughtpolice];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };
