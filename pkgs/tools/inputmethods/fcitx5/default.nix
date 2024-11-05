@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };
