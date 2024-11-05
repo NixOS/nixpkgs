@@ -70,15 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
     homepage = "http://rapidjson.org/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      dotlambda
-      Madouura
-      tobim
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [
+      lib.maintainers.dotlambda
+      lib.maintainers.Madouura
+      lib.maintainers.tobim
     ];
   };
 })
