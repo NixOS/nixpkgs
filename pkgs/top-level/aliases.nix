@@ -1083,6 +1083,8 @@ mapAliases {
   schildichat-desktop = schildichat-web;
   schildichat-desktop-wayland = schildichat-web;
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
+  segger-jlink = throw "segger-jlink has been removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
+  segger-jlink-headless = throw "segger-jlink-headless has been removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
   semeru-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   semeru-jre-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   session-desktop-appimage = session-desktop;

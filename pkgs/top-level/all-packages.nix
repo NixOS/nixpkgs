@@ -11988,8 +11988,6 @@ with pkgs;
 
   seehecht = callPackage ../tools/text/seehecht { };
 
-  segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
-
   selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
 
   semantic-release = callPackage ../development/tools/semantic-release { };
