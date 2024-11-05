@@ -1,12 +1,15 @@
 {
-  mkYarnPackage,
-  nodejs,
+  lib,
+  stdenv,
   fetchFromGitLab,
   fetchYarnDeps,
-  lib,
+  yarnConfigHook,
+  yarnInstallHook,
+  nodejs,
 }:
-mkYarnPackage rec {
-  inherit nodejs;
+
+stdenv.mkDerivation rec {
+  pname = "gancio-plugin-telegram-bridge";
   version = "1.0.4";
 
   src = fetchFromGitLab {
@@ -17,23 +20,30 @@ mkYarnPackage rec {
     hash = "sha256-Da8PxCX1Z1dKJu9AiwdRDfb1r1P2KiZe8BClYB9Rz48=";
   };
 
+  # upstream doesn't provide a yarn.lock file
+  postPatch = ''
+    cp --no-preserve=all ${./yarn.lock} ./yarn.lock
+  '';
+
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
+    yarnLock = ./yarn.lock;
     hash = "sha256-BcRVmVA5pnFzpg2gN/nKLzENnoEdwrE0EgulDizq8Ok=";
   };
 
-  packageJSON = ./package.json;
-
-  # upstream doesn't provide a yarn.lock file
-  yarnLock = ./yarn.lock;
-
-  doDist = false;
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnInstallHook
+    nodejs
+  ];
 
   postInstall = ''
-    rmdir $out/bin
-    ln -s $out/libexec/gancio-plugin-telegram/deps/gancio-plugin-telegram/index.js $out/
-    ln -s $out/libexec/gancio-plugin-telegram/node_modules $out/
+    ln -s "$out/lib/node_modules/gancio-plugin-telegram/index.js" "$out/index.js"
+    ln -s "$out/lib/node_modules/gancio-plugin-telegram/node_modules" "$out/node_modules"
   '';
+
+  passthru = {
+    inherit nodejs;
+  };
 
   meta = {
     description = "Telegram bridge for Gancio, republishes content to Telegram channels or groups";
