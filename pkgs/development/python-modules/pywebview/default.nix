@@ -50,21 +50,17 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED
-    export HOME=$TMPDIR
-    # QStandardPaths: XDG_RUNTIME_DIR not set
-    export XDG_RUNTIME_DIR=$HOME/xdg-runtime-dir
+    # a Qt wrapper is required to run the Qt backend
+    # since the upstream script does not have a way to disable tests individually pytest is used directly instead
+    makeQtWrapper "$(command -v pytest)" tests/run.sh \
+      --set PYWEBVIEW_LOG debug \
+      --add-flags "--deselect tests/test_js_api.py::test_concurrent"
 
-    pushd tests
-    substituteInPlace run.sh \
-      --replace "PYTHONPATH=.." "PYTHONPATH=$PYTHONPATH" \
-      --replace "pywebviewtest test_js_api.py::test_concurrent ''${PYTEST_OPTIONS}" "# skip flaky test_js_api.py::test_concurrent"
-
-    patchShebangs run.sh
-    wrapQtApp run.sh
-
-    xvfb-run -s '-screen 0 800x600x24' ./run.sh
-    popd
+    # HOME and XDG directories are required for the tests
+    env \
+      HOME=$TMPDIR \
+      XDG_RUNTIME_DIR=$TMPDIR/xdg-runtime-dir \
+      xvfb-run -s '-screen 0 800x600x24' tests/run.sh
   '';
 
   pythonImportsCheck = [ "webview" ];
