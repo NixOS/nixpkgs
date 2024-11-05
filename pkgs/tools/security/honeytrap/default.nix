@@ -1,8 +1,8 @@
 { lib
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 }:
-buildGoModule {
+buildGo122Module {
   pname = "honeytrap";
   version = "unstable-2021-12-20";
 
