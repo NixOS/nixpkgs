@@ -485,9 +485,9 @@ in
       '';
     }) cfg.ensureUsers;
 
-    warnings = lib.optional (cfg.enableTCPIP == true)
-     "Behaviour of `services.postgresql.enableTCPIP` changed from binding on all interfaces to binding
-     on localhost in addition to the unix socket.";
+    warnings = lib.optional (cfg.enableTCPIP == true) ''
+      Behaviour of `services.postgresql.enableTCPIP` changed from binding on all interfaces to binding on localhost in addition to the unix socket.
+    '';
 
     services.postgresql.settings =
       {
