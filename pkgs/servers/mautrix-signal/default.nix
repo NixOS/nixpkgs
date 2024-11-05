@@ -6,6 +6,7 @@
   fetchpatch,
   olm,
   libsignal-ffi,
+  versionCheckHook,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
@@ -62,6 +63,10 @@ buildGoModule rec {
   postCheck = ''
     unset LD_LIBRARY_PATH
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
