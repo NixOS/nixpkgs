@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) invoiceplane;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted open source application for managing your invoices, clients and payments";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://www.invoiceplane.com";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ onny ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
