@@ -1,9 +1,7 @@
 # If the tests are broken, it's probably for one of two reasons:
 #
 # 1. The version of llvm used doesn't match the expectations of rustc and/or
-#    cargo-llvm-cov. This is relatively unlikely because we pull llvm out of
-#    rustc's attrset, so it *should* be the right version as long as this is the
-#    case.
+#    cargo-llvm-cov.
 # 2. Nixpkgs has changed its rust infrastructure in a way that causes
 #    cargo-llvm-cov to misbehave under test. It's likely that even though the
 #    tests are failing, cargo-llvm-cov will still function properly in actual
@@ -20,7 +18,7 @@
 , fetchurl
 , fetchFromGitHub
 , rustPlatform
-, rustc
+, llvmPackages_19
 , git
 }:
 
@@ -31,7 +29,7 @@ let
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  llvm = rustc.llvmPackages.llvm;
+  inherit (llvmPackages_19) llvm;
 
   # Download `Cargo.lock` from crates.io so we don't clutter up Nixpkgs
   cargoLock = fetchurl {
