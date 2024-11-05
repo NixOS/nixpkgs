@@ -6,6 +6,7 @@
   click,
   click-option-group,
   fetchPypi,
+  hatch-vcs,
   hatchling,
   hypothesis,
   jinja2,
@@ -15,7 +16,6 @@
   tomli,
   typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typed-settings";
   version = "24.5.0";
@@ -52,6 +52,8 @@ buildPythonPackage rec {
     jinja = [ jinja2 ];
     pydantic = [ pydantic ];
   };
+
+  nativeBuildInputs = [ hatch-vcs ];
 
   nativeCheckInputs = [
     hypothesis
