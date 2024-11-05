@@ -29,11 +29,6 @@ from typing import List, Tuple
 
 log = logging.getLogger("vim-updater")
 
-sh = logging.StreamHandler()
-formatter = logging.Formatter("%(name)s:%(levelname)s: %(message)s")
-sh.setFormatter(formatter)
-log.addHandler(sh)
-
 # Import plugin update library from maintainers/scripts/pluginupdate.py
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
 import importlib
@@ -58,7 +53,6 @@ class VimEditor(pluginupdate.Editor):
         self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str
     ):
         log.info("Generating nix code")
-        sorted_plugins = sorted(plugins, key=lambda v: v[0].name.lower())
         log.debug("Loading nvim-treesitter revision from nix...")
         nvim_treesitter_rev = pluginupdate.run_nix_expr(
             "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev",
@@ -95,7 +89,7 @@ class VimEditor(pluginupdate.Editor):
                 """
                 )
             )
-            for pdesc, plugin in sorted_plugins:
+            for pdesc, plugin in plugins:
                 content = self.plugin2nix(pdesc, plugin, _isNeovimPlugin(plugin))
                 f.write(content)
                 if (
