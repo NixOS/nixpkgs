@@ -12322,8 +12322,6 @@ with pkgs;
   somebar = callPackage ../applications/misc/somebar { };
 
   spacebar = callPackage ../os-specific/darwin/spacebar {
-    inherit (darwin.apple_sdk.frameworks)
-      Carbon Cocoa ScriptingBridge SkyLight;
   };
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser { };
