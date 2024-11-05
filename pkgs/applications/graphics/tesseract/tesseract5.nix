@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers
-, Accelerate, CoreGraphics, CoreVideo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  leptonica,
+  libarchive,
+  libpng,
+  libtiff,
+  icu,
+  pango,
+  opencl-headers,
+  Accelerate,
+  CoreGraphics,
+  CoreVideo,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,20 +35,22 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [
-    curl
-    leptonica
-    libarchive
-    libpng
-    libtiff
-    icu
-    pango
-    opencl-headers
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-    CoreGraphics
-    CoreVideo
-  ];
+  buildInputs =
+    [
+      curl
+      leptonica
+      libarchive
+      libpng
+      libtiff
+      icu
+      pango
+      opencl-headers
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+      CoreGraphics
+      CoreVideo
+    ];
 
   meta = {
     description = "OCR engine";
