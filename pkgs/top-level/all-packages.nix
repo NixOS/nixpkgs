@@ -28770,8 +28770,6 @@ with pkgs;
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
 
-  karlender = callPackage ../applications/office/karlender { };
-
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
     inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
     stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
