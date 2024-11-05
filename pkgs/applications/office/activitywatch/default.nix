@@ -142,6 +142,7 @@ rec {
       homepage = "https://github.com/ActivityWatch/aw-qt";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;
+      badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
 
