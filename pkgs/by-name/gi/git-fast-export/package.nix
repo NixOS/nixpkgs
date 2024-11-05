@@ -1,22 +1,41 @@
-{lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  mercurial,
+  makeWrapper,
+  nix-update-script,
+  fetchpatch,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fast-export";
-  version = "221024";
+  version = "231118";
 
   src = fetchFromGitHub {
     owner = "frej";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-re8iXM8s+TD35UGKalq2kVn8fx68fsnUC7Yo+/DQ9SM=";
+    repo = "fast-export";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JUy0t2yzd4bI7WPGG1E8L1topLfR5leV/WTU+u0bCyM=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/frej/fast-export/commit/a3d0562737e1e711659e03264e45cb47a5a2f46d.patch?full_index=1";
+      hash = "sha256-vZOHnb5lXO22ElCK4oWQKCcPIqRyZV5axWfZqa84V1Y=";
+    })
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [mercurial.python mercurial];
+  buildInputs = [
+    mercurial.python
+    mercurial
+  ];
 
   installPhase = ''
     binPath=$out/bin
-    libexecPath=$out/libexec/${pname}
+    libexecPath=$out/libexec/fast-export
     sitepackagesPath=$out/${mercurial.python.sitePackages}
     mkdir -p $binPath $libexecPath $sitepackagesPath
 
@@ -57,11 +76,13 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Import mercurial into git";
     homepage = "https://repo.or.cz/w/fast-export.git";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.koral ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.koral ];
+    platforms = lib.platforms.unix;
   };
-}
+})
