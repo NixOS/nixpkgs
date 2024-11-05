@@ -3121,8 +3121,6 @@ with pkgs;
 
   awsume = python3Packages.callPackage ../tools/admin/awsume { };
 
-  aws-assume-role = callPackage ../tools/admin/aws-assume-role { };
-
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
 
   aws-mfa = python3Packages.callPackage ../tools/admin/aws-mfa { };
