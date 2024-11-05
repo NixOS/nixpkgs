@@ -30,8 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Self-hosted open source application for managing your invoices, clients and payments";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/InvoicePlane/InvoicePlane/releases/tag/v${version}";
     homepage = "https://www.invoiceplane.com";
+    license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ onny ];
   };
