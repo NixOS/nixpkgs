@@ -11,7 +11,6 @@
 , libglvnd
 , darwin
 , apple-sdk_15
-, apple-sdk_12
 , darwinMinVersionHook
 , buildPackages
 , python3
@@ -32,11 +31,10 @@ let
       });
 
       # Per <https://doc.qt.io/qt-6/macos.html#supported-versions>.
-      # This should reflect the lowest “Target Platform” and the
-      # highest “Build Environment”.
-      apple-sdk_qt = apple-sdk_15;
-      darwinDeploymentTargetDeps = [
-        apple-sdk_12
+      # This should reflect the highest “Build Environment” and the
+      # lowest “Target Platform”.
+      darwinVersionInputs = [
+        apple-sdk_15
         (darwinMinVersionHook "12.0")
       ];
     in
@@ -45,12 +43,12 @@ let
       inherit callPackage srcs;
 
       qtModule = callPackage ./qtModule.nix {
-        inherit apple-sdk_qt;
+        inherit darwinVersionInputs;
       };
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
-        inherit apple-sdk_qt darwinDeploymentTargetDeps;
+        inherit darwinVersionInputs;
         inherit (srcs.qtbase) src version;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
