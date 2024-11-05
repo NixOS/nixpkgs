@@ -19,7 +19,10 @@ bundlerEnv {
     homepage = "https://github.com/stelligent/cfn_nag";
     mainProgram = "cfn_nag";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [
+      momeemt
+      mathstlouis
+    ];
     platforms = lib.platforms.unix;
   };
 }
