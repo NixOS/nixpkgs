@@ -36,5 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/zeek/zeekscript/blob/v${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab tobim ];
+    # Incompatible with tree-sitter > 0.21.
+    broken = true;
   };
 }

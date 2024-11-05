@@ -18851,4 +18851,16 @@ final: prev:
     };
     meta.homepage = "https://github.com/jghauser/follow-md-links.nvim/";
   };
+
+  avante-nvim = buildVimPlugin {
+    pname = "avante.nvim";
+    version = "2024-11-04";
+    src = fetchFromGitHub {
+      owner = "yetone";
+      repo = "avante.nvim";
+      rev = "5db2a0f92ff0ac4cfde27266cbc91eabdc2bb7f5";
+      sha256 = "sha256-bLHKJfmn8a57U3WRrvib7yWUgO8PI1V0H77Q+xsGlfM=";
+    };
+    meta.homepage = "https://github.com/yetone/avante.nvim";
+  };
 }
