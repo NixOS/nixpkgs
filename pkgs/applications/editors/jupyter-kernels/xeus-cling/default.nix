@@ -40,11 +40,11 @@ let
         language = "cpp";
         logo32 = fetchurl {
           url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/32px-ISO_C%2B%2B_Logo.svg.png";
-          hash = "sha256-cr0TB8/j2mkcFhfCkz9F7ZANOuTlWA2OcWtDcXyOjHw=";
+          hash = "sha256-+TKtwXybKw4oAHfgOsDxvL4ucItPguF76HJHdFTd3s0=";
         };
         logo64 = fetchurl {
           url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/64px-ISO_C%2B%2B_Logo.svg.png";
-          hash = "sha256-nZtJ4bR7GmQttvqEJC9KejOxphrjjxT36L9yOIITFLk=";
+          hash = "sha256-7SjOcSaSPUHIKnjBxMdn+KSjviL69IXhX7eJsacYeGE=";
         };
       };
 
