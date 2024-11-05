@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGo122Module, fetchFromGitHub, nixosTests }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "dnsmasq_exporter";
   version = "0.3.0";
 
