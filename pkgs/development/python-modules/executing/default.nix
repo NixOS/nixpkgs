@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,13 +28,14 @@ buildPythonPackage rec {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PBvfkv9GQ5Vj5I5SygtmHXtqqHMJ4XgNV1/I+lSU0/U=";
+    hash = "sha256-epgKMPOvPdkpRp0n5A22gZ5DeXLyI60bqzLTx5JFlLk=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.12") [
-    (fetchpatch { # https://github.com/alexmojaki/executing/pull/83
-      url = "https://github.com/alexmojaki/executing/commit/230ef110f004a8cecf03e983561f26a5fecede8f.diff";
-      hash = "sha256-McMUIbOWozoDDQSfrJqcxBjuAZ/rrHePfqp5+AVUKI4=";
+  patches = [
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/alexmojaki/executing/commit/3f11fdcd7a017fbdca8a3a9de23dab18d3ba2100.patch";
+      hash = "sha256-ZnTO9lT+bj4nekPx4D0DxjhJOCkZn6lDm5xdLrziB+4=";
     })
   ];
 
