@@ -39,6 +39,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "irc" ];
 
   meta = with lib; {
