@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     description = "Recovers weak LEAP and PPTP passwords";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pyrox0 ];
+    platforms = lib.platforms.linux;
   };
 }
