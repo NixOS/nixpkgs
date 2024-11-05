@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.18.4";
+  version = "1.18.5";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -22,7 +22,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     rev = "refs/tags/ent-changelog-${version}";
-    hash = "sha256-LoJFRVzhPBAhVfCuApCw3N1ULQ1OO2oAcKNG+1GLPZw=";
+    hash = "sha256-Q2KMQWuBEzEdSfzjD2JUOqTeSu6qJbu3mHwweaSKOio=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -32,7 +32,7 @@ buildGoModule rec {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-hdPeqYnTUO+WjVt1a9NIwvKOwF7QcvCqaA2mCdLzEm8=";
+  vendorHash = "sha256-NhpCUbSw2yGwTl5XgKjRrIhP3vihvxKMHZpw3/lIXdo=";
 
   postPatch = ''
     # override dev version from release tag
