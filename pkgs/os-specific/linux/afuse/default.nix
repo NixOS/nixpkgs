@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed
-    substituteInPlace configure.ac --replace \
+    substituteInPlace configure.ac --replace-fail \
       'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' \
       ""
   '';
