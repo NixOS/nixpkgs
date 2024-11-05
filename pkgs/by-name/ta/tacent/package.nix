@@ -34,5 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ PopeRigby ];
     platforms = lib.platforms.linux;
   };
-
 }
