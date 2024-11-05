@@ -36662,13 +36662,13 @@ with pkgs;
 
   factorio_1-demo = factorio-demo;
 
-  factorio_2 = factorio.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2 = factorio.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-experimental = factorio-experimental.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-experimental = factorio-experimental.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-headless = factorio-headless.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-headless = factorio-headless.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
-  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../games/factorio/versions.json; };
+  factorio_2-headless-experimental = factorio-headless-experimental.override { versionsJson = ../by-name/fa/factorio/versions.json; };
 
   # there is no factorio_2-demo
 
