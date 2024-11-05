@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     "CCOMP=${stdenv.cc.targetPrefix}cc"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
   setupHook =
     let
       hookFiles = [ ./setup-hook.sh ] ++ lib.optional withContrib ./setup-contrib-hook.sh;
