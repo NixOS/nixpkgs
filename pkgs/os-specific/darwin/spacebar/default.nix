@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  Carbon,
-  Cocoa,
-  ScriptingBridge,
-  SkyLight,
+  apple-sdk_12,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
+    apple-sdk_12
   ];
 
   installPhase = ''
