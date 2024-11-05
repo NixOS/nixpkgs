@@ -1,19 +1,19 @@
 {
-  lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zlib
-, altgraph
-, packaging
-, pyinstaller-hooks-contrib
-, testers
-, pyinstaller
-, glibc
-, binutils
-, macholib
-, installShellFiles
-, stdenv
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  zlib,
+  altgraph,
+  packaging,
+  pyinstaller-hooks-contrib,
+  testers,
+  pyinstaller,
+  glibc,
+  binutils,
+  macholib,
+  installShellFiles,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-FDhA+AVv97kQv48W9s2SzBCmwmgLt20KJdVY1UPSEnA=";
   };
-
 
   build-system = [ setuptools ];
 
@@ -41,7 +40,13 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix" "PATH" ":"  (lib.makeBinPath [ glibc binutils ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      glibc
+      binutils
+    ])
   ];
 
   postInstall = ''
