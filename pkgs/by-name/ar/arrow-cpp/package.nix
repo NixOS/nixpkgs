@@ -51,7 +51,7 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
   enableS3 ? true,
   enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
