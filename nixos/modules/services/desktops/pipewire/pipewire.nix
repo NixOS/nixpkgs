@@ -332,7 +332,7 @@ in {
       {
         # JACK intentionally not checked, as PW-on-JACK setups are a thing that some people may want
         assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
-        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
+        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Either set `services.pipewire.audio.enable` to true to enable audio support, or set both `services.pipewire.pulse.enable` and `services.pipewire.alsa.enable` to false to use pipewire exclusively for the compositor.";
       }
       {
         assertion = length
