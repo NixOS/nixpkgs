@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DSYSTEMD=1" ];
 
-  postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/";
+  postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/bootstrap.json";
 
   installCheckPhase = "$out/bin/toxvpn -h";
   doInstallCheck = true;
