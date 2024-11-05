@@ -10,17 +10,20 @@
   giflib,
   apple-sdk_11,
   darwinMinVersionHook,
+  jellyfin,
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
   version = "10.10.1";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    hash = "sha256-+f+chR00eDCVZvAGNDB61c0htsVvqFK62oZorW3Qdsg=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-+f+chR00eDCVZvAGNDB61c0htsVvqFK62oZorW3Qdsg=";
+    };
 
   postPatch = ''
     substituteInPlace webpack.common.js \
