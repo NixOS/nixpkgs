@@ -60,7 +60,7 @@ in
               # Prior to NixOS 24.11, this was set to true by default, while upstream defaulted to false.
               # Keep the option unset to follow upstream defaults
               default = versionOlder config.system.stateVersion "24.11";
-              defaultText = literalExpression "versionOlder config.system.stateVersion \"24.11\"";
+              defaultText = literalExpression "lib.versionOlder config.system.stateVersion \"24.11\"";
               description = ''
                 Allow dockerd to be restarted without affecting running container.
                 This option is incompatible with docker swarm.
