@@ -29392,8 +29392,6 @@ with pkgs;
     withPortAudio = stdenv.hostPlatform.isDarwin;
   };
 
-  limesctl = callPackage ../applications/misc/limesctl { };
-
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
