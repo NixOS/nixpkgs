@@ -123,6 +123,8 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aggregate6 = callPackage ../development/python-modules/aggregate6 { };
+
   ago = callPackage ../development/python-modules/ago { };
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
@@ -5117,6 +5119,8 @@ self: super: with self; {
 
   git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
+  git-dummy = callPackage ../development/python-modules/git-dummy { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   githubkit = callPackage ../development/python-modules/githubkit { };
@@ -9420,6 +9424,8 @@ self: super: with self; {
     pythonPackages = self;
   });
 
+  opencv-python = callPackage ../development/python-modules/opencv-python { };
+
   opencv-python-headless = callPackage ../development/python-modules/opencv-python-headless { };
 
   openerz-api = callPackage ../development/python-modules/openerz-api { };
@@ -13654,8 +13660,6 @@ self: super: with self; {
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
 
   replicate = callPackage ../development/python-modules/replicate { };
-
-  repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 

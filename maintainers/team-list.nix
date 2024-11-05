@@ -465,6 +465,7 @@ with lib.maintainers;
     members = [
       das_j
       conni2461
+      helsinki-Jo
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
     shortName = "Helsinki Systems employees";
@@ -845,9 +846,14 @@ with lib.maintainers;
   };
 
   postgres = {
-    members = [ thoughtpolice ];
+    members = [
+      thoughtpolice
+      ma27
+      wolfgangwalther
+    ];
     scope = "Maintain the PostgreSQL package and plugins along with the NixOS module.";
     shortName = "PostgreSQL";
+    enableFeatureFreezePing = true;
   };
 
   python = {

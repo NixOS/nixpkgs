@@ -9,7 +9,7 @@
   libjpeg,
   openssl,
   libopus,
-  ffmpeg,
+  ffmpeg_6,
   openh264,
   crc32c,
   libvpx,
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       libjpeg
       openssl
       libopus
-      ffmpeg
+      ffmpeg_6
       openh264
       crc32c
       libvpx

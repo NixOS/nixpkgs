@@ -597,8 +597,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  edge-runtime = callPackage ../development/web/edge-runtime { };
-
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
   eludris = callPackage ../tools/misc/eludris {
@@ -2791,9 +2789,7 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  alacritty = callPackage ../applications/terminal-emulators/alacritty {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
-  };
+  alacritty = callPackage ../applications/terminal-emulators/alacritty { };
 
   blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal { };
 
@@ -5260,8 +5256,6 @@ with pkgs;
   jwt-hack = callPackage ../tools/security/jwt-hack { } ;
 
   jwx = callPackage ../tools/security/jwx { } ;
-
-  kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   karma = callPackage ../servers/monitoring/karma { };
 
@@ -13611,11 +13605,11 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish74 varnish75;
+    varnish60 varnish75;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish74Packages varnish75Packages;
+    varnish60Packages varnish75Packages;
 
-  varnishPackages = varnish74Packages;
+  varnishPackages = varnish75Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
@@ -17885,7 +17879,6 @@ with pkgs;
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
-  gn1924 = callPackage ../development/tools/build-managers/gn/rev1924.nix { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
@@ -23201,8 +23194,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
-  intel-vaapi-driver = callPackage ../development/libraries/intel-vaapi-driver { };
-
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
   libva-vdpau-driver = callPackage ../development/libraries/libva-vdpau-driver { };
@@ -24972,8 +24963,6 @@ with pkgs;
   seyren = callPackage ../servers/monitoring/seyren { };
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
-
-  sensu = callPackage ../servers/monitoring/sensu { };
 
   inherit (callPackages ../servers/monitoring/sensu-go { })
     sensu-go-agent
@@ -30202,8 +30191,6 @@ with pkgs;
 
   kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
-  kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
-
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krabby = callPackage ../applications/misc/krabby { };
@@ -32588,6 +32575,13 @@ with pkgs;
   thunderbird-unwrapped = thunderbirdPackages.thunderbird;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
 
+  thunderbird-latest-unwrapped = thunderbirdPackages.thunderbird-latest;
+  thunderbird-latest = wrapThunderbird thunderbird-latest-unwrapped { };
+
+  thunderbird-esr-unwrapped = thunderbirdPackages.thunderbird-esr;
+  thunderbird-esr = wrapThunderbird thunderbird-esr-unwrapped { };
+
+  thunderbird-128-unwrapped = thunderbirdPackages.thunderbird-128;
   thunderbird-128 = wrapThunderbird thunderbirdPackages.thunderbird-128 { };
 
   thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
@@ -36760,8 +36754,6 @@ with pkgs;
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
-
-  dbus-map = callPackage ../tools/misc/dbus-map { };
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn { };
 
