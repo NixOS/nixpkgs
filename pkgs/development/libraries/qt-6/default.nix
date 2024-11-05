@@ -7,6 +7,7 @@
 , fetchpatch2
 , makeSetupHook
 , makeWrapper
+, runCommand
 , gst_all_1
 , libglvnd
 , darwin
@@ -37,6 +38,15 @@ let
         apple-sdk_15
         (darwinMinVersionHook "12.0")
       ];
+
+      onlyPluginsAndQml = drv: let
+        drv' = drv.__spliced.targetTarget or drv;
+        inherit (self.qtbase) qtPluginPrefix qtQmlPrefix;
+      in (runCommand "${drv'.name}-only-plugins-qml" { } ''
+          mkdir -p $(dirname "$out/${qtPluginPrefix}")
+          test -d "${drv'}/${qtPluginPrefix}" && ln -s "${drv'}/${qtPluginPrefix}" "$out/${qtPluginPrefix}" || true
+          test -d "${drv'}/${qtQmlPrefix}" && ln -s "${drv'}/${qtQmlPrefix}" "$out/${qtQmlPrefix}" || true
+      '');
     in
     {
 
@@ -164,19 +174,27 @@ let
       qtwebview = callPackage ./modules/qtwebview.nix { };
 
       wrapQtAppsHook = callPackage
-        ({ makeBinaryWrapper, qtwayland }: makeSetupHook
+        ({ makeBinaryWrapper, qtwayland, qtbase }:
+          makeSetupHook
           {
             name = "wrap-qt6-apps-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
-            depsTargetTargetPropagated = lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [ qtwayland.out ];
+            depsTargetTargetPropagated = [
+              (onlyPluginsAndQml qtbase)
+            ] ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+              (onlyPluginsAndQml qtwayland)
+            ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
       wrapQtAppsNoGuiHook = callPackage
-        ({ makeBinaryWrapper }: makeSetupHook
+        ({ makeBinaryWrapper, qtbase }: makeSetupHook
           {
             name = "wrap-qt6-apps-no-gui-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
+            depsTargetTargetPropagated = [
+              (onlyPluginsAndQml qtbase)
+            ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
