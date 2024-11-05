@@ -38429,4 +38429,8 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  hof = callPackage ../by-name/ho/hof/package.nix {
+    buildGoModule = buildGo122Module;
+  };
 }
