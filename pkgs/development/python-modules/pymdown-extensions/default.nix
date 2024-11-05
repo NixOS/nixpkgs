@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  python,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
@@ -70,6 +71,8 @@ buildPythonPackage rec {
   disabledTests = [
     # test artifact mismatch
     "test_toc_tokens"
+  ] ++ lib.optionals python.isPy312 [
+    "test_windows_root_conversion"
   ];
 
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
