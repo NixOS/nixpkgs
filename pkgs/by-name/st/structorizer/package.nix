@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-22";
+  version = "3.32-23";
 
   desktopItems = [
     (makeDesktopItem {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-rUeb7V3l9nvmw+EuOEksHB+r6TjsLJHjRpHDQKpno1Q=";
+    hash = "sha256-fqvQH4DRl+R0laGOnfWgFz67JSAdUzrws4k7gmQ3S7A=";
   };
 
   patches = [ ./makeStructorizer.patch ./makeBigJar.patch ];
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
 
     install -D ${pname}.jar -t $out/share/java/
       makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
-      --add-flags "-jar $out/share/java/${pname}.jar"
+      --add-flags "-jar $out/share/java/${pname}.jar" \
+      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd'
 
     cat << EOF > $out/share/mime/packages/structorizer.xml
     <?xml version="1.0" encoding="UTF-8"?>
