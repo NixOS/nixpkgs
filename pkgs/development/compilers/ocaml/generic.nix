@@ -105,7 +105,9 @@ stdenv.mkDerivation (args // {
   # sequential order among them as a single rule.
   makefile = ./Makefile.nixpkgs;
   buildFlags = if useNativeCompilers
-    then ["nixpkgs_world_bootstrap_world_opt"]
+    then [(if lib.versionOlder version "5.2"
+      then "nixpkgs_world_bootstrap_world_opt"
+      else "defaultentry")]
     else ["nixpkgs_world"];
   buildInputs = optional (lib.versionOlder version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
