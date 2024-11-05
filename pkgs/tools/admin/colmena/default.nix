@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, makeBinaryWrapper, nix-eval-jobs, nixVersions
+{ stdenv, lib, fetchpatch, rustPlatform, fetchFromGitHub, installShellFiles, makeBinaryWrapper, nix-eval-jobs, nix
 , colmena, testers }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,6 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
+  patches = [
+    # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/236
+    (fetchpatch {
+      url = "https://github.com/zhaofengli/colmena/commit/36382ee2bef95983848435065f7422500c7923a8.patch";
+      sha256 = "sha256-5cQ2u3eTzhzjPN+rc6xWIskHNtheVXXvlSeJ1G/lz+E=";
+    })
+  ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd colmena \
       --bash <($out/bin/colmena gen-completions bash) \
@@ -27,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/colmena gen-completions fish)
 
     wrapProgram $out/bin/colmena \
-      --prefix PATH ":" "${lib.makeBinPath [ nixVersions.nix_2_18 ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ nix ]}"
   '';
 
   # Recursive Nix is not stable yet
