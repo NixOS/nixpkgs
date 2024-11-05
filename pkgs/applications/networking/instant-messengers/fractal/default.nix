@@ -22,6 +22,7 @@
 , sqlite
 , xdg-desktop-portal
 , libseccomp
+, glycin-loaders
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,14 @@ stdenv.mkDerivation rec {
       "ruma-0.10.1" = "sha256-6U2LKMYyY7SLOh2jJcVuDBsfcidNoia1XU+JsmhMHGY=";
     };
   };
+
+  # Dirty approach to add patches after cargoSetupPostUnpackHook
+  # We should eventually use a cargo vendor patch hook instead
+  preConfigure = ''
+    pushd ../$(stripHash $cargoDeps)/glycin-2.*
+      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    popd
+  '';
 
   nativeBuildInputs = [
     glib
@@ -76,6 +85,12 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     gst-plugins-good
   ]);
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
