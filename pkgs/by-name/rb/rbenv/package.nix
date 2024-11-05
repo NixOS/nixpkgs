@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rbenv";
-  version = "1.2.0";
+  version = "1.3.0";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rbenv";
     repo = "rbenv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-m/Yy5EK8pLTBFcsgKCrNvQrPFFIlYklXXZbjN4Nmm9c=";
+    sha256 = "sha256-AO0z9QtCGHwUr2ji28sbvQmCBDIfjAqbiac+HTH3N7Q=";
   };
 
   postPatch = ''
@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv libexec $out
     ln -s $out/libexec/rbenv $out/bin/rbenv
 
-    installShellCompletion completions/rbenv.{bash,zsh}
+    installShellCompletion --zsh completions/_rbenv
+    installShellCompletion --bash completions/rbenv.bash
   '';
 
   meta = {
