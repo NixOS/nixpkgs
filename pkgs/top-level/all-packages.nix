@@ -597,8 +597,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  edge-runtime = callPackage ../development/web/edge-runtime { };
-
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
   eludris = callPackage ../tools/misc/eludris {
@@ -2791,9 +2789,7 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  alacritty = callPackage ../applications/terminal-emulators/alacritty {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
-  };
+  alacritty = callPackage ../applications/terminal-emulators/alacritty { };
 
   blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal { };
 
@@ -5260,8 +5256,6 @@ with pkgs;
   jwt-hack = callPackage ../tools/security/jwt-hack { } ;
 
   jwx = callPackage ../tools/security/jwx { } ;
-
-  kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   karma = callPackage ../servers/monitoring/karma { };
 
@@ -17882,7 +17876,6 @@ with pkgs;
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
-  gn1924 = callPackage ../development/tools/build-managers/gn/rev1924.nix { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
     pythonPackages = python3Packages;
@@ -30194,8 +30187,6 @@ with pkgs;
   kondo = callPackage ../applications/misc/kondo { };
 
   kotatogram-desktop = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
-
-  kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 

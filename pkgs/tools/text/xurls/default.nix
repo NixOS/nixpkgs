@@ -1,19 +1,26 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "xurls";
-  version = "2.5.0";
+  version = "2.5.0-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "xurls";
-    rev = "v${version}";
-    sha256 = "sha256-9hPXZ/t15+LG9fji1gyeWhUrYOr6eGyKYg3a1SmHJpQ=";
+    rev = "7c973a26c7bd6ecd8d86bb435d93ff98df2710fa";
+    sha256 = "sha256-jZmlM9rs+N0ks7msmb3eJ96aTYp0qUo/1bgLAgHnvSo=";
   };
 
-  vendorHash = "sha256-eVK7qU+NWsarBsEpg6aGow/urmhIpU3Z9RwoTvSymXo=";
+  vendorHash = "sha256-W6Z1E6a+qBdOuyHoiT6YA+CAJHBJ0FTYH8AntiKvVBY=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Extract urls from text";
