@@ -8,6 +8,7 @@
   wrapGAppsHook4,
   glib,
   tzdata,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,12 +54,14 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 target/gra-gen/data/codes.loers.Karlender.appdata.xml -t $out/share/metainfo/
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Mobile-friendly GTK calendar application";
     mainProgram = "karlender";
     homepage = "https://gitlab.com/floers/karlender";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ chuangzhu ];
+    platforms = lib.platforms.linux;
   };
 }
