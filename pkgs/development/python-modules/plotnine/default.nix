@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4x7euxf+G/HaqC3LVD7TCQEVcihdb/FSMqRvMWAqhgo=";
+    hash = "sha256-K2Feqg3UiffZ4izYzrCW+iu7dH61sItOUVtwvzTMth0=";
   };
 
   postPatch = ''
