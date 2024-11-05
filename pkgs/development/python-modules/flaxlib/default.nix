@@ -52,6 +52,10 @@ buildPythonPackage rec {
   # This package does not have tests (yet ?)
   doCheck = false;
 
+  passthru = {
+    inherit (flax) updateScript;
+  };
+
   meta = {
     description = "Rust library used internally by flax";
     homepage = "https://github.com/google/flax/tree/main/flaxlib";

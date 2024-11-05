@@ -31,6 +31,9 @@
 
   # optional-dependencies
   matplotlib,
+
+  writeScript,
+  tomlq,
 }:
 
 buildPythonPackage rec {
@@ -111,6 +114,14 @@ buildPythonPackage rec {
     "test_vmap_and_cond_passthrough" # ValueError: vmap has mapped output but out_axes is None
     "test_vmap_and_cond_passthrough_error" # AssertionError: "at vmap.*'broadcast'.*got axis spec ...
   ];
+
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      nix-update flax # does not --build by default
+      nix-build . -A flax.src # src is essentially a passthru
+      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+    '';
+  };
 
   meta = {
     description = "Neural network library for JAX";
