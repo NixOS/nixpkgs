@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   rustPlatform,
@@ -83,6 +84,7 @@ rec {
       homepage = "https://github.com/ActivityWatch/aw-watcher-window";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;
+      badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
 
