@@ -46,7 +46,7 @@ maven.buildMavenPackage rec {
     which
   ];
 
-  buildPhase = ''
+  preBuild = ''
     export PATH=$(lib.makeBinPath [ postgresql ]):$PATH
   '';
 
