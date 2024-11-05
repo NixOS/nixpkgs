@@ -32,7 +32,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
+        url = "https://archive.mariadb.org/mariadb-${version}/source/mariadb-${version}.tar.gz";
         inherit hash;
       };
 
@@ -244,26 +244,26 @@ in
     # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.26";
-      hash = "sha256-3V+ZodMK5HNl/Bix3u/23AqzishOfZ/ZyMBP9rAZYfE=";
+      version = "10.5.27";
+      hash = "sha256-76ZPpfczuCKrGmeV4evBecFgwIaQ7Ncduh6w9hru3RQ=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
-      version = "10.6.19";
-      hash = "sha256-vOyw/3t5pBNEc2+plHEHh8FVFtUet3FfJ4w/D8t+hwM=";
+      version = "10.6.20";
+      hash = "sha256-R/BavH2+uz8msx51AisbOWnbvEdSxK5wH4kgpgSJbUE=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
       # Supported until 2028-02-16
-      version = "10.11.9";
-      hash = "sha256-CgAYCGTNAWGHyYb6q4AQ3iOhF7mnX5HWRWQh+JTkjSA=";
+      version = "10.11.10";
+      hash = "sha256-sGp0ZQuDoWqpqwmJhEgrAo51sABnSxH/KIdyxhmm8CI=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_114 = self.callPackage generic {
       # Supported until 2029-05-29
-      version = "11.4.3";
-      hash = "sha256-bwAXuZAbsYl94O7SHK75/6nWbvVZNFoNim8BEwhBPs4=";
+      version = "11.4.4";
+      hash = "sha256-lvvS5uk/t+izc+6nXYW2/qV8DhEaAgkMu+/tUlmdx3s=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
   }
