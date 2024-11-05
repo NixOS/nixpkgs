@@ -72,9 +72,8 @@ in
               CN = "Test Root CA";
             };
           };
-          defaultAuthority.local = {
-            root = "testRoot";
-          };
+          defaultAuthority = "local";
+          specifications.testCert.authority.local.root = "testRoot";
         };
       };
   };
@@ -90,7 +89,7 @@ in
           authorities.vault = {
             server.enable = true;
           };
-          defaultAuthority.vault = config.security.certificates.authorities.vault.settings;
+          defaultAuthority = "vault";
         };
       };
   };

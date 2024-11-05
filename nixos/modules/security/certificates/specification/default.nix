@@ -1,9 +1,8 @@
 { lib
+, defaultAuthority
 , config
 , pkgs
 , name
-, authorities
-, defaultAuthority
 , ...
 }:
 let
@@ -19,7 +18,6 @@ let
     mkOption
     types
     ;
-  lib-cert = import ../lib.nix { inherit lib; };
 in
 {
   imports = [
@@ -28,6 +26,7 @@ in
   ];
 
   options = {
+    inherit name;
     service = mkOption {
       type = types.str;
       description = ''
@@ -90,30 +89,21 @@ in
       };
 
     authority = mkOption {
-      type = types.attrTag authorities;
+      type = types.attrTag { };
       description = ''
         Authority used to provide the certificate.
       '';
+      default = {
+        "${defaultAuthority}" = { };
+      };
       defaultText = lib.literalExpression "config.security.certificates.defaultAuthority";
-      default = defaultAuthority;
     };
     output = mkOption {
       type = types.submodule {
         options = {
           openssl = {
             config = mkOption {
-              type = with types; attrsOf (
-                attrsOf (oneOf [
-                  bool
-                  number
-                  str
-                  (listOf (oneOf [
-                    bool
-                    number
-                    str
-                  ]))
-                ])
-              );
+              type = lib.cert.openssl.config.type;
               description = ''
                 The resultant CSR structures as a OpenSSL config file. suitable for
                 passing to `openssl req`.
@@ -172,6 +162,19 @@ in
                 copies those file to their destinations ensuring correct permissions.
               '';
             };
+
+            mkCertificate = mkOption {
+              type = types.pathInStore;
+              description = ''
+                A runnable that will generate and sign (by the appropriate authority)
+                the certificate then install the files as needed.
+                This option should be set by the specified authority module.
+                ::: {.note}
+                The script will be executed within it's own private temporary
+                directory. Any files left in that directory will NOT be persisted
+                :::
+              '';
+            };
           };
         };
       };
@@ -186,7 +189,7 @@ in
   config =
     let
       out = config.output;
-      openssl = cmd: args: "${pkgs.openssl}/bin/${lib-cert.openssl.toShell cmd args}";
+      openssl = cmd: args: "${pkgs.openssl}/bin/${lib.cert.openssl.toShell cmd args}";
       mkCertScript = subName: runtimeInputs: text:
         let
           fullName = "certificate-${name}-${subName}";
@@ -198,7 +201,6 @@ in
         "${app}/bin/${fullName}";
     in
     {
-      _module.args = { inherit lib-cert; };
       output = {
         openssl = {
           config = mkMerge [
@@ -235,7 +237,7 @@ in
           ];
 
           configFile = pkgs.writeText "certificate-${name}-openssl.cnf" (
-            lib-cert.openssl.toConfigFile { } out.openssl.config
+            lib.cert.openssl.config.generate out.openssl.config
           );
         };
         scripts = {

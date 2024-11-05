@@ -1,5 +1,5 @@
 # Helper functions for use around the security.certificates module
-{ lib }:
+{ lib, pkgs }:
 let
   inherit (lib)
     any
@@ -56,10 +56,12 @@ in
     toMultiValLong =
       name: list:
       listToAttrs (
-        imap1 (i: val: {
-          name = "${name}.${toString i}";
-          value = toString val;
-        }) list
+        imap1
+          (i: val: {
+            name = "${name}.${toString i}";
+            value = toString val;
+          })
+          list
       );
 
     /**
@@ -97,27 +99,27 @@ in
       toMultiValLong
       :::
 
-      # Inputs
-      Options
-      : Empty set, for future use
-
       # Type
       ```
-      toConfigFile :: AttrSet -> AttrSet
+      config :: { type, generate }
       ```
     */
-    toConfigFile =
-      with lib.generators;
-      { }:
-      toINI {
-        mkKeyValue = mkKeyValueDefault {
-          mkValueString =
-            v:
-            if (lib.isList v) then
-              toMultiValShort (map (mkValueStringDefault { }) v)
-            else
-              mkValueStringDefault { } v;
-        } "=";
+    config =
+      let
+        inherit (lib.generators)
+          mkKeyValueDefault
+          mkValueStringDefault;
+      in
+      pkgs.formats.ini {
+        mkKeyValue = mkKeyValueDefault
+          {
+            mkValueString =
+              v:
+              if (lib.isList v) then
+                toMultiValShort (map (mkValueStringDefault { }) v)
+              else
+                mkValueStringDefault { } v;
+          } "=";
       };
     /**
       OpenSSL shell command
