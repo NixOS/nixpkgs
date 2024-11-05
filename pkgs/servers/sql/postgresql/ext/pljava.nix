@@ -72,6 +72,7 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     description = "PL/Java extension for PostgreSQL";
+    changelog = "https://github.com/tada/pljava/releases/tag/V${lib.replaceStrings [ "." ] [ "_" ] version}";
     homepage = "https://github.com/tada/pljava";
     license = licenses.bsd3;
     platforms = postgresql.meta.platforms;
