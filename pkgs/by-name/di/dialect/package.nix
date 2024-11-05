@@ -1,34 +1,35 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook4
-, python3
-, blueprint-compiler
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk4
-, gobject-introspection
-, gst_all_1
-, libsoup_3
-, glib-networking
-, libadwaita
-, libsecret
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  python3,
+  blueprint-compiler,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk4,
+  gobject-introspection,
+  gst_all_1,
+  libsoup_3,
+  glib-networking,
+  libadwaita,
+  libsecret,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.4.2";
+  version = "2.5.0";
   pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "dialect-app";
     repo = "dialect";
-    rev = version;
+    rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-DAhzvia5ut806rTc2iMuMrVKyYBSaAiMyC4rEOyU4x0=";
+    hash = "sha256-TWXJlzuSBy+Ij3s0KS02bh8vdXP10hQpgdz4QMTLf/Q=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     libsecret
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dbus-python
     gtts
     pygobject3
