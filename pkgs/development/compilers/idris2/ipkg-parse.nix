@@ -1,71 +1,5 @@
 { lib }:
 let
-  # Test 1
-  test1_text = ''
-    package micropack
-
-    version = 0.0.1
-
-    authors = "Stefan Höck"
-
-    brief   = "Minimalistic installer for pack"
-
-    langversion >= 0.6.0
-
-    depends = base >= 0.6.0
-            , elab-util
-
-            , idris2
-            , parser-toml
-
-    main       = MicroPack
-    executable = micropack
-    modules = Pack.CmdLn
-        , Pack.CmdLn.Completion
-        , Pack.CmdLn.Types
-
-        , Pack.Config
-
-    sourcedir  = "src"
-  '';
-
-  # Test 1
-  test2_text = ''
-    package pack
-
-    version = 0.0.1
-
-    authors = "Stefan Höck"
-
-    brief   = "A package manager for Idris2 with curated package collections"
-
-    langversion >= 0.6.0
-
-    -- script to run before building
-    prebuild = "bash version.sh"
-
-    postbuild = "bash restore.sh"
-
-    depends = base >= 0.6.0
-            , elab-util
-
-            , idris2
-            , parser-toml
-
-    modules = Pack.CmdLn
-            , Pack.CmdLn.Completion
-            , Pack.CmdLn.Opts
-            , Pack.CmdLn.Types
-
-            , Pack.Config
-
-    main       = Main
-
-    executable = pack
-
-    sourcedir  = "src"
-  '';
-
   startsWith =
     prefix: str:
     let
@@ -73,7 +7,10 @@ let
     in
     builtins.substring 0 prefixLength str == prefix;
 
-  parseToLines =
+  # just a helper function that will
+  # 1. remove comments
+  # 2. if field is a multiline (like "depends" field) - will join it's lines
+  parseIpkgToOneLineFields =
     text:
     let
       splitLines = lib.splitString "\n" text;
@@ -101,7 +38,7 @@ let
   # "> 0.6.0 && < 0.5.0" -> {"lowerInclusive": false,"lowerBound": "0.6.0","upperInclusive": false,"upperBound": "0.5.0"}
   # "> 0.6.0" -> {"lowerInclusive": false,"lowerBound": "0.6.0","upperInclusive": true,"upperBound": "*"}
   # "> 0.6.0 && < 0.7.0" -> {"lowerInclusive": false,"lowerBound": "0.6.0","upperInclusive": false,"upperBound": "0.7.0"}
-  parseVersion =
+  parseIpkgVersion =
     value:
     let
       # split &&
@@ -178,7 +115,7 @@ let
     else
       throw "Invalid version string ${value}";
 
-  parseVersion_emptyIsInfinity =
+  parseIpkgVersion_emptyStringIsInfinity =
     value:
     if value == "" then
       {
@@ -188,12 +125,12 @@ let
         upperBound = "*";
       }
     else
-      parseVersion value;
+      parseIpkgVersion value;
 
   parseIpkg =
     text:
     let
-      lines = parseToLines text;
+      lines = parseIpkgToOneLineFields text;
       # split by first whitespace using regex, first element is the key
       dict = builtins.foldl' (
         acc: line:
@@ -210,7 +147,7 @@ let
             else if key == "modules" then
               commaSeparatedToArray value
             else if key == "langversion" then
-              parseVersion value
+              parseIpkgVersion value
             else
               removeQuotes value;
         in
@@ -246,248 +183,19 @@ let
         let
           nameValuesArray = builtins.map dependecyToHashNameValue (commaSeparatedToArray string);
         in
-        builtins.mapAttrs (_name: value: parseVersion_emptyIsInfinity value) (
+        builtins.mapAttrs (_name: value: parseIpkgVersion_emptyStringIsInfinity value) (
           builtins.listToAttrs nameValuesArray
         );
     in
     dict;
 
   importIpkg = path: parseIpkg (builtins.readFile path);
-
-  #################################################################
-
-  tests = {
-    testMoreEq0_6_0 = {
-      expr = parseVersion ">= 0.6.0";
-      expected = {
-        lowerInclusive = true;
-        lowerBound = "0.6.0";
-        upperInclusive = true;
-        upperBound = "*";
-      };
-    };
-    testLessEq0_6_0 = {
-      expr = parseVersion "<= 0.6.0";
-      expected = {
-        lowerInclusive = true;
-        lowerBound = "*";
-        upperInclusive = true;
-        upperBound = "0.6.0";
-      };
-    };
-    testMore0_6_0_less0_5_0 = {
-      expr = parseVersion "> 0.6.0 && < 0.5.0";
-      expected = {
-        lowerInclusive = false;
-        lowerBound = "0.6.0";
-        upperInclusive = false;
-        upperBound = "0.5.0";
-      };
-    };
-    testMore0_6_0 = {
-      expr = parseVersion "> 0.6.0";
-      expected = {
-        lowerInclusive = false;
-        lowerBound = "0.6.0";
-        upperInclusive = true;
-        upperBound = "*";
-      };
-    };
-    testMore0_6_0_less0_7_0 = {
-      expr = parseVersion "> 0.6.0 && < 0.7.0";
-      expected = {
-        lowerInclusive = false;
-        lowerBound = "0.6.0";
-        upperInclusive = false;
-        upperBound = "0.7.0";
-      };
-    };
-    testThrowsIfJustNumber = {
-      expr = builtins.tryEval (parseVersion "0.6.0");
-      expected = {
-        "success" = false;
-        "value" = false;
-      };
-    };
-    testThrowsIfWrongOrder = {
-      expr = builtins.tryEval (parseVersion "< 0.6.0 && > 0.7.0");
-      expected = {
-        "success" = false;
-        "value" = false;
-      };
-    };
-    testToLines = {
-      expr = parseToLines test1_text;
-      expected = [
-        "package micropack"
-        "version = 0.0.1"
-        ''authors = "Stefan Höck"''
-        ''brief   = "Minimalistic installer for pack"''
-        "langversion >= 0.6.0"
-        "depends = base >= 0.6.0, elab-util, idris2, parser-toml"
-        "main       = MicroPack"
-        "executable = micropack"
-        "modules = Pack.CmdLn, Pack.CmdLn.Completion, Pack.CmdLn.Types, Pack.Config"
-        ''sourcedir  = "src"''
-      ];
-    };
-    # taken from idris2 --dump-ipkg-json ./micropack.ipkg
-    testParsed = {
-      expr = parseIpkg test1_text;
-      expected = {
-        name = "micropack";
-        version = "0.0.1";
-        authors = "Stefan Höck";
-        brief = "Minimalistic installer for pack";
-        langversion = {
-          lowerInclusive = true;
-          lowerBound = "0.6.0";
-          upperInclusive = true;
-          upperBound = "*";
-        };
-        depends = {
-          base = {
-            lowerInclusive = true;
-            lowerBound = "0.6.0";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          elab-util = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          idris2 = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          parser-toml = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-        };
-        main = "MicroPack";
-        executable = "micropack";
-        modules = [
-          "Pack.CmdLn"
-          "Pack.CmdLn.Completion"
-          "Pack.CmdLn.Types"
-          "Pack.Config"
-        ];
-        sourcedir = "src";
-      };
-    };
-    test2ToLines = {
-      expr = parseToLines test2_text;
-      expected = [
-        "package pack"
-        "version = 0.0.1"
-        ''authors = "Stefan Höck"''
-        ''brief   = "A package manager for Idris2 with curated package collections"''
-        "langversion >= 0.6.0"
-        ''prebuild = "bash version.sh"''
-        ''postbuild = "bash restore.sh"''
-        "depends = base >= 0.6.0, elab-util, idris2, parser-toml"
-        "modules = Pack.CmdLn, Pack.CmdLn.Completion, Pack.CmdLn.Opts, Pack.CmdLn.Types, Pack.Config"
-        "main       = Main"
-        "executable = pack"
-        ''sourcedir  = "src"''
-      ];
-    };
-    test2Parsed = {
-      expr = parseIpkg test2_text;
-      expected = {
-        name = "pack";
-        depends = {
-          base = {
-            lowerInclusive = true;
-            lowerBound = "0.6.0";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          elab-util = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          idris2 = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-          parser-toml = {
-            lowerInclusive = true;
-            lowerBound = "*";
-            upperInclusive = true;
-            upperBound = "*";
-          };
-        };
-        modules = [
-          "Pack.CmdLn"
-          "Pack.CmdLn.Completion"
-          "Pack.CmdLn.Opts"
-          "Pack.CmdLn.Types"
-          "Pack.Config"
-        ];
-        version = "0.0.1";
-        langversion = {
-          lowerInclusive = true;
-          lowerBound = "0.6.0";
-          upperInclusive = true;
-          upperBound = "*";
-        };
-        authors = "Stefan Höck";
-        brief = "A package manager for Idris2 with curated package collections";
-        main = "Main";
-        executable = "pack";
-        sourcedir = "src";
-        prebuild = "bash version.sh";
-        postbuild = "bash restore.sh";
-      };
-    };
-  };
-
-  #################################################################
-
-  runTestsAll =
-    tests:
-    let
-      testResults = lib.reverseList (lib.debug.runTests tests);
-    in
-    if testResults == [ ] then
-      true
-    else
-      let
-        errorMessage = lib.concatStringsSep "\n\n" (
-          map (
-            test:
-            "Test: "
-            + test.name
-            + ''
-
-              Expected: ''
-            + builtins.toJSON test.expected
-            + ''
-
-              Actual  : ''
-            + builtins.toJSON test.result
-          ) testResults
-        );
-      in
-      builtins.throw ''
-
-        Tests failed.
-        ${errorMessage}
-      '';
 in
-assert (runTestsAll tests);
 {
-  inherit parseIpkg importIpkg;
+  inherit
+    importIpkg
+    parseIpkg
+    parseIpkgVersion
+    parseIpkgToOneLineFields
+    ;
 }
