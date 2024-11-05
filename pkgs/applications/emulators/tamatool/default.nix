@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zip
-, copyDesktopItems
-, libpng
-, SDL2
-, SDL2_image
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zip,
+  copyDesktopItems,
+  libpng,
+  SDL2,
+  SDL2_image,
 
-# Optionally bundle a ROM file
-, rom ? null
+  # Optionally bundle a ROM file
+  rom ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
