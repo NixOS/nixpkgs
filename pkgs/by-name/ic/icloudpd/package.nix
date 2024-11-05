@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.24.0";
+  version = "1.24.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -72,8 +72,11 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==69.0.2" "setuptools" \
-      --replace "wheel==0.42.0" "wheel"
+      --replace-fail "setuptools==69.0.2" "setuptools" \
+      --replace-fail "wheel==0.42.0" "wheel"
+
+    substituteInPlace src/foundation/__init__.py \
+      --replace-fail "0.0.1" "${version}"
   '';
 
   meta = with lib; {
