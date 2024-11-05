@@ -12321,9 +12321,6 @@ with pkgs;
 
   somebar = callPackage ../applications/misc/somebar { };
 
-  spacebar = callPackage ../os-specific/darwin/spacebar {
-  };
-
   speech-denoiser = callPackage ../applications/audio/speech-denoiser { };
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
