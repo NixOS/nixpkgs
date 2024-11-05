@@ -6,7 +6,6 @@
 , phpPackage
 , autoconf
 , pkg-config
-, aspell
 , bzip2
 , curl
 , cyrus_sasl
@@ -58,6 +57,11 @@ in {
   };
 
   inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
+
+  # Next version of the builder
+  buildComposerProject2 = builders.v2.buildComposerProject;
+  composerHooks2 = builders.v2.composerHooks;
+  mkComposerVendor = builders.v2.mkComposerVendor;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -156,7 +160,7 @@ in {
       checkPhase = ''
         runHook preCheck
 
-        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes make test
+        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes SKIP_ONLINE_TESTS=yes make test
         runHook postCheck
       '';
 
@@ -177,8 +181,8 @@ in {
 
       meta = {
         description = "PHP upstream extension: ${name}";
-        inherit (php.meta) maintainers homepage license;
-      };
+        inherit (php.meta) maintainers homepage license platforms;
+      } // args.meta or { };
     }));
 
   php = phpPackage;
@@ -249,7 +253,7 @@ in {
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
       buildPecl = buildPecl.override {
-        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
       };
       inherit (pkgs) darwin;
     };
@@ -265,6 +269,9 @@ in {
     igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = callPackage ../development/php-packages/imagick { };
+
+    # Shadowed by built-in version on PHP < 8.3.
+    imap = callPackage ../development/php-packages/imap { };
 
     inotify = callPackage ../development/php-packages/inotify { };
 
@@ -293,6 +300,8 @@ in {
     opentelemetry = callPackage ../development/php-packages/opentelemetry { };
 
     openswoole = callPackage ../development/php-packages/openswoole { };
+
+    parallel = callPackage ../development/php-packages/parallel { };
 
     pdlib = callPackage ../development/php-packages/pdlib { };
 
@@ -323,6 +332,8 @@ in {
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
+
+    pspell = callPackage ../development/php-packages/pspell { };
 
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
@@ -383,7 +394,7 @@ in {
             "--enable-dom"
           ];
           # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
-          patches = lib.optionals ((lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.2.7") || (lib.versions.majorMinor php.version == "8.1" && lib.versionAtLeast php.version "8.1.27")) [
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml 2.12
             # Part of 8.3.1RC1+, 8.2.14RC1+
             (fetchpatch {
@@ -393,17 +404,16 @@ in {
                 "NEWS"
               ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
-            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
-              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
-              excludes = [ "NEWS" ];
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
         }
@@ -446,12 +456,10 @@ in {
           name = "iconv";
           buildInputs = [ libiconv ];
           configureFlags = [ "--with-iconv" ];
-          doCheck = stdenv.isLinux;
-        }
-        {
-          name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+          # Some other extensions support separate libdirs, but iconv does not. This causes problems with detecting
+          # Darwin’s libiconv because it has separate outputs. Adding `-liconv` works around the issue.
+          env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
+          doCheck = stdenv.hostPlatform.isLinux;
         }
         {
           name = "intl";
@@ -465,7 +473,7 @@ in {
             "LDAP_DIR=${openldap.dev}"
             "LDAP_INCDIR=${openldap.dev}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
-          ] ++ lib.optionals stdenv.isLinux [
+          ] ++ lib.optionals stdenv.hostPlatform.isLinux [
             "--with-ldap-sasl=${cyrus_sasl.dev}"
           ];
           doCheck = false;
@@ -487,7 +495,7 @@ in {
           # The configure script doesn't correctly add library link
           # flags, so we add them to the variable used by the Makefile
           # when linking.
-          MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
+          MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
           # The configure script builds a config.h which is never
           # included. Let's include it in the main header file
           # included by all .c-files.
@@ -509,11 +517,11 @@ in {
           name = "opcache";
           buildInputs = [ pcre2 ] ++
             lib.optional
-              (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
+              (!stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
               valgrind.dev;
           configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
           zendExtension = true;
-          postPatch = lib.optionalString stdenv.isDarwin ''
+          postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
             # Tests are flaky on darwin
             rm ext/opcache/tests/blacklist.phpt
             rm ext/opcache/tests/bug66338.phpt
@@ -547,8 +555,7 @@ in {
           name = "pdo_dblib";
           internalDeps = [ php.extensions.pdo ];
           configureFlags = [ "--with-pdo-dblib=${freetds}" ];
-          # Doesn't seem to work on darwin.
-          enable = (!stdenv.isDarwin);
+          meta.broken = stdenv.hostPlatform.isDarwin;
           doCheck = false;
         }
         {
@@ -567,7 +574,7 @@ in {
         {
           name = "pdo_pgsql";
           internalDeps = [ php.extensions.pdo ];
-          configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pdo-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         {
@@ -580,11 +587,10 @@ in {
         {
           name = "pgsql";
           buildInputs = [ pcre2 ];
-          configureFlags = [ "--with-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
-        { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
         {
           name = "readline";
           buildInputs = [
@@ -617,17 +623,25 @@ in {
           configureFlags = [
             "--enable-simplexml"
           ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
-            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
-              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
-              excludes = [ "NEWS" ];
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
         }
@@ -635,8 +649,6 @@ in {
           name = "snmp";
           buildInputs = [ net-snmp openssl ];
           configureFlags = [ "--with-snmp" ];
-          # net-snmp doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
           doCheck = false;
         }
         {
@@ -645,19 +657,30 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
+          # Some tests are causing issues in the Darwin sandbox with issues
+          # such as
+          #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
+          doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
           internalDeps = [ php.extensions.session ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
-            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
-              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
-              excludes = [ "NEWS" ];
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
         }
@@ -673,7 +696,7 @@ in {
           # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
           # - https://github.com/php/php-src/issues/12076
           # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
-          patches = lib.optionals (stdenv.isi686 && stdenv.isLinux) [
+          patches = lib.optionals (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isLinux) [
             ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch
           ];
         }
@@ -692,17 +715,25 @@ in {
             "--enable-xml"
           ];
           doCheck = false;
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
-            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
-              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
-              excludes = [ "NEWS" ];
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
         }
@@ -722,17 +753,25 @@ in {
           configureFlags = [
             "--enable-xmlwriter"
           ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
-            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+            # Fix tests with libxml2 2.12
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+            # Required for libxml2 2.13 compatibility patch.
             (fetchpatch {
-              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
-              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
-              excludes = [ "NEWS" ];
+              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
+              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
+            })
+            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ];
         }
@@ -764,6 +803,13 @@ in {
             "--with-zlib"
           ];
         }
+      ] ++ lib.optionals (lib.versionOlder php.version "8.3") [
+        # Using version from PECL on new PHP versions.
+        {
+          name = "imap";
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+        }
       ];
 
       # Convert the list of attrs:
@@ -772,14 +818,12 @@ in {
       # [ { name = <name>; value = <extension drv>; } ... ]
       #
       # which we later use listToAttrs to make all attrs available by name.
-      #
-      # Also filter out extensions based on the enable property.
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
           value = mkExtension drv;
         })
-        (builtins.filter (i: i.enable or true) extensionData);
+        extensionData;
 
       # Produce the final attribute set of all extensions defined.
     in

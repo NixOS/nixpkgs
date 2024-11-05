@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   pythonOlder,
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [ babel ];
     lingua = [ lingua ];
   };
@@ -47,17 +48,20 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = lib.optionals isPyPy [
-    # https://github.com/sqlalchemy/mako/issues/315
-    "test_alternating_file_names"
-    # https://github.com/sqlalchemy/mako/issues/238
-    "test_file_success"
-    "test_stdin_success"
-    # fails on pypy2.7
-    "test_bytestring_passthru"
-  ];
+  disabledTests =
+    lib.optionals isPyPy [
+      # https://github.com/sqlalchemy/mako/issues/315
+      "test_alternating_file_names"
+      # https://github.com/sqlalchemy/mako/issues/238
+      "test_file_success"
+      "test_stdin_success"
+      # fails on pypy2.7
+      "test_bytestring_passthru"
+    ]
+    # https://github.com/sqlalchemy/mako/issues/408
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "test_future_import";
 
   meta = with lib; {
     description = "Super-fast templating language";

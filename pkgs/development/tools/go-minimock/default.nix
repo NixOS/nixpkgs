@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "go-minimock";
-  version = "3.3.13";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "gojuno";
     repo = "minimock";
     rev = "v${version}";
-    hash = "sha256-YLGZJMBe5wKI9RccJ1ps48A3ZiPWMrzjZH4Fpy8K9yM=";
+    hash = "sha256-YwaC+saod1IoVj6fc6Zucwy83XhnPgqaOp1IcxEmlaw=";
   };
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-O1Bp+zuSq3/UULpej4rXxeHcDiNAhECqj9Yh9aGeA0E=";
+  vendorHash = "sha256-0dqbDG/fKaznxeVMSVCEtkQn76dOso6XBiw6xlKqgwM=";
 
   doCheck = true;
 

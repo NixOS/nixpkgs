@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ctlptl";
-  version = "0.8.30";
+  version = "0.8.35";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qIuZfOgzoFaZznacJ2UEMMDKevsadmRkhwPXkb5rJiM=";
+    hash = "sha256-JFHPwda1p3xIfbQqnl3tI7Z/LhAB1U2VtLvT2DlyQMo=";
   };
 
-  vendorHash = "sha256-GeUuCMcx/huEw4SLNierkcmxyZiOvClKwpjGQZDP6nw=";
+  vendorHash = "sha256-d9TijRzBpMvRrOMexGtewtAA9XpLwDTjPnPzt7G67Cs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

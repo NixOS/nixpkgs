@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.14.2";
+  version = "1.14.4";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "sha256-BK2QTlcns+e3LL3NgcVYk4an+j/x0btpKAuBZ+QIN+Q=";
+    sha256 = "sha256-jrLlhpPWsc1aOEH36W6MbikAj1nAX8CinHKG+iRk+18=";
   };
 
   nativeBuildInputs = [ autoconf
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                       ];
 
   buildInputs = [ glib imagemagick ]
-    ++ lib.optional stdenv.isDarwin Foundation;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   patches = [ ./xmlcatalog_patch.patch ];
 

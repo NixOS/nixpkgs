@@ -39,9 +39,9 @@
 , qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
-, enableX11 ? stdenv.isLinux, xorg
+, enableX11 ? stdenv.hostPlatform.isLinux, xorg
 , ncurses
-, enableWayland ? stdenv.isLinux
+, enableWayland ? stdenv.hostPlatform.isLinux
 , wayland
 , wayland-protocols
 , libgudev
@@ -54,17 +54,17 @@
 
 # MMAL is not supported on aarch64, see:
 # https://github.com/raspberrypi/userland/issues/688
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
+assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-FQ+RTmHcBWALaLiMoQPHzCJxMBWOOJ6p6hWfQFCi67A=";
+    hash = "sha256-dZrLEebeg3P/jLteerjrmjhjG+gc8kIgJnsAHrVVk8E=";
   };
 
   patches = [
@@ -147,9 +147,9 @@ stdenv.mkDerivation rec {
     qtbase
     qtdeclarative
     qtwayland
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libdrm
     libGL
     libv4l
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only
     "-Doss=disabled" # Linux only

@@ -4,7 +4,7 @@ qtModule {
   pname = "qtlocation";
   propagatedBuildInputs = [ qtbase qtmultimedia ];
   outputs = [ "bin" "out" "dev" ];
-  qmakeFlags = lib.optionals stdenv.isDarwin [
+  qmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
      # boost uses std::auto_ptr which has been disabled in clang with libcxx
      # This flag re-enables this feature
      # https://libcxx.llvm.org/docs/UsingLibcxx.html#c-17-specific-configuration-macros

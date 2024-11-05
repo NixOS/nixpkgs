@@ -1,5 +1,5 @@
 { lib
-, python310
+, python3
 , fetchFromGitHub
 , gdk-pixbuf
 , adwaita-icon-theme
@@ -11,13 +11,14 @@
 , perl
 , sqlite
 , tzdata
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , xvfb-run
 }:
 
 let
-  python = python310.override {
+  python = python3.override {
+    self = python;
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
         enableGtk3 = true;
@@ -53,7 +54,7 @@ in python.pkgs.buildPythonApplication rec {
   buildInputs = [
     sqlite
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     glib-networking
     adwaita-icon-theme
     gdk-pixbuf
@@ -84,7 +85,7 @@ in python.pkgs.buildPythonApplication rec {
       TZ=Europe/Kaliningrad \
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python.interpreter} setup.py test
+      ${python.interpreter} -m unittest
   '';
 
   meta = with lib; {

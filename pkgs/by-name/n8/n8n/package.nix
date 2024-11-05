@@ -6,38 +6,39 @@
   nodejs,
   pnpm,
   python3,
-  nodePackages,
+  node-gyp,
   cacert,
   xcbuild,
   libkrb5,
   libmongocrypt,
   postgresql,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.48.3";
+  version = "1.61.0";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-aCMbii5+iJ7m4P6Krr1/pcoH6fBsrFLtSjCx9DBYOeg=";
+    hash = "sha256-9hIwpid/uly7wUcrBgLkSw+Aah8OQ66MgrMQbs/5v1Y=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n1U5ftbB7BbiDIkZMVPG2ieoRBlJ+nPYFT3fNJRRTCI=";
+    hash = "sha256-lZLWqlR6xq7DYpnydgJK8gL7WdfZcRU+8Autzh6e7kY=";
   };
 
   nativeBuildInputs = [
     pnpm.configHook
     python3 # required to build sqlite3 bindings
-    nodePackages.node-gyp # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs
@@ -59,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    echo "Removing non-deterministic files"
+
+    rm -r $(find -type d -name .turbo)
+    rm node_modules/.modules.yaml
+    rm packages/nodes-base/dist/types/nodes.json
+
+    echo "Removed non-deterministic files"
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -71,11 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # makes libmongocrypt bindings not look for static libraries in completely wrong places
-  BUILD_TYPE = "dynamic";
-
   passthru = {
     tests = nixosTests.n8n;
+    updateScript = nix-update-script { };
   };
 
   dontStrip = true;
@@ -91,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       freezeboy
       gepbird
-      k900
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";

@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
-, substituteAll
 , pkg-config
 , gtk-doc
 , gobject-introspection
@@ -34,7 +32,6 @@
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
-, openssl
 , python3
 }:
 
@@ -44,28 +41,15 @@ let
   ]);
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2024.4";
+  version = "2024.8";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-Y8kZCCEzOsc3Pg2SPkwnZrJevc/fTvtEy1koxlidn8s=";
+    sha256 = "sha256-4hNuEWZp8RT/c0nxLimfY8C+znM0UWSUFKjc2FuGPD8=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    # > I guess my inclination here is to recommend that musl users
-    # > carry a downstream patch to revert the commits in #3175 until
-    # > such time as they can update to the new musl.
-    # https://github.com/ostreedev/ostree/issues/3200#issuecomment-1974819192
-    (fetchpatch {
-      name = "revert-statx.diff";
-      url = "https://github.com/ostreedev/ostree/commit/f46cc0cd85b564e40e03c7438a41c8e57f6b836c.diff";
-      excludes = [ "ci/*" ];
-      revert = true;
-      hash = "sha256-LsXbRYh4hfjNdt1S384IPlSvtC5f2rgSTZEkIIBkT0g=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf

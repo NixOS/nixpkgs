@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
-      stdenv.isDarwin
+      stdenv.hostPlatform.isDarwin
       ||
 
         # see https://github.com/devicetree-org/dt-schema/issues/108

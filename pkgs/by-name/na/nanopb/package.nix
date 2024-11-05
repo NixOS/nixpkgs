@@ -26,6 +26,7 @@ let
     inherit (self.passthru) generator-out;
   };
   python3 = buildPackages.python3.override {
+    self = python3;
     packageOverrides = _: _: {
       nanopb-proto = self.passthru.python-module;
     };
@@ -57,13 +58,13 @@ let
 in
 {
   pname = "nanopb";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "nanopb";
     repo = "nanopb";
     rev = self.version;
-    hash = "sha256-LfARVItT+7dczg2u08RlXZLrLR7ScvC44tgmcy/Zv48=";
+    hash = "sha256-zXhUEajCZ24VA/S0pSFewz096s8rmhKARSWbSC5TdAg=";
   };
 
   dontPatch = true;
@@ -119,4 +120,3 @@ in
     '';
   };
 })
-

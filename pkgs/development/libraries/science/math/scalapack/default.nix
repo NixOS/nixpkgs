@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, openssh, mpiCheckPhaseHook, mpi, blas, lapack
+, mpiCheckPhaseHook, mpi, blas, lapack
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru = { inherit (blas) isILP64; };
+
+  __structuredAttrs = true;
 
   # upstream patch, remove with next release
   patches = [ (fetchpatch {
@@ -37,14 +39,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
 
   # xslu and xsllt tests seem to time out on x86_64-darwin.
   # this line is left so those who force installation on x86_64-darwin can still build
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
 
   # Increase individual test timeout from 1500s to 10000s because hydra's builds
   # sometimes fail due to this
-  checkFlagsArray = [ "ARGS=--timeout 10000" ];
+  checkFlags = [ "ARGS=--timeout 10000" ];
 
   postFixup = ''
     # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
@@ -79,6 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ costrouc markuskowa gdinh ];
     # xslu and xsllt tests fail on x86 darwin
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

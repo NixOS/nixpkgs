@@ -36,18 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cmake
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;
 
-  propagatedBuildInputs = lib.optionals stdenv.isLinux [ libGLU libX11 ]
-    ++ lib.optionals stdenv.isDarwin [ OpenGL ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
   cmakeFlags = [
@@ -57,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
   ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
-  passthru.tests = [ raylib-games ];
+  passthru.tests = { inherit raylib-games; };
 
   patches = [
     # Patch version in CMakeLists.txt to 5.0.0
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # fix libasound.so/libpulse.so not being found
-  appendRunpaths = [
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.makeLibraryPath (lib.optional alsaSupport alsa-lib ++ lib.optional pulseSupport libpulseaudio))
   ];
 

@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
-  version = "2.5.0";
+  version = "2.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
-    hash = "sha256-4GCLmPEoCX1Cw+H6Bo1KA4+9GX35HgONAmMF/WNX6ag=";
+    hash = "sha256-1KKXOvoSAemzafWvBoYFtxqgSObHcXe3GVPgG25VNm0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     tqdm
     urllib3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     idna
     cryptography
     pyopenssl
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     git
     pkg-config
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xcbuild.xcrun
   ] ++ (with python3.pkgs; [
     mock
@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "TestFTP"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Rejects paths containing nix
     "test_conditional_os"
     # Requires Apple Clang
@@ -88,9 +88,8 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTestPaths = [
     # Requires cmake, meson, autotools, apt-get, etc.
-    "test/functional/command/new_test.py"
+    "test/functional/command/runner_test.py"
     "test/functional/command/test_install_deploy.py"
-    "test/functional/graph/test_transitive_build_scripts.py"
     "test/functional/layout/test_editable_cmake.py"
     "test/functional/layout/test_editable_cmake_components.py"
     "test/functional/layout/test_in_subfolder.py"
@@ -102,7 +101,6 @@ python3.pkgs.buildPythonApplication rec {
     "test/functional/tools/system/package_manager_test.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"
-    "test/integration/command/runner_test.py"
     "test/integration/command/user_test.py"
     "test/integration/command_v2/list_test.py"
     "test/performance/test_large_graph.py"

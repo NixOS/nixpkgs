@@ -8,6 +8,7 @@
 , cmark
 , docbook_xsl
 , expat
+, fetchpatch2
 , file
 , flac
 , fmt
@@ -49,14 +50,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "86.0";
+  version = "87.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    hash = "sha256-h9rVs4A7JihnCj15XUus9xMvShKWyYhJN/90v/fl0PE=";
+    hash = "sha256-UU57ZgH1sxCXspwfKXScw08aJYiv+k526U8q8N1tA+4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/fc83003f541ac690fe308c3f4ac36e62814a40db.diff";
+      hash = "sha256-HOS79g5xm70upV5Okv1COEg0SanXs7brRRB59Ofx5HA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -91,8 +99,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ optionals withGUI [ cmark ]
-  ++ optionals stdenv.isLinux [ qtwayland ]
-  ++ optionals stdenv.isDarwin [ libiconv ];
+  ++ optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+  ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

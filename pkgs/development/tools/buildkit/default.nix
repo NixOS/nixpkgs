@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "buildkit";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    hash = "sha256-xJimqvNkz9od5XjpzyKCNUciw8GbfydBDl0Oa45xoME=";
+    hash = "sha256-+FwbYG7PCj9+WG9CnR/MjmujnhfqWYtu99raT1tO+m4=";
   };
 
   vendorHash = null;
 
-  subPackages = [ "cmd/buildctl" ] ++ lib.optionals stdenv.isLinux [ "cmd/buildkitd" ];
+  subPackages = [ "cmd/buildctl" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "cmd/buildkitd" ];
 
   ldflags = [ "-s" "-w" "-X github.com/moby/buildkit/version.Version=${version}" "-X github.com/moby/buildkit/version.Revision=${src.rev}" ];
 

@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "favadi";
     repo = "protoc-go-inject-tag";
     rev = "v${version}";
-    sha256 = "01jsrx83pygvjx3nzfnwvb2vn5gagl79m9i67v7cfg1lzz168spj";
+    hash = "sha256-8mpkwv80PMfOPiammg596hW7xdrcum9Hl/v5O1DPWgY=";
   };
 
   vendorHash = "sha256-tMpcJ37yGr7i91Kwz57FmJ+u2x0CAus0+yWOR10fJLo=";

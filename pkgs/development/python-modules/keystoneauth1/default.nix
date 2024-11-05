@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.6.0";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7LfzR1nr4QPbNyqwlTwLghkp3dSX8zKqaz72yqz/7Yg=";
+    hash = "sha256-MVfCEuEhFk3mTWPl734dqtK9NkmmjeHpcbdodwGe8cQ=";
   };
 
   postPatch = ''
@@ -40,9 +40,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     betamax
     iso8601
     lxml

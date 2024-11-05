@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.6";
+  version = "0.11.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bw28mLz9GaMucqP+EqR1F3OKLxDJiIVacrCBIV35G/I=";
+    hash = "sha256-1npXzPqasgtI5KLq791hfneKFO5GrSiRdqfRd13//6M=";
   };
 
   postPatch = ''

@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cotp";
-  version = "1.7.3";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "replydev";
     repo = "cotp";
     rev = "v${version}";
-    hash = "sha256-CBe/K06z4oqpiwHKwAkWdp+zwAV6Qzne6T/xSSIRz7Y=";
+    hash = "sha256-U5x8szvouoxJ+DZUlrn5wtXt+6vs62tzcWICQW3B21U=";
   };
 
-  cargoHash = "sha256-OMQnmZacHNTGAyBoTLulvwXb6DELFag70m5C75FQ648=";
+  cargoHash = "sha256-o9LRXbx77EXXO7rEmpBrx2nommJgG0ikw1YzdeB0Gug=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   meta = with lib; {
     homepage = "https://github.com/replydev/cotp";

@@ -20,7 +20,7 @@ let
   version = "${mklVersion}.${rel}";
 
   mklVersion = "2023.1.0";
-  rel = if stdenvNoCC.isDarwin then "43558" else "46342";
+  rel = if stdenvNoCC.hostPlatform.isDarwin then "43558" else "46342";
 
   # Intel openmp uses its own versioning.
   openmpVersion = "2023.1.0";
@@ -66,17 +66,17 @@ in stdenvNoCC.mkDerivation ({
   pname = "mkl";
   inherit version;
 
-  dontUnpack = stdenvNoCC.isLinux;
+  dontUnpack = stdenvNoCC.hostPlatform.isLinux;
 
-  sourceRoot = if stdenvNoCC.isDarwin then "." else null;
+  sourceRoot = if stdenvNoCC.hostPlatform.isDarwin then "." else null;
 
-  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
+  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.hostPlatform.isDarwin
     then
       [ _7zz cctools ]
     else
       [ rpmextract ]);
 
-  buildPhase = if stdenvNoCC.isDarwin then ''
+  buildPhase = if stdenvNoCC.hostPlatform.isDarwin then ''
     for f in bootstrapper.app/Contents/Resources/packages/*/cupPayload.cup; do
       tar -xf $f
     done
@@ -110,9 +110,9 @@ in stdenvNoCC.mkDerivation ({
 
     # Dynamic libraries
     mkdir -p $out/lib
-    cp -a opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64"}/*${shlibExt}* $out/lib
-    cp -a opt/intel/oneapi/compiler/${mklVersion}/${if stdenvNoCC.isDarwin then "mac" else "linux"}/compiler/lib/${lib.optionalString stdenvNoCC.isLinux "intel64_lin"}/*${shlibExt}* $out/lib
-    cp -a opt/intel/oneapi/tbb/${tbbVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64/gcc4.8"}/*${shlibExt}* $out/lib
+    cp -a opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
+    cp -a opt/intel/oneapi/compiler/${mklVersion}/${if stdenvNoCC.hostPlatform.isDarwin then "mac" else "linux"}/compiler/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64_lin"}/*${shlibExt}* $out/lib
+    cp -a opt/intel/oneapi/tbb/${tbbVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64/gcc4.8"}/*${shlibExt}* $out/lib
 
     # Headers
     cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
@@ -121,10 +121,10 @@ in stdenvNoCC.mkDerivation ({
     cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib
   '' +
     (if enableStatic then ''
-      install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64"}/*.a
+      install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*.a
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*.pc
     '' else ''
-      cp opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64"}/*${shlibExt}* $out/lib
+      cp opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.hostPlatform.isLinux "intel64"}/*${shlibExt}* $out/lib
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*dynamic*.pc
     '') + ''
     # Setup symlinks for blas / lapack
@@ -142,7 +142,7 @@ in stdenvNoCC.mkDerivation ({
   # fixDarwinDylibName fails for libmkl_cdft_core.dylib because the
   # larger updated load commands do not fit. Use install_name_tool
   # explicitly and ignore the error.
-  postFixup = lib.optionalString stdenvNoCC.isDarwin ''
+  postFixup = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     for f in $out/lib/*.dylib; do
       install_name_tool -id $out/lib/$(basename $f) $f || true
     done
@@ -176,7 +176,7 @@ in stdenvNoCC.mkDerivation ({
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ bhipple ];
   };
-} // lib.optionalAttrs stdenvNoCC.isDarwin {
+} // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
   src = fetchurl {
     url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/087a9190-9d96-4b8c-bd2f-79159572ed89/m_onemkl_p_${mklVersion}.${rel}_offline.dmg";
     hash = "sha256-bUaaJPSaLr60fw0DzDCjPvY/UucHlLbCSLyQxyiAi04=";

@@ -14,7 +14,7 @@
   requests,
   urllib3,
 
-  # optional-dependenices
+  # optional-dependencies
   paramiko,
   websocket-client,
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ssh = [ paramiko ];
+    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
     tls = [];
     websockets = [ websocket-client ];
   };
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit" ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "api_test"
     "stream_response"
     "socket_file"

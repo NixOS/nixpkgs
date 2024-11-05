@@ -21,27 +21,26 @@
 , wrapGAppsHook4
 , sqlite
 , xdg-desktop-portal
+, libseccomp
 }:
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "7";
+  version = "9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     rev = "refs/tags/${version}";
-    hash = "sha256-IfcThpsGATMD3Uj9tvw/aK7IVbiVT8sdZ088gRUqnlg=";
+    hash = "sha256-3UI727LUYw7wUKbGRCtgpkF9NNw4XuZ3tl3KV3Ku9r4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "mas-http-0.8.0" = "sha256-IiYxF9qT/J/n8t/cVT/DRV3gl2MTA6/YfjshVIic/n4=";
-      "matrix-sdk-0.7.1" = "sha256-quwt9Dx0K6LDMwHBipc52Ek59zz5mlTAdOj+RXZBU3Q=";
-      "ruma-0.9.4" = "sha256-tp0EFS39UTXZJQPUDjeQixb8wzsMCzyFggVj6M8TRYg=";
-      "vodozemac-0.5.1" = "sha256-Hm0C696RmNX6n1Jx+hqkKMjpdbArliuzdiS4wCv3OIM=";
+      "matrix-sdk-0.7.1" = "sha256-AmODDuNLpI6gXuu+oPl3MqcOnywqR8lqJ0bVOIiz02E=";
+      "ruma-0.10.1" = "sha256-6U2LKMYyY7SLOh2jJcVuDBsfcidNoia1XU+JsmhMHGY=";
     };
   };
 
@@ -70,6 +69,7 @@ stdenv.mkDerivation rec {
     libshumate
     sqlite
     xdg-desktop-portal
+    libseccomp
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ anselmschueler ]);
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
     mainProgram = "fractal";
   };

@@ -4,8 +4,6 @@
 , dotnet-runtime_8
 , buildDotnetModule
 , fetchFromGitHub
-, fontconfig
-, xorg
 , libglvnd
 , makeDesktopItem
 , copyDesktopItems
@@ -34,7 +32,7 @@ buildDotnetModule rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib fontconfig ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   postInstall = ''
     rm -rf $out/lib/${lib.toLower pname}/runtimes/{*musl*,win*}
@@ -42,22 +40,21 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     libglvnd
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
   ];
 
-  desktopItems = makeDesktopItem {
-    name = meta.mainProgram;
-    exec = meta.mainProgram;
-    icon = meta.mainProgram;
-    desktopName = meta.mainProgram;
-    genericName = meta.description;
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Network" ];
-    startupNotify = true;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = meta.mainProgram;
+      exec = meta.mainProgram;
+      icon = meta.mainProgram;
+      desktopName = meta.mainProgram;
+      genericName = meta.description;
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Network" ];
+      startupNotify = true;
+    })
+  ];
 
   meta = with lib; {
     mainProgram = builtins.head executables;

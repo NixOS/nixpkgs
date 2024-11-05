@@ -1,9 +1,21 @@
-{ lib
-, python312Packages
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  python312Packages,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchPypi,
 }:
 
+let
+  pixel-font-builder-compat = python312Packages.pixel-font-builder.overrideAttrs rec {
+    version = "0.0.26";
+    src = fetchPypi {
+      inherit version;
+      pname = "pixel_font_builder";
+      hash = "sha256-bgs2FbOA5tcUXe5+KuVztWGAv5yFxQNBaiZMeZ+ic+8=";
+    };
+  };
+in
 python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
   version = "2024.05.12";
@@ -18,7 +30,7 @@ python312Packages.buildPythonPackage rec {
   format = "other";
 
   nativeBuildInputs = with python312Packages; [
-    pixel-font-builder
+    pixel-font-builder-compat
     unidata-blocks
     character-encoding-utils
     pypng

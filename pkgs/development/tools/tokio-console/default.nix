@@ -3,20 +3,23 @@
 , installShellFiles
 , rustPlatform
 , protobuf
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
-  version = "0.1.10";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
     rev = "tokio-console-v${version}";
-    hash = "sha256-sjfdxOeaNANYJuJMjZ/tCGc2mWM+98d8yPHAVSl4cF4=";
+    hash = "sha256-KqX+s1oQIRyqAP+0iGrZiT8lB+cGviY1vtHaXy5Q6TA=";
   };
 
-  cargoHash = "sha256-86KQpRpYSCQs6SUeG0HV26b58x/QUyovoL+5fg8JCOI=";
+  cargoHash = "sha256-QJdTysoVIbeLsTMt62Q355S8zx8tNCikZAyeRs7cz4o=";
+
+  buildAndTestSubdir = "tokio-console";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip config::tests::toml_example_changed"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tokio-console \
       --bash <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion bash) \
       --fish <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion fish) \

@@ -11,6 +11,7 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  frozendict,
   importlib-resources,
   jsonschema,
   pycryptodome,
@@ -26,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.65.0";
+  version = "0.67.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CyVmMDZ+8B3SYRR6JKFeI/dyQbJk70/slm3hRV1f3ig=";
+    hash = "sha256-06RKvKOXMhq6LwKSk451cR7EUW+78AZzWsrqSMgq02E=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       aiosqlite
       crccheck
       cryptography
+      frozendict
       jsonschema
       pyserial-asyncio
       typing-extensions
@@ -70,10 +72,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-    "test_quirks_v2"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ "test_periodic_scan_priority" ];
+  disabledTests =
+    [
+      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+      "test_quirks_v2"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      "test_periodic_scan_priority"
+    ];
 
   disabledTestPaths = [
     # Tests require network access

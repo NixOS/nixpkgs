@@ -24,7 +24,7 @@ let
   unpackGog = runCommand "ut1999-gog" {
     src = requireFile rec {
       name = "setup_ut_goty_2.0.0.5.exe";
-      sha256 = "00v8jbqhgb1fry7jvr0i3mb5jscc19niigzjc989qrcp9pamghjc";
+      hash = "sha256-TMJX1U2XZZxQYvK/GG0KjGlZVh0R5C2Pzy6sB/GSaAM=";
       message = ''
         Unreal Tournament 1999 requires the official GOG package, version 2.0.0.5.
 
@@ -63,21 +63,21 @@ in stdenv.mkDerivation {
     stdenv.cc.cc
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
     autoPatchelfHook
     imagemagick
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
   ];
 
   installPhase = let
-    outPrefix = if stdenv.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
+    outPrefix = if stdenv.hostPlatform.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
   in ''
     runHook preInstall
 
     mkdir -p $out/bin
-    cp -r ${if stdenv.isDarwin then "UnrealTournament.app" else "./*"} $out
+    cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
     chmod -R 755 $out
     cd ${outPrefix}
 
@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
 
     cp -n ${unpackGog}/Textures/* ./Textures || true
     cp -n ${unpackGog}/System/*.{u,int} ./System || true
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
     ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
     ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
@@ -102,8 +102,9 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # .so files in the SystemARM64 directory are not loaded properly on aarch64-linux
-  appendRunpaths = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+  # Bring in game's .so files into lookup. Otherwise game fails to start
+  # as: `Object not found: Class Render.Render`
+  appendRunpaths = [
     "${placeholder "out"}/${systemDir}"
   ];
 

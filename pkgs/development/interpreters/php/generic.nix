@@ -58,7 +58,7 @@ let
     , zendSignalsSupport ? true
     , zendMaxExecutionTimersSupport ? false
     , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-    , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    , valgrindSupport ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
 
@@ -164,7 +164,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject buildComposerWithPlugin composerHooks mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository mkComposerVendor buildComposerProject buildComposerProject2 buildComposerWithPlugin composerHooks composerHooks2 mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -213,7 +213,7 @@ let
           enableParallelBuilding = true;
 
           nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
-            ++ lib.optional stdenv.isDarwin xcbuild;
+            ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -285,7 +285,7 @@ let
               if [ -f "scripts/dev/genfiles" ]; then
                 ./scripts/dev/genfiles
               fi
-            '' + lib.optionalString stdenv.isDarwin ''
+            '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
               substituteInPlace configure --replace-fail "-lstdc++" "-lc++"
             '';
 
@@ -313,7 +313,11 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = lib.optionals (lib.versionOlder version "8.4")  [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ./fix-paths-php84.patch
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.25.9";
+  version = "1.26.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,10 +31,12 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-p/Zy4roRG0xdk2w5O0CdYIr15D+wumiuGlCNxrHHWdw=";
+    hash = "sha256-lZ0zteLZFKSeFBXWxUnPwlC9VVjUPulUCUocPGOUmuI=";
   };
 
   pythonRelaxDeps = [
+    "aiohttp"
+    "aiohttp-socks"
     "beautifulsoup4"
     "playwright"
     "setuptools"
@@ -59,7 +61,7 @@ buildPythonPackage rec {
     w3lib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recaptcha = [
       speechrecognition
       pydub

@@ -54,7 +54,7 @@ in rustPlatform.buildRustPackage {
   buildInputs = [
     ncurses
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Security
   ]);
 

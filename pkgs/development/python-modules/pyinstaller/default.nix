@@ -11,17 +11,19 @@
 , pyinstaller
 , glibc
 , binutils
+, macholib
 , installShellFiles
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.9.0";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9KdcVS+swuKjcPHkIrlxteXNtAWP84zqAjWqIfwLN48=";
+    hash = "sha256-FDhA+AVv97kQv48W9s2SzBCmwmgLt20KJdVY1UPSEnA=";
   };
 
 
@@ -34,10 +36,11 @@ buildPythonPackage rec {
   dependencies = [
     altgraph
     packaging
+    macholib
     pyinstaller-hooks-contrib
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix" "PATH" ":"  (lib.makeBinPath [ glibc binutils ])
   ];
 

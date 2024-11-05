@@ -1,6 +1,5 @@
 { lib, stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
 , ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
-, autoconf, automake, libtool
 , buildPackages
 }:
 
@@ -35,6 +34,13 @@ stdenv.mkDerivation rec {
     "pyexecdir=$(py)/${python3.sitePackages}"
     "pythondir=$(py)/${python3.sitePackages}"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   doCheck = false; # fails 1 out of 1 tests, needs `certutil`
 

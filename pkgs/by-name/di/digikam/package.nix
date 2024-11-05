@@ -4,6 +4,7 @@
   lib,
   fetchFromGitLab,
   fetchgit,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -12,6 +13,7 @@
   bison,
   wrapGAppsHook3,
 
+  exiftool,
   opencv,
   libtiff,
   libpng,
@@ -70,7 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
   };
 
-  patches = [ ./disable-tests-download.patch ];
+  patches = [
+    ./disable-tests-download.patch
+
+    # Fix build with Qt 6.8
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/digikam/-/commit/a8b49ed8df676cae0f48b3369831edde2b74903e.patch";
+      hash = "sha256-93kQ/Dg/A9FR83ChyiUaRwyelE1Iq14eIecUteVbnqI=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -124,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtnetworkauth
     kdePackages.qtscxml
     kdePackages.qtsvg
+    kdePackages.qtwayland
     kdePackages.qtwebengine
     kdePackages.qt5compat
     kdePackages.qtmultimedia
@@ -181,12 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
         gnumake
         hugin
         enblend-enfuse
+        exiftool
       ]
     })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${kdePackages.qtbase.qtPluginPrefix}/digikam)
     substituteInPlace $out/bin/digitaglinktree \
-      --replace "/usr/bin/perl" "${perl}/bin/perl" \
-      --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
+      --replace "/usr/bin/perl" "${lib.getExe perl}" \
+      --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
   meta = {

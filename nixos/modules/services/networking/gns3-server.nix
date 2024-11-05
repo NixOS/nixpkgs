@@ -129,7 +129,14 @@ in {
       }
     ];
 
+    users.groups.gns3 = { };
+
     users.groups.ubridge = lib.mkIf cfg.ubridge.enable { };
+
+    users.users.gns3 = {
+      group = "gns3";
+      isSystemUser = true;
+    };
 
     security.wrappers.ubridge = lib.mkIf cfg.ubridge.enable {
       capabilities = "cap_net_raw,cap_net_admin=eip";
@@ -150,7 +157,7 @@ in {
         };
       }
       (lib.mkIf (cfg.ubridge.enable) {
-        Server.ubridge_path = lib.mkDefault (lib.getExe cfg.ubridge.package);
+        Server.ubridge_path = lib.mkDefault "/run/wrappers/bin/ubridge";
       })
       (lib.mkIf (cfg.auth.enable) {
         Server = {
@@ -206,7 +213,6 @@ in {
       serviceConfig = {
         ConfigurationDirectory = "gns3";
         ConfigurationDirectoryMode = "0750";
-        DynamicUser = true;
         Environment = "HOME=%S/gns3";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = "${lib.getExe cfg.package} ${commandArgs}";
@@ -227,14 +233,27 @@ in {
         User = "gns3";
         WorkingDirectory = "%S/gns3";
 
+        # Required for ubridge integration to work
+        #
+        # GNS3 needs to run SUID binaries (ubridge)
+        # but NoNewPrivileges breaks execution of SUID binaries
+        DynamicUser = false;
+        NoNewPrivileges = false;
+        RestrictSUIDSGID = false;
+        PrivateUsers = false;
+
         # Hardening
-        DeviceAllow = lib.optional flags.enableLibvirtd "/dev/kvm";
+        DeviceAllow = [
+          # ubridge needs access to tun/tap devices
+          "/dev/net/tap rw"
+          "/dev/net/tun rw"
+        ] ++ lib.optionals flags.enableLibvirtd [
+          "/dev/kvm"
+        ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
         PrivateTmp = true;
-        PrivateUsers = true;
         # Don't restrict ProcSubset because python3Packages.psutil requires read access to /proc/stat
         # ProcSubset = "pid";
         ProtectClock = true;
@@ -255,8 +274,7 @@ in {
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        UMask = "0077";
+        UMask = "0022";
       };
     };
   };

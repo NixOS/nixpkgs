@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   setuptools,
   pillow,
   zbar,
@@ -13,9 +12,6 @@ buildPythonPackage rec {
   pname = "python-zbar";
   version = "0.23.93";
   pyproject = true;
-
-  # distutils usage in setup.py
-  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "mchehab";

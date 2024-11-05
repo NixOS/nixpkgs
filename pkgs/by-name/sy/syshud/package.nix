@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  glibmm,
   gtk4-layer-shell,
   gtkmm4,
+  libevdev,
   nix-update-script,
   pkg-config,
   wireplumber,
@@ -12,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-07-16";
+  version = "0-unstable-2024-09-26";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "d60c3bb6c8eefba743478fe7c183055fa057e69e";
-    hash = "sha256-2aVqCXUZYGtv6xIqbZ1yk3SZK45igZVgPl0byxTXu8E=";
+    rev = "0b6e4958d8ea66b54bc67f0b5aa005fa3eaa4f6f";
+    hash = "sha256-cyE7ZxesAmnepW7kI6b9Gp7R/v+yG2//EQAj4/X6c+c=";
   };
 
   postPatch = ''
@@ -32,13 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    glibmm
     gtk4-layer-shell
     gtkmm4
+    libevdev
     wireplumber
   ];
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
+    "PREFIX="
   ];
 
   # populate version info used by `syshud -v`:
@@ -57,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "branch" ];
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
   };
 
   meta = {

@@ -3,7 +3,8 @@ From: Yaya <yaya@uwu.is>
 Date: Sun, 6 Aug 2023 00:02:40 +0000
 Subject: [PATCH] Revert "Config: Restrict permissions of OTP config file"
 
-This reverts commit 4befb3b1d02f32eb2c56f12e4684a7bb3167b0ee.
+This reverts commit 4befb3b1d02f32eb2c56f12e4684a7bb3167b0ee
+and 3b82864bccee1af625dd19faed511d5b76f66f9d.
 
 The Nix store is world readable by design.
 ---
@@ -19,7 +20,7 @@ index 9ec0f975e..91e5f1a54 100644
      with_runtime_config =
        if File.exists?(config_path) do
 -        # <https://git.pleroma.social/pleroma/pleroma/-/issues/3135>
--        %File.Stat{mode: mode} = File.lstat!(config_path)
+-        %File.Stat{mode: mode} = File.stat!(config_path)
 -
 -        if Bitwise.band(mode, 0o007) > 0 do
 -          raise "Configuration at #{config_path} has world-permissions, execute the following: chmod o= #{config_path}"

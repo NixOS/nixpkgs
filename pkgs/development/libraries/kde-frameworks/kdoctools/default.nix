@@ -22,7 +22,7 @@ mkDerivation {
   outputs = [ "out" "dev" ];
   patches = [ ./kdoctools-no-find-docbook-xml.patch ]
     # kf.doctools.core: Error: Could not find kdoctools catalogs
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
       name = "kdoctools-relocate-datapath.patch";
       url = "https://github.com/msys2/MINGW-packages/raw/0900785a1f4e4146ab9561fb92a1c70fa70fcfc4/mingw-w64-kdoctools-qt5/0001-kdoctools-relocate-datapath.patch";

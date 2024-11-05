@@ -5,11 +5,6 @@
 
   dotnetCorePackages,
 
-  libX11,
-  libICE,
-  libSM,
-  fontconfig,
-
   xdg-utils,
 }:
 
@@ -38,12 +33,11 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  runtimeDeps = [
-    libX11
-    libICE
-    libSM
-    fontconfig
-  ];
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile nuget.config
+  '';
 
   # Required for OneClick
   makeWrapperArgs = [

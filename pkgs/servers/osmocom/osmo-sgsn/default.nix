@@ -12,18 +12,18 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
   pname = "osmo-sgsn";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sgsn";
     rev = version;
-    hash = "sha256-obslARttKN+ut1ubIQ7zsL3/mnXK/AUoJeBnRJoPoZ0=";
+    hash = "sha256-tcGnsLsVJohxaSfMbGfkHcBhLpbTZbXM+KWe2j34qeo=";
   };
 
   postPatch = ''

@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
 
   HOME = "$TMPDIR";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd volta \
       --bash <($out/bin/volta completions bash) \
       --fish <($out/bin/volta completions fish) \

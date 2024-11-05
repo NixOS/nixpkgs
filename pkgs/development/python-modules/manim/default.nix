@@ -12,12 +12,8 @@
   texliveInfraOnly,
 
   click,
-  click-default-group,
   cloup,
-  colour,
-  grpcio,
-  grpcio-tools,
-  importlib-metadata,
+  decorator,
   isosurfaces,
   jupyterlab,
   manimpango,
@@ -25,6 +21,7 @@
   moderngl,
   moderngl-window,
   networkx,
+  notebook,
   numpy,
   pillow,
   pycairo,
@@ -37,6 +34,7 @@
   srt,
   svgelements,
   tqdm,
+  typing-extensions,
   watchdog,
 }:
 
@@ -188,7 +186,7 @@ buildPythonPackage rec {
     hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
@@ -205,20 +203,18 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
+
+    substituteInPlace manim/_config/default.cfg \
+      --replace "ffmpeg_executable = ffmpeg" "ffmpeg_executable = ${lib.getExe ffmpeg}"
   '';
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
-    click-default-group
     cloup
-    colour
-    grpcio
-    grpcio-tools
-    importlib-metadata
+    decorator
     isosurfaces
-    jupyterlab
     manimpango
     mapbox-earcut
     moderngl
@@ -236,8 +232,18 @@ buildPythonPackage rec {
     srt
     svgelements
     tqdm
+    typing-extensions
     watchdog
   ];
+
+  optional-dependencies = {
+    jupyterlab = [
+      jupyterlab
+      notebook
+    ];
+    # TODO package dearpygui
+    # gui = [ dearpygui ];
+  };
 
   makeWrapperArgs = [
     "--prefix"

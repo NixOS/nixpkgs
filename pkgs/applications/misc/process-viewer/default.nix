@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk4 ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ gtk4 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 

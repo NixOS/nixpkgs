@@ -13,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cargoHash = "sha256-Y/0In33y4mVTaE9yoBZ/3tRWcsSKgGjTCSHdjScNEj0=";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd git-absorb \
       --bash <($out/bin/git-absorb --gen-completions bash) \
       --fish <($out/bin/git-absorb --gen-completions fish) \

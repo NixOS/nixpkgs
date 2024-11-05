@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-youtube";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-youtube";
     rev = "v${version}";
-    hash = "sha256-j3NZ+5QBbdpE2bxenqq5bW/42CWvQ9FqrKMmfYIe4Lo=";
+    hash = "sha256-5vQPFW0qABKQjFUvjMrtmIGEpMzLLbAOBA4GFqqBNw0=";
   };
 
   build-system = [ setuptools ];

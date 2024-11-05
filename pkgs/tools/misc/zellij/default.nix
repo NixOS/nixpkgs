@@ -3,7 +3,6 @@
 , rustPlatform
 , stdenv
 , installShellFiles
-, perl
 , pkg-config
 , libiconv
 , openssl
@@ -30,13 +29,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     mandown
     installShellFiles
-    perl
     pkg-config
   ];
 
+  OPENSSL_NO_VENDOR = 1;
+
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     DiskArbitration
     Foundation
@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     mandown docs/MANPAGE.md > zellij.1
     installManPage zellij.1
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \

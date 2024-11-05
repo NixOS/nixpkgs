@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +26,17 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "UPNPC_BUILD_STATIC" stdenv.hostPlatform.isStatic)
   ];
 
-  doCheck = !stdenv.isFreeBSD;
+  doCheck = !stdenv.hostPlatform.isFreeBSD;
 
   postInstall = ''
     mv $out/bin/upnpc-* $out/bin/upnpc
     mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
     mv $out/bin/external-ip.sh $out/bin/external-ip
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) upnp;
+  };
 
   meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";

@@ -8,7 +8,7 @@ pythonNamespacesHook() {
         echo "Enforcing PEP420 namespace: ${namespace}"
 
         # split namespace into segments. "azure.mgmt" -> "azure mgmt"
-        IFS='.' read -ra pathSegments <<< $namespace
+        IFS='.' read -ra pathSegments <<<$namespace
         constructedPath=$out/@pythonSitePackages@
 
         # Need to remove the __init__.py at each namespace level
@@ -49,4 +49,3 @@ pythonNamespacesHook() {
 if [ -z "${dontUsePythonNamespacesHook-}" -a -n "${pythonNamespaces-}" ]; then
     postFixupHooks+=(pythonNamespacesHook)
 fi
-

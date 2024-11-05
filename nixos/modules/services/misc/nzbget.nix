@@ -1,46 +1,43 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.nzbget;
   pkg = pkgs.nzbget;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
-  configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}") cfg.settings);
+  configOpts = lib.concatStringsSep " " (lib.mapAttrsToList (name: value: "-o ${name}=${lib.escapeShellArg (toStr value)}") cfg.settings);
   toStr = v:
     if v == true then "yes"
     else if v == false then "no"
-    else if isInt v then toString v
+    else if lib.isInt v then toString v
     else v;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
-    (mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
+    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "configFile" ] "The configuration of nzbget is now managed by users through the web interface.")
+    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "dataDir" ] "The data directory for nzbget is now /var/lib/nzbget.")
+    (lib.mkRemovedOptionModule [ "services" "misc" "nzbget" "openFirewall" ] "The port used by nzbget is managed through the web interface so you should adjust your firewall rules accordingly.")
   ];
 
   # interface
 
   options = {
     services.nzbget = {
-      enable = mkEnableOption "NZBGet, for downloading files from news servers";
+      enable = lib.mkEnableOption "NZBGet, for downloading files from news servers";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nzbget";
         description = "User account under which NZBGet runs";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nzbget";
         description = "Group under which NZBGet runs";
       };
 
-      settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool int str ]);
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ bool int str ]);
         default = {};
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
@@ -56,7 +53,7 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nzbget.settings = {
       # allows nzbget to run as a "simple" service
       OutputMode = "loggable";
@@ -100,7 +97,7 @@ in
       };
     };
 
-    users.users = mkIf (cfg.user == "nzbget") {
+    users.users = lib.mkIf (cfg.user == "nzbget") {
       nzbget = {
         home = stateDir;
         group = cfg.group;
@@ -108,7 +105,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "nzbget") {
+    users.groups = lib.mkIf (cfg.group == "nzbget") {
       nzbget = {
         gid = config.ids.gids.nzbget;
       };

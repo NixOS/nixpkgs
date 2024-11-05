@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.7.4";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-q1o2pNKfvenpRwiYgIKkOYNcajgIhrhCjFC7bbEyLE4=";
+    hash = "sha256-hxqd0TrsKANCPgQf6JUP0p1BYhZdqfnWbtCQCBxF8Gs=";
   };
 
-  cargoHash = "sha256-sMyK1v4pJmmlN47mvgUkpLBjcpmT346VSp984IpvVWY=";
+  cargoHash = "sha256-jDwfFHC19m20ECAo5VbFI6zht4gnZMYqTKsbyoVJJZU=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -45,10 +45,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       openssl
     ] ++
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       Security
       SystemConfiguration

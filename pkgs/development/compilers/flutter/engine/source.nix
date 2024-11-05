@@ -1,9 +1,9 @@
 {
+  stdenv,
+  lib,
   callPackage,
-  hostPlatform,
-  targetPlatform,
   fetchgit,
-  tools ? callPackage ./tools.nix { inherit hostPlatform; },
+  tools ? null,
   curl,
   pkg-config,
   git,
@@ -11,15 +11,20 @@
   runCommand,
   writeText,
   cacert,
+  flutterVersion,
   version,
   hashes,
   url,
-}:
+}@pkgs:
 let
-  constants = callPackage ./constants.nix { inherit targetPlatform; };
+  target-constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
+  build-constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
+  tools = pkgs.tools or (callPackage ./tools.nix { });
+
   boolOption = value: if value then "True" else "False";
 in
-runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
+runCommand
+  "flutter-engine-source-${version}-${stdenv.buildPlatform.system}-${stdenv.targetPlatform.system}"
   {
     pname = "flutter-engine-source";
     inherit version;
@@ -47,12 +52,24 @@ runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
         "custom_vars": {
           "download_fuchsia_deps": False,
           "download_android_deps": False,
-          "download_linux_deps": ${boolOption targetPlatform.isLinux},
+          "download_linux_deps": ${boolOption stdenv.targetPlatform.isLinux},
           "setup_githooks": False,
           "download_esbuild": False,
           "download_dart_sdk": False,
+          "host_cpu": "${build-constants.alt-arch}",
+          "host_os": "${build-constants.alt-os}",
         },
       }]
+
+      target_os_only = True
+      target_os = [
+        "${target-constants.alt-os}"
+      ]
+
+      target_cpu_only = True
+      target_cpu = [
+        "${target-constants.alt-arch}"
+      ]
     '';
 
     NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -64,7 +81,9 @@ runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = hashes.${targetPlatform.system} or (throw "Hash not set for ${targetPlatform.system}");
+    outputHash =
+      (hashes."${stdenv.buildPlatform.system}" or { })."${stdenv.targetPlatform.system}"
+        or (throw "Hash not set for ${stdenv.targetPlatform.system} on ${stdenv.buildPlatform.system}");
   }
   ''
     source ${../../../../build-support/fetchgit/deterministic-git}
@@ -76,13 +95,13 @@ runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
     cd $out
 
     export PATH=$PATH:$depot_tools
-    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks 2>&1 >/dev/null
-    find $out -name '.git' -exec dirname {} \; | xargs bash -c 'make_deterministic_repo $@' _
-    find $out -path '*/.git/*' ! -name 'HEAD' -prune -exec rm -rf {} \;
-    find $out -name '.git' -exec mkdir {}/logs \;
-    find $out -name '.git' -exec cp {}/HEAD {}/logs/HEAD \;
+    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
+    find $out -name '.git' -exec rm -rf {} \; || true
 
-    rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader}
+    rm -rf $out/src/{buildtools,fuchsia}
+    rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
+    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
+    rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
 
     rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
   ''

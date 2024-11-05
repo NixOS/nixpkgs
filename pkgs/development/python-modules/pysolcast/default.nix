@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mcaulifn";
     repo = "solcast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NssU1RZU5Xc9s6E4nnjYElAGZrE4ER2jSzamrCx/Yng=";
+    hash = "sha256-x91QVCDPjfC8rCVam/mrc8HP84ONa2/mJtSV64hrilc=";
   };
 
   pythonRelaxDeps = [ "responses" ];

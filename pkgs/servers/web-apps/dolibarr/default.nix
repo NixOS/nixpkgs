@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
-  version = "19.0.2";
+  version = "20.0.0";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
     rev = version;
-    hash = "sha256-HPAcDgJSh3oIrr0vI9C80NR6oDS1KbAiiYR1tL5qrrI=";
+    hash = "sha256-nxytzUEpEo1qeIlpbPQ4mETl5DAAP+d1bqUcYxEW26E=";
   };
 
   dontBuild = true;

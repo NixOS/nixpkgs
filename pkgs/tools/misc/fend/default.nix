@@ -18,19 +18,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.5.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     rev = "v${version}";
-    hash = "sha256-owWBbeZtkjLiMYnXB5d4PfFX4i5BWo0OOnWd3C02VLE=";
+    hash = "sha256-mokBvBJlqvrherpZ+qMy86CXESXlaC6Qh3LISmmfR0Q=";
   };
 
-  cargoHash = "sha256-pxy6TPDvAnbXJ6QMxWUCwVeWVzKmvwYxysJWhZpeVvI=";
+  cargoHash = "sha256-+8rXZ+xX2fqm0+tFnyQK9HXa/ZuIcbvtzVrB5cOUCp4=";
 
   nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
-  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh

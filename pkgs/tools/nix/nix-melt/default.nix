@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-melt";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-melt";
     rev = "v${version}";
-    hash = "sha256-5V9sPbBb9t4B6yiLrYF+hx6YokGDH6+UsVQBhgqxMbY=";
+    hash = "sha256-jx7g9GOFAjOlJyNsGOUTLh2qWII9u0prOoBEvNPmdj8=";
   };
 
-  cargoHash = "sha256-yBoaLqynvYC9ebC0zjd2FmSSd53xzn4ralihtCFubAw=";
+  cargoHash = "sha256-CVMQPnSwGErZnf5/iAcVy37VlJjZdO/BkO3C/rlpl/w=";
 
   nativeBuildInputs = [
     installShellFiles

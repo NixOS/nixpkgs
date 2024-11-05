@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Fix django tests
   postPatch = ''
     substituteInPlace tests/test_project/settings.py \
-      --replace "USE_L10N = True" ""
+      --replace-fail "USE_L10N = True" ""
   '';
 
   patches = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   # For Django tests
   preCheck = "export DJANGO_SETTINGS_MODULE=test_project.settings";
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # fail on Darwin because it defaults to multiprocessing `spawn`
     "test_reset_signalizes"
     "test_reset_all_signalizes"

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp
   ;
 
   cmakeFlags = [

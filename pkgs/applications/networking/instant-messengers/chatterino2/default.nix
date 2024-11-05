@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     boost
     openssl
     libsecret
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
   cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
   '' + ''

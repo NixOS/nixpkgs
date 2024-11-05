@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gitaly-git";
-  version = "2.44.1.gl1";
+  version = "2.45.2";
 
   # `src` attribute for nix-update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "git";
     rev = "v${version}";
-    hash = "sha256-1XtzM2dYbt3nsYOm5isgHnolfziyIC9yCTkfLJ95V6Y=";
+    hash = "sha256-R4K5b4d1DQw+pwoOCAK4EJtVPXQDPossTUmVv0LJtUs=";
   };
 
   # we actually use the gitaly build system

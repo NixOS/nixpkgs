@@ -78,6 +78,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
@@ -101,11 +102,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "273";
+  version = "282";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-TccR/Vxq6Zf9tEvknLWewPVvJqo8pVSIi1+KxKMASq4=";
+    hash = "sha256-hp1SW9vHBZnlSNKCKW7AUPheyMntxvrPo0McDHZw96c=";
   };
 
   outputs = [
@@ -244,7 +245,7 @@ python.pkgs.buildPythonApplication rec {
         # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
       # This doesn't work on aarch64-darwin
       ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
     )
@@ -271,7 +272,7 @@ python.pkgs.buildPythonApplication rec {
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
       "test_non_unicode_filename"
       "test_listing"
@@ -287,7 +288,7 @@ python.pkgs.buildPythonApplication rec {
       "test_libmix_differences"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"

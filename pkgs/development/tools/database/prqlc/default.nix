@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prqlc";
-  version = "0.12.2";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
     rev = version;
-    hash = "sha256-nD3B4R2eBX52wekBrBT3jiIYdE/p6xgnHrvDFFofl/s=";
+    hash = "sha256-DuuWeXuqOKpC4NbaQ6xhYxzZLtxOMzqDl7eOd9zTIuY=";
   };
 
-  cargoHash = "sha256-Rhvl9rqtJyEpZZYUaN+ih6KXgEVKZCyovf34l883bZM=";
+  cargoHash = "sha256-ZOlbKmSHAcgYMYbeyyljltf56WbP5dK7ezpmgSA3CyQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
       sqlite
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.Security

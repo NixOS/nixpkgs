@@ -1,19 +1,16 @@
 { config, options, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.nixpkgs.flake;
 in
 {
   options.nixpkgs.flake = {
-    source = mkOption {
+    source = lib.mkOption {
       # In newer Nix versions, particularly with lazy trees, outPath of
       # flakes becomes a Nix-language path object. We deliberately allow this
       # to gracefully come through the interface in discussion with @roberth.
       #
       # See: https://github.com/NixOS/nixpkgs/pull/278522#discussion_r1460292639
-      type = types.nullOr (types.either types.str types.path);
+      type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
 
       default = null;
       defaultText = "if (using nixpkgsFlake.lib.nixosSystem) then self.outPath else null";
@@ -34,8 +31,8 @@ in
       '';
     };
 
-    setNixPath = mkOption {
-      type = types.bool;
+    setNixPath = lib.mkOption {
+      type = lib.types.bool;
 
       default = cfg.source != null;
       defaultText = "config.nixpkgs.flake.source != null";
@@ -54,8 +51,8 @@ in
       '';
     };
 
-    setFlakeRegistry = mkOption {
-      type = types.bool;
+    setFlakeRegistry = lib.mkOption {
+      type = lib.types.bool;
 
       default = cfg.source != null;
       defaultText = "config.nixpkgs.flake.source != null";
@@ -75,7 +72,7 @@ in
     };
   };
 
-  config = mkIf (cfg.source != null) (mkMerge [
+  config = lib.mkIf (cfg.source != null) (lib.mkMerge [
     {
       assertions = [
         {
@@ -87,19 +84,19 @@ in
         }
       ];
     }
-    (mkIf cfg.setFlakeRegistry {
-      nix.registry.nixpkgs.to = mkDefault {
+    (lib.mkIf cfg.setFlakeRegistry {
+      nix.registry.nixpkgs.to = lib.mkDefault {
         type = "path";
         path = cfg.source;
       };
     })
-    (mkIf cfg.setNixPath {
+    (lib.mkIf cfg.setNixPath {
       # N.B. This does not include nixos-config in NIX_PATH unlike modules/config/nix-channel.nix
       # because we would need some kind of evil shim taking the *calling* flake's self path,
       # perhaps, to ever make that work (in order to know where the Nix expr for the system came
       # from and how to call it).
-      nix.nixPath = mkDefault ([ "nixpkgs=flake:nixpkgs" ]
-        ++ optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels");
+      nix.nixPath = lib.mkDefault ([ "nixpkgs=flake:nixpkgs" ]
+        ++ lib.optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels");
     })
   ]);
 }

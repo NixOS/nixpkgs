@@ -1,9 +1,13 @@
 {
   mkKdeDerivation,
   libcanberra,
+  libvlc,
 }:
 mkKdeDerivation {
   pname = "kalarm";
 
-  extraBuildInputs = [libcanberra];
+  extraBuildInputs = [
+    libcanberra
+    libvlc
+  ];
 }

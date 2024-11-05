@@ -9,6 +9,7 @@ let
     setAttr
     hasAttr
     optionals
+    isDerivation
     hasSuffix
     splitString
     remove
@@ -23,23 +24,33 @@ let
   # E.g. cl-unicode creating .txt files during compilation
   build-with-compile-into-pwd = args:
     let
-      build = (build-asdf-system (args // { version = args.version + "-build"; }))
+      args' = if isDerivation args then args.drvAttrs else args;
+      build = (build-asdf-system (args' // { version = args'.version + "-build"; }))
         .overrideAttrs(o: {
           buildPhase = with builtins; ''
+            runHook preBuild
+
             mkdir __fasls
             export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)/__fasls:${storeDir}:${storeDir}"
             export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
             ${o.pkg}/bin/${o.program} ${toString (o.flags or [])} < ${o.buildScript}
+
+            runHook postBuild
           '';
           installPhase = ''
+            runHook preInstall
+
             mkdir -pv $out
             rm -rf __fasls
             cp -r * $out
+
+            runHook postInstall
           '';
         });
-    in build-asdf-system (args // {
+    in build-asdf-system (args' // {
       # Patches are already applied in `build`
       patches = [];
+      postPatch = "";
       src = build;
     });
 
@@ -49,38 +60,10 @@ let
 
   packages = ql.overrideScope (self: super: {
 
-  cl-environments = super.cl-environments.overrideLispAttrs (old: {
-    patches = old.patches or [] ++ [
-      # Needed because SB-INT:TRULY-DYNAMIC-EXTENT has been removed since sbcl 2.3.10.
-      # The update isn't available on quicklisp yet, but we can fetch from upstream directly
-      (pkgs.fetchpatch {
-        url = "https://github.com/alex-gutev/cl-environments/commit/1bd7ecf68adeaf654616c6fb763c1239e0f2e221.patch";
-        sha256 = "sha256-i6KdthYqPlJPvxM2c2kossHYvXNhpZHl/7NzELNrOHU=";
-      })
-    ];
-  });
-
   cl-unicode = build-with-compile-into-pwd {
     inherit (super.cl-unicode) pname version src systems;
     lispLibs = super.cl-unicode.lispLibs ++ [ self.flexi-streams ];
   };
-
-  dissect = super.dissect.overrideAttrs {
-    version = "1.0.0-trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "Shinmera";
-      repo = "dissect";
-      rev = "a70cabcd748cf7c041196efd711e2dcca2bbbb2c";
-      hash = "sha256-WXv/jbokgKJTc47rBjvOF5npnqDlsyr8oSXIzN/7ofo=";
-    };
-  };
-
-  cl-gobject-introspection = super.cl-gobject-introspection.overrideLispAttrs (o: {
-    postPatch = ''
-      substituteInPlace src/init.lisp \
-        --replace sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
-    '';
-  });
 
   jzon = super.com_dot_inuoe_dot_jzon;
 
@@ -99,13 +82,7 @@ let
     ];
   };
 
-  cl-liballegro-nuklear = build-with-compile-into-pwd {
-    inherit (super.cl-liballegro-nuklear) pname version src;
-    nativeBuildInputs = [ pkgs.allegro5 ];
-    nativeLibs = [ pkgs.allegro5 ];
-    lispLibs = super.cl-liballegro-nuklear.lispLibs ++ [ self.cl-liballegro ];
-    patches = [ ./patches/cl-liballegro-nuklear-missing-dll.patch ];
-  };
+  cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
   lessp = build-asdf-system {
     pname = "lessp";
@@ -183,8 +160,14 @@ let
   cephes = build-with-compile-into-pwd {
     inherit (super.cephes) pname version src lispLibs;
     patches = [ ./patches/cephes-make.patch ];
+    postPatch = ''
+      find \( -name '*.dll' -o -name '*.dylib' -o -name '*.so' \) -delete
+    '';
     postConfigure = ''
       substituteAllInPlace cephes.asd
+    '';
+    postInstall = ''
+      find $out -name '*.o' -delete
     '';
   };
 
@@ -205,271 +188,6 @@ let
     inherit (super.mathkit) pname version src asds ;
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
-
-  cl-colors2_0_5_4 = build-asdf-system {
-    inherit (super.cl-colors2) pname systems lispLibs;
-    version = "0.5.4";
-
-    src = pkgs.fetchgit {
-      url = "https://codeberg.org/cage/cl-colors2";
-      rev = "v0.5.4";
-      sha256 = "sha256-JbT1BKjaXDwdlzHLPjX1eg0RMIOT86R17SPgbe2h+tA=";
-    };
-  };
-
-  prompter = build-asdf-system rec {
-    pname = "prompter";
-    version = "20240108-git";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "prompter";
-      rev = "7890ed5d02e70aba01ceb964c6ee4f40776e7dc0";
-      hash = "sha256-rRKtpSKAqfzvnlC3NQ4840RrlbBUpI4V6uX6p5hRJWQ=";
-    };
-
-    lispLibs = [
-      self.cl-containers
-      self.nclasses
-      self.alexandria
-      self.calispel
-      self.closer-mop
-      self.lparallel
-      self.moptilities
-      self.serapeum
-      self.str
-      self.trivial-package-local-nicknames
-    ];
-
-  };
-
-  njson = build-asdf-system rec {
-    pname = "njson";
-    version = "1.2.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "njson";
-      rev = version;
-      sha256 = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
-    };
-    lispLibs = [ self.cl-json self.com_dot_inuoe_dot_jzon];
-    systems = [ "njson" "njson/cl-json" "njson/jzon"];
-  };
-
-  nsymbols = build-asdf-system rec {
-    pname = "nsymbols";
-    version = "0.3.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nsymbols";
-      rev = version;
-      sha256 = "sha256-psk29WEA7Hxgp29oUniBNvI+lyZfMkdpa5A7okc6kKs=";
-    };
-    lispLibs = [ self.closer-mop ];
-    systems = [ "nsymbols" "nsymbols/star" ];
-
-  };
-
-  nclasses = build-asdf-system rec {
-    pname = "nclasses";
-    version = "0.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nclasses";
-      rev = version;
-      sha256 = "sha256-foXmaLxMYMFieB2Yd2iPsU4EX5kLXq7kyElqGZ47OgI=";
-    };
-    lispLibs = [ self.moptilities ];
-  };
-
-  nfiles = build-asdf-system rec {
-    pname = "nfiles";
-    version = "1.1.4";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nfiles";
-      rev = version;
-      sha256 = "sha256-4rhpBErQgZHcwZRblxgiYaUmKalvllSbJjnRteDVH6k=";
-    };
-    lispLibs = [
-      self.nclasses
-      self.quri
-      self.alexandria
-      self.iolib
-      self.serapeum
-      self.trivial-garbage
-      self.trivial-package-local-nicknames
-      self.trivial-types
-    ];
-  };
-
-  nhooks = build-asdf-system rec {
-    pname = "nhooks";
-    version = "1.2.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nhooks";
-      rev = version;
-      hash = "sha256-6A3fsemsv2KbTmdGMQeL9iHFUBHc4kK6CRNVyc91LdU=";
-    };
-    lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
-  };
-
-  nkeymaps = build-asdf-system rec {
-    pname = "nkeymaps";
-    version = "1.1.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nkeymaps";
-      rev = version;
-      hash = "sha256-/t85Yh4EvnSyIM6xeDBLmfVz3wddmavInXzeYafNMJ0=";
-    };
-    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames
-                            str ];
-  };
-
-
-  history-tree = build-asdf-system rec {
-    pname = "history-tree";
-    version = "0.1.2";
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "history-tree";
-      rev = version;
-      hash = "sha256-wpVONvShNnvrPOlbNoX/t9sYiwxnIKnnJaJyALEyeNg=";
-    };
-    lispLibs = with self; [
-      alexandria
-      cl-custom-hash-table
-      local-time
-      nclasses
-      trivial-package-local-nicknames
-    ];
-  };
-
-  nyxt-gtk = build-asdf-system {
-    pname = "nyxt";
-    version = "3.11.6";
-
-    lispLibs = (with self; [
-      alexandria
-      bordeaux-threads
-      calispel
-      cl-base64
-      cl-gopher
-      cl-html-diff
-      cl-json
-      cl-ppcre
-      cl-ppcre-unicode
-      cl-prevalence
-      cl-qrencode
-      cl-tld
-      closer-mop
-      dissect
-      moptilities
-      dexador
-      enchant
-      flexi-streams
-      idna
-      iolib
-      lass
-      local-time
-      lparallel
-      log4cl
-      montezuma
-      ndebug
-      osicat
-      parenscript
-      py-configparser
-      serapeum
-      str
-      phos
-      plump
-      clss
-      spinneret
-      trivia
-      trivial-features
-      trivial-garbage
-      trivial-package-local-nicknames
-      trivial-types
-      unix-opts
-      cluffer
-      cl-cffi-gtk
-      quri
-      sqlite
-      trivial-clipboard
-      cl-gobject-introspection
-      cl-webkit2
-      slynk
-      iterate
-      symbol-munger
-      history-tree
-      nhooks
-      nkeymaps
-      prompter
-      cl-colors2_0_5_4
-      njson
-      nsymbols
-      nclasses
-      nfiles
-      cl-containers
-      swank
-    ]);
-
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nyxt";
-      rev = "3.11.6";
-      hash = "sha256-o+4LnSNyhdz5YAjNQJuE2ERtt48PckjKfts9QVRw82A=";
-    };
-
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-
-    buildInputs = [
-      # needed for GSETTINGS_SCHEMAS_PATH
-      pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
-
-      # needed for XDG_ICON_DIRS
-      pkgs.adwaita-icon-theme
-    ];
-
-    # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.
-    # This is done because if asdf:operate is used and the operation matches the system's :build-operation
-    # then output translations are ignored, causing the result of the operation to be placed where
-    # the .asd is located, which in this case is the nix store.
-    # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
-    patches = [ ./patches/nyxt-remove-build-operation.patch ];
-
-    NASDF_USE_LOGICAL_PATHS = true;
-
-    buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
-      (require :uiop)
-      (let ((pwd (uiop:ensure-directory-pathname (uiop/os:getcwd))))
-        (asdf:load-asd (uiop:merge-pathnames* "libraries/nasdf/nasdf.asd" pwd))
-        (asdf:load-asd (uiop:merge-pathnames* "nyxt.asd" pwd)))
-      ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:operare :program-op instead
-      (asdf:operate :program-op :nyxt/gi-gtk-application)
-    '';
-
-    # TODO(kasper): use wrapGAppsHook3
-    installPhase = ''
-      mkdir -pv $out
-      cp -r * $out
-      rm -fv $out/nyxt
-      mkdir -p $out/bin
-      cp -v nyxt $out/bin
-      wrapProgram $out/bin/nyxt \
-        --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
-        --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
-        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
-        --prefix GIO_EXTRA_MODULES ":" ${pkgs.dconf.lib}/lib/gio/modules/ \
-        --prefix GIO_EXTRA_MODULES ":" ${pkgs.glib-networking}/lib/gio/modules/
-    '';
-  };
-
-  nyxt = self.nyxt-gtk;
 
   stumpwm = super.stumpwm.overrideLispAttrs (o: rec {
     version = "22.11";
@@ -532,37 +250,9 @@ let
     inherit (super.magicl) pname version src lispLibs;
     nativeBuildInputs = [ pkgs.gfortran ];
     nativeLibs = [ pkgs.openblas ];
-    patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
   };
 
-  cl-glib = build-asdf-system {
-    pname = "cl-glib";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-glib";
-      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
-      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
-    };
-    lispLibs = with self; [
-      cl-gobject-introspection-wrapper
-      bordeaux-threads
-    ];
-  };
-
-  cl-glib_dot_gio = build-asdf-system {
-    pname = "cl-glib.gio";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-glib";
-      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
-      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
-    };
-    lispLibs = with self; [
-      cl-gobject-introspection-wrapper
-    ];
-  };
+  cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";
 
   cl-gtk4 = build-asdf-system {
     pname = "cl-gtk4";
@@ -570,13 +260,14 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "bohonghuang";
       repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
+      rev = "ff60e3495cdbba5c09d0bb8aa49f3184cc060c8e";
+      hash = "sha256-06cyPf+5z+GE3YvZEJ67kC281nkwRz/hoaykTISsni0=";
     };
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-glib
-      cl-glib_dot_gio
+      cl-gio
+      cl-gobject
     ];
     nativeBuildInputs = [
       pkgs.gobject-introspection
@@ -589,13 +280,8 @@ let
 
   cl-gtk4_dot_adw = build-asdf-system {
     pname = "cl-gtk4.adw";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
-    };
+    version = self.cl-gtk4.version;
+    src = self.cl-gtk4.src;
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-gtk4
@@ -608,15 +294,12 @@ let
     ];
   };
 
-  cl-gtk4_dot_webkit2 = build-asdf-system {
-    pname = "cl-gtk4.webkit2";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
-    };
+  cl-gtk4_dot_webkit2 = throw "cl-gtk4_dot_webkit2 was replaced by cl-gtk4_dot_webkit";
+
+  cl-gtk4_dot_webkit = build-asdf-system {
+    pname = "cl-gtk4.webkit";
+    version = self.cl-gtk4.version;
+    src = self.cl-gtk4.src;
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-gtk4
@@ -627,8 +310,6 @@ let
     nativeLibs = [
       pkgs.webkitgtk_6_0
     ];
-    # Requires old webkitgtk_5_0 which was replaced by webkitgtk_6_0
-    meta.broken = true;
   };
 
   cl-avro = build-asdf-system {
@@ -637,97 +318,43 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "SahilKang";
       repo = "cl-avro";
-      rev = "7d624253e98afb987a01729bd72c99bae02f0d7d";
-      hash = "sha256-AlTn+Q1gKnAFEfcnz9+VeHz681pPIirg2za3VXYiNWk=";
+      rev = "b8fa26320fa0ae88390215140d57f9cca937f691";
+      hash = "sha256-acXsotvKWuffrLbrG9YJ8yZc5E6WC8N0qCFCAiX6N0Q=";
     };
     lispLibs = with self; [
-      alexandria
-      babel
-      chipz
-      closer-mop
-      ieee-floats
-      flexi-streams
-      local-time
-      local-time-duration
-      md5
-      salza2
-      st-json
-      time-interval
+      alexandria babel chipz closer-mop ieee-floats flexi-streams local-time
+      local-time-duration md5 salza2 st-json time-interval
       trivial-extensible-sequences
     ];
   };
 
-  trivial-clock = build-asdf-system {
-    pname = "trivial-clock";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-trivial-clock";
-      rev = "641e12ab1763914996beb1ceee67aabc9f1a3b1e";
-      hash = "sha256-mltQEJ2asxyQ/aS/9BuWmN3XZ9bGmmkopcF5YJU1cPk=";
-    };
-    systems = [ "trivial-clock" "trivial-clock/test" ];
-    lispLibs = [ self.cffi self.fiveam ];
-  };
-
-  frugal-uuid = build-asdf-system {
-    pname = "frugal-uuid";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-frugal-uuid";
-      rev = "be27972333a16fc3f16bc7fbf9e3013b2123d75c";
-      hash = "sha256-rWO43vWMibF8/OxL70jle5nhd9oRWC7+MI44KWrQD48=";
-    };
-    systems = [ "frugal-uuid"
-                "frugal-uuid/non-frugal"
-                "frugal-uuid/benchmark"
-                "frugal-uuid/test" ];
-    lispLibs = with self; [
-      babel
-      bordeaux-threads
-      fiveam
+  frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
+    systems = [
+      "frugal-uuid"
+      "frugal-uuid/non-frugal"
+      "frugal-uuid/benchmark"
+      "frugal-uuid/test"
+    ];
+    lispLibs = o.lispLibs ++ (with self; [
       ironclad
-      trivial-benchmark
+      babel
       trivial-clock
-    ];
-  };
+      trivial-benchmark
+      fiveam
+    ]);
+  });
 
-  duckdb = build-asdf-system {
-    pname = "duckdb";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-duckdb";
-      rev = "3ed1df5ba5c738a0b7fed7aa73632ec86f558d09";
-      hash = "sha256-AJMxhtDACe6WTwEOxLsC8y6uBaPqjt8HLRw/eIZI02E=";
-    };
+  duckdb = super.duckdb.overrideLispAttrs (o: {
     systems = [ "duckdb" "duckdb/test" "duckdb/benchmark" ];
-    lispLibs = with self; [
-      bordeaux-threads
-      cffi-libffi
-      cl-ascii-table
-      cl-spark
-      cl-ppcre
-      frugal-uuid
-      let-plus
-      local-time
-      local-time-duration
-      periods
-      float-features
-    ];
-    nativeLibs = with pkgs; [
-      duckdb libffi
-    ];
-  };
+  });
 
   polyclot = build-asdf-system {
     pname = "polyclot";
     version = "trunk";
     src = pkgs.fetchfossil {
-      url = "https://fossil.turtleware.eu/polyclot";
-      rev = "e678b3c3e002f53b446780406c9ed13f8451309d22a1dc50ced4dbeedf08a1ec";
-      sha256 = "sha256-J08bU9HSVbzEivYtQsyIYPZJTrugj+jJSa4LglS0Olg=";
+      url = "https://fossil.turtleware.eu/fossil.turtleware.eu/polyclot";
+      rev = "18500c968b1fc1e2a915b5c70b8cddc4a2b54de51da4eedc5454e42bfea3b479";
+      sha256 = "sha256-KgBL1QQN4iG6d8E9GlKAuxSwkrY6Zy7e1ZzEDGKad+A=";
     };
     systems = [ "eu.turtleware.polyclot" "eu.turtleware.polyclot/demo" ];
     lispLibs = with self; [ clim mcclim mcclim-layouts ];
@@ -739,27 +366,16 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "kaveh808";
       repo = "kons-9";
-      rev = "95ad44fac0566f445c4b7bd040339dcff75ee992";
-      sha256 = "19rl7372j9f1cv2kl55r8vyf4dhcz4way4hkjgysbxzrb1psp17n";
+      rev = "08770e7fbb839b91fd035f1cd4a50ecc81b42d57";
+      sha256 = "sha256-Tit/qmOU5+zp43/ecIXGbh4CtgWzltWM7tHdVWkga0k=";
     };
     systems = [ "kons-9" "kons-9/testsuite" ];
+    patches = [ ./patches/kons-9-fix-testsuite-compilation.patch ];
     lispLibs = with self; [
       closer-mop trivial-main-thread trivial-backtrace cffi cl-opengl cl-glu
-      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber
+      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber shasht
       org_dot_melusina_dot_confidence
     ];
-  };
-
-  sb-cga = build-asdf-system {
-    pname = "sb-cga";
-    version = "1.0.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "nikodemus";
-      repo = "sb-cga";
-      rev = "9a554ea1c01cac998ff7eaa5f767bc5bcdc4c094";
-      sha256 = "sha256-iBM+VXu6JRqGmeIFzfXbGot+elvangmfSpDB7DjFpPg";
-    };
-    lispLibs = [ self.alexandria ];
   };
 
   nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
@@ -826,30 +442,8 @@ let
     meta.mainProgram = "qlot";
   };
 
-  misc-extensions = super.misc-extensions.overrideLispAttrs (old: rec {
-    version = "4.0.3";
-    src = pkgs.fetchFromGitLab {
-      domain = "gitlab.common-lisp.net";
-      owner = "misc-extensions";
-      repo = "misc-extensions";
-      rev = "v${version}";
-      hash = "sha256-bDNI4mIaNw/rf7ZwvwolKo6+mUUxsgubGUd/988sHAo=";
-    };
-  });
-
-  fset = super.fset.overrideLispAttrs (old: rec {
-    version = "1.4.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "slburson";
-      repo = "fset";
-      rev = "v${version}";
-      hash = "sha256-alO8Ek5Xpyl5N99/LgyIZ50aoRbY7bKh3XBntFV6Q5k=";
-    };
-    lispLibs = with super; [
-      self.misc-extensions
-      mt19937
-      named-readtables
-    ];
+  fset = super.fset.overrideLispAttrs (oa: {
+    systems = [ "fset" "fset/test" ];
     meta = {
       description = "functional collections library";
       homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
@@ -857,32 +451,25 @@ let
     };
   });
 
-  coalton = build-asdf-system {
-    pname = "coalton";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "coalton-lang";
-      repo = "coalton";
-      rev = "05111b8a59e3f7346b175ce1ec621bff588e1e1f";
-      hash = "sha256-L9o7Y3zDx9qLXGe/70c1LWEKUWsSRgBQru66mIuaCFw=";
-    };
-    lispLibs = with super; [
-      alexandria
-      eclector-concrete-syntax-tree
-      fiasco
-      float-features
-      self.fset
-      named-readtables
-      trivial-garbage
+  thih-coalton = self.coalton;
+  quil-coalton = self.coalton;
+  coalton = super.coalton.overrideLispAttrs (oa: {
+    systems = [
+      "coalton"
+      "thih-coalton"
+      "quil-coalton"
+      "thih-coalton/tests"
+      "quil-coalton/tests"
+      "coalton/tests"
     ];
+    lispLibs = oa.lispLibs ++ [ self.fiasco ];
     nativeLibs = [ pkgs.mpfr ];
-    systems = [ "coalton" "coalton/tests" ];
     meta = {
       description = "statically typed functional programming language that supercharges Common Lisp";
       homepage = "https://coalton-lang.github.io";
       license = pkgs.lib.licenses.mit;
     };
-  };
+  });
 
   });
 

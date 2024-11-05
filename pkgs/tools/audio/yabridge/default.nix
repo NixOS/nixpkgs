@@ -83,16 +83,18 @@ multiStdenv.mkDerivation (finalAttrs: {
   };
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    cp -R --no-preserve=mode,ownership ${asio} asio
-    cp -R --no-preserve=mode,ownership ${bitsery} bitsery
-    cp -R --no-preserve=mode,ownership ${clap} clap
-    cp -R --no-preserve=mode,ownership ${function2} function2
-    cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
-    cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
-    cp -R --no-preserve=mode,ownership ${vst3} vst3
-  )'';
+  postUnpack = ''
+    (
+      cd "$sourceRoot/subprojects"
+      cp -R --no-preserve=mode,ownership ${asio} asio
+      cp -R --no-preserve=mode,ownership ${bitsery} bitsery
+      cp -R --no-preserve=mode,ownership ${clap} clap
+      cp -R --no-preserve=mode,ownership ${function2} function2
+      cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
+      cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
+      cp -R --no-preserve=mode,ownership ${vst3} vst3
+    )
+  '';
 
   patches = [
     # Hard code bitbridge & runtime dependencies

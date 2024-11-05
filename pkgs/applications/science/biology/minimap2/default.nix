@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
     mkdir -p $out/bin

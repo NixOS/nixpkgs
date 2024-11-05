@@ -4,6 +4,7 @@
 , meson
 , pkg-config
 , ninja
+, wayland-scanner
 , wayland
 , libepoxy
 , glib
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.14.2";
+  version = "1.14.3";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
-    sha256 = "k8l2aumGTurq7isKdPIsvKCN9CwaG9tVsIbyUo44DTg=";
+    sha256 = "sha256-EBIYQllahQKR2z6C89sLmYTfB5Ai04bOQsK4UIFZ3Gw=";
   };
 
   depsBuildBuild = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [

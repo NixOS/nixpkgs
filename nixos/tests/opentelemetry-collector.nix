@@ -12,7 +12,9 @@ in {
       enable = true;
       settings = {
         exporters.logging.verbosity = "detailed";
-        receivers.otlp.protocols.http = {};
+        receivers.otlp.protocols = {
+          http.endpoint = "0.0.0.0:${toString port}";
+        };
         service = {
           pipelines.logs = {
             receivers = [ "otlp" ];

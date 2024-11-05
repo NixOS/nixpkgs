@@ -22,11 +22,12 @@
 , gobject-introspection
 , vala
 , withDemoAgent ? false
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geoclue";
-  version = "2.7.0";
+  version = "2.7.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "geoclue";
     repo = "geoclue";
-    rev = version;
-    hash = "sha256-vzarUg4lBEXYkH+n9SY8SYr0gHUX94PSTDmKd957gyc=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-LwL1WtCdHb/NwPr3/OLISwaAwplhJwiZT9vUdX29Bbs=";
   };
 
   patches = [
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     avahi
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     modemmanager
   ];
 
@@ -76,14 +77,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
     "-Ddemo-agent=${lib.boolToString withDemoAgent}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
-    "-Dmozilla-api-key=5c28d1f4-9511-47ff-b11a-2bef80fc177c"
     "-Ddbus-srv-user=geoclue"
-    "-Ddbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"
     "-Dmodem-gps-source=false"
@@ -95,12 +94,15 @@ stdenv.mkDerivation rec {
     patchShebangs demo/install-file.py
   '';
 
+  updateScript = nix-update-script {};
+
   meta = with lib; {
-    broken = stdenv.isDarwin && withDemoAgent;
+    broken = stdenv.hostPlatform.isDarwin && withDemoAgent;
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
+    changelog = "https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/${finalAttrs.version}/NEWS";
     maintainers = with maintainers; [ raskin mimame ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2Plus;
   };
-}
+})

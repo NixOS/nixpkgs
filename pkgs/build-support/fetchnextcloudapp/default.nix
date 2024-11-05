@@ -8,7 +8,7 @@
 , patches ? [ ]
 , description ? null
 , homepage ? null
-, unpack ? true # whether to use fetchzip rather than fetchurl
+, unpack ? false # whether to use fetchzip rather than fetchurl
 }:
 applyPatches ({
   inherit patches;

@@ -108,11 +108,11 @@ in
 
   cqueues = prev.cqueues.overrideAttrs (oa: rec {
     # Parse out a version number without the Lua version inserted
-    version = with lib; let
+    version = let
       version' = prev.cqueues.version;
-      rel = splitVersion version';
-      date = head rel;
-      rev = last (splitString "-" (last rel));
+      rel = lib.splitVersion version';
+      date = lib.head rel;
+      rev = lib.last (lib.splitString "-" (lib.last rel));
     in
     "${date}-${rev}";
 
@@ -141,15 +141,6 @@ in
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
-  });
-
-  fennel = prev.fennel.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [
-      installShellFiles
-    ];
-    postInstall = ''
-      installManPage fennel.1
-    '';
   });
 
   # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
@@ -212,7 +203,7 @@ in
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
-    propagatedBuildInputs = with lib; oa.propagatedBuildInputs ++ optional (!isLuaJIT) final.luaffi;
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
   });
 
   lgi = prev.lgi.overrideAttrs (oa: {
@@ -255,7 +246,7 @@ in
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
       knownRockspec = (fetchurl {
-        url = "https://luarocks.org/lmathx-20120430.51-1.rockspec";
+        url = "mirror://luarocks/lmathx-20120430.51-1.rockspec";
         sha256 = "148vbv2g3z5si2db7rqg5bdily7m4sjyh9w6r3jnx3csvfaxyhp0";
       }).outPath;
       src = fetchurl {
@@ -266,7 +257,7 @@ in
       if luaAtLeast "5.2" && luaOlder "5.3" then {
         version = "20120430.52-1";
         knownRockspec = (fetchurl {
-          url = "https://luarocks.org/lmathx-20120430.52-1.rockspec";
+          url = "mirror://luarocks/lmathx-20120430.52-1.rockspec";
           sha256 = "14rd625sipakm72wg6xqsbbglaxyjba9nsajsfyvhg0sz8qjgdya";
         }).outPath;
         src = fetchurl {
@@ -332,7 +323,13 @@ in
   });
 
   lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs(oa: {
-    meta = oa.meta // { broken = true; };
+    src = fetchFromGitHub {
+      owner = "cdbattags";
+      repo = "lua-resty-jwt";
+      rev = "v0.2.3";
+      hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
+      fetchSubmodules = true;
+    };
   });
 
   lua-zlib = prev.lua-zlib.overrideAttrs (oa: {
@@ -359,7 +356,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      postgresql
+      (lib.getDev postgresql)
     ];
   });
 
@@ -464,7 +461,7 @@ in
     ];
   });
 
-  luasystem = prev.luasystem.overrideAttrs (oa: lib.optionalAttrs stdenv.isLinux {
+  luasystem = prev.luasystem.overrideAttrs (oa: lib.optionalAttrs stdenv.hostPlatform.isLinux {
     buildInputs = [ glibc.out ];
   });
 
@@ -478,13 +475,6 @@ in
   #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
   #   meta.broken = true;
   # });
-
-  lua-resty-openidc =  prev.lua-resty-openidc.overrideAttrs (_: {
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
-    '';
-  });
 
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
@@ -511,6 +501,9 @@ in
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
 
+    # ld: symbol(s) not found for architecture arm64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -550,9 +543,19 @@ in
       '';
   });
 
+  lze  = prev.lze.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+    '';
+  });
+
   neotest  = prev.neotest.overrideAttrs(oa: {
-    # A few tests fail for strange reasons on darwin
-    doCheck = !stdenv.isDarwin;
+    doCheck = stdenv.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -566,7 +569,7 @@ in
       export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
       nvim --headless -i NONE \
         --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory tests/ {}"
+        -c "PlenaryBustedDirectory tests/ {sequential = true}"
 
       runHook postCheck
       '';
@@ -580,7 +583,15 @@ in
       export HOME=$(mktemp -d)
       busted --lua=nlua
       runHook postCheck
-      '';
+    '';
+  });
+
+  neorg = prev.neorg.overrideAttrs (oa: {
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
+        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+    '';
   });
 
   plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
@@ -632,7 +643,7 @@ in
     buildInputs = [ libuv final.lua ];
 
     nativeBuildInputs = [ pkg-config cmake ]
-      ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
   };
 
   luv = prev.luv.overrideAttrs (oa: {
@@ -750,6 +761,17 @@ in
     };
   })) {};
 
+  rtp-nvim  = prev.rtp-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [ final.nlua final.busted ];
@@ -762,8 +784,7 @@ in
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
-
-    doCheck = true;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # the plugin loads the library from either the LIBSQLITE env
@@ -779,7 +800,7 @@ in
 
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+        -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
     '';
 
   });
@@ -801,7 +822,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+      hash = "sha256-pKqG8aiV8BvvDO6RE6J3HEA/S4E4QunbO4WBpV5jUYk=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
@@ -810,10 +831,10 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
+      hash = "sha256-2WN5RoM1G2SE6H3g5pmEQvOoSCoaw3xMG8cDdfU2DAo=";
     };
 
-    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
       (if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
@@ -825,17 +846,13 @@ in
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
-    nativeBuildInputs = let
-      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
-      # so we have to pass the correct package in here.
+    propagatedBuildInputs = let
+      # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+      # but that doesn't seem to work
       lua = lib.head oa.propagatedBuildInputs;
-    in oa.nativeBuildInputs ++ [
-      lua.pkgs.luarocks-build-treesitter-parser
-    ] ++ (lib.optionals stdenv.isDarwin [
-      clang
-      tree-sitter
-    ]);
-    meta.broken = (luaOlder "5.1" || stdenv.isDarwin);
+    in oa.propagatedBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser-cpp
+    ];
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

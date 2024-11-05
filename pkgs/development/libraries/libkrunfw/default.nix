@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
-  version = "4.2.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-LaIyPk9QkxPFP169r6PqyBMpFujbQBlX77z63OqKGYc=";
+    hash = "sha256-o1bFz3INtJRm9gdm2b9+sHW6r+l/RNCZr62ucI73N9w=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.32.tar.xz";
-    hash = "sha256-qqgk6vB/YZEdIrdf8JCkA8PdC9c+I5M+C7qLWXFDbOE=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.52.tar.xz";
+    hash = "sha256-FZGrNIOZ1KpTEhFYUlBWppyM8P4OkJNbAJXppY43tLg=";
   };
 
   postPatch = ''
@@ -63,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
   };
 })

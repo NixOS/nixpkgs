@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = bpp-core.meta // {
     homepage = "https://github.com/BioPP/bpp-phyl";

@@ -95,7 +95,7 @@ let
         makeWrapper "${mpv}/bin/mpv" "$out/bin/mpv" ${mostMakeWrapperArgs}
         rm "$out/bin/umpv"
         makeWrapper "${mpv}/bin/umpv" "$out/bin/umpv" ${umpvWrapperArgs}
-      '' + lib.optionalString stdenv.isDarwin ''
+      '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # wrapProgram can't operate on symlinks
         rm "$out/Applications/mpv.app/Contents/MacOS/mpv"
         makeWrapper "${mpv}/Applications/mpv.app/Contents/MacOS/mpv" "$out/Applications/mpv.app/Contents/MacOS/mpv" ${mostMakeWrapperArgs}

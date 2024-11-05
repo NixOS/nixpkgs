@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ postgresql sqlite ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Kerberos ];
 
   meta = with lib; {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";

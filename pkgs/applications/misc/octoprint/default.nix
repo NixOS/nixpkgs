@@ -23,6 +23,7 @@ let
           werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
             version = "2.2.3";
             format = "setuptools";
+            pyproject = null;
             src = fetchPypi {
               pname = "Werkzeug";
               inherit version;
@@ -66,13 +67,13 @@ let
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FileCheck";
-          version = "2021.2.23";
+          version = "2024.3.27";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
             rev = version;
-            sha256 = "sha256-e/QGEBa9+pjOdrZq3Zc6ifbSMClIyeTOi0Tji0YdVmI=";
+            sha256 = "sha256-2MK9whPpgwQC+WPbPf628Ocjz6t8HKozblP7dmjD7RQ=";
           };
           doCheck = false;
         };
@@ -181,8 +182,8 @@ let
               class-doc
               pydantic_1
             ]
-            ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ]
-            ++ lib.optionals (!stdenv.isDarwin) [ octoprint-pisupport ];
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [ py.pkgs.appdirs ]
+            ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ octoprint-pisupport ];
 
           nativeCheckInputs = with self; [
             ddt
@@ -241,7 +242,7 @@ let
 
           disabledTests = [
             "test_check_setup" # Why should it be able to call pip?
-          ] ++ lib.optionals stdenv.isDarwin [ "test_set_external_modification" ];
+          ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
           disabledTestPaths = [
             "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
           ];

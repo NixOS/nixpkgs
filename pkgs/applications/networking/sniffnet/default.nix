@@ -3,35 +3,37 @@
 , fetchFromGitHub
 , pkg-config
 , libpcap
+, libxkbcommon
 , openssl
 , stdenv
 , alsa-lib
 , expat
 , fontconfig
 , vulkan-loader
+, wayland
 , xorg
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3OvzMzlaSwT7fOJATi+2QsSWln+SLkXNr2kYlQGClwA=";
+    hash = "sha256-wepy56LOhliU6t0ZRPviEbZtsWNqrtUnpUXsEdkRDqI=";
   };
 
-  cargoHash = "sha256-PdlST5n8YaKkByPOvFAg5CqRxVkqRgLeVHW6CJOKioY=";
+  cargoHash = "sha256-cV3WhidnH2CBlmHa3IVHTQfTuPdSHwwY0XhgNPyLDN4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libpcap
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     expat
     fontconfig
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     rustPlatform.bindgenHook
   ];
@@ -60,9 +62,9 @@ rustPlatform.buildRustPackage rec {
       --replace 'Exec=/usr/bin/sniffnet' 'Exec=sniffnet'
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 libxkbcommon wayland ]}
   '';
 
   meta = with lib; {

@@ -14,7 +14,7 @@
   zlib,
   # Boolean flags
   ## Darwin headless will hang when trying to run the SDL test program
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 let
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   configureFlags = [
     # Disable dynamically loaded dependencies
@@ -52,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature false "tif-shared")
     (lib.enableFeature false "webp-shared")
     (lib.enableFeature enableSdltest "sdltest")
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Don't use native macOS frameworks
-    # Caution: do not set this as (!stdenv.isDarwin) since it would be true
+    # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
     # outside Darwin - and ImageIO does not exist outisde Darwin
     (lib.enableFeature false "imageio")
   ];

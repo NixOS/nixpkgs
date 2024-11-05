@@ -239,7 +239,7 @@ core-big = stdenv.mkDerivation {
     # to the version vendored by texlive (2.1.0-beta3)
     (fetchpatch {
       name = "luajit-fix-aarch64-linux.patch";
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/30253fbfc22cd93d97ec53df323778a3aab82754/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
       hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
@@ -320,7 +320,11 @@ context = stdenv.mkDerivation rec {
   version = "2.10.08";
 
   src = fetchurl {
-    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=67034&view=co";
+    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=67034&view=co";
+    # keep the name the same, to avoid rebuilds now
+    name = "luametatex-${version}.tar.xz?revision=67034&view=co";
+    # when bumping the version this should probably be changed to:
+    # name = "luametatex-${version}.tar.xz";
     hash = "sha256-3JeOUQ63jJOZWTxFCoyWjfcrspmdmC/yqgS1JaLfTWk=";
   };
 

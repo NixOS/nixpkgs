@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     notmuch
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "JMAP integration for notmuch mail";

@@ -43,6 +43,7 @@
 , udev
 , webkitgtk_4_1
 , zlib
+, buildPackages
 , ...
 }:
 
@@ -71,7 +72,7 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
   };
 
   libz-sys = attrs: {
@@ -280,7 +281,7 @@ in
   };
 
   security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+    propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {
@@ -319,7 +320,7 @@ in
   };
 
   serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   servo-fontconfig-sys = attrs: {
@@ -357,4 +358,15 @@ in
     buildInputs = [ atk ];
   };
 
+  # Assumes it can run Command::new(env::var("CARGO")).arg("locate-project")
+  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L244
+  proc-macro-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
+    prePatch = (attrs.prePatch or "") + ''
+      substituteInPlace \
+        src/lib.rs \
+        --replace-fail \
+        'env::var("CARGO").map_err(|_| Error::CargoEnvVariableNotSet)?' \
+        '"${lib.getBin buildPackages.cargo}/bin/cargo"'
+    '';
+  };
 }

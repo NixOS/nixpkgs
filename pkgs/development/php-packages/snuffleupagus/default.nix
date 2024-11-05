@@ -11,18 +11,18 @@
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
     rev = "v${version}";
-    hash = "sha256-NwG8gBaToBaJGrZoCD7bDym7hQidWU0ArckoQCHN81o=";
+    hash = "sha256-W+EQXjvmDHih5YW/SjRcEdUELePUPKrNWB8vW9dLK/g=";
   };
 
   buildInputs =
     [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreFoundation
       darwin.apple_sdk_11_0.Libsystem
       libiconv

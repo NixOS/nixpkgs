@@ -5,7 +5,7 @@
 , pkg-config
 , stdenv
 , openssl
-, withALSA ? stdenv.isLinux
+, withALSA ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , alsa-plugins
 , withPortAudio ? false
@@ -17,18 +17,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "sha256-DtF6asSlLdC2m/0JTBo4YUx9HgsojpfiqVdqaIwniKA=";
+    sha256 = "sha256-/YMICsrUMYqiL5jMlb5BbZPlHfL9btbWiv/Kt2xhRW4=";
   };
 
-  cargoHash = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
+  cargoHash = "sha256-UOvGvseWaEqqjuvTewDfkBeR730cKMQCq55weYmu15Y=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
   ];
 

@@ -2,23 +2,24 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "steamguard-cli";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "dyc3";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cd2j3QRJv4GNm05W1O2tfYyZ/GHwixFisAG6EQ6TXzw=";
+    hash = "sha256-SrMg/4bTAvk+2fLck8SJBMQ3bELu1OBB7pDZmk+rCbA=";
   };
 
-  cargoHash = "sha256-LYrn0MKrOYjYPLdBukXRXGW+XWVcGHNAl0vC/qkmkNs=";
+  cargoHash = "sha256-MSN0xQj6IfOjI0qQqVBaGhh0BQJa4z24El2rGLlFBSM=";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd steamguard \
       --bash <($out/bin/steamguard completion --shell bash) \
       --fish <($out/bin/steamguard completion --shell fish) \

@@ -2,7 +2,7 @@
 let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix (extraArgs // { })
 else
   callPackage ./linux.nix (extraArgs // { })

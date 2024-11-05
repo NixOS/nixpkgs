@@ -31,8 +31,8 @@
   ]
 }:
 let
-  version = "1.17.31";
-  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  version = "1.18.26";
+  hash = "sha256-sJ0Zn5GMi64/S8zqomL/dYRVW8SOQWsP+bpcdatJC0A=";
   rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     owner = "solana-labs";
     repo = "solana";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   cargoLock = {
@@ -55,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
       "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
+      "aes-gcm-siv-0.10.3" = "sha256-N1ppxvew4B50JQWsC3xzP0X4jgyXZ5aOQ0oJMmArjW8=";
+      "curve25519-dalek-3.2.1" = "sha256-FuVNFuGCyHXqKqg+sn3hocZf1KMCI092Ohk7cvLPNjQ=";
     };
   };
 
@@ -70,8 +72,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles protobuf pkg-config ];
   buildInputs = [ openssl rustPlatform.bindgenHook ]
-    ++ lib.optionals stdenv.isLinux [ udev ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libcxx
     IOKit
     Security
@@ -80,11 +82,10 @@ rustPlatform.buildRustPackage rec {
     Libsystem
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd solana \
       --bash <($out/bin/solana completion --shell bash) \
-      --fish <($out/bin/solana completion --shell fish) \
-      --zsh  <($out/bin/solana completion --shell zsh)
+      --fish <($out/bin/solana completion --shell fish)
 
     mkdir -p $out/bin/sdk/bpf
     cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
@@ -96,8 +97,8 @@ rustPlatform.buildRustPackage rec {
 
   # Require this on darwin otherwise the compiler starts rambling about missing
   # cmath functions
-  CPPFLAGS = lib.optionals stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
-  LDFLAGS = lib.optionals stdenv.isDarwin "-L${lib.getLib libcxx}/lib";
+  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib libcxx}/lib";
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

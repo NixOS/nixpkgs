@@ -5,10 +5,10 @@
 , gitUpdater
 , nixosTests
 , cmake
-, content-hub
 , gettext
 , libapparmor
 , lomiri-action-api
+, lomiri-content-hub
 , lomiri-ui-extras
 , lomiri-ui-toolkit
 , pkg-config
@@ -27,23 +27,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     rev = finalAttrs.version;
-    hash = "sha256-C5iXv8VS8Mm1ryxK7Vi5tVmiM01OSIFiTyH0vP9B/xA=";
+    hash = "sha256-VxSADFTlaxQUDc81TzGkx54mjAUgY2L+suQC9zYGKo0=";
   };
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/575 merged & in release
-    (fetchpatch {
-      name = "0001-morph-browser-tst_SessionUtilsTests-Set-permissions-on-temporary-xdg-runtime-directory.patch";
-      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/e90206105b8b287fbd6e45ac37ca1cd259981928.patch";
-      hash = "sha256-5htFn+OGVVBn3mJQaZcF5yt0mT+2QRlKyKFesEhklfA=";
-    })
-
     # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/576 merged & in release
     (fetchpatch {
       name = "0002-morph-browser-Call-i18n-bindtextdomain-with-buildtime-determined-locale-path.patch";
@@ -84,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebengine
 
     # QML
-    content-hub
     lomiri-action-api
+    lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
     qqc2-suru-style
@@ -132,7 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
       standalone = nixosTests.morph-browser;
 
       # Lomiri-specific issues with the desktop file may break the entire session, make sure it still works
-      lomiri = nixosTests.lomiri;
+      lomiri-basics = nixosTests.lomiri.desktop-basics;
+      lomiri-appinteractions = nixosTests.lomiri.desktop-appinteractions;
     };
   };
 

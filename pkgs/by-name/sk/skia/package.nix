@@ -18,7 +18,7 @@
 , vulkan-memory-allocator
 , xcbuild
 
-, enableVulkan ? !stdenv.isDarwin
+, enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Version from https://skia.googlesource.com/skia/+/refs/heads/main/RELEASE_NOTES.md
   # or https://chromiumdash.appspot.com/releases
   # plus date of the tip of the corresponding chrome/m$version branch
-  version = "124-unstable-2024-05-22";
+  version = "129-unstable-2024-09-18";
 
   src = fetchgit {
     url = "https://skia.googlesource.com/skia.git";
     # Tip of the chrome/m$version branch
-    rev = "a747f7ea37db6ea3871816dbaf2eb41b5776c826";
-    hash = "sha256-zHfv4OZK/nVJc2rl+dBSCc4f6qndpAKcFZtThw06+LY=";
+    rev = "dda581d538cb6532cda841444e7b4ceacde01ec9";
+    hash = "sha256-NZiZFsABebugszpYsBusVlTYnYda+xDIpT05cZ8Jals=";
   };
 
   postPatch = ''
@@ -41,11 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'deps = [ "//third_party/zlib" ]' 'deps = []'
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [
     gn
     ninja
     python3
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildInputs = [
     expat
@@ -62,28 +63,34 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-    gn gen build --args='${toString ([
-      # Build in release mode
-      "is_official_build=true"
-      "is_component_build=true"
-      # Don't use missing tools
-      "skia_use_dng_sdk=false"
-      "skia_use_wuffs=false"
-      # Use system dependencies
-      "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
-    ] ++ map (lib: "skia_use_system_${lib}=true") [
-      "zlib"
-      "harfbuzz"
-      "libpng"
-      "libwebp"
-    ] ++ lib.optionals enableVulkan [
-      "skia_use_vulkan=true"
-    ])}'
-    cd build
-    runHook postConfigure
-  '';
+  gnFlags = let
+    cpu = {
+      "x86_64" = "x64";
+      "i686" = "x86";
+      "arm" = "arm";
+      "aarch64" = "arm64";
+    }.${stdenv.hostPlatform.parsed.cpu.name};
+  in [
+    # Build in release mode
+    "is_official_build=true"
+    "is_component_build=true"
+    # Don't use missing tools
+    "skia_use_dng_sdk=false"
+    "skia_use_wuffs=false"
+    # Use system dependencies
+    "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+    "cc=\"${stdenv.cc.targetPrefix}cc\""
+    "cxx=\"${stdenv.cc.targetPrefix}c++\""
+    "ar=\"${stdenv.cc.targetPrefix}ar\""
+    "target_cpu=\"${cpu}\""
+  ] ++ map (lib: "skia_use_system_${lib}=true") [
+    "zlib"
+    "harfbuzz"
+    "libpng"
+    "libwebp"
+  ] ++ lib.optionals enableVulkan [
+    "skia_use_vulkan=true"
+  ];
 
   # Somewhat arbitrary, but similar to what other distros are doing
   installPhase = ''
@@ -94,10 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp *.so *.a $out/lib
 
     # Includes
-    pushd ../include
+    pushd ../../include
     find . -name '*.h' -exec install -Dm644 {} $out/include/skia/{} \;
     popd
-    pushd ../modules
+    pushd ../../modules
     find . -name '*.h' -exec install -Dm644 {} $out/include/skia/modules/{} \;
     popd
 
@@ -135,9 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://skia.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
     pkgConfigModules = [ "skia" ];
     # https://github.com/NixOS/nixpkgs/pull/325871#issuecomment-2220610016
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

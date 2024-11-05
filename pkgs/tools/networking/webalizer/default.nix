@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.23.08";
 
   src = fetchurl {
-    url = "https://ftp.debian.org/debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
     sha256 = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
   };
 

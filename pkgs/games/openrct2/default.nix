@@ -29,34 +29,34 @@
 }:
 
 let
-  openrct2-version = "0.4.12";
+  openrct2-version = "0.4.15";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.6";
-  openmsx-version = "1.5";
+  objects-version = "1.4.8";
+  openmsx-version = "1.6";
   opensfx-version = "1.0.5";
-  title-sequences-version = "0.4.6";
+  title-sequences-version = "0.4.14";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-AZFJt1ZsYO07hHN9Nt+N95wTGfYPob/kZ7EkVVkUezg=";
+    hash = "sha256-VumjJGAur+2A7n0pFcNM7brYaoeaVCPBtRGFIZmq5QY=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-XfVic6b5jB1P2I0w5C+f97vvWvCh2zlcWpaXGLOj3CA=";
+    hash = "sha256-A6iFaWda5qiFirGqOP6H9w0PP5Me8BRr2HXKZPHJImE=";
   };
 
   openmsx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenMusic";
     rev = "v${openmsx-version}";
-    hash = "sha256-p/wlvQFfu3R+jIuCcRbTMvxt0VKGGwJw0NDIsf6URWI=";
+    hash = "sha256-KjWJSB2tdE0ExswVlz0dLXNPhLJ1kI6VZb3vqXQfx8w=";
   };
 
   opensfx-src = fetchFromGitHub {
@@ -70,7 +70,7 @@ let
     owner = "OpenRCT2";
     repo = "title-sequences";
     rev = "v${title-sequences-version}";
-    hash = "sha256-HWp2ecClNM/7O3oaydVipOnEsYNP/bZnZFS+SDidPi0=";
+    hash = "sha256-ier7sBYJjBIvKVxfaCelJPZ+oF9NEshvR2k/X9JpP+0=";
   };
 in
 stdenv.mkDerivation {

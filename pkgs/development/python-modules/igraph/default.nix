@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   dependencies = [ texttable ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cairo = [ cairocffi ];
     matplotlib = [ matplotlib ];
     plotly = [ plotly ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     "testAuthorityScore"

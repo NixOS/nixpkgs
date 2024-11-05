@@ -19,10 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-MFEi1U0RNvrfDtV4HpvPgKTCibAh76z7Gnmj32IubYw=";
   };
 
+  # Workaround for https://github.com/ethanfurman/dbf/issues/48
+  patches = lib.optional python.stdenv.isDarwin ./darwin.patch;
+
   propagatedBuildInputs = [ aenum ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} -m dbf.test
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "dbf" ];

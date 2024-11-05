@@ -8,24 +8,24 @@
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2024-03-11";
+  version = "unstable-2024-07-31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "pynvim_pp";
-    rev = "34e3a027c595981886d7efd1c91071f3eaa4715d";
-    hash = "sha256-2+jDRJXlg9q4MN9vOhmeq4cWVJ0wp5r5xAh3G8lqgOg=";
+    rev = "6d3c298b7eb9543bce7ab515b0a39f256c1d37ca";
+    hash = "sha256-W6YaxI/fa2HL6+FIBTTA+7K2Be02iuIfFFVO/hhYnpo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pynvim ];
+  dependencies = [ pynvim ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ms-jpq/pynvim_pp";
     description = "Dependency to chadtree and coq_nvim plugins";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -71,7 +71,7 @@ in
 
           - nixpkgs.config.cudaSupport
           - nixpkgs.config.rocmSupport
-          - if stdenv.isDarwin && stdenv.isAarch64
+          - if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
 
           IFF multiple acceleration methods are found to be enabled or if you
           haven't set either `cudaSupport or rocmSupport` you will have to

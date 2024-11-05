@@ -2,24 +2,25 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
-  version = "0.52.17";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = pname;
     rev = version;
-    hash = "sha256-0r5xhmU9a9I+q24mjJ+C4EKK1Nw/67YThuBFibAx3Dw=";
+    hash = "sha256-1+UbUwvv5HWiQ+u9gPtJ3JwP6cMi4IZOCSMedXzWEoQ=";
   };
 
-  cargoHash = "sha256-ljYsF5lBRqiTqx9nta5h/75052GWOBJ9uJnqZkWJvwI=";
+  cargoHash = "sha256-NmnKWVyD+NrP7ReERQB1/K8hyrSFj6qgjQjYwxZc+OY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd snazy \
       --bash <($out/bin/snazy --shell-completion bash) \
       --fish <($out/bin/snazy --shell-completion fish) \

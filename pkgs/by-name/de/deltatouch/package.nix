@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitea
-, fetchpatch
 , cmake
 , intltool
 , libdeltachat
@@ -12,25 +11,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tqcQmFmF8Z9smVMfaXOmXQ3Uw41bUcU4iUi8fxBlg8U=";
+    hash = "sha256-mOs5WlWOkH9A+BZK6hvKq/JKS4k8tzvvov4CYFHyMfA=";
     fetchSubmodules = true;
   };
 
-
-  patches = [
-    (fetchpatch {
-      name = "0001-deltatouch-Fix-localisation.patch";
-      url = "https://codeberg.org/lk108/deltatouch/commit/dcfdd8a0fca5fff10d0383f77f4c0cbea302de00.patch";
-      hash = "sha256-RRjHG/xKtj757ZP2SY0GtWwh66kkTWoICV1vDkFAw3k=";
-    })
-  ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
@@ -57,12 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'assets/logo.svg DESTINATION assets' 'assets/logo.svg DESTINATION ''${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps RENAME deltatouch.svg' \
       --replace-fail "\''${DESKTOP_FILE_NAME} DESTINATION \''${DATA_DIR}" "\''${DESKTOP_FILE_NAME} DESTINATION \''${CMAKE_INSTALL_DATAROOTDIR}/applications"
 
-    substituteInPlace plugins/DeltaHandler/CMakeLists.txt plugins/DTWebEngineProfile/CMakeLists.txt \
+    substituteInPlace plugins/{DeltaHandler,HtmlMsgEngineProfile,WebxdcEngineProfile}/CMakeLists.txt \
       --replace-fail 'set(QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}")' 'set(QT_IMPORTS_DIR "${placeholder "out"}/${qt5.qtbase.qtQmlPrefix}")'
 
     # Fix import of library dependencies
+    substituteInPlace plugins/{DeltaHandler,WebxdcEngineProfile}/CMakeLists.txt \
+      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"'
     substituteInPlace plugins/DeltaHandler/CMakeLists.txt \
-      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"' \
       --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libquirc.so.1.2"' 'IMPORTED_LOCATION "${lib.getLib quirc}/lib/libquirc.so"'
 
     # Fix icon reference in desktop file
@@ -76,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    changelog = "https://codeberg.org/lk108/deltatouch/src/commit/${finalAttrs.src.rev}/CHANGELOG";
+    changelog = "https://codeberg.org/lk108/deltatouch/src/tag/${finalAttrs.src.rev}/CHANGELOG";
     description = "Messaging app for Ubuntu Touch, powered by Delta Chat core";
     longDescription = ''
       DeltaTouch is a messenger for Ubuntu Touch based on Delta Chat core.

@@ -15,18 +15,18 @@
 , xmlrpc_c
 , zlib
 , nixosTests
-, unstableGitUpdater
+, gitUpdater
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
-  version = "0.9.8-unstable-2023-03-16";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "1da0e3476dcabbf74b2e836d6b4c37b4d96bde09";
-    hash = "sha256-OXOZSMuNAU+VGwNyyfzcmkTRjDJq9HsKUNxZDYpSvFQ=";
+    rev = "v${version}";
+    hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
   };
 
   outputs = [ "out" "man" ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };

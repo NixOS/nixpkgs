@@ -1,15 +1,15 @@
 diff --git a/src/sage_docbuild/builders.py b/src/sage_docbuild/builders.py
-index c5be38600a..e1d15f62d3 100644
+index 871cc4705a2..4b718136b91 100644
 --- a/src/sage_docbuild/builders.py
 +++ b/src/sage_docbuild/builders.py
-@@ -105,31 +105,6 @@ def builder_helper(type):
+@@ -106,31 +106,6 @@ def builder_helper(type):
      """
      Return a function which builds the documentation for
      output type ``type``.
 -
 -    TESTS:
 -
--    Check that :trac:`25161` has been resolved::
+-    Check that :issue:`25161` has been resolved::
 -
 -        sage: from sage_docbuild.builders import DocBuilder
 -        sage: from sage_docbuild.__main__ import setup_parser
@@ -48,10 +48,10 @@ index c5be38600a..e1d15f62d3 100644
              if build_options.ABORT_ON_ERROR:
                  raise
 diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
-index 07c584de55..b83283a9ee 100644
+index 5621fe9e456..b1b91ce7b2c 100644
 --- a/src/sage_docbuild/sphinxbuild.py
 +++ b/src/sage_docbuild/sphinxbuild.py
-@@ -331,3 +331,8 @@ def runsphinx():
+@@ -323,3 +323,8 @@ def runsphinx():
          sys.stderr = saved_stderr
          sys.stdout.flush()
          sys.stderr.flush()

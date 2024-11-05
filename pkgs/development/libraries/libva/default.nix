@@ -33,10 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
-  mesonFlags = lib.optionals stdenv.isLinux [
+  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
     "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
+
+  env = lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") {
+    NIX_LDFLAGS = "--undefined-version";
+  } // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
+  };
 
   passthru.tests = {
     # other drivers depending on libva and selected application users.

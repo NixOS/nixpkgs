@@ -3,10 +3,9 @@
 , util-linux, getopt
 , dejavu_fonts
 }:
-with lib;
 let
   version = "1.13.4";
-  gopt = if stdenv.isLinux then util-linux else getopt;
+  gopt = if stdenv.hostPlatform.isLinux then util-linux else getopt;
   runtimeDeps = [
     coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer gopt
   ];
@@ -29,10 +28,10 @@ stdenv.mkDerivation {
     mv vcs $out/bin/vcs
     substituteAllInPlace $out/bin/vcs
     chmod +x $out/bin/vcs
-    wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${makeBinPath runtimeDeps}"
+    wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${lib.makeBinPath runtimeDeps}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Generates contact sheets from video files";
     homepage = "http://p.outlyer.net/vcs";
     license = licenses.lgpl21Plus;

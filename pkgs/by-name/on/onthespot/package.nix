@@ -1,16 +1,17 @@
-{ lib
-, copyDesktopItems
-, fetchFromGitHub
-, makeDesktopItem
-, python3
-, libsForQt5
-, ffmpeg
+{
+  lib,
+  copyDesktopItems,
+  fetchFromGitHub,
+  makeDesktopItem,
+  python3,
+  libsForQt5,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "onthespot";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "casualsnek";
@@ -19,12 +20,23 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-VaJBNsT7uNOGY43GnzhUqDQNiPoFZcc2UaIfOKgkufg=";
   };
 
+  pythonRemoveDeps = [
+    "PyQt5-Qt5"
+    "PyQt5-stubs"
+    # Doesn't seem to be used in the sources and causes
+    # build issues
+    "PyOgg"
+  ];
+
+  pythonRelaxDeps = true;
+
   nativeBuildInputs = with python3.pkgs; [
     copyDesktopItems
     libsForQt5.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    async-timeout
     charset-normalizer
     defusedxml
     ffmpeg
@@ -42,16 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     urllib3
     zeroconf
   ];
-
-  pythonRemoveDeps = [
-    "PyQt5-Qt5"
-    "PyQt5-stubs"
-    # Doesn't seem to be used in the sources and causes
-    # build issues
-    "PyOgg"
-  ];
-
-  pythonRelaxDeps = true;
 
   postInstall = ''
     install -Dm444 $src/src/onthespot/resources/icon.png $out/share/icons/hicolor/256x256/apps/onthespot.png
@@ -72,13 +74,13 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "QT based Spotify music downloader written in Python";
     homepage = "https://github.com/casualsnek/onthespot";
     changelog = "https://github.com/casualsnek/onthespot/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
     mainProgram = "onthespot_gui";
   };
 }

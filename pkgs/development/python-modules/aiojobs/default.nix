@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiojobs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LwFXb/SHP6bbqPg1tqYwE03FKHf4Mv1PPOxnPdESH0I=";
+    hash = "sha256-FNc71YyAjtR+hd0UOqFAy6XW0PwHSlM76C3ecPM5vsU=";
   };
 
   patches = [
@@ -32,23 +33,19 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=aiojobs/ --cov=tests/ --cov-report term" ""
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytest-cov-stub
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiojobs" ];
 

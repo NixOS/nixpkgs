@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, fetchpatch, ncurses, libX11 }:
 
 let
-   useX11 = !stdenv.isAarch32 && !stdenv.isMips;
-   useNativeCompilers = !stdenv.isMips;
+   useX11 = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isMips;
+   useNativeCompilers = !stdenv.hostPlatform.isMips;
    inherit (lib) optional optionals optionalString;
 in
 

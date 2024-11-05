@@ -2,7 +2,6 @@
 , bash
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , libgit2
 , libssh2
@@ -16,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ciel";
-  version = "3.2.7";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4SVBaQDr0O1Fei8qwNjSNtv3sz9tu7oQPyGmoQypWno=";
+    hash = "sha256-vV1qZLVVVc6KFZrpF4blKmbfQjf/Ltn+IhmM5Zqb2zU=";
   };
 
   cargoLock = {

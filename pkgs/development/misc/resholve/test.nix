@@ -234,7 +234,7 @@ rec {
       ncurses
       procps
       ps
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       nixos-install-tools
       nixos-rebuild
     ];
@@ -258,7 +258,7 @@ rec {
     tset fake args
     ps fake args
     top fake args
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     nixos-generate-config fake args
     nixos-rebuild fake args
   '');
@@ -279,7 +279,7 @@ rec {
   inherit shunit2;
   inherit xdg-utils;
   inherit yadm;
-} // lib.optionalAttrs stdenv.isLinux {
+} // lib.optionalAttrs stdenv.hostPlatform.isLinux {
   inherit arch-install-scripts;
   inherit dgoss;
   inherit rancid;
@@ -287,6 +287,6 @@ rec {
   inherit wgnord;
   inherit wsl-vpnkit;
   inherit zxfer;
-} // lib.optionalAttrs (stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64)) {
+} // lib.optionalAttrs (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64)) {
   inherit s0ix-selftest-tool;
 }

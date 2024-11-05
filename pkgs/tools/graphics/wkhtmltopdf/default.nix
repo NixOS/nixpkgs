@@ -39,13 +39,7 @@ let
     '';
   };
 
-  linuxAttrs = rec {
-    version = "0.12.6.1-3";
-    src = fetchurl {
-      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
-      hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
-    };
-
+  _linuxAttrs = {
     nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
     buildInputs = [
@@ -79,6 +73,22 @@ let
       runHook postInstall
     '';
   };
+
+  linuxAttrs.aarch64-linux = rec {
+    version = "0.12.6.1-3";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_arm64.deb";
+      hash = "sha256-tmBhV7J8E+BE0Ku+ZwMB+I3k4Xgq/KT5wGpYF/PgOpw=";
+    };
+  } // _linuxAttrs;
+
+  linuxAttrs.x86_64-linux = rec {
+    version = "0.12.6.1-3";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
+      hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
+    };
+  } // _linuxAttrs;
 in
 stdenv.mkDerivation ({
   pname = "wkhtmltopdf";
@@ -105,9 +115,9 @@ stdenv.mkDerivation ({
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nbr kalbasit ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
   };
 }
 // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
-// lib.optionalAttrs (stdenv.hostPlatform.isLinux) linuxAttrs
+// lib.optionalAttrs (stdenv.hostPlatform.isLinux) linuxAttrs.${stdenv.system}
 )

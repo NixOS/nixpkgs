@@ -22,6 +22,8 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraPkgs = pkgs: [ pkgs.at-spi2-atk pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
@@ -30,7 +32,6 @@ appimageTools.wrapType2 rec {
       $out/share/icons/hicolor/1024x1024/apps/notable.png
     substituteInPlace $out/share/applications/notable.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/${pname}" \
       --add-flags "--disable-seccomp-filter-sandbox"
   '';

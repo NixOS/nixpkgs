@@ -172,6 +172,46 @@ in
     };
   };
 
+  firmwareupdater = buildPlugin rec {
+    pname = "firmwareupdater";
+    version = "1.14.0";
+
+    src = fetchFromGitHub {
+      owner = "OctoPrint";
+      repo = "OctoPrint-FirmwareUpdater";
+      rev = version;
+      sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
+    };
+
+    propagatedBuildInputs = with super; [ pyserial  ];
+
+    meta = with lib; {
+      description = "Printer Firmware Updater";
+      homepage = "https://github.com/OctoPrint/OctoPrint-FirmwareUpdater";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
+  fullscreen = buildPlugin rec {
+    pname = "fullscreen";
+    version = "0.0.6";
+
+    src = fetchFromGitHub {
+      owner = "BillyBlaze";
+      repo = "OctoPrint-FullScreen";
+      rev = version;
+      sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
+    };
+
+    meta = with lib; {
+      description = "Open webcam in fullscreen mode";
+      homepage = "https://github.com/BillyBlaze/OctoPrint-FullScreen";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
     version = "0.2.12";
@@ -231,15 +271,102 @@ in
     };
   };
 
+    mqttchambertemperature = buildPlugin rec {
+    pname = "mqttchambertemperature";
+    version = "0.0.3";
+
+    src = fetchFromGitHub {
+      owner = "synman";
+      repo = "OctoPrint-MqttChamberTemperature";
+      rev = version;
+      sha256 = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
+    };
+
+    propagatedBuildInputs = with super; [ jsonpath-ng ];
+
+    meta = with lib; {
+      description = "Enables Chamber temperature reporting via subscribing to an MQTT topic";
+      homepage = "https://github.com/synman/OctoPrint-MqttChamberTemperature";
+      license = licenses.wtfpl;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
+  navbartemp = buildPlugin rec {
+    pname = "navbartemp";
+    version = "0.15";
+
+    src = fetchFromGitHub {
+      owner = "imrahil";
+      repo = "OctoPrint-NavbarTemp";
+      rev = version;
+      sha256 = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
+    };
+
+    meta = with lib; {
+      description = "Displays temperatures on navbar";
+      homepage = "https://github.com/imrahil/OctoPrint-NavbarTemp";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
+  obico = buildPlugin rec {
+    pname = "obico";
+    version = "2.5.0";
+
+    src = fetchFromGitHub {
+      owner = "TheSpaghettiDetective";
+      repo = "OctoPrint-Obico";
+      rev = version;
+      sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
+    };
+
+    propagatedBuildInputs = with super; [
+      backoff
+      sentry-sdk
+      bson
+      distro
+    ];
+
+    meta = with lib; {
+      description = "Monitor Octoprint-connected printers with Obico";
+      homepage = "https://www.obico.io/";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
+  octopod = buildPlugin rec {
+    pname = "octopod";
+    version = "0.3.16";
+
+    src = fetchFromGitHub {
+      owner = "gdombiak";
+      repo = "OctoPrint-OctoPod";
+      rev = version;
+      sha256 = "sha256-9QKC1MsYO3XihOTAijJUv5i20iMSQHOHPfLiYPV5y8s=";
+    };
+
+    propagatedBuildInputs = with super; [ pillow ];
+
+    meta = with lib; {
+      description = "OctoPod extension for OctoPrint";
+      homepage = "https://github.com/gdombiak/OctoPrint-OctoPod";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.3.1";
+    version = "2.3.3";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-2lxaTcmPBSdfMmViIfLEbeYWfXZpNVAO4i5Z678gWy0=";
+      sha256 = "sha256-hqm8RShCNpsVbrVXquat5VXqcVc7q5tn5+7Ipqmaw4U=";
     };
 
     propagatedBuildInputs = with super; [
@@ -258,6 +385,27 @@ in
       homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
+    };
+  };
+
+  prusaslicerthumbnails = buildPlugin rec {
+    pname = "prusaslicerthumbnails";
+    version = "1.0.7";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-PrusaSlicerThumbnails";
+      rev = version;
+      sha256 = "sha256-waNCTjAZwdBfhHyJCG2La7KTnJ8MDVuX1JLetFB5bS4=";
+    };
+
+    propagatedBuildInputs = with super; [ psutil  ];
+
+    meta = with lib; {
+      description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
+      homepage = "https://github.com/jneilliii/OctoPrint-PrusaSlicerThumbnails";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
     };
   };
 
@@ -286,6 +434,27 @@ in
       homepage = "https://github.com/kantlivelong/OctoPrint-PSUControl";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ gebner ];
+    };
+  };
+
+  resource-monitor = buildPlugin rec {
+    pname = "resource-monitor";
+    version = "0.3.16";
+
+    src = fetchFromGitHub {
+      owner = "Renaud11232";
+      repo = "OctoPrint-Resource-Monitor";
+      rev = version;
+      sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
+    };
+
+    propagatedBuildInputs = with super; [ psutil  ];
+
+    meta = with lib; {
+      description = "Plugin to view the current CPU and RAM usage on your system";
+      homepage = "https://github.com/Renaud11232/OctoPrint-Resource-Monitor";
+      license = licenses.mit;
+      maintainers = with maintainers; [ tri-ler ];
     };
   };
 
@@ -364,6 +533,25 @@ in
       homepage = "https://github.com/birkbjo/OctoPrint-Themeify";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
+  timelapsepurger = buildPlugin rec {
+    pname = "firmwareupdater";
+    version = "0.1.4";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-TimelapsePurger";
+      rev = version;
+      sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
+    };
+
+    meta = with lib; {
+      description = "Automatically deletes timelapses that are older than configured timeframe";
+      homepage = "https://github.com/jneilliii/OctoPrint-TimelapsePurger";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
     };
   };
 

@@ -207,6 +207,10 @@ let
         for i in $(find arch -name install.sh); do
             patchShebangs "$i"
         done
+
+        # unset $src because the build system tries to use it and spams a bunch of warnings
+        # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
+        unset src
       '';
 
       configurePhase = ''
@@ -392,6 +396,9 @@ let
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
+        # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
+        broken = withRust && lib.versionOlder version "6.12";
+
         description =
           "The Linux kernel" +
           (if kernelPatches == [] then "" else

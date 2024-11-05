@@ -23,7 +23,7 @@ buildGoModule rec {
   vendorHash = "sha256-P0Qnfu/cqLveAwz9jf/wTXxkoh0jvazlE5C/PcUrWsA=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
 
   # clean fails with read only vendor dir
   postPatch = ''
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   # It attaches entitlements with codesign and strip removes those,
   # voiding the entitlements and making it non-operational.
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   buildPhase = ''
     runHook preBuild

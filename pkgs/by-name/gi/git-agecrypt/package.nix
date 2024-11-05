@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [ libgit2 zlib ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
 
   meta = with lib; {

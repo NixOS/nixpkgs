@@ -10,7 +10,7 @@
 , rsyslog
 }:
 
-assert enableCapabilities -> stdenv.isLinux;
+assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";

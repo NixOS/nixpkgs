@@ -4,6 +4,7 @@
 , writeText
 , writeShellScript
 , sqlite
+, nixosTests
 }:
 let
   pypkgs = python3.pkgs;
@@ -82,6 +83,8 @@ pypkgs.buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) pykms; };
 
   meta = with lib; {
     description = "Windows KMS (Key Management Service) server written in Python";

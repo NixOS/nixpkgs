@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
   installPhase = ''
     mkdir -p $prefix/bin
-    mv expand-response-params $prefix/bin/
+    mv expand-response-params${stdenv.hostPlatform.extensions.executable} $prefix/bin/
   '';
 
   meta = {
@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     '';
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    mainProgram = "expand-response-params${stdenv.hostPlatform.extensions.executable}";
   };
 }

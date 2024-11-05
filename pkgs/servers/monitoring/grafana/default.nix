@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "11.1.3";
+  version = "11.3.0";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -16,13 +16,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-PfkKBKegMk+VjVJMocGj+GPTuUJipjD8+857skwmoco=";
+    hash = "sha256-tPPhRCZ8auVaX68YhGzpkykxqln8zzqdAZiedpmYqlk=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-  } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix error: no member named 'aligned_alloc' in the global namespace.
     # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
     NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
@@ -35,7 +35,7 @@ buildGoModule rec {
       yarn nodejs cacert
       jq moreutils python3
     # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
@@ -51,21 +51,21 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-2VnhZBWLdYQhqKCxM63fCAwQXN4Zrh2wCdPBLCCUuvg=";
+      x86_64-linux = "sha256-8XuRhipddv28msoSpG5WjpHc7NUEh4/+wRutKrY9r1U=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-MZE3/PHynL6SHOxJgOG41pi2X8XeutruAOyUFY9Lmsc=";
+      aarch64-darwin = "sha256-IOuE2QjZmeCOZdqA49RWoAtz2FROGqWo8Dp4wFnEkkk=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-vd3hb7+lmhQPTZO/Xqi59XSPGj5sd218xQAD1bRbUz8=";
+  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.

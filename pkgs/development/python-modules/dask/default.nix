@@ -34,22 +34,19 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.7.1";
+    version = "2024.10.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-aHira3GKtw674VQ5bc5lFEWyuLf4ZWexKQP6eaGwbzg=";
+      hash = "sha256-UB/LqgDRXnjJ/RjEke9eBDyVAy+Dtak7wYJB63xmDd4=";
     };
 
     build-system = [ setuptools ];
@@ -126,14 +123,14 @@ let
     ];
 
     disabledTests =
-      lib.optionals stdenv.isDarwin [
+      lib.optionals stdenv.hostPlatform.isDarwin [
         # Test requires features of python3Packages.psutil that are
         # blocked in sandboxed-builds
         "test_auto_blocksize_csv"
         # AttributeError: 'str' object has no attribute 'decode'
         "test_read_dir_nometa"
       ]
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
         # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
         "test_foldby_tree_reduction"
         "test_to_bag"

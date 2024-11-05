@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wthrr";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ttytm";
     repo = "wthrr-the-weathercrab";
     rev = "v${version}";
-    hash = "sha256-3bWO2Gl8/B2p4k/6QhlT46RvyMJJs7WkVcX35vWN2Fk=";
+    hash = "sha256-8o84FFdcEPRtbsxWCc97tTGGownxlhpIM71GiBRT6uM=";
   };
 
-  cargoHash = "sha256-8Uy+8UpCQyLaLsulpgC1w2XI9aqj2P5ebBlXqpuDIc4=";
+  cargoHash = "sha256-gHvPz8DZ6wSfMCzh8vx7Wv8pfP3P7p5EeRCTo4b30cw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration

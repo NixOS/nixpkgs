@@ -1,14 +1,11 @@
 # dleyna-server service.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
   ###### interface
   options = {
     services.dleyna-server = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable dleyna-server service, a DBus service
@@ -20,7 +17,7 @@ with lib;
 
 
   ###### implementation
-  config = mkIf config.services.dleyna-server.enable {
+  config = lib.mkIf config.services.dleyna-server.enable {
     environment.systemPackages = [ pkgs.dleyna-server ];
 
     services.dbus.packages = [ pkgs.dleyna-server ];

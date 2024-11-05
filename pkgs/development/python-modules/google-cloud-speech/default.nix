@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.26.1";
+  version = "2.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EqzrAuNMFO1J7qMQKufndt/Yciur3RRm3k2w3owfkak=";
+    pname = "google_cloud_speech";
+    inherit version;
+    hash = "sha256-cGvKg647ru1cz1HM+7BkIqyUTPfjepPdm/KygwXqdEU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

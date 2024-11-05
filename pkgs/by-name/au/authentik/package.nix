@@ -14,13 +14,13 @@
 , makeWrapper }:
 
 let
-  version = "2024.6.1";
+  version = "2024.6.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-SMupiJGJbkBn33JP4WLF3IsBdt3SN3JvZg/EYlz443g=";
+    hash = "sha256-QwK/auMLCJEHHtyexFnO+adCq/u0fezHQ90fXW9J4c4=";
   };
 
   meta = with lib; {
@@ -70,7 +70,7 @@ let
       openapi-generator-cli generate -i ./schema.yml \
       -g typescript-fetch -o $out \
       -c ./scripts/api-ts-config.yaml \
-        --additional-properties=npmVersion=${nodejs.pkgs.npm.version} \
+        --additional-properties=npmVersion="$(${lib.getExe' nodejs "npm"} --version)" \
         --git-repo-id authentik --git-user-id goauthentik
       runHook postBuild
     '';
@@ -87,7 +87,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-v9oD8qV5UDJeZn4GZDEPlVM/jGVSeTqdIUDJl6tYXZw=";
+    npmDepsHash = "sha256-8TzB3ylZzVLePD86of8E/lGgIQCciWMQF9m1Iqv9ZTY=";
 
     postPatch = ''
       cd web
@@ -289,9 +289,9 @@ let
           celery
           channels
           channels-redis
+          codespell
           colorama
           dacite
-          daphne
           deepmerge
           defusedxml
           django
@@ -324,7 +324,6 @@ let
           packaging
           paramiko
           psycopg
-          pycryptodome
           pydantic
           pydantic-scim
           pyjwt
@@ -344,13 +343,15 @@ let
           uvicorn
           watchdog
           webauthn
-          websockets
           wsproto
           xmlsec
           zxcvbn
         ]
-        ++ uvicorn.optional-dependencies.standard
-        ++ [ codespell ];
+        ++ channels.optional-dependencies.daphne
+        ++ django-storages.optional-dependencies.s3
+        ++ opencontainers.optional-dependencies.reggie
+        ++ psycopg.optional-dependencies.c
+        ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
           mkdir -p $out/web $out/website
@@ -382,7 +383,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-hxtyXyCfVemsjYQeo//gd68x4QO/4Vcww8i2ocsUVW8=";
+    vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

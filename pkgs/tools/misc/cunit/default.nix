@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libtool];
 
   src = fetchurl {
-    url = "mirror://sourceforge/cunit/CUnit/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/cunit/CUnit/${version}/CUnit-${version}.tar.bz2";
     sha256 = "057j82da9vv4li4z5ri3227ybd18nzyq81f6gsvhifs5z0vr3cpm";
   };
 

@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.matrix-appservice-irc;
 
@@ -25,29 +22,29 @@ let
   '';
   registrationFile = "/var/lib/matrix-appservice-irc/registration.yml";
 in {
-  options.services.matrix-appservice-irc = with types; {
-    enable = mkEnableOption "the Matrix/IRC bridge";
+  options.services.matrix-appservice-irc = with lib.types; {
+    enable = lib.mkEnableOption "the Matrix/IRC bridge";
 
-    port = mkOption {
+    port = lib.mkOption {
       type = port;
       description = "The port to listen on";
       default = 8009;
     };
 
-    needBindingCap = mkOption {
+    needBindingCap = lib.mkOption {
       type = bool;
       description = "Whether the daemon needs to bind to ports below 1024 (e.g. for the ident service)";
       default = false;
     };
 
-    passwordEncryptionKeyLength = mkOption {
+    passwordEncryptionKeyLength = lib.mkOption {
       type = ints.unsigned;
       description = "Length of the key to encrypt IRC passwords with";
       default = 4096;
       example = 8192;
     };
 
-    registrationUrl = mkOption {
+    registrationUrl = lib.mkOption {
       type = str;
       description = ''
         The URL where the application service is listening for homeserver requests,
@@ -56,13 +53,13 @@ in {
       example = "http://localhost:8009";
     };
 
-    localpart = mkOption {
+    localpart = lib.mkOption {
       type = str;
       description = "The user_id localpart to assign to the appservice";
       default = "appservice-irc";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Configuration for the appservice, see
         <https://github.com/matrix-org/matrix-appservice-irc/blob/${pkgs.matrix-appservice-irc.version}/config.sample.yaml>
@@ -73,19 +70,19 @@ in {
         freeformType = jsonType;
 
         options = {
-          homeserver = mkOption {
+          homeserver = lib.mkOption {
             description = "Homeserver configuration";
             default = {};
             type = submodule {
               freeformType = jsonType;
 
               options = {
-                url = mkOption {
+                url = lib.mkOption {
                   type = str;
                   description = "The URL to the home server for client-server API calls";
                 };
 
-                domain = mkOption {
+                domain = lib.mkOption {
                   type = str;
                   description = ''
                     The 'domain' part for user IDs on this home server. Usually
@@ -96,21 +93,21 @@ in {
             };
           };
 
-          database = mkOption {
+          database = lib.mkOption {
             default = {};
             description = "Configuration for the database";
             type = submodule {
               freeformType = jsonType;
 
               options = {
-                engine = mkOption {
+                engine = lib.mkOption {
                   type = str;
                   description = "Which database engine to use";
                   default = "nedb";
                   example = "postgres";
                 };
 
-                connectionString = mkOption {
+                connectionString = lib.mkOption {
                   type = str;
                   description = "The database connection string";
                   default = "nedb://var/lib/matrix-appservice-irc/data";
@@ -120,14 +117,14 @@ in {
             };
           };
 
-          ircService = mkOption {
+          ircService = lib.mkOption {
             default = {};
             description = "IRC bridge configuration";
             type = submodule {
               freeformType = jsonType;
 
               options = {
-                passwordEncryptionKeyPath = mkOption {
+                passwordEncryptionKeyPath = lib.mkOption {
                   type = str;
                   description = ''
                     Location of the key with which IRC passwords are encrypted
@@ -136,9 +133,43 @@ in {
                   default = "/var/lib/matrix-appservice-irc/passkey.pem";
                 };
 
-                servers = mkOption {
+                servers = lib.mkOption {
                   type = submodule { freeformType = jsonType; };
                   description = "IRC servers to connect to";
+                };
+
+                mediaProxy = {
+                  signingKeyPath = lib.mkOption {
+                    type = path;
+                    default = "/var/lib/matrix-appservice-irc/media-signingkey.jwk";
+                    description = ''
+                      Path to the signing key file for authenticated media.
+                    '';
+                  };
+                  ttlSeconds = lib.mkOption {
+                    type = ints.unsigned;
+                    default = 3600;
+                    example = 0;
+                    description = ''
+                      Lifetime in seconds, that generated URLs stay valid.
+
+                      Set the lifetime to 0 to prevent URLs from becoming invalid.
+                    '';
+                  };
+                  bindPort = lib.mkOption {
+                    type = port;
+                    default = 11111;
+                    description = ''
+                      Port that the media proxy binds to.
+                    '';
+                  };
+                  publicUrl = lib.mkOption {
+                    type = str;
+                    example = "https://matrix.example.com/media";
+                    description = ''
+                      URL under which the media proxy is publicly acccessible.
+                    '';
+                  };
                 };
               };
             };
@@ -147,7 +178,8 @@ in {
       };
     };
   };
-  config = mkIf cfg.enable {
+
+  config = lib.mkIf cfg.enable {
     systemd.services.matrix-appservice-irc = {
       description = "Matrix-IRC bridge";
       before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
@@ -184,6 +216,9 @@ in {
           sed -i "s/^hs_token:.*$/$hs_token/g" ${registrationFile}
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
+        if ! [ -f "${cfg.settings.ircService.mediaProxy.signingKeyPath}"]; then
+          ${lib.getExe pkgs.nodejs} ${pkg}/lib/generate-signing-key.js > "${cfg.settings.ircService.mediaProxy.signingKeyPath}"
+        fi
         # Allow synapse access to the registration
         if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
           chgrp matrix-synapse ${registrationFile}
@@ -206,7 +241,7 @@ in {
         User = "matrix-appservice-irc";
         Group = "matrix-appservice-irc";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ lib.optional (cfg.needBindingCap) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
 

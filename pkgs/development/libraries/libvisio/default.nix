@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Library providing ability to interpret and import visio diagrams into various applications";
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libvisio";

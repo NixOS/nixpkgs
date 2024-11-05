@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.5.4";
+  version = "10.8.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-C/ZmU1RRV4gJsgTgBGnhsJ7JUasHdKgoIro+fpjH4Ss=";
+    hash = "sha256-/fHNRFtxyNa9VdEi5wQ+YA+9mFv3ZpRFJQnWkuxQd5I=";
   };
 
   pythonRelaxDeps = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     tritonclient
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ pycocotools ];
   };
 

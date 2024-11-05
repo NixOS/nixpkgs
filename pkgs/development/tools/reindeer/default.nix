@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "2024.07.22.00";
+  version = "2024.10.28.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "reindeer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T6qUXkzYlkaHlGahf4tnZLD9MogSQueFIBeZDJCiB/w=";
+    hash = "sha256-1wbw92dZT5SVXgfWMgXd3asHhilVzH4lvqW60hTznVc=";
   };
 
-  cargoHash = "sha256-DUcyMohQbkc/93iqFWQGMwvOhdlzhoQTdXH64FFbmY0=";
+  cargoHash = "sha256-OjA0OKotAdRLGRkl8n3Gn2+Z8JVcGjQYHtOszWnnFdM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices

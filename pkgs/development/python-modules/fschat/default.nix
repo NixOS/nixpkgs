@@ -63,7 +63,7 @@ buildPythonPackage {
     # ] ++ markdown2.optional-dependencies.all;
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     llm_judge = [
       anthropic
       openai

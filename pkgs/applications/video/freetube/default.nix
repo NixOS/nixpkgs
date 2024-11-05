@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    hash = "sha256-Mk8qHDiUs2Nd8APMR8q1wZhTtxyzRhBAeXew9ogC3nk=";
+    hash = "sha256-YRXKL09XXX6HxC1lsk0iQnTGmPHFwfNL5XRA+u/crus=";
   };
 
   passthru.tests = nixosTests.freetube;
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ryneeverett
       alyaeanyx
+      ryand56
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

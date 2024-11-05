@@ -10,8 +10,7 @@
 , libgit2-glib
 , gi-docgen
 , gobject-introspection
-, enchant
-, icu
+, gom
 , gtk4
 , gtksourceview5
 , json-glib
@@ -21,12 +20,12 @@
 , libpanel
 , libpeas2
 , libportal-gtk4
+, libspelling
 , libsysprof-capture
 , libxml2
 , meson
 , ninja
 , ostree
-, d-spy
 , pcre2
 , pkg-config
 , python3
@@ -42,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "46.2";
+  version = "47.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DIV7iQA7JHh/Kx0qrhLSdaB0xmhLSIA7SMACdtk3GWM=";
+    hash = "sha256-Roe5PEfNHjNmWi3FA3kLYhPugnhy/ABNl40UvL+ptJU=";
   };
 
   patches = [
@@ -85,8 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpeas2
     libportal-gtk4
     vte-gtk4
-    enchant
-    icu
+    gom
     gtk4
     gtksourceview5
     json-glib
@@ -94,10 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libdex
     libpanel
+    libspelling
     libsysprof-capture
     libxml2
     ostree
-    d-spy
     pcre2
     python3
     template-glib

@@ -12,7 +12,6 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonAtLeast,
   sqlalchemy,
   thrift,
   requests,
@@ -22,18 +21,16 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "3.3.0";
+  version = "3.4.0";
   format = "pyproject";
 
-  # Depends on thrift that at the moment do not work in Python 3.12
-  # see PR 328415 fix this.
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a3OeKJ3c2UCClsPMah7iJY2YvIVLfHmmBuHAx8vdXZs=";
+    hash = "sha256-8q5qWN+i2mGbzXvkop/G6mjZegzZ/6kr1Fl7FaHwLYA=";
   };
 
   patches = [

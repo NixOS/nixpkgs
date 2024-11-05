@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildGhidraScripts
-, binwalk
-, swift
-, yara
+{
+  lib,
+  fetchFromGitHub,
+  buildGhidraScripts,
+  binwalk,
+  swift,
+  yara,
 }:
 
 buildGhidraScripts {

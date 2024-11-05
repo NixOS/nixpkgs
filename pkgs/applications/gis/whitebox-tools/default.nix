@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeBuildInputs = [
     cmake
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     description = "Advanced geospatial data analysis platform";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mpickering ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ mpickering ]);
   };
 }

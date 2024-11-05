@@ -10,7 +10,7 @@ in
 deployAndroidPackage rec {
   inherit package os;
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];
   buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx stdenv.cc.cc.lib ];
 
@@ -71,7 +71,7 @@ deployAndroidPackage rec {
   '';
 
   patchInstructions = patchOsAgnostic
-    + lib.optionalString stdenv.isLinux patchElfBnaries;
+    + lib.optionalString stdenv.hostPlatform.isLinux patchElfBnaries;
 
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
 }

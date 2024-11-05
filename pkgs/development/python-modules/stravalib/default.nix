@@ -15,24 +15,24 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "1.6";
+  version = "2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U+QlSrijvT77/m+yjhFxbcVTQe51J+PR4Kc8N+qG+wI=";
+    hash = "sha256-uF29fK+ZSSO688zKYYiSEygBUJZ6NBcvdgGgz3I1I6Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
     pint
     pydantic
@@ -52,6 +52,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sikmir ];
-    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

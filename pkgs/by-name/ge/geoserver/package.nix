@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
-  version = "2.25.3";
+  version = "2.26.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-EmW3i0qi7P48AftCz7tqI2Wtvdy3cpyR57+s42dYwt8=";
+    hash = "sha256-WeItL0j50xWYXIFmH4EFhHjxv9Xr6rG0YO8re1jUnNM=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   installPhase =
     let
       inputs = finalAttrs.buildInputs or [ ];
-      ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      ldLibraryPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstall

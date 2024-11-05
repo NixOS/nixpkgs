@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     openssl libtasn1
     glib json-glib
     gnutls
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     fuse
     libseccomp
   ];
 
   configureFlags = [
     "--localstatedir=/var"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--with-cuse"
   ];
 

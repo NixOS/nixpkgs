@@ -52,8 +52,6 @@ buildPythonPackage rec {
       --replace "'pytest-runner==5.2.0'," ""
   '';
 
-  doCheck = true;
-
   pythonImportsCheck = [ "dropbox" ];
 
   nativeBuildInputs = [

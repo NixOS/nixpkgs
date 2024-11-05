@@ -68,7 +68,6 @@ buildGoModule rec {
       berryp
       peterromfeldhk
       qjoly
-      superherointj
     ];
   };
 }

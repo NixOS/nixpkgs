@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -30,16 +29,14 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.21";
+  version = "1.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
     rev = "refs/tags/${version}";
-    hash = "sha256-yY75QpvZ0fAW2W0GVM7fzmXKmTdDyukCVC/1cyU5IjQ=";
+    hash = "sha256-DnU3u7h/sPCjKLTFppAuPcY8CC0PNdFIlmeGd4xgy3M=";
   };
 
   build-system = [

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ftrvxmtrx/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
     mainProgram = "9pfs";
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ lpl-102 bsd2 ];
   };

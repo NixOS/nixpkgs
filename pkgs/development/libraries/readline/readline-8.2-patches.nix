@@ -11,4 +11,7 @@ patch: [
 (patch "008" "0smjjzhwxi2ibpdisnk53lh1pzgka6rhlqyh3662xy69v34ysxx1")
 (patch "009" "05m1fwbs7mbs3pz3pg87gbbayandrrcgaqawzliqb6g1jbk8b61x")
 (patch "010" "0k3vyrjs2g6y2cfs03l2gp37fhxgqpiwvxb1c7z4q88cbb32x3km")
+(patch "011" "1msdahvz56l9m5m69a87zp2c7qrfv0dxwd09rj1697isgy83s0g0")
+(patch "012" "1lybzig73pqpcbw79im0kn6299lkcbnh24yigygn5jm2sj7dz2kc")
+(patch "013" "1a48lyrhvn6nbj5qhradfpbbs3md5maz7wb32yvaghvfgnak990y")
 ]

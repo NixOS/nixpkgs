@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   # Some test for hot-reload fails on Darwin, but the rest of the library
   # should remain usable. (https://todo.sr.ht/~olly/embrace-sql/4)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Embrace SQL keeps your SQL queries in SQL files";

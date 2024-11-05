@@ -6,14 +6,16 @@
 , runCommand
 , appimageTools
 , icu
+, genericUpdater
+, writeShellScript
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.4.0.32175";
+  version = "2.5.1.34629";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    hash = "sha256-+EKl8o+S5nwV3u+RrhxuOm/6dLH6zRSvFnyaZRO8xc0=";
+    hash = "sha256-YaMlvgktoa738grHarJX2Uh5PZ7qHuASyJBcUhMssEI=";
     stripRoot = false;
   };
 
@@ -22,7 +24,7 @@ let
       nativeBuildInputs = [ appimageTools.appimage-exec ];
     }
     ''
-      appimage-exec.sh -x $out ${src}/${pname}-${version}/${pname}
+      appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
 
       # JetBrains ship a broken desktop file. Despite registering a custom
       # scheme handler for jetbrains:// URLs, they never mark the command as
@@ -46,7 +48,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname} $out/bin/${pname} \
+    makeWrapper ${appimage}/bin/jetbrains-toolbox $out/bin/jetbrains-toolbox \
       --append-flags "--update-failed" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 
@@ -57,6 +59,13 @@ stdenv.mkDerivation {
 
   # Disabling the tests, this seems to be very difficult to test this app.
   doCheck = false;
+
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "jetbrains-toolbox-versionLister" ''
+      curl -Ls 'https://data.services.jetbrains.com/products?code=TBA&release.type=release' \
+        | jq -r '.[] | .releases | flatten[] | .build'
+    '';
+  };
 
   meta = with lib; {
     description = "Jetbrains Toolbox";

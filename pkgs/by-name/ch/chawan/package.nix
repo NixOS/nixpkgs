@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-07-14";
+  version = "0-unstable-2024-10-25";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "0e3d67f31df2c2d53aa0e578439852731e5f5af9";
-    hash = "sha256-eVoZisQyaebWO58a0a0KR7fwsL1kTmPX1SayqdnmSuk=";
+    rev = "28bf2922a33dd987a0a3095bc461589ef23ad37d";
+    hash = "sha256-Bxt9uovo69whyAtrpCDz3DyAYjCYaZfMZknnFW0WDao=";
     fetchSubmodules = true;
   };
 
@@ -79,6 +79,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.isDarwin; # pending PR #292043
+    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

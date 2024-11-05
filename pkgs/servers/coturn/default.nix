@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
+
+    # Don't call setgroups unconditionally in mainrelay
+    # https://github.com/coturn/coturn/pull/1508
+    ./dont-call-setgroups-unconditionally.patch
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
     license = with licenses; [ bsd3 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ralith _0x4A6F ];
-    broken = stdenv.isDarwin; # 2018-10-21
+    maintainers = with maintainers; [ _0x4A6F ];
+    broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
 }

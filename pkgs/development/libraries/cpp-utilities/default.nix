@@ -8,18 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.25.0";
+  version = "5.26.1";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "cpp-utilities";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ECTtKx/N5MfWwYSwOycs6FXxDR56DT9tkdRxrhX4fVU=";
+    sha256 = "sha256-ft8gusZ6We3nEAOwccGrUidxpO5tdWR5VNDQ/r5l2P8=";
   };
 
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ cppunit ];
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
   # tests fail on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/cpp-utilities";

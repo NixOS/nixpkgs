@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tile38";
-  version = "1.33.1";
+  version = "1.33.3";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Rr1TcZedC+dJDN/oZTbKXS1Z1QYMofVtMS4YLA1r27E=";
+    hash = "sha256-r13STmaDJz4OGboNPsrJSi668q72Bzffe5TRXJk6pdI=";
   };
 
   vendorHash = "sha256-nnamNwowRPWQBKUMg800bFgijv8iHbdh/wUwTfX0NcY=";

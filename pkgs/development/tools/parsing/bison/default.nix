@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # cannot add bash to buildInputs due to infinite recursion
   strictDeps = stdenv.hostPlatform != stdenv.buildPlatform;
 
-  nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
+  nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
   enableParallelBuilding = true;

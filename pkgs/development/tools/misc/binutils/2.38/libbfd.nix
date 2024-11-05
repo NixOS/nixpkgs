@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
+  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [

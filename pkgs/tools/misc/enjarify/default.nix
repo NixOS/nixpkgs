@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/enjarify
   '';
 
-  buildInputs = [ ];
-
   meta = with lib; {
     description = "Tool for translating Dalvik bytecode to equivalent Java bytecode";
     homepage = "https://github.com/google/enjarify/";

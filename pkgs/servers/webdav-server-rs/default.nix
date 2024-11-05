@@ -5,7 +5,7 @@
 , libtirpc
 , pam
 , rpcsvc-proto
-, enablePAM ? stdenv.isLinux
+, enablePAM ? stdenv.hostPlatform.isLinux
 }:
 
 rustPlatform.buildRustPackage rec {

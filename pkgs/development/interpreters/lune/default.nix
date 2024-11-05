@@ -12,24 +12,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.8.6";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-03ckR2FpSlaAZlhjyX3ob+7W5Pq8OLri7jT+XIM7oeQ=";
+    hash = "sha256-KZt3w+nhJjz3ZLtLzJz0zpFTwQ28OmFWnCsLbo36Ryc=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-xEUq3Cc15bUAXpUoZw8tNQo6tW3/VXeuOtjIW4zrh1Q=";
+  cargoHash = "sha256-yTpklksOV+AFuW3Bc0L6sbAiJsQ+mseF1yz37FcWt1k=";
 
   nativeBuildInputs = [
     pkg-config
     cmake # required for libz-ng-sys
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];
@@ -64,6 +64,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
     # note: Undefined symbols for architecture x86_64
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

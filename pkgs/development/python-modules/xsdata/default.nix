@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.7";
+  version = "24.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tefra";
     repo = "xsdata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7rROd0iKs/SuIZGUwVDbusKgp7APIlvFto43Q3QCfZk=";
+    hash = "sha256-wQSrdAS4E6AmpP+pKviFomLrcSHLROhTWHg/hYGTaeQ=";
   };
 
   patches = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       click-default-group
@@ -59,11 +59,9 @@ buildPythonPackage rec {
     soap = [ requests ];
   };
 
-  nativeCheckInputs =
-    [ pytestCheckHook ]
-    ++ passthru.optional-dependencies.cli
-    ++ passthru.optional-dependencies.lxml
-    ++ passthru.optional-dependencies.soap;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ optional-dependencies.cli ++ optional-dependencies.lxml ++ optional-dependencies.soap;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 

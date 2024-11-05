@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.hardware.infiniband;
@@ -31,9 +28,9 @@ in
 
 {
   options.hardware.infiniband = {
-    enable = mkEnableOption "Infiniband support";
-    guids = mkOption {
-      type = with types; listOf str;
+    enable = lib.mkEnableOption "Infiniband support";
+    guids = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [];
       example = [ "0xe8ebd30000eee2e1" ];
       description = ''
@@ -42,7 +39,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.initrd.kernelModules = [
       "mlx5_core" "mlx5_ib" "ib_cm"
       "rdma_cm" "rdma_ucm" "rpcrdma"

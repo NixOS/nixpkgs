@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , pkg-config
 , memstreamHook
 , CoreAudio
@@ -9,6 +10,9 @@
 , ncurses
 , alsa-lib
 , buildPackages
+
+## Additional optional output modes
+, enableVorbis ? false, libvorbis
 }:
 
 stdenv.mkDerivation rec {
@@ -28,28 +32,41 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
+
   buildInputs = [
     libjack2
     ncurses
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreAudio
     libobjc
+  ] ++ lib.optionals enableVorbis [
+    libvorbis
+  ];
+
+  enabledOutputModes = [
+    "jack"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "oss"
+    "alsa"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "darwin"
+  ] ++ lib.optionals enableVorbis [
+    "vorbis"
   ];
 
   configureFlags = [
     "--enable-ncurses"
+    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--enable-audio=oss,alsa,jack"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-alsaseq"
     "--with-default-output=alsa"
     "lib_cv_va_val_copy=yes"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--enable-audio=darwin,jack"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "lib_cv_va_val_copy=no"
     "timidity_cv_ccoption_rdynamic=yes"
     # These configure tests fail because of incompatible function pointer conversions.
@@ -84,7 +101,9 @@ stdenv.mkDerivation rec {
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
   # This fixup step is unnecessary and fails on Darwin
-  dontRewriteSymlinks = stdenv.isDarwin;
+  dontRewriteSymlinks = stdenv.hostPlatform.isDarwin;
+
+  passthru.tests = nixosTests.timidity;
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/timidity/";

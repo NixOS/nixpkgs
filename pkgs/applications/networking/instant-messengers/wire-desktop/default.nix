@@ -6,7 +6,7 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook3
+, buildPackages
 , cpio
 , xar
 , libdbusmenu
@@ -30,7 +30,7 @@ let
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "3.35.3348";
+    x86_64-linux = "3.36.3462";
   }.${system} or throwSystem;
 
   hash = let
@@ -38,7 +38,7 @@ let
   in {
     inherit x86_64-darwin;
     aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "sha256-KtDUuAzD53mFJ0+yywp0Q2/hx9MGsOhFjRLWsZAd+h0=";
+    x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -57,6 +57,7 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
@@ -97,7 +98,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook3
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
     buildInputs = [
@@ -135,6 +136,10 @@ let
       (lib.getLib udev)
       libdbusmenu
     ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+    '';
 
     postFixup = ''
       makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
@@ -183,6 +188,6 @@ let
   };
 
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

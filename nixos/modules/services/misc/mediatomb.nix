@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
 
   gid = config.ids.gids.mediatomb;
@@ -13,19 +10,19 @@ let
   # configuration on media directory
   mediaDirectory = {
     options = {
-      path = mkOption {
-        type = types.str;
+      path = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Absolute directory path to the media directory to index.
         '';
       };
-      recursive = mkOption {
-        type = types.bool;
+      recursive = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether the indexation must take place recursively or not.";
       };
-      hidden-files = mkOption {
-        type = types.bool;
+      hidden-files = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to index the hidden files or not.";
       };
@@ -39,7 +36,6 @@ let
         <transcode mimetype="video/x-flv" using="vlcmpeg" />
         <transcode mimetype="application/ogg" using="vlcmpeg" />
         <transcode mimetype="audio/ogg" using="ogg2mp3" />
-        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
       </mimetype-profile-mappings>
       <profiles>
         <profile name="ogg2mp3" enabled="no" type="external">
@@ -55,7 +51,7 @@ let
           <accept-url>yes</accept-url>
           <first-resource>yes</first-resource>
           <accept-ogg-theora>yes</accept-ogg-theora>
-          <agent command="${libsForQt5.vlc}/bin/vlc"
+          <agent command="${lib.getExe vlc}"
             arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit" />
           <buffer size="14400000" chunk-size="512000" fill-size="120000" />
         </profile>
@@ -66,7 +62,7 @@ let
     </transcoding>
 '';
 
-  configText = optionalString (! cfg.customCfg) ''
+  configText = lib.optionalString (! cfg.customCfg) ''
 <?xml version="1.0" encoding="UTF-8"?>
 <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
     <server>
@@ -87,7 +83,7 @@ let
         </sqlite3>
       </storage>
       <protocolInfo extend="${optionYesNo cfg.ps3Support}"/>
-      ${optionalString cfg.dsmSupport ''
+      ${lib.optionalString cfg.dsmSupport ''
       <custom-http-headers>
         <add header="X-User-Agent: redsonic"/>
       </custom-http-headers>
@@ -95,7 +91,7 @@ let
       <manufacturerURL>redsonic.com</manufacturerURL>
       <modelNumber>105</modelNumber>
       ''}
-        ${optionalString cfg.tg100Support ''
+        ${lib.optionalString cfg.tg100Support ''
       <upnp-string-limit>101</upnp-string-limit>
       ''}
       <extended-runtime-options>
@@ -109,7 +105,7 @@ let
     </server>
     <import hidden-files="no">
       <autoscan use-inotify="auto">
-      ${concatMapStrings toMediaDirectory cfg.mediaDirectories}
+      ${lib.concatMapStrings toMediaDirectory cfg.mediaDirectories}
       </autoscan>
       <scripting script-charset="UTF-8">
         <common-script>${pkg}/share/${name}/js/common.js</common-script>
@@ -139,10 +135,10 @@ let
           <map from="flv" to="video/x-flv"/>
           <map from="mkv" to="video/x-matroska"/>
           <map from="mka" to="audio/x-matroska"/>
-          ${optionalString cfg.ps3Support ''
+          ${lib.optionalString cfg.ps3Support ''
           <map from="avi" to="video/divx"/>
           ''}
-          ${optionalString cfg.dsmSupport ''
+          ${lib.optionalString cfg.dsmSupport ''
           <map from="avi" to="video/avi"/>
           ''}
         </extension-mimetype>
@@ -199,26 +195,26 @@ in {
 
     services.mediatomb = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Gerbera/Mediatomb DLNA server.
         '';
       };
 
-      serverName = mkOption {
-        type = types.str;
+      serverName = lib.mkOption {
+        type = lib.types.str;
         default = "Gerbera (Mediatomb)";
         description = ''
           How to identify the server on the network.
         '';
       };
 
-      package = mkPackageOption pkgs "gerbera" { };
+      package = lib.mkPackageOption pkgs "gerbera" { };
 
-      ps3Support = mkOption {
-        type = types.bool;
+      ps3Support = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable ps3 specific tweaks.
@@ -226,8 +222,8 @@ in {
         '';
       };
 
-      dsmSupport = mkOption {
-        type = types.bool;
+      dsmSupport = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable D-Link DSM 320 specific tweaks.
@@ -235,69 +231,69 @@ in {
         '';
       };
 
-      tg100Support = mkOption {
-        type = types.bool;
+      tg100Support = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Telegent TG100 specific tweaks.
         '';
       };
 
-      transcoding = mkOption {
-        type = types.bool;
+      transcoding = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable transcoding.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/${name}";
-        defaultText = literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
+        defaultText = lib.literalExpression ''"/var/lib/''${config.${opt.package}.pname}"'';
         description = ''
           The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';
       };
 
-      pcDirectoryHide = mkOption {
-        type = types.bool;
+      pcDirectoryHide = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to list the top-level directory or not (from upnp client standpoint).
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "mediatomb";
         description = "User account under which the service runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "mediatomb";
         description = "Group account under which the service runs.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 49152;
         description = ''
           The network port to listen on.
         '';
       };
 
-      interface = mkOption {
-        type = types.str;
+      interface = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           A specific interface to bind to.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If false (the default), this is up to the user to declare the firewall rules.
@@ -310,16 +306,16 @@ in {
         '';
       };
 
-      uuid = mkOption {
-        type = types.str;
+      uuid = lib.mkOption {
+        type = lib.types.str;
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
         description = ''
           A unique (on your network) to identify the server by.
         '';
       };
 
-      mediaDirectories = mkOption {
-        type = with types; listOf (submodule mediaDirectory);
+      mediaDirectories = lib.mkOption {
+        type = with lib.types; listOf (submodule mediaDirectory);
         default = [];
         description = ''
           Declare media directories to index.
@@ -330,8 +326,8 @@ in {
         ];
       };
 
-      customCfg = mkOption {
-        type = types.bool;
+      customCfg = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Allow the service to create and use its own config file inside the `dataDir` as
@@ -350,9 +346,9 @@ in {
   ###### implementation
 
   config = let binaryCommand = "${pkg}/bin/${name}";
-               interfaceFlag = optionalString ( cfg.interface != "") "--interface ${cfg.interface}";
-               configFlag = optionalString (! cfg.customCfg) "--config ${pkgs.writeText "config.xml" configText}";
-    in mkIf cfg.enable {
+               interfaceFlag = lib.optionalString ( cfg.interface != "") "--interface ${cfg.interface}";
+               configFlag = lib.optionalString (! cfg.customCfg) "--config ${pkgs.writeText "config.xml" configText}";
+    in lib.mkIf cfg.enable {
     systemd.services.mediatomb = {
       description = "${cfg.serverName} media Server";
       # Gerbera might fail if the network interface is not available on startup
@@ -365,11 +361,11 @@ in {
       serviceConfig.Group = cfg.group;
     };
 
-    users.groups = optionalAttrs (cfg.group == "mediatomb") {
+    users.groups = lib.optionalAttrs (cfg.group == "mediatomb") {
       mediatomb.gid = gid;
     };
 
-    users.users = optionalAttrs (cfg.user == "mediatomb") {
+    users.users = lib.optionalAttrs (cfg.user == "mediatomb") {
       mediatomb = {
         isSystemUser = true;
         group = cfg.group;
@@ -380,11 +376,11 @@ in {
     };
 
     # Open firewall only if users enable it
-    networking.firewall = mkMerge [
-      (mkIf (cfg.openFirewall && cfg.interface != "") {
+    networking.firewall = lib.mkMerge [
+      (lib.mkIf (cfg.openFirewall && cfg.interface != "") {
         interfaces."${cfg.interface}" = defaultFirewallRules;
       })
-      (mkIf (cfg.openFirewall && cfg.interface == "") defaultFirewallRules)
+      (lib.mkIf (cfg.openFirewall && cfg.interface == "") defaultFirewallRules)
     ];
   };
 }

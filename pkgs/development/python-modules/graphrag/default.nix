@@ -12,26 +12,25 @@
   datashaper,
   devtools,
   environs,
-  fastparquet,
   graspologic,
+  json-repair,
   lancedb,
+  matplotlib,
   networkx,
   nltk,
-  numba,
   numpy,
   openai,
+  pandas,
   pyaml-env,
+  pyarrow,
   pydantic,
   python-dotenv,
   pyyaml,
   rich,
-  scipy,
-  swifter,
   tenacity,
-  textual,
   tiktoken,
   typing-extensions,
-  uvloop,
+  umap-learn,
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
@@ -39,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.1.1";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIAQOIqm9S9AtssE6UxcXfaIbSt3+506ueMrlathNaQ=";
+    hash = "sha256-H5ITK4m3l+rlIEYXoMIpsE9faCu6rRZuB5zaZQeArOU=";
   };
 
   build-system = [
@@ -54,12 +53,7 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "azure-identity"
-    "scipy"
-    "tiktoken"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies = [
     aiofiles
@@ -70,26 +64,25 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
-    fastparquet
     graspologic
+    json-repair
     lancedb
+    matplotlib
     networkx
     nltk
-    numba
     numpy
     openai
+    pandas
     pyaml-env
+    pyarrow
     pydantic
     python-dotenv
     pyyaml
     rich
-    scipy
-    swifter
     tenacity
-    textual
     tiktoken
     typing-extensions
-    uvloop
+    umap-learn
   ];
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";
@@ -111,11 +104,13 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context_max_tokens"
   ];
 
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
+    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

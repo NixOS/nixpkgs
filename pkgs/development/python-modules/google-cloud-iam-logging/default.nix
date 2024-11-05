@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.3.4";
+  version = "1.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZxNJV7jMqaMaN4Obt5sToUBmcXsfQHJPkNYnt8K+jf4=";
+    pname = "google_cloud_iam_logging";
+    inherit version;
+    hash = "sha256-B/OE8m6CpTddR+nAv9OP/y1V1c32/cUZPzfptAOuMrw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

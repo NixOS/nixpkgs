@@ -1,6 +1,5 @@
 { lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   buildDotnetModule,
   buildGoModule,

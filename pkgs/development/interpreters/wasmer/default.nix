@@ -8,22 +8,22 @@
 , CoreFoundation
 , SystemConfiguration
 , Security
-, withLLVM ? !stdenv.isDarwin
-, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
+, withLLVM ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+, withSinglepass ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.3.5";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hEhU3o/SLHWV9zmgCtW+7K/2ev+oGAnrZmlyNtoeSV4=";
+    hash = "sha256-zTz4UK+A4HWf+XGaTh7FOUFEeB9JnZooFnxZ4K3AFGw=";
   };
 
-  cargoHash = "sha256-xyR5pnwMGE5K4o7X0Q2JEervSgR5LK1vqpOa3Mm6xkU=";
+  cargoHash = "sha256-YSnGGd2uIxvhxDTJjtQMdv4Qx1DE7RA05Z+q4emJAKg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.llvm
     libffi
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     SystemConfiguration
     Security
@@ -52,12 +52,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
-  env.LLVM_SYS_150_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+  env.LLVM_SYS_180_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Universal WebAssembly Runtime";
     mainProgram = "wasmer";
     longDescription = ''
@@ -67,7 +67,8 @@ rustPlatform.buildRustPackage rec {
       x86 and ARM devices.
     '';
     homepage = "https://wasmer.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ Br1ght0ne shamilton nickcao ];
   };
 }

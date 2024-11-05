@@ -10,25 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.32.1";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PkDT6FU6JSIeeKCJeeIjjqZfoo+tGzqyPyWuIiwusQY=";
+    hash = "sha256-WR8fzpeN6zufvakanJBSMtgTpfDRqCyaTfEzE5NqFOA=";
   };
 
-  cargoHash = "sha256-ymI5O6j6NEcgIbMLEYgyUZBBkwxDWDWaVn4hqJScGxA=";
+  cargoHash = "sha256-AasNva4SOTSrvBTrGHX/jOPjcjt3o8KUsFL7e4uhW6M=";
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/static-web-server/static-web-server/pull/466.patch";
-      hash = "sha256-VYSoi6swG4nEFmGKvdEaJ05mJlxaXYsjs8cQai40P4g=";
-    })
-  ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''

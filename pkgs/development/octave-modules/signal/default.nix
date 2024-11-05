@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "signal";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VVreL/gPcRiQk5XDNAXwoXpPvNIrxtL7nD9/Rf72SOc=";
+    sha256 = "sha256-lO74/qeMiWCfjd9tX/i/wuDauTK0P4bOkRR0pYtcce4=";
   };
 
   requiredOctavePackages = [

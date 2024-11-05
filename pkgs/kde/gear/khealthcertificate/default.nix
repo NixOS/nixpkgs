@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "khealthcertificate";
 
-  extraNativeBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [ qtdeclarative ];
 }

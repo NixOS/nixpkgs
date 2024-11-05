@@ -2,13 +2,10 @@
 , stdenvNoCC
 , libsass
 , nodejs
-, python3
-, pkg-config
 , pnpm_9
 , fetchFromGitHub
 , nixosTests
 , vips
-, nodePackages
 }:
 
 let
@@ -60,10 +57,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   #     runHook postInstall
 
   #  '';
-    preInstall = ''
+  preInstall = ''
     mkdir $out
     cp -R ./dist $out
     cp -R ./node_modules $out
+  '';
+
+  preFixup = ''
+    find $out -name libvips-cpp.so.42 -print0 | while read -d $'\0' libvips; do
+      echo replacing libvips at $libvips
+      rm $libvips
+      ln -s ${lib.getLib vips}/lib/libvips-cpp.so.42 $libvips
+    done
   '';
 
 

@@ -155,8 +155,8 @@ in {
 
     featureGates = mkOption {
       description = "List set of feature gates.";
-      default = [];
-      type = types.listOf types.str;
+      default = {};
+      type = types.attrsOf types.bool;
     };
 
     masterAddress = mkOption {

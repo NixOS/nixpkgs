@@ -12,12 +12,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "0p321rfcihz2779sdd6qfgpxgk5yd53d33vq5pvb50dbdgxww0bc";
+    hash = "sha256-bAHO+2urgbL2LXiP0UZpvszX73PYtKbTOeLDyFwOYlw=";
   };
 
   postPatch = ''
     substituteInPlace betterdiscordctl \
-      --replace "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
+      --replace-fail "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
   '';
 
   installPhase = ''

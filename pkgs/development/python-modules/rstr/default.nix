@@ -23,7 +23,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  doCheck = true;
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {

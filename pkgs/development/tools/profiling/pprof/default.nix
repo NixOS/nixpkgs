@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "pprof";
-  version = "0-unstable-2024-07-10";
+  version = "0-unstable-2024-09-25";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "f6c9dda6c6da638264f96f1097bce50fd82b4927";
-    hash = "sha256-jxPl3e9aYRWyR7vkz+15aZiG331WnrNkMW8vwbcldfY=";
+    rev = "fa3061bff0bcf0d611f07dbdba73665bd2bbac97";
+    hash = "sha256-wUHCbgmJI3YTettVVrLnRPIexaHuAQDmbnHXPTLBBYM=";
   };
 
   postPatch = ''

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.4.2";
+  version = "4.4.4";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-puQntHcK2kiUXzqpBq9xD8gzz/DULfkfGCgwJ0DXlOw=";
+    hash = "sha256-cBdnd1PN99H9w1Xkv82x66g2l5Oo3yTSQUJ6k5y/QoM=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
     (lib.mesonBool "introspection" withIntrospection)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dc_args=-D_DARWIN_C_SOURCE"
   ];
 

@@ -1,7 +1,7 @@
 { lib, stdenv, dpkg, fetchurl, zip, nixosTests }:
 
 let
-  generic = { version, sha256, suffix ? "", ... } @ args:
+  generic = { version, sha256, suffix ? "", knownVulnerabilities ? [ ], ... } @ args:
   stdenv.mkDerivation (args // {
     pname = "unifi-controller";
 
@@ -39,21 +39,16 @@ let
       license = licenses.unfree;
       platforms = platforms.unix;
       maintainers = with maintainers; [ globin patryk27 ];
+      inherit knownVulnerabilities;
     };
   });
 
 in rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
-  unifi7 = generic {
-    version = "7.5.187";
-    suffix = "-f57f5bf7ab";
-    sha256 = "sha256-a5kl8gZbRnhS/p1imPl7soM0/QSFHdM0+2bNmDfc1mY=";
-  };
-
   unifi8 = generic {
-    version = "8.2.93";
-    suffix = "-1c329ecd26";
-    sha256 = "sha256-7zcRxflEvPRxH7MtudOqumeUpSzAaEIbjaaJVpr2Gbc=";
+    version = "8.5.6";
+    suffix = "-1x29lm155t";
+    sha256 = "sha256-ZpCoE8OPb3FcKzf7Nurf9q+g2BpbjZcp1LvWOsV/tpA=";
   };
 }

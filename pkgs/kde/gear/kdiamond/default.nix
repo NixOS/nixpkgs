@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kdiamond";
 
-  extraNativeBuildInputs = [_7zz];
+  extraNativeBuildInputs = [ _7zz ];
   meta.mainProgram = "kdiamond";
 }

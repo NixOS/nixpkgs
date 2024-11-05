@@ -7,26 +7,26 @@
 , runtimeShellPackage
 , runtimeShell
 , nixosTests
-, enablePrivSep ? true
+, enablePrivSep ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcpcd";
-  version = "10.0.8";
+  version = "10.0.6";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
     rev = "v${version}";
-    sha256 = "sha256-kM+mdB7ul9NYHOEAJtp3M57M2MellrCoY/SaPWFLEpQ=";
+    sha256 = "sha256-tNC5XCA8dShaTIff15mQz8v+YK9sZkRNLCX5qnlpxx4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     freebsd.libcapsicum
     freebsd.libcasper
   ];
@@ -38,30 +38,22 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ]
-  ++ (
-    if ! enablePrivSep
-    then [ "--disable-privsep" ]
-    else [
-      "--enable-privsep"
-      # dhcpcd disables privsep if it can't find the default user,
-      # so we explicitly specify a user.
-      "--privsepuser=dhcpcd"
-    ]
-  );
+    "--disable-privsep"
+    "--dbdir=/var/lib/dhcpcd"
+    (lib.enableFeature enablePrivSep "privsep")
+  ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  # Hack to make installation succeed.  dhcpcd will still use /var/db
+  # Hack to make installation succeed.  dhcpcd will still use /var/lib
   # at runtime.
   installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (udev != null && stdenv.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (udev != null && stdenv.hostPlatform.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
-  passthru = {
-    inherit enablePrivSep;
-    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  passthru.tests = {
+    inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
   };
 
   meta = with lib; {
@@ -69,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = platforms.linux ++ platforms.freebsd;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
     mainProgram = "dhcpcd";
   };
 }

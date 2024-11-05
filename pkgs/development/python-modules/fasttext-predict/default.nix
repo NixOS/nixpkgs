@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace setup.py \
       --replace-fail "-flto" ""
   '';

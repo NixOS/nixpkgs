@@ -2,31 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  boost-histogram,
-  dask,
+
+  # build-system
   hatchling,
   hatch-vcs,
+
+  # dependencies
+  boost-histogram,
+  dask,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dask-histogram";
-  version = "2024.3.0";
+  version = "2024.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
     rev = "refs/tags/${version}";
-    hash = "sha256-RqZMAEGFqEXNmNv7SWCyQw9cI+I+Oa6s8O/7Jp+9id8=";
+    hash = "sha256-k+hD5y9K6Jsm++H+IAWJ/Z3wlCN4fV8RIcyAnvOvem0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost-histogram
     dask
   ];
@@ -35,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_histogram" ];
 
-  meta = with lib; {
+  meta = {
     description = "Histograms with task scheduling";
     homepage = "https://dask-histogram.readthedocs.io/";
     changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

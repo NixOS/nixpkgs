@@ -1,7 +1,7 @@
 { lib, fetchgit, meson, ninja, pkg-config, nix-update-script
-, python3, gtk3, libsecret, gst_all_1, webkitgtk, glib
+, python3, gtk3, libsecret, gst_all_1, webkitgtk_4_0, glib
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobject-introspection, wrapGAppsHook3, gnome }:
+, gobject-introspection, wrapGAppsHook3, gnome-settings-daemon }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-ugly
     gstreamer
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gtk3
     gtkspell3
     hunspell
     libsecret
-    webkitgtk
+    webkitgtk_4_0
     glib
   ];
 

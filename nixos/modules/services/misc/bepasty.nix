@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   gunicorn = pkgs.python3Packages.gunicorn;
   bepasty = pkgs.bepasty;
@@ -13,20 +11,20 @@ let
 in
 {
   options.services.bepasty = {
-    enable = mkEnableOption "bepasty, a binary pastebin server";
+    enable = lib.mkEnableOption "bepasty, a binary pastebin server";
 
-    servers = mkOption {
+    servers = lib.mkOption {
       default = {};
       description = ''
         configure a number of bepasty servers which will be started with
         gunicorn.
         '';
-      type = with types ; attrsOf (submodule ({ config, ... } : {
+      type = with lib.types ; attrsOf (submodule ({ config, ... } : {
 
         options = {
 
-          bind = mkOption {
-            type = types.str;
+          bind = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Bind address to be used for this server.
               '';
@@ -34,16 +32,16 @@ in
             default = "127.0.0.1:8000";
           };
 
-          dataDir = mkOption {
-            type = types.str;
+          dataDir = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Path to the directory where the pastes will be saved to
               '';
             default = default_home+"/data";
           };
 
-          defaultPermissions = mkOption {
-            type = types.str;
+          defaultPermissions = lib.mkOption {
+            type = lib.types.str;
             description = ''
               default permissions for all unauthenticated accesses.
               '';
@@ -51,8 +49,8 @@ in
             default = "read";
           };
 
-          extraConfig = mkOption {
-            type = types.lines;
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             description = ''
               Extra configuration for bepasty server to be appended on the
               configuration.
@@ -68,8 +66,8 @@ in
               '';
           };
 
-          secretKey = mkOption {
-            type = types.str;
+          secretKey = lib.mkOption {
+            type = lib.types.str;
             description = ''
               server secret for safe session cookies, must be set.
 
@@ -81,8 +79,8 @@ in
             default = "";
           };
 
-          secretKeyFile = mkOption {
-            type = types.nullOr types.str;
+          secretKeyFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
               A file that contains the server secret for safe session cookies, must be set.
@@ -94,8 +92,8 @@ in
               '';
           };
 
-          workDir = mkOption {
-            type = types.str;
+          workDir = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Path to the working directory (used for config and pidfile).
               Defaults to the users home directory.
@@ -105,7 +103,7 @@ in
 
         };
         config = {
-          secretKeyFile = mkDefault (
+          secretKeyFile = lib.mkDefault (
             if config.secretKey != ""
             then toString (pkgs.writeTextFile {
               name = "bepasty-secret-key";
@@ -118,13 +116,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ bepasty ];
 
     # creates gunicorn systemd service for each configured server
-    systemd.services = mapAttrs' (name: server:
-      nameValuePair ("bepasty-server-${name}-gunicorn")
+    systemd.services = lib.mapAttrs' (name: server:
+      lib.nameValuePair ("bepasty-server-${name}-gunicorn")
         ({
           description = "Bepasty Server ${name}";
           wantedBy = [ "multi-user.target" ];

@@ -3,7 +3,7 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
+  fetchpatch2,
   substituteAll,
 
   # build-system
@@ -25,17 +25,22 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.15.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
-    rev = version;
-    hash = "sha256-TpD8YZnnv48PKYrUqR0/qvJG1XRbcMBcrkcERh6Q4q0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wiQmShniYZmB8hk/MC5FWFf1s5vqEHiYBkXTo4OeZ+E=";
   };
 
   patches = [
+    (fetchpatch2 {
+      name = "bump-gast-to-0.6.0.patch";
+      url = "https://github.com/serge-sans-paille/pythran/commit/840a0e706ec39963aec6bcd1f118bf33177c20b4.patch";
+      hash = "sha256-FHGXWuAX/Nmn6uEfQgAXfUxIdApDwSfHHtOStxyme/0=";
+    })
     # Hardcode path to mp library
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
@@ -51,9 +56,9 @@ buildPythonPackage rec {
     ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     gast
     numpy
@@ -73,9 +78,8 @@ buildPythonPackage rec {
   # Test suite is huge and has a circular dependency on scipy.
   doCheck = false;
 
-  disabled = !isPy3k;
-
   meta = {
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.rev}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;

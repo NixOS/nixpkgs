@@ -33,6 +33,25 @@ let
           example = literalExpression "pkgs.dockerTools.buildImage {...};";
         };
 
+        imageStream = mkOption {
+          type = with types; nullOr package;
+          default = null;
+          description = ''
+            Path to a script that streams the desired image on standard output.
+
+            This option is mainly intended for use with
+            `pkgs.dockerTools.streamLayeredImage` so that the intermediate
+            image archive does not need to be stored in the Nix store.  For
+            larger images this optimization can significantly reduce Nix store
+            churn compared to using the `imageFile` option, because you don't
+            have to store a new copy of the image archive in the Nix store
+            every time you change the image.  Instead, if you stream the image
+            then you only need to build and store the layers that differ from
+            the previous image.
+          '';
+          example = literalExpression "pkgs.dockerTools.streamLayeredImage {...};";
+        };
+
         login = {
 
           username = mkOption {
@@ -119,7 +138,7 @@ let
             For more details and a full list of logging drivers, refer to respective backends documentation.
 
             For Docker:
-            [Docker engine documentation](https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver)
+            [Docker engine documentation](https://docs.docker.com/engine/logging/configure/)
 
             For Podman:
             Refer to the docker-run(1) man page.
@@ -148,12 +167,17 @@ let
             somewhere within the specified `hostPort` range.
             Example: `1234-1236:1234/tcp`
 
+            Publishing a port bypasses the NixOS firewall. If the port is not
+            supposed to be shared on the network, make sure to publish the
+            port to localhost.
+            Example: `127.0.0.1:1234:1234`
+
             Refer to the
-            [Docker engine documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) for full details.
+            [Docker engine documentation](https://docs.docker.com/engine/network/#published-ports) for full details.
           '';
           example = literalExpression ''
             [
-              "8080:9000"
+              "127.0.0.1:8080:9000"
             ]
           '';
         };
@@ -179,7 +203,7 @@ let
             would be difficult with an attribute set.  There are
             also a variety of mount options available as a third
             field; please refer to the
-            [docker engine documentation](https://docs.docker.com/engine/reference/run/#volume-shared-filesystems) for details.
+            [docker engine documentation](https://docs.docker.com/engine/storage/volumes/) for details.
           '';
           example = literalExpression ''
             [
@@ -270,6 +294,9 @@ let
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
         ''}
+        ${optionalString (container.imageStream != null) ''
+          ${container.imageStream} | ${cfg.backend} load
+        ''}
         ${optionalString (cfg.backend == "podman") ''
           rm -f /run/podman-${escapedName}.ctr-id
         ''}
@@ -277,10 +304,10 @@ let
     };
   in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    wants = lib.optional (container.imageFile == null)  "network-online.target";
+    wants = lib.optional (container.imageFile == null && container.imageStream == null)  "network-online.target";
     after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
-            # if imageFile is not set, the service needs the network to download the image from the registry
-            ++ lib.optionals (container.imageFile == null) [ "network-online.target" ]
+            # if imageFile or imageStream is not set, the service needs the network to download the image from the registry
+            ++ lib.optionals (container.imageFile == null && container.imageStream == null) [ "network-online.target" ]
             ++ dependsOn;
     requires = dependsOn;
     environment = proxy_env;
@@ -388,6 +415,17 @@ in {
   config = lib.mkIf (cfg.containers != {}) (lib.mkMerge [
     {
       systemd.services = mapAttrs' (n: v: nameValuePair "${cfg.backend}-${n}" (mkService n v)) cfg.containers;
+
+      assertions =
+        let
+          toAssertion = _: { imageFile, imageStream, ... }:
+            { assertion = imageFile == null || imageStream == null;
+
+              message = "You can only define one of imageFile and imageStream";
+            };
+
+        in
+          lib.mapAttrsToList toAssertion cfg.containers;
     }
     (lib.mkIf (cfg.backend == "podman") {
       virtualisation.podman.enable = true;

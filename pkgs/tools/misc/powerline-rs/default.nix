@@ -15,12 +15,12 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NAhLTrTshCm1QKGaOdD/YaqD6c3oYZwVBst8fvTlScQ=";
 
   nativeBuildInputs = [ pkg-config file perl cmake curl ];
-  buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   COMPLETION_OUT = "out";
   postInstall = ''
-    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/share/bash-completion/completions/${pname}"
-    install -Dm 755 "${COMPLETION_OUT}/${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
+    install -Dm 755 "${COMPLETION_OUT}/powerline-rs.bash" "$out/share/bash-completion/completions/powerline-rs"
+    install -Dm 755 "${COMPLETION_OUT}/powerline-rs.fish" "$out/share/fish/vendor_completions.d/powerline-rs"
   '';
 
   meta = with lib; {

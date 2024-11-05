@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   outputs = [ "out" "dev" "doc" ];
-  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
+  separateDebugInfo = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "musl";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # `gctest` fails under x86_64 emulation on aarch64-darwin
   # and also on aarch64-linux (qemu-user)
-  doCheck = !((stdenv.isDarwin && stdenv.isx86_64) || (stdenv.isLinux && stdenv.isAarch64));
+  doCheck = !((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64));
 
   enableParallelBuilding = true;
 

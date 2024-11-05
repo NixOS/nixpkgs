@@ -9,36 +9,40 @@
   infrastructure. Regular updates should be done through the individual packages
   update scripts.
  */
+{ startWith ? null }:
 let
-  pkgs = import ../.. {};
+  pkgs = import ../.. { config.allowAliases = false; };
 
   inherit (pkgs) lib;
 
   packagesWith = cond: pkgs:
     let
       packagesWithInner = attrs:
-        lib.unique (
-          lib.concatLists (
-            lib.mapAttrsToList (name: elem:
-              let
-                result = builtins.tryEval elem;
-              in
-                if result.success then
-                  let
-                    value = result.value;
-                  in
-                    if lib.isDerivation value then
-                      lib.optional (cond value) value
-                    else
-                      if lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false) then
-                        packagesWithInner value
-                      else []
-                else []) attrs));
+        lib.concatLists (
+          lib.mapAttrsToList (name: elem:
+            let
+              result = builtins.tryEval elem;
+            in
+              if result.success then
+                let
+                  value = result.value;
+                in
+                  if lib.isDerivation value then
+                    lib.optional (cond value) value
+                  else
+                    if lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false) then
+                      packagesWithInner value
+                    else []
+              else []) attrs);
     in
       packagesWithInner pkgs;
 
-  packages =
-    packagesWith (pkgs: pkgs ? fetch-deps) pkgs;
+  packages = lib.unique
+    (lib.filter (p:
+      (builtins.tryEval p.outPath).success ||
+      builtins.trace "warning: skipping ${p.name} because it failed to evaluate" false)
+    ((pkgs: (lib.drop (lib.lists.findFirstIndex (p: p.name == startWith) 0 pkgs) pkgs))
+    (packagesWith (p: p ? fetch-deps) pkgs)));
 
   helpText = ''
     Please run:

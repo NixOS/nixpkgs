@@ -8,12 +8,9 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, electron_29
+, electron
 }:
 
-let
-  electron = electron_29;
-in
 stdenv.mkDerivation rec {
   pname = "kuro";
   version = "9.0.0";
@@ -43,7 +40,7 @@ stdenv.mkDerivation rec {
   yarnBuildScript = "electron-builder";
   yarnBuildFlags = [
     "--dir"
-    "-c.electronDist=${electron}/libexec/electron"
+    "-c.electronDist=${electron.dist}"
     "-c.electronVersion=${electron.version}"
   ];
 

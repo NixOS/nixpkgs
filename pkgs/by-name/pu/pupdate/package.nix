@@ -5,19 +5,18 @@
 , dotnetCorePackages
 , openssl
 , zlib
-, hostPlatform
 , nix-update-script
 }:
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.11.0";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
-    repo = "${pname}";
+    repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-SqEmpmjI0m6bJT43TLEmEciNEqR/ggQZqFLCm7oFSnY=";
+    hash = "sha256-ogQ7pYLfeyoxg0p7nxUvYhmgDw5xtd7qkFM08B4FDBU=";
   };
 
   buildInputs = [
@@ -30,7 +29,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pupdate.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
+      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
   '';
 
   projectFile = "pupdate.csproj";

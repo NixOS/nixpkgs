@@ -1,53 +1,52 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, overrideSDK
-, fetchFromGitHub
-, testers
-, balena-cli
-, nodePackages
-, python3
-, udev
-, cctools
-, darwin
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  testers,
+  balena-cli,
+  node-gyp,
+  python3,
+  udev,
+  cctools,
+  apple-sdk_12,
+  darwinMinVersionHook,
 }:
 
-let
-  # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "balena-cli";
-  version = "18.2.33";
+  version = "19.0.13";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-DcdCIsvdqIJdBhL+K2mN2q6cWIgoKQKwFDK60pb4ckE=";
+    hash = "sha256-2U+P3LsxaRpktNbDn8iNhHQVjokiWZADYVDpJsDosZU=";
   };
 
-  npmDepsHash = "sha256-Z/xbKGmUi68Sdtvh2JowGqkLXIulvZhX8wW7w2+tBbg=";
+  npmDepsHash = "sha256-CA6qs9Gk19dEK2yCFMVVKmJSoZVLdpnf4V6P5fv2Bcc=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
   makeCacheWritable = true;
 
-  nativeBuildInputs = [
-    nodePackages.node-gyp
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      node-gyp
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    udev
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_12
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = balena-cli;
@@ -69,7 +68,10 @@ in buildNpmPackage' rec {
     homepage = "https://github.com/balena-io/balena-cli";
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.kalebpace maintainers.doronbehar ];
+    maintainers = [
+      maintainers.kalebpace
+      maintainers.doronbehar
+    ];
     mainProgram = "balena";
   };
 }

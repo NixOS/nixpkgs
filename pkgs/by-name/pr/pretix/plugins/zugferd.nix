@@ -4,20 +4,21 @@
   fetchFromGitHub,
   pretix-plugin-build,
   setuptools,
+  django,
   drafthorse,
   ghostscript_headless,
 }:
 
 buildPythonPackage rec {
   pname = "pretix-zugferd";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-zugferd";
     rev = "v${version}";
-    hash = "sha256-ozFDNIA+0feHrHHvxcf+6Jh4L83svmPEE/rerd4Yim8=";
+    hash = "sha256-AJbrx1n32YAZnJGYX67qqaEnOeegYfSUEekvQnmjt+0=";
   };
 
   postPatch = ''
@@ -28,9 +29,14 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "drafthorse" ];
 
   build-system = [
+    django
     pretix-plugin-build
     setuptools
   ];
+
+  postBuild = ''
+    make
+  '';
 
   dependencies = [ drafthorse ];
 

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, nix-update-script
 , cargo
 , meson
 , ninja
@@ -13,8 +12,6 @@
 , gst_all_1
 , gtk4
 , libadwaita
-, llvmPackages
-, glibc
 , pipewire
 , wayland
 , wrapGAppsHook4

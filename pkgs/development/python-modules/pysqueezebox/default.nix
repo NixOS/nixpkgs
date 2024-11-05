@@ -1,29 +1,36 @@
 {
   lib,
   aiohttp,
+  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.7.1";
-  format = "setuptools";
+  version = "10.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rajlaud";
-    repo = pname;
+    repo = "pysqueezebox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WnL9Va3uaWlUHVBtit4v+XdYOFmPpxG91mAHEGwI+7c=";
+    hash = "sha256-p9EwzkKkNi/jGMXx4sPTSpPk3Uq3Na8WElolNryu2N4=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    async-timeout
+    aiohttp
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -45,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
+    changelog = "https://github.com/rajlaud/pysqueezebox/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ nyanloutre ];
   };

@@ -6,5 +6,8 @@
 mkKdeDerivation {
   pname = "audex";
 
-  extraBuildInputs = [libcdio libcdio-paranoia];
+  extraBuildInputs = [
+    libcdio
+    libcdio-paranoia
+  ];
 }

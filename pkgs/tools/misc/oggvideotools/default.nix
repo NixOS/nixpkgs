@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     # Compilation error on Darwin:
     # error: invalid argument '--std=c++0x' not allowed with 'C'
     # make[2]: *** [src/libresample/CMakeFiles/resample.dir/build.make:76: src/libresample/CMakeFiles/resample.dir/filterkit.c.o] Error 1
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

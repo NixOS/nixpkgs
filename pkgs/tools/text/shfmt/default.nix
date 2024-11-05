@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "sha256-2AnSmwl4ID7QxF8k1fl50S47KjKs9PwVpxchUIlhVo0=";
+    hash = "sha256-UI/f5EC5OOvwrxP1wfnNgEpY1DCwmekQohTILRvM2Gc=";
   };
 
-  vendorHash = "sha256-rWAnWohbQZyPlOWqWwcxPMDABxumCo4M8fBUx54q76c=";
+  vendorHash = "sha256-p52IIzkAkcnqbxXBqQ92crYBrD84wQb/uVsTWX8EsPE=";
 
   subPackages = [ "cmd/shfmt" ];
 

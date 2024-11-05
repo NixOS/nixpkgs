@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://marmaro.de/prog/mmh";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ kaction ];
   };
 }

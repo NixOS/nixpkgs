@@ -6,31 +6,33 @@
 , autoPatchelfHook
 , libcxx
 , libGL
-, gcc7
+, gcc
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
-  version = "14.0.1a2";
+  version = "14.2a1";
 
   buildInputs = [
     autoPatchelfHook
     libcxx
     libGL
-    gcc7.cc.lib
+    gcc.cc.lib
   ];
 
   # yes, the below download function is an absolute mess.
   # blame blackmagicdesign.
   src =
     let
-    # from the URL that the POST happens to, see browser console
-      DOWNLOADID = "d73a63095b6a4a189916fb2baa5a0ef3";
+      # from the URL the download page where you click the "only download" button is at
+      REFERID = "b97e55f37a0042fbacd234971d8c93ed";
+      # from the URL that the POST happens to, see browser console
+      DOWNLOADID = "552546307a7c4de29ea6d09a6ca08c90";
     in
     runCommandLocal "${finalAttrs.pname}-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-jkKzUqfirvsVIefjWLx4NlqznXanWDtvhTsIThWFTo4=";
+        outputHash = "sha256-rfZDL1YvAuMD5u68MMyiT8cERsIHMc9K25lXt7cqrrk=";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -39,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         # ENV VARS
         SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        inherit DOWNLOADID;
-        # from the URL the download page where you click the "only download" button is at
-        REFERID = "76801bc1d84147da9cb1a16e663ac33e";
+        inherit REFERID;
         SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
         USERAGENT = builtins.concatStringsSep " " [

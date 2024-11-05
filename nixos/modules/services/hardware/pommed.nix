@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let cfg = config.services.hardware.pommed;
     defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
 in {
@@ -10,8 +7,8 @@ in {
 
     services.hardware.pommed = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use the pommed tool to handle Apple laptop
@@ -19,8 +16,8 @@ in {
         '';
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           The path to the {file}`pommed.conf` file. Leave
@@ -35,7 +32,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.polkit pkgs.pommed_light ];
 
     environment.etc."pommed.conf".source =

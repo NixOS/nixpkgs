@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   preBuild = "${python.interpreter} -m django compilemessages";
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     saml = [ python3-saml ];
     mfa = [ qrcode ];
   };
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     pytest-django
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access
