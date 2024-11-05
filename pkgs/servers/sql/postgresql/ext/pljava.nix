@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "tada";
     repo = "pljava";
-    rev = "V1_6_7";
+    rev = "V${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-M17adSLsw47KZ2BoUwxyWkXKRD8TcexDAy61Yfw4fNU=";
 
   };
@@ -36,7 +36,6 @@ maven.buildMavenPackage rec {
     openjdk
     postgresql
     openssl
-    postgresql
     gcc
     libkrb5
     pkg-config
