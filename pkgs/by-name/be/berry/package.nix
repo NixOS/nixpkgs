@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs configure
   '';
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_C99_SOURCE";
+
   desktopItems = [
     (makeDesktopItem {
       name = "berry";
