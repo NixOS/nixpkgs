@@ -27,8 +27,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "character_encoding_utils" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://github.com/TakWolf/character-encoding-utils";
     description = "Some character encoding utils";

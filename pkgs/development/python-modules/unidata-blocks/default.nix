@@ -24,15 +24,11 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    langcodes
-  ];
+  dependencies = [ langcodes ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "unidata_blocks" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/TakWolf/unidata-blocks";
