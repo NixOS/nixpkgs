@@ -1494,6 +1494,8 @@ self: super: with self; {
 
   base2048 = callPackage ../development/python-modules/base2048 { };
 
+  base32-crockford = callPackage ../development/python-modules/base32-crockford { };
+
   base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
