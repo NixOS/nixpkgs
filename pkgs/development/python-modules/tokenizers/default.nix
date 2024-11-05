@@ -74,14 +74,14 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.20.1";
+  version = "0.20.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QTe1QdmJHSoosNG9cCJS7uQNdoMwgL+CJHQQUX5VtSY=";
+    hash = "sha256-6uUlDLL1dMg5/6/z8AuB7ibqSJ7IUVexHDTkLx35wFY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };

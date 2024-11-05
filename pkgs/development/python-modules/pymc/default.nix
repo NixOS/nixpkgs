@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.17.0";
+  version = "5.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vElS6f46xVvK+p5/IvjgCI4wMZlBe3Q5ZaQUie1yLJw=";
+    hash = "sha256-XJWAzJ8B5MZlMA6gF8OAUeXUHfPH2/buvoGlthgc+Qw=";
   };
 
   postPatch = ''

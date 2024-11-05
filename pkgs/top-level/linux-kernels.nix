@@ -474,7 +474,7 @@ in {
 
     rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
-    tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
+    tuxedo-drivers = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-drivers { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
 
@@ -606,6 +606,7 @@ in {
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
     system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
     system76-scheduler = lib.warn "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
+    tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
