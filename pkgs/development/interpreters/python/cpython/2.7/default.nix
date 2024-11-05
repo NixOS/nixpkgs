@@ -140,10 +140,6 @@ let
     ] ++ lib.optionals (x11Support && stdenv.hostPlatform.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
 
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fix darwin build https://bugs.python.org/issue34027
-      ../3.7/darwin-libutil.patch
-
     ] ++ lib.optionals stdenv.hostPlatform.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
