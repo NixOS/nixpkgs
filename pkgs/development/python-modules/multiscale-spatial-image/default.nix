@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "multiscale-spatial-image";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s/88N8IVkj+9MZYAtEJSpmmDdjIxf4S6U5gYr86Ikrw=";
+    hash = "sha256-SNAbkFgShb1FSM4tXoyf2L27LmpWznMThgAVfJwI00A=";
   };
 
   build-system = [ hatchling ];
