@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
   autoreconfHook,
   pkg-config,
   which,
@@ -17,11 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "leptonica";
-  version = "1.84.1";
+  version = "1.85.0";
 
-  src = fetchurl {
-    url = "https://github.com/DanBloomberg/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Kz4SVLHMo4HnfIGbWcqZd0/0NTAgm5rrUR4dRliKZPY=";
+  src = fetchFromGitHub {
+    owner = "DanBloomBerg";
+    repo = pname;
+    rev = version;
+    hash = "sha256-meiSi0qL4i/KCMe5wsRK1/mbuRLHUb55DDOnxkrXZSs=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +50,9 @@ stdenv.mkDerivation rec {
   # Fails on pngio_reg for unknown reason
   doCheck = false; # !stdenv.hostPlatform.isDarwin;
 
+  passthru.updateScript = nix-update-script { };
   meta = {
+    maintainers = with lib.maintainers; [ patrickdag ];
     description = "Image processing and analysis library";
     homepage = "http://www.leptonica.org/";
     license = lib.licenses.bsd2; # http://www.leptonica.org/about-the-license.html
