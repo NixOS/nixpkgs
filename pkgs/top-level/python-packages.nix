@@ -4663,6 +4663,8 @@ self: super: with self; {
 
   flax = callPackage ../development/python-modules/flax { };
 
+  flaxlib = callPackage ../development/python-modules/flaxlib { };
+
   fleep = callPackage ../development/python-modules/fleep { };
 
   flet = callPackage ../development/python-modules/flet { };
