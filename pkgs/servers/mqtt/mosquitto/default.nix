@@ -13,7 +13,6 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , uthash
-, fetchpatch
 , nixosTests
 }:
 
@@ -30,23 +29,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.18";
+  version = "2.0.20";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
+    hash = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    (fetchpatch {
-      name = "revert-cmake-shared-to-module.patch"; # See https://github.com/eclipse/mosquitto/issues/2277
-      url = "https://github.com/eclipse/mosquitto/commit/e21eaeca37196439b3e89bb8fd2eb1903ef94845.patch";
-      sha256 = "14syi2c1rks8sl2aw09my276w45yq1iasvzkqcrqwy4drdqrf069";
-      revert = true;
-    })
-  ];
 
   postPatch = ''
     for f in html manpage ; do

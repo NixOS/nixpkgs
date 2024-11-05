@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "asciigraph";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "guptarohit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Y+RRFFCeuDjzTznpfC7Wn3j96ZCFSOzvb8ND/ATW+JI=";
+    sha256 = "sha256-+4aGkumO42cloHWV8qEEJ5bj8TTdtfXTWGFCgCRE4Mg=";
   };
 
   vendorHash = null;

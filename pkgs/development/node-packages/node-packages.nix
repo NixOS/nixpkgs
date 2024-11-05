@@ -32335,15 +32335,6 @@ let
         sha512 = "0Fo5oir+O9jnXu5EefYbVK+mHMBeEVEy2cmctR1O1NECcCkPRreJKrS6Qt/j3KC2C148Dfo9i3pCmCMsdqGr0g==";
       };
     };
-    "klaw-sync-6.0.0" = {
-      name = "klaw-sync";
-      packageName = "klaw-sync";
-      version = "6.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/klaw-sync/-/klaw-sync-6.0.0.tgz";
-        sha512 = "nIeuVSzdCCs6TDPTqI8w1Yre34sSq7AkZ4B3sfOBbI2CgVSB4Du4aLQijFU2+lhAFCwt9+42Hel6lQNIv6AntQ==";
-      };
-    };
     "kleur-3.0.3" = {
       name = "kleur";
       packageName = "kleur";
@@ -60493,23 +60484,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-css = nodeEnv.buildNodePackage {
-    name = "coc-css";
-    packageName = "coc-css";
-    version = "2.1.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-css/-/coc-css-2.1.0.tgz";
-      sha512 = "4DG6chaAQg5pQ4B4WLff04+AzKrQo9+WRDJIl0j0Mmcx7IOPP4QE+m00mDuyowsw4eZvaQ/Mc8bwtg5MbPdIcQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Css extension for coc.nvim";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-docker = nodeEnv.buildNodePackage {
     name = "coc-docker";
     packageName = "coc-docker";
@@ -61708,102 +61682,6 @@ in
     meta = {
       description = "toml extension for coc.nvim";
       homepage = "https://github.com/kkiyama117/coc-toml#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-tslint = nodeEnv.buildNodePackage {
-    name = "coc-tslint";
-    packageName = "coc-tslint";
-    version = "1.0.17";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-tslint/-/coc-tslint-1.0.17.tgz";
-      sha512 = "5Zxv2Adtb6Mlpv2YdKErhf8ntxiBl1UyrbEqo7gR9nFIAfi3o0Ue6TJTpZfOhQViFQxLjJAS65IQVRaNlbhkxw==";
-    };
-    dependencies = [
-      sources."@babel/code-frame-7.24.7"
-      sources."@babel/helper-validator-identifier-7.24.7"
-      sources."@babel/highlight-7.24.7"
-      sources."ansi-styles-3.2.1"
-      sources."argparse-1.0.10"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."builtin-modules-1.1.1"
-      sources."chalk-2.4.2"
-      sources."color-convert-1.9.3"
-      sources."color-name-1.1.3"
-      sources."commander-2.20.3"
-      sources."concat-map-0.0.1"
-      sources."diff-4.0.2"
-      sources."escape-string-regexp-1.0.5"
-      sources."esprima-4.0.1"
-      sources."fs.realpath-1.0.0"
-      sources."function-bind-1.1.2"
-      sources."glob-7.2.3"
-      sources."has-flag-3.0.0"
-      sources."hasown-2.0.2"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-core-module-2.15.1"
-      sources."js-tokens-4.0.0"
-      sources."js-yaml-3.14.1"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-parse-1.0.7"
-      sources."picocolors-1.1.0"
-      sources."resolve-1.22.8"
-      sources."semver-5.7.2"
-      sources."sprintf-js-1.0.3"
-      sources."supports-color-5.5.0"
-      sources."supports-preserve-symlinks-flag-1.0.0"
-      sources."tslib-1.14.1"
-      sources."tslint-5.20.1"
-      sources."tsutils-2.29.0"
-      sources."typescript-3.9.10"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "tslint extension for coc.nvim";
-      homepage = "https://github.com/neoclide/coc-tslint#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  coc-tslint-plugin = nodeEnv.buildNodePackage {
-    name = "coc-tslint-plugin";
-    packageName = "coc-tslint-plugin";
-    version = "1.2.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-tslint-plugin/-/coc-tslint-plugin-1.2.0.tgz";
-      sha512 = "WEl0FM8ui0Oip6YqyOYApf8vErXFudj2ftjSYqm5WNLNuPq53JSNi+5w+WNqHwX2UWE8MOB2mQszqwU2fyE8Ag==";
-    };
-    dependencies = [
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."concat-map-0.0.1"
-      sources."get-caller-file-1.0.3"
-      sources."minimatch-3.1.2"
-      sources."mock-require-3.0.3"
-      sources."normalize-path-2.1.1"
-      sources."remove-trailing-separator-1.1.0"
-      sources."typescript-tslint-plugin-0.5.4"
-      sources."vscode-jsonrpc-4.0.0"
-      sources."vscode-languageserver-5.2.1"
-      sources."vscode-languageserver-protocol-3.14.1"
-      sources."vscode-languageserver-types-3.14.0"
-      sources."vscode-uri-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "TSLint extension for coc.nvim as tsserver plugin";
       license = "MIT";
     };
     production = true;
@@ -77144,90 +77022,6 @@ in
       description = "A bidirectional runtime wikitext parser. Converts back and forth between wikitext and HTML/XML DOM with RDFa.";
       homepage = "https://github.com/wikimedia/parsoid#readme";
       license = "GPL-2.0+";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  patch-package = nodeEnv.buildNodePackage {
-    name = "patch-package";
-    packageName = "patch-package";
-    version = "8.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/patch-package/-/patch-package-8.0.0.tgz";
-      sha512 = "da8BVIhzjtgScwDJ2TtKsfT5JFWz1hYoBl9rUQ1f38MC2HwnEIkK8VN3dKMKcP7P7bvvgzNDbfNHtx3MsQb5vA==";
-    };
-    dependencies = [
-      sources."@yarnpkg/lockfile-1.1.0"
-      sources."ansi-styles-4.3.0"
-      sources."at-least-node-1.0.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."braces-3.0.3"
-      sources."call-bind-1.0.7"
-      sources."chalk-4.1.2"
-      sources."ci-info-3.9.0"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."concat-map-0.0.1"
-      sources."cross-spawn-7.0.3"
-      sources."define-data-property-1.1.4"
-      sources."es-define-property-1.0.0"
-      sources."es-errors-1.3.0"
-      sources."fill-range-7.1.1"
-      sources."find-yarn-workspace-root-2.0.0"
-      sources."fs-extra-9.1.0"
-      sources."fs.realpath-1.0.0"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.2.4"
-      sources."glob-7.2.3"
-      sources."gopd-1.0.1"
-      sources."graceful-fs-4.2.11"
-      sources."has-flag-4.0.0"
-      sources."has-property-descriptors-1.0.2"
-      sources."has-proto-1.0.3"
-      sources."has-symbols-1.0.3"
-      sources."hasown-2.0.2"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-docker-2.2.1"
-      sources."is-number-7.0.0"
-      sources."is-wsl-2.2.0"
-      sources."isarray-2.0.5"
-      sources."isexe-2.0.0"
-      sources."json-stable-stringify-1.1.1"
-      sources."jsonfile-6.1.0"
-      sources."jsonify-0.0.1"
-      sources."klaw-sync-6.0.0"
-      sources."micromatch-4.0.8"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."object-keys-1.1.1"
-      sources."once-1.4.0"
-      sources."open-7.4.2"
-      sources."os-tmpdir-1.0.2"
-      sources."path-is-absolute-1.0.1"
-      sources."path-key-3.1.1"
-      sources."picomatch-2.3.1"
-      sources."rimraf-2.7.1"
-      sources."semver-7.6.3"
-      sources."set-function-length-1.2.2"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."slash-2.0.0"
-      sources."supports-color-7.2.0"
-      sources."tmp-0.0.33"
-      sources."to-regex-range-5.0.1"
-      sources."universalify-2.0.1"
-      sources."which-2.0.2"
-      sources."wrappy-1.0.2"
-      sources."yaml-2.5.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fix broken node modules with no fuss";
-      homepage = "https://github.com/ds300/patch-package#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

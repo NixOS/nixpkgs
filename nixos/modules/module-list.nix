@@ -48,6 +48,7 @@
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
+  ./hardware/apple-touchbar.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
@@ -171,6 +172,7 @@
   ./programs/cpu-energy-meter.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/coolercontrol.nix
+  ./programs/corefreq.nix
   ./programs/criu.nix
   ./programs/darling.nix
   ./programs/dconf.nix
@@ -311,6 +313,7 @@
   ./programs/wayland/hyprland.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/miracle-wm.nix
+  ./programs/wayland/niri.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
@@ -517,10 +520,10 @@
   ./services/desktops/gnome/gnome-remote-desktop.nix
   ./services/desktops/gnome/gnome-settings-daemon.nix
   ./services/desktops/gnome/gnome-user-share.nix
+  ./services/desktops/gnome/localsearch.nix
   ./services/desktops/gnome/rygel.nix
   ./services/desktops/gnome/sushi.nix
-  ./services/desktops/gnome/tracker-miners.nix
-  ./services/desktops/gnome/tracker.nix
+  ./services/desktops/gnome/tinysparql.nix
   ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
@@ -711,7 +714,6 @@
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
-  ./services/matrix/matrix-sliding-sync.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
   ./services/misc/amazon-ssm-agent.nix
@@ -1388,9 +1390,6 @@
   ./services/web-apps/alps.nix
   ./services/web-apps/anuko-time-tracker.nix
   ./services/web-apps/artalk.nix
-  ./services/web-apps/atlassian/confluence.nix
-  ./services/web-apps/atlassian/crowd.nix
-  ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/audiobookshelf.nix
   ./services/web-apps/bluemap.nix
   ./services/web-apps/bookstack.nix
@@ -1472,6 +1471,7 @@
   ./services/web-apps/netbox.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nextcloud-notify_push.nix
+  ./services/web-apps/nextcloud-whiteboard-server.nix
   ./services/web-apps/nextjs-ollama-llm-ui.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
@@ -1547,6 +1547,7 @@
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/pomerium.nix
   ./services/web-servers/rustus.nix
+  ./services/web-servers/send.nix
   ./services/web-servers/stargazer.nix
   ./services/web-servers/static-web-server.nix
   ./services/web-servers/tomcat.nix

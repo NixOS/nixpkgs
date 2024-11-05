@@ -8,6 +8,9 @@
   setuptools,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
   version = "1.66.2";

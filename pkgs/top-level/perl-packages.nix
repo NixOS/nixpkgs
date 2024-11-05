@@ -7,7 +7,7 @@
 
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
-, fetchurl, fetchpatch, fetchFromGitHub, fetchFromGitLab
+, fetchurl, fetchpatch, fetchpatch2, fetchFromGitHub, fetchFromGitLab
 , perl, shortenPerlShebang
 , nixosTests
 }:
@@ -959,10 +959,10 @@ with self; {
 
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
-    version = "0.98";
+    version = "1.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.98.tar.gz";
-      hash = "sha256-oWD3ESJYjdU12pTbsLgwHkjlONJaRCobE/cZCWKIWTI=";
+      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-1.00.tar.gz";
+      hash = "sha256-PKNFnK6f/VHef2i95CEtBx1hOLZEUo9izJDHikhSyss=";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl PodParser locallib ];
@@ -992,15 +992,14 @@ with self; {
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.4.0";
+    version = "1.4.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.0.tar.gz";
-      hash = "sha256-sNs4cDH3dWJmLgA7xV16EComOAtK1/25qKO61XaeUBw=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.1.tar.gz";
+      hash = "sha256-yvMcyPdy46TJ1LP/Oo9oSm61sbPCYfTdwPkKiMNgB8Y=";
     };
-    buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
-    propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl ];
-    doCheck = false;  # Can't find home directory.
+    buildInputs = [ CaptureTiny TestExit TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
+    propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl AlgorithmBackoff ];
     meta = {
       description = "Sensible database change management";
       homepage = "https://sqitch.org";
@@ -9939,6 +9938,21 @@ with self; {
     };
   };
 
+  FileKDBX = buildPerlPackage {
+    pname = "File-KDBX";
+    version = "0.906";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CC/CCM/File-KDBX-0.906.tar.gz";
+      hash = "sha256-tHt/kzOrtJHqrsY0WhTn+TlW0UOUTBS4Fkp/0bIkvW8=";
+    };
+    propagatedBuildInputs = [ CryptArgon2 CryptX DevelGlobalDestruction FileKeePass IteratorSimple RefUtil XMLLibXML boolean namespaceclean ];
+    buildInputs = [ ScopeGuard TestDeep TestFatal TestWarnings ];
+    meta = {
+      description = "Interface to KeePass V3 and V4 database files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileKeePass = buildPerlPackage {
     pname = "File-KeePass";
     version = "2.03";
@@ -10928,6 +10942,14 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.051.tar.gz";
       hash = "sha256-ZWlhHcyArBSCx8IiZLGujJw1HUmDUR65psX0ehAVAIk=";
     };
+    patches = [
+      # Fix build with gobject-introspection 1.82
+      # https://gitlab.gnome.org/GNOME/perl-glib-object-introspection/-/issues/7
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/perl-glib-object-introspection/-/commit/e5adffecdc9b321d1f8d91777b190b8ae08f8dd0.patch";
+        hash = "sha256-/QAhKENSeP+QRoWx/v8EMFPOouZ36Qd78lhZpvInz7Q=";
+      })
+    ];
     nativeCheckInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''
@@ -13307,6 +13329,19 @@ with self; {
       '';
       license = with lib.licenses; [ artistic2 ];
       broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.InlineJava.x86_64-darwin
+    };
+  };
+
+  IteratorSimple = buildPerlPackage {
+    pname = "Iterator-Simple";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MICHAEL/Iterator-Simple-0.07.tar.gz";
+      hash = "sha256-y1dNBju0gcj7nLV4GkZFiWqg4e5xW6lHz3ZvH/Tp60Q=";
+    };
+    meta = {
+      description = "Simple iterator and utilities";
+      license = with lib.licenses; [ artistic1 gpl2Only ];
     };
   };
 
@@ -15708,6 +15743,21 @@ with self; {
       description = "Legacy internal and client support for Menlo";
       homepage = "https://github.com/miyagawa/cpanminus";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  meta = buildPerlModule {
+    pname = "meta";
+    version = "0.012";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/meta-0.012.tar.gz";
+      hash = "sha256-Fx0J0wn4APVTTQE4tXMDmpYfEDtDaKhBC3dogzFuuFk=";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Meta-programming API";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -19100,6 +19150,8 @@ with self; {
     };
   };
 
+  NetRemctl = callPackage ../development/perl-modules/NetRemctl { };
+
   NetServer = buildPerlPackage {
     pname = "Net-Server";
     version = "2.014";
@@ -19213,7 +19265,39 @@ with self; {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz";
       hash = "sha256-FMN7wcuz883H1sE+DyeoWfFM3P1epUoEZ6iLwlmwt0E=";
     };
-    doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
+    patches = [
+      (fetchpatch2 {
+        url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Switch_from_Socket6_to_Socket.patch";
+        hash = "sha256-IpVhqI+dXqzauTkLF0Doulg5U33FxHUhqFTp0jeMtMY=";
+      })
+      (fetchpatch2 {
+        url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Simple_rewrite_to_Digest-HMAC-helpers.patch";
+        hash = "sha256-ZXo9w2YLtPmM1SJLvIiLWefw7SwrTFyTo4eX6DG1yfA=";
+      })
+      (fetchpatch2 {
+        url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Split_usm.t_to_two_parts.patch";
+        hash = "sha256-A2gsD6DIX1aFSVLbSL/1zKSM1xiM6hWBadJJH7f5E8o=";
+      })
+      (fetchpatch2 {
+        url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Add_tests_for_another_usm_scenarios.patch";
+        hash = "sha256-U7nNuL35l/zdSzx1jgjp1PmLQn3xzzDw9DGnyeydi2E=";
+      })
+      (fetchpatch2 {
+        url = "https://src.fedoraproject.org/rpms/perl-Net-SNMP/raw/6e1d3e8ff2b9bd38dab48301a9d8b5d81ef3b7fe/f/Net-SNMP-v6.0.1-Rewrite_from_Digest-SHA1-to-Digest-SHA.patch";
+        hash = "sha256-dznhj1Fcy0iBBl92p825InjkNZixR2MURVQ/b9bVjtc=";
+      })
+      ../development/perl-modules/net-snmp-add-sha-algorithms.patch
+    ];
+    preCheck =
+      (lib.optionalString stdenv.hostPlatform.isLinux ''
+        export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
+        export LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
+      '');
+    propagatedBuildInputs = [
+      CryptDES
+      CryptRijndael
+      DigestHMAC
+    ];
     meta = {
       description = "Object oriented interface to SNMP";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -21295,14 +21379,14 @@ with self; {
 
   ProtocolHTTP2 = buildPerlModule {
     pname = "Protocol-HTTP2";
-    version = "1.10";
-
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.10.tar.gz";
-      hash = "sha256-wmoAWPtK+ul+S/DbxkGJ9nEURRXERH89y1l+zQOWpko=";
+      url = "mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.11.tar.gz";
+      hash = "sha256-Vp8Fsavpl7UHyCUVMMyB0e6WvZMsxoJTS2zkhlNQCRM=";
     };
     buildInputs = [ AnyEvent ModuleBuildTiny NetSSLeay TestLeakTrace TestSharedFork TestTCP ];
     meta = {
+      homepage = "https://github.com/vlet/p5-Protocol-HTTP2";
       description = "HTTP/2 protocol implementation (RFC 7540)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -22102,6 +22186,21 @@ with self; {
       homepage = "https://github.com/rjray/rpc-xml";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "make_method";
+    };
+  };
+
+  ReturnMultiLevel = buildPerlPackage {
+    pname = "Return-MultiLevel";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Return-MultiLevel-0.08.tar.gz";
+      hash = "sha256-UbGu8wxcQAn2QCZ6CFiSEuh9zRAYAPDSD5xjXJ/+iKE=";
+    };
+    buildInputs = [ TestFatal ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Return::MultiLevel";
+      description = "Return across multiple call levels";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -24089,9 +24188,9 @@ with self; {
       hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
     propagatedBuildInputs = [
-      pkgs.bwidget
+      pkgs.tclPackages.bwidget
       pkgs.tcl
-      pkgs.tix
+      pkgs.tclPackages.tix
       pkgs.tk
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreServices ];
@@ -25035,6 +25134,20 @@ with self; {
     propagatedBuildInputs = [ SubUplevel ];
     meta = {
       description = "Test exception-based code";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestExit = buildPerlPackage {
+    pname = "Test-Exit";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Test-Exit-0.11.tar.gz";
+      hash = "sha256-+9qS034EgdGO68geSNAlIotXGExZstWm9r34cELox7I=";
+    };
+    propagatedBuildInputs = [ ReturnMultiLevel ];
+    meta = {
+      description = "Test whether code exits without terminating testing";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

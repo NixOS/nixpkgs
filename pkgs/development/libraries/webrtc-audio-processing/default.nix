@@ -53,8 +53,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = licenses.bsd3;
-    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
-    platforms = intersectLists platforms.unix (platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.power ++ platforms.riscv ++ platforms.x86);
+    platforms = intersectLists
+      # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
+      (platforms.darwin ++ platforms.linux ++ platforms.windows)
+      # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
+      (platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.power ++ platforms.riscv ++ platforms.x86);
     # BE platforms are unsupported
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = platforms.bigEndian;

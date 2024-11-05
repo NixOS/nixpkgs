@@ -5,15 +5,7 @@
 }:
 # Take packages from self first, then python.pkgs (and secondarily pkgs)
 lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
-  python = python3.override {
-    self = self.python;
-    packageOverrides = self: super: {
-      moto = super.moto.overridePythonAttrs (oldAttrs: {
-        # a lot of tests -> very slow, we already build them when building python packages
-        doCheck = false;
-      });
-    };
-  };
+  python = python3;
 
   buildbot-pkg = self.callPackage ./pkg.nix { };
 

@@ -17,6 +17,7 @@
 , makeWrapper
 , DarwinTools # sw_vers
 , cctools # vtool
+, darwinMinVersionHook
 , xcbuild
 , CryptoKit
 , LocalAuthentication
@@ -111,13 +112,6 @@ let
           substituteInPlace cmake/modules/SwiftSupport.cmake \
             --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
         fi
-      '';
-
-    preConfigure = (attrs.preConfigure or "")
-      + ''
-        # Builds often don't set a target, and our default minimum macOS deployment
-        # target on x86_64-darwin is too low. Harmless on non-Darwin.
-        export MACOSX_DEPLOYMENT_TARGET=10.15.4
       '';
 
     postInstall = (attrs.postInstall or "")
@@ -362,7 +356,7 @@ let
       swift-driver
       swift-system
       swift-tools-support-core
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
 
     cmakeFlags = [
       "-DUSE_CMAKE_INSTALL=ON"
@@ -392,7 +386,7 @@ in stdenv.mkDerivation (commonAttrs // {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CryptoKit
       LocalAuthentication
-    ];
+  ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
 
   configurePhase = generated.configure + ''
     # Functionality provided by Xcode XCTest, but not available in
@@ -411,9 +405,6 @@ in stdenv.mkDerivation (commonAttrs // {
   '';
 
   buildPhase = ''
-    # Required to link with swift-corelibs-xctest on Darwin.
-    export SWIFTTSC_MACOS_DEPLOYMENT_TARGET=10.12
-
     TERM=dumb swift-build -c release
   '';
 

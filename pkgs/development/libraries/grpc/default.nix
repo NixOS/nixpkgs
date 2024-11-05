@@ -19,11 +19,19 @@
 , arrow-cpp
 }:
 
+# This package should be updated together with all related python grpc packages
+# to ensure compatibility.
+# nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "grpc";
   version = "1.66.1"; # N.B: if you change this, please update:
-    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio
+    # pythonPackages.grpcio-channelz
+    # pythonPackages.grpcio-health-checking
+    # pythonPackages.grpcio-reflection
     # pythonPackages.grpcio-status
+    # pythonPackages.grpcio-testing
+    # pythonPackages.grpcio-tools
 
   src = fetchFromGitHub {
     owner = "grpc";

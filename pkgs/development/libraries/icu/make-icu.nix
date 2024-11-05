@@ -8,9 +8,13 @@ let
 
   pname = "icu4c";
 
+  release = lib.replaceStrings [ "." ] [ "-" ] version;
+  # To test rc versions of ICU replace the line above with the line below.
+  #release = lib.replaceStrings [ "." ] [ "-" ] (if lib.hasSuffix "rc" version then lib.replaceStrings [ "1" ] [ "" ] version else version);
+
   baseAttrs = {
     src = fetchurl {
-      url = "https://github.com/unicode-org/icu/releases/download/release-${lib.replaceStrings [ "." ] [ "-" ] version}/icu4c-${lib.replaceStrings [ "." ] [ "_" ] version}-src.tgz";
+      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${lib.replaceStrings [ "." ] [ "_" ] version}-src.tgz";
       inherit hash;
     };
 
@@ -75,7 +79,7 @@ let
       mkdir -p $static/lib
       mv -v lib/*.a $static/lib
     '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
+      sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${lib.versions.majorMinor version}/pkgdata.inc
     '' + (let
       replacements = [
         { from = "\${prefix}/include"; to = "${placeholder "dev"}/include"; } # --cppflags-searchpath
@@ -83,7 +87,7 @@ let
         { from = "\${pkglibdir}/pkgdata.inc"; to = "${placeholder "dev"}/lib/icu/pkgdata.inc"; } # --incpkgdatafile
       ];
     in ''
-      rm $out/share/icu/${version}/install-sh $out/share/icu/${version}/mkinstalldirs # Avoid having a runtime dependency on bash
+      rm $out/share/icu/${lib.versions.majorMinor version}/install-sh $out/share/icu/${lib.versions.majorMinor version}/mkinstalldirs # Avoid having a runtime dependency on bash
 
       substituteInPlace "$dev/bin/icu-config" \
         ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}

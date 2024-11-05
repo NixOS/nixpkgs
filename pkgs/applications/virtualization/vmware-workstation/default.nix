@@ -12,7 +12,6 @@
 , readline70
 , xz
 , cups
-, glibc
 , libaio
 , vulkan-loader
 , alsa-lib
@@ -20,8 +19,7 @@
 , libxcrypt-legacy
 , libGL
 , numactl
-, libX11
-, libXi
+, xorg
 , kmod
 , python3
 , autoPatchelfHook
@@ -29,47 +27,16 @@
 , symlinkJoin
 , enableInstaller ? false, bzip2, sqlite
 , enableMacOSGuests ? false, fetchFromGitHub, unzip
-, enableGuestTools ? true,
 }:
 
 let
   # base - versions
-  version = "17.5.2";
-  build = "23775571";
+  version = "17.6.1";
+  build = "24319023";
   baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
 
-  # tools - versions
-  toolsVersion = "12.4.0";
-  toolsBuild = "23259341";
-
   # macOS - versions
-  fusionVersion = "13.5.2";
-  fusionBuild = "23775688";
   unlockerVersion = "3.0.5";
-
-  guestToolsSrc =
-  let
-    fetchComponent = (system: hash: fetchzip {
-      inherit hash;
-      url = "${baseUrl}/packages/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component.tar";
-      stripRoot = false;
-    } + "/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component");
-  in lib.mapAttrsToList fetchComponent {
-      linux = "sha256-vT08mR6cCXZjiQgb9jy+MaqYzS0hFbNUM7xGAHIJ8Ao=";
-      linuxPreGlibc25 = "sha256-BodN1lxuhxyLlxIQSlVhGKItJ10VPlti/sEyxcRF2SA=";
-      netware = "sha256-o/S4wAYLR782Fn20fTQ871+rzsa1twnAxb9laV16XIk=";
-      solaris = "sha256-3LdFoI4TD5zxlohDGR3DRGbF6jwDZAoSMEpHWU4vSGU=";
-      winPre2k = "sha256-+QcvWfY3aCDxUwAfSuj7Wf9sxIO+ztWBrRolMim8Dfw=";
-      winPreVista = "sha256-3NgO/GdRFTpKNo45TMet0msjzxduuoF4nVLtnOUTHUA=";
-      windows = "sha256-2F7UPjNvtibmWAJxpB8IOnol12aMOGMy+403WeCTXw8=";
-  };
-
-  # macOS - ISOs
-  darwinIsoSrc = fetchzip {
-    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-DDLRWAVRI3ZeXV5bUXWwput9mEC1qsJUsjojI0CJYMI=";
-    stripRoot = false;
-  } + "/com.vmware.fusion.zip";
 
   # macOS - Unlocker
   unlockerSrc = fetchFromGitHub {
@@ -104,7 +71,6 @@ stdenv.mkDerivation rec {
     readline
     xz
     cups
-    glibc
     libaio
     vulkan-loader
     alsa-lib
@@ -112,9 +78,21 @@ stdenv.mkDerivation rec {
     libxcrypt-legacy
     libGL
     numactl
-    libX11
-    libXi
-    kmod
+    xorg.libX11
+    xorg.libXau
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
@@ -123,23 +101,13 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-5PZZpXN/V687TXjqeTm8MEays4/QTf02jVfdpi9C7GI=";
+    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
     stripRoot = false;
   } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase = let
-    guestTools = lib.optionalString enableGuestTools (lib.concatMapStringsSep " " (src: "--install-component ${src}") guestToolsSrc);
-  in
+  unpackPhase =
   ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} ${guestTools} --extract unpacked"
-
-    ${lib.optionalString enableMacOSGuests ''
-      mkdir -p fusion/
-      unzip "${darwinIsoSrc}" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-        -d fusion/
-    ''}
+    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
   '';
 
   postPatch = lib.optionalString enableMacOSGuests ''
@@ -258,8 +226,8 @@ stdenv.mkDerivation rec {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${libX11}/lib/libX11.so.6 \
-        --add-needed ${libXi}/lib/libXi.so.6 \
+        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
+        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done
@@ -281,28 +249,6 @@ stdenv.mkDerivation rec {
     echo "Installing VMware Network Editor"
     unpacked="unpacked/vmware-network-editor"
     cp -r $unpacked/lib $out/lib/vmware/
-
-    mkdir -p $out/lib/vmware/isoimages/
-
-    ${lib.optionalString enableGuestTools ''
-    echo "Installing VMware Tools"
-    cp unpacked/vmware-tools-linux/linux.iso \
-       unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
-       unpacked/vmware-tools-netware/netware.iso \
-       unpacked/vmware-tools-solaris/solaris.iso \
-       unpacked/vmware-tools-winPre2k/winPre2k.iso \
-       unpacked/vmware-tools-winPreVista/winPreVista.iso \
-       unpacked/vmware-tools-windows/windows.iso \
-       $out/lib/vmware/isoimages/
-    ''}
-
-    ${lib.optionalString enableMacOSGuests ''
-      echo "Installing VMWare Tools for MacOS"
-      cp -v \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-       $out/lib/vmware/isoimages/
-    ''}
 
     ## VMware Player Application
     echo "Installing VMware Player Application"
@@ -407,6 +353,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
     ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+
+    # Remove shipped X11 libraries
+    for lib in $out/lib/vmware/lib/* $out/lib/vmware-ovftool/lib*.so*; do
+      lib_name="$(basename "$lib")"
+      if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
+        rm -rf "$lib"
+      fi
+    done
 
     runHook postInstall
   '';

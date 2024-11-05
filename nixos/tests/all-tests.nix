@@ -440,6 +440,7 @@ in {
   pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
+  odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
   odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
   # 9pnet_virtio used to mount /nix partition doesn't support
@@ -658,6 +659,8 @@ in {
   networking.networkmanager = handleTest ./networking/networkmanager.nix {};
   netbox_3_6 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_6; };
   netbox_3_7 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_7; };
+  netbox_4_0 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_4_0; };
+  netbox_4_1 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_4_1; };
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
@@ -699,8 +702,8 @@ in {
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
-  nixos-rebuild-specialisations = handleTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
-  nixos-rebuild-target-host = handleTest ./nixos-rebuild-target-host.nix {};
+  nixos-rebuild-specialisations = runTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix;
+  nixos-rebuild-target-host = runTest ./nixos-rebuild-target-host.nix;
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
@@ -715,6 +718,7 @@ in {
   nsd = handleTest ./nsd.nix {};
   ntfy-sh = handleTest ./ntfy-sh.nix {};
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix {};
+  ntpd = handleTest ./ntpd.nix {};
   ntpd-rs = handleTest ./ntpd-rs.nix {};
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvmetcfg = handleTest ./nvmetcfg.nix {};
@@ -824,8 +828,10 @@ in {
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   pretalx = runTest ./web-apps/pretalx.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix { socket = true; };
-  printing-service = handleTest ./printing.nix { socket = false; };
+  printing-socket = handleTest ./printing.nix { socket = true; listenTcp = true; };
+  printing-service = handleTest ./printing.nix { socket = false; listenTcp = true; };
+  printing-socket-notcp = handleTest ./printing.nix { socket = true; listenTcp = false; };
+  printing-service-notcp = handleTest ./printing.nix { socket = false; listenTcp = false; };
   private-gpt = handleTest ./private-gpt.nix {};
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix {};
@@ -845,8 +851,8 @@ in {
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-store = runTest ./qemu-vm-store.nix;
-  qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
-  qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
+  qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
+  qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
   qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix {};
   quake3 = handleTest ./quake3.nix {};
@@ -900,6 +906,7 @@ in {
   seafile = handleTest ./seafile.nix {};
   searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix {};
+  send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
@@ -929,6 +936,7 @@ in {
   sourcehut = handleTest ./sourcehut {};
   spacecookie = handleTest ./spacecookie.nix {};
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
+  spiped = runTest ./spiped.nix;
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
   sslh = handleTest ./sslh.nix {};
   ssh-agent-auth = handleTest ./ssh-agent-auth.nix {};
@@ -1040,6 +1048,7 @@ in {
   tika = runTest ./tika.nix;
   timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTestOn ["aarch64-linux" "x86_64-linux"] ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinyproxy = handleTest ./tinyproxy.nix {};
@@ -1092,7 +1101,6 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish74 = handleTest ./varnish.nix { package = pkgs.varnish74; };
   varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
@@ -1107,6 +1115,7 @@ in {
   vscode-remote-ssh = handleTestOn ["x86_64-linux"] ./vscode-remote-ssh.nix {};
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = handleTest ./vsftpd.nix {};
+  wakapi = handleTest ./wakapi.nix {};
   warzone2100 = handleTest ./warzone2100.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wastebin = handleTest ./wastebin.nix {};

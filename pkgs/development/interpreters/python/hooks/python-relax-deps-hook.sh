@@ -89,7 +89,7 @@ pythonRelaxDepsHook() {
         _pythonRelaxDeps $metadata_file
         _pythonRemoveDeps $metadata_file
 
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+        if (("${NIX_DEBUG:-0}" >= 1)); then
             echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
             cat $metadata_file
         fi

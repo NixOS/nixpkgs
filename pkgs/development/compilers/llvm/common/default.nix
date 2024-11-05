@@ -540,6 +540,29 @@ let
               libllvmLibdir = "${tools.libllvm.lib}/lib";
             })
           ]
+          # Backport version logic from Clang 16. This is needed by the following patch.
+          ++ lib.optional (lib.versions.major metadata.release_version == "15") (fetchpatch {
+            name = "clang-darwin-Use-consistent-version-define-stringifying-logic.patch";
+            url = "https://github.com/llvm/llvm-project/commit/60a33ded751c86fff9ac1c4bdd2b341fbe4b0649.patch?full_index=1";
+            includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+            stripLen = 1;
+            hash = "sha256-YVTSg5eZLz3po2AUczPNXCK26JA3CuTh6Iqp7hAAKIs=";
+          })
+          # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
+          # This is needed by newer SDKs (14+).
+          ++
+            lib.optional
+              (
+                lib.versionAtLeast (lib.versions.major metadata.release_version) "15"
+                && lib.versionOlder (lib.versions.major metadata.release_version) "17"
+              )
+              (fetchpatch {
+                name = "clang-darwin-An-OS-version-preprocessor-define.patch";
+                url = "https://github.com/llvm/llvm-project/commit/c8e2dd8c6f490b68e41fe663b44535a8a21dfeab.patch?full_index=1";
+                includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+                stripLen = 1;
+                hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
+              })
           ++ lib.optional (lib.versions.major metadata.release_version == "18") (fetchpatch {
             name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
             url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
@@ -764,16 +787,20 @@ let
           bintools = bintools';
           extraPackages =
             [ targetLlvmLibraries.compiler-rt-no-libc ]
-            ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-              targetLlvmLibraries.libunwind
-            ];
+            ++ lib.optionals
+              (
+                !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+              )
+              [
+                targetLlvmLibraries.libunwind
+              ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
                 echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
                 echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isDarwin) ''
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
                 echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
               ''
@@ -794,7 +821,7 @@ let
               "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
             ) "--unwindlib=libunwind"
             ++ lib.optional (
               !stdenv.targetPlatform.isWasm
@@ -803,7 +830,7 @@ let
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
@@ -991,14 +1018,11 @@ let
         let
           # temp rename to avoid infinite recursion
           stdenv =
-            if args.stdenv.hostPlatform.useLLVM or false then
+            # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+            if args.stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+            else if args.stdenv.hostPlatform.useLLVM or false then
               overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-            else if
-              lib.versionAtLeast metadata.release_version "16"
-              && args.stdenv.hostPlatform.isDarwin
-              && args.stdenv.hostPlatform.isStatic
-            then
-              overrideCC args.stdenv buildLlvmTools.clangNoCompilerRtWithLibc
             else
               args.stdenv;
         in
@@ -1017,10 +1041,10 @@ let
         patches = compiler-rtPatches;
         doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
-          if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform then
-            stdenv
+          # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+          if stdenv.hostPlatform.isDarwin then
+            overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
           else
-            # TODO: make this branch unconditional next rebuild
             overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
       };
 
@@ -1102,7 +1126,11 @@ let
                 )
                 # https://github.com/llvm/llvm-project/issues/64226
                 (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
-          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+          stdenv =
+            if stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
+            else
+              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         }
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
           # TODO: remove this, causes LLVM 13 packages rebuild.

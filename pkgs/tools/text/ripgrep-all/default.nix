@@ -39,6 +39,9 @@ in rustPlatform.buildRustPackage rec {
     };
   };
 
+  # override debug=true set in Cargo.toml upstream
+  RUSTFLAGS = "-C debuginfo=none";
+
   nativeBuildInputs = [ makeWrapper poppler_utils ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 

@@ -6,6 +6,7 @@
   setuptools,
   setuptools-scm,
   flask,
+  flask-caching,
   zstandard,
   brotli,
   brotlicffi,
@@ -13,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.15";
+  version = "1.17";
   pname = "flask-compress";
   pyproject = true;
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "colour-science";
     repo = "flask-compress";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J7d/OIUsDWM6DoXS0P4EOE3k6txXKm6m4Yq/EJk6FRE=";
+    hash = "sha256-87fjJxaS7eJbOkSUljnhqFIeahoS4L2tAOhmv4ryVUM=";
   };
 
   build-system = [
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     zstandard
   ] ++ lib.optionals (!isPyPy) [ brotli ] ++ lib.optionals isPyPy [ brotlicffi ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    flask-caching
+  ];
 
   pythonImportsCheck = [ "flask_compress" ];
 

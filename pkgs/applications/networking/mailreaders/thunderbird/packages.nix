@@ -53,22 +53,24 @@ let
   };
 
 in rec {
-  thunderbird = thunderbird-128;
+  # Upstream claims -latest is "for testing purposes only". Stick to -esr until this changes.
+  thunderbird = thunderbird-esr;
 
-  thunderbird-115 = common {
-    version = "115.16.0esr";
-    sha512 = "1c70050a773c92593dca2a34b25e9e6edcef6fbb9b081024e4dba024450219e06aace52d9fb90ccc2e8069b7bba0396258c86cc19848a7ac705b42641f6e36a5";
+  thunderbird-latest = common {
+    version = "132.0";
+    sha512 = "71206606d691e3b257b4b163e56604eaff221a43f88015fcbdbbbb3bbd708a7459f61b0470f7534ce9adafd41561e11b3487484fbfe3e95a06674785cae97029";
 
     updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-115";
-      versionPrefix = "115";
-      versionSuffix = "esr";
+      attrPath = "thunderbirdPackages.thunderbird-latest";
     };
   };
 
+  # Eventually, switch to an updateScript without versionPrefix hardcoded...
+  thunderbird-esr = thunderbird-128;
+
   thunderbird-128 = common {
-    version = "128.3.1esr";
-    sha512 = "9fef04a0c498eb16688c141cb7d45e803ecc75ea6fc6117ff8ad1e6b049716f49b435f3e5a1baa703fa937e25483137e22256e58572eeacf317de264b961ba6a";
+    version = "128.4.0esr";
+    sha512 = "ad031b3a9b738598358cead23cf8438435016222cd9a474c31892dc1b3db43d2d5d3a10c9639df770dc76eb3c0bc9db8be8beab84828d54ee50fc1e03f0da0a5";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";
@@ -79,5 +81,6 @@ in rec {
 }
  // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
+  thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
 }
 

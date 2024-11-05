@@ -9,7 +9,7 @@
   fire,
   fonttools,
   numpy,
-  opencv4,
+  opencv-python-headless,
   tkinter,
   python-docx,
   setuptools,
@@ -34,8 +34,6 @@ buildPythonPackage {
     setuptools
   ];
 
-  pythonRemoveDeps = [ "opencv-python" ];
-
   preBuild = "echo '${version}' > version.txt";
 
   dependencies = [
@@ -43,7 +41,7 @@ buildPythonPackage {
     fire
     fonttools
     numpy
-    opencv4
+    opencv-python-headless
     python-docx
   ];
 

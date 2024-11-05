@@ -3,7 +3,6 @@
   lib,
   substituteAll,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -43,11 +42,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "46.0";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-C5oPZPoYqOfgm0yVo/dU+gM8LNvS3DVwHwYYVywcs9c=";
+    hash = "sha256-8qrL5V+jjocIWD7sCmZRBJ5TfrUFo+0s4Lqk6bZCRtE=";
   };
 
   patches = [
@@ -57,18 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
-    })
-
-    (fetchpatch {
-      name = "backport-no-systemd-fix-1.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/46f998d7308cb18832666bc34ee54b1d9c27739f.patch";
-      includes = [ "plugins/sharing/gsd-sharing-manager.c" ];
-      hash = "sha256-P5FJUY50Pg3MuwHwGUz28/TMZkT7j+fmGPozWb9rVYo=";
-    })
-    (fetchpatch {
-      name = "backport-no-systemd-fix-2.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/1a4d50f4ee611bdede6072c0bfd2a1b2e327c5fc.patch";
-      hash = "sha256-pROhnE9GziS9h0nMWZBsd8YtW6RxMrwmaSOe0UtkUJU=";
     })
   ];
 
@@ -126,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done

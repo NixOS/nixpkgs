@@ -1,7 +1,7 @@
-From 1213bbf5583c6615f719e0acf5f568e08bca5b35 Mon Sep 17 00:00:00 2001
+From 3ecb08a7603a07310d1a38c0f47bc54bbe1f11c8 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:59:22 +0200
-Subject: [PATCH 3/3] nixpkgs: use system C/C++ toolchains
+Subject: [PATCH] nixpkgs: use system C/C++ toolchains
 
 Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 ---
@@ -9,10 +9,10 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index 4e55a129e4..6c2a5f0d82 100644
+index addee4f6af..dc1967e43b 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -24,7 +24,11 @@ JQ_VERSION = "1.7"
+@@ -26,7 +26,11 @@ JQ_VERSION = "1.7"
  YQ_VERSION = "4.24.4"
  
  def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, yq_version = YQ_VERSION):
@@ -25,6 +25,3 @@ index 4e55a129e4..6c2a5f0d82 100644
      go_rules_dependencies()
      go_register_toolchains(go_version)
      if go_version != "host":
--- 
-2.45.1
-

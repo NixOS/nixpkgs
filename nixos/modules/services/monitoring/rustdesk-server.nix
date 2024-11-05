@@ -3,6 +3,12 @@ let
   TCPPorts = [21115 21116 21117 21118 21119];
   UDPPorts = [21116];
 in {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "rustdesk-server" "relayIP" ] "This option has been replaced by services.rustdesk-server.signal.relayHosts")
+    (lib.mkRenamedOptionModule [ "services" "rustdesk-server" "extraRelayArgs" ] [ "services" "rustdesk-server" "relay" "extraArgs" ])
+    (lib.mkRenamedOptionModule [ "services" "rustdesk-server" "extraSignalArgs" ] [ "services" "rustdesk-server" "signal" "extraArgs" ])
+  ];
+
   options.services.rustdesk-server = with lib; with types; {
     enable = mkEnableOption "RustDesk, a remote access and remote control software, allowing maintenance of computers and other devices";
 
@@ -18,30 +24,53 @@ in {
       '';
     };
 
-    relayIP = mkOption {
-      type = str;
-      description = ''
-        The public facing IP of the RustDesk relay.
-      '';
+    signal = {
+      enable = mkOption {
+        type = bool;
+        default = true;
+        description = ''
+          Whether to enable the RustDesk signal server.
+        '';
+      };
+
+      relayHosts = mkOption {
+        type = listOf str;
+        default = [];
+        # reference: https://rustdesk.com/docs/en/self-host/rustdesk-server-pro/relay/
+        description = ''
+          The relay server IP addresses or DNS names of the RustDesk relay.
+        '';
+      };
+
+      extraArgs = mkOption {
+        type = listOf str;
+        default = [];
+        example = [ "-k" "_" ];
+        description = ''
+          A list of extra command line arguments to pass to the `hbbs` process.
+        '';
+      };
+
     };
 
-    extraSignalArgs = mkOption {
-      type = listOf str;
-      default = [];
-      example = [ "-k" "_" ];
-      description = ''
-        A list of extra command line arguments to pass to the `hbbs` process.
-      '';
+    relay = {
+      enable = mkOption {
+        type = bool;
+        default = true;
+        description = ''
+          Whether to enable the RustDesk relay server.
+        '';
+      };
+      extraArgs = mkOption {
+        type = listOf str;
+        default = [];
+        example = [ "-k" "_" ];
+        description = ''
+          A list of extra command line arguments to pass to the `hbbr` process.
+        '';
+      };
     };
 
-    extraRelayArgs = mkOption {
-      type = listOf str;
-      default = [];
-      example = [ "-k" "_" ];
-      description = ''
-        A list of extra command line arguments to pass to the `hbbr` process.
-      '';
-    };
   };
 
   config = let
@@ -96,13 +125,17 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
 
-    systemd.services.rustdesk-signal = lib.mkMerge [ serviceDefaults {
-      serviceConfig.ExecStart = "${cfg.package}/bin/hbbs -r ${cfg.relayIP} ${lib.escapeShellArgs cfg.extraSignalArgs}";
-    } ];
+    systemd.services.rustdesk-signal =
+      let
+        relayArg = builtins.concatStringsSep ":" cfg.signal.relayHosts;
+      in
+        lib.mkIf cfg.signal.enable (lib.mkMerge [ serviceDefaults {
+          serviceConfig.ExecStart = "${cfg.package}/bin/hbbs --relay-servers ${relayArg} ${lib.escapeShellArgs cfg.signal.extraArgs}";
+        } ]);
 
-    systemd.services.rustdesk-relay = lib.mkMerge [ serviceDefaults {
-      serviceConfig.ExecStart = "${cfg.package}/bin/hbbr ${lib.escapeShellArgs cfg.extraRelayArgs}";
-    } ];
+    systemd.services.rustdesk-relay = lib.mkIf cfg.relay.enable (lib.mkMerge [ serviceDefaults {
+      serviceConfig.ExecStart = "${cfg.package}/bin/hbbr ${lib.escapeShellArgs cfg.relay.extraArgs}";
+    } ]);
   };
 
   meta.maintainers = with lib.maintainers; [ ppom ];

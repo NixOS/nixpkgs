@@ -17,12 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
   };
 
-  # avoid retaining reference to CF during stdenv bootstrap
-  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "gt_cv_func_CFPreferencesCopyAppValue=no"
-    "gt_cv_func_CFLocaleCopyCurrent=no"
-    "gt_cv_func_CFLocaleCopyPreferredLanguages=no"
-  ];
+  # GNU tar fails to link libiconv even though the configure script detects it.
+  # https://savannah.gnu.org/bugs/index.php?64441
+  patches = [ ./link-libiconv.patch ];
 
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.
@@ -33,8 +30,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) updateAutotoolsGnuConfigScriptsHook;
+  nativeBuildInputs = [ autoreconfHook ];
+
   # Add libintl on Darwin specifically as it fails to link (or skip)
   # NLS on it's own:
   #  "_libintl_textdomain", referenced from:

@@ -182,21 +182,21 @@ in
         message = "Either `services.wakapi.passwordSalt` or `services.wakapi.passwordSaltFile` must be set.";
       }
       {
-        assertion = cfg.passwordSalt != null -> cfg.passwordSaltFile != null;
+        assertion = !(cfg.passwordSalt != null && cfg.passwordSaltFile != null);
         message = "Both `services.wakapi.passwordSalt` `services.wakapi.passwordSaltFile` should not be set at the same time.";
       }
       {
-        assertion = cfg.smtpPassword != null -> cfg.smtpPasswordFile != null;
+        assertion = !(cfg.smtpPassword != null && cfg.smtpPasswordFile != null);
         message = "Both `services.wakapi.smtpPassword` `services.wakapi.smtpPasswordFile` should not be set at the same time.";
       }
       {
-        assertion = cfg.db.createLocally -> cfg.db.dialect != null;
+        assertion = cfg.database.createLocally -> cfg.settings.db.dialect != null;
         message = "`services.wakapi.database.createLocally` is true, but a database dialect is not set!";
       }
     ];
 
     warnings = [
-      (lib.optionalString (cfg.db.createLocall -> cfg.db.dialect != "postgres") ''
+      (lib.optionalString (cfg.database.createLocally -> cfg.settings.db.dialect != "postgres") ''
         You have enabled automatic database configuration, but the database dialect is not set to "posgres".
 
         The Wakapi module only supports for PostgreSQL. Please set `services.wakapi.database.createLocally`

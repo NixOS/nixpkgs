@@ -246,7 +246,7 @@ with self;
     pname = "cohttp_async_websocket";
     hash = "0d0smavnxpnwrmhlcf3b5a3cm3n9kz1y8fh6l28xv6zrn4sc7ik8";
     meta.description = "Websocket library for use with cohttp and async";
-    propagatedBuildInputs = [ async_websocket cohttp-async ppx_jane uri-sexp ];
+    propagatedBuildInputs = [ async_ssl async_websocket cohttp-async ppx_jane uri-sexp ];
   };
 
   cohttp_static_handler = janePackage {

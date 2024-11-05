@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, apple-sdk_11 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv apple-sdk_11 ];
 
   # Compilation during tests fails if this env var is not set.
   preCheck = "export GIRT_BUILD_GIT_HASH=${version}";

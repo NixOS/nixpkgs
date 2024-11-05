@@ -78,6 +78,11 @@
   };
 
   config = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
+    assertions = [
+      { assertion = config.hardware.nvidia.datacenter.enable || lib.elem "nvidia" config.services.xserver.videoDrivers;
+        message = ''`nvidia-container-toolkit` requires nvidia datacenter or desktop drivers: set `hardware.nvidia.datacenter.enable` or add "nvidia" to `services.xserver.videoDrivers`'';
+      }];
+
     virtualisation.docker = {
       daemon.settings = lib.mkIf
         (lib.versionAtLeast config.virtualisation.docker.package.version "25") {
@@ -129,9 +134,6 @@
              containerPath = "/usr/local/nvidia/lib64"; }])
       ]);
     };
-
-    services.xserver.videoDrivers = lib.mkIf
-      (!config.hardware.nvidia.datacenter.enable) [ "nvidia" ];
 
     systemd.services.nvidia-container-toolkit-cdi-generator = {
       description = "Container Device Interface (CDI) for Nvidia generator";

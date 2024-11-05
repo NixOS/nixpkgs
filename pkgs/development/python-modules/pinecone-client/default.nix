@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pinecone_client";
     inherit version;
-    hash = "sha256-sueMKd5QwYDb/nXhXwjIfsGjpPG8ayvh8Myu4atENPo=";
+    hash = "sha256-+onGBXkuyU3jbUyVhSULR7C2Q0B0VwU+yokAhCS+YoE=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];

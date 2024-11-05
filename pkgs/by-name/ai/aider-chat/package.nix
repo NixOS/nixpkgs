@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.59.0";
+  version = "0.61.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -20,60 +20,107 @@ python3.pkgs.buildPythonApplication {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "paul-gauthier";
+    owner = "Aider-AI";
     repo = "aider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-20LicYj1j5gGzhF+SxPUKu858nHZgwDF1JxXeHRtYe0=";
+    hash = "sha256-C1VMdLRb+FVN8zwWRa7RCkRxZgdUPNUfBdAjMi9efjQ=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools-scm ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      aiohappyeyeballs
-      backoff
-      beautifulsoup4
-      configargparse
-      diff-match-patch
-      diskcache
-      flake8
-      gitpython
-      grep-ast
-      importlib-resources
-      json5
-      jsonschema
-      jiter
-      litellm
-      networkx
-      numpy
-      packaging
-      pathspec
-      pexpect
-      pillow
-      playwright
-      prompt-toolkit
-      ptyprocess
-      pypager
-      pypandoc
-      pyperclip
-      pyyaml
-      psutil
-      rich
-      scipy
-      sounddevice
-      soundfile
-      streamlit
-      tokenizers
-      watchdog
-      pydub
-    ]
-    ++ lib.optionals (!tensorflow.meta.broken) [
-      llama-index-core
-      llama-index-embeddings-huggingface
-    ];
+  dependencies = with python3.pkgs; [
+    aiohappyeyeballs
+    aiohttp
+    aiosignal
+    annotated-types
+    anyio
+    attrs
+    backoff
+    beautifulsoup4
+    certifi
+    cffi
+    charset-normalizer
+    click
+    configargparse
+    diff-match-patch
+    diskcache
+    distro
+    filelock
+    flake8
+    frozenlist
+    fsspec
+    gitdb
+    gitpython
+    grep-ast
+    h11
+    httpcore
+    httpx
+    huggingface-hub
+    idna
+    importlib-resources
+    jinja2
+    jiter
+    json5
+    jsonschema
+    jsonschema-specifications
+    litellm
+    markdown-it-py
+    markupsafe
+    mccabe
+    mdurl
+    multidict
+    networkx
+    numpy
+    openai
+    packaging
+    pathspec
+    pexpect
+    pillow
+    prompt-toolkit
+    psutil
+    ptyprocess
+    pycodestyle
+    pycparser
+    pydantic
+    pydantic-core
+    pydub
+    pyflakes
+    pygments
+    pypandoc
+    pyperclip
+    python-dotenv
+    pyyaml
+    referencing
+    regex
+    requests
+    rich
+    rpds-py
+    scipy
+    smmap
+    sniffio
+    sounddevice
+    soundfile
+    soupsieve
+    tiktoken
+    tokenizers
+    tqdm
+    tree-sitter
+    tree-sitter-languages
+    typing-extensions
+    urllib3
+    wcwidth
+    yarl
+    zipp
+
+    # Not listed in requirements
+    mixpanel
+    monotonic
+    posthog
+    propcache
+    python-dateutil
+  ];
 
   buildInputs = [ portaudio ];
 
@@ -110,6 +157,15 @@ python3.pkgs.buildPythonApplication {
     export HOME=$(mktemp -d)
     export AIDER_CHECK_UPDATE=false
   '';
+
+  optional-dependencies = with python3.pkgs; {
+    playwright = [
+      greenlet
+      playwright
+      pyee
+      typing-extensions
+    ];
+  };
 
   meta = {
     description = "AI pair programming in your terminal";

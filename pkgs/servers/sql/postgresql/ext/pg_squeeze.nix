@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
+{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestExtension }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pg_squeeze";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
     rev = "REL${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    hash = "sha256-YS13iIpQ4NJe0N6bRVa2RDxEMwEzBc2mjNYM5/Vqjn8=";
+    hash = "sha256-Kh1wSOvV5Rd1CG/na3yzbWzvaR8SJ6wmTZOnM+lbgik=";
   };
 
   buildInputs = [
@@ -25,18 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "pg_squeeze-test";
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
     postgresqlExtraSettings = ''
       wal_level = logical
       shared_preload_libraries = 'pg_squeeze'
     '';
-    passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pg_squeeze;
 
@@ -48,12 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
       VALUES ('public', 'a', ('{30}', '{22}', NULL, NULL, '{3, 5}'));
       SELECT squeeze.squeeze_table('public', 'a', NULL, NULL, NULL);
     '';
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
   meta = with lib; {

@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.80.1";
+  version = "1.82.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-od98Qk4VvaGrY5wA6QUbmt9c6hqeUS+KYDtTzRmbxtg=";
+    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
   };
 
   patches = [

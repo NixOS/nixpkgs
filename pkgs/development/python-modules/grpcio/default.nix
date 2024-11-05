@@ -16,14 +16,17 @@
   zlib,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
   format = "setuptools";
-  version = "1.64.1";
+  version = "1.66.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jVHdHFnV+g80JmuAo4BewpofJkJcKlRzYTP22H/Eloo=";
+    hash = "sha256-VjWIxYe3XDS5KLxChUjlsA6jjEaXIYGk2Ldbp+PyQjE=";
   };
 
   outputs = [

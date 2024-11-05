@@ -4,6 +4,7 @@
   fetchFromGitLab,
   setuptools,
   aiohttp,
+  tenacity,
   aioresponses,
   pytest-asyncio,
   pytestCheckHook,
@@ -11,24 +12,32 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "3.0.3";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-0UvzMFYKM/Sb9B2XwZwl+a9v7lTxAc1H59vR88VwDww=";
+    hash = "sha256-SVkprX9fMy1uGixsxsE7gbUJndvl+V/kle3Rq34S6Hs=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    tenacity
+  ];
 
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # connection error on mock host
+    "test_info_auth_fails"
   ];
 
   pythonImportsCheck = [ "doorbirdpy" ];

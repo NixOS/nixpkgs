@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small single “window” launcher for the WebKit WPE port";
+    homepage = "https://github.com/Igalia/cog";
+    mainProgram = "cog";
     license = licenses.mit;
     maintainers = [ maintainers.matthewbauer ];
     platforms = platforms.linux;

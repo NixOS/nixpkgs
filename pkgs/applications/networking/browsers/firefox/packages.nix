@@ -5,10 +5,10 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "131.0.3";
+    version = "132.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "3aa96db839f7a45e34c43b5e7e3333e1100ca11545ad26a8e42987fbc72df5ae7ebebe7dfc8c4e856d2bb4676c0516914a07c001f6047799f314146a3329c0ce";
+      sha512 = "10d5b05f61628deb9a69cb34b2cf3c75bb6b8768f5a718cef2157d5feb1671ede0d583439562e1c1221914eb6ed37fdf415dd651b1465c056be174136cd80b9d";
     };
 
     extraPatches = [
@@ -35,11 +35,11 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "132.0b5";
+    version = "133.0b1";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7b9b3120ce3f5918bb0a6d385b23503ff2dbd0b6171d63ce6310eca43d252537b43cc79ace326d2e29611ae4fb06d815bcaefb63c6942d00e53277deeb0eba70";
+      sha512 = "c4a85a72b2891c5b6c6e200cd7ef13abe0f5ad090f8ef1d8243a489791f3542b2cd390c141118c4745c4ca677d1e9bf1e564e4a45e066d27ed53e6bd92844727";
     };
 
     meta = {
@@ -64,13 +64,13 @@
 
   firefox-devedition = buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "132.0b5";
+    version = "133.0b1";
     applicationName = "Mozilla Firefox Developer Edition";
     requireSigning = false;
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "3c2f028ae1d2ebf01a4fc341ee7f706bfdacb0c4dd2db2e3f24b42fe1e4e89f67a3827ad794c557c084a723272928264ae9e0bf67a4268078ebd8e4af1f97688";
+      sha512 = "dced4aba71b07b68ee31c283945e7d62a7032f08f5cf71aa261fc7ba32f58277acbe9fdbdd28777d7f4b824e411815b069cab0ce791438088c9ad19c3d2de62e";
     };
 
     meta = {
@@ -96,10 +96,10 @@
 
   firefox-esr-128 = buildMozillaMach rec {
     pname = "firefox";
-    version = "128.3.1esr";
+    version = "128.4.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "c5c1a2e951e0dbb1259a0f77a26b8678bfa4a4c7e909f8fcd5c6d0f807625926824ed235e114d9bab5e289232efaaf4c6691764db64860161ebc9bece9200f0c";
+      sha512 = "e720b1f993926d73f5a5727648f753176ac2fd093fb0b71393946bbc5919ce5fc7b88b82960bd1aa427b5663c7f659828dc6702485fc0c1e7a6961571c67faa3";
     };
 
     meta = {

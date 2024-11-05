@@ -474,7 +474,7 @@ let
     RMySQL = with pkgs; [ zlib libmysqlclient openssl.dev ];
     RNetCDF = with pkgs; [ netcdf udunits ];
     RODBC = [ pkgs.libiodbc ];
-    rpanel = [ pkgs.bwidget ];
+    rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ postgresql ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
@@ -645,7 +645,7 @@ let
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
-    jqr = [ pkgs.jq.lib ];
+    jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
     interpolation = [ pkgs.gmp ];
@@ -801,7 +801,7 @@ let
     sphereTessellation = with pkgs; [ gmp.dev mpfr.dev ];
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
-    ChemmineOB = [ pkgs.eigen ];
+    ChemmineOB = with pkgs; [ eigen openbabel ];
     DGP4LCF = [ pkgs.lapack pkgs.blas ];
   };
 
@@ -1460,9 +1460,9 @@ let
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
       preConfigure = ''
-        export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
+        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
       '';
-      TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+      TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
     });
 
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {
@@ -1582,29 +1582,26 @@ let
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
 
-    ChemmineOB = let
-      # R package doesn't compile with the latest (unstable) version.
-      # Override from nixpkgs-23.11
-      openbabel3 = pkgs.openbabel.overrideAttrs (attrs: {
-        version = "3.1.1";
-        src = pkgs.fetchFromGitHub {
-          owner = "openbabel";
-          repo = "openbabel";
-          rev = "openbabel-${lib.replaceStrings ["."] ["-"] attrs.version}";
-          sha256 = "sha256-wQpgdfCyBAoh4pmj9j7wPTlMtraJ62w/EShxi/olVMY=";
-        };
-      });
-    in
-    old.ChemmineOB.overrideAttrs (attrs: {
+    ChemmineOB = old.ChemmineOB.overrideAttrs (attrs: {
       # pkg-config knows openbabel-3 without the .0
       # Eigen3 is also looked for in the wrong location
+      # pointer was changed in newer version of openbabel:
+      #   https://github.com/openbabel/openbabel/commit/305a6fd3183540e4a8ae1d79d10bf1860e6aa373
       postPatch = ''
         substituteInPlace configure \
           --replace-fail openbabel-3.0 openbabel-3
         substituteInPlace src/Makevars.in \
           --replace-fail "-I/usr/include/eigen3" "-I${pkgs.eigen}/include/eigen3"
+        substituteInPlace src/ChemmineOB.cpp \
+          --replace-fail "obsharedptr<" "std::shared_ptr<"
       '';
-      buildInputs = attrs.buildInputs ++ [openbabel3];
+
+      # copied from fastnlo-toolkit:
+      # None of our currently packaged versions of swig are C++17-friendly
+      # Use a workaround from https://github.com/swig/swig/issues/1538
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = (attrs.env.NIX_CFLAGS_COMPILE or "") + lib.optionalString stdenv.hostPlatform.isDarwin " -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+      };
     });
 
     ps = old.ps.overrideAttrs (attrs: {

@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
-  version = "0-unstable-2024-10-09";
+  version = "0-unstable-2024-10-29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "c1a26cd7fa447b2802a4bececfd7cb9d316c0600";
-    hash = "sha256-jtcfGmk03Yf5IaswIvi6N9oMXzNPYlJBf4WMLkogUVo=";
+    rev = "50a1b171f64a75594793147aa39db933ef38aed9";
+    hash = "sha256-hzguPEQDTKBWe8Um+pwJpsctPbQqA6QW5LGknKWFaKo=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -29,8 +29,6 @@ python3Packages.buildPythonApplication {
     blobfile
     grpcio
     grpcio-tools
-    hf-transfer
-    huggingface-hub
     jinja2
     netifaces
     numpy
@@ -39,13 +37,11 @@ python3Packages.buildPythonApplication {
     prometheus-client
     protobuf
     psutil
+    pydantic
     requests
     rich
     safetensors
-    tailscale
     tenacity
-    tiktoken
-    tokenizers
     tqdm
     transformers
     tinygrad

@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.2.1";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-M1gyw0Nmh+aLU9scbuqmK2kPyfwtaFaCfue+T8PLguQ=";
+    hash = "sha256-Gm7MAOuG+kYQ3TRTRdQXJ+HcoUz+iL9j+pTXz+zAySg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -96,6 +96,9 @@ buildPythonPackage rec {
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

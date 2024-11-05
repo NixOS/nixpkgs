@@ -210,6 +210,7 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/**/*
+        - pkgs/by-name/sw/switch-to-configuration-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: nim":
@@ -217,9 +218,9 @@
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
-        - pkgs/development/compilers/nim/*
-        - pkgs/development/nim-packages/**/*
-        - pkgs/top-level/nim-packages.nix
+        - pkgs/build-support/build-nim-package.nix
+        - pkgs/by-name/ni/nim*
+        - pkgs/top-level/nim-overrides.nix
 
 "6.topic: nodejs":
   - any:
@@ -339,6 +340,15 @@
       - any-glob-to-any-file:
         - pkgs/os-specific/linux/systemd/**/*
         - nixos/modules/system/boot/systemd*/**/*
+
+"6.topic: tcl":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/tcl.section.md
+        - pkgs/development/interpreters/tcl/*
+        - pkgs/development/tcl-modules/**/*
+        - pkgs/top-level/tcl-packages.nix
 
 "6.topic: TeX":
   - any:

@@ -114,6 +114,7 @@ mapAliases ({
   clvm-tools = throw "clvm-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   clvm-tools-rs = throw "clvm-tools-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
+  codecov = throw "python-codecov has been removed, as it was broken and archived by upstream."; # Added 2024-10-24
   codespell = throw "codespell has been promoted to a top-level attribute name: `pkgs.codespell`"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
   command_runner = command-runner; # added 2024-03-06
@@ -229,6 +230,7 @@ mapAliases ({
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gbulb = throw "gbulb has been removed as it is unmaintained and no longer compatible with PyGObject 3.50."; # added 2024-10-14
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
@@ -270,6 +272,7 @@ mapAliases ({
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
   image-match = throw "image-match has been removed because it is no longer maintained"; # added 2023-06-10
   imgaug = throw "imgaug has been removed as it is no longer maintained"; # added 2023-07-10
+  imgtool = throw "imgtool has been promoted to a top-level attribute name: `mcuboot-imgtool`"; # added 2024-10-09
   intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years";  # added 2024-05-21
@@ -416,6 +419,15 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proton-keyring-linux-secretservice = throw "proton-keyring-linux-secretservice functionality was integrated in the proton-keyring-linux module"; # added 2024-10-16
+  proton-vpn-connection = throw "proton-vpn-connection functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch = throw "proton-vpn-killswitch functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager = throw "proton-vpn-killswitch-network-manager functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager-wireguard = throw "proton-vpn-killswitch-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-logger = throw "proton-vpn-logger functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-network-manager-openvpn = throw "proton-vpn-network-manager-openvpn functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-network-manager-wireguard = throw "proton-vpn-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-session = throw "proton-vpn-session functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
@@ -428,6 +440,7 @@ mapAliases ({
   pyblake2 = throw "pyblake2 is deprecated in favor of hashlib"; # added 2023-04-23
   pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20
   pycontracts = throw "pycontracts has been removed, since upstream is no longer active and it is broken on modern Python versions."; # added 2024-08-09
+  pydns = py3dns; # added 2024-10-25
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyjet = throw "pyjet is deprecated, use fastjet instead"; # added 2023-05-10
   pygame_sdl2 = pygame-sdl2; # added 2024-01-07
@@ -474,6 +487,7 @@ mapAliases ({
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
   pygeoip = throw "pygeoip has been removed, since it wash archived in April 2018"; # added 2024-07-27
   pygeos = throw "pygeos has been removed, since it was merged with shapely 2.0"; # added 2024-05-26
+  pyreqwest-impersonate = throw "pyreqwest has been renamed to primp"; # added 2024-10-22
   pyRFC3339 = pyrfc3339; # added 2024-01-07
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
@@ -559,6 +573,7 @@ mapAliases ({
   recursivePthLoader = recursive-pth-loader; # added 2024-01-07
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   repeated_test = repeated-test; # added 2022-11-15
+  repocheck = throw "repocheck has been promoted to a top-level attribute name: `pkgs.repocheck`"; # Added 2024-11-03
   reportengine = throw "reportengine has been removed, since it is unmaintained and broken"; # added 2024-08-21
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
@@ -646,6 +661,7 @@ mapAliases ({
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
+  transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20

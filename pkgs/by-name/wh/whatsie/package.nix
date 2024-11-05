@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsie";
-  version = "4.16.0";
+  version = "4.16.2";
 
   src = fetchFromGitHub {
     owner = "keshavbhatt";
     repo = "whatsie";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-+sbnpaR+pR5aKbGUIVM3yRpco7/jE9LkCbQKrgFDYwM=";
+    hash = "sha256-4Ur/FNg4jqtyWGB0lW4Uw2XlfMclz080LDRNO+RnkrM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

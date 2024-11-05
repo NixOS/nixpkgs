@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, nix-update-script, ocamlPackages }:
+{ lib, stdenv, fetchFromGitHub, nix-update-script, ocamlPackages, darwin }:
 
 let
   inherit (ocamlPackages) buildDunePackage camomile;
@@ -14,6 +14,8 @@ buildDunePackage rec {
     rev = "v${version}";
     sha256 = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
   };
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
 
   propagatedBuildInputs = [
     camomile

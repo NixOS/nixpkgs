@@ -10,6 +10,7 @@
 , which
 , musl-fts
 , pcre
+, gnused
   # options
 , conf ? null
 , withIcons ? false
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withPcre [ "O_PCRE=1" ]
     ++ extraMakeFlags;
 
-  binPath = lib.makeBinPath [ file which ];
+  binPath = lib.makeBinPath [ file which gnused ];
 
   installTargets = [ "install" "install-desktop" ];
 

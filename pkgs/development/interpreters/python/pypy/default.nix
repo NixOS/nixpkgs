@@ -1,7 +1,7 @@
 { lib, stdenv, substituteAll, fetchurl
 , zlibSupport ? true, zlib
-, bzip2, pkg-config, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
+, bzip2, pkg-config, libffi, darwin
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tclPackages, libX11
 , gdbm, db, xz, python-setup-hook
 , optimizationLevel ? "jit", boehmgc
 # For the Python package set
@@ -64,7 +64,7 @@ in with passthru; stdenv.mkDerivation rec {
   ] ++ lib.optionals (lib.any (l: l == optimizationLevel) [ "0" "1" "2" "3"]) [
     boehmgc
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libunwind Security
+   darwin.libutil
   ];
 
   # Remove bootstrap python from closure
@@ -98,7 +98,7 @@ in with passthru; stdenv.mkDerivation rec {
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" \
-      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
 
   buildPhase = ''

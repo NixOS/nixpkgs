@@ -39,5 +39,8 @@
     maintainers = with maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
     license = licenses.tsl;
+    # PostgreSQL 17 support issue upstream: https://github.com/timescale/timescaledb-toolkit/issues/813
+    # Check after next package update.
+    broken = versionAtLeast postgresql.version "17" && version == "1.18.0";
   };
 }
