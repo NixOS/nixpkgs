@@ -40,8 +40,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pixel_font_builder" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://github.com/TakWolf/pixel-font-builder";
     description = "Library that helps create pixel style fonts";
