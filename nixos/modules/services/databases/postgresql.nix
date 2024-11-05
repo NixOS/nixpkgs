@@ -379,7 +379,7 @@ in
           The value takes the form of a comma-separated list of host names and/or numeric IP addresses.
           The special entry `*` corresponds to all available IP interfaces.
 
-          See the PostgreSQL documentation on [listen_address](https://www.postgresql.org/docs/16/runtime-config-connection.html#GUC-LISTEN-ADDRESSES).
+          See the PostgreSQL documentation on [listen_address](https://www.postgresql.org/docs/current/runtime-config-connection.html#GUC-LISTEN-ADDRESSES).
         '';
       };
 
