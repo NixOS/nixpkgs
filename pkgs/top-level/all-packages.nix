@@ -10000,7 +10000,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_30;
+    electron = electron_32;
   };
 
   mosh = callPackage ../tools/networking/mosh { };
@@ -32160,8 +32160,6 @@ with pkgs;
     curses = ncurses;
   };
 
-  linuxstopmotion = libsForQt5.callPackage ../applications/video/linuxstopmotion { };
-
   sweethome3d = recurseIntoAttrs (
     (callPackage ../applications/misc/sweethome3d { }) //
     (callPackage ../applications/misc/sweethome3d/editors.nix {
@@ -38233,8 +38231,6 @@ with pkgs;
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
-  gortr = callPackage ../servers/gortr { };
 
   stayrtr = callPackage ../servers/stayrtr { };
 
