@@ -6182,6 +6182,10 @@ self: super: with self; {
 
   icalevents = callPackage ../development/python-modules/icalevents { };
 
+  icdiff = toPythonModule (pkgs.icdiff.override {
+    python3Packages = self;
+  });
+
   icecream = callPackage ../development/python-modules/icecream { };
 
   iceportal = callPackage ../development/python-modules/iceportal { };
