@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, gmp
-, withEmacsSupport ? true
-, withContrib ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  withEmacsSupport ? true,
+  withContrib ? true,
+}:
 
 let
   versionPkg = "0.4.2";
@@ -10,15 +15,13 @@ let
     hash = "sha256-m0hfBLsaNiLaIktcioK+ZtWUsWht3IDSJ6CzgJmS06c=";
   };
 
-  postInstallContrib = lib.optionalString withContrib
-  ''
+  postInstallContrib = lib.optionalString withContrib ''
     local contribDir=$out/lib/ats2-postiats-*/ ;
     mkdir -p $contribDir ;
     tar -xzf "${contrib}" --strip-components 1 -C $contribDir ;
   '';
 
-  postInstallEmacs = lib.optionalString withEmacsSupport
-  ''
+  postInstallEmacs = lib.optionalString withEmacsSupport ''
     local siteLispDir=$out/share/emacs/site-lisp/ats2 ;
     mkdir -p $siteLispDir ;
     install -m 0644 -v ./utils/emacs/*.el $siteLispDir ;
@@ -53,16 +56,19 @@ stdenv.mkDerivation rec {
     let
       hookFiles = [ ./setup-hook.sh ] ++ lib.optional withContrib ./setup-contrib-hook.sh;
     in
-      builtins.toFile "setupHook.sh"
-      (lib.concatMapStringsSep "\n" builtins.readFile hookFiles);
+    builtins.toFile "setupHook.sh" (lib.concatMapStringsSep "\n" builtins.readFile hookFiles);
 
   postInstall = postInstallContrib + postInstallEmacs;
 
   meta = with lib; {
     description = "Functional programming language with dependent types";
-    homepage    = "http://www.ats-lang.org";
-    license     = licenses.gpl3Plus;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ttuegel bbarker ];
+    homepage = "http://www.ats-lang.org";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      thoughtpolice
+      ttuegel
+      bbarker
+    ];
   };
 }
