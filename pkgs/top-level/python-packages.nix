@@ -13352,6 +13352,8 @@ self: super: with self; {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
+  python-statemachine = callPackage ../development/python-modules/python-statemachine { };
+
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
   python-technove = callPackage ../development/python-modules/python-technove { };
