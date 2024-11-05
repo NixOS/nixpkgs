@@ -21325,6 +21325,17 @@
     githubId = 6064962;
     name = "TakWolf";
   };
+  talhaHavadar = {
+    email = "havadartalha@gmail.com";
+    github = "talhaHavadar";
+    githubId = 6908462;
+    name = "Talha Can Havadar";
+    keys = [
+      {
+        fingerprint = "1E13 12DF 4B71 58B6 EBF9  DE78 2574 3879 62FE B0D1";
+      }
+    ];
+  };
   talkara = {
     email = "taito.horiuchi@relexsolutions.com";
     github = "talkara";
