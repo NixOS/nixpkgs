@@ -27,7 +27,8 @@ rec {
   };
 
   extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
+      nativeBuildInputs = [ appimage-exec ];
+      strictDeps = true;
     } ''
       appimage-exec.sh -x $out ${src}
       ${postExtract}
