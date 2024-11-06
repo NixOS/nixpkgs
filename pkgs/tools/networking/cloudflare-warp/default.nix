@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       categories = [ "Utility" "Security" "ConsoleOnly" ];
       noDisplay = true;
       mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
-      exec = "warp-cli teams-enroll-token %u";
+      exec = "warp-cli --accept-tos registration token %u";
       startupNotify = false;
       terminal = true;
     })
