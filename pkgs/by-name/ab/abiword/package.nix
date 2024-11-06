@@ -20,6 +20,7 @@
 , libxslt
 , goffice
 , wrapGAppsHook3
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -76,6 +77,10 @@ stdenv.mkDerivation rec {
   preAutoreconf = ''
     ./autogen-common.sh
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
 
   meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";
