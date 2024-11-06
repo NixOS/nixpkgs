@@ -183,7 +183,8 @@ in mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-  ];
+  ] ++
+  lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     NIX_CFLAGS_COMPILE =
