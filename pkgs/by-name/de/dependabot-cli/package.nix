@@ -1,12 +1,12 @@
 {
   buildGoModule,
   dependabot-cli,
+  dockerTools,
   fetchFromGitHub,
   installShellFiles,
   lib,
-  testers,
-  dockerTools,
   makeWrapper,
+  testers,
 }:
 let
   pname = "dependabot-cli";
