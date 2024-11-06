@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "3.0.5";
+  version = "3.0.8";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-SVkprX9fMy1uGixsxsE7gbUJndvl+V/kle3Rq34S6Hs=";
+    # https://gitlab.com/klikini/doorbirdpy/-/issues/8
+    rev = "eb32d7b5d7832565172382f98458c2dd409f1886";
+    hash = "sha256-UayXJhfiiwB2aXCa5V1U/LnNiV7KX4lpIG9hNG6iCm0=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +34,6 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # connection error on mock host
-    "test_info_auth_fails"
   ];
 
   pythonImportsCheck = [ "doorbirdpy" ];
