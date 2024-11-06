@@ -1604,8 +1604,6 @@ with pkgs;
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku akkuPackages;
 
-  alice-lg = callPackage ../servers/alice-lg{ };
-
   alice-tools = callPackage ../tools/games/alice-tools {
     withGUI = false;
   };
@@ -6986,8 +6984,6 @@ with pkgs;
 
   dupe-krill = callPackage ../tools/filesystems/dupe-krill { };
 
-  duplicacy = callPackage ../tools/backup/duplicacy { };
-
   duplicity = callPackage ../tools/backup/duplicity { };
 
   duply = callPackage ../tools/backup/duply { };
@@ -12058,9 +12054,6 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  signalbackup-tools = darwin.apple_sdk_11_0.callPackage
-    ../applications/networking/instant-messengers/signalbackup-tools { };
-
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
   signaldctl = callPackage ../applications/networking/instant-messengers/signaldctl { };
@@ -12315,11 +12308,6 @@ with pkgs;
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   somebar = callPackage ../applications/misc/somebar { };
-
-  spacebar = callPackage ../os-specific/darwin/spacebar {
-    inherit (darwin.apple_sdk.frameworks)
-      Carbon Cocoa ScriptingBridge SkyLight;
-  };
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser { };
 
@@ -12843,10 +12831,6 @@ with pkgs;
   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
 
   trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
-
-  trunk = callPackage ../development/tools/trunk {
-    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-  };
 
   trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
@@ -22512,8 +22496,6 @@ with pkgs;
 
   rapidfuzz-cpp = callPackage ../development/libraries/rapidfuzz-cpp { };
 
-  rapidjson = callPackage ../development/libraries/rapidjson { };
-
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
   rapidyaml = callPackage ../development/libraries/rapidyaml {};
@@ -23342,8 +23324,6 @@ with pkgs;
 
   x265 = callPackage ../development/libraries/x265 { };
 
-  xandikos = callPackage ../servers/xandikos { };
-
   inherit (callPackages ../development/libraries/xapian { })
     xapian_1_4;
   xapian = xapian_1_4;
@@ -23940,8 +23920,6 @@ with pkgs;
   bird = callPackage ../servers/bird { };
 
   bird-lg = callPackage ../servers/bird-lg { };
-
-  birdwatcher = callPackage ../servers/birdwatcher { };
 
   bloat = callPackage ../servers/bloat { };
 
@@ -38217,8 +38195,6 @@ with pkgs;
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
-  stayrtr = callPackage ../servers/stayrtr { };
 
   sunshine = callPackage ../servers/sunshine { };
 
