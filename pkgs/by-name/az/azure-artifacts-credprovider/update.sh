@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused gawk nix-prefetch jq dotnet-sdk_6 nuget-to-nix
+#!nix-shell -i bash -p curl gnused gawk nix-prefetch jq dotnet-sdk_8 nuget-to-nix
 
 set -euo pipefail
 URL="https://github.com/microsoft/artifacts-credprovider"

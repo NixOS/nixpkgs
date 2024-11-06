@@ -1,33 +1,26 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
-, stdenv
-, libunwind
-, libuuid
-, icu
-, openssl
-, zlib
-, curl
-, dotnet-sdk_6
 , fetchFromGitHub
 }:
 buildDotnetModule rec {
-  inherit dotnet-sdk_6;
-  version = "1.0.9";
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  version = "1.3.0";
   src = fetchFromGitHub {
       owner = "microsoft";
       repo = "artifacts-credprovider";
       rev = "v${version}";
-      sha256 = "sha256-ZlTwxesEP0N2yVCuroaTcq+pRylU4fF+RojbhMzTGyw=";
+      sha256 = "sha256-JbcoDs4c/+uKIgVWZkuo4jqd1hlqe+H949jNfkDwZls=";
   };
   pname = "azure-artifacts-credprovider";
   projectFile =  "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";
   testProjectFile = "CredentialProvider.Microsoft.Tests/CredentialProvider.Microsoft.Tests.csproj";
   nugetDeps = ./deps.nix;
   passthru.updateScript = ./update.sh;
-  dotnetInstallFlags = [
-    "-f:net6.0"
-  ];
+  patchPhase = ''
+    sed -i 's|<TargetFrameworks>.*</TargetFrameworks>|<TargetFramework>net8.0</TargetFramework>|' Build.props
+  '';
   meta = with lib; {
     homepage = "https://github.com/microsoft/artifacts-credprovider";
     description = "Azure Artifacts Credential Provider";
