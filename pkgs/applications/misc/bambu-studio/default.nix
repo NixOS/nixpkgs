@@ -1,9 +1,6 @@
 {
   stdenv,
   lib,
-  openexr,
-  jemalloc,
-  c-blosc,
   binutils,
   fetchFromGitHub,
   cmake,
@@ -55,17 +52,6 @@ let
           "--enable-debug=no"
         ];
       });
-
-  openvdb' = openvdb.overrideAttrs (old: {
-    buildInputs = [
-      openexr
-      boost179
-      tbb_2021_11
-      jemalloc
-      c-blosc
-      ilmbase
-    ];
-  });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
@@ -111,7 +97,7 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt_7_6
-    openvdb'
+    openvdb
     pcre
     tbb_2021_11
     webkitgtk_4_0
