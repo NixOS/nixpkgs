@@ -8387,6 +8387,12 @@
     githubId = 28863828;
     name = "guserav";
   };
+  gusgibbon = {
+    name = "Gus Gibbon";
+    email = "gusgibbon@tutanota.com";
+    github = "gusgibbon";
+    githubId = 176186659;
+  };
   guyonvarch = {
     email = "joris@guyonvarch.me";
     github = "guyonvarch";
