@@ -136,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.libguestfs.org/guestfs-tools-release-notes-${lib.versions.majorMinor finalAttrs.version}.1.html";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hydraPlatforms = [ ];
   };
 })
