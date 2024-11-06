@@ -5,7 +5,6 @@
   buildNpmPackage,
   nix-update-script,
   electron,
-  writeShellScriptBin,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -37,7 +36,6 @@ buildNpmPackage rec {
 
   nativeBuildInputs =
     [
-      (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
