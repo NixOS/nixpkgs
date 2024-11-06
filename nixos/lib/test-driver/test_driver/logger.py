@@ -58,6 +58,8 @@ class JunitXMLLogger(AbstractLogger):
             self.stdout = ""
             self.stderr = ""
             self.failure = False
+            self.total_secs = None
+            self.nested_secs = 0
 
     def __init__(self, outfile: Path) -> None:
         self.tests: dict[str, JunitXMLLogger.TestCaseState] = {
@@ -77,9 +79,14 @@ class JunitXMLLogger(AbstractLogger):
         self.tests.setdefault(name, self.TestCaseState())
         self.currentSubtest = name
 
+        tic = time.monotonic()
         yield
+        toc = time.monotonic()
 
+        time_difference = toc - tic
+        self.tests[self.currentSubtest].total_secs = time_difference
         self.currentSubtest = old_test
+        self.tests[self.currentSubtest].nested_secs += time_difference
 
     @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
@@ -111,6 +118,7 @@ class JunitXMLLogger(AbstractLogger):
             for name, test_case_state in self.tests.items():
                 tc = TestCase(
                     name,
+                    elapsed_sec=test_case_state.total_secs - test_case_state.nested_secs,
                     stdout=test_case_state.stdout,
                     stderr=test_case_state.stderr,
                 )
