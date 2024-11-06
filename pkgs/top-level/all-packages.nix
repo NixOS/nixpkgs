@@ -19797,7 +19797,9 @@ with pkgs;
 
   cairo = callPackage ../development/libraries/cairo { };
 
-  cairo-lang = callPackage ../development/compilers/cairo { };
+  cairo-lang = callPackage ../development/compilers/cairo {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
