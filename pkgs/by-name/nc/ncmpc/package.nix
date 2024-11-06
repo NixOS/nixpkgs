@@ -9,6 +9,7 @@
 , libmpdclient
 , gettext
 , boost
+, fmt
 , pcreSupport ? false, pcre ? null
 }:
 
@@ -16,16 +17,16 @@ assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
-  version = "0.49";
+  version = "0.51";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "sha256-rqIlQQ9RhFrhPwUd9dZmMZiqwFinNoV46VaJ3pbyUI8=";
+    sha256 = "sha256-mFZ8szJT7eTPHQHxjpP5pThCcY0YERGkGR8528Xu9MA=";
   };
 
-  buildInputs = [ glib ncurses libmpdclient boost ]
+  buildInputs = [ glib ncurses libmpdclient boost fmt ]
     ++ lib.optional pcreSupport pcre;
   nativeBuildInputs = [ meson ninja pkg-config gettext ];
 
