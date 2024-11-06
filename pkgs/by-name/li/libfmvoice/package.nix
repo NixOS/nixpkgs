@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   buildFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
