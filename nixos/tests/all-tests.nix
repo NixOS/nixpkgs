@@ -870,7 +870,7 @@ in {
   realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
-  redmine = handleTest ./redmine.nix {};
+  redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
   renovate = handleTest ./renovate.nix {};
   replace-dependencies = handleTest ./replace-dependencies {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
