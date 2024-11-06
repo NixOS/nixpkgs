@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  cython,
+  fetchFromGitHub,
+  cython_0,
   fastrlock,
   numpy,
   wheel,
@@ -13,13 +13,12 @@
   addOpenGLRunpath,
   pythonOlder,
   symlinkJoin,
+  fetchpatch
 }:
 
 let
   inherit (cudaPackages) cudnn cutensor nccl;
-  cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = with cudaPackages; [
+  outpaths = with cudaPackages; [
       cuda_cccl # <nv/target>
       cuda_cccl.dev
       cuda_cudart
@@ -36,20 +35,34 @@ let
 
       # Missing:
       # cusparselt
-    ];
+  ];
+  cudatoolkit-joined = symlinkJoin {
+    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
+    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
   };
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.0.0";
+  version = "13.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LwTnhX9pKnEzYNycOwZwmAarhAT8o5ta+XIcBKKXmq4=";
+  src = fetchFromGitHub {
+    owner = "cupy";
+    repo = "cupy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url =
+        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
+      hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
+    })
+  ];
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
@@ -65,7 +78,7 @@ buildPythonPackage rec {
     setuptools
     wheel
     addOpenGLRunpath
-    cython
+    cython_0
     cudaPackages.cuda_nvcc
   ];
 
@@ -78,7 +91,6 @@ buildPythonPackage rec {
 
   NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
-  LDFLAGS = "-L${cudaPackages.cuda_cudart}/lib/stubs";
 
   propagatedBuildInputs = [
     fastrlock
