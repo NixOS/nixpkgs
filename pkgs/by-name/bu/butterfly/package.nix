@@ -70,8 +70,13 @@ flutter.buildFlutterApplication {
     license = with lib.licenses; [
       agpl3Plus
       cc-by-sa-40
+      asl20 # pdfium-binaries
     ];
     maintainers = with lib.maintainers; [ aucub ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # pdfium-binaries
+    ];
   };
 }
