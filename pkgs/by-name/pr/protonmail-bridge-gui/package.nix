@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Use `gtest` from Nixpkgs to allow an offline build
     ./use-nix-googletest.patch
+    # From https://github.com/ProtonMail/proton-bridge/pull/502 hopefully superceded by next upstream release
+    ./0001-Fix-ColorImage-Qt-crash.patch
+    ./0002-Avoid-name-clash-with-6.8-introduced-popupType.patch
   ];
 
   nativeBuildInputs = [

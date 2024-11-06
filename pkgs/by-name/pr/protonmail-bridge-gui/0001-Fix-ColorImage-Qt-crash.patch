@@ -1,0 +1,104 @@
+From 5615176ca9eb172f223bec9f85f8ca1d090c2686 Mon Sep 17 00:00:00 2001
+From: Cimbali <me@cimba.li>
+Date: Wed, 23 Oct 2024 12:46:43 +0100
+Subject: [PATCH 1/2] Fix ColorImage Qt crash
+
+---
+ bridge-gui/qml/BugReport/QuestionItem.qml              | 1 +
+ bridge-gui/qml/Proton/InfoTooltip.qml                  | 1 +
+ bridge-gui/qml/Proton/LinkLabel.qml                    | 1 +
+ bridge-gui/qml/SetupWizard/ClientConfigCertInstall.qml | 1 +
+ bridge-gui/qml/SetupWizard/ClientConfigParameters.qml  | 1 +
+ bridge-gui/qml/SetupWizard/ClientListItem.qml          | 1 +
+ bridge-gui/qml/SetupWizard/Login.qml                   | 1 +
+ 7 files changed, 7 insertions(+)
+
+diff --git a/bridge-gui/qml/BugReport/QuestionItem.qml b/bridge-gui/qml/BugReport/QuestionItem.qml
+index 9cf37cc1972d80fbd47ca353ea5d2420b2e05cdf..2e0ca39c63874fe8ede3b9c1eea9ab1ef2800d95 100644
+--- a/bridge-gui/qml/BugReport/QuestionItem.qml
++++ b/bridge-gui/qml/BugReport/QuestionItem.qml
+@@ -13,6 +13,7 @@
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ import Proton
+ 
+ Item {
+diff --git a/bridge-gui/qml/Proton/InfoTooltip.qml b/bridge-gui/qml/Proton/InfoTooltip.qml
+index 281e93e8fb21f179179211d6d750e4c12b685de1..0ec6bf2629f56f26aa92bba209b6eb679bf25d58 100644
+--- a/bridge-gui/qml/Proton/InfoTooltip.qml
++++ b/bridge-gui/qml/Proton/InfoTooltip.qml
+@@ -16,6 +16,7 @@
+ // along with Proton Mail Bridge. If not, see <https://www.gnu.org/licenses/>.
+ import QtQuick
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ import QtQuick.Layouts
+ 
+ ColorImage {
+diff --git a/bridge-gui/qml/Proton/LinkLabel.qml b/bridge-gui/qml/Proton/LinkLabel.qml
+index 30871f21fa7932c062a0a9d37f9413beaf2277d6..af9b40d2e1afa1d5bc564f3dc96ad811221121bd 100644
+--- a/bridge-gui/qml/Proton/LinkLabel.qml
++++ b/bridge-gui/qml/Proton/LinkLabel.qml
+@@ -12,6 +12,7 @@
+ // along with Proton Mail Bridge. If not, see <https://www.gnu.org/licenses/>.
+ import QtQuick
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ import QtQuick.Layouts
+ 
+ RowLayout {
+diff --git a/bridge-gui/qml/SetupWizard/ClientConfigCertInstall.qml b/bridge-gui/qml/SetupWizard/ClientConfigCertInstall.qml
+index 1ac498b0ad9af5b8a75986f122e3cd6ef25318c3..9790afe9c5a9a15b64cf1655edc90b850c78fdf5 100644
+--- a/bridge-gui/qml/SetupWizard/ClientConfigCertInstall.qml
++++ b/bridge-gui/qml/SetupWizard/ClientConfigCertInstall.qml
+@@ -15,6 +15,7 @@ import QtQml
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ 
+ Item {
+     id: root
+diff --git a/bridge-gui/qml/SetupWizard/ClientConfigParameters.qml b/bridge-gui/qml/SetupWizard/ClientConfigParameters.qml
+index 52e3fec2e97c68fe2931d2c3d78c27082bbba0b5..2a4c7d39a5b8fb33c847a786a9fcd044483ad7a1 100644
+--- a/bridge-gui/qml/SetupWizard/ClientConfigParameters.qml
++++ b/bridge-gui/qml/SetupWizard/ClientConfigParameters.qml
+@@ -14,6 +14,7 @@ import QtQml
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ import ".."
+ 
+ Rectangle {
+diff --git a/bridge-gui/qml/SetupWizard/ClientListItem.qml b/bridge-gui/qml/SetupWizard/ClientListItem.qml
+index 3e781d1654880ab56f0b9e5104456c1ea385291e..30e9307e28b2c3c996d2cd44a51dbc82166a4f78 100644
+--- a/bridge-gui/qml/SetupWizard/ClientListItem.qml
++++ b/bridge-gui/qml/SetupWizard/ClientListItem.qml
+@@ -14,6 +14,7 @@ import QtQml
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ 
+ Rectangle {
+     id: root
+diff --git a/bridge-gui/qml/SetupWizard/Login.qml b/bridge-gui/qml/SetupWizard/Login.qml
+index 20eba75312a335f4f61d1cf8455a53a0d352cc1e..2f1a86a92b4216b4c6b9c9551552048432330ef4 100644
+--- a/bridge-gui/qml/SetupWizard/Login.qml
++++ b/bridge-gui/qml/SetupWizard/Login.qml
+@@ -14,6 +14,7 @@ import QtQml
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
++import QtQuick.Controls.impl
+ 
+ FocusScope {
+     id: root
+
+base-commit: df78e292341043b196c2aba812fc48d2c2e8501b
+-- 
+2.46.1
+

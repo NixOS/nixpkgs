@@ -1,0 +1,80 @@
+From 834a2f910a30086132d53004fd8f7d770925bdad Mon Sep 17 00:00:00 2001
+From: Cimbali <me@cimba.li>
+Date: Wed, 23 Oct 2024 13:26:43 +0100
+Subject: [PATCH 2/2] Avoid name clash with 6.8-introduced popupType
+
+---
+ bridge-gui/qml/Banner.qml                   | 2 +-
+ bridge-gui/qml/Proton/ApplicationWindow.qml | 6 +++---
+ bridge-gui/qml/Proton/Dialog.qml            | 2 +-
+ bridge-gui/qml/Proton/Popup.qml             | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/bridge-gui/qml/Banner.qml b/bridge-gui/qml/Banner.qml
+index f3affdc90f5f7e068cbda3a5445551255ee0f24f..88d3a48abe857b7812ee80be28b241e7c4a3924c 100644
+--- a/bridge-gui/qml/Banner.qml
++++ b/bridge-gui/qml/Banner.qml
+@@ -28,7 +28,7 @@ Popup {
+     implicitWidth: 600 // contentLayout.implicitWidth + contentLayout.anchors.leftMargin + contentLayout.anchors.rightMargin
+     leftMargin: (mainWindow.width - root.implicitWidth) / 2
+     modal: false
+-    popupType: ApplicationWindow.PopupType.Banner
++    popupPrio: ApplicationWindow.PopupPriority.Banner
+     shouldShow: notification ? (notification.active && !notification.dismissed) : false
+     topMargin: 37
+ 
+diff --git a/bridge-gui/qml/Proton/ApplicationWindow.qml b/bridge-gui/qml/Proton/ApplicationWindow.qml
+index ef23ede58bf2db67799714e2f2c0c47e74ce10a9..7220789670776a8749d79a219993237585d52208 100644
+--- a/bridge-gui/qml/Proton/ApplicationWindow.qml
++++ b/bridge-gui/qml/Proton/ApplicationWindow.qml
+@@ -21,7 +21,7 @@ T.ApplicationWindow {
+     id: root
+ 
+     // popup priority based on types
+-    enum PopupType {
++    enum PopupPriority {
+         Banner,
+         Dialog
+     }
+@@ -78,10 +78,10 @@ T.ApplicationWindow {
+                 topmost = obj;
+                 break;
+             }
+-            if (topmost && (topmost.popupType > obj.popupType)) {
++            if (topmost && (topmost.popupPrio > obj.popupPrio)) {
+                 continue;
+             }
+-            if (topmost && (topmost.popupType === obj.popupType) && (topmost.occurred > obj.occurred)) {
++            if (topmost && (topmost.popupPrio === obj.popupPrio) && (topmost.occurred > obj.occurred)) {
+                 continue;
+             }
+             topmost = obj;
+diff --git a/bridge-gui/qml/Proton/Dialog.qml b/bridge-gui/qml/Proton/Dialog.qml
+index f1ab61a0374e916ce6ab3819de33828af063bbee..30e7a99d854d952178ffed731062789f6ac98150 100644
+--- a/bridge-gui/qml/Proton/Dialog.qml
++++ b/bridge-gui/qml/Proton/Dialog.qml
+@@ -21,7 +21,7 @@ T.Dialog {
+ 
+     property ColorScheme colorScheme
+     readonly property var occurred: shouldShow ? new Date() : undefined
+-    readonly property int popupType: ApplicationWindow.PopupType.Dialog
++    readonly property int popupPrio: ApplicationWindow.PopupPriority.Dialog
+     property bool shouldShow: false
+ 
+     function close() {
+diff --git a/bridge-gui/qml/Proton/Popup.qml b/bridge-gui/qml/Proton/Popup.qml
+index 68c3af7c52eb6a9864b24d58155844bc219504e0..78fa29c1eb259b708f8301fcde8e21a40e3c0563 100644
+--- a/bridge-gui/qml/Proton/Popup.qml
++++ b/bridge-gui/qml/Proton/Popup.qml
+@@ -21,7 +21,7 @@ T.Popup {
+ 
+     property ColorScheme colorScheme
+     readonly property var occurred: shouldShow ? new Date() : undefined
+-    property int popupType: ApplicationWindow.PopupType.Banner
++    property int popupPrio: ApplicationWindow.PopupPriority.Banner
+     property bool shouldShow: false
+ 
+     function close() {
+-- 
+2.46.1
+
