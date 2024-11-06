@@ -10,6 +10,7 @@
   gobject-introspection,
   vala,
   glibcLocales,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,15 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
   '';
+
+  patches = [
+    # Upstream unreleased patch for gcc14 error
+    (fetchpatch {
+      name = "fix-incompatible-pointer-types.patch";
+      url = "https://github.com/TelepathyIM/telepathy-glib/commit/72412c944b771f3214ddc40fa9dea82cea3a5651.patch";
+      hash = "sha256-NXQel0eS7zK6FRbJcPsPXCQxos0xT8EN102vX94M5Vo=";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://telepathy.freedesktop.org";
