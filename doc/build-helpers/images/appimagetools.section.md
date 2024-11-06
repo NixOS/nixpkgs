@@ -117,7 +117,7 @@ in appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
     substituteInPlace $out/share/applications/irccloud.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 }
 ```
@@ -147,7 +147,7 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/irccloud.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
   };
 in appimageTools.wrapType2 {
