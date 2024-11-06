@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-firmware";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
     rev = finalAttrs.version;
-    sha256 = "sha256-tEMSlKsqqPMZA0Gr89+u3dmAmZ7ffQm/2i1AB93y05E=";
+    sha256 = "sha256-dI9tE/I+14IhYZ+IDLErPunlT4L29AudbZXh0at4jKQ=";
   };
 
   nativeBuildInputs = [
