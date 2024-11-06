@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qt6,
+  qt5,
   perl,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -51,7 +51,7 @@ assert withLibVlc -> withHttpStream;
 let
   fstat = x: fn: "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
 
-  withUdisks = (withTaglib && withDevices);
+  withUdisks = (withTaglib && withDevices && stdenv.hostPlatform.isLinux);
 
   options = [
     {
@@ -100,7 +100,7 @@ let
     {
       names = [ "HTTP_STREAM_PLAYBACK" ];
       enable = withHttpStream;
-      pkgs = [ qt6.qtmultimedia ];
+      pkgs = [ qt5.qtmultimedia ];
     }
     {
       names = [ "LAME" ];
@@ -151,15 +151,15 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "cantata";
-    rev = "v${version}";
-    sha256 = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
   };
 
   patches = [
@@ -174,27 +174,28 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg
+    qt5.qtbase
+    qt5.qtsvg
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.qttools
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
-  meta = with lib; {
+  meta = {
     description = "Graphical client for MPD";
     mainProgram = "cantata";
     homepage = "https://github.com/cdrummond/cantata";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # Technically, Cantata should run on Darwin/Windows so if someone wants to
     # bother figuring that one out, be my guest.
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
-}
+})
