@@ -23976,10 +23976,7 @@ with pkgs;
 
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
 
-  dmlive = callPackage ../applications/video/dmlive {
-    inherit (darwin) configd;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  dmlive = callPackage ../applications/video/dmlive { };
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
 
