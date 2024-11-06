@@ -1536,6 +1536,12 @@
     githubId = 29845794;
     name = "Duncan Russell";
   };
+  anpandey = {
+    email = "anpandey@protonmail.com";
+    github = "anpandey";
+    githubId = 25336974;
+    name = "Ankit Pandey";
+  };
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
