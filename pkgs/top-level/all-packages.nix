@@ -446,8 +446,6 @@ with pkgs;
 
   ciel = callPackage ../tools/package-management/ciel { };
 
-  circt = callPackage ../development/compilers/circt { };
-
   clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
     stdenv = clangStdenv;
   };
