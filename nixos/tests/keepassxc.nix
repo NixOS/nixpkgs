@@ -46,7 +46,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.wait_for_x()
 
     with subtest("Can create database and entry with CLI"):
-        ${aliceDo "keepassxc-cli db-create -k foo.keyfile foo.kdbx"}
+        ${aliceDo "keepassxc-cli db-create --set-key-file foo.keyfile foo.kdbx"}
         ${aliceDo "keepassxc-cli add --no-password -k foo.keyfile foo.kdbx bar"}
 
     with subtest("Ensure KeePassXC starts"):
