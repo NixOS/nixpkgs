@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.11.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vi5ddTyhCeGVYgfeSsJ8M3zmuZ++ftcgO5RRBe1bL4Y=";
+    hash = "sha256-UaQGKGLmeV1pQEbKbnBUnW0TWDxkDRUFlmgEsOA/7/I=";
   };
 
   patches = [
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
+    changelog = "https://streamlink.github.io/changelog.html";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     homepage = "https://streamlink.github.io/";
     longDescription = ''
