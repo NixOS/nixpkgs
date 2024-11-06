@@ -3,45 +3,46 @@
   authlib,
   buildPythonPackage,
   fetchFromGitHub,
-  pkce,
+  poetry-core,
+  requests,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.32.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.35.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "somm15";
+    owner = "openviess";
     repo = "PyViCare";
     rev = "refs/tags/${version}";
-    hash = "sha256-qK5JCaCL+gbgNcBo5IjhlRrXD1IhA1B56hmcjvPie6Y=";
+    hash = "sha256-5VvbbCQTc2EG7YsQlPd3BRwDtJzIuEX2yLs2RWFeFDM=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version_config=True," 'version="${version}",' \
-      --replace "'setuptools-git-versioning<1.8.0'" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.1.0"' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     authlib
-    pkce
+    requests
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
-    simplejson
   ];
 
   pythonImportsCheck = [ "PyViCare" ];
 
   meta = with lib; {
+    changelog = "https://github.com/openviess/PyViCare/releases/tag/${version}";
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
     license = with licenses; [ asl20 ];
