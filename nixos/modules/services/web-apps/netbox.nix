@@ -304,7 +304,7 @@ in {
 
           ${pkg}/bin/netbox migrate
           ${pkg}/bin/netbox trace_paths --no-input
-          ${pkg}/bin/netbox collectstatic --no-input
+          ${pkg}/bin/netbox collectstatic --clear --no-input
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
           ${pkg}/bin/netbox reindex --lazy
           ${pkg}/bin/netbox clearsessions
