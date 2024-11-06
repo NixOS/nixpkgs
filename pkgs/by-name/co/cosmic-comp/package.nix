@@ -83,8 +83,7 @@ rustPlatform.buildRustPackage rec {
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  # Use default stdenv installPhase, not the buildRustPackage one.
-  installPhase = "installPhase";
+  dontCargoInstall = true;
 
   # These libraries are only used by the X11 backend, which will not
   # be the common case, so just make them available, don't link them.
