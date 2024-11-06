@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   dpkg,
   autoPatchelfHook,
@@ -31,9 +32,12 @@
   runCommandLocal,
   cacert,
   coreutils,
-  useChineseVersion ? false
+  fetchurl,
+  useChineseVersion ? false,
+  use365Version ? false,
 }:
 let
+  sources = import ./sources.nix;
   pkgVersion = "12.1.0.17900";
   url =
     if useChineseVersion then
@@ -50,27 +54,55 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = pkgVersion;
+  version = if use365Version then sources.version else pkgVersion;
 
-  src = runCommandLocal (if useChineseVersion then "wps-office_${version}_amd64.deb" else "wps-office_${version}.XA_amd64.deb")
-    {
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = hash;
+  src =
+    if use365Version then
+      (
+        {
+          x86_64-linux = fetchurl {
+            url = sources.pro_amd64_url;
+            hash = sources.pro_amd64_hash;
+          };
+          aarch64-linux = fetchurl {
+            url = sources.pro_arm64_url;
+            hash = sources.pro_arm64_hash;
+          };
+        }
+        .${stdenv.system} or (throw "wpsoffice-365-${version}: ${stdenv.system} is unsupported.")
+      )
+    else if (stdenv.system == "x86_64-linux") then
+      runCommandLocal
+        (
+          if useChineseVersion then
+            "wps-office_${version}_amd64.deb"
+          else
+            "wps-office_${version}.XA_amd64.deb"
+        )
+        {
+          outputHashMode = "recursive";
+          outputHashAlgo = "sha256";
+          outputHash = hash;
 
-      nativeBuildInputs = [ curl coreutils ];
+          nativeBuildInputs = [
+            curl
+            coreutils
+          ];
 
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    } ''
-    timestamp10=$(date '+%s')
-    md5hash=($(echo -n "${securityKey}${uri}$timestamp10" | md5sum))
+          impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        }
+        ''
+          timestamp10=$(date '+%s')
+          md5hash=($(echo -n "${securityKey}${uri}$timestamp10" | md5sum))
 
-    curl \
-    --retry 3 --retry-delay 3 \
-    "${url}?t=$timestamp10&k=$md5hash" \
-    > $out
-  '';
+          curl \
+          --retry 3 --retry-delay 3 \
+          "${url}?t=$timestamp10&k=$md5hash" \
+          > $out
+        ''
+    else
+      (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
@@ -165,15 +197,32 @@ stdenv.mkDerivation rec {
     patchelf --add-needed libjpeg.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
+    # 365 specific: Font watermark
+    if [ -e $out/opt/kingsoft/wps-office/office6/libFontWatermark.so ]; then
+      patchelf --replace-needed libmysqlclient.so.18 libmysqlclient.so $out/opt/kingsoft/wps-office/office6/libFontWatermark.so
+      patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/opt/kingsoft/wps-office/office6/libFontWatermark.so
+    fi
+    # 365 specific: xiezuo
+    if [ -e $out/opt/xiezuo/resources/qt-tools/platforminputcontexts/libfcitxplatforminputcontextplugin.so ]; then
+      patchelf --replace-needed libFcitxQt5DBusAddons.so.1 libFcitx5Qt5DBusAddons.so.1 $out/opt/xiezuo/resources/qt-tools/platforminputcontexts/libfcitxplatforminputcontextplugin.so
+    fi
   '';
 
   meta = with lib; {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ mlatus th0rgal rewine pokon548 ];
+    maintainers = with maintainers; [
+      mlatus
+      th0rgal
+      rewine
+      pokon548
+    ];
   };
 }
