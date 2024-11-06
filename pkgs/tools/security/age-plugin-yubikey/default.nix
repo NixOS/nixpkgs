@@ -5,23 +5,25 @@
 , pkg-config
 , openssl
 , pcsclite
-, PCSC
-, Foundation
-, IOKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "age-plugin-yubikey";
-  version = "0.5.0";
+  version = "0.5.0-unstable-2024-11-02";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9ghnPe83K+qixaFKCdM2FCPoENTNJnZA+OmmpD0E5LE=";
+    rev = "36290c74ebd2723832aae684d43b927c9104f744";
+    hash = "sha256-vfemYGQnn3IzG7Y6iVKHZlYN+55/+A+N/GMG3TLs1h0=";
   };
 
-  cargoHash = "sha256-8petNuCJ1qS6XKt+24Lg/bZh96yj9oO6fu/z65Xhi4k=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "age-core-0.10.0" = "sha256-Iw1KPYhUwfAvLGpYAGuSRhynrRJhD3EqOIS4UY6qC6c=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -30,12 +32,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux pcsclite
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Foundation
-    PCSC
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   meta = with lib; {
     description = "YubiKey plugin for age";
