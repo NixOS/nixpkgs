@@ -870,6 +870,12 @@
     githubId = 56970006;
     keys = [ { fingerprint = "50E2 669C AB38 2F4A 5F72  1667 0D6B FC01 D45E DADD"; } ];
   };
+  akotro = {
+    name = "Antonis Kotronakis";
+    email = "mail@akotro.dev";
+    github = "akotro";
+    githubId = 20772540;
+  };
   akru = {
     email = "mail@akru.me";
     github = "akru";
