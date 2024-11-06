@@ -75,6 +75,7 @@ let
     newScope = true;
     scope = true;
     pkgs = true;
+    test-pkgs = true;
     callPackage = true;
     mkDerivation = true;
     overrideDerivation = true;
