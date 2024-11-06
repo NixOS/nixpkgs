@@ -49,14 +49,14 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.10.1";
+  version = "8.11.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-c6Sw6ZWWoJ+lkkpPt+S5lahf2g0YosAquc8TS+vOBO4=";
+    hash = "sha256-21nPDWccpuf1wsXsF3CEozp54EyX5xzxg6XN6iNQVOs=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
