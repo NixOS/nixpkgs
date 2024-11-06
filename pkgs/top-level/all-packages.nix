@@ -6986,8 +6986,6 @@ with pkgs;
 
   dupe-krill = callPackage ../tools/filesystems/dupe-krill { };
 
-  duplicacy = callPackage ../tools/backup/duplicacy { };
-
   duplicity = callPackage ../tools/backup/duplicity { };
 
   duply = callPackage ../tools/backup/duply { };
