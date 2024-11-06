@@ -19,7 +19,7 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-firmware";
   version = "46.0";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-tEMSlKsqqPMZA0Gr89+u3dmAmZ7ffQm/2i1AB93y05E=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})
