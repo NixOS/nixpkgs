@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeShellScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeShellScript,
 
   # dependencies
-, alsa-lib
-, clang
-, cmake
-, curl
-, libGLU
-, libjack2
-, libogg
-, mesa
-, openssl
-, xorg
+  alsa-lib,
+  clang,
+  cmake,
+  curl,
+  libGLU,
+  libjack2,
+  libogg,
+  mesa,
+  openssl,
+  xorg,
 
   # enable crash reporting. makes insecure due to dependency on python2
   # @TODO: fix crashpad; needs depot_tools
-, enableCrashpad ? false
-, python2
+  enableCrashpad ? false,
+  python2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,22 +33,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LdJDTO8c7kS8G52b0MRO4oFhZZlcsexwJl1deVz9vf0=";
   };
 
-  nativeBuildInputs = [
-    alsa-lib
-    clang
-    cmake
-    curl
-    libGLU
-    libjack2
-    libogg
-    mesa
-    openssl
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-  ]
-  # crashpad relies on python2 and depot_tools
-  ++ lib.optionals enableCrashpad [ python2 ];
+  nativeBuildInputs =
+    [
+      alsa-lib
+      clang
+      cmake
+      curl
+      libGLU
+      libjack2
+      libogg
+      mesa
+      openssl
+      xorg.libX11
+      xorg.libXext
+      xorg.libXrandr
+    ]
+    # crashpad relies on python2 and depot_tools
+    ++ lib.optionals enableCrashpad [ python2 ];
 
   installPhase = ''
     runHook preInstall
