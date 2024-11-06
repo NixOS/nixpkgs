@@ -6470,8 +6470,6 @@ with pkgs;
 
   age-plugin-tpm = callPackage ../tools/security/age-plugin-tpm { };
 
-  age-plugin-yubikey = callPackage ../tools/security/age-plugin-yubikey { };
-
   artim-dark = callPackage ../data/themes/artim-dark { };
 
   bbin = callPackage ../development/tools/bbin { };
