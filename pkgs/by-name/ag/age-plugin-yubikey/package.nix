@@ -40,6 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/str4d/age-plugin-yubikey";
     changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ kranzes vtuan10 ];
+    maintainers = with maintainers; [ kranzes vtuan10 adamcstephens ];
   };
 }
