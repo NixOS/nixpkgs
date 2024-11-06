@@ -17,6 +17,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     services.xserver.enable = true;
 
+    # for better OCR
+    environment.etc."icewm/prefoverride".text = ''
+      ColorActiveTitleBar = "rgb:FF/FF/FF"
+    '';
+
     # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
     qt = {
       enable = true;
