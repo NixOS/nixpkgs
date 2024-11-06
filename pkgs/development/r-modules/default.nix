@@ -1055,10 +1055,11 @@ let
     });
 
     timeless = old.timeless.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-n0/52CV3NzWe7T3N6VoaURMxWrnqeYaUMPKkUy+LRQs=";
+        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
       };
 
       cargoRoot = "src/rust";
