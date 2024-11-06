@@ -21,18 +21,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ libtool libtommath ];
+  nativeBuildInputs = [ libtool ];
+  buildInputs = [ libtommath ];
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace makefile.shared --replace "LIBTOOL:=glibtool" "LIBTOOL:=libtool"
   '';
 
+  # Flags needed only when building libtomcrypt
+  env.BUILD_CFLAGS = "-DUSE_LTM";
+  # Flags needed by libtomcrypt and dependent packages
+  env.USER_CFLAGS = "-DLTM_DESC -DLTC_PTHREAD";
+
   preBuild = ''
     makeFlagsArray+=(PREFIX=$out \
-      CFLAGS="-DUSE_LTM -DLTM_DESC -DLTC_PTHREAD" \
+      CFLAGS="$BUILD_CFLAGS $USER_CFLAGS" \
       EXTRALIBS=\"-ltommath\" \
       INSTALL_GROUP=$(id -g) \
       INSTALL_USER=$(id -u))
+  '';
+
+  preFixup = ''
+    sed -i "/^Cflags:/s|\$| $USER_CFLAGS|" $out/lib/pkgconfig/libtomcrypt.pc
   '';
 
   makefile = "makefile.shared";
