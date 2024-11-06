@@ -4,8 +4,6 @@
   nixosTests,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
-  darwin,
   openssl,
   pkg-config,
   nix-update-script,
@@ -26,12 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   installCheckPhase = ''
