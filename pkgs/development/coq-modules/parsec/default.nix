@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, ceres, coq-ext-lib, version ? null }:
+{ lib, mkCoqDerivation, coq, ceres, ExtLib, version ? null }:
 
 mkCoqDerivation {
 
@@ -6,7 +6,7 @@ mkCoqDerivation {
   repo = "coq-parsec";
   owner = "liyishuai";
 
-  propagatedBuildInputs = [ ceres coq-ext-lib ];
+  propagatedBuildInputs = [ ceres ExtLib ];
   releaseRev = (v: "v${v}");
 
   inherit version;
