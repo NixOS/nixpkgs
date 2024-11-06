@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
     ./0002-FreeCad-OndselSolver-pkgconfig.patch
+    ./0003-Gui-take-in-account-module-path-argument.patch
   ];
 
   cmakeFlags = [
