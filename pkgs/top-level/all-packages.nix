@@ -6117,8 +6117,6 @@ with pkgs;
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
-  cantata = libsForQt5.callPackage ../applications/audio/cantata { };
-
   cantoolz = callPackage ../tools/networking/cantoolz { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
