@@ -345,6 +345,7 @@
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix
+  ./security/certificates
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/doas.nix
