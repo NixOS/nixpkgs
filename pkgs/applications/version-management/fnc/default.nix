@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, zlib, ncurses, libiconv, darwin }:
+{ lib, fetchurl, stdenv, zlib, ncurses, libiconv }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";
@@ -9,9 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-npS+sOxF0S/9TuFjtEFlev0HpIOsaP6zmcfopPNUehk=";
   };
 
-  buildInputs = [ libiconv ncurses zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libutil
-  ];
+  buildInputs = [ libiconv ncurses zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
