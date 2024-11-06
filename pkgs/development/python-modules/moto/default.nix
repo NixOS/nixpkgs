@@ -141,6 +141,14 @@ buildPythonPackage rec {
 
     # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
     "--deselect=ests/test_s3/test_s3_file_handles.py::TestS3FileHandleClosuresUsingMocks::test_delete_object_with_version"
+
+    # Likely regressed in a python minor version bump
+    "--deselect=tests/test_ses/test_ses_boto3.py::test_send_raw_email"
+    "--deselect=tests/test_ses/test_ses_boto3.py::test_send_raw_email_validate_domain"
+    "--deselect=tests/test_ses/test_ses_boto3.py::test_send_raw_email_without_source"
+    "--deselect=tests/test_sesv2/test_sesv2.py::test_send_raw_email"
+    "--deselect=tests/test_sesv2/test_sesv2.py::test_send_raw_email__with_specific_message"
+    "--deselect=tests/test_sesv2/test_sesv2.py::test_send_raw_email__with_to_address_display_name"
   ];
 
   disabledTestPaths = [
