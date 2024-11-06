@@ -12,6 +12,10 @@ in
     enable = lib.mkEnableOption "Niri, a scrollable-tiling Wayland compositor";
 
     package = lib.mkPackageOption pkgs "niri" { };
+
+    enableGtkPortal = lib.mkEnableOption "the GTK3 XDG desktop portal" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -44,6 +48,7 @@ in
         inherit lib pkgs;
         enableWlrPortal = false;
         enableXWayland = false;
+        inherit (cfg) enableGtkPortal;
       })
     ]
   );
