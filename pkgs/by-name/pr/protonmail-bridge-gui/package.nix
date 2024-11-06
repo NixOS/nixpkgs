@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/add_subdirectory(bridge-gui-tester)/d" CMakeLists.txt
   '';
 
+  __structuredAttrs = true; # to allow spaces in `cmakeFlags`
+
   cmakeFlags = [
     "-DBRIDGE_APP_FULL_NAME=Proton Mail Bridge"
     "-DBRIDGE_VENDOR=Proton AG"
