@@ -37,6 +37,6 @@ stdenv.mkDerivation rec
     homepage = "https://www.openvdb.org";
     maintainers = [ maintainers.guibou ];
     platforms = platforms.unix;
-    license = licenses.mpl20;
+    license = licenses.asl20;
   };
 }
