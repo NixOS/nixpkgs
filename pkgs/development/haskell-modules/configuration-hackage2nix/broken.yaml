@@ -4268,7 +4268,6 @@ broken-packages:
   - openapi3-code-generator # failure in job https://hydra.nixos.org/build/233255628 at 2023-09-02
   - openapi-petstore # failure in job https://hydra.nixos.org/build/233221722 at 2023-09-02
   - openapi-typed # failure in job https://hydra.nixos.org/build/233226830 at 2023-09-02
-  - opencascade-hs # failure in job https://hydra.nixos.org/build/243821447 at 2024-01-01
   - opencc # failure in job https://hydra.nixos.org/build/233211902 at 2023-09-02
   - opench-meteo # failure in job https://hydra.nixos.org/build/233212476 at 2023-09-02
   - OpenCL # failure in job https://hydra.nixos.org/build/233216571 at 2023-09-02
