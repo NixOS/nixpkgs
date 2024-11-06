@@ -4,6 +4,7 @@
   openssl,
   pkg-config,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +25,14 @@ rustPlatform.buildRustPackage rec {
   # tests expect internet connectivity to query real nameservers like 8.8.8.8
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Rust based DNS client, server, and resolver";
     homepage = "https://hickory-dns.org/";
-    maintainers = with maintainers; [ colinsane ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ colinsane ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       asl20
       mit
     ];
