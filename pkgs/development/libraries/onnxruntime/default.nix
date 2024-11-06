@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , Foundation
-, abseil-cpp
+, abseil-cpp_202401
 , cmake
 , cpuinfo
 , eigen
@@ -23,12 +23,15 @@
 , protobuf_21
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
+, ncclSupport ? config.cudaSupport
 , cudaPackages ? {}
 }@inputs:
 
 
 let
   version = "1.18.1";
+
+  abseil-cpp = abseil-cpp_202401;
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
@@ -147,7 +150,7 @@ effectiveStdenv.mkDerivation rec {
     numpy
     pybind11
     packaging
-  ]) ++ lib.optionals effectiveStdenv.isDarwin [
+  ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
@@ -158,8 +161,9 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+  ] ++ lib.optionals (cudaSupport && ncclSupport) (with cudaPackages; [
     nccl
-  ]);
+  ]));
 
   nativeCheckInputs = [
     gtest
@@ -196,7 +200,7 @@ effectiveStdenv.mkDerivation rec {
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
-    (lib.cmakeBool "onnxruntime_USE_NCCL" cudaSupport)
+    (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [

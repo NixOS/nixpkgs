@@ -24,13 +24,13 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-CxO1KU7F6sT5D8vjKOmntjDxcieoRSHTvuSqXfplcHk=";
+    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -38,6 +38,10 @@
     ./patches/0001-makefile-correctly-sed-paths.patch
     ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail ' ?= /usr/' ' ?= /'
+  '';
 
   buildInputs = [ perl ];
   nativeBuildInputs = [ makeWrapper ];
@@ -55,16 +59,6 @@
     "TLP_WITH_SYSTEMD=1"
 
     "DESTDIR=${placeholder "out"}"
-    "TLP_BATD=/share/tlp/bat.d"
-    "TLP_BIN=/bin"
-    "TLP_CONFDEF=/share/tlp/defaults.conf"
-    "TLP_CONFREN=/share/tlp/rename.conf"
-    "TLP_FLIB=/share/tlp/func.d"
-    "TLP_MAN=/share/man"
-    "TLP_META=/share/metainfo"
-    "TLP_SBIN=/sbin"
-    "TLP_SHCPL=/share/bash-completion/completions"
-    "TLP_TLIB=/share/tlp"
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
@@ -100,7 +94,6 @@
         $out/share/tlp/tlp-pcilist
         $out/share/tlp/tlp-readconfs
         $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
       )
       for f in "''${fixup_perl[@]}"; do
         wrapProgram "$f" --prefix PATH : "${paths}"

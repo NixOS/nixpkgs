@@ -11,7 +11,6 @@
 , python3
 , libxsmm
 , mpi
-, openssh
 }:
 
 stdenv.mkDerivation rec {
@@ -50,10 +49,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  preConfigure = ''
-    export PKG_CONFIG_PATH=${libxsmm}/lib
-  '';
-
   cmakeFlags = [
     "-DUSE_OPENMP=ON"
     "-DUSE_SMM=libxsmm"
@@ -66,7 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    openssh
     mpiCheckPhaseHook
   ];
 

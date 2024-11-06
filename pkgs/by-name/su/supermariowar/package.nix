@@ -11,23 +11,25 @@
   SDL2_mixer,
   zlib,
   unstableGitUpdater,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supermariowar";
-  version = "2023-unstable-2024-07-16";
+  version = "2023-unstable-2024-09-21";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "supermariowar";
-    rev = "0ba445f425d03a444b3814bcd5898590ef8845b9";
-    hash = "sha256-4a34m1f7LRA48RZwHLa2Sv3oeTakPZ3ezFv3rEuKmqM=";
+    rev = "7e7ebe39cadba5d0bd9d7e87a08264332c2f1f12";
+    hash = "sha256-kBwaqw0GZvLWE5GqgfieLRU4s8wYFtTZyl1MgwWGbMc=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -45,17 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
 
     for app in smw smw-leveledit smw-worldedit; do
-      chmod +x $out/games/$app
-
-      cat << EOF > $out/bin/$app
-      $out/games/$app --datadir $out/share/games/smw
-    EOF
-      chmod +x $out/bin/$app
+      makeWrapper $out/games/$app $out/bin/$app \
+        --add-flags "--datadir $out/share/games/smw"
     done
 
     ln -s $out/games/smw-server $out/bin/smw-server
   '';
+
   passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     description = "A fan-made multiplayer Super Mario Bros. style deathmatch game";
     homepage = "https://github.com/mmatyas/supermariowar";

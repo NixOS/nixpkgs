@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.4.2";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,11 +54,12 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1OMVgV6dFKoG/upv+RWbYqftqejeQLBlsycuy2+Na6E=";
+    hash = "sha256-f5TudaLlHtIMAvS7s5mWgqpdi7/vWNF0EdlYNuG67hM=";
   };
 
 
   pythonRelaxDeps = [
+    "protobuf"
     "urwid"
   ];
 
@@ -90,7 +91,7 @@ buildPythonPackage rec {
     urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis

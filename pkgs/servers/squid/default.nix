@@ -5,17 +5,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.8";
+  version = "6.10";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
+    hash = "sha256-Cwexh+cj8Edw3SW+uJrsEgMKFYaWqoiS2HyLJoU0CKc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap pam systemd ];
 
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-delay-pools"
     "--enable-x-accelerator-vary"
     "--enable-htcp"
-  ] ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
     "--enable-linux-netfilter";
 
   doCheck = true;

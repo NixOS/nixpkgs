@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iso-codes";
-  version = "4.16.0";
+  version = "4.17.0";
 
   src = fetchurl {
     url = with finalAttrs; "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
-    sha256 = "sha256-fJkPw5oFl1vtsBdeP/Cfw4MEiBX2i0Yqu/BVqAMuZsw=";
+    hash = "sha256-3VyhPbd+xt0cwl9cAYQpCocOwf7SRdjjmgT/NPWQdsM=";
   };
 
   nativeBuildInputs = [ gettext python3 ];

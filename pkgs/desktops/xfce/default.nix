@@ -125,8 +125,6 @@ makeScopeWithSplicing' {
 
       xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
 
-      xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
-
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
       xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
@@ -173,6 +171,8 @@ makeScopeWithSplicing' {
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
+
+      xfce4-embed-plugin = throw "xfce4-embed-plugin has been removed, as it was broken"; # Added 2024-07-15
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
       xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08

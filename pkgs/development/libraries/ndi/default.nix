@@ -3,10 +3,10 @@
 let
   versionJSON = lib.importJSON ./version.json;
   ndiPlatform =
-    if stdenv.isAarch64 then "aarch64-rpi4-linux-gnueabi"
-    else if stdenv.isAarch32 then "arm-rpi2-linux-gnueabihf"
-    else if stdenv.isx86_64 then "x86_64-linux-gnu"
-    else if stdenv.isi686 then "i686-linux-gnu"
+    if stdenv.hostPlatform.isAarch64 then "aarch64-rpi4-linux-gnueabi"
+    else if stdenv.hostPlatform.isAarch32 then "arm-rpi2-linux-gnueabihf"
+    else if stdenv.hostPlatform.isx86_64 then "x86_64-linux-gnu"
+    else if stdenv.hostPlatform.isi686 then "i686-linux-gnu"
     else throw "unsupported platform for NDI SDK";
 in
 stdenv.mkDerivation rec {

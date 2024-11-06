@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.34.0";
+  version = "5.34.2";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-N/UUzYlzu84QTLhRf/P8UEBSoINwPu4NDoc9smuRmCA=";
+    sha256 = "sha256-KRyj2JjptCW20MF2hyj+zWwc9MJox52xX9omKFrVuDI=";
   };
 
   nativeBuildInputs = [ bison flex ] ++
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Monitoring system";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "monit";
   };
 }

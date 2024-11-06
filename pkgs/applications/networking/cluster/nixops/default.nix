@@ -19,19 +19,19 @@ let
     };
 
     plugins = ps: _super: with ps; rec {
-      nixops-aws = callPackage ./plugins/nixops-aws.nix { };
       nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
       nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
-      nixops-gce = callPackage ./plugins/nixops-gce.nix { };
       nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
-      nixops-hetzner = callPackage ./plugins/nixops-hetzner.nix { };
-      nixops-hetznercloud = callPackage ./plugins/nixops-hetznercloud.nix { };
-      nixops-libvirtd = callPackage ./plugins/nixops-libvirtd.nix { };
       nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
       nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
 
+      nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
+      nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
+      nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
+      nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
+      nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
+
       # aliases for backwards compatibility
-      nixops-gcp = nixops-gce;
       nixops-virtd = nixops-libvirtd;
       nixopsvbox = nixops-vbox;
     };
@@ -42,7 +42,7 @@ let
     selectedPlugins = [];
 
     # selector is a function mapping pythonPackages to a list of plugins
-    # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
+    # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-digitalocean ])
     withPlugins = selector:
       this.extend (this: _old: {
         selectedPlugins = selector this.availablePlugins;
@@ -109,14 +109,9 @@ in
 
   # Not recommended; too fragile.
   nixops_unstable_full = minimal.withPlugins (ps: [
-    ps.nixops-aws
     ps.nixops-digitalocean
     ps.nixops-encrypted-links
-    ps.nixops-gce
     ps.nixops-hercules-ci
-    ps.nixops-hetzner
-    ps.nixops-hetznercloud
-    ps.nixops-libvirtd
     ps.nixops-vbox
   ]);
 }

@@ -1,41 +1,38 @@
 { config, lib, options, pkgs, utils, ... }:
-
-with lib;
-
 let
   gcfg = config.services.tarsnap;
   opt = options.services.tarsnap;
 
   configFile = name: cfg: ''
     keyfile ${cfg.keyfile}
-    ${optionalString (cfg.cachedir != null) "cachedir ${cfg.cachedir}"}
-    ${optionalString cfg.nodump "nodump"}
-    ${optionalString cfg.printStats "print-stats"}
-    ${optionalString cfg.printStats "humanize-numbers"}
-    ${optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes "+cfg.checkpointBytes)}
-    ${optionalString cfg.aggressiveNetworking "aggressive-networking"}
-    ${concatStringsSep "\n" (map (v: "exclude ${v}") cfg.excludes)}
-    ${concatStringsSep "\n" (map (v: "include ${v}") cfg.includes)}
-    ${optionalString cfg.lowmem "lowmem"}
-    ${optionalString cfg.verylowmem "verylowmem"}
-    ${optionalString (cfg.maxbw != null) "maxbw ${toString cfg.maxbw}"}
-    ${optionalString (cfg.maxbwRateUp != null) "maxbw-rate-up ${toString cfg.maxbwRateUp}"}
-    ${optionalString (cfg.maxbwRateDown != null) "maxbw-rate-down ${toString cfg.maxbwRateDown}"}
+    ${lib.optionalString (cfg.cachedir != null) "cachedir ${cfg.cachedir}"}
+    ${lib.optionalString cfg.nodump "nodump"}
+    ${lib.optionalString cfg.printStats "print-stats"}
+    ${lib.optionalString cfg.printStats "humanize-numbers"}
+    ${lib.optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes "+cfg.checkpointBytes)}
+    ${lib.optionalString cfg.aggressiveNetworking "aggressive-networking"}
+    ${lib.concatStringsSep "\n" (map (v: "exclude ${v}") cfg.excludes)}
+    ${lib.concatStringsSep "\n" (map (v: "include ${v}") cfg.includes)}
+    ${lib.optionalString cfg.lowmem "lowmem"}
+    ${lib.optionalString cfg.verylowmem "verylowmem"}
+    ${lib.optionalString (cfg.maxbw != null) "maxbw ${toString cfg.maxbw}"}
+    ${lib.optionalString (cfg.maxbwRateUp != null) "maxbw-rate-up ${toString cfg.maxbwRateUp}"}
+    ${lib.optionalString (cfg.maxbwRateDown != null) "maxbw-rate-down ${toString cfg.maxbwRateDown}"}
   '';
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
+    (lib.mkRemovedOptionModule [ "services" "tarsnap" "cachedir" ] "Use services.tarsnap.archives.<name>.cachedir")
   ];
 
   options = {
     services.tarsnap = {
-      enable = mkEnableOption "periodic tarsnap backups";
+      enable = lib.mkEnableOption "periodic tarsnap backups";
 
-      package = mkPackageOption pkgs "tarsnap" { };
+      package = lib.mkPackageOption pkgs "tarsnap" { };
 
-      keyfile = mkOption {
-        type = types.str;
+      keyfile = lib.mkOption {
+        type = lib.types.str;
         default = "/root/tarsnap.key";
         description = ''
           The keyfile which associates this machine with your tarsnap
@@ -61,14 +58,14 @@ in
         '';
       };
 
-      archives = mkOption {
-        type = types.attrsOf (types.submodule ({ config, options, ... }:
+      archives = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule ({ config, options, ... }:
           {
             options = {
-              keyfile = mkOption {
-                type = types.str;
+              keyfile = lib.mkOption {
+                type = lib.types.str;
                 default = gcfg.keyfile;
-                defaultText = literalExpression "config.${opt.keyfile}";
+                defaultText = lib.literalExpression "config.${opt.keyfile}";
                 description = ''
                   Set a specific keyfile for this archive. This defaults to
                   `"/root/tarsnap.key"` if left unspecified.
@@ -88,10 +85,10 @@ in
                 '';
               };
 
-              cachedir = mkOption {
-                type = types.nullOr types.path;
+              cachedir = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
                 default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
-                defaultText = literalExpression ''
+                defaultText = lib.literalExpression ''
                   "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
                 '';
                 description = ''
@@ -106,16 +103,16 @@ in
                 '';
               };
 
-              nodump = mkOption {
-                type = types.bool;
+              nodump = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = ''
                   Exclude files with the `nodump` flag.
                 '';
               };
 
-              printStats = mkOption {
-                type = types.bool;
+              printStats = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = ''
                   Print global archive statistics upon completion.
@@ -124,8 +121,8 @@ in
                 '';
               };
 
-              checkpointBytes = mkOption {
-                type = types.nullOr types.str;
+              checkpointBytes = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = "1GB";
                 description = ''
                   Create a checkpoint every `checkpointBytes`
@@ -138,8 +135,8 @@ in
                 '';
               };
 
-              period = mkOption {
-                type = types.str;
+              period = lib.mkOption {
+                type = lib.types.str;
                 default = "01:15";
                 example = "hourly";
                 description = ''
@@ -150,8 +147,8 @@ in
                 '';
               };
 
-              aggressiveNetworking = mkOption {
-                type = types.bool;
+              aggressiveNetworking = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Upload data over multiple TCP connections, potentially
@@ -162,22 +159,22 @@ in
                 '';
               };
 
-              directories = mkOption {
-                type = types.listOf types.path;
+              directories = lib.mkOption {
+                type = lib.types.listOf lib.types.path;
                 default = [];
                 description = "List of filesystem paths to archive.";
               };
 
-              excludes = mkOption {
-                type = types.listOf types.str;
+              excludes = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [];
                 description = ''
                   Exclude files and directories matching these patterns.
                 '';
               };
 
-              includes = mkOption {
-                type = types.listOf types.str;
+              includes = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [];
                 description = ''
                   Include only files and directories matching these
@@ -187,8 +184,8 @@ in
                 '';
               };
 
-              lowmem = mkOption {
-                type = types.bool;
+              lowmem = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Reduce memory consumption by not caching small files.
@@ -198,8 +195,8 @@ in
                 '';
               };
 
-              verylowmem = mkOption {
-                type = types.bool;
+              verylowmem = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Reduce memory consumption by a factor of 2 beyond what
@@ -208,8 +205,8 @@ in
                 '';
               };
 
-              maxbw = mkOption {
-                type = types.nullOr types.int;
+              maxbw = lib.mkOption {
+                type = lib.types.nullOr lib.types.int;
                 default = null;
                 description = ''
                   Abort archival if upstream bandwidth usage in bytes
@@ -217,40 +214,40 @@ in
                 '';
               };
 
-              maxbwRateUp = mkOption {
-                type = types.nullOr types.int;
+              maxbwRateUp = lib.mkOption {
+                type = lib.types.nullOr lib.types.int;
                 default = null;
-                example = literalExpression "25 * 1000";
+                example = lib.literalExpression "25 * 1000";
                 description = ''
                   Upload bandwidth rate limit in bytes.
                 '';
               };
 
-              maxbwRateDown = mkOption {
-                type = types.nullOr types.int;
+              maxbwRateDown = lib.mkOption {
+                type = lib.types.nullOr lib.types.int;
                 default = null;
-                example = literalExpression "50 * 1000";
+                example = lib.literalExpression "50 * 1000";
                 description = ''
                   Download bandwidth rate limit in bytes.
                 '';
               };
 
-              verbose = mkOption {
-                type = types.bool;
+              verbose = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to produce verbose logging output.
                 '';
               };
-              explicitSymlinks = mkOption {
-                type = types.bool;
+              explicitSymlinks = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to follow symlinks specified as archives.
                 '';
               };
-              followSymlinks = mkOption {
-                type = types.bool;
+              followSymlinks = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to follow all symlinks in archive trees.
@@ -262,7 +259,7 @@ in
 
         default = {};
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             nixos =
               { directories = [ "/home" "/root/ssl" ];
@@ -292,19 +289,19 @@ in
     };
   };
 
-  config = mkIf gcfg.enable {
+  config = lib.mkIf gcfg.enable {
     assertions =
-      (mapAttrsToList (name: cfg:
+      (lib.mapAttrsToList (name: cfg:
         { assertion = cfg.directories != [];
           message = "Must specify paths for tarsnap to back up";
         }) gcfg.archives) ++
-      (mapAttrsToList (name: cfg:
+      (lib.mapAttrsToList (name: cfg:
         { assertion = !(cfg.lowmem && cfg.verylowmem);
           message = "You cannot set both lowmem and verylowmem";
         }) gcfg.archives);
 
     systemd.services =
-      (mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}" {
+      (lib.mapAttrs' (name: cfg: lib.nameValuePair "tarsnap-${name}" {
         description = "Tarsnap archive '${name}'";
         requires    = [ "network-online.target" ];
         after       = [ "network-online.target" ];
@@ -322,11 +319,11 @@ in
         script = let
           tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
           run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
-                        ${optionalString cfg.verbose "-v"} \
-                        ${optionalString cfg.explicitSymlinks "-H"} \
-                        ${optionalString cfg.followSymlinks "-L"} \
-                        ${concatStringsSep " " cfg.directories}'';
-          cachedir = escapeShellArg cfg.cachedir;
+                        ${lib.optionalString cfg.verbose "-v"} \
+                        ${lib.optionalString cfg.explicitSymlinks "-H"} \
+                        ${lib.optionalString cfg.followSymlinks "-L"} \
+                        ${lib.concatStringsSep " " cfg.directories}'';
+          cachedir = lib.escapeShellArg cfg.cachedir;
           in if (cfg.cachedir != null) then ''
             mkdir -p ${cachedir}
             chmod 0700 ${cachedir}
@@ -353,7 +350,7 @@ in
         };
       }) gcfg.archives) //
 
-      (mapAttrs' (name: cfg: nameValuePair "tarsnap-restore-${name}"{
+      (lib.mapAttrs' (name: cfg: lib.nameValuePair "tarsnap-restore-${name}"{
         description = "Tarsnap restore '${name}'";
         requires    = [ "network-online.target" ];
 
@@ -362,8 +359,8 @@ in
         script = let
           tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
           lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
-          run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
-          cachedir = escapeShellArg cfg.cachedir;
+          run = ''${tarsnap} -x -f "${lastArchive}" ${lib.optionalString cfg.verbose "-v"}'';
+          cachedir = lib.escapeShellArg cfg.cachedir;
 
         in if (cfg.cachedir != null) then ''
           mkdir -p ${cachedir}
@@ -393,14 +390,14 @@ in
 
     # Note: the timer must be Persistent=true, so that systemd will start it even
     # if e.g. your laptop was asleep while the latest interval occurred.
-    systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap-${name}"
+    systemd.timers = lib.mapAttrs' (name: cfg: lib.nameValuePair "tarsnap-${name}"
       { timerConfig.OnCalendar = cfg.period;
         timerConfig.Persistent = "true";
         wantedBy = [ "timers.target" ];
       }) gcfg.archives;
 
     environment.etc =
-      mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
+      lib.mapAttrs' (name: cfg: lib.nameValuePair "tarsnap/${name}.conf"
         { text = configFile name cfg;
         }) gcfg.archives;
 

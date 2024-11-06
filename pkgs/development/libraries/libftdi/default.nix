@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
-  buildInputs = [ libusb-compat-0_1 ] ++ lib.optionals stdenv.isDarwin [ libobjc Security IOKit ];
+  buildInputs = [ libusb-compat-0_1 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Security IOKit ];
 
   propagatedBuildInputs = [ libusb-compat-0_1 ];
 
-  configureFlags = lib.optional (!stdenv.isDarwin) "--with-async-mode";
+  configureFlags = lib.optional (!stdenv.hostPlatform.isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
       if isELF "$f"; then
         patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"

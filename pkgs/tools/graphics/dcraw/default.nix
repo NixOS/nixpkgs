@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fdl3xa1fbm71xzc3760rsjkvf0x5jdjrvdzyg2l9ka24vdc7418";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
   buildInputs = [ libjpeg lcms2 gettext ];
 
   # Jasper is disabled because the library is abandoned and has many

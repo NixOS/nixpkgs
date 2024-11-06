@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sheldon";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rossmacarthur";
     repo = pname;
     rev = version;
-    hash = "sha256-vGFR8NL3bOCUuNr0KQuAbjQMxvFbN/T9aVmf7Wxt9JU=";
+    hash = "sha256-eyfIPO1yXvb+0SeAx+F6/z5iDUA2GfWOiElfjn6abJM=";
   };
 
-  cargoHash = "sha256-wVB+yL+h90f7NnASDaX5gxT5z45M8I1rxIJwY8uyB4k=";
+  cargoHash = "sha256-+yTX1wUfVVjsM42X0QliL+0xbzTPheADZibPh/5Czh8=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security curl ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   # Needs network connection
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "sheldon";
   };
 }

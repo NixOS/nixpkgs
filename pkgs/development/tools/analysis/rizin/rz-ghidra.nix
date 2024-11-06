@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     # errors out with undefined symbols from Cutter
-    broken = enableCutterPlugin && stdenv.isDarwin;
+    broken = enableCutterPlugin && stdenv.hostPlatform.isDarwin;
     description = "Deep ghidra decompiler and sleigh disassembler integration for rizin";
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";

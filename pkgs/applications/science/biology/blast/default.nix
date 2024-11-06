@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
   buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   postInstall = ''
@@ -96,8 +96,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
-    similarity between biological sequences'';
+    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = licenses.publicDomain;
 

@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Y87u/QU5LgIESIHvHs1yQpNVPaVzW378CCstE/6F3QQ=";
+    url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/devhelp-${version}.tar.xz";
+    hash = "sha256-Y87u/QU5LgIESIHvHs1yQpNVPaVzW378CCstE/6F3QQ=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     description = "API documentation browser for GNOME";
     mainProgram = "devhelp";
     homepage = "https://apps.gnome.org/Devhelp/";
+    changelog = "https://gitlab.gnome.org/GNOME/devhelp/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

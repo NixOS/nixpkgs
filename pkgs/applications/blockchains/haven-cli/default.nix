@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haven-cli";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "haven-protocol-org";
     repo = "haven-main";
     rev = "v${version}";
-    hash = "sha256-XjRxpUW7NC12T5G7fol4avWLJDOOawxJbAHOp5eZ0Fk=";
+    hash = "sha256-UPDhvARXatqvxwsuSfxdasVcLbjkXOpK8yY7GoEPxxw=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf readline easyloggingpp
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit CoreData PCSC ]
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
     "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
     ++ lib.optional (!trezorSupport) "-DUSE_DEVICE_TREZOR=OFF";
 
   outputs = [ "out" "source" ];

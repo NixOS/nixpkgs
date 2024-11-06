@@ -46,6 +46,17 @@ let
     GUIX_LOCPATH = "${cfg.stateDir}/guix/profiles/per-user/root/guix-profile/lib/locale";
     LC_ALL = "C.UTF-8";
   };
+
+  # Currently, this is just done the lazy way with the official Guix script. A
+  # more "formal" way would be creating our own Guix script to handle and
+  # generate the ACL file ourselves.
+  aclFile = pkgs.runCommandLocal "guix-acl" { } ''
+    export GUIX_CONFIGURATION_DIRECTORY=./
+    for official_server_keys in ${lib.concatStringsSep " " cfg.substituters.authorizedKeys}; do
+      ${lib.getExe' cfg.package "guix"} archive --authorize < "$official_server_keys"
+    done
+    install -Dm0600 ./acl "$out"
+  '';
 in
 {
   meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
@@ -116,6 +127,57 @@ in
         :::
       '';
       example = "/gnu/var";
+    };
+
+    substituters = {
+      urls = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [
+          "https://ci.guix.gnu.org"
+          "https://bordeaux.guix.gnu.org"
+          "https://berlin.guix.gnu.org"
+        ];
+        example = lib.literalExpression ''
+          options.services.guix.substituters.urls.default ++ [
+            "https://guix.example.com"
+            "https://guix.example.org"
+          ]
+        '';
+        description = ''
+          A list of substitute servers' URLs for the Guix daemon to download
+          substitutes from.
+        '';
+      };
+
+      authorizedKeys = lib.mkOption {
+        type = with lib.types; listOf path;
+        default = [
+          "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
+          "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
+          "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
+        ];
+        defaultText = ''
+          The packaged signing keys from {option}`services.guix.package`.
+        '';
+        example = lib.literalExpression ''
+          options.services.guix.substituters.authorizedKeys.default ++ [
+            (builtins.fetchurl {
+              url = "https://guix.example.com/signing-key.pub";
+            })
+
+            (builtins.fetchurl {
+              url = "https://guix.example.org/static/signing-key.pub";
+            })
+          ]
+        '';
+        description = ''
+          A list of signing keys for each substitute server to be authorized as
+          a source of substitutes. Without this, the listed substitute servers
+          from {option}`services.guix.substituters.urls` would be ignored [with
+          some
+          exceptions](https://guix.gnu.org/manual/en/html_node/Substitute-Authentication.html).
+        '';
+      };
     };
 
     publish = {
@@ -215,6 +277,8 @@ in
         script = ''
           ${lib.getExe' package "guix-daemon"} \
             --build-users-group=${cfg.group} \
+            ${lib.optionalString (cfg.substituters.urls != [ ])
+              "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"} \
             ${lib.escapeShellArgs cfg.extraArgs}
         '';
         serviceConfig = {
@@ -254,11 +318,7 @@ in
 
       # Make transferring files from one store to another easier with the usual
       # case being of most substitutes from the official Guix CI instance.
-      system.activationScripts.guix-authorize-keys = ''
-        for official_server_keys in ${package}/share/guix/*.pub; do
-          ${lib.getExe' package "guix"} archive --authorize < $official_server_keys
-        done
-      '';
+      environment.etc."guix/acl".source = aclFile;
 
       # Link the usual Guix profiles to the home directory. This is useful in
       # ephemeral setups where only certain part of the filesystem is
@@ -270,8 +330,8 @@ in
         in ''
           [ -d "${userProfile}" ] && ln -sfn "${userProfile}" "${location}"
         '';
-        linkProfileToPath = acc: profile: location: let
-          in acc + (linkProfile profile location);
+        linkProfileToPath = acc: profile: location:
+          acc + (linkProfile profile location);
 
         # This should contain export-only Guix user profiles. The rest of it is
         # handled manually in the activation script.
@@ -387,7 +447,7 @@ in
           Type = "oneshot";
 
           PrivateDevices = true;
-          PrivateNetworks = true;
+          PrivateNetwork = true;
           ProtectControlGroups = true;
           ProtectHostname = true;
           ProtectKernelTunables = true;

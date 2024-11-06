@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -D -m 0644 *${stdenv.hostPlatform.extensions.sharedLibrary}* -t $out/lib
     install -D -m 0644 *.a -t $out/lib
     popd
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libamplsolver.dylib $out/lib/libamplsolver.dylib
   '' + ''
     runHook postInstall
@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ aanderse ];
+    # generates header at compile time
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

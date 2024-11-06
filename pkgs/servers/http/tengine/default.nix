@@ -100,11 +100,11 @@ stdenv.mkDerivation rec {
     ++ map (mod: "--add-module=${mod.src}") modules;
 
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
-    + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
+    + optionalString stdenv.hostPlatform.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  hardeningEnable = optional (!stdenv.isDarwin) "pie";
+  hardeningEnable = optional (!stdenv.hostPlatform.isDarwin) "pie";
 
   enableParallelBuilding = true;
 

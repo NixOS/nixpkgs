@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ocplib-endian cmdliner afl-persistent ];
   checkInputs = [ calendar fpath pprint uutf uunf uucp ];
   # uunf is broken on aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Property fuzzing for OCaml";

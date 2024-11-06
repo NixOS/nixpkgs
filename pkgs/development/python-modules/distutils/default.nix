@@ -5,6 +5,8 @@
   setuptools-scm,
   setuptools,
   python,
+  jaraco-collections,
+  jaraco-functools,
   jaraco-envs,
   jaraco-path,
   jaraco-text,
@@ -22,11 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "distutils";
-    rev = "813ab9868b353991ec7324eb09619ee5beb9183f";
-    hash = "sha256-/YtITDuZlTJRisqsQ6SrgRRUrqLZpj+k3drrouURZlc=";
+    rev = "378984e02edae91d5f49425da8436f8dd9152b8a"; # correlate commit from setuptools version
+    hash = "sha256-31sPPVY6tr+OwpiFiaKw82KyhDNBVW3Foea49dCa6pA=";
   };
 
   build-system = [ setuptools-scm ];
+
+  dependencies = [ jaraco-functools ];
 
   postInstall = ''
     rm -r $out/${python.sitePackages}/distutils
@@ -36,6 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distutils" ];
 
   nativeCheckInputs = [
+    jaraco-collections
     jaraco-envs
     jaraco-path
     jaraco-text

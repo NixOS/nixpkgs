@@ -1,29 +1,26 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.irkerd;
   ports = [ 6659 ];
 in
 {
   options.services.irkerd = {
-    enable = mkOption {
+    enable = lib.mkOption {
       description = "Whether to enable irker, an IRC notification daemon.";
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    openPorts = mkOption {
+    openPorts = lib.mkOption {
       description = "Open ports in the firewall for irkerd";
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       default = "localhost";
       example = "0.0.0.0";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Specifies the bind address on which the irker daemon listens.
         The default is localhost.
@@ -33,14 +30,14 @@ in
       '';
     };
 
-    nick = mkOption {
+    nick = lib.mkOption {
       default = "irker";
-      type = types.str;
+      type = lib.types.str;
       description = "Nick to use for irker";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.irkerd = {
       description = "Internet Relay Chat (IRC) notification daemon";
       documentation = [ "man:irkerd(8)" "man:irkerhook(1)" "man:irk(1)" ];
@@ -61,7 +58,7 @@ in
     };
     users.groups.irkerd = {};
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openPorts ports;
-    networking.firewall.allowedUDPPorts = mkIf cfg.openPorts ports;
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts ports;
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openPorts ports;
   };
 }

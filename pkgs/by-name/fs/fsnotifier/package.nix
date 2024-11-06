@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "JetBrains";
     repo = "intellij-community";
     rev = "0f6d9ccb67b8fcad0d802cd76209d503c4ed66a6";
-    sha256 = "3TAiVvKi50JQRrVG6J7LUJKTiuOTDyKt4DhoA1QmbrM=";
+    hash = "sha256-3TAiVvKi50JQRrVG6J7LUJKTiuOTDyKt4DhoA1QmbrM=";
     sparseCheckout = [ "native/fsNotifier/linux" ];
   };
 

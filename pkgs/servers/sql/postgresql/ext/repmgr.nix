@@ -2,13 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , postgresql
-, openssl
-, zlib
-, readline
 , flex
 , curl
 , json_c
-, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +37,9 @@ stdenv.mkDerivation rec {
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ zimbatm ];
+    # PostgreSQL 17 support issue upstream: https://github.com/EnterpriseDB/repmgr/issues/856
+    # Check after next package update.
+    broken = versionAtLeast postgresql.version "17" && version == "5.4.1";
   };
 }
 

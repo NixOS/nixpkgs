@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch2, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg_7, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
+, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
@@ -25,13 +25,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
+    hash = "sha256-gXxxlAEuzMCvFu5oSQayNW191XAC/YKvldItYEFxvNM=";
   };
 
   patches = [
@@ -52,9 +52,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+      --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace-fail '-lquazip5' '-lquazip1-qt5' \
+      --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+
+    substituteInPlace resources/etc/OpenBoard.config \
+      --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
   nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
@@ -68,7 +73,7 @@ in stdenv.mkDerivation (finalAttrs: {
     fontconfig
     openssl
     poppler
-    ffmpeg_7
+    ffmpeg
     libva
     alsa-lib
     SDL

@@ -4,13 +4,11 @@
   buildPythonPackage,
   isPyPy,
   fetchPypi,
-  fetchpatch2,
   setuptools,
   pytestCheckHook,
   libffi,
   pkg-config,
   pycparser,
-  pythonAtLeast,
 }:
 
 let
@@ -21,12 +19,12 @@ if isPyPy then
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.16.0";
+    version = "1.17.1";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-vLPvQ+WGZbvaL7GYaY/K5ndkg+DEpjGqVkeAbCXgLMA=";
+      hash = "sha256-HDnGAWwyvEjdVFYZUOvWg24WcPKuRhKPZ89J54nFKCQ=";
     };
 
     patches =
@@ -42,19 +40,6 @@ else
         # deemed safe to trust in cffi.
         #
         ./darwin-use-libffi-closures.diff
-
-        (fetchpatch2 {
-          # https://github.com/python-cffi/cffi/pull/34
-          name = "python-3.13-compat-1.patch";
-          url = "https://github.com/python-cffi/cffi/commit/49127c6929bfc7186fbfd3819dd5e058ad888de4.patch";
-          hash = "sha256-RbspsjwDf4uwJxMqG0JZGvipd7/JqXJ2uVB7PO4Qcms=";
-        })
-        (fetchpatch2 {
-          # https://github.com/python-cffi/cffi/pull/24
-          name = "python-3.13-compat-2.patch";
-          url = "https://github.com/python-cffi/cffi/commit/14723b0bbd127790c450945099db31018d80fa83.patch";
-          hash = "sha256-H5rFgRRTr27l5S6REo8+7dmPDQW7WXhP4f4DGZjdi+s=";
-        })
       ]
       ++ lib.optionals (stdenv.cc.isClang && (ccVersion == "boot" || lib.versionAtLeast ccVersion "13")) [
         # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
@@ -64,7 +49,7 @@ else
         ./clang-pointer-substraction-warning.diff
       ];
 
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Remove setup.py impurities
       substituteInPlace setup.py \
         --replace "'-iwithsysroot/usr/include/ffi'" "" \
@@ -72,14 +57,13 @@ else
         --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
-    nativeBuildInputs = [
-      pkg-config
-      setuptools
-    ];
+    nativeBuildInputs = [ pkg-config ];
+
+    build-system = [ setuptools ];
 
     buildInputs = [ libffi ];
 
-    propagatedBuildInputs = [ pycparser ];
+    dependencies = [ pycparser ];
 
     # The tests use -Werror but with python3.6 clang detects some unreachable code.
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";

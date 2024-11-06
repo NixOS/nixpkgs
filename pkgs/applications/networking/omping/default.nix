@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Open Multicast Ping (omping) is a tool for testing IPv4/IPv6 multicast connectivity on a LAN";
     license = licenses.mit;
     platforms = platforms.unix;

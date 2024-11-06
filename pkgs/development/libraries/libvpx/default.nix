@@ -43,7 +43,7 @@
 }:
 
 let
-  inherit (stdenv) is64bit isMips isDarwin isCygwin;
+  inherit (stdenv.hostPlatform) is64bit isMips isDarwin isCygwin;
   inherit (lib) enableFeature optional optionals;
 
   # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
@@ -66,8 +66,8 @@ let
 
   kernel =
     # Build system doesn't understand BSD, so pretend to be Linux.
-    /**/ if stdenv.isBSD then "linux"
-    else if stdenv.isDarwin then "darwin${darwinVersion}"
+    /**/ if stdenv.hostPlatform.isBSD then "linux"
+    else if stdenv.hostPlatform.isDarwin then "darwin${darwinVersion}"
     else stdenv.hostPlatform.parsed.kernel.name;
 
   isGeneric =
@@ -76,7 +76,7 @@ let
     || stdenv.hostPlatform.isRiscV;
 
   target =
-    /**/ if (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+    /**/ if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
       (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
     else null;
 in

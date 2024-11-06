@@ -2,26 +2,43 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   fusepy,
+  indexed-gzip,
+  indexed-zstd,
+  libarchive-c,
+  python-xz,
+  pythonOlder,
+  rapidgzip,
+  rarfile,
   ratarmountcore,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.15.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hprXZGgE2fpg8Km3gWO60e7teUB4Age5skNPc4p+wIg=";
+    hash = "sha256-1JAj9vA/aZLDvZC7j5PD1OL9n4I0gag4Ezc0i68OQsw=";
   };
 
-  propagatedBuildInputs = [
-    ratarmountcore
+  pythonRelaxDeps = [ "python-xz" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     fusepy
+    indexed-gzip
+    indexed-zstd
+    libarchive-c
+    python-xz
+    rapidgzip
+    rarfile
+    ratarmountcore
   ];
 
   checkPhase = ''
@@ -34,10 +51,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mounts archives as read-only file systems by way of indexing";
-    mainProgram = "ratarmount";
     homepage = "https://github.com/mxmlnkn/ratarmount";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
+    mainProgram = "ratarmount";
   };
 }

@@ -1,33 +1,37 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3
-, fetchFromGitHub
-, qt5
-, wrapQtAppsHook
-, testers
-, gns3-gui
+{
+  fetchFromGitHub,
+  gns3-gui,
+  lib,
+  python3Packages,
+  qt5,
+  testers,
+  wrapQtAppsHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gns3-gui";
   inherit version;
 
   src = fetchFromGitHub {
     inherit hash;
     owner = "GNS3";
-    repo = pname;
+    repo = "gns3-gui";
     rev = "refs/tags/v${version}";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = with python3Packages; [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  propagatedBuildInputs = [ qt5.qtwayland ];
+
+  dependencies = with python3Packages; [
     distro
     jsonschema
     psutil
@@ -36,7 +40,6 @@ python3.pkgs.buildPythonApplication rec {
     sip
     (pyqt5.override { withWebSockets = true; })
     truststore
-    qt5.qtwayland
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
@@ -49,9 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -65,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     command = "${lib.getExe gns3-gui} --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Network Simulator 3 GUI (${channel} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
@@ -74,9 +75,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };
 }

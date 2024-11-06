@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Calculates sunrise or sunset times with civil, nautical, astronomical and custom twilights";
     homepage = "https://github.com/risacher/sunwait";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "sunwait";
     platforms = lib.platforms.all;
   };

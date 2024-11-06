@@ -21,16 +21,17 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
-  version = "2.11.2";
+  version = "2.13.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2VmV8Z8TDacc4qZePG87ZgnBydLdm+anpmk8gFKbSLM=";
+    hash = "sha256-db8omhyngvenAgfGGpMAhGkgqGug/sv7AL1G+sniM/c=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -39,6 +40,27 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      django = prev.django_5;
+
+      # TODO: drop after https://github.com/NixOS/nixpkgs/pull/306556 or similar got merged
+      django-allauth = prev.django-allauth.overridePythonAttrs ({ src, nativeCheckInputs, ... }: let
+        version = "65.0.2";
+      in {
+        inherit version;
+        src = src.override {
+          rev = "refs/tags/${version}";
+          hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
+        };
+
+        nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
+      });
+
+      django-extensions = prev.django-extensions.overridePythonAttrs (_: {
+        # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
+        # probably because of django_5 but it is the latest version available and used like that in paperless-ngx
+        doCheck = false;
+      });
+
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
 
@@ -75,18 +97,18 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gbHavMUmsZaRSfBkdrrNpTO0R8zacb8110U8n5Y09oU=";
+    npmDepsHash = "sha256-pBCWcdCTQh0N4pRLBWLZXybuhpiat030xvPZ5z7CUJ0=";
 
     nativeBuildInputs = [
       pkg-config
       python3
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
     ];
 
     buildInputs = [
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
       darwin.apple_sdk.frameworks.CoreText
     ];
@@ -115,21 +137,28 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
-  format = "other";
+  pyproject = false;
 
   inherit version src;
 
+  postPatch = ''
+    # pytest-xdist makes the tests flaky
+    substituteInPlace src/setup.cfg \
+      --replace-fail "--numprocesses auto --maxprocesses=16" ""
+  '';
+
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     bleach
     channels
     channels-redis
     concurrent-log-handler
     dateparser
-    django
+    django_5
     django-allauth
     django-auditlog
     django-celery-results
@@ -147,8 +176,10 @@ python.pkgs.buildPythonApplication rec {
     flower
     gotenberg-client
     gunicorn
+    httpx-oauth
     imap-tools
     inotifyrecursive
+    jinja2
     langdetect
     mysqlclient
     nltk
@@ -190,18 +221,18 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = let
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath dependencies;
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
-    makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
+    makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
       --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
 
@@ -217,12 +248,12 @@ python.pkgs.buildPythonApplication rec {
     daphne
     factory-boy
     imagehash
+    pytest-cov-stub
     pytest-django
     pytest-env
     pytest-httpx
     pytest-mock
     pytest-rerunfailures
-    pytest-xdist
     pytestCheckHook
   ];
 
@@ -238,10 +269,6 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-
-    # Disable unneeded code coverage test
-    substituteInPlace src/setup.cfg \
-      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [
@@ -253,13 +280,15 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
     # Something broken with new Tesseract and inline RTL/LTR overrides?
     "test_rtl_language_detection"
+    # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
+    "test_convert"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
+    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -269,6 +298,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }

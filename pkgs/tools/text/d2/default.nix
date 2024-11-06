@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , installShellFiles
 , git
@@ -7,18 +7,18 @@
 , d2
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "d2";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "terrastruct";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SAejVwqTa/yV1pAIltAkX25KxITfkbzP9SGcLQdPUCg=";
+    hash = "sha256-HD59q4GFrkjLvQQdYGA7ISwXJztweRxoV5AWbHinTx8=";
   };
 
-  vendorHash = "sha256-aoc8KSznkWJpn0Ye7FUOH5sNQ4fslIGJhIaQdGrwcqQ=";
+  vendorHash = "sha256-HcWyhQFRI+dvOhUrVaL9U5PvL/CDBpaOYPXSkYzIYf4=";
 
   excludedPackages = [ "./e2etests" ];
 
@@ -48,7 +48,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Modern diagram scripting language that turns text to diagrams";
+    mainProgram = "d2";
     homepage = "https://d2lang.com";
+    changelog = "https://github.com/terrastruct/d2/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dit7ya kashw2 ];
   };

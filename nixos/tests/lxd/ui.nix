@@ -1,9 +1,5 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "lxd-ui";
-
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
 
   nodes.machine = { lib, ... }: {
     virtualisation = {

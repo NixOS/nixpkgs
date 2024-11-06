@@ -62,7 +62,7 @@ in buildGoModule rec {
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
       --replace "TestImportOrdering" "SkipImportOrdering"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
 

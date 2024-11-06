@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ glib ];
   dontWrapGApps = true;
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "ImageJ";
       desktopName = "ImageJ";
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${jre}/bin/java $out/bin/imagej \
       ''${gappsWrapperArgs[@]} \
       --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"

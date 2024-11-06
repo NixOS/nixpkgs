@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     description = "A C library for Etebase";
     homepage = "https://www.etebase.com/";
     license = licenses.bsd3;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };

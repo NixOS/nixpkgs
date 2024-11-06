@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "cadvisor";
-  version = "unstable-2023-10-22";
+  version = "0.49.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
-    rev = "bf2a7fee4170e418e7ac774af7679257fe26dc69";
-    hash = "sha256-wf5TtUmBC8ikpaUp3KLs8rBMunFPevNYYoactudHMsU=";
+    rev = "v${version}";
+    hash = "sha256-Hr9L9cewJN1ibh+6L0XhxxNAH4U8TrK+j7YBjS6FzZc=";
   };
 
   modRoot = "./cmd";
 
-  vendorHash = "sha256-LEtiJC3L6Q7MZH2gvpR9y2Zn9vig+9mWlRyVuKY3rsA=";
+  vendorHash = "sha256-9h+W+zuwxlpkBaCpk1otrBrwfyitfGLViOcZRpKB3uU=";
 
   ldflags = [ "-s" "-w" "-X github.com/google/cadvisor/version.Version=${version}" ];
 
@@ -21,6 +21,8 @@ buildGoModule rec {
     mv $out/bin/{cmd,cadvisor}
     rm $out/bin/example
   '';
+
+  passthru.tests = { inherit (nixosTests) cadvisor; };
 
   meta = with lib; {
     description = "Analyzes resource usage and performance characteristics of running docker containers";

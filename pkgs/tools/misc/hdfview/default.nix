@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  hdf4,
+  hdf5,
+  makeDesktopItem,
+  copyDesktopItems,
+  strip-nondeterminism,
+  stripJavaArchivesHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdfview";
-  version = "3.3.1";
+  version = "3.3.2";
 
-  src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-WcGYceMOB8gCycJSW4KdApy2gIBgTnE/d0PxGZClUqg=";
+  src = fetchFromGitHub {
+    owner = "HDFGroup";
+    repo = "hdfview";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-aJHeknkF38qDH9l+vuzdKFZZTcs/XMjtlHuu/LTF124=";
   };
 
   patches = [
@@ -31,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      arch = if stdenv.isx86_64 then "x86_64" else "aarch64";
+      arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "aarch64";
     in
     ''
       runHook preBuild
@@ -46,27 +60,34 @@ stdenv.mkDerivation rec {
     desktopName = name;
     exec = name;
     icon = name;
-    comment = meta.description;
-    categories = [ "Science" "DataVisualization" ];
+    comment = finalAttrs.finalPackage.meta.description;
+    categories = [
+      "Science"
+      "DataVisualization"
+    ];
   };
 
-  installPhase = ''
-    runHook preInstall
-  '' + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/bin $out/lib
-    cp -a build/dist/HDFView/bin/HDFView $out/bin/
-    cp -a build/dist/HDFView/lib/app $out/lib/
-    cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
-    ln -s ${jdk}/lib/openjdk $out/lib/runtime
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p $out/bin $out/lib
+      cp -a build/dist/HDFView/bin/HDFView $out/bin/
+      cp -a build/dist/HDFView/lib/app $out/lib/
+      cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
+      ln -s ${jdk}/lib/openjdk $out/lib/runtime
 
-    mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
-    cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
-  '' + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    cp -a build/dist/HDFView.app $out/Applications/
-  '' + ''
-    runHook postInstall
-  '';
+      mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
+      cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      cp -a build/dist/HDFView.app $out/Applications/
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   preFixup = ''
     # Remove build timestamp from javadoc files
@@ -77,8 +98,16 @@ stdenv.mkDerivation rec {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    downloadPage = "https://github.com/HDFGroup/hdfview";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "HDFView";
+    # Startup issue is described here:
+    # https://github.com/NixOS/nixpkgs/issues/340048 A possible solution is
+    # suggested here:
+    # https://forum.hdfgroup.org/t/building-hdfview-3-1-0-on-centos-6-swt-library-not-found/5698
+    # But it requires us to update swt, which is a bit hard, the swt update is tracked here:
+    # https://github.com/NixOS/nixpkgs/issues/219771
+    broken = true;
   };
-}
+})

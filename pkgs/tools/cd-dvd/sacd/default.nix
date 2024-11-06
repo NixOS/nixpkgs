@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  makeFlagsArray = [
+  makeFlags = [
     "PREFIX=$(out)"
   ];
 

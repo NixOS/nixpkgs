@@ -2,16 +2,19 @@
   buildPythonPackage,
   cirq-core,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-web";
-  format = "setuptools";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";
 
-  propagatedBuildInputs = [ cirq-core ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cirq-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

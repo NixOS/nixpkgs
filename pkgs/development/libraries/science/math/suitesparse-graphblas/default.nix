@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse-graphblas";
-  version = "9.3.0";
+  version = "9.3.1";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
     rev = "v${version}";
-    hash = "sha256-/ubvds/mg5SW8kEfnEuPyHCM/P8+ETT1Uus2ESj50Og=";
+    hash = "sha256-lNjxNW0XrHtdULDI35qp2BRCOrdKMnWu7Rje0+uBv0g=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
   '';
 
-  cmakeFlags = [ (lib.cmakeBool "GRAPHBLAS_USE_JIT" (!(stdenv.isLinux && stdenv.isAarch64))) ];
+  cmakeFlags = [
+    (lib.cmakeBool "GRAPHBLAS_USE_JIT" (
+      !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+    ))
+  ];
 
   meta = with lib; {
     description = "Graph algorithms in the language of linear algebra";

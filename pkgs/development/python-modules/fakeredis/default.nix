@@ -12,12 +12,13 @@
   pytestCheckHook,
   pythonOlder,
   redis,
+  redis-server,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.23.4";
+  version = "2.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SZyYtXwd5ofE2rlRw9Nl24VYMlPIuzrnoyE2ayapZww=";
+    hash = "sha256-HjId4SueqkbC319Eel8G85ZOj72ZKEVEH2D8V/GfXi4=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lua = [ lupa ];
     json = [ jsonpath-ng ];
     bf = [ pyprobables ];
@@ -52,6 +53,17 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "fakeredis" ];
+
+  pytestFlagsArray = [ "-m 'not slow'" ];
+
+  preCheck = ''
+    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
 
   disabledTests = [
     # AssertionError

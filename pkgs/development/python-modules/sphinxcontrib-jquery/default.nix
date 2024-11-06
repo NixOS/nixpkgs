@@ -39,10 +39,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxcontrib.jquery" ];
 
+  dependencies = [
+    sphinx
+  ];
+
   nativeCheckInputs = [
     defusedxml
     pytestCheckHook
-    sphinx
   ];
 
   pythonNamespaces = [ "sphinxcontrib" ];

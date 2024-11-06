@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       "kmymoney/plugins/woob/interface/kmymoneywoob.py"
   '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeInstallCheckInputs = [ xvfb-run ];
   installCheckPhase =
     lib.optionalString doInstallCheck ''

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libmad
     libao
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     IOKit
   ];

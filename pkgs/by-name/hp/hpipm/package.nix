@@ -26,8 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBLASFEO_PATH=${blasfeo}"
-  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DTARGET=GENERIC" ];
+    "-DHPIPM_FIND_BLASFEO=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DTARGET=GENERIC" ];
 
   meta = {
     description = "High-performance interior-point-method QP and QCQP solvers";

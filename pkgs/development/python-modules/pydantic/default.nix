@@ -20,15 +20,16 @@
   cloudpickle,
   email-validator,
   dirty-equals,
-  faker,
+  jsonschema,
   pytestCheckHook,
   pytest-mock,
   eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.7.4";
+  version = "2.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S4FZUnOsKC8J0xyTeXhMmCACCma+VfCSmrE6sYAnpok=";
+    hash = "sha256-Eb/9k9bNizRyGhjbW/LAE/2R0Ino4DIRDy5ZrQuzJ7o=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     email = [ email-validator ];
   };
 
@@ -61,11 +62,12 @@ buildPythonPackage rec {
     [
       cloudpickle
       dirty-equals
-      faker
+      jsonschema
       pytest-mock
       pytestCheckHook
+      rich
     ]
-    ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+    ++ lib.flatten (lib.attrValues optional-dependencies)
     ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''

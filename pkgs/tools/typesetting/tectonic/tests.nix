@@ -62,7 +62,6 @@ let
         the `tectonic` derivation is updated.
       */
       inherit (emptyFile)
-        outputHashAlgo
         outputHashMode
         outputHash
         ;

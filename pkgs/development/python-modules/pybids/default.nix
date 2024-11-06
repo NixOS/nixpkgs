@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.16.5";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5MAp5CYlOh1WxsXOE/LHVNm/K4VGFaLKWaaKYwKjQIM=";
+    hash = "sha256-4MpFXGh2uOHCjMa213CF6QzKCyEQNiN1moyNolEcySQ=";
   };
 
   pythonRelaxDeps = [

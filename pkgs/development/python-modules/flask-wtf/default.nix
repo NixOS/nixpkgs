@@ -36,7 +36,7 @@ buildPythonPackage rec {
     wtforms
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     email = [ email-validator ];
   };
 

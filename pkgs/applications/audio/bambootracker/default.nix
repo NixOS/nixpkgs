@@ -17,14 +17,14 @@ assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rMYs2jixzoMGem9lxAjDMbFOMrnK8BLFjZIagdZk/Ok=";
+    hash = "sha256-tFUliKR55iZybNyYIF1FXh8RGf8jKEsGrWBuldB277g=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   qmakeFlags = [
     "CONFIG+=system_rtaudio"
     "CONFIG+=system_rtmidi"
+  ] ++ lib.optionals (stdenv.cc.isClang || (lib.versionAtLeast qtbase.version "6.0")) [
+    # Clang is extra-strict about some deprecations
+    # Latest Qt6 deprecated QCheckBox::stateChanged(int)
+    "CONFIG+=no_warnings_are_errors"
   ];
 
   postConfigure = "make qmake_all";

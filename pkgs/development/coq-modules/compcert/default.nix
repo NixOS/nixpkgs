@@ -1,5 +1,5 @@
 { lib, mkCoqDerivation
-, coq, flocq
+, coq, flocq, MenhirLib
 , ocamlPackages, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
@@ -29,7 +29,7 @@ compcert = mkCoqDerivation {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with lib.versions; lib.switch coq.version [
-      { case = range "8.14" "8.19"; out = "3.14"; }
+      { case = range "8.14" "8.20"; out = "3.14"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
       { case = range "8.8" "8.11"; out = "3.8"; }
@@ -50,7 +50,7 @@ compcert = mkCoqDerivation {
 
   nativeBuildInputs = with ocamlPackages; [ makeWrapper ocaml findlib menhir coq coq2html ];
   buildInputs = with ocamlPackages; [ menhirLib ];
-  propagatedBuildInputs = [ flocq ];
+  propagatedBuildInputs = [ flocq MenhirLib ];
 
   enableParallelBuilding = true;
 
@@ -66,6 +66,7 @@ compcert = mkCoqDerivation {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
+    -use-external-MenhirLib \
     ${target} \
   '';  # don't remove the \ above, the command gets appended in override below
 
@@ -200,12 +201,17 @@ patched_compcert = compcert.overrideAttrs (o:
           })
         ];
       }
-      { cases = [ (isEq "8.19") (isEq "3.14") ];
+      { cases = [ (range "8.19" "8.20") (isEq "3.14") ];
         out = [
           # Support for Coq 8.19.2
           (fetchpatch {
             url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
             hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
+          # Support for Coq 8.20.0
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/20a5b48758bf8ac18e4c420df67017b371efc237.patch";
+            hash = "sha256-TJ87CvLiAv1absGnPsTXsD/HQwKgS82loUTcosulyso=";
           })
         ];
       }

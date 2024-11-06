@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  blis,
   buildPythonPackage,
   callPackage,
   catalogue,
@@ -10,13 +9,11 @@
   fetchPypi,
   hypothesis,
   jinja2,
-  jsonschema,
   langcodes,
   mock,
   murmurhash,
   numpy,
   packaging,
-  pathy,
   preshed,
   pydantic,
   pytestCheckHook,
@@ -29,7 +26,6 @@
   thinc,
   tqdm,
   typer,
-  typing-extensions,
   wasabi,
   weasel,
   writeScript,
@@ -40,36 +36,42 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.5";
+  version = "3.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pkjGy/Ksx6Vaae6ef6TyK99pqoKKWHobxc//CM88LdM=";
+    hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
   };
 
-  pythonRelaxDeps = [
-    "smart-open"
-    "typer"
-  ];
+  postPatch = ''
+    # spaCy is compatible with NumPy v1 and v2
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
+    cymem
     cython_0
+    murmurhash
+    numpy
+    thinc
   ];
 
-  propagatedBuildInputs = [
-    blis
+  pythonRelaxDeps = [
+    "thinc"
+  ];
+
+  dependencies = [
     catalogue
     cymem
     jinja2
-    jsonschema
     langcodes
     murmurhash
     numpy
     packaging
-    pathy
     preshed
     pydantic
     requests
@@ -82,15 +84,13 @@ buildPythonPackage rec {
     typer
     wasabi
     weasel
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     mock
   ];
-
-  doCheck = true;
 
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
@@ -132,7 +132,7 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP)";
     mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = licenses.mit;
     maintainers = [ ];
   };

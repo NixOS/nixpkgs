@@ -1,45 +1,46 @@
-{ lib
-, commitizen
-, fetchFromGitHub
-, buildPythonPackage
-, git
-, pythonOlder
-, stdenv
-, installShellFiles
-, poetry-core
-, nix-update-script
-, testers
-, argcomplete
-, charset-normalizer
-, colorama
-, decli
-, importlib-metadata
-, jinja2
-, packaging
-, pyyaml
-, questionary
-, termcolor
-, tomlkit
-, py
-, pytest-freezer
-, pytest-mock
-, pytest-regressions
-, pytest7CheckHook
-, deprecated
+{
+  lib,
+  commitizen,
+  fetchFromGitHub,
+  buildPythonPackage,
+  git,
+  pythonOlder,
+  stdenv,
+  installShellFiles,
+  poetry-core,
+  nix-update-script,
+  testers,
+  argcomplete,
+  charset-normalizer,
+  colorama,
+  decli,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pyyaml,
+  questionary,
+  termcolor,
+  tomlkit,
+  py,
+  pytest-freezer,
+  pytest-mock,
+  pytest-regressions,
+  pytest7CheckHook,
+  deprecated,
 }:
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "3.28.0";
-  format = "pyproject";
+  version = "3.30.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
-    repo = pname;
+    repo = "commitizen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z/L8TvMoee3qB+P6HUJEQxqw3nDEbBQabQOUyx0iugw=";
+    hash = "sha256-8ULIoFKrDAGHwz0EZzYJtl/4h6UVUECLUDbvTJbdD60=";
   };
 
   pythonRelaxDeps = [
@@ -47,12 +48,11 @@ buildPythonPackage rec {
     "decli"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    installShellFiles
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  dependencies = [
     argcomplete
     charset-normalizer
     colorama
@@ -76,8 +76,6 @@ buildPythonPackage rec {
     pytest-regressions
     pytest7CheckHook
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "commitizen" ];
 
@@ -108,13 +106,12 @@ buildPythonPackage rec {
     let
       register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
     in
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      ''
-        installShellCompletion --cmd cz \
-          --bash <(${register-python-argcomplete} --shell bash $out/bin/cz) \
-          --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
-          --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
-      '';
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd cz \
+        --bash <(${register-python-argcomplete} --shell bash $out/bin/cz) \
+        --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
+        --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -130,6 +127,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "cz";
-    maintainers = with maintainers; [ lovesegfault anthonyroussel ];
+    maintainers = with maintainers; [
+      lovesegfault
+      anthonyroussel
+    ];
   };
 }

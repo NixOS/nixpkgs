@@ -26,5 +26,8 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "minidjvu";
+    knownVulnerabilities = [
+      "minidjvu is vulnerable to a number of out-of-bound read vulnerabilities, potentially causing denials of service (CVE-2017-12441, CVE-2017-12442, CVE-2017-12443, CVE-2017-12444, CVE-2017-12445)"
+    ];
   };
 }

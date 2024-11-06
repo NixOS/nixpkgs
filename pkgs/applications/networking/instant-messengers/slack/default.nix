@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.39.90";
-  x86_64-darwin-sha256 = "0wdvsw0m1jks1n97anzamssicl9jfx9js480q3kl9hd80viz97lq";
+  x86_64-darwin-version = "4.41.97";
+  x86_64-darwin-sha256 = "1akqchqknbz4vpr6xx0hjfnllcp9b1lnzhb2x9402bkmjh985ps4";
 
-  x86_64-linux-version = "4.39.90";
-  x86_64-linux-sha256 = "00ygbka304xnh99s17hh51lxjdkv2flh6nmn143dkj7qqabgrll8";
+  x86_64-linux-version = "4.41.97";
+  x86_64-linux-sha256 = "15fa2ci9da0wrvxalaqpg412krcwwd1g84d0pa50i5vj1yl3sy3d";
 
-  aarch64-darwin-version = "4.39.90";
-  aarch64-darwin-sha256 = "0rm0khbf2bqxs2ddlmss7m3sb5yy05lb96kv0a065ifadzcf5zsb";
+  aarch64-darwin-version = "4.41.97";
+  aarch64-darwin-sha256 = "09m99yfsfjk71627fpbiryb4f3nrdrccijgfm9pshrvw3mr934r6";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -207,6 +207,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

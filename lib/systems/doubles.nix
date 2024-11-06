@@ -69,6 +69,7 @@ in {
 
   arm           = filterDoubles predicates.isAarch32;
   armv7         = filterDoubles predicates.isArmv7;
+  aarch         = filterDoubles predicates.isAarch;
   aarch64       = filterDoubles predicates.isAarch64;
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
@@ -114,6 +115,4 @@ in {
   genode        = filterDoubles predicates.isGenode;
 
   embedded      = filterDoubles predicates.isNone;
-
-  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux" "powerpc64-linux" "powerpc64le-linux" "aarch64-darwin" "riscv64-linux"];
 }

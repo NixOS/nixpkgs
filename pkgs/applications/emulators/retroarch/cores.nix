@@ -8,7 +8,7 @@
 , curl
 , fetchFromGitHub
 , fetchpatch
-, ffmpeg
+, ffmpeg_6
 , fluidsynth
 , fmt
 , freetype
@@ -267,7 +267,7 @@ in
       let
         # linux = bsd
         # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
-        platform = if stdenv.isDarwin then "macos" else "linux";
+        platform = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
       in
       [
         "-C"
@@ -318,7 +318,7 @@ in
 
   citra = mkLibretroCore rec {
     core = "citra";
-    extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
+    extraBuildInputs = [ libGLU libGL boost ffmpeg_6 nasm ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_FFMPEG_STATIC=0"

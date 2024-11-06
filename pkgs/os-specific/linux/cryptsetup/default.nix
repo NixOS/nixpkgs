@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.3";
+  version = "2.7.5";
 
   outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-t3KuT23wzucgCyjOqWDk2q/yogPS/VAr6rPBMXsHpFY=";
+    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # support, because the path still gets included in the binary even
     # though it isn't used.
     "--with-luks2-external-tokens-path=/"
-  ] ++ (with lib; mapAttrsToList (flip enableFeature)) programs;
+  ] ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ] ++ lib.optional (!withInternalArgon2) libargon2;

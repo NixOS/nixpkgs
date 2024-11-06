@@ -3,7 +3,6 @@
   buildPythonPackage,
   decorator,
   fetchPypi,
-  invocations,
   invoke,
   pytest,
   pytestCheckHook,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ decorator ];
 
   nativeCheckInputs = [
-    invocations
     invoke
     pytestCheckHook
   ];

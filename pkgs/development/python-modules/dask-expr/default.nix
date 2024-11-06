@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.10";
+  version = "1.1.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JLOTmpaKDyv4dgEM/dQFeQrD0OZcwNxBi7/pq/STJYY=";
+    hash = "sha256-HHoUQ6LfrlUnZNvvbPbQbNW6WLabGa88RsC9M8hlARI=";
   };
 
   postPatch = ''

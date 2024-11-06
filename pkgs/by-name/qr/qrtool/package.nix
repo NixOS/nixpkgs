@@ -1,36 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  asciidoctor,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    sha256 = "sha256-lD/xi2k5baZGUUixy/032jTBevr0uQIT/JmX+d+kPyA=";
+    hash = "sha256-ViDlY60iGNBwCDRgKiNKbsFSXozyzqlTzKpd9NCxrv0=";
   };
 
-  cargoHash = "sha256-lR/LusIgdA+G7YeSLHjxdcC96tOSqSyalVamS42ORs0=";
+  cargoHash = "sha256-Bcu5hyW0uUHkshlBoKNG/NL0XYnrPJa/P8bHdcGjFTc=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
-  postInstall = ''
-    # Built by ./build.rs using `asciidoctor`
-    installManPage ./target/*/release/build/qrtool*/out/*.?
+  postInstall =
+    ''
+      # Built by ./build.rs using `asciidoctor`
+      installManPage ./target/*/release/build/qrtool*/out/*.?
 
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd qrtool \
-      --bash <($out/bin/qrtool --generate-completion bash) \
-      --fish <($out/bin/qrtool --generate-completion fish) \
-      --zsh <($out/bin/qrtool --generate-completion zsh)
-  '';
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd qrtool \
+        --bash <($out/bin/qrtool --generate-completion bash) \
+        --fish <($out/bin/qrtool --generate-completion fish) \
+        --zsh <($out/bin/qrtool --generate-completion zsh)
+    '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];

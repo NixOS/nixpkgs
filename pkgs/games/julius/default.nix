@@ -6,6 +6,7 @@
 , cmake
 , libpng
 , darwin
+, apple-sdk_11
 , libicns
 , imagemagick
 }:
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
     libicns
     imagemagick
@@ -38,11 +39,9 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_mixer
     libpng
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
     mkdir -p $out/Applications
     cp -r julius.app $out/Applications/

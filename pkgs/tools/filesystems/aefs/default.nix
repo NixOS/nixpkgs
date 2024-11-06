@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   #
   #     $ tar xf "$(nix-build -A aefs.src)"
   #     $ grep -R FUSE_USE_VERSION
-  configureFlags = lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
 
   nativeBuildInputs = [ autoreconfHook git ];
 
@@ -34,9 +34,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/edolstra/aefs";
     description = "Cryptographic filesystem implemented in userspace using FUSE";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

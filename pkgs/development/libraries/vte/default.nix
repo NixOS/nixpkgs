@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , gettext
 , pkg-config
@@ -26,20 +26,24 @@
 , icu
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, fast-float
 , nixosTests
 , blackbox-terminal
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.76.3";
+  version = "0.78.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional (gtkVersion != null) "devdoc";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9njpTAVvN3/QAhIUrf9UUMsXLpoIsWCREYHd/3t9XWA=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "vte";
+    rev = finalAttrs.version;
+    hash = "sha256-dVCvf4eTIJlrSzG6xLdKU47N9uAtHDwRrGkWtSmqbEU=";
   };
 
   patches = [
@@ -50,6 +54,23 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
+    })
+    # build: Add fast_float dependency
+    # https://gitlab.gnome.org/GNOME/vte/-/issues/2823
+    (fetchpatch {
+      name = "0003-build-Add-fast_float-dependency.patch";
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f6095fca4d1baf950817e7010e6f1e7c313b9e2e.patch";
+      hash = "sha256-EL9PPiI5pDJOXf4Ck4nkRte/jHx/QWbxkjDFRSsp+so=";
+    })
+    (fetchpatch {
+      name = "0003-widget-termprops-Use-fast_float.patch";
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/6c2761f51a0400772f443f12ea23a75576e195d3.patch";
+      hash = "sha256-jjM9bhl8EhtylUIQ2nMSNX3ugnkZQP/2POvSUDW0LM0=";
+    })
+    (fetchpatch {
+      name = "0003-build-Use-correct-path-to-include-fast_float.h.patch";
+      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/d09330585e648b5c9991dffab4a06d1f127bf916.patch";
+      hash = "sha256-YGVXt2VojljYgTcmahQ2YEZGEysyUSwk+snQfoipJ+E=";
     })
   ];
 
@@ -74,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     lz4
     icu
+    fast-float
   ] ++ lib.optionals systemdSupport [
     systemd
   ];
@@ -92,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
   ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
   ];
@@ -104,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs perf/*
     patchShebangs src/parser-seq.py
+    patchShebangs src/minifont-coverage.py
     patchShebangs src/modes.py
   '';
 

@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.8";
+    version = "6.8.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-COTQ5dqK8RMrUea8M1AYCtV63Nk18Je20LwRmiwsChA=";
+      hash = "sha256-Aw6Kem1ZDk6utAPuJWdWFc2A0jbzq4oLVtzIQYEViwU=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      hash = "sha256-mP82UtASD0Fh8ilDDCB6ubY7/MGPoRP6hg6/xRwzwAw=";
+      hash = "sha256-i5AVyi9m7qLLubhV8fBhhZ6/RYOjMdwmv9Bek9pT/xo=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -50,7 +50,7 @@ let
            rustc
          ];
     buildInputs = [ docutils ]
-      ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";
@@ -92,7 +92,7 @@ let
       downloadPage = "https://www.mercurial-scm.org/release/";
       changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
+      maintainers = with maintainers; [ lukegb pacien techknowlogick ];
       platforms = platforms.unix;
       mainProgram = "hg";
     };

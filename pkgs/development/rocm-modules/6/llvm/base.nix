@@ -54,8 +54,8 @@ in
 
 let
   llvmNativeTarget =
-    if stdenv.isx86_64 then "X86"
-    else if stdenv.isAarch64 then "AArch64"
+    if stdenv.hostPlatform.isx86_64 then "X86"
+    else if stdenv.hostPlatform.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
   inferNativeTarget = t: if t == "NATIVE" then llvmNativeTarget else t;
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;

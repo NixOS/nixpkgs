@@ -1,16 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
   ###### interface
-
   options = {
 
-    hardware.cpu.intel.updateMicrocode = mkOption {
+    hardware.cpu.intel.updateMicrocode = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Update the CPU microcode for Intel processors.
       '';
@@ -18,12 +13,10 @@ with lib;
 
   };
 
-
   ###### implementation
-
-  config = mkIf config.hardware.cpu.intel.updateMicrocode {
+  config = lib.mkIf config.hardware.cpu.intel.updateMicrocode {
     # Microcode updates must be the first item prepended in the initrd
-    boot.initrd.prepend = mkOrder 1 [ "${pkgs.microcodeIntel}/intel-ucode.img" ];
+    boot.initrd.prepend = lib.mkOrder 1 [ "${pkgs.microcode-intel}/intel-ucode.img" ];
   };
 
 }

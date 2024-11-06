@@ -63,6 +63,11 @@ stdenv.mkDerivation rec {
     # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
+    (fetchurl {
+      name = "CVE-2021-4217.patch";
+      url = "https://git.launchpad.net/ubuntu/+source/unzip/plain/debian/patches/CVE-2021-4217.patch?id=94a790fcbb5d6c53cdf5d786bcaa0b8dc10309b6";
+      hash = "sha256-YKE4jVNSlrHLbszXNYYRtAQs0ly4AsodEz6tadMIVqE=";
+    })
   ] ++ lib.optional enableNLS
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -85,7 +90,7 @@ stdenv.mkDerivation rec {
   ]
   # `lchmod` is not available on Linux, so we remove it to fix "not supported" errors (when the zip file contains symlinks).
   # Alpine (musl) and Debian (glibc) also add this flag.
-  ++ lib.optionals stdenv.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
 
   preConfigure = ''
     sed -i -e 's@CF="-O3 -Wall -I. -DASM_CRC $(LOC)"@CF="-O3 -Wall -I. -DASM_CRC -DLARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(LOC)"@' unix/Makefile

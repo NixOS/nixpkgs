@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   pytestCheckHook,
   writeText,
   autograd,
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymoo";
-  version = "0.6.0.1";
-  format = "setuptools";
+  version = "0.6.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
-    rev = version;
-    hash = "sha256-+qtW7hfSo266n1SRzAgHIu99W5Sl+NYbKOHXv/JI9IA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CbeJwv51lu4cABgGieqy/8DCDJCb8wOPPVqUHk8Jb7E=";
   };
 
   pymoo_data = fetchFromGitHub {
@@ -45,19 +46,21 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cma==3.2.2" "cma" \
-      --replace "'alive-progress'," ""
+  pythonRelaxDeps = [ "cma" ];
+  pythonRemoveDeps = [ "alive-progress" ];
 
+  postPatch = ''
     substituteInPlace pymoo/util/display/display.py \
-      --replace "from pymoo.util.display.progress import ProgressBar" "" \
-      --replace "ProgressBar() if progress else None" \
+      --replace-fail "from pymoo.util.display.progress import ProgressBar" "" \
+      --replace-fail "ProgressBar() if progress else None" \
                 "print('Missing alive_progress needed for progress=True!') if progress else None"
   '';
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    cython
+  ];
+  dependencies = [
     autograd
     cma
     deprecated
@@ -67,10 +70,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  doCheck = true;
   preCheck = ''
     substituteInPlace pymoo/config.py \
-      --replace "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
+      --replace-fail "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
                 "file://$pymoo_data/"
   '';
   nativeCheckInputs = [

@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with ocamlPackages; [ ocaml dune_3 findlib ocamlbuild ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ]
-    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.isLinux [ inotify ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ]
+    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]);
 
   meta = with lib; {
     description = "Static type checker for JavaScript";

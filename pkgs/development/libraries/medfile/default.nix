@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/*/*.c --replace-warn \
       "#if H5_VERS_MINOR > 12" \
       "#if H5_VERS_MINOR > 14"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Some medfile test files #define _a, which
     # breaks system header files that use _a as a function parameter
     substituteInPlace tests/c/*.c \

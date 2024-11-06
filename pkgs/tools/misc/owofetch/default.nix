@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rfN4QERs1H1G7ZZim//78vlxbYfU4Cx7SYYUz/QLKeU=";
 
-  buildInputs = lib.optionals stdenvNoCC.isDarwin [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     Foundation
     DiskArbitration
   ];

@@ -1,21 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.deviceTree;
 
-  overlayType = types.submodule {
+  overlayType = lib.types.submodule {
     options = {
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Name of this overlay
         '';
       };
 
-      filter = mkOption {
-        type = types.nullOr types.str;
+      filter = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "*rpi*.dtb";
         description = ''
@@ -23,18 +20,18 @@ let
         '';
       };
 
-      dtsFile = mkOption {
-        type = types.nullOr types.path;
+      dtsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         description = ''
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
         default = null;
-        example = literalExpression "./dts/overlays.dts";
+        example = lib.literalExpression "./dts/overlays.dts";
       };
 
-      dtsText = mkOption {
-        type = types.nullOr types.str;
+      dtsText = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Literal DTS contents, overlay is applied to
@@ -55,8 +52,8 @@ let
         '';
       };
 
-      dtboFile = mkOption {
-        type = types.nullOr types.path;
+      dtboFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Path to .dtbo compiled overlay file.
@@ -79,9 +76,9 @@ let
 
   # Fill in `dtboFile` for each overlay if not set already.
   # Existence of one of these is guarded by assertion below
-  withDTBOs = xs: flip map xs (o: o // { dtboFile =
+  withDTBOs = xs: lib.flip map xs (o: o // { dtboFile =
     let
-      includePaths = ["${getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"] ++ cfg.dtboBuildExtraIncludePaths;
+      includePaths = ["${lib.getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"] ++ cfg.dtboBuildExtraIncludePaths;
       extraPreprocessorFlags = cfg.dtboBuildExtraPreprocessorFlags;
     in
     if o.dtboFile == null then
@@ -97,67 +94,67 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "hardware" "deviceTree" "base" ] "Use hardware.deviceTree.kernelPackage instead")
+    (lib.mkRemovedOptionModule [ "hardware" "deviceTree" "base" ] "Use hardware.deviceTree.kernelPackage instead")
   ];
 
   options = {
       hardware.deviceTree = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Build device tree files. These are used to describe the
             non-discoverable hardware of a system.
           '';
         };
 
-        kernelPackage = mkOption {
+        kernelPackage = lib.mkOption {
           default = config.boot.kernelPackages.kernel;
-          defaultText = literalExpression "config.boot.kernelPackages.kernel";
-          example = literalExpression "pkgs.linux_latest";
-          type = types.path;
+          defaultText = lib.literalExpression "config.boot.kernelPackages.kernel";
+          example = lib.literalExpression "pkgs.linux_latest";
+          type = lib.types.path;
           description = ''
             Kernel package where device tree include directory is from. Also used as default source of dtb package to apply overlays to
           '';
         };
 
-        dtboBuildExtraPreprocessorFlags = mkOption {
+        dtboBuildExtraPreprocessorFlags = lib.mkOption {
           default = [];
-          example = literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
-          type = types.listOf types.str;
+          example = lib.literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
+          type = lib.types.listOf lib.types.str;
           description = ''
             Additional flags to pass to the preprocessor during dtbo compilations
           '';
         };
 
-        dtboBuildExtraIncludePaths = mkOption {
+        dtboBuildExtraIncludePaths = lib.mkOption {
           default = [];
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [
               ./my_custom_include_dir_1
               ./custom_include_dir_2
             ]
           '';
-          type = types.listOf types.path;
+          type = lib.types.listOf lib.types.path;
           description = ''
             Additional include paths that will be passed to the preprocessor when creating the final .dts to compile into .dtbo
           '';
         };
 
-        dtbSource = mkOption {
+        dtbSource = lib.mkOption {
           default = "${cfg.kernelPackage}/dtbs";
-          defaultText = literalExpression "\${cfg.kernelPackage}/dtbs";
-          type = types.path;
+          defaultText = lib.literalExpression "\${cfg.kernelPackage}/dtbs";
+          type = lib.types.path;
           description = ''
             Path to dtb directory that overlays and other processing will be applied to. Uses
             device trees bundled with the Linux kernel by default.
           '';
         };
 
-        name = mkOption {
+        name = lib.mkOption {
           default = null;
           example = "some-dtb.dtb";
-          type = types.nullOr types.str;
+          type = lib.types.nullOr lib.types.str;
           description = ''
             The name of an explicit dtb to be loaded, relative to the dtb base.
             Useful in extlinux scenarios if the bootloader doesn't pick the
@@ -165,8 +162,8 @@ in
           '';
         };
 
-        filter = mkOption {
-          type = types.nullOr types.str;
+        filter = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           example = "*rpi*.dtb";
           description = ''
@@ -174,9 +171,9 @@ in
           '';
         };
 
-        overlays = mkOption {
+        overlays = lib.mkOption {
           default = [];
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [
               { name = "pps"; dtsFile = ./dts/pps.dts; }
               { name = "spi";
@@ -185,7 +182,7 @@ in
               { name = "precompiled"; dtboFile = ./dtbos/example.dtbo; }
             ]
           '';
-          type = types.listOf (types.coercedTo types.path (path: {
+          type = lib.types.listOf (lib.types.coercedTo lib.types.path (path: {
             name = baseNameOf path;
             filter = null;
             dtboFile = path;
@@ -195,9 +192,9 @@ in
           '';
         };
 
-        package = mkOption {
+        package = lib.mkOption {
           default = null;
-          type = types.nullOr types.path;
+          type = lib.types.nullOr lib.types.path;
           internal = true;
           description = ''
             A path containing the result of applying `overlays` to `kernelPackage`.
@@ -206,7 +203,7 @@ in
       };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     assertions = let
       invalidOverlay = o: (o.dtsFile == null) && (o.dtsText == null) && (o.dtboFile == null);

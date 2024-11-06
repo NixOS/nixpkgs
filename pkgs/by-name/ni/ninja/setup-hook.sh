@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 ninjaBuildPhase() {
     runHook preBuild
 
@@ -9,9 +11,9 @@ ninjaBuildPhase() {
     fi
 
     local flagsArray=(
-        -j$buildCores
-        $ninjaFlags "${ninjaFlagsArray[@]}"
+        "-j$buildCores"
     )
+    concatTo flagsArray ninjaFlags ninjaFlagsArray
 
     echoCmd 'build flags' "${flagsArray[@]}"
     TERM=dumb ninja "${flagsArray[@]}"
@@ -24,7 +26,7 @@ ninjaCheckPhase() {
 
     if [ -z "${checkTarget:-}" ]; then
         if ninja -t query test >/dev/null 2>&1; then
-            checkTarget=test
+            checkTarget="test"
         fi
     fi
 
@@ -38,10 +40,9 @@ ninjaCheckPhase() {
         fi
 
         local flagsArray=(
-            -j$buildCores
-            $ninjaFlags "${ninjaFlagsArray[@]}"
-            $checkTarget
+            "-j$buildCores"
         )
+        concatTo flagsArray ninjaFlags ninjaFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         TERM=dumb ninja "${flagsArray[@]}"
@@ -62,10 +63,9 @@ ninjaInstallPhase() {
 
     # shellcheck disable=SC2086
     local flagsArray=(
-        -j$buildCores
-        $ninjaFlags "${ninjaFlagsArray[@]}"
-        ${installTargets:-install}
+        "-j$buildCores"
     )
+    concatTo flagsArray ninjaFlags ninjaFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
     TERM=dumb ninja "${flagsArray[@]}"
@@ -73,14 +73,14 @@ ninjaInstallPhase() {
     runHook postInstall
 }
 
-if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
+if [ -z "${dontUseNinjaBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=ninjaBuildPhase
 fi
 
-if [ -z "${dontUseNinjaCheck-}" -a -z "${checkPhase-}" ]; then
+if [ -z "${dontUseNinjaCheck-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=ninjaCheckPhase
 fi
 
-if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
+if [ -z "${dontUseNinjaInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=ninjaInstallPhase
 fi

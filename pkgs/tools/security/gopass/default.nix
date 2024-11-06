@@ -35,7 +35,7 @@ buildGoModule rec {
       git
       gnupg
       xclip
-    ] ++ lib.optional stdenv.isLinux wl-clipboard
+    ] ++ lib.optional stdenv.hostPlatform.isLinux wl-clipboard
   );
 
   postInstall = ''

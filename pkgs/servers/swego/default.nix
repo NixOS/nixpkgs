@@ -38,7 +38,7 @@ buildGoModule rec {
     maintainers = with maintainers; [ fab ];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "swego";
   };
 }

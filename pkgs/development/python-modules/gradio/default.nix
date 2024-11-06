@@ -47,6 +47,7 @@
 
   # check
   pytestCheckHook,
+  hypothesis,
   altair,
   boto3,
   gradio-pdf,
@@ -63,15 +64,15 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.40.0";
-  format = "pyproject";
+  version = "5.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ChV5E6RfFcOwW6uFqU4/phfHfn27yS8+MKjMVytnlgU=";
+    hash = "sha256-0hU2aObeLfegG7M/AaB0/HcW7IY8QPRy2OQ5Q57x4VM=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -82,7 +83,11 @@ buildPythonPackage rec {
     rm -rf venv/
   '';
 
-  pythonRelaxDeps = [ "tomlkit" ];
+  pythonRelaxDeps = [
+    "tomlkit"
+    "aiofiles"
+    "markupsafe"
+  ];
 
   pythonRemoveDeps = [
     # our package is presented as a binary, not a python lib - and
@@ -90,7 +95,7 @@ buildPythonPackage rec {
     "ruff"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
@@ -126,13 +131,14 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  passthru.optional-dependencies.oauth = [
+  optional-dependencies.oauth = [
     authlib
     itsdangerous
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    hypothesis
     altair
     boto3
     gradio-pdf
@@ -149,7 +155,7 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ passthru.optional-dependencies.oauth ++ pydantic.passthru.optional-dependencies.email;
+  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
@@ -158,7 +164,7 @@ buildPythonPackage rec {
       export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
@@ -166,6 +172,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Actually broken
     "test_mount_gradio_app"
+    "test_processing_utils_backwards_compatibility" # type error
 
     # requires network, it caught our xfail exception
     "test_error_analytics_successful"
@@ -187,10 +194,13 @@ buildPythonPackage rec {
 
     # flaky: OSError: Cannot find empty port in range: 7860-7959
     "test_docs_url"
+    "test_orjson_serialization"
+    "test_dataset_is_updated"
+    "test_multimodal_api"
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_async_generators"
@@ -245,8 +255,8 @@ buildPythonPackage rec {
     "test/test_networking.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Network-related tests that are flaky on darwin (depend on port availability)
+
+    # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
   ];
   pytestFlagsArray = [
@@ -275,14 +285,16 @@ buildPythonPackage rec {
         pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
         doInstallCheck = false;
         doCheck = false;
+        preCheck = "";
         pythonImportsCheck = null;
         dontCheckRuntimeDeps = true;
       });
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gradio.app/";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio@${version}";
     description = "Python library for easily interacting with trained machine learning models";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

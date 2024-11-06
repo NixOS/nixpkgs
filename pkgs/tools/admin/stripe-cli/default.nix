@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.21.2";
+  version = "1.21.10";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uerQwznpezbNnPj5U/IjMxoqRMJQhhje8oRwJTDimFY=";
+    hash = "sha256-L2ydkrm2foSIh67LsMYNvV53Hdj9TdV7C4tKeHe+AK0=";
   };
   vendorHash = "sha256-TuxYJ3u4/5PJYRoRgom+M1au9XerZ+vj9X3jUWTPM58=";
 

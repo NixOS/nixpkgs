@@ -6,6 +6,7 @@
   buildNpmPackage,
   nodejs_18,
   ffmpeg-full,
+  nunicode,
   util-linux,
   python3,
   getopt,
@@ -20,13 +21,13 @@ let
 
   src = fetchFromGitHub {
     owner = "advplyr";
-    repo = pname;
+    repo = "audiobookshelf";
     rev = "refs/tags/v${source.version}";
     inherit (source) hash;
   };
 
   client = buildNpmPackage {
-    pname = "${pname}-client";
+    pname = "audiobookshelf-client";
     inherit (source) version;
 
     src = runCommand "cp-source" { } ''
@@ -45,8 +46,7 @@ let
     inherit
       stdenv
       ffmpeg-full
-      pname
-      nodejs
+      nunicode
       getopt
       ;
   };
@@ -55,14 +55,6 @@ in
 buildNpmPackage {
   inherit pname src;
   inherit (source) version;
-
-  postPatch = ''
-    # Always skip version checks of the binary manager.
-    # We provide our own binaries, and don't want to trigger downloads.
-    substituteInPlace server/managers/BinaryManager.js --replace-fail \
-      'if (!this.validVersions.length) return true' \
-      'return true'
-  '';
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -74,13 +66,13 @@ buildNpmPackage {
   installPhase = ''
     mkdir -p $out/opt/client
     cp -r index.js server package* node_modules $out/opt/
-    cp -r ${client}/lib/node_modules/${pname}-client/dist $out/opt/client/dist
+    cp -r ${client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
     mkdir $out/bin
 
-    echo '${wrapper}' > $out/bin/${pname}
-    echo "  exec ${nodejs}/bin/node $out/opt/index.js" >> $out/bin/${pname}
+    echo '${wrapper}' > $out/bin/audiobookshelf
+    echo "  exec ${nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
-    chmod +x $out/bin/${pname}
+    chmod +x $out/bin/audiobookshelf
   '';
 
   passthru = {

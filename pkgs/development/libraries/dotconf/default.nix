@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
 
   meta = with lib; {
     description = "Configuration parser library";

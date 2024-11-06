@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
   preCheck =
-    (lib.optionalString stdenv.isLinux ''
+    (lib.optionalString stdenv.hostPlatform.isLinux ''
       echo "nameserver 127.0.0.1" > resolv.conf
       export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
       export LD_PRELOAD=${libredirect}/lib/libredirect.so
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     "test_nts_token_performance"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cle = [ cryptography ];
     eventlet = [ eventlet ];
     gevent = [ gevent ];

@@ -3,7 +3,8 @@
 set -euo pipefail
 shopt -s nullglob
 
-export PATH="@binPath@"
+export SSL_CERT_FILE=@cacert@/etc/ssl/certs/ca-bundle.crt
+export PATH="@binPath@:$PATH"
 # used for glob ordering of package names
 export LC_ALL=C
 
@@ -50,7 +51,7 @@ for package in *; do
   [[ -d "$package" ]] || continue
   cd "$package"
   for version in *; do
-    id=$(xq -r .package.metadata.id "$version"/*.nuspec)
+    id=$(xmlstarlet sel -t -v /_:package/_:metadata/_:id "$version"/*.nuspec)
 
     if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
       continue

@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    hash = "sha256-/qKPeE2Ptweaf+rHOvdW0TUDLwN9D93MMgDoU4fTzEA=";
+    hash = "sha256-mQLfRAun2G/LDnw3jyFGJbOqpxh2PL8IGzFELRfAgAI=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ruma-0.10.1" = "sha256-I1mTeJLo+pgIqFkn1D2De/oACQPkUELjGdyGf3MVuLQ=";
+      "ruma-0.10.1" = "sha256-VmIZ24vULpm6lF24OFZdsI5JG+XqVPpUWM/R64X17jo=";
     };
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   passthru.tests = {
     inherit (nixosTests) matrix-conduit;

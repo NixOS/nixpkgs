@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ./mingw-install-exes.patch
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 

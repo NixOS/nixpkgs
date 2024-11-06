@@ -25,13 +25,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.6.2";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${finalAttrs.version}" ;
-    hash = "sha256-hIEIu7feOZWqxRskf6Ej7l653/9KW8B3cnpPLoCRBAc=";
+    hash = "sha256-EDFUVjud79ZRCzGbOh9L9NcXfN3ikvsqkVSOME9F9oo=";
   };
 
   # The upstream download script tries to download the models to the
@@ -50,7 +50,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
       SDL2
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreGraphics
       CoreML
@@ -67,26 +67,29 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
-      --replace '${cudaOldStr}' '${cudaNewStr}'
+      --replace-fail '${cudaOldStr}' '${cudaNewStr}'
   '';
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
     WHISPER_METAL_EMBED_LIBRARY = "1";
   } // lib.optionalAttrs cudaSupport {
-    WHISPER_CUBLAS = "1";
+    GGML_CUDA = "1";
   };
-
-  makeFlags = [ "main" "stream" "command" ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
     cp ./main $out/bin/whisper-cpp
-    cp ./stream $out/bin/whisper-cpp-stream
-    cp ./command $out/bin/whisper-cpp-command
+
+    for file in *; do
+      if [[ -x "$file" && -f "$file" && "$file" != "main" ]]; then
+        cp "$file" "$out/bin/whisper-cpp-$file"
+      fi
+    done
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 

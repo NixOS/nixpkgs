@@ -29,7 +29,7 @@
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
 # or being unrelated to that.
-, doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+, doCheck ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
 }:
 
 let
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     pam
     dbus
     duktape
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemdMinimal else elogind)
   ];
@@ -116,6 +116,17 @@ stdenv.mkDerivation rec {
   env = {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
     PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+
+    # HACK: We want to install policy files files to $out/share but polkit
+    # should read them from /run/current-system/sw/share on a NixOS system.
+    # Similarly for config files in /etc.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "dest";
+  } // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
   mesonFlags = [
@@ -127,18 +138,10 @@ stdenv.mkDerivation rec {
     "-Dtests=${lib.boolToString doCheck}"
     "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dman=true"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
   ];
 
-  # HACK: We want to install policy files files to $out/share but polkit
-  # should read them from /run/current-system/sw/share on a NixOS system.
-  # Similarly for config files in /etc.
-  # With autotools, it was possible to override Make variables
-  # at install time but Meson does not support this
-  # so we need to convince it to install all files to a temporary
-  # location using DESTDIR and then move it to proper one in postInstall.
-  env.DESTDIR = "dest";
 
   inherit doCheck;
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.oci;
@@ -7,9 +12,14 @@ in
   imports = [ ./oci-common.nix ];
 
   config = {
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSizeAutoSupported = false;
+
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       name = "oci-image";
       configFile = ./oci-config-user.nix;
       format = "qcow2";
@@ -25,7 +35,10 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
-      path  = [ pkgs.coreutils pkgs.curl ];
+      path = [
+        pkgs.coreutils
+        pkgs.curl
+      ];
       script = ''
         mkdir -m 0700 -p /root/.ssh
         if [ -f /root/.ssh/authorized_keys ]; then

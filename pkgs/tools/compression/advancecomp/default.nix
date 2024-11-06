@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;
     homepage = "https://github.com/amadvance/advancecomp";
-
+    changelog = "https://github.com/amadvance/advancecomp/blob/v${version}/HISTORY";
   };
 }

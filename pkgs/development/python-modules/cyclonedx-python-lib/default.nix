@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "7.5.1";
+  version = "7.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zYiSJJ49lgRMuJX0fqL8dedcFQzsh6JiMuoqV0VhF2I=";
+    hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     types-toml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     validation = [
       jsonschema
       lxml
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ddt
     pytestCheckHook
     xmldiff
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
 

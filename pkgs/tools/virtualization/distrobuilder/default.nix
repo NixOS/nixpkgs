@@ -1,37 +1,46 @@
 { lib
-, pkg-config
 , buildGoModule
-, fetchFromGitHub
-, makeWrapper
+, callPackage
+, cdrkit
 , coreutils
+, debootstrap
+, fetchFromGitHub
 , gnupg
 , gnutar
-, squashfsTools
-, debootstrap
-, callPackage
+, hivex
+, makeWrapper
 , nixosTests
+, pkg-config
+, squashfsTools
+, stdenv
+, wimlib
 }:
 
 let
   bins = [
     coreutils
+    debootstrap
     gnupg
     gnutar
     squashfsTools
-    debootstrap
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
   ];
 in
 buildGoModule rec {
   pname = "distrobuilder";
-  version = "3.0";
+  version = "3.1";
 
-  vendorHash = "sha256-pFrEkZnrcx0d3oM1klQrNHH+MiLvO4V1uFQdE0kXUqM=";
+  vendorHash = "sha256-3oHLvOdHbOdaL2FTo+a5HmayNi/i3zoAsU/du9h1N30=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
     rev = "refs/tags/distrobuilder-${version}";
-    sha256 = "sha256-JfME9VaqaQnrhnzhSLGUy9uU+tki1hXdnwqBUD/5XH0=";
+    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
     fetchSubmodules = false;
   };
 

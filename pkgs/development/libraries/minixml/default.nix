@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # remove the -arch flags which are set by default in the build
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-archflags=\"-mmacosx-version-min=10.14\""
   ];
 

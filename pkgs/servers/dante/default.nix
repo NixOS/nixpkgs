@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
 
-  configureFlags = if !stdenv.isDarwin
+  configureFlags = if !stdenv.hostPlatform.isDarwin
     then [ "--with-libc=libc.so.6" ]
     else [ "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}" ];
 
-  dontAddDisableDepTrack = stdenv.isDarwin;
+  dontAddDisableDepTrack = stdenv.hostPlatform.isDarwin;
 
   patches = [
     # Fixes several issues with `osint.m4` that causes incorrect check failures when using newer

@@ -24,16 +24,16 @@ let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
   pname = "librenms";
-  version = "24.7.0";
+  version = "24.9.1";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-XAtIm1YVmDhf2JjSiLDPGYhXRTL9lDQxDX+4//skC8Q=";
+    sha256 = "sha256-6LNhMtw2U7/31Qsd1C8u+iT99CCdoz3qQh0hjsDM+9A=";
   };
 
-  vendorHash = "sha256-adPBPmm4BDUEY/BGsvghWGc38SbcFxsnDwLfvX6SjvQ=";
+  vendorHash = "sha256-VWf1gN2VczS/4+aO+QFjBMjeritO/3dF6oeaOfSQibo=";
 
   php = phpPackage;
 
@@ -53,6 +53,7 @@ in phpPackage.buildComposerProject rec {
     (python3.withPackages (ps: with ps; [
       pymysql
       python-dotenv
+      python-memcached
       redis
       setuptools
       psutil

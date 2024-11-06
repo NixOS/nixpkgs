@@ -21,21 +21,14 @@
 , wayland
 , xdg-utils
 
-  # Darwin Frameworks
-, AppKit
-, CoreGraphics
-, CoreServices
-, CoreText
-, Foundation
-, libiconv
-, OpenGL
+, apple-sdk_11
 }:
 let
   rpathLibs = [
     expat
     fontconfig
     freetype
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -49,16 +42,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MrlzAZWLgfwIoTdxY+fjWbrv7tygAjnxXebiEgwOM9A=";
+    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
   };
 
-  cargoHash = "sha256-7HPTELRlmyjj7CXNbgqrzxW548BgbxybWi+tT3rOCX0=";
+  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
 
   nativeBuildInputs = [
     cmake
@@ -71,19 +64,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = rpathLibs
-    ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    CoreGraphics
-    CoreServices
-    CoreText
-    Foundation
-    libiconv
-    OpenGL
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
   ];
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
@@ -91,7 +78,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
 
   postInstall = (
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir $out/Applications
       cp -r extra/osx/Alacritty.app $out/Applications
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS

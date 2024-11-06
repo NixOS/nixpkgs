@@ -11,8 +11,8 @@
 
 let
   apexcharts = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/apexcharts@3.50.0/dist/apexcharts.min.js";
-    hash = "sha256-pLaS+eABqnCs0TLhRUEBQVLeF7RSlW5LjsmS7eV4iKI=";
+    url = "https://cdn.jsdelivr.net/npm/apexcharts@3.52.0/dist/apexcharts.min.js";
+    hash = "sha256-2sxp9+shRA5LMxzhgx+fpeQPIY2ZWgBdt4mp5V2Yn+E=";
   };
   tablerCss = fetchurl {
     url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css";
@@ -42,18 +42,18 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlpage";
-  version = "0.25.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     rev = "v${version}";
-    hash = "sha256-ixxTaJ72EqGqvopcIr/7kRfFyK9p5laAmu7+jR5Tp1I=";
+    hash = "sha256-wI+nXrjX98vqyCE6Ofa5KxKUvpLfHqd7KFCsILuOnGk=";
   };
 
   postPatch = ''
     substituteInPlace sqlpage/apexcharts.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@3.50.0/dist/apexcharts.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@3.52.0/dist/apexcharts.min.js */' \
       "$(cat ${apexcharts})"
     substituteInPlace sqlpage/sqlpage.css \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css */' \
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
       "$(cat ${tomselect})"
     '';
 
-  cargoHash = "sha256-yD82/h5dgcvp8OBfAoRfkq+YsauPncaRjfGM7dRQq5E=";
+  cargoHash = "sha256-/B8tayEbyOsc0/po1YQKtp694X12B3I50OU4cMwJo8Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage rec {
       sqlite
       zstd
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration

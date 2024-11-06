@@ -117,7 +117,7 @@ buildPythonPackage rec {
       # Test fails on Hydra
       "test_start_requests_laziness"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_xmliter_encoding"
       "test_download"
       "test_reactor_default_twisted_reactor_select"

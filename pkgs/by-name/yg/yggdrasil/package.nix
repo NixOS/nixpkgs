@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "sha256-hKgZejK7q0rySVBz3amC1wPhZsxCDexVECJWBMRQTDc=";
+    hash = "sha256-Xyuqvz3/3RgSY6LSXUSNX0f6SuRdmmgScW8URVOPijo=";
   };
 
-  vendorHash = "sha256-HBl30BnSERivIHb3dbfhDwwBvs3MUkltDf+R790vSGE=";
+  vendorHash = "sha256-EO+ab4bptcDxGTx7y1rEvYJLtiTalXyyR71U6O9OkEA=";
 
   subPackages = [ "cmd/genkeys" "cmd/yggdrasil" "cmd/yggdrasilctl" ];
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
-    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=yggdrasil"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/config.defaultAdminListen=unix:///var/run/yggdrasil/yggdrasil.sock"
     "-s"
     "-w"

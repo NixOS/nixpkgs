@@ -43,6 +43,7 @@ buildGoModule rec {
     description = "Jenkins CLI allows you to manage your Jenkins in an easy way";
     mainProgram = "jcli";
     homepage = "https://github.com/jenkins-zh/jenkins-cli";
+    changelog = "https://github.com/jenkins-zh/jenkins-cli/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };

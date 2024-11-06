@@ -1,25 +1,22 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let cfg = config.services.jotta-cli;
 in {
   options = {
     services.jotta-cli = {
 
-      enable = mkEnableOption "Jottacloud Command-line Tool";
+      enable = lib.mkEnableOption "Jottacloud Command-line Tool";
 
-      options = mkOption {
+      options = lib.mkOption {
         default = [ "stdoutlog" "datadir" "%h/.jottad/" ];
         example = [ ];
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         description = "Command-line options passed to jottad.";
       };
 
       package = lib.mkPackageOption pkgs "jotta-cli" { };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.jottad = {
 
       description = "Jottacloud Command-line Tool daemon";
@@ -27,7 +24,7 @@ in {
       serviceConfig = {
         Type = "notify";
         EnvironmentFile = "-%h/.config/jotta-cli/jotta-cli.env";
-        ExecStart = "${lib.getExe' cfg.package "jottad"} ${concatStringsSep " " cfg.options}";
+        ExecStart = "${lib.getExe' cfg.package "jottad"} ${lib.concatStringsSep " " cfg.options}";
         Restart = "on-failure";
       };
 

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.207.0";
+  version = "0.213.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-T01Vo8W21Gu2e7W87LFM/7NGsqHgWt+L4mXmPAEyB70=";
+    sha256 = "sha256-WgivwlsT8QytB6oaB8lQASq+YQa8lbe/6PwpJUFZifU=";
   };
 
-  vendorHash = "sha256-5Uul5c8Lwu6SJ7DlLU8+k2Pxa3V/DhqdvK5xY2g6S40=";
+  vendorHash = "sha256-R0ZabOquZQLONbW6p5xtYKLi8P3Q5JieM4EATT1a83U=";
 
   ldflags = [
     "-s" "-w"
@@ -34,6 +34,8 @@ buildGoModule rec {
       --fish <($out/bin/pscale completion fish) \
       --zsh <($out/bin/pscale completion zsh)
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
     package = pscale;

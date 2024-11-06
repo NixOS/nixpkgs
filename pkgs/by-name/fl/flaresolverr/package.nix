@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Proxy server to bypass Cloudflare protection";
     homepage = "https://github.com/FlareSolverr/FlareSolverr";
+    changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "flaresolverr";
     maintainers = with maintainers; [ paveloom ];

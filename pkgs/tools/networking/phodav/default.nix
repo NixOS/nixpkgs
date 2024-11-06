@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lintl";
 
   passthru = {
     updateScript = gnome.updateScript {

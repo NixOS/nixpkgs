@@ -14,7 +14,7 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "graphics" "extraPackages" ])
     (lib.mkRemovedOptionModule [ "hardware" "opengl" "s3tcSupport" ] "S3TC support is now always enabled in Mesa.")
     (lib.mkRemovedOptionModule [ "hardware" "opengl" "driSupport"] "The setting can be removed.")
 
@@ -100,7 +100,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.enable32Bit -> pkgs.stdenv.isx86_64;
+        assertion = cfg.enable32Bit -> pkgs.stdenv.hostPlatform.isx86_64;
         message = "`hardware.graphics.enable32Bit` only makes sense on a 64-bit system.";
       }
       {
@@ -112,7 +112,7 @@ in
     systemd.tmpfiles.settings.graphics-driver = {
       "/run/opengl-driver"."L+".argument = toString driversEnv;
       "/run/opengl-driver-32" =
-        if pkgs.stdenv.isi686 then
+        if pkgs.stdenv.hostPlatform.isi686 then
           { "L+".argument = "opengl-driver"; }
         else if cfg.enable32Bit then
           { "L+".argument = toString driversEnv32; }

@@ -37,44 +37,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.6.6";
+  version = "3.6.7";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     rev = finalAttrs.version;
-    hash = "sha256-T4aaBS918NbUEwWkSx0URi0W9uhCB8IFmzRcOR7T8Og=";
+    hash = "sha256-Mft0qhjdAbU82RgjYuKue5p7EqbTbt3ii5yXSsCFHrQ=";
   };
 
   patches = [
     (fetchpatch {
-      name = "add-FindSPRAL.cmake.patch";
-      url = "https://github.com/casadi/casadi/pull/3792/commits/28bc1b03e67ae06dea0c8557057020f5651be7ad.patch";
-      hash = "sha256-t0+RnXoFakmoX93MhN08RWAbCg6Nerh42LicBBgAkRQ=";
+      name = "fix-FindMUMPS.cmake.patch";
+      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
+      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
     })
   ];
 
   postPatch =
     ''
-      # fix case of fatropConfig.cmake & hpipmConfig.cmake
+      # fix case of hpipmConfig.cmake
       substituteInPlace CMakeLists.txt --replace-fail \
         "FATROP HPIPM" \
-        "fatrop hpipm"
+        "FATROP hpipm"
 
       # nix provide lib/clang headers in libclang, not in llvm.
       substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
         '$'{CLANG_LLVM_LIB_DIR} \
         ${llvmPackages_17.libclang.lib}/lib
-
-      # fix fatrop includes
-      substituteInPlace casadi/interfaces/fatrop/fatrop_conic_interface.hpp --replace-fail \
-        "<ocp/" \
-        "<fatrop/ocp/"
-
-      # fix mumps lib name. No idea where this comes from.
-      substituteInPlace cmake/FindMUMPS.cmake --replace-fail \
-        "mumps_seq" \
-        "mumps"
 
       # help casadi find its own libs
       substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
@@ -96,6 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace swig/python/CMakeLists.txt --replace-fail \
         "if (SWIG_IMPORT)" \
         "if (NOT SWIG_IMPORT)"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # this is only printing stuff, and is not defined on all CPU
+      substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
+        "d_print_exp_tran_mat" \
+        "//d_print_exp_tran_mat"
+
+      # fix missing symbols
+      substituteInPlace cmake/FindCLANG.cmake --replace-fail \
+        "clangBasic)" \
+        "clangBasic clangASTMatchers clangSupport)"
     '';
 
   nativeBuildInputs = [
@@ -138,11 +139,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pythonSupport [
       python3Packages.numpy
       python3Packages.python
-    ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages_17.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)
     (lib.cmakeBool "WITH_PYTHON3" pythonSupport)
+    # We don't mind always setting this cmake variable, it will be read only if
+    # pythonSupport is enabled.
+    "-DPYTHON_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}"
     (lib.cmakeBool "WITH_JSON" false)
     (lib.cmakeBool "WITH_INSTALL_INTERNAL_HEADERS" true)
     (lib.cmakeBool "INSTALL_INTERNAL_HEADERS" true)
@@ -158,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CSPARSE" true)
     (lib.cmakeBool "WITH_BLASFEO" true)
     (lib.cmakeBool "WITH_HPIPM" true)
-    (lib.cmakeBool "WITH_FATROP" false) # invalid new-expression of abstract class type 'casadi::CasadiStructuredQP'
+    (lib.cmakeBool "WITH_FATROP" true)
     (lib.cmakeBool "WITH_BUILD_FATROP" false)
     (lib.cmakeBool "WITH_SUPERSCS" false) # packaging too chaotic
     (lib.cmakeBool "WITH_BUILD_OSQP" false)
@@ -189,11 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     #(lib.cmakeBool "WITH_ALPAQA" true)  # this requires casadi...
   ];
 
-  # I don't know how to pass absolute $out path from cmakeFlags
-  postConfigure = lib.optionalString pythonSupport ''
-    cmake -DPYTHON_PREFIX=$out/${python3Packages.python.sitePackages} ..
-  '';
-
   doCheck = true;
 
   meta = {
@@ -201,5 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/casadi/casadi";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.all;
   };
 })

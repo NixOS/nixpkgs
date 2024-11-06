@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -14,16 +14,15 @@ python3.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-a20q7kavWwCsfnAW02+IY0jKERMxkJ+2nid/CwQxC9E=";
+    hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "==" ">="
-
     substituteInPlace floss/main.py \
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
+
+  pythonRelaxDeps = [ "networkx" ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -34,6 +33,7 @@ python3.pkgs.buildPythonPackage rec {
     with python3.pkgs;
     [
       binary2strings
+      dncil
       halo
       networkx
       pefile

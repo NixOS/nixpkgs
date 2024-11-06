@@ -5,17 +5,19 @@
   cmake,
   python3,
   opencc,
+  rapidjson,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "sha256-JKudwA2C7gHihjPnsqPq5i7X8TvG8yQYZEG5f/xu3yo=";
+    sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
   nativeBuildInputs =
@@ -26,6 +28,19 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       opencc # opencc_dict
     ];
+
+  buildInputs = [
+    rapidjson
+  ];
+
+  # TODO use more system dependencies
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_RAPIDJSON" true)
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "ver."; };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";

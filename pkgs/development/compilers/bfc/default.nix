@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://bfc.wilfred.me.uk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ figsoda ];
-    broken = stdenv.isAarch64 && stdenv.isLinux;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }

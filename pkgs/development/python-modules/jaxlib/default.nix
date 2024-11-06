@@ -240,7 +240,7 @@ let
       wheel
       build
       which
-    ] ++ lib.optionals effectiveStdenv.isDarwin [ cctools ];
+    ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs =
       [
@@ -259,8 +259,8 @@ let
         snappy
         zlib
       ]
-      ++ lib.optionals effectiveStdenv.isDarwin [ IOKit ]
-      ++ lib.optionals (!effectiveStdenv.isDarwin) [ nsync ];
+      ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ IOKit ]
+      ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -406,7 +406,7 @@ let
 
       TF_SYSTEM_LIBS = lib.concatStringsSep "," (
         tf_system_libs
-        ++ lib.optionals (!effectiveStdenv.isDarwin) [
+        ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [
           "nsync" # fails to build on darwin
         ]
       );
@@ -414,7 +414,7 @@ let
       # Note: we cannot do most of this patching at `patch` phase as the deps
       # are not available yet. Framework search paths aren't added by bintools
       # hook. See https://github.com/NixOS/nixpkgs/pull/41914.
-      preBuild = lib.optionalString effectiveStdenv.isDarwin ''
+      preBuild = lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
         export NIX_LDFLAGS+=" -F${IOKit}/Library/Frameworks"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"

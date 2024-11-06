@@ -21,7 +21,7 @@ index a572ed55dd..3dd6c2fda6 100644
  		lxvst_path = "/usr/local/lib64/lxvst:/usr/local/lib/lxvst:/usr/lib64/lxvst:/usr/lib/lxvst:"
  			"/usr/local/lib64/linux_vst:/usr/local/lib/linux_vst:/usr/lib64/linux_vst:/usr/lib/linux_vst:"
 -			"/usr/lib/vst:/usr/local/lib/vst";
-+			"/usr/lib/vst:/usr/local/lib/vst:"
++			"/usr/lib/vst:/usr/local/lib/vst:$HOME/.nix-profile/lib/vst:"
 +			"$HOME/.lxvst:$HOME/.nix-profile/lib/lxvst:/run/current-system/sw/lib/lxvst:/etc/profiles/per-user/$USER/lib/lxvst";
  	}
  

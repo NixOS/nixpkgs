@@ -14,6 +14,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
+, nixosTests
 , withDocs ? true
 }:
 
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     dbus # for dbus-daemon
   ];
 
-  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     chmod +x meson_post_install.py tests/test-dconf.py
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
+    tests = { inherit (nixosTests) dconf; };
   };
 
   meta = with lib; {

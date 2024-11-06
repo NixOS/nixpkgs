@@ -13,7 +13,6 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , uthash
-, fetchpatch
 , nixosTests
 }:
 
@@ -30,23 +29,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.18";
+  version = "2.0.20";
 
   src = fetchFromGitHub {
     owner = "eclipse";
-    repo = pname;
+    repo = "mosquitto";
     rev = "v${version}";
-    sha256 = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
+    hash = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "revert-cmake-shared-to-module.patch"; # See https://github.com/eclipse/mosquitto/issues/2277
-      url = "https://github.com/eclipse/mosquitto/commit/e21eaeca37196439b3e89bb8fd2eb1903ef94845.patch";
-      sha256 = "14syi2c1rks8sl2aw09my276w45yq1iasvzkqcrqwy4drdqrf069";
-      revert = true;
-    })
-  ];
 
   postPatch = ''
     for f in html manpage ; do
@@ -83,11 +73,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) mosquitto;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.peterhoeg ];
+    platforms = lib.platforms.unix;
+    mainProgram = "mosquitto";
   };
 }

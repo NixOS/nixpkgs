@@ -583,7 +583,7 @@ stdenv.mkDerivation rec {
     which
     zip
     python3.pkgs.absl-py   # Needed to build fish completion
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx sigtool CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools libcxx sigtool CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -622,7 +622,7 @@ stdenv.mkDerivation rec {
   '' +
   # disable execlog parser on darwin, since it fails to build
   # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-  lib.optionalString (!stdenv.isDarwin) ''
+  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # need to change directory for bazel to find the workspace
     cd ./bazel_src
     # build execlog tooling
@@ -649,7 +649,7 @@ stdenv.mkDerivation rec {
   '' +
   # disable execlog parser on darwin, since it fails to build
   # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-  (lib.optionalString (!stdenv.isDarwin) ''
+  (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir $out/share
     cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
     cat <<EOF > $out/bin/bazel-execlog
@@ -730,7 +730,7 @@ stdenv.mkDerivation rec {
     # stored non-contiguously in the binary due to gcc optimisations, which leads
     # Nix to miss the hash when scanning for dependencies
     echo "${bazelRC}" >> $out/nix-support/depends
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';
 

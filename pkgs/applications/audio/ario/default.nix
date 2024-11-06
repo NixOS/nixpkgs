@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     taglib
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/ario/plugins/*.dylib; do
       ln -s $file $out/lib/ario/plugins/$(basename $file .dylib).so
     done

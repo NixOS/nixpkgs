@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.logcheck;
 
@@ -22,7 +19,7 @@ let
 
   flags = "-r ${rulesDir} -c ${configFile} -L ${logFiles} -${levelFlag} -m ${cfg.mailTo}";
 
-  levelFlag = getAttrFromPath [cfg.level]
+  levelFlag = lib.getAttrFromPath [cfg.level]
     { paranoid    = "p";
       server      = "s";
       workstation = "w";
@@ -43,7 +40,7 @@ let
       };
 
   writeIgnoreCronRule = name: {level, user, regex, cmdline, ...}:
-    let escapeRegex = escape (stringToCharacters "\\[]{}()^$?*+|.");
+    let escapeRegex = lib.escape (lib.stringToCharacters "\\[]{}()^$?*+|.");
         cmdline_ = builtins.unsafeDiscardStringContext cmdline;
         re = if regex != "" then regex else if cmdline_ == "" then ".*" else escapeRegex cmdline_;
     in writeIgnoreRule "cron-${name}" {
@@ -53,9 +50,9 @@ let
       '';
     };
 
-  levelOption = mkOption {
+  levelOption = lib.mkOption {
     default = "server";
-    type = types.enum [ "workstation" "server" "paranoid" ];
+    type = lib.types.enum [ "workstation" "server" "paranoid" ];
     description = ''
       Set the logcheck level.
     '';
@@ -65,9 +62,9 @@ let
     options = {
       level = levelOption;
 
-      regex = mkOption {
+      regex = lib.mkOption {
         default = "";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Regex specifying which log lines to ignore.
         '';
@@ -77,25 +74,25 @@ let
 
   ignoreCronOptions = {
     options = {
-      user = mkOption {
+      user = lib.mkOption {
         default = "root";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User that runs the cronjob.
         '';
       };
 
-      cmdline = mkOption {
+      cmdline = lib.mkOption {
         default = "";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
         '';
       };
 
-      timeArgs = mkOption {
+      timeArgs = lib.mkOption {
         default = null;
-        type = types.nullOr (types.str);
+        type = lib.types.nullOr (lib.types.str);
         example = "02 06 * * *";
         description = ''
           "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
@@ -109,20 +106,20 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
+      enable = lib.mkEnableOption "logcheck cron job, to mail anomalies in the system logfiles to the administrator";
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "logcheck";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Username for the logcheck user.
         '';
       };
 
-      timeOfDay = mkOption {
+      timeOfDay = lib.mkOption {
         default = "*";
         example = "6";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Time of day to run logcheck. A logcheck will be scheduled at xx:02 each day.
           Leave default (*) to run every hour. Of course when nothing special was logged,
@@ -130,68 +127,68 @@ in
         '';
       };
 
-      mailTo = mkOption {
+      mailTo = lib.mkOption {
         default = "root";
         example = "you@domain.com";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Email address to send reports to.
         '';
       };
 
-      level = mkOption {
+      level = lib.mkOption {
         default = "server";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Set the logcheck level. Either "workstation", "server", or "paranoid".
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "FQDN=1";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Config options that you would like in logcheck.conf.
         '';
       };
 
-      files = mkOption {
+      files = lib.mkOption {
         default = [ "/var/log/messages" ];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         example = [ "/var/log/messages" "/var/log/mail" ];
         description = ''
           Which log files to check.
         '';
       };
 
-      extraRulesDirs = mkOption {
+      extraRulesDirs = lib.mkOption {
         default = [];
         example = [ "/etc/logcheck" ];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         description = ''
           Directories with extra rules.
         '';
       };
 
-      ignore = mkOption {
+      ignore = lib.mkOption {
         default = {};
         description = ''
           This option defines extra ignore rules.
         '';
-        type = with types; attrsOf (submodule ignoreOptions);
+        type = with lib.types; attrsOf (submodule ignoreOptions);
       };
 
-      ignoreCron = mkOption {
+      ignoreCron = lib.mkOption {
         default = {};
         description = ''
           This option defines extra ignore rules for cronjobs.
         '';
-        type = with types; attrsOf (submodule ignoreCronOptions);
+        type = with lib.types; attrsOf (submodule ignoreCronOptions);
       };
 
-      extraGroups = mkOption {
+      extraGroups = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [ "postdrop" "mongodb" ];
         description = ''
           Extra groups for the logcheck user, for example to be able to use sendmail,
@@ -202,12 +199,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.logcheck.extraRulesDirs =
-        mapAttrsToList writeIgnoreRule cfg.ignore
-        ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
+        lib.mapAttrsToList writeIgnoreRule cfg.ignore
+        ++ lib.mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
-    users.users = optionalAttrs (cfg.user == "logcheck") {
+    users.users = lib.optionalAttrs (cfg.user == "logcheck") {
       logcheck = {
         group = "logcheck";
         isSystemUser = true;
@@ -216,7 +213,7 @@ in
         extraGroups = cfg.extraGroups;
       };
     };
-    users.groups = optionalAttrs (cfg.user == "logcheck") {
+    users.groups = lib.optionalAttrs (cfg.user == "logcheck") {
       logcheck = {};
     };
 
@@ -236,7 +233,7 @@ in
             mkCron = name: {user, cmdline, timeArgs, ...}: ''
               ${timeArgs} ${user} ${cmdline}
             '';
-        in mapAttrsToList mkCron (filterAttrs withTime cfg.ignoreCron)
+        in lib.mapAttrsToList mkCron (lib.filterAttrs withTime cfg.ignoreCron)
            ++ [ cronJob ];
   };
 }

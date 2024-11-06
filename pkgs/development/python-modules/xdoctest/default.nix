@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
   pytestCheckHook,
@@ -10,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xdoctest";
-  version = "1.1.6";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "xdoctest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/RtD/e0ubW3j4623HQGfowXQYZjl7dDfwwbfxm3ll8=";
+    hash = "sha256-1c3wnQ30J2OfnBffzGfPPt9St8VpLGmFGbifzbw+cOc=";
   };
 
   nativeBuildInputs = [

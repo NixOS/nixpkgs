@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace qosmic.pro \
       --replace "/share" "/Applications/qosmic.app/Contents/Resources" \
       --replace "/qosmic/scripts" "/scripts" \
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "CONFIG+=link_pkgconfig"
   ];
 
-  preInstall = lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv qosmic.app $out/Applications
   '';

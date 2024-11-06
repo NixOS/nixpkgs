@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 let
-  version = "0.27.2";
+  version = "0.28.0";
 in
 buildGoModule {
   pname = "step-cli";
@@ -16,7 +16,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9w7rUtlLa1kl9oVboWZWj4eoZh+pPdGsEEQDWYdEMns=";
+    hash = "sha256-Ha64SLJWJdfVt1T2M6UHyFD/OD8lmUQ0vU8OKjN272Y=";
   };
 
   ldflags = [
@@ -30,7 +30,7 @@ buildGoModule {
     rm command/certificate/remote_test.go
   '';
 
-  vendorHash = "sha256-GD9TAvWqE3nvgVpoy/4CkkdVxliNMy+GNBXJtGSNVqo=";
+  vendorHash = "sha256-yfaAms1reMGfLwiTJVRKvpNb4EzoN62W0oXoT7ErTN0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

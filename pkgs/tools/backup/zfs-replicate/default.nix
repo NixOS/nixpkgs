@@ -4,7 +4,7 @@
 , hypothesis
 , lib
 , poetry-core
-, pytest
+, pytest-cov-stub
 , pytestCheckHook
 , stringcase
 }:
@@ -19,10 +19,6 @@ buildPythonApplication rec {
     hash = "sha256-Xmg33bqs3gQJWqkCNiWYUem3o6XsxpfbHIVvLs/2D94=";
   };
 
-  postPatch = ''
-    sed -i pyproject.toml -e '/--cov[^"]*/d'
-  '';
-
   nativeBuildInputs = [
     poetry-core
   ];
@@ -30,7 +26,7 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
-    pytest
+    pytest-cov-stub
   ];
 
   propagatedBuildInputs = [

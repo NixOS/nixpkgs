@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ py-cpuinfo ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aspect = [ aspectlib ];
     histogram = [ pygal ];
     elasticsearch = [ elasticsearch ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     mercurial
     pytestCheckHook
     pytest-xdist
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"

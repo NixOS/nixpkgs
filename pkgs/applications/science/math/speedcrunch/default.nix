@@ -32,6 +32,6 @@ mkDerivation rec {
     '';
     maintainers = with maintainers; [ gebner j0hax ];
     inherit (qtbase.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

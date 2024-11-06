@@ -12,6 +12,7 @@
 , withLdap ? true, openldap
 , withMemcached ? false, libmemcached
 , withMysql ? false, libmysqlclient
+, withPostgresql ? false, postgresql
 , withPcap ? true, libpcap
 , withRedis ? false, hiredis
 , withRest ? false, curl
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLdap openldap
     ++ lib.optional withMemcached libmemcached
     ++ lib.optional withMysql libmysqlclient
+    ++ lib.optional withPostgresql postgresql
     ++ lib.optional withPcap libpcap
     ++ lib.optional withRedis hiredis
     ++ lib.optional withRest curl

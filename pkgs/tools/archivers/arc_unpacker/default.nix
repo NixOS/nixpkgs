@@ -82,7 +82,7 @@ stdenv.mkDerivation {
   '';
 
   # A few tests fail on aarch64-linux
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = with lib; {
     description = "Tool to extract files from visual novel archives";
@@ -93,6 +93,6 @@ stdenv.mkDerivation {
     mainProgram = "arc_unpacker";
 
     # unit test failures
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

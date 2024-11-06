@@ -11,20 +11,21 @@
   responses,
   setuptools,
   pythonOlder,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.56.0";
+  version = "15.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-+9oQLCuR+rRCG5tnyofHd8WMkQ5QPsWfLCnwIDU5d9o=";
+    hash = "sha256-2rwy7tfTKaUmPJv59WMVGAOUP+vGWquJbF/3BbS3kkA=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -48,6 +49,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "recipe_scrapers" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) mealie tandoor-recipes;
+    };
+  };
 
   meta = with lib; {
     description = "Python package for scraping recipes data";

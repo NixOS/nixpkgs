@@ -258,7 +258,7 @@ in
       default = { };
       description = ''
         Configuration for dendrite, see:
-        <https://github.com/matrix-org/dendrite/blob/master/dendrite-config.yaml>
+        <https://github.com/matrix-org/dendrite/blob/main/dendrite-sample.yaml>
         for available options with which to populate settings.
       '';
     };

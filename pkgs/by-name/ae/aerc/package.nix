@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromSourcehut
+, fetchpatch
 , ncurses
 , notmuch
 , scdoc
@@ -31,6 +32,12 @@ buildGoModule rec {
 
   patches = [
     ./runtime-libexec.patch
+
+    # patch to fix a encoding problem with gpg signed messages
+    (fetchpatch {
+      url ="https://git.sr.ht/~rjarry/aerc/commit/7346d20.patch";
+      hash = "sha256-OCm8BcovYN2IDSgslZklQxkGVkSYQ8HLCrf2+DRB2mM=";
+    })
   ];
 
   postPatch = ''

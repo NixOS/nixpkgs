@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cubiomes-viewer";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Cubitect";
     repo = pname;
     rev = version;
-    hash = "sha256-UUvNSTM98r8D/Q+/pPTXwGzW4Sl1qhgem4WsFRfybuo=";
+    hash = "sha256-ORTFddzVGKXpy5V6zXJgCnwLwn/8cWKklpcoHkc6u34=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/Cubitect/cubiomes-viewer";
     description = "Graphical Minecraft seed finder and map viewer";
     mainProgram = "cubiomes-viewer";

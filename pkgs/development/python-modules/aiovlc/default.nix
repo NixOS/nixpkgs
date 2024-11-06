@@ -1,37 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
+  poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  rich,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.3.2";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiovlc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+IpWX661Axl2Ke1NGN6W9CMMQMEu7EQ/2PeRkkByAxI=";
+    hash = "sha256-2YG/m/z2xHUep2VJuCQs4+gGHUolj/u3kycpYZmUyBs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      " --cov=aiovlc --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ click ];
+  dependencies = [
+    rich
+    typer
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];

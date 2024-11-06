@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, libcap, acl, oniguruma, liburing }:
+{ lib, stdenv, fetchFromGitHub, attr, acl, libcap, liburing, oniguruma }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "3.1.3";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-/thPPueNrYzbxxZYAqlxZ2GEsceCzd+LkI84S8AS1mo=";
+    hash = "sha256-7sHuOk1QTBNaGaIQ3sFc+y7TzBFT6DqKdRLndy4ahc8=";
   };
 
-  buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl liburing ];
+  buildInputs = [ oniguruma ] ++
+    lib.optionals stdenv.hostPlatform.isLinux [ acl attr libcap liburing ];
 
+  configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "release" ]; # "release" enables compiler optimizations
 
   meta = with lib; {
     description = "Breadth-first version of the UNIX find command";

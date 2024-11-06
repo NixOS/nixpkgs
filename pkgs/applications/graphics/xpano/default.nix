@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xpano";
-  version = "0.19.0";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "krupkat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cb6BJg0wdfhqEFLbQ27NpjJU/cc4SZSk94UHzJfzn5U=";
+    sha256 = "sha256-f2qoBpZ5lPBocPas8KMsY5bSYL20gO+ZHLz2R66qSig=";
     fetchSubmodules = true;
   };
 

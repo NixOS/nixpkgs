@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
       --replace 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib gtk3 lua5_2 curl readline ]
-    ++ lib.optional stdenv.isDarwin PCSC
-    ++ lib.optional stdenv.isLinux pcsclite;
+    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
+    ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
   enableParallelBuilding = true;
 

@@ -7,20 +7,20 @@
 
 buildNpmPackage rec {
   pname = "protoc-gen-connect-es";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-es";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qCIwr4Hyc5PARUa7tMntuyWRmO6ognmtjxN0myo8FXc=";
+    hash = "sha256-pur1OJuud2ZwPAfd6pSuTAx2vtW6kQM9rntDmtvVj3c=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-OGwEpXZqzMSIES+cmseQlo6/vzkx5ztO0gM/rUB0tGY=";
+  npmDepsHash = "sha256-wObMmeFCP/zZ6P5cCVkFnn5X0h9/4ePsSj9uBd6C1/Y=";
 
   npmWorkspace = "packages/protoc-gen-connect-es";
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
-  version = "1.3.283.0";
+  version = "1.3.296.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-CAmDDqeMVKNdV/91VQYAKyCc+e+H99PRYZzt5WjswBI=";
+    hash = "sha256-o1yRTvP7a+XVwendTKBJKNnelVGWLD0gH258GGeUDhQ=";
   };
 
   nativeBuildInputs = [ cmake ];

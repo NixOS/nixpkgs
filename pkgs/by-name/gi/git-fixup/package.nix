@@ -1,4 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, git, coreutils, gnused, gnugrep }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  coreutils,
+  gnused,
+  gnugrep,
+  nix-update-script,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "git-fixup";
@@ -8,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "keis";
     repo = "git-fixup";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Mue2xgYxJSEu0VoDmB7rnoSuzyT038xzETUO1fwptrs=";
+    hash = "sha256-Mue2xgYxJSEu0VoDmB7rnoSuzyT038xzETUO1fwptrs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,8 +38,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/git-fixup \
-      --prefix PATH : "${lib.makeBinPath [ git coreutils gnused gnugrep ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          git
+          coreutils
+          gnused
+          gnugrep
+        ]
+      }"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fighting the copy-paste element of your rebase workflow";

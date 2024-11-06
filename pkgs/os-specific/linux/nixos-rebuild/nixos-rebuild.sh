@@ -32,6 +32,7 @@ specialisation=
 buildHost=
 targetHost=
 remoteSudo=
+noSSHTTY=
 verboseScript=
 noFlake=
 attr=
@@ -102,21 +103,32 @@ while [ "$#" -gt 0 ]; do
       --use-substitutes|--substitute-on-destination|-s)
         copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders|--log-format)
+      -I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
+      --max-jobs|-j|--cores|--log-format)
+        j="$1"; shift 1
+        extraBuildFlags+=("$i" "$j")
+        copyFlags+=("$i" "$j")
+        ;;
+      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q|--show-trace|--refresh|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
+        ;;
+      --keep-going|-k|--keep-failed|-K|--fallback|--repair)
+        extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
         verboseScript="true"
         extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --option)
         j="$1"; shift 1
         k="$1"; shift 1
         extraBuildFlags+=("$i" "$j" "$k")
+        copyFlags+=("$i" "$j" "$k")
         ;;
       --fast)
         buildNix=
@@ -152,6 +164,9 @@ while [ "$#" -gt 0 ]; do
       --use-remote-sudo)
         remoteSudo=1
         ;;
+      --no-ssh-tty)
+        noSSHTTY=1
+        ;;
       --flake)
         flake="$1"
         shift 1
@@ -180,10 +195,6 @@ while [ "$#" -gt 0 ]; do
         ;;
     esac
 done
-
-if [[ -n "$SUDO_USER" ]]; then
-    useSudo=1
-fi
 
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
@@ -231,12 +242,18 @@ targetHostCmd() {
 }
 
 targetHostSudoCmd() {
+    local t=
+    if [[ ! "${noSSHTTY:-x}" = 1 ]]; then
+        t="-t"
+    fi
+
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
-        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        # But if the user really doesn't want it, don't do it.
+        SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     fi
 }
 
@@ -552,6 +569,28 @@ getNixDrv() {
     fi
 }
 
+getVersion() {
+    local dir="$1"
+    local rev=
+    local gitDir="$dir/.git"
+    if [ -e "$gitDir" ]; then
+        if [ -z "$(type -P git)" ]; then
+            echo "warning: Git not found; cannot figure out revision of $dir" >&2
+            return
+        fi
+        cd "$dir"
+        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
+        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
+            rev+=M
+        fi
+    fi
+
+    if [ -n "$rev" ]; then
+        echo ".git.$rev"
+    fi
+}
+
+
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
@@ -573,7 +612,7 @@ fi
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$(runCmd $SHELL "$nixpkgs/nixos/modules/installer/tools/get-version-suffix" "${extraBuildFlags[@]}" || true)
+        suffix=$(getVersion "$nixpkgs" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
@@ -592,7 +631,7 @@ if [ "$action" = repl ]; then
     if [[ -z $buildingAttribute ]]; then
         exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
-        exec nix repl '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+        exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
     else
         if [[ -n "${lockFlags[0]}" ]]; then
             # nix repl itself does not support locking flags
@@ -729,8 +768,7 @@ EOF
                     .nixosVersion, .kernelVersion, .configurationRevision,
                     (.specialisations | join(" "))
                 ] | @tsv' |
-                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation" |
-                ${PAGER:cat}
+                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation"
         else
             jq --slurp .
         fi
@@ -817,7 +855,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "--no-ask-password"
         "--pipe"
         "--quiet"
-        "--same-dir"
         "--service-type=exec"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"

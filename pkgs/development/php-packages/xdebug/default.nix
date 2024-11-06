@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   fetchFromGitHub,
 }:
 
@@ -20,7 +21,6 @@ buildPecl {
   };
 
   doCheck = true;
-  checkTarget = "test";
 
   zendExtension = true;
 
@@ -30,5 +30,6 @@ buildPecl {
     homepage = "https://xdebug.org/";
     license = lib.licenses.php301;
     maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.4";
   };
 }

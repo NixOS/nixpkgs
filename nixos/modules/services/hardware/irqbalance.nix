@@ -1,17 +1,14 @@
 #
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.irqbalance;
 
 in
 {
-  options.services.irqbalance.enable = mkEnableOption "irqbalance daemon";
+  options.services.irqbalance.enable = lib.mkEnableOption "irqbalance daemon";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.irqbalance ];
 

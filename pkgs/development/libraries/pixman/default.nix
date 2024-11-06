@@ -18,6 +18,8 @@
 
 , gitUpdater
 , testers
+
+, __flattenIncludeHackHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config __flattenIncludeHackHook ];
 
   buildInputs = [ libpng ];
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Diwmmxt=disabled"
   ]
   # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-  ++ lib.optional (stdenv.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
+  ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -61,9 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
-
-  postInstall = glib.flattenInclude;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests = {

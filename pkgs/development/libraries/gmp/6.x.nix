@@ -38,13 +38,13 @@ let self = stdenv.mkDerivation rec {
     # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    (lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    (lib.enableFeature (!stdenv.hostPlatform.isSunOS && stdenv.hostPlatform.isx86) "fat")
     # The config.guess in GMP tries to runtime-detect various
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
     "--build=${stdenv.buildPlatform.config}"
-  ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+  ] ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
     ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"

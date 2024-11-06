@@ -19,19 +19,19 @@
 
 buildPythonPackage rec {
   pname = "cashews";
-  version = "7.1.0";
+  version = "7.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Krukov";
     repo = "cashews";
     rev = "refs/tags/${version}";
-    hash = "sha256-VzIW6/xhKk+ZWd29BYQp6sjpBst8IVz8t/hCLc2LFT4=";
+    hash = "sha256-GS6QnWCVUgxj5uiH13jUDvRBadAB0xcZd4pb0+4q6gk=";
   };
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dill = [ dill ];
     diskcache = [ diskcache ];
     redis = [ redis ];

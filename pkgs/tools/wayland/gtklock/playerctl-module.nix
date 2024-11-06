@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "Gtklock module adding power controls to the lockscreen";
-    homepage = "https://github.com/jovanlanik/gtklock-powerbar-module";
+    description = "Gtklock module adding media player controls to the lockscreen";
+    homepage = "https://github.com/jovanlanik/gtklock-playerctl-module";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;

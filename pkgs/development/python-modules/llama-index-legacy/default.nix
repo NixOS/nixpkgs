@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-legacy";
-  version = "0.9.48";
+  version = "0.9.48.post3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_legacy";
     inherit version;
-    hash = "sha256-gt3EaR7b9JUz1lWCwkm6IsA/6W+9PpL3dY3M7yjkODQ=";
+    hash = "sha256-9pafEIXvsKvr1jZ+RvNRICDz9rnAhvRYpRmDDdYeggY=";
   };
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 

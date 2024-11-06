@@ -169,7 +169,7 @@ let
       if isDerivation value then
         value.meta.hydraPlatforms
           or (subtractLists (value.meta.badPlatforms or [])
-               (value.meta.platforms or [ "x86_64-linux" ]))
+               (value.meta.platforms or supportedSystems))
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
@@ -178,7 +178,7 @@ let
 
 in {
   /* Common platform groups on which to test packages. */
-  inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
+  inherit (platforms) unix linux darwin cygwin all;
 
   inherit
     assertTrue

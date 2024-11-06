@@ -58,9 +58,12 @@ lib.makeOverridable (
 
       HOST_SH = stdenv'.shell;
 
-      makeFlags = [
-        "STRIP=-s" # flag to install, not command
-      ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
+      makeFlags =
+        [
+          "STRIP=-s" # flag to install, not command
+        ]
+        ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no"
+        ++ lib.optional stdenv.hostPlatform.isStatic "SHLIB_NAME=";
 
       # amd64 not x86_64 for this on unlike NetBSD
       MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
@@ -73,17 +76,14 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta =
-        with lib;
-        {
-          maintainers = with maintainers; [
-            rhelmot
-            artemist
-          ];
-          platforms = platforms.unix;
-          license = licenses.bsd2;
-        }
-        // attrs.meta or { };
+      meta = {
+        maintainers = with lib.maintainers; [
+          rhelmot
+          artemist
+        ];
+        platforms = lib.platforms.unix;
+        license = lib.licenses.bsd2;
+      } // attrs.meta or { };
     }
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
@@ -92,14 +92,14 @@ lib.makeOverridable (
       # Since STRIP in `makeFlags` has to be a flag, not the binary itself
       STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
+    // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
       HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
     // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
       HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
+    // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Joy+SO1zR78Eh5eK2bxyT0l3hCuLX/J3u/UvN+++6vg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Manage secret values in-repo via public key cryptography";

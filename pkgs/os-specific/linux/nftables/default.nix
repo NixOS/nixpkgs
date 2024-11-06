@@ -7,15 +7,16 @@
 , withCli ? true, libedit
 , withXtables ? true, iptables
 , nixosTests
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.9";
+  version = "1.1.1";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-o8MEzZugYSOe4EdPmvuTipu5nYm5YCRvZvDDoKheFM0=";
+    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +37,17 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
     ++ lib.optional withXtables "--with-xtables";
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
     lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.netfilter.org/nftables";
+    rev-prefix = "v";
   };
 
   meta = with lib; {
@@ -47,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ izorkin ];
     mainProgram = "nft";
   };
 }

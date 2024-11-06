@@ -3,18 +3,27 @@
 , fetchFromBitbucket
 , cmake
 , pkg-config
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, lerc
+, libxkbcommon
+, libepoxy
+, libXtst
 , wrapGAppsHook3
-, makeWrapper
 , pixman
 , libpthreadstubs
 , gtkmm3
 , libXau
 , libXdmcp
 , lcms2
+, libraw
 , libiptcdata
 , fftw
 , expat
-, pcre
+, pcre2
 , libsigcxx
 , lensfun
 , librsvg
@@ -22,17 +31,21 @@
 , exiv2
 , exiftool
 , mimalloc
+, openexr_3
+, ilmbase
+, opencolorio
+, color-transformation-language
 }:
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.23";
+  version = "1.24.1";
 
   src = fetchFromBitbucket {
     owner = "agriggio";
     repo = "art";
     rev = version;
-    hash = "sha256-OB/Rr4rHNJc40o6esNPDRbhN4EPGf2zhlzzM+mBpUUU=";
+    hash = "sha256-uvdqU509ri6CKCEGA8Ln5tMp0pe3r/bcJefbeZGjocE=";
   };
 
   nativeBuildInputs = [
@@ -42,16 +55,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    lerc
+    libxkbcommon
+    libepoxy
+    libXtst
     pixman
     libpthreadstubs
     gtkmm3
     libXau
     libXdmcp
     lcms2
+    libraw
     libiptcdata
     fftw
     expat
-    pcre
+    pcre2
     libsigcxx
     lensfun
     librsvg
@@ -59,11 +82,18 @@ stdenv.mkDerivation rec {
     exiftool
     libcanberra-gtk3
     mimalloc
+    openexr_3
+    ilmbase
+    opencolorio
+    color-transformation-language
   ];
 
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"
     "-DCACHE_NAME_SUFFIX=\"\""
+    "-DENABLE_OCIO=True"
+    "-DENABLE_CTL=1"
+    "-DCTL_INCLUDE_DIR=${color-transformation-language}/include/CTL"
   ];
 
   CMAKE_CXX_FLAGS = toString [

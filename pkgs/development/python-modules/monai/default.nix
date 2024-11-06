@@ -5,8 +5,8 @@
   fetchpatch,
   pythonOlder,
   ninja,
-  ignite,
   numpy,
+  packaging,
   pybind11,
   torch,
   which,
@@ -14,41 +14,38 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-wm4n3FuIXbE99RRLsGnZDeHtR/Tmj6C0s29pvflZg+o=";
+    hash = "sha256-PovYyRLgoYwxqGeCBpWxX/kdClYtYK1bgy8yRa9eue8=";
+    # note: upstream consistently seems to modify the tag shortly after release,
+    # so best to wait a few days before updating
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-distutils";
-      url = "https://github.com/Project-MONAI/MONAI/commit/87862f0d5730d42d282e779fc1450f18b4869863.patch";
-      hash = "sha256-wApYfugDPWcuxwmd91peNqc0+l+SoMlT8hhx99oI2Co=";
-    })
-  ];
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     which
   ];
+
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
+    packaging
     torch
-    ignite
   ];
 
-  BUILD_MONAI = 1;
+  env.BUILD_MONAI = 1;
 
   doCheck = false; # takes too long; tries to download data
 

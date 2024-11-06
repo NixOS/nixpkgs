@@ -6,7 +6,9 @@
 , makeDesktopItem
 , love
 , luajit
-, libcoldclear ? callPackage ./libcoldclear.nix { }
+, writeShellScript
+, nix-update
+, libcoldclear ? callPackage ./libcoldclear.nix { inherit ccloader; }
 , ccloader ? callPackage ./ccloader.nix { inherit libcoldclear luajit; }
 }:
 
@@ -31,15 +33,14 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "0.17.17";
+  version = "0.17.21";
 
   src = fetchurl {
     url = "https://github.com/26F-Studio/Techmino/releases/download/v${version}/Techmino_Bare.love";
-    hash = "sha256-ExVdS2QXSRVMlRhrjD/Plo7fhQ3uUBHlwv6y91/S3uA=";
+    hash = "sha256-8gMIyNP1FS52LnbpQ+G9XNtK3rQruzkMDRz7Gk9LZcQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ love ccloader ];
 
   dontUnpack = true;
 
@@ -62,6 +63,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit ccloader libcoldclear;
+    updateScript = writeShellScript "update-script.sh" ''
+      if ${lib.getExe nix-update} techmino | grep "Packages updated"; then
+        ${lib.getExe nix-update} techmino.ccloader
+      fi
+    '';
   };
 
   meta = with lib; {

@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-9umi9QWWSG0W3w9d7eRwtZHUraqInkqJbE+Lkdn3TU8=";
+    hash = "sha256-KJZ6KlsMmKal4gRzDKh7E8fulphCx2eviJMiyypbagY=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -m755 -D keymapp "$out/bin/${pname}"
-    install -Dm644 icon.png "$out/share/pixmaps/${pname}.png"
+    install -m755 -D keymapp "$out/bin/keymapp"
+    install -Dm644 icon.png "$out/share/pixmaps/keymapp.png"
 
     runHook postInstall
   '';

@@ -2,24 +2,24 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, boost
+, boost186 # (boost181) breaks on darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
-  version = "1.34";
+  version = "1.36";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "lballabio";
     repo = "QuantLib";
-    rev = "v${version}";
-    sha256 = "sha256-qrMaIBiDg7bFtWTDAQgAMtekb/7VrI7Ix+G59mU4WHI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-u1ePmtgv+kAvH2/yTuxJFcafbfULZ8daHj4gKmKzV78=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost ];
+  buildInputs = [ boost186 ];
 
   # Required by RQuantLib, may be beneficial for others too
   cmakeFlags = [ "-DQL_HIGH_RESOLUTION_DATE=ON" ];
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free/open-source library for quantitative finance";
     homepage = "https://quantlib.org";
+    changelog = "https://github.com/lballabio/QuantLib/releases/tag/v${finalAttrs.version}";
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = [ maintainers.kupac ];
   };
-}
+})

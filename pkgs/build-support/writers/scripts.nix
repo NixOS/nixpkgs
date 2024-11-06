@@ -22,17 +22,17 @@ let
 in
 rec {
   /**
-    A generic function that returns a derivation which, when beeing built outputs the script in an executable format.
+    `makeScriptWriter` returns a derivation which creates an executable script.
 
     # Inputs
 
     config (AttrSet)
     : `interpreter` (String)
-      : the interpreter to use for the script
+      : the [interpreter](https://en.wikipedia.org/wiki/Shebang_(Unix)) to use for the script.
     : `check` (String)
-      : A command to check the script. I.e. some linting check.
+      : A command to check the script. For example, this could be a linting check.
     : `makeWrapperArgs` (Optional, [ String ], Default: [])
-      : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
+      : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper].
 
     `nameOrPath` (String)
     : The name of the script or the path to the script.
@@ -40,8 +40,8 @@ rec {
       When a `string` starting with "/" is passed, the script will be created at the specified path in $out.
       I.e. `"/bin/hello"` will create a script at `$out/bin/hello`.
 
-      Any other `string` is interpreted as filename.
-      It must be a simple unix filename starting with a letter, digit, dot, or underscore.
+      Any other `string` is interpreted as a filename.
+      It must be a [POSIX filename](https://en.wikipedia.org/wiki/Filename) starting with a letter, digit, dot, or underscore.
       Spaces or special characters are not allowed.
 
     `content` (String)
@@ -51,6 +51,7 @@ rec {
     This function is used as base implementation for other high-level writer functions.
 
     For example, `writeBash` can (roughly) be implemented as:
+
     ```nix
     writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
     ```
@@ -103,7 +104,8 @@ rec {
       name = last (builtins.split "/" nameOrPath);
       path = if nameIsPath then nameOrPath else "/bin/${name}";
       # The inner derivation which creates the executable under $out/bin (never at $out directly)
-      # This is required in order to support wrapping, as wrapped programs consist of at least two files: the executable and the wrapper.
+      # This is required in order to support wrapping, as wrapped programs consist of
+      # at least two files: the executable and the wrapper.
       inner =
         pkgs.runCommandLocal name
           (
@@ -129,7 +131,7 @@ rec {
             # On darwin a script cannot be used as an interpreter in a shebang but
             # there doesn't seem to be a limit to the size of shebang and multiple
             # arguments to the interpreter are allowed.
-            if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
+            if [[ -n "${toString pkgs.stdenvNoCC.hostPlatform.isDarwin}" ]] && isScript $interpreter
             then
               wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
               # Get first word from the line (note: xargs echo remove leading spaces)
@@ -178,11 +180,10 @@ rec {
       '';
 
   /**
-    This is a generic function that returns a derivation which, when built, compiles the given script into an executable format.
+    `makeBinWriter` returns a derivation which compiles the given script into an executable format.
 
     :::{.note}
-    This function is the base implementation for other compile language `writers`.
-    i.e. `writeHaskell`, `writeRust`.
+    This function is the base implementation for other compile language `writers`, such as `writeHaskell` and `writeRust`.
     :::
 
     # Inputs
@@ -192,7 +193,7 @@ rec {
       : The script that compiles the given content into an executable.
 
     : `strip` (Boolean, Default: true)
-      : Whether to strip the executable or not.
+      : Whether to [strip](https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase) the executable or not.
 
     : `makeWrapperArgs` (Optional, [ String ], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
@@ -201,10 +202,10 @@ rec {
     : The name of the script or the path to the script.
 
       When a `string` starting with "/" is passed, the script will be created at the specified path in $out.
-      I.e. `"/bin/hello"` will create a script at `$out/bin/hello`.
+      For example, `"/bin/hello"` will create a script at `$out/bin/hello`.
 
-      Any other `string` is interpreted as filename.
-      It must be a simple unix filename starting with a letter, digit, dot, or underscore.
+      Any other `string` is interpreted as a filename.
+      It must be a [POSIX filename](https://en.wikipedia.org/wiki/Filename) starting with a letter, digit, dot, or underscore.
       Spaces or special characters are not allowed.
 
     # Examples
@@ -296,25 +297,36 @@ rec {
         ln -s ${inner}/bin/${name} $out
       '';
 
-  # Like writeScript but the first line is a shebang to bash
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeBash "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeBash "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix" "PATH" ":" "${pkgs.hello}/bin"
-  #       ];
-  #     }
-  #     ''
-  #       hello
-  #     ''
+  /**
+    Like writeScript but the first line is a shebang to bash
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+
+    ## Without arguments
+
+    ```nix
+    writeBash "example" ''
+    echo hello world
+    ''
+    ```
+
+    ## With arguments
+
+    ```nix
+    writeBash "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
@@ -322,46 +334,72 @@ rec {
     else
       makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
 
-  # Like writeScriptBin but the first line is a shebang to bash
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeBashBin "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #  writeBashBin "example"
-  #    {
-  #      makeWrapperArgs = [
-  #        "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #      ];
-  #    }
-  #    ''
-  #      hello
-  #    ''
+  /**
+    Like writeScriptBin but the first line is a shebang to bash
+
+    Can be called with or without extra arguments.
+
+    ## Examples
+    :::{.example}
+    ## `pkgs.writers.writeBashBin` example without arguments
+
+    ```nix
+    writeBashBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBashBin` example with arguments
+
+    ```nix
+    writeBashBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeBashBin = name: writeBash "/bin/${name}";
 
-  # Like writeScript but the first line is a shebang to dash
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeDash "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeDash "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #       ];
-  #     }
-  #     ''
-  #       hello
-  #     ''
+  /**
+    Like writeScript but the first line is a shebang to dash
+
+    Can be called with or without extra arguments.
+
+    # Example
+    :::{.example}
+    ## `pkgs.writers.writeDash` example without arguments
+
+    ```nix
+    writeDash "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeDash` example with arguments
+
+    ```nix
+    writeDash "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
@@ -369,46 +407,71 @@ rec {
     else
       makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
 
-  # Like writeScriptBin but the first line is a shebang to dash
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeDashBin "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #  writeDashBin "example"
-  #    {
-  #      makeWrapperArgs = [
-  #        "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #      ];
-  #    }
-  #    ''
-  #      hello
-  #    ''
+  /**
+    Like writeScriptBin but the first line is a shebang to dash
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeDashBin` without arguments
+
+    ```nix
+    writeDashBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeDashBin` with arguments
+
+    ```nix
+    writeDashBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeDashBin = name: writeDash "/bin/${name}";
 
-  # Like writeScript but the first line is a shebang to fish
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeFish "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeFish "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #       ];
-  #     }
-  #     ''
-  #       hello
-  #     ''
+  /**
+    Like writeScript but the first line is a shebang to fish
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeFish` without arguments
+
+    ```nix
+    writeFish "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeFish` with arguments
+
+    ```nix
+    writeFish "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeFish =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
@@ -425,36 +488,140 @@ rec {
         check = "${lib.getExe pkgs.fish} --no-config --no-execute"; # syntax check only
       } name argsOrScript;
 
-  # Like writeScriptBin but the first line is a shebang to fish
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeFishBin "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeFishBin "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #       ];
-  #     }
-  #     ''
-  #       hello
-  #     ''
+  /**
+    Like writeScriptBin but the first line is a shebang to fish
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeFishBin` without arguments
+
+    ```nix
+    writeFishBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeFishBin` with arguments
+
+    ```nix
+    writeFishBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      hello
+    ''
+    ```
+    :::
+  */
   writeFishBin = name: writeFish "/bin/${name}";
 
-  # writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
-  # and some haskell source code and returns an executable.
-  #
-  # Example:
-  #   writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
-  #     import Acme.Missiles
-  #
-  #     main = launchMissiles
-  #   '';
+  /**
+    Like writeScript but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` without arguments
+
+    ```nix
+    writeBabashka "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` with arguments
+
+    ```nix
+    writeBabashka "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashka =
+    name: argsOrScript:
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.babashka}";
+          check = "${lib.getExe pkgs.clj-kondo} --lint";
+        }
+      ) name
+    else
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.babashka}";
+        check = "${lib.getExe pkgs.clj-kondo} --lint";
+      } name argsOrScript;
+
+  /**
+    Like writeScriptBin but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` without arguments
+
+    ```nix
+    writeBabashkaBin "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` with arguments
+
+    ```nix
+    writeBabashkaBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+
+  /**
+    writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
+    and some haskell source code and returns an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeHaskell` usage example
+
+    ```nix
+    writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
+      import Acme.Missiles
+
+      main = launchMissiles
+    '';
+    ```
+    :::
+  */
   writeHaskell =
     name:
     {
@@ -479,28 +646,90 @@ rec {
       inherit makeWrapperArgs strip;
     } name;
 
-  # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
+  /**
+    writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
+  */
   writeHaskellBin = name: writeHaskell "/bin/${name}";
 
-  # Like writeScript but the first line is a shebang to nu
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeNu "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeNu "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #       ];
-  #     }
-  #     ''
-  #       hello
-  #     ''
+  /**
+    writeNim takes a name, an attrset with an optional Nim compiler, and some
+    Nim source code, returning an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNim` usage example
+
+    ```nix
+      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+        echo "hello nim"
+      '';
+    ```
+    :::
+  */
+  writeNim =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      nim ? pkgs.nim2,
+      nimCompileOptions ? { },
+      strip ? true,
+    }:
+    let
+      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+        {
+          d = "release";
+          nimcache = ".";
+        }
+        // nimCompileOptions
+      );
+    in
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.nim
+        ${lib.getExe nim} compile ${nimCompileCmdArgs} tmp.nim
+        mv tmp $out
+      '';
+      inherit makeWrapperArgs strip;
+    } name;
+
+  /**
+    writeNimBin takes the same arguments as writeNim but outputs a directory
+    (like writeScriptBin)
+  */
+  writeNimBin = name: writeNim "/bin/${name}";
+
+  /**
+    Like writeScript but the first line is a shebang to nu
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNu` without arguments
+
+    ```nix
+    writeNu "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeNu` with arguments
+
+    ```nix
+    writeNu "example"
+      {
+        makeWrapperArgs = [
+          "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+        ];
+      }
+      ''
+        hello
+      ''
+    ```
+    :::
+  */
   writeNu =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
@@ -510,29 +739,44 @@ rec {
     else
       makeScriptWriter { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; } name argsOrScript;
 
-  # Like writeScriptBin but the first line is a shebang to nu
-  #
-  # Can be called with or without extra arguments.
-  #
-  # Example without arguments:
-  #   writeNuBin "example" ''
-  #     echo hello world
-  #   ''
-  #
-  # Example with arguments:
-  #   writeNuBin "example"
-  #     {
-  #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
-  #       ];
-  #     }
-  #    ''
-  #      hello
-  #    ''
+  /**
+    Like writeScriptBin but the first line is a shebang to nu
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNuBin` without arguments
+
+    ```nix
+    writeNuBin "example" ''
+      echo hello world
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeNuBin` with arguments
+
+    ```nix
+    writeNuBin "example"
+      {
+        makeWrapperArgs = [
+          "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+        ];
+      }
+      ''
+        hello
+      ''
+    ```
+    :::
+  */
   writeNuBin = name: writeNu "/bin/${name}";
 
-  # makeRubyWriter takes ruby and compatible rubyPackages and produces ruby script writer,
-  # If any libraries are specified, ruby.withPackages is used as interpreter, otherwise the "bare" ruby is used.
+  /**
+    makeRubyWriter takes ruby and compatible rubyPackages and produces ruby script writer,
+    If any libraries are specified, ruby.withPackages is used as interpreter, otherwise the "bare" ruby is used.
+  */
   makeRubyWriter =
     ruby: rubyPackages: buildRubyPackages: name:
     {
@@ -551,19 +795,30 @@ rec {
       }
     ) name;
 
-  # Like writeScript but the first line is a shebang to ruby
-  #
-  # Example:
-  #   writeRuby "example" { libraries = [ pkgs.rubyPackages.git ]; } ''
-  #    puts "hello world"
-  #   ''
+  /**
+    Like writeScript but the first line is a shebang to ruby
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeRuby` usage example
+
+    ```nix
+    writeRuby "example" { libraries = [ pkgs.rubyPackages.git ]; } ''
+     puts "hello world"
+    ''
+    ```
+
+    :::
+  */
   writeRuby = makeRubyWriter pkgs.ruby pkgs.rubyPackages buildPackages.rubyPackages;
 
   writeRubyBin = name: writeRuby "/bin/${name}";
 
-  # makeLuaWriter takes lua and compatible luaPackages and produces lua script writer,
-  # which validates the script with luacheck at build time. If any libraries are specified,
-  # lua.withPackages is used as interpreter, otherwise the "bare" lua is used.
+  /**
+    makeLuaWriter takes lua and compatible luaPackages and produces lua script writer,
+    which validates the script with luacheck at build time. If any libraries are specified,
+    lua.withPackages is used as interpreter, otherwise the "bare" lua is used.
+  */
   makeLuaWriter =
     lua: luaPackages: buildLuaPackages: name:
     {
@@ -586,26 +841,35 @@ rec {
       }
     ) name;
 
-  # writeLua takes a name an attributeset with libraries and some lua source code and
-  # returns an executable (should also work with luajit)
-  #
-  # Example:
-  # writeLua "test_lua" { libraries = [ pkgs.luaPackages.say ]; } ''
-  #   s = require("say")
-  #   s:set_namespace("en")
-  #
-  #   s:set('money', 'I have %s dollars')
-  #   s:set('wow', 'So much money!')
-  #
-  #   print(s('money', {1000})) -- I have 1000 dollars
-  #
-  #   s:set_namespace("fr") -- switch to french!
-  #   s:set('wow', "Tant d'argent!")
-  #
-  #   print(s('wow')) -- Tant d'argent!
-  #   s:set_namespace("en")  -- switch back to english!
-  #   print(s('wow')) -- So much money!
-  # ''
+  /**
+    writeLua takes a name an attributeset with libraries and some lua source code and
+    returns an executable (should also work with luajit)
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeLua` usage example
+
+    ```nix
+    writeLua "test_lua" { libraries = [ pkgs.luaPackages.say ]; } ''
+      s = require("say")
+      s:set_namespace("en")
+
+      s:set('money', 'I have %s dollars')
+      s:set('wow', 'So much money!')
+
+      print(s('money', {1000})) -- I have 1000 dollars
+
+      s:set_namespace("fr") -- switch to french!
+      s:set('wow', "Tant d'argent!")
+
+      print(s('wow')) -- Tant d'argent!
+      s:set_namespace("en")  -- switch back to english!
+      print(s('wow')) -- So much money!
+    ''
+    ```
+
+    :::
+  */
   writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
 
   writeLuaBin = name: writeLua "/bin/${name}";
@@ -619,7 +883,7 @@ rec {
       strip ? true,
     }:
     let
-      darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
+      darwinArgs = lib.optionals stdenv.hostPlatform.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
     in
     makeBinWriter {
       compileScript = ''
@@ -631,16 +895,39 @@ rec {
 
   writeRustBin = name: writeRust "/bin/${name}";
 
-  # writeJS takes a name an attributeset with libraries and some JavaScript sourcecode and
-  # returns an executable
-  #
-  # Example:
-  #   writeJS "example" { libraries = [ pkgs.uglify-js ]; } ''
-  #     var UglifyJS = require("uglify-js");
-  #     var code = "function add(first, second) { return first + second; }";
-  #     var result = UglifyJS.minify(code);
-  #     console.log(result.code);
-  #   ''
+  /**
+    writeJS takes a name an attributeset with libraries and some JavaScript sourcecode and
+    returns an executable
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `attrs`
+
+    : 2\. Function argument
+
+    `content`
+
+    : 3\. Function argument
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeJS` usage example
+
+    ```nix
+    writeJS "example" { libraries = [ pkgs.uglify-js ]; } ''
+      var UglifyJS = require("uglify-js");
+      var code = "function add(first, second) { return first + second; }";
+      var result = UglifyJS.minify(code);
+      console.log(result.code);
+    ''
+    ```
+
+    :::
+  */
   writeJS =
     name:
     {
@@ -659,7 +946,9 @@ rec {
       exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
     '';
 
-  # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
+  /**
+    writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
+  */
   writeJSBin = name: writeJS "/bin/${name}";
 
   awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
@@ -684,14 +973,23 @@ rec {
         gixy $out
       '';
 
-  # writePerl takes a name an attributeset with libraries and some perl sourcecode and
-  # returns an executable
-  #
-  # Example:
-  #   writePerl "example" { libraries = [ pkgs.perlPackages.boolean ]; } ''
-  #     use boolean;
-  #     print "Howdy!\n" if true;
-  #   ''
+  /**
+    writePerl takes a name an attributeset with libraries and some perl sourcecode and
+    returns an executable
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writePerl` usage example
+
+    ```nix
+    writePerl "example" { libraries = [ pkgs.perlPackages.boolean ]; } ''
+      use boolean;
+      print "Howdy!\n" if true;
+    ''
+    ```
+
+    :::
+  */
   writePerl =
     name:
     {
@@ -705,17 +1003,44 @@ rec {
       }
     ) name;
 
-  # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
+  /**
+    writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
+  */
   writePerlBin = name: writePerl "/bin/${name}";
 
-  # makePythonWriter takes python and compatible pythonPackages and produces python script writer,
-  # which validates the script with flake8 at build time. If any libraries are specified,
-  # python.withPackages is used as interpreter, otherwise the "bare" python is used.
+  /**
+    makePythonWriter takes python and compatible pythonPackages and produces python script writer,
+    which validates the script with flake8 at build time. If any libraries are specified,
+    python.withPackages is used as interpreter, otherwise the "bare" python is used.
+
+    # Inputs
+
+    `python`
+
+    : 1\. Function argument
+
+    `pythonPackages`
+
+    : 2\. Function argument
+
+    `buildPythonPackages`
+
+    : 3\. Function argument
+
+    `name`
+
+    : 4\. Function argument
+
+    `attrs`
+
+    : 5\. Function argument
+  */
   makePythonWriter =
     python: pythonPackages: buildPythonPackages: name:
     {
       libraries ? [ ],
       flakeIgnore ? [ ],
+      doCheck ? true,
       ...
     }@args:
     let
@@ -727,6 +1052,7 @@ rec {
       (builtins.removeAttrs args [
         "libraries"
         "flakeIgnore"
+        "doCheck"
       ])
       // {
         interpreter =
@@ -734,7 +1060,7 @@ rec {
             if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
-        check = optionalString python.isPy3k (
+        check = optionalString (python.isPy3k && doCheck) (
           writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
           ''
@@ -742,55 +1068,86 @@ rec {
       }
     ) name;
 
-  # writePyPy2 takes a name an attributeset with libraries and some pypy2 sourcecode and
-  # returns an executable
-  #
-  # Example:
-  # writePyPy2 "test_pypy2" { libraries = [ pkgs.pypy2Packages.enum ]; } ''
-  #   from enum import Enum
-  #
-  #   class Test(Enum):
-  #       a = "success"
-  #
-  #   print Test.a
-  # ''
+  /**
+    writePyPy2 takes a name an attributeset with libraries and some pypy2 sourcecode and
+    returns an executable
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writePyPy2` usage example
+
+    ```nix
+    writePyPy2 "test_pypy2" { libraries = [ pkgs.pypy2Packages.enum ]; } ''
+      from enum import Enum
+
+      class Test(Enum):
+          a = "success"
+
+      print Test.a
+    ''
+    ```
+
+    :::
+  */
   writePyPy2 = makePythonWriter pkgs.pypy2 pkgs.pypy2Packages buildPackages.pypy2Packages;
 
-  # writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
+  /**
+    writePyPy2Bin takes the same arguments as writePyPy2 but outputs a directory (like writeScriptBin)
+  */
   writePyPy2Bin = name: writePyPy2 "/bin/${name}";
 
-  # writePython3 takes a name an attributeset with libraries and some python3 sourcecode and
-  # returns an executable
-  #
-  # Example:
-  # writePython3 "test_python3" { libraries = [ pkgs.python3Packages.pyyaml ]; } ''
-  #   import yaml
-  #
-  #   y = yaml.load("""
-  #     - test: success
-  #   """)
-  #   print(y[0]['test'])
-  # ''
+  /**
+    writePython3 takes a name an attributeset with libraries and some python3 sourcecode and
+    returns an executable
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writePython3` usage example
+
+    ```nix
+    writePython3 "test_python3" { libraries = [ pkgs.python3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.safe_load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    ''
+    ```
+
+    :::
+  */
   writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages buildPackages.python3Packages;
 
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name: writePython3 "/bin/${name}";
 
-  # writePyPy3 takes a name an attributeset with libraries and some pypy3 sourcecode and
-  # returns an executable
-  #
-  # Example:
-  # writePyPy3 "test_pypy3" { libraries = [ pkgs.pypy3Packages.pyyaml ]; } ''
-  #   import yaml
-  #
-  #   y = yaml.load("""
-  #     - test: success
-  #   """)
-  #   print(y[0]['test'])
-  # ''
+  /**
+    writePyPy3 takes a name an attributeset with libraries and some pypy3 sourcecode and
+    returns an executable
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writePyPy3` usage example
+
+    ```nix
+    writePyPy3 "test_pypy3" { libraries = [ pkgs.pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.safe_load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    ''
+    ```
+
+    :::
+  */
   writePyPy3 = makePythonWriter pkgs.pypy3 pkgs.pypy3Packages buildPackages.pypy3Packages;
 
-  # writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
+  /**
+    writePyPy3Bin takes the same arguments as writePyPy3 but outputs a directory (like writeScriptBin)
+  */
   writePyPy3Bin = name: writePyPy3 "/bin/${name}";
 
   makeFSharpWriter =

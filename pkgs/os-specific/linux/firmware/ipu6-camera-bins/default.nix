@@ -6,15 +6,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "ipu6-camera-bins";
-  version = "unstable-2023-10-26";
+  version = "unstable-2024-09-27";
 
   src = fetchFromGitHub {
-    owner = "intel";
     repo = "ipu6-camera-bins";
-    rev = "af5ba0cb4a763569ac7514635013e9d870040bcf";
-    hash = "sha256-y0pT5M7AKACbquQWLZPYpTPXRC5hipLNL61nhs+cst4=";
+    owner = "intel";
+    rev = "98ca6f2a54d20f171628055938619972514f7a07";
+    hash = "sha256-DAjAzHMqX41mrfQVpDUJLw4Zjb9pz6Uy3TJjTGIkd6o=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
       include \
       $out/
 
-    install -m 0644 -D LICENSE $out/share/doc/LICENSE
+    # There is no LICENSE file in the src
+    # install -m 0644 -D LICENSE $out/share/doc/LICENSE
 
     runHook postInstall
   '';
 
   postFixup = ''
-    for pcfile in $out/lib/*/pkgconfig/*.pc; do
+    for pcfile in $out/lib/pkgconfig/*.pc; do
       substituteInPlace $pcfile \
         --replace 'prefix=/usr' "prefix=$out"
     done

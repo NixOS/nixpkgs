@@ -44,7 +44,8 @@ import ../pillow/generic.nix (
     };
 
     meta = with lib; {
-      broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+      broken =
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
       homepage = "https://python-pillow.github.io/pillow-perf/";
       description = "Friendly PIL fork - SIMD version";
       longDescription = ''

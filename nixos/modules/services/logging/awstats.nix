@@ -1,29 +1,26 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.awstats;
   package = pkgs.awstats;
   configOpts = {name, config, ...}: {
     options = {
-      type = mkOption{
-        type = types.enum [ "mail" "web" ];
+      type = lib.mkOption{
+        type = lib.types.enum [ "mail" "web" ];
         default = "web";
         example = "mail";
         description = ''
           The type of log being collected.
         '';
       };
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "The domain name to collect stats for.";
         example = "example.com";
       };
 
-      logFile = mkOption {
-        type = types.str;
+      logFile = lib.mkOption {
+        type = lib.types.str;
         example = "/var/log/nginx/access.log";
         description = ''
           The log file to be scanned.
@@ -35,8 +32,8 @@ let
         '';
       };
 
-      logFormat = mkOption {
-        type = types.str;
+      logFormat = lib.mkOption {
+        type = lib.types.str;
         default = "1";
         description = ''
           The log format being used.
@@ -48,8 +45,8 @@ let
         '';
       };
 
-      hostAliases = mkOption {
-        type = types.listOf types.str;
+      hostAliases = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "www.example.org" ];
         description = ''
@@ -57,10 +54,10 @@ let
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrsOf types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "ValidHTTPCodes" = "404";
           }
@@ -69,44 +66,44 @@ let
       };
 
       webService = {
-        enable = mkEnableOption "awstats web service";
+        enable = lib.mkEnableOption "awstats web service";
 
-        hostname = mkOption {
-          type = types.str;
+        hostname = lib.mkOption {
+          type = lib.types.str;
           default = config.domain;
           description = "The hostname the web service appears under.";
         };
 
-        urlPrefix = mkOption {
-          type = types.str;
+        urlPrefix = lib.mkOption {
+          type = lib.types.str;
           default = "/awstats";
           description = "The URL prefix under which the awstats pages appear.";
         };
       };
     };
   };
-  webServices = filterAttrs (name: value: value.webService.enable) cfg.configs;
+  webServices = lib.filterAttrs (name: value: value.webService.enable) cfg.configs;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "awstats" "service" "enable" ] "Please enable per domain with `services.awstats.configs.<name>.webService.enable`")
-    (mkRemovedOptionModule [ "services" "awstats" "service" "urlPrefix" ] "Please set per domain with `services.awstats.configs.<name>.webService.urlPrefix`")
-    (mkRenamedOptionModule [ "services" "awstats" "vardir" ] [ "services" "awstats" "dataDir" ])
+    (lib.mkRemovedOptionModule [ "services" "awstats" "service" "enable" ] "Please enable per domain with `services.awstats.configs.<name>.webService.enable`")
+    (lib.mkRemovedOptionModule [ "services" "awstats" "service" "urlPrefix" ] "Please set per domain with `services.awstats.configs.<name>.webService.urlPrefix`")
+    (lib.mkRenamedOptionModule [ "services" "awstats" "vardir" ] [ "services" "awstats" "dataDir" ])
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption "awstats, a real-time logfile analyzer";
+    enable = lib.mkEnableOption "awstats, a real-time logfile analyzer";
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/awstats";
       description = "The directory where awstats data will be stored.";
     };
 
-    configs = mkOption {
-      type = types.attrsOf (types.submodule configOpts);
+    configs = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule configOpts);
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "mysite" = {
             domain = "example.com";
@@ -117,8 +114,8 @@ in
       description = "Attribute set of domains to collect stats for.";
     };
 
-    updateAt = mkOption {
-      type = types.nullOr types.str;
+    updateAt = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "hourly";
       description = ''
@@ -129,18 +126,18 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ package.bin ];
 
-    environment.etc = mapAttrs' (name: opts:
-    nameValuePair "awstats/awstats.${name}.conf" {
+    environment.etc = lib.mapAttrs' (name: opts:
+    lib.nameValuePair "awstats/awstats.${name}.conf" {
       source = pkgs.runCommand "awstats.${name}.conf"
       { preferLocalBuild = true; }
       (''
         sed \
       ''
       # set up mail stats
-      + optionalString (opts.type == "mail")
+      + lib.optionalString (opts.type == "mail")
       ''
         -e 's|^\(LogType\)=.*$|\1=M|' \
         -e 's|^\(LevelForBrowsersDetection\)=.*$|\1=0|' \
@@ -187,7 +184,7 @@ in
       ''
       +
       # extra config
-      concatStringsSep "\n" (mapAttrsToList (n: v: ''
+      lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         -e 's|^\(${n}\)=.*$|\1="${v}"|' \
       '') opts.extraConfig)
       +
@@ -199,11 +196,11 @@ in
     # create data directory with the correct permissions
     systemd.tmpfiles.rules =
       [ "d '${cfg.dataDir}' 755 root root - -" ] ++
-      mapAttrsToList (name: opts: "d '${cfg.dataDir}/${name}' 755 root root - -") cfg.configs ++
+      lib.mapAttrsToList (name: opts: "d '${cfg.dataDir}/${name}' 755 root root - -") cfg.configs ++
       [ "Z '${cfg.dataDir}' 755 root root - -" ];
 
     # nginx options
-    services.nginx.virtualHosts = mapAttrs'(name: opts: {
+    services.nginx.virtualHosts = lib.mapAttrs'(name: opts: {
       name = opts.webService.hostname;
       value = {
         locations = {
@@ -224,10 +221,10 @@ in
     }) webServices;
 
     # update awstats
-    systemd.services = mkIf (cfg.updateAt != null) (mapAttrs' (name: opts:
-      nameValuePair "awstats-${name}-update" {
+    systemd.services = lib.mkIf (cfg.updateAt != null) (lib.mapAttrs' (name: opts:
+      lib.nameValuePair "awstats-${name}-update" {
         description = "update awstats for ${name}";
-        script = optionalString (opts.type == "mail")
+        script = lib.optionalString (opts.type == "mail")
         ''
           if [[ -f "${cfg.dataDir}/${name}-cursor" ]]; then
             CURSOR="$(cat "${cfg.dataDir}/${name}-cursor" | tr -d '\n')"
