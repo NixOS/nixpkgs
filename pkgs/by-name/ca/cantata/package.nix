@@ -1,11 +1,9 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
 , cmake
 , pkg-config
-, qtbase
-, qtsvg
-, qttools
+, qt6
 , perl
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -23,7 +21,6 @@
 , taglib
 , taglib_extras
 , withHttpStream ? true
-, qtmultimedia
 , withReplaygain ? true
 , ffmpeg
 , speex
@@ -64,7 +61,7 @@ let
     { names = [ "FFMPEG" "MPG123" "SPEEXDSP" ]; enable = withReplaygain; pkgs = [ ffmpeg speex mpg123 ]; }
     { names = [ "HTTPS_SUPPORT" ]; enable = true; pkgs = [ ]; }
     { names = [ "HTTP_SERVER" ]; enable = withHttpServer; pkgs = [ ]; }
-    { names = [ "HTTP_STREAM_PLAYBACK" ]; enable = withHttpStream; pkgs = [ qtmultimedia ]; }
+    { names = [ "HTTP_STREAM_PLAYBACK" ]; enable = withHttpStream; pkgs = [ qt6.qtmultimedia ]; }
     { names = [ "LAME" ]; enable = withLame; pkgs = [ lame ]; }
     { names = [ "LIBVLC" ]; enable = withLibVlc; pkgs = [ libvlc ]; }
     { names = [ "MTP" ]; enable = withMtp; pkgs = [ libmtp ]; }
@@ -76,7 +73,7 @@ let
   ];
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cantata";
   version = "2.5.0";
 
@@ -99,13 +96,13 @@ mkDerivation rec {
   '';
 
   buildInputs = [
-    qtbase
-    qtsvg
+    qt6.qtbase
+    qt6.qtsvg
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ]
   ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qt6.qttools ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
