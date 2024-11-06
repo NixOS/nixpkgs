@@ -41,7 +41,7 @@ import ./make-test-python.nix (
 
         with subtest("Check RetroArch started"):
             machine.wait_until_succeeds("pgrep retroarch")
-            machine.wait_for_window("^RetroArch ")
+            machine.wait_for_window("^RetroArch")
 
         with subtest("Check configuration created"):
             machine.wait_for_file("${user.home}/.config/retroarch/retroarch.cfg")
