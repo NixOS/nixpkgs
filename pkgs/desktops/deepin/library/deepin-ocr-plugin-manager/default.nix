@@ -4,8 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   ncnn,
   opencv,
   vulkan-headers,
@@ -32,9 +31,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [

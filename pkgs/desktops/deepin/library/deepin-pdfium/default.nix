@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
+  libsForQt5,
   pkg-config,
   libchardet,
   lcms2,
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
   ];
 

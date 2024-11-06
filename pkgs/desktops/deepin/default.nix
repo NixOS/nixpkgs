@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  libsForQt5,
+  pkgs,
 }:
 let
   packages =
@@ -117,4 +117,4 @@ let
       go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31
     };
 in
-lib.makeScope libsForQt5.newScope packages
+lib.makeScope pkgs.newScope packages

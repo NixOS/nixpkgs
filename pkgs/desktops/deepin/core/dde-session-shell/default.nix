@@ -5,17 +5,14 @@
   linkFarm,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   wrapGAppsHook3,
-  qtbase,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
   deepin-pw-check,
   gsettings-qt,
   lightdm_qt,
-  qtx11extras,
   linux-pam,
   xorg,
   gtest,
@@ -64,20 +61,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     deepin-pw-check
     gsettings-qt
     lightdm_qt
-    qtx11extras
+    libsForQt5.qtx11extras
     linux-pam
     xorg.libXcursor
     xorg.libXtst
@@ -90,9 +88,6 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")

@@ -5,7 +5,6 @@
   cmake,
   extra-cmake-modules,
   pkg-config,
-  wrapQtAppsHook,
   wayland-scanner,
   dtk6declarative,
   dtk6widget,
