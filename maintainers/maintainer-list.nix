@@ -15474,6 +15474,12 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  NikaidouHaruki = {
+    name = "Nikaidou Haruki";
+    email = "nharuki@tuta.com";
+    github = "haruki-nikaidou";
+    githubId = 135048882;
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikitavoloboev";
