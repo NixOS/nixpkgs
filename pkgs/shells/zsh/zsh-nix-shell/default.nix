@@ -16,14 +16,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = [ bash ];
+
   installPhase = ''
-    install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh-nix-shell
-    install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
+    install -D nix-shell.plugin.zsh --target-directory="$out/share/zsh-nix-shell"
+    install -D scripts/* --target-directory="$out/share/zsh-nix-shell/scripts"
   '';
 
   meta = with lib; {
-    description = "zsh plugin that lets you use zsh in nix-shell shell";
-    homepage = src.meta.homepage;
+    description = "Plugin that lets you use zsh in nix-shell shell";
+    homepage = "https://github.com/chisui/zsh-nix-shell";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aw ];
