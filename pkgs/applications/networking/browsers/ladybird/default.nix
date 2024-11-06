@@ -26,6 +26,7 @@
 , Cocoa
 , Foundation
 , OpenGL
+, unstableGitUpdater
 }:
 
 let
@@ -147,6 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
