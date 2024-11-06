@@ -2,35 +2,42 @@
   lib,
   stdenv,
   fetchCrate,
+  fetchurl,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-risczero";
-  version = "0.17.0";
+  version = "1.1.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-UXCZ4l45zcyn2AnfDW6dNdEnXCWL2waNwDTbermgS6M=";
+    hash = "sha256-YZ3yhj1VLxl3Fg/yWhqrZXxIQ7oK6Gdo0NU39oDvoo8=";
   };
 
-  cargoHash = "sha256-KkV+ZQAPegbeZKj3ixDSFQEyKwkKeMYceSc27xGtQms=";
+  src-recursion-hash = "28e4eeff7a8f73d27408d99a1e3e8842c79a5f4353e5117ec0b7ffaa7c193612"; # That is from cargoDeps/risc0-circuit-recursion/build.rs
+
+  src-recursion = fetchurl {
+    url = "https://risc0-artifacts.s3.us-west-2.amazonaws.com/zkr/${src-recursion-hash}.zip";
+    hash = "sha256-KOTu/3qPc9J0CNmaHj6IQseaX0NT5RF+wLf/qnwZNhI="; # This hash should be the same as src-recuresion-hash
+  };
+
+  env = {
+    RECURSION_SRC_PATH = src-recursion;
+  };
+
+  cargoHash = "sha256-pNgnUtKn2w5rWbgDi0MHZCm9nYPgESL3g7EMaYwoSq4=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;
