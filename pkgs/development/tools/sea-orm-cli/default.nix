@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.sea-ql.org/SeaORM";
     description = " Command line utility for SeaORM";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ traxys ];
+    maintainers = with maintainers; [ traxys NikaidouHaruki ];
   };
 }
