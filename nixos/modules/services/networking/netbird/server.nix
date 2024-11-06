@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [patrickdag];
+    maintainers = with lib.maintainers; [ patrickdag ];
     doc = ./server.md;
   };
 
@@ -26,12 +26,12 @@ in
     ./dashboard.nix
     ./management.nix
     ./signal.nix
+    ./relay.nix
+    ./proxy.nix
   ];
 
   options.services.netbird.server = {
-    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API and signal service";
-
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird server services";
+    enable = mkEnableOption "Netbird Server stack, comprising the dashboard, management API, relay and signal service";
 
     domain = mkOption {
       type = str;
@@ -44,7 +44,6 @@ in
       dashboard = {
         domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
 
         managementServer = "https://${cfg.domain}";
       };
@@ -53,7 +52,6 @@ in
         {
           domain = mkDefault cfg.domain;
           enable = mkDefault cfg.enable;
-          enableNginx = mkDefault cfg.enableNginx;
         }
         // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
@@ -66,18 +64,22 @@ in
                 URI = "turn:${turnDomain}:${builtins.toString turnPort}";
                 Username = "netbird";
                 Password =
-                  if (cfg.coturn.password != null)
-                  then cfg.coturn.password
-                  else {_secret = cfg.coturn.passwordFile;};
+                  if (cfg.coturn.password != null) then
+                    cfg.coturn.password
+                  else
+                    { _secret = cfg.coturn.passwordFile; };
               }
             ];
           };
         });
 
       signal = {
-        domain = mkDefault cfg.domain;
         enable = mkDefault cfg.enable;
-        enableNginx = mkDefault cfg.enableNginx;
+      };
+
+      relay = {
+        settings.NB_EXPOSED_ADDRESS = "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
+        enable = mkDefault cfg.enable;
       };
 
       coturn = {
