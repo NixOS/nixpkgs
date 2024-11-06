@@ -23982,8 +23982,6 @@ with pkgs;
 
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
 
-  dmlive = callPackage ../applications/video/dmlive { };
-
   do-agent = callPackage ../servers/monitoring/do-agent { };
 
   dodgy = with python3Packages; toPythonApplication dodgy;
