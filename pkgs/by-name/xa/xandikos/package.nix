@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch2,
   lib,
   nixosTests,
   python3Packages,
@@ -8,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.11";
+  version = "0.2.12";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
@@ -17,17 +16,8 @@ python3Packages.buildPythonApplication rec {
     owner = "jelmer";
     repo = "xandikos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cBsceJ6tib8OYx5L2Hv2AqRS+ADRSLIuJGIULNpAmEI=";
+    hash = "sha256-wdEwIVN9dkLVj8oe+2eh5n258pZRfKgLgzVCmwafCis=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-compatibility-with-icalendar-v6.patch";
-      url = "https://github.com/jelmer/xandikos/commit/ae8924c374ed86b2efde5bfbc75e56f6d8318086.patch";
-      excludes = [ "requirements.txt" ];
-      hash = "sha256-PCKo5C6Ejw9ZsFFLAMw1ZtMoCq9gJxR65K7CM6RUYwU=";
-    })
-  ];
 
   build-system = with python3Packages; [
     setuptools
