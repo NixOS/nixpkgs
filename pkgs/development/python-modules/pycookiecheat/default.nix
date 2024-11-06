@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycookiecheat";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "n8henrie";
     repo = "pycookiecheat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x568e4M7fz93hq0y06Grz9GlrjGV38GxWd+PhNiAyBY=";
+    hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
   pythonRelaxDeps = [
