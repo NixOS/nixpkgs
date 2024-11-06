@@ -61,7 +61,6 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = lib.mapAttrs (_: v: if lib.isBool v then lib.boolToString v else toString v) cfg.settings;
       serviceConfig = {
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
         DynamicUser = true;
         EnvironmentFile = lib.optional (cfg.passwordFile != null) cfg.passwordFile;
