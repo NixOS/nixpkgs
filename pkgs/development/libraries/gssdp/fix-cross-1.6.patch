@@ -1,0 +1,16 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2023-11-02 22:19:05.000000000 +0000
++++ b/meson.build	2024-11-06 21:03:00.492857007 +0000
+@@ -92,12 +92,6 @@
+ endif
+ 
+ 
+-gidocgen_dep = dependency('gi-docgen', version: '>= 2021.1',
+-                          fallback: ['gi-docgen', 'dummy_dep'],
+-                          native: true,
+-                          required: get_option('gtk_doc') and get_option('introspection')
+-                      )
+-
+ subdir('doc')
+ 
+ if get_option('examples')

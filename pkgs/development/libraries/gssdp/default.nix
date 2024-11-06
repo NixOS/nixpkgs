@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
+  patches  = [ ./fix-cross.patch ];
+
   strictDeps = true;
 
   depsBuildBuild = [

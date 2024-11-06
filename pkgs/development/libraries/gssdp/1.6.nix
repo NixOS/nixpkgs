@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
   };
 
+  patches = [ ./fix-cross-1.6.patch ];
+
+  strictDeps = true;
+
   depsBuildBuild = [
     pkg-config
   ];
