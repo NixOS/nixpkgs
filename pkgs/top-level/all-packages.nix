@@ -446,8 +446,6 @@ with pkgs;
 
   ciel = callPackage ../tools/package-management/ciel { };
 
-  circt = callPackage ../development/compilers/circt { };
-
   clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
     stdenv = clangStdenv;
   };
@@ -4699,8 +4697,6 @@ with pkgs;
   dwt1-shell-color-scripts = callPackage ../tools/misc/dwt1-shell-color-scripts { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
-
-  dua = callPackage ../tools/misc/dua { };
 
   duf = callPackage ../tools/misc/duf { };
 
@@ -25005,8 +25001,6 @@ with pkgs;
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
-  tailspin = callPackage ../tools/misc/tailspin { };
-
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
@@ -25374,8 +25368,6 @@ with pkgs;
   libuuid = if stdenv.hostPlatform.isLinux
     then util-linuxMinimal
     else null;
-
-  light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
 
