@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "antiprism";
-  version = "0.30";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "antiprism";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dD3MH+KectuuKOYF7bqWtGsBo5zz+UMyY/io1tgXbgU=";
+    sha256 = "sha256-0FkaIsZixYHP45H0gytnzlpRvNd8mMYjW22w15z3RH8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
