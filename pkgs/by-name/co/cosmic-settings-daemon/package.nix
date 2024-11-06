@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  stdenv,
   rustPlatform,
   pkg-config,
   libinput,
@@ -42,10 +43,12 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/polkit-1/rules.d
-    cp data/polkit-1/rules.d/*.rules $out/share/polkit-1/rules.d/
-  '';
+  makeFlags = [
+    "prefix=$(out)"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  dontCargoInstall = true;
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
