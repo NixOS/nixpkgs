@@ -5,17 +5,15 @@
   meson,
   ninja,
   pkg-config,
+  sphinx,
   glib,
   ncurses,
   libmpdclient,
   gettext,
   boost,
   fmt,
-  pcreSupport ? false,
-  pcre ? null,
+  pcre2,
 }:
-
-assert pcreSupport -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
@@ -34,19 +32,25 @@ stdenv.mkDerivation rec {
     libmpdclient
     boost
     fmt
-  ] ++ lib.optional pcreSupport pcre;
+    pcre2
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     gettext
+    sphinx
   ];
 
   mesonFlags = [
-    "-Dlirc=disabled"
-    "-Ddocumentation=disabled"
-  ] ++ lib.optional (!pcreSupport) "-Dregex=disabled";
+    (lib.mesonEnable "lirc" false)
+  ];
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "Curses-based interface for MPD (music player daemon)";
