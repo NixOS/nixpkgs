@@ -2,16 +2,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   dde-qt-dbus-factory,
-  qtbase,
-  qtmultimedia,
-  qtx11extras,
   image-editor,
   gsettings-qt,
   xorg,
@@ -20,7 +15,7 @@
   ffmpeg,
   ffmpegthumbnailer,
   portaudio,
-  kwayland,
+  dwayland,
   udev,
   gst_all_1,
 }:
@@ -50,19 +45,20 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
     [
       dtkwidget
       dde-qt-dbus-factory
-      qtbase
-      qtmultimedia
-      qtx11extras
+      qt5integration
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
+      libsForQt5.qtx11extras
       image-editor
       gsettings-qt
       xorg.libXdmcp
@@ -73,7 +69,7 @@ stdenv.mkDerivation rec {
       ffmpeg
       ffmpegthumbnailer
       portaudio
-      kwayland
+      dwayland
       udev
     ]
     ++ (with gst_all_1; [
@@ -82,9 +78,7 @@ stdenv.mkDerivation rec {
       gst-plugins-good
     ]);
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
         udev
@@ -106,5 +100,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = lib.teams.deepin.members;
+    broken = true;
   };
 }

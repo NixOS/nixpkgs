@@ -5,8 +5,7 @@
   fetchpatch,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   qt5platform-plugins,
   dtkwidget,
   dtkdeclarative,
@@ -37,8 +36,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
