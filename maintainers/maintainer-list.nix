@@ -21815,6 +21815,12 @@
     githubId = 7709;
     name = "Thomaz Leite";
   };
+  thomasbach-dev = {
+    name = "Thomas Bach";
+    github = "thomasbach-dev";
+    githubId = 63091663;
+    email = "github@thomasbach.dev";
+  };
   thomasdesr = {
     email = "git@hive.pw";
     github = "thomasdesr";

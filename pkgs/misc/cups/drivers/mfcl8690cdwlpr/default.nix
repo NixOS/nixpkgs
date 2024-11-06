@@ -3,16 +3,17 @@ makeWrapper, perl, pkgs, lib, stdenv, which }:
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwlpr";
-  version = "1.3.0-0";
+  version = "1.5.0-0";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf103241/${pname}-${version}.i386.deb";
-    sha256 = "0x8zd4b1psmw1znp2ibncs37xm5mljcy9yza2rx8jm8lp0a3l85v";
+    sha256 = "05kmw9s82xbybmglcj286ynyb581zj4l94fijdq1wljx30x9rvmj";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
   dontUnpack = true;
+  libPath = lib.makeLibraryPath [stdenv.cc.cc];
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -29,10 +30,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [
       coreutils file ghostscript gnugrep gnused which
       ]}
-
-    # need to use i686 glibc here, these are 32bit proprietary binaries
-    interpreter=${pkgs.pkgsi686Linux.glibc}/lib/ld-linux.so.2
-    patchelf --set-interpreter "$interpreter" $dir/lpd/brmfcl8690cdwfilter
+    interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
+    patchelf --set-interpreter "$interpreter" --set-rpath "${libPath}" $dir/lpd/x86_64/brmfcl8690cdwfilter
+    ln $dir/lpd/x86_64/brmfcl8690cdwfilter $dir/lpd/brmfcl8690cdwfilter
+    patchelf --set-interpreter "$interpreter" $dir/lpd/x86_64/brprintconf_mfcl8690cdw
+    ln $dir/lpd/x86_64/brprintconf_mfcl8690cdw $dir/lpd/brprintconf_mfcl8690cdw
   '';
 
   meta = {
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.thomasbach-dev ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
