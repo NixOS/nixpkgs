@@ -80,6 +80,8 @@ in {
         '';
       };
 
+      package = lib.options.mkPackageOption pkgs "snapcast" { };
+
       listenAddress = lib.mkOption {
         type = lib.types.str;
         default = "::";
@@ -286,7 +288,7 @@ in {
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.snapcast}/bin/snapserver --daemon ${optionString}";
+        ExecStart = "${cfg.package}/bin/snapserver --daemon ${optionString}";
         Type = "forking";
         LimitRTPRIO = 50;
         LimitRTTIME = "infinity";
