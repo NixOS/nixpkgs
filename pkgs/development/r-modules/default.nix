@@ -646,6 +646,7 @@ let
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
     rsbml = [ pkgs.libsbml ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    ravetools = with pkgs; [ pkg-config fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.out ];
