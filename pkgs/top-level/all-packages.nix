@@ -1634,8 +1634,6 @@ with pkgs;
 
   askalono = callPackage ../tools/misc/askalono { };
 
-  asleap = callPackage ../tools/networking/asleap { };
-
   awsbck = callPackage ../tools/backup/awsbck {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3122,8 +3120,6 @@ with pkgs;
   awslogs = callPackage ../tools/admin/awslogs { };
 
   awsume = python3Packages.callPackage ../tools/admin/awsume { };
-
-  aws-assume-role = callPackage ../tools/admin/aws-assume-role { };
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
 
@@ -9788,8 +9784,6 @@ with pkgs;
 
   maildrop = callPackage ../tools/networking/maildrop { };
 
-  mailhog = callPackage ../servers/mail/mailhog { };
-
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
     availablePlugins = {
       # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
@@ -10268,6 +10262,7 @@ with pkgs;
     nomad_1_6
     nomad_1_7
     nomad_1_8
+    nomad_1_9
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -12371,8 +12366,6 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
-  structorizer = callPackage ../applications/graphics/structorizer { };
-
   subberthehut = callPackage ../tools/misc/subberthehut { };
 
   subedit = callPackage ../tools/text/subedit { };
@@ -14172,7 +14165,6 @@ with pkgs;
   aspectj = callPackage ../development/compilers/aspectj { };
 
   ats = callPackage ../development/compilers/ats { };
-  ats2 = callPackage ../development/compilers/ats2 { };
 
   ats-acc = callPackage ../development/tools/ats-acc { };
 
@@ -15992,6 +15984,8 @@ with pkgs;
     fetchHex
     lfe lfe_2_1;
   beamPackages = beam.packages.erlang // { __attrsFailEvaluation = true; };
+
+  erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
   expr = callPackage ../development/interpreters/expr { };
 
