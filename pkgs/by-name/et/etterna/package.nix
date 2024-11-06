@@ -71,16 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # wacky insertion of wrapper directly into phase, so that $out is set
     cat > $out/bin/etterna << EOF
-      #!${stdenv.shell}
+    #!${stdenv.shell}
 
-      export ETTERNA_ROOT_DIR="\$HOME/.local/share/etterna"
-      export ETTERNA_ADDITIONAL_ROOT_DIRS="$out/share/etterna"
+    export ETTERNA_ROOT_DIR="\$HOME/.local/share/etterna"
+    export ETTERNA_ADDITIONAL_ROOT_DIRS="$out/share/etterna"
 
-      echo "HOME: \$HOME"
-      echo "PWD: \$(pwd)"
-      echo "ETTERNA_ADDITIONAL_ROOT_DIRS: \$ETTERNA_ADDITIONAL_ROOT_DIRS"
+    echo "HOME: \$HOME"
+    echo "PWD: \$(pwd)"
+    echo "ETTERNA_ADDITIONAL_ROOT_DIRS: \$ETTERNA_ADDITIONAL_ROOT_DIRS"
 
-      exec $out/bin/etterna-unwrapped "\$@"
+    exec $out/bin/etterna-unwrapped "\$@"
     EOF
 
     chmod +x $out/bin/etterna
