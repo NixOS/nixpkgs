@@ -20,72 +20,77 @@
 , enableCrashpad ? false
 , python2
 }:
-let
-  version = "8deab331e6c0e9b34eeeda363863193b26c221a4";
 
-  artifacts =
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "etterna-artifacts";
-      inherit version;
-
-      src = fetchFromGitHub {
-        owner = "etternagame";
-        repo = "etterna";
-        rev = finalAttrs.version;
-        hash = "sha256-LdJDTO8c7kS8G52b0MRO4oFhZZlcsexwJl1deVz9vf0=";
-      };
-
-      nativeBuildInputs = [
-        alsa-lib
-        clang
-        cmake
-        curl
-        libGLU
-        libjack2
-        libogg
-        mesa
-        openssl
-        xorg.libX11
-        xorg.libXext
-        xorg.libXrandr
-      ]
-      # crashpad relies on python2 and depot_tools
-      ++ lib.optionals enableCrashpad [ python2 ];
-
-      cmakeFlags = lib.optionals (!enableCrashpad) [ "-D WITH_CRASHPAD=OFF" ];
-    });
-
-  wrapper = writeShellScript "etterna-wrapper" ''
-    #!/usr/bin/env sh
-
-    export ETTERNA_ROOT_DIR="$HOME/.local/share/etterna"
-    export ETTERNA_ADDITIONAL_ROOT_DIRS="${artifacts}/Etterna"
-
-    exec ${artifacts}/Etterna/Etterna "$@"
-  '';
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etterna";
-  inherit version;
+  version = "8deab331e6c0e9b34eeeda363863193b26c221a4";
 
-  dontUnpack = true;
+  src = fetchFromGitHub {
+    owner = "etternagame";
+    repo = "etterna";
+    rev = finalAttrs.version;
+    hash = "sha256-LdJDTO8c7kS8G52b0MRO4oFhZZlcsexwJl1deVz9vf0=";
+  };
+
+  nativeBuildInputs = [
+    alsa-lib
+    clang
+    cmake
+    curl
+    libGLU
+    libjack2
+    libogg
+    mesa
+    openssl
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrandr
+  ]
+  # crashpad relies on python2 and depot_tools
+  ++ lib.optionals enableCrashpad [ python2 ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share}
+    mkdir -p $out/{bin,share/etterna}
 
-    # link artifacts
-    ln -s ${artifacts}/Etterna $out/share/etterna
-    ln -s ${wrapper} $out/bin/etterna
+    # copy select necessary game files into virtual fs
+    for dir in \
+      Announcers Assets BGAnimations \
+      BackgroundEffects BackgroundTransitions \
+      Data GameTools NoteSkins Scripts \
+      Songs Themes
+    do
+      cp -r "/build/source/$dir" "$out/share/etterna/$dir"
+    done
+
+    # copy binary
+    cp /build/source/Etterna $out/bin/etterna-unwrapped
+
+    # wacky insertion of wrapper directly into phase, so that $out is set
+    cat > $out/bin/etterna << EOF
+      #!${stdenv.shell}
+
+      export ETTERNA_ROOT_DIR="\$HOME/.local/share/etterna"
+      export ETTERNA_ADDITIONAL_ROOT_DIRS="$out/share/etterna"
+
+      echo "HOME: \$HOME"
+      echo "PWD: \$(pwd)"
+      echo "ETTERNA_ADDITIONAL_ROOT_DIRS: \$ETTERNA_ADDITIONAL_ROOT_DIRS"
+
+      exec $out/bin/etterna-unwrapped "\$@"
+    EOF
+
+    chmod +x $out/bin/etterna
 
     runHook postInstall
   '';
+
+  cmakeFlags = lib.optionals (!enableCrashpad) [ "-D WITH_CRASHPAD=OFF" ];
 
   meta = with lib; {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mib ];
     mainProgram = "etterna";
   };
-
 })
