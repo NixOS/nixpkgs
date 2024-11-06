@@ -1770,8 +1770,6 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
-  heh = callPackage ../applications/editors/heh { };
-
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
   hexo-cli = callPackage ../development/tools/hexo-cli { };
