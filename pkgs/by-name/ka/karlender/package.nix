@@ -82,7 +82,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "karlender";
     homepage = "https://gitlab.com/floers/karlender";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      bot-wxt1221
+    ];
     platforms = lib.platforms.linux;
   };
 }
