@@ -960,6 +960,7 @@ in {
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
+  swapspace = handleTestOn ["aarch64-linux" "x86_64-linux"] ./swapspace.nix {};
   sway = handleTest ./sway.nix {};
   swayfx = handleTest ./swayfx.nix {};
   switchTest = handleTest ./switch-test.nix { ng = false; };
