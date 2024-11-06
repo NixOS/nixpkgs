@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Create file hierarchies from media tags";
     homepage = "https://www.emacswiki.org/emacs/Bongo";
-    platforms = lib.ruby.meta.platforms;
+    platforms = ruby.meta.platforms;
     maintainers = with lib.maintainers; [
       livnev
       dbrock
