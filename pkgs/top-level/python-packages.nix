@@ -4663,6 +4663,8 @@ self: super: with self; {
 
   flax = callPackage ../development/python-modules/flax { };
 
+  flaxlib = callPackage ../development/python-modules/flaxlib { };
+
   fleep = callPackage ../development/python-modules/fleep { };
 
   flet = callPackage ../development/python-modules/flet { };
@@ -15469,8 +15471,6 @@ self: super: with self; {
   tdir = callPackage ../development/python-modules/tdir { };
 
   teamcity-messages = callPackage ../development/python-modules/teamcity-messages { };
-
-  telegram = callPackage ../development/python-modules/telegram { };
 
   telegraph = callPackage ../development/python-modules/telegraph { };
 
