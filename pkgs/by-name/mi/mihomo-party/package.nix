@@ -15,7 +15,7 @@
   libGL,
 }:
 let
-  version = "1.5.5";
+  version = "1.5.6";
   src =
     let
       inherit (stdenv.hostPlatform) system;
@@ -25,8 +25,8 @@ let
         aarch64-linux = "arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-elCqfmg7xmj5tSygZOVUiEyh6xSzaaf74Lu9fpRB3ok=";
-        aarch64-linux = "sha256-p30i5tlm1ZLQE/9ie5vSQ8jAD0wP7L7YRiTwJbowGcA=";
+        x86_64-linux = "sha256-4ipAV9kqK/qYAydXMugDI4RbGe/a5Om+hKz/KwPXXSc=";
+        aarch64-linux = "sha256-Fc5fd8fv9qpuCeFny9jL5h4nnHg5Vi50YAqNlmymEIg=";
       };
     in
     fetchurl {
@@ -86,11 +86,10 @@ stdenv.mkDerivation {
     description = "Another Mihomo GUI";
     homepage = "https://github.com/mihomo-party-org/mihomo-party";
     mainProgram = "mihomo-party";
-    platforms = lib.platforms.darwin ++ [
+    platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ aucub ];
