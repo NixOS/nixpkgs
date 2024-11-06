@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.2.2";
+  version = "2.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = "trueseeing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5IHJXlpHZJFKj7rdmRsWA5FXZFJf3usGsLgXx1cYEmU=";
+    hash = "sha256-2KELqHa6lw9wdJBaC90vTZSjD7tfkr3K6yDNhqBQrR0=";
   };
 
   build-system = with python3.pkgs; [
@@ -24,12 +24,13 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     aiohttp
     asn1crypto
-    attrs
     importlib-metadata
     jinja2
     lief
     lxml
     progressbar2
+    prompt-toolkit
+    pyaxmlparser
     pypubsub
     pyyaml
     termcolor
