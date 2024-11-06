@@ -555,8 +555,7 @@ in {
           name = "pdo_dblib";
           internalDeps = [ php.extensions.pdo ];
           configureFlags = [ "--with-pdo-dblib=${freetds}" ];
-          # Doesn't seem to work on darwin.
-          meta.broken = (!stdenv.hostPlatform.isDarwin);
+          meta.broken = stdenv.hostPlatform.isDarwin;
           doCheck = false;
         }
         {

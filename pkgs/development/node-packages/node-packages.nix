@@ -38322,15 +38322,6 @@ let
         sha512 = "KCfK3Vi2F+PH1klYauoQzg81GQ8/GGjQRKYY6tRnpQUPKTs/1gBZSRWtTEd7jGdSn1LZL7gpAmJT+BcS55k2XQ==";
       };
     };
-    "npm-packlist-2.2.2" = {
-      name = "npm-packlist";
-      packageName = "npm-packlist";
-      version = "2.2.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/npm-packlist/-/npm-packlist-2.2.2.tgz";
-        sha512 = "Jt01acDvJRhJGthnUJVF/w6gumWOZxO7IkpY/lsX9//zqQgnF7OJaxgQXcerd4uQOLu7W5bkb4mChL9mdfm+Zg==";
-      };
-    };
     "npm-packlist-8.0.2" = {
       name = "npm-packlist";
       packageName = "npm-packlist";
@@ -84786,67 +84777,6 @@ in
     meta = {
       description = "nginx-language-server extension for coc.nvim";
       homepage = "https://github.com/yaegassy/coc-nginx#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  yalc = nodeEnv.buildNodePackage {
-    name = "yalc";
-    packageName = "yalc";
-    version = "1.0.0-pre.53";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/yalc/-/yalc-1.0.0-pre.53.tgz";
-      sha512 = "tpNqBCpTXplnduzw5XC+FF8zNJ9L/UXmvQyyQj7NKrDNavbJtHvzmZplL5ES/RCnjX7JR7W9wz5GVDXVP3dHUQ==";
-    };
-    dependencies = [
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."chalk-4.1.2"
-      sources."cliui-7.0.4"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."concat-map-0.0.1"
-      sources."detect-indent-6.1.0"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.2.0"
-      sources."fs-extra-8.1.0"
-      sources."fs.realpath-1.0.0"
-      sources."get-caller-file-2.0.5"
-      sources."glob-7.2.3"
-      sources."graceful-fs-4.2.11"
-      sources."has-flag-4.0.0"
-      sources."ignore-5.3.2"
-      sources."ignore-walk-3.0.4"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."ini-2.0.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."jsonfile-4.0.0"
-      sources."minimatch-3.1.2"
-      sources."npm-bundled-1.1.2"
-      sources."npm-normalize-package-bin-1.0.1"
-      sources."npm-packlist-2.2.2"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."require-directory-2.1.1"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."supports-color-7.2.0"
-      sources."universalify-0.1.2"
-      sources."wrap-ansi-7.0.0"
-      sources."wrappy-1.0.2"
-      sources."y18n-5.0.8"
-      sources."yargs-16.2.0"
-      sources."yargs-parser-20.2.9"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Work with npm/yarn packages locally like a boss.";
-      homepage = "https://github.com/whitecolor/yalc";
       license = "MIT";
     };
     production = true;

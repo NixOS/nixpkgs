@@ -6644,6 +6644,14 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  erooke = {
+    email = "ethan@roo.ke";
+    name = "Ethan Rooke";
+    keys = [ { fingerprint = "B66B EB9F 6111 E44B 7588  8240 B287 4A77 049A 5923"; } ];
+    github = "erooke";
+    githubId = 46689793;
+    matrix = "@ethan:roo.ke";
+  };
   erosennin = {
     email = "ag@sologoc.com";
     github = "erosennin";
@@ -11278,6 +11286,13 @@
     name = "Keenan Weaver";
     github = "keenanweaver";
     githubId = 37268985;
+  };
+  keksgesicht = {
+    name = "Jan Braun";
+    email = "git@keksgesicht.de";
+    github = "Keksgesicht";
+    githubId = 32649612;
+    keys = [ { fingerprint = "65DF D21C 22A9 E4CD FD1A  0804 C3D7 16E7 29B3 C86A"; } ];
   };
   keldu = {
     email = "mail@keldu.de";
@@ -23119,6 +23134,12 @@
     github = "Vskilet";
     githubId = 7677567;
     name = "Victor SENE";
+  };
+  vtimofeenko = {
+    email = "nixpkgs.maintain@vtimofeenko.com";
+    github = "VTimofeenko";
+    githubId = 9886026;
+    name = "Vladimir Timofeenko";
   };
   vtuan10 = {
     email = "mail@tuan-vo.de";

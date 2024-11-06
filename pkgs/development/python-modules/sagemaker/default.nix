@@ -53,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "attrs"
     "boto3"
     "cloudpickle"
     "importlib-metadata"
