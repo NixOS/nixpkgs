@@ -67,10 +67,21 @@ import ./make-test-python.nix ({ pkgs, ...} :
         # Wait for the enter password screen to appear.
         machine.wait_for_text("/home/alice/foo.kdbx")
 
-        # Click on "Browse" button to select keyfile
+        # Click on "I have key file" button to open keyfile dialog
         machine.send_key("tab")
+        machine.send_key("tab")
+        machine.send_key("tab")
+        machine.send_key("ret")
+
+        # Select keyfile
+        machine.wait_for_text("Select key file")
         machine.send_chars("/home/alice/foo.keyfile")
         machine.send_key("ret")
+
+        # Open database
+        machine.wait_for_text("foo.kdbx \\[Locked] - KeePassXC")
+        machine.send_key("ret")
+
         # Database is unlocked (doesn't have "[Locked]" in the title anymore)
         machine.wait_for_text("foo.kdbx - KeePassXC")
   '';
