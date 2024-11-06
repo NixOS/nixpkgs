@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HDF4_BUILD_WITH_INSTALL_NAME" false)
       (lib.cmakeBool "HDF4_ENABLE_JPEG_LIB_SUPPORT" true)
       (lib.cmakeBool "HDF4_ENABLE_Z_LIB_SUPPORT" true)
-      (lib.cmakeBool "HDF4_ENABLE_NETCD" netcdfSupport)
+      (lib.cmakeBool "HDF4_ENABLE_NETCDF" netcdfSupport)
       (lib.cmakeBool "HDF4_BUILD_FORTRAN" fortranSupport)
       (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
       (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
