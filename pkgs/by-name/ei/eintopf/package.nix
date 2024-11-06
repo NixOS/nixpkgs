@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, callPackage
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  callPackage,
+  nixosTests,
 }:
 
 let
@@ -44,12 +45,11 @@ buildGoModule rec {
     inherit (nixosTests) eintopf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A calendar for Stuttgart, showing events, groups and places";
     homepage = "https://codeberg.org/Klasse-Methode/eintopf";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.unix;
   };
 }
-
