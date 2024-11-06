@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchFromGitLab,
   python3,
   cmake,
@@ -12,6 +13,26 @@
   ensureNewerSourcesForZipFilesHook,
 }:
 
+let
+  python =
+    let
+      packageOverrides = self: super: {
+        pyparsing = super.pyparsing.overridePythonAttrs (old: rec {
+          version = "3.1.2";
+          src = fetchFromGitHub {
+            owner = "pyparsing";
+            repo = "pyparsing";
+            rev = "refs/tags/${version}";
+            hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
+          };
+        });
+      };
+    in
+    python3.override {
+      inherit packageOverrides;
+      self = python;
+    };
+in
 stdenv.mkDerivation rec {
   pname = "quickder";
   version = "1.7.1";
@@ -33,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arpa2cm
     arpa2common
-    (python3.withPackages (
+    (python.withPackages (
       ps: with ps; [
         asn1ate
         colored
