@@ -14,9 +14,9 @@ stdenv.mkDerivation rec
     sha256 = "sha256-S2uvzDCrTxAmvUMJr5PChcYTqhIHvRZbOfQLtUvzypI=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ boost cmake ];
 
-  buildInputs = [ boost tbb jemalloc c-blosc zlib ];
+  buildInputs = [ tbb jemalloc c-blosc zlib ];
 
   cmakeFlags = [ "-DOPENVDB_CORE_STATIC=OFF" "-DOPENVDB_BUILD_NANOVDB=ON"];
 
