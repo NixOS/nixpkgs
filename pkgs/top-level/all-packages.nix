@@ -20344,6 +20344,7 @@ with pkgs;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+  libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
   libbassmix = (callPackage ../development/libraries/audio/libbass { }).bassmix;
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
