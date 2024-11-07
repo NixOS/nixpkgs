@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mhe";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-R/bUItF2BaKTFdMNBHFJKq0jSX6z49e8CGXENUn07SU=";
+    hash = "sha256-B/G46/9Xf1LRu02p0X4/UeW1RYotSXKXRO9VZDPhkNU=";
   };
 
   propagatedBuildInputs = [
