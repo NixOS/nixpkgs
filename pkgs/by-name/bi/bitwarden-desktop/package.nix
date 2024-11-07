@@ -127,7 +127,7 @@ in buildNpmPackage rec {
   postBuild = ''
     pushd apps/desktop
 
-    # desktop_native/index.js loads a file of that name regarldess of the libc being used
+    # desktop_native/index.js loads a file of that name regardless of the libc being used
     mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-${bitwardenDesktopNativeArch}-musl.node
 
     npm exec electron-builder -- \
@@ -148,17 +148,14 @@ in buildNpmPackage rec {
     "--skip=password::password::tests::test"
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    pushd ${cargoRoot}
+    cargoCheckType=release
+    HOME=$(mktemp -d)
+  '';
 
-    (
-      cd ${cargoRoot}
-      HOME=$(mktemp -d)
-      cargoCheckType=release
-      cargoCheckHook
-    )
-
-    runHook postCheck
+  postCheck = ''
+    popd
   '';
 
   installPhase = ''

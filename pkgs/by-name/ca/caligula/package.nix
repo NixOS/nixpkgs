@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ma7JVbWSiKfkCXCDwA8DFm2+KPrWR+8nSdgGSqehNg8=";
 
   env = {
-     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+     LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
    };
 
 

@@ -45,7 +45,7 @@ let
       ];
 
       buildInputs = [
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
         xorg.libX11 # libX11.so.6
         xorg.libXext # libXext.so.6
         alsa-lib # libasound.so.2

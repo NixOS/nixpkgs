@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     krb5
     libtasn1
     lttng-ust_2_12
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

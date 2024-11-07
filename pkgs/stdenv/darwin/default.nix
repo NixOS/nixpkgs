@@ -129,7 +129,7 @@ let
 
                 rsrc="$out/resource-root"
                 mkdir "$rsrc"
-                ln -s "$(clangResourceRootIncludePath "${clang-unwrapped.lib}")" "$rsrc"
+                ln -s "$(clangResourceRootIncludePath "${lib.getLib clang-unwrapped}")" "$rsrc"
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
@@ -349,9 +349,11 @@ let
     inherit (prevStage.darwin)
       Csu
       adv_cmds
+      copyfile
       libiconv
       libresolv
       libsbuf
+      libutil
       system_cmds
       ;
   };
@@ -1063,7 +1065,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                       extraBuildCommands = ''
                         rsrc="$out/resource-root"
                         mkdir "$rsrc"
-                        ln -s "${cc.lib}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
+                        ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
                         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
                         ln -s "${prevStage.llvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
                         ln -s "${prevStage.llvmPackages.compiler-rt.out}/share" "$rsrc/share"
@@ -1238,7 +1240,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ++ (with prevStage.llvmPackages; [
             bintools-unwrapped
             clang-unwrapped
-            clang-unwrapped.lib
+            (lib.getLib clang-unwrapped)
             compiler-rt
             compiler-rt.dev
             libcxx
@@ -1273,7 +1275,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 patch
                 ;
 
-              "apple-sdk_${sdkMajorVersion}" = self.apple-sdk;
+              # TODO: Simplify when dropping support for macOS < 11.
+              "apple-sdk_${builtins.replaceStrings [ "." ] [ "_" ] sdkMajorVersion}" = self.apple-sdk;
 
               darwin = super.darwin.overrideScope (
                 _: _:

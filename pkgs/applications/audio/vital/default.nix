@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     libGL
     xorg.libSM
     xorg.libICE
