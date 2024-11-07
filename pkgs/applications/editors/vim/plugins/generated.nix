@@ -11146,6 +11146,18 @@ final: prev:
     meta.homepage = "https://github.com/camspiers/snap/";
   };
 
+  snacks-nvim = buildVimPlugin {
+    pname = "snacks.nvim";
+    version = "2024-11-07";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "snacks.nvim";
+      rev = "334895c5bb2ed04f65800abaeb91ccb0487b0f1f";
+      sha256 = "uKAdjRLUtKi6FlE0IHGlnW0Bv2hQhoTRiarvwyU0YaE=";
+    };
+    meta.homepage = "https://github.com/folke/snacks.nvim/";
+  };
+
   snippets-nvim = buildVimPlugin {
     pname = "snippets.nvim";
     version = "2020-09-09";
