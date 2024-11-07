@@ -4,8 +4,7 @@
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
   # darwin support
-, libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, AVFoundation, Carbon, Cocoa, CoreAudio, CoreBluetooth
-, CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
+, darwinMinVersionHook, apple-sdk, apple-sdk_10_14, apple-sdk_14, xcbuild
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
@@ -38,6 +37,13 @@ let
     if isLinux
     then "linux-generic-g++"
     else throw "Please add a qtPlatformCross entry for ${plat.config}";
+
+  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 14.x.
+  # Note that Qt propagates the 10.14 SDK instead of the 10.13 SDK to make sure that applications linked to Qt
+  # support automatic dark mode on x86_64-darwin (see: https://developer.apple.com/documentation/appkit/nsappearancecustomization/choosing_a_specific_appearance_for_your_macos_app).
+  propagatedAppleSDK = if lib.versionOlder (lib.getVersion apple-sdk) "10.14" then apple-sdk_10_14 else apple-sdk;
+  propagatedMinVersionHook = darwinMinVersionHook "10.13";
+  buildAppleSDK = apple-sdk_14;
 in
 
 stdenv.mkDerivation (finalAttrs: ({
@@ -56,10 +62,8 @@ stdenv.mkDerivation (finalAttrs: ({
     pcre2
   ] ++ (
     if stdenv.hostPlatform.isDarwin then [
-      # TODO: move to buildInputs, this should not be propagated.
-      AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
-      CoreLocation CoreServices DiskArbitration Foundation OpenGL
-      libobjc libiconv MetalKit IOKit
+      propagatedAppleSDK
+      propagatedMinVersionHook
     ] else [
       dbus glib udev
 
@@ -80,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: ({
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
+    ++ lib.optional stdenv.isDarwin buildAppleSDK
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysqlSupport) libmysqlclient
@@ -141,15 +146,13 @@ stdenv.mkDerivation (finalAttrs: ({
     patchShebangs ./bin
   '' + (
     if stdenv.hostPlatform.isDarwin then ''
-        sed -i \
-            -e 's|/usr/bin/xcode-select|xcode-select|' \
-            -e 's|/usr/bin/xcrun|xcrun|' \
-            -e 's|/usr/bin/xcodebuild|xcodebuild|' \
-            -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
-            ./configure
-            substituteInPlace ./mkspecs/common/mac.conf \
-                --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
-                --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
+      substituteInPlace configure \
+        --replace-fail '/usr/bin/xcode-select' '${lib.getBin xcbuild}/bin/xcode-select' \
+        --replace-fail '/usr/bin/xcrun' '${lib.getBin xcbuild}/bin/xcrun' \
+        --replace-fail '/System/Library/Frameworks/Cocoa.framework' "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
+      substituteInPlace ./mkspecs/common/mac.conf \
+        --replace-fail "/System/Library/Frameworks/OpenGL.framework/" "$SDKROOT/System/Library/Frameworks/OpenGL.framework/" \
+        --replace-fail "/System/Library/Frameworks/AGL.framework/" "$SDKROOT/System/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \

@@ -8,6 +8,7 @@
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  fetchpatch2,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -35,7 +36,6 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [ "acme" ];
-
 
   build-system = [ setuptools ];
 

@@ -49,6 +49,8 @@ python.pkgs.buildPythonApplication rec {
     "qrcode"
     # https://github.com/WeblateOrg/weblate/commit/1cf2a423b20fcd2dde18a43277311334e38208e7
     "rapidfuzz"
+    # https://github.com/WeblateOrg/weblate/commit/3e34566fd7c151e1983586586bd7651cefe79585
+    "redis"
   ];
 
   patches = [

@@ -1,14 +1,14 @@
 diff --git a/XOptions/xoptions.cpp b/XOptions/xoptions.cpp
-index ca5723e..30574a5 100755
+index 8c887c3..36cdbc3 100755
 --- a/XOptions/xoptions.cpp
 +++ b/XOptions/xoptions.cpp
-@@ -1531,14 +1531,7 @@ bool XOptions::checkNative(const QString &sIniFileName)
+@@ -1754,14 +1754,7 @@ bool XOptions::checkNative(const QString &sIniFileName)
  #if defined(Q_OS_MAC)
      bResult = true;
  #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 -    QString sApplicationDirPath = qApp->applicationDirPath();
 -
--    if ((sApplicationDirPath == "/bin") || (sApplicationDirPath == "/usr/bin") || (sApplicationDirPath == "/usr/local/bin") ||
+-    if ((sApplicationDirPath == "/bin") || (sApplicationDirPath == "/usr/bin") || (sApplicationDirPath == "/usr/local/bin") || (sApplicationDirPath == "/app/bin") ||
 -        (sApplicationDirPath.contains("/usr/local/bin$")) || isAppImage()) {
 -        bResult = true;
 -    } else {
@@ -18,7 +18,7 @@ index ca5723e..30574a5 100755
  #elif defined(Q_OS_WIN)
      QString sApplicationDirPath = qApp->applicationDirPath();
  
-@@ -1565,22 +1558,7 @@ QString XOptions::getApplicationDataPath()
+@@ -1788,22 +1781,7 @@ QString XOptions::getApplicationDataPath()
  #ifdef Q_OS_MAC
      sResult = sApplicationDirPath + "/../Resources";
  #elif defined(Q_OS_LINUX)

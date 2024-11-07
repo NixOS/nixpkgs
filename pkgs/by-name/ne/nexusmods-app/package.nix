@@ -24,14 +24,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-0uZdN24TvK4QoBEC0BSAYNALQv9swYZ8SgVJ03m2dzQ=";
+    hash = "sha256-6oygXJEiTqb0xe7mKRUsZgghfTqrllCRXJy6IDeqJQI=";
   };
 
   enableParallelBuilding = false;
@@ -103,7 +103,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.2/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.3/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"

@@ -2,9 +2,9 @@
 , lib
 , fetchzip
 
-  # Only used for Linux's x86/x86_64
+  # Only useful on Linux x86/x86_64, and brings in non‐free Open Watcom
 , uasm
-, useUasm ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86)
+, useUasm ? false
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CXX=${stdenv.cc.targetPrefix}c++"
     ]
     ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
+    ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
     # We need at minimum 10.13 here because of utimensat, however since
     # we need a bump anyway, let's set the same minimum version as the one in
     # aarch64-darwin so we don't need additional changes for it

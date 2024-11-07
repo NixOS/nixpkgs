@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
+, apple-sdk ? null
 , netbsd ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -106,7 +107,8 @@ let
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config
+    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -405,6 +407,9 @@ stdenvNoCC.mkDerivation {
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

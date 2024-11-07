@@ -73,7 +73,6 @@ let
   };
 
   allBeamDeps = import ./rebar-deps.nix {
-    # TODO(@chuangzhu) add updateScript
     inherit fetchHex fetchgit fetchFromGitHub;
     builder = lib.makeOverridable beamPackages.buildRebar3;
 
@@ -115,7 +114,7 @@ let
         buildInputs = [ sqlite ];
         buildPlugins = [ beamPackages.pc ];
       };
-      p1_mysql = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      p1_mysql = prev.p1_mysql.override { buildPlugins = [ beamPackages.pc ]; };
       epam = prev.epam.override {
         buildInputs = [ pam ];
         buildPlugins = [ beamPackages.pc ];
@@ -142,7 +141,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs:{
   pname = "ejabberd";
-  version = "24.07";
+  version = "24.10";
 
   nativeBuildInputs = [
     makeWrapper
@@ -171,7 +170,7 @@ stdenv.mkDerivation (finalAttrs:{
     owner = "processone";
     repo = "ejabberd";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-4wEQBumWrHqN2uNrDxAJhgv2ok7pgQlAEPpL96ZOsTQ=";
+    hash = "sha256-WQCFwhyaTVAX1bQURJkiCupgr3zc5yKrhQBiGyYsWZk=";
   };
 
   passthru.tests = {
@@ -210,6 +209,8 @@ stdenv.mkDerivation (finalAttrs:{
       lib.makeBinPath [ imagemagick ]
     }"''}
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source XMPP application server written in Erlang";

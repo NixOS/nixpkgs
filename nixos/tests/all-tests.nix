@@ -129,7 +129,6 @@ in {
   apfs = runTest ./apfs.nix;
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
-  apply = pkgs.callPackage ../modules/system/activation/apply/checks.nix { };
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
   aria2 = handleTest ./aria2.nix {};
@@ -704,17 +703,7 @@ in {
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
   nixos-rebuild-specialisations = runTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix;
-  nixos-rebuild-specialisations-legacy = runTestOn ["x86_64-linux"] {
-    name = mkForce "nixos-rebuild-specialisations-legacy";
-    imports = [ ./nixos-rebuild-specialisations.nix ];
-    extraBaseModules = { system.apply.enable = false; };
-  };
   nixos-rebuild-target-host = runTest ./nixos-rebuild-target-host.nix;
-  nixos-rebuild-target-host-legacy = runTest {
-    name = mkForce "nixos-rebuild-target-host-legacy";
-    imports = [ ./nixos-rebuild-target-host.nix ];
-    extraBaseModules = { system.apply.enable = false; };
-  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
@@ -881,7 +870,7 @@ in {
   realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
-  redmine = handleTest ./redmine.nix {};
+  redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
   renovate = handleTest ./renovate.nix {};
   replace-dependencies = handleTest ./replace-dependencies {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
@@ -971,6 +960,7 @@ in {
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
+  swapspace = handleTestOn ["aarch64-linux" "x86_64-linux"] ./swapspace.nix {};
   sway = handleTest ./sway.nix {};
   swayfx = handleTest ./swayfx.nix {};
   switchTest = handleTest ./switch-test.nix { ng = false; };
@@ -1059,6 +1049,7 @@ in {
   tika = runTest ./tika.nix;
   timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTestOn ["aarch64-linux" "x86_64-linux"] ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinyproxy = handleTest ./tinyproxy.nix {};
@@ -1111,7 +1102,6 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish74 = handleTest ./varnish.nix { package = pkgs.varnish74; };
   varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};

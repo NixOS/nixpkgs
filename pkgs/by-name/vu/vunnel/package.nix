@@ -20,7 +20,9 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "defusedxml"
     "ijson"
+    "importlib-metadata"
     "sqlalchemy"
+    "websockets"
     "xsdata"
   ];
 

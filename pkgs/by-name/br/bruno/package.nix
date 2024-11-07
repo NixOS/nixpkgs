@@ -14,17 +14,10 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  overrideSDK,
-  darwin,
+  apple-sdk_11,
 }:
 
-let
-  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bruno";
   version = "1.34.0";
 
@@ -59,7 +52,8 @@ buildNpmPackage' rec {
       pango
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreText
+      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+      apple-sdk_11
     ];
 
   desktopItems = [

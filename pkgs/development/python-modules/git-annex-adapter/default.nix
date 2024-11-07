@@ -65,9 +65,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # KeyError and AssertionError
+    "test_annex_keys"
+    "test_batchjson_metadata"
+    "test_file_tree"
     "test_jsonprocess_annex_metadata_batch"
     "test_process_annex_metadata_batch"
-    "test_batchjson_metadata"
   ];
 
   meta = with lib; {

@@ -7,7 +7,6 @@
 , ninja
 , libmpdclient
 , yaml-cpp
-, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +23,13 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
   nativeBuildInputs = [ cmake pkg-config meson ninja ];
-  buildInputs = [ libmpdclient yaml-cpp ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
+  buildInputs = [ libmpdclient yaml-cpp ];
 
   mesonFlags = [ "-Dunsupported_use_system_yamlcpp=true" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework CoreFoundation";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/joshkunz/ashuffle";

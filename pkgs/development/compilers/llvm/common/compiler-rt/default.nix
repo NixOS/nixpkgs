@@ -7,10 +7,11 @@
 , src ? null
 , monorepoSrc ? null
 , runCommand
+, apple-sdk
+, apple-sdk_10_13
 , cmake
 , ninja
 , python3
-, xcbuild
 , libllvm
 , libcxx
 , linuxHeaders
@@ -46,6 +47,14 @@ let
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
+  # Sanitizers require 10.13 or newer. Instead of disabling them for most x86_64-darwin users,
+  # build them with a newer SDK and the default (10.12) deployment target.
+  apple-sdk' =
+    if lib.versionOlder (lib.getVersion apple-sdk) "10.13" then
+      apple-sdk_10_13.override { enableBootstrap = true; }
+    else
+      apple-sdk.override { enableBootstrap = true; };
+
   src' = if monorepoSrc != null then
     runCommand "${baseName}-src-${version}" {} (''
       mkdir -p "$out"
@@ -69,22 +78,29 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python3 libllvm.dev ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
+    ++ [ python3 libllvm.dev ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
+    # Adding the bootstrap SDK to `buildInputs` on static builds  propagates it, breaking `xcrun`.
+    # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-  ] ++ lib.optionals (!haveLibc) [
-    # The compiler got stricter about this, and there is a usellvm patch below
-    # which patches out the assert include causing an implicit definition of
-    # assert. It would be nicer to understand why compiler-rt thinks it should
-    # be able to #include <assert.h> in the first place; perhaps it's in the
-    # wrong, or perhaps there is a way to provide an assert.h.
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE = toString ([
+      "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+    ] ++ lib.optionals (!haveLibc) [
+      # The compiler got stricter about this, and there is a usellvm patch below
+      # which patches out the assert include causing an implicit definition of
+      # assert. It would be nicer to understand why compiler-rt thinks it should
+      # be able to #include <assert.h> in the first place; perhaps it's in the
+      # wrong, or perhaps there is a way to provide an assert.h.
+      "-Wno-error=implicit-function-declaration"
+    ]);
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
+    NIX_CFLAGS_LINK = "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  };
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
@@ -127,33 +143,30 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) (lib.optionals (lib.versionAtLeast release_version "16") [
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
+  ] ++ lib.optionals (!haveLibcxx) [
+    # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
+    # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
+    # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
+    "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
+    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
+    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
-  ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-DSANITIZER_MIN_OSX_VERSION=10.10"
-  ] ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ]) ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
   ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build.
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
       --replace "<stdlib.h>" "<stddef.h>"

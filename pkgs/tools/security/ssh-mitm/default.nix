@@ -12,19 +12,11 @@ let
     self = py;
     packageOverrides = self: super: {
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
-        version = "3.3.1";
+        version = "3.4.1";
         src = oldAttrs.src.override {
           inherit version;
-          hash = "sha256-ajd3qWGshtvvN1xfW41QAUoaltD9fwVKQ7yIATSw/3c=";
+          hash = "sha256-ixUwKHCvf2ZS8uA4l1wdKXPwYEbLXX1lNVZos+y+zgw=";
         };
-        patches = [
-          (fetchpatch {
-            name = "Use-pytest-s-setup_method-in-pytest-8-the-nose-method-setup-is-deprecated.patch";
-            url = "https://github.com/paramiko/paramiko/pull/2349.diff";
-            hash = "sha256-4CTIZ9BmzRdh+HOwxSzfM9wkUGJOnndctK5swqqsIvU=";
-          })
-
-        ];
         dependencies = oldAttrs.dependencies ++ [ python3.pkgs.icecream ];
       });
     };
@@ -35,14 +27,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "ssh-mitm";
-  version = "4.1.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uf1B7oEZyNWj4TjrLvEfFdxsvsGeMLXFsSdxGLUV4ZU=";
+    hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
   };
 
   build-system = [
@@ -50,7 +42,8 @@ buildPythonApplication rec {
     hatch-requirements-txt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    appimage
     argcomplete
     colored
     packaging

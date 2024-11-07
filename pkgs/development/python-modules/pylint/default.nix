@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.2.5";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pylint-dev";
     repo = "pylint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b3KkSgTmN6ojMJaVQGwvHIa41M2eZS9prxcL5peX/xU=";
+    hash = "sha256-cnMYHHtIRxIySfZV0jTn+OFji+72cOReyNNDiJ9pbAg=";
   };
 
   build-system = [ setuptools ];

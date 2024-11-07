@@ -19,6 +19,7 @@
   arrow-cpp,
   Cocoa,
   coc-clangd,
+  coc-css,
   coc-diagnostic,
   coc-pyright,
   code-minimap,
@@ -133,6 +134,9 @@
   # must be lua51Packages
   luajitPackages,
   aider-chat,
+  # typst-preview dependencies
+  tinymist,
+  websocat,
 }:
 self: super:
 let
@@ -162,14 +166,66 @@ in
     nvimRequireCheck = "autosave";
   };
 
-  avante-nvim = (callPackage ./avante-nvim { }).overrideAttrs {
-    dependencies = with self; [
-      dressing-nvim
-      nui-nvim
-      nvim-treesitter
-      plenary-nvim
-    ];
-  };
+  avante-nvim = super.avante-nvim.overrideAttrs (
+    oldAttrs:
+    let
+      avante-nvim-lib = rustPlatform.buildRustPackage {
+        pname = "avante-nvim-lib";
+        inherit (oldAttrs) version src;
+
+        cargoHash = "sha256-X8JqUoPjm9emJjmwCh7+0bfdtPXLwOg6IRfQHaYlH90=";
+
+        nativeBuildInputs = [
+          pkg-config
+        ];
+
+        buildInputs = [
+          openssl
+        ];
+
+        buildFeatures = [ "luajit" ];
+
+        checkFlags = [
+          # Disabled because they access the network.
+          "--skip=test_hf"
+          "--skip=test_public_url"
+          "--skip=test_roundtrip"
+        ];
+      };
+    in
+    {
+      dependencies = with self; [
+        dressing-nvim
+        nui-nvim
+        nvim-treesitter
+        plenary-nvim
+      ];
+
+      postInstall =
+        let
+          ext = stdenv.hostPlatform.extensions.sharedLibrary;
+        in
+        ''
+          mkdir -p $out/build
+          ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
+          ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
+          ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
+        '';
+
+      doInstallCheck = true;
+      nvimRequireCheck = "avante";
+
+      meta = {
+        description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
+        homepage = "https://github.com/yetone/avante.nvim";
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
+          ttrei
+          aarnphm
+        ];
+      };
+    }
+  );
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
     dependencies = with self; [
@@ -451,6 +507,11 @@ in
   coc-clangd = buildVimPlugin {
     inherit (coc-clangd) pname version meta;
     src = "${coc-clangd}/lib/node_modules/coc-clangd";
+  };
+
+  coc-css = buildVimPlugin {
+    inherit (coc-css) pname version meta;
+    src = "${coc-css}/lib/node_modules/coc-css";
   };
 
   coc-diagnostic = buildVimPlugin {
@@ -1665,6 +1726,10 @@ in
     }
   );
 
+  nvim-scissors = super.nvim-scissors.overrideAttrs {
+    nvimRequireCheck = "scissors";
+  };
+
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/tealmaker/init.lua \
@@ -2719,12 +2784,21 @@ in
         --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
+
+  typst-preview-nvim = super.typst-preview-nvim.overrideAttrs {
+    postPatch = ''
+      substituteInPlace lua/typst-preview/config.lua \
+       --replace-fail "['tinymist'] = nil," "tinymist = '${lib.getExe tinymist}'," \
+       --replace-fail "['websocat'] = nil," "websocat = '${lib.getExe websocat}',"
+    '';
+
+    nvimRequireCheck = "typst-preview";
+  };
 }
 // (
   let
     nodePackageNames = [
       "coc-cmake"
-      "coc-css"
       "coc-docker"
       "coc-emmet"
       "coc-eslint"

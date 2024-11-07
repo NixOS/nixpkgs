@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-gyYlg6NSnwLDUBqouKx3K0y8A9yTTpi6tuSINibig6U=";
   };
 
+  separateDebugInfo = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 

@@ -94,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
     in
     ''
+      unset DEVELOPER_DIR # Use the system Xcode not the nixpkgs SDK.
+
       CC=/usr/bin/clang
 
       DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer

@@ -1,23 +1,23 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
-, buildGoModule
+, buildGo122Module
 , buildNpmPackage
 , makeWrapper
 , exiftool
 , ffmpeg
 , testers
 , photofield
+, nix-update-script
 }:
 
 let
-  version = "0.13.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6pJvOn3sN6zfjt2dVZ/xH6pSXM0WgbG7au9tSVUGYys=";
+    hash = "sha256-GYU0BR5X3s3SGmZEFMyK7m+zUa2i2E9krAbtk8dwPdg=";
   };
 
   webui = buildNpmPackage {
@@ -26,7 +26,7 @@ let
 
     sourceRoot = "${src.name}/ui";
 
-    npmDepsHash = "sha256-trKcNuhRdiabFKMafOLtPg8x1bQHLOif6Hm4k5bTAYc=";
+    npmDepsHash = "sha256-ULl4wHEo/PP0Y0O5po7eRDd+T/UjkZhQGIj262WFtFU=";
 
     installPhase = ''
       mkdir -p $out/share
@@ -35,20 +35,11 @@ let
   };
 in
 
-buildGoModule {
+buildGo122Module {
   pname = "photofield";
   inherit version src;
 
-  patches = [
-    # Needed for Go 1.22 build support
-    (fetchpatch {
-      name = "upgrade-pyroscope-go.patch";
-      url = "https://github.com/SmilyOrg/photofield/commit/681dcd48ab4113b0e99fe1a0d3638f0dfe985c05.patch";
-      hash = "sha256-JGb5KAI/SmR1kiiaPoSsAF7G4YWDFXj0K3Gjw0zA3Ro=";
-    })
-  ];
-
-  vendorHash = "sha256-BnImE4wK2MDO21N5tT9Q9w+NkDpdBCEqUwzuH/xb6fg=";
+  vendorHash = "sha256-eN9syG9/QUA8yut3LaeIb+xlaNUvRAFspyqcCHv6oSA=";
 
   preBuild = ''
     cp -r ${webui}/share/photofield-ui ui/dist
@@ -72,9 +63,12 @@ buildGoModule {
       --prefix PATH : "${lib.makeBinPath [exiftool ffmpeg]}"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = photofield;
-    command = "photofield -version";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = photofield;
+      command = "photofield -version";
+    };
   };
 
   meta = with lib; {

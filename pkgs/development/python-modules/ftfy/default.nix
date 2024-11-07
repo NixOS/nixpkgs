@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   wcwidth,
@@ -17,17 +17,19 @@
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.2.3";
+  version = "6.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ebUFmI8p1XelipBpr+dVU6AqRuQt5gkcBmDNxngSutw=";
+  src = fetchFromGitHub {
+    owner = "rspeer";
+    repo = "python-ftfy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ wcwidth ];
 
@@ -42,12 +44,8 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTestPaths = [
-    # Calls poetry and fails to match output exactly
-    "tests/test_cli.py"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";

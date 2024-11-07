@@ -38,7 +38,7 @@ cargoCheckHook() {
     concatTo flagsArray cargoTestFlags checkFlags checkFlagsArray
 
     echoCmd 'cargoCheckHook flags' "${flagsArray[@]}"
-    cargo test "${flagsArray[@]}"
+    @setEnv@ cargo test "${flagsArray[@]}"
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd

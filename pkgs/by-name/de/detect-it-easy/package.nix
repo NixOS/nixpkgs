@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "detect-it-easy";
-  version = "3.09";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "horsicq";
     repo = "DIE-engine";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-A9YZBlGf3j+uSefPiDhrS1Qtu6vaLm4Yodt7BioGD2Q=";
+    hash = "sha256-yHgxYig5myY2nExweUk2muKbJTKN3SiwOLgQcMIY/BQ=";
   };
 
   patches = [ ./0001-remove-hard-coded-paths-in-xoptions.patch ];
@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # clean up wrongly created dirs in `install.sh` and broken .desktop file
   postInstall = ''
-    rm -r $out/lib/{bin,share}
     grep -v "Version=#VERSION#" $src/LINUX/die.desktop > $out/share/applications/die.desktop
   '';
 
@@ -61,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Program for determining types of files for Windows, Linux and MacOS.";
     mainProgram = "die";
     homepage = "https://github.com/horsicq/Detect-It-Easy";
+    changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";
     maintainers = with lib.maintainers; [ ivyfanchiang ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mit;

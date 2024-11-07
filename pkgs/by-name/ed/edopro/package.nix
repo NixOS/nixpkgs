@@ -15,6 +15,7 @@
   # Use fmt 10+ after release 40.1.4+
   fmt_9,
   freetype,
+  irrlicht,
   libevent,
   libgit2,
   libGL,
@@ -25,7 +26,6 @@
   libX11,
   libxkbcommon,
   libXxf86vm,
-  lua5_3,
   mono,
   nlohmann_json,
   openal,
@@ -49,6 +49,11 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "${stdenv.hostPlatform.system} is an unsupported arch label for edopro");
+
+  maintainers = with lib.maintainers; [
+    OPNA2608
+    redhawk
+  ];
 
   deps = import ./deps.nix;
 in
@@ -78,9 +83,7 @@ let
     ];
 
     enableParallelBuilding = true;
-    buildFlags = [
-      "NDEBUG=1"
-    ];
+    buildFlags = [ "NDEBUG=1" ];
     makeFlags = [
       "-C"
       "source/Irrlicht"
@@ -89,57 +92,18 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/{bin,include}
-      cp lib/Linux/libIrrlicht.a $out/bin
-      cp -r include/* $out/include
+      install -Dm644 -t $out/lib lib/Linux/libIrrlicht.a
+      cp -r include $out/include
 
       runHook postInstall
     '';
-  };
 
-  ocgcore = stdenv.mkDerivation {
-    pname = "ygopro-core";
-    version = deps.ocgcore-version;
-
-    src = fetchFromGitHub {
-      owner = "edo9300";
-      repo = "ygopro-core";
-      rev = deps.ocgcore-rev;
-      hash = deps.ocgcore-hash;
-      fetchSubmodules = true;
+    meta = {
+      inherit (irrlicht.meta) description platforms;
+      homepage = "https://github.com/edo9300/irrlicht1-8-4";
+      license = lib.licenses.agpl3Plus;
+      inherit maintainers;
     };
-
-    patches = [
-      ./ocgcore-lua-symbols.patch
-    ];
-
-    nativeBuildInputs = [ premake5 ];
-
-    buildInputs = [ lua5_3 ];
-
-    preBuild = ''
-      premake5 gmake2 \
-        --lua-path="${lua5_3}"
-    '';
-
-    enableParallelBuilding = true;
-    buildFlags = [
-      "verbose=true"
-      "config=release"
-      "ocgcoreshared"
-    ];
-    makeFlags = [
-      "-C"
-      "build"
-    ];
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm644 -t $out/lib bin/release/libocgcore${stdenv.hostPlatform.extensions.sharedLibrary}
-
-      runHook postInstall
-    '';
   };
 
   edopro = stdenv.mkDerivation {
@@ -151,7 +115,6 @@ let
       repo = "edopro";
       rev = deps.edopro-rev;
       hash = deps.edopro-hash;
-      fetchSubmodules = true;
     };
 
     nativeBuildInputs = [
@@ -171,9 +134,7 @@ let
       libjpeg
       libpng
       libvorbis
-      lua5_3
       nlohmann_json
-      ocgcore
       openal
       SDL2
       sqlite
@@ -183,6 +144,8 @@ let
     postPatch = ''
       substituteInPlace premake5.lua \
         --replace-fail 'flags "LinkTimeOptimization"' 'removeflags "LinkTimeOptimization"'
+
+      touch ocgcore/premake5.lua
     '';
 
     preBuild = ''
@@ -191,7 +154,7 @@ let
         --covers=\"${covers_url}\" \
         --fields=\"${fields_url}\" \
         --pics=\"${pics_url}\" \
-        --prebuilt-core="${lib.getLib ocgcore}/lib" \
+        --no-core \
         --sound=sfml
     '';
 
@@ -205,7 +168,7 @@ let
     buildFlags = [
       "verbose=true"
       "config=release_${archLabel}"
-      "ygopro"
+      "ygoprodll"
     ];
     makeFlags = [
       "-C"
@@ -216,8 +179,8 @@ let
       runHook preInstall
 
       mkdir -p $out/bin
-      cp bin/${archLabel}/release/ygopro $out/bin
-      wrapProgram $out/bin/ygopro \
+      cp bin/${archLabel}/release/ygoprodll $out/bin
+      wrapProgram $out/bin/ygoprodll \
         --prefix PATH : ${lib.makeBinPath [ mono ]} \
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
@@ -233,12 +196,30 @@ let
 
       runHook postInstall
     '';
+
+    meta = {
+      description = "Bleeding-edge automatic duel simulator, a fork of the YGOPro client";
+      homepage = "https://projectignis.github.io";
+      changelog = "https://github.com/edo9300/edopro/releases";
+      license = lib.licenses.agpl3Plus;
+      mainProgram = "ygoprodll";
+      # This is likely a very easy app to port if you're interested.
+      # We just have no way to test on other platforms.
+      platforms = [
+        "x86_64-linux"
+        # Currently offline mode does not work, the problem is that the core is updated whenever it is needed.
+        # So in our method we would have to update the client if it's statically linked as well.
+        # It is possible but we have decided against it for now.  In theory if we added more logic to the update script it could work.
+        "aarch64-linux"
+      ];
+      inherit maintainers;
+    };
   };
 
   edopro-script =
     let
       assetsToCopy = lib.concatStringsSep "," [
-        # Needed if we download files from ProjectIgnis' website or any https only website.
+        # Needed if we download files from ProjectIgnis' website or any https-only website.
         "cacert.pem"
         "config"
         "deck"
@@ -267,17 +248,18 @@ let
           rm $EDOPRO_DIR/config/io.github.edo9300.EDOPro.desktop.in
       fi
 
-      exec ${edopro}/bin/ygopro -C $EDOPRO_DIR $@
+      exec ${lib.getExe edopro} -C $EDOPRO_DIR $@
     '';
 
   edopro-desktop = runCommandLocal "io.github.edo9300.EDOPro.desktop" { } ''
-    cp ${assets}/config/io.github.edo9300.EDOPro.desktop.in desktop-template
+    mkdir -p $out/share/applications
 
-    sed '/Path=/d' -i desktop-template
-    sed 's/Exec=.*/Exec=EDOPro/' -i desktop-template
-    sed 's/Icon=.*/Icon=EDOPro/' -i desktop-template
-
-    install -D desktop-template $out/share/applications/io.github.edo9300.EDOPro.desktop
+    sed ${assets}/config/io.github.edo9300.EDOPro.desktop.in \
+      -e '/Path=/d' \
+      -e 's/Exec=.*/Exec=edopro/' \
+      -e 's/Icon=.*/Icon=edopro/' \
+      -e 's/StartupWMClass=.*/StartupWMClass=edopro/' \
+      >$out/share/applications/io.github.edo9300.EDOPro.desktop
   '';
 in
 symlinkJoin {
@@ -289,30 +271,28 @@ symlinkJoin {
   ];
 
   postBuild = ''
-    mkdir -p $out/share/icons/hicolor/256x256/apps/
-    ${imagemagick}/bin/magick \
-        ${assets}/textures/AppIcon.png \
-        -resize 256x256 \
-        $out/share/icons/hicolor/256x256/apps/EDOPro.png
+    for size in 16 32 48 64 128 256 512 1024; do
+      res="$size"x"$size"
+      mkdir -p $out/share/icons/hicolor/"$res"/apps/
+      ${imagemagick}/bin/magick \
+          ${assets}/textures/AppIcon.png \
+          -resize "$res" \
+          $out/share/icons/hicolor/"$res"/apps/edopro.png
+    done
   '';
 
   passthru.updateScript = ./update.py;
 
   meta = {
-    description = "Bleeding-edge automatic duel simulator, a fork of the YGOPro client";
-    homepage = "https://projectignis.github.io";
-    changelog = "https://github.com/edo9300/edopro/releases";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [
-      OPNA2608
-      redhawk
-    ];
+    inherit (edopro.meta)
+      description
+      homepage
+      changelog
+      license
+      platforms
+      maintainers
+      ;
+    # To differenciate it from the original YGOPro
     mainProgram = "edopro";
-    # This is likely a very easy app to port if you're interested.
-    # We just have no way to test on other platforms.
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
   };
 }

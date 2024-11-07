@@ -6,7 +6,6 @@ setupMpiCheck() {
   # Find out which MPI implementation we are using
   # and set safe defaults that are guaranteed to run
   # on any build machine
-
   mpiType="NONE"
 
   # OpenMPI signature
@@ -41,6 +40,10 @@ setupMpiCheck() {
       export OMPI_MCA_rmaps_base_oversubscribe=1
       export PRTE_MCA_rmaps_default_mapping_policy=node:oversubscribe
 
+      # Make sure we do not need openssh in the checkPhase
+      export OMPI_MCA_plm_ssh_agent=false
+      export PRRTE_MCA_plm_ssh_agent=false
+
       # Disable CPU pinning
       export OMPI_MCA_hwloc_base_binding_policy=none
       export PRTE_MCA_hwloc_default_binding_policy=none
@@ -59,6 +62,8 @@ setupMpiCheck() {
     MPICH)
       # Fix to make mpich run in a sandbox
       export HYDRA_IFACE=lo
+      # Disable sysfs cpu topology directory discovery.
+      export HWLOC_XMLFILE="@topology@"
       ;;
     MVAPICH)
       # Disable CPU pinning

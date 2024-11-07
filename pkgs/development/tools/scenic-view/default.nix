@@ -2,7 +2,7 @@
 let
   jdk = openjdk.override (lib.optionalAttrs stdenv.hostPlatform.isLinux {
     enableJavaFX = true;
-    openjfx = openjfx.override { withWebKit = true; };
+    openjfx_jdk = openjfx.override { withWebKit = true; };
   });
 
   pname = "scenic-view";

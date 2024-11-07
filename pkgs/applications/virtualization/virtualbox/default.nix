@@ -233,11 +233,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
     # we don't take any chances and only apply it if people actually want to use KVM support.
-    ++ optional enableKvm (fetchpatch {
-      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
-      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${finalAttrs.virtualboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
-      hash = finalAttrs.kvmPatchHash;
-    })
+    ++ optional enableKvm (
+      let
+        patchVboxVersion =
+          # There is no updated patch for 7.0.22 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
+      in
+      fetchpatch {
+        name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
+        url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${patchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
+        hash = finalAttrs.kvmPatchHash;
+      }
+    )
     ++ [
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851

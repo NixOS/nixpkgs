@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # ld64 on darwin doesn't support nested archives and as the nested lib
+  # (libbase64.a) is not required to build so leave it out
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace share/Makefile.am \
+      --replace-fail libpicture_a_LIBADD '#libpicture_a_LIBADD'
+  '';
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libogg libvorbis libao curl speex flac ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];

@@ -382,7 +382,25 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
       llvmPackages = pkgs.llvmPackages_15;
     };
-    ghc98 = compiler.ghc982;
+    ghc983 = callPackage ../development/compilers/ghc/9.8.3.nix {
+      bootPkgs =
+        # For GHC 9.6 no armv7l bindists are available.
+        if stdenv.buildPlatform.isAarch32 then
+          bb.packages.ghc963
+        else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          bb.packages.ghc963
+        else
+          bb.packages.ghc963Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 11 && < 16
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+      llvmPackages = pkgs.llvmPackages_15;
+    };
+    ghc98 = compiler.ghc982; # HLS doesn't work yet with 9.8.3
     ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
       bootPkgs =
         # For GHC 9.6 no armv7l bindists are available.
@@ -424,8 +442,8 @@ in {
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       # 2023-01-15: Support range >= 11 && < 16
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-      llvmPackages = pkgs.llvmPackages_15;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
+      llvmPackages = pkgs.llvmPackages_18;
     };
 
     ghcjs = compiler.ghcjs810;
@@ -571,7 +589,12 @@ in {
       ghc = bh.compiler.ghc982;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
     };
-    ghc98 = packages.ghc982;
+    ghc983 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc983;
+      ghc = bh.compiler.ghc983;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
+    };
+    ghc98 = packages.ghc982; # HLS doesn't work yet with 9.8.3
     ghc9101 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc9101;
       ghc = bh.compiler.ghc9101;

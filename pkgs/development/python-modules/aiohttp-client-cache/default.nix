@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.11.1";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-MuY60hAkD4Ik8+Encv5TrBAs8kx88Y3bhqy7n9+eS28=";
+    hash = "sha256-5g/oFhNrWx1m87trJyq4HZeFTqHk2bVwhaNgQmln0mU=";
   };
 
   build-system = [ poetry-core ];

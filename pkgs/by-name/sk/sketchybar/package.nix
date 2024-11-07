@@ -1,26 +1,14 @@
 {
   lib,
-  overrideSDK,
   stdenv,
-  darwin,
   fetchFromGitHub,
-  testers,
   nix-update-script,
+  apple-sdk_15,
+  versionCheckHook,
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    AppKit
-    Carbon
-    CoreAudio
-    CoreWLAN
-    CoreVideo
-    DisplayServices
-    IOKit
-    MediaRemote
-    SkyLight
-    ;
 
   target =
     {
@@ -28,10 +16,8 @@ let
       "x86_64-darwin" = "x86";
     }
     .${system} or (throw "Unsupported system: ${system}");
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
   version = "2.21.0";
 
@@ -43,15 +29,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    AppKit
-    Carbon
-    CoreAudio
-    CoreWLAN
-    CoreVideo
-    DisplayServices
-    IOKit
-    MediaRemote
-    SkyLight
+    apple-sdk_15
   ];
 
   makeFlags = [ target ];
@@ -65,14 +43,11 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "sketchybar-v${finalAttrs.version}";
-    };
+  passthru.updateScript = nix-update-script { };
 
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Highly customizable macOS status bar replacement";

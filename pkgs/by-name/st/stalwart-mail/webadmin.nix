@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  trunk-ng,
+  trunk,
   tailwindcss,
   fetchNpmDeps,
   nix-update-script,
@@ -44,15 +44,20 @@ rustPlatform.buildRustPackage rec {
     nodejs
     npmHooks.npmConfigHook
     tailwindcss
-    trunk-ng
-    wasm-bindgen-cli
+    trunk
+    # needs to match with wasm-bindgen version in upstreams Cargo.lock
+    (wasm-bindgen-cli.override {
+      version = "0.2.93";
+      hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
+      cargoHash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
+    })
     zip
   ];
 
   NODE_PATH = "$npmDeps";
 
   buildPhase = ''
-    trunk-ng build --offline --verbose --release
+    trunk build --offline --frozen --release
   '';
 
   installPhase = ''

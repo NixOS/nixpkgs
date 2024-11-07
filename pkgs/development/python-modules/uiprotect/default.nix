@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.3.1";
+  version = "6.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-42rxRD3mXgMLz3mADF0ksDLpw2di5MyVL7+6iW41nI8=";
+    hash = "sha256-+BHxcwQhx4lOqS0ATk1PjLbyTu7xQakM3HMrydXeGUc=";
   };
 
   build-system = [ poetry-core ];

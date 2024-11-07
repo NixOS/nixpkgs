@@ -113,6 +113,13 @@ let
         ];
       });
 
+      inline-snapshot = super.inline-snapshot.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # fixture does not expect pydantic<2
+          "test_pydantic_repr"
+        ];
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -239,6 +246,16 @@ let
         };
       });
 
+      # newer versions require pydantic>=2
+      python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
+        version = "0.72.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oKI7zXfoUVmJXLQvyoDEmoCL4AwaYgaFcLKNlFFrC9o=";
+        };
+      });
+
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -316,10 +333,6 @@ let
         disabledTests = [
           "test_sign_failures"
         ];
-      };
-
-      versioningit = super.versioningit.overridePythonAttrs {
-        doCheck = false;
       };
 
       # Pinned due to API changes ~1.0

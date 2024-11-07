@@ -230,6 +230,7 @@ mapAliases ({
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gbulb = throw "gbulb has been removed as it is unmaintained and no longer compatible with PyGObject 3.50."; # added 2024-10-14
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
@@ -486,6 +487,7 @@ mapAliases ({
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
   pygeoip = throw "pygeoip has been removed, since it wash archived in April 2018"; # added 2024-07-27
   pygeos = throw "pygeos has been removed, since it was merged with shapely 2.0"; # added 2024-05-26
+  pyreqwest-impersonate = throw "pyreqwest has been renamed to primp"; # added 2024-10-22
   pyRFC3339 = pyrfc3339; # added 2024-01-07
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
@@ -571,6 +573,7 @@ mapAliases ({
   recursivePthLoader = recursive-pth-loader; # added 2024-01-07
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   repeated_test = repeated-test; # added 2022-11-15
+  repocheck = throw "repocheck has been promoted to a top-level attribute name: `pkgs.repocheck`"; # Added 2024-11-03
   reportengine = throw "reportengine has been removed, since it is unmaintained and broken"; # added 2024-08-21
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
@@ -638,6 +641,7 @@ mapAliases ({
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   synologydsm-api = py-synologydsm-api; # added 2024-07-29
   sysv_ipc = sysv-ipc; # added 2024-01-07
+  telegram = throw "telegram has been removed since it is abandoned"; # added 2024-11-06
   tempita = throw "tempita has been removed because it is unmaintained and the upstream repository is gone"; # added 2024-07-29
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
@@ -658,6 +662,7 @@ mapAliases ({
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
+  transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
@@ -698,6 +703,7 @@ mapAliases ({
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
   xapp = python-xapp; # added 2024-07-19
+  xarray-datatree = throw "Datatree has been merged upstream into pydata/xarray, and released as of xarray version 2024.10.0."; # added 2024-11-02
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27
