@@ -24,7 +24,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "teamspeak-client";
+  pname = "teamspeak3";
 
   version = "3.6.2";
 
