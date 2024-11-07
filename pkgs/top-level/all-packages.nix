@@ -2241,8 +2241,6 @@ with pkgs;
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
-  git-nomad = callPackage ../applications/version-management/git-nomad { };
-
   git-octopus = callPackage ../applications/version-management/git-octopus { };
 
   git-open = callPackage ../applications/version-management/git-open { };
