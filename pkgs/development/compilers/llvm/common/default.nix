@@ -355,7 +355,7 @@ let
       mkExtraBuildCommands0 = cc: ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
-        ln -s "${cc.lib}/lib/clang/${clangVersion}/include" "$rsrc"
+        ln -s "${lib.getLib cc}/lib/clang/${clangVersion}/include" "$rsrc"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       '';
       mkExtraBuildCommandsBasicRt =
@@ -649,7 +649,7 @@ let
                 { substituteAll, libclang }:
                 (substituteAll {
                   src = metadata.getVersionFile "lldb/resource-dir.patch";
-                  clangLibDir = "${libclang.lib}/lib";
+                  clangLibDir = "${lib.getLib libclang}/lib";
                 }).overrideAttrs
                   (_: _: { name = "resource-dir.patch"; })
               ) { };

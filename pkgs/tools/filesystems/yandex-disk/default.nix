@@ -3,13 +3,13 @@
 let
   p = if stdenv.hostPlatform.is64bit then {
       arch = "x86_64";
-      gcclib = "${stdenv.cc.cc.lib}/lib64";
+      gcclib = "${lib.getLib stdenv.cc.cc}/lib64";
       sha256 = "sha256-HH/pLZmDr6m/B3e6MHafDGnNWR83oR2y1ijVMR/LOF0=";
       webarchive = "20220519080155";
     }
     else {
       arch = "i386";
-      gcclib = "${stdenv.cc.cc.lib}/lib";
+      gcclib = "${lib.getLib stdenv.cc.cc}/lib";
       sha256 = "sha256-28dmdnJf+qh9r3F0quwlYXB/UqcOzcHzuzFq8vt2bf0=";
       webarchive = "20220519080430";
     };

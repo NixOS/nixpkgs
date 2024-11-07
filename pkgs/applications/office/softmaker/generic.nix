@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     libXmu
     libXrandr
     libXrender
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   dontBuild = true;

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/opt/StarUML/staruml" "$out/bin/staruml"
 
     mkdir -p $out/lib
-    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
     ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf \

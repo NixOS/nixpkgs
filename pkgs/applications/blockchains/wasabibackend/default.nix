@@ -25,7 +25,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
 
-  buildInputs = [stdenv.cc.cc.lib zlib];
+  buildInputs = [(lib.getLib stdenv.cc.cc) zlib];
 
   runtimeDeps = [openssl zlib];
 

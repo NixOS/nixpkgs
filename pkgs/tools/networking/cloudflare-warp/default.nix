@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libpcap
     openssl
     nss
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   desktopItems = [

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
 
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
 
   unpackPhase = ''

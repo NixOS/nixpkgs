@@ -31,7 +31,7 @@ let
     runtimeLibs = [
       udev
       alsa-lib
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libxkbcommon
       libxcb
       libX11
