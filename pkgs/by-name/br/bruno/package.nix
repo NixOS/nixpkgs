@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nix-update-script,
+  gitUpdater,
   electron,
   writeShellScriptBin,
   makeWrapper,
@@ -164,7 +164,7 @@ buildNpmPackage' rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Open-source IDE For exploring and testing APIs";
