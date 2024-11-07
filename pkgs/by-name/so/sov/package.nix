@@ -63,5 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sov";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
+    # sys/timerfd.h header inexistent
+    broken = stdenv.isDarwin;
   };
 })
