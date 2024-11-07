@@ -76,7 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAll {
       src = ./007-darwin-bsd-ps-abspath.diff;
       ps = lib.getExe ps;
-    });
+    })
+  ++ [
+    # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
+    # Needed to corretly link curl in pkgsStatic.
+    ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
+  ];
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   separateDebugInfo = true;
