@@ -54,14 +54,19 @@ stdenv.mkDerivation rec {
       qtsvg
     ]);
 
-  # This just runs the installer script. If it gets stuck at something like
+  # This runs the installer script. If it gets stuck, run it with -x.
+  # If it then gets stuck at something like:
+  #
   # ++ exec
   # + PAGER_PATH=
-  # it's looking for a dependency and didn't find it. Check the script and make sure the dep is in nativeBuildInputs.
+  #
+  # it's looking for a dependency and didn't find it. Check the script and make
+  # sure the dep is in nativeBuildInputs.
   unpackPhase = ''
     runHook preUnpack
 
-    echo -e '\ny' | PAGER=cat sh -xe $src
+    # Run the installer script non-interactively
+    echo -e '\ny' | PAGER=cat sh -e $src
 
     mv TeamSpeak3-Client-linux_${arch}/* .
 
