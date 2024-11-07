@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     gtk2-x11
     libXt
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ] ++ lib.optionals withGTK3 [
     gtk3
   ];

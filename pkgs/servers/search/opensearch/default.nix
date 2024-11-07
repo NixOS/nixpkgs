@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/opensearch \
       --prefix PATH : "${lib.makeBinPath [ gnugrep coreutils ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/plugins/opensearch-knn/lib/" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/plugins/opensearch-knn/lib/" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"

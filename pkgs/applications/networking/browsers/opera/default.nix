@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     pango
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     qt6.qtbase
   ];
 

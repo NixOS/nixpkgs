@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     # ifcopenshell needs stdc++
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     boost179
     cgal
     eigen

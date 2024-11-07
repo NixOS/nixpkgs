@@ -107,7 +107,7 @@ let
     dontConfigure = true;
 
     libPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
+      stdenv.cc.cc
       curlWithGnuTls
       udev
       libX11

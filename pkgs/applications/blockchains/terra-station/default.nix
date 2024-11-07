@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # patch pre-built node modules
     asar e $out/share/${pname}/resources/app.asar asar-unpacked
     find asar-unpacked -name '*.node' -exec patchelf \
-      --add-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      --add-rpath "${lib.makeLibraryPath [ stdenv.cc.cc ]}" \
       {} \;
     asar p asar-unpacked $out/share/${pname}/resources/app.asar
 

@@ -48,7 +48,7 @@ linux = stdenv.mkDerivation (finalAttrs:  {
   buildInputs = [
     curl
     fontconfig
-    stdenv.cc.cc.lib # libstdc++.so libgcc_s.so
+    (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
     zlib
   ];
 

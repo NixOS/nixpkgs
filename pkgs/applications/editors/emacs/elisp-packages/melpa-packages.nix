@@ -153,8 +153,8 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${pkgs.llvmPackages.libclang.lib}/include";
-          LDFLAGS = "-L${pkgs.llvmPackages.libclang.lib}/lib";
+          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
         });
 
         # part of a larger package

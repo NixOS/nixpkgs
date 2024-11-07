@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     pam
   ];
 

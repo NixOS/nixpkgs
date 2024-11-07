@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libX11
     libXext
     alsa-lib
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''

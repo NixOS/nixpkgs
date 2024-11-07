@@ -15,7 +15,7 @@
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
+   (lib.getLib targetPackages.stdenv.cc.cc)
   ]
 , writeScript
 }:

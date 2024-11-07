@@ -1072,7 +1072,7 @@ let
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-        buildInputs = [ stdenv.cc.cc.lib ];
+        buildInputs = [ (lib.getLib stdenv.cc.cc) ];
         meta = {
           description = "Open-source autopilot for software development - bring the power of ChatGPT to your IDE";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
@@ -1349,7 +1349,7 @@ let
 
         buildInputs = [
           zlib
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
         ];
 
         postInstall = ''
@@ -3245,7 +3245,7 @@ let
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
         buildInputs = [
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           zlib
         ];
         meta = {
