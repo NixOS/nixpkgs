@@ -63,7 +63,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    sha256 = "b3d0b264c5e38e789faaf3417003397f3240014c59c7f417f9ca3bd39c5ffb66";
+    sha256 = "sha256-b3d0b264c5e38e789faaf3417003397f3240014c59c7f417f9ca3bd39c5ffb66";
   };
 
   patches = [
