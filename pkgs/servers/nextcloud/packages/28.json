@@ -250,9 +250,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-pOnL5uz8FcuHUFn7otp9NQinOqm+oCmXRHx4TM2NukI=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.12/spreed-v18.0.12.tar.gz",
-    "version": "18.0.12",
+    "hash": "sha256-8Y6bBj9IiGkLbxyNUhVRpBuDqDU1ZCAbXxk9/Oi3yGM=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.13/spreed-v18.0.13.tar.gz",
+    "version": "18.0.13",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -310,9 +310,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-8e4xQjOWSVAps6dg4jvN3MGVSOhaOgjPHPpTOgXKFJY=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v6.0.1/user_oidc-v6.0.1.tar.gz",
-    "version": "6.0.1",
+    "hash": "sha256-hdFEruRfEFL5PQykOpHHb19NOKh+p5hGOMo0tPVg0eE=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v6.1.2/user_oidc-v6.1.2.tar.gz",
+    "version": "6.1.2",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
