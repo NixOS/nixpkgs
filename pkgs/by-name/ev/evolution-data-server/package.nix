@@ -179,6 +179,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    platforms = platforms.linux; # requires libuuid
   };
 }
