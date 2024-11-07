@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchzip,
-  makeWrapper,
   makeDesktopItem,
   glib,
   qt5,
@@ -12,20 +11,15 @@
   perl,
   libcxx,
   autoPatchelfHook,
+  copyDesktopItems,
 }:
 
 let
-
   arch = "amd64";
 
-  desktopItem = makeDesktopItem {
-    name = "teamspeak";
-    exec = "ts3client";
-    icon = "teamspeak";
-    comment = "The TeamSpeak voice communication tool";
-    desktopName = "TeamSpeak";
-    genericName = "TeamSpeak";
-    categories = [ "Network" ];
+  pluginsdk = fetchzip {
+    url = "https://files.teamspeak-services.com/releases/sdk/3.3.1/ts_sdk_3.3.1.zip";
+    hash = "sha256-wx4pBZHpFPoNvEe4xYE80KnXGVda9XcX35ho4R8QxrQ=";
   };
 in
 
@@ -39,17 +33,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-WfEQQ4lxoj+QSnAOfdCoEc+Z1Oa5dbo6pFli1DsAZCI=";
   };
 
-  # grab the plugin sdk for the desktop icon
-  pluginsdk = fetchzip {
-    url = "https://files.teamspeak-services.com/releases/sdk/3.3.1/ts_sdk_3.3.1.zip";
-    hash = "sha256-wx4pBZHpFPoNvEe4xYE80KnXGVda9XcX35ho4R8QxrQ=";
-  };
-
   nativeBuildInputs = [
-    makeWrapper
     perl # Installer script needs `shasum`
     qt5.wrapQtAppsHook
     autoPatchelfHook
+    copyDesktopItems
   ];
 
   buildInputs =
@@ -100,34 +88,38 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase =
-    ''
-      runHook preInstall
+  desktopItems = [
+    (makeDesktopItem {
+      name = "teamspeak";
+      exec = "ts3client";
+      icon = "teamspeak";
+      comment = "The TeamSpeak voice communication tool";
+      desktopName = "TeamSpeak";
+      genericName = "TeamSpeak";
+      categories = [ "Network" ];
+    })
+  ];
 
-      # Install files.
-      mkdir -p $out/lib/teamspeak
-      mv * $out/lib/teamspeak/
+  qtWrapperArgs = [
+    # wayland is currently broken, remove when TS3 fixes that
+    "--set QT_QPA_PLATFORM xcb"
+    "--set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb"
+  ];
 
-      # Make a desktop item
-      mkdir -p $out/share/applications/ $out/share/icons/hicolor/64x64/apps/
-      cp ${pluginsdk}/doc/_static/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
-      cp ${desktopItem}/share/applications/* $out/share/applications/
+  installPhase = ''
+    runHook preInstall
 
-      # Make a symlink to the binary from bin.
-      mkdir -p $out/bin/
-      ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
+    mkdir -p $out/lib/teamspeak
+    mv * $out/lib/teamspeak/
 
-      runHook postInstall
-    '';
+    # Grab the desktop icon from the plugin sdk
+    install ${pluginsdk}/doc/_static/logo.png -D $out/share/icons/hicolor/64x64/apps/teamspeak.png
 
-  preFixup =
-    ''
-      wrapProgram $out/bin/ts3client \
-    '' # wayland is currently broken, remove when TS3 fixes that
-    + ''
-      --set QT_QPA_PLATFORM xcb \
-      --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
-    '';
+    mkdir -p $out/bin/
+    ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "TeamSpeak voice communication tool";
