@@ -29,9 +29,9 @@ Any Qt package should include `wrapQtAppsHook` or `wrapQtAppsNoGuiHook` in `nati
 
 ::: {.note}
 
-`wrapQtAppsHook` propagates plugins and QML components from `qtwayland` to ensure the Wayland platform plugin is available, which is required for graphical applications to run under Wayland on non-Qt based desktops. On platforms that do not support `qtwayland` (e.g. Darwin), only plugins `qtbase` will be propagated.
+`wrapQtAppsHook` propagates plugins and QML components from `qtwayland` on platforms that support it, to allow applications to act as native Wayland clients. It should be used for all graphical applications.
 
-`wrapQtAppsNoGuiHook` does not propagate `qtwayland` reduce closure size for purely command-line applications.
+`wrapQtAppsNoGuiHook` does not propagate `qtwayland` to reduce closure size for purely command-line applications.
 
 :::
 
