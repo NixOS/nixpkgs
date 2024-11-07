@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
@@ -65,6 +66,20 @@ stdenv.mkDerivation rec {
     libwebp
     libseccomp
   ];
+
+  mesonBuildType = "release";
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
+
+  checkPhase = ''
+    runHook preCheck
+
+    cargoCheckHook
+    mesonCheckPhase
+
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
