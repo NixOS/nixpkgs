@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  protobuf,
+  protobuf4,
   dill,
   grpcio,
   pulumi,
@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     semver
-    protobuf
+    protobuf4
     dill
-    grpcio
+    (grpcio.override { protobuf = protobuf4; })
     pyyaml
     six
   ];
