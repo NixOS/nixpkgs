@@ -558,6 +558,8 @@ in {
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
+    yt6801 = callPackage ../os-specific/linux/yt6801 { };
+
     ithc = callPackage ../os-specific/linux/ithc { };
 
     ryzen-smu = callPackage ../os-specific/linux/ryzen-smu { };

@@ -1,4 +1,10 @@
-{ kernel, stdenv, lib, fetchzip, bc }:
+{
+  kernel,
+  stdenv,
+  lib,
+  fetchzip,
+  bc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yt6801";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oz6CeOUN6QWKXxe3WUZljhGDTFArsknjzBuQ4IchGeU=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}";
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
 
@@ -17,15 +26,17 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "modules" ];
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "KSRC_BASE=${KERNELDIR}"
-    "KSRC=${KERNELDIR}/build"
-    "KDST=kernel/drivers/net/ethernet/motorcomm"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      "KSRC_BASE=${KERNELDIR}"
+      "KSRC=${KERNELDIR}/build"
+      "KDST=kernel/drivers/net/ethernet/motorcomm"
+      "INSTALL_MOD_PATH=${placeholder "out"}"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm
@@ -37,8 +48,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Motorcomm yt6801 Network Interface Card driver";
     homepage = "https://www.motor-comm.com/product/ethernet-control-chip";
-    license = with licenses; [ gpl2Plus gpl2Only ];
+    license = with licenses; [
+      gpl2Plus
+      gpl2Only
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bartvdbraak ];
   };
 }
