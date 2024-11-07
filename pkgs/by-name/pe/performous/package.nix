@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   aubio,
   boost,
@@ -43,6 +44,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./performous-cmake.patch
     ./performous-fftw.patch
+    (fetchpatch {
+      name = "performous-ffmpeg.patch";
+      url = "https://github.com/performous/performous/commit/f26c27bf74b85fa3e3b150682ab9ecf9aecb3c50.patch";
+      excludes = [ ".github/workflows/macos.yml" ];
+      hash = "sha256-cQVelET/g2Kx2PlV3pspjEoNIwwn5Yz6enYl5vCMMKo=";
+    })
   ];
 
   postPatch = ''
