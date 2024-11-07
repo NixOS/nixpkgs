@@ -9,6 +9,7 @@
 , imagemagick
 , makeWrapper
 , installShellFiles
+, genericUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = [ ./update.sh finalAttrs.src.url ];
+  passthru.updateScript = genericUpdater {
+    rev-prefix = "v";
+    versionLister = ''
+     curl https://hg.globalcode.info/graphics/shader-shark/tags | grep 'class="list"' | sed 's;.*\/rev/\([^"]*\)[^$]*;\1;'
+    # ignore args'';
+  };
 
   meta = with lib; {
     mainProgram = "shader-shark";
