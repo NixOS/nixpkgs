@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-Zzk7cQs5zD+houNjK8s3tP9kZ2/eAUV/OE3/GrNAXk8=";
+    hash = "sha256-nLrwf/4vbASOAyOWlc4X9ZQKFq/Kdh83XadpRuquEA4=";
   };
 
-  cargoHash = "sha256-Ou+YKfEOmMTZVg9unqoOibMQYsdNAYTq4ZoOANLRk2Y=";
+  cargoHash = "sha256-MnxvuO1KG7X2plFkQ/DNBHnH2cPi1X3SVbvcN8N7ZXk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ minijackson doronbehar ];
+    maintainers = with lib.maintainers; [ minijackson doronbehar dvn0 ];
     mainProgram = "sq";
   };
 }
