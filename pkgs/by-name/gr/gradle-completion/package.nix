@@ -1,19 +1,24 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gradle-completion";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "gradle";
     repo = "gradle-completion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "15b0692i3h8h7b95465b2aw9qf5qjmjag5n62347l8yl7zbhv3l2";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   strictDeps = true;
 
@@ -22,20 +27,21 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    install -Dm0644 ./_gradle $out/share/zsh/site-functions/_gradle
-    install -Dm0644 ./gradle-completion.bash $out/share/bash-completion/completions/gradle
+    installShellCompletion --name gradle \
+      --bash gradle-completion.bash \
+      --zsh _gradle
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gradle tab completion for bash and zsh";
     homepage = "https://github.com/gradle/gradle-completion";
-    license = licenses.mit;
-    maintainers = [ ] ++ teams.java.members;
+    license = lib.licenses.mit;
+    maintainers = [ ] ++ lib.teams.java.members;
   };
-}
+})
