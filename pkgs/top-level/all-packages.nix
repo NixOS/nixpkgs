@@ -33247,6 +33247,8 @@ with pkgs;
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
+  xairedit = callPackage ../applications/audio/midas/xairedit.nix { };
+
   xannotate = callPackage ../tools/X11/xannotate { };
 
   xaos = libsForQt5.callPackage ../applications/graphics/xaos { };
