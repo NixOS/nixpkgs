@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Program for comparing multiple versions of an image or video";
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
+    changelog = "https://gitlab.gnome.org/YaLTeR/identity/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "identity";
