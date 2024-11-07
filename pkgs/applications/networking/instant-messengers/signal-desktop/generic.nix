@@ -156,6 +156,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libappindicator-gtk3
+    libpulseaudio
     libnotify
     libuuid
     mesa # for libgbm
