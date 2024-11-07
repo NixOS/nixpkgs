@@ -18,14 +18,14 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "commit";
   version = "4.2";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Commit";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-L8CI8SAGWhhJyTc8aMPV0s+UevEJGE7n1l7fFnTjdPw=";
     fetchSubmodules = true;
   };
@@ -46,10 +46,13 @@ stdenv.mkDerivation rec {
     patchShebangs {,.}*
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     appstream
     blueprint-compiler
     desktop-file-utils # for `desktop-file-validate` & `update-desktop-database`
+    gjs
     glib # for `glib-compile-schemas`
     gtk4 # for `gtk-update-icon-cache`
     meson
@@ -65,6 +68,8 @@ stdenv.mkDerivation rec {
     libspelling
   ];
 
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -77,4 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "re.sonny.Commit";
     platforms = lib.platforms.linux;
   };
-}
+})
