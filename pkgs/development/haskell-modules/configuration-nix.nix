@@ -185,6 +185,11 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.nvvm;
 
+  # Doesn't declare LLVM dependency, needs llvm-config
+  llvm-codegen = addBuildTools [
+    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
+  ] super.llvm-codegen;
+
   # hledger* overrides
   inherit (
     let
