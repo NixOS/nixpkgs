@@ -37,7 +37,7 @@
 
 let
   pname = "RStudio";
-  version = "2024.04.2+764";
+  version = "2024.09.1+394";
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
   RSTUDIO_VERSION_MINOR = lib.versions.minor version;
   RSTUDIO_VERSION_PATCH = lib.versions.patch version;
@@ -49,7 +49,7 @@ let
     owner = "rstudio";
     repo = "rstudio";
     rev = "v" + version;
-    hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
+    hash = "sha256-sHP9KKGlFJ4omgV29cf5rCdMs4SJxk9G186ZMSYBUPc=";
   };
 
   mathJaxSrc = fetchurl {
@@ -129,7 +129,7 @@ in
       ./r-location.patch
       ./clang-location.patch
       ./use-system-node.patch
-      ./fix-resources-path.patch
+    #  ./fix-resources-path.patch
       ./pandoc-nix-path.patch
       ./use-system-quarto.patch
       ./ignore-etc-os-release.patch
