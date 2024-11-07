@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsHostHost
+{ lib, stdenv
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage.override {
 
   nativeBuildInputs = [
     pkg-config cmake installShellFiles makeWrapper
-    (lib.getDev pkgsHostHost.curl)
     zlib
   ];
   buildInputs = [ file curl python3 openssl zlib ]
