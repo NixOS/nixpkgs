@@ -78,7 +78,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
