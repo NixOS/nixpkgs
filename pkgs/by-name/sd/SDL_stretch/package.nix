@@ -16,16 +16,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ SDL ];
 
+  configureFlags = [
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
+  ];
+
   buildInputs = [ SDL ];
 
   strictDeps = true;
 
   meta = {
-     homepage = "https://sdl-stretch.sourceforge.net/";
-     description = "Stretch Functions For SDL";
-     license = lib.licenses.lgpl2;
-     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
-     inherit (SDL.meta) platforms;
+    # sdlstretchcode.c:38:10: fatal error: 'malloc.h' file not found
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://sdl-stretch.sourceforge.net/";
+    description = "Stretch Functions For SDL";
+    license = lib.licenses.lgpl2;
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    inherit (SDL.meta) platforms;
   };
 })
