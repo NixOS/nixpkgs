@@ -48,13 +48,20 @@ edk2 = stdenv.mkDerivation rec {
     })
   ];
 
-  srcWithVendoring = fetchFromGitHub {
+  srcWithVendoring = (fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
     hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
-  };
+  }).overrideAttrs
+    (_: {
+      env = {
+        GIT_CONFIG_COUNT = 1;
+        GIT_CONFIG_KEY_0 = "url.https://github.com/tianocore/edk2-subhook.git.insteadOf";
+        GIT_CONFIG_VALUE_0 = "https://github.com/Zeex/subhook.git";
+      };
+    });
 
   # We don't want EDK2 to keep track of OpenSSL,
   # they're frankly bad at it.
