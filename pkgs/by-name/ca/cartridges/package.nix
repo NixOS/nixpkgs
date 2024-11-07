@@ -15,14 +15,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
-  version = "2.9.3";
+  version = "2.10.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "refs/tags/v${version}";
-    hash = "sha256-37i8p6KaS/G7ybw850XYaPiG83/Lffn/+21xVk5xva0=";
+    hash = "sha256-uwU0jW5+33hiqpuG83r0GVfANl6ltDLa3s4s0IJHRoQ=";
   };
 
   nativeBuildInputs = [
