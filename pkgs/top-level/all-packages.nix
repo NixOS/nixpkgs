@@ -1756,8 +1756,6 @@ with pkgs;
 
   grizzly = callPackage ../tools/misc/grizzly { };
 
-  guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
-
   fabs = callPackage ../tools/backup/fabs { };
 
   fm = callPackage ../applications/file-managers/fm { };
@@ -28741,8 +28739,6 @@ with pkgs;
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
-
-  karlender = callPackage ../applications/office/karlender { };
 
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
     inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
