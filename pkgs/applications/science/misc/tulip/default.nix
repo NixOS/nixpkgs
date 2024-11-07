@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl, libxml2, freetype, libGLU, libGL, glew
-, qtbase, wrapQtAppsHook, autoPatchelfHook, python3
-, cmake, libjpeg, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  freetype,
+  libGLU,
+  libGL,
+  glew,
+  qtbase,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  python3,
+  cmake,
+  libjpeg,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tulip";
@@ -11,12 +25,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-7z21WkPi1v2AGishDmXZPAedMjgXPRnpUiHTzEnc5LY=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ libxml2 freetype glew libjpeg qtbase python3 ]
+  buildInputs =
+    [
+      libxml2
+      freetype
+      glew
+      libjpeg
+      qtbase
+      python3
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+    ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
