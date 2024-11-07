@@ -12,7 +12,7 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  cctools,
+  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -65,20 +65,14 @@ buildNpmPackage rec {
     popd
   '';
 
-  nativeBuildInputs =
-    [
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  nativeBuildInputs = [
+    zip
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # Fix error: no member named 'aligned_alloc' in the global namespace
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
-  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   # our patch adds the platform detecting build option
   npmBuildFlags = "self";
