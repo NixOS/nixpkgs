@@ -102,7 +102,14 @@ self: super: {
   #######################################
 
   # All jailbreaks in this section due to: https://github.com/haskell/haskell-language-server/pull/4316#discussion_r1667684895
-  haskell-language-server = doJailbreak (dontCheck (super.haskell-language-server.overrideScope (lself: lsuper: {
+  haskell-language-server =
+    let
+      patchedHls = appendPatch (pkgs.fetchpatch {
+        url = "https://github.com/haskell/haskell-language-server/commit/6d0a6f220226fe6c1cb5b6533177deb55e755b0b.patch";
+        sha256 = "sha256-pmwccv5kKYB3K6rmetz8uxdXQaiDZfQXaYyRR5ZgBxk";
+      }) super.haskell-language-server;
+    in
+      doJailbreak (dontCheck (patchedHls.overrideScope (lself: lsuper: {
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
