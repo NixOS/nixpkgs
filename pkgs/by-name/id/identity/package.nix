@@ -1,14 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
-  rustPlatform,
-  cargo,
-  rustc,
   appstream,
   blueprint-compiler,
+  cargo,
   dav1d,
   desktop-file-utils,
+  fetchFromGitLab,
+  glib,
   gst_all_1,
   gtk4,
   lcms,
@@ -17,12 +16,14 @@
   libwebp,
   meson,
   ninja,
-  pkg-config,
   nix-update-script,
+  pkg-config,
+  rustPlatform,
+  rustc,
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
   version = "0.7.0";
 
@@ -30,26 +31,30 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-h8/mWGuosBiQRpoW8rINJht/7UBVEnUnTKY5HBCAyw4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-oO7l4zVKR93fFLqkY67DfzrAA9kUN06ov9ogwDuaVlE=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
     blueprint-compiler
     cargo
-    desktop-file-utils
+    desktop-file-utils # for `desktop-file-validate`
+    glib # for `glib-compile-schemas`
+    gtk4 # for `gtk-update-icon-cache`
     meson
     ninja
     pkg-config
-    rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
+    rustc
     wrapGAppsHook4
   ];
 
@@ -63,8 +68,8 @@ stdenv.mkDerivation rec {
     gtk4
     lcms
     libadwaita
-    libwebp
     libseccomp
+    libwebp
   ];
 
   mesonBuildType = "release";
@@ -91,4 +96,4 @@ stdenv.mkDerivation rec {
     mainProgram = "identity";
     platforms = lib.platforms.linux;
   };
-}
+})
