@@ -5,20 +5,10 @@
   fetchzip,
   makeWrapper,
   makeDesktopItem,
-  zlib,
   glib,
-  libpng,
-  freetype,
-  openssl,
-  xorg,
-  fontconfig,
   qt5,
   libsForQt5,
   xkeyboard_config,
-  alsa-lib,
-  libpulseaudio ? null,
-  libredirect,
-  which,
   perl,
   libcxx,
   autoPatchelfHook,
@@ -57,41 +47,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    which
     perl # Installer script needs `shasum`
     qt5.wrapQtAppsHook
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    zlib
-    glib
-    libpng
-    freetype
-    xorg.libSM
-    xorg.libICE
-    xorg.libXrender
-    openssl
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcursor
-    xorg.libXinerama
-    xorg.libxcb
-    fontconfig
-    xorg.libXext
-    xorg.libX11
-    alsa-lib
-    libpulseaudio
-    libsForQt5.quazip
-    libcxx
-    libredirect
-  ] ++ (with qt5; [
-    qtbase
-    qtwebengine
-    qtwebchannel
-    qtsvg
-    qtwebsockets
-  ]);
+  buildInputs =
+    [
+      libsForQt5.quazip
+      glib
+      libcxx
+    ]
+    ++ (with qt5; [
+      qtbase
+      qtwebengine
+      qtwebchannel
+      qtwebsockets
+      qtsvg
+    ]);
 
   # This just runs the installer script. If it gets stuck at something like
   # ++ exec
