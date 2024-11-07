@@ -74,7 +74,6 @@ in stdenv.mkDerivation (finalAttrs: {
     latest = localRepoCheck nixVersions.latest;
     git = localRepoCheck nixVersions.git;
     nix_2_18 = localRepoCheck nixVersions.nix_2_18;
-    nix_2_19 = localRepoCheck nixVersions.nix_2_19;
   };
 
   meta = {
