@@ -820,6 +820,8 @@ with pkgs;
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
+  sysbox = callPackage ../applications/virtualization/sysbox { };
+
   doc2go = callPackage ../development/tools/doc2go { };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
