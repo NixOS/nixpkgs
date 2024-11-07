@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "binary";
-  version = "5.0";
+  version = "5.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
     rev = "refs/tags/${version}";
-    hash = "sha256-T/gFXYcUJBN1NWMQaFco1bqqZTz3JHQpM8C2Y5yz7SI=";
+    hash = "sha256-HBmWaT0cjYz3UAO1r5chFW7KARpL1EnY8wEeR9etPE0=";
   };
 
   nativeBuildInputs = [
