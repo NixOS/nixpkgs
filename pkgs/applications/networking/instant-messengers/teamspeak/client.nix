@@ -24,7 +24,7 @@
   quazip,
   which,
   perl,
-  llvmPackages,
+  libcxx,
 }:
 
 let
@@ -56,7 +56,7 @@ let
     qtwebsockets
     libpulseaudio
     quazip
-    llvmPackages.libcxx
+    libcxx
   ];
 
   desktopItem = makeDesktopItem {
