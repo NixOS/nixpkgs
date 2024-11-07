@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-10-22";
+  version = "0-unstable-2024-11-06";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "648fac7215e1841e3714d4c72c7aee75152da522";
-    hash = "sha256-OB9dV+dNr5eA4h1+telYitrI62m+XSK/SYc9UPs7D4M=";
+    rev = "ad1ba30b27ff2802b6e743c6b8970e4bd1309dfc";
+    hash = "sha256-vrRkUTWHm+2GTJ3axO2oPJ0gKyMSH8Reh3TjYYze/Io=";
   };
 
   postPatch = ''
