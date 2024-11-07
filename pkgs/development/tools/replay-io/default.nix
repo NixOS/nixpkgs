@@ -1,14 +1,30 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoPatchelfHook, makeWrapper, libcxx
-, libX11, libXt, libXdamage, glib, gtk3, dbus-glib, openssl, nodejs, zlib
-, fetchzip }:
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, autoPatchelfHook
+, makeWrapper
+, libcxx
+, libX11
+, libXt
+, libXdamage
+, glib
+, gtk3
+, dbus-glib
+, openssl_1_1
+, nodejs
+, zlib
+, fetchzip
+}:
 let metadata = lib.importJSON ./meta.json;
-in rec {
+in
+rec {
   replay-recordreplay = stdenv.mkDerivation rec {
     pname = "replay-recordreplay";
     version = builtins.head (builtins.match ".*/linux-recordreplay-(.*).tgz"
       metadata.recordreplay.url);
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib openssl zlib ];
+    buildInputs = [ stdenv.cc.cc.lib openssl_1_1 zlib ];
 
     src = (fetchzip metadata.recordreplay);
     dontBuild = true;
@@ -19,7 +35,9 @@ in rec {
     '';
     postFixup = ''
       patchelf --set-rpath "$(patchelf --print-rpath $out):${
-        lib.makeLibraryPath [ openssl ]
+        lib.makeLibraryPath [ openssl_1_1 ]
+      }:${
+        lib.makeLibraryPath [ zlib ]
       }" $out
     '';
     meta = with lib; {
