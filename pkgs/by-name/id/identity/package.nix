@@ -11,7 +11,9 @@
   desktop-file-utils,
   gst_all_1,
   gtk4,
+  lcms,
   libadwaita,
+  libseccomp,
   libwebp,
   meson,
   ninja,
@@ -22,21 +24,19 @@
 
 stdenv.mkDerivation rec {
   pname = "identity";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
     rev = "v${version}";
-    hash = "sha256-AiOaTjYOc7Eo+9kl1H91TKAkCKNUJNWobmBENZlHBhQ=";
+    hash = "sha256-h8/mWGuosBiQRpoW8rINJht/7UBVEnUnTKY5HBCAyw4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "gst-plugin-gtk4-0.12.0-alpha.1" = "sha256-JSw9yZ4oy7m6c9pqOT+fnYEbTlneLTtWQf3/Jbek/ps=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-oO7l4zVKR93fFLqkY67DfzrAA9kUN06ov9ogwDuaVlE=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +60,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
     gtk4
+    lcms
     libadwaita
     libwebp
+    libseccomp
   ];
 
   passthru.updateScript = nix-update-script { };
