@@ -1,18 +1,21 @@
 {
   lib,
-  fetchFromGitHub,
-  python3Packages,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  gobject-introspection,
+  fetchFromGitHub,
+  glib,
   glib-networking,
+  gobject-introspection,
+  gtk4,
   libadwaita,
   meson,
   ninja,
   pkg-config,
+  python3Packages,
   wrapGAppsHook4,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "cartridges";
   version = "2.10.1";
@@ -25,10 +28,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-uwU0jW5+33hiqpuG83r0GVfANl6ltDLa3s4s0IJHRoQ=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     appstream
     blueprint-compiler
-    desktop-file-utils
+    desktop-file-utils # for `desktop-file-validate`
+    glib # for `glib-compile-schemas`
+    gtk4 # for `gtk-update-icon-cache`
     gobject-introspection
     meson
     ninja
@@ -49,10 +56,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ ''''${gappsWrapperArgs[@]}'' ];
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/libexec $out $pythonPath
+  '';
+
+  # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
+  # is skipped by `buildPythonApplication`
+  # https://github.com/NixOS/nixpkgs/blob/9d4343b7b27a3e6f08fc22ead568233ff24bbbde/pkgs/development/interpreters/python/mk-python-derivation.nix#L296
+  postInstallCheck = ''
+    mesonCheckPhase
   '';
 
   meta = {
@@ -64,7 +78,7 @@ python3Packages.buildPythonApplication rec {
       You can sort and hide games or download cover art from SteamGridDB.
     '';
     homepage = "https://apps.gnome.org/Cartridges/";
-    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "cartridges";
