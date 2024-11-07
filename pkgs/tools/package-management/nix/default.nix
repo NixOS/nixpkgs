@@ -6,7 +6,6 @@
 , libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
 , buildPackages
