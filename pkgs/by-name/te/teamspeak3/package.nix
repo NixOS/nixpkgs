@@ -7,7 +7,6 @@
   glib,
   qt5,
   libsForQt5,
-  xkeyboard_config,
   perl,
   libcxx,
   autoPatchelfHook,
@@ -108,7 +107,6 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [
     # wayland is currently broken, remove when TS3 fixes that
     "--set QT_QPA_PLATFORM xcb"
-    "--set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb"
   ];
 
   installPhase = ''
