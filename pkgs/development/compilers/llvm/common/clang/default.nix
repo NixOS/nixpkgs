@@ -86,31 +86,17 @@ let
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 
-    outputs = [ "out" "lib" "dev" "python" ];
+    outputs = [ "out" "dev" "python" ];
 
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
     '' + (lib.optionalString (lib.versions.major release_version == "17") ''
-
-      mkdir -p $lib/lib/clang
-      mv $lib/lib/17 $lib/lib/clang/17
-    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
-      mv $out/lib/clang $lib/lib/clang
+      mkdir -p $out/lib/clang
+      ln -s ../17 $out/lib/clang/17
     '') + ''
-
-      # Move libclang to 'lib' output
-      moveToOutput "lib/libclang.*" "$lib"
-      moveToOutput "lib/libclang-cpp.*" "$lib"
-    '' + (if lib.versionOlder release_version "15" then ''
-      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '' else ''
-      substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '') + ''
-
+      substituteInPlace ''${!outputDev}/lib/cmake/clang/ClangTargets-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$out/lib/libclang." \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$out/lib/libclang-cpp."
     '' + (if lib.versionOlder release_version "15" then ''
       mkdir -p $python/bin $python/share/{clang,scan-view}
     '' else ''
