@@ -123,7 +123,7 @@ in phpPackage.buildComposerProject rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage    = "https://www.librenms.org/";
     license     = licenses.gpl3Only;
-    maintainers = teams.wdz.members;
+    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
     platforms   = platforms.linux;
   };
 }
