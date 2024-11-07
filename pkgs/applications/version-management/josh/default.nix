@@ -13,7 +13,7 @@
 let
   # josh-ui requires javascript dependencies, haven't tried to figure it out yet
   cargoFlags = [ "--workspace" "--exclude" "josh-ui" ];
-  version = "24.08.14";
+  version = "24.10.04";
 in
 
 rustPlatform.buildRustPackage {
@@ -21,13 +21,13 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "esrlabs";
+    owner = "josh-project";
     repo = "josh";
-    rev = "v${version}";
-    hash = "sha256-6U1nhERpPQAVgQm6xwRlHIhslYBLd65DomuGn5yRiSs=";
+    rev = "r${version}";
+    hash = "sha256-6rfNEWNeC0T/OXhCReaV5npcJjQoH6XhsZzHXGnnxOo=";
   };
 
-  cargoHash = "sha256-s6+Bd4ucwUinrcbjNvlDsf9LhWc/U9SAvBRW7JAmxVA=";
+  cargoHash = "sha256-tK/5qNvN1zs6DM7dXNc1nPhbUOt5lPqRpbie6h2d7Y0=";
 
   nativeBuildInputs = [
     pkg-config

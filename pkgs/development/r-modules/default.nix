@@ -426,6 +426,7 @@ let
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
+    mcrPioda = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib netcdf ];
     nanonext = with pkgs; [ mbedtls nng ];
@@ -456,6 +457,7 @@ let
     RcppGSL = [ pkgs.gsl ];
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
+    resultant = with pkgs; [ gmp.dev mpfr.dev pkg-config ];
     rgdal = with pkgs; [ proj.dev gdal ];
     Rhisat2 = [ pkgs.which pkgs.hostname ];
     gdalcubes = [ pkgs.pkg-config ];
@@ -580,6 +582,7 @@ let
     RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
     rswipl = with pkgs; [ cmake pkg-config ];
+    scorematchingad = [ pkgs.cmake ];
     rrd = [ pkgs.pkg-config ];
     surveyvoi = [ pkgs.pkg-config ];
     Rbwa = [ pkgs.zlib.dev ];
@@ -644,6 +647,7 @@ let
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
     rsbml = [ pkgs.libsbml ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    ravetools = with pkgs; [ pkg-config fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.out ];
@@ -671,6 +675,7 @@ let
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
+    OpenCL = with pkgs; [ opencl-clhpp ocl-icd ];
     gpuMagic = [ pkgs.ocl-icd ];
     JMcmprsk = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
@@ -1050,10 +1055,11 @@ let
     });
 
     timeless = old.timeless.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-n0/52CV3NzWe7T3N6VoaURMxWrnqeYaUMPKkUy+LRQs=";
+        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
       };
 
       cargoRoot = "src/rust";

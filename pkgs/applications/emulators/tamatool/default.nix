@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zip
-, copyDesktopItems
-, libpng
-, SDL2
-, SDL2_image
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zip,
+  copyDesktopItems,
+  libpng,
+  SDL2,
+  SDL2_image,
 
-# Optionally bundle a ROM file
-, rom ? null
+  # Optionally bundle a ROM file
+  rom ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,8 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     SDL2
     SDL2_image
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   makeFlags = [
@@ -55,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     "DIST_PATH=$(out)"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework CoreFoundation";
+  };
 
   desktopItems = [ "linux/tamatool.desktop" ];
 
