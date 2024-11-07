@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  boost179,
+  boost180,
   cereal,
   cgal_5,
   curl,
@@ -28,6 +28,7 @@
   mesa,
   mpfr,
   nlopt,
+  slic3r,
   opencascade-occt_7_6,
   openvdb,
   opencv,
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost179
+    boost180
     cereal
     cgal_5
     curl
