@@ -102,18 +102,25 @@ self: super: {
   #######################################
 
   # All jailbreaks in this section due to: https://github.com/haskell/haskell-language-server/pull/4316#discussion_r1667684895
-  haskell-language-server = doJailbreak (dontCheck (super.haskell-language-server.overrideScope (lself: lsuper: {
-    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
-    # because some packages, like ormolu, need a newer Cabal version.
-    # ghc-paths is special because it depends on Cabal for building
-    # its Setup.hs, and therefor declares a Cabal dependency, but does
-    # not actually use it as a build dependency.
-    # That means ghc-paths can just use the ghc included Cabal version,
-    # without causing package-db incoherence and we should do that because
-    # otherwise we have different versions of ghc-paths
-    # around which have the same abi-hash, which can lead to confusions and conflicts.
-    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  })));
+  haskell-language-server =
+    lib.pipe
+      (super.haskell-language-server.overrideScope (lself: lsuper: {
+        # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
+        # because some packages, like ormolu, need a newer Cabal version.
+        # ghc-paths is special because it depends on Cabal for building
+        # its Setup.hs, and therefor declares a Cabal dependency, but does
+        # not actually use it as a build dependency.
+        # That means ghc-paths can just use the ghc included Cabal version,
+        # without causing package-db incoherence and we should do that because
+        # otherwise we have different versions of ghc-paths
+        # around which have the same abi-hash, which can lead to confusions and conflicts.
+        ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+      }))
+      [
+        doJailbreak
+        dontCheck
+      ];
+
   hls-plugin-api = doJailbreak super.hls-plugin-api;
   ghcide = doJailbreak super.ghcide;
 
