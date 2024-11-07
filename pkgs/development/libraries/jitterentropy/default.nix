@@ -1,4 +1,9 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   hardeningDisable = [ "fortify" ]; # avoid warnings
 
@@ -21,8 +29,14 @@ stdenv.mkDerivation rec {
     description = "Provides a noise source using the CPU execution timing jitter";
     homepage = "https://github.com/smuellerDD/jitterentropy-library";
     changelog = "https://github.com/smuellerDD/jitterentropy-library/raw/v${version}/CHANGES.md";
-    license = with lib.licenses; [ bsd3 /* OR */ gpl2Only ];
+    license = with lib.licenses; [
+      bsd3 # OR
+      gpl2Only
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ johnazoidberg c0bw3b ];
+    maintainers = with lib.maintainers; [
+      johnazoidberg
+      c0bw3b
+    ];
   };
 }
