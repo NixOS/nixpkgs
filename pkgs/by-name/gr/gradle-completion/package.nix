@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   installShellFiles,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -37,6 +38,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Gradle tab completion for bash and zsh";
