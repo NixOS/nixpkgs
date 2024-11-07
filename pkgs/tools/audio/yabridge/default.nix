@@ -72,14 +72,14 @@ let
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "5.1.0";
+  version = "5.1.1";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "yabridge";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vnSdGedpiit8nym26i1QFiNnATk0Bymm7e5Ha2H41/M=";
+    hash = "sha256-4eA3vQFklIWkhtbd3Nw39bnJT6gPcni79ZyQVqU4+GQ=";
   };
 
   # Unpack subproject sources
