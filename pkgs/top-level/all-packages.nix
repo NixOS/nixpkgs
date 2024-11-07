@@ -32088,6 +32088,8 @@ with pkgs;
 
   styx = callPackage ../applications/misc/styx { };
 
+  sway-input-config = callPackage ../by-name/sw/sway-input-config/package.nix { };
+
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
   tart = callPackage ../applications/virtualization/tart { };
