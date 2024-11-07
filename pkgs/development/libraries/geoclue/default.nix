@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs demo/install-file.py
   '';
 
-  updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin && withDemoAgent;
