@@ -1,0 +1,12 @@
+diff --git a/config/BuildSystem/config/packages/MUMPS.py b/config/BuildSystem/config/packages/MUMPS.py
+index 0f04018..8f2dc5a 100644
+--- a/config/BuildSystem/config/packages/MUMPS.py
++++ b/config/BuildSystem/config/packages/MUMPS.py
+@@ -162,6 +162,7 @@ class Configure(config.package.Package):
+         g.write('OPTC += -DUSE_LIBHWLOC\n')
+     g.close()
+     if self.installNeeded('Makefile.inc'):
++      output1,err1 = '', ''
+       try:
+         output1,err1,ret1  = config.package.Package.executeShellCommand('make clean', cwd=self.packageDir, timeout=60, log = self.log)
+       except RuntimeError as e:
