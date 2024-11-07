@@ -32,13 +32,13 @@ assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "libjpeg-turbo";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = finalAttrs.version;
-    hash = "sha256-w2wJaVf4sjJ9pPPqc9R4TE6Q6Yl0U6+fI5KLpQKwEXI=";
+    hash = "sha256-ZNqhOfZtWcMv10VWIUxn7MSy4KhW/jBrgC1tUFKczqs=";
   };
 
   patches = [
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       dvgrab
       epeg
-      freeimage
       gd
       graphicsmagick
       imagemagick

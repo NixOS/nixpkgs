@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, perl, cmake, boost }:
+{ lib, stdenv, fetchFromGitHub, postgresql, perl, cmake, boost, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pgrouting";
   version = "3.6.3";
 
   nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ postgresql boost ];
+  buildInputs = [ boost ];
 
   src = fetchFromGitHub {
     owner  = "pgRouting";
@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     hash   = "sha256-VCoapUM7Vh4W1DUE/gWQ9YIRLbw63XlOWsgajJW+XNU=";
   };
-
-  installPhase = ''
-    install -D lib/*.so                        -t $out/lib
-    install -D sql/pgrouting--${version}.sql   -t $out/share/postgresql/extension
-    install -D sql/common/pgrouting.control    -t $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "PostgreSQL/PostGIS extension that provides geospatial routing functionality";

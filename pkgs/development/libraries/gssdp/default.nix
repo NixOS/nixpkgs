@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch2
 , fetchurl
 , meson
 , ninja
@@ -21,12 +22,20 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://gitlab.gnome.org/GNOME/gssdp/-/merge_requests/11
+      url = "https://gitlab.gnome.org/GNOME/gssdp/-/commit/db9d02c22005be7e5e81b43a3ab777250bd7b27b.diff";
+      hash = "sha256-DJQrg6MhzpX8R0QaNnqdwA1+v8xncDU8jcX+I3scW1M=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -64,7 +73,7 @@ stdenv.mkDerivation rec {
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+  postFixup = lib.optionalString withIntrospection ''
     # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \

@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch2
 , fetchurl
 , gettext
 , meson
@@ -106,13 +107,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_user_services=false"
   ];
 
-  doCheck =
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/402
-    !stdenv.hostPlatform.isDarwin
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/398
-    && !stdenv.hostPlatform.is32bit
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/issues/474
-    && !stdenv.hostPlatform.isMusl;
+  patches = [
+    # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/730
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/tinysparql/commit/12ed969913cb579f638fa0aa0853aeb6c6c6f536.patch";
+      hash = "sha256-jyx9hdWUUxfCSTGn7lZL4RUiQAF4pkf4gfCP8g9Ep3U=";
+    })
+  ];
+
+  doCheck = true;
 
   postPatch = ''
     chmod +x \

@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.30.4";
+  version = "3.30.5";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-x1nJcnTx56qq/LHw0mH53pvzpdbst+LfYWMkpG/nBLI=";
+    hash = "sha256-n1XhpAUI8vKbfgZfoIwp+CxAL6BALag5//5koldVqG0=";
   };
 
   patches = [
@@ -76,7 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAll {
       src = ./007-darwin-bsd-ps-abspath.diff;
       ps = lib.getExe ps;
-    });
+    })
+  ++ [
+    # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
+    # Needed to corretly link curl in pkgsStatic.
+    ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
+  ];
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   separateDebugInfo = true;

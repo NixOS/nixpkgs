@@ -17,7 +17,7 @@
   pre-commit,
   pynput,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
   pytestCheckHook,
@@ -87,7 +87,7 @@ buildPythonPackage rec {
       pre-commit
       pynput
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-markdown-docs
       pytest-xdist
     ];

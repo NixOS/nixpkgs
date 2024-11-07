@@ -7,17 +7,18 @@
 , readline
 , libxslt
 , libxcrypt
+, apple-sdk_11
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.10";
+  version = "1.4.11";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-AjOOM8FsIcnilXHO9SPnaytwhjYlT28wxs8ZXUjGLa8=";
+    hash = "sha256-Toum2T84NWW70GG+Te7hUxgjLRu8ynIS8Y4X9Wu5dag=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     python3
     readline # required to build python
     libxcrypt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
   ];
 
   # otherwise the configure script fails with

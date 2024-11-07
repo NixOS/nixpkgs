@@ -15,6 +15,7 @@ shopt -s inherit_errexit
 # $NIX_DEBUG must be a documented integer level, if set, so we can use it safely as an integer.
 # See the `Verbosity` enum in the Nix source for these levels.
 if ! [[ -z ${NIX_DEBUG-} || $NIX_DEBUG == [0-7] ]]; then
+    # shellcheck disable=SC2016
     printf 'The `NIX_DEBUG` environment variable has an unexpected value: %s\n' "${NIX_DEBUG}"
     echo "It can only be unset or an integer between 0 and 7."
     exit 1
@@ -396,7 +397,7 @@ concatTo() {
     for arg in "$@"; do
         IFS="=" read -r name default <<< "$arg"
         local -n nameref="$name"
-        if [[ ! -n "${nameref[@]}" && -n "$default" ]]; then
+        if [[ -z "${nameref[*]}" && -n "$default" ]]; then
             targetref+=( "$default" )
         elif type=$(declare -p "$name" 2> /dev/null); then
             case "${type#* }" in
@@ -1073,6 +1074,10 @@ substituteInPlace() {
         fileNames+=("$arg")
         shift
     done
+    if ! [[ "${#fileNames[@]}" -gt 0 ]]; then
+        echo >&2 "substituteInPlace called without any files to operate on (files must come before options!)"
+        return 1
+    fi
 
     for file in "${fileNames[@]}"; do
         substitute "$file" "$file" "$@"

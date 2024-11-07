@@ -3,9 +3,10 @@
   stdenv,
   fetchFromGitHub,
   postgresql,
+  buildPostgresqlExtension,
 }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pgmq";
   version = "1.4.4";
 
@@ -19,17 +20,6 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/pgmq-extension";
 
   dontConfigure = true;
-
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/share/postgresql/extension sql/*.sql
-    install -D -t $out/share/postgresql/extension *.control
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Lightweight message queue like AWS SQS and RSMQ but on Postgres";

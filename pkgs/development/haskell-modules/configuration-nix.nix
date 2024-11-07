@@ -523,7 +523,7 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cwiid}/include"
       "--extra-include-dirs=${pkgs.bluez.dev}/include"
     ];
-    prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
+    prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
   }) super.hcwiid;
 
   # cabal2nix doesn't pick up some of the dependencies.

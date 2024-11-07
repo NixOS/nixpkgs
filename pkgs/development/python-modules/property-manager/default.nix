@@ -6,7 +6,7 @@
   verboselogs,
   coloredlogs,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [
     pytest
-    pytest-cov
+    pytest-cov-stub
   ];
 
   meta = with lib; {

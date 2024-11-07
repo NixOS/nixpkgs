@@ -84,20 +84,20 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for creating fast, dynamic graphical user interfaces";
 
-    longDescription =
-      '' Clutter is free software library for creating fast, compelling,
-         portable, and dynamic graphical user interfaces.  It is a core part
-         of MeeGo, and is supported by the open source community.  Its
-         development is sponsored by Intel.
+    longDescription = ''
+      Clutter is free software library for creating fast, compelling,
+      portable, and dynamic graphical user interfaces.  It is a core part
+      of MeeGo, and is supported by the open source community.  Its
+      development is sponsored by Intel.
 
-         Clutter uses OpenGL for rendering (and optionally OpenGL|ES for use
-         on mobile and embedded platforms), but wraps an easy to use,
-         efficient, flexible API around GL's complexity.
+      Clutter uses OpenGL for rendering (and optionally OpenGL|ES for use
+      on mobile and embedded platforms), but wraps an easy to use,
+      efficient, flexible API around GL's complexity.
 
-         Clutter enforces no particular user interface style, but provides a
-         rich, generic foundation for higher-level toolkits tailored to
-         specific needs.
-      '';
+      Clutter enforces no particular user interface style, but provides a
+      rich, generic foundation for higher-level toolkits tailored to
+      specific needs.
+    '';
 
     license = lib.licenses.lgpl2Plus;
     homepage = "http://www.clutter-project.org/";

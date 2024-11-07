@@ -99,12 +99,8 @@ let
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
-  # TODO: Merge these `lib.removePrefix` calls once update scripts have
-  # been run.
-  version = lib.removePrefix tagPrefix (lib.removePrefix "refs/tags/" source.src.rev);
-  versionSplit =
-    # TODO: Remove `-ga` logic once update scripts have been run.
-    builtins.match (if atLeast11 then "(.+)[-+](.+)" else "(.+)-b?(.+)") version;
+  version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
+  versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
   versionBuild = lib.elemAt versionSplit 1;
 
   # The JRE 8 libraries are in directories that depend on the CPU.
@@ -219,15 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
         name = "gnumake-4.4.1";
         url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
         hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
-      })
-    ]
-    ++ lib.optionals (featureVersion == "17") [
-      # Backport fixes for musl 1.2.4 which are already applied in jdk21+
-      # Fetching patch from chimera because they already went through the effort of rebasing it onto jdk17
-      (fetchurl {
-        name = "lfs64.patch";
-        url = "https://raw.githubusercontent.com/chimera-linux/cports/4614075d19e9c9636f3f7e476687247f63330a35/contrib/openjdk17/patches/lfs64.patch";
-        hash = "sha256-t2mRbdEiumBAbIAC0zsJNwCn59WYWHsnRtuOSL6bWB4=";
       })
     ]
     ++ lib.optionals (!headless && enableGtk) [

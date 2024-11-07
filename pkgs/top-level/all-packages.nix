@@ -16229,15 +16229,25 @@ with pkgs;
     bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
+  python314Full = python314.override {
+    self = python314Full;
+    pythonAttr = "python314Full";
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
+    x11Support = true;
+  };
 
   # https://py-free-threading.github.io
   python313FreeThreading = python313.override {
     pythonAttr = "python313FreeThreading";
     enableGIL = false;
   };
+  python314FreeThreading = python314.override {
+    pythonAttr = "python313FreeThreading";
+    enableGIL = false;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python39 python310 python311 python312 python313 python3Minimal pypy27 pypy310 pypy39 rustpython;
+  inherit (pythonInterpreters) python27 python39 python310 python311 python312 python313 python314 python3Minimal pypy27 pypy310 pypy39 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
@@ -16249,6 +16259,7 @@ with pkgs;
   python311Packages = recurseIntoAttrs python311.pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
   python313Packages = python313.pkgs;
+  python314Packages = python314.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -22326,9 +22337,7 @@ with pkgs;
 
   popt = callPackage ../development/libraries/popt { };
 
-  portaudio = callPackage ../development/libraries/portaudio {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
-  };
+  portaudio = callPackage ../development/libraries/portaudio { };
 
   portmidi = callPackage ../development/libraries/portmidi {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreAudio CoreFoundation CoreMIDI CoreServices;
@@ -22687,8 +22696,6 @@ with pkgs;
   sealcurses = callPackage ../development/libraries/sealcurses { };
 
   seasocks = callPackage ../development/libraries/seasocks { };
-
-  serd = callPackage ../development/libraries/serd { };
 
   serf = callPackage ../development/libraries/serf { };
 
@@ -28206,10 +28213,7 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
-  cdparanoiaIII = callPackage ../applications/audio/cdparanoia {
-    inherit (darwin) IOKit;
-    inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
+  cdparanoiaIII = callPackage ../applications/audio/cdparanoia { };
 
   celeste = callPackage ../applications/networking/sync/celeste { };
 

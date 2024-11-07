@@ -890,6 +890,11 @@ lib.mapAttrs mkLicense ({
     fullName = "MIT License";
   };
 
+  mit-cmu = {
+    spdxId = "MIT-CMU";
+    fullName = "CMU License";
+  };
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
