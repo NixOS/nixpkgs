@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
+    # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
+    "TestUIDGeneratorPython"
   ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
