@@ -16,7 +16,7 @@ buildDotnetModule rec {
     hash = "sha512-aUjjT5Qf64wrKRn1vkwJadMOBWMkvsXUjtZ7S3/ZWAh1CCDkQNO84mSbtbVc9ny0fKeJEqaDX2tJNwq7pYqAbA==";
   };
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   projectFile = "inklecate/inklecate.csproj";
   nugetDeps = ./deps.nix;

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libPath = lib.makeLibraryPath [
       libsForQt5.qtbase # libQt5PrintSupport.so.5
       libsForQt5.qtsvg  # libQt5Svg.so.5
-      stdenv.cc.cc.lib  # libstdc++.so.6
+      (lib.getLib stdenv.cc.cc)  # libstdc++.so.6
       libglvnd          # libGL.so.1
       libX11            # libX11.so.6
       libXi             # libXi.so.6

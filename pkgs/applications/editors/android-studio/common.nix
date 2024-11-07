@@ -137,7 +137,7 @@ let
           e2fsprogs
 
           # Gradle wants libstdc++.so.6
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           # mksdcard wants 32 bit libstdc++.so.6
           pkgsi686Linux.stdenv.cc.cc.lib
 

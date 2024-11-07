@@ -184,7 +184,7 @@ self = stdenv.mkDerivation {
       rm -f $out/lib/*.a
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
     '' +
     # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which

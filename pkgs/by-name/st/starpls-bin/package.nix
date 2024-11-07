@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isElf [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''

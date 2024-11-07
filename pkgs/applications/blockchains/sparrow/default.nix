@@ -136,7 +136,7 @@ let
   sparrow-modules = stdenvNoCC.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook (lib.getLib stdenv.cc.cc) zlib ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   buildInputs = [
     alsa-lib
     zlib
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

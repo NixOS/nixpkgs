@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2
     xz
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''

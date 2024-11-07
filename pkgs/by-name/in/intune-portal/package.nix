@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     let
       libPath = {
         intune = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
+          stdenv.cc.cc
           libuuid
           xorg.libX11
           curlMinimal
