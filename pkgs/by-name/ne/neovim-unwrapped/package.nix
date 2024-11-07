@@ -6,7 +6,6 @@
   cmake,
   gettext,
   msgpack-c,
-  darwin,
   libuv,
   lua,
   pkg-config,
@@ -145,7 +144,6 @@ stdenv.mkDerivation (
         tree-sitter
         unibilium
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [
         glibcLocales
         procps
