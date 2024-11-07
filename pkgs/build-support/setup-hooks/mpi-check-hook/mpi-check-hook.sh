@@ -62,6 +62,8 @@ setupMpiCheck() {
     MPICH)
       # Fix to make mpich run in a sandbox
       export HYDRA_IFACE=lo
+      # Disable sysfs cpu topology directory discovery.
+      export HWLOC_XMLFILE="@topology@"
       ;;
     MVAPICH)
       # Disable CPU pinning
