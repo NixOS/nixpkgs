@@ -331,6 +331,10 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  snap = super.snap.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   warp = super.warp.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
   });
