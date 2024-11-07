@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
   inherit version;
   pname = "dell-command-configure";
 
-  buildInputs = [ openssl stdenv.cc.cc.lib ];
+  buildInputs = [ openssl (lib.getLib stdenv.cc.cc) ];
   nativeBuildInputs = [ autoPatchelfHook ];
   dontConfigure = true;
 

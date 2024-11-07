@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   httpx,
   poetry-core,
   pytest-asyncio,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-QAnwFX53jf7yWWa308/XTARNw5Qeo9K2zfD+6+HiFuM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "pytest-httpx-compat.patch";
+      url = "https://github.com/home-assistant-ecosystem/python-glances-api/commit/f193472a25469e7e4b946f9a1c3a7a95949c6c04.patch";
+      hash = "sha256-hFeWv2WdbdeoaHgAOmwtBwWwPLjJzyurTZDV98qR7F8=";
+    })
+  ];
 
   build-system = [ poetry-core ];
 

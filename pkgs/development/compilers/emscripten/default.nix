@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
+    paths = with llvmPackages; [ clang-unwrapped (lib.getLib clang-unwrapped)  lld llvm ];
   };
 
   nodeModules = buildNpmPackage {

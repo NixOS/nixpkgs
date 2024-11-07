@@ -35,7 +35,7 @@ pythonPackages.buildPythonApplication rec {
    postFixup = ''
    for file in $(find $out -type f -type f -perm /0111); do
        old_rpath=$(patchelf --print-rpath $file) && \
-       patchelf --set-rpath $old_rpath:${stdenv.cc.cc.lib}/lib $file || true
+       patchelf --set-rpath $old_rpath:${lib.getLib stdenv.cc.cc}/lib $file || true
    done
    # Link to the master program
    ln -s $out/bin/quast.py $out/bin/quast

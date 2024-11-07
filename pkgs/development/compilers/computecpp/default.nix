@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  buildInputs = [ stdenv.cc.cc.lib ocl-icd zlib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ocl-icd zlib ];
   nativeBuildInputs = [ autoPatchelfHook pkg-config installShellFiles ];
 
   installPhase = ''

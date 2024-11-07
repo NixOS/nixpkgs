@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libdrm
       openssl
-      stdenv.cc.cc.lib
+      stdenv.cc.cc
       zlib
     ]
     ++ (with xorg; [

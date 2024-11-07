@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
   '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.

@@ -38,6 +38,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # yarl compat issue https://github.com/jrester/tesla_powerwall/issues/68
+    "test_parse_endpoint"
+  ];
+
   pytestFlagsArray = [ "tests/unit" ];
 
   pythonImportsCheck = [ "tesla_powerwall" ];

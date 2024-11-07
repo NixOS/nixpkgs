@@ -15,10 +15,10 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oTeIh5278nckh5fFaEFjWht11ovGmN80MaLJl4k4NAs=";
 
-  buildInputs = [ clang.cc.lib ];
+  buildInputs = [ (lib.getLib clang.cc) ];
 
   preConfigure = ''
-    export LIBCLANG_PATH="${clang.cc.lib}/lib"
+    export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
   '';
 
   doCheck = true;
