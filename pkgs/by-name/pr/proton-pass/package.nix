@@ -5,6 +5,7 @@
   dpkg,
   makeWrapper,
   electron,
+  asar,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
@@ -21,21 +22,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     makeWrapper
+    asar
   ];
+
+  # Rebuild the ASAR archive with the assets embedded
+  preInstall = ''
+    asar extract usr/lib/proton-pass/resources/app.asar tmp
+    cp -r usr/lib/proton-pass/resources/assets/ tmp/
+    rm usr/lib/proton-pass/resources/app.asar
+    asar pack tmp/ usr/lib/proton-pass/resources/app.asar
+    rm -fr tmp
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
+    mkdir -p $out/share/proton-pass
     cp -r usr/share/ $out/
-    cp -r usr/lib/proton-pass/resources/app.asar $out/share/
+    cp -r usr/lib/proton-pass/resources/app.asar $out/share/proton-pass/
     runHook postInstall
   '';
 
   preFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/proton-pass \
-      --add-flags $out/share/app.asar \
+      --add-flags $out/share/proton-pass/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
