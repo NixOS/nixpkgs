@@ -9402,6 +9402,12 @@
     githubId = 36996706;
     name = "Philip Rying";
   };
+  imsick = {
+    email = "lent-lather-excuse@duck.com";
+    github = "dvishal485";
+    githubId = 26341736;
+    name = "Vishal Das";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
