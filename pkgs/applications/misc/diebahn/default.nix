@@ -17,23 +17,24 @@
 , pango
 , gettext
 , darwin
+, blueprint-compiler
 }:
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     rev = version;
-    hash = "sha256-ps55DiAsetmdcItZKcfyYDD0q0w1Tkf/U48UR/zQx1g=";
+    hash = "sha256-SLZJiCkHUS2p7cNk3i3yO2c3tWR4T4ch+zJ1iYEkS6E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${src}";
     inherit src;
-    hash = "sha256-StJxWasUMj9kh9rLs4LFI3XaZ1Z5pvFBjEjtp79WZjg=";
+    hash = "sha256-XYlRm8yqQr9ZNV7jQeuR8kvqFNudUjJlzE6h9X0zq0Y=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
