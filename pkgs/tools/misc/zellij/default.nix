@@ -4,10 +4,7 @@
 , stdenv
 , installShellFiles
 , pkg-config
-, libiconv
 , openssl
-, DiskArbitration
-, Foundation
 , mandown
 , zellij
 , testers
@@ -36,10 +33,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    DiskArbitration
-    Foundation
   ];
 
   preCheck = ''
