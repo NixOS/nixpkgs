@@ -5,9 +5,7 @@
 , clang
 , lib
 , makeSetupHook
-, maturin
 , rust
-, rustc
 , stdenv
 
 # This confusingly-named parameter indicates the *subdirectory of
@@ -23,6 +21,7 @@
       propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit (rust.envVars) rustHostPlatformSpec setEnv;
+        configOverrides = ../cargo-config-overrides.toml;
       };
     } ./cargo-build-hook.sh) {};
 
@@ -32,6 +31,7 @@
       propagatedBuildInputs = [ cargo ];
       substitutions = {
         inherit (rust.envVars) rustHostPlatformSpec setEnv;
+        configOverrides = ../cargo-config-overrides.toml;
       };
     } ./cargo-check-hook.sh) {};
 
@@ -50,6 +50,7 @@
       propagatedBuildInputs = [ cargo cargo-nextest ];
       substitutions = {
         inherit (rust.envVars) rustHostPlatformSpec;
+        configOverrides = ../cargo-config-overrides.toml;
       };
     } ./cargo-nextest-hook.sh) {};
 

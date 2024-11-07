@@ -17,10 +17,15 @@ cargoBuildHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
+    CONFIG_OVERRIDES_FILE=$(mktemp --tmpdir cargo-config-overrides.XXXXXXXXXX)
+    substitute "@configOverrides@" "$CONFIG_OVERRIDES_FILE" \
+        --subst-var-by "target" "@rustHostPlatformSpec@"
+
     local flagsArray=(
         "-j" "$NIX_BUILD_CORES"
         "--target" "@rustHostPlatformSpec@"
         "--offline"
+        "--config" "$CONFIG_OVERRIDES_FILE"
     )
 
     if [ "${cargoBuildType}" != "debug" ]; then

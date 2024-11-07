@@ -291,7 +291,7 @@ stdenvs
       inherit
         (pkgs.callPackage ../../../build-support/rust/hooks {
           inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
-          inherit (pkgs) cargo rustc;
+          inherit (pkgs) cargo;
         })
         bindgenHook
         ;

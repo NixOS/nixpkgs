@@ -1,0 +1,2 @@
+[target.@target@.curl]
+rustc-link-lib = ["curl"]
