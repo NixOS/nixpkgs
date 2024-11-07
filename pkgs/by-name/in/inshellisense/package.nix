@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "inshellisense";
-  version = "0.0.1-rc.16";
+  version = "0.0.1-rc.18";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jqLYN251ZvLOjYsSQJmvQ1TupO4jz3Q23aDpKX+Puvs=";
+    hash = "sha256-9cSygGQar2rD3lorehlNmUzd0ZnABNJSJwmoNH3MTmk=";
   };
 
-  npmDepsHash = "sha256-rGUyA0RLnNZ6ocmHPXfBLJ6ZmeeTN9w+TJTtfTQQ24M=";
+  npmDepsHash = "sha256-/FSzeHPgVb5OB6mjP5GYAYBdTmk93xyWJI+NH7L61Do=";
 
   # Needed for dependency `@homebridge/node-pty-prebuilt-multiarch`
   # On Darwin systems the build fails with,
