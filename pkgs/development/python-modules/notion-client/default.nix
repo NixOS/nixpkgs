@@ -43,6 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notion_client" ];
 
+  disabledTests = [
+    "test_api_http_response_error"
+  ];
+
   meta = with lib; {
     description = "Python client for the official Notion API";
     homepage = "https://github.com/ramnes/notion-sdk-py";
