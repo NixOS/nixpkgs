@@ -38,20 +38,18 @@
 buildPythonApplication rec {
   pname = "bikeshed";
   version = "4.2.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-vtZ97brCk+fd/HsA2UHdS17o8rJ/VvSOdhg0MHzlCs8=";
   };
 
-  # Relax requirements from "==" to ">="
-  # https://github.com/tabatkins/bikeshed/issues/2178
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "==" ">="
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = true;
+
+  dependencies = [
     about-time
     aiofiles
     aiohttp
