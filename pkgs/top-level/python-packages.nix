@@ -13213,7 +13213,7 @@ self: super: with self; {
 
   pyvex = callPackage ../development/python-modules/pyvex { };
 
-  pyvicare-neo = callPackage ../development/python-modules/pyvicare-neo { };
+  pyvicare = callPackage ../development/python-modules/pyvicare { };
 
   pyvirtualdisplay = callPackage ../development/python-modules/pyvirtualdisplay { };
 
@@ -15638,6 +15638,8 @@ self: super: with self; {
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 
+  teslemetry-stream = callPackage ../development/python-modules/teslemetry-stream { };
+
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
@@ -17579,6 +17581,8 @@ self: super: with self; {
   webdriver-manager = callPackage ../development/python-modules/webdriver-manager { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
+
+  webexpythonsdk = callPackage ../development/python-modules/webexpythonsdk { };
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 

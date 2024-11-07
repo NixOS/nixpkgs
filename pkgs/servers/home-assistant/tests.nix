@@ -8,10 +8,12 @@ let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
     axis = getComponentDeps "deconz";
+    gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     govee_ble = [
       ibeacon-ble
     ];
     hassio = getComponentDeps "homeassistant_yellow";
+    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
     lovelace = [
       pychromecast
     ];
@@ -35,6 +37,7 @@ let
     system_log = [
       isal
     ];
+    tesla_fleet = getComponentDeps "teslemetry";
     xiaomi_miio = [
       arrow
     ];
@@ -69,6 +72,10 @@ let
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
     ];
+    honeywell = [
+      # Failed: Unused ignore translations: component.honeywell.config.abort.reauth_successful. Please remove them from the ignore_translations fixture.
+      "--deselect=tests/components/honeywell/test_config_flow.py::test_reauth_flow"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
@@ -76,9 +83,17 @@ let
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
+    jewish_calendar = [
+      # Failed: Unused ignore translations: component.jewish_calendar.config.abort.reconfigure_successful. Please remove them from the ignore_translations fixture.
+      "--deselect tests/components/jewish_calendar/test_config_flow.py::test_reconfigure"
+    ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
+    ];
+    nina = [
+      # Failed: Unused ignore translations: component.nina.options.error.unknown. Please remove them from the ignore_translations fixture.
+      "--deselect tests/components/nina/test_config_flow.py::test_options_flow_unexpected_exception"
     ];
     sql = [
       "-W"
