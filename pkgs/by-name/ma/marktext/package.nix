@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "marktext";
@@ -20,7 +24,10 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = pkgs: [ pkgs.libsecret pkgs.xorg.libxkbfile  ];
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    pkgs.xorg.libxkbfile
+  ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/marktext.desktop $out/share/applications/marktext.desktop
@@ -34,7 +41,10 @@ appimageTools.wrapType2 rec {
     description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
     homepage = "https://www.marktext.cc";
     license = licenses.mit;
-    maintainers = with maintainers; [ nh2 eduarrrd ];
+    maintainers = with maintainers; [
+      nh2
+      eduarrrd
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "marktext";
   };
