@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-Zl2bOGDJIe/bhMFNsy969JYCYqtXTOzgb+bbOlKqOco=";
+    hash = "sha256-KZCzrvdWd6zfQHppjyp4XzqNCfH2UnuRneu+BNIRVAY=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
