@@ -18635,6 +18635,14 @@
     github = "Sail0rd";
     githubId = 55802415;
   };
+  sako = {
+    name = "Sako";
+    email = "sako@cock.email";
+    matrix = "@sako:imagisphe.re";
+    github = "Sakooooo";
+    githubId = 78461130;
+    keys = [ { fingerprint = "CA52 EE7B E681 720E 32B6  6792 FE52 FD65 B76E 4751"; } ];
+  };
   samalws = {
     email = "sam@samalws.com";
     name = "Sam Alws";
