@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tyson";
-  version = "0.1.1";
+  version = "0.1.1-unstable-2024-04-10";
 
   src = fetchFromGitHub {
     owner = "jetpack-io";
     repo = "tyson";
-    rev = "v${version}";
-    hash = "sha256-c4ROLn+BSX7v/4C9/IeU6HiE2YvnqDuXXGp2iZhAVk4=";
+    rev = "d6b38819db9b260928b29f4d39bf4c72841c6a01";
+    hash = "sha256-NoQJBEedV3NDNQ4PVvvjjsO7N+rq40LWKp962P+naEY=";
   };
 
-  vendorHash = "sha256-NhDv7oH8LK/vebwjs55tsCCWVhbZZd15z5ewOF5z9+Y=";
+  vendorHash = "sha256-kJIfKgVaHuCYvvTZXyuZ/Hg8z1BlW4oW6+5s1inFizg=";
 
   nativeBuildInputs = [
     installShellFiles
