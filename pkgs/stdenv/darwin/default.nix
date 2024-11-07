@@ -349,9 +349,11 @@ let
     inherit (prevStage.darwin)
       Csu
       adv_cmds
+      copyfile
       libiconv
       libresolv
       libsbuf
+      libutil
       system_cmds
       ;
   };
