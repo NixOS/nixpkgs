@@ -15,6 +15,7 @@
   packaging,
 
   # checks
+  awkward-pandas,
   pandas,
   pytestCheckHook,
   pytest-timeout,
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.4.1";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MWqkEbw6hdNaXrRLWoxUcppT+X9a+DmEhho9GpG29XM=";
+    hash = "sha256-letdC246I9LDqEnLCOTz51cBnQGbkrsR/i7UN6EMcDA=";
   };
 
   build-system = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    awkward-pandas
     pandas
     pytestCheckHook
     pytest-timeout
