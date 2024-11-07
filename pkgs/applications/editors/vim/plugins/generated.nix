@@ -11134,18 +11134,6 @@ final: prev:
     meta.homepage = "https://github.com/ibhagwan/smartyank.nvim/";
   };
 
-  snap = buildVimPlugin {
-    pname = "snap";
-    version = "2024-06-05";
-    src = fetchFromGitHub {
-      owner = "camspiers";
-      repo = "snap";
-      rev = "486a2ab714eee79c392abfb45bdb94398409ed34";
-      sha256 = "1ghca3fjdd0v3s4jldilki7kzhz891qxkf1l0dzx4h4p420kc42d";
-    };
-    meta.homepage = "https://github.com/camspiers/snap/";
-  };
-
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
     version = "2024-11-07";
@@ -11156,6 +11144,18 @@ final: prev:
       sha256 = "14l3cy2rdm1rxnxl635hijx2jvc2bkrdgrci1sb1caccpypw613y";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
+  };
+
+  snap = buildVimPlugin {
+    pname = "snap";
+    version = "2024-06-05";
+    src = fetchFromGitHub {
+      owner = "camspiers";
+      repo = "snap";
+      rev = "486a2ab714eee79c392abfb45bdb94398409ed34";
+      sha256 = "1ghca3fjdd0v3s4jldilki7kzhz891qxkf1l0dzx4h4p420kc42d";
+    };
+    meta.homepage = "https://github.com/camspiers/snap/";
   };
 
   snippets-nvim = buildVimPlugin {
