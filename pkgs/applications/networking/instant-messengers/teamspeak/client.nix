@@ -94,11 +94,17 @@ stdenv.mkDerivation rec {
   # + PAGER_PATH=
   # it's looking for a dependency and didn't find it. Check the script and make sure the dep is in nativeBuildInputs.
   unpackPhase = ''
+    runHook preUnpack
+
     echo -e '\ny' | PAGER=cat sh -xe $src
     cd TeamSpeak*
+
+    runHook postUnpack
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mv ts3client_linux_${arch} ts3client
     echo "patching ts3client..."
     patchelf --replace-needed libquazip.so ${libsForQt5.quazip}/lib/libquazip1-qt5.so ts3client
@@ -107,10 +113,14 @@ stdenv.mkDerivation rec {
       --set-rpath ${lib.makeLibraryPath deps} \
       --force-rpath \
       ts3client
+
+    runHook postBuild
   '';
 
   installPhase =
     ''
+      runHook preInstall
+
       # Delete unecessary libraries - these are provided by nixos.
       rm *.so.* *.so
       rm QtWebEngineProcess
@@ -137,6 +147,8 @@ stdenv.mkDerivation rec {
     + ''
       --set QT_QPA_PLATFORM xcb \
       --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
+
+      runHook postInstall
     '';
 
   dontStrip = true;
