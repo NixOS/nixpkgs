@@ -5081,6 +5081,22 @@ let
         };
       };
 
+      visualstudiotoolsforunity.vstuc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vstuc";
+          publisher = "VisualStudioToolsForUnity";
+          version = "1.0.4";
+          hash = "sha256-LkLdXbXW91wMmaXpnRxSpff/zHCOE74nPP3aS0Ig3Gc=";
+        };
+        meta = {
+          description = "Integrates Visual Studio Code for Unity";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=visualstudiotoolsforunity.vstuc";
+          homepage = "https://github.com/MicrosoftDocs/vscode-dotnettools";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.mib ];
+        };
+      };
+
       vitaliymaz.vscode-svg-previewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-svg-previewer";
