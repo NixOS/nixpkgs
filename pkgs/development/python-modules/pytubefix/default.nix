@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   pytestCheckHook,
 }:
@@ -22,6 +23,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  patches = [
+    # cipher test: correct function name resolution (https://github.com/JuanBindez/pytubefix/pull/316)
+    (fetchpatch {
+      url = "https://github.com/JuanBindez/pytubefix/commit/25a90fd3552c85944e140e8ba65ef0ded935dcf0.patch";
+      hash = "sha256-RXVA6XTrnI3N6/wYm8hSQAg0zXPWMdSairnKuCNlZBs=";
+    })
+  ];
+
   disabledTestPaths = [
     # require network access
     "tests/test_captions.py"
@@ -31,6 +40,7 @@ buildPythonPackage rec {
     "tests/test_main.py"
     "tests/test_query.py"
     "tests/test_streams.py"
+    "tests/contrib/test_playlist.py"
   ];
 
   pythonImportsCheck = [ "pytubefix" ];
