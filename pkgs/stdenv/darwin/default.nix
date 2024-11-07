@@ -1273,7 +1273,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 patch
                 ;
 
-              "apple-sdk_${sdkMajorVersion}" = self.apple-sdk;
+              # TODO: Simplify when dropping support for macOS < 11.
+              "apple-sdk_${builtins.replaceStrings [ "." ] [ "_" ] sdkMajorVersion}" = self.apple-sdk;
 
               darwin = super.darwin.overrideScope (
                 _: _:
