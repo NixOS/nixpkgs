@@ -1262,6 +1262,7 @@ dont-distribute-packages:
  - essence-of-live-coding-pulse
  - essence-of-live-coding-pulse-example
  - essence-of-live-coding-quickcheck
+ - essence-of-live-coding-vivid
  - essence-of-live-coding-warp
  - estimators
  - estreps
@@ -2497,6 +2498,7 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
+ - large-anon
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -3162,6 +3164,8 @@ dont-distribute-packages:
  - potoki-hasql
  - potoki-zlib
  - powerqueue-sqs
+ - ppad-hmac-drbg
+ - ppad-secp256k1
  - pqueue-mtl
  - practice-room
  - pred-set
