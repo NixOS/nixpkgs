@@ -1,0 +1,13 @@
+diff --git a/setuptools/_vendor/importlib_metadata/__init__.py b/setuptools/_vendor/importlib_metadata/__init__.py
+index ed4813551..790513de1 100644
+--- a/setuptools/_vendor/importlib_metadata/__init__.py
++++ b/setuptools/_vendor/importlib_metadata/__init__.py
+@@ -836,7 +836,7 @@ class Prepared:
+         """
+         PEP 503 normalization plus dashes as underscores.
+         """
+-        return re.sub(r"[-_.]+", "-", name).lower().replace('-', '_')
++        return re.sub(r"[-_.]+", "-", str(name)).lower().replace('-', '_')
+ 
+     @staticmethod
+     def legacy_normalize(name):

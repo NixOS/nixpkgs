@@ -6,6 +6,7 @@
   fetchFromGitHub,
   python,
   wheel,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-ZvhXfusayUHHFXl7ZBksFhxTi1p+Va6qAwq7Fo7Tg/s=";
   };
 
-  patches = [
-    ./tag-date.patch
-  ];
+  patches =
+    [
+      ./tag-date.patch
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      ./str-fix.patch
+    ];
 
   nativeBuildInputs = [ wheel ];
 
