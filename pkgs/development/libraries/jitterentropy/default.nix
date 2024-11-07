@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ]; # avoid warnings
 
-  meta = with lib; {
+  meta = {
     description = "Provides a noise source using the CPU execution timing jitter";
     homepage = "https://github.com/smuellerDD/jitterentropy-library";
     changelog = "https://github.com/smuellerDD/jitterentropy-library/raw/v${version}/CHANGES.md";
-    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ johnazoidberg c0bw3b ];
+    license = with lib.licenses; [ bsd3 /* OR */ gpl2Only ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ johnazoidberg c0bw3b ];
   };
 }
