@@ -1782,7 +1782,7 @@ with pkgs;
 
   hyperpotamus = callPackage ../tools/misc/hyperpotamus { };
 
-  inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+  inherit (callPackages ../tools/networking/ivpn/default.nix { buildGoModule = buildGo122Module; }) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
 
@@ -6467,10 +6467,6 @@ with pkgs;
   };
 
   age-plugin-tpm = callPackage ../tools/security/age-plugin-tpm { };
-
-  age-plugin-yubikey = darwin.apple_sdk_11_0.callPackage ../tools/security/age-plugin-yubikey {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation PCSC IOKit;
-  };
 
   artim-dark = callPackage ../data/themes/artim-dark { };
 
@@ -17446,8 +17442,6 @@ with pkgs;
   gnome-doc-utils = callPackage ../development/tools/documentation/gnome-doc-utils { };
 
   gnome-desktop-testing = callPackage ../development/tools/gnome-desktop-testing { };
-
-  gnome-firmware = callPackage ../applications/misc/gnome-firmware { };
 
   gnome-tecla = callPackage ../applications/misc/gnome-tecla { };
 
