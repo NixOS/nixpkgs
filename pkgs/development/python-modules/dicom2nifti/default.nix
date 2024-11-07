@@ -8,6 +8,8 @@
   nibabel,
   numpy,
   pydicom,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
   scipy,
   setuptools,
 }:
@@ -42,7 +44,11 @@ buildPythonPackage rec {
     substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pylibjpeg
+    pylibjpeg-libjpeg
+  ];
 
   pythonImportsCheck = [ "dicom2nifti" ];
 
