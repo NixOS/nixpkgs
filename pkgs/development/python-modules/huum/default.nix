@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.7.10";
+  version = "0.7.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "frwickst";
     repo = "pyhuum";
     rev = "refs/tags/${version}";
-    hash = "sha256-INW6d/Zc5UZZOgN6wW+Xbm/wH1K/V6bviu3mID1R+BY=";
+    hash = "sha256-anYVrisn68EFpMsZXQb4PMsDKpRzUomoaJpOFtYVzhc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
