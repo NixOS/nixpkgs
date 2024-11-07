@@ -109,14 +109,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/teamspeak
-    mv * $out/lib/teamspeak/
+    mkdir -p $out/opt/teamspeak
+    mv * $out/opt/teamspeak/
 
     # Grab the desktop icon from the plugin sdk
     install ${pluginsdk}/doc/_static/logo.png -D $out/share/icons/hicolor/64x64/apps/teamspeak.png
 
     mkdir -p $out/bin/
-    ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
+    ln -s $out/opt/teamspeak/ts3client $out/bin/ts3client
 
     runHook postInstall
   '';
