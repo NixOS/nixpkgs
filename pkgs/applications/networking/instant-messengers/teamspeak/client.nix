@@ -21,41 +21,12 @@
   which,
   perl,
   libcxx,
+  autoPatchelfHook,
 }:
 
 let
 
   arch = "amd64";
-
-  deps = [
-    zlib
-    glib
-    libpng
-    freetype
-    xorg.libSM
-    xorg.libICE
-    xorg.libXrender
-    openssl
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcursor
-    xorg.libXinerama
-    xorg.libxcb
-    fontconfig
-    xorg.libXext
-    xorg.libX11
-    alsa-lib
-    libpulseaudio
-    libsForQt5.quazip
-    libcxx
-    libredirect
-  ] ++ (with qt5; [
-    qtbase
-    qtwebengine
-    qtwebchannel
-    qtsvg
-    qtwebsockets
-  ]);
 
   desktopItem = makeDesktopItem {
     name = "teamspeak";
@@ -89,7 +60,38 @@ stdenv.mkDerivation rec {
     which
     perl # Installer script needs `shasum`
     qt5.wrapQtAppsHook
+    autoPatchelfHook
   ];
+
+  buildInputs = [
+    zlib
+    glib
+    libpng
+    freetype
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    openssl
+    xorg.libXrandr
+    xorg.libXfixes
+    xorg.libXcursor
+    xorg.libXinerama
+    xorg.libxcb
+    fontconfig
+    xorg.libXext
+    xorg.libX11
+    alsa-lib
+    libpulseaudio
+    libsForQt5.quazip
+    libcxx
+    libredirect
+  ] ++ (with qt5; [
+    qtbase
+    qtwebengine
+    qtwebchannel
+    qtsvg
+    qtwebsockets
+  ]);
 
   # This just runs the installer script. If it gets stuck at something like
   # ++ exec
@@ -99,37 +101,35 @@ stdenv.mkDerivation rec {
     runHook preUnpack
 
     echo -e '\ny' | PAGER=cat sh -xe $src
-    cd TeamSpeak*
+
+    mv TeamSpeak3-Client-linux_${arch}/* .
 
     runHook postUnpack
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  patchPhase = ''
+    runHook prePatch
+
+    # Delete unecessary libraries - these are provided by nixos.
+    find . -\( -name '*.so' -or -name '*.so.*' -\) -print0 | xargs -0 rm # I hate find.
+
+    rm QtWebEngineProcess
+    rm qt.conf
 
     mv ts3client_linux_${arch} ts3client
-    echo "patching ts3client..."
+
     # Our libquazip's so name has this suffix and there is no symlink
-    patchelf --replace-needed libquazip.so libquazip1-qt5.so ts3client
+    patchelf --replace-needed libquazip.so libquazip1-qt5.so ts3client error_report
 
-    patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${lib.makeLibraryPath deps} \
-      --force-rpath \
-      ts3client
-
-    runHook postBuild
+    runHook postPatch
   '';
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase =
     ''
       runHook preInstall
-
-      # Delete unecessary libraries - these are provided by nixos.
-      rm *.so.* *.so
-      rm QtWebEngineProcess
-      rm qt.conf
-      rm -r platforms # contains libqxcb.so
 
       # Install files.
       mkdir -p $out/lib/teamspeak
@@ -155,9 +155,6 @@ stdenv.mkDerivation rec {
       --set QT_QPA_PLATFORM xcb \
       --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
-
-  dontStrip = true;
-  dontPatchELF = true;
 
   meta = with lib; {
     description = "TeamSpeak voice communication tool";
