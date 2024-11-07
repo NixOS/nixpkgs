@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     which
     perl # Installer script needs `shasum`
+    qt5.wrapQtAppsHook
   ];
 
   # This just runs the installer script. If it gets stuck at something like
@@ -141,14 +142,16 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin/
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
+      runHook postInstall
+    '';
+
+  preFixup =
+    ''
       wrapProgram $out/bin/ts3client \
-        --set QT_PLUGIN_PATH "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}" \
     '' # wayland is currently broken, remove when TS3 fixes that
     + ''
       --set QT_QPA_PLATFORM xcb \
       --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
-
-      runHook postInstall
     '';
 
   dontStrip = true;
