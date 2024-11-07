@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";

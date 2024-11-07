@@ -98,7 +98,7 @@ in
 stdenv.mkDerivation {
   inherit pname version srcs;
 
-  buildInputs = [ stdenv.cc.cc.lib ]
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ]
     ++ optional stdenv.hostPlatform.isLinux libaio
     ++ optional odbcSupport unixODBC;
 

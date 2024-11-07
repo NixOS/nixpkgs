@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in `find $out/lib/sane/ -type f`; do
       # Make it possible to find libstdc++.so.6
-      patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:$out/lib/sane $f
+      patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib:$out/lib/sane $f
 
       # Horrible kludge: The driver hardcodes /usr/lib/sane/ as a dlopen path.
       # We can directly modify the binary to force a relative lookup instead.

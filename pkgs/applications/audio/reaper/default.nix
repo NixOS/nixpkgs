@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
   buildInputs = [
-    stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
+    (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     alsa-lib
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     # Note that libcurl and libxml2 are needed for ReaPack to run.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc.lib ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/

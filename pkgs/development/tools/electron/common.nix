@@ -193,7 +193,7 @@ in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       libPath = lib.makeLibraryPath [
         libnotify
         pipewire
-        stdenv.cc.cc.lib
+        stdenv.cc.cc
         libsecret
         libpulseaudio
         speechd-minimal

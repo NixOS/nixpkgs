@@ -147,15 +147,15 @@ stdenv.mkDerivation rec {
       ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so
       ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so.1
 
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libColorGearCufr2.so.2.0.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" libColorGearCufr2.so.2.0.0
     )
 
     (
       cd $out/bin
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2 cnpdfdrv
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2 cnpdfdrv
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${lib.getLib stdenv.cc.cc}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
 
       wrapProgram $out/bin/cnrsdrvufr2 \
         --prefix LD_LIBRARY_PATH ":" "$out/lib" \

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
     find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc.lib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib stdenv.cc.cc ]
     }
   '';
 

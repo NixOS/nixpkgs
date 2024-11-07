@@ -169,7 +169,7 @@ stdenv.mkDerivation {
       rm -f $out/lib/*.a
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         for LIB in $out/lib/*.dylib; do

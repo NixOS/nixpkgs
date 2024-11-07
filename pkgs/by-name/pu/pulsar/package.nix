@@ -70,7 +70,7 @@ let
     libxkbcommon
     xorg.libxkbfile
     pango
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
     systemd
   ];
 

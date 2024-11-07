@@ -48,7 +48,7 @@ symlinkJoin rec {
       xorg.libXxf86vm
 
       # lwjgl
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
 
       # narrator support
       flite

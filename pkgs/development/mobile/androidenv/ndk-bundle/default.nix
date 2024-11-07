@@ -12,7 +12,7 @@ deployAndroidPackage rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx (lib.getLib stdenv.cc.cc) ];
 
   patchElfBnaries = ''
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling

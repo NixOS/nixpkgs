@@ -16,7 +16,7 @@ let
 
   libPath = lib.makeLibraryPath [
     glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
-    libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc.lib
+    libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc
     dbus libGL
   ];
 
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
                "$out/libQt5Gui.so.5"     \
                "$out/libQt5Core.so.5"    \
                "$out/libQt5Network.so.5" ; do
-        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$bin"
+        patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${libPath}:\$ORIGIN/Analyzers:\$ORIGIN" "$bin"
     done
 
-    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64:${libPath}:\$ORIGIN/../" "$out/platforms/libqxcb.so"
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib:${lib.getLib stdenv.cc.cc}/lib64:${libPath}:\$ORIGIN/../" "$out/platforms/libqxcb.so"
 
     # Build the LD_PRELOAD library that makes Logic work from a read-only directory
     mkdir -p "$out/lib"

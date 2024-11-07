@@ -16,7 +16,7 @@ let
   runtimeLibs = [
     fontconfig.lib
     openssl
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     xorg.libX11
     xorg.libICE
     xorg.libSM

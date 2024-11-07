@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  buildInputs = [ alsa-lib curl gtk3 stdenv.cc.cc.lib webkitgtk_4_0 zenity ];
+  buildInputs = [ alsa-lib curl gtk3 (lib.getLib stdenv.cc.cc) webkitgtk_4_0 zenity ];
 
   installPhase = ''
     mkdir -p "$out/bin"

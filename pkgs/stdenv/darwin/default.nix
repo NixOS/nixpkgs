@@ -129,7 +129,7 @@ let
 
                 rsrc="$out/resource-root"
                 mkdir "$rsrc"
-                ln -s "$(clangResourceRootIncludePath "${clang-unwrapped.lib}")" "$rsrc"
+                ln -s "$(clangResourceRootIncludePath "${lib.getLib clang-unwrapped}")" "$rsrc"
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
@@ -1036,7 +1036,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                       extraBuildCommands = ''
                         rsrc="$out/resource-root"
                         mkdir "$rsrc"
-                        ln -s "${cc.lib}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
+                        ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
                         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
                         ln -s "${prevStage.llvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
                         ln -s "${prevStage.llvmPackages.compiler-rt.out}/share" "$rsrc/share"
@@ -1211,7 +1211,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ++ (with prevStage.llvmPackages; [
             bintools-unwrapped
             clang-unwrapped
-            clang-unwrapped.lib
+            (lib.getLib clang-unwrapped)
             compiler-rt
             compiler-rt.dev
             libcxx

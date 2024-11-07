@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     apple-sdk_11
   ];
 
-  env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${llvmPackages.libclang.lib}/lib";
+  env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${lib.getLib llvmPackages.libclang}/lib";
 
   cargoHash = "sha256-5DS6pTYGOQ4qay6+YiUstInRX17n3RViNxKXtFZ6J3k=";
 

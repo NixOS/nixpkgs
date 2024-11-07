@@ -17,7 +17,7 @@
       substitutions = {
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
         libPath = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
+          stdenv.cc.cc
           stdenv.cc.libc
           dotnet-sdk.passthru.icu
           zlib

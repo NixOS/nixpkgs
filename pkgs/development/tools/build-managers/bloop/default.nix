@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   nativeBuildInputs = [ installShellFiles makeWrapper ]
     ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
-  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) zlib ];
   propagatedBuildInputs = [ jre ];
 
   installPhase = ''

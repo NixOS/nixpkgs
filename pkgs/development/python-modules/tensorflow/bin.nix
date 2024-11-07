@@ -154,7 +154,7 @@ buildPythonPackage {
       ];
 
       libpaths = [
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
         zlib
       ];
 

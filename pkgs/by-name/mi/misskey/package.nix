@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
           lib.makeLibraryPath [
             jemalloc
             ffmpeg-headless
-            stdenv.cc.cc.lib
+            stdenv.cc.cc
           ]
         }
 

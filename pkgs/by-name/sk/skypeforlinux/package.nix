@@ -96,7 +96,7 @@ let
       xorg.libXScrnSaver
       xorg.libxcb
     ]
-    + ":${stdenv.cc.cc.lib}/lib64";
+    + ":${lib.getLib stdenv.cc.cc}/lib64";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then

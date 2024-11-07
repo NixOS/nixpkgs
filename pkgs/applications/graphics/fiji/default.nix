@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems unzip ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   desktopItems = [
     (makeDesktopItem {

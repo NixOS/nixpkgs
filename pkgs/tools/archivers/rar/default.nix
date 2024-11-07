@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) ];
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];

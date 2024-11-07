@@ -10,7 +10,7 @@ let
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
+      libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];
 
 in

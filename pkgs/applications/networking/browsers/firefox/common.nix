@@ -384,7 +384,7 @@ buildStdenv.mkDerivation {
     "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
     "--enable-system-pixman"
     "--with-distribution-id=org.nixos"
-    "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
+    "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
     "--with-system-ffi"
     "--with-system-icu"
     "--with-system-jpeg"

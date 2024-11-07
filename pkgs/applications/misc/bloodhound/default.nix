@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     pango
     systemd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     udev
     xorg.libX11
     xorg.libXScrnSaver

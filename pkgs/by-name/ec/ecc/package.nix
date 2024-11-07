@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/ecc-rs \
-      --prefix LIBCLANG_PATH : ${llvmPackages.libclang.lib}/lib \
+      --prefix LIBCLANG_PATH : ${lib.getLib llvmPackages.libclang}/lib \
       --prefix PATH : ${lib.makeBinPath (with llvmPackages; [clang bintools-unwrapped])}
   '';
 

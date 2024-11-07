@@ -171,7 +171,7 @@ let
     pname = "libasi";
     buildInputs = [
       libusb1
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = with lib; {
@@ -182,7 +182,7 @@ let
 
   libastroasis = buildIndi3rdParty {
     pname = "libastroasis";
-    buildInputs = [ stdenv.cc.cc.lib ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = with lib; {
       license = licenses.unfreeRedistributable;
@@ -193,7 +193,7 @@ let
   libatik = buildIndi3rdParty {
     pname = "libatik";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
       systemd
       libdc1394
@@ -247,7 +247,7 @@ let
   libinovasdk = buildIndi3rdParty {
     pname = "libinovasdk";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -348,7 +348,7 @@ let
     '';
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
       systemd
     ];
@@ -377,7 +377,7 @@ let
     cmakeFlags = [ "-DQHY_FIRMWARE_INSTALL_DIR=\${CMAKE_INSTALL_PREFIX}/lib/firmware/qhy" ];
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -404,7 +404,7 @@ let
   libricohcamerasdk = buildIndi3rdParty {
     pname = "libricohcamerasdk";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -447,7 +447,7 @@ let
   libsvbony = buildIndi3rdParty {
     pname = "libsvbony";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];

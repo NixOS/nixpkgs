@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
     xcbutil

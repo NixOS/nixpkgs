@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       harfbuzz        # libWebView.so
       libsoup_3       # libWebView.so
       webkitgtk_4_1   # libWebView.so
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
     ];
     binPath = lib.makeBinPath [
       zenity          # File selection dialog

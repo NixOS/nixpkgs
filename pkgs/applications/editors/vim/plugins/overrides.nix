@@ -293,7 +293,7 @@ in
           --replace "let g:clang_library_path = ''
       + "''"
       + ''
-        " "let g:clang_library_path='${llvmPackages.libclang.lib}/lib/libclang.so'"
+        " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
 
               substituteInPlace "$out"/plugin/libclang.py \
                 --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
@@ -302,7 +302,7 @@ in
 
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
-      sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
+      sed "/^let g:clighter8_libclang_path/s|')$|${lib.getLib llvmPackages.clang.cc}/lib/libclang.so')|" \
         -i "$out"/plugin/clighter8.vim
     '';
   };

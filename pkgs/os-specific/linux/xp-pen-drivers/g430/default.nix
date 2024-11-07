@@ -19,7 +19,7 @@ mkDerivation rec {
     libXtst
     qtbase
     libglvnd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''

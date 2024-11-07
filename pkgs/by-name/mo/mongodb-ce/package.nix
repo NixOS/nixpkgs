@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl.dev
     openssl.dev
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''

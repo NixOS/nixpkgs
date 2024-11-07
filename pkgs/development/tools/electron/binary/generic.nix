@@ -97,7 +97,7 @@ let
     xorg.libxkbfile
     pango
     pciutils
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
     systemd
   ]
     ++ lib.optionals (lib.versionAtLeast version "9.0.0") [ libdrm mesa ]

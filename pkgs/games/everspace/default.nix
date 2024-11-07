@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     pango
     gtk2-x11
     openal
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   runtimeDependencies = [

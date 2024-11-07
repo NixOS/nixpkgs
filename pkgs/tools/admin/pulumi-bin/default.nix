@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     install -D -t $out/bin/ *
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
   '' + ''
     installShellCompletion --cmd pulumi \
       --bash <($out/bin/pulumi completion bash) \

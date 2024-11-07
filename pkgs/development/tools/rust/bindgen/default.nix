@@ -1,4 +1,4 @@
-{ rust-bindgen-unwrapped, zlib, bash, runCommand, runCommandCC }:
+{ lib, rust-bindgen-unwrapped, zlib, bash, runCommand, runCommandCC }:
 let
   clang = rust-bindgen-unwrapped.clang;
   self = runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
@@ -6,7 +6,7 @@ let
       #for substituteAll
       inherit bash;
       unwrapped = rust-bindgen-unwrapped;
-      libclang = clang.cc.lib;
+      libclang = (lib.getLib clang.cc);
       meta = rust-bindgen-unwrapped.meta // {
         longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
           This version of bindgen is wrapped with the required compiler flags
