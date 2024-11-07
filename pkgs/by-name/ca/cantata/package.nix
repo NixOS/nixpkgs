@@ -197,5 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Technically, Cantata should run on Darwin/Windows so if someone wants to
     # bother figuring that one out, be my guest.
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
 })
