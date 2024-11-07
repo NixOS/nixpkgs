@@ -20,6 +20,7 @@
   pkg-config,
   rustPlatform,
   rustc,
+  versionCheckHook,
   wrapGAppsHook4,
 }:
 
@@ -76,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   checkPhase = ''
     runHook preCheck
