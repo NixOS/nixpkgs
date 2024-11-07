@@ -3,23 +3,23 @@
   fetchFromGitHub,
   libxcb,
   makeBinaryWrapper,
+  nix-update-script,
   pkg-config,
   rustPlatform,
-  unstableGitUpdater,
   xcb-util-cursor,
   xwayland,
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "xwayland-satellite";
-  version = "0.4-unstable-2024-09-15";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
-    rev = "b962a0f33b503aa39c9cf6919f488b664e5b79b4";
-    hash = "sha256-OANPb73V/RQDqtpIcbzeJ93KuOHKFQv+1xXC44Ut7tY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nq7bouXQXaaPPo/E+Jbq+wNHnatD4dY8OxSrRqzvy6s=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-1EtwGMoLfYK0VZj8jdQiweO/RHGBzyEoeMEI4pmqfu8=";
+  cargoHash = "sha256-KnkU+uLToD0cBNgPnRiR34XHIphQWoATjim1E/MVf48=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
       --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
-  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Xwayland outside your Wayland compositor";
