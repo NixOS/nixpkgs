@@ -2,31 +2,46 @@
 , buildPythonApplication
 , fetchPypi
 # build inputs
+, about-time
 , aiofiles
 , aiohttp
+, aiosignal
+, alive-progress
+, async-timeout
 , attrs
 , certifi
+, charset-normalizer
 , cssselect
+, frozenlist
 , html5lib
+, idna
 , isodate
 , json-home-client
+, kdl-py
 , lxml
+, multidict
 , pillow
 , pygments
 , requests
 , result
 , setuptools
+, six
 , tenacity
+, typing-extensions
+, uri-template
+, urllib3
+, webencodings
 , widlparser
+, yarl
 }:
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "3.7.0";
+  version = "4.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
+    hash = "sha256-vtZ97brCk+fd/HsA2UHdS17o8rJ/VvSOdhg0MHzlCs8=";
   };
 
   # Relax requirements from "==" to ">="
@@ -37,22 +52,37 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
+    about-time
     aiofiles
     aiohttp
+    aiosignal
+    alive-progress
+    async-timeout
     attrs
     certifi
+    charset-normalizer
     cssselect
+    frozenlist
     html5lib
+    idna
     isodate
     json-home-client
+    kdl-py
     lxml
+    multidict
     pillow
     pygments
     requests
     result
     setuptools
+    six
     tenacity
+    typing-extensions
+    uri-template
+    urllib3
+    webencodings
     widlparser
+    yarl
   ];
 
   checkPhase = ''
