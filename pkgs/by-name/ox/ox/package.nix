@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, testers, nix-update-script, ox }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  nix-update-script,
+  ox,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
