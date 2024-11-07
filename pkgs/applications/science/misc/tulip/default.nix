@@ -47,12 +47,15 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    # fatal error: 'Python.h' file not found
-    "-I${python3}/include/${python3.libPrefix}"
-    # error: format string is not a string literal (potentially insecure)
-    "-Wno-format-security"
-  ]);
+  env.NIX_CFLAGS_COMPILE =
+    # error: invalid conversion from 'unsigned char*' to 'char*'
+    "-fpermissive "
+    + (lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+      # fatal error: 'Python.h' file not found
+      "-I${python3}/include/${python3.libPrefix}"
+      # error: format string is not a string literal (potentially insecure)
+      "-Wno-format-security"
+    ]));
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
