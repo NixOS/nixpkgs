@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , qt6
@@ -22,9 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/gui/qt/";
 
   patches = [
-    # This is resolved upstream, but I can't apply the patch because the
-    # sourceRoot isn't set to the base of the Git repo.
-    ./resolve-ambiguous-constexpr.patch
+    (fetchpatch {
+      name = "resolve-ambiguous-constexpr.patch";
+      url = "https://github.com/CE-Programming/CEmu/commit/3e43e0358846f18d9246e9252d1fe0966aa26a14.diff";
+      hash = "sha256-W2H9Rz2zighez99T/PbA3v+Eer5nZEjXXx/r2gyKh6k=";
+      relative = "gui/qt";
+    })
   ];
 
   nativeBuildInputs = [
