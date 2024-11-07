@@ -1,27 +1,35 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, gtk-layer-shell
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk-layer-shell,
 }:
 
 buildGoModule rec {
   pname = "nwg-dock-hyprland";
-  version = "0.2.2";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-dock-hyprland";
-    rev = "v${version}";
-    hash = "sha256-iamDOQcQJRdFVnwffWPIXHlY0J4orfrEbfLzaoeV+KM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Vp8JmRQf71vezdknzifxlK7zTlorwiEHsyXpmy6mxIE=";
   };
 
-  vendorHash = "sha256-cZ5w7B8bi0faOVWoQ6eeW5ejCZJgnNB91DQalC75mPo=";
+  vendorHash = "sha256-RBU0l4YRtV5JPH1dLT+lZ05jmxRwyn3glMUKHw1Eg8g=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+
   buildInputs = [ gtk-layer-shell ];
 
   postInstall = ''
