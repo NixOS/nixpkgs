@@ -7130,9 +7130,7 @@ with pkgs;
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-  };
+  cargo-udeps = callPackage ../development/tools/rust/cargo-udeps { };
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
