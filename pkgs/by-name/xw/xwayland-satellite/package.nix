@@ -63,6 +63,7 @@ rustPlatform.buildRustPackage rec {
       Grants rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base.
     '';
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
+    changelog = "https://github.com/Supreeeme/xwayland-satellite/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       if-loop69420
