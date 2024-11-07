@@ -26,13 +26,13 @@ assert (blas.isILP64 == lapack.isILP64 &&
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.13";
+  version = "0.10.15";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
     rev = finalAttrs.version;
-    hash = "sha256-c5yZI5AfaO/NFyy88efu1COb+T2r1LpHhUTfilw2H1U=";
+    hash = "sha256-TSAVRLeOWh3IQ9X0Zr4CQS+h1vTeUZnzMp/IYujGMn0=";
   };
 
   postPatch = ''
