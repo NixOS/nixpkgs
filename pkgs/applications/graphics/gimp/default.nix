@@ -57,13 +57,13 @@ let
   python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.10.38";
+  version = "3.0.0-rc1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
+    url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
+    sha256 = "b3d0b264c5e38e789faaf3417003397f3240014c59c7f417f9ca3bd39c5ffb66";
   };
 
   patches = [
@@ -147,7 +147,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python2.pkgs.pygtk
   ];
 
-  # needed by gimp-2.0.pc
+  # needed by gimp-3.0.pc
   propagatedBuildInputs = [
     gegl
   ];
