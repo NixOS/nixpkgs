@@ -28,7 +28,6 @@
   mesa,
   mpfr,
   nlopt,
-  slic3r,
   opencascade-occt_7_6,
   openvdb,
   opencv,
