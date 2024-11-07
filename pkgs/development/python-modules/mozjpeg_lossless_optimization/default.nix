@@ -7,6 +7,7 @@
   pytestCheckHook,
   setuptools,
   cmake,
+  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "mozjpeg_lossless_optimization";
@@ -36,6 +37,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
   nativeCheckInputs = [ pytestCheckHook ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Python library to optimize JPEGs losslessly using MozJPEG";
