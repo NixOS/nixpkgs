@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
-  version = "0.35.1-unstable-2024-09-22";
+  version = "0.35.1-unstable-2024-11-01";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "d5f137ce47de39e2c8c4ed09d13ba1f809bee560";
-    hash = "sha256-12XKeBCKciKummI43oTbKGkkY0mghA82ir2C3LhnwSs=";
+    rev = "f03bdcf472d32d51a1093528071dc329b348379d";
+    hash = "sha256-fbk0m20NpaUCWvH/l9hfmx+VKw4U3pkTkXdAeHL7bHs=";
   };
 
-  cargoHash = "sha256-XSmeJAK18J9WxrG5orFbAB9hWVLQQ50oB223oHT3OOk=";
+  cargoHash = "sha256-PNqecQSx0Q+K3bBfbOJYWPdl7JdUTDQ4f95RUuW0vPw=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -35,6 +35,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_obfuscated_share_link"
     "--skip=test_share_link_strip_json"
     "--skip=test_localization_popular"
+    "--skip=test_private_sub"
+    "--skip=test_banned_sub"
+    "--skip=test_gated_sub"
 
     # subreddit.rs
     "--skip=test_fetching_subreddit"
@@ -48,6 +51,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_oauth_client"
     "--skip=test_oauth_client_refresh"
     "--skip=test_oauth_token_exists"
+    "--skip=test_oauth_headers_len"
   ];
 
   env = {
