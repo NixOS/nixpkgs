@@ -26,20 +26,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.34.0";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-6UcByIiKBAIicH3dNF+6byuj/WsEb4Xi+iPvfjPsQkA=";
+    hash = "sha256-ydb80+FP2IsobvCZiIKzbErAJNakVoSoYrhddmPmYkc=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-z8d1paC5VQ/XsXJuQ6Z7PjSwC6abN6kRmG0sfI9aCqw=";
+  npmDepsHash = "sha256-ODE8GLIgdUEOiniki8jzkHfU5TKHWoIIbjGJjNzMZCI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -85,6 +85,14 @@ buildNpmPackage' rec {
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+
+  # remove giflib dependency
+  npmRebuildFlags = [ "--ignore-scripts" ];
+  preBuild = ''
+    substituteInPlace node_modules/canvas/binding.gyp \
+      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+    npm rebuild
+  '';
 
   dontNpmBuild = true;
   postBuild = ''
@@ -166,12 +174,12 @@ buildNpmPackage' rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gepbird
       kashw2
       lucasew
