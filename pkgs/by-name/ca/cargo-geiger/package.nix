@@ -4,9 +4,6 @@
 , rustPlatform
 , pkg-config
 , openssl
-  # darwin dependencies
-, darwin
-, libiconv
 , curl
 }:
 
@@ -32,8 +29,7 @@ rustPlatform.buildRustPackage rec {
     ./allow-warnings.patch
   ];
 
-  buildInputs = [ curl openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation Security libiconv ]);
+  buildInputs = [ curl openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   # skip tests with networking or other failures
