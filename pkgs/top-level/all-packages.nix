@@ -30987,8 +30987,6 @@ with pkgs;
 
   nwg-dock = callPackage ../applications/misc/nwg-dock { };
 
-  nwg-dock-hyprland = callPackage ../applications/misc/nwg-dock-hyprland { };
-
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
   nwg-look = callPackage ../applications/misc/nwg-look { };
