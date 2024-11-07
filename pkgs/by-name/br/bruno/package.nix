@@ -86,8 +86,9 @@ buildNpmPackage rec {
     npm rebuild
   '';
 
-  dontNpmBuild = true;
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
+
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
@@ -127,6 +128,8 @@ buildNpmPackage rec {
     }
 
     popd
+
+    runHook postBuild
   '';
 
   npmPackFlags = [ "--ignore-scripts" ];
