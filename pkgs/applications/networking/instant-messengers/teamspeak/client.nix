@@ -12,16 +12,12 @@
   openssl,
   xorg,
   fontconfig,
-  qtbase,
-  qtwebengine,
-  qtwebchannel,
-  qtsvg,
-  qtwebsockets,
+  qt5,
+  libsForQt5,
   xkeyboard_config,
   alsa-lib,
   libpulseaudio ? null,
   libredirect,
-  quazip,
   which,
   perl,
   libcxx,
@@ -49,15 +45,16 @@ let
     xorg.libXext
     xorg.libX11
     alsa-lib
+    libpulseaudio
+    libsForQt5.quazip
+    libcxx
+  ] ++ (with qt5; [
     qtbase
     qtwebengine
     qtwebchannel
     qtsvg
     qtwebsockets
-    libpulseaudio
-    quazip
-    libcxx
-  ];
+  ]);
 
   desktopItem = makeDesktopItem {
     name = "teamspeak";
@@ -104,7 +101,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv ts3client_linux_${arch} ts3client
     echo "patching ts3client..."
-    patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip1-qt5.so ts3client
+    patchelf --replace-needed libquazip.so ${libsForQt5.quazip}/lib/libquazip1-qt5.so ts3client
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${lib.makeLibraryPath deps} \
@@ -135,7 +132,7 @@ stdenv.mkDerivation rec {
 
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
+        --set QT_PLUGIN_PATH "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}" \
     '' # wayland is currently broken, remove when TS3 fixes that
     + ''
       --set QT_QPA_PLATFORM xcb \
