@@ -6117,8 +6117,6 @@ with pkgs;
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
-  cantata = libsForQt5.callPackage ../applications/audio/cantata { };
-
   cantoolz = callPackage ../tools/networking/cantoolz { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
@@ -38372,5 +38370,9 @@ with pkgs;
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
+  };
+
+  cantata = callPackage ../by-name/ca/cantata/package.nix {
+    ffmpeg = ffmpeg_6;
   };
 }
