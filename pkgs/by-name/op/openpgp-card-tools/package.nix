@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
+, installShellFiles
 , pkg-config
 , pcsclite
 , dbus
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-G5+lVK41hbzy/Ltc0EKoUfqF0M1OYu679jyVjYKJmn0=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ installShellFiles pkg-config rustPlatform.bindgenHook ];
 
   buildInputs = [ pcsclite dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.PCSC
@@ -36,6 +37,13 @@ rustPlatform.buildRustPackage rec {
       package = openpgp-card-tools;
     };
   };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    OCT_COMPLETION_OUTPUT_DIR=$PWD/shell $out/bin/oct
+    installShellCompletion ./shell/oct.{bash,fish} ./shell/_oct
+    OCT_MANPAGE_OUTPUT_DIR=$PWD/man $out/bin/oct
+    installManPage ./man/*.1
+  '';
 
   meta = with lib; {
     description = "Tool for inspecting and configuring OpenPGP cards";
