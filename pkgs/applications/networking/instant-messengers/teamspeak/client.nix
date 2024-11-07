@@ -48,6 +48,7 @@ let
     libpulseaudio
     libsForQt5.quazip
     libcxx
+    libredirect
   ] ++ (with qt5; [
     qtbase
     qtwebengine
@@ -141,7 +142,6 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}" \
     '' # wayland is currently broken, remove when TS3 fixes that
     + ''
