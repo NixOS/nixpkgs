@@ -109,7 +109,9 @@ stdenv.mkDerivation rec {
 
     mv ts3client_linux_${arch} ts3client
     echo "patching ts3client..."
-    patchelf --replace-needed libquazip.so ${libsForQt5.quazip}/lib/libquazip1-qt5.so ts3client
+    # Our libquazip's so name has this suffix and there is no symlink
+    patchelf --replace-needed libquazip.so libquazip1-qt5.so ts3client
+
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${lib.makeLibraryPath deps} \
