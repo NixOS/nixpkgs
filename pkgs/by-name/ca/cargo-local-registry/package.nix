@@ -6,8 +6,6 @@
 , libgit2
 , openssl
 , zlib
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,10 +30,6 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # tests require internet access
