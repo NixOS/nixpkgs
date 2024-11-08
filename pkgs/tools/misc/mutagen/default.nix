@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 buildGoModule rec {
   pname = "mutagen";
@@ -35,7 +35,7 @@ buildGoModule rec {
   postInstall = ''
     install -d $out/libexec
     ln -s ${agents}/mutagen-agents.tar.gz $out/libexec/
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/mutagen generate \
       --bash-completion-script mutagen.bash \
       --fish-completion-script mutagen.fish \
