@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
+  buildInputs = [ curl openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv ];
 
   nativeCheckInputs = [ git ];
 
