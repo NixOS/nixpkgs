@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-CNQUqhFnuxoZpkVKyp/tDEfX91R8kjC2R41o2HA9eaM=";
+    hash = "sha256-PTy/YcojJGrYQhdp98e3rEMqHIWDMR5jiSC6BdzBT/M=";
   };
 
   patches = [
