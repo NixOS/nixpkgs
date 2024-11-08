@@ -29,8 +29,7 @@ buildPythonPackage rec {
     sed -i /patchelf/d pyproject.toml
     # Build system requirements
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=65.6.3,<71" "setuptools" \
-      --replace-fail "wheel>=0.42.0,<=0.43.0" "wheel"
+      --replace-fail "setuptools>=70.1,<75" "setuptools"
   '';
 
   build-system = [
