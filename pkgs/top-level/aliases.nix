@@ -839,6 +839,8 @@ mapAliases {
   nixUnstable = throw "nixUnstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest."; # Converted to throw 2024-04-22
   nix_2_3 = nixVersions.nix_2_3;
   nixfmt = lib.warn "nixfmt was renamed to nixfmt-classic. The nixfmt attribute may be used for the new RFC 166-style formatter in the future, which is currently available as nixfmt-rfc-style" nixfmt-classic; # Added 2024-03-31
+  nrf-command-line-tools = throw "nrf-command-line-tools has been removed as it depends on segger-jlink, which was removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
+  nrfconnect = throw "nrfconnect has been removed as it depends on segger-jlink, which was removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
 
   # When the nixops_unstable alias is removed, nixops_unstable_minimal can be renamed to nixops_unstable.
 
@@ -1085,6 +1087,8 @@ mapAliases {
   schildichat-desktop = schildichat-web;
   schildichat-desktop-wayland = schildichat-web;
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
+  segger-jlink = throw "segger-jlink has been removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
+  segger-jlink-headless = throw "segger-jlink-headless has been removed as it requires Qt 4, which has been end‐of‐life since 2015"; # Added 2024-11-05
   semeru-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   semeru-jre-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   sensu = throw "sensu has been removed as the upstream project is deprecated. Consider using `sensu-go`"; # Added 2024-10-28
