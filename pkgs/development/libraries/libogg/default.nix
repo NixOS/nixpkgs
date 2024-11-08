@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" true) ];
+
   meta = {
     description = "Media container library to manipulate Ogg files";
     longDescription = ''
