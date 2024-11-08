@@ -29,7 +29,7 @@
 
   vulkanSupport ? true,
   vulkan-loader,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
+  metalSupport ? stdenv.hostPlatform.isDarwin,
 }:
 
 let
