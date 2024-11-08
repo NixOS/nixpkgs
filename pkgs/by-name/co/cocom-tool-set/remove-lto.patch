@@ -1,0 +1,42 @@
+diff --git a/configure b/configure
+index 574cbe9..0dc2aa0 100755
+--- a/configure
++++ b/configure
+@@ -5858,37 +5858,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+     CXXFLAGS="`echo $CXXFLAGS|sed s/-O2//` -O3"
+   fi
+ 
+-  my_save_cflags="$CFLAGS"
+-  CFLAGS=-flto
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC supports -flto" >&5
+-$as_echo_n "checking whether CC supports -flto... " >&6; }
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-      lto=yes
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-  CFLAGS="$my_save_cflags"
+-  if test "$lto" = yes; then
+-    CFLAGS="`echo $CFLAGS` -flto"
+-    CXXFLAGS="`echo $CXXFLAGS` -flto"
+-  fi
+-
+   system=`uname -m`
+   case $system in
+ 	i386*|i486*|i586*|i686*)
