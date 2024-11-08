@@ -13,6 +13,7 @@
   forFHSEnv ? false,
 
   pkgsStatic,
+  ncurses,
 }:
 
 let
@@ -45,7 +46,7 @@ lib.warnIf (withDocs != null)
     # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
     # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
     # or you can check libc/include/sys/cdefs.h in bionic source code
-    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    ++ lib.optional (stdenv.hostPlatform.libc == "bionic" || stdenv.hostPlatform.isCygwin) "fortify";
 
     outputs = [
       "out"
@@ -105,10 +106,10 @@ lib.warnIf (withDocs != null)
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
       "--without-libintl-prefix"
       "--without-libiconv-prefix"
-      "--with-installed-readline"
+      "--with-curses"
       "bash_cv_dev_stdin=present"
       "bash_cv_dev_fd=standard"
-      "bash_cv_termcap_lib=libncurses"
+      "gt_cv_func_printf_posix=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
       "--disable-nls"
@@ -128,20 +129,16 @@ lib.warnIf (withDocs != null)
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
-    buildInputs = lib.optional interactive readline;
+    buildInputs =
+      lib.optional interactive readline ++ lib.optional stdenv.hostPlatform.isCygwin ncurses;
 
     enableParallelBuilding = true;
-
-    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
-      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-      "SHOBJ_LIBS=-lbash"
-    ];
 
     nativeCheckInputs = [ util-linux ];
     doCheck = false; # dependency cycle, needs to be interactive
 
     postInstall = ''
-      ln -s bash "$out/bin/sh"
+      ln -s bash${stdenv.hostPlatform.extensions.executable} "$out/bin/sh"
       rm -f $out/lib/bash/Makefile.inc
     '';
 
