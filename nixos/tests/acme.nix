@@ -466,6 +466,15 @@ in {
                 f"{switcher_path} test"
             )
 
+      # Start a unit explicitly, then wait for it to activate.
+      # This is used for the acme-finished-* targets, as those
+      # aren't started by switch-to-configuration, meaning
+      # wait_for_unit(target) will fail with "no pending jobs"
+      # if it wins the race and checks the target state before
+      # the actual unit is started.
+      def start_and_wait(node, unit):
+          node.start_job(unit)
+          node.wait_for_unit(unit)
 
       # Ensures the issuer of our cert matches the chain
       # and matches the issuer we expect it to be.
@@ -567,7 +576,7 @@ in {
       # Perform http-01 w/ lego test first
       with subtest("Can request certificate with Lego's built in web server"):
           switch_to(webserver, "http01lego")
-          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          start_and_wait(webserver, "acme-finished-http.example.test.target")
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
 
@@ -581,7 +590,7 @@ in {
       with subtest("Can renew certificates when they expire"):
           hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
           switch_to(webserver, "renew")
-          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          start_and_wait(webserver, "acme-finished-http.example.test.target")
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
           hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
@@ -591,7 +600,7 @@ in {
       with subtest("Handles email change correctly"):
           hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
           switch_to(webserver, "accountchange")
-          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          start_and_wait(webserver, "acme-finished-http.example.test.target")
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
           hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
@@ -602,15 +611,15 @@ in {
       switch_to(webserver, "general")
 
       with subtest("Can request certificate with HTTP-01 challenge"):
-          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          start_and_wait(webserver, "acme-finished-a.example.test.target")
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "a.example.test")
 
       with subtest("Runs 1 cert for account creation before others"):
-          webserver.wait_for_unit("acme-finished-b.example.test.target")
-          webserver.wait_for_unit("acme-finished-c.example.test.target")
+          start_and_wait(webserver, "acme-finished-b.example.test.target")
+          start_and_wait(webserver, "acme-finished-c.example.test.target")
           check_connection(client, "b.example.test")
           check_connection(client, "c.example.test")
 
@@ -645,12 +654,12 @@ in {
 
       with subtest("Correctly implements OCSP stapling"):
           switch_to(webserver, "ocsp_stapling")
-          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          start_and_wait(webserver, "acme-finished-a.example.test.target")
           check_stapling(client, "a.example.test")
 
       with subtest("Can request certificate with HTTP-01 using lego's internal web server"):
           switch_to(webserver, "lego_server")
-          webserver.wait_for_unit("acme-finished-lego.example.test.target")
+          start_and_wait(webserver, "acme-finished-lego.example.test.target")
           webserver.wait_for_unit("nginx.service")
           webserver.succeed("echo HENLO && systemctl cat nginx.service")
           webserver.succeed('test "$(stat -c \'%U\' /var/lib/acme/* | uniq)" = "root"')
@@ -660,23 +669,23 @@ in {
       with subtest("Can request certificate with HTTP-01 when nginx startup is delayed"):
           webserver.execute("systemctl stop nginx")
           switch_to(webserver, "slow_startup")
-          webserver.wait_for_unit("acme-finished-slow.example.test.target")
+          start_and_wait(webserver, "acme-finished-slow.example.test.target")
           check_issuer(webserver, "slow.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.test")
 
       with subtest("Can limit concurrency of running renewals"):
           switch_to(webserver, "concurrency_limit")
-          webserver.wait_for_unit("acme-finished-f.example.test.target")
-          webserver.wait_for_unit("acme-finished-g.example.test.target")
-          webserver.wait_for_unit("acme-finished-h.example.test.target")
+          start_and_wait(webserver, "acme-finished-f.example.test.target")
+          start_and_wait(webserver, "acme-finished-g.example.test.target")
+          start_and_wait(webserver, "acme-finished-h.example.test.target")
           check_connection(client, "f.example.test")
           check_connection(client, "g.example.test")
           check_connection(client, "h.example.test")
 
       with subtest("Works with caddy"):
           switch_to(webserver, "caddy")
-          webserver.wait_for_unit("acme-finished-example.test.target")
+          start_and_wait(webserver, "acme-finished-example.test.target")
           webserver.wait_for_unit("caddy.service")
           # FIXME reloading caddy is not sufficient to load new certs.
           # Restart it manually until this is fixed.
@@ -685,7 +694,7 @@ in {
 
       with subtest("security.acme changes reflect on caddy"):
           switch_to(webserver, "caddy_change_acme_conf")
-          webserver.wait_for_unit("acme-finished-example.test.target")
+          start_and_wait(webserver, "acme-finished-example.test.target")
           webserver.wait_for_unit("caddy.service")
           # FIXME reloading caddy is not sufficient to load new certs.
           # Restart it manually until this is fixed.
@@ -703,7 +712,8 @@ in {
                   switch_to(webserver, server)
                   for domain in domains:
                       if domain != "wildcard":
-                          webserver.wait_for_unit(
+                          start_and_wait(
+                              webserver,
                               f"acme-finished-{server}-{domain}.example.test.target"
                           )
               except Exception as err:
@@ -737,7 +747,7 @@ in {
           with subtest("Can remove an alias from a domain + cert is updated"):
               test_alias = f"{server}-{domains[0]}-alias.example.test"
               switch_to(webserver, f"{server}_remove_alias")
-              webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
+              start_and_wait(webserver, f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection(client, test_domain)
               rc, _s = client.execute(
@@ -752,7 +762,7 @@ in {
               switch_to(webserver, server)
               wait_for_server()
               switch_to(webserver, f"{server}_change_acme_conf")
-              webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
+              start_and_wait(webserver, f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
 
@@ -763,7 +773,7 @@ in {
           switch_to(webserver, "http01lego_legacyAccountHash", allow_fail=True)
           # unit is failed, but in a way that this throws no exception:
           try:
-            webserver.wait_for_unit("acme-finished-http.example.test.target")
+            start_and_wait(webserver, "acme-finished-http.example.test.target")
           except Exception:
             # The unit is allowed – or even expected – to fail due to not being able to
             # reach the actual letsencrypt server. We only use it for serialising the
