@@ -63,12 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "wipegame";
     description = "Re-implementation of the 1995 PSX game wipEout";
     homepage = "https://github.com/phoboslab/wipeout-rewrite";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })
