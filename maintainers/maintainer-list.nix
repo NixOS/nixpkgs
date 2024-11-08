@@ -21839,6 +21839,12 @@
     github = "thefossguy";
     githubId = 44400303;
   };
+  thegrubster = {
+    name = "Andreas Krath";
+    email = "andreas.krath@gmail.com";
+    github = "thegrubster";
+    githubId = 70445343;
+  };
   thehans255 = {
     name = "Hans Jorgensen";
     email = "foss-contact@thehans255.com";
