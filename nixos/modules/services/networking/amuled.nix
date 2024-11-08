@@ -1,4 +1,4 @@
-{ config, lib, options, pkgs, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 let
   cfg = config.services.amule;
   opt = options.services.amule;
@@ -40,6 +40,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "amule-daemon" { };
+
     };
 
   };
@@ -66,15 +68,37 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${user} ${cfg.dataDir}
-      '';
+      serviceConfig = {
+        Environment = [ "HOME=${cfg.dataDir}" ];
+        Type = "forking";
+        User = "${cfg.user}";
+        WorkingDirectory = cfg.dataDir;
+        PIDFile = "${cfg.dataDir}/muleLock";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe' cfg.package "amuled")
+          "--config-dir=${config.services.amule.dataDir}"
+          "--full-daemon"
+        ];
+        Restart = "on-failure";
+        RestartSec = "5s";
 
-      script = ''
-        ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${user} \
-            -c 'HOME="${cfg.dataDir}" ${pkgs.amule-daemon}/bin/amuled'
-      '';
+        # Hardening
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        DevicePolicy = "closed";
+        ProtectSystem = "strict";
+        ReadWritePaths = cfg.dataDir;
+        ProtectHome = "tmpfs";
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = "AF_INET";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+      };
     };
   };
 }
