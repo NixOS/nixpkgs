@@ -5280,6 +5280,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices ApplicationServices Carbon AppKit;
   };
 
+  lapce-utils = callPackage ../applications/editors/lapce/utils.nix { };
+
+  lapce-plugins = callPackage ../applications/editors/lapce/plugins { };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
