@@ -130,14 +130,14 @@ rec {
     mkdir -p /fs${storeDir}
     mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
 
+    echo "mounting host's build directory..."
+    mkdir -p /fs/build
+    mount -t 9p sa /fs/build -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
+
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/run
     ln -sfn /run /fs/var/run
-
-    echo "mounting host's temporary directory..."
-    mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -169,7 +169,12 @@ rec {
 
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
-    source /tmp/xchg/saved-env
+    set -euo pipefail
+    source /build/xchg/saved-env
+    if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
+      source "$NIX_ATTRS_SH_FILE"
+    fi
+    source $stdenv/setup
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
@@ -179,7 +184,6 @@ rec {
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
-    out="$1"
     cd "$NIX_BUILD_TOP"
 
     if ! test -e /bin/sh; then
@@ -203,8 +207,10 @@ rec {
     if test -n "$origBuilder" -a ! -e /.debug; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
-      $origBuilder $origArgs
-      echo $? > /tmp/xchg/in-vm-exit
+      declare -a argsArray=()
+      concatTo argsArray origArgs
+      "$origBuilder" "''${argsArray[@]}"
+      echo $? > /build/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
 
@@ -223,11 +229,12 @@ rec {
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
+      -virtfs local,path=/build,security_model=none,mount_tag=sa \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -259,8 +266,6 @@ rec {
     cd $TMPDIR
     ${qemuCommand}
     EOF
-
-    mkdir -p -m 0700 $out
 
     chmod +x ./run-vm
     source ./run-vm
