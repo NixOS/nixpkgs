@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.83";
+  version = "1.84-unstable-2024-11-07";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "surelog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-V4LmW4ca6KfugOu0XnGwutRqWR/9K6ESokHOB2yAVag=";
+    rev = "5c96759a13467ecbd3905d4a0c169a6640d57da8";
+    hash = "sha256-Jfyme0cz3qTeNMsBMKrRi5YUSfD4Gr2eTW8SrUIrURE=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/chipsalliance/Surelog";
     license = lib.licenses.asl20;
     mainProgram = "surelog";
-    maintainers = with lib.maintainers; [ matthuszagh ];
+    maintainers = with lib.maintainers; [ matthuszagh hzeller ];
     platforms = lib.platforms.all;
   };
 })
