@@ -8,6 +8,8 @@
   nibabel,
   numpy,
   pydicom,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
   scipy,
   setuptools,
 }:
@@ -37,16 +39,16 @@ buildPythonPackage rec {
     scipy
   ];
 
-  # python-gdcm just builds the python interface provided by the "gdcm" package, so
-  # we should be able to replace "python-gdcm" with "gdcm" but this doesn't work
-  # (similar to https://github.com/NixOS/nixpkgs/issues/84774)
   postPatch = ''
-    substituteInPlace setup.py --replace-fail "python-gdcm" ""
     substituteInPlace tests/test_generic.py --replace-fail "from common" "from dicom2nifti.common"
     substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pylibjpeg
+    pylibjpeg-libjpeg
+  ];
 
   pythonImportsCheck = [ "dicom2nifti" ];
 

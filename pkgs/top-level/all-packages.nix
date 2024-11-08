@@ -20433,8 +20433,6 @@ with pkgs;
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
-  libchewing = callPackage ../development/libraries/libchewing { };
-
   libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
@@ -23973,11 +23971,6 @@ with pkgs;
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
 
   dmarc-metrics-exporter = callPackage ../servers/monitoring/prometheus/dmarc-metrics-exporter { };
-
-  dmlive = callPackage ../applications/video/dmlive {
-    inherit (darwin) configd;
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   do-agent = callPackage ../servers/monitoring/do-agent { };
 

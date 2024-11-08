@@ -217,7 +217,7 @@ let
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
-      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation-disable-ans" ]
       ++ lib.optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
     else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
