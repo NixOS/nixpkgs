@@ -248,7 +248,7 @@ with pkgs;
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
-
+ 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
 
   alterx = callPackage ../tools/security/alterx { };
@@ -256,6 +256,8 @@ with pkgs;
   altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
   archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
+ 
+  sublist3r = callPackage ./../by-name/su/sublist3r/package.nix { /* ... */ };
 
   asciicam = callPackage ../applications/video/asciicam { };
 
