@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromGitea,
   flake8,
   click,
   pyyaml,
@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "clickclick";
-  version = "1.2.2";
+  version = "20.10.2";
   format = "setuptools";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "hjacobs";
     repo = "python-clickclick";
     rev = version;
-    sha256 = "1rij9ws9nhsmagiy1vclzliiqfkxi006rf65qvrw1k3sm2s8p5g0";
+    hash = "sha256-gefU6CI4ibtvonsaKZmuffuUNUioBn5ODs72BI5zXOw=";
   };
 
   nativeCheckInputs = [
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Click command line utilities";
-    homepage = "https://github.com/hjacobs/python-clickclick/";
+    homepage = "https://codeberg.org/hjacobs/python-clickclick/";
     license = licenses.asl20;
   };
 }
