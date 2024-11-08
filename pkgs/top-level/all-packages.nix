@@ -1697,8 +1697,6 @@ with pkgs;
 
   askalono = callPackage ../tools/misc/askalono { };
 
-  asleap = callPackage ../tools/networking/asleap { };
-
   awsbck = callPackage ../tools/backup/awsbck {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17914,10 +17912,6 @@ with pkgs;
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
-  antares = callPackage ../by-name/an/antares/package.nix {
-    electron = electron_30;
-  };
-
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
   antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
@@ -17998,7 +17992,7 @@ with pkgs;
   electron_27 = electron_27-bin;
   electron_28 = electron_28-bin;
   electron_29 = electron_29-bin;
-  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
+  electron_30 = electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
@@ -27318,6 +27312,8 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
   linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+  linuxPackages_6_11_hardened = linuxKernel.packages.linux_6_11_hardened;
+  linux_6_11_hardened = linuxKernel.kernels.linux_6_11_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -35377,7 +35373,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_32; };
 
   webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
 
