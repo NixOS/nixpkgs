@@ -17355,6 +17355,8 @@ self: super: with self; {
 
   swh-model = callPackage ../development/python-modules/swh-model { };
 
+  swh-scanner = callPackage ../development/python-modules/swh-scanner { };
+
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
 
   swift = callPackage ../development/python-modules/swift { };
