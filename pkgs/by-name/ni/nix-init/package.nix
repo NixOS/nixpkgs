@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    curl
     installShellFiles
     pkg-config
   ];
