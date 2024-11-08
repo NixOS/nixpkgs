@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   fetchpatch,
   olm,
   libsignal-ffi,
+  versionCheckHook,
   # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
@@ -32,23 +34,45 @@ buildGoModule rec {
     })
   ];
 
-  buildInputs = (lib.optional (!withGoolm) olm) ++ [
-    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
-    # see https://github.com/mautrix/signal/issues/401
-    libsignal-ffi
-  ];
+  buildInputs =
+    (lib.optional (!withGoolm) olm)
+    ++ (lib.optional withGoolm stdenv.cc.cc.lib)
+    ++ [
+      # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+      # see https://github.com/mautrix/signal/issues/401
+      libsignal-ffi
+    ];
+
   tags = lib.optional withGoolm "goolm";
+
+  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
 
   vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
 
-  doCheck = false;
+  doCheck = true;
+  preCheck =
+    ''
+      # Needed by the tests to be able to find libstdc++
+      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+    ''
+    + (lib.optionalString (!withGoolm) ''
+      # When using libolm, the tests need explicit linking to libstdc++
+      export CGO_LDFLAGS="-lstdc++"
+    '');
+
+  postCheck = ''
+    unset LD_LIBRARY_PATH
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
     description = "Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
-      expipiplus1
       niklaskorz
       ma27
     ];

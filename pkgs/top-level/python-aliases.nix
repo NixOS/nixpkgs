@@ -548,8 +548,8 @@ mapAliases ({
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyunifiprotect = throw "pyunifiprotect has disappeared from GitHub and PyPI, use uiprotect instead"; # added 2024-09-17
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
+  pyvicare-neo = pyvicare; # Added 2024-11-06
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
-  pyvicare = pyvicare-neo; # added 2024-08-31
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
@@ -573,6 +573,7 @@ mapAliases ({
   recursivePthLoader = recursive-pth-loader; # added 2024-01-07
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   repeated_test = repeated-test; # added 2022-11-15
+  repocheck = throw "repocheck has been promoted to a top-level attribute name: `pkgs.repocheck`"; # Added 2024-11-03
   reportengine = throw "reportengine has been removed, since it is unmaintained and broken"; # added 2024-08-21
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
@@ -640,6 +641,7 @@ mapAliases ({
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   synologydsm-api = py-synologydsm-api; # added 2024-07-29
   sysv_ipc = sysv-ipc; # added 2024-01-07
+  telegram = throw "telegram has been removed since it is abandoned"; # added 2024-11-06
   tempita = throw "tempita has been removed because it is unmaintained and the upstream repository is gone"; # added 2024-07-29
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
@@ -701,6 +703,7 @@ mapAliases ({
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
   xapp = python-xapp; # added 2024-07-19
+  xarray-datatree = throw "Datatree has been merged upstream into pydata/xarray, and released as of xarray version 2024.10.0."; # added 2024-11-02
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27

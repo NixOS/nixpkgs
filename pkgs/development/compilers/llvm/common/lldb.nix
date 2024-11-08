@@ -115,7 +115,7 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
-    "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"
+    "-DCLANG_RESOURCE_DIR=../../../../${lib.getLib libclang}"
   ] ++ lib.optionals enableManpages ([
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"

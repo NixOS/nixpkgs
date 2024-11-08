@@ -82,7 +82,7 @@
           libxkbcommon
           xorg.libxkbfile
           pango
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           systemd
         ];
       in ''

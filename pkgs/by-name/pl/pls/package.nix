@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,10 +15,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-cDAHzK3pgpn5zEFdLBltf1e28yFFkXOzcF+nvDb8aWI=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   meta = {
     changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";

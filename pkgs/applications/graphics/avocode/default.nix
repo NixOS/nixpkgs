@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   libPath = lib.makeLibraryPath (with xorg; [
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
     at-spi2-core.out
     gdk-pixbuf
     glib

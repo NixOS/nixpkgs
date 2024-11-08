@@ -12,28 +12,22 @@
 
 let
 
-  wasm-bindgen-84 = wasm-bindgen-cli.override {
-    version = "0.2.84";
-    hash = "sha256-0rK+Yx4/Jy44Fw5VwJ3tG243ZsyOIBBehYU54XP/JGk=";
-    cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
-  };
-
   commonDerivationAttrs = {
     pname = "lldap";
-    version = "0.5.1-unstable-2024-08-09";
+    version = "0.5.1-unstable-2024-10-30";
 
     src = fetchFromGitHub {
       owner = "lldap";
       repo = "lldap";
-      rev = "4138963bee15f5423629c081ec88805d43b8235c";
-      hash = "sha256-g/Y+StSQQiA+1O0yh2xIhBHO9/MjM4QW1DNQIABTHdI=";
+      rev = "143eb70bee92e8225028ea00b69735a28e8c088d";
+      hash = "sha256-6XGKz/OKHd80yX9a4rlvc9RZjBB6ao+jiO5Vlcc0ohE=";
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
-        "lber-0.4.1" = "sha256-2rGTpg8puIAXggX9rEbXPdirfetNOHWfFc80xqzPMT4=";
+        "lber-0.4.3" = "sha256-ff0C4uOAohbwHIFt6c0iGQwPDUTJhO3vHlSUDK/yEbY=";
         "opaque-ke-0.6.1" = "sha256-99gaDv7eIcYChmvOKQ4yXuaGVzo2Q6BcgSQOzsLF+fM=";
         "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
       };
@@ -45,7 +39,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-84 binaryen which rustc rustc.llvmPackages.lld
+      wasm-pack wasm-bindgen-cli binaryen which rustc rustc.llvmPackages.lld
     ];
 
     buildPhase = ''

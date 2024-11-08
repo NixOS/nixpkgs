@@ -101,6 +101,11 @@ in
   ) // {
   __structuredAttrs = true;
 
+
+  # the image will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
   nativeBuildInputs = [
     systemd
     fakeroot

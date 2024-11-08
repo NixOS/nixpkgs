@@ -6,7 +6,7 @@
   setuptools,
   matplotlib,
   numpy,
-  opencv4,
+  opencv-python,
   pillow,
   scikit-learn,
   torch,
@@ -27,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-q9PcG836Az+2o1XqeKNh0+z9GN9UGinmGyOAhD5B3Zw=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt\
-      --replace "opencv-python" "opencv"
-  '';
-
   nativeBuildInputs = [
   ];
 
@@ -46,7 +41,7 @@ buildPythonPackage rec {
   dependencies = [
     matplotlib
     numpy
-    opencv4
+    opencv-python
     pillow
     scikit-learn
     torchvision

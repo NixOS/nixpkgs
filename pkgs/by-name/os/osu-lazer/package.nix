@@ -15,6 +15,7 @@
   libglvnd,
   xorg,
   udev,
+  vulkan-loader,
 }:
 
 buildDotnetModule rec {
@@ -57,6 +58,9 @@ buildDotnetModule rec {
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action
     # [verbose]: SDL error log [debug]: Failed loading libudev.so.1: libudev.so.1: cannot open shared object file: No such file or directory
     udev
+
+    # needed for vulkan renderer, can fall back to opengl if omitted
+    vulkan-loader
   ];
 
   executables = [ "osu!" ];

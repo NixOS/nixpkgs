@@ -48,6 +48,13 @@ buildPythonPackage rec {
       url = "https://github.com/open-mmlab/mmengine/commit/4c22f78cdea2981a2b48a167e9feffe4721f8901.patch";
       hash = "sha256-k+IFLeqTEVUGGiqmZg56LK64H/UTvpGN20GJT59wf4A=";
     })
+    (fetchpatch2 {
+      # Bug reported upstream in https://github.com/open-mmlab/mmengine/issues/1575
+      # PR: https://github.com/open-mmlab/mmengine/pull/1589
+      name = "adapt-to-pytest-breaking-change";
+      url = "https://patch-diff.githubusercontent.com/raw/open-mmlab/mmengine/pull/1589.patch";
+      hash = "sha256-lyKf1GCLOPMpDttJ4s9hbATIGCVkiQhtyLfH9WzMWrw=";
+    })
   ];
 
   build-system = [ setuptools ];
@@ -64,7 +71,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    # bitsandbytes (broken as of 2024-07-06)
+    bitsandbytes
     coverage
     dvclive
     lion-pytorch
@@ -77,7 +84,7 @@ buildPythonPackage rec {
 
   preCheck =
     ''
-      export HOME=$TMPDIR
+      export HOME=$(mktemp -d)
     ''
     # Otherwise, the backprop hangs forever. More precisely, this exact line:
     # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
@@ -95,14 +102,6 @@ buildPythonPackage rec {
     "tests/test_runner/test_activation_checkpointing.py"
     # missing dependencies
     "tests/test_visualizer/test_vis_backend.py"
-    # Tests are outdated (runTest instead of run_test)
-    "mmengine/testing/_internal"
-    "tests/test_dist/test_dist.py"
-    "tests/test_dist/test_utils.py"
-    "tests/test_hooks/test_sync_buffers_hook.py"
-    "tests/test_model/test_wrappers/test_model_wrapper.py"
-    "tests/test_optim/test_optimizer/test_optimizer.py"
-    "tests/test_optim/test_optimizer/test_optimizer_wrapper.py"
   ];
 
   disabledTests = [

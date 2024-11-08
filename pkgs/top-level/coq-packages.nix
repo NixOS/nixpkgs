@@ -41,7 +41,6 @@ let
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
-      coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -63,6 +62,7 @@ let
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       ElmExtraction = callPackage ../development/coq-modules/ElmExtraction {};
       equations = callPackage ../development/coq-modules/equations { };
+      ExtLib = callPackage ../development/coq-modules/ExtLib {};
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
@@ -99,12 +99,12 @@ let
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
-      mathcomp-altreals = self.mathcomp-analysis.altreals;
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
       mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};

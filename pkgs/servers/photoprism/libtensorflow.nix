@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # Patch library to use our libc, libstdc++ and others
   patchPhase =
     let
-      rpath = lib.makeLibraryPath [ stdenv.cc.libc stdenv.cc.cc.lib ];
+      rpath = lib.makeLibraryPath [ stdenv.cc.libc stdenv.cc.cc ];
     in
     ''
       chmod -R +w lib

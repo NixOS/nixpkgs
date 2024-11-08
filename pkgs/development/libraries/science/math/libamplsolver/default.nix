@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ aanderse ];
+    # generates header at compile time
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

@@ -153,8 +153,8 @@ let
         # https://github.com/Golevka/emacs-clang-complete-async/issues/90
         auto-complete-clang-async = (addPackageRequires super.auto-complete-clang-async [ self.auto-complete ]).overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.llvm ];
-          CFLAGS = "-I${pkgs.llvmPackages.libclang.lib}/include";
-          LDFLAGS = "-L${pkgs.llvmPackages.libclang.lib}/lib";
+          CFLAGS = "-I${lib.getLib pkgs.llvmPackages.libclang}/include";
+          LDFLAGS = "-L${lib.getLib pkgs.llvmPackages.libclang}/lib";
         });
 
         # part of a larger package
@@ -1384,6 +1384,13 @@ let
         org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
 
         org-trello = ignoreCompilationError super.org-trello; # elisp error
+
+        # Requires xwidgets compiled into emacs, so mark this package
+        # as broken if emacs hasn't been compiled with the flag.
+        org-xlatex =
+          if self.emacs.withXwidgets
+          then super.org-xlatex
+          else markBroken super.org-xlatex;
 
         # Optimizer error: too much on the stack
         orgnav = ignoreCompilationError super.orgnav;

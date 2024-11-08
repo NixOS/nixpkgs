@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
     ncurses5
     numactl
     zlib

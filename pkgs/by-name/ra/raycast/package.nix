@@ -11,12 +11,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.84.8";
+  version = "1.85.0";
 
   src = fetchurl {
     name = "Raycast.dmg";
     url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
-    hash = "sha256-MSxscz2c5eNfdlWxn8sEVtqg2iXlPnIfJHnaiMvwtgY=";
+    hash = "sha256-wx9Ps/7O4y21D7lK3UlL23Cbvl8lRDZ375lOHq67w0I=";
   };
 
   dontPatch = true;
@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     text = ''
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
       version=$(echo "$url" | jq -r '.version')
-      update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix
+      update-source-version raycast "$version" --file=./pkgs/by-name/ra/raycast/package.nix
     '';
   });
 
@@ -59,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lovesegfault
       stepbrobd
       donteatoreo
+      jakecleary
     ];
     platforms = [
       "aarch64-darwin"

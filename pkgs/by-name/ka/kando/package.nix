@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  overrideSDK,
 
   electron,
   nodejs,
@@ -20,15 +19,10 @@
   libXtst,
   libXi,
   wayland,
-  darwin,
+  apple-sdk_11,
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "kando";
   version = "1.4.0";
 
@@ -64,7 +58,9 @@ buildNpmPackage' rec {
       libXi
       wayland
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.AppKit ];
+    ++ lib.optionals stdenv.isDarwin [
+      apple-sdk_11
+    ];
 
   dontUseCmakeConfigure = true;
 

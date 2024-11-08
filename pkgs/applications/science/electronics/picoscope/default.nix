@@ -17,7 +17,7 @@
 let
   shared_meta = lib: {
     homepage = "https://www.picotech.com/downloads/linux";
-    maintainers = with lib.maintainers; [ expipiplus1 wirew0rm ] ++ lib.teams.lumiguide.members;
+    maintainers = with lib.maintainers; [ wirew0rm ] ++ lib.teams.lumiguide.members;
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
   };
@@ -28,7 +28,7 @@ let
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
       nativeBuildInputs = [ dpkg autoPatchelfHook ];
-      buildInputs = [ stdenv.cc.cc.lib ];
+      buildInputs = [ (lib.getLib stdenv.cc.cc) ];
       sourceRoot = ".";
       unpackCmd = "dpkg-deb -x $src .";
       installPhase = ''

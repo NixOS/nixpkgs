@@ -39,7 +39,7 @@ let
             zlib
           ] ++ (args.buildInputs or [ ]);
 
-          env.LIBCLANG_PATH = args.env.LIBCLANG_PATH or "${llvmPackages.libclang.lib}/lib";
+          env.LIBCLANG_PATH = args.env.LIBCLANG_PATH or "${lib.getLib llvmPackages.libclang}/lib";
 
           # Needs to be disabled in BPF builds
           hardeningDisable = [
