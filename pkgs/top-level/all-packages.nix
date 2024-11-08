@@ -14462,7 +14462,7 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = false;
+        langCC = stdenv.targetPlatform.isCygwin; # can't compile libcygwin1.a without C++
         libcCross = libcCross1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -19567,6 +19567,7 @@ with pkgs;
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "ucrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+    else if name == "cygwin" then targetPackages.windows.cygwin or windows.cygwin
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries

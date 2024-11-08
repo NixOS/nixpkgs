@@ -33,6 +33,22 @@ stdenv.mkDerivation {
     (lib.enableFeature stdenv.hostPlatform.isAarch64 "libarm64")
   ];
 
+  postInstall = lib.optionalString stdenv.targetPlatform.isCygwin ''
+    cd $out/lib
+    ln -fs w32api/libkernel32.a .
+    ln -fs w32api/libuser32.a .
+    ln -fs w32api/libadvapi32.a .
+    ln -fs w32api/libshell32.a .
+    ln -fs w32api/libgdi32.a .
+    ln -fs w32api/libcomdlg32.a .
+    ln -fs w32api/libntdll.a .
+    ln -fs w32api/libnetapi32.a .
+    ln -fs w32api/libpsapi.a .
+    ln -fs w32api/libuserenv.a .
+    ln -fs w32api/libnetapi32.a .
+    ln -fs w32api/libdbghelp.a .
+  '';
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];

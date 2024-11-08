@@ -15,6 +15,9 @@ lib.makeScope newScope (
 
     dlfcn = callPackage ./dlfcn { };
 
+    cygwin = callPackage ./cygwin {
+      stdenv = stdenvNoLibc;
+    };
     cygwin_headers = callPackage ./cygwin/headers.nix { };
 
     mingwrt = callPackage ./mingwrt { };
