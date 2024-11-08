@@ -13,6 +13,8 @@
   watchdog,
   webtest,
   wheel,
+  build,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pip
-  ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -51,6 +53,7 @@ buildPythonPackage rec {
     setuptools
     twine
     webtest
+    build
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
