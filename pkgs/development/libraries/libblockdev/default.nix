@@ -40,11 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WCMedMkaMMhZbB3iJu3c+CTT3AvOjzOSYP45J+NQEDQ=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" "python" ];
 
   postPatch = ''
     patchShebangs scripts
+    substituteInPlace src/python/gi/overrides/Makefile.am \
+      --replace-fail ''\'''${exec_prefix}' '@PYTHON_EXEC_PREFIX@'
   '';
+
+  configureFlags = [
+    "--with-python_prefix=${placeholder "python"}"
+  ];
 
   nativeBuildInputs = [
     autoconf-archive
