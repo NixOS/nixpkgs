@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-q6hqteXv600iH7xpCKHgRLkJYSpy9hIf/QnlsYI+jh4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "oldest-supported-numpy" "numpy"
-  '';
-
   build-system = [ meson-python ];
 
   dependencies = [ numpy ];
