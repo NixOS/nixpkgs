@@ -28891,6 +28891,8 @@ with pkgs;
 
   glicol-cli = callPackage ../applications/audio/glicol-cli { };
 
+  globaleaks = callPackage ../servers/web-apps/globaleaks {};
+
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
   gnmic = callPackage ../applications/networking/gnmic { };
