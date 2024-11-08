@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchzip,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "mutagen";
@@ -28,25 +35,33 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
+  subPackages = [
+    "cmd/mutagen"
+    "cmd/mutagen-agent"
+  ];
 
-  tags = [ "mutagencli" "mutagenagent" ];
+  tags = [
+    "mutagencli"
+    "mutagenagent"
+  ];
 
-  postInstall = ''
-    install -d $out/libexec
-    ln -s ${agents}/mutagen-agents.tar.gz $out/libexec/
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    $out/bin/mutagen generate \
-      --bash-completion-script mutagen.bash \
-      --fish-completion-script mutagen.fish \
-      --zsh-completion-script mutagen.zsh
+  postInstall =
+    ''
+      install -d $out/libexec
+      ln -s ${agents}/mutagen-agents.tar.gz $out/libexec/
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      $out/bin/mutagen generate \
+        --bash-completion-script mutagen.bash \
+        --fish-completion-script mutagen.fish \
+        --zsh-completion-script mutagen.zsh
 
-    installShellCompletion \
-      --cmd mutagen \
-      --bash mutagen.bash \
-      --fish mutagen.fish \
-      --zsh mutagen.zsh
-  '';
+      installShellCompletion \
+        --cmd mutagen \
+        --bash mutagen.bash \
+        --fish mutagen.fish \
+        --zsh mutagen.zsh
+    '';
 
   meta = with lib; {
     description = "Make remote development work with your local tools";
