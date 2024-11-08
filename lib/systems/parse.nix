@@ -444,7 +444,7 @@ rec {
       else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
-        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+        then mkSkeletonFromList [ (elemAt l 0) "pc" "cygwin" ]
       # MSVC ought to be the default ABI so this case isn't needed. But then it
       # becomes difficult to handle the gnu* variants for Aarch32 correctly for
       # minGW. So it's easier to make gnu* the default for the MinGW, but
@@ -478,6 +478,13 @@ rec {
         kernel = if elemAt l 2 == "mingw32"
                  then "windows"  # autotools breaks on -gnu for window
                  else elemAt l 2;
+      }
+      # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
+      else if elemAt l 2 == "cygwin"
+      then {
+        cpu = elemAt l 0;
+        kernel = "windows";
+        abi = "cygnus";
       }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
