@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" { } (
+  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir -p "$out"
     ''
