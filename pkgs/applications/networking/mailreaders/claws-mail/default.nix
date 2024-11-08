@@ -107,6 +107,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./mime.patch
+    ./plugin-load-in-default-dir.patch
   ];
 
   preConfigure = ''
