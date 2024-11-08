@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages_19,
   fetchFromGitHub,
 
   gtest,
@@ -23,7 +24,10 @@
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
   version = "4.3.7";
 
@@ -163,5 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mesonlsp";
     maintainers = with maintainers; [ paveloom ];
     platforms = platforms.unix;
+    # ../src/liblog/log.cpp:41:7: error: call to 'format' is ambiguous
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })
