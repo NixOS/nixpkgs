@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , buildPackages
 , coreutils
@@ -29,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     # do not set sticky bit in nix store
     substituteInPlace src/Makefile.in --replace 04755 0755
   '';
+
+  patches = [
+    # Fix for https://github.com/NixOS/nixpkgs/issues/354544
+    (fetchpatch {
+      url = "https://www.sudo.ws/repos/sudo/raw-rev/71e3f5a288e1ac21151b1b9577f0fe3745671cf7";
+      hash = "sha256-L4AF1ee+qW9QKLrUzL5+hC5EznNC9k7sNeVGNBAJ6S4=";
+    })
+  ];
 
   configureFlags = [
     "--with-env-editor"
