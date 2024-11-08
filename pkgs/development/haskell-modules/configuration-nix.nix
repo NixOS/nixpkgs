@@ -113,35 +113,6 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
-  # - Disable scrypt support since the library used only works on x86 due to SSE2:
-  #   https://github.com/informatikr/scrypt/issues/8
-  # - Use crypton as the encryption backend. That override becomes obsolete with
-  #   3.1.* since cabal2nix picks crypton by default then.
-  password =
-    let
-      scryptSupported = pkgs.stdenv.hostPlatform.isx86;
-    in
-
-      lib.pipe
-        (super.password.override ({
-          cryptonite = self.crypton;
-        } // lib.optionalAttrs (!scryptSupported) {
-          scrypt = null;
-        }))
-        ([
-          (enableCabalFlag "crypton")
-          (disableCabalFlag "cryptonite")
-          # https://github.com/cdepillabout/password/pull/84
-          (appendPatch ./patches/password-3.0.4.0-scrypt-conditional.patch)
-          (overrideCabal (drv: {
-            # patch doesn't apply otherwise because of revisions
-            prePatch = drv.prePatch or "" + ''
-              ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-            '';
-          }))
-        ] ++ lib.optionals (!scryptSupported) [
-          (disableCabalFlag "scrypt")
-        ]);
 
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
@@ -184,11 +155,6 @@ self: super: builtins.intersectAttrs super {
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   }) super.nvvm;
-
-  # Doesn't declare LLVM dependency, needs llvm-config
-  llvm-codegen = addBuildTools [
-    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
-  ] super.llvm-codegen;
 
   # hledger* overrides
   inherit (
@@ -415,6 +381,7 @@ self: super: builtins.intersectAttrs super {
 
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
+  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   safe-exceptions = overrideCabal (drv: {
     # Fix strictDeps build error "could not execute: hspec-discover"
@@ -1447,7 +1414,7 @@ self: super: builtins.intersectAttrs super {
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
      in lib.pipe
-          (super.mpi-hs_0_7_3_1.override { ompi = pkgs.mpi; })
+          (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
             ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
