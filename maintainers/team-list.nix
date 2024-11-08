@@ -449,7 +449,6 @@ with lib.maintainers;
   haskell = {
     members = [
       cdepillabout
-      expipiplus1
       maralorn
       ncfavier
       sternenseemann
