@@ -16,20 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-server";
-  version = "0.44.1";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
     rev = "refs/tags/${version}";
-    hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
+    hash = "sha256-SBAt6CyOt28elXGybAx7glLDEs8vYkoaTXHoEaPEuKk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-dxAgTGW+xxnL+vA6j2Ng02F1zt/Y5VaSxP9xg8jfMy8=";
-      "stardust-xr-0.14.1" = "sha256-fmRb46s0Ec8wnoerBh4JCv1WKz2of1YW+YGwy0Gr/yQ=";
+      "smithay-0.3.0" = "sha256-FNsjbcdiI46nNSWMd4smn5Lg53UU4NFmCfV8ZfaJLs0=";
+      "stardust-xr-0.45.0" = "sha256-FdbtBgvknjGW2MnrS2QMwtTSrRjd+KezC3kY5JqRH2s=";
+      "stereokit-macros-0.1.0" = "sha256-cs/fbbqMSaoJZIjDEcqjoqlhldtVTRPBczJ4GD8+Sks=";
     };
   };
 
