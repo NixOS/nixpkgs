@@ -10,8 +10,6 @@
 , openssl
 , zlib
 , zstd
-, stdenv
-, darwin
 , spdx-license-list-data
 , nix
 , nurl
@@ -51,10 +49,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   buildNoDefaultFeatures = true;
