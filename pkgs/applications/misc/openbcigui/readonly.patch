@@ -1,0 +1,22 @@
+diff --git a/OpenBCI_GUI/OpenBCI_GUI.pde b/OpenBCI_GUI/OpenBCI_GUI.pde
+index 1f31e3ab..ad6db348 100644
+--- a/OpenBCI_GUI/OpenBCI_GUI.pde
++++ b/OpenBCI_GUI/OpenBCI_GUI.pde
+@@ -364,17 +364,6 @@ void setup() {
+ 
+     cog = loadImage("cog_1024x1024.png");
+ 
+-    // check if the current directory is writable
+-    File dummy = new File(sketchPath());
+-    if (!dummy.canWrite()) {
+-        showStartupError = true;
+-        startupErrorMessage = "OpenBCI GUI was launched from a read-only location.\n\n" +
+-            "Please move the application to a different location and re-launch.\n" +
+-            "If you just downloaded the GUI, move it out of the disk image or Downloads folder.\n\n" +
+-            "If this error persists, contact the OpenBCI team for support.";
+-        return; // early exit
+-    }
+-    
+     directoryManager = new DirectoryManager();
+ 
+     // redirect all output to a custom stream that will intercept all prints
