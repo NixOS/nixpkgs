@@ -6,6 +6,7 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
+  rhttp = callPackage ./rhttp { };
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
   sqlite3 = callPackage ./sqlite3 { };
   system_tray = callPackage ./system-tray { };
