@@ -12,18 +12,19 @@
   fontconfig,
   alsa-lib,
   libXrender,
+  libXinerama,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clanlib";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     repo = "ClanLib";
     owner = "sphair";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-SVsLWcTP+PCIGDWLkadMpJPj4coLK9dJrW4sc2+HotE=";
+    hash = "sha256-sRHRkT8NiKVfa9YgP6DYV9WzCZoH7f0phHpoYMnCk98=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     alsa-lib
     libXrender
+    libXinerama
   ];
 
   passthru.updateScript = nix-update-script { };
