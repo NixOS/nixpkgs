@@ -5,6 +5,7 @@
   pkg-config,
   ffmpeg,
   gnutls,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -17,12 +18,9 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    rev = "v${version}";
-    sha256 = "sha256-cOxIL093Mi+g9Al/SQJ6vdaeBAXUN6ZGsSaVvEIiJpU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cOxIL093Mi+g9Al/SQJ6vdaeBAXUN6ZGsSaVvEIiJpU=";
   };
-
-  # livepeer_cli has a vendoring problem
-  subPackages = [ "cmd/livepeer" ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,11 +29,13 @@ buildGoModule rec {
     gnutls
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Official Go implementation of the Livepeer protocol";
     homepage = "https://livepeer.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elitak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ elitak ];
     mainProgram = "livepeer";
   };
 }
