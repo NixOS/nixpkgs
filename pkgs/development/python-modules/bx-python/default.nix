@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   numpy,
+  pyparsing,
   cython,
   zlib,
   python-lzo,
@@ -37,7 +38,10 @@ buildPythonPackage rec {
 
   buildInputs = [ zlib ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    pyparsing
+  ];
 
   nativeCheckInputs = [
     python-lzo
