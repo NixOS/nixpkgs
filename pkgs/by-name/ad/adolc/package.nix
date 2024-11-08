@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [ "--with-openmp-flag=-fopenmp" ];
+
+  buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   meta = with lib; {
     description = "Automatic Differentiation of C/C++";
