@@ -21,6 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-Wq7ar96w5hdAyKMMvK4zjYln74RmX1l/VhvS++CN+Xk=";
   };
 
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
