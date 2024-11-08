@@ -27,7 +27,7 @@
 , yaml-cpp
 , soci
 , postgresql
-, nodejs
+, nodejs_20
 , qmake
 , server ? false # build server version
 , sqlite
@@ -60,8 +60,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "v1.2.2";
-    hash = "sha256-wvM9Bm7Nb6yU9z0o+uF5lB2kdgjOW5wZSk6y48NPF2U=";
+    rev = "v1.3.2";
+    hash = "sha256-Fz0rBQVAomP6pJ/tY3lR4j7W7scMJDM2JaNob1NK6NU=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -69,8 +69,8 @@ let
   quartoSrc = fetchFromGitHub {
     owner = "quarto-dev";
     repo = "quarto";
-    rev = "bb264a572c6331d46abcf087748c021d815c55d7";
-    hash = "sha256-lZnZvioztbBWWa6H177X6rRrrgACx2gMjVFDgNup93g=";
+    rev = "release/rstudio-cranberry-hibiscus";
+    hash = "sha256-Tv9MPv6zRd94YgACn+lN48V2n8lNx+AdCJg+RUgrt7o=";
   };
 
   description = "Set of integrated tools for the R language";
@@ -85,7 +85,7 @@ in
       ant
       jdk
       pandoc
-      nodejs
+      nodejs_20
     ] ++ lib.optionals (!server) [
       copyDesktopItems
     ];
@@ -139,11 +139,11 @@ in
       substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace-fail '@R@' ${R}
 
       substituteInPlace src/gwt/build.xml \
-        --replace-fail '@node@' ${nodejs} \
+        --replace-fail '@node@' ${nodejs_20} \
         --replace-fail './lib/quarto' ${quartoSrc}
 
       substituteInPlace src/cpp/conf/rsession-dev.conf \
-        --replace-fail '@node@' ${nodejs}
+        --replace-fail '@node@' ${nodejs_20}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace-fail '@libclang@' ${lib.getLib llvmPackages.libclang} \
@@ -178,10 +178,9 @@ in
 
       unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
 
-     # As of Chocolate Cosmos, node 18.20.3 is used for runtime
-     # 18.18.2 is still used for build
-     # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
-     mkdir -p dependencies/common/node/18.20.3
+      # As of Cranberry Hibiscus, node 20.15.1 is used for runtime
+      # node_20 can be used for build.
+      mkdir -p dependencies/common/node/20.15.1
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc
