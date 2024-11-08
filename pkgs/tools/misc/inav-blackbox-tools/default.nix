@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Tools for working with blackbox flight logs";
     homepage = "https://github.com/inavflight/blackbox-tools";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/inav-blackbox-tools.x86_64-darwin
   };
