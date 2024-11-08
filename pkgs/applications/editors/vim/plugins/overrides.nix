@@ -2261,6 +2261,16 @@ in
     dependencies = with self; [ telescope-nvim ];
   };
 
+  quarto-nvim = super.quarto-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-lspconfig
+      otter-nvim
+    ];
+
+    nvimRequireCheck = "quarto";
+    doInstallCheck = true;
+  };
+
   telescope-zoxide = super.telescope-zoxide.overrideAttrs {
     dependencies = with self; [ telescope-nvim ];
 
