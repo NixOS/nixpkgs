@@ -22,8 +22,9 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    (lib.enableFeature true "idl")
-    (lib.enableFeature true "secure-api")
+    (lib.enableFeature stdenv.targetPlatform.isMinGW "idl")
+    (lib.enableFeature stdenv.targetPlatform.isMinGW "secure-api")
+    (lib.enableFeature stdenv.targetPlatform.isCygwin "w32api")
     (lib.withFeatureAs true "default-msvcrt" crt)
 
     # Including other architectures causes errors with invalid asm
