@@ -5,6 +5,7 @@
   curl,
   curlpp,
   doctest,
+  srcOnly,
   fetchFromGitHub,
   fetchurl,
   fmt,
@@ -36,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
         rev = "45664c4e9f05ff287731a9ff8b724d0c89fb6e77";
         hash = "sha256-qLD9zD6hbItDn6ZHHWBXrAWhySvqcs40xA5+C/5Fkhw=";
       };
-      curlpp_src = curlpp.src;
       doctest_src = doctest;
+      curlpp_src = srcOnly curlpp;
       fmt_src = fmt;
       nlohmann_json_src = nlohmann_json;
       pugixml_src = fetchFromGitHub {
