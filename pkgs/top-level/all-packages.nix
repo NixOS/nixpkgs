@@ -7073,9 +7073,7 @@ with pkgs;
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
-  };
+  cargo-outdated = callPackage ../development/tools/rust/cargo-outdated { };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
     cargo-pgrx_0_10_2
     cargo-pgrx_0_11_2
