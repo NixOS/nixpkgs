@@ -6,6 +6,7 @@
   setuptools,
   requests,
   polling,
+  deprecated,
   pytestCheckHook,
   mock,
   httpretty,
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     polling
+    deprecated
   ];
 
   nativeCheckInputs = [
