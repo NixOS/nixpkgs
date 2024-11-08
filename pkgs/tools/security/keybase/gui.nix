@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     description = "Keybase official GUI";
     mainProgram = "keybase-gui";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ];
+    maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np Br1ght0ne shofius ryand56 ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };
