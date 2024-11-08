@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   cups,
   ninja,
@@ -57,7 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
+  sourceRoot = "pyside-setup-everywhere-src-6.8.0/sources/pyside6";
+
+  patches = [
+    # Manual backport of https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=cacc9c5803a6dec820dd46211a836453183c8dab
+    # to fit our structure.
+    # FIXME: remove for 6.8.1
+    ./fix-installing-docs.patch
+  ];
 
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
