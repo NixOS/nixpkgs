@@ -2,7 +2,6 @@
 , stdenv
 , lib
 , fetchurl
-, requireFile
 , dpkg
 , nss
 , nspr
@@ -45,21 +44,6 @@
 , libnotify
 , buildFHSEnv
 , writeShellScript
-, /**
-  License for wechat-uos, packed in a gz archive named "license.tar.gz".
-  It should have the following files:
-  license.tar.gz
-  ├── etc
-  │   ├── lsb-release
-  │   └── os-release
-  └── var
-      ├── lib
-      │   └── uos-license
-      │       └── .license.json
-      └── uos
-          └── .license.key
-  */
-  uosLicense ? null
 }:
 let
   # zerocallusedregs hardening breaks WeChat
@@ -72,77 +56,14 @@ let
     name = "wechat-uos-env";
     buildCommand = ''
       mkdir -p $out/etc
-      mkdir -p $out/lib/license
       mkdir -p $out/usr/bin
       mkdir -p $out/usr/share
       mkdir -p $out/opt
       mkdir -p $out/var
 
       ln -s ${wechat}/opt/* $out/opt/
-      ln -s ${wechat}/usr/lib/wechat-uos/license/etc/os-release  $out/etc/os-release
-      ln -s ${wechat}/usr/lib/wechat-uos/license/etc/lsb-release  $out/etc/lsb-release
-      ln -s ${wechat}/usr/lib/wechat-uos/license/var/*  $out/var/
-      ln -s ${wechat}/usr/lib/wechat-uos/license/libuosdevicea.so $out/lib/license/
     '';
     preferLocalBuild = true;
-  };
-
-  uosLicenseUnzipped = stdenvNoCC.mkDerivation {
-    name = "uos-license-unzipped";
-    src =
-      if uosLicense == null then
-        requireFile
-          {
-            name = "license.tar.gz";
-            url = "https://www.uniontech.com";
-            hash = "sha256-U3YAecGltY8vo9Xv/h7TUjlZCyiIQdgSIp705VstvWk=";
-          } else uosLicense;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r * $out/
-
-      runHook postInstall
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-pNftwtUZqBsKBSPQsEWlYLlb6h2Xd9j56ZRMi8I82ME=";
-  };
-
-  libuosdevicea = stdenv.mkDerivation rec {
-    name = "libuosdevicea";
-    src = ./libuosdevicea.c;
-
-    unpackPhase = ''
-      runHook preUnpack
-
-      cp ${src} libuosdevicea.c
-
-      runHook postUnpack
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      $CC -shared -fPIC -o libuosdevicea.so libuosdevicea.c
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib
-      cp libuosdevicea.so $out/lib/
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      license = licenses.gpl2Plus;
-    };
   };
 
   wechat-uos-runtime = with xorg; [
@@ -231,8 +152,6 @@ let
         };
       }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-      inherit uosLicense;
-
       nativeBuildInputs = [ dpkg ];
 
       unpackPhase = ''
@@ -249,10 +168,6 @@ let
         mkdir -p $out
 
         cp -r wechat-uos/* $out
-
-        mkdir -pv $out/usr/lib/wechat-uos/license
-        ln -s ${uosLicenseUnzipped}/* $out/usr/lib/wechat-uos/license/
-        ln -s ${libuosdevicea}/lib/libuosdevicea.so $out/usr/lib/wechat-uos/license/
 
         runHook postInstall
       '';
