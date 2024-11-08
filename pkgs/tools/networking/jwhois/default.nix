@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: this should probably be fixed at a lower level than this?
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-undef-prefix";
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   meta = {
     description = "Client for the WHOIS protocol allowing you to query the owner of a domain name";
     homepage = "https://www.gnu.org/software/jwhois/";
