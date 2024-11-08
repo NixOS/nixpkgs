@@ -52,7 +52,6 @@
   wavpack,
   wxGTK32,
   gtk3,
-  apple-sdk_11,
   libpng,
   libjpeg,
 }:
@@ -82,18 +81,14 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
     '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      pkg-config
-      python3
-      makeWrapper
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      linuxHeaders
-    ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    python3
+    makeWrapper
+    wrapGAppsHook3
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
   buildInputs =
     [
@@ -144,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
       util-linux
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
       libpng
       libjpeg
     ];
