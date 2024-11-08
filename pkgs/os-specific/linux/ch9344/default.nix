@@ -1,17 +1,18 @@
-{ stdenv, lib, fetchzip, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "ch9344";
-  version = "2.0";
+  version = "0-unstable-2024-11-15";
 
-  src = fetchzip {
-    name = "CH9344SER_LINUX.zip";
-    url = "https://www.wch.cn/downloads/file/386.html#CH9344SER_LINUX.zip";
-    hash = "sha256-YKNMYpap7CjhgTIpd/M9+nB11NtpwGYT/P14J6q3XZg=";
+  src = fetchFromGitHub {
+    owner = "WCHSoftGroup";
+    repo = "ch9344ser_linux";
+    rev = "4ea8973886989d67acdd01dba213e355eacc9088";
+    hash = "sha256-ZZ/8s26o7wRwHy6c0m1vZ/DtRW5od+NgiU6aXZBVfc4=";
   };
 
   patches = [
-    ./fix-incompatible-pointer-types.patch
+    ./fix-linux-6-12-build.patch
   ];
 
   sourceRoot = "${src.name}/driver";
@@ -34,13 +35,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.wch-ic.com/";
-    downloadPage = "https://www.wch.cn/downloads/CH9344SER_LINUX_ZIP.html";
+    downloadPage = "https://github.com/WCHSoftGroup/ch9344ser_linux";
     description = "WCH CH9344/CH348 UART driver";
     longDescription = ''
       A kernel module for WinChipHead CH9344/CH348 USB To Multi Serial Ports controller.
     '';
-    # Archive contains no license.
-    license = licenses.unfree;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ MakiseKurisu ];
   };
