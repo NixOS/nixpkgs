@@ -50,7 +50,7 @@ let
     in
     {
 
-      inherit callPackage srcs;
+      inherit callPackage srcs darwinVersionInputs;
 
       qtModule = callPackage ./qtModule.nix {
         inherit darwinVersionInputs;
