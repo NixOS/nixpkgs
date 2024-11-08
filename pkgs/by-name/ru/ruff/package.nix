@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "ruff";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   outputs = [
@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-9zbLlQfDeqdUp1AKP/NRMZl9KeTyyTJz7JZVW/GGRM0=";
+    hash = "sha256-TQ7nBd2S77VYShYxpxZ3CfCMiOGyl9EtIv9nXZjmijc=";
   };
 
   # Do not rely on path lookup at runtime to find the ruff binary
