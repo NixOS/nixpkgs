@@ -30966,6 +30966,8 @@ with pkgs;
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
+  ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
+
   ninjas2 = callPackage ../applications/audio/ninjas2 { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
