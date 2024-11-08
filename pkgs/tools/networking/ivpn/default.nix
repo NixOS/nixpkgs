@@ -21,14 +21,20 @@ builtins.mapAttrs
       attrs
       // rec {
         inherit pname;
-        version = "3.10.15";
+        version = "3.14.29";
+
+        buildInputs = [
+          wirelesstools
+        ];
 
         src = fetchFromGitHub {
           owner = "ivpn";
           repo = "desktop-app";
-          rev = "v${version}";
-          hash = "sha256-3yVRVM98tVjot3gIkUb/CDwmwKdOOBjBjzGL6htDtpk=";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-8JScty/sGyxzC2ojRpatHpCqEXZw9ksMortIhZnukoU=";
         };
+
+        proxyVendor = true; # .c file
 
         ldflags = [
           "-s"
@@ -41,12 +47,12 @@ builtins.mapAttrs
           mv $out/bin/{${attrs.modRoot},${pname}}
         '';
 
-        meta = with lib; {
+        meta = {
           description = "Official IVPN Desktop app";
           homepage = "https://www.ivpn.net/apps";
           changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
-          license = licenses.gpl3Only;
-          maintainers = with maintainers; [
+          license = lib.licenses.gpl3Only;
+          maintainers = with lib.maintainers; [
             urandom
             ataraxiasjel
           ];
@@ -58,13 +64,12 @@ builtins.mapAttrs
   {
     ivpn = {
       modRoot = "cli";
-      vendorHash = "sha256-T49AE3SUmdP3Tu9Sp5C/QryKDto/NzEqRuUQ3+aJFL0=";
+      vendorHash = "sha256-STbkFchrmxwWnSgEJ7RGKN3jGaCC0npL80YjlwUcs1g=";
     };
     ivpn-service = {
       modRoot = "daemon";
-      vendorHash = "sha256-9Rk6ruMpyWtQe+90kw4F8OLq7/JcDSrG6ufkfcrS4W8=";
+      vendorHash = "sha256-REIY3XPyMA2Loxo1mKzJMJwZrf9dQMOtnQOUEgN5LP8=";
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ wirelesstools ];
 
       patches = [ ./permissions.patch ];
       postPatch = ''
