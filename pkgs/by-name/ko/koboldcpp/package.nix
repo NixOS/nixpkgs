@@ -110,12 +110,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Remove an unused argument, mainly intended for Darwin to reduce warnings
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-warn " -s " " "
-  '';
-
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
