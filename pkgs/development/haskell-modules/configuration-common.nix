@@ -22,16 +22,20 @@ self: super: {
   # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
   dunai = doJailbreak (addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai));
 
-  # Make sure that Cabal_* can be built as-is
-  Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override {
+  # Make sure that Cabal 3.10.* can be built as-is
+  Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-  });
-  Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
+  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+    # Use process core package when possible
+    process = self.process_1_6_24_0;
+  }));
+
+  Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
-  });
-  Cabal_3_14_0_0 = doDistribute (super.Cabal_3_14_0_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_14_0_0;
-  });
+  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
+    # Use process core package when possible
+    process = self.process_1_6_24_0;
+  }));
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
   # makes sense to use the non Stackage version if we want to use Cabal* >= 3.12
@@ -361,6 +365,15 @@ self: super: {
     })
   ]
     super.threadscope);
+
+  # http2 also overridden in all-packages.nix for mailctl.
+  # twain is currently only used by mailctl, so the .overrideScope shouldn't
+  # negatively affect any other packages, at least currently...
+  # https://github.com/alexmingoia/twain/issues/5
+  twain = super.twain.overrideScope (self: _: {
+    http2 = self.http2_3_0_3;
+    warp = self.warp_3_3_30;
+  });
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -1257,7 +1270,6 @@ self: super: {
   stack = super.stack.overrideScope (lself: lsuper: {
     # stack-3.1.1 requires the latest versions of these libraries
     pantry = lself.pantry_0_10_0;
-    static-bytes = lself.static-bytes_0_1_1; # for pantry_0_10_0
     tar = lself.tar_0_6_3_0;
 
     # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
@@ -1990,6 +2002,14 @@ self: super: {
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
+  vivid = overrideCabal (drv: assert drv.version == "0.5.2.0"; {
+    # 2024-10-18: Some library dependency must have stopped
+    # re-exporting 'void', so now it needs an extra import line.
+    # Fixed in 0.5.2.1.
+    postPatch = ''
+      sed -i '/) where/a import Control.Monad (void)' Vivid/GlobalState.hs
+    '';
+  }) super.vivid;
 
   # Test suite does not compile.
   feed = dontCheck super.feed;
@@ -2255,6 +2275,44 @@ self: super: {
 
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
+
+  large-hashable = lib.pipe (super.large-hashable.override {
+    # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
+    utf8-light = null;
+  }) [
+    # 2022-03-21: use version from git which supports GHC 9.{0,2} and aeson 2.0
+    (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
+      version = "unstable-2022-06-10";
+      src = pkgs.fetchFromGitHub {
+        owner = "factisresearch";
+        repo = "large-hashable";
+        rev = "4d149c828c185bcf05556d1660f79ff1aec7eaa1";
+        sha256 = "141349qcw3m93jw95jcha9rsg2y8sn5ca5j59cv8xmci38k2nam0";
+      };
+    })
+    # Provide newly added dependencies
+    (overrideCabal (drv: {
+      libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
+        self.cryptonite
+        self.memory
+      ];
+      testHaskellDepends = drv.testHaskellDepends or [] ++ [
+        self.inspection-testing
+      ];
+    }))
+    # https://github.com/factisresearch/large-hashable/issues/24
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [] ++ [
+        "-n" "^Data.LargeHashable.Tests.Inspection:genericSumGetsOptimized$"
+      ];
+    }))
+    # https://github.com/factisresearch/large-hashable/issues/25
+    # Currently broken with text >= 2.0
+    (overrideCabal (lib.optionalAttrs (lib.versionAtLeast self.ghc.version "9.4") {
+      broken = true;
+      hydraPlatforms = [];
+    }))
+  ];
 
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
