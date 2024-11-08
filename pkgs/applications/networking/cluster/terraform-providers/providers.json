@@ -213,7 +213,7 @@
     "repo": "terraform-provider-ccloud",
     "rev": "v1.6.6",
     "spdx": "MPL-2.0",
-    "vendorHash": null
+    "vendorHash": "sha256-uftDCqDU0HeDj7rjAevulsFCVFFQt3eg8vcFM9YJrow="
   },
   "checkly": {
     "hash": "sha256-4J7pwtlAa920RXF6ZoSoi03qA15NBzUlXQCZRErI2Co=",
