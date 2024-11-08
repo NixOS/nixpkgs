@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pcsx2-bin";
-  version = "2.1.231";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://github.com/PCSX2/pcsx2/releases/download/v${finalAttrs.version}/pcsx2-v${finalAttrs.version}-macos-Qt.tar.xz";
-    hash = "sha256-c1Tvti8NatGct0OAwcWdFNBQhv6Zwiy2ECJ2qyCs9qA=";
+    hash = "sha256-szQgGIBH+h/mH18zY3RQGiyhoYwQ07+rq/zX3uNfgME=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
