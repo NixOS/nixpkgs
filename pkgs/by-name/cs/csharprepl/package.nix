@@ -7,13 +7,13 @@
 buildDotnetGlobalTool {
   pname = "csharprepl";
   nugetName = "CSharpRepl";
-  version = "0.6.6";
+  version = "0.6.7";
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   # We're using an SDK here because it's a REPL, and it requires an SDK instaed of a runtime
   dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
-  nugetHash = "sha256-VkZGnfD8p6oAJ7i9tlfwJfmKfZBHJU7Wdq+K4YjPoRs=";
+  nugetHash = "sha256-a0CiU3D6RZp1FF459NIUUry5TFRDgm4FRhqJZNAGYWs=";
 
   meta = {
     description = "C# REPL with syntax highlighting";
