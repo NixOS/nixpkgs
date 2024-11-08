@@ -24,6 +24,9 @@ rec {
       lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv ++
       lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k ++
       lib.optionals (lib.versionAtLeast release_version "16") lib.platforms.loongarch64;
+
+    version = releaseInfo.version;
+    rev = releaseInfo.original.rev or null;
   };
 
   releaseInfo =
