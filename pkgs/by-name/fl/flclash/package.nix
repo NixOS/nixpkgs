@@ -30,10 +30,20 @@ let
     vendorHash = "sha256-K+PrLFvDHyaxf1NKzcqf0qmfQwT8rctScv1CN+TxY0M=";
     buildPhase = ''
       runHook preBuild
+
       mkdir -p $out/lib
       go build -ldflags="-w -s" -tags=with_gvisor -buildmode=c-shared -o $out/lib/libclash.so
+
       runHook postBuild
     '';
+
+    meta = {
+      description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
+      homepage = "https://github.com/chen08209/FlClash";
+      license = with lib.licenses; [ gpl3Plus ];
+      maintainers = with lib.maintainers; [ aucub ];
+      platforms = lib.platforms.linux;
+    };
   };
 in
 flutter.buildFlutterApplication {
@@ -60,7 +70,9 @@ flutter.buildFlutterApplication {
 
   patchPhase = ''
     runHook prePatch
+
     substituteInPlace lib/clash/core.dart --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
+
     runHook postPatch
   '';
 
