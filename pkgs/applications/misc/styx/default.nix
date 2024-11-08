@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, caddy, asciidoctor
-, file, lessc, sass, multimarkdown, linkchecker
-, perlPackages, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, caddy, asciidoctor, linkchecker, pkgs }:
 
 stdenv.mkDerivation rec {
   pname = "styx";
@@ -15,27 +13,18 @@ stdenv.mkDerivation rec {
 
   server = "${caddy}/bin/caddy";
   linkcheck = "${linkchecker}/bin/linkchecker";
+  nixpkgs = pkgs.path;
 
   nativeBuildInputs = [ asciidoctor ];
 
-  outputs = [ "out" "lib" "themes" ];
-
-  propagatedBuildInputs = [
-    file
-    lessc
-    sass
-    asciidoctor
-    multimarkdown
-    perlPackages.ImageExifTool
-    python3Packages.parsimonious
-  ];
+  outputs = [ "out" "themes" ];
 
   installPhase = ''
     mkdir $out
-    install -D -m 777 src/styx.sh $out/bin/styx
 
-    mkdir -p $out/share/styx-src
-    cp -r ./* $out/share/styx-src
+    install -D -m 777 src/styx.sh $out/bin/styx
+    cp src/default.nix $out/default.nix
+    cp src/styx-config.nix $out/styx-config.nix
 
     mkdir -p $out/share/doc/styx
     asciidoctor src/doc/index.adoc       -o $out/share/doc/styx/index.html
@@ -51,10 +40,11 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/styx/scaffold
     cp -r src/scaffold $out/share/styx
-    cp -r src/tools $out/share/styx
+    cp -r src/tools    $out/share/styx
+    cp -r src/nix      $out/share/styx
 
-    mkdir $lib
-    cp -r src/lib/* $lib
+    mkdir -p $out/lib
+    cp -r src/lib/* $out/lib
 
     mkdir $themes
     cp -r themes/* $themes
