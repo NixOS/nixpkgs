@@ -45,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     import ./readline-8.3-patches.nix patch
   );
 
-  hardeningDisable = lib.optionals stdenv.hostPlatform.isCygwin [ "fortify" ];
-
   patches =
     lib.optionals (curses-library.pname == "ncurses") [
       ./link-against-ncurses.patch

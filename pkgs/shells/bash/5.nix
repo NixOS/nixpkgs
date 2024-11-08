@@ -46,7 +46,7 @@ lib.warnIf (withDocs != null)
     # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
     # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
     # or you can check libc/include/sys/cdefs.h in bionic source code
-    ++ lib.optional (stdenv.hostPlatform.libc == "bionic" || stdenv.hostPlatform.isCygwin) "fortify";
+    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
     outputs = [
       "out"
