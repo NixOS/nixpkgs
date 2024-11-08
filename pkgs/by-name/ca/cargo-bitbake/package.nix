@@ -1,4 +1,4 @@
-{ lib, pkg-config, rustPlatform, fetchFromGitHub, openssl }:
+{ lib, pkg-config, rustPlatform, fetchFromGitHub, curl, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bitbake";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ curl openssl ];
 
   cargoHash = "sha256-LYdQ0FLfCopY8kPTCmiW0Qyx6sHA4nlb+hK9hXezGLg=";
 
