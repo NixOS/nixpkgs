@@ -23,8 +23,13 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   checkPhase = ''
+    runHook preCheck
+    # "Do not run the tests from the source directory"
     mkdir testdir; cd testdir
-    ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    (set -x
+      ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    )
+    runHook postCheck
   '';
 
   meta = with lib; {
