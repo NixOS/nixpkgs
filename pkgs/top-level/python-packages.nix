@@ -1087,6 +1087,8 @@ self: super: with self; {
     inherit (pkgs) cmake ninja;
   };
 
+  awkward-pandas = callPackage ../development/python-modules/awkward-pandas { };
+
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
   aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
