@@ -84,5 +84,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ _0x4A6F thoughtpolice ];
     mainProgram = "jj";
+    knownVulnerabilities = [ "CVE-2024-51990" ];
   };
 }

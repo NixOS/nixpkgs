@@ -14,19 +14,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.10.5";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pzb2x5tTDT6yUNURbAok5eQWZHaxP/RUo8T0JECKHJ4=";
+    hash = "sha256-Pp8QpagTgWWHoC+e/iGfEveQYuMDDX7Oz1IAUx8cp3A=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname src;
 
-    hash = "sha256-bosCE9gBFCcM3Ww6sJmhps/cl4lovXKMieYpkqAMst8=";
+    hash = "sha256-kUfCTF/HKHmsxzWyT6XK833+4A2RUBJcxx6lZsRSTn0=";
   };
 
   nativeBuildInputs = [
