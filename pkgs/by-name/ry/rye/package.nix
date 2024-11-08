@@ -8,6 +8,7 @@
   pkg-config,
 
   # buildInputs
+  curl,
   openssl,
   stdenv,
   darwin,
@@ -47,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs =
-    [ openssl ]
+    [ curl openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk;
       [
