@@ -16,6 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.withFeatureAs true "default-msvcrt" crt)
+    (lib.enableFeature stdenvNoCC.targetPlatform.isCygwin "w32api")
   ];
 
   preConfigure = ''

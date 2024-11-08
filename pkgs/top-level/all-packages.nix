@@ -7593,6 +7593,8 @@ with pkgs;
       windows.mingw_w64_headers or fallback
     else if libc == "nblibc" then
       netbsd.headers
+    else if stdenv.targetPlatform.isCygwin then
+      targetPackages.windows.cygwin_headers or windows.cygwin_headers
     else
       null;
 
