@@ -1,0 +1,44 @@
+diff --git a/configure b/configure
+index 18eb2bdf2..8b349d18e 100755
+--- a/configure
++++ b/configure
+@@ -24918,20 +24918,6 @@ printf "%s\n" "$as_me: WARNING: Replacing missing/broken (v)snprintf() with sudo
+ 
+ printf "%s\n" "#define PREFER_PORTABLE_SNPRINTF 1" >>confdefs.h
+ 
+-fi
+-if test X"$ac_cv_build_prog_cc_c99" != X"no"
+-then :
+-
+-    # If we have a C99 compiler and are cross-compiling, assume
+-    # C99-compliant v?snprintf().
+-    if test X"$ac_cv_have_working_snprintf$ac_cv_have_working_vsnprintf" = X"crosscross"
+-then :
+-
+-	ac_cv_have_working_snprintf=yes
+-	ac_cv_have_working_vsnprintf=yes
+-
+-fi
+-
+ fi
+ if test X"$ac_cv_have_working_snprintf$ac_cv_have_working_vsnprintf" = X"yesyes"
+ then :
+diff --git a/configure.ac b/configure.ac
+index 28b63ef0d..bceb9d6ff 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3061,14 +3061,6 @@ AS_IF([test X"$sudo_mktemp" = X"yes"], [
+     COMPAT_TEST_PROGS="${COMPAT_TEST_PROGS}${COMPAT_TEST_PROGS+ }mktemp_test"
+ ])
+ AX_FUNC_SNPRINTF
+-AS_IF([test X"$ac_cv_prog_cc_c99" != X"no"], [
+-    # If we have a C99 compiler and are cross-compiling, assume
+-    # C99-compliant v?snprintf().
+-    AS_IF([test X"$ac_cv_have_working_snprintf$ac_cv_have_working_vsnprintf" = X"crosscross"], [
+-	ac_cv_have_working_snprintf=yes
+-	ac_cv_have_working_vsnprintf=yes
+-    ])
+-])
+ AS_IF([test X"$ac_cv_have_working_snprintf$ac_cv_have_working_vsnprintf" = X"yesyes"], [
+     # System has a C99-compliant v?snprintf(), check for v?asprintf()
+     AC_CHECK_FUNCS([asprintf], [], [

@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wNhNeX8GtzL8Vz0LeYroMSjCvDMFIFfwW1YOxry/oD0=";
   };
 
+  # The bump to version 1.9.16 broke cross compilation for aarch64.
+  # This patch revert https://github.com/sudo-project/sudo/commit/920710b186ad11205b7f4969178555cd5fe23e20
+  patches = [ ./fix-cross-compilation.patch ];
+
   prePatch = ''
     # do not set sticky bit in nix store
     substituteInPlace src/Makefile.in --replace 04755 0755
