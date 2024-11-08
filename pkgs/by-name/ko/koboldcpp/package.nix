@@ -30,6 +30,7 @@
   vulkanSupport ? true,
   vulkan-loader,
   metalSupport ? stdenv.hostPlatform.isDarwin,
+  nix-update-script,
 }:
 
 let
@@ -116,7 +117,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
