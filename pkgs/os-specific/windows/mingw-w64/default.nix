@@ -10,6 +10,7 @@
 assert lib.assertOneOf "crt" crt [
   "msvcrt"
   "ucrt"
+  "cygwin"
 ];
 
 stdenv.mkDerivation {
