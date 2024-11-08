@@ -8,7 +8,6 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  rich,
   typer,
 }:
 
@@ -28,17 +27,16 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    rich
-    typer
-  ];
+  optional-dependencies = {
+    cli = [ typer ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiovlc" ];
 
