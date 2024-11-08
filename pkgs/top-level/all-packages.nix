@@ -1768,8 +1768,6 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
-  heh = callPackage ../applications/editors/heh { };
-
   hexdiff = callPackage ../tools/misc/hexdiff { };
 
   hexo-cli = callPackage ../development/tools/hexo-cli { };
@@ -2242,8 +2240,6 @@ with pkgs;
   git-mit = callPackage ../applications/version-management/git-mit { };
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
-
-  git-nomad = callPackage ../applications/version-management/git-nomad { };
 
   git-octopus = callPackage ../applications/version-management/git-octopus { };
 
@@ -22187,6 +22183,7 @@ with pkgs;
   zunclient = with python311Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
+  openvdb_11 = callPackage ../development/libraries/openvdb/11.nix { };
 
   openvr = callPackage ../by-name/op/openvr/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;

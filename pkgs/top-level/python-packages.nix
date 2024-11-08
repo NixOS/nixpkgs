@@ -2920,6 +2920,7 @@ self: super: with self; {
 
   datafusion = callPackage ../development/python-modules/datafusion {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    protoc = pkgs.protobuf;
   };
 
   datalad = callPackage ../development/python-modules/datalad { };
@@ -16118,6 +16119,8 @@ self: super: with self; {
   trustme = callPackage ../development/python-modules/trustme { };
 
   truststore = callPackage ../development/python-modules/truststore { };
+
+  trx-python = callPackage ../development/python-modules/trx-python { };
 
   trytond = callPackage ../development/python-modules/trytond { };
 
