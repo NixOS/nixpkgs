@@ -18612,6 +18612,12 @@
     github = "ribose-jeffreylau";
     githubId = 2649467;
   };
+  ribru17 = {
+    name = "Riley Bruins";
+    email = "ribru17@hotmail.com";
+    github = "ribru17";
+    githubId = 55766287;
+  };
   ricarch97 = {
     email = "ricardo.steijn97@gmail.com";
     github = "RicArch97";
