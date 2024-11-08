@@ -44,7 +44,7 @@ buildPythonPackage rec {
     deprecation
     mobly
     pygobject3
-  ];
+  ] ++ home-assistant-chip-wheels.propagatedBuildInputs;
 
   pythonNamespaces = [
     "chip"
