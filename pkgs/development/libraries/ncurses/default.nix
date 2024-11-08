@@ -99,6 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS=-D_XOPEN_SOURCE_EXTENDED
   '';
 
+  # Fortify currently breaks under the nixpkgs' Cygwin with errors such as:
+  #     two or more data types in declaration specifiers
+  #     conflicting types for 'read'
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isCygwin [ "fortify" ];
+
   enableParallelBuilding = true;
 
   doCheck = false;
