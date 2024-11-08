@@ -14275,6 +14275,12 @@
     githubId = 38543128;
     name = "Miles Breslin";
   };
+  milescranmer = {
+    email = "miles.cranmer@gmail.com";
+    github = "MilesCranmer";
+    githubId = 7593028;
+    name = "Miles Cranmer";
+  };
   milibopp = {
     email = "contact@ebopp.de";
     github = "milibopp";
