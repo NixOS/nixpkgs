@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, curl
 , openssl
 , stdenv
 , CoreServices
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [ curl openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     Security
     SystemConfiguration
