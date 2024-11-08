@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   makeWrapper,
   Foundation,
   glew,
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     mainProgram = "wipegame";
