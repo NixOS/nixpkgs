@@ -682,10 +682,6 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString targetPlatform.isDarwin ''
-        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
-    ''
-
     + optionalString targetPlatform.isAndroid ''
       echo "-D__ANDROID_API__=${targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
     ''
