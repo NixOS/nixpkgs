@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   prePatch = ''
-    substituteInPlace dbeaver.ini \
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
       --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
   '';
 
