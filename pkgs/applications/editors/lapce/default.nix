@@ -14,15 +14,11 @@
 , libGL
 , libobjc
 , libxkbcommon
-, Security
-, CoreServices
-, ApplicationServices
-, Carbon
-, AppKit
 , wrapGAppsHook3
 , wayland
 , gobject-introspection
 , xorg
+, apple-sdk_11
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -93,11 +89,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
-    Security
-    CoreServices
-    ApplicationServices
-    Carbon
-    AppKit
+    apple-sdk_11
   ];
 
   postInstall = if stdenv.hostPlatform.isLinux then ''
@@ -124,7 +116,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";
-    # Undefined symbols for architecture x86_64: "_NSPasteboardTypeFileURL"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }
