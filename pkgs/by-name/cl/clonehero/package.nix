@@ -119,5 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = with maintainers; [ kira-bruneau syboxez ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

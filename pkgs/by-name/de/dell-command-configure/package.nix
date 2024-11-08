@@ -107,5 +107,6 @@ in stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ ryangibb ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
