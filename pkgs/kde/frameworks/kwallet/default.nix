@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   libgcrypt,
-  kcrash,
   kdoctools,
 }:
 mkKdeDerivation {
@@ -9,7 +8,6 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     libgcrypt
-    kcrash
     kdoctools
   ];
 }
