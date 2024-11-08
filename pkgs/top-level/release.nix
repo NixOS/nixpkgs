@@ -288,6 +288,7 @@ let
         "ghc94"
         "ghc96"
         "ghc98"
+        "ghc910"
       ] (compilerName: {
         inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
           haskell-language-server;
