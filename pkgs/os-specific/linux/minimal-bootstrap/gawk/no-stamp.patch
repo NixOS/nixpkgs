@@ -1,0 +1,10 @@
+--- configure
++++ configure
+@@ -3676,7 +3676,6 @@ cat >> $CONFIG_STATUS <<EOF
+ 
+ EOF
+ cat >> $CONFIG_STATUS <<\EOF
+-date > stamp-h
+ exit 0
+ EOF
+ chmod +x $CONFIG_STATUS

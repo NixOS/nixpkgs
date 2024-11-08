@@ -1,0 +1,23 @@
+diff --git a/click_package/Makefile.am b/click_package/Makefile.am
+index 4981d74..9df9e79 100644
+--- a/click_package/Makefile.am
++++ b/click_package/Makefile.am
+@@ -1,5 +1,3 @@
+-SUBDIRS = tests
+-
+ noinst_SCRIPTS = paths.py
+ CLEANFILES = $(noinst_SCRIPTS)
+ 
+diff --git a/configure.ac b/configure.ac
+index 8f4dc9e..adbd366 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -52,8 +52,6 @@ PKG_CHECK_MODULES([SERVICE], [
+ AC_SUBST([SERVICE_CFLAGS])
+ AC_SUBST([SERVICE_LIBS])
+ 
+-AC_CHECK_PROG(DBUS_TEST_RUNNER_CHECK,dbus-test-runner,yes)
+-AS_IF([test "${DBUS_TEST_RUNNER_CHECK}" != "yes"], [AC_MSG_ERROR([dbus-test-runner not found])])
+ AC_CHECK_PROG(GDBUS_CHECK,gdbus,yes)
+ AS_IF([test "${GDBUS_CHECK}" != "yes"], [AC_MSG_ERROR([gdbus (glib) not found])])
+ 

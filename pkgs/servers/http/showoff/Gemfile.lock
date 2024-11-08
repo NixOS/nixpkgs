@@ -1,0 +1,73 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.6.0)
+      public_suffix (>= 2.0.2, < 4.0)
+    commonmarker (0.18.2)
+      ruby-enum (~> 0.5)
+    concurrent-ruby (1.1.5)
+    daemons (1.3.1)
+    em-websocket (0.3.8)
+      addressable (>= 2.1.1)
+      eventmachine (>= 0.12.9)
+    eventmachine (1.2.7)
+    fidget (0.0.6)
+      ruby-dbus (< 0.15.0)
+    gli (2.18.0)
+    htmlentities (4.3.4)
+    i18n (1.6.0)
+      concurrent-ruby (~> 1.0)
+    iso-639 (0.2.8)
+    json (2.2.0)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.1)
+      mini_portile2 (~> 2.4.0)
+    parslet (1.8.2)
+    public_suffix (3.0.3)
+    rack (1.6.11)
+    rack-contrib (1.8.0)
+      rack (~> 1.4)
+    rack-protection (1.5.5)
+      rack
+    redcarpet (3.4.0)
+    ruby-dbus (0.14.1)
+    ruby-enum (0.7.2)
+      i18n
+    showoff (0.20.1)
+      commonmarker
+      fidget (>= 0.0.3)
+      gli (>= 2.0)
+      htmlentities
+      i18n
+      iso-639
+      json
+      nokogiri
+      parslet
+      rack-contrib
+      redcarpet
+      sinatra (~> 1.3)
+      sinatra-websocket
+      thin (~> 1.3)
+      tilt (>= 2.0.3)
+    sinatra (1.4.8)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    sinatra-websocket (0.3.1)
+      em-websocket (~> 0.3.6)
+      eventmachine
+      thin (>= 1.3.1, < 2.0.0)
+    thin (1.7.2)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0, >= 1.0.4)
+      rack (>= 1, < 3)
+    tilt (2.0.9)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  showoff
+
+BUNDLED WITH
+   2.1.4

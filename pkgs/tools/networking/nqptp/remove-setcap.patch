@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 78f36d7..8dc4e4f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,8 +19,6 @@ endif
+ 
+ install-exec-hook:
+ if BUILD_FOR_LINUX
+-# NQPTP runs as user/group nqptp/nqptp on Linux and uses setcap to access ports 319 and 320
+-	setcap 'cap_net_bind_service=+ep' $(bindir)/nqptp
+ # no installer for System V
+ if INSTALL_SYSTEMD_STARTUP
+ 	getent group nqptp &>/dev/null || groupadd -r nqptp &>/dev/null

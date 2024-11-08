@@ -1,0 +1,3 @@
+{
+  imports = [ { _type = "flake"; } ];
+}

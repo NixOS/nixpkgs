@@ -1,0 +1,57 @@
+From 9358bebb11df19f46d0813723959518498d812b2 Mon Sep 17 00:00:00 2001
+From: VuiMuich <vuimuich@quantentunnel.de>
+Date: Mon, 2 Sep 2024 11:15:27 +0200
+Subject: [PATCH] fix rust 1.80.x for nixpkgs
+
+---
+ Cargo.lock | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index f8a82eecf..5728b55bf 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -777,6 +777,12 @@ dependencies = [
+  "winapi",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num-traits"
+ version = "0.2.17"
+@@ -1218,13 +1224,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.30"
++version = "0.3.35"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c4a34ab300f2dee6e562c10a046fc05e358b29f9bf92277f30c3c8d82275f6f5"
++checksum = "ef89ece63debf11bc32d1ed8d078ac870cbeb44da02afb02a9ff135ae7ca0582"
+ dependencies = [
+  "deranged",
+  "itoa",
+  "libc",
++ "num-conv",
+  "num_threads",
+  "powerfmt",
+  "serde",
+@@ -1240,10 +1247,11 @@ checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.15"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4ad70d68dba9e1f8aceda7aa6711965dfec1cac869f311a51bd08b3a2ccbce20"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 

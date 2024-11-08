@@ -1,0 +1,61 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ab3884c..c0fd356 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -38,32 +38,23 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+ 	${TOML++}
+-	GIT_REPOSITORY "https://github.com/marzer/tomlplusplus.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v3.3.0"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_Declare(
+ 	${SOL2}
+-	GIT_REPOSITORY "https://github.com/ThePhD/sol2.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v3.3.0"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_Declare(
+ 	${MAGIC_ENUM}
+-	GIT_REPOSITORY "https://github.com/Neargye/magic_enum.git"
+-	GIT_SHALLOW ON
+-    GIT_SUBMODULES ""
+-	GIT_TAG "v0.8.2"
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(${TOML++})
+ if(NOT ${TOML++}_POPULATED)
+     message(STATUS "Cloning ${TOML++}")
+-	FetchContent_Populate(${TOML++}) 
++	FetchContent_Populate(${TOML++})
+     FetchContent_MakeAvailable(${TOML++})
+ endif()
+ 
+@@ -113,7 +104,7 @@ if(NOT LUA_INCLUDE_DIR OR (WIN32 AND NOT LUA_LIBRARIES))
+     find_package(Lua)
+ endif()
+ 
+-include_directories(${LUA_INCLUDE_DIR} src src/include ${${TOML++}_SOURCE_DIR} ${${SOL2}_SOURCE_DIR}/include ${${MAGIC_ENUM}_SOURCE_DIR}/include)
++include_directories(${LUA_INCLUDE_DIR} src src/include TOML_PLUS_PLUS_SRC ${${SOL2}_SOURCE_DIR}/include MAGIC_ENUM_SRC)
+ 
+ set(SOURCES
+     src/toml.cpp
+@@ -129,8 +120,8 @@ source_group(src FILES ${SOURCES})
+ 
+ if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+ 	target_link_options(toml.lua PUBLIC ${PROJECT_SOURCE_DIR}\\libs\\lua51.lib)
+-else() 
+-    target_link_libraries(toml.lua ${LUA_LIBRARIES})    
++else()
++    target_link_libraries(toml.lua ${LUA_LIBRARIES})
+ endif()
+ 
+ if (LINK_FLAGS)

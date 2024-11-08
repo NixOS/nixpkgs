@@ -1,0 +1,38 @@
+diff -Naur libx86-1.1+ds1.orig/Makefile libx86-1.1+ds1/Makefile
+--- libx86-1.1+ds1.orig/Makefile	2008-05-19 12:28:59.000000000 +0300
++++ libx86-1.1+ds1/Makefile	2012-02-20 01:32:03.750068423 +0200
+@@ -5,6 +5,7 @@
+ ifeq ($(BACKEND),x86emu)
+ 	OBJECTS += thunk.o x86emu/decode.o x86emu/debug.o x86emu/fpu.o \
+ 	x86emu/ops.o x86emu/ops2.o x86emu/prim_ops.o x86emu/sys.o
++	CFLAGS += -DX86EMU -fno-delete-null-pointer-checks
+ else
+ 	OBJECTS += lrmi.o
+ endif
+diff -Naur libx86-1.1+ds1.orig/thunk.c libx86-1.1+ds1/thunk.c
+--- libx86-1.1+ds1.orig/thunk.c	2008-04-03 03:48:00.000000000 +0300
++++ libx86-1.1+ds1/thunk.c	2012-02-20 01:12:56.468820192 +0200
+@@ -32,6 +32,7 @@
+ #define TRUE 1
+ #define FALSE 0
+ 
++#ifndef X86EMU
+ #define __BUILDIO(bwl,bw,type) \
+ static inline void out##bwl##_local(unsigned long port, unsigned type value) {        __asm__ __volatile__("out" #bwl " %" #bw "0, %w1" : : "a"(value), "Nd"(port)); \
+ }\
+@@ -44,6 +45,15 @@
+ __BUILDIO(b,b,char)
+ __BUILDIO(w,w,short)
+ __BUILDIO(l,,int)
++#else
++/* use libc functions */
++#define inb_local inb
++#define inw_local inw
++#define inl_local inl
++#define outb_local outb
++#define outw_local outw
++#define outl_local outl
++#endif /* X86EMU */
+ 
+ 
+ char *mmap_addr = SHMERRORPTR;

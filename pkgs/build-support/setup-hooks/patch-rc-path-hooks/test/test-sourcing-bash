@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+UNPATCHED_SOURCE_FILE="$1"
+PATCHED_SOURCE_FILE="$2"
+ORIG_PATH="$PWD/alfa:$PWD/bravo"
+RESULT_PATH_FROM_UNPATCHED="$(
+    PATH="$ORIG_PATH"; export PATH
+    . "$UNPATCHED_SOURCE_FILE"
+    echo "$PATH"
+)"
+RESULT_PATH_FROM_PATCHED="$(
+    PATH="$ORIG_PATH"; export PATH
+    . "$PATCHED_SOURCE_FILE"
+    echo "$PATH"
+)"
+if [[ "$RESULT_PATH_FROM_UNPATCHED" != "$RESULT_PATH_FROM_PATCHED" ]]; then
+    echo "Result path mismatched: $UNPATCHED_SOURCE_FILE ($RESULT_PATH_FROM_UNPATCHED) and $PATCHED_SOURCE_FILE ($RESULT_PATH_FROM_PATCHED)" >&2
+    exit 1
+fi

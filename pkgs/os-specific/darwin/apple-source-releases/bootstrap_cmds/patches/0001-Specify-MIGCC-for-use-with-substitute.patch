@@ -1,0 +1,13 @@
+diff --git a/migcom.tproj/mig.sh b/migcom.tproj/mig.sh
+index 3f6b0b544a..f91f1a0112 100644
+--- a/migcom.tproj/mig.sh
++++ b/migcom.tproj/mig.sh
+@@ -47,6 +47,8 @@
+ # the rights to redistribute these changes.
+ #
+ 
++MIGCC=@clang@
++
+ realpath()
+ {
+ 	local FILE="$1"

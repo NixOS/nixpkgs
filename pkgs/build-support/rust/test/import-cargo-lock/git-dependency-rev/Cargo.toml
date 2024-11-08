@@ -1,0 +1,8 @@
+[package]
+name = "git-dependency-rev"
+version = "0.1.0"
+authors = ["Daniël de Kok <me@danieldk.eu>"]
+edition = "2018"
+
+[dependencies]
+rand = { git = "https://github.com/rust-random/rand.git", rev = "0.8.3" }
