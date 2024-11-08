@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biopython";
     repo = "biopython";
-    rev = "refs/tags/biopython-${lib.replaceStrings [ "." ] [ "" ] version}";
+    rev = "refs/tags/biopython-${lib.replaceChars [ "." ] [ "" ] version}";
     hash = "sha256-zXUB/AkWc/cY9M02WheSvXjT/nwM+lGXfXgCcWfu0G4=";
   };
 
