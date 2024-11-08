@@ -5,13 +5,11 @@
 , installShellFiles
 , pkg-config
 , ronn
-, stdenv
 , curl
 , libgit2
 , libssh2
 , openssl
 , zlib
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,8 +36,6 @@ rustPlatform.buildRustPackage rec {
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   postBuild = ''
