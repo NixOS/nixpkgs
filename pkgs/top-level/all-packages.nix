@@ -34405,9 +34405,7 @@ with pkgs;
 
   ivan = callPackage ../games/ivan { };
 
-  ja2-stracciatella = callPackage ../games/ja2-stracciatella {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-  };
+  ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
 
   jfsw = callPackage ../games/jfsw { };
 
