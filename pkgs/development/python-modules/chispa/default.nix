@@ -5,6 +5,7 @@
   poetry-core,
   pythonOlder,
   setuptools,
+  prettytable,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-WPtn8YGlj67MEy2onxoU5SctQ7NcvTImaU0VgMoz2B4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ setuptools ];
+  dependencies = [
+    setuptools
+    prettytable
+  ];
 
   # Tests require a spark installation
   doCheck = false;
