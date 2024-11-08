@@ -1,0 +1,11 @@
+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+--- a/Source/cmake/OptionsQt.cmake
++++ b/Source/cmake/OptionsQt.cmake
+@@ -683,7 +683,6 @@ if (WIN32 AND COMPILER_IS_GCC_OR_CLANG)
+ endif ()
+ 
+ if (APPLE)
+-    SET_AND_EXPOSE_TO_BUILD(HAVE_QOS_CLASSES 1)
+ endif ()
+ 
+ if (ENABLE_MATHML)

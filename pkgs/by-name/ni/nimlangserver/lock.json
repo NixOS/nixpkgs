@@ -1,0 +1,242 @@
+{
+  "depends": [
+    {
+      "method": "git",
+      "path": "/nix/store/jvk4kr8wws3dbjqnlag2zcysg0d7xnhz-nim-chronos-c04576d",
+      "rev": "c04576d829b8a0a1b12baaa8bc92037501b3a4a0",
+      "sha256": "0plwammxi4iis59p2416g7420f5fx38jziwhmi082c5lm2x658x9",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-chronos",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "chronos"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/rxh6hjns335dl5zn13dl78hlj6ign33m-nim-http-utils-8b88ad6",
+      "rev": "8b88ad6dd9a6326c29f82067800c483d9410d873",
+      "sha256": "1c20yhzm7c69xkcdzxwbm8ldid565nrmvgr5jk3g6cghh6z9b63n",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-http-utils",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "httputils"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/ngj2jlgi2ygv3xvnqvhlpws2s069fh6c-nim-stint-7c81df9",
+      "rev": "7c81df9adc80088f46a4c2b8bf2a46c26fab057c",
+      "sha256": "0gl8hxk3a29p5f2l3x5v3hscbydnwy8470bl9xjsawysbpa41jq0",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-stint",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "stint"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/fvqlv9l67gdbvdq48w76y7dm48s52viw-nim-unittest2-e96f321",
+      "rev": "e96f3215030cbfa13abc2f5827069b6f8ba87e38",
+      "sha256": "0q919mswsspk3fdhb9a742y7yv0pk14yc965afx2jza57m4fw2a2",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-unittest2",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "unittest2"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/ggzfksc7mbfllfdr2va5rmyx757c7nfx-nim-websock-63bcc29",
+      "rev": "63bcc2902d884c63101e144555ad99421734a70a",
+      "sha256": "0rxdz62pns7ywwzh4r1pjj9qyhx7djj06y5yhf83j7dc30qi7wp2",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-websock",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "websock"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/4q5lil0j6wdxjbkk4nbwnvz0swhxph4v-nim-serialization-298a955",
+      "rev": "298a9554a885b2df59737bb3461aac8d0d339724",
+      "sha256": "1skh778gkml33n0pz7s8fxybdn2rqg2hg10nyp8jip9x6rbpgz6g",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-serialization",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "serialization"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/1k3vziq26ynmmm9j9savsfm8d7glmrax-nim-stew-d4634c5",
+      "rev": "d4634c5405ac188e7050d348332edb6c3b09a527",
+      "sha256": "15ii11644vxs55jix64krg8h0ninnhlgqnc7klmskycbcr4a1xgh",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-stew",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "stew"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/3x156nly2vr6nixgw1zk5jp5n6bgi6rk-nim-faststreams-dbc4a95",
+      "rev": "dbc4a95df60238157dcf286f6125188cb72f37c1",
+      "sha256": "1zvh1lgjmszdd074993qkj01w2v7fjxcawjf7iplwq0rvjpszdy0",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-faststreams",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "faststreams"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/7k5blrxbh2zzsxrmz54l5i6v6dj4mp3g-with-91c51ec",
+      "rev": "91c51ec1051bf0cb518cf9bb78114e2a84b03da7",
+      "sha256": "170hfdc2z2qp9cxgvpqswzr4bmzljybh4lnn0k5kganwvf0ffz9p",
+      "srcDir": "",
+      "url": "https://github.com/zevv/with",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "with"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/jw9y4cm15y80h3v9xjz5s1r0rnyi5x4i-nim-testutils-e4fb95c",
+      "rev": "e4fb95cbe36ad1e231661c922da04b81e0ffeed9",
+      "sha256": "0gqhag91f8dkdv0v2mg6pz5q6afl70bbnk628i52p4wsi4bl49jj",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-testutils",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "testutils"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/sskmpq7fqax2x2wydb1lhyac4ikx5p6p-nim-results-57b2392",
+      "rev": "57b2392ad69849e3e2d02b74a8a0feee2c3d9570",
+      "sha256": "1wma3dhrrdfxn05ds6yiv9mj071czv90x06bm7f5rslzk0s7m1af",
+      "srcDir": "",
+      "url": "https://github.com/arnetheduck/nim-results",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "results"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/06gaz1ks9rc13bxr7wkig4sfiz0mb3xw-nim-json-rpc-e27c10a",
+      "rev": "e27c10ad4172e67f71a78044f53de073e7401390",
+      "sha256": "16f1lz2c6pzyjwmnqxxzl3sf635kzvzggmk2gl7mqifz4v31wjbq",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-json-rpc",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "json_rpc"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/narxn874mr56chm56iya8zdmnadvg61d-nimcrypto-71bca15",
+      "rev": "71bca15508e2c0548f32b42a69bcfb1ccd9ab9ff",
+      "sha256": "0iizdwgxdrfa94572874dr5d3q2g9j6yk33xzywci7ig3w58rm82",
+      "srcDir": "",
+      "url": "https://github.com/cheatfate/nimcrypto",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "nimcrypto"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/mki47dpj9mi8wa7gwhp3n0q6z9lhn1mv-nim-bearssl-667b404",
+      "rev": "667b40440a53a58e9f922e29e20818720c62d9ac",
+      "sha256": "0a4mf9g7p7zdhlzzfl9iikmhkyl7w5kf2mrn0bv4w4n30sl98m4s",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-bearssl",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "bearssl"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/cfs80kvd9s3np81i5bfr0pvhsv046vxm-nim-json-serialization-8a4ed98",
+      "rev": "8a4ed98bbd0a9479df15af2fa31da38a586ea6d5",
+      "sha256": "1r6acznzdyd3r5ixfhxbcqsrm6iqcyvrg5i93pzna1q4h9mgmf5f",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-json-serialization",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "json_serialization"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/vnxrmzlkma85rsf82abcr81ywrgr5dya-nim-chronicles-32ac867",
+      "rev": "32ac8679680ea699f7dbc046e8e0131cac97d41a",
+      "sha256": "0w3ya0rpy0rp997nnfakq0cshpk4vyva195mmgrw5c9zp4pwv2hm",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-chronicles",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "chronicles"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/ngqb4fpv1yi4zn5x7sn3p3yvxmmbn2z1-nim-zlib-45b06fc",
+      "rev": "45b06fca15ce0f09586067d950da30c10227865a",
+      "sha256": "1gcvl59j7yj698sl4l35drq0cmvy2zsywgi7b0dv9ci3klss4cxb",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-zlib",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "zlib"
+      ]
+    }
+  ]
+}

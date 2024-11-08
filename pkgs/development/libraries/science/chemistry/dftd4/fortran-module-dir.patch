@@ -1,0 +1,56 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f222aab..262b505 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -89,7 +89,6 @@ target_include_directories(
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${module-dir}>
+ )
+ target_include_directories(
+   "${PROJECT_NAME}-lib"
+@@ -132,7 +131,7 @@ install(
+ install(
+   DIRECTORY
+   "${CMAKE_CURRENT_BINARY_DIR}/include/"
+-  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${module-dir}"
++  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/"
+ )
+ if(WITH_API)
+   enable_language("C")
+diff --git a/config/template.cmake b/config/template.cmake
+index 8b5141d..8f94d66 100644
+--- a/config/template.cmake
++++ b/config/template.cmake
+@@ -6,7 +6,6 @@ set("@PROJECT_NAME@_WITH_OpenMP" @WITH_OpenMP@)
+ set(
+   "@PROJECT_NAME@_INCLUDE_DIRS"
+   "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@"
+-  "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/@module-dir@"
+ )
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+ 
+diff --git a/config/template.pc b/config/template.pc
+index 3d6efbb..fea69e4 100644
+--- a/config/template.pc
++++ b/config/template.pc
+@@ -6,4 +6,4 @@ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@
+ Version: @PROJECT_VERSION@
+ Libs: -L${libdir} -l@PROJECT_NAME@
+-Cflags: -I${includedir} -I${includedir}/@module-dir@
++Cflags: -I${includedir} -I${includedir}/
+diff --git a/meson.build b/meson.build
+index c9e9c58..ac8f0bd 100644
+--- a/meson.build
++++ b/meson.build
+@@ -83,7 +83,7 @@ if install
+     )
+   endif
+ 
+-  module_id = meson.project_name() / fc_id + '-' + fc.version()
++  module_id = meson.project_name()
+   meson.add_install_script(
+     find_program(files('config'/'install-mod.py')),
+     get_option('includedir') / module_id,

@@ -1,0 +1,13 @@
+diff --git a/Lib/venv/__init__.py b/Lib/venv/__init__.py
+index caa7285..ad666ac 100644
+--- a/Lib/venv/__init__.py
++++ b/Lib/venv/__init__.py
+@@ -379,7 +379,7 @@ class EnvBuilder:
+                 if data is not None:
+                     with open(dstfile, 'wb') as f:
+                         f.write(data)
+-                    shutil.copymode(srcfile, dstfile)
++                    os.chmod(dstfile, 0o644)
+ 
+ 
+ def create(env_dir, system_site_packages=False, clear=False,

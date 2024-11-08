@@ -1,0 +1,25 @@
+From 303a669356fa7cd6bc95ac7076ce51b1cab3970a Mon Sep 17 00:00:00 2001
+From: Adrian Ho <the.gromgit@gmail.com>
+Date: Tue, 6 Sep 2022 10:49:10 +0800
+Subject: [PATCH] Enable macOS builds
+
+macOS requires explicit `environ` declaration.
+---
+ s3backer.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/s3backer.h b/s3backer.h
+index ccc9053..383e246 100644
+--- a/s3backer.h
++++ b/s3backer.h
+@@ -90,6 +90,10 @@
+ #include <zlib.h>
+ #include <fuse.h>
+ 
++#ifdef __APPLE__
++extern char **environ;
++#endif
++
+ #ifndef FUSE_OPT_KEY_DISCARD
+ #define FUSE_OPT_KEY_DISCARD -4
+ #endif

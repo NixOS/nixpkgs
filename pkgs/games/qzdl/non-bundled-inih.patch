@@ -1,0 +1,36 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 10a8fb6..dcab540 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -6,16 +6,8 @@ set(CMAKE_AUTOMOC ON)
+ project(qzdl LANGUAGES C CXX)
+ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-	inih
+-	GIT_REPOSITORY https://github.com/benhoyt/inih.git
+-	GIT_TAG r44
+-)
+-FetchContent_GetProperties(inih)
+-if (NOT inih_POPULATED)
+-	FetchContent_Populate(inih)
+-endif()
++find_package(PkgConfig)
++pkg_check_modules(INIH inih)
+ 
+ add_executable(
+ 	zdl
+@@ -45,9 +37,8 @@ add_executable(
+ 	libwad.cpp
+ 	qzdl.cpp
+ 	${PROJECT_SOURCE_DIR}/zdlconf/zdlconf.cpp
+-	${inih_SOURCE_DIR}/ini.c
+ )
+ 
+-target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf)
+-target_include_directories(zdl PRIVATE ${inih_SOURCE_DIR})
+-target_link_libraries(zdl Qt5::Core Qt5::Widgets)
++target_include_directories(zdl PRIVATE ${PROJECT_SOURCE_DIR}/zdlconf ${INIH_INCLUDEDIR})
++target_link_libraries(zdl Qt5::Core Qt5::Widgets ${INIH_LDFLAGS})
++install(TARGETS zdl RUNTIME DESTINATION "bin")

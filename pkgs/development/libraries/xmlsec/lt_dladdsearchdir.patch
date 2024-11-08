@@ -1,0 +1,16 @@
+diff --git a/src/dl.c b/src/dl.c
+index b13f9d46..d761855b 100644
+--- a/src/dl.c
++++ b/src/dl.c
+@@ -346,6 +346,11 @@ xmlSecCryptoDLInit(void) {
+         xmlSecIOError("lt_dlinit", NULL, NULL);
+         return(-1);
+     }
++    ret = lt_dladdsearchdir("@out@/lib");
++    if(ret != 0) {
++      xmlSecIOError("lt_dladdsearchdir", NULL, NULL);
++      return(-1);
++    }
+ #endif /* XMLSEC_DL_LIBLTDL */
+ 
+     return(0);

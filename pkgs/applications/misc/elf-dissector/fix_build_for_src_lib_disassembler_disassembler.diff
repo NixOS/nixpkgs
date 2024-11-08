@@ -1,0 +1,17 @@
+diff --git a/src/lib/disassmbler/disassembler.cpp b/src/lib/disassmbler/disassembler.cpp
+index 8ff058e..dbd4bbe 100644
+--- a/src/lib/disassmbler/disassembler.cpp
++++ b/src/lib/disassmbler/disassembler.cpp
+@@ -144,11 +144,7 @@ QString Disassembler::disassembleBinutils(const unsigned char* data, uint64_t si
+     QString result;
+     disassembler_ftype disassemble_fn;
+     disassemble_info info;
+-#if BINUTILS_VERSION >= BINUTILS_VERSION_CHECK(2, 39)
+-    INIT_DISASSEMBLE_INFO(info, &result, qstring_printf, fprintf_styled);
+-#else
+-    INIT_DISASSEMBLE_INFO(info, &result, qstring_printf);
+-#endif
++    INIT_DISASSEMBLE_INFO(info, &result, qstring_printf, qstring_printf);
+ 
+     info.application_data = this;
+     info.flavour = bfd_target_elf_flavour;

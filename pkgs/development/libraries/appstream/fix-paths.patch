@@ -1,0 +1,17 @@
+diff --git a/meson.build b/meson.build
+index 5e7f57d5..3fe89e8c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -171,10 +171,10 @@ endif
+ stemmer_inc_dirs = include_directories()
+ if get_option('stemming')
+     stemmer_lib = cc.find_library('stemmer', required: true)
+-    stemmer_inc_dirs = include_directories(['/usr/include'])
++    stemmer_inc_dirs = include_directories(['@libstemmer_includedir@'])
+     if not cc.has_header('libstemmer.h')
+         if cc.has_header('libstemmer/libstemmer.h')
+-            stemmer_inc_dirs = include_directories('/usr/include/libstemmer')
++            stemmer_inc_dirs = include_directories('@libstemmer_includedir@/libstemmer')
+         else
+             error('Unable to find Snowball header "libstemmer.h". Please ensure libstemmer/Snowball is installed properly in order to continue.')
+         endif

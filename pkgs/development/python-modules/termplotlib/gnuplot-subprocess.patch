@@ -1,0 +1,26 @@
+diff --git a/src/termplotlib/helpers.py b/src/termplotlib/helpers.py
+index 4b67fd0..38a2242 100644
+--- a/src/termplotlib/helpers.py
++++ b/src/termplotlib/helpers.py
+@@ -32,7 +32,7 @@ def is_unicode_standard_output():
+ 
+ 
+ def get_gnuplot_version():
+-    out = subprocess.check_output(["gnuplot", "--version"]).decode()
++    out = subprocess.check_output(["@gnuplot@", "--version"]).decode()
+     m = re.match("gnuplot (\\d).(\\d) patchlevel (\\d)\n", out)
+     if m is None:
+         raise RuntimeError("Couldn't get gnuplot version")
+diff --git a/src/termplotlib/plot.py b/src/termplotlib/plot.py
+index 0f46b87..1418fd1 100644
+--- a/src/termplotlib/plot.py
++++ b/src/termplotlib/plot.py
+@@ -17,7 +17,7 @@ def plot(
+     ticks_scale: int = 0,
+ ):
+     p = subprocess.Popen(
+-        ["gnuplot"],
++        ["@gnuplot@"],
+         stdout=subprocess.PIPE,
+         stdin=subprocess.PIPE,
+         stderr=subprocess.PIPE,
