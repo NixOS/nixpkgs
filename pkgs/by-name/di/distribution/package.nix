@@ -45,7 +45,7 @@ buildGoModule rec {
     homepage = "https://distribution.github.io/distribution/";
     changelog = "https://github.com/distribution/distribution/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "registry";
     platforms = platforms.unix;
   };
