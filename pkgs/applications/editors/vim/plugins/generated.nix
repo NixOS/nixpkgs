@@ -9930,6 +9930,18 @@ final: prev:
     meta.homepage = "https://github.com/Almo7aya/openingh.nvim/";
   };
 
+  one-small-step-for-vimkind = buildVimPlugin {
+    pname = "one-small-step-for-vimkind";
+    version = "2024-10-15";
+    src = fetchFromGitHub {
+      owner = "jbyuki";
+      repo = "one-small-step-for-vimkind";
+      rev = "ad065ad2c814249cfb9e344ce5b2b35d36fbc09f";
+      sha256 = "sha256-KIxEjUutHkPRUubZQO3ZaFUm9Lm3mUJ6p6HB6hLuJEM=";
+    };
+    meta.homepage = "https://github.com/jbyuki/one-small-step-for-vimkind/";
+  };
+
   openscad-nvim = buildVimPlugin {
     pname = "openscad.nvim";
     version = "2024-04-13";
