@@ -10051,8 +10051,6 @@ with pkgs;
 
   munge = callPackage ../tools/security/munge { };
 
-  mutagen = callPackage ../tools/misc/mutagen { };
-
   mutagen-compose = callPackage ../tools/misc/mutagen-compose { };
 
   mycli = callPackage ../tools/admin/mycli { };
