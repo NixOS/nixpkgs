@@ -4,7 +4,7 @@
 # - pkgs/development/lua-modules/updater/updater.py
 
 # format:
-# $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
+# $ nix run nixpkgs#ruff maintainers/scripts/pluginupdate.py
 # type-check:
 # $ nix run nixpkgs#python3.pkgs.mypy maintainers/scripts/pluginupdate.py
 # linted:
@@ -195,7 +195,7 @@ class RepoGitHub(Repo):
             xml = req.read()
 
             # Filter out illegal XML characters
-            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f]")
             xml = illegal_xml_regex.sub(b"", xml)
 
             root = ET.fromstring(xml)
@@ -328,12 +328,11 @@ def load_plugins_from_csv(
     return plugins
 
 
-
 def run_nix_expr(expr, nixpkgs: str, **args):
-    '''
+    """
     :param expr nix expression to fetch current plugins
     :param nixpkgs Path towards a nixpkgs checkout
-    '''
+    """
     with CleanEnvironment(nixpkgs) as nix_path:
         cmd = [
             "nix",
@@ -624,7 +623,7 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
 
 
 def check_results(
-    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
+    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]],
 ) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
     """ """
     failures: List[Tuple[PluginDesc, Exception]] = []
@@ -792,9 +791,11 @@ def update_plugins(editor: Editor, args):
 
     log.info("Start updating plugins")
     if args.proc > 1 and args.github_token == None:
-        log.warning("You have enabled parallel updates but haven't set a github token.\n"
-        "You may be hit with `HTTP Error 429: too many requests` as a consequence."
-        "Either set --proc=1 or --github-token=YOUR_TOKEN. ")
+        log.warning(
+            "You have enabled parallel updates but haven't set a github token.\n"
+            "You may be hit with `HTTP Error 429: too many requests` as a consequence."
+            "Either set --proc=1 or --github-token=YOUR_TOKEN. "
+        )
 
     fetch_config = FetchConfig(args.proc, args.github_token)
     update = editor.get_update(args.input_file, args.outfile, fetch_config)
@@ -810,11 +811,9 @@ def update_plugins(editor: Editor, args):
     if autocommit:
         try:
             repo = git.Repo(os.getcwd())
-            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
+            updated = datetime.now(tz=UTC).strftime("%Y-%m-%d")
             print(args.outfile)
-            commit(repo,
-                   f"{editor.attr_path}: update on {updated}", [args.outfile]
-                   )
+            commit(repo, f"{editor.attr_path}: update on {updated}", [args.outfile])
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)
             sys.exit(1)
