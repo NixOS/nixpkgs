@@ -1,8 +1,8 @@
 {
-  lib
-, fetchPypi
-, python3Packages
-, dmenu
+  lib,
+  fetchPypi,
+  python3Packages,
+  dmenu,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,5 +35,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "dmenu-extended";
     platforms = platforms.unix;
   };
-
 }
