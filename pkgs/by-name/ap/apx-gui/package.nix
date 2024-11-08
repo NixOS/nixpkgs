@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apx-gui";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner  = "Vanilla-OS";
     repo   = "apx-gui";
     rev    = "v${finalAttrs.version}";
-    hash = "sha256-UgDBDk4ChgWFUoz5BAXbn0b4Bngs9/hTmcu1Y4FXLU0=";
+    hash = "sha256-nZMbVXeWEgfBsVgX2iESRzDgu0tjiqC1dTCaTlW0iWA=";
   };
 
   strictDeps = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (ps: [ ps.pygobject3 ps.requests ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ps.pyyaml ps.requests ]))
     wrapGAppsHook4
   ];
 
