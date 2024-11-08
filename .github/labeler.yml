@@ -1,3 +1,4 @@
+# NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":
   - any:
     - changed-files:
@@ -7,12 +8,6 @@
         - pkgs/build-support/agda/**/*
         - pkgs/development/libraries/agda/**/*
         - pkgs/top-level/agda-packages.nix
-
-"6.topic: bsd":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - pkgs/os-specific/bsd/**/*
 
 "6.topic: cinnamon":
   - any:
@@ -54,14 +49,6 @@
       - any-glob-to-any-file:
         - pkgs/development/cuda-modules/**/*
         - pkgs/top-level/cuda-packages.nix
-
-"6.topic: darwin":
-  - any:
-    - changed-files:
-      - any-glob-to-any-file:
-        - pkgs/os-specific/darwin/**/*
-        - pkgs/top-level/darwin-aliases.nix
-        - pkgs/top-level/darwin-packages.nix
 
 "6.topic: deepin":
   - any:
