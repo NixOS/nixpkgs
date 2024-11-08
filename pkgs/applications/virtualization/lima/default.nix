@@ -7,7 +7,14 @@
 , xcbuild
 , sigtool
 , makeWrapper
+, apple-sdk_15
 }:
+
+let
+  qemuWithAppleSdk = qemu.overrideAttrs (oldAttrs: {
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ apple-sdk_15 ];
+  });
+in
 
 buildGoModule rec {
   pname = "lima";
@@ -23,7 +30,7 @@ buildGoModule rec {
   vendorHash = "sha256-P0Qnfu/cqLveAwz9jf/wTXxkoh0jvazlE5C/PcUrWsA=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool apple-sdk_15 ];
 
   # clean fails with read only vendor dir
   postPatch = ''
