@@ -28,4 +28,7 @@ rec {
     feature = "rocm";
     libraries = ps: [ ps.torchWithRocm ];
   };
+  tester-darwin = callPackage ./mk-darwin-check.nix {
+    libraries = ps: [ ps.torch ];
+  };
 }
