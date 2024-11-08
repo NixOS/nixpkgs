@@ -585,6 +585,7 @@ in {
           "initrd-fs.target"
           config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
         ];
+        conflicts = [ "emergency.service" "emergency.target" ];
         requiredBy = [ "initrd.target" ];
         unitConfig = {
           AssertPathExists = "/etc/initrd-release";
