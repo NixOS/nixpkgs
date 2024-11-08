@@ -15559,6 +15559,11 @@
     githubId = 6391776;
     name = "Nikita Voloboev";
   };
+  NiklasGollenstede = {
+    name = "Niklas Gollenstede";
+    github = "NiklasGollenstede";
+    githubId = 10552031;
+  };
   niklashh = {
     email = "niklas.2.halonen@aalto.fi";
     github = "xhalo32";

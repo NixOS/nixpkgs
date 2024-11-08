@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, lib, ... }:
 let
   # Generated with
   #
@@ -6,9 +6,14 @@ let
   #
   snakeoil-cert = ./cert.pem;
   snakeoil-key = ./key.pem;
+  snakeoil-password = builtins.path { path = ./password.txt; };
 in
 {
   name = "rkvm";
+
+  meta = {
+    maintainers = [ lib.maintainers.NiklasGollenstede ];
+  };
 
   nodes = {
     server = { pkgs, ... }: {
@@ -63,9 +68,9 @@ in
         settings = {
           server = "10.0.0.1:5258";
           certificate = snakeoil-cert;
-          key = snakeoil-key;
-          password = "snakeoil";
         };
+        passwordFile = snakeoil-password;
+        useOwnSlice = true;
       };
     };
   };
