@@ -14,13 +14,13 @@ buildDotnetGlobalTool {
 
   nugetHash = "sha256-VkZGnfD8p6oAJ7i9tlfwJfmKfZBHJU7Wdq+K4YjPoRs=";
 
-  meta = with lib; {
+  meta = {
     description = "C# REPL with syntax highlighting";
     homepage = "https://fuqua.io/CSharpRepl";
     changelog = "https://github.com/waf/CSharpRepl/blob/main/CHANGELOG.md";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ donteatoreo ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ donteatoreo ];
     mainProgram = "csharprepl";
   };
 }
