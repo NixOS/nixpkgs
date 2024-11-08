@@ -44,6 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "notion_client" ];
 
   disabledTests = [
+    # requires network access
     "test_api_http_response_error"
   ];
 
