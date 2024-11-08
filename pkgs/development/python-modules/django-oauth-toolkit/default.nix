@@ -12,6 +12,7 @@
 
   # tests
   djangorestframework,
+  pytest-cov-stub,
   pytest-django,
   pytest-mock,
   pytestCheckHook,
@@ -29,10 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-Ya0KlX+vtLXN2Fgk0Gv7KemJCUTwkaH+4GQA1ByUlBY=";
   };
 
-  postPatch = ''
-    sed -i '/cov/d' pyproject.toml
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -42,12 +39,15 @@ buildPythonPackage rec {
     requests
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
 
   # xdist is disabled right now because it can cause race conditions on high core machines
   # https://github.com/jazzband/django-oauth-toolkit/issues/1300
   nativeCheckInputs = [
     djangorestframework
+    pytest-cov-stub
     pytest-django
     # pytest-xdist
     pytest-mock
