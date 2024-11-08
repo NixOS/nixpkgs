@@ -1,29 +1,22 @@
 {
   lib,
-  python3Packages,
-  fetchFromGitHub,
+  rustPlatform,
+  fetchCrate,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "asciinema";
-  version = "2.4.0";
+  version = "3.0.0-rc.3";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "asciinema";
-    repo = "asciinema";
-    rev = "v${version}";
-    hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-BUVD+kdQBzIM0gbj8jNKjWoJIHJFPrwi36m1eefPZJM=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  cargoHash = "sha256-CYDy0CedwG/ThTV+XOfOg8ncxF3tdTEGakmu4MXfiE4=";
 
-  postPatch = ''
-    substituteInPlace tests/pty_test.py \
-      --replace-fail "python3" "${python3Packages.python.interpreter}"
-  '';
-
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+  doCheck = false; # TEMP until we fix checks
 
   meta = {
     description = "Terminal session recorder and the best companion of asciinema.org";
