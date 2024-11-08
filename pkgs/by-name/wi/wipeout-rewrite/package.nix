@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   makeWrapper,
-  Foundation,
   glew,
   SDL2,
   writeShellScript,
@@ -41,14 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      glew
-      SDL2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    glew
+    SDL2
+  ];
 
   installPhase = ''
     runHook preInstall
