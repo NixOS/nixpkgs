@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  curl,
   openssl,
   protobuf,
   rdkafka,
@@ -62,8 +63,10 @@ rustPlatform.buildRustPackage {
     ]
     # Provides the mig command used by the build scripts
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+
   buildInputs =
     [
+      curl
       oniguruma
       openssl
       protobuf
