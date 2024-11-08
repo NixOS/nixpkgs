@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 prusnak ];
+    maintainers = with maintainers; [ prusnak ];
     platforms = platforms.linux;
   };
 }

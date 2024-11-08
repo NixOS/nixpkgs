@@ -6881,14 +6881,6 @@
     githubId = 873530;
     name = "Alexey Levan";
   };
-  expipiplus1 = {
-    email = "nix@monoid.al";
-    matrix = "@ellie:monoid.al";
-    github = "expipiplus1";
-    githubId = 857308;
-    name = "Ellie Hermaszewska";
-    keys = [ { fingerprint = "FC1D 3E4F CBCA 80DF E870  6397 C811 6E3A 0C1C A76A"; } ];
-  };
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";

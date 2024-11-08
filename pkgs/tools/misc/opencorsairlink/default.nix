@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ lib.maintainers.expipiplus1 ];
+    maintainers = [];
     mainProgram = "OpenCorsairLink.elf";
   };
 }

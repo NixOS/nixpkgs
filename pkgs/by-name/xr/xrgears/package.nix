@@ -65,9 +65,6 @@ stdenv.mkDerivation {
     mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [
-      expipiplus1
-      Scrumplex
-    ];
+    maintainers = with maintainers; [ Scrumplex ];
   };
 }

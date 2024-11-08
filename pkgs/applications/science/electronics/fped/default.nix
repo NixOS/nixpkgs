@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     mainProgram = "fped";
     homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

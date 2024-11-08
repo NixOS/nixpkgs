@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       lgpl21Plus # libgpiod
       lgpl3Plus # C++ bindings
     ] ++ lib.optional enable-tools gpl2Plus;
-    maintainers = [ maintainers.expipiplus1 ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

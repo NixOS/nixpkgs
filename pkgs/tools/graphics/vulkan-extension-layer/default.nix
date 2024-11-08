@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/Vulkan-ExtensionLayer/";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
   };
 }

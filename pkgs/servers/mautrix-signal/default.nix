@@ -48,7 +48,6 @@ buildGoModule rec {
     description = "Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
-      expipiplus1
       niklaskorz
       ma27
     ];
