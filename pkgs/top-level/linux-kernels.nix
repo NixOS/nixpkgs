@@ -204,6 +204,10 @@ in {
        then latest
        else testing;
 
+    linux_default = packageAliases.linux_default.kernel;
+
+    linux_latest = packageAliases.linux_latest.kernel;
+
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
     zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
