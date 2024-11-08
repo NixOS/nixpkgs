@@ -1256,8 +1256,6 @@ self: super: {
 
   stack = super.stack.overrideScope (lself: lsuper: {
     # stack-3.1.1 requires the latest versions of these libraries
-    pantry = lself.pantry_0_10_0;
-    static-bytes = lself.static-bytes_0_1_1; # for pantry_0_10_0
     tar = lself.tar_0_6_3_0;
 
     # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
@@ -2046,7 +2044,7 @@ self: super: {
 
   # Requests latest versions of crypton-connection and tls
   darcs = super.darcs.overrideScope (self: super: {
-    crypton-connection = self.crypton-connection_0_4_1;
+    crypton-connection = self.crypton-connection_0_4_2;
     tls = self.tls_2_0_6;
   });
 
@@ -2886,7 +2884,7 @@ self: super: {
   }) super.kmonad;
 
   ghc-syntax-highlighter_0_0_12_0 = super.ghc-syntax-highlighter_0_0_12_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_10_1_20240511;
+    ghc-lib-parser = self.ghc-lib-parser_9_10_1_20241103;
   });
 
   # 2024-03-17: broken
@@ -2980,7 +2978,7 @@ self: super: {
   cornelis = dontCheck super.cornelis;
 
   lzma = doJailbreak (super.lzma.overrideScope (self: super: {
-    tasty = super.tasty_1_5;
+    tasty = super.tasty_1_5_2;
   }));
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
