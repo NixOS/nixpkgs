@@ -1,7 +1,8 @@
 { lib
+, callPackage
 , fetchFromGitHub
 , semgrep-core
-, buildPythonApplication
+, buildPythonPackage
 , pythonPackages
 
 , pytestCheckHook
@@ -15,7 +16,7 @@ let
   common = import ./common.nix { inherit lib; };
   semgrepBinPath = lib.makeBinPath [ semgrep-core ];
 in
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "semgrep";
   inherit (common) version;
   src = fetchFromGitHub {
@@ -130,7 +131,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit common;
+    inherit common semgrep-core;
     submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;
     updateScript = ./update.sh;
   };

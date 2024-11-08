@@ -11959,8 +11959,8 @@ with pkgs;
 
   semantic-release = callPackage ../development/tools/semantic-release { };
 
-  semgrep = python3.pkgs.callPackage ../tools/security/semgrep { };
-  semgrep-core = callPackage ../tools/security/semgrep/semgrep-core.nix { };
+  semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
+  inherit (semgrep.passthru) semgrep-core;
 
   setroot = callPackage  ../tools/X11/setroot { };
 
