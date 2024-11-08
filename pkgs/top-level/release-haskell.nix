@@ -379,7 +379,6 @@ let
         xmobar
         xmonadctl
         xmonad-with-packages
-        yi
         zsh-git-prompt
         ;
 
@@ -561,8 +560,9 @@ let
         compilerNames.ghc9101
       ] released;
       Cabal_3_10_3_0 = released;
+      Cabal-syntax_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_0_0 = released;
+      Cabal-syntax_3_12_1_0 = released;
       cabal2nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
@@ -590,6 +590,9 @@ let
       language-nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
+      large-hashable = [
+        compilerNames.ghc928
+      ];
       nix-paths = released;
       titlecase = lib.subtractLists [
         compilerNames.ghc9101
