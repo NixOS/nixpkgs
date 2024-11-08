@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
-  mutf8,
   webassets,
   pytestCheckHook,
   mock,
@@ -11,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dukpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "dukpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-8RDMz9SfBoUe7LQ9/atsZlJ/2uwLUb0hZxeYdsUOGpU=";
+    hash = "sha256-5+SdGHYBron6EwpCf5ByaK8KuqQXhvN73wQUptvgPzc=";
   };
 
   postPatch = ''
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  dependencies = [ mutf8 ];
 
   optional-dependencies = {
     webassets = [ webassets ];
