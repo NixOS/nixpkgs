@@ -17347,10 +17347,6 @@ with pkgs;
     buildShareware = true;
   };
 
-  space-cadet-pinball = callPackage ../by-name/sp/space-cadet-pinball/package.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   starsector = callPackage ../games/starsector {
     openjdk = openjdk8;
   };
