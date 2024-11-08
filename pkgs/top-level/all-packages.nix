@@ -25364,6 +25364,10 @@ with pkgs;
   fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
 
+  fuse-t = callPackage ../by-name/fu/fuse-t/package.nix {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
+
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet { };

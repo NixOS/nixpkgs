@@ -1,0 +1,10 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/fuse
+
+Name: fuse-t
+Description: Userspace FUSE implementation for macOS
+Version: @version@
+Libs:  -L${libdir} -Wl,-rpath,${libdir} -lfuse-t
+Cflags: -I${includedir} -D_FILE_OFFSET_BITS=64
