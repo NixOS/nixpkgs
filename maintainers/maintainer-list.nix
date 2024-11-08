@@ -7000,6 +7000,12 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  fazo96 = {
+    email = "enrico.fasoli1996@gmail.com";
+    github = "fazo96";
+    githubId = 2546805;
+    name = "Enrico Fasoli";
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
@@ -12582,6 +12588,15 @@
     github = "lodi";
     githubId = 918448;
     name = "Anthony Lodi";
+  };
+  logan-barnett = {
+    email = "logustus+nixpkgs@gmail.com";
+    github = "LoganBarnett";
+    githubId = 27005;
+    keys = [{
+      fingerprint = "3F29 5F7D 2427 6467 A9B2  3459 41E4 6FB1 ACEA 3EF0";
+    }];
+    name = "Logan Barnett";
   };
   logo = {
     email = "logo4poop@protonmail.com";
