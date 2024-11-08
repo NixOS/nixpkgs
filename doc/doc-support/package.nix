@@ -5,6 +5,7 @@
   lib,
   stdenvNoCC,
   callPackage,
+  mkShellNoCC,
   documentation-highlighter,
   nixos-render-docs,
   nixpkgs ? { },
@@ -95,10 +96,14 @@ stdenvNoCC.mkDerivation (
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };
 
-      shell = callPackage ../../pkgs/tools/nix/web-devmode.nix {
-        buildArgs = "./.";
-        open = "/share/doc/nixpkgs/manual.html";
-      };
+      shell =
+        let
+          devmode = callPackage ../../pkgs/tools/nix/web-devmode.nix {
+            buildArgs = "./.";
+            open = "/share/doc/nixpkgs/manual.html";
+          };
+        in
+        mkShellNoCC { packages = [ devmode ]; };
 
       tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
     };
