@@ -3,24 +3,21 @@
   stdenv,
   lib,
   fetchzip,
-  bc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yt6801";
   version = "1.0.29";
 
   src = fetchzip {
     url = "https://www.motor-comm.com/Public/Uploads/uploadfile/files/20240812/yt6801-linux-driver-1.0.29.zip";
     sha256 = "sha256-oz6CeOUN6QWKXxe3WUZljhGDTFArsknjzBuQ4IchGeU=";
+    stripRoot = false;
   };
 
-  hardeningDisable = [
-    "pic"
-    "format"
-  ];
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}";
-  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  preConfigure = "cd src";
 
   configurePhase = "true";
 
@@ -29,10 +26,7 @@ stdenv.mkDerivation rec {
   makeFlags =
     [
       "ARCH=${stdenv.hostPlatform.linuxArch}"
-      "KSRC_BASE=${KERNELDIR}"
-      "KSRC=${KERNELDIR}/build"
-      "KDST=kernel/drivers/net/ethernet/motorcomm"
-      "INSTALL_MOD_PATH=${placeholder "out"}"
+      "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -40,7 +34,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm
-    find . -name "*.ko" -exec cp {} $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm/ \;
+    cp src/yt6801.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm/
   '';
 
   enableParallelBuilding = true;
