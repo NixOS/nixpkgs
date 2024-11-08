@@ -1217,10 +1217,10 @@ in {
         mkdir -p $(dirname ${cfg.registry.certFile})
         openssl req -nodes -newkey rsa:4096 -keyout ${cfg.registry.keyFile} -out /tmp/registry-auth.csr -subj "/CN=${cfg.registry.issuer}"
         openssl x509 -in /tmp/registry-auth.csr -out ${cfg.registry.certFile} -req -signkey ${cfg.registry.keyFile} -days 3650
-        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.keyFile})
-        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.certFile})
-        chown ${cfg.user}:${cfg.group} ${cfg.registry.keyFile}
-        chown ${cfg.user}:${cfg.group} ${cfg.registry.certFile}
+        chown ${config.services.docker-registry.user}:${config.services.docker-registry.group} $(dirname ${cfg.registry.keyFile})
+        chown ${config.services.docker-registry.user}:${config.services.docker-registry.group} $(dirname ${cfg.registry.certFile})
+        chown ${config.services.docker-registry.user}:${config.services.docker-registry.group} ${cfg.registry.keyFile}
+        chown ${config.services.docker-registry.user}:${config.services.docker-registry.group} ${cfg.registry.certFile}
       '';
 
       unitConfig = {
