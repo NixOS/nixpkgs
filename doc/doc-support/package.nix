@@ -5,6 +5,7 @@
   lib,
   stdenvNoCC,
   callPackage,
+  devmode,
   mkShellNoCC,
   documentation-highlighter,
   nixos-render-docs,
@@ -98,12 +99,12 @@ stdenvNoCC.mkDerivation (
 
       shell =
         let
-          devmode = callPackage ../../pkgs/tools/nix/web-devmode.nix {
+          devmode' = devmode.override {
             buildArgs = "./.";
             open = "/share/doc/nixpkgs/manual.html";
           };
         in
-        mkShellNoCC { packages = [ devmode ]; };
+        mkShellNoCC { packages = [ devmode' ]; };
 
       tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
     };
