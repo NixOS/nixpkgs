@@ -279,6 +279,16 @@ in {
         type = types.listOf (types.enum (builtins.attrNames magics));
       };
 
+      addEmulatedSystemsToNixSandbox = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Whether to add the {option}`boot.binfmt.emulatedSystems` to {option}`nix.settings.extra-platforms`.
+          Disable this to use remote builders for those platforms, while allowing testing binaries locally.
+        '';
+      };
+
       preferStaticEmulators = mkOption {
         default = false;
         description = ''
@@ -325,7 +335,7 @@ in {
         interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
-    nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
+    nix.settings = lib.mkIf (cfg.addEmulatedSystemsToNixSandbox && cfg.emulatedSystems != []) {
       extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
       extra-sandbox-paths = let
         ruleFor = system: cfg.registrations.${system};
