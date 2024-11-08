@@ -17,6 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cd mingw-w64-headers
   '';
 
+  configureFlags = lib.optionals stdenvNoCC.targetPlatform.isCygwin [ "--enable-w32api" ];
+
   meta = {
     platforms = lib.platforms.windows;
   };

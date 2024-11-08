@@ -19546,6 +19546,7 @@ with pkgs;
   preLibcCrossHeaders = let
     inherit (stdenv.targetPlatform) libc;
   in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
+    else if stdenv.targetPlatform.isCygwin then targetPackages.windows.cygwin_headers or windows.cygwin_headers
     else if libc == "nblibc" then targetPackages.netbsd.headers or netbsd.headers
     else null;
 
