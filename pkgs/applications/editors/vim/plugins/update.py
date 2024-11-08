@@ -3,7 +3,7 @@
 # run with:
 # $ nix run .\#vimPluginsUpdater
 # format:
-# $ nix run nixpkgs#python3Packages.black -- update.py
+# $ nix run nixpkgs#python3Packages.ruff -- update.py
 # type-check:
 # $ nix run nixpkgs#python3Packages.mypy -- update.py
 # linted:
@@ -19,14 +19,13 @@
 #
 
 import inspect
-import os
-import logging
-import textwrap
 import json
+import logging
+import os
 import subprocess
-from typing import List, Tuple
+import textwrap
 from pathlib import Path
-
+from typing import List, Tuple
 
 log = logging.getLogger("vim-updater")
 
@@ -37,12 +36,12 @@ log.addHandler(sh)
 
 # Import plugin update library from maintainers/scripts/pluginupdate.py
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-import pluginupdate
 import importlib
-from pluginupdate import run_nix_expr, PluginDesc
 
-treesitter = importlib.import_module('nvim-treesitter.update')
+import pluginupdate
+from pluginupdate import PluginDesc, run_nix_expr
 
+treesitter = importlib.import_module("nvim-treesitter.update")
 
 
 HEADER = (
@@ -56,9 +55,7 @@ class VimEditor(pluginupdate.Editor):
     nvim_treesitter_updated = False
 
     def generate_nix(
-        self,
-        plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]],
-        outfile: str
+        self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str
     ):
         log.info("Generating nix code")
         sorted_plugins = sorted(plugins, key=lambda v: v[0].name.lower())
@@ -66,7 +63,7 @@ class VimEditor(pluginupdate.Editor):
         nvim_treesitter_rev = pluginupdate.run_nix_expr(
             "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev",
             self.nixpkgs,
-            timeout=10
+            timeout=10,
         )
 
         GET_PLUGINS_LUA = """
@@ -109,8 +106,9 @@ class VimEditor(pluginupdate.Editor):
             f.write("\n}\n")
         print(f"updated {outfile}")
 
-    def plugin2nix(self, pdesc: PluginDesc, plugin: pluginupdate.Plugin, isNeovim: bool) -> str:
-
+    def plugin2nix(
+        self, pdesc: PluginDesc, plugin: pluginupdate.Plugin, isNeovim: bool
+    ) -> str:
         repo = pdesc.repo
 
         content = f"  {plugin.normalized_name} = "
@@ -138,19 +136,25 @@ class VimEditor(pluginupdate.Editor):
         if self.nvim_treesitter_updated:
             print("updating nvim-treesitter grammars")
             cmd = [
-                "nix", "build",
-                "vimPlugins.nvim-treesitter.src", "-f", self.nixpkgs
-                , "--print-out-paths"
+                "nix",
+                "build",
+                "vimPlugins.nvim-treesitter.src",
+                "-f",
+                self.nixpkgs,
+                "--print-out-paths",
             ]
             log.debug("Running command: %s", " ".join(cmd))
-            nvim_treesitter_dir = subprocess.check_output(cmd, text=True, timeout=90).strip()
+            nvim_treesitter_dir = subprocess.check_output(
+                cmd, text=True, timeout=90
+            ).strip()
 
             generated = treesitter.update_grammars(nvim_treesitter_dir)
             treesitter_generated_nix_path = os.path.join(
-                NIXPKGS_NVIMTREESITTER_FOLDER,
-                "generated.nix"
+                NIXPKGS_NVIMTREESITTER_FOLDER, "generated.nix"
             )
-            open(os.path.join(args.nixpkgs, treesitter_generated_nix_path), "w").write(generated)
+            open(os.path.join(args.nixpkgs, treesitter_generated_nix_path), "w").write(
+                generated
+            )
 
             if self.nixpkgs_repo:
                 index = self.nixpkgs_repo.index
