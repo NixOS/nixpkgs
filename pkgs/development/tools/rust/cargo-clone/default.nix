@@ -4,10 +4,6 @@
 , pkg-config
 , curl
 , openssl
-, stdenv
-, CoreServices
-, Security
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,18 +14,14 @@ rustPlatform.buildRustPackage rec {
     owner = "janlikar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kK0J1Vfx1T17CgZ3DV9kQbAUxk4lEfje5p6QvdBS5VQ=";
+    hash = "sha256-kK0J1Vfx1T17CgZ3DV9kQbAUxk4lEfje5p6QvdBS5VQ=";
   };
 
   cargoHash = "sha256-6UUaOwu6N/XFdGEnoAX5zM4xTsqwHwPrmZ1t5huF6nM=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ curl openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    Security
-    SystemConfiguration
-  ];
+  buildInputs = [ curl openssl ];
 
   # requires internet access
   doCheck = false;
