@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.23.2";
+  version = "1.24.0";
   pyproject = true;
 
   outputs = [
@@ -37,12 +37,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
-    hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
+    hash = "sha256-YeOmrYkyP+z6/xdrwXKPuMMxLy+qg0JNnVB3uiD199o=";
   };
 
   patches = [
-    # Support Python 3.10-3.12, remove distutils, https://dev.gnupg.org/D545
-    ./python-310-312-remove-distutils.patch
     # Support Python 3.13
     ./python313-support.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
