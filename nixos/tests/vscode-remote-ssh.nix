@@ -28,7 +28,7 @@ in {
       networking.interfaces.eth1.ipv4.addresses = [ { address = serverAddress; prefixLength = 24; } ];
       services.openssh.enable = true;
       users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
-      virtualisation.additionalPaths = with pkgs; [ patchelf bintools stdenv.cc.cc.lib ];
+      virtualisation.additionalPaths = with pkgs; [ patchelf bintools (lib.getLib stdenv.cc.cc) ];
     };
     client = { ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];

@@ -8,6 +8,7 @@
   libiconv,
   numpy,
   protobuf,
+  protoc,
   pyarrow,
   Security,
   SystemConfiguration,
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    protoc
   ];
 
   buildInputs =

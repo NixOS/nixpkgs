@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ libusb1 udev stdenv.cc.cc.lib ];
+  buildInputs = [ libusb1 udev (lib.getLib stdenv.cc.cc) ];
 
   unpackPhase = ''
     sh "$src" --noexec --target source

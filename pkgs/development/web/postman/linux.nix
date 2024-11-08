@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     atk
     at-spi2-atk
     at-spi2-core

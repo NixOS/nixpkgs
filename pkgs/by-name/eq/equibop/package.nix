@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   patches =

@@ -28,7 +28,7 @@ let
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
       nativeBuildInputs = [ dpkg autoPatchelfHook ];
-      buildInputs = [ stdenv.cc.cc.lib ];
+      buildInputs = [ (lib.getLib stdenv.cc.cc) ];
       sourceRoot = ".";
       unpackCmd = "dpkg-deb -x $src .";
       installPhase = ''

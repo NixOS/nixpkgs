@@ -42,7 +42,7 @@ else stdenv.mkDerivation rec {
     PATH=${bintools-unwrapped}/bin:${llvmPackages.clang-unwrapped}/bin:$PATH \
       clang -arch x86_64 -arch arm64 -arch arm64e \
       -isystem "$SDKROOT/usr/include" \
-      -isystem ${llvmPackages.libclang.lib}/lib/clang/*/include \
+      -isystem ${lib.getLib llvmPackages.libclang}/lib/clang/*/include \
       "-L$SDKROOT/usr/lib" \
       -Wl,-install_name,$out/lib/$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
