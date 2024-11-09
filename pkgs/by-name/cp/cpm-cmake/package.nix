@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cpm-cmake/CPM.cmake";
     description = "CMake's missing package manager";
     longDescription = ''
@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       CMake's FetchContent module that adds version control, caching, a
       simple API and more.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ pandapip1 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pandapip1 ];
+    platforms = lib.platforms.all;
   };
 })
