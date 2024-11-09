@@ -9089,8 +9089,6 @@ with pkgs;
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
-  lunatask = callPackage ../applications/misc/lunatask { };
-
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
   kapp = callPackage ../tools/networking/kapp { };
@@ -34884,8 +34882,6 @@ with pkgs;
   system-syzygy = callPackage ../games/system-syzygy { };
 
   t4kcommon = callPackage ../games/t4kcommon { };
-
-  taisei = callPackage ../games/taisei { };
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
