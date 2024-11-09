@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, darwin }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, curl, openssl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.3.1";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-QNMdqoxxY8ao2O44hJxZNgLrPwzu9+ieweTPc7pfFY4=";
 
   nativeBuildInputs = [pkg-config];
-  buildInputs = [openssl]
+  buildInputs = [curl openssl]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       Security
       SystemConfiguration
