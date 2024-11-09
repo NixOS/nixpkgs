@@ -1,11 +1,13 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   rustPlatform,
   pytestCheckHook,
   pyahocorasick,
   hypothesis,
+  typing-extensions,
   pytest-benchmark,
 }:
 
@@ -31,6 +33,8 @@ buildPythonPackage rec {
     maturinBuildHook
     cargoSetupHook
   ];
+
+  dependencies = lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-benchmark

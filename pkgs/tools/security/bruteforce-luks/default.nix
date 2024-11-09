@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cryptsetup,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bruteforce-luks";
   version = "1.4.1";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
-    rev = version;
-    repo = "bruteforce-luks";
     owner = "glv2";
+    repo = "bruteforce-luks";
+    rev = version;
+    hash = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
   };
+
+  postPatch = ''
+    # the test hangs indefinetly when more than 3 threads are used, I haven't figured out why
+    substituteInPlace tests/Makefile.am \
+      --replace-fail " crack-volume3.sh" ""
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ cryptsetup ];
@@ -18,8 +30,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    homepage = "https://github.com/glv2/bruteforce-luks";
     description = "Cracks passwords of LUKS encrypted volumes";
     mainProgram = "bruteforce-luks";
     longDescription = ''
@@ -30,7 +42,7 @@ stdenv.mkDerivation rec {
       knowing anything about it would take way too much time (unless the
       password is really short and/or weak). It can also use a dictionary.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

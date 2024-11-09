@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  boost179,
+  boost180,
   cereal,
   cgal_5,
   curl,
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost179
+    boost180
     cereal
     cgal_5
     curl
