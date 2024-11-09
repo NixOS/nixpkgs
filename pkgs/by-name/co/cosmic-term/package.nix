@@ -104,7 +104,6 @@ rustPlatform.buildRustPackage rec {
         xorg.libX11
         xorg.libXcursor
         xorg.libXi
-        xorg.libXrandr
       ]}
   '';
 
