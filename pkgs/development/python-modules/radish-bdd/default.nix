@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "0.17.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = pname;
