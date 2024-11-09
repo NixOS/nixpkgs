@@ -9,6 +9,7 @@
   useArrow ? (!useMinimalFeatures),
   useHDF ? (!useMinimalFeatures),
   useJava ? (!useMinimalFeatures),
+  useLibAvif ? (!useMinimalFeatures),
   useLibHEIF ? (!useMinimalFeatures),
   useLibJXL ? (!useMinimalFeatures),
   useMysql ? (!useMinimalFeatures),
@@ -42,6 +43,7 @@
   json_c,
   lerc,
   libaom,
+  libavif,
   libde265,
   libdeflate,
   libgeotiff,
@@ -137,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     let
       tileDbDeps = lib.optionals useTiledb [ tiledb ];
+      libAvifDeps = lib.optionals useLibAvif [ libavif ];
       libHeifDeps = lib.optionals useLibHEIF [
         libheif
         dav1d
@@ -205,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3.pkgs.numpy
     ]
     ++ tileDbDeps
+    ++ libAvifDeps
     ++ libHeifDeps
     ++ libJxlDeps
     ++ mysqlDeps
