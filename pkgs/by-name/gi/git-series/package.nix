@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  curl,
   installShellFiles,
   libgit2,
   libssh2,
@@ -28,14 +26,14 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  ];
 
   buildInputs = [
     libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  ];
 
   env = {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
