@@ -12066,6 +12066,11 @@ self: super: with self; {
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
   protobuf = protobuf5;
 
+  # Protobuf 3.x
+  protobuf3 = callPackage ../development/python-modules/protobuf/3.nix {
+    protobuf = pkgs.protobuf3_20;
+  };
+
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
   # Protobuf 4.x
