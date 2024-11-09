@@ -21,6 +21,8 @@
 #include "../../wfslib/src/free_blocks_tree.h"
 #include "../../wfslib/src/quota_area.h"
 
+constexpr int kBytesPerGB = 1024 * 1024 * 1024;
+
 class ReencryptorBlocksDevice final : public BlocksDevice {
  public:
   struct BlockInfo {
@@ -52,15 +54,25 @@ class ReencryptorBlocksDevice final : public BlocksDevice {
     return res;
   }
 
-  const std::map<uint32_t, BlockInfo>& blocks() { return blocks_; }
+  size_t blocks_count() const { return blocks_.size(); }
+
+  size_t bytes_count() const {
+    return std::accumulate(blocks_.begin(), blocks_.end(), size_t{0},
+                           [](size_t acc, const auto& block) { return acc + block.second.data_size; });
+  }
 
   void Reencrypt(std::shared_ptr<BlocksDevice> output_device) {
-    for (const auto& [block_number, info] : blocks()) {
+    auto total_bytes = bytes_count();
+    size_t bytes_so_far = 0;
+    for (const auto& [block_number, info] : blocks_) {
       std::vector<std::byte> data(info.data_size, std::byte{0});
       BlocksDevice::ReadBlock(block_number, info.size_in_blocks, data, {}, info.iv, info.encrypted,
                               /*check_hash=*/false);
       output_device->WriteBlock(block_number, info.size_in_blocks, data, {}, info.iv, info.encrypted,
                                 /*recalculate_hash=*/false);
+      bytes_so_far += info.data_size;
+      std::print("Reencrypting: {: 6.2f}/{:.2f} GB [{:.2f}%]\r", static_cast<double>(bytes_so_far) / kBytesPerGB,
+                 static_cast<double>(total_bytes) / kBytesPerGB, static_cast<double>(bytes_so_far) / total_bytes * 100);
     }
   }
 
@@ -73,10 +85,22 @@ std::string inline prettify_path(const std::filesystem::path& path) {
   return "/" + path.generic_string();
 }
 
-void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::path& path, bool shadow = false) {
+void updateExploreStatus(const ReencryptorBlocksDevice* reencryptor, std::string location) {
+  if (location.length() > 64) {
+    location = location.substr(0, 64 - 3) + "...";
+  }
+  std::print("Exploring: {: 6.2f} GB | {: 8} blocks | Exploring: {:64}\r",
+             static_cast<double>(reencryptor->bytes_count()) / kBytesPerGB, reencryptor->blocks_count(), location);
+}
+
+void exploreDir(const ReencryptorBlocksDevice* reencryptor,
+                const std::shared_ptr<Directory>& dir,
+                const std::filesystem::path& path,
+                bool shadow = false) {
   if (!shadow && dir->is_quota()) {
     // It is an area, iterate its allocator
     auto quota = dir->quota();
+    updateExploreStatus(reencryptor, prettify_path(path) + " free blocks allocator");
     try {
       auto allocator = throw_if_error(quota->GetFreeBlocksAllocator());
       FreeBlocksTree tree(allocator.get());
@@ -85,24 +109,27 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
     } catch (const WfsException& e) {
       std::println(std::cerr, "Error: Failed to explore {} free blocks allocator ({})", prettify_path(path), e.what());
     }
+    updateExploreStatus(reencryptor, prettify_path(path) + " shadow dir");
     try {
-      exploreDir(throw_if_error(quota->GetShadowDirectory1()), path / ".shadow_dir_1", true);
+      exploreDir(reencryptor, throw_if_error(quota->GetShadowDirectory1()), path / ".shadow_dir_1", true);
     } catch (const WfsException& e) {
       std::println(std::cerr, "Error: Failed to explore {} shadow dir 12 ({})", prettify_path(path), e.what());
     }
     try {
-      exploreDir(throw_if_error(quota->GetShadowDirectory2()), path / ".shadow_dir_2", true);
+      exploreDir(reencryptor, throw_if_error(quota->GetShadowDirectory2()), path / ".shadow_dir_2", true);
     } catch (const WfsException& e) {
       std::println(std::cerr, "Error: Failed to explore {} shadow dir 2 ({})", prettify_path(path), e.what());
     }
   }
+  updateExploreStatus(reencryptor, prettify_path(path));
   for (auto [name, item_or_error] : *dir) {
     auto const npath = path / name;
     try {
       auto item = throw_if_error(item_or_error);
       if (item->is_directory())
-        exploreDir(std::dynamic_pointer_cast<Directory>(item), npath);
+        exploreDir(reencryptor, std::dynamic_pointer_cast<Directory>(item), npath);
       else if (item->is_file()) {
+        updateExploreStatus(reencryptor, prettify_path(npath));
         auto file = std::dynamic_pointer_cast<File>(item);
         size_t to_read = file->Size();
         File::stream stream(file);
@@ -120,10 +147,12 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
     } catch (const WfsException& e) {
       std::println(std::cerr, "Error: Failed to explore {} ({})", prettify_path(npath), e.what());
     }
+    updateExploreStatus(reencryptor, prettify_path(path));
   }
 }
 
-void exploreTransactions(const std::shared_ptr<WfsDevice>& wfs_device) {
+void exploreTransactions(const ReencryptorBlocksDevice* reencryptor, const std::shared_ptr<WfsDevice>& wfs_device) {
+  updateExploreStatus(reencryptor, "transactions");
   try {
     throw_if_error(wfs_device->GetTransactionsArea(false));
   } catch (const WfsException& e) {
@@ -245,14 +274,14 @@ int main(int argc, char* argv[]) {
                                                                     /*read_only=*/false, /*open_create=*/true)
                                      : input_device;
 
-    std::println("Exploring blocks...");
     auto reencryptor = std::make_shared<ReencryptorBlocksDevice>(input_device, input_key);
 
     auto wfs_device = throw_if_error(WfsDevice::Open(reencryptor));
-    exploreTransactions(wfs_device);
-    exploreDir(throw_if_error(wfs_device->GetRootDirectory()), {});
-    std::println("Found {} blocks! Reencrypting...", reencryptor->blocks().size());
+    exploreTransactions(reencryptor.get(), wfs_device);
+    exploreDir(reencryptor.get(), throw_if_error(wfs_device->GetRootDirectory()), {});
+    std::println("");
     reencryptor->Reencrypt(std::make_shared<ReencryptorBlocksDevice>(output_device, output_key));
+    std::println("");
     std::println("Done!");
   } catch (std::exception& e) {
     std::println(std::cerr, "Error: {}", e.what());
