@@ -5,9 +5,8 @@
 , fetchurl
 , git
 , cctools
-, DarwinTools
+, darwin
 , makeWrapper
-, CoreServices
 , bison
 , openssl
 , protobuf
@@ -73,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools DarwinTools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.DarwinTools ];
 
   buildInputs = [
     curl
@@ -96,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     antlr.runtime.cpp
   ] ++ pythonDeps
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   preConfigure = ''
     # Build MySQL
