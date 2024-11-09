@@ -10,21 +10,22 @@
 
 buildDotnetModule rec {
   pname = "jackett";
-  version = "0.21.2831";
+  version = "0.22.893";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha512-Ka993M45A9RYs6txl3gxhoq8c/vKRJzeLP2Ycx2L9uiNPWFsKlDwDr2rPLvZ9H0soZJs7sjeBAt0RFHSAlSvBg==";
+    hash = "sha512-W5Bmm426DOpnppP20a82ZwaUE9/HRUXXCKQUMK8TBgT1BUPPHykyW2Bew0u3U6NXXAX5EepyOb9lcidpBjN5RQ==";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
+  dotnetInstallFlags = [ "-p:TargetFramework=net8.0" ];
 
   runtimeDeps = [ openssl ];
 
