@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
 
-      , removeReferencesTo, writeShellApplication
+      , removeReferencesTo, writeShellScriptBin
 
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
@@ -53,10 +53,7 @@ let
       else
         stdenv;
 
-    pg_config = writeShellApplication {
-      name = "pg_config";
-      text = builtins.readFile ./pg_config.sh;
-    };
+    pg_config = writeShellScriptBin "pg_config" (builtins.readFile ./pg_config.sh);
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
