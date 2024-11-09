@@ -4,6 +4,7 @@
   pkg-config,
   stdenv,
   wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayland
+    wayland-scanner
   ];
 
   outputs = [
