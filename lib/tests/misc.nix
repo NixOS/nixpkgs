@@ -51,6 +51,7 @@ let
     fix
     fold
     foldAttrs
+    flattenAttrs
     foldl
     foldl'
     foldlAttrs
@@ -892,6 +893,43 @@ runTests {
     { a = 3;        c = 8; }
     ];
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
+  };
+
+  testFlattenAttrs = {
+    expr = flattenAttrs {
+        a.b.c.d = "e";
+        one.two.three.four.five = 6;
+        foo.bar = null;
+        yes.no.maybe = true;
+      };
+    expected = {
+      d = "e";
+      five = 6;
+      bar = null;
+      maybe = true;
+    };
+  };
+
+  testFlattenAttrsEmptyAttrs = {
+    expr = flattenAttrs { };
+    expected = { };
+  };
+
+  testFlattenAttrsRecAttrs = {
+    expr = flattenAttrs rec {
+        a.b.c.d = "e";
+        one.two.three.four.five = 6;
+        foo.bar = null;
+        yes.no.maybe = true;
+        f = a;
+        seven = one.two.three.four;
+      };
+    expected = {
+      d = "e";
+      five = 6;
+      bar = null;
+      maybe = true;
+    };
   };
 
   testListCommonPrefixExample1 = {

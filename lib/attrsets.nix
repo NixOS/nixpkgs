@@ -823,6 +823,54 @@ rec {
         ) a (attrNames n)
     ) {} list_of_attrs;
 
+  /**
+    Flatten an attribute set to the bottom name and value pairs as
+    one singular final attribute set, stripping everything else
+    above.
+
+    In a few words, this does what `lib.lists.flatten` does, but for
+    attribute sets, rather than lists.
+
+
+    # Inputs
+
+    `attrs`
+
+    : The top-level attribute set to flatten.
+
+    # Type
+
+    ```
+    flattenAttrs :: AttrSet -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.flattenAttrs` usage example
+
+    ```nix
+    flattenAttrs { a.b.c.d = "e"; one.two.three.four.five = 6; foo.bar = null; }
+    => { d = "e"; five = 6; bar = null; }
+    ```
+
+    :::
+  */
+  flattenAttrs = attrs:
+    let
+      op = acc: n:
+        let
+          v = attrs.${n};
+          x =
+            if (lib.isAttrs v)
+            then flattenAttrs v
+            else { ${n} = v; };
+        in
+        acc // x;
+    in
+    lib.foldl'
+      op
+      {}
+      (lib.attrNames attrs);
 
   /**
     Recursively collect sets that verify a given predicate named `pred`

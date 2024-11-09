@@ -83,7 +83,7 @@ let
       toExtension;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
-      filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
+      filterAttrsRecursive foldlAttrs foldAttrs flattenAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
