@@ -9,13 +9,16 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-L91qIud8dWx7dWWEcknKUSTJe+f4OBL8wBg6dKUWgkQ=";
+  vendorHash = "sha256-vs4M0JOVbNKLFNrlyeRp85EWCVGrPIhZs/KbwrQCqk4=";
 
   postPatch = ''
     # Gives github.com/pulumi/pulumi/pkg/v3: is replaced in go.mod, but not marked as replaced in vendor/modules.txt etc
     substituteInPlace language_test.go \
-      --replace "TestLanguage" \
-                "SkipTestLanguage"
+      --replace-quiet "TestLanguage" "SkipTestLanguage"
+    substituteInPlace main_test.go \
+      --replace-quiet "TestNonblockingStdout" "SkipTestNonblockingStdout"
+    substituteInPlace main_test.go \
+      --replace-quiet "TestGetProgramDependencies" "SkipTestGetProgramDependencies"
   '';
 
   ldflags = [

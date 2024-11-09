@@ -92,6 +92,7 @@ in
 , env ? { }
 , meta
 , fetchSubmodules ? false
+, cmdGenPostConfigure ? ""
 , ...
 }@args:
 let
@@ -105,6 +106,7 @@ let
 
     cmd = cmdGen;
     pname = cmdGen;
+    postConfigure = cmdGenPostConfigure;
   };
 in
 mkBasePackage ({

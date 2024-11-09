@@ -4,10 +4,10 @@
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-aws-native";
-  version = "0.38.0";
+  version = "1.4.0";
   rev = "v${version}";
-  hash = "sha256-v7jNPCrjtfi9KYD4RhiphMIpV23g/CBV/sKPBkMulu0=";
-  vendorHash = "sha256-Yu9tNakwXWYdrjzI6/MFRzVBhJAEOjsmq9iBAQlR0AI=";
+  hash = "sha256-MSsWK9eae1WEo/inNQ52T+B9c6XlJg2ycoFUOJhLJag=";
+  vendorHash = "sha256-1IGahpX7hORFm8tZpoJGwdZWyihtnqR7QqVB5dYamxE=";
   cmdGen = "pulumi-gen-aws-native";
   cmdRes = "pulumi-resource-aws-native";
   extraLdflags = [
@@ -18,7 +18,11 @@ mkPulumiPackage rec {
   postConfigure = ''
     pushd ..
 
-    ${cmdGen} schema aws-cloudformation-schema ${version}
+    chmod +w .
+    chmod -R +w reports/
+
+    ${cmdGen} --docs-url https://github.com/cdklabs/awscdk-service-spec/raw/main/sources/CloudFormationDocumentation/CloudFormationDocumentation.json docs ${version}
+    ${cmdGen} --schema-folder aws-cloudformation-schema --metadata-folder meta schema ${version}
 
     popd
   '';

@@ -6,10 +6,10 @@
 mkPulumiPackage rec {
   owner = "Regrau";
   repo = "pulumi-yandex";
-  version = "0.98.0";
+  version = "0.99.1";
   rev = "v${version}";
-  hash = "sha256-Olwl4JNrJUiJaGha7ZT0Qb0+6hRKxOOy06eKMJfYf0I=";
-  vendorHash = "sha256-8mu0msSq59f5GZNo7YIGuNTYealGyEL9kwk0jCcSO68=";
+  hash = "sha256-LCWrt5TIvzXssLjV523K27LWzd+za88WLzgbLLnK+sw=";
+  vendorHash = "sha256-z9UAGX3PRInlO8v/1zgPYR8SlTnDuZfgEruBWJfVNiU=";
   cmdGen = "pulumi-tfgen-yandex";
   cmdRes = "pulumi-resource-yandex";
   extraLdflags = [
