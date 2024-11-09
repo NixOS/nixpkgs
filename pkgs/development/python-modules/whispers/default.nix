@@ -13,6 +13,8 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  wrapt,
+  semgrep,
   setuptools,
 }:
 
@@ -35,6 +37,12 @@ buildPythonPackage rec {
       --replace-fail '"pytest-runner"' ""
   '';
 
+  pythonRelaxDeps = [
+    "lxml"
+    "pyyaml"
+    "semgrep"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -46,6 +54,8 @@ buildPythonPackage rec {
     luhn
     lxml
     pyyaml
+    wrapt
+    semgrep
   ];
 
   nativeCheckInputs = [
@@ -53,7 +63,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # pinning tests highly sensitive to semgrep version
+    "tests/unit/plugins/test_semgrep.py"
+  ];
+
   preCheck = ''
+    # pinning test highly sensitive to semgrep version
+    substituteInPlace tests/unit/test_main.py \
+      --replace-fail '("--ast", 421),' ""
+
     # Some tests need the binary available in PATH
     export PATH=$out/bin:$PATH
   '';
