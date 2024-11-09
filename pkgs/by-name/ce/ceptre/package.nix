@@ -20,15 +20,21 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ mlton ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp ceptre $out/bin
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linear logic programming language for modeling generative interactive systems";
     mainProgram = "ceptre";
     homepage = "https://github.com/chrisamaphone/interactive-lp";
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      pSub
+    ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
   };
 }
