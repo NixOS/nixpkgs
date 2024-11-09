@@ -248,13 +248,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
-/pkgs/tools/networking/ntp @thoughtpolice
-/pkgs/tools/networking/openntpd @thoughtpolice
+/pkgs/by-name/nt/ntp @thoughtpolice
+/pkgs/by-name/op/openntpd @thoughtpolice
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
-/pkgs/tools/networking/kea/default.nix @mweinelt
-/pkgs/tools/networking/babeld/default.nix @mweinelt
+/pkgs/by-name/ke/kea @mweinelt
+/pkgs/by-name/ba/babeld @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
@@ -407,12 +407,12 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 
 # GNU Tar & Zip
 /pkgs/tools/archivers/gnutar        @RossComputerGuy
-/pkgs/tools/archivers/zip           @RossComputerGuy
+/pkgs/by-name/zi/zip           @RossComputerGuy
 
 # SELinux
-/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
-/pkgs/os-specific/linux/libselinux  @RossComputerGuy
-/pkgs/os-specific/linux/libsepol    @RossComputerGuy
+/pkgs/by-name/ch/checkpolicy @RossComputerGuy
+/pkgs/by-name/li/libselinux  @RossComputerGuy
+/pkgs/by-name/li/libsepol    @RossComputerGuy
 
 # installShellFiles
 /pkgs/by-name/in/installShellFiles/*     @Ericson2314
