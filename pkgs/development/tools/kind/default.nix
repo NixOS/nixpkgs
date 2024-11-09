@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-vndN3ssiaaJdpPZQ0vBdqr4xPuY2bAHAd+SJamNrX6Q=";
+    hash = "sha256-6WlkZ2dLMSSSlJAEshMpD5Ai0WVo1NzXAvpjEQd3JPA=";
   };
 
   patches = [
