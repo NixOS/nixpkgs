@@ -14,6 +14,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-KIRVztkE72juIgXquZlC6AYo78QKHBD7iCvCa+ri66k=";
   };
 
+  postPatch = ''
+    substituteInPlace cmake/CPM.cmake \
+      --replace-fail "set(CURRENT_CPM_VERSION 1.0.0-development-version)" "set(CURRENT_CPM_VERSION ${finalAttrs.version})"
+  '';
+
   dontConfigure = true;
   dontBuild = true;
 
