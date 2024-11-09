@@ -28,17 +28,19 @@
 , e2fsprogs
 , libnvme
 , keyutils
+, libatasmart
+, json-glib
 , nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblockdev";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
-    rev = "${finalAttrs.version}-1";
-    hash = "sha256-WCMedMkaMMhZbB3iJu3c+CTT3AvOjzOSYP45J+NQEDQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-85vfHHR6WqSPCW1QmD3HccIpOqNYrx1PDjTh297VA1A=";
   };
 
   outputs = [ "out" "dev" "devdoc" "python" ];
@@ -71,8 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     e2fsprogs
     glib
     gptfdisk
+    json-glib
     keyutils
     kmod
+    libatasmart
     libbytesize
     libndctl
     libnvme
