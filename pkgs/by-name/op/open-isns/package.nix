@@ -1,4 +1,12 @@
-{ lib, stdenv, pkg-config, meson, ninja, openssl, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  pkg-config,
+  meson,
+  ninja,
+  openssl,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "open-isns";
@@ -17,9 +25,18 @@ stdenv.mkDerivation rec {
         --replace-fail "/var/lib" "$out/var/lib" \
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   propagatedBuildInputs = [ openssl ];
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   configureFlags = [ "--enable-shared" ];
 
