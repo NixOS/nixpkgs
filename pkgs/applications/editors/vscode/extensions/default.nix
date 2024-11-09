@@ -3627,6 +3627,10 @@ let
         };
       };
 
+      ms-vscode-remote.vscode-remote-extensionpack =
+        callPackage ./ms-vscode-remote.vscode-remote-extensionpack
+          { };
+
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
       mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
