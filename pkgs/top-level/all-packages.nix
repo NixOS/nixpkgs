@@ -14852,6 +14852,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix { buildGoModule = buildGo123Module; };
+
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
