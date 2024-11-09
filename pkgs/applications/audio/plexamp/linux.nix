@@ -1,4 +1,11 @@
-{ fetchurl, appimageTools, makeWrapper, pname, version, meta }:
+{
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  pname,
+  version,
+  meta,
+}:
 let
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
@@ -11,7 +18,12 @@ let
   };
 in
 appimageTools.wrapType2 {
-  inherit pname version src meta;
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
