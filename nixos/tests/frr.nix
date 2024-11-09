@@ -9,8 +9,7 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   let
 
-    ifAddr =
-      node: iface: (pkgs.lib.head node.config.networking.interfaces.${iface}.ipv4.addresses).address;
+    ifAddr = node: iface: (pkgs.lib.head node.networking.interfaces.${iface}.ipv4.addresses).address;
 
     ospfConf1 = ''
       router ospf
@@ -106,7 +105,7 @@ import ./make-test-python.nix (
             for gw in client, router1, router2, server:
                 gw.wait_for_unit("frr")
 
-        router1.succeed("${nodes.router1.config.system.build.toplevel}/specialisation/ospf/bin/switch-to-configuration test >&2")
+        router1.succeed("${nodes.router1.system.build.toplevel}/specialisation/ospf/bin/switch-to-configuration test >&2")
 
         with subtest("Wait for OSPF to form adjacencies"):
             for gw in router1, router2:
