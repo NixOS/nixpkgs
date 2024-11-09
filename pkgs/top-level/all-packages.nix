@@ -27118,6 +27118,8 @@ with pkgs;
 
   nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
 
+  noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix { static = true; };
+
   noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
     suffix = "-lgc-plus";
     variants = [
