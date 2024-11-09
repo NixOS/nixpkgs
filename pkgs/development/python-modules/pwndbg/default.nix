@@ -19,6 +19,19 @@
   gdb-pt-dump,
   poetry-core,
 }:
+let
+  # Fixes an issue when disassembling syscalls. Upstream also uses the beta
+  # version. See https://github.com/pwndbg/pwndbg/issues/2500.
+  pwntools-beta = pwntools.overrideAttrs (oldAttrs: rec {
+    version = "4.14.0beta1";
+    src = fetchFromGitHub {
+      owner = "Gallopsled";
+      repo = "pwntools";
+      rev = version;
+      sha256 = "sha256-hZ8wK5HtIKm3CbNpi6+q28H4YGzAL+34MI6b+YPLzzs=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "pwndbg";
   version = "2024.08.29";
@@ -41,7 +54,7 @@ buildPythonPackage rec {
     future
     ipython
     psutil
-    pwntools
+    pwntools-beta
     pycparser
     pyelftools
     pygments
