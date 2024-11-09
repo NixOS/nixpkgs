@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.4";
+  version = "0.42.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RDLwL9AZ3G8CzVwDtWqFFZNH/ulpHeFBhglbWNv/ZIk=";
+    hash = "sha256-KWkKIKiaRR26CctDFrHJAITM+nmRKGxLeC5HHwVZz4s=";
   };
 
   nativeBuildInputs = [ poetry-core ];
