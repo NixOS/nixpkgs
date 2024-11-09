@@ -49,6 +49,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
+  pythonRelaxDeps = [
+    "igraph"
+  ];
+
   propagatedBuildInputs = [
     igraph
     pybind11
