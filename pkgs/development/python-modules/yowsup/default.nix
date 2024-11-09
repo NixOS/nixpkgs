@@ -33,6 +33,12 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
   pythonRemoveDeps = [ "argparse" ];
 
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
