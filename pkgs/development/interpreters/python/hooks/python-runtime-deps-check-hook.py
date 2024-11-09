@@ -55,7 +55,7 @@ def get_metadata(wheel: str) -> Metadata:
     """
     text = get_manifest_text_from_wheel(wheel)
     raw, _ = parse_email(text)
-    metadata = Metadata.from_raw(raw)
+    metadata = Metadata.from_raw(raw, validate=False)
 
     return metadata
 
