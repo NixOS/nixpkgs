@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mypgoclient";
+  pname = "mygpoclient";
   version = "1.9";
   pyproject = true;
 
