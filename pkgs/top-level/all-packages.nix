@@ -10161,6 +10161,9 @@ with pkgs;
       protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
         abseil-cpp = abseil-cpp_202103;
       };
+      protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
+        abseil-cpp = abseil-cpp_202103;
+      };
     })
     protobuf_29
     protobuf_28
@@ -10170,6 +10173,7 @@ with pkgs;
     protobuf_24
     protobuf_23
     protobuf_21
+    protobuf3_20
     ;
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
