@@ -12,6 +12,7 @@
   pytest-codspeed ? null, # Not in Nixpkgs
   pytest-cov,
   pytest-xdist,
+  pytest-benchmark,
   rustc,
   rustPlatform,
   runCommand,
@@ -35,13 +36,12 @@
     assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
     jemalloc',
 
-  # (optional) python deps
   polars,
   python,
 }:
 
 let
-  version = "1.9.0";
+  version = "1.12.0";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
@@ -56,7 +56,7 @@ buildPythonPackage {
     owner = "pola-rs";
     repo = "polars";
     rev = "py-${version}";
-    hash = "sha256-EYWhVk7SJo1RuXz8JPy6fPvHzAs8xvnVSKj3TYZXTss=";
+    hash = "sha256-q//vt8FvVKY9N/BOIoOwxaSB/F/tNX1Zl/9jd0AzSH4=";
   };
 
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
@@ -70,6 +70,7 @@ buildPythonPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "numpy-0.21.0" = "sha256-u0Z+6L8pXSPaA3cE1sUpY6sCoaU1clXUcj/avnNzmsw=";
+      "polars-parquet-format-2.10.0" = "sha256-iB3KZ72JSp7tJCLn9moukpDEGf9MUos04rIQ9rDGWfI=";
     };
   };
 
@@ -230,6 +231,7 @@ buildPythonPackage {
         ps.xlsx2csv
         ps.xlsxwriter
         ps.zstandard
+        ps.cloudpickle
       ]))
     ];
     nativeCheckInputs = [
@@ -237,6 +239,7 @@ buildPythonPackage {
       pytest-codspeed
       pytest-cov
       pytest-xdist
+      pytest-benchmark
     ];
 
     pytestFlagsArray = [
@@ -282,6 +285,7 @@ buildPythonPackage {
 
       # Untriaged
       "tests/unit/cloud/test_prepare_cloud_plan.py"
+      "tests/unit/io/cloud/test_cloud.py"
     ];
 
     installPhase = "touch $out";
