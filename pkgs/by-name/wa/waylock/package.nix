@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i1Nd39666xrkzi7r08ZRIXJXvK9wmzb8zdmvmWEQaHE=";
+    hash = "sha256-jfMSar+Y3inu1Cly6rIDw+akBJIQ6huL0smAstgQmEo=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
