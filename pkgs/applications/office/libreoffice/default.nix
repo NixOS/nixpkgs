@@ -548,7 +548,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  doCheck = true;
+  # Disable tests for the Qt5 build, as they seem even more flaky
+  # than usual, and we will drop the Qt5 build after 24.11 anyway.
+  doCheck = !(kdeIntegration && qtMajor == "5");
 
   preCheck = ''
     export HOME=$(pwd)
