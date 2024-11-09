@@ -49,8 +49,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radish" ];
 
-  disabledTests = [ "test_main_cli_calls" ];
-
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
