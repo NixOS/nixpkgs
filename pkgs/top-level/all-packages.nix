@@ -13603,10 +13603,6 @@ with pkgs;
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
-  bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
-
-  bottles-unwrapped = callPackage ../applications/misc/bottles { };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   cage = callPackage ../applications/window-managers/cage {
