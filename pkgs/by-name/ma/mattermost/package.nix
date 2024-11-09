@@ -1,5 +1,7 @@
 {
   lib,
+  callPackage,
+  stdenvNoCC,
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
@@ -24,7 +26,60 @@
   },
 }:
 
-buildGoModule rec {
+let
+  /*
+    Helper function that sets the `withTests` and `withoutTests` passthru correctly,
+    and returns the version with tests.
+
+    The primary reason to use this helper over reindenting the whole file is to avoid
+    lots of manual backporting when the update script runs.
+  */
+  buildMattermost =
+    { passthru, ... }@args:
+    let
+      # Joins the webapp and Matermost derivation together.
+      # That way patches to the webapp won't cause a rebuild of the server.
+      wrapMattermost =
+        server:
+        stdenvNoCC.mkDerivation {
+          pname = "${server.pname}-wrapped";
+          inherit (server) version;
+          inherit server;
+          inherit (server) webapp;
+
+          dontUnpack = true;
+
+          # Just link all the server and webapp root directories together.
+          installPhase = ''
+            mkdir -p $out
+            for dir in "$server" "$webapp"; do
+              for path in "$dir"/*; do
+                ln -s "$path" "$out/$(basename -- "$path")"
+              done
+            done
+          '';
+
+          passthru = finalPassthru // {
+            inherit server;
+            inherit (server) webapp;
+          };
+
+          inherit (server) meta;
+        };
+      finalPassthru =
+        let
+          withoutTestsUnwrapped = buildGoModule (args // { passthru = finalPassthru; });
+          withTestsUnwrapped = callPackage ./tests.nix { mattermost = withoutTestsUnwrapped; };
+        in
+        lib.recursiveUpdate passthru rec {
+          withoutTests = wrapMattermost withoutTestsUnwrapped;
+          withTests = wrapMattermost withTestsUnwrapped;
+          tests.mattermostWithTests = withTests;
+        };
+    in
+    finalPassthru.withTests;
+in
+buildMattermost rec {
   pname = "mattermost";
   inherit (versionInfo) version;
 
@@ -64,14 +119,12 @@ buildGoModule rec {
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
-  overrideModAttrs = (
-    _: {
-      buildPhase = ''
-        make setup-go-work
-        go work vendor -e
-      '';
-    }
-  );
+  overrideModAttrs = _: {
+    buildPhase = ''
+      make setup-go-work
+      go work vendor -e -v
+    '';
+  };
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -81,46 +134,6 @@ buildGoModule rec {
     forceGitDeps = true;
   };
 
-  webapp = buildNpmPackage rec {
-    pname = "mattermost-webapp";
-    inherit version src;
-
-    sourceRoot = "${src.name}/webapp";
-
-    # Remove deprecated image-webpack-loader causing build failures
-    # See: https://github.com/tcoopman/image-webpack-loader#deprecated
-    postPatch = ''
-      substituteInPlace channels/webpack.config.js \
-        --replace-fail 'options: {}' 'options: { disable: true }'
-    '';
-
-    npmDepsHash = npmDeps.hash;
-    makeCacheWritable = true;
-    forceGitDeps = true;
-
-    npmRebuildFlags = [ "--ignore-scripts" ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      npm run build --workspace=platform/types
-      npm run build --workspace=platform/client
-      npm run build --workspace=platform/components
-      npm run build --workspace=channels
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -a channels/dist/* $out
-
-      runHook postInstall
-    '';
-  };
-
   inherit (versionInfo) vendorHash;
 
   modRoot = "./server";
@@ -128,7 +141,10 @@ buildGoModule rec {
     make setup-go-work
   '';
 
-  subPackages = [ "cmd/mattermost" ];
+  subPackages = [
+    "cmd/mattermost"
+    "cmd/mmctl"
+  ];
 
   tags = [ "production" ];
 
@@ -147,8 +163,7 @@ buildGoModule rec {
     shopt -s extglob
     mkdir -p $out/{i18n,fonts,templates,config}
 
-    # Link in the client and copy the language packs.
-    ln -sf $webapp $out/client
+    # Copy the language packs.
     cp -a $src/server/i18n/* $out/i18n/
 
     # Fonts have the execute bit set, remove it.
@@ -160,6 +175,13 @@ buildGoModule rec {
     # Generate the config.
     OUTPUT_CONFIG=$out/config/config.json \
       go run -tags production ./scripts/config_generator
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    for subPackage in $subPackages; do
+      "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
+    done
   '';
 
   passthru = {
@@ -175,6 +197,50 @@ buildGoModule rec {
         ];
     };
     tests.mattermost = nixosTests.mattermost;
+
+    # Builds a Mattermost plugin.
+    buildPlugin = callPackage ./build-plugin.nix { };
+
+    # Builds the webapp.
+    webapp = buildNpmPackage rec {
+      pname = "mattermost-webapp";
+      inherit version src;
+
+      sourceRoot = "${src.name}/webapp";
+
+      # Remove deprecated image-webpack-loader causing build failures
+      # See: https://github.com/tcoopman/image-webpack-loader#deprecated
+      postPatch = ''
+        substituteInPlace channels/webpack.config.js \
+          --replace-fail 'options: {}' 'options: { disable: true }'
+      '';
+
+      npmDepsHash = npmDeps.hash;
+      makeCacheWritable = true;
+      forceGitDeps = true;
+
+      npmRebuildFlags = [ "--ignore-scripts" ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        npm run build --workspace=platform/types
+        npm run build --workspace=platform/client
+        npm run build --workspace=platform/components
+        npm run build --workspace=channels
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/client
+        cp -a channels/dist/* $out/client
+
+        runHook postInstall
+      '';
+    };
   };
 
   meta = with lib; {
