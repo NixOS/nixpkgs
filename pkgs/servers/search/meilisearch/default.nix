@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "1.11.1";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "meiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QtuUuLUR+yrcKk0wH2XRdkV5mFnH2PuZ0sgMgKxudH8=";
+    hash = "sha256-SxmN6CDgS4QrCdJPF36RyljvKXXhCuYzaJnpqROSY5U=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
