@@ -4,15 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qttools,
-  qtx11extras,
-  qtmultimedia,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
-  qtmpris,
-  qtdbusextended,
   gsettings-qt,
   elfutils,
   ffmpeg_6,
@@ -52,8 +47,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -61,10 +56,10 @@ stdenv.mkDerivation rec {
       dtkwidget
       qt5integration
       qt5platform-plugins
-      qtx11extras
-      qtmultimedia
-      qtdbusextended
-      qtmpris
+      libsForQt5.qtx11extras
+      libsForQt5.qtmultimedia
+      libsForQt5.qtdbusextended
+      libsForQt5.qtmpris
       gsettings-qt
       elfutils
       ffmpeg_6
@@ -88,8 +83,8 @@ stdenv.mkDerivation rec {
     ]);
 
   propagatedBuildInputs = [
-    qtmultimedia
-    qtx11extras
+    libsForQt5.qtmultimedia
+    libsForQt5.qtx11extras
     ffmpegthumbnailer
   ];
 
