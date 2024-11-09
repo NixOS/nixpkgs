@@ -13,11 +13,11 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.11.1";
+    version = "6.12.1";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-      hash = "sha256-By9T43GLM1J63TkRi3kl05h1RflBorU1QHgYOrXQ9N0=";
+      hash = "sha256-6VDvvKx68U47soBUWiaBuDu6enINLDhJd0he7sSCzeg=";
       stripRoot = false;
     };
 
