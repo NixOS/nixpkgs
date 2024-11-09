@@ -2,7 +2,7 @@ This package depends on DWL being built with the IPC patch found at https://code
 
 this requires the following to be included in your configuration.nix (or flake)
 
-....
+```
 environment.systemPackages = with pkgs; [
   (dwl.overrideAttrs (
     attrs: {
@@ -13,4 +13,4 @@ environment.systemPackages = with pkgs; [
       ];
       }))
     ];
-....
+```
