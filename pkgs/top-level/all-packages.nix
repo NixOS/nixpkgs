@@ -380,6 +380,10 @@ with pkgs;
 
   mumps_par = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
+  pilfer = callPackage ../applications/networking/eludris/pilfer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   prisma-engines = callPackage ../development/tools/database/prisma-engines {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
