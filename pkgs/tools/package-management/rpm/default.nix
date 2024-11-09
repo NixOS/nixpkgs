@@ -26,6 +26,7 @@
 , libcap
 , apple-sdk_13
 , darwinMinVersionHook
+, gnupg
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
-  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
+  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite gnupg ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 (darwinMinVersionHook "13.0") ];
