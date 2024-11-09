@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools-scm
-, nipreps-versions
-, pybids
-, requests
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  nipreps-versions,
+  pybids,
+  requests,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "24.1.0";
+  version = "24.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "templateflow";
     repo = "python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-UxYJnKOqIIf10UW5xJ7MrFHtZY5WNVi5oZgdozj65Z8=";
+    hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  doCheck = false;  # most tests try to download data
+  doCheck = false; # most tests try to download data
   #pythonImportsCheck = [ "templateflow" ];  # touches $HOME/.cache, hence needs https://github.com/NixOS/nixpkgs/pull/120300
 
   meta = with lib; {

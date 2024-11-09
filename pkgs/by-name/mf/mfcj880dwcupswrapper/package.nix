@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf102044/mfcj880dw_cupswrapper_GPL_source_${version}.tar.gz";
-    sha256 = "bf291fe31d64afeaefb5b0e606f4baf80c41d80009e34b32b77d56f759e9cf94";
+    hash = "sha256-vykf4x1kr+rvtbDmBvS6+AxB2AAJ40syt31W91npz5Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

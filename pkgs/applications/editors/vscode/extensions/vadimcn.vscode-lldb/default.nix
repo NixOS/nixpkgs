@@ -1,5 +1,19 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
-, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  rustPlatform,
+  makeWrapper,
+  llvmPackages,
+  buildNpmPackage,
+  cmake,
+  nodejs,
+  unzip,
+  python3,
+  pkg-config,
+  libsecret,
+  darwin,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -27,7 +41,11 @@ let
 
     cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
 
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
+
     nativeBuildInputs = [ makeWrapper ];
+
+    env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
 
     buildAndTestSubdir = "adapter";
 
@@ -48,7 +66,7 @@ let
       cp $out/lib/* $out/share/adapter
       cp -r adapter/scripts $out/share/adapter
       cp -t $out/share/formatters formatters/*.py
-      ln -s ${lldb.lib} $out/share/lldb
+      ln -s ${lib.getLib lldb} $out/share/lldb
       makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
         --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     '';
@@ -70,12 +88,15 @@ let
       pkg-config
     ];
 
-    buildInputs = [
-      libsecret
-    ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      Security
-      AppKit
-    ]);
+    buildInputs =
+      [ libsecret ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin (
+        with darwin.apple_sdk.frameworks;
+        [
+          Security
+          AppKit
+        ]
+      );
 
     dontNpmBuild = true;
 
@@ -89,13 +110,33 @@ let
     '';
   };
 
-in stdenv.mkDerivation {
+  # debugservers on macOS require the 'com.apple.security.cs.debugger'
+  # entitlement which nixpkgs' lldb-server does not yet provide; see
+  # <https://github.com/NixOS/nixpkgs/pull/38624> for details
+  lldbServer =
+    if stdenv.hostPlatform.isDarwin then
+      "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
+    else
+      "${lldb.out}/bin/lldb-server";
+in
+stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
-  inherit src version vscodeExtUniqueId vscodeExtPublisher vscodeExtName;
+  inherit
+    src
+    version
+    vscodeExtUniqueId
+    vscodeExtPublisher
+    vscodeExtName
+    ;
 
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-  nativeBuildInputs = [ cmake nodejs unzip makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    nodejs
+    unzip
+    makeWrapper
+  ];
 
   patches = [ ./cmake-build-extension-only.patch ];
 
@@ -105,9 +146,14 @@ in stdenv.mkDerivation {
       --replace "1.9.2" ${version}
   '';
 
-  postConfigure = ''
-    cp -r ${nodeDeps}/lib/node_modules .
-  '';
+  postConfigure =
+    ''
+      cp -r ${nodeDeps}/lib/node_modules .
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export HOME="$TMPDIR/home"
+      mkdir $HOME
+    '';
 
   cmakeFlags = [
     # Do not append timestamp to version.
@@ -115,7 +161,7 @@ in stdenv.mkDerivation {
   ];
   makeFlags = [ "vsix_bootstrap" ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME=$TMPDIR
   '';
 
@@ -129,7 +175,8 @@ in stdenv.mkDerivation {
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
-      --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
+      --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
+      --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -149,7 +196,7 @@ in stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A native debugger extension for VSCode based on LLDB";
+    description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.nigelgbanks ];

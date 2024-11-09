@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/aeosynth/bk";
-    description = "A terminal epub reader written in rust";
+    description = "Terminal epub reader written in rust";
     license = licenses.mit;
     maintainers = with maintainers; [ vuimuich ];
     mainProgram = "bk";

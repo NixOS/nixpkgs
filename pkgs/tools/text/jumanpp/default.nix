@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = with lib; {
-    description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
+    description = "Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     mainProgram = "jumanpp";
     longDescription = ''
       JUMAN++ is a new morphological analyser that considers semantic

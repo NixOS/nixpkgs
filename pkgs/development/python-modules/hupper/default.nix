@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, watchdog
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  watchdog,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    watchdog
-  ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   disabledTestPaths = [
     # Doesn't work with an exported home, RuntimeError: timeout waiting for change to file=/build/tmpgfn145cx
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     mainProgram = "hupper";
     homepage = "https://github.com/Pylons/hupper";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

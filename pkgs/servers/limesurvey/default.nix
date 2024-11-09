@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "6.4.1+240108";
+  version = "6.6.5+240924";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    hash = "sha256-Cpf8X6igF7LdRbFihGudFmx/8aY0Kf0BE7jHnEF1DYA=";
+    hash = "sha256-CuuTFCDY7jnF2njZdyB6e8/nRf0n0ybKgZ0QscC2IAI=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source survey application";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;

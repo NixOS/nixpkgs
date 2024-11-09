@@ -4,30 +4,30 @@ index e2f7bba..6d1879e 100755
 +++ b/dotoolc
 @@ -7,7 +7,7 @@ is $DOTOOL_PIPE else /tmp/dotool-pipe.' >&2
  fi
- 
+
  fifo_being_read(){
 -	[ -p "$1" ] && /bin/echo 1<>"$1" >"$1"
 +	[ -p "$1" ] && echo 1<>"$1" >"$1"
  }
- 
+
  p="${DOTOOL_PIPE:-/tmp/dotool-pipe}"
 diff --git a/dotoold b/dotoold
-index d2d39a3..e46129c 100755
+index 48a7789..c405312 100755
 --- a/dotoold
 +++ b/dotoold
-@@ -7,7 +7,7 @@ for the pipe is $DOTOOL_PIPE else /tmp/dotool-pipe.' >&2
- fi
- 
+@@ -12,7 +12,7 @@ for the pipe is $DOTOOL_PIPE else /tmp/dotool-pipe.' >&2
+ done
+
  fifo_being_read(){
 -	[ -p "$1" ] && /bin/echo 1<>"$1" >"$1"
 +	[ -p "$1" ] && echo 1<>"$1" >"$1"
  }
- 
+
  p="${DOTOOL_PIPE:-/tmp/dotool-pipe}"
-@@ -20,5 +20,5 @@ fi
+@@ -25,5 +25,5 @@ fi
  rm -f -- "$p" || exit 1
  trap 'rm -f -- "$p"; pkill -P $$; trap - EXIT; exit' EXIT INT TERM HUP
  mkfifo -m 660 "$p" || exit 1
--dotool <> "$p" &
-+@dotool@ <> "$p" &
- wait
+-dotool "$@" <> "$p" &
++@dotool@ "$@" <> "$p" &
+ wait $!

@@ -1,27 +1,57 @@
-{ lib, stdenv, fetchurl, pkg-config, libdaemon, bison, flex, check }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libbsd,
+  libdaemon,
+  bison,
+  flex,
+  check,
+  nixosTests,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radvd";
-  version = "2.19";
+  version = "2.20_rc1";
 
-  src = fetchurl {
-    url = "http://www.litech.org/radvd/dist/${pname}-${version}.tar.xz";
-    sha256 = "0h722f17h7cra1sjgrxhrrvx54mm47fs039909yhbabigxch8kjn";
+  src = fetchFromGitHub {
+    owner = "radvd-project";
+    repo = "radvd";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-+cZn4pE4hBZDckfcQJzYdZxHkexWl/AmufCN5BiwWwA=";
   };
 
-  nativeBuildInputs = [ pkg-config bison flex check ];
-  buildInputs = [ libdaemon ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    bison
+    flex
+    check
+  ];
+
+  buildInputs = [
+    libdaemon
+    libbsd
+  ];
 
   # Needed for cross-compilation
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
+
+  passthru.tests = {
+    inherit (nixosTests) connman ipv6 systemd-networkd-ipv6-prefix-delegation;
+    privacy_scripted = nixosTests.networking.scripted.privacy;
+    privacy_networkd = nixosTests.networking.networkd.privacy;
+  };
 
   meta = with lib; {
     homepage = "http://www.litech.org/radvd/";
+    changelog = "https://github.com/radvd-project/radvd/blob/${finalAttrs.src.rev}/CHANGES";
     description = "IPv6 Router Advertisement Daemon";
+    downloadPage = "https://github.com/radvd-project/radvd";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ fpletz ];
   };
-}
+})

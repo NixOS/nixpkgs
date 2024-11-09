@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.5.5.0";
+  version = "2.5.16.0";
 
   src = fetchFromGitHub {
-    owner = "OpenImageIO";
-    repo = "oiio";
+    owner = "AcademySoftwareFoundation";
+    repo = "OpenImageIO";
     rev = "v${version}";
-    hash = "sha256-FtUZqk1m9ahdnwhrBeMFkUbV0dangMY/w9ShevCASfo=";
+    hash = "sha256-hUCwlzQW5mJH5HYPbLWOcupc36nxM12CV0sakZhiGzo=";
   };
 
   # Workaround broken zlib version detecion in CMake < 3.37.
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://openimageio.org";
-    description = "A library and tools for reading and writing images";
+    description = "Library and tools for reading and writing images";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

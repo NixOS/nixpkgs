@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran: simple command line utilities for dictionary maintenance";
     mainProgram = "mtquery";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [viric];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

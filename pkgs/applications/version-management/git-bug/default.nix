@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "MichaelMure";
+    owner = "git-bug";
     repo = "git-bug";
     rev = "v${version}";
     sha256 = "12byf6nsamwz0ssigan1z299s01cyh8bhgj86bibl90agd4zs9n8";
@@ -36,9 +36,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Distributed bug tracker embedded in Git";
-    homepage = "https://github.com/MichaelMure/git-bug";
+    homepage = "https://github.com/git-bug/git-bug";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ royneary DeeUnderscore ];
+    maintainers = with maintainers; [ royneary DeeUnderscore sudoforge ];
     mainProgram = "git-bug";
   };
 }

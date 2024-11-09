@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut, flit-core }:
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromSourcehut,
+  flit-core,
+}:
 
 buildPythonPackage rec {
   pname = "loca";
@@ -13,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "1l6jimw3wd81nz1jrzsfw1zzsdm0jm998xlddcqaq0h38sx69w8g";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   doCheck = false; # all checks are static analyses
   pythonImportsCheck = [ "loca" ];

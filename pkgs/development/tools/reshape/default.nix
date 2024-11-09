@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-VTJ3FNhVLgxo/VVBhk1yF9UUktLXcbrEkYwoyoWFhXA=";
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   nativeCheckInputs = [
     postgresqlTestHook
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
 
   meta = with lib; {
-    description = "An easy-to-use, zero-downtime schema migration tool for Postgres";
+    description = "Easy-to-use, zero-downtime schema migration tool for Postgres";
     mainProgram = "reshape";
     homepage = "https://github.com/fabianlindfors/reshape";
     changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${version}";

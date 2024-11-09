@@ -1,47 +1,49 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, flask
-, google-api-core
-, google-cloud-appengine-logging
-, google-cloud-audit-log
-, google-cloud-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, mock
-, pandas
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, rich
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  flask,
+  google-api-core,
+  google-cloud-appengine-logging,
+  google-cloud-audit-log,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  mock,
+  opentelemetry-api,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.10.0";
+  version = "3.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2T00c1EkDdsUz+IBmHotMs+df0eLiy+r7TAVtCWzJ08=";
+    pname = "google_cloud_logging";
+    inherit version;
+    hash = "sha256-CnPNlBGIdTh9RTU3HZ6UJoYe3vjkT7oSYehngtW41U8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-cloud-appengine-logging
     google-cloud-audit-log
     google-cloud-core
     grpc-google-iam-v1
+    opentelemetry-api
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
@@ -87,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

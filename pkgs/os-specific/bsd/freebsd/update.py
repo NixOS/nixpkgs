@@ -16,6 +16,7 @@ import typing
 import urllib.request
 
 _QUERY_VERSION_PATTERN = re.compile('^([A-Z]+)="(.+)"$')
+_RELEASE_PATCH_PATTERN = re.compile('^RELEASE-p([0-9]+)$')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MIN_VERSION = packaging.version.Version("13.0.0")
 MAIN_BRANCH = "main"
@@ -60,7 +61,16 @@ def query_version(repo: git.Repo) -> dict[str, typing.Any]:
             continue
         fields[m[1].lower()] = m[2]
 
-    fields["major"] = packaging.version.parse(fields["revision"]).major
+    parsed = packaging.version.parse(fields["revision"])
+    fields["major"] = parsed.major
+    fields["minor"] = parsed.minor
+
+    # Extract the patch number from `RELAESE-p<patch>`, which is used
+    # e.g. in the "releng" branches.
+    m = _RELEASE_PATCH_PATTERN.match(fields["branch"])
+    if m is not None:
+        fields["patch"] = m[1]
+
     return fields
 
 
@@ -95,7 +105,7 @@ def handle_commit(
         "ref": ref_name,
         "refType": ref_type,
         "supported": ref_name in supported_refs,
-        "version": query_version(repo),
+        "version": version,
     }
 
 
@@ -151,6 +161,14 @@ def main() -> None:
         result = handle_commit(
             repo, tag.commit, tag.name, "tag", supported_refs, old_versions
         )
+
+        # Hack in the patch version from parsing the tag, if we didn't
+        # get one from the "branch" field (from newvers). This is
+        # probably 0.
+        versionObj = result["version"]
+        if "patch" not in versionObj:
+            versionObj["patch"] = version.micro
+
         versions[tag.name] = result
 
     for branch in repo.remote("origin").refs:

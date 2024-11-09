@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hikounomizu";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchurl {
     url = "http://download.tuxfamily.org/hnm/${finalAttrs.version}/hikounomizu-${finalAttrs.version}-src.tar.bz2";
-    hash = "sha256-3wRhe6CDq1dD0SObAygfqslYJx+EM3LM3rj6HI0whYU=";
+    hash = "sha256-rWy6m9Wc6w0PSSS8WUMeCNvXok2hRioKRGR6a1tyPks=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A free platform-based fighting game";
+    description = "Free platform-based fighting game";
     longDescription = ''
       Hikou no mizu (ハイクの水) is a free platform-based fighting game,
       licensed under the GNU GPL v3 (program) and the LAL (graphics).

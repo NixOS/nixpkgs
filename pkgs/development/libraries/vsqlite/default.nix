@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost sqlite ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.in \
         --replace '-Wl,--as-needed' "" \
         --replace '-Wl,-soname -Wl,libvsqlitepp.so.3' \

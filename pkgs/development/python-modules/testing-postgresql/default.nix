@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pg8000
-, postgresql
-, psycopg2
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, testing-common-database
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pg8000,
+  postgresql,
+  psycopg2,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  testing-common-database,
 }:
 
 buildPythonPackage rec {
   pname = "testing-postgresql";
   # Version 1.3.0 isn't working so let's use the latest commit from GitHub
   version = "unstable-2017-10-31";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-A4tahAaa98X66ZYa3QxIQDZkwAwVB6ZDRObEhkbUWKs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     testing-common-database
     pg8000
   ];
@@ -39,17 +43,19 @@ buildPythonPackage rec {
   # Add PostgreSQL to search path
   prePatch = ''
     substituteInPlace src/testing/postgresql.py \
-      --replace "/usr/local/pgsql" "${postgresql}"
+      --replace-fail "/usr/local/pgsql" "${postgresql}"
   '';
+
+  pythonRelaxDeps = [ "pg8000" ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pg8000 >= 1.10" "pg8000"
+      --replace-fail "pg8000 >= 1.10" "pg8000"
+    substituteInPlace tests/test_postgresql.py \
+      --replace-fail "self.assertRegexpMatches" "self.assertRegex"
   '';
 
-  pythonImportsCheck = [
-    "testing.postgresql"
-  ];
+  pythonImportsCheck = [ "testing.postgresql" ];
 
   # Fix tests for Darwin build. See:
   # https://github.com/NixOS/nixpkgs/pull/74716#issuecomment-598546916

@@ -1,4 +1,5 @@
 { supportedSystems
+, system ? builtins.currentSystem
 , packageSet ? (import ../..)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -33,7 +34,7 @@ let
     systems
     ;
 
-  pkgs = packageSet (recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
+  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
 
   hydraJob' = if scrubJobs then hydraJob else id;
 
@@ -118,7 +119,7 @@ let
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */
-  crossMaintainers = [ maintainers.viric ];
+  crossMaintainers = [ ];
 
 
   # Generate attributes for all supported systems.
@@ -168,7 +169,7 @@ let
       if isDerivation value then
         value.meta.hydraPlatforms
           or (subtractLists (value.meta.badPlatforms or [])
-               (value.meta.platforms or [ "x86_64-linux" ]))
+               (value.meta.platforms or supportedSystems))
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
@@ -177,7 +178,7 @@ let
 
 in {
   /* Common platform groups on which to test packages. */
-  inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
+  inherit (platforms) unix linux darwin cygwin all;
 
   inherit
     assertTrue

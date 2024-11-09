@@ -25,7 +25,7 @@ buildGoModule rec {
   doCheck = false; # fails on go 1.17
 
   meta = with lib; {
-    description = "An autocompletion daemon for the Go programming language";
+    description = "Autocompletion daemon for the Go programming language";
     mainProgram = "gocode-gomod";
     longDescription = ''
       Gocode is a helper tool which is intended to be integrated with your

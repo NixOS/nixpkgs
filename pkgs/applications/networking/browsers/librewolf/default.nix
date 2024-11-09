@@ -15,9 +15,9 @@ in
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
-    description = "A fork of Firefox, focused on privacy, security and freedom";
+    description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
-    maintainers = with lib.maintainers; [ dotlambda squalus ];
+    maintainers = with lib.maintainers; [ squalus ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
     broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
@@ -26,7 +26,7 @@ in
     license = lib.licenses.mpl20;
     mainProgram = "librewolf";
   };
-  tests = [ nixosTests.librewolf ];
+  tests = { inherit (nixosTests) librewolf; };
   updateScript = callPackage ./update.nix {
     attrPath = "librewolf-unwrapped";
   };

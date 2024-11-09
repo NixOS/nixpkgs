@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = finalAttrs.pname;
+    repo = "libsass";
     rev = finalAttrs.version;
     hash = "sha256-FkLL3OAJXDptRQY6ZkYbss2pcc40f/wasIvEIyHRQFo=";
     # Remove unicode file names which leads to different checksums on HFS+
@@ -32,13 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit gtk3 gtk4 sassc;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
-    description = "A C/C++ implementation of a Sass compiler";
+    description = "C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = licenses.mit;
     maintainers = with maintainers; [ codyopel offline ];

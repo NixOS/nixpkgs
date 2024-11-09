@@ -99,6 +99,7 @@ import ../make-test-python.nix ({ package, ... }: {
       };
 
       dn1 = { ... }: {
+        virtualisation.diskSize = 4096;
         services.hadoop = {
           inherit package coreSite hdfsSite;
           hdfs.datanode = {

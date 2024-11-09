@@ -53,7 +53,7 @@ buildGraalvmNativeImage {
 
   meta = {
     changelog = "https://github.com/Hakky54/certificate-ripper/releases/tag/${version}";
-    description = "A CLI tool to extract server certificates";
+    description = "CLI tool to extract server certificates";
     homepage = "https://github.com/Hakky54/certificate-ripper";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tomasajt ];

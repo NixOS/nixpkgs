@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       Fan Gu and Xiamu Niu.
     '';
     license = licenses.mit;
-    maintainers = [ maintainers.infinisil ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "blockhash";
   };

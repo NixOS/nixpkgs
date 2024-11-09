@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtmultimedia
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 

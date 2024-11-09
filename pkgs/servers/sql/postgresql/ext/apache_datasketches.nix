@@ -1,22 +1,22 @@
 { stdenv, lib, fetchFromGitHub, postgresql, boost182, nixosTests }:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
 
   main_src = fetchFromGitHub {
     name   = "datasketches-postgresql";
     owner  = "apache";
     repo   = "datasketches-postgresql";
     rev    = "refs/tags/${version}";
-    hash   = "sha256-sz94fIe7nyWhjiw8FAm6ZzVpB0sAK5YxUrtbaZt/guA=";
+    hash   = "sha256-W41uAs3W4V7c9O/wBw3rut65bcmY8EdQS1/tPszMGqA=";
   };
 
   cpp_src = fetchFromGitHub {
     name   = "datasketches-cpp";
     owner  = "apache";
     repo   = "datasketches-cpp";
-    rev    = "refs/tags/4.1.0";
-    hash   = "sha256-vPoFzRxOXlEAiiHH9M5S6255ahzaKsGNYS0cdHwrRYw=";
+    rev    = "refs/tags/5.0.2";
+    hash   = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
   };
 in
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -D -m 644 ./datasketches.so -t $out/lib/
+    install -D -m 644 ./datasketches${postgresql.dlSuffix} -t $out/lib/
     cat \
       sql/datasketches_cpc_sketch.sql \
       sql/datasketches_kll_float_sketch.sql \
@@ -56,6 +56,7 @@ stdenv.mkDerivation {
       ./sql/datasketches--1.3.0--1.4.0.sql \
       ./sql/datasketches--1.4.0--1.5.0.sql \
       ./sql/datasketches--1.5.0--1.6.0.sql \
+      ./sql/datasketches--1.6.0--1.7.0.sql \
       -t $out/share/postgresql/extension
     runHook postInstall
   '';

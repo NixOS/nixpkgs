@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ghorg";
-  version = "1.9.10";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
-    sha256 = "sha256-UU8iOpfM5RMwlDceDXofs3Nzyy93zcsUOuTGw/kzVe8=";
+    sha256 = "sha256-tsR7cBpDa311rLI1CTXD2LLl3j2PxkBeQsjkUP99iIo=";
   };
 
   doCheck = false;

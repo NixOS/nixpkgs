@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5/UgEzkJw9XDgtS1jKyWh5ijTp3L+UQLuE5CXcyIgTs=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = with lib; {
-    description = "A high performance code minimap render";
+    description = "High performance code minimap render";
     homepage = "https://github.com/wfxr/code-minimap";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ bsima ];

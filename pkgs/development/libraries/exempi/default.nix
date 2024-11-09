@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ expat zlib boost ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
-  doCheck = stdenv.isLinux && stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit;
   dontDisableStatic = doCheck;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
+    description = "Implementation of XMP (Adobe's Extensible Metadata Platform)";
     mainProgram = "exempi";
     homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = platforms.linux ++ platforms.darwin;

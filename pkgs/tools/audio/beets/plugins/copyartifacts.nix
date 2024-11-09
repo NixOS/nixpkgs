@@ -19,11 +19,13 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [ "-r fEs" ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
     beets
-    six
   ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";

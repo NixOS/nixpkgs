@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = with maintainers; [ lurkki ];
     # Darwin build fails due to hfst not being found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

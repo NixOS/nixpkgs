@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
       requests
       setuptools
       tornado
-    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
   );
 
   propagatedNativeBuildInputs = [
@@ -45,7 +45,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
-    description = "An extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
+    description = "Extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
     mainProgram = "mopidy";
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];

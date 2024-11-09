@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, setuptools
-, pytest-vcr
-, syrupy
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  pytest-vcr,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-zUvZRnxVzg9izvUbp7QVcyu6Bw3dUXHOr0kOQRWEZVc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "connect_box"
-  ];
+  pythonImportsCheck = [ "connect_box" ];
 
-  pytestFlagsArray = [
-    "--vcr-record=none"
-  ];
+  pytestFlagsArray = [ "--vcr-record=none" ];
 
   meta = with lib; {
     description = "Interact with a Compal CH7465LG cable modem/router";

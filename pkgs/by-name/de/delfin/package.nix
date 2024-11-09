@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "delfin";
-  version = "0.4.2";
+  version = "0.4.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
-    hash = "sha256-7GHwwwFibmwBcrlC2zSpEUZ2dca14wZFU6PJWjincPQ=";
+    hash = "sha256-F4ipIOqMS42nXHRSRpzIlTh61g2xjpog7Zmxn6D29nE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-zlecw6230AC/+y537iEhJU+BgWRs2WCFP0AIcxchZBA=";
+    hash = "sha256-ciw178jBwz4I6I1x6iI45RJ2ITw0JfukLWNyBmE3FZg=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ colinsane ];
+    maintainers = with maintainers; [ colinsane avery ];
     mainProgram = "delfin";
     platforms = platforms.linux;
   };

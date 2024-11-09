@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, casttube
-, fetchPypi
-, pythonOlder
-, protobuf
-, setuptools
-, wheel
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  casttube,
+  fetchPypi,
+  pythonOlder,
+  protobuf,
+  setuptools,
+  wheel,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "14.0.1";
+  version = "14.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyChromecast";
     inherit version;
-    hash = "sha256-4W4Kf5SIMZGRuLT6IcoL60vxLu2lyb9kAkEYjyvqCj4=";
+    hash = "sha256-qGce5OpKcJXi4GcOIhUUXsHj4KoHN/901kiuTcJosrE=";
   };
 
   postPatch = ''
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pychromecast"
-  ];
+  pythonImportsCheck = [ "pychromecast" ];
 
   meta = with lib; {
     description = "Library for Python to communicate with the Google Chromecast";

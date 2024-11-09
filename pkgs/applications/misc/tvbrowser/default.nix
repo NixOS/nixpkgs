@@ -5,6 +5,7 @@
 , ant
 , jdk
 , makeWrapper
+, stripJavaArchivesHook
 , callPackage
 }:
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-dmNfI6T0MU7UtMH+C/2hiAeDwZlFCB4JofQViZezoqI=";
   };
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [ ant jdk makeWrapper stripJavaArchivesHook ];
 
   buildPhase = ''
     runHook preBuild

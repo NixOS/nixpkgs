@@ -11,19 +11,20 @@ stdenv.mkDerivation rec {
     rev = "VERSION_${underscoreVersion}";
     sha256 = "0ha6r7bcgf6pcn5gbd2sl7835givhda1jql49c232f1iair1yqyp";
   };
-  patchPhase = ''substituteInPlace configure \
-    --replace /usr/local /
+  patchPhase = ''
+    substituteInPlace configure \
+      --replace /usr/local /
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ] ++ lib.optionals stdenv.isLinux [ libbsd ] ;
+  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ] ;
 
   dontAddPrefix = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;

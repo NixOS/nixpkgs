@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folio";
-  version = "24.09";
+  version = "24.12";
 
   src = fetchFromGitHub {
     owner = "toolstack";
     repo = "Folio";
     rev = version;
-    hash = "sha256-D9jjoOVDJa90tpb8AW93xLyXW/meyMp1pCYK52DsJN0=";
+    hash = "sha256-0Aq8R+5k5LCmciRHauTvxuJWCyN3FN4sP9aEPNlMn+k=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A beautiful markdown note-taking app for GNOME (forked from Paper)";
+    description = "Beautiful markdown note-taking app for GNOME (forked from Paper)";
     homepage = "https://github.com/toolstack/Folio";
     license = licenses.gpl3Only;
     mainProgram = "com.toolstack.Folio";

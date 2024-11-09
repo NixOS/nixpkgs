@@ -1,72 +1,93 @@
-{ lib
-, stdenv
-, fetchurl
-, appimageTools
-, undmg
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  undmg,
 }:
 
 let
   pname = "hoppscotch";
-  version = "23.12.5";
+  version = "24.8.1-0";
 
-  src = fetchurl {
-    aarch64-darwin = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_mac_aarch64.dmg";
-      hash = "sha256-WUJW38vQ7o5KEmCxhVnJ03/f5tPOTYcczrEcmt6NSCY=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_mac_x64.dmg";
-      hash = "sha256-bQFD+9IoelinWYUndzbVvPNaRde6ACPvw9ifX9mYdno=";
-    };
-    x86_64-linux = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_linux_x64.AppImage";
-      hash = "sha256-MYQ7SRm+CUPIXROZxejbbZ0/wH+U5DQO4YGbE/HQAj8=";
-    };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  src =
+    fetchurl
+      {
+        aarch64-darwin = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
+          hash = "sha256-Tc6lQbMZHX4Wl0R3fGClRr27fFTrYTxMtAkSPCw8mrw=";
+        };
+        x86_64-darwin = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
+          hash = "sha256-c3UHntrLRoXfmz8LL3Xu8mjBtyf952/tYMFqbTyECR0=";
+        };
+        x86_64-linux = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
+          hash = "sha256-Aegc4kiLPtY+hlQtfYR3uztqs8Gj9fbUcAZ1XB8i1Pw=";
+        };
+      }
+      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
     description = "Open source API development ecosystem";
-    mainProgram = "hoppscotch";
+    longDescription = ''
+      Hoppscotch is a lightweight, web-based API development suite. It was built
+      from the ground up with ease of use and accessibility in mind providing
+      all the functionality needed for API developers with minimalist,
+      unobtrusive UI.
+    '';
     homepage = "https://hoppscotch.com";
-    changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/${version}";
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
+    downloadPage = "https://hoppscotch.com/downloads";
+    changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/20${lib.head (lib.splitString "-" version)}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DataHearth ];
+    mainProgram = "hoppscotch";
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 in
-if stdenv.isDarwin then stdenv.mkDerivation
-{
-  inherit pname version src meta;
+if stdenv.hostPlatform.isDarwin then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-  sourceRoot = ".";
+    sourceRoot = ".";
 
-  nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg ];
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    mkdir -p "$out/Applications"
-    mv Hoppscotch.app $out/Applications/
+      mkdir -p "$out/Applications"
+      mv Hoppscotch.app $out/Applications/
 
-    runHook postInstall
-  '';
-}
-else appimageTools.wrapType2 {
-  inherit pname version src meta;
-
-  extraPkgs = pkgs:
-    appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
-
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extractType2 { inherit pname version src; };
-    in
-    ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
-      # Install .desktop files
-      install -Dm444 ${appimageContents}/hoppscotch.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/hoppscotch.png -t $out/share/pixmaps
+      runHook postInstall
     '';
-}
+  }
+else
+  appimageTools.wrapType2 {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
+
+    extraInstallCommands =
+      let
+        appimageContents = appimageTools.extractType2 { inherit pname version src; };
+      in
+      ''
+        # Install .desktop files
+        install -Dm444 ${appimageContents}/hoppscotch.desktop -t $out/share/applications
+        install -Dm444 ${appimageContents}/hoppscotch.png -t $out/share/pixmaps
+      '';
+  }

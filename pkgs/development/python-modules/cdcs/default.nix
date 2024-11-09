@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ipython
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipython,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "cdcs";
-  version = "0.2.2";
-  format = "setuptools";
+  version = "0.2.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WiNjMMcpp5K+Re44ryB7LNzr2LnnYzLZ5b0iT7u1ZiA=";
+    hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipython
     numpy
     pandas
@@ -43,8 +42,11 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "cdcs"
+  pythonImportsCheck = [ "cdcs" ];
+
+  disabledTests = [
+    # Test is out-dated
+    "test_head"
   ];
 
   meta = with lib; {

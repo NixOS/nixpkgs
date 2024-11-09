@@ -1,26 +1,27 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, scdoc
-, coreutils
-, util-linux
-, jq
-, libnotify
-, withHyprland ? true
-, hyprland
-, gawk
+{
+  coreutils,
+  fetchFromGitHub,
+  gawk,
+  hyprland,
+  jq,
+  lib,
+  libnotify,
+  makeWrapper,
+  scdoc,
+  stdenvNoCC,
+  util-linux,
+  withHyprland ? true,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-iginpMlgANSPWgFxNC2TYMjf2NKSSzzrjIN8lIsAvX8=";
+    hash = "sha256-0GkZBqpORJqhhC19bsJHvkbHKOno1ZyBBA7nhzfqLZw=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +33,18 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/hdrop --prefix PATH ':' \
-      "${lib.makeBinPath ([
-        coreutils
-        util-linux
-        jq
-        libnotify
-        gawk
-      ]
-      ++ lib.optional withHyprland hyprland)}"
+      "${
+        lib.makeBinPath (
+          [
+            coreutils
+            util-linux
+            jq
+            libnotify
+            gawk
+          ]
+          ++ lib.optional withHyprland hyprland
+        )
+      }"
   '';
 
   meta = with lib; {

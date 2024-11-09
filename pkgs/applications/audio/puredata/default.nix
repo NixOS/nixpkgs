@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fftw
     libjack2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     portaudio
   ];
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     "--enable-universal"
     "--enable-fftw"
     "--enable-jack"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-alsa"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--enable-portaudio"
     "--without-local-portaudio"
     "--disable-jack-framework"
@@ -49,12 +49,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''A real-time graphical programming environment for
-                    audio, video, and graphical processing'';
+    description = ''A real-time graphical programming environment for audio, video, and graphical processing'';
     homepage = "http://puredata.info";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu carlthome ];
+    maintainers = with maintainers; [ carlthome ];
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };

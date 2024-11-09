@@ -75,7 +75,7 @@ units".
 
 "Normal" systemd units, by default, are ordered AFTER `sysinit.target`. In
 other words, these "normal" units expect all services ordered before
-`sysinit.target` to have finished without explicity declaring this dependency
+`sysinit.target` to have finished without explicitly declaring this dependency
 relationship for each dependency. See the [systemd
 bootup](https://www.freedesktop.org/software/systemd/man/latest/bootup.html)
 for more details on the bootup process.

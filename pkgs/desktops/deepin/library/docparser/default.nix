@@ -1,40 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, wrapQtAppsHook
-, poppler
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsForQt5,
+  poppler,
+  pugixml,
+  libzip,
+  libuuid,
+  tinyxml-2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "docparser";
-  version = "1.0.3";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iWRWSu8fALTTLLWdQGbpunN/1tpvKxuN/ZWJg34x0mU=";
+    hash = "sha256-shZXhs9ncgm6rECvCWrLi26RO1WAc1gRowoYmeKesfk=";
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ poppler ];
+  buildInputs = [
+    poppler
+    pugixml
+    libzip
+    libuuid
+    tinyxml-2
+  ];
 
   qmakeFlags = [ "VERSION=${version}" ];
 
-  meta = with lib; {
-    description = "A document parser library ported from document2html";
+  meta = {
+    description = "Document parser library ported from document2html";
     homepage = "https://github.com/linuxdeepin/docparser";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

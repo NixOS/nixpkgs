@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, pkgs
 , fetchFromGitHub
 , cmake
 , boost

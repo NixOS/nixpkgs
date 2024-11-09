@@ -2,24 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-matchable";
-  version = "20160306";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-matchable";
     rev = "v${version}";
-    sha256 = "02qn7x348p23z1x5lwhkyj7i8z6mgwpzpnwr8dyina0yzsdkr71s";
+    sha256 = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
   };
 
   buildInputs = [ chez ];
 
-  buildPhase = ''
-    make PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
-
-  installPhase = ''
-    make install PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
+  makeFlags = [ "CHEZ=${lib.getExe chez}" "PREFIX=$(out)" ];
 
   doCheck = false;
 

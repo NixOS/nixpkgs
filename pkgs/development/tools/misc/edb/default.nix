@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, boost, capstone
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, boost, capstone_4
 , double-conversion, graphviz, qtxmlpatterns }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost.dev capstone double-conversion graphviz qtxmlpatterns ];
+  buildInputs = [ boost.dev capstone_4 double-conversion graphviz qtxmlpatterns ];
 
   postPatch = ''
     # Remove CMAKE_INSTALL_PREFIX from DEFAULT_PLUGIN_PATH otherwise the nix store path will appear twice.

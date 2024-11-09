@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "bwd";
-  version = "2.2.0";
+  version = "2.3.0";
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";
@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "RedPRL";
     repo = "ocaml-bwd";
     rev = version;
-    hash = "sha256-4DttkEPI9yJtMsqzTNSnoDajcvMQPIiJAHk0kJl540Y=";
+    hash = "sha256-rzn0U/D6kPNsH5hBTElc3d1jfKbgKbjA2JHicpaJtu4=";
   };
 
   doCheck = true;

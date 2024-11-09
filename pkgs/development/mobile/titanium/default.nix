@@ -24,6 +24,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/tidev/titanium-cli";
     license = lib.licenses.asl20;
     mainProgram = "titanium";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

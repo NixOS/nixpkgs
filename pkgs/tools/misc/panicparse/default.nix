@@ -22,7 +22,7 @@ buildGoModule rec {
     description = "Crash your app in style (Golang)";
     homepage = "https://github.com/maruel/panicparse";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "panicparse";
   };
 }

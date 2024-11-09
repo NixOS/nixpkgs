@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyaudio
-, numpy
-, libsndfile
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyaudio,
+  numpy,
+  libsndfile,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-TLSWhLARY+3sHkl2p3d3LDGzLu6DggjTJWFpyrwRXSI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
     pyaudio
     libsndfile
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pyaudio
@@ -51,9 +48,7 @@ buildPythonPackage rec {
 
   doCheck = false; # all test files (test/wavefileTest.py) are failing
 
-  pythonImportsCheck = [
-    "wavefile"
-  ];
+  pythonImportsCheck = [ "wavefile" ];
 
   meta = with lib; {
     description = "Pythonic libsndfile wrapper to read and write audio files";

@@ -1,34 +1,49 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) optionals mkOption mkEnableOption types mkIf elem concatStringsSep maintainers mdDoc;
+  inherit (lib)
+    getOutput
+    maintainers
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    types
+    ;
+
   cfg = config.networking.stevenblack;
-
-  # needs to be in a specific order
-  activatedHosts = with cfg; [ ]
-    ++ optionals (elem "fakenews" block) [ "fakenews" ]
-    ++ optionals (elem "gambling" block) [ "gambling" ]
-    ++ optionals (elem "porn" block) [ "porn" ]
-    ++ optionals (elem "social" block) [ "social" ];
-
-  hostsPath = "${pkgs.stevenblack-blocklist}/alternates/" + concatStringsSep "-" activatedHosts + "/hosts";
 in
 {
   options.networking.stevenblack = {
-    enable = mkEnableOption (mdDoc "the stevenblack hosts file blocklist");
+    enable = mkEnableOption "the stevenblack hosts file blocklist";
+
+    package = mkPackageOption pkgs "stevenblack-blocklist" { };
 
     block = mkOption {
-      type = types.listOf (types.enum [ "fakenews" "gambling" "porn" "social" ]);
+      type = types.listOf (
+        types.enum [
+          "fakenews"
+          "gambling"
+          "porn"
+          "social"
+        ]
+      );
       default = [ ];
-      description = mdDoc "Additional blocklist extensions.";
+      description = "Additional blocklist extensions.";
     };
   };
 
   config = mkIf cfg.enable {
-    networking.hostFiles = [ ]
-      ++ optionals (activatedHosts != [ ]) [ hostsPath ]
-      ++ optionals (activatedHosts == [ ]) [ "${pkgs.stevenblack-blocklist}/hosts" ];
+    networking.hostFiles = map (x: "${getOutput x cfg.package}/hosts") ([ "ads" ] ++ cfg.block);
   };
 
-  meta.maintainers = [ maintainers.moni maintainers.artturin ];
+  meta.maintainers = with maintainers; [
+    moni
+    artturin
+    frontear
+  ];
 }

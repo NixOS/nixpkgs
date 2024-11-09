@@ -1,63 +1,80 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, torch
-, requests
-, setuptools
-, soundfile
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flac,
+  openai,
+  openai-whisper,
+  pocketsphinx,
+  pyaudio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  soundfile,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.10.3";
+  version = "3.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
     rev = "refs/tags/${version}";
-    hash = "sha256-g2DE3u2nuJHqWA2X8S6zw5nUVS1yvSqO0VI3zKoIUgg=";
+    hash = "sha256-5DZ5QhaYpVtd+AX5OSYD3cM+37Ez0+EL5a+zJ+X/uNg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  postPatch = ''
+    # Remove Bundled binaries
+    rm speech_recognition/flac-*
+    rm -r third-party
+
+    substituteInPlace speech_recognition/audio.py \
+      --replace-fail 'shutil_which("flac")' '"${lib.getExe flac}"'
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
+    pyaudio
     requests
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    numpy
-    pytestCheckHook
-    torch
-    soundfile
-  ];
+  optional-dependencies = {
+    audio = [ pyaudio ];
+    whisper-api = [ openai ];
+    whisper-local = [
+      openai-whisper
+      soundfile
+    ];
+  };
 
-  pythonImportsCheck = [
-    "speech_recognition"
-  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pocketsphinx
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "speech_recognition" ];
 
   disabledTests = [
-    # Test files are missing in source
-    "test_flac"
-    # Attribute error
-    "test_whisper"
-    # PocketSphinx is not available in Nixpkgs
-    "test_sphinx"
+    # Parsed string does not match expected
+    "test_sphinx_keywords"
   ];
 
   meta = with lib; {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    license = with licenses; [ gpl2Only bsd3 ];
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
+    license = with licenses; [
+      gpl2Only
+      bsd3
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

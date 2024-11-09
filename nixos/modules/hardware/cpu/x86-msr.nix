@@ -5,7 +5,7 @@
 }:
 let
   inherit (builtins) hasAttr;
-  inherit (lib) mkIf mdDoc;
+  inherit (lib) mkIf;
   cfg = config.hardware.cpu.x86.msr;
   opt = options.hardware.cpu.x86.msr;
   defaultGroup = "msr";
@@ -28,24 +28,24 @@ let
 in
 {
   options.hardware.cpu.x86.msr = with lib.options; with lib.types; {
-    enable = mkEnableOption (mdDoc "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)");
+    enable = mkEnableOption "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)";
     owner = mkOption {
       type = str;
       default = "root";
       example = "nobody";
-      description = mdDoc "Owner ${set}";
+      description = "Owner ${set}";
     };
     group = mkOption {
       type = str;
       default = defaultGroup;
       example = "nobody";
-      description = mdDoc "Group ${set}";
+      description = "Group ${set}";
     };
     mode = mkOption {
       type = str;
       default = "0640";
       example = "0660";
-      description = mdDoc "Mode ${set}";
+      description = "Mode ${set}";
     };
     settings = mkOption {
       type = submodule {

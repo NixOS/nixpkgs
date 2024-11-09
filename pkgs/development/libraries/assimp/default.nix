@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.3.1";
+  version = "5.4.3";
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    hash = "sha256-/1A8n7oe9WsF3FpbLZxhifzrdj38t9l5Kc8Q5jfDoyY=";
+    hash = "sha256-sOYhYHBz3Tg+pi1OIJ1mGmsjEc6dPO6nFH0aolfpLRA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "A library to import various 3D model formats";
+    description = "Library to import various 3D model formats";
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
     license = licenses.bsd3;

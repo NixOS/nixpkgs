@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
     owner = "tezos";
     repo = "tezos-rust-libs";
     rev = "v${version}";
-    sha256 = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
+    hash = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
   };
 
   nativeBuildInputs = [ llvmPackages_12.llvm cargo ];
-  propagatedBuildDeps = [ llvmPackages_12.libllvm ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  propagatedBuildInputs = [ llvmPackages_12.libllvm ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildPhase = ''
     runHook preBuild
@@ -48,4 +48,11 @@ stdenv.mkDerivation rec {
   '';
 
   cargoVendorDir = "./vendor";
+
+  meta = {
+    homepage = "https://gitlab.com/tezos/tezos-rust-libs";
+    description = "Tezos: all rust dependencies and their dependencies";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ulrikstrid ];
+  };
 }

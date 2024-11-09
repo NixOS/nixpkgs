@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An extremely simple personal calendar program";
+    description = "Extremely simple personal calendar program";
     homepage    = "https://www.lightandmatter.com/when/when.html";
     license     = licenses.gpl2Only;
     mainProgram = "when";

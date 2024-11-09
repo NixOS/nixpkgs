@@ -1,22 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qt5platform-plugins
-, qtbase
-, dtkwidget
-, dtkdeclarative
-, deepin-ocr-plugin-manager
-, gio-qt
-, udisks2-qt5
-, image-editor
-, libraw
-, libexif
-, freeimage
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  qt5platform-plugins,
+  dtkwidget,
+  dtkdeclarative,
+  deepin-ocr-plugin-manager,
+  libraw,
+  freeimage,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,8 +36,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -59,7 +54,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   meta = with lib; {
-    description = "An image viewing tool with fashion interface and smooth performance";
+    description = "Image viewing tool with fashion interface and smooth performance";
     homepage = "https://github.com/linuxdeepin/deepin-image-viewer";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

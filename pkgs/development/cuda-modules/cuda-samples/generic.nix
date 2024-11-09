@@ -11,6 +11,7 @@
   hash,
   lib,
   pkg-config,
+  stdenv,
 }:
 let
   inherit (lib) lists strings;
@@ -23,7 +24,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = finalAttrs.pname;
+    repo = "cuda-samples";
     rev = "v${finalAttrs.version}";
     inherit hash;
   };
@@ -63,7 +64,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${backendStdenv.hostPlatform.parsed.cpu.name}/${backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';
@@ -72,6 +73,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
     license = lib.licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
   };
 })

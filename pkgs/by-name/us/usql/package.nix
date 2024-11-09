@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildGoModule
 , unixODBC
@@ -11,18 +10,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.18.1";
+  version = "0.19.12";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-2/qB05LQGw4XjnODn0dzuTVqkc9X6YACJ45z+/juHXk=";
+    hash = "sha256-gutAb6GkaHtZK0uw9+If/luIUn8jiGfruWtAV3nQJvE=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-PFXULlYMSUoJ23jDA3CTImiUAlcoqHoh1zq+749qO2g=";
+  vendorHash = "sha256-32tl3mXpFqthXMRERDvMsocfMW0ltSvnm8/+NKiSjmE=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group

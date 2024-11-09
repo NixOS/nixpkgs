@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, substituteAll
 , cmake
 , ninja
 , openssl
@@ -46,11 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
-
-  postInstall = ''
-    mkdir -p $lib
-    mv $out/lib $lib
-  '';
 
   doInstallCheck = true;
 
@@ -98,16 +91,26 @@ stdenv.mkDerivation (finalAttrs: {
         # fails with Out of Memory Error
         "test/sql/copy/parquet/batched_write/batch_memory_usage.test"
         # wants http connection
+        "test/sql/copy/csv/recursive_query_csv.test"
         "test/sql/copy/csv/test_mixed_lines.test"
-      ] ++ lib.optionals stdenv.isAarch64 [
+        "test/parquet/parquet_long_string_stats.test"
+        "test/sql/attach/attach_remote.test"
+        "test/sql/copy/csv/test_sniff_httpfs.test"
+        "test/sql/httpfs/internal_issue_2490.test"
+        # fails with incorrect result
+        # Upstream issue https://github.com/duckdb/duckdb/issues/14294
+        "test/sql/copy/file_size_bytes.test"
+      ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
+        "test/sql/aggregate/aggregates/histogram_table_function.test"
       ]);
-      LD_LIBRARY_PATH = lib.optionalString stdenv.isDarwin "DY" + "LD_LIBRARY_PATH";
+      LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstallCheck
+      (($(ulimit -n) < 1024)) && ulimit -n 1024
 
       HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 

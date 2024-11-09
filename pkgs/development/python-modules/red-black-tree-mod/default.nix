@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-OONlKQOiv5Y3nCfCCCygt7kFFYZi3X7wyX9P2TqaqQg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "red_black_dict_mod"
-  ];
+  pythonImportsCheck = [ "red_black_dict_mod" ];
 
   meta = with lib; {
     description = "Flexible python implementation of red black trees";

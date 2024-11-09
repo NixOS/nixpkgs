@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Tk9n2gPwyPin6JZ4RSO8d/+xVpEz4rF8C2eGKwrAXU0=";
   };
 
-  cargoSha256 = "sha256-8RfiObWDqZJg+sjjDBk+sRoS5CiECIdNPH79T+O8e8M=";
+  cargoHash = "sha256-8RfiObWDqZJg+sjjDBk+sRoS5CiECIdNPH79T+O8e8M=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,6 +69,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://salsa.debian.org/silwol/freenukum/-/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

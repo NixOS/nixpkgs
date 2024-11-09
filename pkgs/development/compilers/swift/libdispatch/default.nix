@@ -37,6 +37,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-libdispatch";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cmm dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members ++ (with lib.maintainers; [ cmm ]);
   };
 }

@@ -1,7 +1,8 @@
 { stdenv
 , autoreconfHook
 , fetchFromGitHub
-, gnome
+, gnome-shell
+, gnome-themes-extra
 , gtk-engine-murrine
 , gtk3
 , inkscape
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedUserEnvPkgs = [
-    gnome.gnome-themes-extra
+    gnome-themes-extra
     gtk-engine-murrine
   ];
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-gnome-shell=${gnome.gnome-shell.version}"
+    "--with-gnome-shell=${gnome-shell.version}"
     "--disable-unity"
   ];
 

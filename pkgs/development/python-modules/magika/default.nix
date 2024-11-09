@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, magika
-, numpy
-, onnxruntime
-, poetry-core
-, python-dotenv
-, pythonOlder
-, stdenv
-, tabulate
-, testers
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  magika,
+  numpy,
+  onnxruntime,
+  poetry-core,
+  python-dotenv,
+  pythonOlder,
+  stdenv,
+  tabulate,
+  testers,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "magika";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r6C7iDCG/o3JEvweQGb4upr+LuHvmNtkwtduZGehCsc=";
+    hash = "sha256-Q9wRU6FjcyciWmJqFVDAo5Wh1F6jPsH11GubCAI4vuA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click
@@ -49,6 +48,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mihaimaruseac ];
     mainProgram = "magika";
     # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
-    broken = stdenv.isAarch64 && stdenv.isLinux;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }

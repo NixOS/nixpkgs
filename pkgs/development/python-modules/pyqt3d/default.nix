@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqt-builder
-, python
-, pythonOlder
-, qt3d
-, setuptools
-, sip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  pyqt-builder,
+  python,
+  pythonOlder,
+  qt3d,
+  setuptools,
+  sip,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt3d";
-  version = "5.15.6";
+  version = "5.15.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt3D";
     inherit version;
-    hash = "sha256-fWxtVc2PwiGzE8mVwPhymjdxFJJvA3f46QEdRevziBw=";
+    hash = "sha256-6ng+tUbH2tLV6q+C6lBQ3eRSVamELgoddYSIHp4lqVE=";
   };
 
   postPatch = ''
@@ -29,7 +29,10 @@ buildPythonPackage rec {
       --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
   # HACK: paralellize compilation of make calls within pyqt's setup.py
@@ -51,22 +54,16 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = [
-    qt3d
-  ];
+  buildInputs = [ qt3d ];
 
-  propagatedBuildInputs = [
-    pyqt5
-  ];
+  propagatedBuildInputs = [ pyqt5 ];
 
   dontConfigure = true;
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt5.Qt3DCore"
-  ];
+  pythonImportsCheck = [ "PyQt5.Qt3DCore" ];
 
   meta = with lib; {
     description = "Python bindings for the Qt 3D framework";

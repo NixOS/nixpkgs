@@ -1,31 +1,30 @@
-{ buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, python
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  lib,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.11.1";
+  version = "2.12.0";
 
   disabled = pythonOlder "3.6";
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-QboOevyXUt+1PO1UieifgYa+AOWZ5xJmBpW3p1/yZj8=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "pycodestyle";
+    rev = version;
+    hash = "sha256-YN1KOJ8f+VY9vJTWm3aTOOai66dveKOKOpeBkZKkC2A=";
   };
 
-  pythonImportsCheck = [
-    "pycodestyle"
-  ];
+  pythonImportsCheck = [ "pycodestyle" ];
 
-  nativCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
   postCheck = ''
@@ -38,8 +37,6 @@ buildPythonPackage rec {
     mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

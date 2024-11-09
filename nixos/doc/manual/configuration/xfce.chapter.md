@@ -5,7 +5,7 @@ To enable the Xfce Desktop Environment, set
 ```nix
 {
   services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.displayManager.defaultSession = "xfce";
+  services.displayManager.defaultSession = "xfce";
 }
 ```
 

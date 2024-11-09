@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
-  version = "2.27";
+  version = "2.28";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "sha256-F6IJrYD2dk+5bKKVIahLiNnD/Hd/CjNQQd9zz0Gkans=";
+    sha256 = "sha256-cBl2BKgPCP/xHZW6fTH51cY9/lV/1HVLsN7a1R1Blv4=";
   };
 
   buildInputs = [ zlib ];
 
-  makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
+    description = "Versatile pairwise aligner for genomic and spliced nucleotide sequences";
     mainProgram = "minimap2";
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
 , gst_all_1
 , libviperfx
 , makeWrapper
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An Adaptive Digital Sound Processor";
+    description = "Adaptive Digital Sound Processor";
     homepage = "https://github.com/Audio4Linux/Viper4Linux";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];

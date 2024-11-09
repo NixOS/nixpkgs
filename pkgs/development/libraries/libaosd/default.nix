@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       composited rendering via XComposite, as well as support for
       rendering Cairo and Pango layouts.
     '';
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/atheme-legacy/libaosd";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];

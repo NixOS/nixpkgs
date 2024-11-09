@@ -1,34 +1,39 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, mock
-, numpy
-, scipy
-, smart-open
-, testfixtures
-, pyemd
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
+  fetchPypi,
+  mock,
+  numpy,
+  scipy,
+  smart-open,
+  pyemd,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.3.2";
-  format = "setuptools";
+  version = "4.3.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # C code generated with CPython3.12 does not work cython_0.
+  disabled = !(pythonOlder "3.12");
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
+    hash = "sha256-hIUgdqaj2I19rFviReJMIcO4GbVl4UwbYfo+Xudtz1c=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
+    cython_0
+    oldest-supported-numpy
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     smart-open
     numpy
     scipy
@@ -40,16 +45,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gensim"
+  pythonRelaxDeps = [
+    "scipy"
   ];
+
+  pythonImportsCheck = [ "gensim" ];
 
   # Test setup takes several minutes
   doCheck = false;
 
-  pytestFlagsArray = [
-    "gensim/test"
-  ];
+  pytestFlagsArray = [ "gensim/test" ];
 
   meta = with lib; {
     description = "Topic-modelling library";

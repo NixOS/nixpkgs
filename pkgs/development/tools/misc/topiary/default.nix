@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , nix-update-script
 }:
 
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
+    description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
     mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
     changelog = "https://github.com/tweag/topiary/blob/${src.rev}/CHANGELOG.md";

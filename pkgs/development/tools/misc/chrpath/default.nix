@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "chrpath";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchurl {
-    url = "https://alioth-archive.debian.org/releases/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0yvfq891mcdkf8g18gjjkn2m5rvs8z4z4cl1vwdhx6f2p9a4q3dv";
+    url = "https://codeberg.org/pere/chrpath/archive/release-${version}.tar.gz";
+    hash = "sha256-Sh2syR9OrxyMP3Z/2IHrH+OlCaINBii/l2DZCsEkvQw=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   meta = with lib; {
     description = "Command line tool to adjust the RPATH or RUNPATH of ELF binaries";
@@ -17,8 +21,8 @@ stdenv.mkDerivation rec {
       binary. The rpath, or runpath if it is present, is where the runtime
       linker should look for the libraries needed for a program.
     '';
-    homepage = "https://tracker.debian.org/pkg/chrpath";
-    license = licenses.gpl2;
+    homepage = "https://codeberg.org/pere/chrpath";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

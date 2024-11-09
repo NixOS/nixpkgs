@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gmp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gmp,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-81JVptPkEQkWa11LCIZtWsu5ny4eZNOn50x3RmTNqEI=";
   };
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # skip tests which require being online to download test vectors
@@ -37,9 +34,7 @@ buildPythonPackage rec {
   # but the installed package works just fine
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fastecdsa"
-  ];
+  pythonImportsCheck = [ "fastecdsa" ];
 
   meta = with lib; {
     description = "Fast elliptic curve digital signatures";

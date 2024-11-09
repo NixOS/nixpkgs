@@ -93,7 +93,7 @@ in rec {
     inherit hasDistutilsCxxPatch;
     # Remove after 24.11 is released.
     pythonForBuild =
-      lib.warnIf (lib.isInOldestRelease 2311) "`pythonForBuild` (from `python*`) has been renamed to `pythonOnBuildForHost`"
+      lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2311) "`pythonForBuild` (from `python*`) has been renamed to `pythonOnBuildForHost`"
         pythonOnBuildForHost_overridden;
     pythonOnBuildForHost = pythonOnBuildForHost_overridden;
 

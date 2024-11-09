@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       --replace "CXX_STANDARD 14" "CXX_STANDARD 17"
   '';
 
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags -DMSK_PREFIX=$out"
-  '';
+  cmakeFlags = [
+    "-DMSK_PREFIX=${placeholder "out"}"
+  ];
 
   postFixup = ''
     ln -s $out/lib/molsketch/* $out/lib/.

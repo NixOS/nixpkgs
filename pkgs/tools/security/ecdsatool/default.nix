@@ -16,6 +16,11 @@ stdenv.mkDerivation {
     ./configure --prefix=$out
   '';
 
+  patches = [
+    ./ctype-header-c99-implicit-function-declaration.patch
+    ./openssl-header-c99-implicit-function-declaration.patch
+  ];
+
   nativeBuildInputs = with pkgs; [openssl autoconf automake];
   buildInputs = with pkgs; [libuecc];
 

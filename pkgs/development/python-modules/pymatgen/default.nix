@@ -1,57 +1,65 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, ase
-, cython
-, glibcLocales
-, joblib
-, matplotlib
-, monty
-, networkx
-, numpy
-, palettable
-, pandas
-, plotly
-, pybtex
-, pydispatcher
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, requests
-, ruamel-yaml
-, scipy
-, seekpath
-, spglib
-, sympy
-, tabulate
-, uncertainties
+{
+  lib,
+  ase,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  glibcLocales,
+  joblib,
+  matplotlib,
+  monty,
+  networkx,
+  oldest-supported-numpy,
+  palettable,
+  pandas,
+  plotly,
+  pybtex,
+  pydispatcher,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  ruamel-yaml,
+  scipy,
+  seekpath,
+  setuptools,
+  spglib,
+  sympy,
+  tabulate,
+  uncertainties,
 }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.2.23";
-  format = "setuptools";
+  version = "2024.9.17.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev= "v${version}";
-    hash = "sha256-eswoup9ACj/PHVW3obcnZjD4tWemsmROZFtwGGigEYE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o76bGItldcLfgZ5KDw2uL0GJvyljQJEwISR0topVR44=";
   };
+
+  prePatch = ''
+    # Upstream switched to building against numpy2 but should still be compatible with numpy1
+    substituteInPlace pyproject.toml --replace-fail "numpy>=2.1.0" "numpy>=1.26.0"
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     monty
     networkx
-    numpy
+    oldest-supported-numpy
     palettable
     pandas
     plotly
@@ -66,39 +74,30 @@ buildPythonPackage rec {
     uncertainties
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-  preCheck = ''
-    # hide from tests
-    mv pymatgen _pymatgen
-    # ensure tests can find these
-    export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
-    # some tests cover the command-line scripts
-    export PATH=$out/bin:$PATH
-  '';
-  disabledTests = [
-    # presumably won't work with our dir layouts
-    "test_egg_sources_txt_is_complete"
-    # borderline precision failure
-    "test_thermal_conductivity"
-  ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ase = [ ase ];
     joblib = [ joblib ];
     seekpath = [ seekpath ];
   };
 
-  pythonImportsCheck = [
-    "pymatgen"
-  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  preCheck = ''
+    # ensure tests can find these
+    export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    # some tests cover the command-line scripts
+    export PATH=$out/bin:$PATH
+  '';
+
+  pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;  # tests segfault. that's bad.
-    description = "A robust materials analysis code that defines core object representations for structures and molecules";
+    description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
+    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

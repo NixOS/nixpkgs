@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.namore ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ expat nifticlib zlib ];
 
   # without the test data, this is only a few basic tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase = ''
     runHook preCheck
     ctest -LE 'NEEDS_DATA'

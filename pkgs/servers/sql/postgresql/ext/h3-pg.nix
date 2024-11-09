@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , h3_4
 , postgresql
-, postgresqlTestHook
+, postgresqlTestExtension
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/AddPostgreSQLExtension.cmake \
       --replace "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
   '';
@@ -42,14 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -t $out/share/postgresql/extension h3_postgis/h3_postgis-*.sql h3_postgis/h3_postgis.control
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "h3-pg-test";
-    dontUnpack = true;
-    doCheck = true;
-    buildInputs = [ postgresqlTestHook ];
-    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.h3-pg ps.postgis ])) ];
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    passAsFile = [ "sql" ];
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    withPackages = [ "postgis" ];
     sql = ''
       CREATE EXTENSION h3;
       CREATE EXTENSION h3_postgis CASCADE;
@@ -57,20 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
       SELECT h3_lat_lng_to_cell(POINT('37.3615593,-122.0553238'), 5);
       SELECT ST_NPoints(h3_cell_to_boundary_geometry('8a63a9a99047fff'));
     '';
-    failureHook = "postgresqlStop";
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
   meta = with lib; {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
 })

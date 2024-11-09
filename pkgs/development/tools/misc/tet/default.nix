@@ -9,8 +9,6 @@ stdenv.mkDerivation ({
     sha256 = "1j57hv56df38w249l595b8rsgmsyvjkbysai03a9724gax5jl9av" ;
   };
 
-  buildInputs = [ ];
-
   patchPhase = "chmod +x configure";
 
   configurePhase = "./configure -t lite";
@@ -20,7 +18,7 @@ stdenv.mkDerivation ({
   installPhase = "cd src; make install; cd -; cp -vr $PWD $out";
 
   meta = {
-    description = "The Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";
+    description = "Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";
     homepage = "http://tetworks.opengroup.org/Products/tet.htm";
     license = lib.licenses.artistic1;
     platforms = lib.platforms.unix;

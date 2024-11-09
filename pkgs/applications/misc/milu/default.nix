@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/yuejia/Milu";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.vrthra ];
+    maintainers = [ ];
     mainProgram = "milu";
   };
 }

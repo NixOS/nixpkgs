@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyasn1
-, pythonOlder
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyasn1,
+  pythonOlder,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.9.1";
-  format = "setuptools";
+  version = "1.2.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,10 +19,12 @@ buildPythonPackage rec {
     owner = "miketeo";
     repo = "pysmb";
     rev = "refs/tags/pysmb-${version}";
-    hash = "sha256-psV6fYymE6k2YqxOvFM2s7JTG51fI5pSqmkZnvfmprw=";
+    hash = "sha256-Zid6KGNr7BBuyHaxdXkhRC/Ug93HmVXKMtreFf+M7OE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyasn1
     tqdm
   ];

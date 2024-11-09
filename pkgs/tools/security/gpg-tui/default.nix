@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals x11Support [
     libxcb
     libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Foundation
     libiconv

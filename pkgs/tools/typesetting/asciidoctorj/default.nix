@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
-  version = "2.5.12";
+  version = "3.0.0";
 
   src = fetchzip {
     url = "mirror://maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
-    sha256 = "sha256-cpFY9nEqy7yBevupHMpNybqnAfN2fT9RcSKWlRdWsag=";
+    sha256 = "sha256-F4tmpdNS0PIoLpqV9gifJf2iQ/kX+cp3EssRyhzyOUw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

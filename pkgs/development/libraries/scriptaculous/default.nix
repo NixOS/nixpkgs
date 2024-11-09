@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A set of JavaScript libraries to enhance the user interface of web sites";
+    description = "Set of JavaScript libraries to enhance the user interface of web sites";
     longDescription = ''
       script.aculo.us provides you with
       easy-to-use, cross-browser user

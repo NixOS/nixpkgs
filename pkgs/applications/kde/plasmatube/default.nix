@@ -1,7 +1,7 @@
 { lib
 , mkDerivation
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , kcoreaddons
 , kdeclarative
@@ -18,7 +18,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ unzip cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon CoreAudio CoreFoundation CoreMIDI CoreServices
   ];
 

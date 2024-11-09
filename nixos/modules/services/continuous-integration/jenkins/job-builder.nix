@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   jenkinsCfg = config.services.jenkins;
   cfg = config.services.jenkins.jobBuilder;
@@ -9,7 +6,7 @@ let
 in {
   options = {
     services.jenkins.jobBuilder = {
-      enable = mkEnableOption (mdDoc ''
+      enable = lib.mkEnableOption ''
         the Jenkins Job Builder (JJB) service. It
         allows defining jobs for Jenkins in a declarative manner.
 
@@ -22,55 +19,55 @@ in {
 
         Please see the Jenkins Job Builder documentation for more info:
         <https://jenkins-job-builder.readthedocs.io/>
-      '');
+      '';
 
-      accessUser = mkOption {
+      accessUser = lib.mkOption {
         default = "admin";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           User id in Jenkins used to reload config.
         '';
       };
 
-      accessToken = mkOption {
+      accessToken = lib.mkOption {
         default = "";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           User token in Jenkins used to reload config.
           WARNING: This token will be world readable in the Nix store. To keep
           it secret, use the {option}`accessTokenFile` option instead.
         '';
       };
 
-      accessTokenFile = mkOption {
+      accessTokenFile = lib.mkOption {
         default = "${config.services.jenkins.home}/secrets/initialAdminPassword";
-        defaultText = literalExpression ''"''${config.services.jenkins.home}/secrets/initialAdminPassword"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${config.services.jenkins.home}/secrets/initialAdminPassword"'';
+        type = lib.types.str;
         example = "/run/keys/jenkins-job-builder-access-token";
-        description = lib.mdDoc ''
+        description = ''
           File containing the API token for the {option}`accessUser`
           user.
         '';
       };
 
-      yamlJobs = mkOption {
+      yamlJobs = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           - job:
               name: jenkins-job-test-1
               builders:
                 - shell: echo 'Hello world!'
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in YAML format.
         '';
       };
 
-      jsonJobs = mkOption {
+      jsonJobs = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
-        example = literalExpression ''
+        type = lib.types.listOf lib.types.str;
+        example = lib.literalExpression ''
           [
             '''
               [ { "job":
@@ -82,15 +79,15 @@ in {
             '''
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in JSON format.
         '';
       };
 
-      nixJobs = mkOption {
+      nixJobs = lib.mkOption {
         default = [ ];
-        type = types.listOf types.attrs;
-        example = literalExpression ''
+        type = lib.types.listOf lib.types.attrs;
+        example = lib.literalExpression ''
           [ { job =
               { name = "jenkins-job-test-3";
                 builders = [
@@ -100,7 +97,7 @@ in {
             }
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in Nix format.
 
           This is a trivial wrapper around jsonJobs, using builtins.toJSON
@@ -110,7 +107,7 @@ in {
     };
   };
 
-  config = mkIf (jenkinsCfg.enable && cfg.enable) {
+  config = lib.mkIf (jenkinsCfg.enable && cfg.enable) {
     assertions = [
       { assertion =
           if cfg.accessUser != ""
@@ -213,7 +210,7 @@ in {
 
             # Create / update jobs
             mkdir -p ${jobBuilderOutputDir}
-            for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
+            for inputFile in ${yamlJobsFile} ${lib.concatStringsSep " " jsonJobsFiles}; do
                 HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test --config-xml -o "${jobBuilderOutputDir}" "$inputFile"
             done
 
@@ -237,7 +234,7 @@ in {
                 jobdir="${jenkinsCfg.home}/$jenkinsjobname"
                 rm -rf "$jobdir"
             done
-          '' + (optionalString (cfg.accessUser != "") reloadScript);
+          '' + (lib.optionalString (cfg.accessUser != "") reloadScript);
       serviceConfig = {
         Type = "oneshot";
         User = jenkinsCfg.user;

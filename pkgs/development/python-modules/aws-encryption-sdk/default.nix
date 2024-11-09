@@ -1,34 +1,33 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, mock
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wrapt
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  mock,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QwT8+M4qo/qYsaz/ejvzzQUowynAxDe1Xg9Fa79iNH4=";
+    hash = "sha256-6yrboU9IHNg9cWmrjmQplIltOaSmTheWkEprSSVmE7A=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cryptography
@@ -41,19 +40,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   disabledTestPaths = [
     # Tests require networking
     "examples"
     "test/integration"
   ];
 
-  pythonImportsCheck = [
-    "aws_encryption_sdk"
+  disabledTests = [
+    # pytest 8 compat issue
+    "test_happy_version"
   ];
+
+  pythonImportsCheck = [ "aws_encryption_sdk" ];
 
   meta = with lib; {
     description = "Python implementation of the AWS Encryption SDK";

@@ -1,25 +1,32 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lacus";
-  version = "1.8.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "lacus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3sgTt3SsasltChCqHAWyujtUvoLwHWZzfWwlfnJA+zE=";
+    hash = "sha256-5KddApwaN4t+QRaQTqIXuYStuPxKq3v6pRknBusAcbM=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "gunicorn"
+    "psutil"
+    "redis"
+  ];
+
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     flask-restx
     gunicorn
     lacuscore

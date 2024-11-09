@@ -1,4 +1,4 @@
-{ lib, buildPackages, fetchFromGitHub, makeRustPlatform, installShellFiles, stdenv }:
+{ lib, buildPackages, fetchFromGitHub, fetchpatch, makeRustPlatform, installShellFiles, stdenv }:
 
 let
   args = rec {
@@ -12,15 +12,18 @@ let
       sha256 = "sha256-ERIzx9Fveanq7/aWcB2sviTxIahvSu0sTwgpGf/aYE8=";
     };
 
+    patches = [
+      (fetchpatch {
+        name = "rust-1.77-tests.patch";
+        url = "https://github.com/rust-secure-code/cargo-auditable/commit/5317a27244fc428335c4e7a1d066ae0f65f0d496.patch";
+        hash = "sha256-UblGseiSC/2eE4rcnTgYzxAMrutHFSdxKTHqKj1mX5o=";
+      })
+    ];
+
     cargoHash = "sha256-4o3ctun/8VcBRuj+j0Yaawdkyn6Z6LPp+FTyhPxQWU8=";
 
-    # Cargo.lock is outdated
-    preConfigure = ''
-      cargo update --offline
-    '';
-
     meta = with lib; {
-      description = "A tool to make production Rust binaries auditable";
+      description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";

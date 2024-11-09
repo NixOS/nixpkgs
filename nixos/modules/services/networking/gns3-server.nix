@@ -14,25 +14,25 @@ in {
 
   options = {
     services.gns3-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "GNS3 Server daemon");
+      enable = lib.mkEnableOption "GNS3 Server daemon";
 
-      package = lib.mkPackageOptionMD pkgs "gns3-server" { };
+      package = lib.mkPackageOption pkgs "gns3-server" { };
 
       auth = {
-        enable = lib.mkEnableOption (lib.mdDoc "password based HTTP authentication to access the GNS3 Server");
+        enable = lib.mkEnableOption "password based HTTP authentication to access the GNS3 Server";
 
         user = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "gns3";
-          description = lib.mdDoc ''Username used to access the GNS3 Server.'';
+          description = ''Username used to access the GNS3 Server.'';
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/secrets/gns3-server-password";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password to access the GNS3 Server.
 
             ::: {.warning}
@@ -47,7 +47,7 @@ in {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
         default = {};
         example = { host = "127.0.0.1"; port = 3080; };
-        description = lib.mdDoc ''
+        description = ''
           The global options in `config` file in ini format.
 
           Refer to <https://docs.gns3.com/docs/using-gns3/administration/gns3-server-configuration-file/>
@@ -59,20 +59,20 @@ in {
         file = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = "/var/log/gns3/server.log";
-          description = lib.mdDoc ''Path of the file GNS3 Server should log to.'';
+          description = ''Path of the file GNS3 Server should log to.'';
         };
 
-        debug = lib.mkEnableOption (lib.mdDoc "debug logging");
+        debug = lib.mkEnableOption "debug logging";
       };
 
       ssl = {
-        enable = lib.mkEnableOption (lib.mdDoc "SSL encryption");
+        enable = lib.mkEnableOption "SSL encryption";
 
         certFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.pem";
-          description = lib.mdDoc ''
+          description = ''
             Path to the SSL certificate file. This certificate will
             be offered to, and may be verified by, clients.
           '';
@@ -82,23 +82,23 @@ in {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.key";
-          description = lib.mdDoc "Private key file for the certificate.";
+          description = "Private key file for the certificate.";
         };
       };
 
       dynamips = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable Dynamips support.'');
-        package = lib.mkPackageOptionMD pkgs "dynamips" { };
+        enable = lib.mkEnableOption ''Dynamips support'';
+        package = lib.mkPackageOption pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable uBridge support.'');
-        package = lib.mkPackageOptionMD pkgs "ubridge" { };
+        enable = lib.mkEnableOption ''uBridge support'';
+        package = lib.mkPackageOption pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable VPCS support.'');
-        package = lib.mkPackageOptionMD pkgs "vpcs" { };
+        enable = lib.mkEnableOption ''VPCS support'';
+        package = lib.mkPackageOption pkgs "vpcs" { };
       };
     };
   };
@@ -129,7 +129,14 @@ in {
       }
     ];
 
+    users.groups.gns3 = { };
+
     users.groups.ubridge = lib.mkIf cfg.ubridge.enable { };
+
+    users.users.gns3 = {
+      group = "gns3";
+      isSystemUser = true;
+    };
 
     security.wrappers.ubridge = lib.mkIf cfg.ubridge.enable {
       capabilities = "cap_net_raw,cap_net_admin=eip";
@@ -150,7 +157,7 @@ in {
         };
       }
       (lib.mkIf (cfg.ubridge.enable) {
-        Server.ubridge_path = lib.mkDefault (lib.getExe cfg.ubridge.package);
+        Server.ubridge_path = lib.mkDefault "/run/wrappers/bin/ubridge";
       })
       (lib.mkIf (cfg.auth.enable) {
         Server = {
@@ -206,7 +213,6 @@ in {
       serviceConfig = {
         ConfigurationDirectory = "gns3";
         ConfigurationDirectoryMode = "0750";
-        DynamicUser = true;
         Environment = "HOME=%S/gns3";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = "${lib.getExe cfg.package} ${commandArgs}";
@@ -227,14 +233,27 @@ in {
         User = "gns3";
         WorkingDirectory = "%S/gns3";
 
+        # Required for ubridge integration to work
+        #
+        # GNS3 needs to run SUID binaries (ubridge)
+        # but NoNewPrivileges breaks execution of SUID binaries
+        DynamicUser = false;
+        NoNewPrivileges = false;
+        RestrictSUIDSGID = false;
+        PrivateUsers = false;
+
         # Hardening
-        DeviceAllow = lib.optional flags.enableLibvirtd "/dev/kvm";
+        DeviceAllow = [
+          # ubridge needs access to tun/tap devices
+          "/dev/net/tap rw"
+          "/dev/net/tun rw"
+        ] ++ lib.optionals flags.enableLibvirtd [
+          "/dev/kvm"
+        ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
         PrivateTmp = true;
-        PrivateUsers = true;
         # Don't restrict ProcSubset because python3Packages.psutil requires read access to /proc/stat
         # ProcSubset = "pid";
         ProtectClock = true;
@@ -255,8 +274,7 @@ in {
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        UMask = "0077";
+        UMask = "0022";
       };
     };
   };

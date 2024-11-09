@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A real-time strategy game made with LÖVE based on the original Stronghold by Firefly studios";
+    description = "Real-time strategy game made with LÖVE based on the original Stronghold by Firefly studios";
     homepage = "https://gitlab.com/stone-kingdoms/stone-kingdoms";
     platforms = platforms.linux;
     license = with licenses; [

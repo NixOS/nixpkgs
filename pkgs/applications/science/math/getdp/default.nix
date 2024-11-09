@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, cmake, gfortran, blas, lapack, mpi, petsc, python3 }:
 
-stdenv.mkDerivation rec {
+let
+  mpiSupport = petsc.passthru.mpiSupport;
+in stdenv.mkDerivation rec {
   pname = "getdp";
   version = "3.6.0";
   src = fetchurl {
     url = "http://getdp.info/src/getdp-${version}-source.tgz";
-    sha256 = "sha256-N1cb72W77Dr+TzeHpLgv5FuFb+SJqyGcfn+kOfEvZgA=";
+    hash = "sha256-nzefwCV+Z9BHDofuTfhR+vhqm3cCSiUT+7cbtn601N8=";
   };
 
-  inherit (petsc) mpiSupport;
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ gfortran blas lapack petsc ]
     ++ lib.optional mpiSupport mpi
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
   meta = with lib; {
-    description = "A General Environment for the Treatment of Discrete Problems";
+    description = "General Environment for the Treatment of Discrete Problems";
     mainProgram = "getdp";
     longDescription = ''
       GetDP is a free finite element solver using mixed elements to discretize
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://getdp.info/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

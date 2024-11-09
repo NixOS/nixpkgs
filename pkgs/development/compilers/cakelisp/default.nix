@@ -3,12 +3,12 @@
 stdenv.mkDerivation {
   pname = "cakelisp";
   # using unstable as it's the only version that builds against gcc-13
-  version = "0.3.0-unstable-2024-03-21";
+  version = "0.3.0-unstable-2024-04-25";
 
   src = fetchgit {
     url = "https://macoy.me/code/macoy/cakelisp";
-    rev = "6bde4b8002e4825116f3b18291a012bf1729f497";
-    hash = "sha256-jpwVHiDRVa6QoYxsasmiV1IdbBqZj0tU5EBruOHfzYg=";
+    rev = "eb4427f555c3def9d65612672ccfe59e11b14059";
+    hash = "sha256-wFyqAbHrBMFKqMYlBjS6flYHPn3Rxtaiqb1rRmlZrB4=";
   };
 
   buildInputs = [ gcc ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
         --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
     substituteInPlace src/ModuleManager.cpp \
         --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Build.sh --replace '--export-dynamic' '-export_dynamic'
     substituteInPlace runtime/HotReloading.cake --replace '--export-dynamic' '-export_dynamic'
     substituteInPlace Bootstrap.cake --replace '--export-dynamic' '-export_dynamic'
@@ -43,13 +43,13 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A performance-oriented Lisp-like language";
+    description = "Performance-oriented Lisp-like language";
     mainProgram = "cakelisp";
     homepage = "https://macoy.me/code/macoy/cakelisp";
     license = licenses.gpl3Plus;
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = [ maintainers.sbond75 ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

@@ -6,7 +6,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RlCC+39zC+LeA/QDWPHYx5TrEwOgVrnvcH1Xg12qSLE=";
+    hash = "sha256-RlCC+39zC+LeA/QDWPHYx5TrEwOgVrnvcH1Xg12qSLE=";
   };
 
   propagatedBuildInputs = with pythonPackages; [ mopidy configobj ];
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/dirkgroenen/mopidy-mopify";
-    description = "A mopidy webclient based on the Spotify webbased interface";
+    description = "Mopidy webclient based on the Spotify webbased interface";
     license = licenses.gpl3;
     maintainers = [ maintainers.Gonzih ];
   };

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pyyaml,
+  requests,
 }:
 let
   pname = "prompthub-py";
@@ -24,9 +25,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyyaml
@@ -34,7 +33,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "A simple client to fetch prompts from Prompt Hub using its REST API.";
+    description = "Simple client to fetch prompts from Prompt Hub using its REST API";
     homepage = "https://github.com/deepset-ai/prompthub-py";
     changelog = "https://github.com/deepset-ai/prompthub-py/releases/tag/v${version}";
     license = licenses.asl20;

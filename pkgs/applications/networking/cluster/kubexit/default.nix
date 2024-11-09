@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-RA3+S5Pad+4mNUgcZ2Z0K0FKA3Za5o1ko049GM4yQQ8=";
   ldflags = [ "-s" "-w" ];
   meta = with lib; {
-    description = "Command supervisor for coordinated Kubernetes pod container termination.";
+    description = "Command supervisor for coordinated Kubernetes pod container termination";
     mainProgram = "kubexit";
     homepage = "https://github.com/karlkfi/kubexit/";
     license = licenses.asl20;

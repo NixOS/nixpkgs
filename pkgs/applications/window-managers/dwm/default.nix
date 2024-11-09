@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null}:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null
+# update script dependencies
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "dwm";
@@ -29,9 +32,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+  passthru.updateScript = gitUpdater {
+    url = "git://git.suckless.org/dwm";
+  };
+
   meta = with lib; {
     homepage = "https://dwm.suckless.org/";
-    description = "An extremely fast, small, and dynamic window manager for X";
+    description = "Extremely fast, small, and dynamic window manager for X";
     longDescription = ''
       dwm is a dynamic window manager for X. It manages windows in tiled,
       monocle and floating layouts. All of the layouts can be applied
@@ -42,7 +49,7 @@ stdenv.mkDerivation rec {
       tags.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ viric neonfuz ];
+    maintainers = with maintainers; [ neonfuz ];
     platforms = platforms.all;
     mainProgram = "dwm";
   };

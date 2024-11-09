@@ -1,5 +1,5 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index 94eec244..4bb15db9 100644
+index eaa48117..30201d97 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
 @@ -31,7 +31,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
@@ -12,19 +12,19 @@ index 94eec244..4bb15db9 100644
  
  log = logging.getLogger(__name__)
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 5a34a95a..5ee1b333 100644
+index 1c6dd5fe..b689a091 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
-@@ -14,7 +14,7 @@ from ocrmypdf.subprocess import get_version, run
- 
+@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
  
  def version() -> Version:
--    return Version(get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*'))
-+    return Version(get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*'))
- 
- 
- def available():
-@@ -27,7 +27,7 @@ def available():
+     try:
+-        version = get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*')
++        version = get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*')
+     except CalledProcessError as e:
+         # TeX Live for Windows provides an incompatible jbig2.EXE which may
+         # be on the PATH.
+@@ -33,7 +33,7 @@ def available():
  
  def convert_group(cwd, infiles, out_prefix, threshold):
      args = [
@@ -33,7 +33,7 @@ index 5a34a95a..5ee1b333 100644
          '-b',
          out_prefix,
          '--symbol-mode',  # symbol mode (lossy)
-@@ -44,7 +44,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
+@@ -50,7 +50,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
  
  
  def convert_single(cwd, infile, outfile, threshold):
@@ -65,7 +65,7 @@ index 5b8600d0..fcad771b 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index fab92bb1..78b634a7 100644
+index 102bdab8..bfef4400 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
 @@ -95,7 +95,7 @@ class TesseractVersion(Version):
@@ -96,10 +96,10 @@ index fab92bb1..78b634a7 100644
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index 493d9b3a..578c2dda 100644
+index d1165c46..7c732b15 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
-@@ -70,7 +70,7 @@ class UnpaperImageTooLargeError(Exception):
+@@ -48,7 +48,7 @@ class UnpaperImageTooLargeError(Exception):
  
  
  def version() -> Version:
@@ -108,7 +108,7 @@ index 493d9b3a..578c2dda 100644
  
  
  @contextmanager
-@@ -92,7 +92,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+@@ -70,7 +70,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
  def run_unpaper(
      input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
  ) -> None:

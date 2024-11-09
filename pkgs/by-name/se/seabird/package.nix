@@ -1,5 +1,5 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , copyDesktopItems
 , fetchFromGitHub
 , pkg-config
@@ -12,28 +12,28 @@
 , vte-gtk4
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "seabird";
-  version = "0.2.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
     rev = "v${version}";
-    hash = "sha256-wrZLWDTgcUS8snCqc5rInqitAkrsStL8zmc8vjl4ApQ=";
+    hash = "sha256-y+QIBqU3kAxedhWLnu07m9HQOCgHfOvVscIxxWtUcZo=";
   };
 
-  vendorHash = "sha256-z9l6g5NkAErRQo8oiqwKG9ssm8K2S+eSZBD0w4kO3kc=";
+  vendorHash = "sha256-4o9z4XjtW7kNHAb8L0kuq9rgQzTwvAAXcl6+RIGjmqI=";
 
   nativeBuildInputs = [
     copyDesktopItems
+    gobject-introspection
     libxml2
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     gtksourceview5
     libadwaita
@@ -41,6 +41,8 @@ buildGo122Module rec {
   ];
 
   ldflags = [ "-s" "-w" ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'

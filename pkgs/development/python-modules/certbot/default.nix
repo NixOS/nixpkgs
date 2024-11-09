@@ -1,49 +1,53 @@
-{ lib
-, buildPythonPackage
-, python
-, runCommand
-, fetchFromGitHub
-, configargparse
-, acme
-, configobj
-, cryptography
-, distro
-, josepy
-, parsedatetime
-, pyrfc3339
-, pyopenssl
-, pytz
-, requests
-, six
-, zope-component
-, zope-interface
-, setuptools
-, dialog
-, gnureadline
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  python,
+  runCommand,
+  fetchFromGitHub,
+  fetchpatch,
+  configargparse,
+  acme,
+  configobj,
+  cryptography,
+  distro,
+  josepy,
+  parsedatetime,
+  pyrfc3339,
+  pytz,
+  setuptools,
+  dialog,
+  gnureadline,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.9.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYB9Y0wniRgzNk5XatkjKayIPj7ienXsqOboKPwzIfk=";
+    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
-
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch {
+      name = "CSR_support_in_pyOpenSSL_is_deprecated.patch";
+      url = "https://github.com/certbot/certbot/commit/f005045d87b25f1922774685646e57765aa202ad.patch";
+      includes = [ "pytest.ini" ];
+      hash = "sha256-YcQbZb7DLU+AXxNyqJRYZIC18DuT6X8kGbfdYtUrHiA=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     configargparse
     acme
     configobj
@@ -56,7 +60,10 @@ buildPythonPackage rec {
     setuptools # for pkg_resources
   ];
 
-  buildInputs = [ dialog gnureadline ];
+  buildInputs = [
+    dialog
+    gnureadline
+  ];
 
   nativeCheckInputs = [
     python-dateutil
@@ -66,6 +73,8 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
@@ -73,13 +82,12 @@ buildPythonPackage rec {
   # certbot.withPlugins has a similar calling convention as python*.withPackages
   # it gets invoked with a lambda, and invokes that lambda with the python package set matching certbot's:
   # certbot.withPlugins (cp: [ cp.certbot-dns-foo ])
-  passthru.withPlugins = f:
+  passthru.withPlugins =
+    f:
     let
       pythonEnv = python.withPackages f;
-
     in
-    runCommand "certbot-with-plugins"
-      { } ''
+    runCommand "certbot-with-plugins" { } ''
       mkdir -p $out/bin
       cd $out/bin
       ln -s ${pythonEnv}/bin/certbot

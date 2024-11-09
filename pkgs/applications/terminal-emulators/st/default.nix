@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "st";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://dl.suckless.org/st/st-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FvQ7lDOt6dcNYIXDH5/Znyg16q3jEiECDyIUMDXfwNI=";
+    hash = "sha256-ayFdT0crIdYjLzDyIRF6d34kvP7miVXd77dCZGf5SUs=";
   };
 
   outputs = [ "out" "terminfo" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     (writeText "config.def.h" conf);
 
   postPatch = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 

@@ -8,12 +8,12 @@ with builtins;
 
 stdenv.mkDerivation rec {
   pname = "ttyd";
-  version = "1.7.5";
+  version = "1.7.7";
   src = fetchFromGitHub {
     owner = "tsl0922";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ci6PLrFQa/aX48kjAqQfCtOOhS06ikfEtYoCgmGhGdU=";
+    sha256 = "sha256-7e08oBKU7BMZ8328qCfNynCSe7LVZ88+iQZRRKl2YkY=";
   };
 
   nativeBuildInputs = [ pkg-config cmake xxd ];

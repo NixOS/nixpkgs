@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alienarena";
-  version = "7.71.6";
+  version = "7.71.7";
 
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
     rev = version;
-    hash = "sha256-Dml0VY5VQiWLq8LjItBSzNwJB9L4biJ/nJWmEGtG2ZY=";
+    hash = "sha256-ri0p/0onI5DU7kDxwdFxRyT1LQLVe89VNEYPXPgilOs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
-    description = "A free, stand-alone first-person shooter computer game";
+    description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
       about rich, colorful, arcade-like atmospheres? How about retro

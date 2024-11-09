@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osi";
-  version = "0.108.9";
+  version = "0.108.11";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Osi";
     rev = "releases/${version}";
-    hash = "sha256-ueIa9CL4K5ygKpkMRvfuWR0emEG6omg65ZKCsConWsw=";
+    hash = "sha256-3aTO7JGEOP/RCOZ1X9b68rrtv6T78euf1TYGTjyXSRE=";
   };
 
   buildInputs =
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit withGurobi withCplex; };
 
   meta = with lib; {
-    description = "An abstract base class to a generic linear programming (LP) solver";
+    description = "Abstract base class to a generic linear programming (LP) solver";
     homepage = "https://github.com/coin-or/Osi";
     license = licenses.epl20;
     platforms = platforms.unix;

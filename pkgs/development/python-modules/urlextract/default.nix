@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, filelock
-, idna
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, uritools
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  filelock,
+  idna,
+  platformdirs,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  uritools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-cFCOArqd83LiXPBkLbNnzs4nPocSzQzngXj8XdfqANs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     filelock
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     "test_dns_cache_reuse"
   ];
 
-  pythonImportsCheck = [
-    "urlextract"
-  ];
+  pythonImportsCheck = [ "urlextract" ];
 
   meta = with lib; {
     description = "Collects and extracts URLs from given text";

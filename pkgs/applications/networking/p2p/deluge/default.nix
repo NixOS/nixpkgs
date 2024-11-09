@@ -7,7 +7,8 @@
 , glib
 , gobject-introspection
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
+, nixosTests
 }:
 
 let
@@ -54,7 +55,7 @@ let
         glib
       ] ++ optionals withGUI [
         gobject-introspection
-        wrapGAppsHook
+        wrapGAppsHook3
       ];
 
       nativeCheckInputs = with pypkgs; [
@@ -86,6 +87,8 @@ let
           substituteInPlace $f --replace /usr/bin $out/bin
         done
       '';
+
+      passthru.tests = { inherit (nixosTests) deluge; };
 
       meta = with lib; {
         description = "Torrent client";

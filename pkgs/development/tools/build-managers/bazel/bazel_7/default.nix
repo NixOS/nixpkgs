@@ -43,7 +43,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
-, version ? "7.0.2",
+, version ? "7.1.2"
 }:
 
 let
@@ -51,7 +51,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-3qK5BXXUPvPkHEAvZMJIGETsvwtA+FSLdaIEpNUE4DU=";
+    hash = "sha256-nPbtIxnIFpGdlwFe720MWULNGu1I4DxzuggV2VPtYas=";
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
     # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
-    # sandbox. Oddly, bazel_6 does not need that patch :-/.
+    # sandbox.
     #
     # If you want to investigate the sandbox profile path,
     # IORegisterForSystemPower can be allowed with
@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
     which
     zip
     python3.pkgs.absl-py # Needed to build fish completion
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     cctools
     libcxx
     Foundation
@@ -561,7 +561,7 @@ stdenv.mkDerivation rec {
     # stored non-contiguously in the binary due to gcc optimisations, which leads
     # Nix to miss the hash when scanning for dependencies
     echo "${bazelRC}" >> $out/nix-support/depends
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';
 

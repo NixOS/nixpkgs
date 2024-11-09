@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
+{ lib, stdenv, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
 
 stdenv.mkDerivation {
   pname = "libagar-test";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl bsdbuild libagar libjpeg libpng openssl ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Tests for libagar";
     mainProgram = "agartest";
     homepage = "http://libagar.org/index.html";

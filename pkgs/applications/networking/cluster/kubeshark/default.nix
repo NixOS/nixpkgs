@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubeshark";
-  version = "52.2.1";
+  version = "52.3.82";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = "v${version}";
-    hash = "sha256-MmKkM4nc9FkZkQIURPz63ryl0yhvxBwOvxkjrsaa67U=";
+    hash = "sha256-PjQX+OAE2UujGc+XHn2izrHgjvGbSK84IU9z5aBM+VM=";
   };
 
-  vendorHash = "sha256-SmvO9DYOXxnmN2dmHPPOguVwEbWSH/xNLBB+idpzopo=";
+  vendorHash = "sha256-fjkuDX6SC23An0zZW0ocoFJ/K6JKsyVUQdxzfHCUFJs=";
 
   ldflags = let t = "github.com/kubeshark/kubeshark"; in [
    "-s" "-w"
@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
   doCheck = true;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubeshark \
       --bash <($out/bin/kubeshark completion bash) \
       --fish <($out/bin/kubeshark completion fish) \
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/kubeshark/kubeshark/releases/tag/${version}";
-    description = "The API Traffic Viewer for Kubernetes";
+    description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
     homepage = "https://kubeshark.co/";
     license = licenses.asl20;

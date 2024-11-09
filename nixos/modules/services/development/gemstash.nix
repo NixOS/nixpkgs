@@ -24,19 +24,19 @@ let
 in
 {
   options.services.gemstash = {
-    enable = mkEnableOption (lib.mdDoc "gemstash service");
+    enable = mkEnableOption "gemstash, a cache for rubygems.org and a private gem server";
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open the firewall for the port in {option}`services.gemstash.bind`.
       '';
     };
 
     settings = mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Configuration for Gemstash. The details can be found at in
         [gemstash documentation](https://github.com/rubygems/gemstash/blob/master/man/gemstash-configuration.5.md).
         Each key set here is automatically prefixed with ":" to match the gemstash expectations.
@@ -47,22 +47,22 @@ in
           base_path = mkOption {
             type = types.path;
             default = "/var/lib/gemstash";
-            description = lib.mdDoc "Path to store the gem files and the sqlite database. If left unchanged, the directory will be created.";
+            description = "Path to store the gem files and the sqlite database. If left unchanged, the directory will be created.";
           };
           bind = mkOption {
             type = types.str;
             default = "tcp://0.0.0.0:9292";
-            description = lib.mdDoc "Host and port combination for the server to listen on.";
+            description = "Host and port combination for the server to listen on.";
           };
           db_adapter = mkOption {
             type = types.nullOr (types.enum [ "sqlite3" "postgres" "mysql" "mysql2" ]);
             default = null;
-            description = lib.mdDoc "Which database type to use. For choices other than sqlite3, the dbUrl has to be specified as well.";
+            description = "Which database type to use. For choices other than sqlite3, the dbUrl has to be specified as well.";
           };
           db_url = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = lib.mdDoc "The database to connect to when using postgres, mysql, or mysql2.";
+            description = "The database to connect to when using postgres, mysql, or mysql2.";
           };
         };
       };

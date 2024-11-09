@@ -12,7 +12,7 @@ in
     {
       environment.systemPackages = [
         pkgs.curl
-        (pkgs.wrapMpv pkgs.mpv-unwrapped {
+        (pkgs.mpv.override {
           scripts = [ pkgs.mpvScripts.simple-mpv-webui ];
         })
       ];

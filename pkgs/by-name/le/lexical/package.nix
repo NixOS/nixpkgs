@@ -2,25 +2,27 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  writeScript,
   elixir,
+  nix-update-script,
+  testers,
+  lexical,
 }:
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.5.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HWqwJ7PAz80bm6YeDG84hLWPE11n06K98GOyeDQWZWU=";
+    hash = "sha256-YKp1IOBIt6StYpVZyTj3BMZM/+6Bp+galbFpuBKYeOM=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit pname version src;
 
-    hash = "sha256-G0mT+rvXZWLJIMfrhxq3TXt26wDImayu44wGEYJ+3CE=";
+    hash = "sha256-myxmQM46TELDu9wpr82qxqH4s/YR9t0gdAfGOm0Dw1k=";
   };
 
   installPhase = ''
@@ -37,11 +39,17 @@ beamPackages.mixRelease rec {
     makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" --set RELEASE_COOKIE lexical
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = lexical; };
+  };
+
+  meta = {
     description = "Lexical is a next-generation elixir language server";
     homepage = "https://github.com/lexical-lsp/lexical";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/lexical-lsp/lexical/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "lexical";
     platforms = beamPackages.erlang.meta.platforms;
   };

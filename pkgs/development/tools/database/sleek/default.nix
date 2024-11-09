@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock.lockFile = ./Cargo.lock;
 
   meta = with lib; {
-    description = "A CLI tool for formatting SQL";
+    description = "CLI tool for formatting SQL";
     homepage = "https://github.com/nrempel/sleek";
     license = licenses.mit;
     maintainers = with maintainers; [ xrelkd ];

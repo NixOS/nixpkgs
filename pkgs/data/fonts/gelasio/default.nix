@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "a font which is metric-compatible with Microsoft's Georgia";
+    description = "Font which is metric-compatible with Microsoft's Georgia";
     longDescription = ''
       Gelasio is an original typeface which is metrics compatible with Microsoft's
       Georgia in its Regular, Bold, Italic and Bold Italic weights. Interpolated

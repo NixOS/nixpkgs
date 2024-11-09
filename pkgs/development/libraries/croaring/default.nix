@@ -1,28 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "croaring";
-  version = "0.2.61";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "RoaringBitmap";
     repo = "CRoaring";
     rev = "v${version}";
-    sha256 = "14y8iwv6b6gg7hgs00yqg8rwx4vwbb1zs2s99lxa51zx9vp1alcn";
+    hash = "sha256-WaFyJ/6zstJ05e3vfrwhaZKQsjRAEvVTs688Hw0fr94=";
   };
 
-  patches = fetchpatch {
-    url = "https://github.com/RoaringBitmap/CRoaring/commit/8d8c60736f506b2b8f1c365148a8a541b26a55f2.patch";
-    sha256 = "1y2mbn4i8lj3lkn5s8zziyr9pl1fq9hndzz9c01dkv3s8sn7f55s";
-  };
+  # roaring.pc.in cannot handle absolute CMAKE_INSTALL_*DIRs, nor
+  # overridden CMAKE_INSTALL_FULL_*DIRs. With Nix, they are guaranteed
+  # to be absolute so the following patch suffices (see #144170).
+  patches = [ ./fix-pkg-config.patch ];
 
   nativeBuildInputs = [ cmake ];
 
+  doCheck = true;
+
+  preConfigure = ''
+    mkdir -p dependencies/.cache
+    ln -s ${fetchFromGitHub {
+      owner = "clibs";
+      repo = "cmocka";
+      rev = "f5e2cd7";
+      hash = "sha256-Oq0nFsZhl8IF7kQN/LgUq8VBy+P7gO98ep/siy5A7Js=";
+    }} dependencies/.cache/cmocka
+  '';
+
   meta = with lib; {
     description = "Compressed bitset library for C and C++";
-    homepage = "http://roaringbitmap.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    homepage = "https://roaringbitmap.org/";
+    license = with licenses; [ asl20 mit ];
+    maintainers = [ maintainers.orivej ];
     platforms = platforms.all;
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, ninja
-, oldest-supported-numpy
-, scikit-build
-, setuptools
-, numpy
-, iisignature
-, boost
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  ninja,
+  oldest-supported-numpy,
+  scikit-build,
+  setuptools,
+  numpy,
+  iisignature,
+  boost,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-BGZaJSrpNSwZMHBYFDmDVPZOtgam/EVyh5Y5FAB8e1o=";
   };
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
   dontUseCmakeConfigure = true;
 
@@ -35,14 +34,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  passthru.optional-dependencies = {
-    iisignature = [
-      iisignature
-    ];
+  optional-dependencies = {
+    iisignature = [ iisignature ];
   };
 
   # PyPI tarball has no tests

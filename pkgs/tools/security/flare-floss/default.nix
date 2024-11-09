@@ -1,11 +1,12 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "3.0.1";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -13,33 +14,37 @@ python3.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-bmOWOFqyvOvSrNTbwLqo0WMq4IAZxZ0YYaWCdCrpziU=";
+    hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "==" ">="
-
     substituteInPlace floss/main.py \
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [ "networkx" ];
+
+  build-system = with python3.pkgs; [
     setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    binary2strings
-    halo
-    networkx
-    pefile
-    pydantic_1
-    rich
-    tabulate
-    tqdm
-    viv-utils
-    vivisect
-  ] ++ viv-utils.optional-dependencies.flirt;
+  dependencies =
+    with python3.pkgs;
+    [
+      binary2strings
+      dncil
+      halo
+      networkx
+      pefile
+      pydantic
+      rich
+      tabulate
+      tqdm
+      viv-utils
+      vivisect
+    ]
+    ++ viv-utils.optional-dependencies.flirt;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-sugar

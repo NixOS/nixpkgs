@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-LlSbxIxvouzvlP6PB8J8fJaxWoRbxz4wTs7Gb5LbM4A=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  pythonImportsCheck = [
-    "pyarrow_hotfix"
-  ];
+  pythonImportsCheck = [ "pyarrow_hotfix" ];
 
   meta = with lib; {
     description = "Hotfix for the PyArrow security vulnerability CVE-2023-47248";

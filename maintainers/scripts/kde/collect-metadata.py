@@ -27,8 +27,13 @@ import utils
     ),
     default=pathlib.Path(__file__).parent.parent.parent.parent
 )
-def main(repo_metadata: pathlib.Path, nixpkgs: pathlib.Path):
-    metadata = utils.KDERepoMetadata.from_repo_metadata_checkout(repo_metadata)
+@click.option(
+    "--unstable",
+    default=False,
+    is_flag=True
+)
+def main(repo_metadata: pathlib.Path, nixpkgs: pathlib.Path, unstable: bool):
+    metadata = utils.KDERepoMetadata.from_repo_metadata_checkout(repo_metadata, unstable)
     out_dir = nixpkgs / "pkgs/kde/generated"
     metadata.write_json(out_dir)
 

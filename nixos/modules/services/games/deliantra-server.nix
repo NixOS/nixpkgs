@@ -1,21 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.deliantra-server;
   serverPort = 13327;
 in {
   options.services.deliantra-server = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, the Deliantra game server will be started at boot.
       '';
     };
 
-    package = mkPackageOption pkgs "deliantra-server" {
+    package = lib.mkPackageOption pkgs "deliantra-server" {
       extraDescription = ''
         ::: {.note}
         This will also be used for map/arch data, if you don't change {option}`dataDir`
@@ -23,11 +20,11 @@ in {
       '';
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "${pkgs.deliantra-data}";
-      defaultText = literalExpression ''"''${pkgs.deliantra-data}"'';
-      description = lib.mdDoc ''
+      defaultText = lib.literalExpression ''"''${pkgs.deliantra-data}"'';
+      description = ''
         Where to store readonly data (maps, archetypes, sprites, etc).
         Note that if you plan to use the live map editor (rather than editing
         the maps offline and then nixos-rebuilding), THIS MUST BE WRITEABLE --
@@ -36,10 +33,10 @@ in {
       '';
     };
 
-    stateDir = mkOption {
-      type = types.str;
+    stateDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/deliantra";
-      description = lib.mdDoc ''
+      description = ''
         Where to store runtime data (save files, persistent items, etc).
 
         If left at the default, this will be automatically created on server
@@ -49,17 +46,17 @@ in {
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open ports in the firewall for the server.
       '';
     };
 
-    configFiles = mkOption {
-      type = types.attrsOf types.str;
-      description = lib.mdDoc ''
+    configFiles = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      description = ''
         Contents of the server configuration files. These will be appended to
         the example configurations the server comes with and overwrite any
         default settings defined therein.
@@ -67,7 +64,7 @@ in {
         The example here is not comprehensive. See the files in
         /etc/deliantra-server after enabling this module for full documentation.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           dm_file = '''
             admin:secret_password:localhost
@@ -92,7 +89,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.deliantra = {
       description     = "Deliantra server daemon user";
       home            = cfg.stateDir;
@@ -113,8 +110,8 @@ in {
         text =
           # Deliantra doesn't come with a motd file, but respects it if present
           # in /etc.
-          (optionalString (name != "motd")
-            (fileContents "${cfg.package}/etc/deliantra-server/${name}"))
+          (lib.optionalString (name != "motd")
+            (lib.fileContents "${cfg.package}/etc/deliantra-server/${name}"))
           + "\n${value}";
       }) ({
         motd = "";
@@ -134,7 +131,7 @@ in {
         DELIANTRA_CONFDIR="/etc/deliantra-server";
       };
 
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         {
           ExecStart = "${cfg.package}/bin/deliantra-server";
           Restart = "always";
@@ -142,7 +139,7 @@ in {
           Group = "deliantra";
           WorkingDirectory = cfg.stateDir;
         }
-        (mkIf (cfg.stateDir == "/var/lib/deliantra") {
+        (lib.mkIf (cfg.stateDir == "/var/lib/deliantra") {
           StateDirectory = "deliantra";
         })
       ];
@@ -163,7 +160,7 @@ in {
       '';
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ serverPort ];
     };
   };

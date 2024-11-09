@@ -5,7 +5,7 @@ let
 
   jamenv = ''
     unset AR
-  '' + (if stdenv.isDarwin then ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev SDL}/include/SDL"
     export GARGLKINI="$out/Applications/Gargoyle.app/Contents/Resources/garglk.ini"
   '' else ''
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     sha256 = "0w54avmbp4i4zps2rb4acmpa641s6wvwbrln4vbdhcz97fx48nzz";
   };
 
-  nativeBuildInputs = [ jam pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ jam pkg-config ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
-    ++ lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ smpeg libvorbis ];
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: build/linux.release/alan3/Location.o:(.bss+0x0): multiple definition of
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =
-  if stdenv.isDarwin then
+  if stdenv.hostPlatform.isDarwin then
   (substituteAll {
     inherit (stdenv) shell;
     isExecutable = true;
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

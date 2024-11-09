@@ -1,42 +1,51 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, autoPatchelfHook
-, dpkg
-, makeBinaryWrapper
-, makeWrapper
-, undmg
-, wrapGAppsHook
+  autoPatchelfHook,
+  dpkg,
+  makeBinaryWrapper,
+  makeWrapper,
+  undmg,
+  wrapGAppsHook3,
 
-, libappindicator
-, libnotify
-, libsecret
-, mpv-unwrapped
-, xdg-user-dirs
+  glib-networking,
+  gtk3,
+  libappindicator,
+  libnotify,
+  libsoup_3,
+  mpv-unwrapped,
+  xdg-user-dirs,
+  webkitgtk_4_1,
 }:
 
 let
   pname = "spotube";
-  version = "3.5.0";
+  version = "3.8.3";
 
   meta = {
-    description = "An open source, cross-platform Spotify client compatible across multiple platforms";
+    description = "Open source, cross-platform Spotify client compatible across multiple platforms";
     longDescription = ''
       Spotube is an open source, cross-platform Spotify client compatible across
       multiple platforms utilizing Spotify's data API and YouTube (or Piped.video or JioSaavn)
       as an audio source, eliminating the need for Spotify Premium
     '';
     downloadPage = "https://github.com/KRTirtho/spotube/releases";
-    homepage = "https://spotube.netlify.app/";
+    homepage = "https://spotube.krtirtho.dev/";
     license = lib.licenses.bsdOriginal;
     mainProgram = "spotube";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  fetchArtifact = { filename, hash }:
+  fetchArtifact =
+    { filename, hash }:
     fetchurl {
       url = "https://github.com/KRTirtho/spotube/releases/download/v${version}/${filename}";
       inherit hash;
@@ -47,12 +56,15 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-omXhiH/hVxFef03GqmpYf65SfdLjLyeMyuAWuvSpYiI=";
+      hash = "sha256-N1H/Vy5QQi8zAqiqAi5aTnUQcKC/EgL3GUhEfnCkaAQ=";
     };
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg makeBinaryWrapper ];
+    nativeBuildInputs = [
+      undmg
+      makeBinaryWrapper
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -68,21 +80,24 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-Rea4GvxdkUfZF8lCBzI9UrD9Iz9D5vq9oxYBn5bahZE=";
+      hash = "sha256-x75ie9FXunClMT+YZVFlvl2VSDl933QYMRpEYjJ8YhY=";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [
+      glib-networking
+      gtk3
       libappindicator
       libnotify
-      libsecret
+      libsoup_3
       mpv-unwrapped
+      webkitgtk_4_1
     ];
 
     dontWrapGApps = true;
@@ -107,4 +122,4 @@ let
     '';
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

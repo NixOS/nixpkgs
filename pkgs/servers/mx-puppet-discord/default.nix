@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgs, lib, nodejs_18, pkg-config
+{ stdenv, fetchFromGitLab, pkgs, lib, node-pre-gyp, nodejs_18, pkg-config
 , libjpeg, pixman, cairo, pango, which, postgresql }:
 
 let
@@ -22,7 +22,7 @@ let
 in myNodePackages.package.override {
   inherit version src;
 
-  nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp nodejs.pkgs.node-gyp-build pkg-config which ];
+  nativeBuildInputs = [ node-pre-gyp nodejs.pkgs.node-gyp-build pkg-config which ];
   buildInputs = [ libjpeg pixman cairo pango postgresql ];
 
   postRebuild = ''
@@ -41,13 +41,13 @@ in myNodePackages.package.override {
   '';
 
   meta = with lib; {
-    description = "A discord puppeting bridge for matrix";
+    description = "Discord puppeting bridge for matrix";
     license = licenses.asl20;
     homepage = "https://gitlab.com/mx-puppet/discord/mx-puppet-discord";
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "mx-puppet-discord";
   };
 }

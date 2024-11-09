@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-RSug3YSiqYLGs05Bee4NoaoCyPvUZ7IqlKWI1hmxbiA=";
   };
 
-  vendorHash = "sha256-XDm6LU9D/rVQHiko7EFpocv+IktGe6tQhJYRrOJxeSs=";
+  vendorHash = "sha256-QsGfINktk+rBj4b5h+NBVS6XV1SVz+9fDL1vtUqcKEU=";
 
   ldflags = [
     "-s"
@@ -42,7 +42,7 @@ buildGoModule rec {
   passthru.tests = { inherit(nixosTests) alps; };
 
   meta = with lib; {
-    description = "A simple and extensible webmail.";
+    description = "Simple and extensible webmail";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner madonius hmenke ];

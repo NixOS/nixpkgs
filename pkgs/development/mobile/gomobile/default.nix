@@ -26,7 +26,7 @@ buildGoModule {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodeWrapper ];
 
   # Prevent a non-deterministic temporary directory from polluting the resulting object files
   postPatch = ''
@@ -57,7 +57,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A tool for building and running mobile apps written in Go";
+    description = "Tool for building and running mobile apps written in Go";
     homepage = "https://pkg.go.dev/golang.org/x/mobile/cmd/gomobile";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakubgs ];

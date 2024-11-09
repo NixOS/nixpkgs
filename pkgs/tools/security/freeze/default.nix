@@ -22,7 +22,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/Freeze $out/bin/freeze
   '';
 

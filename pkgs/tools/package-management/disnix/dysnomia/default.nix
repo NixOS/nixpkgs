@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
      (if enableNginxWebApplication then "--with-nginx" else "--without-nginx")
      (if enableXinetdService then "--with-xinetd" else "--without-xinetd")
      (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
-     (if stdenv.isDarwin then "--with-launchd" else "--without-launchd")
+     (if stdenv.hostPlatform.isDarwin then "--with-launchd" else "--without-launchd")
      "--with-job-template=${jobTemplate}"
    ] ++ lib.optional enableLegacy "--enable-legacy";
 
   buildInputs = [ getopt netcat ]
-    ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.hostPlatform.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
     ++ lib.optional enableMySQLDatabase mariadb.out
     ++ lib.optional enablePostgreSQLDatabase postgresql

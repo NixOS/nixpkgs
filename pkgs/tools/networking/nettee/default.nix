@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://saf.bio.caltech.edu/nettee.html";
     description = ''Network "tee" program'';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ Profpatsch ];
     platforms = lib.platforms.linux;
     mainProgram = "nettee";

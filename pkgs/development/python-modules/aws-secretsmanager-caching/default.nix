@@ -1,25 +1,26 @@
-{ lib
-, botocore
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  botocore,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aws-secretsmanager-caching";
-  version = "1.1.2";
-  pyprject = true;
+  version = "1.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
     inherit version;
-    hash = "sha256-hhdo+I1yA/pLA+YFDFi8Ekrv27xQLpxiqXh1+4XqteA=";
+    hash = "sha256-9tbsnUPg2+T21d6982tMtpHRWpZ7NYsldfXZGXSmwP8=";
   };
 
   patches = [
@@ -32,18 +33,14 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'," ""
   '';
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     botocore
-    setuptools  # Needs pkg_resources at runtime.
+    setuptools # Needs pkg_resources at runtime.
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Integration tests require networking.
@@ -65,9 +62,7 @@ buildPythonPackage rec {
     "test_valid_json"
   ];
 
-  pythonImportsCheck = [
-    "aws_secretsmanager_caching"
-  ];
+  pythonImportsCheck = [ "aws_secretsmanager_caching" ];
 
   meta = with lib; {
     description = "Client-side AWS secrets manager caching library";

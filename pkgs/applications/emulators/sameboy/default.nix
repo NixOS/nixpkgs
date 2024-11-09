@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, rgbds, SDL2, wrapGAppsHook, glib }:
+{ lib, stdenv, fetchFromGitHub, gtk3, rgbds, SDL2, wrapGAppsHook3, glib }:
 
 stdenv.mkDerivation rec {
   pname = "sameboy";
-  version = "0.16.2";
+  version = "0.16.7";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     rev = "v${version}";
-    sha256 = "sha256-KEbwug/cwGLS/uhY1rKasLJWaKtiYYzdZvbAU2orfbI=";
+    sha256 = "sha256-KUvhmORI3hIJFMCW8U2BZYnIwzg7h+GZZA4+U0IPS9E=";
   };
 
   enableParallelBuilding = true;
-  # glib and wrapGAppsHook are needed to make the Open ROM menu work.
-  nativeBuildInputs = [ rgbds glib wrapGAppsHook ];
+  # glib and wrapGAppsHook3 are needed to make the Open ROM menu work.
+  nativeBuildInputs = [ rgbds glib wrapGAppsHook3 ];
   buildInputs = [ SDL2 ];
 
   makeFlags = [

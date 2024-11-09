@@ -7,14 +7,14 @@ let
   toml = pkgs.formats.toml { };
 in
 {
-  meta.maintainers = with maintainers; [ ckie ];
+  meta.maintainers = [ ];
 
   options.services.rkvm = {
     enable = mkOption {
       default = cfg.server.enable || cfg.client.enable;
       defaultText = literalExpression "config.${opt.server.enable} || config.${opt.client.enable}";
       type = types.bool;
-      description = mdDoc ''
+      description = ''
         Whether to enable rkvm, a Virtual KVM switch for Linux machines.
       '';
     };
@@ -32,7 +32,7 @@ in
               listen = mkOption {
                 type = types.str;
                 default = "0.0.0.0:5258";
-                description = mdDoc ''
+                description = ''
                   An internet socket address to listen on, either IPv4 or IPv6.
                 '';
               };
@@ -40,7 +40,7 @@ in
               switch-keys = mkOption {
                 type = types.listOf types.str;
                 default = [ "left-alt" "left-ctrl" ];
-                description = mdDoc ''
+                description = ''
                   A key list specifying a host switch combination.
 
                   _A list of key names is available in <https://github.com/htrefil/rkvm/blob/master/switch-keys.md>._
@@ -50,7 +50,7 @@ in
               certificate = mkOption {
                 type = types.path;
                 default = "/etc/rkvm/certificate.pem";
-                description = mdDoc ''
+                description = ''
                   TLS certificate path.
 
                   ::: {.note}
@@ -62,7 +62,7 @@ in
               key = mkOption {
                 type = types.path;
                 default = "/etc/rkvm/key.pem";
-                description = mdDoc ''
+                description = ''
                   TLS key path.
 
                   ::: {.note}
@@ -73,7 +73,7 @@ in
 
               password = mkOption {
                 type = types.str;
-                description = mdDoc ''
+                description = ''
                   Shared secret token to authenticate the client.
                   Make sure this matches your client's config.
                 '';
@@ -82,7 +82,7 @@ in
           };
 
         default = { };
-        description = mdDoc "Structured server daemon configuration";
+        description = "Structured server daemon configuration";
       };
     };
 
@@ -97,7 +97,7 @@ in
               server = mkOption {
                 type = types.str;
                 example = "192.168.0.123:5258";
-                description = mdDoc ''
+                description = ''
                   An RKVM server's internet socket address, either IPv4 or IPv6.
                 '';
               };
@@ -105,7 +105,7 @@ in
               certificate = mkOption {
                 type = types.path;
                 default = "/etc/rkvm/certificate.pem";
-                description = mdDoc ''
+                description = ''
                   TLS ceritficate path.
 
                   ::: {.note}
@@ -116,7 +116,7 @@ in
 
               password = mkOption {
                 type = types.str;
-                description = mdDoc ''
+                description = ''
                   Shared secret token to authenticate the client.
                   Make sure this matches your server's config.
                 '';
@@ -125,7 +125,7 @@ in
           };
 
         default = {};
-        description = mdDoc "Structured client daemon configuration";
+        description = "Structured client daemon configuration";
       };
     };
 

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl, iconv, darwin}:
+{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
 
 stdenv.mkDerivation rec {
   pname = "cdrkit";
@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib bzip2 perl ] ++
-    lib.optionals stdenv.isLinux [ libcap ] ++
-    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon IOKit iconv ]);
+    lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   hardeningDisable = [ "format" ];
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isMusl [
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
   patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libusal/scsi-mac-iokit.c \
       --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
     substituteInPlace genisoimage/sha256.c \
@@ -43,11 +42,9 @@ stdenv.mkDerivation rec {
         --replace "#define HAVE_RCMD 1" "#undef HAVE_RCMD"
   '';
 
-  postConfigure = lib.optionalString stdenv.isDarwin ''
-    for f in */CMakeFiles/*.dir/link.txt ; do
-      substituteInPlace "$f" \
-        --replace "-lrt" "-framework IOKit"
-    done
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace  */CMakeFiles/*.dir/link.txt \
+      --replace-warn "-lrt" "-framework IOKit -framework CoreFoundation"
   '';
 
   postInstall = ''
@@ -75,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://cdrkit.org/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
 }

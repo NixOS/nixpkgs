@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , python3
 , librsync
+, glib
 , ncftp
 , gnupg
 , gnutar
@@ -10,6 +11,7 @@
 , util-linux
 , rsync
 , makeWrapper
+, wrapGAppsNoGuiHook
 , gettext
 , getconf
 , testers
@@ -18,13 +20,13 @@
 
 let self = python3.pkgs.buildPythonApplication rec {
   pname = "duplicity";
-  version = "2.2.3";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "duplicity";
     repo = "duplicity";
     rev = "rel.${version}";
-    hash = "sha256-4IwKqXlG7jh1siuPT5pVgiYB+KlmCzF6+OMPT3I3yTQ=";
+    hash = "sha256-qY6J0t6mgrbEojlKxpVFfsVhffjrAxc8R9Z/Klrp7wE=";
   };
 
   patches = [
@@ -37,7 +39,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     # don't try to use gtar on darwin/bsd
     substituteInPlace testing/functional/test_restart.py \
       --replace-fail 'tarcmd = "gtar"' 'tarcmd = "tar"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # tests try to access these files in the sandbox, but can't deal with EPERM
     substituteInPlace testing/unit/test_globmatch.py \
       --replace-fail /var/log /test/log
@@ -48,7 +50,7 @@ let self = python3.pkgs.buildPythonApplication rec {
       --replace-fail '"/tmp/' 'os.environ.get("TMPDIR")+"/'
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses /tmp/
     "testing/unit/test_cli_main.py::CommandlineTest::test_intermixed_args"
   ];
@@ -57,11 +59,14 @@ let self = python3.pkgs.buildPythonApplication rec {
     makeWrapper
     gettext
     python3.pkgs.wrapPython
+    wrapGAppsNoGuiHook
     python3.pkgs.setuptools-scm
   ];
 
   buildInputs = [
     librsync
+    # For Gio typelib
+    glib
   ];
 
   pythonPath = with python3.pkgs; [
@@ -79,36 +84,46 @@ let self = python3.pkgs.buildPythonApplication rec {
     pycrypto
     pydrive2
     future
-  ];
+  ] ++ paramiko.optional-dependencies.invoke;
 
   nativeCheckInputs = [
     gnupg # Add 'gpg' to PATH.
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux # Add 'setsid' to PATH.
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     getconf
   ] ++ (with python3.pkgs; [
     lockfile
     mock
     pexpect
-    pytest
-    pytest-runner
+    pytestCheckHook
     fasteners
   ]);
 
-  postInstall = let
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = let
     binPath = lib.makeBinPath ([
       gnupg
       ncftp
       rsync
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       getconf
     ]); in ''
-    wrapProgram $out/bin/duplicity \
+    makeWrapperArgsBak=("''${makeWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PATH : "${binPath}"
+    )
+  '';
+
+  postFixup = ''
+    # Restore previous value for tests wrapping in preInstallCheck
+    makeWrapperArgs=("''${makeWrapperArgsBak[@]}")
   '';
 
   preCheck = ''
@@ -131,9 +146,11 @@ let self = python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
+    changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
+    mainProgram = "duplicity";
     maintainers = with maintainers; [ corngood ];
   };
 };

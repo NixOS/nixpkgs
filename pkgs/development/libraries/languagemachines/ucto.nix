@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A rule-based tokenizer for natural language";
+    description = "Rule-based tokenizer for natural language";
     mainProgram = "ucto";
     homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;

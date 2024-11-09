@@ -6,7 +6,7 @@ let
   libPath = lib.makeLibraryPath
     [ stdenv.cc.libc stdenv.cc.cc gtk2 gdk-pixbuf atk pango glib cairo
       freetype fontconfig libxml2 gnome2.gtksourceview
-    ] + ":${stdenv.cc.cc.lib}/lib64:$out/libexec";
+    ] + ":${lib.getLib stdenv.cc.cc}/lib64:$out/libexec";
 
   patchExe = x: ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "verifast";
-  version = "21.04";
+  version = "24.08.30";
 
   src = fetchurl {
     url    = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
-    sha256 = "sha256-PlRsf4wFXoM+E+60SbeKzs/RZK0HNVirX47AnI6NeYM=";
+    sha256 = "sha256-hIS5e+zVlxSOqr1/ZDy0PangyWjB9uLCvN8Qr688msg=";
   };
 
   dontConfigure = true;

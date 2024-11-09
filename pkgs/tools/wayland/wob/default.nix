@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ cmocka inih wayland wayland-protocols ]
-    ++ lib.optional stdenv.isLinux libseccomp;
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
-  mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
+  mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A lightweight overlay bar for Wayland";
+    description = "Lightweight overlay bar for Wayland";
     longDescription = ''
       A lightweight overlay volume/backlight/progress/anything bar for Wayland,
       inspired by xob.

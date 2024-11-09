@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.22.1";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    hash = "sha256-rR84muba8nMrPZAhH+8xXOOxBvKIsU8Xju8tG7BjqBo=";
+    hash = "sha256-+qC5fFBuQchz1dMP5AezWkkD2anZshN1wIteKce0Ecw=";
   };
 
   vendorHash = null;
@@ -29,7 +29,7 @@ buildGoModule rec {
   #   even with __darwinAllowLocalNetworking allowed.
   # - CGO_FLAGS warnings break tests' expected stdout/stderr outputs.
   # - DAP test binaries exit prematurely.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0

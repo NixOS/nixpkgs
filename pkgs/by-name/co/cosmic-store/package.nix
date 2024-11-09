@@ -1,29 +1,32 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, appstream, makeBinaryWrapper
 , cosmic-icons, glib, just, pkg-config, libglvnd, libxkbcommon, libinput
-, fontconfig, flatpak, freetype, openssl, mesa, wayland, xorg, vulkan-loader
+, fontconfig, flatpak, freetype, openssl, wayland, xorg, vulkan-loader
 , vulkan-validation-layers, }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "unstable-2024-03-13";
+  version = "1.0.0-alpha.2";
+
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "df014ea82ae0465470f5d237bfe71d2c085d29a0";
-    hash = "sha256-1Sp6/qVONK+O5FLEcsu45eEBNaVbJLptt+ByXOZYwpo=";
+    repo = "cosmic-store";
+    rev = "epoch-${version}";
+    hash = "sha256-mq94ZMVOdXAPR52ID5x8nppJ9mNoTOPBfn7Eouj3T1U=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
-      "appstream-0.2.2" = "sha256-Qb/zzZJ2sM97nGVtp8amecTlwuaDrx1cacDcZOwhUm8=";
+      "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
+      "appstream-0.2.2" = "sha256-OWeNXxvqU8s0ksdY9v5bZeNfDYgMBVd1DhEAjjZxEmo=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-J6c2pRCpyfCFMmzwJ4RdEghSaFDshDtZL6DteAiaq1o=";
-      "cosmic-text-0.11.2" = "sha256-6mvGyMCFC/tSIiDgDX+zuDUi15S9dXI6Dc6pj36hIJM=";
+      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
+      "cosmic-config-0.1.0" = "sha256-gXrMEoAN+7nYAEcs4w6wROhQTjMCxkGn+muJutktLyk=";
+      "cosmic-text-0.12.1" = "sha256-u2Tw+XhpIKeFg8Wgru/sjGw6GUZ2m50ZDmRBJ1IM66w=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
       "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
@@ -74,7 +77,7 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-store" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
@@ -84,7 +87,6 @@ rustPlatform.buildRustPackage rec {
           xorg.libXrandr
           libxkbcommon
           vulkan-loader
-          mesa.drivers
         ]
       }
   '';
@@ -93,7 +95,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-store";
     description = "App Store for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
   };
 }

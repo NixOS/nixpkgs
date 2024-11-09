@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.23.08";
 
   src = fetchurl {
-    url = "https://ftp.debian.org/debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
     sha256 = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
   };
 
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Web server log file analysis program";
     homepage = "https://webalizer.net/";
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

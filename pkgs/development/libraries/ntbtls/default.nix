@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   buildInputs = [ libgcrypt libgpg-error libksba zlib ]
-    ++ lib.optional stdenv.isDarwin gettext;
+    ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev
   '';
 
   meta = with lib; {
-    description = "A tiny TLS 1.2 only implementation";
+    description = "Tiny TLS 1.2 only implementation";
     mainProgram = "ntbtls-config";
     homepage = "https://www.gnupg.org/software/ntbtls/";
     license = licenses.gpl3Plus;

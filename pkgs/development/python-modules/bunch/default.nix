@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,14 +28,12 @@ buildPythonPackage rec {
   # No real tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bunch"
-  ];
+  pythonImportsCheck = [ "bunch" ];
 
   meta = with lib; {
     description = "Python dictionary that provides attribute-style access";
     homepage = "https://github.com/dsc/bunch";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

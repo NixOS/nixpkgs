@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lzo
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lzo,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -22,23 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-iXAvOCzHPvNERMkE5y4QTHi4ZieW1wrYWYScs7zyb2c=";
   };
 
-
   nativeBuildInputs = [
     setuptools
     wheel
   ];
 
-  buildInputs = [
-    lzo
-  ];
+  buildInputs = [ lzo ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "lzo"
-  ];
+  pythonImportsCheck = [ "lzo" ];
 
   meta = with lib; {
     description = "Python bindings for the LZO data compression library";

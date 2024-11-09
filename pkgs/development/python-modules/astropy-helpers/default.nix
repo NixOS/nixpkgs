@@ -1,7 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -9,7 +11,8 @@ buildPythonPackage rec {
   version = "4.0.1";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  # ModuleNotFoundError: No module named 'imp'
+  disabled = !isPy3k || pythonAtLeast "3.12";
 
   doCheck = false; # tests requires sphinx-astropy
 

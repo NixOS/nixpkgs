@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchPypi
-, invocations
-, invoke
-, pytest
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  invoke,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,33 +21,24 @@ buildPythonPackage rec {
     hash = "sha256-lW6gKOww27+2gN2Oe0p/uPgKI5WV6Ius4Bi/LA1xgkg=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    decorator
-  ];
+  propagatedBuildInputs = [ decorator ];
 
   nativeCheckInputs = [
-    invocations
     invoke
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "pytest_relaxed"
-  ];
+  pythonImportsCheck = [ "pytest_relaxed" ];
 
   meta = with lib; {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
     changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

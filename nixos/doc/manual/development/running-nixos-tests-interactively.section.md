@@ -44,7 +44,7 @@ As an alternative, you can proxy the guest shell to a local TCP server by first
 starting a TCP server in a terminal using the command:
 
 ```ShellSession
-$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr`
+$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr
 ```
 
 In the terminal where the test driver is running, connect to this server by

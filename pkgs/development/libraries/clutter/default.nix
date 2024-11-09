@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     atk
     json-glib
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libX11
     libGL
     libGLU
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-introspection" # needed by muffin AFAIK
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-x"
     "--enable-x11-backend=no"
     "--enable-quartz-backend=yes"
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     homepage = "http://www.clutter-project.org/";
 
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

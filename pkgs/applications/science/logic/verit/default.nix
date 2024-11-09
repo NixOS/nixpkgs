@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An open, trustable and efficient SMT-solver";
+    description = "Open, trustable and efficient SMT-solver";
     homepage = "https://verit.loria.fr/";
     license = licenses.bsd3;
     platforms = platforms.unix;

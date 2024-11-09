@@ -1,8 +1,8 @@
 { fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tdlib";
-  version = "1.8.24";
+  version = "1.8.38";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "c5c55092dd61b9eb15d6bbfd0f02c04c593450e7";
-    hash = "sha256-jqS3PGg42W15QBgpL1PNU3xJdk67g8u0THN/4hW5i88=";
+    rev = "d321984b75fccdb76239529e8aadcf7f80b0e35a";
+    hash = "sha256-5QNcpwW0viWUtsW7b5oSq6X0tRyup6V5CT/BNhdv6lw=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                  function(generate_pkgconfig' \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     sed -i "/vptr/d" test/CMakeLists.txt
   '';
 

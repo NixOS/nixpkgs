@@ -32,7 +32,7 @@ let
   # default value of withWindowSystem
   withWindowSystem' =
          if withWindowSystem != null then withWindowSystem
-    else if stdenv.isLinux then "all"
+    else if stdenv.hostPlatform.isLinux then "all"
     else "x11";
 
   windowSystems = {
@@ -118,11 +118,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A command line image viewer for tiling window managers";
+    description = "Command line image viewer for tiling window managers";
     homepage = "https://sr.ht/~exec64/imv/";
     license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
+    mainProgram = "imv";
   };
 }

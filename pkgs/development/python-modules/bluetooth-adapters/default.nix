@@ -1,24 +1,27 @@
-{ lib
-, aiohttp
-, aiooui
-, async-timeout
-, bleak
-, buildPythonPackage
-, dbus-fast
-, fetchFromGitHub
-, mac-vendor-lookup
-, myst-parser
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sphinx-rtd-theme
-, sphinxHook
-, usb-devices
+{
+  lib,
+  aiohttp,
+  aiooui,
+  async-timeout,
+  bleak,
+  buildPythonPackage,
+  dbus-fast,
+  fetchFromGitHub,
+  mac-vendor-lookup,
+  myst-parser,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx-rtd-theme,
+  sphinxHook,
+  uart-devices,
+  usb-devices,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.18.0";
+  version = "0.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +30,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KPmCOPCK7muT0qptJMKQwWU/6tvepkdHwlNYcrvpRLg=";
+    hash = "sha256-dQjoaBK+WMHQss/7nQRRCE8Jv4S0iq6awa/t3SMGUiE=";
   };
 
   postPatch = ''
@@ -40,30 +43,30 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     myst-parser
     poetry-core
     sphinx-rtd-theme
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiooui
     async-timeout
     bleak
     dbus-fast
     mac-vendor-lookup
+    uart-devices
     usb-devices
   ];
 
-  pythonImportsCheck = [
-    "bluetooth_adapters"
-  ];
-
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "bluetooth_adapters" ];
 
   meta = with lib; {
     description = "Tools to enumerate and find Bluetooth Adapters";

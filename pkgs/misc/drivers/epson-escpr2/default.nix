@@ -1,16 +1,23 @@
-{ lib, stdenv, fetchurl, cups, rpm, cpio }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  cups,
+  rpm,
+  cpio,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.9";
+  version = "1.2.20";
 
   src = fetchurl {
-    # To find new versions, visit
-    # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
-    # some printer like for instance "WF-7210" to get to the most recent
-    # version.
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/15/33/94/3bf10a30a1f8b5b91ddbafa4571c073878ec476b/epson-inkjet-printer-escpr2-1.2.9-1.src.rpm";
-    sha256 = "sha256-2smNBTMSqoKYsGUoBtIHS3Fwk9ODbiXaP7Dtq69FG9U=";
+    # To find the most recent version go to
+    # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
+    # and retreive the download link for source package for x86 CPU
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/35/74/81cbf34af8c0fa4c59b4c1f4600173dfda822ee4/epson-inkjet-printer-escpr2-1.2.20-1.src.rpm";
+    sha256 = "sha256-HBKAcHVOV+xO6IpFS1EyYyn4Ri4e5btBp/e50f3RoTA=";
   };
 
   unpackPhase = ''
@@ -23,10 +30,17 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  patches = [ ./cups-filter-ppd-dirs.patch ];
-
   buildInputs = [ cups ];
-  nativeBuildInputs = [ rpm cpio ];
+  nativeBuildInputs = [
+    autoreconfHook
+    rpm
+    cpio
+  ];
+
+  configureFlags = [
+    "--with-cupsfilterdir=${builtins.placeholder "out"}/lib/cups/filter"
+    "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
+  ];
 
   meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
@@ -37,8 +51,12 @@ stdenv.mkDerivation rec {
 
       Refer to the description of epson-escpr for usage.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ma9e ma27 shawn8901 ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      ma9e
+      ma27
+      shawn8901
+    ];
     platforms = platforms.linux;
   };
 }

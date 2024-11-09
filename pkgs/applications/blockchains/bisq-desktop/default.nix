@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.14";
+  version = "1.9.17";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "0xbq94qbp59523xjp80bly38aisfwkfi0y9hmyhf8xlw084b82kz";
+    sha256 = "1wqzgxsm9p6lh0bmvw0byaxx1r5v64d024jf1pg9mykb1dnnx0wy";
   };
 
   nativeBuildInputs = [
@@ -115,11 +115,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A decentralized bitcoin exchange network";
+    description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
+    changelog = "https://github.com/bisq-network/bisq/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ juaningan emmanuelrosa ];
     platforms = [ "x86_64-linux" ];
+    # Requires OpenJFX 11 or 16, which are both EOL.
+    broken = true;
   };
 }

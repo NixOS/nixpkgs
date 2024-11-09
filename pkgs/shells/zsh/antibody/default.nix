@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "The fastest shell plugin manager";
+    description = "Fastest shell plugin manager";
     mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;
@@ -30,6 +30,6 @@ buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

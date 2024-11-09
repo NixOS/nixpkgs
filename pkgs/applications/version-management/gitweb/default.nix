@@ -22,6 +22,6 @@ in buildEnv {
        ++ [ "${git}/share/gitweb" ];
 
   meta = git.meta // {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

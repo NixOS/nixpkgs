@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchzip
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , glibc_multi
 , glibc
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     git
     pkg-config
   ] ++ lib.optionals withCuda [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   buildInputs = [ hwloc ] ++ (if withCuda then
@@ -95,11 +95,11 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString withCuda ''
-    addOpenGLRunpath $out/bin/FIRESTARTER_CUDA
+    addDriverRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;

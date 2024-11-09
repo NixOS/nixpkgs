@@ -1,22 +1,33 @@
 { lib
-, stdenvNoCC
-, fetchurl
-, makeWrapper
+, maven
+, fetchFromGitHub
 , jre
+, makeWrapper
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "2.7.0";
+maven.buildMavenPackage rec {
   pname = "apgdiff";
+  version = "2.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/fordfrog/apgdiff/raw/release_${finalAttrs.version}/releases/apgdiff-${finalAttrs.version}.jar";
-    sha256 = "sha256-6OempDmedl6LOwP/s5y0hOIxGDWHd7qM7/opW3UwQ+I=";
+  src = fetchFromGitHub {
+    sparseCheckout = [ "src" ];
+    owner = "fordfrog";
+    repo = "apgdiff";
+    rev = "refs/tags/release_${version}";
+    hash = "sha256-2m+9QNwQV2tJwOabTXE2xjRB5gDrSwyL6zL2op+wmkM=";
   };
+
+  # Fix wrong version string in --help
+  postPatch = ''
+    sed -i 's/VersionNumber=.*/VersionNumber=${version}/' \
+      src/main/resources/cz/startnet/utils/pgdiff/Resources.properties
+  '';
+
+  mvnHash = "sha256-zJQirS8sVqHKZsBukEOf7ox5IeiAVOP6wEHWb4CAyxc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = ''
-    install -Dm644 $src $out/lib/apgdiff.jar
+  installPhase = ''
+    install -Dm644 target/apgdiff-${version}.jar $out/lib/apgdiff.jar
 
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/apgdiff \
@@ -30,7 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://apgdiff.com";
     license = licenses.mit;
     inherit (jre.meta) platforms;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
     maintainers = [ maintainers.misterio77 ];
   };
-})
+}

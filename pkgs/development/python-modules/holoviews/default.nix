@@ -1,33 +1,45 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, fetchPypi
-, ipython
-, matplotlib
-, notebook
-, numpy
-, pandas
-, panel
-, param
-, pythonOlder
-, pyviz-comms
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  colorcet,
+  numpy,
+  pandas,
+  panel,
+  param,
+  pyviz-comms,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov,
+  flaky,
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.18.3";
-  format = "setuptools";
+  version = "1.19.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V44w6J1ydU+XqD6+CBmP7I6HzH5JslufMew5P5OcpQA=";
+    hash = "sha256-uehejAcnWkVsDvjQa8FX0Cs37/Zvs2AqoS9chvCEhlw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     colorcet
     numpy
     pandas
@@ -36,18 +48,32 @@ buildPythonPackage rec {
     pyviz-comms
   ];
 
-  # tests not fully included with pypi release
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "holoviews"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+    flaky
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # All the below fail due to some change in flaky API
+    "test_periodic_param_fn_non_blocking"
+    "test_callback_cleanup"
+    "test_poly_edit_callback"
+    "test_launch_server_with_complex_plot"
+    "test_launch_server_with_stream"
+    "test_launch_simple_server"
+    "test_server_dynamicmap_with_dims"
+    "test_server_dynamicmap_with_stream"
+    "test_server_dynamicmap_with_stream_dims"
+  ];
+
+  pythonImportsCheck = [ "holoviews" ];
+
+  meta = {
     description = "Python data analysis and visualization seamless and simple";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

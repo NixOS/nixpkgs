@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   preConfigure = "./autogen.sh";
 
   meta = with lib; {
-    description = "A GNU/Linux keylogger that works";
+    description = "GNU/Linux keylogger that works";
     license = licenses.gpl3;
     homepage = "https://github.com/kernc/logkeys";
     maintainers = with maintainers; [mikoim offline];

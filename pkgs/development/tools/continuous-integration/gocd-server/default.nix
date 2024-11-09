@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A continuous delivery server specializing in advanced workflow modeling and visualization";
+    description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
     license = licenses.asl20;
     platforms = platforms.all;

@@ -1,17 +1,34 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libogg";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/ogg/${pname}-${version}.tar.xz";
+    url = "http://downloads.xiph.org/releases/ogg/libogg-${finalAttrs.version}.tar.xz";
     sha256 = "01b7050bghdvbxvw0gzv588fn4a27zh42ljpwzm4vrf8dziipnf4";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    # Can also be built with the `./configure` script available in the release,
+    # however using cmake makes sure the resulting tree would include
+    # `OggConfig.cmake` and other cmake files useful when packages try to look it
+    # up with cmake.
+    cmake
+  ];
+
+  meta = {
     description = "Media container library to manipulate Ogg files";
     longDescription = ''
       Library to work with Ogg multimedia container format.
@@ -19,8 +36,8 @@ stdenv.mkDerivation rec {
       plethora of codecs. Open format free for anyone to use.
     '';
     homepage = "https://xiph.org/ogg/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.all;
   };
-}
+})

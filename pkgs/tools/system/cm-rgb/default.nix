@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , atk
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , click
 , hidapi
 , psutil
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
     # Populate GI_TYPELIB_PATH
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/gfduszynski/cm-rgb";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

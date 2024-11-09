@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, zlib, openssl, libuuid, pkg-config, bzip2 }:
+{ fetchurl, lib, stdenv, zlib, openssl, libuuid, pkg-config, bzip2 }:
 
 stdenv.mkDerivation rec {
   version = "20231119";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib openssl libuuid ]
-    ++ lib.optionals stdenv.isDarwin [ bzip2 ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
 
   # cannot run test program while cross compiling
   configureFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

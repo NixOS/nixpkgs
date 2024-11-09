@@ -20,7 +20,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool build chart by go mod graph output with zero dependencies";
+    description = "Tool build chart by go mod graph output with zero dependencies";
     homepage = "https://github.com/PaulXu-cn/go-mod-graph-chart";
     mainProgram = "gmchart";
     license = licenses.mit;

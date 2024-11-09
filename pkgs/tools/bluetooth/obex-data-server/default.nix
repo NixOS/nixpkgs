@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://wiki.muiline.com/obex-data-server";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

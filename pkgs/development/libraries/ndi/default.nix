@@ -1,12 +1,12 @@
-{ lib, stdenv, requireFile, avahi, obs-studio-plugins }:
+{ lib, stdenv, fetchurl, avahi, obs-studio-plugins }:
 
 let
   versionJSON = lib.importJSON ./version.json;
   ndiPlatform =
-    if stdenv.isAarch64 then "aarch64-rpi4-linux-gnueabi"
-    else if stdenv.isAarch32 then "arm-rpi2-linux-gnueabihf"
-    else if stdenv.isx86_64 then "x86_64-linux-gnu"
-    else if stdenv.isi686 then "i686-linux-gnu"
+    if stdenv.hostPlatform.isAarch64 then "aarch64-rpi4-linux-gnueabi"
+    else if stdenv.hostPlatform.isAarch32 then "arm-rpi2-linux-gnueabihf"
+    else if stdenv.hostPlatform.isx86_64 then "x86_64-linux-gnu"
+    else if stdenv.hostPlatform.isi686 then "i686-linux-gnu"
     else throw "unsupported platform for NDI SDK";
 in
 stdenv.mkDerivation rec {
@@ -15,20 +15,10 @@ stdenv.mkDerivation rec {
   majorVersion = builtins.head (builtins.splitVersion version);
   installerName = "Install_NDI_SDK_v${majorVersion}_Linux";
 
-  src = requireFile rec {
-    name    = "${installerName}.tar.gz";
-    sha256  = versionJSON.hash;
-    message = ''
-      In order to use NDI SDK version ${version}, you need to comply with
-      NewTek's license and download the appropriate Linux tarball from:
-
-        ${meta.homepage}
-
-      Once you have downloaded the file, please use the following command and
-      re-run the installation:
-
-        \$ nix-prefetch-url file://\$PWD/${name}
-    '';
+  src = fetchurl {
+    name = "${pname}-${version}.tar.gz";
+    url = "https://downloads.ndi.tv/SDK/NDI_SDK_Linux/${installerName}.tar.gz";
+    hash = versionJSON.hash;
   };
 
   buildInputs = [ avahi ];
@@ -52,6 +42,8 @@ stdenv.mkDerivation rec {
       if [ -L "$i" ]; then continue; fi
       patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
     done
+    rm $out/bin/libndi.so.${majorVersion}
+    ln -s $out/lib/libndi.so.${version} $out/bin/libndi.so.${majorVersion}
     mv include examples $out/
     mkdir -p $out/share/doc/${pname}-${version}
     mv licenses $out/share/doc/${pname}-${version}/licenses

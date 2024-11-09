@@ -1,3 +1,16 @@
+From ffb6777d58f068db7e14372415154cd93f77766e Mon Sep 17 00:00:00 2001
+From: roblabla <unfiltered@roblab.la>
+Date: Wed, 31 Jan 2024 13:19:55 +0100
+Subject: [PATCH] Use com.google.protobuf:protobuf-gradle-plugin
+
+---
+ Ghidra/Debug/Debugger-gadp/build.gradle      |  7 +-
+ Ghidra/Debug/Debugger-isf/build.gradle       |  8 +-
+ Ghidra/Debug/Debugger-rmi-trace/build.gradle | 14 +--
+ build.gradle                                 |  6 ++
+ gradle/hasProtobuf.gradle           | 94 --------------------
+ 5 files changed, 26 insertions(+), 103 deletions(-)
+
 diff --git a/Ghidra/Debug/Debugger-gadp/build.gradle b/Ghidra/Debug/Debugger-gadp/build.gradle
 index 9e1c57faf..3a3242eb5 100644
 --- a/Ghidra/Debug/Debugger-gadp/build.gradle
@@ -6,7 +19,7 @@ index 9e1c57faf..3a3242eb5 100644
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 +apply plugin: 'com.google.protobuf'
  
  apply plugin: 'eclipse'
@@ -28,7 +41,7 @@ index d135294a0..785681ca2 100644
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 -
 +apply plugin: 'com.google.protobuf'
  apply plugin: 'eclipse'
@@ -43,16 +56,16 @@ index d135294a0..785681ca2 100644
  	api project(':Framework-AsyncComm')
  	api project(':Framework-Debugging')
 diff --git a/Ghidra/Debug/Debugger-rmi-trace/build.gradle b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
-index eec00786e..666cccafc 100644
+index 40fbc17ab..7517ffe6e 100644
 --- a/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 +++ b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 @@ -18,12 +18,17 @@ apply from: "${rootProject.projectDir}/gradle/javaProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
  apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
--apply from: "${rootProject.projectDir}/gradle/debugger/hasProtobuf.gradle"
+-apply from: "${rootProject.projectDir}/gradle/hasProtobuf.gradle"
 +apply plugin: 'com.google.protobuf'
- apply from: "${rootProject.projectDir}/gradle/debugger/hasPythonPackage.gradle"
+ apply from: "${rootProject.projectDir}/gradle/hasPythonPackage.gradle"
  
  apply plugin: 'eclipse'
  eclipse.project.name = 'Debug Debugger-rmi-trace'
@@ -63,17 +76,23 @@ index eec00786e..666cccafc 100644
 +	}
 +}
  dependencies {
+ 	api project(':Pty')
  	api project(':Debugger')
- }
-@@ -36,7 +41,7 @@ task generateProtoPy {
+@@ -44,12 +49,9 @@ task generateProtoPy {
  	ext.outdir = file("build/generated/source/proto/main/py")
  	outputs.dir(outdir)
  	inputs.files(src)
 -	dependsOn(configurations.protocArtifact)
 +	dependsOn(protobuf.generateProtoTasks.all())
  	doLast {
- 		def exe = configurations.protocArtifact.first()
- 		if (!isCurrentWindows()) {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
++		def exe = protobuf.tools.protoc.path
+ 		exec {
+ 			commandLine exe, "--python_out=$outdir", "-I$srcdir"
+ 			args src
 diff --git a/build.gradle b/build.gradle
 index b0c717fb1..5f56506a5 100644
 --- a/build.gradle
@@ -91,11 +110,10 @@ index b0c717fb1..5f56506a5 100644
  	}
  }
  else {	
-diff --git a/gradle/debugger/hasProtobuf.gradle b/gradle/debugger/hasProtobuf.gradle
-deleted file mode 100644
-index 23b4ce74b..000000000
---- a/gradle/debugger/hasProtobuf.gradle
-+++ /dev/null
+diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
+index 23b4ce74b..e69de29bb 100644
+--- a/gradle/hasProtobuf.gradle
++++ b/gradle/hasProtobuf.gradle
 @@ -1,94 +0,0 @@
 -/* ###
 - * IP: GHIDRA
@@ -191,3 +209,6 @@ index 23b4ce74b..000000000
 -	}
 -}
 -zipSourceSubproject.dependsOn generateProto
+-- 
+2.42.0
+

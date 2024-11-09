@@ -5,31 +5,34 @@
 , gzip
 , lib
 , libiconv
+, libiconvReal
 , libpipeline
 , makeWrapper
 , nixosTests
 , pkg-config
 , stdenv
 , zstd
-, autoreconfHook
 }:
 
+let
+  libiconv' = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
+in
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.12.0";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-QVpihKInZK0i/w9mcQ2FO+d5DdRRzXFDbj0lx02ZapU=";
+    hash = "sha256-gvBzn09hqrXrk30jTeOwFOd3tVOKKMvTFDPEWuCa77k=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeBuildInputs = [ groff makeWrapper pkg-config zstd ];
+  buildInputs = [ libpipeline db groff libiconv' ]; # (Yes, 'groff' is both native and build input)
+  nativeCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -59,6 +62,8 @@ stdenv.mkDerivation rec {
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
   ];
 
   preConfigure = ''
@@ -89,8 +94,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
-    description = "An implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2;
+    description = "Implementation of the standard Unix documentation system accessed using the man command";
+    license = licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };

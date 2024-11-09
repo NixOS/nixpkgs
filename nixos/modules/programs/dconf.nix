@@ -93,12 +93,12 @@ let
       keyfiles = lib.mkOption {
         type = listOf (oneOf [ path package ]);
         default = [ ];
-        description = lib.mdDoc "A list of dconf keyfile directories.";
+        description = "A list of dconf keyfile directories.";
       };
       settings = lib.mkOption {
         type = attrs;
         default = { };
-        description = lib.mdDoc "An attrset used to generate dconf keyfile.";
+        description = "An attrset used to generate dconf keyfile.";
         example = literalExpression ''
           with lib.gvariant;
           {
@@ -112,7 +112,7 @@ let
       locks = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           A list of dconf keys to be lockdown. This doesn't take effect if `lockAll`
           is set.
         '';
@@ -123,7 +123,7 @@ let
       lockAll = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Lockdown all dconf keys in `settings`.";
+        description = "Lockdown all dconf keys in `settings`.";
       };
     };
   };
@@ -133,7 +133,7 @@ let
       enableUserDb = lib.mkOption {
         type = bool;
         default = true;
-        description = lib.mdDoc "Add `user-db:user` at the beginning of the profile.";
+        description = "Add `user-db:user` at the beginning of the profile.";
       };
 
       databases = lib.mkOption {
@@ -143,7 +143,7 @@ let
           dconfDatabase
         ]);
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of data sources for the profile. An element can be an attrset,
           or the path of an already compiled database. Each element is converted
           to a file-db.
@@ -161,7 +161,7 @@ in
 {
   options = {
     programs.dconf = {
-      enable = lib.mkEnableOption (lib.mdDoc "dconf");
+      enable = lib.mkEnableOption "dconf";
 
       profiles = lib.mkOption {
         type = with lib.types; attrsOf (oneOf [
@@ -170,7 +170,7 @@ in
           dconfProfile
         ]);
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Attrset of dconf profiles. By default the `user` profile is used which
           ends up in `/etc/dconf/profile/user`.
         '';
@@ -193,7 +193,7 @@ in
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
-        description = lib.mdDoc "A list of packages which provide dconf profiles and databases in {file}`/etc/dconf`.";
+        description = "A list of packages which provide dconf profiles and databases in {file}`/etc/dconf`.";
       };
     };
   };

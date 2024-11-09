@@ -1,34 +1,26 @@
-{ lib
-, python3Packages
-, podman
-, fetchPypi
-, bindep
+{
+  lib,
+  setuptools,
+  setuptools-scm,
+  jsonschema,
+  requirements-parser,
+  pyyaml,
+  podman,
+  fetchPypi,
+  bindep,
+  buildPythonPackage,
 }:
-python3Packages.buildPythonPackage rec {
+
+buildPythonPackage rec {
   pname = "ansible-builder";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rxyhgj9Cad751tPAptCTLCtXQLUXaRYv39bkoFzzjOk=";
+    pname = "ansible_builder";
+    inherit version;
+    hash = "sha256-0txXPianvVCV6YrrN+6bALyfUAWr6nFH10IpwPNCb8s=";
   };
-
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-    setuptools-scm
-  ];
-
-  buildInputs = [
-    bindep
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    podman
-    jsonschema
-    requirements-parser
-    pyyaml
-  ];
 
   patchPhase = ''
     # the upper limits of setuptools are unnecessary
@@ -36,8 +28,22 @@ python3Packages.buildPythonPackage rec {
     sed -i 's/, <=[0-9.]*//g' pyproject.toml
   '';
 
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  buildInputs = [ bindep ];
+
+  dependencies = [
+    podman
+    jsonschema
+    requirements-parser
+    pyyaml
+  ];
+
   meta = with lib; {
-    description = "An Ansible execution environment builder";
+    description = "Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.6";
+  version = "3.6#8";
 
   src = fetchurl {
-    url = "http://picat-lang.org/download/picat36_src.tar.gz";
-    hash = "sha256-DjP1cjKxRLxMjiHmYX42+kaG5//09IrPIc1O75gLA6k=";
+    url = "http://picat-lang.org/download/picat368_src.tar.gz";
+    hash = "sha256-eJxF5atvJq3fhFltcQCGTP/sgUmfsfCohUgm3x2U1n0=";
   };
 
   buildInputs = [ zlib ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Logic-based programming langage";
+    description = "Logic-based programming language";
     mainProgram = "picat";
     homepage    = "http://picat-lang.org/";
     license     = licenses.mpl20;
@@ -51,4 +51,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ earldouglas thoughtpolice ];
   };
 }
-

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netbox2netshot";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "netbox2netshot";
     rev = version;
-    hash = "sha256-PT/eQBe0CX1l6tcC5QBiXKGWgIQ8s4h6IApeWyb8ysc=";
+    hash = "sha256-zi/on31uYSW3XhIZzKMkxIj0QZxUzoOcpRR8w5LFH90=";
   };
 
-  cargoHash = "sha256-/T+6cjWG8u/Mr8gtBOXbEEZOO0pDykEpNIVTgooAmuw=";
+  cargoHash = "sha256-qMIGCE3YsV+ZihqBpayrxddsSkmFPldgYNHnAK5semA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     description = "Inventory synchronization tool between Netbox and Netshot";
     homepage = "https://github.com/scaleway/netbox2netshot";
     license = licenses.asl20;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
     mainProgram = "netbox2netshot";
   };
 }

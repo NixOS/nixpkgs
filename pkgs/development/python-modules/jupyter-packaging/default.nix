@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, deprecation
-, hatchling
-, pythonOlder
-, packaging
-, pytestCheckHook
-, pytest-timeout
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  deprecation,
+  hatchling,
+  pythonOlder,
+  packaging,
+  pytestCheckHook,
+  pytest-timeout,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     deprecation
@@ -47,6 +46,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-timeout
   ];
+
+  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -69,6 +70,5 @@ buildPythonPackage rec {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = licenses.bsd3;
-    maintainers = [ maintainers.elohmeier ];
   };
 }

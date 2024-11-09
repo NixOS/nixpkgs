@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  patchPhase = ''
+  postPatch = ''
     runHook prePatch
 
     substituteInPlace ./CMakeLists.txt \
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     # prevent inheriting permissions from /nix/store when copying
     substituteInPlace Converter/src/main.cpp --replace \
       'fs::copy(templateDir, pagedir, fs::copy_options::overwrite_existing | fs::copy_options::recursive)' 'string cmd = "cp --no-preserve=mode -r " + templateDir + " " + pagedir; system(cmd.c_str());'
-
-    runHook postPatch
   '';
 
+  # The upstream build system does not provide an install target.
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/{bin,lib}
     mv liblaszip.so $out/lib
     mv PotreeConverter $out/bin
@@ -56,10 +56,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
+  postFixup = ''
     ln -s $src/resources $out/bin/resources
-    runHook postFixup
   '';
 
   meta = with lib; {

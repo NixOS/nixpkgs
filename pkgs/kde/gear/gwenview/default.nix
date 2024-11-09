@@ -10,13 +10,11 @@
   kimageannotator,
   lcms2,
   libtiff,
-  wayland,
-  wayland-protocols,
 }:
 mkKdeDerivation {
   pname = "gwenview";
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtsvg
     qtwayland
@@ -29,7 +27,5 @@ mkKdeDerivation {
     kimageannotator
     lcms2
     libtiff
-    wayland
-    wayland-protocols
   ];
 }

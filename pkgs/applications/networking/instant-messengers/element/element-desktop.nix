@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , yarn
 , nodejs
 , fetchYarnDeps
@@ -16,8 +16,9 @@
 , AppKit
 , CoreServices
 , desktopToDarwinBundle
-, libnotify
 , useKeytar ? true
+# command line arguments which are always set
+, commandLineArgs ? ""
 }:
 
 let
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
     hash = desktopSrcHash;
@@ -42,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
@@ -79,11 +80,6 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   '';
 
   installPhase =
-    let
-      libPath = lib.makeLibraryPath [
-        libnotify
-      ];
-    in
   ''
     runHook preInstall
 
@@ -111,15 +107,15 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
-      --set LD_LIBRARY_PATH "${libPath}" \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
     exec = "${executableName} %u";
@@ -132,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
   '';
 
@@ -154,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, keepalive
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  keepalive,
 }:
 
 buildPythonPackage rec {

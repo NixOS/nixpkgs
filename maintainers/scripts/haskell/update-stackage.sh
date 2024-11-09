@@ -63,6 +63,7 @@ sed -r \
     -e '/ language-nix /d' \
     -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
+    -e '/ cabal-install-solver /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \
     -e '/ lsp-test /d' \

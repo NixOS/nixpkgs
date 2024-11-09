@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
+  patches = [
+    # Compatibility with YODA 2.x
+    ./yoda2_support.patch
+  ];
+
   buildInputs = [
     boost
     gfortran
@@ -59,6 +64,10 @@ stdenv.mkDerivation rec {
     patchShebangs --build check
   '';
   enableParallelChecking = false;
+
+  # None of our currently packaged versions of swig are C++17-friendly
+  # Use a workaround from https://github.com/swig/swig/issues/1538
+  env.CXXFLAGS="-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";

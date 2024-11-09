@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "openFPGALoader";
     homepage = "https://github.com/trabucayre/openFPGALoader";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ danderson ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

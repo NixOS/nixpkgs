@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rush";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-57gBYfZsKdK1moXBC52KgxKv/MIeQK6tDu+fznXLZ+Y=";
+    sha256 = "sha256-Jm80iJq2pwO/CJCItSN8gUo5ThxRQsG0Z5TYVtWSEts=";
   };
 
   strictDeps = true;
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
-    longDescription =
-      '' GNU Rush is a Restricted User Shell, designed for sites
+    longDescription = ''
+         GNU Rush is a Restricted User Shell, designed for sites
          providing limited remote access to their resources, such as
          svn or git repositories, scp, or the like.  Using a
          sophisticated configuration file, Rush gives you complete

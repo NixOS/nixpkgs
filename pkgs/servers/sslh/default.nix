@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NCjLqYSPHukY11URQ/n+33Atzl4DhPDbNOEDaP6bQlg=";
+    hash = "sha256-+G6xYiytSWW2CljuaeJZfTuXCjkbDCzwU/FSLBmvnGw=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.isLinux [ libcap tcp_wrappers ];
+  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap tcp_wrappers ];
 
-  makeFlags = lib.optionals stdenv.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
 
   postInstall = ''
     # install all flavours

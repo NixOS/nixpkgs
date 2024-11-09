@@ -21,6 +21,7 @@
 , libXtst
 , libxshmfence
 , libXi
+, cups
 , fontconfig
 , freetype
 , harfbuzz
@@ -49,7 +50,7 @@
 , systemd
 , pipewire
 , gn
-, ffmpeg_4
+, ffmpeg
 , lib
 , stdenv
 , glib
@@ -64,31 +65,6 @@
 , bootstrap_cmds
 , cctools
 , xcbuild
-, AGL
-, AVFoundation
-, Accelerate
-, Cocoa
-, CoreLocation
-, CoreML
-, ForceFeedback
-, GameController
-, ImageCaptureCore
-, LocalAuthentication
-, MediaAccessibility
-, MediaPlayer
-, MetalKit
-, Network
-, OpenDirectory
-, Quartz
-, ReplayKit
-, SecurityInterface
-, Vision
-, openbsm
-, libunwind
-, cups
-, libpm
-, sandbox
-, xnu
 }:
 
 qtModule {
@@ -122,9 +98,6 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # removes macOS 12+ dependencies
-    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
-    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
@@ -170,8 +143,6 @@ qtModule {
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace "\$sysroot/usr" "${xnu}"
   '';
 
   cmakeFlags = [
@@ -200,7 +171,7 @@ qtModule {
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
   ];
 
   propagatedBuildInputs = [
@@ -231,7 +202,7 @@ qtModule {
     lcms2
 
     libevent
-    ffmpeg_4
+    ffmpeg
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib
@@ -275,36 +246,10 @@ qtModule {
 
     libkrb5
     mesa
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    Accelerate
-    Cocoa
-    CoreLocation
-    CoreML
-    ForceFeedback
-    GameController
-    ImageCaptureCore
-    LocalAuthentication
-    MediaAccessibility
-    MediaPlayer
-    MetalKit
-    Network
-    OpenDirectory
-    Quartz
-    ReplayKit
-    SecurityInterface
-    Vision
-
-    openbsm
-    libunwind
   ];
 
   buildInputs = [
     cups
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libpm
-    sandbox
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -313,8 +258,11 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
+  # Debug info is too big to link with LTO.
+  separateDebugInfo = false;
+
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz

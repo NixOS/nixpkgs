@@ -17,10 +17,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YDopY+wdWlVL2X+/wc1tLSSqFclAkt++JXMK3VodD4s=";
   };
 
-  cargoHash = "sha256-uuHPJe+1VsnLRGbHtgTMrib6Tk359cwTDVfvtHnDToo=";
+  patches = [
+    # part of https://github.com/coastalwhite/lemurs/commit/09003a830400250ec7745939399fc942c505e6c6, but including the rest of the commit may be breaking
+    ./0001-fix-static-lifetime-string.patch
+  ];
 
-  # Fixes a lock issue
-  preConfigure = "cargo update --offline";
+  cargoHash = "sha256-uuHPJe+1VsnLRGbHtgTMrib6Tk359cwTDVfvtHnDToo=";
 
   buildInputs = [
     linux-pam
@@ -31,10 +33,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A customizable TUI display/login manager written in Rust";
+    description = "Customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [asl20 mit];
-    maintainers = with maintainers; [jeremiahs];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ jeremiahs ];
     mainProgram = "lemurs";
   };
 }

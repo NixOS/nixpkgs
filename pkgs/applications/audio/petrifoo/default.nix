@@ -32,7 +32,7 @@ stdenv.mkDerivation  rec {
     homepage = "https://petri-foo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     mainProgram = "petri-foo";
   };
 }

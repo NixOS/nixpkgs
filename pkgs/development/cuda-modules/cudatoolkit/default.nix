@@ -3,7 +3,7 @@
   runPatches ? [ ],
   autoPatchelfHook,
   autoAddDriverRunpath,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alsa-lib,
   curlMinimal,
   expat,
@@ -35,7 +35,7 @@
   wayland,
   xorg,
   zlib,
-  freeglut,
+  libglut,
   libGLU,
   libsForQt5,
   libtiff,
@@ -74,7 +74,7 @@ backendStdenv.mkDerivation rec {
       perl
       makeWrapper
       rsync
-      addOpenGLRunpath
+      addDriverRunpath
       autoPatchelfHook
       autoAddDriverRunpath
       markForCudatoolkitRootHook
@@ -85,7 +85,7 @@ backendStdenv.mkDerivation rec {
   buildInputs =
     lib.optionals (lib.versionOlder version "11") [
       libsForQt5.qt5.qtwebengine
-      freeglut
+      libglut
       libGLU
     ]
     ++ [
@@ -237,6 +237,7 @@ backendStdenv.mkDerivation rec {
       ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
         cd pkg/builds/cuda-toolkit
         mv * $out/
+        rm -f $out/nsight-systems-*/host-linux-x64/libstdc++.so*
       ''}
       ${lib.optionalString (lib.versionAtLeast version "11") ''
         mkdir -p $out/bin $out/lib64 $out/include $doc
@@ -410,7 +411,7 @@ backendStdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A compiler for NVIDIA GPUs, math libraries, and tools";
+    description = "Deprecated runfile-based CUDAToolkit installation (a compiler for NVIDIA GPUs, math libraries, and tools)";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];
     license = licenses.nvidiaCuda;

@@ -5,7 +5,7 @@
 , runCommandLocal
 , unzip
 , appimage-run
-, addOpenGLRunpath
+, addDriverRunpath
 , dbus
 , libGLU
 , xorg
@@ -25,17 +25,20 @@
 , jq
 
 , studioVariant ? false
+
+, common-updater-scripts
+, writeShellApplication
 }:
 
 let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "18.6.6";
+      version = "19.0.2";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
-        addOpenGLRunpath
+        addDriverRunpath
         copyDesktopItems
         unzip
       ];
@@ -52,8 +55,8 @@ let
           outputHashAlgo = "sha256";
           outputHash =
             if studioVariant
-            then "sha256-9iTdIjHH8uoXlVr6miyqmHuzbbpbqdJPEbPGycsccoI="
-            else "sha256-WrIQ1FHm65MOGb5HfFl2WzXYJRlqktuZdrtzcjWp1gI=";
+            then "sha256-q11stWFWRDUebAUzGH23R3Spd3EdDG85+6yB/srYCJY="
+            else "sha256-dYTrO0wpIN68WhBovmYLK5uWOQ1nubpSyKqPCDMPMiM=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -91,7 +94,7 @@ let
         } ''
         DOWNLOADID=$(
           curl --silent --compressed "$DOWNLOADSURL" \
-            | jq --raw-output '.downloads[] | select(.name | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .urls.Linux[0].downloadId'
+            | jq --raw-output '.downloads[] | .urls.Linux?[]? | select(.downloadTitle | test("^'"$PRODUCT $VERSION"'( Update)?$")) | .downloadId'
         )
         echo "downloadid is $DOWNLOADID"
         test -n "$DOWNLOADID"
@@ -147,14 +150,14 @@ let
       postFixup = ''
         for program in $out/bin/*; do
           isELF "$program" || continue
-          addOpenGLRunpath "$program"
+          addDriverRunpath "$program"
         done
 
         for program in $out/libs/*; do
           isELF "$program" || continue
           if [[ "$program" != *"libcudnn_cnn_infer"* ]];then
             echo $program
-            addOpenGLRunpath "$program"
+            addDriverRunpath "$program"
           fi
         done
         ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
@@ -162,11 +165,11 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = "davinci-resolve";
-          desktopName = "Davinci Resolve";
+          name = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
           genericName = "Video Editor";
-          exec = "resolve";
-          # icon = "DV_Resolve";
+          exec = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+          icon = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
           comment = "Professional video editing, color, effects and audio post-processing";
           categories = [
             "AudioVideo"
@@ -181,7 +184,6 @@ let
 in
 buildFHSEnv {
   inherit (davinci) pname version;
-  name = null;
 
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
@@ -252,7 +254,34 @@ buildFHSEnv {
     ''
   }";
 
-  passthru = { inherit davinci; };
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
+    ln -s ${davinci}/share/applications/*.desktop $out/share/applications/
+    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/davinci-resolve${lib.optionalString studioVariant "-studio"}.png
+  '';
+
+  passthru = {
+    inherit davinci;
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-davinci-resolve";
+      runtimeInputs = [ curl jq common-updater-scripts ];
+      text = ''
+        set -o errexit
+        drv=pkgs/applications/video/davinci-resolve/default.nix
+        currentVersion=${lib.escapeShellArg davinci.version}
+        downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
+
+        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
+        update-source-version davinci-resolve "$latestLinuxVersion" --source-key=davinci.src
+
+        # Since the standard and studio both use the same version we need to reset it before updating studio
+        sed -i -e "s/""$latestLinuxVersion""/""$currentVersion""/" "$drv"
+
+        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+\.\d+(\.\d+)?' | sort | tail -n 1)"
+        update-source-version davinci-resolve-studio "$latestStudioLinuxVersion" --source-key=davinci.src
+      '';
+    });
+  };
 
   meta = with lib; {
     description = "Professional video editing, color, effects and audio post-processing";
@@ -261,6 +290,6 @@ buildFHSEnv {
     maintainers = with maintainers; [ amarshall jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "davinci-resolve";
+    mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

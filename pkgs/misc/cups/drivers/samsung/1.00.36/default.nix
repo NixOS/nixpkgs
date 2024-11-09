@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$out/lib/libscmssc.so"
     patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
-    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
   '';
 
   # all binaries are already stripped
@@ -115,6 +115,6 @@ in stdenv.mkDerivation rec {
     # Tested on linux-x86_64. Might work on linux-i386.
     # Probably won't work on anything else.
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

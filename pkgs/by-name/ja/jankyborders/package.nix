@@ -1,14 +1,12 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, pkgs
-, overrideSDK
-, darwin
-, testers
+{
+  lib,
+  stdenv,
+  apple-sdk_11,
+  fetchFromGitHub,
+  pkg-config,
+  testers,
+  nix-update-script,
 }:
-let
-  stdenv = overrideSDK pkgs.stdenv "11.0";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "JankyBorders";
   version = "1.6.0";
@@ -24,12 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = with darwin.apple_sdk.frameworks; [
-    AppKit
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    SkyLight
+  buildInputs = [
+    apple-sdk_11
   ];
 
   installPhase = ''
@@ -41,9 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    version = "borders-v${finalAttrs.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "borders-v${finalAttrs.version}";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -1,12 +1,12 @@
-{ lib
-, python3
-, buildPythonPackage
-, fetchFromGitHub
-, typing-extensions
-, diffimg
-, imgdiff
-, pytestCheckHook
-, recommonmark
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  typing-extensions,
+  diffimg,
+  imgdiff,
+  pytestCheckHook,
+  recommonmark,
 }:
 
 buildPythonPackage rec {

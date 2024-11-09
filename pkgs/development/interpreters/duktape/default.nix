@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, validatePkgConfig }:
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, validatePkgConfig }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duktape";
@@ -11,7 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/svaarala/duktape/issues/2464
   LDFLAGS = [ "-lm" ];
 
-  nativeBuildInputs = [ validatePkgConfig ];
+  nativeBuildInputs = [ validatePkgConfig ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     make -f Makefile.sharedlibrary
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
+    description = "Embeddable Javascript engine, with a focus on portability and compact footprint";
     homepage = "https://duktape.org/";
     downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;

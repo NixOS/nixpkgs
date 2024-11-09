@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "mblock-mlink";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [

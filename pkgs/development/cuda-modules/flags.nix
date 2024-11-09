@@ -7,7 +7,7 @@
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
   cudaVersion,
-  hostPlatform,
+  stdenv,
   # gpus :: List Gpu
   gpus,
 }:
@@ -19,6 +19,8 @@ let
     strings
     trivial
     ;
+
+  inherit (stdenv) hostPlatform;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
   # from improved performance, reduced file size, or greater hardware support by
@@ -207,6 +209,11 @@ let
       # E.g. "-gencode=arch=compute_75,code=sm_75 ... -gencode=arch=compute_86,code=compute_86"
       gencodeString = strings.concatStringsSep " " gencode;
 
+      # cmakeCudaArchitecturesString :: String
+      # A semicolon-separated string of CUDA capabilities without dots, suitable for passing to CMake.
+      # E.g. "75;86"
+      cmakeCudaArchitecturesString = strings.concatMapStringsSep ";" dropDot cudaCapabilities;
+
       # Jetson devices cannot be targeted by the same binaries which target non-Jetson devices. While
       # NVIDIA provides both `linux-aarch64` and `linux-sbsa` packages, which both target `aarch64`,
       # they are built with different settings and cannot be mixed.
@@ -269,6 +276,8 @@ assert
         "-gencode=arch=compute_86,code=compute_86"
       ];
       gencodeString = "-gencode=arch=compute_75,code=sm_75 -gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_86,code=compute_86";
+
+      cmakeCudaArchitecturesString = "75;86";
 
       isJetsonBuild = false;
     };
@@ -338,6 +347,8 @@ assert
         "-gencode=arch=compute_72,code=compute_72"
       ];
       gencodeString = "-gencode=arch=compute_62,code=sm_62 -gencode=arch=compute_72,code=sm_72 -gencode=arch=compute_72,code=compute_72";
+
+      cmakeCudaArchitecturesString = "62;72";
 
       isJetsonBuild = true;
     };

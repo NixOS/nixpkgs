@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "5.2.4";
-  format = "setuptools";
+  version = "5.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hr7sYn6V2iw4r3P8mXhYVyUD8JpU2zGq4nG6hHM7gxU=";
+    hash = "sha256-4vnjtSbw2y/o+fSWDl/CqTEZkl0jULGOLURdZ0BpKvY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
@@ -25,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "survey" ];
 
   meta = with lib; {
-    description = "A simple library for creating beautiful interactive prompts";
+    description = "Simple library for creating beautiful interactive prompts";
     homepage = "https://github.com/Exahilosys/survey";
     changelog = "https://github.com/Exahilosys/survey/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,5 +1,10 @@
 #! @perl@/bin/perl
 
+# NOTE: This script has an alternative implementation at
+# <nixpkgs/pkgs/by-name/sw/switch-to-configuration-ng>. Any behavioral
+# modifications to this script should also be made to that implementation.
+
+
 # Issue #166838 uncovered a situation in which a configuration not suitable
 # for the target architecture caused a cryptic error message instead of
 # a clean failure. Due to this mismatch, the perl interpreter in the shebang
@@ -471,6 +476,9 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
         if (parse_systemd_bool(\%new_unit_info, "Service", "X-ReloadIfChanged", 0) and not $units_to_restart->{$unit} and not $units_to_stop->{$unit}) {
             $units_to_reload->{$unit} = 1;
             record_unit($reload_list_file, $unit);
+        }
+        elsif ($unit eq "dbus.service" || $unit eq "dbus-broker.service") {
+            # dbus service should only ever be reloaded, not started/stoped/restarted as that would break the system.
         }
         elsif (!parse_systemd_bool(\%new_unit_info, "Service", "X-RestartIfChanged", 1) || parse_systemd_bool(\%new_unit_info, "Unit", "RefuseManualStop", 0) || parse_systemd_bool(\%new_unit_info, "Unit", "X-OnlyManualStart", 0)) {
             $units_to_skip->{$unit} = 1;

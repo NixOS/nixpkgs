@@ -1,41 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, cython
-, numpy
-, scipy
-, h5py
-, nibabel
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  meson-python,
+  packaging,
+  cython,
+  numpy,
+  scipy,
+  h5py,
+  nibabel,
+  tqdm,
+  trx-python,
 }:
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dipy";
-    repo = pname;
+    repo = "dipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-sfqCK2r9Io1gDDHL9s9R37J0h9KcOQML3B2zJx2+QuA=";
+    hash = "sha256-6cpxuk2PL43kjQ+6UGiUHUXC7pC9OlW9kZvGOdEXyzw=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==" "numpy>="
+  '';
+
+  build-system = [
     cython
+    meson-python
+    numpy
     packaging
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     h5py
     nibabel
+    packaging
     tqdm
+    trx-python
   ];
 
   # disable tests for now due to:
@@ -52,7 +64,6 @@ buildPythonPackage rec {
     "dipy.reconst"
     "dipy.io"
     "dipy.viz"
-    "dipy.boots"
     "dipy.data"
     "dipy.utils"
     "dipy.segment"

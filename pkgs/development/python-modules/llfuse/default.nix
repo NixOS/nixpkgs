@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython_3
-, fuse
-, pkg-config
-, pytestCheckHook
-, python
-, setuptools
-, which
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  fuse,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  setuptools,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.5.0";
+  version = "1.5.1";
 
   format = "pyproject";
 
@@ -24,10 +25,14 @@ buildPythonPackage rec {
     owner = "python-llfuse";
     repo = "python-llfuse";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-6/iW5eHmX6ODVPLFkOo3bN9yW8ixqy2MHwQ2r9FA0iI=";
+    hash = "sha256-wni/b1hEn6/G0RszCJi+wmBHx6F0Ov1cZ/sRf8PLmps=";
   };
 
-  nativeBuildInputs = [ cython_3 pkg-config setuptools ];
+  nativeBuildInputs = [
+    cython
+    pkg-config
+    setuptools
+  ];
 
   buildInputs = [ fuse ];
 
@@ -41,8 +46,11 @@ buildPythonPackage rec {
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
-  doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ pytestCheckHook which ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    pytestCheckHook
+    which
+  ];
 
   disabledTests = [
     "test_listdir" # accesses /usr/bin
@@ -54,6 +62,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor dotlambda ];
+    maintainers = with maintainers; [
+      bjornfor
+      dotlambda
+    ];
   };
 }

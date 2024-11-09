@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, poetry-core
-, pydantic
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  poetry-core,
+  pydantic,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llamaindex-py-client";
-  version = "0.1.15";
+  version = "0.1.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,14 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llamaindex_py_client";
     inherit version;
-    hash = "sha256-x84mhVupdhU7tAFXw8GUIjxrdReZNbmI3UvWo/6Dqss=";
+    hash = "sha256-c/dHkruMCSuubcYmYnoJrBOgmfqNEPj8yD4XorMyzKc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pydantic
   ];
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index_client"
-  ];
+  pythonImportsCheck = [ "llama_index_client" ];
 
   meta = with lib; {
     description = "Client for LlamaIndex";

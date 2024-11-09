@@ -1,5 +1,4 @@
-{ lib
-, buildFHSEnv
+{ buildFHSEnv
 , sparrow-unwrapped
 }:
 

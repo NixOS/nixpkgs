@@ -1,14 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
+let
+  cfg = config.services.xserver.displayManager.sx;
 
-let cfg = config.services.xserver.displayManager.sx;
-
-in {
+in
+{
   options = {
     services.xserver.displayManager.sx = {
-      enable = mkEnableOption (lib.mdDoc "sx pseudo-display manager") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "" // {
+        description = ''
           Whether to enable the "sx" pseudo-display manager, which allows users
           to start manually via the "sx" command from a vt shell. The X server
           runs under the user's id, not as root. The user must provide a
@@ -19,16 +24,34 @@ in {
           dependency.
         '';
       };
+
+      addAsSession = lib.mkEnableOption "" // {
+        description = ''
+          Whether to add sx as a display manager session. Keep in mind that sx
+          expects to be run from a TTY, so it may not work in your display
+          manager.
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "sx" { };
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.sx ];
-    services.xserver = {
-      exportConfiguration = true;
-      logFile = mkDefault null;
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
+    services = {
+      displayManager.sessionPackages = lib.optionals cfg.addAsSession [ cfg.package ];
+
+      xserver = {
+        exportConfiguration = true;
+        logFile = lib.mkDefault null;
+      };
     };
   };
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = with lib.maintainers; [
+    figsoda
+    thiagokokada
+  ];
 }

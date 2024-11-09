@@ -1,43 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pydantic
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k4tlWRasGa2oQykCD9QJl65UAoZQMJVdyCfqlUBBgqY=";
+    hash = "sha256-9BCYC8PW44pB348kkH7aB1YqXXN1VNcBHphlN503M6g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "datauri"
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pydantic
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_pydantic" # incompatible with pydantic v2
-  ];
+  pythonImportsCheck = [ "datauri" ];
 
   meta = with lib; {
-    description = "Data URI manipulation made easy.";
+    description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/v${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ yuu ];
   };

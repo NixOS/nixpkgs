@@ -7,7 +7,7 @@
 , gettext
 , libxml2
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , glib
 , gssdp
@@ -21,7 +21,7 @@
 , libmediaart
 , sqlite
 , systemd
-, tracker
+, tinysparql
 , shared-mime-info
 , gnome
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libmediaart
     sqlite
     systemd
-    tracker
+    tinysparql
     shared-mime-info
   ] ++ (with gst_all_1; [
     gstreamer
@@ -99,8 +99,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
-    homepage = "https://wiki.gnome.org/Projects/Rygel";
+    description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
+    homepage = "https://gitlab.gnome.org/GNOME/rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

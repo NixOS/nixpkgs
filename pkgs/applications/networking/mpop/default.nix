@@ -16,11 +16,11 @@ assert lib.assertOneOf "sslLibrary" sslLibrary ["gnutls" "openssl" "no"];
 
 stdenv.mkDerivation rec {
   pname = "mpop";
-  version = "1.4.18";
+  version = "1.4.20";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YJmVAYT30JSngtHnq5gzc28SMI00pUSlm0aoRx2fhbc=";
+    sha256 = "sha256-Ncx94X492spHQ4Y0ZEiPjIKoOsGzdk/d1/QjiBQ1v0s=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional stdenv.isDarwin Security
+    lib.optional stdenv.hostPlatform.isDarwin Security
     ++ lib.optional gsaslSupport gsasl
     ++ lib.optional idnSupport libidn
     ++ lib.optional (sslLibrary == "gnutls") gnutls
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature idnSupport "idn")
     (lib.withFeature gsaslSupport "gsasl")
     "--with-tls=${sslLibrary}"
-  ] ++ lib.optional stdenv.isDarwin "--with-macosx-keyring";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-macosx-keyring";
 
   meta = with lib;{
     description = "POP3 mail retrieval agent";

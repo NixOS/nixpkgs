@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4, lxd }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4, lxd-lts }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   passthru.tests = {
-    inherit lxd;
+    inherit lxd-lts;
   };
 
   meta = with lib; {
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = teams.lxc.members;
+    maintainers = [ ];
   };
 }

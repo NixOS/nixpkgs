@@ -1,13 +1,11 @@
 { pkgs, ... }:
 
 let
-  inherit (pkgs) callPackage python3Packages;
+  inherit (pkgs) callPackage;
 in
 
 {
-  pass-audit = callPackage ./audit {
-    pythonPackages = python3Packages;
-  };
+  pass-audit = callPackage ./audit {};
   pass-checkup = callPackage ./checkup.nix {};
   pass-import = callPackage ./import.nix {};
   pass-otp = callPackage ./otp.nix {};

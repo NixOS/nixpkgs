@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, impacket
-, netaddr
-, poetry-core
-, pypykatz
-, pythonOlder
-, pythonRelaxDepsHook
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  impacket,
+  netaddr,
+  poetry-core,
+  pypykatz,
+  pythonOlder,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.9";
+  version = "3.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Hackndo";
     repo = "lsassy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VGLSVv/+UpgeSTHoOTjEfQSAYfXA3bAI+yKjcKBI1Z4=";
+    hash = "sha256-Idel52GAzir+SVgKfMU+e8Z0EkMf+PBdIcaQd0o8qJE=";
   };
 
   pythonRelaxDeps = [
@@ -30,13 +30,8 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     impacket
@@ -48,9 +43,7 @@ buildPythonPackage rec {
   # Tests require an active domain controller
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lsassy"
-  ];
+  pythonImportsCheck = [ "lsassy" ];
 
   meta = with lib; {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";

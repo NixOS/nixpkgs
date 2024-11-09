@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, runs
-, xmod
-, pytestCheckHook
-, tdir
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  runs,
+  xmod,
+  pytestCheckHook,
+  tdir,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-FVtat3gUsK5Lv6XSkVXj0hY6NkMGw6LxRWMJrZ/cIis=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     runs
@@ -34,15 +33,13 @@ buildPythonPackage rec {
     tdir
   ];
 
-  pythonImportsCheck = [
-    "editor"
-  ];
+  pythonImportsCheck = [ "editor" ];
 
   meta = with lib; {
     description = "Open the default text editor";
     homepage = "https://github.com/rec/editor";
     changelog = "https://github.com/rec/editor/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

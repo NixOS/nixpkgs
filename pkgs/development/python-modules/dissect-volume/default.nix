@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.9";
+  version = "3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     rev = "refs/tags/${version}";
-    hash = "sha256-Bhi3p0joTNx1y/yBhehhG06WmM7gUJhIJbmqZY4DzLQ=";
+    hash = "sha256-IhG2FZdCmYrGxHc2i+ERhphxP/uGgOY67epHEWnQXb0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.volume"
-  ];
+  pythonImportsCheck = [ "dissect.volume" ];
 
   disabledTests = [
     # gzip.BadGzipFile: Not a gzipped file
     "test_ddf_read"
     "test_dm_thin"
+    "test_lvm"
     "test_lvm_mirro"
     "test_lvm_thin"
+    "test_lvm"
     "test_md_raid0_zones"
     "test_md_read"
   ];

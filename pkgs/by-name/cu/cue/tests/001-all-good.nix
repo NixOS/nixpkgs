@@ -1,5 +1,4 @@
-{ lib
-, cue
+{ cue
 , runCommand
 }:
 

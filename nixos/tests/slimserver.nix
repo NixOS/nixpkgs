@@ -8,8 +8,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       enable = true;
       extraArguments = "-s 127.0.0.1 -d slimproto=info";
     };
-    sound.enable = true;
-    boot.initrd.kernelModules = ["snd-dummy"];
+    boot.kernelModules = ["snd-dummy"];
   };
 
   testScript =

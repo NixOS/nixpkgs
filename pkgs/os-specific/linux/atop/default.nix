@@ -1,22 +1,25 @@
 { lib
 , stdenv
 , fetchurl
+, glib
 , zlib
 , ncurses
+, pkg-config
 , findutils
 , systemd
 , python3
+, nixosTests
 # makes the package unfree via pynvml
 , withAtopgpu ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "atop";
-  version = "2.8.1";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "sha256-lwBYoZt5w0RPlx+FRXKg5jiR3C1fcDf/g3VwhUzg2h4=";
+    hash = "sha256-m5TGZmAu//e/QC7M5wbDR/OMOctjSY+dOWJoYeVkbiA=";
   };
 
   nativeBuildInputs = lib.optionals withAtopgpu [
@@ -24,8 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     zlib
     ncurses
+    pkg-config
   ] ++ lib.optionals withAtopgpu [
     python3
   ];
@@ -51,8 +56,6 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
     # Don't fail on missing /etc/default/atop, make sure /var/log/atop exists pre-start
     ./atop.service.patch
-    # Specify PIDFile in /run, not /var/run to silence systemd warning
-    ./atopacct.service.patch
   ];
 
   preConfigure = ''
@@ -76,6 +79,8 @@ stdenv.mkDerivation rec {
   '' else ''
     rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
   '');
+
+  passthru.tests = { inherit (nixosTests) atop; };
 
   meta = with lib; {
     platforms = platforms.linux;

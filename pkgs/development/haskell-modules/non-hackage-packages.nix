@@ -17,6 +17,8 @@ self: super: {
   # from the latest master instead of the current version on Hackage.
   cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
 
+  ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
+
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 

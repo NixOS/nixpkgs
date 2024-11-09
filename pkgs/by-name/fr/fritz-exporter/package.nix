@@ -20,6 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
+  pythonRelaxDeps = [
+    "defusedxml"
+    "attrs"
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];

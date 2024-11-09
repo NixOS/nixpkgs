@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mpfr
     fplll
     eigen
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
 

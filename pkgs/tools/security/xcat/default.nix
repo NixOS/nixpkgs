@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       and directories.
     '';
     homepage = "https://github.com/orf/xcat";
+    changelog = "https://github.com/orf/xcat/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

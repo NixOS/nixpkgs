@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biscuit-cli";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "biscuit-auth";
     repo = "biscuit-cli";
     rev = version;
-    sha256 = "sha256-Mvrv3BU0Pw85fs8IbjMKSQLIhtU6SKoLC0cuGdhfAYs=";
+    sha256 = "sha256-BLDJ4Rzu48sAklbv021XSzmATRd+D01yGHqJt6kvjGw=";
   };
 
-  cargoHash = "sha256-tgmM0rswIFrpFyupaASTXYvIyhVu0fXJJN+hg0p+vrQ=";
+  cargoHash = "sha256-J5/3zk9ZjSuiZBKrogP+8sVZr+w9dYlROkRRJFPyVvs=";
 
   passthru = {
     updateScript = nix-update-script { };

@@ -47,11 +47,12 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 sh ./autogen.sh
   '';
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "3270 Virtual Terminal for GTK";
     homepage = "https://github.com/PerryWerneck/libv3270";
+    changelog = "https://github.com/PerryWerneck/libv3270/blob/master/CHANGELOG";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.vifino ];
   };

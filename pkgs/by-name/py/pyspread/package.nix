@@ -9,10 +9,10 @@
 let
   # get rid of rec
   pname = "pyspread";
-  version = "2.2.3";
+  version = "2.3";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oNMDDXpl6Y0N7j+qgboSTJA9SR5KzKxhoMh/44ngjdA=";
+    hash = "sha256-vbDZo/kYtnxmOd3JSEG9+0yD0nfM/BGcAySfBD2xogw=";
   };
   inherit (libsForQt5)
     qtsvg
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     homepage = "https://pyspread.gitlab.io/";
-    description = "A Python-oriented spreadsheet application";
+    description = "Python-oriented spreadsheet application";
     longDescription = ''
       pyspread is a non-traditional spreadsheet application that is based on and
       written in the programming language Python. The goal of pyspread is to be

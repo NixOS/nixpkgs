@@ -1,13 +1,14 @@
-{ lib
-, asn1crypto
-, asysocks
-, buildPythonPackage
-, fetchPypi
-, oscrypto
-, pythonOlder
-, six
-, tqdm
-, unicrypto
+{
+  lib,
+  asn1crypto,
+  asysocks,
+  buildPythonPackage,
+  fetchPypi,
+  oscrypto,
+  pythonOlder,
+  six,
+  tqdm,
+  unicrypto,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # no tests are published: https://github.com/skelsec/minikerberos/pull/5
   doCheck = false;
 
-  pythonImportsCheck = [
-    "minikerberos"
-  ];
+  pythonImportsCheck = [ "minikerberos" ];
 
   meta = with lib; {
     description = "Kerberos manipulation library in Python";

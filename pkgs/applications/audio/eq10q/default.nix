@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "LV2 EQ plugins and more, with 64 bit processing";
     longDescription = ''
       Up to 10-Bands parametric equalizer with mono and stereo versions.

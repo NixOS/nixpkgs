@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

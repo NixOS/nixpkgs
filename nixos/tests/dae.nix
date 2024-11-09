@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     services.dae = {
       enable = true;
       config = ''
-        global{}
+        global { disable_waiting_network: true }
         routing{}
       '';
     };

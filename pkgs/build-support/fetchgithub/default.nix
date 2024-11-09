@@ -4,6 +4,7 @@ lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
+, fetchLFS ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
@@ -25,7 +26,7 @@ let
   };
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != []);
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || fetchLFS || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
   fetcher =
@@ -52,7 +53,7 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
+      inherit rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${rev}.tar.gz";

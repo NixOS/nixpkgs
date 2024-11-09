@@ -4,7 +4,7 @@
 { name # The name of the pc file
   # keywords
   # provide a default description for convenience. it's not important but still required by pkg-config.
-, description ? "A pkg-config file for ${name}"
+, description ? "Pkg-config file for ${name}"
 , url ? ""
 , version ? ""
 , requires ? [ ]
@@ -51,9 +51,7 @@ let
     lib.pipe attrs [
       (lib.mapAttrsToList renderFunc)
       (builtins.filter (v: v != ""))
-      (builtins.concatStringsSep "\n")
-      (section: ''${section}
-      '')
+      (lib.concatLines)
     ];
 
   variablesSectionRendered = renderSomething renderVariable variables;

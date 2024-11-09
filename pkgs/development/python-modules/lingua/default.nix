@@ -1,9 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, flit-core
-, polib
-, click }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  flit-core,
+  polib,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "lingua";
@@ -20,9 +22,7 @@ buildPythonPackage rec {
       --replace-fail SafeConfigParser ConfigParser
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click

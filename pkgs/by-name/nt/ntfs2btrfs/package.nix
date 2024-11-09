@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fmt lzo zlib zstd ];
 
   meta = {
-    description = "A CLI tool which does in-place conversion of Microsoft's NTFS filesystem to the open-source filesystem Btrfs";
+    description = "CLI tool which does in-place conversion of Microsoft's NTFS filesystem to the open-source filesystem Btrfs";
     homepage = "https://github.com/maharmstone/ntfs2btrfs";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ j1nxie ];

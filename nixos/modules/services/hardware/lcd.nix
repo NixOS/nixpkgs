@@ -36,32 +36,32 @@ in with lib; {
       serverHost = mkOption {
         type = str;
         default = "localhost";
-        description = lib.mdDoc "Host on which LCDd is listening.";
+        description = "Host on which LCDd is listening.";
       };
 
       serverPort = mkOption {
         type = int;
         default = 13666;
-        description = lib.mdDoc "Port on which LCDd is listening.";
+        description = "Port on which LCDd is listening.";
       };
 
       server = {
         enable = mkOption {
           type = bool;
           default = false;
-          description = lib.mdDoc "Enable the LCD panel server (LCDd)";
+          description = "Enable the LCD panel server (LCDd)";
         };
 
         openPorts = mkOption {
           type = bool;
           default = false;
-          description = lib.mdDoc "Open the ports in the firewall";
+          description = "Open the ports in the firewall";
         };
 
         usbPermissions = mkOption {
           type = bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Set group-write permissions on a USB device.
 
             A USB connected LCD panel will most likely require having its
@@ -83,25 +83,25 @@ in with lib; {
         usbVid = mkOption {
           type = str;
           default = "";
-          description = lib.mdDoc "The vendor ID of the USB device to claim.";
+          description = "The vendor ID of the USB device to claim.";
         };
 
         usbPid = mkOption {
           type = str;
           default = "";
-          description = lib.mdDoc "The product ID of the USB device to claim.";
+          description = "The product ID of the USB device to claim.";
         };
 
         usbGroup = mkOption {
           type = str;
           default = "dialout";
-          description = lib.mdDoc "The group to use for settings permissions. This group must exist or you will have to create it.";
+          description = "The group to use for settings permissions. This group must exist or you will have to create it.";
         };
 
         extraConfig = mkOption {
           type = lines;
           default = "";
-          description = lib.mdDoc "Additional configuration added verbatim to the server config.";
+          description = "Additional configuration added verbatim to the server config.";
         };
       };
 
@@ -109,19 +109,19 @@ in with lib; {
         enable = mkOption {
           type = bool;
           default = false;
-          description = lib.mdDoc "Enable the LCD panel client (LCDproc)";
+          description = "Enable the LCD panel client (LCDproc)";
         };
 
         extraConfig = mkOption {
           type = lines;
           default = "";
-          description = lib.mdDoc "Additional configuration added verbatim to the client config.";
+          description = "Additional configuration added verbatim to the client config.";
         };
 
         restartForever = mkOption {
           type = bool;
           default = true;
-          description = lib.mdDoc "Try restarting the client forever.";
+          description = "Try restarting the client forever.";
         };
       };
     };

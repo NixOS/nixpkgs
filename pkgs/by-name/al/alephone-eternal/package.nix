@@ -1,16 +1,16 @@
-{ alephone, fetchurl, unrar }:
+{ alephone, fetchurl }:
 
 alephone.makeWrapper rec {
   pname = "marathon-eternal";
-  version = "1.2.0";
+  version = "1.2.1";
   desktopName = "Marathon-Eternal";
 
   zip = fetchurl {
-    url = "http://eternal.bungie.org/files/_releases/EternalXv120.zip";
-    sha256 = "1qrvx0sp9xc8zbpp5yz8jdz458ajzmyv2si7hrppiyawc8dpcwck";
+    url = "https://eternal.bungie.org/files/_releases/EternalXv121.zip";
+    hash = "sha256-8smVdL7CYbrIzCqu3eqk6KQempKLWuEJ9qWStdWkYWo=";
   };
 
-  sourceRoot = "Eternal 1.2.0";
+  sourceRoot = "Eternal 1.2.1";
 
   meta = {
     description =

@@ -12,6 +12,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
 
+  build-system = with python3Packages; [
+    cython
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     # requirements
     pyaes
@@ -36,7 +40,6 @@ python3Packages.buildPythonApplication rec {
     cryptography
 
     # requirements-hw
-    cython
     trezor
     keepkey
     btchip-python
@@ -48,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  buildInputs = [ ] ++ lib.optional stdenv.isLinux qtwayland;
+  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
@@ -58,7 +61,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
   '';
@@ -81,7 +84,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A Bitcoin Cash SPV Wallet";
+    description = "Bitcoin Cash SPV Wallet";
     mainProgram = "electron-cash";
     longDescription = ''
       An easy-to-use Bitcoin Cash client featuring wallets generated from

@@ -1,11 +1,11 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, python
-, numpy
-, scipy
-, periodictable
-, fields
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  numpy,
+  scipy,
+  periodictable,
+  fields,
 }:
 
 buildPythonPackage rec {

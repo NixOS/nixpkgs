@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pkg-config
-, setuptools
-, igraph
-, texttable
-, cairocffi
-, matplotlib
-, plotly
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pkg-config,
+  setuptools,
+  igraph,
+  texttable,
+  cairocffi,
+  matplotlib,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.4";
+  version = "0.11.6";
 
   disabled = pythonOlder "3.8";
 
@@ -24,27 +25,26 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-sR9OqsBxP2DvcYz1dhIP29rrQ56CRKW02oNAXUNttio=";
+    postFetch = ''
+      # export-subst prevents reproducability
+      rm $out/.git_archival.json
+    '';
+    hash = "sha256-DXYNFSvmKiulMnWL8w5l9lWGtS9Sff/Hn4x538nrvzo=";
   };
 
   postPatch = ''
     rm -r vendor
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    setuptools
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    igraph
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    texttable
-  ];
+  buildInputs = [ igraph ];
 
-  passthru.optional-dependencies = {
+  dependencies = [ texttable ];
+
+  optional-dependencies = {
     cairo = [ cairocffi ];
     matplotlib = [ matplotlib ];
     plotly = [ plotly ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     "testAuthorityScore"
@@ -73,6 +73,9 @@ buildPythonPackage rec {
     homepage = "https://igraph.org/python/";
     changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    maintainers = with maintainers; [
+      MostAwesomeDude
+      dotlambda
+    ];
   };
 }

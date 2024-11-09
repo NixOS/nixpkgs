@@ -7,7 +7,15 @@ let
       mkDerivation {
         pname = "haskell-setBuildTarget";
         version = "0.1.0.0";
-        src = ./.;
+        src = lib.fileset.toSource {
+          root = ./.;
+          fileset = lib.fileset.unions [
+            ./haskell-setBuildTarget.cabal
+            ./Bar.hs
+            ./Foo.hs
+            ./Setup.hs
+          ];
+        };
         isLibrary = false;
         isExecutable = true;
         executableHaskellDepends = [ base ];

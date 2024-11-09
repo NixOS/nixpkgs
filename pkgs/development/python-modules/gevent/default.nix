@@ -1,24 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, python
-, libev
-, cffi
-, cython_3
-, greenlet
-, importlib-metadata
-, setuptools
-, wheel
-, zope-event
-, zope-interface
-, pythonOlder
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  python,
+  libev,
+  cffi,
+  cython,
+  greenlet,
+  importlib-metadata,
+  setuptools,
+  wheel,
+  zope-event,
+  zope-interface,
+  pythonOlder,
+  c-ares,
+  libuv,
 
-# for passthru.tests
-, dulwich
-, gunicorn
-, opentracing
-, pika
+  # for passthru.tests
+  dulwich,
+  gunicorn,
+  opentracing,
+  pika,
 }:
 
 buildPythonPackage rec {
@@ -34,24 +38,26 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
     wheel
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [
     libev
+    libuv
+    c-ares
   ];
 
   propagatedBuildInputs = [
     importlib-metadata
     zope-event
     zope-interface
-  ] ++ lib.optionals (!isPyPy) [
-    greenlet
-  ];
+  ] ++ lib.optionals (!isPyPy) [ greenlet ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   # Bunch of failures.
   doCheck = false;
@@ -66,8 +72,11 @@ buildPythonPackage rec {
       dulwich
       gunicorn
       opentracing
-      pika;
+      pika
+      ;
   } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+
+  GEVENTSETUP_EMBED = "0";
 
   meta = with lib; {
     description = "Coroutine-based networking library";

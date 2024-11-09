@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "pmtiles";
-  version = "1.19.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
     rev = "v${version}";
-    hash = "sha256-JVx543uatVUWD1TmnjJBz4X/oHPKpbrGpGcxQd2IYiw=";
+    hash = "sha256-b473V082jM8d0XRn4tPzVGLryFNHn5Cab3IkNWve49s=";
   };
 
-  vendorHash = "sha256-N/8n3NDHShcXjPvLSkLRacY4aqFzLYM/+/mJRGXQAVg=";
+  vendorHash = "sha256-QDGs0L29W4QQBeIH1Z23nI/FYdu95kLnOAIZEWPOMWw=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
 
@@ -19,10 +19,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The single-file utility for creating and working with PMTiles archives";
+    description = "Single-file utility for creating and working with PMTiles archives";
     homepage = "https://github.com/protomaps/go-pmtiles";
     license = licenses.bsd3;
-    maintainers = [ maintainers.theaninova ];
+    maintainers = teams.geospatial.members ++ (with maintainers; [ theaninova ]);
     mainProgram = "pmtiles";
   };
 }

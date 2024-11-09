@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
 , xorg, gtk3, nss, alsa-lib, udev, libnotify
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 let
   pname = "vk-messenger";
@@ -33,7 +33,7 @@ let
   linux = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook ];
+    nativeBuildInputs = [ rpmextract autoPatchelfHook wrapGAppsHook3 ];
     buildInputs = (with xorg; [
       libXdamage libXtst libXScrnSaver libxkbfile
     ]) ++ [ gtk3 nss alsa-lib ];
@@ -71,4 +71,4 @@ let
       cp -r *.app $out/Applications
     '';
   };
-in if stdenv.isDarwin then darwin else linux
+in if stdenv.hostPlatform.isDarwin then darwin else linux

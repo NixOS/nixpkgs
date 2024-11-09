@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "Default typeface used in the user interface of GNOME since version 3.0";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

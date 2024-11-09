@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     libX11 libSM SDL SDL_ttf SDL_image libGLU libGL expat zlib libXxf86misc
   ];
   meta = with lib; {
-    description = "A multiplayer X11 space combat game";
+    description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];

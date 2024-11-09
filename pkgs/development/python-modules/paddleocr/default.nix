@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, attrdict
-, beautifulsoup4
-, cython
-, fire
-, fonttools
-, lmdb
-, lxml
-, numpy
-, opencv4
-, openpyxl
-, pdf2docx
-, pillow
-, premailer
-, pyclipper
-, pymupdf
-, python-docx
-, rapidfuzz
-, scikit-image
-, shapely
-, tqdm
-, paddlepaddle
-, lanms-neo
-, polygon3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  attrdict,
+  beautifulsoup4,
+  cython,
+  fire,
+  fonttools,
+  lmdb,
+  lxml,
+  numpy,
+  opencv-python,
+  openpyxl,
+  pdf2docx,
+  pillow,
+  pyclipper,
+  pymupdf,
+  python-docx,
+  rapidfuzz,
+  scikit-image,
+  shapely,
+  tqdm,
+  paddlepaddle,
+  lanms-neo,
+  polygon3,
 }:
 
 let
-  version = "2.7.1";
+  version = "2.8.1";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -38,8 +37,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "v${version}";
-    hash = "sha256-5Dt4UL+7dwJNjcNnCVi3o8bLCt7/m/M6oh1vPu9rza8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TLNpb+CwLKvtmPppDuUbGyJorhmkVVW01J61+XUICYk=";
   };
 
   patches = [
@@ -54,13 +53,11 @@ buildPythonPackage {
     ./remove-import-imaug.patch
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   # trying to relax only pymupdf makes the whole build fail
   pythonRelaxDeps = true;
   pythonRemoveDeps = [
     "imgaug"
     "visualdl"
-    "opencv-python"
     "opencv-contrib-python"
   ];
 
@@ -73,11 +70,10 @@ buildPythonPackage {
     lmdb
     lxml
     numpy
-    opencv4
+    opencv-python
     openpyxl
     pdf2docx
     pillow
-    premailer
     pyclipper
     pymupdf
     python-docx
@@ -106,6 +102,10 @@ buildPythonPackage {
     '';
     changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

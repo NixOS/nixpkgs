@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/sord";
-    description = "A lightweight C library for storing RDF data in memory";
+    description = "Lightweight C library for storing RDF data in memory";
     license = with licenses; [ bsd0 isc ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

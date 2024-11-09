@@ -1,4 +1,8 @@
-{ stdenv, runCommand, ruby, lib, rsync
+{ stdenv
+, lib
+, buildPackages
+, runCommand
+, ruby
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeBinaryWrapper
 , bundler
@@ -23,6 +27,7 @@
 , nativeBuildInputs ? []
 , buildInputs ? []
 , extraConfigPaths ? []
+, passthru ? {}
 , ...
 }@args:
 
@@ -182,7 +187,7 @@ let
             exit 1
           '';
         };
-    });
+    } // passthru);
   };
 
   basicEnv =
@@ -190,7 +195,7 @@ let
       runCommand name' basicEnvArgs ''
         mkdir -p $out
         for i in $paths; do
-          ${rsync}/bin/rsync -a $i/lib $out/
+          ${buildPackages.rsync}/bin/rsync -a $i/lib $out/
         done
         eval "$postBuild"
       ''

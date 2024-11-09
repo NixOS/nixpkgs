@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export CPPFLAGS="-I${getDev libmysqlclient}/include/mysql"
-    export LDFLAGS="-L${libmysqlclient}/lib/mysql -L${postgresql}/lib"
+    export LDFLAGS="-L${libmysqlclient}/lib/mysql"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Extremely lightweight but extensible database access library written in C";
     mainProgram = "odbx-sql";
     license = licenses.lgpl21;

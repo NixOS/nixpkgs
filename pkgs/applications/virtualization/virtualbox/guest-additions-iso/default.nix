@@ -1,22 +1,15 @@
-{ stdenv, fetchurl, lib, virtualbox}:
+{
+  fetchurl,
+  lib,
+  virtualbox,
+}:
 
 let
   inherit (virtualbox) version;
 in
-stdenv.mkDerivation rec {
-  pname = "VirtualBox-GuestAdditions-iso";
-  inherit version;
-
-  src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0efbcb9bf4722cb19292ae00eba29587432e918d3b1f70905deb70f7cf78e8ce";
-  };
-
-  buildCommand = ''
-    mkdir -p $out
-    cp $src $out/
-  '';
-
+fetchurl {
+  url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+  sha256 = "486f90cbfe9ed4bf2b12d726ebf54a839758a237e967aa65fc2c92d90a963021";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''
@@ -24,7 +17,13 @@ stdenv.mkDerivation rec {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [
+      lib.maintainers.sander
+      lib.maintainers.friedrichaltheide
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

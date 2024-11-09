@@ -2,30 +2,21 @@
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , gopass
 }:
 
 buildGoModule rec {
   pname = "gopass-hibp";
-  version = "1.15.12";
+  version = "1.15.14";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-hibp";
     rev = "v${version}";
-    hash = "sha256-5BnCaxF2XZ4f26KsTbapcZ2+Ii58nR/14pCj0c0QLKE=";
+    hash = "sha256-WRYDfz8BK3jJx/XaE9pBd6SvPruwc+tKMWsAv58LXY8=";
   };
 
-  patches = [
-    # go mod tidy. Remove with next release
-    (fetchpatch {
-      url = "https://github.com/gopasspw/gopass-hibp/commit/cdfdbc6da154874c74d7c8fc83bb11a98dd8fd81.patch";
-      hash = "sha256-jCzg3c8EizhoRYvWUZCys6/q2ChVWy/psPofNGIYdxs=";
-    })
-  ];
-
-  vendorHash = "sha256-GLqtwUg3fa1okdPoQBkF+ygpm8GLmDyIyUiC7/TTTaE=";
+  vendorHash = "sha256-0Iw1MPKSI0Xon5EarndLJX0aYUJvSu/xeTKAopEIPSw=";
 
   subPackages = [ "." ];
 

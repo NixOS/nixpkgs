@@ -131,10 +131,10 @@ in lib.recursiveUpdate orig rec {
 
   # TODO: handle symlinks in bin.core
   ptex.binlinks = {
-    pbibtex = tl.uptex + "/bin/upbibtex";
-    pdvitype = tl.uptex + "/bin/updvitype";
-    ppltotf = tl.uptex + "/bin/uppltotf";
-    ptftopl = tl.uptex + "/bin/uptftopl";
+    pbibtex = tl.uptex.out + "/bin/upbibtex";
+    pdvitype = tl.uptex.out + "/bin/updvitype";
+    ppltotf = tl.uptex.out + "/bin/uppltotf";
+    ptftopl = tl.uptex.out + "/bin/uptftopl";
   };
 
   texdef.binlinks = {
@@ -143,7 +143,7 @@ in lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = tl."texlive.infra" + "/bin/mktexlsr";
+    texhash = tl."texlive.infra".out + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {

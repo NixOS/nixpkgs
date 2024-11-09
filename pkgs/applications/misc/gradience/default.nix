@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , wrapGAppsHook4
 , meson
@@ -67,6 +66,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     svglib
     yapsy
+    packaging
   ];
 
   preFixup = ''

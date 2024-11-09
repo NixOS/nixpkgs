@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -10,19 +10,20 @@
 , menu-cache
 , qtbase
 , qttools
-, qtx11extras
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.9.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    hash = "sha256-8pfUpyjn01D8CL+2PjGkZqyHu+lpHZIXlXn67rZoxMY=";
+    hash = "sha256-a3NdU1OZI+BqtvpUhqhwylf5upFJxeg8B+1cPTAdDr4=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -38,7 +40,7 @@ mkDerivation rec {
     libfm-qt
     menu-cache
     qtbase
-    qtx11extras
+    qtwayland
   ];
 
   hardeningDisable = [ "format" ];

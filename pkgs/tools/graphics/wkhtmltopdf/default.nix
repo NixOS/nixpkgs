@@ -1,47 +1,110 @@
-{ stdenv, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
-, fontconfig, freetype, libpng, zlib, libjpeg, wrapQtAppsHook
-, openssl, libX11, libXext, libXrender }:
+{ lib
+, autoPatchelfHook
+, cpio
+, freetype
+, zlib
+, openssl
+, fetchurl
+, dpkg
+, gcc-unwrapped
+, libjpeg
+, libpng
+, fontconfig
+, stdenv
+, xar
+, xorg
+}:
 
-stdenv.mkDerivation rec {
-  version = "0.12.6";
-  pname = "wkhtmltopdf";
+let
+  darwinAttrs = rec {
+    version = "0.12.6-2";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.macos-cocoa.pkg";
+      sha256 = "sha256-gaZrd7UI/t6NvKpnEnIDdIN2Vos2c6F/ZhG21R6YlPg=";
+    };
 
-  src = fetchFromGitHub {
-    owner  = "wkhtmltopdf";
-    repo   = "wkhtmltopdf";
-    rev    = version;
-    sha256 = "0m2zy986kzcpg0g3bvvm815ap9n5ann5f6bdy7pfj6jv482bm5mg";
+    nativeBuildInputs = [ xar cpio ];
+
+    unpackPhase = ''
+      xar -xf $src
+      zcat Payload | cpio -i
+      tar -xf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r bin include lib share $out/
+      runHook postInstall
+    '';
   };
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  _linuxAttrs = {
+    nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
-  buildInputs = [
-    fontconfig freetype libpng zlib libjpeg openssl
-    libX11 libXext libXrender
-    qtwebkit qtsvg qtxmlpatterns
-  ];
+    buildInputs = [
+      xorg.libXext
+      xorg.libXrender
 
-  prePatch = ''
-    for f in src/image/image.pro src/pdf/pdf.pro ; do
-      substituteInPlace $f --replace '$(INSTALL_ROOT)' ""
-    done
+      freetype
+      openssl
+      zlib
+
+      (lib.getLib fontconfig)
+      (lib.getLib gcc-unwrapped)
+      (lib.getLib libjpeg)
+      (lib.getLib libpng)
+    ];
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      mkdir pkg
+      dpkg-deb -x $src pkg
+
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp -r pkg/usr/local $out
+
+      runHook postInstall
+    '';
+  };
+
+  linuxAttrs.aarch64-linux = rec {
+    version = "0.12.6.1-3";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_arm64.deb";
+      hash = "sha256-tmBhV7J8E+BE0Ku+ZwMB+I3k4Xgq/KT5wGpYF/PgOpw=";
+    };
+  } // _linuxAttrs;
+
+  linuxAttrs.x86_64-linux = rec {
+    version = "0.12.6.1-3";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
+      hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
+    };
+  } // _linuxAttrs;
+in
+stdenv.mkDerivation ({
+  pname = "wkhtmltopdf";
+
+  dontStrip = true;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/wkhtmltopdf --version
   '';
-
-  # rewrite library path
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltopdf
-    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltoimage
-  '';
-
-  configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://wkhtmltopdf.org/";
-    description = "Tools for rendering web pages to PDF or images";
+    description =
+      "Tools for rendering web pages to PDF or images (binary package)";
     longDescription = ''
       wkhtmltopdf and wkhtmltoimage are open source (LGPL) command line tools
       to render HTML into PDF and various image formats using the QT Webkit
@@ -51,7 +114,10 @@ stdenv.mkDerivation rec {
       There is also a C library, if you're into that kind of thing.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jb55 ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ nbr kalbasit ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
   };
 }
+// lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
+// lib.optionalAttrs (stdenv.hostPlatform.isLinux) linuxAttrs.${stdenv.system}
+)

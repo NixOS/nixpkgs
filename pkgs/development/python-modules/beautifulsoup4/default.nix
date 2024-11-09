@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, hatchling
-, html5lib
-, lxml
-, pytestCheckHook
-, pythonOlder
-, soupsieve
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  chardet,
+  hatchling,
+  html5lib,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  soupsieve,
+  sphinxHook,
 
-# for passthru.tests
-, html-sanitizer
-, markdownify
-, mechanicalsoup
-, nbconvert
-, subliminal
-, wagtail
+  # for passthru.tests
+  html-sanitizer,
+  markdownify,
+  mechanicalsoup,
+  nbconvert,
+  subliminal,
+  wagtail,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +26,10 @@ buildPythonPackage rec {
   version = "4.12.3";
   pyproject = true;
 
-  outputs = ["out" "doc"];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   disabled = pythonOlder "3.6";
 
@@ -32,6 +37,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tests.patch";
+      url = "https://git.launchpad.net/beautifulsoup/patch/?id=9786a62726de5a8caba10021c4d4a58c8a3e9e3f";
+      hash = "sha256-FOMoJjT0RgqKjbTLN/qCuc0HjhKeenMcgwb9Fp8atAY=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling
@@ -43,30 +56,26 @@ buildPythonPackage rec {
     soupsieve
   ];
 
-  passthru.optional-dependencies = {
-    html5lib = [
-      html5lib
-    ];
-    lxml = [
-      lxml
-    ];
+  optional-dependencies = {
+    html5lib = [ html5lib ];
+    lxml = [ lxml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "bs4"
-  ];
+  pythonImportsCheck = [ "bs4" ];
 
   passthru.tests = {
-    inherit html-sanitizer
+    inherit
+      html-sanitizer
       markdownify
       mechanicalsoup
       nbconvert
       subliminal
-      wagtail;
+      wagtail
+      ;
   };
 
   meta = with lib; {

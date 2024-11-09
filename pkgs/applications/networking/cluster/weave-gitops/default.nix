@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "Weave Gitops CLI";
     license = licenses.mpl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nullx76 ];
+    maintainers = [ ];
     mainProgram = "gitops";
   };
 }

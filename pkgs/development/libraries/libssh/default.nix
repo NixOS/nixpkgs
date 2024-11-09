@@ -15,18 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.10.6";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/libssh-${version}.tar.xz";
-    hash = "sha256-GGHUmPW28XQbarxz5ghHhJHtz5ydS2Yw7vbnRZbencE=";
+    hash = "sha256-FLfcxy6R4IFRxYuYGntXCrJmP2MOfSg3ZF1anGEsG3k=";
   };
 
-  # Do not split 'dev' output until lib/cmake/libssh/libssh-config.cmake
-  # is fixed to point INTERFACE_INCLUDE_DIRECTORIES to .dev output.
-  # Otherwise it breaks `plasma5Packages.kio-extras`:
-  #   https://hydra.nixos.org/build/221540008/nixlog/3/tail
-  #outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
@@ -37,12 +33,14 @@ stdenv.mkDerivation rec {
   # included in `buildInputs` such as libX11.
   cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
-  # single output, otherwise cmake and .pc files point to the wrong directory
-  # outputs = [ "out" "dev" ];
-
   buildInputs = [ zlib openssl libsodium ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/libssh/libssh-config.cmake \
+      --replace-fail "set(_IMPORT_PREFIX \"$out\")" "set(_IMPORT_PREFIX \"$dev\")"
+  '';
 
   passthru.tests = {
     inherit ffmpeg sshping wireshark;

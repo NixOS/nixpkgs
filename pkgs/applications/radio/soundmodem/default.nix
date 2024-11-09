@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "soundmodem";
@@ -9,12 +9,25 @@ stdenv.mkDerivation rec {
     sha256 = "156l3wjnh5rcisxb42kcmlf74swf679v4xnj09zy5j74rd4h721z";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = [ alsa-lib audiofile gtk2 libxml2 ];
 
   patches = [ ./matFix.patch ];
 
   doCheck = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "SoundmodemConfig";
+      exec = "soundmodemconfig";
+      desktopName = "SoundModemConfig";
+      comment = "Audio based modem for ham radio supporting ax.25";
+      categories = [ "Audio" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Audio based modem for ham radio supporting ax.25";

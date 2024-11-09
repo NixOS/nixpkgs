@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/astrale-sharp/typstfmt/blob/${src.rev}/CHANGELOG.md";
-    description = "A formatter for the Typst language";
+    description = "Formatter for the Typst language";
     homepage = "https://github.com/astrale-sharp/typstfmt";
     license = lib.licenses.mit;
     mainProgram = "typstfmt";

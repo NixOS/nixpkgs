@@ -20,7 +20,7 @@ in
 {
   name = "nfs";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes =

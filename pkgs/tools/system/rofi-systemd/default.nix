@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -a rofi-systemd $out/bin/rofi-systemd
   '';
 
-  wrapperPath = with lib; makeBinPath [
+  wrapperPath = lib.makeBinPath [
     coreutils
     gawk
     jq

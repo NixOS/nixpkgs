@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustywind";
-  version = "0.21.1";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
     rev = "v${version}";
-    hash = "sha256-cRgMTM4u8Nm+5eD3rNsx/1+PdS08+0N53m8NAlzVcXc=";
+    hash = "sha256-NRIWjmKjteJibqnOjkkUY9eKIM65H7NaRX8rn1MdXmY=";
   };
 
-  cargoHash = "sha256-utqo3w5itQa5pJTDWhEYIRj9OAZ+K6SgrPHXi3WE6+Q=";
+  cargoHash = "sha256-yUODUAhWtRGCj3U9nBlw3+5dNv6vGHXmJzUd8hGKnu0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

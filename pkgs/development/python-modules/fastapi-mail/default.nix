@@ -1,21 +1,22 @@
-{ lib
-, aioredis
-, aiosmtplib
-, blinker
-, buildPythonPackage
-, email-validator
-, fakeredis
-, fastapi
-, fetchFromGitHub
-, httpx
-, jinja2
-, poetry-core
-, pydantic
-, pydantic-settings
-, pytest-asyncio
-, pytestCheckHook
-, python-multipart
-, pythonOlder
+{
+  lib,
+  aioredis,
+  aiosmtplib,
+  blinker,
+  buildPythonPackage,
+  email-validator,
+  fakeredis,
+  fastapi,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  poetry-core,
+  pydantic,
+  pydantic-settings,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-multipart,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,18 +33,19 @@ buildPythonPackage rec {
     hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.5"' 'version = "${version}"' \
-      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^2.0"' 'pydantic = "*"' \
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "1.2.5"' 'version = "${version}"'
+  '';
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aioredis
     aiosmtplib
     blinker
@@ -68,9 +70,7 @@ buildPythonPackage rec {
     "test_redis_checker"
   ];
 
-  pythonImportsCheck = [
-    "fastapi_mail"
-  ];
+  pythonImportsCheck = [ "fastapi_mail" ];
 
   meta = with lib; {
     description = "Module for sending emails and attachments";

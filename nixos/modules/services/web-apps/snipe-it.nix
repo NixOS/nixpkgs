@@ -34,22 +34,22 @@ let
 in {
   options.services.snipe-it = {
 
-    enable = mkEnableOption (lib.mdDoc "snipe-it, a free open source IT asset/license management system");
+    enable = mkEnableOption "snipe-it, a free open source IT asset/license management system";
 
     user = mkOption {
       default = "snipeit";
-      description = lib.mdDoc "User snipe-it runs as.";
+      description = "User snipe-it runs as.";
       type = types.str;
     };
 
     group = mkOption {
       default = "snipeit";
-      description = lib.mdDoc "Group snipe-it runs as.";
+      description = "Group snipe-it runs as.";
       type = types.str;
     };
 
     appKeyFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
         generated with `head -c 32 /dev/urandom | base64`.
@@ -63,13 +63,13 @@ in {
       default = config.networking.fqdnOrHostName;
       defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "snipe-it.example.com";
-      description = lib.mdDoc ''
+      description = ''
         The hostname to serve Snipe-IT on.
       '';
     };
 
     appURL = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The root URL that you want to host Snipe-IT on. All URLs in Snipe-IT will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
         Command example: `snipe-it snipe-it:update-url https://old.example.com https://new.example.com`
@@ -83,7 +83,7 @@ in {
     };
 
     dataDir = mkOption {
-      description = lib.mdDoc "snipe-it data directory";
+      description = "snipe-it data directory";
       default = "/var/lib/snipe-it";
       type = types.path;
     };
@@ -92,29 +92,29 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = lib.mdDoc "Database host port.";
+        description = "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "snipeit";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = user;
         defaultText = literalExpression "user";
-        description = lib.mdDoc "Database username.";
+        description = "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/dbpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           {option}`database.user`.
         '';
@@ -122,7 +122,7 @@ in {
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
@@ -130,34 +130,34 @@ in {
       driver = mkOption {
         type = types.enum [ "smtp" "sendmail" ];
         default = "smtp";
-        description = lib.mdDoc "Mail driver to use.";
+        description = "Mail driver to use.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Mail host address.";
+        description = "Mail host address.";
       };
       port = mkOption {
         type = types.port;
         default = 1025;
-        description = lib.mdDoc "Mail host port.";
+        description = "Mail host port.";
       };
       encryption = mkOption {
         type = with types; nullOr (enum [ "tls" "ssl" ]);
         default = null;
-        description = lib.mdDoc "SMTP encryption mechanism to use.";
+        description = "SMTP encryption mechanism to use.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "snipeit";
-        description = lib.mdDoc "Mail username.";
+        description = "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/mailpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           {option}`mail.user`.
         '';
@@ -165,30 +165,30 @@ in {
       backupNotificationAddress = mkOption {
         type = types.str;
         default = "backup@example.com";
-        description = lib.mdDoc "Email Address to send Backup Notifications to.";
+        description = "Email Address to send Backup Notifications to.";
       };
       from = {
         name = mkOption {
           type = types.str;
           default = "Snipe-IT Asset Management";
-          description = lib.mdDoc "Mail \"from\" name.";
+          description = "Mail \"from\" name.";
         };
         address = mkOption {
           type = types.str;
           default = "mail@example.com";
-          description = lib.mdDoc "Mail \"from\" address.";
+          description = "Mail \"from\" address.";
         };
       };
       replyTo = {
         name = mkOption {
           type = types.str;
           default = "Snipe-IT Asset Management";
-          description = lib.mdDoc "Mail \"reply-to\" name.";
+          description = "Mail \"reply-to\" name.";
         };
         address = mkOption {
           type = types.str;
           default = "mail@example.com";
-          description = lib.mdDoc "Mail \"reply-to\" address.";
+          description = "Mail \"reply-to\" address.";
         };
       };
     };
@@ -197,7 +197,7 @@ in {
       type = types.str;
       default = "18M";
       example = "1G";
-      description = lib.mdDoc "The maximum size for uploads (e.g. images).";
+      description = "The maximum size for uploads (e.g. images).";
     };
 
     poolConfig = mkOption {
@@ -210,7 +210,7 @@ in {
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the snipe-it PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
@@ -232,7 +232,7 @@ in {
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
@@ -253,7 +253,7 @@ in {
                 options = {
                   _secret = mkOption {
                     type = nullOr (oneOf [ str path ]);
-                    description = lib.mdDoc ''
+                    description = ''
                       The path to a file containing the value the
                       option should be set to in the final
                       configuration file.
@@ -275,7 +275,7 @@ in {
           OIDC_ISSUER_DISCOVER = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Snipe-IT configuration options to set in the
         {file}`.env` file.
         Refer to <https://snipe-it.readme.io/docs/configuration>
@@ -331,7 +331,7 @@ in {
       APP_CONFIG_CACHE = "/run/snipe-it/cache/config.php";
       APP_ROUTES_CACHE = "/run/snipe-it/cache/routes-v7.php";
       APP_EVENTS_CACHE = "/run/snipe-it/cache/events.php";
-      SESSION_SECURE_COOKIE = tlsEnabled;
+      SECURE_COOKIES = tlsEnabled;
     };
 
     services.mysql = mkIf db.createLocally {

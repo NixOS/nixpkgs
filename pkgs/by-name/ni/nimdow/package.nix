@@ -3,18 +3,20 @@
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
 
-  version = "0.7.37";
-
-  requiredNimVersion = 1;
+  version = "0.7.39";
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = finalAttrs.pname;
+    repo = "nimdow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-930wDS0UW65QzpUHHOuM25oi/OhFmG0Q7N05ftu7XlI=";
+    hash = "sha256-9gYlVuKDHCs6yaY1b6dJgwQUJdko6npjom4ab7nKZ7w=";
   };
 
   lockFile = ./lock.json;
+
+  nimFlags = [
+    "--deepcopy:on"
+  ];
 
   postInstall = ''
     install -D config.default.toml $out/share/nimdow/config.default.toml

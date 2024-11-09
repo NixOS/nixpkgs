@@ -34,6 +34,7 @@ let
   # See description in cc-wrapper.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
+  wrapperBinName = "${targetPrefix}${baseBinName}";
 in
 
 stdenv.mkDerivation {
@@ -73,7 +74,7 @@ stdenv.mkDerivation {
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
     ''
     # symlink in share for autoconf to find macros
 
@@ -128,10 +129,11 @@ stdenv.mkDerivation {
 
   meta =
     let pkg-config_ = optionalAttrs (pkg-config != null) pkg-config; in
-    (optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority"])) //
+    (optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority" "mainProgram"])) //
     { description =
         attrByPath ["meta" "description"] "pkg-config" pkg-config_
         + " (wrapper script)";
       priority = 10;
+      mainProgram = wrapperBinName;
   };
 }

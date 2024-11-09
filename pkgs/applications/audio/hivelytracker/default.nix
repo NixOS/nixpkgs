@@ -6,7 +6,7 @@
 , SDL_image
 , SDL_ttf
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     mainProgram = "hivelytracker";
     maintainers = with maintainers; [ fgaz ];
-    broken = stdenv.isDarwin; # TODO: try to use xcbuild
+    broken = stdenv.hostPlatform.isDarwin; # TODO: try to use xcbuild
   };
 })

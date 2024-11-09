@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, httpx
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  httpx,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-RWjR12ns1+tLuDZfBO7G42TF9w7sezdl9UPa67E1/PU=";
   };
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  pythonImportsCheck = [
-    "youtubesearchpython"
-  ];
+  pythonImportsCheck = [ "youtubesearchpython" ];
 
   # Project has no tests
   doCheck = false;
@@ -32,6 +29,6 @@ buildPythonPackage rec {
     description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

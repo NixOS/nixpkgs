@@ -7,23 +7,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "docuum";
-  version = "0.23.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "docuum";
     rev = "v${version}";
-    hash = "sha256-jZJkI4rk/8O6MsHjuDqmIiRc1LJpTajk/rSUVYnHiOs=";
+    hash = "sha256-nWd6h39jU1eZWPFMxhxActsmrs9k0TDMlealuzTa+o0=";
   };
 
-  cargoHash = "sha256-qBigfW0W3t0a43y99H22gmKBnhsu08Yd1CTTatsRfRs=";
+  cargoHash = "sha256-uoQ1qUII6TSZsosAdNfs2CREVuN2kuT9Bmi5vuDT/rY=";
 
   checkFlags = [
     # fails, no idea why
     "--skip=format::tests::code_str_display"
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
   ];
 

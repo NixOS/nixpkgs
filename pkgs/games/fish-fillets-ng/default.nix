@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A puzzle game";
+    description = "Puzzle game";
     mainProgram = "fillets";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];

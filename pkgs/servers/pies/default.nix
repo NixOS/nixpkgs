@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A program invocation and execution supervisor";
+    description = "Program invocation and execution supervisor";
 
-    longDescription =
-      '' The name Pies (pronounced "p-yes") stands for Program Invocation and
+    longDescription = ''
+         The name Pies (pronounced "p-yes") stands for Program Invocation and
          Execution Supervisor.  This utility starts and controls execution of
          external programs, called components.  Each component is a
          stand-alone program, which is executed in the foreground.  Upon

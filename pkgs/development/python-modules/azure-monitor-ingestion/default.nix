@@ -1,28 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, azure-core
-, isodate
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  azure-core,
+  isodate,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-monitor-ingestion";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-idAEqP+HaZs/0fzyBaqO8enTTySg88w3TSIUceiYdDs=";
+    hash = "sha256-JU11mTof5wfRmPAUrvWhT6pXDO5zabNbsDriqo+Zvnk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-core

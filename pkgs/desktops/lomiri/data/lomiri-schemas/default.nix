@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
     rev = finalAttrs.version;
-    hash = "sha256-Pnn/Qh5EYEqmP8QFsZcSCpDL36++aeUUok3t9a1/1n0=";
+    hash = "sha256-OjSMt9XKqGoStF5O2zJTh3drHWe7Vk2cM94OYMSQmoU=";
   };
 
   strictDeps = true;

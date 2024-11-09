@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "memtest_vulkan";
     broken =
       stdenv.system == "aarch64-linux" # error: linker `aarch64-linux-gnu-gcc` not found
-      || stdenv.isDarwin; # Can't find Vulkan; might work though?
+      || stdenv.hostPlatform.isDarwin; # Can't find Vulkan; might work though?
   };
 }

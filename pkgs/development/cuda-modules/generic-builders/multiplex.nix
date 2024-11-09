@@ -3,7 +3,7 @@
   lib,
   cudaVersion,
   flags,
-  hostPlatform,
+  stdenv,
   # Expected to be passed by the caller
   mkVersionedPackageName,
   # pname :: String
@@ -39,6 +39,8 @@ let
     modules
     strings
     ;
+
+  inherit (stdenv) hostPlatform;
 
   evaluatedModules = modules.evalModules {
     modules = [

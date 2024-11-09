@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Dolby B & C software decoder";
+    description = "Dolby B & C software decoder";
     homepage = "https://sourceforge.net/projects/dolbybcsoftwaredecode/";
     maintainers = with maintainers; [ lorenz ];
 

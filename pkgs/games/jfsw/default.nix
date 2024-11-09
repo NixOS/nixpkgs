@@ -5,7 +5,7 @@
 , SDL2
 , perl
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "sw";
     maintainers = with lib.maintainers; [ moody ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     inherit (SDL2.meta) platforms;
   };
 })

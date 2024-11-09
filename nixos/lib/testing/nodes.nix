@@ -13,7 +13,7 @@ let
     types
     ;
 
-  inherit (hostPkgs) hostPlatform;
+  inherit (hostPkgs.stdenv) hostPlatform;
 
   guestSystem =
     if hostPlatform.isLinux
@@ -151,7 +151,7 @@ in
     nodesCompat =
       mapAttrs
         (name: config: config // {
-          config = lib.warnIf (lib.isInOldestRelease 2211)
+          config = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211)
             "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
             config;
         })

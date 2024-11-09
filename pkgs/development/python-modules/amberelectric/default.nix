@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "amberelectric";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HujjqJ3nkPIj8P0qAiQnQzLhji5l8qOAO2Gh53OJ7UY=";
+    hash = "sha256-gxpFKIrGHpwjPdF0nnyruwCYf3bhrubdtXNx2+wEiZU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     urllib3
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "amberelectric"
-  ];
+  pythonImportsCheck = [ "amberelectric" ];
 
   meta = with lib; {
     description = "Python Amber Electric API interface";

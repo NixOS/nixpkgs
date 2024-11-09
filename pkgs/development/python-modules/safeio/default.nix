@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,6 @@ buildPythonPackage rec {
     description = "Safely make I/O operations to files in Python even from multiple threads";
     homepage = "https://github.com/Animenosekai/safeIO";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

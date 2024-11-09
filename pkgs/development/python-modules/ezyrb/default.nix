@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, future
-, numpy
-, scipy
-, matplotlib
-, scikit-learn
-, torch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  future,
+  numpy,
+  scipy,
+  matplotlib,
+  scikit-learn,
+  torch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +35,9 @@ buildPythonPackage rec {
     torch
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ezyrb"
-  ];
+  pythonImportsCheck = [ "ezyrb" ];
 
   disabledTestPaths = [
     # Exclude long tests

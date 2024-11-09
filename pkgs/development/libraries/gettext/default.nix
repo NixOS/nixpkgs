@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz, bash
+{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,16 +19,25 @@ stdenv.mkDerivation rec {
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-  ];
+  ]
+    # An accidental inclusion in https://marc.info/?l=glibc-alpha&m=150511271003225&w=2
+    # resulted in a getcwd prototype to be added in when it isn't needed.
+    # Clang does not like this unless the "overridable" attribute was appied.
+    # Since we don't need to redeclare getcwd, we can just remove it.
+    #
+    # Issue: https://github.com/NixOS/nixpkgs/issues/348658
+    # Fixed in https://github.com/autotools-mirror/gettext/commit/cb2c1486336462c8180f487221181ee798b0e73e
+    # Remove in 0.22.5 upgrade.
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) ./fix-getcwd-clang.patch;
 
   outputs = [ "out" "man" "doc" "info" ];
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
-     "--disable-csharp" "--with-xz"
+     "--disable-csharp"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -51,13 +60,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    xz
-    xz.bin
+    updateAutotoolsGnuConfigScriptsHook
   ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
   ]
-  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
     # HACK, see #10874 (and 14664)
     libiconv
   ];
@@ -97,12 +105,12 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm vrthra ];
+    maintainers = with maintainers; [ zimbatm ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }
 
-// lib.optionalAttrs stdenv.isDarwin {
+// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

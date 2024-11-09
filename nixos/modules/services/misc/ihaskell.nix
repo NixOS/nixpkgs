@@ -1,7 +1,4 @@
 { pkgs, lib, config, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.ihaskell;
@@ -14,23 +11,23 @@ in
 {
   options = {
     services.ihaskell = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Autostart an IHaskell notebook service.";
+        description = "Autostart an IHaskell notebook service.";
       };
 
-      extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = haskellPackages: [];
-        defaultText = literalExpression "haskellPackages: []";
-        example = literalExpression ''
+        defaultText = lib.literalExpression "haskellPackages: []";
+        example = lib.literalExpression ''
           haskellPackages: [
             haskellPackages.wreq
             haskellPackages.lens
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra packages available to ghc when running ihaskell. The
           value must be a function which receives the attrset defined
           in {var}`haskellPackages` as the sole argument.
@@ -39,7 +36,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.ihaskell = {
       group = config.users.groups.ihaskell.name;

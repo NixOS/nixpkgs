@@ -1,25 +1,31 @@
-{ lib
-, aenum
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, simplejson
+{
+  lib,
+  aenum,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "wallbox";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-COZHMkAbTFZKi/b4e6toC4gPj1MPfGN4aBVi6SglrBI=";
+    hash = "sha256-8taZpC1N5ZsVurh10WosZvg7WDmord+PDfhHpRlfqBE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aenum
     requests
     simplejson
@@ -28,9 +34,7 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wallbox"
-  ];
+  pythonImportsCheck = [ "wallbox" ];
 
   meta = with lib; {
     description = "Module for interacting with Wallbox EV charger api";

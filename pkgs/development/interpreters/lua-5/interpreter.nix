@@ -3,6 +3,7 @@
 , makeWrapper
 , self
 , packageOverrides ? (final: prev: {})
+, substituteAll
 , pkgsBuildBuild
 , pkgsBuildHost
 , pkgsBuildTarget
@@ -24,12 +25,12 @@ stdenv.mkDerivation (finalAttrs:
 
     luaversion = lib.versions.majorMinor finalAttrs.version;
 
-    plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
-          else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
-          else if stdenv.isDarwin then "macosx"
+    plat = if (stdenv.hostPlatform.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+          else if (stdenv.hostPlatform.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
+          else if stdenv.hostPlatform.isDarwin then "macosx"
           else if stdenv.hostPlatform.isMinGW then "mingw"
-          else if stdenv.isFreeBSD then "freebsd"
-          else if stdenv.isSunOS then "solaris"
+          else if stdenv.hostPlatform.isFreeBSD then "freebsd"
+          else if stdenv.hostPlatform.isSunOS then "solaris"
           else if stdenv.hostPlatform.isBSD then "bsd"
           else if stdenv.hostPlatform.isUnix then "posix"
           else "generic";
@@ -51,9 +52,10 @@ stdenv.mkDerivation (finalAttrs:
 
   LuaPathSearchPaths  = luaPackages.luaLib.luaPathList;
   LuaCPathSearchPaths = luaPackages.luaLib.luaCPathList;
-  setupHook = luaPackages.lua-setup-hook
-    finalAttrs.LuaPathSearchPaths
-    finalAttrs.LuaCPathSearchPaths;
+  setupHook = builtins.toFile "lua-setup-hook" ''
+      source @out@/nix-support/utils.sh
+      addEnvHooks "$hostOffset" luaEnvHook
+      '';
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs:
 
       # abort if patching didn't work
       grep $out src/luaconf.h
-  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
@@ -94,10 +96,10 @@ stdenv.mkDerivation (finalAttrs:
 
     makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
-    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
+    makeFlagsArray+=(${lib.optionalString stdenv.hostPlatform.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${finalAttrs.version}.dylib"
+      TO_LIB="${if stdenv.hostPlatform.isDarwin then "liblua.${finalAttrs.version}.dylib"
                 else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${finalAttrs.version}" )}" )
 
     runHook postConfigure
@@ -107,7 +109,12 @@ stdenv.mkDerivation (finalAttrs:
   inherit postBuild;
 
   postInstall = ''
-    mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
+    mkdir -p "$out/nix-support" "$out/share/doc/lua" "$out/lib/pkgconfig"
+    cp ${substituteAll {
+      src = ./utils.sh;
+      luapathsearchpaths=lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
+      luacpathsearchpaths=lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
+    }} $out/nix-support/utils.sh
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/${luaversion} $out/{share,lib}/lua
     mkdir -p "$out/lib/pkgconfig"
@@ -162,6 +169,7 @@ stdenv.mkDerivation (finalAttrs:
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
+    mainProgram = "lua";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

@@ -125,6 +125,16 @@ with lib;
     '';
 
     # allow nix-copy to live system
-    nix.settings.trusted-users = [ "root" "nixos" ];
+    nix.settings.trusted-users = [ "nixos" ];
+
+    # Install less voices for speechd to save some space
+    nixpkgs.overlays = [
+      (_: prev: {
+        mbrola-voices = prev.mbrola-voices.override {
+          # only ship with one voice per language
+          languages = [ "*1" ];
+        };
+      })
+    ];
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , version
 , hash
+, patches ? []
 , fetchFromGitHub
 
 , cmake
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
     repo = "mbedtls";
     rev = "${pname}-${version}";
     inherit hash;
+    # mbedtls >= 3.6.0 uses git submodules
+    fetchSubmodules = true;
   };
+
+  inherit patches;
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
 
@@ -41,6 +46,10 @@ stdenv.mkDerivation rec {
     # https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.3.0 below "Requirement changes".
     "-DGEN_FILES=off"
   ];
+
+  env = lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) {
+    NIX_CFLAGS_COMPILE = "-Wno-error=calloc-transposed-args";
+  };
 
   doCheck = true;
 

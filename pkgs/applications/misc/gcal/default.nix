@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin gettext;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   meta = {
     description = "Program for calculating and printing calendars";
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "gcal";
   };
 }

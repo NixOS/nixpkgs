@@ -11,6 +11,7 @@
 , proj
 , sqlite
 , libiconv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,13 @@ stdenv.mkDerivation rec {
     url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${version}.tar.gz";
     hash = "sha256-Q74t00na/+AW3RQAxdEShYKMIv6jXKUQnyHz7VBgUIA=";
   };
+
+  patches = [
+    # Drop use of deprecated libxml2 HTTP API.
+    # From: https://www.gaia-gis.it/fossil/libspatialite/info/7c452740fe
+    # see also: https://github.com/NixOS/nixpkgs/issues/347085
+    ./xmlNanoHTTPCleanup.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -38,13 +46,14 @@ stdenv.mkDerivation rec {
     minizip
     proj
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+    zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}
   '';
 

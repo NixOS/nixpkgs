@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   dontConfigure = true;

@@ -18,17 +18,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2023.13";
+  version = "2024.0";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7lMIIJ3iduyxZKwK65tle3c+az2G2Mpi4JwAeCCsTxw=";
+    sha256 = "sha256-EBgb442wI9qU/o6EVCwPnMtPuv1f6Xk2+CZpKWXf3tY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs = if stdenv.hostPlatform.isDarwin
     then [
       CoreFoundation
       Cocoa
@@ -50,9 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
-    description = "The Lobster programming language";
+    description = "Lobster programming language";
     mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of

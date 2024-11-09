@@ -1,61 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# Runtime dependencies
-, hatchling
-, toolz
-, numpy
-, jsonschema
-, typing-extensions
-, pandas
-, jinja2
-, packaging
-
-# Build, dev and test dependencies
-, anywidget
-, ipython
-, pytestCheckHook
-, vega-datasets
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  ipython,
+  ipywidgets,
+  jinja2,
+  jsonschema,
+  narwhals,
+  numpy,
+  packaging,
+  pandas,
+  polars,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  toolz,
+  typing-extensions,
+  vega-datasets,
 }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.2.0";
-  format = "pyproject";
+  version = "5.4.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uTG+V0SQgAQtMjvrVvKVKgIBT9qO+26EPRxQCEXj/gc=";
+    hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     jsonschema
+    narwhals
     numpy
     packaging
     pandas
     toolz
-  ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
+  ] ++ lib.optional (pythonOlder "3.14") typing-extensions;
 
   nativeCheckInputs = [
-    anywidget
     ipython
-    sphinx
-    vega-datasets
+    ipywidgets
+    polars
+    pytest-xdist
     pytestCheckHook
+    vega-datasets
   ];
 
   pythonImportsCheck = [ "altair" ];
+
+  disabledTests = [
+    # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
+    "test_renderer_with_none_embed_options"
+  ];
 
   disabledTestPaths = [
     # Disabled because it requires internet connectivity
@@ -69,11 +74,14 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A declarative statistical visualization library for Python.";
+    description = "Declarative statistical visualization library for Python";
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh vinetos ];
+    maintainers = with maintainers; [
+      teh
+      vinetos
+    ];
   };
 }

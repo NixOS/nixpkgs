@@ -1,27 +1,28 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
   # Python Inputs
-, fastdtw
-, numpy
-, pandas
-, psutil
-, qiskit-terra
-, qiskit-optimization
-, scikit-learn
-, scipy
-, quandl
-, yfinance
+  fastdtw,
+  numpy,
+  pandas,
+  psutil,
+  qiskit-terra,
+  qiskit-optimization,
+  scikit-learn,
+  scipy,
+  quandl,
+  yfinance,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, pytest-timeout
-, qiskit-aer
+  pytestCheckHook,
+  ddt,
+  pytest-timeout,
+  qiskit-aer,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     fastdtw
@@ -76,9 +75,7 @@ buildPythonPackage rec {
     "test_yahoo"
     "test_wikipedia"
   ];
-  pytestFlagsArray = [
-    "--durations=10"
-  ];
+  pytestFlagsArray = [ "--durations=10" ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";

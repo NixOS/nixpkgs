@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, installShellFiles
 , cmake
 , ninja
 , ocl-icd

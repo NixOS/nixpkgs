@@ -12,18 +12,18 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
-  pname = "osmo-ggsn";
-  version = "1.11.0";
+  pname = "osmo-sgsn";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sgsn";
     rev = version;
-    hash = "sha256-jI82LS/WubFAkxBVF31qH4NWSmjC94dL73oOu3shfdU=";
+    hash = "sha256-tcGnsLsVJohxaSfMbGfkHcBhLpbTZbXM+KWe2j34qeo=";
   };
 
   postPatch = ''
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     description = "Osmocom implementation of the 3GPP Serving GPRS Support Node (SGSN)";
     homepage = "https://osmocom.org/projects/osmosgsn";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "osmo-sgsn";
   };
 }

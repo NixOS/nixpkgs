@@ -34,6 +34,6 @@ buildPythonApplication rec {
     mainProgram = "gandi";
     homepage = "https://cli.gandi.net/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

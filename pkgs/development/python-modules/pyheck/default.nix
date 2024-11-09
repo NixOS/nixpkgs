@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, libiconv
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  libiconv,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-mfXkrCbBaJ0da+taKJvfyU5NS43tYJWqtTUXiCLVoGQ=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -41,15 +40,11 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyheck"
-  ];
+  pythonImportsCheck = [ "pyheck" ];
 
   meta = with lib; {
     description = "Python bindings for heck, the Rust case conversion library";

@@ -1,37 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, googleapis-common-protos
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  googleapis-common-protos,
+  protobuf,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
-  version = "0.2.5";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-huL6ujODrcj9BKW9f9T5YLPkrtqn7ZUPL4kc4WkC62s=";
+    pname = "google_cloud_audit_log";
+    inherit version;
+    hash = "sha256-kBQoslcCDYwdETPg+gBBZKVV5aOVx8o827hIZRPfOmU=";
   };
 
-  propagatedBuildInputs = [ googleapis-common-protos protobuf ];
+  build-system = [ setuptools ];
 
-  # tests are a bit wonky to setup and are not very deep either
+  dependencies = [
+    googleapis-common-protos
+    protobuf
+  ];
+
+  # Tests are a bit wonky to setup and are not very deep either
   doCheck = false;
 
-  pythonImportsCheck = [
-    "google.cloud.audit"
-  ];
+  pythonImportsCheck = [ "google.cloud.audit" ];
 
   meta = with lib; {
     description = "Google Cloud Audit Protos";
     homepage = "https://github.com/googleapis/python-audit-log";
     changelog = "https://github.com/googleapis/python-audit-log/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, coloredlogs
-, humanfriendly
-, property-manager
-, fasteners
-, six
-, pytestCheckHook
-, mock
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  coloredlogs,
+  humanfriendly,
+  property-manager,
+  fasteners,
+  six,
+  pytestCheckHook,
+  mock,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     "ssh"
     "foreach"
     "local_context"
-    "release"  # meant to be ran on ubuntu to succeed
+    "release" # meant to be ran on ubuntu to succeed
   ];
 
   meta = with lib; {

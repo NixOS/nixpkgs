@@ -1,24 +1,36 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitea, installShellFiles, perl }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "ssh-tools";
-  version = "1.7";
+  version = "1.9";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "vaporup";
-    repo = pname;
+    repo = "ssh-tools";
     rev = "v${version}";
-    sha256 = "sha256-PDoljR/e/qraPhG9RRjHx1gBIMtTJ815TZDJws8Qg6o=";
+    hash = "sha256-ZMjpc2zjvuLJES5ixEHvo7oAx1JGzy60LzN09Ykn/54=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ssh-* $out/bin/
+  vendorHash = "sha256-GSFhz3cIRl4XUA18HUeUkrw+AJyOkU3ZrZKYTGsWbug=";
+
+  subPackages = [
+    "cmd/go/ssh-authorized-keys"
+    "cmd/go/ssh-sig"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ perl ];
+
+  postInstall = ''
+    install cmd/{bash,perl}/ssh-*/ssh-* -t $out/bin
+    installManPage man/*.1
   '';
 
   meta = with lib; {
-    description = "Collection of various tools using ssh";
-    homepage = "https://github.com/vaporup/ssh-tools/";
+    description = "Making SSH more convenient";
+    homepage = "https://codeberg.org/vaporup/ssh-tools";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

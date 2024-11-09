@@ -27,22 +27,22 @@
 , systemd
 , trash-cli
 , vulkan-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 }:
 stdenv.mkDerivation rec  {
   pname = "plasticity";
-  version = "1.4.19";
+  version = "24.2.4";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-pbq00eMabouGP33d4wbjVvw+AZ+aBWg0e3lc3ZcAwmQ=";
+    hash = "sha256-Pwe1CqprRXqTN93ys247TGrkd0LGKuwrfGmupIN40uU=";
   };
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
 
   buildInputs = [
     alsa-lib
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec  {
     nss
     openssl
     pango
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     trash-cli
     xdg-utils
   ];

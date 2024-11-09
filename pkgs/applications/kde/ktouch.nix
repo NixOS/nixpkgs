@@ -13,7 +13,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/ktouch/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.schmittlauch ];
-    description = "A touch typing tutor from the KDE software collection";
+    description = "Touch typing tutor from the KDE software collection";
     mainProgram = "ktouch";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools qtdeclarative ];

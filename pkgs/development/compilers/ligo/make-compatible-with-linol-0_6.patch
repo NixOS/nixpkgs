@@ -1,0 +1,13 @@
+diff --git a/src/bin/cli.ml b/src/bin/cli.ml
+index 36ee98cbec..960bfc85a0 100644
+--- a/src/bin/cli.ml
++++ b/src/bin/cli.ml
+@@ -3537,7 +3537,7 @@ module Lsp_server = struct
+           ~session_id
+           ~skip_analytics
+       in
+-      let server = Linol_lwt.Jsonrpc2.create_stdio (s :> Linol_lwt.Jsonrpc2.server) in
++      let server = Linol_lwt.Jsonrpc2.create_stdio ~env:() (s :> Linol_lwt.Jsonrpc2.server) in
+       let shutdown () = Poly.(s#get_status = `ReceivedExit) in
+       let task = Linol_lwt.Jsonrpc2.run ~shutdown server in
+       let analytics_job =

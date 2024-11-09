@@ -1,55 +1,74 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  python3,
 }:
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.0";
+        version = "3.4.1";
         src = oldAttrs.src.override {
           inherit version;
-          hash = "sha256-aVD6ymgZrNMhnUrmlKI8eofuONCE9wwXJLDA27i3V2k=";
+          hash = "sha256-ixUwKHCvf2ZS8uA4l1wdKXPwYEbLXX1lNVZos+y+zgw=";
         };
-        patches = [ ];
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.icecream ];
+        dependencies = oldAttrs.dependencies ++ [ python3.pkgs.icecream ];
       });
     };
   };
 in
 with py.pkgs;
 
+
 buildPythonApplication rec {
   pname = "ssh-mitm";
-  version = "3.0.2";
-  format = "setuptools";
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ssh-mitm";
+    repo = "ssh-mitm";
     rev = "refs/tags/${version}";
-    hash = "sha256-koV7g6ZmrrXk60rrDP8BwrDZk3shiyJigQgNcb4BASE=";
+    hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
+
+  dependencies = [
+    appimage
     argcomplete
     colored
     packaging
     paramiko
     pytz
     pyyaml
+    python-json-logger
     rich
+    tkinter
     setuptools
     sshpubkeys
-  ];
+    wrapt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
+  # fix for darwin users
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Module has no tests
   doCheck = false;
+  # Install man page
+  postInstall = ''
+    installManPage man1/*
+  '';
 
-  pythonImportsCheck = [
-    "sshmitm"
-  ];
+  pythonImportsCheck = [ "sshmitm" ];
 
   meta = with lib; {
     description = "Tool for SSH security audits";

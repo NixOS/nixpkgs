@@ -9,14 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lZGFsUV6LNjkBNUpV9UYedVt1yt1qTBJUorxGt4ApsI=";
   };
 
-  # utmp.h is deprecated on aarch64-darwin
-  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+  # utmp has been replaced by utmpx since Mac OS X 10.6 (Snow Leopard):
+  #
+  #   https://stackoverflow.com/a/37913019
+  #
+  # bftpd does not have support for this, so disable it.
+  #
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in login.*; do
-      substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
+      substituteInPlace $file --replace-fail "#ifdef HAVE_UTMP_H" "#if 0"
     done
   '';
 
   buildInputs = [ libxcrypt ];
+
+  CFLAGS = "-std=gnu89";
 
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
@@ -31,7 +38,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A minimal ftp server";
+    description = "Minimal ftp server";
     mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";

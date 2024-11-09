@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildGo122Module
+, buildGoModule
 , cmake
 , ncurses
 , asio
@@ -15,7 +15,7 @@ let
     rev = "4361d30f1c5145a70651c259f2d56369725b0d15";
     hash = "sha256-0WxrgXTCM+BwGcjjWBBKiZawje2yxB5RRac6Sk5t3qc=";
   };
-  goDeps = (buildGo122Module {
+  goDeps = (buildGoModule {
     name = "pan-bindings-goDeps";
     inherit src version;
     modRoot = "go";

@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A package manager for tools that use node_modules";
+    description = "Package manager for tools that use node_modules";
     homepage = "https://github.com/orogene/orogene";
     changelog = "https://github.com/orogene/orogene/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 isc ];

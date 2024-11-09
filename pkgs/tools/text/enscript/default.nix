@@ -31,16 +31,16 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Converter from ASCII to PostScript, HTML, or RTF";
 
-    longDescription =
-      '' GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
-         stores generated output to a file or sends it directly to the
-         printer.  It includes features for `pretty-printing'
-         (language-sensitive code highlighting) in several programming
-         languages.
+    longDescription = ''
+      GNU Enscript converts ASCII files to PostScript, HTML, or RTF and
+      stores generated output to a file or sends it directly to the
+      printer.  It includes features for `pretty-printing'
+      (language-sensitive code highlighting) in several programming
+      languages.
 
-         Enscript can be easily extended to handle different output media and
-         it has many options that can be used to customize printouts.
-      '';
+      Enscript can be easily extended to handle different output media and
+      it has many options that can be used to customize printouts.
+    '';
 
     license = lib.licenses.gpl3Plus;
 

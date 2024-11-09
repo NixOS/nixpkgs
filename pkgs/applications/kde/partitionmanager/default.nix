@@ -2,7 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapGAppsHook3
 , kconfig
 , kcrash
 , kinit
@@ -20,7 +20,6 @@
 , exfat
 , f2fs-tools
 , fatresize
-, hfsprogs
 , jfsutils
 , nilfs-utils
 , ntfs3g
@@ -50,7 +49,7 @@ let
     exfat
     f2fs-tools
     fatresize
-    hfsprogs
+    # hfsprogs intentionally omitted due to being unmaintained
     jfsutils
     nilfs-utils
     ntfs3g
@@ -67,7 +66,7 @@ in
 mkDerivation {
   pname = "partitionmanager";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
 

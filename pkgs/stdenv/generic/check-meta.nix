@@ -46,7 +46,7 @@ let
   # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
   showWarnings = config.showDerivationWarnings;
 
-  getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
+  getNameWithVersion = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
@@ -123,7 +123,7 @@ let
     !allowUnfree &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: builtins.elem (getNameWithVersion x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
@@ -189,7 +189,7 @@ let
 
       Alternatively you can configure a predicate to allow specific packages:
         { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-            "${getName attrs}"
+            "${lib.getName attrs}"
           ];
         }
     '';
@@ -230,23 +230,23 @@ let
 
              $ export NIXPKGS_ALLOW_INSECURE=1
              ${flakeNote}
-        b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
+        b) for `nixos-rebuild` you can add ‘${getNameWithVersion attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 
              {
                nixpkgs.config.permittedInsecurePackages = [
-                 "${getName attrs}"
+                 "${getNameWithVersion attrs}"
                ];
              }
 
         c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-           ‘${getName attrs}’ to `permittedInsecurePackages` in
+           ‘${getNameWithVersion attrs}’ to `permittedInsecurePackages` in
            ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [
-                 "${getName attrs}"
+                 "${getNameWithVersion attrs}"
                ];
              }
 
@@ -257,9 +257,9 @@ let
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
     in ''
-      The package ${getName attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
 
-      however ${getName attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+      however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
 
       and is missing the following ouputs:
 
@@ -269,9 +269,9 @@ let
   handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
     let
       msg = if inHydra
-        then "Failed to evaluate ${getName attrs}: «${reason}»: ${errormsg}"
+        then "Failed to evaluate ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
         else ''
-          Package ‘${getName attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
+          Package ‘${getNameWithVersion attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
         '' + (builtins.getAttr reason remediation) attrs;
 
@@ -283,8 +283,8 @@ let
   handleEvalWarning = { meta, attrs }: { reason , errormsg ? "" }:
     let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
-      msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
-        else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
+      msg = if inHydra then "Warning while evaluating ${getNameWithVersion attrs}: «${reason}»: ${errormsg}"
+        else "Package ${getNameWithVersion attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
              + (optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
@@ -390,22 +390,24 @@ let
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
   # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
-  checkValidity = attrs:
+  checkValidity =
+    let
+      validYes = {
+        valid = "yes";
+        handled = true;
+      };
+    in
+    attrs:
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
-        unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
-      }
-    else {
-      unfree = hasUnfreeLicense attrs;
-      nonSource = hasNonSourceProvenance attrs;
-      broken = isMarkedBroken attrs;
-      unsupported = hasUnsupportedPlatform attrs;
-      insecure = isMarkedInsecure attrs;
-    } // (
+    let
+      res = checkMeta (attrs.meta or {});
+    in
+    if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n"; }
+
     # --- Put checks that cannot be ignored here ---
-    if checkOutputsToInstall attrs then
+    else if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---
@@ -438,7 +440,7 @@ let
     else if hasNoMaintainers attrs then
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     # -----
-    else { valid = "yes"; });
+    else validYes;
 
 
   # The meta attribute is passed in the resulting attribute set,
@@ -485,7 +487,10 @@ let
       position = pos.file + ":" + toString pos.line;
     } // {
       # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
+      unfree = hasUnfreeLicense attrs;
+      broken = isMarkedBroken attrs;
+      unsupported = hasUnsupportedPlatform attrs;
+      insecure = isMarkedInsecure attrs;
 
       available = validity.valid != "no"
       && (if config.checkMetaRecursively or false
@@ -496,7 +501,7 @@ let
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
       inherit (validity) valid;
-  in validity // {
+  in if validity ? handled then validity else validity // {
       # Throw an error if trying to evaluate a non-valid derivation
       # or, alternatively, just output a warning message.
       handled =

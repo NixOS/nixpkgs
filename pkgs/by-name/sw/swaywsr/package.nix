@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swaywsr";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pedroscaff";
     repo = pname;
-    rev = "0276b43824af5c40085248c1275feaa372c412a5";
-    sha256 = "sha256-KCMsn9uevmmjHkP4zwfaWSUI10JgT3M91iqmXI9Cv2Y=";
+    rev = "521fbf92738f44be438d3be6bdd665f02ac9d35c";
+    hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };
 
-  cargoSha256 = "sha256-j/9p28ezy8m5NXReOmG1oryWd+GcY/fNW6i7OrEvjSc=";
+  cargoHash = "sha256-zoV2vy41fVsX8BtddURqQymMX4Zpso+GOBBqoVr3tYo=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

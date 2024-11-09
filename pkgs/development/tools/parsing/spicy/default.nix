@@ -7,11 +7,12 @@
 , bison
 , flex
 , zlib
+, apple-sdk_11
 }:
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.10.0";
+  version = "1.11.3";
 
   strictDeps = true;
 
@@ -19,20 +20,23 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "spicy";
     rev = "v${version}";
-    hash = "sha256-LFAeZ1UsnOKaXlnSd/cMfJQk0ZfaNAzSbvSuoKmmOoI=";
+    hash = "sha256-SKhNBqZRgeN2cZZ2lv/IsOqaa5LY666OlICewN/iPVA=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    bison
     cmake
+    flex
     makeWrapper
     python3
   ];
 
   buildInputs = [
-    bison
     flex
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
   ];
 
   postPatch = ''
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/zeek/spicy";
-    description = "A C++ parser generator for dissecting protocols & files";
+    description = "C++ parser generator for dissecting protocols & files";
     longDescription = ''
       Spicy is a parser generator that makes it easy to create robust C++
       parsers for network protocols, file formats, and more. Spicy is a bit
@@ -63,5 +67,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ tobim ];
+    platforms = platforms.unix;
   };
 }

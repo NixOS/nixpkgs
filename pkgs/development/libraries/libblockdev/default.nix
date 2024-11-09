@@ -40,11 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WCMedMkaMMhZbB3iJu3c+CTT3AvOjzOSYP45J+NQEDQ=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" "python" ];
 
   postPatch = ''
     patchShebangs scripts
+    substituteInPlace src/python/gi/overrides/Makefile.am \
+      --replace-fail ''\'''${exec_prefix}' '@PYTHON_EXEC_PREFIX@'
   '';
+
+  configureFlags = [
+    "--with-python_prefix=${placeholder "python"}"
+  ];
 
   nativeBuildInputs = [
     autoconf-archive
@@ -85,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
-    description = "A library for manipulating block devices";
+    description = "Library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
     license = with lib.licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
     maintainers = with lib.maintainers; [ johnazoidberg ];

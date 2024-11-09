@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "netevent";
-  version = "20201018";
+  version = "20230429";
 
   src = fetchFromGitHub {
     owner = "Blub";
     repo = "netevent";
-    rev = "ddd330f0dc956a95a111c58ad10546071058e4c1";
-    sha256 = "0myk91pmim0m51h4b8hplkbxvns0icvfmv0401r0hw8md828nh5c";
+    rev = "bcadfcc42db0f57a28abddbf19d382453cb1c81f";
+    sha256 = "ikC6S1LNkmv474dlhajtEuHat497Rcdo9O+bCQMXTHQ=";
   };
 
   buildInputs = [ docutils ];

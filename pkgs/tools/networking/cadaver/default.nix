@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command-line WebDAV client";
+    description = "Command-line WebDAV client";
     homepage = "https://notroj.github.io/cadaver/";
     changelog = "https://github.com/notroj/cadaver/blob/${version}/NEWS";
     maintainers = with maintainers; [ ianwookim ];

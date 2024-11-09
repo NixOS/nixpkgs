@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "goresym";
-  version = "2.7.2";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bZOq3GvGRyeIyN/CEuMA6mQjjrRvoVU9fUEUptd6NH0=";
+    sha256 = "sha256-qFDacInIiV1thuYMjyzTG7ru5bkd2Af1iao7Oes1mRg=";
   };
 
   subPackages = [ "." ];
@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/mandiant/GoReSym";
     changelog = "https://github.com/mandiant/GoReSym/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ thehedgeh0g ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

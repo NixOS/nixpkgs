@@ -40,6 +40,13 @@ import pkgs.path { overlays = [ (self: super: {
 
 In the first example, `pkgs.foo` is the result of a function call with some default arguments, usually a derivation. Using `pkgs.foo.override` will call the same function with the given new arguments.
 
+Many packages, like the `foo` example above, provide package options with default values in their arguments, to facilitate overriding.
+Because it's not usually feasible to test that packages build with all combinations of options, you might find that a package doesn't build if you override options to non-default values.
+
+Package maintainers are not expected to fix arbitrary combinations of options.
+If you find that something doesn't work, please submit a fix, ideally with a regression test.
+If you want to ensure that things keep working, consider [becoming a maintainer](https://github.com/NixOS/nixpkgs/tree/master/maintainers) for the package.
+
 ## &lt;pkg&gt;.overrideAttrs {#sec-pkg-overrideAttrs}
 
 The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the nixpkgs expression `pkgs`.

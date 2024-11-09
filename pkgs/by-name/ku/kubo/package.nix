@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.27.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.29.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
   passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
@@ -15,7 +15,7 @@ buildGoModule rec {
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-xWVV2AUpogZaMb3v0w/C+DXvR2rmbOj1Bpyb3on2hfY=";
+    hash = "sha256-udCVyA3NN3RCmVtdIjccfy/RymvrsGJoxlF8DiapP4g=";
   };
 
   # tarball contains multiple files/directories
@@ -41,9 +41,9 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
-      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
+      --replace-fail '/usr/local/bin/ipfs' "$out/bin/ipfs"
     substituteInPlace 'misc/systemd/ipfs-hardened.service' \
-      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
+      --replace-fail '/usr/local/bin/ipfs' "$out/bin/ipfs"
   '';
 
   postInstall = ''
@@ -57,8 +57,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An IPFS implementation in Go";
+    description = "IPFS implementation in Go";
     homepage = "https://ipfs.io/";
+    changelog = "https://github.com/ipfs/kubo/releases/tag/${rev}";
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";

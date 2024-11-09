@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
 
   meta = with lib; {
-    description = "Show off your most used shell commands.";
+    description = "Show off your most used shell commands";
     homepage = "https://github.com/irevenko/tsukae";
     license = licenses.mit;
     mainProgram = "tsukae";

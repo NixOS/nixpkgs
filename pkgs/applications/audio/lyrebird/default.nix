@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , gobject-introspection
 , sox
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [ gtk3 sox ];
 

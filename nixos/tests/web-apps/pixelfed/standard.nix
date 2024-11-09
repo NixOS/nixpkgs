@@ -1,7 +1,6 @@
-import ../../make-test-python.nix ({pkgs, ...}:
-{
+import ../../make-test-python.nix {
   name = "pixelfed-standard";
-  meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  meta.maintainers = [ ];
 
   nodes = {
     server = { pkgs, ... }: {
@@ -35,4 +34,4 @@ import ../../make-test-python.nix ({pkgs, ...}:
     # server.succeed("pixelfed-manage passport:client --personal")
     # server.succeed("curl -H 'Host: pixefed.local' -H 'Accept: application/json' -H 'Authorization: Bearer secret' -F'status'='test' http://localhost/api/v1/statuses")
   '';
-})
+}

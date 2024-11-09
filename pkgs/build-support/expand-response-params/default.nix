@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv, lib }:
 
 # A "response file" is a sequence of arguments that is passed via a
 # file, rather than via argv[].
@@ -23,6 +23,21 @@ stdenv.mkDerivation {
   '';
   installPhase = ''
     mkdir -p $prefix/bin
-    mv expand-response-params $prefix/bin/
+    mv expand-response-params${stdenv.hostPlatform.extensions.executable} $prefix/bin/
   '';
+
+  meta = {
+    description = "Internal tool used by the nixpkgs wrapper scripts for processing response files";
+    longDescription = ''
+      expand-response-params is a tool that allows for obtaining a full list of all
+      arguments passed in a given compiler command line including those passed via
+      so-called response files. The nixpkgs wrapper scripts for bintools and C
+      compilers use it for processing compiler flags. As it is developed in
+      conjunction with the nixpkgs wrapper scripts, it should be considered as
+      unstable and subject to change.
+    '';
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    mainProgram = "expand-response-params${stdenv.hostPlatform.extensions.executable}";
+  };
 }

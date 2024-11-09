@@ -1,27 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope-testrunner
-, transaction
-, six
-, zope-interface
-, zodbpickle
-, zconfig
-, persistent
-, zc-lockfile
-, btrees
-, manuel
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+  zope-testrunner,
+  transaction,
+  six,
+  zope-interface,
+  zodbpickle,
+  zconfig,
+  persistent,
+  zc-lockfile,
+  btrees,
+  manuel,
 }:
 
 buildPythonPackage rec {
   pname = "zodb";
-  version = "5.8.1";
+  version = "6.0";
 
   src = fetchPypi {
     pname = "ZODB";
     inherit version;
-    hash = "sha256-xsc6vTZg1gb/wfIfl97xS1K0b0pwLsnm7kSabiviZN8=";
+    hash = "sha256-5Rx5IRXF2q1OgGdXuvovdUwADCPmurw75eQHdf5Jtdw=";
   };
 
   # remove broken test
@@ -54,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://zodb-docs.readthedocs.io/";
     changelog = "https://github.com/zopefoundation/ZODB/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

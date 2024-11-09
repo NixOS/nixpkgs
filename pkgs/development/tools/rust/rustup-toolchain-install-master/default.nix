@@ -41,13 +41,13 @@ rustPlatform.buildRustPackage rec {
           --subst-var libPath
       '';
     in
-    lib.optionals stdenv.isLinux [ patchelfPatch ];
+    lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

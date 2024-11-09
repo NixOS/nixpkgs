@@ -20,7 +20,7 @@ in
 stdenv.mkDerivation {
   inherit version;
   pname = "meteor";
-  src = srcs.${system};
+  src = srcs.${system} or (throw "unsupported system ${system}");
 
   #dontStrip = true;
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/meteor
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch Meteor to dynamically fixup shebangs and ELF metadata where
     # necessary.
     pushd $out
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     # Patch node.
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${stdenv.cc.cc.lib}/lib" \
+      --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${lib.getLib stdenv.cc.cc}/lib" \
       $out/dev_bundle/bin/node
 
     # Patch mongo.
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     # Patch node dlls.
     for p in $(find $out/packages -name '*.node'); do
       patchelf \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
+        --set-rpath "$(patchelf --print-rpath $p):${lib.getLib stdenv.cc.cc}/lib" \
         $p || true
     done
   '';
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "meteor";
   };
 }

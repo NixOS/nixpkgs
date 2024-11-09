@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,23 +20,19 @@ buildPythonPackage rec {
     hash = "sha256-Lmwgusc4EQlF0GHmMTUxWzUCjBk19cvurNwbOnT+1jM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disabling tests that require a functional DNS IPv{4,6} stack to pass
     "test_create_connection_has_proper_timeout"
   ];
 
-  pythonImportsCheck = [
-    "rfc6555"
-  ];
+  pythonImportsCheck = [ "rfc6555" ];
 
   meta = with lib; {
     description = "Python implementation of the Happy Eyeballs Algorithm";
     homepage = "https://github.com/sethmlarson/rfc6555";
     license = licenses.asl20;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = [ ];
   };
 }

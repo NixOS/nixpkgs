@@ -19,15 +19,20 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ p7zip ];
 
   unpackPhase = ''
-    7z x $src -oLosslessCut-win-x64
+    runHook preUnpack
+    7z x "$src" -o"$sourceRoot"
+    runHook postUnpack
   '';
 
   sourceRoot = "LosslessCut-win-x64";
 
   installPhase = ''
-    mkdir -p $out/bin $out/libexec
-    (cd .. && mv LosslessCut-win-x64 $out/libexec)
-    ln -s "$out/libexec/LosslessCut-win-x64/LosslessCut.exe" "$out/bin/LosslessCut.exe"
+    runHook preInstall
+    mkdir -p "$out/bin" "$out/libexec"
+    cd ..
+    mv "$sourceRoot" "$out/libexec"
+    ln -s "$out/libexec/$(basename "$sourceRoot")/LosslessCut.exe" "$out/bin/LosslessCut.exe"
+    runHook postInstall
   '';
 
   meta = metaCommon // (with lib; {

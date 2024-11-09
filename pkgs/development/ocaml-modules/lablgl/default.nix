@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut, camlp-streams, darwin } :
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libglut, camlp-streams } :
 
 if lib.versionOlder ocaml.version "4.06"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
@@ -18,27 +18,29 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ freeglut camlp-streams ];
+  buildInputs = [ libglut camlp-streams ];
   propagatedBuildInputs = [
     libGLU
-    libGL
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.GLUT
-    darwin.apple_sdk.libs.Xplugin
   ];
 
-  patches = [ ./Makefile.config.patch ./META.patch ];
+  patches = [ ./META.patch ];
 
   preConfigure = ''
     mkdir -p $out/bin
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
-    substituteInPlace Makefile.config \
-      --subst-var-by BINDIR $out/bin/ \
-      --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl/ \
-      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml.version}/site-lib/stublibs/ \
-      --subst-var-by TKINCLUDES "" \
-      --subst-var-by XINCLUDES ""
+    cp \
+      Makefile.config.${if stdenv.hostPlatform.isDarwin then "osx" else "ex"} \
+      Makefile.config
   '';
+
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin/"
+    "INSTALLDIR=${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib/lablgl/"
+    "DLLDIR=${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib/stublibs/"
+    "XINCLUDES="
+    "TKINCLUDES="
+    "TKLIBS="
+  ];
 
   buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 

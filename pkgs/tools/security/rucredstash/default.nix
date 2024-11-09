@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TYobVjjzrK3gprZcYyY98EvdASkq4urB+WiLlbJbwmk=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure

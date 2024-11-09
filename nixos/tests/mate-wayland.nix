@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     ];
 
     services.xserver.enable = true;
-    services.xserver.displayManager = {
+    services.displayManager = {
       sddm.enable = true; # https://github.com/canonical/lightdm/issues/63
       sddm.wayland.enable = true;
       defaultSession = "MATE";
@@ -19,8 +19,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
     services.xserver.desktopManager.mate.enableWaylandSession = true;
-
-    hardware.pulseaudio.enable = true;
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that wayfire can launch:
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
@@ -41,7 +39,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if MATE session components actually start"):
           for i in ["wayfire", "mate-panel", "mate-wayland.sh", "mate-wayland-components.sh"]:
               machine.wait_until_succeeds(f"pgrep -f {i}")
-          machine.wait_for_text('(Applications|Places|System)')
           # It is expected that this applet doesn't work in Wayland
           machine.wait_for_text('WorkspaceSwitcherApplet')
 

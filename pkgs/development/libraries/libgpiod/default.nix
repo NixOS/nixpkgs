@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    hash = "sha256-CvQ6YInWn50HXPZ8oq5ZcrkIHjjms9Rs6jfWfi32+5s=";
+    hash = "sha256-jYDqAirngSKqUlMI50I7gwZL/yePzZzQRblLT4H4BX0=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       lgpl21Plus # libgpiod
       lgpl3Plus # C++ bindings
     ] ++ lib.optional enable-tools gpl2Plus;
-    maintainers = [ maintainers.expipiplus1 ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

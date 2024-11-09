@@ -85,14 +85,14 @@ let
 in
   make-disk-image {
     inherit pkgs lib;
-    config = evalConfig {
+    inherit (evalConfig {
       modules = [
         {
           fileSystems."/" = { device = "/dev/vda"; fsType = "ext4"; autoFormat = true; };
           boot.grub.device = "/dev/vda";
         }
       ];
-    };
+    }) config;
     format = "qcow2";
     onlyNixStore = false;
     partitionTableType = "legacy+gpt";
@@ -104,5 +104,3 @@ in
     memSize = 2048; # Qemu VM memory size in megabytes. Defaults to 1024M.
   }
 ```
-
-

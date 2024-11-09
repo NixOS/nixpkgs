@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, tls, lwt, mirage-crypto-rng-lwt, cmdliner, x509 }:
+{ buildDunePackage, tls, lwt, mirage-crypto-rng-lwt }:
 
 buildDunePackage rec {
   pname = "tls-lwt";
@@ -13,6 +13,5 @@ buildDunePackage rec {
     lwt
     mirage-crypto-rng-lwt
     tls
-    x509
   ];
 }

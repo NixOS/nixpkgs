@@ -4,9 +4,9 @@
   freetype,
   libsoup,
   gtk3,
-  webkitgtk,
+  webkitgtk_4_0,
   pkg-config,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   parallel-disk-usage,
   fetchFromGitHub,
   buildNpmPackage,
@@ -65,8 +65,8 @@ in
       cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
     '';
 
-    nativeBuildInputs = [pkg-config wrapGAppsHook copyDesktopItems];
-    buildInputs = [dbus openssl freetype libsoup gtk3 webkitgtk];
+    nativeBuildInputs = [pkg-config wrapGAppsHook3 copyDesktopItems];
+    buildInputs = [dbus openssl freetype libsoup gtk3 webkitgtk_4_0];
 
     # Disable checkPhase, since the project doesn't contain tests
     doCheck = false;

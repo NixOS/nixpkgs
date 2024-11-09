@@ -27,13 +27,13 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
-    description = "A Linux Audio Session Handler";
+    description = "Linux Audio Session Handler";
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';
     homepage = "https://www.nongnu.org/lash";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

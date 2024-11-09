@@ -6,11 +6,9 @@
   backendStdenv,
   fetchurl,
   lib,
-  lndir,
   markForCudatoolkitRootHook,
   flags,
   stdenv,
-  hostPlatform,
   # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
@@ -40,6 +38,8 @@ let
     sourceTypes
     ;
 
+  inherit (stdenv) hostPlatform;
+
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
@@ -48,7 +48,7 @@ let
   # It is `"unsupported"` if the redistributable is not supported on the target platform.
   redistArch = flags.getRedistArch hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
+  sourceMatchesHost = flags.getNixSystem redistArch == hostPlatform.system;
 in
 backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
@@ -127,7 +127,18 @@ backendStdenv.mkDerivation (finalAttrs: {
   # brokenConditions :: AttrSet Bool
   # Sets `meta.broken = true` if any of the conditions are true.
   # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
-  brokenConditions = { };
+  brokenConditions = {
+    # Unclear how this is handled by Nix internals.
+    "Duplicate entries in outputs" = finalAttrs.outputs != lists.unique finalAttrs.outputs;
+    # Typically this results in the static output being empty, as all libraries are moved
+    # back to the lib output.
+    "lib output follows static output" =
+      let
+        libIndex = lists.findFirstIndex (x: x == "lib") null finalAttrs.outputs;
+        staticIndex = lists.findFirstIndex (x: x == "static") null finalAttrs.outputs;
+      in
+      libIndex != null && staticIndex != null && libIndex > staticIndex;
+  };
 
   # badPlatformsConditions :: AttrSet Bool
   # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
@@ -137,44 +148,43 @@ backendStdenv.mkDerivation (finalAttrs: {
   };
 
   # src :: Optional Derivation
-  src = trivial.pipe redistArch [
-    # If redistArch doesn't exist in redistribRelease, return null.
-    (redistArch: redistribRelease.${redistArch} or null)
-    # If the release is non-null, fetch the source; otherwise, return null.
-    (trivial.mapNullable (
-      { relative_path, sha256, ... }:
-      fetchurl {
-        url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-        inherit sha256;
-      }
-    ))
-  ];
+  # If redistArch doesn't exist in redistribRelease, return null.
+  src = trivial.mapNullable (
+    { relative_path, sha256, ... }:
+    fetchurl {
+      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+      inherit sha256;
+    }
+  ) (redistribRelease.${redistArch} or null);
 
-  # Handle the pkg-config files:
-  # 1. No FHS
-  # 2. Location expected by the pkg-config wrapper
-  # 3. Generate unversioned names too
-  postPatch = ''
-    for path in pkg-config pkgconfig ; do
-      [[ -d "$path" ]] || continue
-      mkdir -p share/pkgconfig
-      mv "$path"/* share/pkgconfig/
-      rmdir "$path"
-    done
-
-    for pc in share/pkgconfig/*.pc ; do
-      sed -i \
-        -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
-        -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
-        -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
-        "$pc"
-    done
-
+  postPatch =
+    # Pkg-config's setup hook expects configuration files in $out/share/pkgconfig
+    ''
+      for path in pkg-config pkgconfig; do
+        [[ -d "$path" ]] || continue
+        mkdir -p share/pkgconfig
+        mv "$path"/* share/pkgconfig/
+        rmdir "$path"
+      done
+    ''
+    # Rewrite FHS paths with store paths
+    # NOTE: output* fall back to out if the corresponding output isn't defined.
+    + ''
+      for pc in share/pkgconfig/*.pc; do
+        sed -i \
+          -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
+          -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
+          -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
+          "$pc"
+      done
+    ''
+    # Generate unversioned names.
     # E.g. cuda-11.8.pc -> cuda.pc
-    for pc in share/pkgconfig/*-"$majorMinorVersion.pc" ; do
-      ln -s "$(basename "$pc")" "''${pc%-$majorMinorVersion.pc}".pc
-    done
-  '';
+    + ''
+      for pc in share/pkgconfig/*-"$majorMinorVersion.pc"; do
+        ln -s "$(basename "$pc")" "''${pc%-$majorMinorVersion.pc}".pc
+      done
+    '';
 
   env.majorMinorVersion = cudaMajorMinorVersion;
 
@@ -205,7 +215,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # one that is compatible with the rest of nixpkgs, even when
     # nvcc forces us to use an older gcc
     # NB: We don't actually know if this is the right thing to do
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   # Picked up by autoPatchelf
@@ -233,7 +243,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # Handle the existence of libPath, which requires us to re-arrange the lib directory
     + strings.optionalString (libPath != null) ''
       full_lib_path="lib/${libPath}"
-      if [[ ! -d "$full_lib_path" ]] ; then
+      if [[ ! -d "$full_lib_path" ]]; then
         echo "${finalAttrs.pname}: '$full_lib_path' does not exist, only found:" >&2
         find lib/ -mindepth 1 -maxdepth 1 >&2
         echo "This release might not support your CUDA version" >&2
@@ -264,9 +274,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   postInstallCheck = ''
     echo "Executing postInstallCheck"
 
-    if [[ -z "''${allowFHSReferences-}" ]] ; then
+    if [[ -z "''${allowFHSReferences-}" ]]; then
       mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "''${!o}"; done)
-      if grep --max-count=5 --recursive --exclude=LICENSE /usr/ "''${outputPaths[@]}" ; then
+      if grep --max-count=5 --recursive --exclude=LICENSE /usr/ "''${outputPaths[@]}"; then
         echo "Detected references to /usr" >&2
         exit 1
       fi
@@ -279,41 +289,22 @@ backendStdenv.mkDerivation (finalAttrs: {
     "libcuda.so.*"
   ];
 
-  # The out output leverages the same functionality which backs the `symlinkJoin` function in
-  # Nixpkgs:
-  # https://github.com/NixOS/nixpkgs/blob/d8b2a92df48f9b08d68b0132ce7adfbdbc1fbfac/pkgs/build-support/trivial-builders/default.nix#L510
-  #
-  # That should allow us to emulate "fat" default outputs without having to actually create them.
-  #
-  # It is important that this run after the autoPatchelfHook, otherwise the symlinks in out will reference libraries in lib, creating a circular dependency.
-  postPhases = [ "postPatchelf" ];
+  # _multioutPropagateDev() currently expects a space-separated string rather than an array
+  preFixup = ''
+    export propagatedBuildOutputs="''${propagatedBuildOutputs[@]}"
+  '';
 
-  # For each output, create a symlink to it in the out output.
-  # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
+  # Propagate all outputs, including `static`
+  propagatedBuildOutputs = builtins.filter (x: x != "dev") finalAttrs.outputs;
+
+  # Kept in case overrides assume postPhases have already been defined
+  postPhases = [ "postPatchelf" ];
   postPatchelf = ''
-    mkdir -p "$out"
-    for output in $(getAllOutputNames); do
-      if [[ "$output" != "out" ]]; then
-        ${meta.getExe lndir} "''${!output}" "$out"
-      fi
-    done
+    true
   '';
 
   # Make the CUDA-patched stdenv available
   passthru.stdenv = backendStdenv;
-
-  # Setting propagatedBuildInputs to false will prevent outputs known to the multiple-outputs
-  # from depending on `out` by default.
-  # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L196
-  # Indeed, we want to do the opposite -- fat "out" outputs that contain all the other outputs.
-  propagatedBuildOutputs = false;
-
-  # By default, if the dev output exists it just uses that.
-  # However, because we disabled propagatedBuildOutputs, dev doesn't contain libraries or
-  # anything of the sort. To remedy this, we set outputSpecified to true, and use
-  # outputsToInstall, which tells Nix which outputs to use when the package name is used
-  # unqualified (that is, without an explicit output).
-  outputSpecified = true;
 
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
@@ -332,8 +323,5 @@ backendStdenv.mkDerivation (finalAttrs: {
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
     license = licenses.unfree;
     maintainers = teams.cuda.members;
-    # Force the use of the default, fat output by default (even though `dev` exists, which
-    # causes Nix to prefer that output over the others if outputSpecified isn't set).
-    outputsToInstall = [ "out" ];
   };
 })

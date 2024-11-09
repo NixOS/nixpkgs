@@ -1,7 +1,7 @@
 { stdenv
 , mate
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   version = mate.mate-settings-daemon.version;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pybluez
-, pytestCheckHook
-, pythonOlder
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pybluez,
+  pytestCheckHook,
+  pythonOlder,
+  pyusb,
 }:
 
 buildPythonPackage rec {
@@ -22,27 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-v65KEP5DuJsZAifd1Rh46x9lSAgBZgyo+e8PKSDKnhw=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    pyusb
-  ];
+  dependencies = [ pyusb ];
 
   optional-dependencies = {
-    bluetooth = [
-      pybluez
-    ];
+    bluetooth = [ pybluez ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nxt"
-  ];
+  pythonImportsCheck = [ "nxt" ];
 
   meta = with lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";

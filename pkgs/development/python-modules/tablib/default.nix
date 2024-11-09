@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markuppy
-, odfpy
-, openpyxl
-, pandas
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools-scm
-, tabulate
-, unicodecsv
-, xlrd
-, xlwt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  markuppy,
+  odfpy,
+  openpyxl,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools-scm,
+  tabulate,
+  unicodecsv,
+  xlrd,
+  xlwt,
 }:
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.5.0";
+  version = "3.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9mYd/EXh1PUfqKYjn5yDSTgIWaW/qnMoBkXwRtbJbjM=";
+    hash = "sha256-BAaF/eEekjdnX0Pphe25S2MlCl6SNvidVhzm+xRluDk=";
   };
 
   postPatch = ''
@@ -32,11 +33,9 @@ buildPythonPackage rec {
       --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       markuppy
       odfpy
@@ -47,28 +46,16 @@ buildPythonPackage rec {
       xlrd
       xlwt
     ];
-    cli = [
-      tabulate
-    ];
-    html = [
-      markuppy
-    ];
-    ods = [
-      odfpy
-    ];
-    pandas = [
-      pandas
-    ];
+    cli = [ tabulate ];
+    html = [ markuppy ];
+    ods = [ odfpy ];
+    pandas = [ pandas ];
     xls = [
       xlrd
       xlwt
     ];
-    xlsx = [
-      openpyxl
-    ];
-    yaml = [
-      pyyaml
-    ];
+    xlsx = [ openpyxl ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -82,15 +69,13 @@ buildPythonPackage rec {
     "tests/test_tablib.py"
   ];
 
-  pythonImportsCheck = [
-    "tablib"
-  ];
+  pythonImportsCheck = [ "tablib" ];
 
   meta = with lib; {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

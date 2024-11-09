@@ -9,6 +9,7 @@
   draco,
   embree,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   git,
   graphviz-nox,
@@ -17,6 +18,8 @@
   lib,
   libGL,
   libX11,
+  libXt,
+  materialx,
   ninja,
   numpy,
   opencolorio,
@@ -48,20 +51,31 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "23.11";
+  version = "24.08";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5zQrfB14kXs75WbL3s4eyhxELglhLNxU2L2aVXiyVjg=";
+    hash = "sha256-slBJleeDi0mCVThty4NUX4M9vaCLV+E8rnp1Ab77TmE=";
   };
 
-  stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv =
+    if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  format = "other";
+  patches = [
+    (fetchpatch {
+      name = "port-to-embree-4.patch";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/c8fec1342e05dca98a1afd4ea93c7a5f0b41e25b.patch?full_index=1";
+      hash = "sha256-pK1TUwmVv9zsZkOypq25pl+FJDxJJvozUtVP9ystGtI=";
+    })
+  ];
+
+  env.OSL_LOCATION = "${osl}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -73,11 +87,13 @@ buildPythonPackage rec {
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
   nativeBuildInputs =
@@ -102,20 +118,22 @@ buildPythonPackage rec {
       embree
       flex
       imath
+      materialx
       opencolorio
       openimageio
       opensubdiv
       ptex
       tbb
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGL
       libX11
+      libXt
     ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.isLinux) [
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
       qt6.qtbase
       qt6.qtwayland
     ];
@@ -147,9 +165,6 @@ buildPythonPackage rec {
     ''
     + lib.optionalString withDocs ''
       mv $out/docs $doc
-    ''
-    + ''
-      rm $out/share -r # only examples
     '';
 
   meta = {
@@ -160,7 +175,10 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shaddydc ];
+    license = lib.licenses.tost;
+    maintainers = with lib.maintainers; [
+      shaddydc
+      gador
+    ];
   };
 }

@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
 
 let
   pname = "joplin-desktop";
-  version = "2.14.17";
+  version = "3.0.15";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-u4wEchyljurmwVZsRnmUBITZUR6SxDxyGczZjXNsJkg=";
-      x86_64-darwin = "sha256-KjNwAnJZGX/DvHDPw15vGlSbJ47s6YT59EalARt1mx4=";
-      aarch64-darwin = "sha256-OYpsHPI+7riMVNAp2JpBlmdFdJUSNqNvBmeYHDw6yzY=";
+      x86_64-linux = "sha256-rNKYihIbdfGZEIGURyty+hS82ftHsqV1YjqM8VYB6RU=";
+      x86_64-darwin = "sha256-s7gZSr/5VOg8bqxGPckK7UxDpvmsNgdhjDg+lxnO/lU=";
+      aarch64-darwin = "sha256-UzAGYIKd5swtl6XNFVTPeg0nqwKKtu0e36+LA0Qiusw=";
     }.${system} or throwSystem;
   };
 
@@ -27,7 +27,7 @@ let
   };
 
   meta = with lib; {
-    description = "An open source note taking and to-do application with synchronisation capabilities";
+    description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
@@ -39,21 +39,18 @@ let
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves qjoly ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version src meta;
+    nativeBuildInputs = [ makeWrapper ];
 
     profile = ''
       export LC_ALL=C.UTF-8
     '';
 
-    multiArch = false; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
@@ -67,7 +64,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Joplin.app";
 
@@ -77,6 +74,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

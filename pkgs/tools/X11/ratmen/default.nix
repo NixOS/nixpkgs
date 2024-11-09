@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
   meta = with lib; {
-    description = "A minimalistic X11 menu creator";
+    description = "Minimalistic X11 menu creator";
     license = licenses.free; # 9menu derivative with 9menu license
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

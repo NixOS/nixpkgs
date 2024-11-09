@@ -1,5 +1,4 @@
 { autoreconfHook
-, cmake
 , lib
 , pkg-config
 , stdenv
@@ -8,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
-  version = "1.6-alpha";
+  version = "1.6.1";
 
   src = fetchFromGitLab {
     owner = "etherlab.org";
     repo = "ethercat";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-kzyA6h0rZFEROLcFZoU+2fIQ/Y0NwtdPuliKDbwkHrE=";
+    hash = "sha256-fvuyADZzH1lHo1TkGd9s3n2n8y9vsGgs/ZOakIw48WI=";
   };
 
   separateDebugInfo = true;

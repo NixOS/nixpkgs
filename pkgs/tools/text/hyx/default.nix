@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dufx3zsabeet7Rp0d60MIuNqisIQd6UgE7WDZYNHl3E=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace "-Wl,-z,relro,-z,now -fpic -pie" ""
   '';

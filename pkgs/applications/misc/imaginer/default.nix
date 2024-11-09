@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , appstream-glib
 , blueprint-compiler
 , desktop-file-utils

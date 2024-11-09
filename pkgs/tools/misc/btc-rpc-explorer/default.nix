@@ -43,5 +43,7 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "btc-rpc-explorer";
     maintainers = with lib.maintainers; [ d-xo ];
+    broken = true; # At 2024-06-29
+                   # https://hydra.nixos.org/build/264232177/nixlog/1
   };
 }

@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php }:
+{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php, nixosTests }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
@@ -21,6 +21,8 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php ]}"
   '';
 
+  passthru.tests = { inherit (nixosTests) icingaweb2; };
+
   meta = with lib; {
     description = "Webinterface for Icinga 2";
     longDescription = ''
@@ -29,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = teams.helsinki-systems.members;
     mainProgram = "icingacli";
     platforms = platforms.all;
   };

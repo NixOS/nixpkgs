@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, cython
-, email-validator
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pytest_7
-, python-dotenv
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, typing-extensions
-, libxcrypt
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  email-validator,
+  fetchFromGitHub,
+  pytest-mock,
+  pytest7CheckHook,
+  python-dotenv,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  libxcrypt,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.14";
+  version = "1.10.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,39 +25,32 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tcaHSPZggVwyzCgDmwOgcGqUmUrJOmkdSNudJTFQ3bc=";
+    hash = "sha256-dn/ZsxbkyK2sJxpo6IsoMBRjq1STdu+xuqHXoNG+Kzk=";
   };
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
-    dotenv = [
-      python-dotenv
-    ];
-    email = [
-      email-validator
-    ];
+  optional-dependencies = {
+    dotenv = [ python-dotenv ];
+    email = [ email-validator ];
   };
 
   nativeCheckInputs = [
     pytest-mock
-    (pytestCheckHook.override { pytest = pytest_7; })
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+    pytest7CheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     # https://github.com/pydantic/pydantic/issues/4817
-    "-W" "ignore::pytest.PytestReturnNotNoneWarning"
+    "-W"
+    "ignore::pytest.PytestReturnNotNoneWarning"
   ];
 
   preCheck = ''

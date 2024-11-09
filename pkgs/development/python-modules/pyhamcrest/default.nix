@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, numpy
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     "test_numpy_numeric_type_int"
   ];
 
-  pythonImportsCheck = [
-    "hamcrest"
-  ];
+  pythonImportsCheck = [ "hamcrest" ];
 
   meta = with lib; {
     description = "Hamcrest framework for matcher objects";

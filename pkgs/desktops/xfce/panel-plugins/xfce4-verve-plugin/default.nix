@@ -24,7 +24,7 @@ mkXfceDerivation {
   ];
 
   meta = with lib; {
-    description = "A command-line plugin";
+    description = "Command-line plugin";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -8,7 +8,7 @@
 , ncurses
 , testers
 , udev
-, addOpenGLRunpath
+, addDriverRunpath
 , amd ? false
 , intel ? false
 , msm ? false
@@ -51,18 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
   ];
-  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
+  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs = with lib; [ ncurses udev ]
-    ++ optional nvidia cudatoolkit
-    ++ optional needDrm libdrm
+  buildInputs = [ ncurses udev ]
+    ++ lib.optional nvidia cudatoolkit
+    ++ lib.optional needDrm libdrm
   ;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
 
   # ordering of fixups is important
-  postFixup = (lib.optionalString needDrm drm-postFixup) + (lib.optionalString nvidia "addOpenGLRunpath $out/bin/nvtop");
+  postFixup = (lib.optionalString needDrm drm-postFixup) + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
 
   doCheck = true;
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
+    description = "(h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
       It can handle multiple GPUs and print information about them in a htop familiar way.

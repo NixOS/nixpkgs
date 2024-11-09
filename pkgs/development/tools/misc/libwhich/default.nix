@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     mainProgram = "libwhich";
     homepage = "https://github.com/vtjnash/libwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchurl
 , autoconf, automake, libtool, xmlto, docbook_xml_dtd_412, docbook_xsl
 }:
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build on Musl.
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/861ac185a6b60134292ff93d40e40b5391d0aa8e/srcpkgs/libieee1284/patches/musl.patch";
-      sha256 = "03xivd6z7m51i5brlmzs60pjrlqyr4561qlnh182wa7rrm01x5y6";
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/libieee1284/files/libieee1284-0.2.11-don-t-blindly-assume-outb_p-to-be-available.patch";
+      hash = "sha256-sNu0OPBMa9GIwSu754noateF4FZC14f+8YRgYUl13KQ=";
     })
   ];
 
@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-python"
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
+    # musl always provides <sys/io.h>, even though the functionality
+    # is x86-specific.
+    # https://www.openwall.com/lists/musl/2024/10/25/2
+    "ac_cv_header_sys_io_h=no"
   ];
 
   prePatch = ''

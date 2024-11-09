@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,14 +16,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-FrmeaQhwLrNewS0HDlbWgCvVQ5U1l0jrw0YVuQdt9Ck=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    autoreconfHook
+  outputs = [
+    "out"
+    "dev"
   ];
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   meta = {
-    description = "A threading support library for Windows 7 and above";
+    description = "Threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];

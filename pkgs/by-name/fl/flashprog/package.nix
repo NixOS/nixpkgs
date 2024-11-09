@@ -9,17 +9,17 @@
 , pkg-config
 , stdenv
 , withJlink ? true
-, withGpio ? stdenv.isLinux
+, withGpio ? stdenv.hostPlatform.isLinux
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.0.1";
+  version = "1.2";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    rev = "2ca11f9a4101ea230081d448ab2b570425b7f0bd";
-    hash = "sha256-pm9g9iOJAKnzzY9couzt8RmqZFbIpKcO++zsUJ9o49U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Z09hZ4a/G3DhWCmSkPyKs7ecSFBUfez7IWWxIhH3LyI=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libftdi1
     libusb1
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pciutils
   ] ++ lib.optionals (withJlink) [
     libjaylink
@@ -46,18 +46,18 @@ stdenv.mkDerivation {
       "PREFIX=$(out)"
       "CONFIG_JLINK_SPI=${yesNo withJlink}"
       "CONFIG_LINUX_GPIO_SPI=${yesNo withGpio}"
-      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.isDarwin)}"
-      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
-      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
-      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
+      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.hostPlatform.isDarwin)}"
+      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
+      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
+      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
     ];
 
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger ];
+    maintainers = with maintainers; [ felixsinger funkeleinhorn ];
     platforms = platforms.all;
     mainProgram = "flashprog";
   };
-}
+})

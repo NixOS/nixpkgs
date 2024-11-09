@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, humanfriendly
-, verboselogs
-, capturer
-, pytestCheckHook
-, mock
-, util-linux
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanfriendly,
+  verboselogs,
+  capturer,
+  pytestCheckHook,
+  mock,
+  util-linux,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-TodI2Wh8M0qMM2K5jzqlLmUKILa5+5qq4ByLttmAA7E=";
   };
 
-  propagatedBuildInputs = [
-    humanfriendly
-  ];
+  propagatedBuildInputs = [ humanfriendly ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   # capturer is broken on darwin / py38, so we skip the test until a fix for
   # https://github.com/xolox/python-capturer/issues/10 is released.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # Required for the CLI test

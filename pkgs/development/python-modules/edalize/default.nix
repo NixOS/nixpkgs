@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, coreutils
-, jinja2
-, pandas
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, which
-, yosys
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  coreutils,
+  jinja2,
+  pandas,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  which,
+  yosys,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +39,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  propagatedBuildInputs = [ jinja2 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     reporting = [
       pandas
       pyparsing
@@ -53,11 +52,9 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "edalize"
-  ];
+  pythonImportsCheck = [ "edalize" ];
 
   disabledTests = [
     # disable failures related to pandas 2.1.0 apply(...,errors="ignore")

@@ -10,23 +10,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.17.0";
-  format = "pyproject";
+  version = "4.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    rev = "v${version}";
-    hash = "sha256-Xj7RNe6XM2atijhVasILWRdTzu6xuKBzMllM1z1mFLY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rZUWPSI7CrKOdEKdsSpekwBerbIMf2iiVrWkV8WrqSc=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     installShellFiles
-  ] ++ (with python3Packages; [
-    pdm-backend
-  ]);
+    argcomplete
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    pdm-backend
+  ];
+
+  dependencies = with python3Packages; [
     argcomplete
     arrow
     b2sdk
@@ -53,10 +56,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   disabledTestPaths = [
-    # requires network
+    # Test requires network
     "test/integration/test_b2_command_line.py"
     "test/integration/test_tqdm_closer.py"
-
     # it's hard to make it work on nix
     "test/integration/test_autocomplete.py"
     "test/unit/test_console_tool.py"
@@ -64,13 +66,20 @@ python3Packages.buildPythonApplication rec {
     "test/unit/_cli/test_autocomplete_cache.py"
   ];
 
+  disabledTests = [
+    # Autocomplete is not successful in a sandbox
+    "test_autocomplete_installer"
+    "test_help"
+    "test_install_autocomplete"
+  ];
+
   postInstall = lib.optionalString (execName != "b2") ''
     mv "$out/bin/b2" "$out/bin/${execName}"
   ''
   + ''
     installShellCompletion --cmd ${execName} \
-      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
-      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
+      --bash <(register-python-argcomplete ${execName}) \
+      --zsh <(register-python-argcomplete ${execName})
   '';
 
   passthru.tests.version = (testers.testVersion {
@@ -86,10 +95,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
-    mainProgram = "backblaze-b2";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hrdinka tomhoule ];
+    mainProgram = "backblaze-b2";
   };
 }

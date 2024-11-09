@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, kinparse
-, pyspice
-, graphviz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  kinparse,
+  pyspice,
+  graphviz,
 }:
 
 buildPythonPackage rec {

@@ -1,36 +1,28 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, packaging
-, setuptools
-, pkgconfig
-, freetype
-, pytest
-, python
-, pillow
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  packaging,
+  setuptools,
+  pkgconfig,
+  freetype,
+  pytest,
+  python,
+  pillow,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.16";
+  version = "1.3.19";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2yajhuRyQ7BqghbSgPClW3inpw4TW2DhgQbomcRFx94=";
+    hash = "sha256-J9+mxlUxOoRBFdz+p8me2T93jaov5rNvKbAZ2YX/VhA=";
   };
-
-  patches = [
-    # Removes `register` storage class specifier, which is not allowed in C++17.
-    (fetchpatch {
-      url = "https://github.com/pytroll/aggdraw/commit/157ed49803567e8c3eeb7dfeff4c116db35747f7.patch";
-      hash = "sha256-QSzpO90u5oSBWUzehRFbXgZ1ApEfLlfp11MUx6w11aI=";
-    })
-  ];
 
   nativeBuildInputs = [
     packaging
@@ -38,9 +30,7 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  buildInputs = [
-    freetype
-  ];
+  buildInputs = [ freetype ];
 
   nativeCheckInputs = [
     numpy

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  writeText,
   cmake,
   libxslt,
   docbook_xsl_ns,
@@ -17,18 +16,18 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
-    hash = "sha256-YLGsKGcKIPd0ihd5IzlT71dYkxZfeH7BpnKQMEyY8dI=";
+    hash = "sha256-8NV0+M9eMcvkP3UERDkaimbapTKxB4rYRLbHZjzG4Ws=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ janik _0x4A6F ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, async-timeout
-, typing-extensions
-, hiredis
-, isPyPy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  async-timeout,
+  typing-extensions,
+  hiredis,
+  isPyPy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

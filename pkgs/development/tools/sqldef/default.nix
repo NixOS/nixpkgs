@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, libpg_query, xxHash, postgresql }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "sqldef";
-  version = "0.17.1";
+  version = "0.17.20";
 
   src = fetchFromGitHub {
     owner = "k0kubun";
     repo = "sqldef";
     rev = "v${version}";
-    hash = "sha256-S2hXwIQU9iKSN9nYG6KacO+bZtgNtMnPQoQaS6DNH30=";
+    hash = "sha256-r175nhzPLoU4CBjEiktsQIuQTgRJ64uW1MhDKHEDR+4=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-8fKJxnjLIWzWsLx/p9tRb/un63/QgJJzMb4/Y4DSZdY=";
+  vendorHash = "sha256-reYZUuZTNeNFrbrDQPVXwx+UuBGdEmTdSowbneZc/No=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Idempotent SQL schema management tool";
-    license = with licenses; [ mit /* for everything except parser */  asl20 /* for parser */ ];
+    license = with licenses; [ mit /* for everything except parser */ asl20 /* for parser */ ];
     homepage = "https://github.com/k0kubun/sqldef";
     changelog = "https://github.com/k0kubun/sqldef/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ kgtkr ];

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pillow
-, pillow-jpls
-, pydicom
-, pylibjpeg
-, pylibjpeg-libjpeg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  numpy,
+  pillow,
+  pillow-jpls,
+  pydicom,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
 }:
 
 let
@@ -21,7 +22,7 @@ let
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
+    hash = "sha256-WXNmkaAdbjyPdNtjV6vpxUWGtdPLvrMr5t/5aMKGSLc=";
   };
 
   propagatedBuildInputs = [
@@ -40,17 +41,15 @@ buildPythonPackage rec {
     pydicom
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # not in nixpkgs yet
+      #pylibjpeg-openjpeg  # broken on aarch64-linux
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.libjpeg;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/

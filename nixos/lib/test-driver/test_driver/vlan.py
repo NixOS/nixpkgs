@@ -4,7 +4,7 @@ import pty
 import subprocess
 from pathlib import Path
 
-from test_driver.logger import rootlog
+from test_driver.logger import AbstractLogger
 
 
 class VLan:
@@ -19,17 +19,20 @@ class VLan:
     pid: int
     fd: io.TextIOBase
 
+    logger: AbstractLogger
+
     def __repr__(self) -> str:
         return f"<Vlan Nr. {self.nr}>"
 
-    def __init__(self, nr: int, tmp_dir: Path):
+    def __init__(self, nr: int, tmp_dir: Path, logger: AbstractLogger):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
+        self.logger = logger
 
         # TODO: don't side-effect environment here
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
-        rootlog.info("start vlan")
+        self.logger.info("start vlan")
         pty_master, pty_slave = pty.openpty()
 
         # The --hub is required for the scenario determined by
@@ -52,11 +55,11 @@ class VLan:
         assert self.process.stdout is not None
         self.process.stdout.readline()
         if not (self.socket_dir / "ctl").exists():
-            rootlog.error("cannot start vde_switch")
+            self.logger.error("cannot start vde_switch")
 
-        rootlog.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
+        self.logger.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
 
-    def __del__(self) -> None:
-        rootlog.info(f"kill vlan (pid {self.pid})")
+    def stop(self) -> None:
+        self.logger.info(f"kill vlan (pid {self.pid})")
         self.fd.close()
         self.process.terminate()

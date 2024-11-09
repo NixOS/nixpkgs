@@ -1,9 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, fetchurl
-, stdenv
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  fetchurl,
+  stdenv,
 }:
 
 let
@@ -31,18 +31,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "bulloak";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
     rev = "v${version}";
-    hash = "sha256-0pzn0gXlhdndCpsrVRNxl1ylIE/S9A0l8VjNn5wDVvw=";
+    hash = "sha256-OAjy8SXaD+2/C5jLNIezv/KdrPHlwJC5L1LwGhqBWQs=";
   };
 
-  cargoHash = "sha256-IlDbys5uluLm418UkGf+FIM1AfR2IBAZQ4Atqlybajw=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  cargoHash = "sha256-lj/wmLu4cBjDjzMD8DlIz+6Rnag0h+zWiE7lfcTC7lY=";
 
   # tests run in CI on the source repo
   doCheck = false;
@@ -50,11 +48,14 @@ rustPlatform.buildRustPackage rec {
   # provide the list of solc versions to the `svm-rs-builds` dependency
   SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
 
-  meta = with lib; {
-    description = "A Solidity test generator based on the Branching Tree Technique";
+  meta = {
+    description = "Solidity test generator based on the Branching Tree Technique";
     homepage = "https://github.com/alexfertel/bulloak";
-    license = with licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     mainProgram = "bulloak";
-    maintainers = with maintainers; [ beeb ];
+    maintainers = with lib.maintainers; [ beeb ];
   };
 }

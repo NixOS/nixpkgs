@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "darkice";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchurl {
     url = "https://github.com/rafael2k/darkice/releases/download/v${version}/darkice-${version}.tar.gz";
-    sha256 = "05yq7lggxygrkd76yiqby3msrgdn082p0qlvmzzv9xbw8hmyra76";
+    sha256 = "sha256-GLTEVzp8z+CcEJTrV5gVniqYkhBupi11OTP28qdGBY4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

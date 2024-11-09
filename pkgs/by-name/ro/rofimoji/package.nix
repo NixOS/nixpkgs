@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rofimoji";
-  version = "6.2.0";
+  version = "6.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    rev = version;
-    hash = "sha256-9P9hXBEfq6sqCvb2SfPBNadEoXAdWF3cmcKGEOK+EHE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CY+ddF2Rth92R22QKqOb/Us+rZhvWTaU/jKy8fljWqQ=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A simple emoji and character picker for rofi";
+    description = "Simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
     changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";

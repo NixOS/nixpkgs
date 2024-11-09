@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libtraceevent
     (perl.withPackages (ps: with ps; [ DBI DBDSQLite ]))
   ]
-  ++ lib.optionals (!stdenv.isAarch64) [ dmidecode ];
+  ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ dmidecode ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
   ''
-  + lib.optionalString (!stdenv.isAarch64) ''
+  + lib.optionalString (!stdenv.hostPlatform.isAarch64) ''
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';

@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     let
       target = if withGraphics then "X-Configure" else "Configure";
       platform =
-        if stdenv.isLinux then "linux"
-        else if stdenv.isDarwin then "macintosh"
-        else if stdenv.isBSD then "bsd"
-        else if stdenv.isCygwin then "cygwin"
-        else if stdenv.isSunOS then "solaris"
+        if stdenv.hostPlatform.isLinux then "linux"
+        else if stdenv.hostPlatform.isDarwin then "macintosh"
+        else if stdenv.hostPlatform.isBSD then "bsd"
+        else if stdenv.hostPlatform.isCygwin then "cygwin"
+        else if stdenv.hostPlatform.isSunOS then "solaris"
         else throw "unsupported system";
     in
     "make ${target} name=${platform}";
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A very high level general-purpose programming language";
-    maintainers = with maintainers; [ vrthra yurrriq ];
+    description = "Very high level general-purpose programming language";
+    maintainers = with maintainers; [ yurrriq ];
     platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
     license = licenses.publicDomain;
     homepage = "https://www.cs.arizona.edu/icon/";

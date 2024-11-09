@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://typesense.org";
-    description = "Typesense is a fast, typo-tolerant search engine for building delightful search experiences.";
+    description = "Typesense is a fast, typo-tolerant search engine for building delightful search experiences";
     mainProgram = "typesense-server";
     license = licenses.gpl3;
     # There has been an attempt at building this from source, which were deemed
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with maintainers; [ oddlama ];
   };
 }

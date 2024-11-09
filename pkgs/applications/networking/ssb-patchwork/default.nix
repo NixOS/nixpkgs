@@ -41,7 +41,7 @@ in
     '';
 
     meta = with lib; {
-      description = "A decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
+      description = "Decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
       longDescription = ''
         sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
       '';

@@ -15,6 +15,6 @@ mkDerivation rec {
     description = "Various text handling addons for KDE applications";
     homepage = "https://invent.kde.org/libraries/ktextaddons/";
     license = licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

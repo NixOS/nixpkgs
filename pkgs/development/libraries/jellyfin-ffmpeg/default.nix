@@ -1,25 +1,23 @@
-{ ffmpeg_6-full
+{ ffmpeg_7-full
 , fetchFromGitHub
+, fetchpatch
 , lib
 }:
 
 let
-  version = "6.0.1-3";
+  version = "7.0.2-5";
 in
 
-(ffmpeg_6-full.override {
+(ffmpeg_7-full.override {
   inherit version; # Important! This sets the ABI.
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-UINiXO61nB/AL0HJJy7G7emujakk/mQv81aUioyJz0Y=";
+    hash = "sha256-cqyXQNx65eLEumOoSCucNpAqShMhiPqzsKc/GjKKQOA=";
   };
 }).overrideAttrs (old: {
   pname = "jellyfin-ffmpeg";
-
-  # Clobber upstream patches as they don't apply to the Jellyfin fork
-  patches = [];
 
   configureFlags = old.configureFlags ++ [
     "--extra-version=Jellyfin"
@@ -34,11 +32,12 @@ in
     ${old.postPatch or ""}
   '';
 
-  meta = with lib; {
+  meta = {
+    inherit (old.meta) license mainProgram;
+    changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
     description = "${old.meta.description} (Jellyfin fork)";
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = with lib.maintainers; [ justinas ];
     pkgConfigModules = [ "libavutil" ];
   };
 })

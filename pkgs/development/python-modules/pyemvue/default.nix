@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# propagated modules
-, requests
-, python-dateutil
-, pycognito
-, typing-extensions
+  # propagated modules
+  requests,
+  python-dateutil,
+  pycognito,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyemvue";
-  version = "0.18.4";
+  version = "0.18.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PTRVabYbT7Xwjkm+Oz56YjNb5Xwcgxn+IvXeazKsHyY=";
+    hash = "sha256-FQ34pKRK1HDLoupMDfVaNxAhn1HbZHYi6se4ewlUWGA=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     requests
@@ -40,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/magico13/PyEmVue/releases/tag/v${version}";
-    description = "A Python library for reading data from the Emporia Vue energy monitoring system";
+    description = "Python library for reading data from the Emporia Vue energy monitoring system";
     homepage = "https://github.com/magico13/PyEmVue";
     license = licenses.mit;
     maintainers = with maintainers; [ presto8 ];

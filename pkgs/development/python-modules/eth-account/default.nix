@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, bitarray
-, eth-abi
-, eth-keyfile
-, eth-keys
-, eth-rlp
-, eth-utils
-, websockets
-, hexbytes
-, pythonOlder
-, rlp
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bitarray,
+  eth-abi,
+  eth-keyfile,
+  eth-keys,
+  eth-rlp,
+  eth-utils,
+  websockets,
+  hexbytes,
+  pythonOlder,
+  rlp,
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     description = "Account abstraction library for web3.py";
     homepage = "https://github.com/ethereum/eth-account";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,104 +1,98 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  substituteAll,
 
-# build
-, setuptools
+  # build-system
+  setuptools,
 
-# patched in
-, geos
-, gdal
-, withGdal ? false
+  # patched in
+  geos,
+  gdal,
+  withGdal ? false,
 
-# propagates
-, asgiref
-, sqlparse
+  # dependencies
+  asgiref,
+  sqlparse,
 
-# extras
-, argon2-cffi
-, bcrypt
+  # optional-dependencies
+  argon2-cffi,
+  bcrypt,
 
-# tests
-, aiosmtpd
-, docutils
-, geoip2
-, jinja2
-, numpy
-, pillow
-, pylibmc
-, pymemcache
-, python
-, pywatchman
-, pyyaml
-, pytz
-, redis
-, selenium
-, tblib
-, tzdata
+  # tests
+  aiosmtpd,
+  docutils,
+  geoip2,
+  jinja2,
+  numpy,
+  pillow,
+  pylibmc,
+  pymemcache,
+  python,
+  pywatchman,
+  pyyaml,
+  pytz,
+  redis,
+  selenium,
+  tblib,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.0.3";
+  version = "5.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    pname = "Django";
-    inherit version;
-    hash = "sha256-X7N1gNz0omL5JYwfQ3OBmqzKkGQx9QXkaI4386mRld8=";
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = "django";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TqOVe+QkwNx/SpI/6X/AQaqLHk3LDSupoRl3RKL6kac=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./django_5_set_zoneinfo_dir.patch;
-      zoneinfo = tzdata + "/share/zoneinfo";
-    })
-    # prevent tests from messing with our pythonpath
-    ./django_5_tests_pythonpath.patch
-    # disable test that excpects timezone issues
-    ./django_5_disable_failing_tests.patch
-
-  ] ++ lib.optionals withGdal [
-    (substituteAll {
-      src = ./django_5_set_geos_gdal_lib.patch;
-      geos = geos;
-      gdal = gdal;
-      extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    })
-  ];
+  patches =
+    [
+      (substituteAll {
+        src = ./django_5_set_zoneinfo_dir.patch;
+        zoneinfo = tzdata + "/share/zoneinfo";
+      })
+      # prevent tests from messing with our pythonpath
+      ./django_5_tests_pythonpath.patch
+      # disable test that excpects timezone issues
+      ./django_5_disable_failing_tests.patch
+    ]
+    ++ lib.optionals withGdal [
+      (substituteAll {
+        src = ./django_5_set_geos_gdal_lib.patch;
+        geos = geos;
+        gdal = gdal;
+        extension = stdenv.hostPlatform.extensions.sharedLibrary;
+      })
+    ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=61.0.0,<69.3.0" setuptools
+
     substituteInPlace tests/utils_tests/test_autoreload.py \
-      --replace "/usr/bin/python" "${python.interpreter}"
-  '' + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
-    # Test regression after xz was reverted from 5.6.0 to 5.4.6
-    # https://hydra.nixos.org/build/254532197
-    substituteInPlace tests/view_tests/tests/test_debug.py \
-      --replace-fail "test_files" "dont_test_files"
+      --replace-fail "/usr/bin/python" "${python.interpreter}"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
-    argon2 = [
-      argon2-cffi
-    ];
-    bcrypt = [
-      bcrypt
-    ];
+  optional-dependencies = {
+    argon2 = [ argon2-cffi ];
+    bcrypt = [ bcrypt ];
   };
 
   nativeCheckInputs = [
@@ -118,16 +112,21 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # make sure the installed library gets imported
     rm -rf django
 
+    # fails to import github_links from docs/_ext/github_links.py
+    rm tests/sphinx/test_github_links.py
+
     # provide timezone data, works only on linux
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+
+    export PYTHONPATH=$PWD/docs/_ext:$PYTHONPATH
   '';
 
   checkPhase = ''
@@ -144,7 +143,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
-    description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design.";
+    description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];

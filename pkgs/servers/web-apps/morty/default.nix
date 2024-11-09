@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule {
   pname = "morty";
@@ -12,6 +12,8 @@ buildGoModule {
   };
 
   vendorHash = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
+
+  passthru.tests = { inherit (nixosTests) morty; };
 
   meta = with lib; {
     description = "Privacy aware web content sanitizer proxy as a service";

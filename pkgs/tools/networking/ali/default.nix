@@ -1,9 +1,9 @@
 { lib
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "ali";
   version = "0.7.5";
 

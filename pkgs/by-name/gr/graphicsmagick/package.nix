@@ -14,7 +14,9 @@
 , libtool
 , libwebp
 , libxml2
+, libheifSupport ? true, libheif
 , nukeReferences
+, pkg-config
 , quantumdepth ? 8
 , runCommand
 , stdenv
@@ -24,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
-  version = "1.3.43";
+  version = "1.3.45";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
-    hash = "sha256-K4hYBzLNfkCdniLGEWI4vvSuBvzaEUUb8z0ln5y/OZ8=";
+    hash = "sha256-3OpRZ0FPfIBVV94tekepsxR7y/YXuR9fD0r+XmVDAms=";
   };
 
   outputs = [ "out" "man" ];
@@ -46,10 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxml2
     zlib
-  ];
+  ] ++ lib.optionals libheifSupport [ libheif ];
 
   nativeBuildInputs = [
     nukeReferences
+    pkg-config
     xz
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 

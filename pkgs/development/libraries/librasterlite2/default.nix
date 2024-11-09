@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libspatialite
     libtiff
     libwebp
-    libxml2
+    (libxml2.override { enableHttp = true; })
     lz4
     minizip
     openjpeg

@@ -20,10 +20,10 @@ let
 in {
   options = {
     services.ngircd = {
-      enable = mkEnableOption (lib.mdDoc "the ngircd IRC server");
+      enable = mkEnableOption "the ngircd IRC server";
 
       config = mkOption {
-        description = lib.mdDoc "The ngircd configuration (see ngircd.conf(5)).";
+        description = "The ngircd configuration (see ngircd.conf(5)).";
 
         type = types.lines;
       };

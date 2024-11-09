@@ -27,7 +27,7 @@ let
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
-  /*
+  /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
 
@@ -45,10 +45,13 @@ let
     let removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /* List of all Nix system doubles the nixpkgs flake will expose the package set
-     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+  /**
+    List of all Nix system doubles the nixpkgs flake will expose the package set
+    for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
-     **Warning**: This attribute is considered experimental and is subject to change.
+    :::{.warning}
+    This attribute is considered experimental and is subject to change.
+    :::
   */
   flakeExposed = import ./flake-systems.nix { };
 
@@ -78,20 +81,24 @@ let
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
+      useLLVM = final.isFreeBSD || final.isOpenBSD;
+
       libc =
-        /**/ if final.isDarwin              then "libSystem"
-        else if final.isMinGW               then "msvcrt"
-        else if final.isWasi                then "wasilibc"
-        else if final.isRedox               then "relibc"
-        else if final.isMusl                then "musl"
-        else if final.isUClibc              then "uclibc"
-        else if final.isAndroid             then "bionic"
-        else if final.isLinux /* default */ then "glibc"
-        else if final.isFreeBSD             then "fblibc"
-        else if final.isNetBSD              then "nblibc"
-        else if final.isAvr                 then "avrlibc"
-        else if final.isGhcjs               then null
-        else if final.isNone                then "newlib"
+        /**/ if final.isDarwin                then "libSystem"
+        else if final.isMinGW                 then "msvcrt"
+        else if final.isWasi                  then "wasilibc"
+        else if final.isWasm && !final.isWasi then null
+        else if final.isRedox                 then "relibc"
+        else if final.isMusl                  then "musl"
+        else if final.isUClibc                then "uclibc"
+        else if final.isAndroid               then "bionic"
+        else if final.isLinux  /* default */  then "glibc"
+        else if final.isFreeBSD               then "fblibc"
+        else if final.isOpenBSD               then "oblibc"
+        else if final.isNetBSD                then "nblibc"
+        else if final.isAvr                   then "avrlibc"
+        else if final.isGhcjs                 then null
+        else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also
@@ -172,7 +179,8 @@ let
       hasSharedLibraries = with final;
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
-         || isCygwin || isMinGW                                        # Windows
+         || isCygwin || isMinGW || isWindows                           # Windows
+         || isWasm                                                     # WASM
         ) && !isStatic;
 
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
@@ -181,7 +189,7 @@ let
       # don't support dynamic linking, but don't get the `staticMarker`.
       # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
       # has the `staticMarker`.
-      isStatic = final.isWasm || final.isRedox;
+      isStatic = final.isWasi || final.isRedox;
 
       # Just a guess, based on `system`
       inherit
@@ -249,37 +257,37 @@ let
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+
+      # Remove before 25.05
+      androidSdkVersion =
+        if (args ? sdkVer && !args ? androidSdkVersion) then
+          throw "For android `sdkVer` has been renamed to `androidSdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidSdkVersion
+        else
+          null;
+      androidNdkVersion =
+        if (args ? ndkVer && !args ? androidNdkVersion) then
+          throw "For android `ndkVer` has been renamed to `androidNdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidNdkVersion
+        else
+          null;
     } // (
       let
         selectEmulator = pkgs:
           let
-            qemu-user = pkgs.qemu.override {
-              smartcardSupport = false;
-              spiceSupport = false;
-              openGLSupport = false;
-              virglSupport = false;
-              vncSupport = false;
-              gtkSupport = false;
-              sdlSupport = false;
-              alsaSupport = false;
-              pulseSupport = false;
-              pipewireSupport = false;
-              jackSupport = false;
-              smbdSupport = false;
-              seccompSupport = false;
-              tpmSupport = false;
-              capstoneSupport = false;
-              enableDocs = false;
-              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
-            };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
+          # Note: we guarantee that the return value is either `null` or a path
+          # to an emulator program. That is, if an emulator requires additional
+          # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          then "${pkgs.execline}/bin/exec"
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          then "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"
           else if final.isMmix
@@ -287,6 +295,10 @@ let
           else null;
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
+
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable = pkgs: final.emulatorAvailable pkgs
+          && (final.isLinux || final.isWasi || final.isMmix);
 
         emulator = pkgs:
           if (final.emulatorAvailable pkgs)
@@ -315,6 +327,7 @@ let
             os =
               /**/ if rust ? platform then rust.platform.os or "none"
               else if final.isDarwin then "macos"
+              else if final.isWasm && !final.isWasi then "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
               else final.parsed.kernel.name;
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
@@ -331,7 +344,8 @@ let
                     if isList f then f else [ f ]
                 )
               else optional final.isUnix "unix"
-                   ++ optional final.isWindows "windows";
+                   ++ optional final.isWindows "windows"
+                   ++ optional final.isWasm "wasm";
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
             vendor = let
@@ -350,12 +364,22 @@ let
               "armv7l" = "armv7";
               "armv6l" = "arm";
               "armv5tel" = "armv5te";
+              "riscv32" = "riscv32gc";
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-          in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
+          in
+            args.rust.rustcTarget or
+            args.rustc.config or (
+              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+              # We cannot know which subversion does the user want, and
+              # currently use WASI 0.1 as default for compatibility. Custom
+              # users can set `rust.rustcTarget` to override it.
+              if final.isWasi
+              then "${cpu_}-wasip1"
+              else "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+            );
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.

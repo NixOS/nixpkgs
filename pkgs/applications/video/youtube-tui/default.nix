@@ -43,20 +43,20 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     libsixel
     mpv
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
     AppKit
   ];
 
   # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapProgram $out/bin/youtube-tui \
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
   '';
 
   meta = with lib; {
-    description = "An aesthetically pleasing YouTube TUI written in Rust";
+    description = "Aesthetically pleasing YouTube TUI written in Rust";
     homepage = "https://siriusmart.github.io/youtube-tui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Ruixi-rebirth ];

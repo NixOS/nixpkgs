@@ -2,28 +2,32 @@
 , stdenv
 , fetchurl
 , ncurses
-, zig_0_11
+, pkg-config
+, zig
+, zstd
 , installShellFiles
 , testers
-, pie ? stdenv.isDarwin
+, pie ? stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-u84dHHDxJHZxvk6iE12MUs0ppwivXtYs7Np9xqgACjw=";
+    hash = "sha256-P0cevTi1bmDauAwn468dgmZmlX8C2ehBmxSdqvet5QU=";
   };
 
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig.hook
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     ncurses
+    zstd
   ];
 
   zigBuildFlags = lib.optional pie "-Dpie=true";
@@ -42,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dev.yorhel.nl/ncdu/changes2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub rodrgz ];
-    inherit (zig_0_11.meta) platforms;
+    inherit (zig.meta) platforms;
     mainProgram = "ncdu";
   };
 })

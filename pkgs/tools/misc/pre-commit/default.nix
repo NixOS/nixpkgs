@@ -18,7 +18,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.6.2";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rlGkoaVLrTCEPgPFNUWefJf6MJaKTA2RDSbV7eGtaAU=";
+    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''
@@ -131,9 +131,6 @@ buildPythonApplication rec {
     "test_dart"
     "test_dart_additional_deps"
     "test_dart_additional_deps_versioned"
-    "test_docker_hook"
-    "test_docker_image_hook_via_args"
-    "test_docker_image_hook_via_entrypoint"
     "test_during_commit_all"
     "test_golang_default_version"
     "test_golang_hook"
@@ -168,10 +165,14 @@ buildPythonApplication rec {
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
     "test_dotnet_"
+    "test_health_check_"
 
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
     # but we use an absolute path so it's not an issue.
     "test_environment_not_sourced"
+
+    # Docker required
+    "test_docker_"
   ];
 
   pythonImportsCheck = [
@@ -183,7 +184,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A framework for managing and maintaining multi-language pre-commit hooks";
+    description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];

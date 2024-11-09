@@ -3,6 +3,7 @@
 , buildPackages
 , version
 , src
+, substituteAll
 , extraMeta ? { }
 , self
 , packageOverrides ? (final: prev: {})
@@ -39,25 +40,25 @@ let
 
   luaPackages = self.pkgs;
 
-  XCFLAGS = with lib;
-    optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
-    ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
-    ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
-    ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
-    ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
-    ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
-    ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
-    ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
-    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
-    ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
+  XCFLAGS =
+    lib.optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+    ++ lib.optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+    ++ lib.optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+    ++ lib.optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
+    ++ lib.optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+    ++ lib.optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+    ++ lib.optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+    ++ lib.optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+    ++ lib.optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ lib.optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
+    ++ lib.optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 
   # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
   # TODO support also other build architectures. The ideal way would be to use
   # stdenv_32bit but that doesn't work due to host platform mismatch:
   # https://github.com/NixOS/nixpkgs/issues/212494
-  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+  buildStdenv = if buildPackages.stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.is32bit
     then buildPackages.pkgsi686Linux.buildPackages.stdenv
     else buildPackages.stdenv;
 
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own
-      substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
+      substituteInPlace src/Makefile --replace-fail "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
   '';
 
@@ -95,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
+    mkdir -p $out/nix-support
+    cp ${substituteAll {
+      src = ../lua-5/utils.sh;
+      luapathsearchpaths=lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
+      luacpathsearchpaths=lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
+    }} $out/nix-support/utils.sh
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
     if [[ ! -e "$out"/bin/luajit ]]; then
@@ -105,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
   LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
   LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
+  setupHook = builtins.toFile "lua-setup-hook" ''
+      source @out@/nix-support/utils.sh
+      addEnvHooks "$hostOffset" luaEnvHook
+      '';
 
   # copied from python
   passthru = let

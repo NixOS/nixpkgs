@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , darwin
+, cmake
 }:
 
 let
@@ -11,23 +12,24 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.8.0";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-ZVETw+GdkrR2V8RrHAWBR+avAuN0158DlJkYBquju8E=";
+    hash = "sha256-KZt3w+nhJjz3ZLtLzJz0zpFTwQ28OmFWnCsLbo36Ryc=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-zOjDT8Sn/p3YaG+dWyYxSWUOo11p9/WG3EyNagZRtQQ=";
+  cargoHash = "sha256-yTpklksOV+AFuW3Bc0L6sbAiJsQ+mseF1yz37FcWt1k=";
 
   nativeBuildInputs = [
     pkg-config
+    cmake # required for libz-ng-sys
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];
@@ -39,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # require internet access
+    "--skip=tests::net_socket_basic"
     "--skip=tests::net_request_codes"
     "--skip=tests::net_request_compression"
     "--skip=tests::net_request_methods"
@@ -54,13 +57,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A standalone Luau script runtime";
+    description = "Standalone Luau script runtime";
     mainProgram = "lune";
     homepage = "https://github.com/lune-org/lune";
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
     # note: Undefined symbols for architecture x86_64
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

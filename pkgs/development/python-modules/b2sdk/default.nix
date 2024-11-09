@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, glibcLocales
-, importlib-metadata
-, packaging
-, logfury
-, pyfakefs
-, pytestCheckHook
-, pytest-lazy-fixture
-, pytest-mock
-, pythonOlder
-, pythonRelaxDepsHook
-, pdm-backend
-, requests
-, tqdm
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glibcLocales,
+  importlib-metadata,
+  logfury,
+  annotated-types,
+  packaging,
+  pdm-backend,
+  pyfakefs,
+  pytest-lazy-fixture,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.33.0";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,42 +30,39 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eMFgsjEb0DMTLqG+8IZru1dEAuKZW4dEszrznZxR+mc=";
+    hash = "sha256-oS037l5pQW/z4GX5+hb/mCUA219cGHE7lyiG8aos21k=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
-  pythonRemoveDeps = [
-    "setuptools"
-  ];
 
-  propagatedBuildInputs = [
-    packaging
-    logfury
-    requests
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    typing-extensions
-  ];
+  pythonRemoveDeps = [ "setuptools" ];
+
+  dependencies =
+    [
+      annotated-types
+      packaging
+      logfury
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pyfakefs
     pytest-lazy-fixture
     pytest-mock
-    pyfakefs
-  ] ++ lib.optionals stdenv.isLinux [
-    glibcLocales
-  ];
+    pytestCheckHook
+    tqdm
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
     "test/integration/test_download.py"
     "test/integration/test_upload.py"
+
+    # Requires backblaze auth
+    "test/integration/test_bucket.py"
   ];
 
   disabledTests = [
@@ -73,17 +71,16 @@ buildPythonPackage rec {
     "test_files_headers"
     "test_large_file"
     "test_file_info_b2_attributes"
+    "test_sync_folder"
   ];
 
-  pythonImportsCheck = [
-    "b2sdk"
-  ];
+  pythonImportsCheck = [ "b2sdk" ];
 
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

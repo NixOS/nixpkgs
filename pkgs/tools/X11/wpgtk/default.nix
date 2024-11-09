@@ -1,5 +1,5 @@
 { lib, python3Packages, fetchFromGitHub, libxslt,
-  gobject-introspection, gtk3, wrapGAppsHook, gnome }:
+  gobject-introspection, gtk3, wrapGAppsHook3, adwaita-icon-theme }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
@@ -17,9 +17,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libxslt
   ];
 

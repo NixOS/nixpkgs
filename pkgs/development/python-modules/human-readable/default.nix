@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, hatchling
-, hatch-vcs
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +27,6 @@ buildPythonPackage rec {
     description = "Library to make data intended for machines, readable to humans";
     homepage = "https://github.com/staticdev/human-readable";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      mkg20001
-    ];
+    maintainers = with maintainers; [ mkg20001 ];
   };
 }

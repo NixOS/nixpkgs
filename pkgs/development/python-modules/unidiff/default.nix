@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "unidiff";
@@ -12,7 +17,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonImportsCheck = [ "unidiff" ];
 
@@ -22,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matiasb/python-unidiff";
     changelog = "https://github.com/matiasb/python-unidiff/raw/v${version}/HISTORY";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ maintainers.pbsds ];
   };
 }

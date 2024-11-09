@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, jeepney
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  jeepney,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # Needs a D-Bus session
   doCheck = false;
 
-  pythonImportsCheck = [
-    "secretstorage"
-  ];
+  pythonImportsCheck = [ "secretstorage" ];
 
   meta = with lib; {
     description = "Python bindings to FreeDesktop.org Secret Service API";

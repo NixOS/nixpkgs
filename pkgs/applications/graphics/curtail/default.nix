@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
 , gettext
@@ -20,18 +20,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.8.0";
+  version = "1.11.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-LLz4nZ9WFQMogQR2gCKn80gvHUG5hlpQpcNjpr4fs2s=";
+    sha256 = "sha256-bN901v2M644EN7tBKN9/kv12AE2XuIPjDSCoohfevFI=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook4
     appstream-glib
     desktop-file-utils
     gettext
@@ -72,6 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ anselmschueler ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

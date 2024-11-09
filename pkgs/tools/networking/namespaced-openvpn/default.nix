@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/slingamn/namespaced-openvpn";
-    description = "Network namespace isolation for OpenVPN tunnels.";
+    description = "Network namespace isolation for OpenVPN tunnels";
     license = licenses.mit;
     maintainers = [ maintainers.lodi ];
     platforms = platforms.linux;

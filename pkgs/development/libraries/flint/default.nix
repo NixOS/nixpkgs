@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , gmp
-, mpir
 , mpfr
 , ntl
 , openblas ? null, blas, lapack
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp
-    mpir
     mpfr
     ntl
   ] ++ lib.optionals withBlas [
@@ -35,7 +33,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gmp=${gmp}"
-    "--with-mpir=${mpir}"
     "--with-mpfr=${mpfr}"
     "--with-ntl=${ntl}"
   ] ++ lib.optionals withBlas [

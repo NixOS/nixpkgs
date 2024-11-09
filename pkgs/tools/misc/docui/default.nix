@@ -18,7 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/skanehira/docui";
     license = licenses.mit;
     maintainers = with maintainers; [ aethelz ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "docui";
   };
 }

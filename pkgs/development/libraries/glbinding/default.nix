@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/cginternals/glbinding/";
-    description = "A C++ binding for the OpenGL API, generated using the gl.xml specification";
+    description = "C++ binding for the OpenGL API, generated using the gl.xml specification";
     license = licenses.mit;
     maintainers = [ maintainers.mt-caret ];
   };

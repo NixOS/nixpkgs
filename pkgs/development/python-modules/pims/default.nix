@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, slicerator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  imageio,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  slicerator,
 }:
 
 buildPythonPackage rec {
   pname = "pims";
-  version = "0.6.1";
+  version = "0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QdllA1QTSJ8vWaSJ0XoUanX53sb4RaOmdXBCFEsoWMU=";
+    hash = "sha256-3SBZk11w6eTZFmETMRJaYncxY38CYne1KzoF5oRgzuY=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  pythonImportsCheck = [
-    "pims"
-  ];
+  pythonImportsCheck = [ "pims" ];
 
   pytestFlagsArray = [
     "-W"
@@ -58,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/pims";
     changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

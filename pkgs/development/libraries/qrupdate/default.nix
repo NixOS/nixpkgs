@@ -28,6 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
       # https://savannah.gnu.org/bugs/?50339
       "-fdefault-integer-8"
     ])}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # prevent cmake from using Accelerate, which causes all tests to segfault
+    "-DBLA_VENDOR=Generic"
+  ];
+
+  # https://github.com/mpimd-csc/qrupdate-ng/issues/4
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    ./disable-zch1dn-test.patch
   ];
 
   doCheck = true;

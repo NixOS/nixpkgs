@@ -14,7 +14,7 @@ buildGoModule {
   vendorHash = "sha256-XNFzG4hGDUN0wWbpBoQWUH1bWIgoYcyP4tNRGSV4ro4=";
 
   meta = with lib; {
-    description = "An interactive Vim-like console client for MPD";
+    description = "Interactive Vim-like console client for MPD";
     homepage = "https://ambientsound.github.io/pms/";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];

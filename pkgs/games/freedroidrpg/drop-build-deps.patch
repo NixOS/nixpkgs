@@ -2,10 +2,10 @@ Do not embed paths to build-only depends (-I...SDL2-dev and friends)
 into savefile lua comments.
 --- a/src/savestruct_internal.c
 +++ b/src/savestruct_internal.c
-@@ -486,8 +486,8 @@ void save_game_data(struct auto_string *strout)
+@@ -571,8 +571,8 @@ void save_game_data(struct auto_string *strout)
  	autostr_append(strout,
- 		"SAVEGAME: %s %s %s;sizeof(tux_t)=%d;sizeof(enemy)=%d;sizeof(bullet)=%d;MAXBULLETS=%d\n",
- 		SAVEGAME_VERSION, SAVEGAME_REVISION, VERSION, (int)sizeof(tux_t), (int)sizeof(enemy), (int)sizeof(bullet), (int)MAXBULLETS);
+ 		"SAVEGAME: %s %s %s;sizeof(tux_t)=%d;sizeof(enemy)=%d;sizeof(bullet)=%d\n",
+ 		SAVEGAME_VERSION, SAVEGAME_REVISION, VERSION, (int)sizeof(tux_t), (int)sizeof(enemy), (int)sizeof(bullet));
 -	autostr_append(strout, "BUILD_CFLAGS: %s\n", BUILD_CFLAGS);
 -	autostr_append(strout, "BUILD_LDFLAGS: %s\n", BUILD_LDFLAGS);
 +	autostr_append(strout, "BUILD_CFLAGS: %s\n", "<hidden>");

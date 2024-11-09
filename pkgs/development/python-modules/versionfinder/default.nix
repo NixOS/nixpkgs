@@ -1,12 +1,13 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, gitpython
-, pip
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitpython,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     "TestFindPipInfo"
   ];
 
-  pythonImportsCheck = [
-    "versionfinder"
-  ];
+  pythonImportsCheck = [ "versionfinder" ];
 
   meta = with lib; {
     description = "Find the version of another package, whether installed via pip, setuptools or git";

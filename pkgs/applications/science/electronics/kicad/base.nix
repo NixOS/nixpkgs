@@ -39,10 +39,10 @@
 , pcre2
 , libdeflate
 
-, swig4
+, swig
 , python
 , wxPython
-, opencascade-occt
+, opencascade-occt_7_6
 , libngspice
 , valgrind
 
@@ -65,6 +65,7 @@ assert testing -> !stable
   -> throw "testing implies stable and cannot be used with stable = false";
 
 let
+  opencascade-occt = opencascade-occt_7_6;
   inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
@@ -136,7 +137,7 @@ stdenv.mkDerivation rec {
   ]
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
-  ++ optionals (stdenv.isLinux) [
+  ++ optionals (stdenv.hostPlatform.isLinux) [
     util-linux
     libselinux
     libsepol
@@ -167,7 +168,7 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    swig4
+    swig
     python
     unixODBC
     libdeflate
@@ -204,7 +205,7 @@ stdenv.mkDerivation rec {
       Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad.org/";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
 }

@@ -9,11 +9,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/lzlib/lzlib-${finalAttrs.version}.tar.lz";
-    sha256 = "e362ecccd82d4dd297df6a51b952c65d2172f9bf41a5c4590d3604d83aa519d3";
+    hash = "sha256-42LszNgtTdKX32pRuVLGXSFy+b9BpcRZDTYE2DqlGdM=";
     # hash from release email
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.in --replace '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
   '';
 

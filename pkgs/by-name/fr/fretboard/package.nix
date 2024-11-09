@@ -16,21 +16,21 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fretboard";
-  version = "5.4";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "fretboard";
-    rev = "v${version}";
-    hash = "sha256-GqnwAB7hmg2QLwSWqrZtTp6+FybK8/v4GZx/lMi0dGY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8xINlVhWgg73DrRi8S5rhNc1sbG4DbWOsiEBjU8NSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-sGvb1+HKIqNSgCV9UzkCrkGrpjA34Pe9eq2/w3K/w/E=";
+    src = finalAttrs.src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-LSL7VvRgA8MaFXn/vi5Zf1sY4cqv0a9PNnZ3JlDNIaE=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -58,12 +58,13 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
+    changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${finalAttrs.version}";
     description = "Look up guitar chords";
-    homepage = "https://github.com/bragefuglseth/fretboard";
-    changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${version}";
+    homepage = "https://apps.gnome.org/Fretboard/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ michaelgrahamevans ];
     mainProgram = "fretboard";
+    maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

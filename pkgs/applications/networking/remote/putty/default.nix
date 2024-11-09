@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.80";
+  version = "0.81";
   pname = "putty";
 
   src = fetchurl {
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-IBPIOnIbF1NSnpCQ98ODDo/kyAoHDMznZFObrbP2cIE=";
+    hash = "sha256-y4sAqU9FNJTjRaPfKB16PtJrsN1+NiZPFFIG+IV2Of4=";
   };
 
   nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk3 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   desktopItems = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Free Telnet/SSH Client";
+    description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
       platforms, along with an xterm terminal emulator.

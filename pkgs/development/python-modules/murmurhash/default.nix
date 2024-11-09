@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,16 +23,12 @@ buildPythonPackage rec {
       --replace "'wheel>=0.32.0,<0.33.0'" ""
   '';
 
-  buildInputs = [
-   cython
-  ];
+  buildInputs = [ cython ];
 
   # No test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "murmurhash"
-  ];
+  pythonImportsCheck = [ "murmurhash" ];
 
   meta = with lib; {
     description = "Cython bindings for MurmurHash2";

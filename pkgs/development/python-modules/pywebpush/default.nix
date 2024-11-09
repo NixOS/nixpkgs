@@ -1,33 +1,32 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, http-ece
-, mock
-, py-vapid
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, six
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  http-ece,
+  mock,
+  py-vapid,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A8zD6XW2A3S3Y0xJVZVha+Ujvyx9oNl26E/amsjGMwE=";
+    hash = "sha256-cuNYauyJoGNzwFheb5fG/QuBUZ5B8yiWo2OZCez0XbA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pywebpush"
-  ];
+  pythonImportsCheck = [ "pywebpush" ];
 
   meta = with lib; {
     description = "Webpush Data encryption library for Python";

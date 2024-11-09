@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix broken install command
     substituteInPlace Makefile --replace "-pm755" "-pDm755"
   '';

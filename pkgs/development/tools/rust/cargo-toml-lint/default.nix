@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ujdekIucqes2Wya4jwTMLstb8JMptbAlqYhgMxfp2gg=";
 
   meta = with lib; {
-    description = "A simple linter for Cargo.toml manifests";
+    description = "Simple linter for Cargo.toml manifests";
     mainProgram = "cargo-toml-lint";
     homepage = "https://github.com/fuellabs/cargo-toml-lint";
     changelog = "https://github.com/fuellabs/cargo-toml-lint/releases/tag/v${version}";

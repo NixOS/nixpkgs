@@ -5,7 +5,7 @@ let
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      hardware.opengl.driSupport = true;
+      hardware.graphics.enable = true;
       environment.systemPackages = [ pkgs.openarena ];
     };
 

@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitLab
 , perlPackages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     owner = "Kerenoc";
     repo = "GCstar";
     rev = "v${version}";
-    sha256 = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
+    hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = with perlPackages; [
     perl

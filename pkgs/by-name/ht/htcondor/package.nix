@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "htcondor";
-  version = "23.4.0";
+  version = "23.10.1";
 
   src = fetchFromGitHub {
     owner = "htcondor";
     repo = "htcondor";
 
     rev = "v${version}";
-    hash = "sha256-+WfNVxP7qsEpn8zPretLnOEAnPq0GylyxCbcQI8o0L0=";
+    hash = "sha256-5gxylfqG87dUEQT3e3vNgtTqWk0QTgWXwAdEAiIuc/E=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     scitokens-cpp
   ];
 
+  env.CXXFLAGS = "-fpermissive";
 
   cmakeFlags = [ "-DSYSTEM_NAME=NixOS" "-DWITH_PYTHON_BINDINGS=false" ];
 
@@ -59,6 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];
     # cannot find -lpthread: No such file or directory
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 }:
 
@@ -14,19 +15,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0/IZ7eX6b4PTnlSSdoOH0FsORGK9hrLr1zlr/IHsJFQ=";
   };
 
+  patches = [
+    # Fix builds on clang15. Remove post-0.6.1.
+    (fetchpatch {
+      name = "clang15fixes.patch";
+      url = "https://github.com/dvidelabs/flatcc/commit/5885e50f88248bc7ed398880c887ab23db89f05a.patch";
+      hash = "sha256-z2HSxNXerDFKtMGu6/vnzGRlqfz476bFMjg4DVfbObQ";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DFLATCC_INSTALL=on"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=misleading-indentation"
-    "-Wno-error=stringop-overflow"
-  ];
-
   meta = with lib; {
-    description = "FlatBuffers Compiler and Library in C for C ";
+    description = "FlatBuffers Compiler and Library in C for C";
     mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
     license = [ licenses.asl20 ];

@@ -1,12 +1,12 @@
 {
   cudaVersion,
   final,
-  hostPlatform,
   lib,
   mkVersionedPackageName,
   package,
   patchelf,
   requireFile,
+  stdenv,
   ...
 }:
 let
@@ -17,6 +17,7 @@ let
     strings
     versions
     ;
+  inherit (stdenv) hostPlatform;
   # targetArch :: String
   targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
     x86_64-linux = "x86_64-linux-gnu";
@@ -64,7 +65,7 @@ finalAttrs: prevAttrs: {
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [ finalAttrs.passthru.cudnn.lib ];
+  buildInputs = prevAttrs.buildInputs ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
 
   preInstall =
     (prevAttrs.preInstall or "")
@@ -98,9 +99,8 @@ finalAttrs: prevAttrs: {
     cudnn =
       let
         desiredName = mkVersionedPackageName "cudnn" package.cudnnVersion;
-        desiredIsAvailable = final ? desiredName;
       in
-      if package.cudnnVersion == null || !desiredIsAvailable then final.cudnn else final.${desiredName};
+      if package.cudnnVersion == null || (final ? desiredName) then final.cudnn else final.${desiredName};
   };
 
   meta = prevAttrs.meta // {

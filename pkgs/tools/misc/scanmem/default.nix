@@ -4,7 +4,7 @@
 , autoreconfHook
 , gobject-introspection
 , intltool
-, wrapGAppsHook
+, wrapGAppsHook3
 , procps
 , python3
 , readline
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 
-  nativeBuildInputs = [ autoreconfHook gobject-introspection intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook gobject-introspection intltool wrapGAppsHook3 ];
   buildInputs = [ readline python3 ];
   configureFlags = ["--enable-gui"];
 

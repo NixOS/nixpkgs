@@ -8,26 +8,19 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule [ "hardware" "parallels" "autoMountShares" ] "Shares are always automatically mounted since Parallels Desktop 20.")
+  ];
+
   options = {
     hardware.parallels = {
 
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This enables Parallels Tools for Linux guests, along with provided
           video, mouse and other hardware drivers.
-        '';
-      };
-
-      autoMountShares = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Control prlfsmountd service. When this service is running, shares can not be manually
-          mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
-          Recommended to enable for simple file sharing, but extended share use such as for code should
-          disable this to manually mount shares.
         '';
       };
 
@@ -36,7 +29,7 @@ in
         default = config.boot.kernelPackages.prl-tools;
         defaultText = "config.boot.kernelPackages.prl-tools";
         example = literalExpression "config.boot.kernelPackages.prl-tools";
-        description = lib.mdDoc ''
+        description = ''
           Defines which package to use for prl-tools. Override to change the version.
         '';
       };
@@ -64,19 +57,6 @@ in
       serviceConfig = {
         ExecStart = "${prl-tools}/bin/prltoolsd -f";
         PIDFile = "/var/run/prltoolsd.pid";
-        WorkingDirectory = "${prl-tools}/bin";
-      };
-    };
-
-    systemd.services.prlfsmountd = mkIf config.hardware.parallels.autoMountShares {
-      description = "Parallels Guest File System Sharing Tool";
-      wantedBy = [ "multi-user.target" ];
-      path = [ prl-tools ];
-      serviceConfig = rec {
-        ExecStart = "${prl-tools}/sbin/prlfsmountd ${PIDFile}";
-        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /media";
-        ExecStopPost = "${prl-tools}/sbin/prlfsmountd -u";
-        PIDFile = "/run/prlfsmountd.pid";
         WorkingDirectory = "${prl-tools}/bin";
       };
     };

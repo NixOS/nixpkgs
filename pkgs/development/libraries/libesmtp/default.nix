@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Library for Posting Electronic Mail";
+    description = "Library for Posting Electronic Mail";
     longDescription = ''
       libESMTP is an SMTP client library which manages submission of electronic mail
       via a preconfigured Mail Transport Agent (MTA) such as Exim or Postfix.

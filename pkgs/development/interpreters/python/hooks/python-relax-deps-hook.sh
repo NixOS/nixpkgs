@@ -4,12 +4,10 @@
 #
 # Example usage in a derivation:
 #
-#   { …, pythonPackages, … }:
+#   { …, python3Packages, … }:
 #
-#   pythonPackages.buildPythonPackage {
+#   python3Packages.buildPythonPackage {
 #     …
-#     nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
-#
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
@@ -91,7 +89,7 @@ pythonRelaxDepsHook() {
         _pythonRelaxDeps $metadata_file
         _pythonRemoveDeps $metadata_file
 
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+        if (("${NIX_DEBUG:-0}" >= 1)); then
             echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
             cat $metadata_file
         fi

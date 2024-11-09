@@ -55,10 +55,11 @@ let
     pname = "dell-command-configure-unpacked-wrapper-lib";
     inherit version;
 
-    src = ./.;
+    unpackPhase = ''
+      cp ${./wrapper-lib.c} wrapper-lib.c
+    '';
 
     postPatch = ''
-      ls -al
       substitute wrapper-lib.c lib.c \
         --subst-var-by to "${unpacked}/srvadmin-hapi/opt/dell/srvadmin/etc/omreg.d/omreg-hapi.cfg"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
@@ -72,7 +73,7 @@ in stdenv.mkDerivation rec {
   inherit version;
   pname = "dell-command-configure";
 
-  buildInputs = [ openssl stdenv.cc.cc.lib ];
+  buildInputs = [ openssl (lib.getLib stdenv.cc.cc) ];
   nativeBuildInputs = [ autoPatchelfHook ];
   dontConfigure = true;
 

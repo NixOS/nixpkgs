@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://www.typerex.org/ocp-indent.html";
-    description = "A customizable tool to indent OCaml code";
+    description = "Customizable tool to indent OCaml code";
     mainProgram = "ocp-indent";
     license = licenses.gpl3;
     maintainers = [ maintainers.jirkamarsik ];

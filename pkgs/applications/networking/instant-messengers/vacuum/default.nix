@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "An XMPP client fully composed of plugins";
+    description = "XMPP client fully composed of plugins";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;

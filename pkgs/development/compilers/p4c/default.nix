@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     cmake
+    protobuf
+    python3
   ]
   ++ lib.optionals enableDocumentation [ doxygen graphviz ]
   ++ lib.optionals enableBPF [ libllvm libbpf ];
@@ -86,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     boehmgc
     gmp
     flex
-    python3
   ];
 
   meta = {

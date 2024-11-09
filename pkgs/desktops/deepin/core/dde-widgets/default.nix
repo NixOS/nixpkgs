@@ -1,38 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dde-qt-dbus-factory
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, dtkwidget
-, qt5integration
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dde-qt-dbus-factory,
+  dtkwidget,
+  libsForQt5,
+  qt5integration,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-widgets";
-  version = "6.0.19";
+  version = "6.0.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oB0lyfmxBSwqjXO+etYdc+DghZVSBU+LXYqK1WS5DaU=";
+    hash = "sha256-aeWQdWi1mMche7AJhAvchRXu89hiZ+CM/RR9HvvbXTw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     dde-qt-dbus-factory
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
     dtkwidget
     qt5integration
     gtest

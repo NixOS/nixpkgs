@@ -5,21 +5,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-tools";
-  version = "1.202.0";
+  version = "1.219.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7JH93VaRQTi2pcHYB+oDqe1FDiyNDWXwRnw5qZMEi7c=";
+    hash = "sha256-9FAq6wcTXXFdQ5kcpkj2KqTcd8C8zXmhRWW/ajCJUMI=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  cargoHash = "sha256-8W2x9pbIu/9DXrRXo4IbSBSa8wAFj5djNpHq7gfa46E=";
+  cargoHash = "sha256-moBRkUbcIGZaVdcE3yDtREtG4unN4n5yA7edpnrUFg4=";
   cargoBuildFlags = [ "--package" "wasm-tools" ];
-  cargoTestFlags = [ "--all" ];
+  cargoTestFlags = [ "--all" ] ++
+    # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
+    [ "--" "--test-threads=1" ];
 
   meta = with lib; {
     description = "Low level tooling for WebAssembly in Rust";

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An efficient binary diff/patch tool";
+    description = "Efficient binary diff/patch tool";
     homepage = "https://www.daemonology.net/bsdiff/";
     license = licenses.bsd2;
     platforms = platforms.unix;

@@ -38,13 +38,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "4.7.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-UzMVJnXYLy7E9RuM4VPdqnIyfQjDOdAlKiqRkXuxnQ0=";
+    sha256 = "sha256-ngorPKDBRk4u4EUoJHAz5jrUiNUGffJKdEf9fiWbi/g=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/ARM-software/astc-encoder";
-    description = "An encoder for the ASTC texture compression format";
+    description = "Encoder for the ASTC texture compression format";
     longDescription = ''
       The Adaptive Scalable Texture Compression (ASTC) format is
       widely supported by mobile and desktop graphics hardware and
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ dasisdormax ];
-    broken = !stdenv.is64bit;
+    broken = !stdenv.hostPlatform.is64bit;
   };
 }

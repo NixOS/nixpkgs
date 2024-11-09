@@ -1,0 +1,15 @@
+[tool.mypy]
+files = ["*.py"]
+strict = true
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "D203", "D213", "ISC001", "T201"]
+allowed-confusables = ["‐"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"

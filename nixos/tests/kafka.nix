@@ -103,13 +103,9 @@ let
   }) { inherit system; });
 
 in with pkgs; {
-  kafka_2_8 = makeKafkaTest "kafka_2_8" { kafkaPackage = apacheKafka_2_8; };
-  kafka_3_0 = makeKafkaTest "kafka_3_0" { kafkaPackage = apacheKafka_3_0; };
-  kafka_3_1 = makeKafkaTest "kafka_3_1" { kafkaPackage = apacheKafka_3_1; };
-  kafka_3_2 = makeKafkaTest "kafka_3_2" { kafkaPackage = apacheKafka_3_2; };
-  kafka_3_3 = makeKafkaTest "kafka_3_3" { kafkaPackage = apacheKafka_3_3; };
-  kafka_3_4 = makeKafkaTest "kafka_3_4" { kafkaPackage = apacheKafka_3_4; };
-  kafka_3_5 = makeKafkaTest "kafka_3_5" { kafkaPackage = apacheKafka_3_5; };
+  kafka_3_6 = makeKafkaTest "kafka_3_6" { kafkaPackage = apacheKafka_3_6; };
+  kafka_3_7 = makeKafkaTest "kafka_3_7" { kafkaPackage = apacheKafka_3_7; };
+  kafka_3_8 = makeKafkaTest "kafka_3_8" { kafkaPackage = apacheKafka_3_8; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
   kafka_kraft = makeKafkaTest "kafka_kraft" { kafkaPackage = apacheKafka; mode = "kraft"; };
 }

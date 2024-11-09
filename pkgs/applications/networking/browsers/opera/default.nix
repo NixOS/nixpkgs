@@ -40,7 +40,7 @@
 , at-spi2-atk
 , at-spi2-core
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qt6
 , proprietaryCodecs ? false
 , vivaldi-ffmpeg-codecs
@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "108.0.5067.29";
+  version = "114.0.5282.102";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-lPazFtTWb/AbK/5H5MQK+dn0imJqUHiL6/KRq1CNxfo=";
+    hash = "sha256-PBbozIdA+cfEzGIyL1P+25FZtrnd7ldctOtZYomKd/8=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     qt6.wrapQtAppsHook
   ];
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     pango
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     qt6.qtbase
   ];
 

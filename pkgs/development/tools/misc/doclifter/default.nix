@@ -1,14 +1,33 @@
-{ lib, stdenv, fetchurl, python3, makeWrapper, libxml2 }:
+{
+  fetchurl,
+  lib,
+  libxml2,
+  makeWrapper,
+  python3,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doclifter";
   version = "2.21";
+
   src = fetchurl {
-    url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3zb+H/rRmU87LWh0+kQtiRMZ4JwJ3tVrt8vQ/EeKx8Q=";
+    url = "http://www.catb.org/~esr/doclifter/doclifter-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3zb+H/rRmU87LWh0+kQtiRMZ4JwJ3tVrt8vQ/EeKx8Q=";
   };
+
+  postPatch = ''
+    substituteInPlace manlifter \
+      --replace-fail '/usr/bin/env python2' '/usr/bin/env python3'
+    2to3 -w manlifter
+  '';
+
+  nativeBuildInputs = [
+    python3
+    makeWrapper
+  ];
+
   buildInputs = [ python3 ];
-  nativeBuildInputs = [ python3 makeWrapper ];
 
   strictDeps = true;
 
@@ -17,19 +36,18 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
-    substituteInPlace manlifter \
-      --replace '/usr/bin/env python2' '/usr/bin/env python3'
-    2to3 -w manlifter
     cp manlifter $out/bin
     wrapProgram "$out/bin/manlifter" \
-        --prefix PATH : "${libxml2}/bin:$out/bin"
-    cp manlifter.1 $out/share/man/man1
+        --prefix PATH : "${lib.getBin libxml2}/bin:$out/bin"
+    gzip < manlifter.1 > $out/share/man/man1/manlifter.1.gz
   '';
 
   meta = {
+    changelog = "https://gitlab.com/esr/doclifter/-/blob/2.21/NEWS";
     description = "Lift documents in nroff markups to XML-DocBook";
     homepage = "http://www.catb.org/esr/doclifter";
-    license = "BSD";
+    license = lib.licenses.bsd2;
+    mainProgram = "doclifter";
     platforms = lib.platforms.unix;
   };
-}
+})

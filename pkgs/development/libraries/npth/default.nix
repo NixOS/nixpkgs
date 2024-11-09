@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgsCross }:
 
 stdenv.mkDerivation rec {
   pname = "npth";
@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    musl = pkgsCross.musl64.npth;
+  };
+
   meta = with lib; {
-    description = "The New GNU Portable Threads Library";
+    description = "New GNU Portable Threads Library";
     mainProgram = "npth-config";
     longDescription = ''
       This is a library to provide the GNU Pth API and thus a non-preemptive

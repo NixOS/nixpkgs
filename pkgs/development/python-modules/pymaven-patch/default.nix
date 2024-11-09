@@ -1,13 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pbr
-, requests
-, six
-, lxml
-, pytestCheckHook
-, pytest-cov
-, mock
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pbr,
+  requests,
+  six,
+  lxml,
+  pytestCheckHook,
+  pytest-cov,
+  mock,
 }:
 buildPythonPackage rec {
   pname = "pymaven-patch";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DPfJPonwHwQI62Vu7FjLSiKMleA7PUfLc9MfiZBVzVA=";
+    hash = "sha256-DPfJPonwHwQI62Vu7FjLSiKMleA7PUfLc9MfiZBVzVA=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportsCheck = [
-    "pymaven"
-  ];
+  pythonImportsCheck = [ "pymaven" ];
 
   meta = with lib; {
     description = "Python access to maven";

@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "lego";
-  version = "4.15.0";
+  version = "4.19.2";
 
   src = fetchFromGitHub {
     owner = "go-acme";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j5TboKYv4xycpCXnuFP/37ioiS89G7eeViEmGwB2BUY=";
+    hash = "sha256-O4lzOZUiicmahxcbzPsEU2+tPDTCUun2JLeWZjpTZIQ=";
   };
 
-  vendorHash = "sha256-uniml5D8887cQyxxZIDhYLni/+r6ZtZ9nJBKPtNeDtI=";
+  vendorHash = "sha256-BcE/8pxQdJp9vttLo4wDSUswJnaBhIn/mlt3ZcOf2wA=";
 
   doCheck = false;
 
   subPackages = [ "cmd/lego" ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-s" "-w" "-X main.version=${version}"
   ];
 
   meta = with lib; {

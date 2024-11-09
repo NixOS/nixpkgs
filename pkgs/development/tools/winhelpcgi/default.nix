@@ -19,6 +19,6 @@
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.shlevy ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

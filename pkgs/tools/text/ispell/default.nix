@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cat >> local.h <<EOF
-    ${lib.optionalString (!stdenv.isDarwin) "#define USG"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "#define USG"}
     #define TERMLIB "-lncurses"
     #define LANGUAGES "{american,MASTERDICTS=american.med,HASHFILES=americanmed.hash}"
     #define MASTERHASH "americanmed.hash"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An interactive spell-checking program for Unix";
+    description = "Interactive spell-checking program for Unix";
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
     license = licenses.free;
     platforms = platforms.unix;

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, scipy
-, numpy
-, pydoe
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  scipy,
+  numpy,
+  pydoe,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pwlf";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
-    rev = "v${version}";
-    hash = "sha256-gjdahulpHjBmOlKOCPF9WmrWe4jn/+0oVI4o09EX7qE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FAH38mSaABdNR8lpxxA/YVo5ec2WYOMEsAQqravbM9k=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pydoe
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "pwlf" ];
 

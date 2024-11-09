@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7PfNDFDuvQ9T3BeA15FuY1jAprGLsyglWXcNrZvtPAE=";
+    hash = "sha256-4ongCmO88IJjUPz35jOOpG4XpfVGYdA3GR2w3E/h+M4=";
   };
 
-  cargoHash = "sha256-5aLT0JfeFj0fZP/1sHXulCQtoquHYriapMdPtN+fxko=";
+  cargoHash = "sha256-Nhm6xn7Upc9m+sTU9Pw3NGdpvwHvb4JGN6CQuMykILo=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
+    description = "Simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
     changelog = "https://github.com/str4d/rage/blob/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option
-    maintainers = with maintainers; [ marsam ryantm ];
+    maintainers = with maintainers; [ ryantm ];
     mainProgram = "rage";
   };
 }

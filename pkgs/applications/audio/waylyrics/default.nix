@@ -9,26 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.13";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
-    owner = "poly000";
+    owner = "waylyrics";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-522NdpGj0oh2SbWa4GFCFpqNFRhqQxfZ1ZRuS9jUj7Y=";
+    hash = "sha256-/hwx4fe1yjfsLYxsQkUMXrqWhAgp/VJ74N1eSiXuJ54=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ncmapi-0.1.13" = "sha256-qu89qf4IPM14V+oE4QQr/SsXSTx3vQbyfzD+Pihcd3E=";
-      "qqmusic-rs-0.1.0" = "sha256-woLsO0n+m3EBUI+PRLio7iLp0UPQSliWK0djCSZEaZc=";
-    };
-  };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-Os7djeTDChNWXWbmDuJWJnf7E+U/V14Jg4cLOMAKhu4=";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ openssl dbus ];
@@ -44,10 +34,12 @@ rustPlatform.buildRustPackage rec {
     install -d $WAYLYRICS_THEME_PRESETS_DIR
     cp -vr themes/* $WAYLYRICS_THEME_PRESETS_DIR
     # Install desktop entry
-    install -Dm644 io.poly000.waylyrics.desktop -t $out/share/applications
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t $out/share/applications
     # Install schema
-    install -Dm644 io.poly000.waylyrics.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
     glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas/
+    # Install metainfo
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.metainfo.xml -t $out/share/metainfo
     # Install icons
     install -d $out/share/icons
     cp -vr res/icons/hicolor $out/share/icons/hicolor
@@ -64,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Desktop lyrics with QQ and NetEase Music source";
     mainProgram = "waylyrics";
-    homepage = "https://github.com/poly000/waylyrics";
+    homepage = "https://github.com/waylyrics/waylyrics";
     license = with licenses; [ mit cc-by-40 ];
     maintainers = with maintainers; [ shadowrz aleksana ];
     platforms = platforms.linux;

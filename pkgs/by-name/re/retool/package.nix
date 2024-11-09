@@ -5,9 +5,9 @@
 , qt6
 }:
 
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "retool";
-  version = "2.02.2-unstable-2024-03-17";
+  version = "2.3.8";
 
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.10";
@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
-    rev = "30d547c7d04b8cbf7710b2037388bf18a00a0c22";
-    hash = "sha256-5Tmi3eVJh9STP9A0dDNPDs4SlIWHw8sk+g1GgpnmqeE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KGBpGZAC0SjStp0aulxVRJMmNwlpvSG0i0rtZgvFCpc=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qt6.qtbase
   ] ++
-  lib.optionals (stdenv.isLinux) [
+  lib.optionals (stdenv.hostPlatform.isLinux) [
     qt6.qtwayland
   ];
 
@@ -47,8 +47,9 @@ python3.pkgs.buildPythonApplication {
   doCheck = false;
 
   meta = with lib; {
-    description = "A better filter tool for Redump and No-Intro dats";
+    description = "Better filter tool for Redump and No-Intro dats";
     homepage = "https://github.com/unexpectedpanda/retool";
+    changelog = "https://github.com/unexpectedpanda/retool/blob/v${version}/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ thiagokokada ];
   };

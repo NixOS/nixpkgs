@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # Doesn't support all the flags
 
   patches = [ ./clang.patch ] # Fix implicit `int` on `main` error with newer versions of clang
-    ++ lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   configureFlags = [ "--without-x" "--with-ncurses=${ncurses.dev}" ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   postInstall = ''
     mkdir -p $dev/bin

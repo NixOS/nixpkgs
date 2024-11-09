@@ -1,8 +1,15 @@
-{ buildPecl, lib, zstd, pkg-config, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  zstd,
+  pkg-config,
+  fetchFromGitHub,
+}:
 
 let
   version = "0.13.3";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "zstd";
 
@@ -13,15 +20,11 @@ in buildPecl {
     hash = "sha256-jEuL93ScF0/FlfUvib6uZafOkIe0+VkWV/frpSjTkvY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zstd ];
 
-  configureFlags = [
-    "--with-libzstd"
-  ];
+  configureFlags = [ "--with-libzstd" ];
 
   meta = with lib; {
     description = "Zstd Extension for PHP";

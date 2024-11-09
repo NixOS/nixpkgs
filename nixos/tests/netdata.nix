@@ -11,7 +11,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
         {
           environment.systemPackages = with pkgs; [ curl jq netdata ];
-          services.netdata.enable = true;
+          services.netdata = {
+            enable = true;
+            python.recommendedPythonPackages = true;
+          };
         };
     };
 

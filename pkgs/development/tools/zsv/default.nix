@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jq ];
 
   configureFlags = [
-    "--jq-prefix=${jq.lib}"
+    "--jq-prefix=${lib.getLib jq}"
   ];
 
   meta = with lib; {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/liquidaty/zsv";
     changelog = "https://github.com/liquidaty/zsv/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

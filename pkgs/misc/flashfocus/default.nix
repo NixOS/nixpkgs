@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
+{ lib, python3Packages, fetchPypi, netcat-openbsd, procps, bash, nix-update-script }:
 
 python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
@@ -8,17 +8,23 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
+    hash = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
   postPatch = ''
     substituteInPlace bin/nc_flash_window \
-      --replace "nc" "${lib.getExe netcat-openbsd}"
+      --replace-fail "nc" "${lib.getExe netcat-openbsd}"
+
+    substituteInPlace src/flashfocus/util.py \
+      --replace-fail "pidof" "${lib.getExe' procps "pidof"}"
   '';
 
   nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
     setuptools
+  ];
+
+  buildInputs = [
+    bash
   ];
 
   pythonRelaxDeps = [

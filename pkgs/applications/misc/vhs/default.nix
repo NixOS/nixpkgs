@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "vhs";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4VQcIynkENScxpeM09IXrpMszqojlMuyjtXX2lbS9dg=";
+    hash = "sha256-kUsh+jy4dXYW1uAUfFv/HKBqIIyVogLKUYNjBhIKlls=";
   };
 
-  vendorHash = "sha256-/XW5Gq9Yz+M7Al1hy6pow34e3Cn3q8aA0ByRdhWXUIQ=";
+  vendorHash = "sha256-1UBhiRemJ+dQNm20+8pbOJus5abvTwVcuzxNMzrniN8=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.isLinux [ chromium ] ++ [ ffmpeg ttyd ])}
+    wrapProgram $out/bin/vhs --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ chromium ] ++ [ ffmpeg ttyd ])}
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \
@@ -28,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool for generating terminal GIFs with code";
+    description = "Tool for generating terminal GIFs with code";
     mainProgram = "vhs";
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";

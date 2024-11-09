@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Tool for Learning about Convolution";
+    description = "Tool for Learning about Convolution";
     homepage = "https://www.gnu.org/software/c-graph/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

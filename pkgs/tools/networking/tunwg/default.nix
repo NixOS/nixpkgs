@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tunwg";
-  version = "24.01.15+9f04d73";
+  version = "24.09.18+760ee81";
 
   src = fetchFromGitHub {
     owner = "ntnj";
     repo = "tunwg";
     rev = "v${version}";
-    hash = "sha256-M7iMl80uxw0hKg4sK8Tv6U5+nMOK8eTfb9SGn+U2+8E=";
+    hash = "sha256-+vgl7saHp1Co35nkxQ+IhqYr6GdGd0JIFEFrezQd5Yo=";
   };
 
-  vendorHash = "sha256-VlH41hOWC5QBCYZxiKCUZRmw2vHRbbPyzToRMU6kDO8=";
+  vendorHash = "sha256-5BJFAnsmx6lbGQTx/6dIdcsETsllCr6C3wPbB2Gvj5Y=";
 
   ldflags = [ "-s" "-w" ];
 

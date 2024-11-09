@@ -1,8 +1,8 @@
 {
-  lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , setuptools
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-0Im1kVFa11AW+7Oe95XvkfxSlaux6bkKaHSQy6hJCN8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "oscscreen" ];
 

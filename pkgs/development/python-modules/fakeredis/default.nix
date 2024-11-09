@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, jsonpath-ng
-, lupa
-, poetry-core
-, pybloom-live
-, pyprobables
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  jsonpath-ng,
+  lupa,
+  poetry-core,
+  pyprobables,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  redis-server,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.21.3";
+  version = "2.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,14 +27,12 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GIg+a8G5S0dmbvMKqS/Vn+wzNM6iNIs3bKPqhecsQt4=";
+    hash = "sha256-HjId4SueqkbC319Eel8G85ZOj72ZKEVEH2D8V/GfXi4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     redis
     sortedcontainers
   ];
@@ -45,26 +44,30 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
-    lua = [
-      lupa
-    ];
-    json = [
-      jsonpath-ng
-    ];
-    bf = [
-      pyprobables
-    ];
-    cf = [
-      pyprobables
-    ];
-    probabilistic = [
-      pyprobables
-    ];
+  optional-dependencies = {
+    lua = [ lupa ];
+    json = [ jsonpath-ng ];
+    bf = [ pyprobables ];
+    cf = [ pyprobables ];
+    probabilistic = [ pyprobables ];
   };
 
-  pythonImportsCheck = [
-    "fakeredis"
+  pythonImportsCheck = [ "fakeredis" ];
+
+  pytestFlagsArray = [ "-m 'not slow'" ];
+
+  preCheck = ''
+    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
+
+  disabledTests = [
+    # AssertionError
+    "test_command"
   ];
 
   meta = with lib; {

@@ -42,7 +42,7 @@ let
 
     meta = {
       homepage = "https://gobby.github.io/";
-      description = "An implementation of the Infinote protocol written in GObject-based C";
+      description = "Implementation of the Infinote protocol written in GObject-based C";
       mainProgram = "infinoted-0.7";
       license = lib.licenses.lgpl2Plus;
       maintainers = [ ];

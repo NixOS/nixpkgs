@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, fetchpatch, unzip
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip
 , fpc, lazarus, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl
 , unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "unstable-2024-02-26";
+  version = "5.18.0-unstable-2024-02-26";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_LDFLAGS = ''
-    -L${stdenv.cc.cc.lib}/lib -lX11 -lglib-2.0 -lgtk-x11-2.0
+    -L${lib.getLib stdenv.cc.cc}/lib -lX11 -lglib-2.0 -lgtk-x11-2.0
     -lgdk-x11-2.0 -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo
     -lc -lcrypto
   '';
@@ -60,7 +60,9 @@ stdenv.mkDerivation rec {
     cp -r "./lang" "$out/share/transgui"
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "A cross platform front-end for the Transmission BitTorrent client";

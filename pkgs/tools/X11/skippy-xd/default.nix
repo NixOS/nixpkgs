@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, xorgproto
-, libX11
-, libXft
-, libXcomposite
-, libXdamage
-, libXext
-, libXinerama
-, libjpeg
-, giflib
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorgproto,
+  libX11,
+  libXft,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXinerama,
+  libjpeg,
+  giflib,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "skippy-xd";
-  version = "0.6.0";
+  version = "0.8.0";
   src = fetchFromGitHub {
-    owner = "dreamcat4";
+    owner = "felixfung";
     repo = "skippy-xd";
-    rev = "d0557c3144fc67568a49d7207efef89c1d5777a0";
-    sha256 = "sha256-dnoPUPCvuR/HhqIz1WAsmWL/CkfTf11YEkbrkVWM4dc=";
+    rev = "30da57cb59ccf77f766718f7d533ddbe533ba241";
+    hash = "sha256-YBUDbI1SHsBI/fA3f3W1sPu3wXSodMbTGvAMqOz7RCM=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Expose-style compositing-based standalone window switcher";
+    homepage = "https://github.com/felixfung/skippy-xd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

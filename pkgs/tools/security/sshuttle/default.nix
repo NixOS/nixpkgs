@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , python3Packages
-, fetchPypi
+, fetchFromGitHub
 , installShellFiles
 , makeWrapper
 , sphinx
@@ -14,19 +14,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.1.1";
+  version = "1.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
+  src = fetchFromGitHub {
+    owner = "sshuttle";
+    repo = "sshuttle";
+    rev = "v${version}";
+    hash = "sha256-7jiDTjtL4FiQ4GimSPtUDKPUA29l22a7XILN/s4/DQY=";
   };
 
   patches = [ ./sudo.patch ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
-  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     sphinx
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytest-cov-stub pytestCheckHook ];
 
   postBuild = ''
     make man -C docs
@@ -45,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     installManPage docs/_build/man/*
 
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.hostPlatform.isLinux [ iptables nettools ])}" \
   '';
 
   meta = with lib; {

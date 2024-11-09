@@ -6,7 +6,7 @@
 , pkg-config
 , efl
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 , directoryListingUpdater
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

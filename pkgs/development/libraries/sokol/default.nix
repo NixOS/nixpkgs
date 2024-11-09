@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "sokol";
-  version = "unstable-2023-08-04";
+  version = "0-unstable-2024-09-20";
 
   src = fetchFromGitHub {
     owner = "floooh";
     repo = "sokol";
-    rev = "47d92ff86298fc96b3b84d93d0ee8c8533d3a2d2";
-    sha256 = "sha256-TsM5wK9a2ectrAY8VnrMPaxCNV3e1yW92SBBCHgs+0k=";
+    rev = "38e4c9a516f8808d706343a5c525acfe7007fe67";
+    sha256 = "sha256-g4JMCbG9is7uBFv6cTBTCmRYfKWMruagtYQjYZnOFn4=";
   };
 
   dontBuild = true;

@@ -25,7 +25,7 @@
 , shared-mime-info
 , taglib
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -124,12 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     gdk-pixbuf # setup hook
     pkg-config
-    (python3.withPackages (ps: with ps; lib.optionals finalAttrs.doCheck [
+    (python3.withPackages (ps: with ps; lib.optionals finalAttrs.finalPackage.doCheck [
       python-dbusmock
       tornado
     ]))
     validatePkgConfig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

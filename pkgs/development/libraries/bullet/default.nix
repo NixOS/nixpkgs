@@ -4,7 +4,7 @@
 , cmake
 , libGLU
 , libGL
-, freeglut
+, libglut
 , Cocoa
 , OpenGL
 }:
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL libglut ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenGL ];
 
   postPatch = ''
     substituteInPlace examples/ThirdPartyLibs/Gwen/CMakeLists.txt \
       --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_CPU_DEMOS=OFF"
     "-DINSTALL_EXTRA_LIBS=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENGL_FOUND=true"
     "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with lib; {
-    description = "A professional free 3D Game Multiphysics Library";
+    description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.

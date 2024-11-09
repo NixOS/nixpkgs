@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
   #  http://www.mail-archive.com/suspend-devel@lists.sourceforge.net/msg02355.html
   makeFlags = [
     "DESTDIR=$(out)"
-  ] ++ lib.optional (!stdenv.isi686) "BACKEND=x86emu";
+  ] ++ lib.optional (!stdenv.hostPlatform.isi686) "BACKEND=x86emu";
 
   preBuild = ''
     sed -i lrmi.c -e 's@defined(__i386__)@(defined(__i386__) || defined(__x86_64__))@'
     sed -e s@/usr@@ -i Makefile
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   meta = with lib; {
     description = "Real-mode x86 code emulator";

@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dqhZIwxWBMXS2RgE8YynYrESVyAOIJ9ujAKcp2tDhvA=";
   };
 
-  cargoSha256 = "sha256-sQ6f8BHGsPFPchFDjNlZimnu9i99SGYf5bYfM1/2Gac=";
+  cargoHash = "sha256-sQ6f8BHGsPFPchFDjNlZimnu9i99SGYf5bYfM1/2Gac=";
 
   meta = with lib; {
-    description = "A CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";
+    description = "CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";
     homepage = "https://github.com/LukeMathWalker/bunyan";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ netcrns ];

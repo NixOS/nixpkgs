@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "butane";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    hash = "sha256-bSzXiA9dAMuljKCDpbWd1hSICNBAMCAUGPLH+0Sz1mA=";
+    hash = "sha256-ELCERcgw01RcSMQjM0PL8CyTKrdfEPV9U8/RSf7YxCs=";
   };
 
   vendorHash = null;

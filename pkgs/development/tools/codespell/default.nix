@@ -6,21 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.6";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-esewCJw4o4SfSst5ALZ90X3XgOuOAsaxytpotvFeHB0=";
+    sha256 = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=codespell_lib" "" \
-      --replace "--cov-report=" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
@@ -30,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     aspell-python
     chardet
     pytestCheckHook
+    pytest-cov-stub
     pytest-dependency
   ];
 
@@ -39,9 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # tries to run not fully installed script
-    "test_command"
-    # error 'dateset' should not be in aspell dictionaries (en, en_GB, en_US, en_CA, en_AU) for dictionary /build/source/codespell_lib/tests/../data/dictionary.txt
-    "test_dictionary_formatting"
+    "test_basic"
   ];
 
   pythonImportsCheck = [ "codespell_lib" ];

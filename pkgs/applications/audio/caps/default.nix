@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A selection of LADSPA plugins implementing classic effects";
+    description = "Selection of LADSPA plugins implementing classic effects";
     longDescription = ''
       The C* Audio Plugin Suite is a selection of classic effects,
       unique filters and signal generators.  The digital guitarist

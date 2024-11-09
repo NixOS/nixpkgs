@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, mirakuru
-, port-for
-, psycopg
-, pytest
-, postgresql
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
+  mirakuru,
+  port-for,
+  psycopg,
+  pytest,
+  postgresql,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-postgresql";
-  version = "5.0.0";
-  format = "pyproject";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,13 +24,12 @@ buildPythonPackage rec {
     owner = "ClearcodeHQ";
     repo = "pytest-postgresql";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uWKp9yxTdlswoDPMlhx+2mF1cdhFzhGYKGHdXPGlz+w=";
+    hash = "sha256-6D9QNcfq518ORQDYCH5G+LLJ7tVWPFwB6ylZR3LOZ5g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace "--cov" ""  \
-      --replace "--max-worker-restart=0" ""
+      --replace-fail "--max-worker-restart=0" ""
     sed -i 's#/usr/lib/postgresql/.*/bin/pg_ctl#${postgresql}/bin/pg_ctl#' pytest_postgresql/plugin.py
   '';
 
@@ -38,22 +39,24 @@ buildPythonPackage rec {
     mirakuru
     port-for
     psycopg
-    setuptools  # requires 'pkg_resources' at runtime
+    setuptools # requires 'pkg_resources' at runtime
   ];
 
   nativeCheckInputs = [
     postgresql
     pytestCheckHook
+    pytest-cov-stub
   ];
   pytestFlagsArray = [
     "-p"
     "no:postgresql"
   ];
-  disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ];  # requires Docker
+  disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ]; # requires Docker
   disabledTests = [
     # permissions issue running pg as Nixbld user
     "test_executor_init_with_password"
     # "ValueError: Pytest terminal summary report not found"
+    "test_postgres_loader_in_cli"
     "test_postgres_options_config_in_cli"
     "test_postgres_options_config_in_ini"
   ];
@@ -61,7 +64,6 @@ buildPythonPackage rec {
     "pytest_postgresql"
     "pytest_postgresql.executor"
   ];
-
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";

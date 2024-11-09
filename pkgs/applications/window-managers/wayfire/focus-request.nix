@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wayfireplugins";
     repo = "focus-request";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v0kGT+KrtfFJ/hp1Dr8izKVj6UHhuW6udHFjWt1y9TY=";
+    hash = "sha256-kUYvLC28IPrvnMT/wKFRlOVkc2ohF3k0T/Qrm/zVkpE=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://gitlab.com/wayfireplugins/focus-request";
-    description = "The wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
+    description = "Wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;

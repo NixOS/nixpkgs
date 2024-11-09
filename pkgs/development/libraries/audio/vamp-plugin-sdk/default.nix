@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
-  enableParallelBuilding = true;
+  # build is susceptible to race conditions: https://github.com/vamp-plugins/vamp-plugin-sdk/issues/12
+  enableParallelBuilding = false;
   makeFlags = [
     "AR:=$(AR)"
     "RANLIB:=$(RANLIB)"
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
   };
 }

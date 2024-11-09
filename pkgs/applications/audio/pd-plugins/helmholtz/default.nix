@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Time domain pitch tracker for Pure Data";
     homepage = "http://www.katjaas.nl/helmholtz/helmholtz.html";
     license = lib.licenses.bsd3;

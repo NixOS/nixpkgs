@@ -27,11 +27,11 @@
 
 let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-/P8/tFrit14/YEvHoIB24yLm4U3veQmBhjeAZcyzWCo=";
+    hash = "sha256-4O0lraa+QgmNONqczvS++9VJ5HfoD43/pcobj/n72nQ=";
   };
 
   mesonFlags = [
@@ -60,6 +60,8 @@ let rizin = stdenv.mkDerivation rec {
     ./librz-wrapper-support.patch
 
     ./0001-fix-compilation-with-clang.patch
+    # Can be dropped when upstream fixes this: https://github.com/NixOS/nixpkgs/issues/300056
+    ./0002-disable-pcre2-jit.patch
   ];
 
 
@@ -83,7 +85,7 @@ let rizin = stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace binrz/rizin/macos_sign.sh \
       --replace 'codesign' '# codesign'
   '';
@@ -135,7 +137,7 @@ let rizin = stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "UNIX-like reverse engineering framework and command-line toolset.";
+    description = "UNIX-like reverse engineering framework and command-line toolset";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rizin";

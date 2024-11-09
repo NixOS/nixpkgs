@@ -22,7 +22,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export PATH=$TMPDIR/usr/bin:$PATH

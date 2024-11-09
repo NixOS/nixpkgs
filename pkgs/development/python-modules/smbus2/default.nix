@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "smbus2";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,16 +17,12 @@ buildPythonPackage rec {
     owner = "kplindegaard";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-tjJurJzDn0ATiYY3Xo66lwUs98/7ZLG3d4+h1prVHAI=";
+    hash = "sha256-3ZAjviVLO/c27NzrPcWf6RlZYclYkmUmOskTP9TVbNM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "smbus2"
-  ];
+  pythonImportsCheck = [ "smbus2" ];
 
   meta = with lib; {
     description = "Drop-in replacement for smbus-cffi/smbus-python";

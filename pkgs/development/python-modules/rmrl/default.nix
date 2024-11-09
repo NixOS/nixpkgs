@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, pdfrw
-, reportlab
-, rmscene
-, setuptools
-, svglib
-, xdg
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pdfrw,
+  reportlab,
+  rmscene,
+  setuptools,
+  svglib,
+  xdg,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

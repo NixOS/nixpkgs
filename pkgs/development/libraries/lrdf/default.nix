@@ -1,6 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, librdf_raptor2, ladspaH, openssl, zlib
-, doCheck ? config.doCheckByDefault or false, ladspaPlugins
+, librdf_raptor2, doCheck ? config.doCheckByDefault or false, ladspaPlugins
 }:
 
 stdenv.mkDerivation rec {

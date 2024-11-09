@@ -1,7 +1,6 @@
 { darwin
 , fetchFromGitHub
 , lib
-, pkg-config
 , rustPlatform
 , stdenv
 }:
@@ -11,20 +10,20 @@ let
     SystemConfiguration
     Security;
   inherit (lib) optionals;
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.17";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W08R1ny4LyzWehnsWSMCRjCxmvV0k7ARVbmZ740hg8w=";
+    hash = "sha256-Oe65m9io7ihymUjylaWHQM/x7r0y/xXqD313H3oyjN8=";
   };
 
-  cargoHash = "sha256-kuKsBnmH3bPgwuJ1q49iHMNT47Djx9BKxcMBbJ3zqis=";
+  cargoHash = "sha256-wZNtEr6IAy+OABpTm93rOhKAP1NEEYUvokjaVdoaSG4=";
 
   buildInputs = optionals isDarwin [
     SystemConfiguration
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Check phase tries to query crates.io
 
   meta = with lib; {
-    description = "A build tool for the Leptos web framework";
+    description = "Build tool for the Leptos web framework";
     mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
     changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";

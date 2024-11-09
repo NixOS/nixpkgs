@@ -1,26 +1,41 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "3.2";
-  format = "setuptools";
+  version = "4.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-65wO44mzJmqo9BlFtiqZgV0mH2nR9Cl3FQkSqmeWqww=";
+    hash = "sha256-38DJFe8Umd0GA5cPXBECxr1+t7asRkNLKabYQL8Cckg=";
   };
 
-  # fails..
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools<74" "setuptools"
+  '';
 
-  pythonImportsCheck = [
-    "zodbpickle"
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "zodbpickle" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # fails..
+  disabledTests = [
+    "test_dump"
+    "test_dumps"
+    "test_load"
+    "test_loads"
   ];
 
   meta = with lib; {
@@ -28,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zodbpickle";
     changelog = "https://github.com/zopefoundation/zodbpickle/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

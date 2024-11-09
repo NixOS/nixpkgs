@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-PF2TFfzWmHXLgTopzJ04dfnzd3Sc/A6Hduffz2guxmU=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
-  cargoSha256 = "sha256-4eaU6dOb97/vV3NSCCpdzK2oQUIHl4kdAtgWbGsY5LU=";
+  cargoHash = "sha256-4eaU6dOb97/vV3NSCCpdzK2oQUIHl4kdAtgWbGsY5LU=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,40 +1,46 @@
-{ lib, stdenv, fetchFromSourcehut, luaPackages, lua }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  lua,
+  luaPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-rhbYG0TpqAZnbLaZOG739/pDA61Dwb4Y1HhBxWLtOus=";
+    repo = "fnlfmt";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LYHhKC8iA4N8DdCH8GfSOkN/e+W3YjkFhVSDQraKoFk=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
 
   buildInputs = [ lua ];
 
-  buildPhase = ''
-    runHook preBuild
+  makeFlags = [
+    "PREFIX=$(out)"
+    "FENNEL=${luaPackages.fennel}/bin/fennel"
+  ];
+  sourceRoot = [ "${src.name}/tags/${version}" ];
 
-    echo "#!${lua}/bin/lua" > fnlfmt
-    ${luaPackages.fennel}/bin/fennel --require-as-include --compile cli.fnl >> fnlfmt
-    chmod +x fnlfmt
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-    runHook postBuild
-  '';
+    $out/bin/fnlfmt --help > /dev/null
 
-  installPhase = ''
-    runHook preInstall
-    install -D ./fnlfmt $out/bin/fnlfmt
-    runHook postInstall
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
     description = "Formatter for Fennel";
-    homepage = "https://git.sr.ht/~technomancy/fnlfmt";
-    license = licenses.lgpl3Plus;
+    homepage = src.meta.homepage;
+    changelog = "${src.meta.homepage}/tree/${version}/changelog.md";
+    license = licenses.mit;
     platforms = lua.meta.platforms;
     maintainers = with maintainers; [ chiroptical ];
     mainProgram = "fnlfmt";

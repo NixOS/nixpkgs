@@ -10,7 +10,7 @@ pypkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
+    hash = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
   };
 
   nativeBuildInputs = with pypkgs; [ setuptools-scm ];
@@ -27,6 +27,7 @@ pypkgs.buildPythonApplication rec {
     homepage = "https://rdiff-backup.net";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "rdiff-backup";
     platforms = platforms.all;
   };
 }

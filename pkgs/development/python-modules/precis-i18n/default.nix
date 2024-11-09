@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-0Z8JbakShuB8FFGl3NS8VFpHAQgr2P900HVxUafAmyU=";
   };
 
-  pythonImportsCheck = [
-    "precis_i18n"
-  ];
+  pythonImportsCheck = [ "precis_i18n" ];
 
   meta = with lib; {
     description = "Internationalized usernames and passwords";
     homepage = "https://github.com/byllyfish/precis_i18n";
     changelog = "https://github.com/byllyfish/precis_i18n/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

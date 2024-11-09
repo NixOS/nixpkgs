@@ -40,7 +40,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/life4/enc";
     changelog = "https://github.com/life4/enc/releases/tag/v${version}";
-    description = "A modern and friendly alternative to GnuPG";
+    description = "Modern and friendly alternative to GnuPG";
     mainProgram = "enc";
     longDescription = ''
       Enc is a CLI tool for encryption, a modern and friendly alternative to GnuPG.

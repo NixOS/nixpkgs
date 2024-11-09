@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
-    description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
-    maintainers = with maintainers; [ ];
+    description = "High-quality typeface family for Latin, Cyrillic, and Greek";
+    maintainers = [ ];
     license = licenses.ofl;
     platforms = platforms.all;
   };

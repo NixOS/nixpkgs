@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/pspp/";
-    description = "A free replacement for SPSS, a program for statistical analysis of sampled data";
+    description = "Free replacement for SPSS, a program for statistical analysis of sampled data";
     license = lib.licenses.gpl3Plus;
 
     longDescription = ''

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, typing-extensions
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  typing-extensions,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,20 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-0eH9fA/oQzrgXcQilUdg4AaTqezj1Q9hP9olhZEDeBc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tls_client"
-  ];
+  pythonImportsCheck = [ "tls_client" ];
 
   meta = with lib; {
     description = "Advanced HTTP Library";

@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "r128gain";
-  version = "1.0.3";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "r128gain";
     rev = version;
-    sha256 = "0w2i2szajv1vcmc96w0fczdr8xc28ijcf1gdg180f21gi6yh96sc";
+    sha256 = "sha256-JyKacDqjIKTNl2GjbJPkgbakF8HR4Jd4czAtOaemDH8=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "r128gain";
     homepage = "https://github.com/desbma/r128gain";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AluisioASG ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

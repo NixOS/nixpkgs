@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clazy";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "clazy";
     rev    = "v${version}";
-    sha256 = "sha256-kcl4dUg84fNdizKUS4kpvIKFfajtTRdz+MYUbKcMFvg=";
+    sha256 = "sha256-Fex0BAmCZUYcNJriHHt/QPi5IgSH/yhnpGCFFZMMD/g=";
   };
 
   buildInputs = [

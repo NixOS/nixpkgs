@@ -1,6 +1,5 @@
 { autoPatchelfHook
 , cairo
-, config
 , e2fsprogs
 , fetchurl
 , gmp
@@ -10,7 +9,7 @@
 , lib
 , stdenv
 , libgcrypt
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +31,7 @@ stdenv.mkDerivation {
     e2fsprogs
     gmp
     gtk3
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     libGL
     libX11
     libgcrypt
@@ -40,7 +39,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   installPhase = ''

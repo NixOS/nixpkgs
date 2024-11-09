@@ -1,17 +1,18 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nixos-icons
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixos-icons,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-desktop-base";
-  version = "2024.01.03";
+  version = "2024.07.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-45qR1LCnA8ZSrWykqNvvm7Dxbi5pQnAuFy6nZJrzyi0=";
+    hash = "sha256-JOC8nQ/YgUpY93FcniO2uypAfsL/SNU+KfTrthoZfQo=";
   };
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -39,7 +40,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
-    license = with licenses; [ gpl3Plus cc-by-40 ];
+    license = with licenses; [
+      gpl3Plus
+      cc-by-40
+    ];
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
   };

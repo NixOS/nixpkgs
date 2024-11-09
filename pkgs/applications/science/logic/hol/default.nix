@@ -4,16 +4,12 @@
 let
   pname = "hol4";
   vnum = "14";
-in
 
-let
   version = "k.${vnum}";
   longVersion = "kananaskis-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
-in
 
-let
   polymlEnableShared = with pkgs; lib.overrideDerivation polyml (attrs: {
     configureFlags = [ "--enable-shared" ];
   });
@@ -66,7 +62,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof

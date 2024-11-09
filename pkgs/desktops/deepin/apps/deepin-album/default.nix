@@ -1,21 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qt5integration
-, qt5platform-plugins
-, qtbase
-, qtsvg
-, udisks2-qt5
-, gio-qt
-, freeimage
-, ffmpeg
-, ffmpegthumbnailer
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  dtkdeclarative,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  gio-qt,
+  freeimage,
+  ffmpeg_6,
+  ffmpegthumbnailer,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -41,12 +39,12 @@ stdenv.mkDerivation rec {
     dtkdeclarative
     qt5integration
     qt5platform-plugins
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     udisks2-qt5
     gio-qt
     freeimage
-    ffmpeg
+    ffmpeg_6
     ffmpegthumbnailer
   ];
 
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   meta = with lib; {
-    description = "A fashion photo manager for viewing and organizing pictures";
+    description = "Fashion photo manager for viewing and organizing pictures";
     homepage = "https://github.com/linuxdeepin/deepin-album";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

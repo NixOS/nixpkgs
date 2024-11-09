@@ -1,13 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pythonOlder,
+
+  # reverse dependencies
+  mashumaro,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.10.0";
+  version = "4.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -15,20 +20,20 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-sKvXyJ6PuW+Y2xjYYQb/HZCraSAE63Rs9u2iaC+Rs8s=";
+    hash = "sha256-Gn6tVcflWd1N7ohW46iLQSJav+HOjfV7fBORX+Eh/7g=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # Tests are not part of PyPI releases. GitHub source can't be used
   # as it ends with an infinite recursion
   doCheck = false;
 
-  pythonImportsCheck = [
-    "typing_extensions"
-  ];
+  pythonImportsCheck = [ "typing_extensions" ];
+
+  passthru.tests = {
+    inherit mashumaro pydantic;
+  };
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python";

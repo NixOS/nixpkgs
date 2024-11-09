@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, runCommand }:
+{ stdenv, lib, fetchFromGitHub }:
 
 # This derivation is impure: it relies on an Xcode toolchain being installed
 # and available in the expected place. The values of sandboxProfile and
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A code formatting and linting tool for Swift";
+    description = "Code formatting and linting tool for Swift";
     homepage = "https://github.com/nicklockwood/SwiftFormat";
     license = licenses.mit;
     maintainers = [ maintainers.bdesham ];

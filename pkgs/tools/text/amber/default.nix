@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nBSgP30Izskq9RbhVIyqWzZgG5ZWHVdiukldw+Q0rco=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = "A code search-and-replace tool";
+    description = "Code search-and-replace tool";
     homepage = "https://github.com/dalance/amber";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.bdesham ];

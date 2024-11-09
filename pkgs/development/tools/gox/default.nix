@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mitchellh/gox";
-    description = "A dead simple, no frills Go cross compile tool";
+    description = "Dead simple, no frills Go cross compile tool";
     mainProgram = "gox";
     license = licenses.mpl20;
     maintainers = with maintainers; [ azahi ];

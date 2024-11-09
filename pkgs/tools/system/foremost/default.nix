@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   #   ld: api.o:(.bss+0xbdba0): multiple definition of `wildcard'; main.o:(.bss+0xbd760): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "mac" ];
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "mac" ];
 
   enableParallelBuilding = true;
 

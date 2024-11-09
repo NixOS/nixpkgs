@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
 
   # Broken for some reason on this platform.
-  doCheck = !(stdenv.isAarch64 && stdenv.isLinux);
+  doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
 
   meta = with lib; {
     homepage = "https://github.com/zeromq/azmq";

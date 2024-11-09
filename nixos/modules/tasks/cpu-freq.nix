@@ -18,7 +18,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "ondemand";
-      description = lib.mdDoc ''
+      description = ''
         Configure the governor used to regulate the frequency of the
         available CPUs. By default, the kernel configures the
         performance governor, although this may be overwritten in your
@@ -34,7 +34,7 @@ in
         type = types.nullOr types.ints.unsigned;
         default = null;
         example = 2200000;
-        description = lib.mdDoc ''
+        description = ''
           The maximum frequency the CPU will use.  Defaults to the maximum possible.
         '';
       };
@@ -43,7 +43,7 @@ in
         type = types.nullOr types.ints.unsigned;
         default = null;
         example = 800000;
-        description = lib.mdDoc ''
+        description = ''
           The minimum frequency the CPU will use.
         '';
       };

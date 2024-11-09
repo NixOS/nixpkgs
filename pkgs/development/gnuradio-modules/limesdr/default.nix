@@ -5,8 +5,7 @@
 , thrift
 , cmake
 , pkg-config
-, doxygen
-, swig
+, swig3
 , python
 , logLib
 , mpir
@@ -39,7 +38,7 @@ in mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
     python
   ];
   buildInputs = [

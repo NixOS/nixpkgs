@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromBitbucket {
     owner = "blaze-lib";
-    repo = finalAttrs.pname;
+    repo = "blaze";
     rev = "v${finalAttrs.version}";
     hash = "sha256-Jl9ZWFqBvLgQwCoMNX3g7z02yc7oYx+d6mbyLBzBJOs=";
   };
@@ -30,6 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bitbucket.org/blaze-lib/blaze";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

@@ -34,8 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "dev"}/share/gir-1.0";
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+  } // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   passthru = {
@@ -47,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
-    homepage = "https://wiki.gnome.org/Projects/Libgee";
+    homepage = "https://gitlab.gnome.org/GNOME/libgee";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

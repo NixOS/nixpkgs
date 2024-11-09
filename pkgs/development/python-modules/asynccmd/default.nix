@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asynccmd";
   version = "0.2.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "valentinmk";
-    repo = pname;
-    rev = version;
-    sha256 = "02sa0k0zgwv0y8k00pd1yh4x7k7xqhdikk2c0avpih1204lcw26h";
+    repo = "asynccmd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0AjOKAEiwHi3AkzMGRvE/czTCfShXQAm8mDz98EESgs=";
   };
 
   patches = [
@@ -24,9 +26,11 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "deprecation-python-38.patch";
       url = "https://github.com/valentinmk/asynccmd/commit/12afa60ac07db17e96755e266061f2c88cb545ff.patch";
-      sha256 = "0l6sk93gj51qqrpw01a8iiyz14k6dd2z68vr9l9w9vx76l8725yf";
+      hash = "sha256-zhdxEDWn78QTTXkj80VrZpLwfYxIBcBvxjgU+Uaa2lA=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   # Tests are outdated
   doCheck = false;
@@ -36,7 +40,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asyncio implementation of Cmd Python library";
     homepage = "https://github.com/valentinmk/asynccmd";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

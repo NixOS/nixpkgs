@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, callPackage, ejson2env }:
 
 buildGoModule rec {
   pname = "ejson2env";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HcUmFajbOUZ0T5Th6OA9WBtfTz646qLbXx8NVeJsVng=";
+    sha256 = "sha256-VXkWmmX+4D+j9ODSEeJJbIx+Bfni9d2X22BFQIe4kwk=";
   };
 
-  vendorHash = "sha256-agWcD8vFNde1SCdkRovMNPf+1KODxV8wW1mXvE0w/CI=";
+  vendorHash = "sha256-7oy8bCegsvv35zyo2aTFMSGZMFkArmxy0rOpK6WlubI=";
 
   ldflags = [
     "-s"
@@ -19,7 +19,13 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = ejson2env; };
+      decryption = callPackage ./test-decryption.nix {};
+    };
+  };
 
   meta = with lib; {
     description = "Decrypt EJSON secrets and export them as environment variables";

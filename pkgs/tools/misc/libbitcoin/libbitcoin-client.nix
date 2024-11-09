@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Bitcoin client query library";
     homepage = "https://github.com/libbitcoin/libbitcoin-client";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3Plus;

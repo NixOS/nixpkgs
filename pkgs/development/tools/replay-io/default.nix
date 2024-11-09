@@ -8,7 +8,7 @@ in rec {
     version = builtins.head (builtins.match ".*/linux-recordreplay-(.*).tgz"
       metadata.recordreplay.url);
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib openssl zlib ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) openssl zlib ];
 
     src = (fetchzip metadata.recordreplay);
     dontBuild = true;
@@ -52,7 +52,7 @@ in rec {
     passthru.updateScript = ./update.sh;
 
     meta = with lib; {
-      description = "The Time Travel Debugger for Web Development";
+      description = "Time Travel Debugger for Web Development";
       longDescription = ''
         Replay allows you to record and replay web applications with familiar browser dev tools.
         You can access the browser DevTools at any point of the recording, adding new logger
@@ -73,7 +73,7 @@ in rec {
     version = builtins.head
       (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
     nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
     src = (fetchurl metadata.replay-node);
     dontUnpack = true;
@@ -114,7 +114,7 @@ in rec {
     };
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ stdenv.cc.cc.lib nodejs ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) nodejs ];
     dontBuild = true;
     installPhase = ''
       runHook preInstall
@@ -128,7 +128,7 @@ in rec {
     '';
 
     meta = with lib; {
-      description = "The Time Travel Debugger for Web Development - Node Command Line";
+      description = "Time Travel Debugger for Web Development - Node Command Line";
       longDescription = ''
         The Replay Node Command Line allows you to record node applications and debug them
         with familiar browser dev tools.

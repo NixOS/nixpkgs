@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, barcode, gnome, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, barcode, gnome, gnome-common, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
 , intltool, itstool, makeWrapper, pkg-config, yelp-tools, qrencode
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper intltool ];
   buildInputs = [
     barcode gtk3 gtk-doc yelp-tools
-    gnome.gnome-common gsettings-desktop-schemas
+    gnome-common gsettings-desktop-schemas
     itstool libxml2 librsvg libe-book libtool qrencode
   ];
 

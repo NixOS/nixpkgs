@@ -2,21 +2,40 @@
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9FMp3cGJr8RdySZvSflYa91uaIV5wVl6WmUDvbRkSFY=";
+    hash = "sha256-MepnNbRX/smljiR9ysRWExFsfb7Qrz++7Y8S0Xn1Ax8=";
   };
 
-  vendorHash = "sha256-3VqCgkyhPKk5iBkKOK2EajEKgEnCHOQjO59AKFafQHc=";
+  vendorHash = "sha256-V6DwV2KukFfFK0PK9MacoHH0sB5qNV315jn0T+4rhfA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Skip tests that require network access
+        "Test_Authorize"
+        "Test_TokenIntrospection"
+        "Test_Logout"
+        "Test_RevokeToken"
+        "Test_Limits"
+        "Test_CreateMeasurement"
+        "Test_GetMeasurement"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
   postInstall = ''
     mv $out/bin/${pname} $out/bin/globalping
@@ -29,7 +48,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A simple CLI tool to run networking commands remotely from hundreds of globally distributed servers";
+    description = "Simple CLI tool to run networking commands remotely from hundreds of globally distributed servers";
     homepage = "https://www.jsdelivr.com/globalping/cli";
     license = licenses.mpl20;
     maintainers = with maintainers; [ xyenon ];

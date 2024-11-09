@@ -40,7 +40,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             address = [
               "2001:DB8::1/64"
             ];
-            networkConfig.IPForward = true;
+            networkConfig.IPv4Forwarding = true;
+            networkConfig.IPv6Forwarding = true;
           };
         };
       };
@@ -66,6 +67,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           settings = {
             interfaces-config.interfaces = [ "eth1" ];
             subnet6 = [ {
+              id = 1;
               interface = "eth1";
               subnet = "2001:DB8::/32";
               pd-pools = [ {
@@ -173,6 +175,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         # for fowarding/input from the configured interfaces so you do not have
         # to manage multiple places
         firewall.enable = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
 
       systemd.network = {
@@ -258,7 +261,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           "01-lo" = {
             name = "lo";
             addresses = [
-              { addressConfig.Address = "FD42::1/128"; }
+              { Address = "FD42::1/128"; }
             ];
           };
         };
@@ -274,6 +277,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       networking = {
         useNetworkd = true;
         useDHCP = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
     };
   };

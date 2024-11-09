@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
       substituteInPlace gitversion.h --replace '7d45afdf7d00a95a8c3687175e2b1669fa1f7745' '365d2e5cbc0e3655fb64c204db0515f5f4cdf5a4'
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace Makefile --replace ' -static ' ' '
       substituteInPlace Makefile --replace 'CC=gcc' ' '
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace Makefile.mac --replace '.git/HEAD .git/index' ' '
       substituteInPlace Makefile.mac --replace '/usr/local/lib/libtoxcore.a' '${libtoxcore}/lib/libtoxcore.a'
       substituteInPlace Makefile.mac --replace '/usr/local/lib/libsodium.a' '${libsodium}/lib/libsodium.dylib'
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
     '';
 
   buildPhase = ''
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       make
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       make -f Makefile.mac tuntox
     '';
 

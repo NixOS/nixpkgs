@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     homepage = "https://github.com/andrew-paglinawan/QuicksandFamily";
-    description = "A sans serif font designed using geometric shapes";
+    description = "Sans serif font designed using geometric shapes";
     longDescription = ''
       Quicksand is a sans serif typeface designed by Andrew Paglinawan
       in 2008 using geometric shapes as it's core foundation. It is

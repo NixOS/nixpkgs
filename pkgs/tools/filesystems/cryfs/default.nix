@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ]; # ++ lib.optional doCheck "-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake";
 
   # macFUSE needs to be installed for the test to succeed on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

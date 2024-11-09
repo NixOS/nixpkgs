@@ -1,4 +1,4 @@
-{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, fetchurl, pkg-config }:
+{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, pkg-config }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
@@ -26,14 +26,14 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/user *.{service,socket}
 
     substituteInPlace $out/lib/systemd/user/*.service \
-      --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector --libnotify"
+      --replace /usr/bin/yubikey-touch-detector "$out/bin/yubikey-touch-detector"
   '';
 
   meta = with lib; {
-    description = "A tool to detect when your YubiKey is waiting for a touch";
+    description = "Tool to detect when your YubiKey is waiting for a touch";
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
     maintainers = with maintainers; [ sumnerevans ];
-    license = with licenses; [ bsd2 isc ];
+    license = licenses.isc;
     platforms = platforms.linux;
     mainProgram = "yubikey-touch-detector";
   };

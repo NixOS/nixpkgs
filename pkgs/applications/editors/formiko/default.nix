@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , docutils
@@ -9,7 +9,7 @@
 , gtkspell3
 , librsvg
 , pygobject3
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 buildPythonApplication rec {
@@ -24,7 +24,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gtk3
   ];
@@ -36,7 +36,7 @@ buildPythonApplication rec {
     gtkspell3
     librsvg
     pygobject3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   # Needs a display

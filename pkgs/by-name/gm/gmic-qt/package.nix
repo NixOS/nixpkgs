@@ -1,26 +1,23 @@
 { lib
 , cimg
 , cmake
-, coreutils
 , curl
-, fetchzip
+, fetchFromGitHub
 , fftw
 , gimp
 , gimpPlugins
 , gmic
-, gnugrep
-, gnused
 , graphicsmagick
 , libjpeg
 , libpng
 , libsForQt5
 , libtiff
+, llvmPackages
 , ninja
-, nix-update
+, nix-update-script
 , openexr
 , pkg-config
 , stdenv
-, writeShellScript
 , zlib
 , variant ? "standalone"
 }:
@@ -53,14 +50,14 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.3.5";
+  version = "3.4.2";
 
-  src = fetchzip {
-    url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-71i8vk9XR6Q8SSEWvGXMcAOIE6DoIVJkylS4SiZLUBY=";
+  src = fetchFromGitHub {
+    owner = "c-koi";
+    repo = "gmic-qt";
+    rev = "v.${finalAttrs.version}";
+    hash = "sha256-fM6dBxBC2b1/v+rfiP//QaAcTJmMtYPn4OUNwVqKhYk=";
   };
-
-  sourceRoot = "${finalAttrs.src.name}/gmic-qt";
 
   nativeBuildInputs = [
     cmake
@@ -70,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cimg
     curl
     fftw
     gmic
@@ -82,12 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ (with libsForQt5; [
     qtbase
     qttools
-  ]) ++ variants.${variant}.extraDeps;
+  ]) ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ] ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \
       translations/filters/csv2ts.sh \
       translations/lrelease.sh
+
+    mkdir ../src
+    ln -s ${gmic.src}/src/gmic.cpp ../src/gmic.cpp
   '';
 
   cmakeFlags = [
@@ -108,23 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic;
     };
 
-    updateScript = writeShellScript "gmic-qt-update-script" ''
-      set -euo pipefail
-
-      export PATH="${lib.makeBinPath [ coreutils curl gnugrep gnused nix-update ]}:$PATH"
-
-      latestVersion=$(curl 'https://gmic.eu/files/source/' \
-                       | grep -E 'gmic_[^"]+\.tar\.gz' \
-                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
-                       | sort --numeric-sort --reverse | head -n1)
-
-      if [[ '${finalAttrs.version}' = "$latestVersion" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-
-      nix-update --version "$latestVersion"
-    '';
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v\\.(.*)" ];
+    };
   };
 
   meta = {
@@ -132,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ AndersonTorres lilyinstarlight ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
   };
 })

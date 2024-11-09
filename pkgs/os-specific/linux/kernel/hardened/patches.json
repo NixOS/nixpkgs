@@ -1,82 +1,62 @@
 {
-    "4.19": {
-        "patch": {
-            "extra": "-hardened1",
-            "name": "linux-hardened-4.19.309-hardened1.patch",
-            "sha256": "1hww72w5anmfr9czqbl31glzl70s34492k9qz9zax141zg1sf6sp",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.309-hardened1/linux-hardened-4.19.309-hardened1.patch"
-        },
-        "sha256": "1yc45kfiwdqsqa11sxafs82b0day6qvgjcll8rx9vipidsmagbcm",
-        "version": "4.19.309"
-    },
     "5.10": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-5.10.212-hardened1.patch",
-            "sha256": "0h04i94vshhcli5m4qpnqg4vsi5v1ifvdhhklk7c0bvkfk35cbml",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.10.212-hardened1/linux-hardened-5.10.212-hardened1.patch"
+            "name": "linux-hardened-v5.10.228-hardened1.patch",
+            "sha256": "1fzpiv9gn2krbx2v61j1dzzsdm0qlgps4rjdkzmi8a8fv9g1iq0p",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v5.10.228-hardened1/linux-hardened-v5.10.228-hardened1.patch"
         },
-        "sha256": "14vll2bghd52wngjxy78hgglydcxka59yziji0w56dcdpmky9wqc",
-        "version": "5.10.212"
+        "sha256": "0wkvn49sdy9ykyz6cqdqd9yplqfhc6b255w6wc17ky182mzqvk3n",
+        "version": "5.10.228"
     },
     "5.15": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-5.15.151-hardened1.patch",
-            "sha256": "040jc5n9qsdz2wv5ksfvc28vd72nmya2i2f0ps0jiras6l2wlhjz",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.15.151-hardened1/linux-hardened-5.15.151-hardened1.patch"
+            "name": "linux-hardened-v5.15.170-hardened1.patch",
+            "sha256": "16b3dzfgx737hsr16n9j3v4lr1qrl5vgsjmmcri0szbcd5sm0620",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v5.15.170-hardened1/linux-hardened-v5.15.170-hardened1.patch"
         },
-        "sha256": "0jby224ncdardjwmf8c59s5j71inpvdlzah984ilf2b6y85pc7la",
-        "version": "5.15.151"
+        "sha256": "1ag7fvixhdcyxv6rqfsvq2wh02g64r4rx8izvfb33nfnld2nangx",
+        "version": "5.15.170"
     },
     "5.4": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-5.4.271-hardened1.patch",
-            "sha256": "0rw5il7885d0d3k2hmh46541svib6rp32g00fcl5bw37ydmq3z8b",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.271-hardened1/linux-hardened-5.4.271-hardened1.patch"
+            "name": "linux-hardened-v5.4.284-hardened1.patch",
+            "sha256": "1skqaq90bigrxg0w075nssqbdq868ii62r8asx0m6wcvd5cl50af",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v5.4.284-hardened1/linux-hardened-v5.4.284-hardened1.patch"
         },
-        "sha256": "0l2qv4xlhnry9crs90rkihsxyny6jz8kxw08bfad7nys9hrn3g6d",
-        "version": "5.4.271"
+        "sha256": "0axkwfhvq3w2072xjqww476qa3rjglxyqmf72mlp9b5ymswil8kp",
+        "version": "5.4.284"
     },
     "6.1": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.1.81-hardened1.patch",
-            "sha256": "0af9dxdsa858zyqc0vsrzg098afhg5vpb2wpr6gj2ykwc13iaf07",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.81-hardened1/linux-hardened-6.1.81-hardened1.patch"
+            "name": "linux-hardened-v6.1.115-hardened1.patch",
+            "sha256": "1vly83nqpridysywj8aby6pmzjgz7jlk6ni957s9v05gfkvf906l",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.1.115-hardened1/linux-hardened-v6.1.115-hardened1.patch"
         },
-        "sha256": "0arl96yrqplbmp2gjyqcfma1lgc30kbn95m0sflv0yyldwf8dg8f",
-        "version": "6.1.81"
+        "sha256": "0vxs6zj4p0ihcp11h3svqy3wa1yph0f1vzc8dlvqh60zgs1bmn0g",
+        "version": "6.1.115"
     },
-    "6.5": {
+    "6.11": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.5.13-hardened1.patch",
-            "sha256": "1fj6yaq2gdjlj2h19vkm13jrx0yiczj6pvric1kq1r6cprqrkkki",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.5.13-hardened1/linux-hardened-6.5.13-hardened1.patch"
+            "name": "linux-hardened-v6.11.6-hardened1.patch",
+            "sha256": "0g5drxsknvhcd80s1mwmbbc9d3v3qpj4c7rha95ygzwxidvagr9f",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.11.6-hardened1/linux-hardened-v6.11.6-hardened1.patch"
         },
-        "sha256": "1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq",
-        "version": "6.5.13"
+        "sha256": "1kiky6viwrgm47slpv234lfq1wrwj29p5rx168gix3q0jw0zcm69",
+        "version": "6.11.6"
     },
     "6.6": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.6.21-hardened1.patch",
-            "sha256": "0k35s5pj92lvfp6kw3isg78zc3gijsg0xbzcyvxdkmhzaq8j6i1i",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.6.21-hardened1/linux-hardened-6.6.21-hardened1.patch"
+            "name": "linux-hardened-v6.6.59-hardened1.patch",
+            "sha256": "1vdyryd0m9rr0z2pznq6jyxbdhy4w4x85c37gfl4sbbcs9549gnw",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.6.59-hardened1/linux-hardened-v6.6.59-hardened1.patch"
         },
-        "sha256": "0mz420w99agr7jv1jgqfr4fjhzbv005xif086sqx556s900l62zf",
-        "version": "6.6.21"
-    },
-    "6.7": {
-        "patch": {
-            "extra": "-hardened1",
-            "name": "linux-hardened-6.7.6-hardened1.patch",
-            "sha256": "063yrs3g0knlz37aq979jhng9k6l19873nbi1jy167xfqmpqqajr",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.7.6-hardened1/linux-hardened-6.7.6-hardened1.patch"
-        },
-        "sha256": "1lrp7pwnxnqyy8c2l4n4nz997039gbnssrfm8ss8kl3h2c7fr2g4",
-        "version": "6.7.6"
+        "sha256": "0vd76ccd4li4wsg04gc4nai9f4y1nknz967qby0i53y0v046hq93",
+        "version": "6.6.59"
     }
 }

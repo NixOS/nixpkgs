@@ -12,16 +12,17 @@
   qttools,
   qtwayland,
   qtwebsockets,
+  gitUpdater
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = finalAttrs.version;
-    hash = "sha256-wgVu5Yr65Gu1z5SEWy5l4B6UiI5bIobBfZLhL7s+SRE=";
+    hash = "sha256-YjnMDHXzL16XMVwewoQztE5yjwn1MA1KAiEmEjIYoPY=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebsockets
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.meta.mainProgram} --version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.meta.mainProgram} --version";
+    };
+    updateScript = gitUpdater { };
   };
 
   meta = {

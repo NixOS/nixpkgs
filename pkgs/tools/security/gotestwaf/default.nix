@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gotestwaf
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gotestwaf,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.4.18";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = "gotestwaf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+AM+x/jKkoXLeWOhrCALhCDuoGCl5jt0BiCit885K7I=";
+    hash = "sha256-bZ8cNREPUgIO7lJg0WBtc9qvkDUnfqtFNi612Ctcxo8=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-mPqCphweDF9RQibdjTaXXfXdO8NENHVMdIPxrJEw2g4=";
 
   # Some tests require networking as of v0.4.0
   doCheck = false;
@@ -27,11 +28,6 @@ buildGoModule rec {
     "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
   ];
 
-  postFixup = ''
-    # Rename binary
-    mv $out/bin/cmd $out/bin/${pname}
-  '';
-
   passthru.tests.version = testers.testVersion {
     command = "gotestwaf --version";
     package = gotestwaf;
@@ -40,10 +36,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
-    mainProgram = "gotestwaf";
     homepage = "https://github.com/wallarm/gotestwaf";
     changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gotestwaf";
   };
 }

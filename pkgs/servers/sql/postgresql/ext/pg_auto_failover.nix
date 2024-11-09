@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline, libkrb5, libxcrypt }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
@@ -25,8 +25,11 @@ stdenv.mkDerivation rec {
     mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
     changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
+    # PostgreSQL 17 support issue upstream: https://github.com/hapostgres/pg_auto_failover/issues/1048
+    # Check after next package update.
+    broken = versionAtLeast postgresql.version "17" && version == "2.1";
   };
 }

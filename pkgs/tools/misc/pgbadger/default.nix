@@ -32,7 +32,7 @@ buildPerlPackage rec {
   # pgbadger has too many `-Idir` flags on its shebang line on Darwin,
   # causing the build to fail when trying to generate the documentation.
   # Rewrite the -I flags in `use lib` form.
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang ./pgbadger
   '';
 
@@ -46,7 +46,7 @@ buildPerlPackage rec {
     TextCSV_XS
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
 
   nativeCheckInputs = [
     bzip2
@@ -64,7 +64,7 @@ buildPerlPackage rec {
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";
-    description = "A fast PostgreSQL Log Analyzer";
+    description = "Fast PostgreSQL Log Analyzer";
     changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
     maintainers = lib.teams.determinatesystems.members;

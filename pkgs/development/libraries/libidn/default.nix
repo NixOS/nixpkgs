@@ -7,7 +7,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.42";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

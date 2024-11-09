@@ -1,18 +1,40 @@
 # Customising Packages {#sec-customising-packages}
 
-Some packages in Nixpkgs have options to enable or disable optional
-functionality or change other aspects of the package.
+The Nixpkgs configuration for a NixOS system is set by the {option}`nixpkgs.config` option.
+
+::::{.example}
+# Globally allow unfree packages
+
+```nix
+{
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
+}
+```
+
+:::{.note}
+This only allows unfree software in the given NixOS configuration.
+For users invoking Nix commands such as [`nix-build`](https://nixos.org/manual/nix/stable/command-ref/nix-build), Nixpkgs is configured independently.
+See the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig) for details.
+:::
+::::
+
+<!-- TODO(@fricklerhandwerk)
+all of the following should go to the Nixpkgs manual, it has nothing to do with NixOS
+-->
+
+Some packages in Nixpkgs have options to enable or disable optional functionality, or change other aspects of the package.
 
 ::: {.warning}
-Unfortunately, Nixpkgs currently lacks a way to query available
-configuration options.
+Unfortunately, Nixpkgs currently lacks a way to query available package configuration options.
 :::
 
 ::: {.note}
 For example, many packages come with extensions one might add.
 Examples include:
-- [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
-- [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
+- [`passExtensions.pass-otp`](https://search.nixos.org/packages?query=passExtensions.pass-otp)
+- [`python312Packages.requests`](https://search.nixos.org/packages?query=python312Packages.requests)
 
 You can use them like this:
 ```nix

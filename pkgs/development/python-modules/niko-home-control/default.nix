@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nclib
-, netaddr
-, netifaces
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nclib,
+  netaddr,
+  netifaces,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nikohomecontrol"
-  ];
+  pythonImportsCheck = [ "nikohomecontrol" ];
 
   meta = with lib; {
     description = "Python SDK for Niko Home Control";

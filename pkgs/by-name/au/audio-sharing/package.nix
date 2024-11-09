@@ -1,5 +1,6 @@
 { appstream-glib
 , cargo
+, dbus
 , desktop-file-utils
 , fetchFromGitLab
 , git
@@ -16,24 +17,24 @@
 , rustPlatform
 , rustc
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audio-sharing";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AudioSharing";
     rev = finalAttrs.version;
-    hash = "sha256-ejNktgN9tfi4TzWDQJnESGcBkpvLVH34sukTFCBfo3U=";
+    hash = "sha256-yUMiy5DaCPfCmBIGCXpqtvSSmQl5wo6vsLdW7Tt/Wfo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-c19DxHF4HFN0qTqC2CNzwko79uVeLeyrrXAvuyxeiOQ=";
+    hash = "sha256-FfjSttXf6WF2w59CP6L/+BIuuXp2yKPTku7FMvdIHg0=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
   ]);
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gtk4
     libadwaita
+    dbus
   ];
 
   passthru = {

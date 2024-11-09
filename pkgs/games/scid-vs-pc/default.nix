@@ -2,11 +2,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
-  version = "4.24";
+  version = "4.25";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    hash = "sha256-x4Ljn1vaXrue16kUofWAH2sDNYC8h3NvzFjffRo0EhA=";
+    hash = "sha256-YZsBwIp5ouGk75wsAywuYyNSeNjCAx0iWgiA7YmUmnk=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ tcl.mkTclDerivation rec {
   meta = with lib; {
     description = "Chess database with play and training functionality";
     homepage = "https://scidvspc.sourceforge.net/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ maintainers.paraseba ];
     platforms = lib.platforms.linux;
   };

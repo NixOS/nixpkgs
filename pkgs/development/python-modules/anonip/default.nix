@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +23,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=anonip --cov-report=term-missing --no-cov-on-fail" ""
-  '';
+  pytestFlagsArray = [ "tests.py" ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
-
-  pythonImportsCheck = [
-    "anonip"
-  ];
+  pythonImportsCheck = [ "anonip" ];
 
   meta = with lib; {
     description = "Tool to anonymize IP addresses in log files";

@@ -11,9 +11,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         enableUserService = true;
         environment = {
           LIVEBOOK_PORT = 20123;
-          LIVEBOOK_COOKIE = "chocolate chip";
-          LIVEBOOK_TOKEN_ENABLED = true;
-
         };
         environmentFile = pkgs.writeText "livebook.env" ''
           LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -38,7 +35,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
       machine.succeed("loginctl enable-linger alice")
       machine.wait_until_succeeds("${sudo} systemctl --user is-active livebook.service")
-      machine.wait_for_open_port(20123)
+      machine.wait_for_open_port(20123, timeout=10)
 
       machine.succeed("curl -L localhost:20123 | grep 'Type password'")
     '';

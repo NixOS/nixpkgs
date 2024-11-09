@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sphinx
-, sphinx-pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sphinx,
+  sphinx-pytest,
+  defusedxml,
+  pytestCheckHook,
 }:
 let
   pname = "sphinx-sitemap";
-  version = "2.5.1";
+  version = "2.6.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -18,20 +20,17 @@ buildPythonPackage {
     owner = "jdillard";
     repo = "sphinx-sitemap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R8nAaEPd2vQs9Z0Fa5yvTP0KP3O+DnIJLPeISZ10Xtk=";
+    hash = "sha256-RERa+/MVug2OQ/FAXS4LOQHB4eEuIW2rwcdZUOrr6g8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   nativeCheckInputs = [
     pytestCheckHook
     sphinx-pytest
+    defusedxml
   ];
 
   meta = with lib; {

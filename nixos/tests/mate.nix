@@ -21,10 +21,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     services.xserver.desktopManager.mate.enable = true;
-
-    # Silence log spam due to no sound drivers loaded:
-    # ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
-    hardware.pulseaudio.enable = true;
   };
 
   enableOCR = true;

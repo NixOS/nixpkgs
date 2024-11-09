@@ -19,14 +19,17 @@ let
     optionalString
     ;
 
+  mkLibraryFile = pkgs: let
+    pkgs' = if isList pkgs then pkgs else pkgs self;
+  in writeText "libraries" ''
+    ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
+  '';
+
   withPackages' = {
     pkgs,
     ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
-    pkgs' = if isList pkgs then pkgs else pkgs self;
-    library-file = writeText "libraries" ''
-      ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
-    '';
+    library-file = mkLibraryFile pkgs;
     pname = "agdaWithPackages";
     version = Agda.version;
   in runCommand "${pname}-${version}" {
@@ -40,13 +43,14 @@ let
         allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
       };
     };
-    inherit (Agda) meta;
+    # Agda is a split package with multiple outputs; do not inherit them here.
+    meta = removeAttrs Agda.meta [ "outputsToInstall" ];
   } ''
     mkdir -p $out/bin
-    makeWrapper ${Agda}/bin/agda $out/bin/agda \
+    makeWrapper ${Agda.bin}/bin/agda $out/bin/agda \
       --add-flags "--with-compiler=${ghc}/bin/ghc" \
       --add-flags "--library-file=${library-file}"
-    ln -s ${Agda}/bin/agda-mode $out/bin/agda-mode
+    ln -s ${Agda.bin}/bin/agda-mode $out/bin/agda-mode
     '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
@@ -105,7 +109,7 @@ let
         # darwin, it seems that there is no standard such locale; luckily,
         # the referenced issue doesn't seem to surface on darwin. Hence let's
         # set this only on non-darwin.
-        LC_ALL = optionalString (!stdenv.isDarwin) "C.UTF-8";
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
 
         meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
@@ -117,5 +121,5 @@ in
 {
   mkDerivation = args: stdenv.mkDerivation (args // defaults args);
 
-  inherit withPackages withPackages';
+  inherit mkLibraryFile withPackages withPackages';
 }

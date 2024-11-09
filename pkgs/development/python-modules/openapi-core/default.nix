@@ -1,37 +1,37 @@
-{ lib
-, aiohttp
-, aioitertools
-, asgiref
-, buildPythonPackage
-, django
-, falcon
-, fastapi
-, fetchFromGitHub
-, flask
-, httpx
-, isodate
-, jsonschema
-, jsonschema-spec
-, more-itertools
-, multidict
-, openapi-schema-validator
-, openapi-spec-validator
-, parse
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pytest_7
-, pythonOlder
-, responses
-, requests
-, starlette
-, webob
-, werkzeug
+{
+  lib,
+  aiohttp,
+  aioitertools,
+  buildPythonPackage,
+  django,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  isodate,
+  jsonschema,
+  jsonschema-path,
+  more-itertools,
+  multidict,
+  openapi-schema-validator,
+  openapi-spec-validator,
+  parse,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  responses,
+  requests,
+  starlette,
+  webob,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.0";
+  version = "0.19.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,49 +40,32 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
+    hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     isodate
     more-itertools
     parse
     openapi-schema-validator
     openapi-spec-validator
     werkzeug
-    jsonschema-spec
-    asgiref
+    jsonschema-path
     jsonschema
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       multidict
     ];
-    django = [
-      django
-    ];
-    falcon = [
-      falcon
-    ];
-    fastapi = [
-      fastapi
-    ];
-    flask = [
-      flask
-    ];
-    requests = [
-      requests
-    ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
+    flask = [ flask ];
+    requests = [ requests ];
     starlette = [
       aioitertools
       starlette
@@ -94,14 +77,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytest-aiohttp
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest-cov-stub
+    pytestCheckHook
     responses
     webob
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -115,6 +95,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
     license = licenses.bsd3;

@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ];
 
   meta = with lib; {
     description = "C library for manipulating POSIX tar files";

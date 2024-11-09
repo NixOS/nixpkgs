@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "template-glib";
-  version = "3.36.1";
+  version = "3.36.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "OxZ6Fzha10WvviD634EGxm0wxb10bVqh2b236AP2pQM=";
+    hash = "sha256-ACDzpAGIjOdjs6F1CML1jpGXKkg6DFR6/bfMviVhmUg=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library for template expansion which supports calling into GObject Introspection from templates";
+    description = "Library for template expansion which supports calling into GObject Introspection from templates";
     homepage = "https://gitlab.gnome.org/GNOME/template-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

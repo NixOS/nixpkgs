@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scraper";
-  version = "0.19.0";
+  version = "0.21.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-HfZ8zyjghTXIyIYS+MaGF5OdMLJv6NIjQswdn/tvQbU=";
+    hash = "sha256-S9bVsLDAX7UJ9FV4ZuI1G1D2fSZSZsevtftr7y+HyI8=";
   };
 
-  cargoHash = "sha256-py8VVciNJ36/aSTlTH+Bx36yrh/8AuzB9XNNv/PrFak=";
+  cargoHash = "sha256-K4ZmarOniI7OgzjkaP66Py5ei+NKeJEOuziS//NXffw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to query HTML files with CSS selectors";
+    description = "Tool to query HTML files with CSS selectors";
     mainProgram = "scraper";
     homepage = "https://github.com/causal-agent/scraper";
     changelog = "https://github.com/causal-agent/scraper/releases/tag/v${version}";

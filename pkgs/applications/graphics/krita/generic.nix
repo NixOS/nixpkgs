@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchpatch, makeWrapper, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchpatch, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
@@ -13,7 +13,7 @@
 }:
 
 mkDerivation rec {
-  pname = "krita";
+  pname = "krita-unwrapped";
   inherit version;
 
   src = fetchurl {
@@ -28,15 +28,9 @@ mkDerivation rec {
       url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
       hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
     })
-    # Fixes build with libjxl 0.9.0
-    (fetchpatch {
-      name = "fix-build-with-libjxl-0.9.0.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/ace7edcca6ad322581ab39620f21ccf3ffbd3b5a.diff";
-      hash = "sha256-dXk4+HNS0+Ie/8V4+Oj4rBJrJbNHG57gIzPymXLEc9M=";
-    })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
@@ -72,14 +66,11 @@ mkDerivation rec {
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
-  preInstall = ''
-    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-  '';
-
   meta = with lib; {
-    description = "A free and open source painting application";
+    description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
+    mainProgram = "krita";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

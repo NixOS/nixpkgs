@@ -1,8 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoBuildFlags = [
-    "--example formatjson5"
-  ];
+  cargoBuildFlags = [ "--example formatjson5" ];
 
   postInstall =
     let
@@ -35,8 +33,10 @@ rustPlatform.buildRustPackage rec {
       install -D target/${cargoTarget}/release/examples/formatjson5 $out/bin/formatjson5
     '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "A JSON5 formatter";
+    description = "JSON5 formatter";
     homepage = "https://github.com/google/json5format";
     license = lib.licenses.bsd3;
     mainProgram = "formatjson5";

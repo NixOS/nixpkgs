@@ -15,6 +15,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       django = super.django_3.overridePythonAttrs (old: rec {
         version = "3.1.14";

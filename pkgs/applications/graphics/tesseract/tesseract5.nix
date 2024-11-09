@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
+, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     icu
     pango
     opencl-headers
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
     CoreGraphics
     CoreVideo
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "OCR engine";
     homepage = "https://github.com/tesseract-ocr/tesseract";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anselmschueler ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "tesseract";
   };

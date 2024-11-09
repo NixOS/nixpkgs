@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchFromGitLab {
-    sha256 = "sha256-MeD/jjhwoiWTb/G8pHrnEEX22h+entPr9MhJ6WHO3DM=";
+    hash = "sha256-MeD/jjhwoiWTb/G8pHrnEEX22h+entPr9MhJ6WHO3DM=";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A package that implements a pre-document language and tools to process it";
+    description = "Package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];

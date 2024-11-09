@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# tests
-, argcomplete
-, pytest-mock
-, pytestCheckHook
+  # tests
+  argcomplete,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.1";
+  version = "5.14.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hYUQWzcaBLgxakPVzinAmFdcLkd4ULYrhIuWTxREUn4=";
+    hash = "sha256-ntBXnTUCyUtLNzKsEgN1zalvkjEUUihH3ks7uYuWtrc=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
     argcomplete
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/ipython/traitlets/issues/902
+    "test_complete_custom_completers"
   ];
 
   disabledTestPaths = [
@@ -44,6 +48,5 @@ buildPythonPackage rec {
     description = "Traitlets Python config system";
     homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

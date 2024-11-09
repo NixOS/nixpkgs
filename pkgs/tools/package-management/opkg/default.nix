@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "opkg";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    hash = "sha256-85OONZZGtAbEDV1EKhRnx+cjV/kauCLkQml1KWQeBt4=";
+    hash = "sha256-2XP9DxVo9Y+H1q7NmqlePh9gIUpFzuJnBL+P51fFRWc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A lightweight package management system based upon ipkg";
+    description = "Lightweight package management system based upon ipkg";
     homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";
     changelog = "https://git.yoctoproject.org/opkg/tree/NEWS?h=v${version}";
     license = licenses.gpl2Plus;

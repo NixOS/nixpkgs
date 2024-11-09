@@ -68,13 +68,11 @@ to `/auth`. See the option description
 for more details.
 :::
 
-[](#opt-services.keycloak.settings.hostname-strict-backchannel)
-determines whether Keycloak should force all requests to go
-through the frontend URL. By default,
-Keycloak allows backend requests to
-instead use its local hostname or IP address and may also
-advertise it to clients through its OpenID Connect Discovery
-endpoint.
+[](#opt-services.keycloak.settings.hostname-backchannel-dynamic)
+Keycloak has the capability to offer a separate URL for backchannel requests,
+enabling internal communication while maintaining the use of a public URL
+for frontchannel requests. Moreover, the backchannel is dynamically
+resolved based on incoming headers endpoint.
 
 For more information on hostname configuration, see the [Hostname
 section of the Keycloak Server Installation and Configuration

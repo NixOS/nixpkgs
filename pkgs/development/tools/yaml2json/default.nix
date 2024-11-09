@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "yaml2json";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "bronze1man";
     repo = "yaml2json";
     rev = "v${version}";
-    hash = "sha256-yVA5eV+/TxWN3wzsHy5++IGMAopkCz+PBfjSD+TNKc8=";
+    hash = "sha256-SDKsmK2YVX+LiF0WQyZOQBpcHFVrBurzqf4xItIfmrE=";
   };
 
   vendorHash = "sha256-g+yaVIx4jxpAQ/+WrGKxhVeliYx7nLQe/zsGpxV4Fn4=";

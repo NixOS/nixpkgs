@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, odpic }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  odpic,
+}:
 
 buildPythonPackage rec {
   pname = "cx-oracle";

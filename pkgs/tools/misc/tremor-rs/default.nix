@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     # Copy the standard library to $out/lib
     cp -r ${src}/tremor-script/lib/ $out
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tremor \
       --bash <($out/bin/tremor completions bash) \
       --fish <($out/bin/tremor completions fish) \
@@ -68,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
-  doCheck = !(stdenv.system == "x86_64-darwin");
+  doCheck = stdenv.system != "x86_64-darwin";
 
   checkFlags = [
     # all try to make a network access

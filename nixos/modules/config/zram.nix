@@ -22,7 +22,7 @@ in
       enable = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable in-memory compressed devices and swap space provided by the zram
           kernel module.
           See [
@@ -34,7 +34,7 @@ in
       swapDevices = lib.mkOption {
         default = 1;
         type = lib.types.int;
-        description = lib.mdDoc ''
+        description = ''
           Number of zram devices to be used as swap, recommended is 1.
         '';
       };
@@ -42,7 +42,7 @@ in
       memoryPercent = lib.mkOption {
         default = 50;
         type = lib.types.int;
-        description = lib.mdDoc ''
+        description = ''
           Maximum total amount of memory that can be stored in the zram swap devices
           (as a percentage of your total memory). Defaults to 1/2 of your total
           RAM. Run `zramctl` to check how good memory is compressed.
@@ -53,7 +53,7 @@ in
       memoryMax = lib.mkOption {
         default = null;
         type = with lib.types; nullOr int;
-        description = lib.mdDoc ''
+        description = ''
           Maximum total amount of memory (in bytes) that can be stored in the zram
           swap devices.
           This doesn't define how much memory will be used by the zram swap devices.
@@ -63,7 +63,7 @@ in
       priority = lib.mkOption {
         default = 5;
         type = lib.types.int;
-        description = lib.mdDoc ''
+        description = ''
           Priority of the zram swap devices. It should be a number higher than
           the priority of your disk-based swap devices (so that the system will
           fill the zram swap devices before falling back to disk swap).
@@ -73,8 +73,8 @@ in
       algorithm = lib.mkOption {
         default = "zstd";
         example = "lz4";
-        type = with lib.types; either (enum [ "lzo" "lz4" "zstd" ]) str;
-        description = lib.mdDoc ''
+        type = with lib.types; either (enum [ "842" "lzo" "lzo-rle" "lz4" "lz4hc" "zstd" ]) str;
+        description = ''
           Compression algorithm. `lzo` has good compression,
           but is slow. `lz4` has bad compression, but is fast.
           `zstd` is both good compression and fast, but requires newer kernel.
@@ -87,7 +87,7 @@ in
         default = null;
         example = "/dev/zvol/tarta-zoot/swap-writeback";
         type = lib.types.nullOr lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           Write incompressible pages to this device,
           as there's no gain from keeping them in RAM.
         '';

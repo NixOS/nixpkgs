@@ -11,6 +11,7 @@
 , libnotify
 , slurp
 , wl-clipboard
+, bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     scdoc
   ];
+
+  buildInputs = [ bash ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -52,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A helper for screenshots within Hyprland, based on grimshot";
+    description = "Helper for screenshots within Hyprland, based on grimshot";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ donovanglover ];

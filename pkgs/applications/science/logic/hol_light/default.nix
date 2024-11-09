@@ -1,8 +1,12 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, findlib, num, camlp5, camlp-streams }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, ocaml, findlib, num, zarith, camlp5, camlp-streams }:
 
 let
+  use_zarith = lib.versionAtLeast ocaml.version "4.14";
   load_num =
-    lib.optionalString (num != null) ''
+    if use_zarith then ''
+      -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith \
+      -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+    '' else lib.optionalString (num != null) ''
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
@@ -22,31 +26,26 @@ let
     '';
 in
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "hol_light is not available for OCaml ${ocaml.version}"
-
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2023-11-03";
+  version = "unstable-2024-07-07";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "dcd765c6032f52a0c0bf21fce5da4794a823e880";
-    hash = "sha256-k2RBNDo4tc3eobKB84Y2xr0UQJvef0hv6jyFCaDCQFM=";
+    rev = "16b184e30e7e3fe9add7d1ee93242323ed2e1726";
+    hash = "sha256-V0OtsmX5pa+CH3ZXmNG3juXwXZ5+A0k13eMCAfaRziQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://salsa.debian.org/ocaml-team/hol-light/-/raw/master/debian/patches/0004-Fix-compilation-with-camlp5-7.11.patch";
-      sha256 = "180qmxbrk3vb1ix7j77hcs8vsar91rs11s5mm8ir5352rz7ylicr";
-    })
-  ];
+  patches = [ ./0004-Fix-compilation-with-camlp5-7.11.patch ];
 
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib camlp5 ];
-  propagatedBuildInputs = [ camlp-streams num ];
+  propagatedBuildInputs = [
+    camlp-streams
+    (if use_zarith then zarith else num)
+  ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"

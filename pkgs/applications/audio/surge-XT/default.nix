@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "surge-XT";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
     rev = "release_xt_${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-xcbZ5TC2W2PVzAkpoKPFIgW1oRGaC+ynQYot3cb5NAQ=";
+    hash = "sha256-4b0H3ZioiXFc4KCeQReobwQZJBl6Ep2/8JlRIwvq/hQ=";
   };
 
   nativeBuildInputs = [

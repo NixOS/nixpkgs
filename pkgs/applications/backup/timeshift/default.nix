@@ -1,6 +1,5 @@
 { callPackage
 , timeshift-unwrapped
-, lib
 , rsync
 , coreutils
 , mount

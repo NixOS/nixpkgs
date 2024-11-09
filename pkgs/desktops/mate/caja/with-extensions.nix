@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 , caja
 , cajaExtensions
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedExtensions (x: x.buildInputs) ++ selectedExtensions

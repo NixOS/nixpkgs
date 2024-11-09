@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = optional enablePadding "-DARRAY_LENGTH_PADDING=ON"
     ++ optional enableSerialization "-DENABLE_SERIALISATION=ON"
-    ++ optional stdenv.is64bit "-DBZ_FULLY64BIT=ON";
+    ++ optional stdenv.hostPlatform.is64bit "-DBZ_FULLY64BIT=ON";
     # FIXME ++ optional doCheck "-DBUILD_TESTING=ON";
 
   # skip broken library name detection
-  ax_boost_user_serialization_lib = lib.optionalString stdenv.isDarwin "boost_serialization";
+  ax_boost_user_serialization_lib = lib.optionalString stdenv.hostPlatform.isDarwin "boost_serialization";
 
   enableParallelBuilding = true;
 

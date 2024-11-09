@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksheet";
-  version = "4.3.13";
+  version = "4.3.14";
 
   src = fetchFromGitHub {
     owner = "fpaquet";
     repo = "gtksheet";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-2JwkyT6OBApfgyfNSksbrusF8WcZ4v3tlbblDJJtN2k=";
+    hash = "sha256-dpo4e/68PLbqUFoKiwlDUUIEFPRqT/5TBZzl7pfY+1Y=";
   };
 
   strictDeps = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A spreadsheet widget for GTK+";
+    description = "Spreadsheet widget for GTK+";
     homepage = "https://fpaquet.github.io/gtksheet/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];

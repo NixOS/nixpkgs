@@ -576,6 +576,7 @@ while read -u 3 mountPoint; do
       mount -t "$fsType" /dev/root /tmp-iso
       mountFS tmpfs /iso size="$fsSize" tmpfs
 
+      echo "copying ISO contents to RAM..."
       cp -r /tmp-iso/* /mnt-root/iso/
 
       umount /tmp-iso

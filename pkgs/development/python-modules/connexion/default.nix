@@ -1,55 +1,54 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, asgiref
-, httpx
-, inflection
-, jsonschema
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, starlette
-, typing-extensions
-, werkzeug
+  # dependencies
+  asgiref,
+  httpx,
+  inflection,
+  jsonschema,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  requests,
+  starlette,
+  typing-extensions,
+  werkzeug,
 
-# optional-dependencies
-, a2wsgi
-, flask
-, swagger-ui-bundle
-, uvicorn
+  # optional-dependencies
+  a2wsgi,
+  flask,
+  swagger-ui-bundle,
+  uvicorn,
 
-# tests
-, pytest-aiohttp
-, pytestCheckHook
-, testfixtures
+  # tests
+  pytest-aiohttp,
+  pytestCheckHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.0.6";
+  version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";
-    repo = pname;
+    repo = "connexion";
     rev = "refs/tags/${version}";
-    hash = "sha256-0EaJwxT80qLqlrxYk4H7Pf/UKq2pA/8HGL8OiqNA/2s=";
+    hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     httpx
     inflection
@@ -63,30 +62,28 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flask = [
       a2wsgi
       flask
     ];
-    swagger-ui = [
-      swagger-ui-bundle
-    ];
-    uvicorn = [
-      uvicorn
-    ];
+    swagger-ui = [ swagger-ui-bundle ];
+    uvicorn = [ uvicorn ];
   };
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "connexion"
-  ];
+  pythonImportsCheck = [ "connexion" ];
 
   disabledTests = [
+    "test_build_example"
+    "test_mock_resolver_no_example"
+    # Tests require network access
+    "test_remote_api"
     # AssertionError
     "test_headers"
     # waiter.acquire() deadlock
@@ -98,10 +95,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    mainProgram = "connexion";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = [ ];
+    mainProgram = "connexion";
   };
 }

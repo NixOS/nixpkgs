@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, xmltodict
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  xmltodict,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "omnilogic"
-  ];
+  pythonImportsCheck = [ "omnilogic" ];
 
   meta = with lib; {
     description = "Python interface for the Hayward Omnilogic pool control system";

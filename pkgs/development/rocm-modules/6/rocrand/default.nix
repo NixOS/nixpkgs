@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "rocRAND";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-BBkcYOP+zh3OQTxuSkeiJizwnE9Gr5Jbhx0e8SU/mmU=";
-    fetchSubmodules = true; # For inline hipRAND
   };
 
   nativeBuildInputs = [
@@ -68,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $benchmark/bin
     mv $out/bin/benchmark_* $benchmark/bin
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
+    rm -r $out/bin/rocRAND
+    # Fail if bin/ isn't actually empty
     rmdir $out/bin
   '';
 

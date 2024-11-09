@@ -1,17 +1,17 @@
 { stdenv
 , buildFHSEnv
 , fetchurl
+, fetchzip
 , lib
 , zlib
 , gdbm
-, bzip2
 , libxslt
 , libxml2
 , libuuid
 , readline
+, readline70
 , xz
 , cups
-, glibc
 , libaio
 , vulkan-loader
 , alsa-lib
@@ -19,28 +19,24 @@
 , libxcrypt-legacy
 , libGL
 , numactl
-, libX11
-, libXi
+, xorg
 , kmod
 , python3
 , autoPatchelfHook
 , makeWrapper
-, sqlite
-, enableInstaller ? false
-, enableMacOSGuests ? false, fetchFromGitHub, gnutar, unzip
+, symlinkJoin
+, enableInstaller ? false, bzip2, sqlite
+, enableMacOSGuests ? false, fetchFromGitHub, unzip
 }:
 
 let
-  # macOS - versions
-  fusionVersion = "13.5.1";
-  fusionBuild = "23298085";
-  unlockerVersion = "3.0.5";
+  # base - versions
+  version = "17.6.1";
+  build = "24319023";
+  baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
 
-  # macOS - ISOs
-  darwinIsoSrc = fetchurl {
-    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-bn6hoicby2YVj1pZTBzBhabNhKefzVQTm5vIrdTO2K4=";
-  };
+  # macOS - versions
+  unlockerVersion = "3.0.5";
 
   # macOS - Unlocker
   unlockerSrc = fetchFromGitHub {
@@ -50,39 +46,31 @@ let
     sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
   };
 
-  gdbm3 = gdbm.overrideAttrs (old: rec {
-    version = "1.8.3";
-
-    src = fetchurl {
-      url = "mirror://gnu/gdbm/gdbm-${version}.tar.gz";
-      sha256 = "sha256-zDQDOKLii0AFirnrU1SiHVP4ihWC6iG6C7GFw3ooHck=";
-    };
-
-    installPhase = ''
-      mkdir -p $out/lib
-      cp .libs/libgdbm*.so* $out/lib/
-    '';
-  });
-
   vmware-unpack-env = buildFHSEnv rec {
     name = "vmware-unpack-env";
     targetPkgs = pkgs: [ zlib ];
   };
+
+  readline70_compat63 = symlinkJoin {
+    name = "readline70_compat63";
+    paths = [ readline70 ];
+    postBuild = ''
+      ln -s $out/lib/libreadline.so $out/lib/libreadline.so.6
+    '';
+  };
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "17.5.1";
-  build = "23298084";
+  inherit version build;
 
   buildInputs = [
     libxslt
     libxml2
     libuuid
-    gdbm3
+    gdbm
     readline
     xz
     cups
-    glibc
     libaio
     vulkan-loader
     alsa-lib
@@ -90,34 +78,39 @@ stdenv.mkDerivation rec {
     libxcrypt-legacy
     libGL
     numactl
-    libX11
-    libXi
-    kmod
+    xorg.libX11
+    xorg.libXau
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ sqlite bzip2 ]
-    ++ lib.optionals enableMacOSGuests [ gnutar unzip ];
+    ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
+    ++ lib.optionals enableMacOSGuests [ unzip ];
 
-  src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-${builtins.replaceStrings ["."] [""] version}-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-qmC3zvKoes77z3x6UkLHsJ17kQrL1a/rxe9mF+UMdJY=";
-  };
+  src = fetchzip {
+    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
+    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
+    stripRoot = false;
+  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase = ''
+  unpackPhase =
+  ''
     ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
-
-    ${lib.optionalString enableMacOSGuests ''
-      mkdir -p fusion/
-      tar -xvpf "${darwinIsoSrc}" -C fusion/
-      unzip "fusion/com.vmware.fusion.zip" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-        -d fusion/
-    ''}
   '';
 
-  patchPhase = lib.optionalString enableMacOSGuests ''
+  postPatch = lib.optionalString enableMacOSGuests ''
     cp -R "${unlockerSrc}" unlocker/
 
     substituteInPlace unlocker/unlocker.py --replace \
@@ -128,6 +121,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p \
       $out/bin \
       $out/etc/vmware \
@@ -173,7 +168,7 @@ stdenv.mkDerivation rec {
         component_version=$(cat unpacked/$component/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
         component_core_id=$([ "$component" == "vmware-installer" ] && echo "-1" || echo "1")
         type=$([ "$component" == "vmware-workstation" ] && echo "0" || echo "1")
-        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"$component\",\"$component_version\",\"${build}\",$component_core_id,\"$component\",\"$component\",$type);"
+        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${build},$component_core_id,'$component','$component',$type);"
         mkdir -p $out/etc/vmware-installer/components/$component
         cp -r $folder/* $out/etc/vmware-installer/components/$component
       done
@@ -231,8 +226,8 @@ stdenv.mkDerivation rec {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${libX11}/lib/libX11.so.6 \
-        --add-needed ${libXi}/lib/libXi.so.6 \
+        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
+        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done
@@ -254,26 +249,6 @@ stdenv.mkDerivation rec {
     echo "Installing VMware Network Editor"
     unpacked="unpacked/vmware-network-editor"
     cp -r $unpacked/lib $out/lib/vmware/
-
-    ## VMware Tools
-    echo "Installing VMware Tools"
-    mkdir -p $out/lib/vmware/isoimages/
-    cp unpacked/vmware-tools-linux/linux.iso \
-       unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
-       unpacked/vmware-tools-netware/netware.iso \
-       unpacked/vmware-tools-solaris/solaris.iso \
-       unpacked/vmware-tools-winPre2k/winPre2k.iso \
-       unpacked/vmware-tools-winPreVista/winPreVista.iso \
-       unpacked/vmware-tools-windows/windows.iso \
-       $out/lib/vmware/isoimages/
-
-    ${lib.optionalString enableMacOSGuests ''
-      echo "Installing VMWare Tools for MacOS"
-      cp -v \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-       $out/lib/vmware/isoimages/
-    ''}
 
     ## VMware Player Application
     echo "Installing VMware Player Application"
@@ -297,7 +272,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe," $out/bin/vmplayer
     sed -i -e "s,@@BINARY@@,$out/bin/vmplayer," $out/share/applications/vmware-player.desktop
 
-    ## VMware OVF Tool compoment
+    ## VMware OVF Tool component
     echo "Installing VMware OVF Tool for Linux"
     unpacked="unpacked/vmware-ovftool"
     mkdir -p $out/lib/vmware-ovftool/
@@ -363,7 +338,7 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/* $out/lib/vmware/bin/* $out/lib/vmware/setup/*
 
-    # Harcoded pkexec hack
+    # Hardcoded pkexec hack
     for lib in "lib/vmware/lib/libvmware-mount.so/libvmware-mount.so" "lib/vmware/lib/libvmwareui.so/libvmwareui.so" "lib/vmware/lib/libvmware-fuseUI.so/libvmware-fuseUI.so"
     do
       sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
@@ -378,6 +353,16 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
     ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+
+    # Remove shipped X11 libraries
+    for lib in $out/lib/vmware/lib/* $out/lib/vmware-ovftool/lib*.so*; do
+      lib_name="$(basename "$lib")"
+      if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
+        rm -rf "$lib"
+      fi
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

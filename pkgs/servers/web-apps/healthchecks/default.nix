@@ -6,33 +6,37 @@
 }:
 let
   py = python3.override {
+    self = py;
     packageOverrides = final: prev: {
-      django = prev.django_4;
+      django = prev.django_5;
     };
   };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "2.10";
+  version = "3.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1x+pYMHaKgLFWcL1axOv/ok1ebs0I7Q+Q6htncmgJzU=";
+    sha256 = "sha256-aKt9L3ZgZ8HffcNNJaR+hAI38raWuLp2q/6+rvkl2pM=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
+    aiosmtpd
     apprise
-    cron-descriptor
     cronsim
     django
     django-compressor
+    django-stubs-ext
     fido2
     minio
+    oncalendar
     psycopg2
     pycurl
+    pydantic
     pyotp
     segno
     statsd
@@ -89,7 +93,7 @@ py.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/healthchecks/healthchecks";
-    description = "A cron monitoring tool written in Python & Django ";
+    description = "Cron monitoring tool written in Python & Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ phaer ];
   };

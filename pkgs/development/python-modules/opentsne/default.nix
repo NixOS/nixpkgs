@@ -1,48 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, numpy
-, oldest-supported-numpy
-, scipy
-, scikit-learn
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  numpy,
+  scipy,
+  scikit-learn,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "opentsne";
-    version = "1.0.1";
+    version = "1.0.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pavlin-policar";
       repo = "openTSNE";
       rev = "refs/tags/v${version}";
-      hash = "sha256-UTfEjjNz1mm5fhyTw9GRlMNURwWlr6kLMjrMngkFV3Y=";
+      hash = "sha256-e1YXF9cdguzcEW0KanIHYlZQiUc+FH8IVOaPshAswco=";
     };
 
-    nativeBuildInputs = [
+    build-system = [
       cython
-      oldest-supported-numpy
+      numpy
       setuptools
-      wheel
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       numpy
       scipy
       scikit-learn
     ];
 
-    pythonImportsCheck = [
-      "openTSNE"
-    ];
+    pythonImportsCheck = [ "openTSNE" ];
 
     doCheck = false;
 
@@ -57,7 +53,10 @@ let
         doInstall = false;
 
         doCheck = true;
-        nativeCheckInputs = [ pytestCheckHook self ];
+        nativeCheckInputs = [
+          pytestCheckHook
+          self
+        ];
       });
     };
 
@@ -69,4 +68,5 @@ let
       maintainers = with maintainers; [ lucasew ];
     };
   };
-in self
+in
+self

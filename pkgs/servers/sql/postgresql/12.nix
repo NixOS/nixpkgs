@@ -1,10 +1,10 @@
 import ./generic.nix {
-  version = "12.18";
-  hash = "sha256-T5kZcl2UHOmGjgf+HtHTqGdIWZtIM4ZUdYOSi3TDkYo=";
+  version = "12.20";
+  hash = "sha256-LVQ68wCf7H/VrzX3pwyVCF0+72tQjlF6qUk+mbFenqk=";
   muslPatches = {
-    icu-collations-hack = {
-      url = "https://git.alpinelinux.org/aports/plain/testing/postgresql12/icu-collations-hack.patch?id=d5227c91adda59d4e7f55f13468f0314e8869174";
-      hash = "sha256-wuwjvGHArkRNwFo40g3p43W32OrJohretlt6iSRlJKg=";
+    dont-use-locale-a = {
+      url = "https://git.alpinelinux.org/aports/plain/testing/postgresql12/dont-use-locale-a-on-musl.patch?id=d5227c91adda59d4e7f55f13468f0314e8869174";
+      hash = "sha256-fk+y/SvyA4Tt8OIvDl7rje5dLs3Zw+Ln1oddyYzerOo=";
     };
   };
 }

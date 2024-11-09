@@ -16,8 +16,8 @@
 # - Attribute names should be computable without relying on `final`.
 #   - Extensions should take arguments to build attribute names before relying on `final`.
 #
-# Silvan's recommendation then is to explicitly use `callPackage` to provide everything our extensions need
-# to compute the attribute names, without relying on `final`.
+# Silvan's recommendation then is to explicitly use `callPackage` to provide everything our
+# extensions need to compute the attribute names, without relying on `final`.
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
@@ -27,14 +27,15 @@
   newScope,
   pkgs,
   config,
-  __attrsFailEvaluation ? true,
 }:
 let
   inherit (lib)
     attrsets
     customisation
     fixedPoints
+    lists
     strings
+    trivial
     versions
     ;
   # Backbone
@@ -50,10 +51,14 @@ let
     cudaAtLeast = strings.versionAtLeast cudaVersion;
 
     # Maintain a reference to the final cudaPackages.
-    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
-    # it's provided with `cudaPackages` from the top-level scope, which is not what we want. We want to
-    # provide the `cudaPackages` from the final scope -- that is, the *current* scope.
-    cudaPackages = final;
+    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
+    # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
+    # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
+    # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
+    # recursing more than one level here.
+    cudaPackages = final // {
+      __attrsFailEvaluation = true;
+    };
 
     # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
     cudaFlags = flags;
@@ -69,10 +74,55 @@ let
     backendStdenv = final.callPackage ../development/cuda-modules/backend-stdenv.nix { };
 
     # Loose packages
-    cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit { };
+
+    # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
+    cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
+    cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
+
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
+
+    tests =
+      let
+        bools = [
+          true
+          false
+        ];
+        configs = {
+          openCVFirst = bools;
+          useOpenCVDefaultCuda = bools;
+          useTorchDefaultCuda = bools;
+        };
+        builder =
+          {
+            openCVFirst,
+            useOpenCVDefaultCuda,
+            useTorchDefaultCuda,
+          }@config:
+          {
+            name = strings.concatStringsSep "-" (
+              [
+                "test"
+                (if openCVFirst then "opencv" else "torch")
+              ]
+              ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
+                "with-default-cuda"
+              ]
+              ++ [
+                "then"
+                (if openCVFirst then "torch" else "opencv")
+              ]
+              ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
+                "with-default-cuda"
+              ]
+            );
+            value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+          };
+      in
+      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
+
+    writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });
 
   mkVersionedPackageName =
@@ -86,7 +136,7 @@ let
     [
       (import ../development/cuda-modules/setup-hooks/extension.nix)
       (callPackage ../development/cuda-modules/cuda/extension.nix { inherit cudaVersion; })
-      (callPackage ../development/cuda-modules/cuda/overrides.nix { inherit cudaVersion; })
+      (import ../development/cuda-modules/cuda/overrides.nix)
       (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit cudaVersion flags mkVersionedPackageName;
         pname = "cudnn";
@@ -114,4 +164,10 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages // { inherit __attrsFailEvaluation; }
+# We want to warn users about the upcoming deprecation of old CUDA
+# versions, without breaking Nixpkgs CI with evaluation warnings. This
+# gross hack ensures that the warning only triggers if aliases are
+# enabled, which is true by default, but not for ofborg.
+lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
+  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
+  cudaPackages

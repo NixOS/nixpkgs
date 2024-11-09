@@ -2,17 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , kernel
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "nct6687d";
-  version = "unstable-2023-09-22";
+  version = "0-unstable-2024-09-02";
 
   src = fetchFromGitHub {
     owner = "Fred78290";
     repo = "nct6687d";
-    rev = "cdfe855342a9383a9c4c918d51576c36d989070d";
-    hash = "sha256-iOLWxj4I6oYkNXFSkmw7meTQEnrIfb4Mw+/LkzgzDxM=";
+    rev = "f45b72a6ca335e20f8a2df5ee5d4e130916150d0";
+    hash = "sha256-2sAL6aXUafmm2DKIhqEoTSPZVmzu/lnTkpPznJndX3o=";
   };
 
   setSourceRoot = ''
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
   buildFlags = [ "modules" ];
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=main" ];
+  };
 
   meta = with lib; {
     description = "Kernel module for the Nuvoton NCT6687-R chipset found on many B550/B650 motherboards from ASUS and MSI";

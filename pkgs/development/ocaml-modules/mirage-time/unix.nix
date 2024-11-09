@@ -1,4 +1,4 @@
-{ buildDunePackage, fetchurl, mirage-time, lwt, duration }:
+{ buildDunePackage, mirage-time, lwt, duration }:
 
 buildDunePackage {
   pname = "mirage-time-unix";

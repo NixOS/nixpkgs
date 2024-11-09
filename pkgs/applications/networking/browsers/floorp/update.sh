@@ -19,7 +19,7 @@ updateBaseVersion() {
 
 updateHash() {
     local hash
-    hash=$(nix-prefetch-github --fetch-submodules --rev "v$1" $owner $repo | jq .hash)
+    hash=$(nix-prefetch-github --fetch-submodules --rev "v$1" $owner $repo | jq -r .hash)
     sed -i "s|hash = \"[a-zA-Z0-9\/+-=]*\";|hash = \"$hash\";|g" "$dirname/default.nix"
 }
 

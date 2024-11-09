@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,16 +22,12 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/src/python";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "psychrolib"
-  ];
+  pythonImportsCheck = [ "psychrolib" ];
 
   meta = with lib; {
     description = "Library of psychrometric functions to calculate thermodynamic properties";

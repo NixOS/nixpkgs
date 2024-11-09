@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Thai input method engine for IBus";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

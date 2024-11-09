@@ -7,7 +7,7 @@ mkKdeDerivation {
   pname = "breeze-icons";
 
   extraNativeBuildInputs = [
-    (python3.withPackages (ps: [ps.lxml]))
+    (python3.withPackages (ps: [ ps.lxml ]))
     libxml2
   ];
 

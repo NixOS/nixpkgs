@@ -1,4 +1,10 @@
-{ appimageTools, buildFHSEnv, makeDesktopItem, extraPkgs ? pkgs: [], appimage-run-tests ? null }:
+{ lib
+, appimageTools
+, buildFHSEnv
+, makeDesktopItem
+, extraPkgs ? pkgs: []
+, appimage-run-tests ? null
+}:
 
 let
   name = "appimage-run";
@@ -14,7 +20,7 @@ let
     mimeTypes = ["application/vnd.appimage" "application/x-iso9660-appimage"];
     categories = ["PackageManager" "Utility"];
   };
-in buildFHSEnv (fhsArgs // {
+in buildFHSEnv (lib.recursiveUpdate fhsArgs {
   inherit name;
 
   targetPkgs = pkgs: [ appimageTools.appimage-exec ]
@@ -26,4 +32,6 @@ in buildFHSEnv (fhsArgs // {
   '';
 
   passthru.tests.appimage-run = appimage-run-tests;
+
+  meta.mainProgram = "appimage-run";
 })

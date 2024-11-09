@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, joblib
-, llvmlite
-, numba
-, scikit-learn
-, scipy
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  joblib,
+  llvmlite,
+  numba,
+  scikit-learn,
+  scipy,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.11";
+  version = "0.5.13";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b0TO2dWp2iyH2bL/8wu1MIVAwGV2BeTVzeftMnW7rVA=";
+    hash = "sha256-10JUwO4KHu7IRZfV/on+3Pd4WT7qvjLC+XQSk0qYAPs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     joblib
@@ -34,17 +33,11 @@ buildPythonPackage rec {
     numba
     scikit-learn
     scipy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pynndescent"
-  ];
+  pythonImportsCheck = [ "pynndescent" ];
 
   meta = with lib; {
     description = "Nearest Neighbor Descent";

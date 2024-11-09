@@ -1,27 +1,24 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, pcre2, doxygen }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pcre2
+, doxygen
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "editorconfig-core-c";
-  version = "0.12.5";
+  version = "0.12.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-c";
-    rev = "v${version}";
-    sha256 = "sha256-4p8bomeXtA+zJ3IvWW0UZixdMnjYWYu7yeA6JUwwRb8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-myJNJxKwgmgm+P2MqnYmW8OC0oYcInL+Suyf/xwX9xo=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fox broken paths in pkg-config.
-    # https://github.com/editorconfig/editorconfig-core-c/pull/81
-    (fetchpatch {
-      url = "https://github.com/editorconfig/editorconfig-core-c/commit/e0ead79d3bb4179fe9bccd3e5598ed47cc0863a3.patch";
-      sha256 = "t/DiPVyyYoMwFpNG6sD+rLWHheFCbMaILXyey6inGdc=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "editorconfig";
   };
-}
+})

@@ -8,7 +8,7 @@
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
 , tlpdb
-}:
+}@args:
 
 # Useful resource covering build options:
 # http://tug.org/texlive/doc/tlbuild.html
@@ -196,7 +196,7 @@ core = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
@@ -239,7 +239,7 @@ core-big = stdenv.mkDerivation {
     # to the version vendored by texlive (2.1.0-beta3)
     (fetchpatch {
       name = "luajit-fix-aarch64-linux.patch";
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/30253fbfc22cd93d97ec53df323778a3aab82754/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
       hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
@@ -320,7 +320,11 @@ context = stdenv.mkDerivation rec {
   version = "2.10.08";
 
   src = fetchurl {
-    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=67034&view=co";
+    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=67034&view=co";
+    # keep the name the same, to avoid rebuilds now
+    name = "luametatex-${version}.tar.xz?revision=67034&view=co";
+    # when bumping the version this should probably be changed to:
+    # name = "luametatex-${version}.tar.xz";
     hash = "sha256-3JeOUQ63jJOZWTxFCoyWjfcrspmdmC/yqgS1JaLfTWk=";
   };
 
@@ -328,7 +332,7 @@ context = stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
 
   meta = with lib; {
-    description = "The LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+    description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
     homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ apfelkuchen6 xworld21 ];
@@ -420,7 +424,28 @@ pygmentex = python3Packages.buildPythonApplication rec {
   };
 };
 
-inherit asymptote;
+asymptote = args.asymptote.overrideAttrs (finalAttrs: prevAttrs: {
+  version = texlive.pkgs.asymptote.version;
+
+  # keep local src and patches even if duplicated in the top level asymptote
+  # so that top level updates do not break texlive
+  src = fetchurl {
+    url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+    hash = "sha256-DecadD+m7pORuH3Sdcs/5M3vUbN6rhSkFoNN0Soq9bs=";
+  };
+
+  texContainer = texlive.pkgs.asymptote.tex;
+  texdocContainer = texlive.pkgs.asymptote.texdoc;
+
+  patches = [
+    (fetchpatch {
+      # partial fix for macOS XDR/V3D support (LDFLAGS change seems like an unrelated bugfix)
+      name = "restore-LDFLAGS-dont-look-for-tirpc-under-MacOS.patch";
+      url = "https://github.com/vectorgraphics/asymptote/commit/7e17096b22d18d133d1bc5916b6e32c0cb24ad10.patch";
+      hash = "sha256-olCFzqfZwWOAjqlB5lDPXYRHU9i3VQNgoR0cO5TmW98=";
+    })
+  ];
+});
 
 inherit biber;
 inherit biber-ms;
@@ -499,23 +524,23 @@ xindy = stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
       --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                     "our \$clisp = '$(type -P clisp)';"
+                     "our \$clisp = '$(type -P clisp)';" \
+      --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
+                     '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
   '';
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 
-  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
+  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" "--disable-xindy-rules" ];
 
   preInstall = ''mkdir -p "$out/bin" '';
   # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
   postInstall = ''
     mkdir -p "$out/lib/xindy"
     mv "$out"/{bin/xindy.mem,lib/xindy/}
-    ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
   '';
 };
 

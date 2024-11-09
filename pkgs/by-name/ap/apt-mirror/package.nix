@@ -18,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GNsyXP/O56Y+8QhoSfMm+ig5lK/K3Cm085jxRt9ZRmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    perl # pod2man
+  ];
 
   buildInputs = [ perl ];
 
@@ -35,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
-    description = "A tool that provides the ability to mirror any parts of apt sources";
+    description = "Tool that provides the ability to mirror any parts of apt sources";
     homepage = "https://github.com/apt-mirror/apt-mirror";
     changelog = "https://github.com/apt-mirror/apt-mirror/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = licenses.gpl2Only;

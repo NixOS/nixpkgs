@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "dr14_tmeter";
     license = licenses.gpl3Plus;
     homepage = "http://dr14tmeter.sourceforge.net/";
-    maintainers = [ maintainers.adisbladis ];
+    maintainers = [ ];
   };
 }

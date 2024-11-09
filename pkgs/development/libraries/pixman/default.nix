@@ -12,11 +12,14 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_17
+, wlroots_0_18
 , xwayland
 
 , gitUpdater
 , testers
+
+, __flattenIncludeHackHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,9 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oGJNuQGAx923n8epFRCT3DfGRtjDjT8jL3Z89kuFoiY=";
   };
 
+  # Raise test timeout, 120s can be slightly exceeded on slower hardware
+  postPatch = ''
+    substituteInPlace test/meson.build \
+      --replace-fail 'timeout : 120' 'timeout : 240'
+  '';
+
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config __flattenIncludeHackHook ];
 
   buildInputs = [ libpng ];
 
@@ -45,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Diwmmxt=disabled"
   ]
   # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-  ++ lib.optional (stdenv.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
+  ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -54,13 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
-
-  postInstall = glib.flattenInclude;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots xwayland;
+      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };
@@ -73,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://pixman.org";
-    description = "A low-level library for pixel manipulation";
+    description = "Low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
     pkgConfigModules = [ "pixman-1" ];

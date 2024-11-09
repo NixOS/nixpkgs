@@ -1,54 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# non-propagates
-, django
+  # non-propagates
+  django,
 
-# dependencies
-, beautifulsoup4
+  # dependencies
+  beautifulsoup4,
 
-# tests
-, python
+  # tests
+  python,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "24.1";
-  format = "pyproject";
+  version = "24.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TCHie5h/VRJ9NSg7wKnWotFHm328kxIp+xFXEa8wL1c=";
+    hash = "sha256-9URZ+10GVX171Zht49UQEDkVOZ7LfOtUvapLydzNAlk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-  ];
+  dependencies = [ beautifulsoup4 ];
 
-  pythonImportsCheck = [
-    "bootstrap4"
-  ];
+  pythonImportsCheck = [ "bootstrap4" ];
 
   nativeCheckInputs = [
     (django.override { withGdal = true; })
+    pytest-django
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} manage.py test -v1 --noinput
-    runHook postCheck
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.app.settings
   '';
 
   meta = with lib; {

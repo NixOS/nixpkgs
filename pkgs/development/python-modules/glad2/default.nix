@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "glad2";
-  version = "2.0.5";
-  format = "setuptools";
+  version = "2.0.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ugdXtqo6IEtjeHOxPQubQIZa4ZbfcpD8bAHYGOWK+Bw=";
+    hash = "sha256-uEB5ufpATzcXG5Yb3R2NohNw5sgY3vuEgcWz/j1kNto=";
   };
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ jinja2 ];
 
   # no python tests
   doCheck = false;

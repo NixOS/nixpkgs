@@ -26,7 +26,7 @@
 # Testing
 , gtest
 # Fixup
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 makeWrapper ];
 
   buildInputs = [
     curl
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   nativeCheckInputs = [ gtest ];
-  doCheck = !stdenv.isAarch64; # single failure that I can't explain
+  doCheck = !stdenv.hostPlatform.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
@@ -102,10 +102,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An internet radio player for linux";
+    description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

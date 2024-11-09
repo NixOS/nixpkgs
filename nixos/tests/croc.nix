@@ -3,11 +3,11 @@ let
   client = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.croc ];
   };
-  pass = pkgs.writeText "pass" "PassRelay";
+  pass = "PassRelay";
 in {
   name = "croc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 julm ];
+    maintainers = [ equirosa SuperSandro2000 ];
   };
 
   nodes = {
@@ -38,12 +38,12 @@ in {
     sender.execute("echo Hello World > testfile01.txt")
     sender.execute("echo Hello Earth > testfile02.txt")
     sender.execute(
-        "croc --pass ${pass} --relay relay send --code topSecret testfile01.txt testfile02.txt >&2 &"
+        "env CROC_SECRET=topSecret croc --pass ${pass} --relay relay send testfile01.txt testfile02.txt >&2 &"
     )
 
     # receive the testfiles and check them
     receiver.succeed(
-        "croc --pass ${pass} --yes --relay relay topSecret"
+        "env CROC_SECRET=topSecret croc --pass ${pass} --yes --relay relay"
     )
     assert "Hello World" in receiver.succeed("cat testfile01.txt")
     assert "Hello Earth" in receiver.succeed("cat testfile02.txt")

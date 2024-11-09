@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, mkDerivation, cmake, sqlite
 , qtbase, qtsvg, qttools, wrapQtAppsHook
 , icoutils # build and runtime deps.
-, wget, fuseiso, wine, sudo, which # runtime deps.
+, wget, fuseiso, wine, which # runtime deps.
 }:
 
 mkDerivation rec {
@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://q4wine.brezblock.org.ua/";
-    description = "A Qt GUI for Wine to manage prefixes and applications";
+    description = "Qt GUI for Wine to manage prefixes and applications";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rkitover ];
     platforms = platforms.unix;

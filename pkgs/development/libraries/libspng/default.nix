@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   mesonBuildType = "release";
 
@@ -32,13 +32,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  strictDeps = true;
+
   nativeCheckInputs = [
     cmake
-    libpng
   ];
 
   buildInputs = [
     zlib
+    libpng
   ];
 
   nativeBuildInputs = [

@@ -130,7 +130,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Canon InkJet printer drivers for many Pixma series printers.";
+    description = "Canon InkJet printer drivers for many Pixma series printers";
     longDescription = ''
       Canon InjKet printer drivers for series E200, E300, E3100, E3300, E4200, E450, E470, E480,
       G3000, G3010, G4000, G4010, G5000, G5080, G6000, G6050, G6080, G7000, G7050, G7080, GM2000,
@@ -145,6 +145,6 @@ stdenv.mkDerivation {
     homepage = "https://hk.canon/en/support/0101048401/1";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     description = "Simple monitoring of system events";
     mainProgram = "eventstat";
     homepage = "https://github.com/ColinIanKing/eventstat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,13 +1,13 @@
 { buildGoModule, avahi, libusb1, pkg-config, lib, fetchFromGitHub, ronn }:
 buildGoModule rec {
   pname = "ipp-usb";
-  version = "0.9.25";
+  version = "0.9.28";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
     rev = version;
-    sha256 = "sha256-ryKQDzb31JA192lbCYkwJrXgwErViqIzP4mD2NmWdgA=";
+    sha256 = "sha256-fjhiOftiZmc9/mA/0yQuIF4/OsBuGUIpf7DLrJB3GRk=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ronn ];
   buildInputs = [ libusb1 avahi ];
 
-  vendorHash = "sha256-61vCER1yR70Pn+CrfTai1sgiQQLU6msb9jxushus5W4=";
+  vendorHash = null;
 
   postInstall = ''
     # to accomodate the makefile

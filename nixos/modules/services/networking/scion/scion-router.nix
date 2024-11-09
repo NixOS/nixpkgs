@@ -3,6 +3,7 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-router;
   toml = pkgs.formats.toml { };
   defaultConfig = {
@@ -11,11 +12,11 @@ let
       config_dir = "/etc/scion";
     };
   };
-  configFile = toml.generate "scion-router.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-router.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-router = {
-    enable = mkEnableOption (lib.mdDoc "the scion-router service");
+    enable = mkEnableOption "the scion-router service";
     settings = mkOption {
       default = { };
       type = toml.type;
@@ -24,7 +25,7 @@ in
           general.id = "br";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         scion-router configuration. Refer to
         <https://docs.scion.org/en/latest/manuals/common.html>
         for details on supported values.
@@ -39,10 +40,10 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-router";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-router";
       };
     };
   };

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   # ERROR: All 188 tests were run, 90 failed unexpectedly.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Flexible dictionary server and client implementing RFC 2229";

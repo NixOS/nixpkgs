@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.efi = "${finalAttrs.finalPackage}/memtest.efi";
 
   preBuild = ''
-    cd ${if stdenv.isi686 then "build32" else "build64"}
+    cd ${if stdenv.hostPlatform.isi686 then "build32" else "build64"}
   '';
 
   installPhase = ''
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.memtest.org/";
-    description = "A tool to detect memory errors";
-    license = lib.licenses.gpl2;
+    description = "Tool to detect memory errors";
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ lib.maintainers.LunNova ];
   };

@@ -1,26 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.10.0";
+  version = "1.11.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xfc4NTmNENt5+O7NXNhrH20pMXWJ6nB5aZTUk5mvYpc=";
+    hash = "sha256-Lg3KHPTI45ZE7tMkCOqZZu4V4NMkxiuomaOTs8a0Z6o=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pkginfo"
-  ];
+  pythonImportsCheck = [ "pkginfo" ];
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
@@ -35,6 +32,6 @@ buildPythonPackage rec {
       setup.py develop).
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

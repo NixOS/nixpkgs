@@ -9,7 +9,7 @@ in
 
   options = {
     services.bpftune = {
-      enable = lib.mkEnableOption (lib.mdDoc "bpftune BPF driven auto-tuning");
+      enable = lib.mkEnableOption "bpftune BPF driven auto-tuning";
 
       package = lib.mkPackageOption pkgs "bpftune" { };
     };

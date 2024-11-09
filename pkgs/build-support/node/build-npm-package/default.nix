@@ -3,7 +3,7 @@
 , fetchNpmDeps
 , buildPackages
 , nodejs
-, darwin
+, cctools
 } @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
@@ -13,6 +13,7 @@
 , prePatch ? ""
 , patches ? [ ]
 , postPatch ? ""
+, patchFlags ? []
 , nativeBuildInputs ? [ ]
 , buildInputs ? [ ]
   # The output hash of the dependencies for this project.
@@ -45,7 +46,7 @@
 , npmWorkspace ? null
 , nodejs ? topLevelArgs.nodejs
 , npmDeps ?  fetchNpmDeps {
-  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch;
+  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch patchFlags;
   name = "${name}-npm-deps";
   hash = npmDepsHash;
 }
@@ -76,7 +77,7 @@ stdenv.mkDerivation (args // {
       (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
       nodejs.python
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;

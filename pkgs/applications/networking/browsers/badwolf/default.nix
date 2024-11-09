@@ -4,8 +4,8 @@
 , ninja
 , pkg-config
 , ed
-, wrapGAppsHook
-, webkitgtk
+, wrapGAppsHook3
+, webkitgtk_4_0
 , libxml2
 , glib-networking
 , gettext
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     ed
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    webkitgtk
+    webkitgtk_4_0
     libxml2
     gettext
     glib-networking

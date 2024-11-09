@@ -8,6 +8,7 @@
 let
 
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       antlr4-python3-runtime = super.antlr4-python3-runtime.override {
         antlr4 = antlr4_9;
@@ -16,7 +17,7 @@ let
       baserow_premium = self.buildPythonPackage rec {
         pname = "baserow_premium";
         version = "1.12.1";
-        foramt = "setuptools";
+        format = "setuptools";
 
         src = fetchFromGitLab {
           owner = "bramw";

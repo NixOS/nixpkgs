@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/coelckers/prboom-plus";
-    description = "An advanced, Vanilla-compatible Doom engine based on PrBoom";
+    description = "Advanced, Vanilla-compatible Doom engine based on PrBoom";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ashley ];
