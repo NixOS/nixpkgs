@@ -25,7 +25,9 @@ buildGoModule rec {
 
   nativeCheckInputs = [ python3 ];
 
-  passthru.tests.restic = nixosTests.restic;
+  passthru.tests = lib.optionalAttrs stdenv.isLinux {
+    restic = nixosTests.restic;
+  };
 
   postPatch = ''
     rm cmd/restic/cmd_mount_integration_test.go
