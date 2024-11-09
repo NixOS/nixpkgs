@@ -14,8 +14,6 @@
 }:
 
 let
-  arch = "amd64";
-
   pluginsdk = fetchzip {
     url = "https://files.teamspeak-services.com/releases/sdk/3.3.1/ts_sdk_3.3.1.zip";
     hash = "sha256-wx4pBZHpFPoNvEe4xYE80KnXGVda9XcX35ho4R8QxrQ=";
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.6.2";
 
   src = fetchurl {
-    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_amd64-${version}.run";
     hash = "sha256-WfEQQ4lxoj+QSnAOfdCoEc+Z1Oa5dbo6pFli1DsAZCI=";
   };
 
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
     # Run the installer script non-interactively
     echo -e '\ny' | PAGER=cat sh -e $src
 
-    mv TeamSpeak3-Client-linux_${arch}/* .
+    cd TeamSpeak3-Client-linux_amd64
 
     runHook postUnpack
   '';
@@ -81,7 +79,7 @@ stdenv.mkDerivation rec {
     rm QtWebEngineProcess
     rm qt.conf
 
-    mv ts3client_linux_${arch} ts3client
+    mv ts3client_linux_amd64 ts3client
 
     # Our libquazip's so name has this suffix and there is no symlink
     patchelf --replace-needed libquazip.so libquazip1-qt5.so ts3client error_report
