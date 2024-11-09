@@ -104,16 +104,16 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       psydvl
       shamilton
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
 }
