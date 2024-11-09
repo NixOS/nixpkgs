@@ -39,4 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
   # required for whitespaces in makeFlags
   __structuredAttrs = true;
 
+  meta = with lib; {
+    description = "A CLI tool for IPC communications with DWL window manager";
+    longDescription = "This tool allows for scripting of window manager features in DWL, It relies on the IPC patch for DWL";
+    homepage = "https://codeberg.org/notchoc/dwlmsg";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ notchoc ];
+    platforms = platforms.all;
+  };
+
 })
