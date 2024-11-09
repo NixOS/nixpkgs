@@ -9782,6 +9782,8 @@ with pkgs;
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
+  mailsend-go = callPackage ../tools/networking/mailsend-go { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     sasl = gsasl;
   };
