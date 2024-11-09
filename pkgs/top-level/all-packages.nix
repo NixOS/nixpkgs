@@ -18718,6 +18718,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
 
+  aws-spend-summary = haskellPackages.aws-spend-summary.bin;
+
   ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
 
   azmq = callPackage ../development/libraries/azmq { };
