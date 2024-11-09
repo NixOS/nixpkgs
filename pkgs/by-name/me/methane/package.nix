@@ -19,17 +19,18 @@
   libmikmod,
   alsa-lib,
   nix-update-script,
+  libXinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs:{
   pname = "methane";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     repo = "methane";
     owner = "rombust";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-STS2+wfZ8E1jpr0PYQOBQsztxhJU0Dt3IhWBE3sjdWE=";
+    hash = "sha256-rByJqkhYsRuv0gTug+vP2qgkRY8TnX+Qx4/MbAmPTOU=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs:{
     quesoglc
     clanlib
     libXrender
+    libXinerama
     libmikmod
     alsa-lib
   ];
