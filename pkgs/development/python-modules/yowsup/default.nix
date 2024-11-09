@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "yowsup";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "1pz0r1gif15lhzdsam8gg3jm6zsskiv2yiwlhaif5rl7lv3p0v7q";
   };
 
@@ -51,11 +51,11 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tgalal/yowsup";
     description = "Python WhatsApp library";
     mainProgram = "yowsup-cli";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }
