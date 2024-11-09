@@ -3713,6 +3713,8 @@ self: super: with self; {
 
   django-tinymce = callPackage ../development/python-modules/django-tinymce { };
 
+  django-tools = callPackage ../development/python-modules/django-tools { };
+
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
@@ -7860,6 +7862,8 @@ self: super: with self; {
   mammoth = callPackage ../development/python-modules/mammoth { };
 
   mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
+
+  manage-django-project = callPackage ../development/python-modules/manage-django-project { };
 
   manageprojects = callPackage ../development/python-modules/manageprojects { };
 
