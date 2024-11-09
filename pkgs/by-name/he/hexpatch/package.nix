@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hexpatch";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "Etto48";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yyYxRJ+o+Z5z7PmjcFCsahRXZ9JHFmGmituzGTxY6ec=";
   };
 
-  cargoHash = "sha256-Bp6+y3ZmkAGxkcz4GJk9tBtglltNPhnGk4lLV9SgDks=";
+  cargoHash = "sha256-bckZtHzgKQow7l2Cg6Xi1oNk13FH2xKe8cbZ/Xj9E04=";
 
   nativeBuildInputs =
     [
