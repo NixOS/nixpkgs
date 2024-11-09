@@ -575,6 +575,9 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# AttrsWith tests
+checkConfigOutput '^11$' config.result ./lazy-attrsWith.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

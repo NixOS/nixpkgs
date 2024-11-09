@@ -582,48 +582,75 @@ rec {
         substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
-    attrsOf = elemType: mkOptionType rec {
-      name = "attrsOf";
-      description = "attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
-      descriptionClass = "composite";
-      check = isAttrs;
-      merge = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
-          )
-          # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
-      emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: attrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
-      nestedTypes.elemType = elemType;
-    };
+    attrsOf = elemType: attrsWith { inherit elemType; };
 
     # A version of attrsOf that's lazy in its values at the expense of
     # conditional definitions not working properly. E.g. defining a value with
     # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
     # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
     # error that it's not defined. Use only if conditional definitions don't make sense.
-    lazyAttrsOf = elemType: mkOptionType rec {
-      name = "lazyAttrsOf";
-      description = "lazy attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
+    lazyAttrsOf = elemType: attrsWith { inherit elemType; lazy = true; };
+
+    # base type for lazyAttrsOf and attrsOf
+    attrsWith = {
+      elemType,
+      lazy ? false,
+    }:
+    let
+      typeName = if lazy then "lazyAttrsOf" else "attrsOf";
+      # Push down position info.
+      pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
+    in
+    mkOptionType {
+      name = typeName;
+      description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
-      merge = loc: defs:
-        zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-          # mergedValue will trigger an appropriate error when accessed
-          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-        )
-        # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+      merge = if lazy then (
+        # Lazy merge Function
+        loc: defs:
+          zipAttrsWith (name: defs:
+            let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+            # mergedValue will trigger an appropriate error when accessed
+            in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+          )
+          # Push down position info.
+          (pushPositions defs)
+      ) else (
+        # Non-lazy merge Function
+        loc: defs:
+          mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+              (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
+            )
+          # Push down position info.
+          (pushPositions defs)))
+      );
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy; };
+      functor = defaultFunctor "attrsWith" // {
+        wrapped = elemType;
+        payload = {
+          # Important!: Add new function attributes here in case of future changes
+          inherit elemType lazy;
+        };
+        binOp = lhs: rhs:
+          let
+            elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+            lazy =
+              if lhs.lazy == rhs.lazy then
+                lhs.lazy
+              else
+                null;
+          in
+          if elemType == null || lazy == null then
+            null
+          else
+            {
+              inherit elemType lazy;
+            };
+      };
       nestedTypes.elemType = elemType;
     };
 
