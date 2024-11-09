@@ -1,13 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  click,
   colorful,
   docopt,
   fetchFromGitHub,
   freezegun,
   humanize,
-  lark,
   lxml,
   parse-type,
   pysingleton,
@@ -33,11 +31,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    click
     colorful
     docopt
     humanize
-    lark
     lxml
     parse-type
     pysingleton
