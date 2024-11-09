@@ -24188,6 +24188,10 @@ with pkgs;
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
+  lavalink = callPackage ../by-name/la/lavalink/package.nix {
+    jdk = zulu17;
+  };
+
   leafnode = callPackage ../servers/news/leafnode { };
 
   leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
