@@ -5,12 +5,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "millheater";
   version = "0.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-8PrTypJuWNuFz1NZLuyqOpWFsN5OLshj7S10YgcGusQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
