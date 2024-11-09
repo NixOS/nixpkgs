@@ -6,6 +6,7 @@
   poetry-core,
   pythonOlder,
   tqdm,
+  pyyaml,
 }:
 buildPythonPackage rec {
   pname = "gguf";
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     numpy
     poetry-core
     tqdm
+    pyyaml
   ];
 
   meta = with lib; {
