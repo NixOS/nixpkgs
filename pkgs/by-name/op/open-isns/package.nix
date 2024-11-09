@@ -1,24 +1,32 @@
-{ lib, stdenv, openssl, fetchFromGitHub }:
+{ lib, stdenv, pkg-config, meson, ninja, openssl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "open-isns";
-  version = "0.102";
+  version = "0.103";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "sha256-Vz6VqqvEr0f8AdN9NcVnruapswmoOgvAXxXSfrM3yRA=";
+    sha256 = "sha256-buqQMsoxRCbWiBDq0XAg93J7bjbdxeIernV8sDVxCAA=";
   };
 
+  # The location of /var/lib is not made configurable in the meson.build file
+  postPatch = ''
+    substituteInPlace meson.build \
+        --replace-fail "/var/lib" "$out/var/lib" \
+  '';
+
+  nativeBuildInputs = [ meson ninja pkg-config ];
   propagatedBuildInputs = [ openssl ];
-  outputs = [ "out" "lib" ];
-  outputInclude = "lib";
+  outputs = [ "out" "lib" "dev" "man" ];
 
   configureFlags = [ "--enable-shared" ];
 
-  installFlags = [ "etcdir=$(out)/etc" "vardir=$(out)/var/lib/isns" ];
-  installTargets = [ "install" "install_hdrs" "install_lib" ];
+  mesonFlags = [
+    "-Dslp=disabled" # openslp is not maintained and labeled unsafe
+    "-Dsystemddir=${placeholder "out"}/lib/systemd"
+  ];
 
   meta = with lib; {
     description = "iSNS server and client for Linux";
