@@ -21,7 +21,7 @@ Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
 - [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
 
-The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
+The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
 
 ## Contributing to this documentation
 
