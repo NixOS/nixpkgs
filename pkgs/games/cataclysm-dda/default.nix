@@ -19,6 +19,14 @@ let
     curses = tiles.override { tiles = false; };
   };
 
+  bn-git = rec {
+    tiles = callPackage ./bn-git.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+    };
+
+    curses = tiles.override { tiles = false; };
+  };
+
   lib = callPackage ./lib.nix {};
 
   pkgs = callPackage ./pkgs {};
@@ -27,7 +35,8 @@ let
     inherit
     callPackage
     stable
-    git;
+    git
+    bn-git;
 
     inherit (lib)
     buildMod
