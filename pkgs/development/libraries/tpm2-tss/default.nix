@@ -78,7 +78,16 @@ stdenv.mkDerivation rec {
         --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
         --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
     done
-  '';
+  ''
+    # tcti tests rely on mocking function calls, which appears not to be supported
+    # on clang
+    + lib.optionalString stdenv.cc.isClang ''
+      sed -i '/TESTS_UNIT / {
+        /test\/unit\/tcti-swtpm/d;
+        /test\/unit\/tcti-mssim/d;
+        /test\/unit\/tcti-device/d
+      }' Makefile-test.am
+    '';
 
   configureFlags = lib.optionals doInstallCheck [
     "--enable-unit"
