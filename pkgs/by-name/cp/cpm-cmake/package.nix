@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       simple API and more.
     '';
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pandapip1 ];
     platforms = platforms.all;
   };
 })
