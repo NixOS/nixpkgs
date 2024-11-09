@@ -34,6 +34,12 @@ buildPythonPackage rec {
     })
   ];
 
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
+
   propagatedBuildInputs = [
     dissononce
     python-axolotl-curve25519
