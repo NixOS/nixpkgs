@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  jellyfin,
   nix-update-script,
   pkg-config,
   xcbuild,
@@ -11,24 +10,27 @@
   giflib,
   apple-sdk_11,
   darwinMinVersionHook,
+  jellyfin,
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.10.0";
+  version = "10.10.1";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    hash = "sha256-BuAvdDIvW2mQ+MzVBPGCFV73P6GxR/I3U24kCu+lXbc=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-+f+chR00eDCVZvAGNDB61c0htsVvqFK62oZorW3Qdsg=";
+    };
 
   postPatch = ''
     substituteInPlace webpack.common.js \
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-EAZm4UTc9+gW7uPiNEp2vLSKA2vOmLKKZ4/DrnGrvYQ=";
+  npmDepsHash = "sha256-kL57KmBHmBwJEhsUciPaj826qdoSQxZXxtFNGkddGZk=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
