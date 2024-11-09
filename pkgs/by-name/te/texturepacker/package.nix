@@ -1,12 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,13 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtsvg
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
   ];
 
   installPhase = ''

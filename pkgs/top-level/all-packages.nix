@@ -16105,8 +16105,6 @@ with pkgs;
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects ;
 
-  texturepacker = qt6.callPackage ../applications/graphics/texturepacker { };
-
   inherit (callPackage ../applications/graphics/tesseract {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   })
