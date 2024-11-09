@@ -6,7 +6,6 @@
   nixosTests,
   nix-update-script,
   versionCheckHook,
-  darwin,
 }:
 
 let
@@ -32,9 +31,6 @@ rustPlatform.buildRustPackage {
   };
 
   nativeBuildInputs = [ versionCheckHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   doInstallCheck = true;
 
