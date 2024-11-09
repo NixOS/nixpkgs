@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nspr
 , perl
+, installShellFiles
 , zlib
 , sqlite
 , ninja
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
+  nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
   '';
 
-  outputs = [ "out" "dev" "tools" ];
+  outputs = [ "out" "dev" "tools" "man" ];
 
   buildPhase =
     let
@@ -140,6 +141,8 @@ stdenv.mkDerivation rec {
         -e "s,@MOD_PATCH_VERSION@,$NSS_PATCH_VERSION," \
         pkg/pkg-config/nss-config.in > $out/bin/nss-config
     chmod 0755 $out/bin/nss-config
+
+    installManPage doc/nroff/*
   '';
 
   postInstall = lib.optionalString useP11kit ''
