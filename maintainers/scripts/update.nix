@@ -231,4 +231,5 @@ in pkgs.stdenv.mkDerivation {
     unset shellHook # do not contaminate nested shells
     exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
+  nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.cacert ];
 }
