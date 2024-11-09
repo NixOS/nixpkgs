@@ -18,7 +18,7 @@
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
+resholve.mkDerivation rec {
   pname = "lesspipe";
   version = "2.11";
 
@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build configure
     substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
+
+    # resholve doesn't see strings in an array definition
+    substituteInPlace lesspipe.sh --replace 'nodash strings' "nodash ${binutils-unwrapped}/bin/strings"
   '';
 
   configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
@@ -45,11 +48,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  postInstall = ''
-    # resholve doesn't see strings in an array definition
-    substituteInPlace $out/bin/lesspipe.sh --replace 'nodash strings' "nodash ${binutils-unwrapped}/bin/strings"
-
-    ${resholve.phraseSolution "lesspipe.sh" {
+  solutions = {
+    lesspipe = {
       scripts = [ "bin/lesspipe.sh" ];
       interpreter = "${bash}/bin/bash";
       inputs = [
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
       execer = [
         "cannot:${iconv}/bin/iconv"
       ];
-    }}
-    ${resholve.phraseSolution "lesscomplete" {
+    };
+    lesscomplete = {
       scripts = [ "bin/lesscomplete" ];
       interpreter = "${bash}/bin/bash";
       inputs = [
@@ -104,8 +104,8 @@ stdenv.mkDerivation rec {
         ];
         builtin = [ "setopt" ];
       };
-    }}
-  '';
+    };
+  };
 
   meta = with lib; {
     description = "Preprocessor for less";
