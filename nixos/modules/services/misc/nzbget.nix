@@ -23,7 +23,7 @@ in
     services.nzbget = {
       enable = lib.mkEnableOption "NZBGet, for downloading files from news servers";
 
-      package = mkPackageOption pkgs "nzbget" { };
+      package = lib.mkPackageOption pkgs "nzbget" { };
 
       user = lib.mkOption {
         type = lib.types.str;
