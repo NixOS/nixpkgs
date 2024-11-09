@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://etto48.github.io/HexPatch/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Etto48 ];
+    maintainers = with lib.maintainers; [ vandrw ];
     mainProgram = "hexpatch";
   };
 }

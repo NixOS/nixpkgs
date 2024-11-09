@@ -22767,6 +22767,12 @@
     githubId = 608417;
     name = "Jos van den Oever";
   };
+  vandrw = {
+    email = "vandrw.nix.wipe909@passfwd.com";
+    github = "vandrw";
+    githubId = 34933567;
+    name = "Andrei Voinea";
+  };
   vanilla = {
     email = "osu_vanilla@126.com";
     github = "VergeDX";
