@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
   python3Packages,
   blueprint-compiler,
   meson,
@@ -25,6 +24,7 @@
   mangohud,
   vkbasalt-cli,
   vmtouch,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -102,7 +102,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Easy-to-use wineprefix manager";
