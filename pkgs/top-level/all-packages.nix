@@ -5607,6 +5607,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  onnxruntime-genai = callPackage ../by-name/on/onnxruntime-genai/package.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   xkbd = callPackage ../applications/misc/xkbd { };
 
   libpsm2 = callPackage ../os-specific/linux/libpsm2 { };

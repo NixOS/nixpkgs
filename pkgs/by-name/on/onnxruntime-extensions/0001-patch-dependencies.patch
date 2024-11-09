@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 526b288..ebd1a11 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -384,8 +384,15 @@ endif()
+ # enable the opencv dependency if we have ops that require it
+ if(OCOS_ENABLE_CV2 OR OCOS_ENABLE_VISION)
+   set(_ENABLE_OPENCV ON)
+-  message(STATUS "Fetch opencv")
+-  include(opencv)
++  # message(STATUS "Fetch opencv")
++  # include(opencv)
++  find_package(OpenCV REQUIRED)
++  set(opencv_LIBS ${OpenCV_LIBS})
++  include_directories(${OpenCV_INCLUDE_DIRS})
++  if (OCOS_ENABLE_OPENCV_CODECS)
++      list(APPEND opencv_INCLUDE_DIRS ${OPENCV_MODULE_opencv_imgcodecs_LOCATION}/include)
++      list(APPEND opencv_LIBS opencv_imgcodecs)
++  endif()
+ endif()
+ 
+ if(OCOS_ENABLE_CV2)

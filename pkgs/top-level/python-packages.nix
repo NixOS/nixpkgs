@@ -9423,6 +9423,13 @@ self: super: with self; {
     };
   };
 
+  onnxruntime-genai = callPackage ../development/python-modules/onnxruntime-genai {
+    onnxruntime-genai = pkgs.onnxruntime-genai.override {
+      python3Packages = self;
+      pythonSupport = true;
+    };
+  };
+
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
 
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
