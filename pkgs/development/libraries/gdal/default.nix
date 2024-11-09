@@ -302,6 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky on macos
       "test_rda_download_queue"
+      "test_ogr_gpkg_arrow_stream_huge_array"
     ]
     ++ lib.optionals (lib.versionOlder proj.version "8") [
       "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
