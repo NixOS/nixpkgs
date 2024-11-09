@@ -1,4 +1,5 @@
 {
+  lib,
   fetchFromGitea,
   pkg-config,
   stdenv,
