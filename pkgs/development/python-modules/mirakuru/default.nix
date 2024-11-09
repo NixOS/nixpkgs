@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "mirakuru";
-  version = "2.5.2";
+  version = "2.5.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1TKP0ESuBMTcReZf0tryjvGpSpwzofwmOiQqhyr6Zg=";
+    hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
