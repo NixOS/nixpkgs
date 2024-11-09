@@ -17,7 +17,7 @@ index e7cb9b962..666a624b0 100644
 +++ b/gettext-runtime/intl/dcigettext.c
 @@ -1,5 +1,5 @@
  /* Implementation of the internal dcigettext function.
--   Copyright (C) 1995-2021 Free Software Foundation, Inc.
+-   Copyright (C) 1995-2020 Free Software Foundation, Inc.
 +   Copyright (C) 1995-2023 Free Software Foundation, Inc.
  
     This program is free software: you can redistribute it and/or modify
@@ -42,7 +42,7 @@ index bb00555ee..536e8bd43 100644
 +++ b/gettext-runtime/intl/gettextP.h
 @@ -1,5 +1,5 @@
  /* Header describing internals of libintl library.
--   Copyright (C) 1995-2021 Free Software Foundation, Inc.
+-   Copyright (C) 1995-2020 Free Software Foundation, Inc.
 +   Copyright (C) 1995-2023 Free Software Foundation, Inc.
     Written by Ulrich Drepper <drepper@cygnus.com>, 1995.
  
