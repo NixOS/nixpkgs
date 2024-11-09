@@ -26,6 +26,10 @@ stdenv.mkDerivation (final: {
     hash = "sha256-0qCQswtBC8R1Q7pHLhJtqCncllqgXo1t9pG97VwCtAI=";
   };
 
+  patches = [
+    ./deno2.patch
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];
