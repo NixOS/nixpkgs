@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -41,6 +42,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
   pythonImportsCheck = [ "mirakuru" ];
+
+  # Necessary for the tests to pass on Darwin with sandbox enabled.
+  __darwinAllowLocalNetworking = true;
+
+  # Those are failing in the darwin sandbox with:
+  # > ps: %mem: requires entitlement
+  # > ps: vsz: requires entitlement
+  # > ps: rss: requires entitlement
+  # > ps: time: requires entitlement
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_forgotten_stop"
+    "test_mirakuru_cleanup"
+    "test_daemons_killing"
+  ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/mirakuru";
