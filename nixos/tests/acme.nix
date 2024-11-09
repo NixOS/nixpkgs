@@ -747,6 +747,7 @@ in {
           with subtest("Can remove an alias from a domain + cert is updated"):
               test_alias = f"{server}-{domains[0]}-alias.example.test"
               switch_to(webserver, f"{server}_remove_alias")
+              wait_for_server()
               start_and_wait(webserver, f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection(client, test_domain)
