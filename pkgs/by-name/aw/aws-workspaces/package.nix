@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     libkrb5
     curl
     lttng-ust

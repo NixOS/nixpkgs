@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, darwin }:
 
 stdenv.mkDerivation rec {
   version = "0.11";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.libutil;
 
   installPhase = ''
     make install PREFIX="$out"

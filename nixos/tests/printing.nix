@@ -3,12 +3,17 @@
 import ./make-test-python.nix (
 { pkgs
 , socket ? true # whether to use socket activation
+, listenTcp ? true # whether to open port 631 on client
 , ...
 }:
 
+let
+  inherit (pkgs) lib;
+in
+
 {
   name = "printing";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ domenkozar matthewbauer ];
   };
 
@@ -35,9 +40,10 @@ import ./make-test-python.nix (
     }];
   };
 
-  nodes.client = { ... }: {
+  nodes.client = { lib, ... }: {
     services.printing.enable = true;
     services.printing.startWhenNeeded = socket;
+    services.printing.listenAddresses = lib.mkIf (!listenTcp) [];
     # Add printer to the client as well, via IPP.
     hardware.printers.ensurePrinters = [{
       name = "DeskjetRemote";
@@ -54,8 +60,8 @@ import ./make-test-python.nix (
     start_all()
 
     with subtest("Make sure that cups is up on both sides and printers are set up"):
-        server.wait_for_unit("cups.${if socket then "socket" else "service"}")
-        client.wait_for_unit("cups.${if socket then "socket" else "service"}")
+        server.wait_for_unit("ensure-printers.service")
+        client.wait_for_unit("ensure-printers.service")
 
     assert "scheduler is running" in client.succeed("lpstat -r")
 
@@ -63,7 +69,7 @@ import ./make-test-python.nix (
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")
 
     with subtest("HTTP server is available too"):
-        client.succeed("curl --fail http://localhost:631/")
+        ${lib.optionalString listenTcp ''client.succeed("curl --fail http://localhost:631/")''}
         client.succeed(f"curl --fail http://{server.name}:631/")
         server.fail(f"curl --fail --connect-timeout 2 http://{client.name}:631/")
 

@@ -29,12 +29,14 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Vector and matrix math library implemented using C++ templates";
 
-    longDescription = ''vmmlib is a vector and matrix math library implemented
-            using C++ templates. Its basic functionality includes a vector
-            and a matrix class, with additional functionality for the
-            often-used 3d and 4d vectors and 3x3 and 4x4 matrices.
-            More advanced functionality include solvers, frustum
-            computations and frustum culling classes, and spatial data structures'';
+    longDescription = ''
+      vmmlib is a vector and matrix math library implemented
+      using C++ templates. Its basic functionality includes a vector
+      and a matrix class, with additional functionality for the
+      often-used 3d and 4d vectors and 3x3 and 4x4 matrices.
+      More advanced functionality include solvers, frustum
+      computations and frustum culling classes, and spatial data structures
+    '';
 
     license     = licenses.bsd2;
     homepage    = "https://github.com/VMML/vmmlib/";

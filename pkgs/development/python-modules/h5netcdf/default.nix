@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oXHAJ9rrNLJMJKO2MEGVuOq7tvEMdIJW7Tz+GYBjg88=";
+    hash = "sha256-6VnDtb08p5Zc5fQ4Ok4Dj/y1UDTGPXkYKb0zpaw4qWI=";
   };
 
   nativeBuildInputs = [

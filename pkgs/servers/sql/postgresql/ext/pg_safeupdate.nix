@@ -21,6 +21,10 @@ with {
     version = "1.5";
     sha256 = "sha256-RRSpkWLFuif+6RCncnsb1NnjKnIIRY9KgebKkjCN5cs=";
   };
+  "17" = {
+    version = "1.5";
+    sha256 = "sha256-RRSpkWLFuif+6RCncnsb1NnjKnIIRY9KgebKkjCN5cs=";
+  };
 }."${lib.versions.major postgresql.version}" or (throw "pg_safeupdate: version specification for pg ${postgresql.version} missing.");
 
 stdenv.mkDerivation rec {

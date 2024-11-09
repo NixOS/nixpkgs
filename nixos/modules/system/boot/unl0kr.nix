@@ -30,11 +30,11 @@ in
 
       example = lib.literalExpression ''
         {
-            general.animations = true;
-            theme = {
-                  default = "pmos-dark";
-                  alternate = "pmos-light";
-            };
+          general.animations = true;
+          theme = {
+            default = "pmos-dark";
+            alternate = "pmos-light";
+          };
         }
       '';
       default = { };

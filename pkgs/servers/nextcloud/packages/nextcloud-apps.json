@@ -8,6 +8,7 @@
 , "end_to_end_encryption": "agpl3Plus"
 , "files_texteditor": "agpl3Plus"
 , "files_markdown": "agpl3Plus"
+, "files_mindmap": "agpl3Plus"
 , "forms": "agpl3Plus"
 , "gpoddersync": "agpl3Only"
 , "groupfolders": "agpl3Plus"
@@ -37,4 +38,5 @@
 , "unsplash": "agpl3Only"
 , "user_oidc": "agpl3Plus"
 , "user_saml": "agpl3Plus"
+, "whiteboard": "agpl3Plus"
 }

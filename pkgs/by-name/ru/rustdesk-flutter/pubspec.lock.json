@@ -416,7 +416,7 @@
       "description": {
         "path": ".",
         "ref": "HEAD",
-        "resolved-ref": "80b063b9d4e015f62e17f42a5aa0b3d20a365926",
+        "resolved-ref": "519350f1f40746798299e94786197d058353bac9",
         "url": "https://github.com/rustdesk-org/rustdesk_desktop_multi_window"
       },
       "source": "git",

@@ -25,12 +25,9 @@
 , zenity
 , makeWrapper
 , darwin
+, apple-sdk_11
 , libicns
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    IOSurface Metal QuartzCore Cocoa AVFoundation;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
   version = "8.0.6";
@@ -85,14 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libpulseaudio
     zenity
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    IOSurface
-    Metal
-    QuartzCore
-    Cocoa
-    AVFoundation
-    darwin.apple_sdk_11_0.libs.simd
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   cmakeFlags = [
     (lib.cmakeBool "NON_PORTABLE" true)

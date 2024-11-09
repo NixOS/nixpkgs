@@ -4,18 +4,18 @@
 {
   "631" = {
     # Python
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   };
   "7322" = {
     # Python community edition
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   };
   "8182" = {
     # Rust (deprecated)
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     buildPhase = ''
       runHook preBuild
       chmod +x -R bin
@@ -65,8 +65,8 @@
   };
   "22407" = {
     # Rust
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ stdenv.cc.cc.lib ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     buildPhase = ''
       runHook preBuild
       chmod +x -R bin

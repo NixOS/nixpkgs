@@ -4,6 +4,7 @@
 , fetchgit
 , fetchurl
 , makeWrapper
+, writeText
 , cmake
 , coreutils
 , git
@@ -225,7 +226,11 @@ stdenv.mkDerivation rec {
   '';
 
   # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
+  env.CXXFLAGS = lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
+
+  # workaround for
+  # https://github.com/root-project/root/issues/14778
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
 
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)

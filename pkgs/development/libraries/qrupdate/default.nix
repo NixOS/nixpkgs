@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
       # https://savannah.gnu.org/bugs/?50339
       "-fdefault-integer-8"
     ])}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # prevent cmake from using Accelerate, which causes all tests to segfault
+    "-DBLA_VENDOR=Generic"
   ];
 
   # https://github.com/mpimd-csc/qrupdate-ng/issues/4

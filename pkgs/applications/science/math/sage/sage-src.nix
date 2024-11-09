@@ -54,13 +54,19 @@ stdenv.mkDerivation rec {
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
   bugfixPatches = [
-    # Sage uses mixed integer programs (MIPs) to find edge disjoint
-    # spanning trees. For some reason, aarch64 glpk takes much longer
-    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
-    # has "numerous problems" and will be replaced by a polynomial
-    # algorithm soon, disable this test for now.
-    # https://github.com/sagemath/sage/issues/34575
-    ./patches/disable-slow-glpk-test.patch
+    # https://github.com/sagemath/sage/pull/38628, landed in 10.5.beta4
+    (fetchpatch {
+      name = "pari-stack-cysignals-exception.patch";
+      url = "https://github.com/sagemath/sage/commit/4a9c985b769b1209902c970ade1892f18ab48c10.diff";
+      hash = "sha256-S6NdonB7needJlQdx52Huk34Q8/vG3nyGicA5JpsdWc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38851, landed in 10.5.beta8
+    (fetchpatch {
+      name = "glpk-aarch64-hang-workaround.patch";
+      url = "https://github.com/sagemath/sage/commit/ce4a78dcb4178f85273619cea076c97345977ee1.diff";
+      hash = "sha256-TibTx5llkXjkEZB/MDy4hfGwKBmwtitEpWP6K/ykke0=";
+    })
 
     # compile libs/gap/element.pyx with -O1
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
@@ -74,11 +80,25 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # https://github.com/sagemath/sage/pull/38500, positively reviewed, to land in 10.5.beta3
+    # https://github.com/sagemath/sage/pull/38500, landed in 10.5.beta3
     (fetchpatch {
       name = "cython-3.0.11-upgrade.patch";
       url = "https://patch-diff.githubusercontent.com/raw/sagemath/sage/pull/38500.diff";
       hash = "sha256-ePfH3Gy1T0UfpoVd3EZowCfy88CbE+yE2MV2itWthsA=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36641, landed in 10.5.beta3
+    (fetchpatch {
+      name = "sympy-1.13.2-update.patch";
+      url = "https://github.com/sagemath/sage/commit/100189fa62f9a40e7aa0d856615366ea99b87aff.diff";
+      sha256 = "sha256-uWr3I15WByQYGVxbJFqG4zUJ7c7+4rjkcgwkAT85O7w=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38250, landed in 10.5.beta0
+    (fetchpatch {
+      name = "numpy-2.0-compat.patch";
+      url = "https://github.com/sagemath/sage/commit/0962e0bcb159d342e7c7d83557a71e7b670fff47.diff";
+      sha256 = "sha256-4SBhgPgT9VsBxcBH8+T5uYtWzYP5tZi9+iKOG55hWgI=";
     })
   ];
 

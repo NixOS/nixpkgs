@@ -44,7 +44,7 @@ buildGoModule rec {
   tags = [ "rocksdb_7_10" ];
 
   CGO_LDFLAGS = [
-    "-L${stdenv.cc.cc.lib}/lib"
+    "-L${lib.getLib stdenv.cc.cc}/lib"
     "-lrocksdb"
     "-lz"
     "-lbz2"

@@ -3,8 +3,6 @@
 , fetchFromGitHub
 , rustPlatform
 , nix-update-script
-, pkg-config
-, openssl
 , darwin
 }:
 
@@ -19,10 +17,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-12/FndzUbUlgcYcwMT1OfamSKgy2q+CvtGyx5YY4IFQ=";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -33,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "IDE support for Pest, via the LSP";
     homepage = "https://pest.rs";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ nickhu ];
     mainProgram = "pest-language-server";
   };

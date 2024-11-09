@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qmidiarp";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qmidiarp/code";
-    sha256 = "sha256-oUdgff2xsXTis+C2Blv0tspWNIMGSODrKxWDpMDYnEU=";
+    sha256 = "sha256-xTDI1QtgOOMexzFKvYWhlfpXv8uXaoD4o+G6XF8/Cw8=";
     rev = "qmidiarp-${version}";
   };
 

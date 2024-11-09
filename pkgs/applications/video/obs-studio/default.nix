@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  separateDebugInfo = true;
+
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
@@ -169,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
     "-Wno-error=stringop-overflow="
   ];

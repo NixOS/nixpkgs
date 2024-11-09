@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--enable-unicode"
     "--enable-ipv6"
     "--enable-eep"
+    "--with-openssl"
   ];
 
   preConfigure = ''

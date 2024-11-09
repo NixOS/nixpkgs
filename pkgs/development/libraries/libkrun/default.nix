@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withSound pipewire
     ++ lib.optional sevVariant openssl;
 
-  env.LIBCLANG_PATH = "${llvmPackages.clang-unwrapped.lib}/lib/libclang.so";
+  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.clang-unwrapped}/lib/libclang.so";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

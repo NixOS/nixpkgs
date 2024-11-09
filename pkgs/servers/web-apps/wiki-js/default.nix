@@ -2,12 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.304";
+  version = "2.5.305";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-w89+X3sqZPlX7EuK/g2oATHqlpx1br/Njh81vZt8zYM=";
+    sha256 = "sha256-beP9k1msJjg9IQbU/CmzTodjMvUnWrLYcw0EleR1OJk=";
   };
+
+  # Unpack the tarball into a subdir. All the contents are copied into `$out`.
+  # Unpacking into the parent directory would also copy `env-vars` into `$out`
+  # in the `installPhase` which ultimately means that the package retains
+  # references to build tools and the tarball.
+  preUnpack = ''
+    mkdir source
+    cd source
+  '';
 
   sourceRoot = ".";
 

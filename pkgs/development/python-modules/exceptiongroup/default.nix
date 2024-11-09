@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = "refs/tags/${version}";
-    hash = "sha256-87HmZsbsoV7QPHux50sYsFY2RaIc3627dH3WAwqXfQU=";
+    hash = "sha256-k88+9FpB/aBun73SnsN6GsBceSUekT8Ig1XBt3hO4ok=";
   };
 
   nativeBuildInputs = [ flit-scm ];

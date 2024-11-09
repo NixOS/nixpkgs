@@ -18,6 +18,7 @@
 
 # runtime
 , flatbuffers
+, gflags
 , level-zero
 , libusb1
 , libxml2
@@ -48,6 +49,7 @@ let
 
   python = python3Packages.python.withPackages (ps: with ps; [
     cython
+    distutils
     pybind11
     setuptools
     sphinx
@@ -58,14 +60,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.2.0";
+  version = "2024.4.1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-HiKKvmqgbwW625An+Su0EOHqVrP18yvG2aOzrS0jWr4=";
+    hash = "sha256-v0PPGFUHCGNWdlTff40Ol2NvaYglb/+L/zZAQujk6lk=";
   };
 
   outputs = [
@@ -117,6 +119,7 @@ stdenv.mkDerivation rec {
 
     # features
     (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_NPU" false) # undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -138,6 +141,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatbuffers
+    gflags
     level-zero
     libusb1
     libxml2

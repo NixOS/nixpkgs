@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "10.1.3";
+  version = "10.1.5";
 in
 
 rustPlatform.buildRustPackage {
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-mrCDx9f+EeA6McRc1s9YwYL4RHKSla10fxXZc1WYPio=";
+    hash = "sha256-MomT9iwIsdou7lIfI7zBU9nEjjYGcsHKTlrYbK4p3BQ=";
   };
 
   cargoLock = {
@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      raylas
       rvdp
       neverbehave
     ];

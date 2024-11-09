@@ -64,7 +64,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
-  openvdb,
+  openvdb_11,
   openxr-loader,
   pkg-config,
   potrace,
@@ -108,13 +108,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.2";
+  version = "4.2.3";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-wv9EwB4DXSVS5K+lb+7gU3pTrMDO/ELeV2eErivfsWU=";
+      hash = "sha256-58wgduTHGfuYohaPjNuAnLFrpXOosEYOk5gJvbxTlQk=";
     })
     (fetchgit {
       name = "assets";
@@ -276,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
-      openvdb
+      openvdb_11
       potrace
       pugixml
       python3

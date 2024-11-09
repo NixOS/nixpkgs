@@ -5,13 +5,11 @@
   buildPythonPackage,
   chalice,
   channels,
-  click,
   daphne,
   django,
   email-validator,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
   flask,
   freezegun,
   graphql-core,
@@ -40,11 +38,13 @@
   starlette,
   typing-extensions,
   uvicorn,
+  typer,
+  graphlib-backport,
 }:
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.237.3";
+  version = "0.243.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,17 +53,8 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-w9ADHKpYijUtN/tB9ANN2ebTMNw8wvqMuYP9fNkisQw=";
+    hash = "sha256-m+KaUd0rl0RRZzVPI+ldwW77YGLq45egkV5vYYz4dW8=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/strawberry-graphql/strawberry/pull/2199
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
-      hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -92,7 +83,7 @@ buildPythonPackage rec {
       libcst
     ];
     debug-server = [
-      click
+      typer
       libcst
       pygments
       python-multipart
@@ -125,10 +116,11 @@ buildPythonPackage rec {
     ];
     chalice = [ chalice ];
     cli = [
-      click
       pygments
       rich
       libcst
+      typer
+      graphlib-backport
     ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
@@ -159,7 +151,6 @@ buildPythonPackage rec {
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
-    "tests/starlite/"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"

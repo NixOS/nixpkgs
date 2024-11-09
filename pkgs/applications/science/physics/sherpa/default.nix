@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, autoconf, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
+{ lib, stdenv, fetchurl, autoconf, gfortran, hepmc3, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "sherpa";
-  version = "2.2.15";
+  version = "2.2.16";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "sha256-3zvLa1k/bm7uOWKUsTyQM39cPBXJJlF1OgPgznl1hks=";
+    sha256 = "sha256-AntSN5BhtJFuDBoOFvrzoCr/W4SnX5CeAXiTcz9MjUs=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--enable-hepmc2=${hepmc2}"
+    "--enable-hepmc3=${hepmc3}"
     "--enable-fastjet=${fastjet}"
     "--enable-lhapdf=${lhapdf}"
     "--enable-rivet=${rivet}"

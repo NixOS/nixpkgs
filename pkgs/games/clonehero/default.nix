@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Load-time libraries (loaded from DT_NEEDED section in ELF binary)
     alsa-lib
     gtk3
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     zlib
 
     # Run-time libraries (loaded with dlopen)

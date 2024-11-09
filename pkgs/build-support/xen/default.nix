@@ -30,7 +30,8 @@
   zstd,
 
   # Optional Components
-  seabios,
+  seabios-qemu,
+  systemSeaBIOS ? seabios-qemu,
   OVMF,
   ipxe,
   checkpolicy,
@@ -261,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-systemd"
     "--disable-qemu-traditional"
     "--with-system-qemu"
-    (if withSeaBIOS then "--with-system-seabios=${seabios}/share/seabios" else "--disable-seabios")
+    (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
     (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")

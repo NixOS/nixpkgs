@@ -2,6 +2,10 @@
 
 let
   source = {
+    "17" = {
+      version = "17.0";
+      hash = "sha256-3ksq09wiudQPuBQI3dhEQi8IkXKLVIsPFgBnwLiicro=";
+    };
     "16" = {
       version = "16.0";
       hash = "sha256-8+tGOl1U5y9Zgu+9O5UDDE4bec4B0JC/BQ6GLhHzQzc=";

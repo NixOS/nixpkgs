@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  checkInputs = [ gtest ];
+  buildInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)

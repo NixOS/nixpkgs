@@ -77,6 +77,7 @@ buildPythonPackage rec {
     "more-itertools"
     "objexplore"
     "textx"
+    "tenacity"
   ];
 
   pythonImportsCheck = [ "osxphotos" ];

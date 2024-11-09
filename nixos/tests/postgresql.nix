@@ -126,6 +126,8 @@ let
       with subtest("Initdb works"):
           machine.succeed("sudo -u postgres initdb -D /tmp/testpostgres2")
 
+      machine.log(machine.execute("systemd-analyze security postgresql.service | grep -v ✓")[1])
+
       machine.shutdown()
     '';
 

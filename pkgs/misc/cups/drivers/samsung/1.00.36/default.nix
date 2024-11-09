@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$out/lib/libscmssc.so"
     patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
-    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
   '';
 
   # all binaries are already stripped

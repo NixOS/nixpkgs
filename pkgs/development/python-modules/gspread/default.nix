@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "6.1.3";
+  version = "6.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "burnash";
     repo = "gspread";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZMzgIRLwMXvJ+JIz3BUps7CTaV/MhfjZYqkEbgHQh+A=";
+    hash = "sha256-xW0PoWMLOtg6+0oqRJxhraNrkndvlbSzyActxjnvUmw=";
   };
 
   nativeBuildInputs = [ flit-core ];

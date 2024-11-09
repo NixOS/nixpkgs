@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.23.1";
+  version = "2.23.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,15 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-yEiehHcJcVC0hjb9NFgsrSxmAsxNki8HNGKk8dEk75s=";
+    hash = "sha256-wK3RaVq5PwDVAKotkDVEeAMImJxJVN1GceyoKBGBkOY=";
   };
+
+  postPatch = ''
+    # only set to ensure py3.13 compat
+    # https://github.com/tox-dev/pipdeptree/pull/406
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pip>=24.2"' '"pip"'
+  '';
 
   build-system = [
     hatchling

@@ -60,8 +60,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     requests-mock
     stestr

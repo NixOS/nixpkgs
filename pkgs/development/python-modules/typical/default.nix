@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "typical";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "seandstewart";
     repo = "typical";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2t9Jhdy9NmYBNzdtjjgUnoK2RDEUsAvDkYMcBRzEcmI=";
+    hash = "sha256-RS4hJ7NufClroRPRO3EyHwDaMgg0s0F7D/mqcBr8O18=";
   };
 
   pythonRelaxDeps = [ "pendulum" ];

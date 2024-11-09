@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, fuse }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  fuse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "afuse";
@@ -11,12 +18,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KpysJRvDx+12BSl9pIGRqbJAM4W1NbzxMgDycGCr2RM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [ fuse ];
+
+  patches = [ ./001-darwin-fdatasync.patch ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed
-    substituteInPlace configure.ac --replace \
+    substituteInPlace configure.ac --replace-fail \
       'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' \
       ""
   '';

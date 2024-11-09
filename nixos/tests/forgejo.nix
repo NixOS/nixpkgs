@@ -188,7 +188,7 @@ let
         assert "hello world" == client.succeed("cat /tmp/repo-clone/testfile").strip()
 
         with subtest("Testing git protocol version=2 over ssh"):
-            git_protocol = client.succeed("GIT_TRACE2_EVENT=true git -C /tmp/repo-clone fetch |& grep negotiated-version")
+            git_protocol = client.succeed("GIT_TRACE2_EVENT=true GIT_TRACE2_EVENT_NESTING=3 git -C /tmp/repo-clone fetch |& grep negotiated-version")
             version = json.loads(git_protocol).get("value")
             assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
 

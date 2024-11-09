@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    facter (4.8.0)
+    facter (4.10.0)
       hocon (~> 1.3)
       thor (>= 1.0.1, < 1.3)
     hocon (1.4.0)

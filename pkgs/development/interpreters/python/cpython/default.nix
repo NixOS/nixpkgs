@@ -25,7 +25,7 @@
 
 # platform-specific dependencies
 , bash
-, configd
+, apple-sdk_11
 , darwin
 , windows
 
@@ -35,7 +35,7 @@
 , tzdata
 , withGdbm ? !stdenv.hostPlatform.isWindows, gdbm
 , withReadline ? !stdenv.hostPlatform.isWindows, readline
-, x11Support ? false, tcl, tk, tix, libX11, xorgproto
+, x11Support ? false, tcl, tk, tclPackages, libX11, xorgproto
 
 # splicing/cross
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
@@ -178,11 +178,12 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
+    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
+    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    configd
   ] ++ optionals tzdataSupport [
     tzdata
   ] ++ optionals withGdbm [
@@ -323,10 +324,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
-  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
-      "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
 
   env = {
@@ -362,9 +363,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals (stdenv.hostPlatform.isDarwin && configd == null) [
-    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
-    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [

@@ -7,37 +7,18 @@
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
 
-  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
-  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
-
   "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
   "PersianCalendar@oxygenws.com" = "persian-calendar";
-
-  "openweather-extension@jenslody.de" = "openweather";
-  "openweather-extension@penguin-teal.github.io" = "openweather-refined";
-
-  "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
-  "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
-  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
-  "vbox-applet@buba98" = "virtualbox-applet-2";
-
-  "panel-date-format@atareao.es" = "panel-date-format-2";
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-
-  "batterytime@typeof.pw" = "battery-time-2";
-  "batime@martin.zurowietz.de" = "battery-time";
-
-  # No longer maintained: https://gitlab.com/arnaudr/gnome-shell-extension-kernel-indicator
-  "kernel-indicator@elboulangero.gitlab.com" = null;
-  "kernel-indicator@pvizc.gitlab.com" = "kernel-indicator";
-
   "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
   "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
   "FuzzyClock@johngoetz" = "fuzzy-clock";
+
+  "batterytime@typeof.pw" = "battery-time-2";
+  "batime@martin.zurowietz.de" = "battery-time";
 
   "power-profile-indicator@laux.wtf" = "power-profile-indicator";
   "power-profile@fthx" = "power-profile-indicator-2";
@@ -47,6 +28,7 @@
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
   "true-color-window-invert@lynet101" = "true-color-window-invert";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
+  "openweather-extension@penguin-teal.github.io" = "openweather-refined";
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

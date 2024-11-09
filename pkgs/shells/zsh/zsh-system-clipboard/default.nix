@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-system-clipboard";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kutsan";
     repo = "zsh-system-clipboard";
     rev = "v${version}";
-    sha256 = "09lqav1mz5zajklr3xa0iaivhpykv3azkjb7yj9wyp0hq3vymp8i";
+    hash = "sha256-VWTEJGudlQlNwLOUfpo0fvh0MyA2DqV+aieNPx/WzSI=";
   };
 
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kutsan/zsh-system-clipboard";
     description = "Plugin that adds key bindings support for ZLE (Zsh Line Editor) clipboard operations for vi emulation keymaps";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ _0qq ];
+    maintainers = with maintainers; [ _0qq satoqz ];
     platforms = platforms.all;
   };
 }

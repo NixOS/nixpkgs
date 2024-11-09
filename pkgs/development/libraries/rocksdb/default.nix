@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "9.6.1";
+  version = "9.7.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Df5X3sL4dRP9TwwfoB3645nlru6eQhFD1LKPCXHrofU=";
+    hash = "sha256-HeC7m9ZK7SIU7adkQEurzHf+MY7AiEwXZQaz9uZZncU=";
   };
 
   patches = lib.optional (lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing) ./fix-findliburing.patch;
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib {}
   '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.

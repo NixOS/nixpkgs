@@ -170,7 +170,7 @@ in stdenv.mkDerivation {
 
   # Needed to discover llvm-config for cross
   preConfigure = ''
-    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+    PATH=${lib.getDev llvmPackages.libllvm}/bin:$PATH
   '';
 
   mesonFlags = [
@@ -204,7 +204,7 @@ in stdenv.mkDerivation {
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
     (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
-    (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
+    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
     # Clover, old OpenCL frontend
     (lib.mesonOption "gallium-opencl" "icd")

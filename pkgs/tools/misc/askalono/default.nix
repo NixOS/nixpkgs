@@ -5,15 +5,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "askalono";
-  version = "0.4.6";
+  version = "0.5.0";
 
   src = fetchCrate {
     pname = "askalono-cli";
     inherit version;
-    hash = "sha256-7l5bHSsmuMoHbbOI3TAYFeHwD3Y62JvfrrXZa08V3+U=";
+    hash = "sha256-LwyUaU4m9fk+mG8FBfkbj9nBvd8KokwlV7cE7EBwk0Q=";
   };
 
-  cargoHash = "sha256-OkN8V37GApJvremRJlWG3HSpWgMC17Ge8JMTiQVoc/g=";
+  cargoHash = "sha256-7yFdoXK9Nyg1uT0mtiXs6evOu1U1quxL7iMMMyxqxqk=";
 
   meta = with lib; {
     description = "Tool to detect open source licenses from texts";

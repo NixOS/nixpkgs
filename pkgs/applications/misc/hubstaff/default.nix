@@ -10,7 +10,7 @@ let
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
+      libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];
 
 in
@@ -50,6 +50,7 @@ stdenv.mkDerivation {
     done
 
     ln -s $opt/x86_64/HubstaffClient.bin.x86_64 $out/bin/HubstaffClient
+    ln -s $opt/x86_64/HubstaffCLI.bin.x86_64 $out/bin/HubstaffCLI
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
+{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs, stdenv }:
 
 buildGoModule rec {
   pname = "git-lfs";
@@ -39,6 +39,7 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage man/man*/*
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd git-lfs \
       --bash <($out/bin/git-lfs completion bash) \
       --fish <($out/bin/git-lfs completion fish) \

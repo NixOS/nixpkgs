@@ -61,7 +61,6 @@ self: super: {
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
   aeson = doDistribute self.aeson_2_2_3_0;
-  apply-refact = doDistribute self.apply-refact_0_14_0_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   auto-update = super.auto-update_0_2_1;
   extensions = doDistribute self.extensions_0_1_0_2;
@@ -112,11 +111,10 @@ self: super: {
 
   bitvec = doJailbreak super.bitvec; # primitive <0.9
 
-  apply-refact_0_14_0_0 = doJailbreak super.apply-refact_0_14_0_0; # ghc-exactprint <1.9
-  retrie = doJailbreak super.retrie; # base <4.20, ghc<9.9, ghc-exactprint<1.9
-
   hashable_1_4_7_0 = doJailbreak super.hashable_1_4_7_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
+
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues
@@ -128,7 +126,7 @@ self: super: {
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
-  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_1; # test suite assumes it can freely call curl
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_2; # test suite assumes it can freely call curl
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
 

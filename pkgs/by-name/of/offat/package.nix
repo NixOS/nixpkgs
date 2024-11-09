@@ -18,7 +18,10 @@ python3.pkgs.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/src";
 
-  pythonRelaxDeps = [ "setuptools" ];
+  pythonRelaxDeps = [
+    "setuptools"
+    "tenacity"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 

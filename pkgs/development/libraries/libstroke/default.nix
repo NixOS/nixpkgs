@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     homepage = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/";
     license = lib.licenses.gpl2;
 
-    longDescription =
-      '' libstroke, last updated in 2001, still successfully provides a basic
-        gesture recognition engine based around a 3x3 grid.  It's simple and
-        easy to work with, and notably used by FVWM.
-      '';
+    longDescription = ''
+      libstroke, last updated in 2001, still successfully provides a basic
+      gesture recognition engine based around a 3x3 grid.  It's simple and
+      easy to work with, and notably used by FVWM.
+    '';
 
     platforms = lib.platforms.linux;
   };

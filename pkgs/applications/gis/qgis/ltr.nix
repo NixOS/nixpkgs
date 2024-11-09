@@ -7,12 +7,14 @@
 , libsForQt5
 
 # unwrapped package parameters
-, withGrass ? true
+, withGrass ? false
+, withServer ? false
 , withWebKit ? false
 }:
 let
   qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {
     withGrass = withGrass;
+    withServer = withServer;
     withWebKit = withWebKit;
   };
 in symlinkJoin rec {

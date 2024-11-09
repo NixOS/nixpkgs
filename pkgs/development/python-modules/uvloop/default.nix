@@ -6,7 +6,7 @@
   fetchPypi,
 
   # build-system
-  cython_0,
+  cython,
   setuptools,
 
   # native dependencies
@@ -22,18 +22,18 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RgPKcUp1T8jZsZfjJdslsuoEU4Xoo60F00Y95yX99Gk=";
+    hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
   };
 
   build-system = [
-    cython_0
+    cython
     setuptools
   ];
 
@@ -60,6 +60,9 @@ buildPythonPackage rec {
       # AssertionError: b'' != b'out\n'
       "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # Segmentation fault

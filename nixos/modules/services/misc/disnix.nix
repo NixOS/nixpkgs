@@ -40,7 +40,7 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    dysnomia.enable = true;
+    services.dysnomia.enable = true;
 
     environment.systemPackages = [ pkgs.disnix ] ++ lib.optional cfg.useWebServiceInterface pkgs.DisnixWebService;
     environment.variables.PATH = lib.optionals cfg.enableProfilePath (map (profileName: "/nix/var/nix/profiles/disnix/${profileName}/bin" ) cfg.profiles);
@@ -74,7 +74,7 @@ in
 
         restartIfChanged = false;
 
-        path = [ config.nix.package cfg.package config.dysnomia.package "/run/current-system/sw" ];
+        path = [ config.nix.package cfg.package config.services.dysnomia.package "/run/current-system/sw" ];
 
         environment = {
           HOME = "/root";

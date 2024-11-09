@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.17.0";
+  version = "2.17.1";
 
   src = fetchurl {
     url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-I5CI9t5jsayE58O3lGRLQ2zj5lClWldKNsPBS4tNtfs=";
+    hash = "sha256-9m7Vt+x4SPOBAqVL88gufSmqhvAiCcnOi7bL43XzCiU=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/opensearch \
       --prefix PATH : "${lib.makeBinPath [ gnugrep coreutils ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/plugins/opensearch-knn/lib/" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/plugins/opensearch-knn/lib/" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"

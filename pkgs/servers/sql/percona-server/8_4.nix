@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests = nixosTests.mysql.percona-server_innovation;
+    tests.percona-server = nixosTests.mysql.percona-server_8_4;
   };
 
   meta = with lib; {

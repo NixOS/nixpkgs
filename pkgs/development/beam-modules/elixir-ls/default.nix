@@ -52,10 +52,13 @@ mixRelease {
     substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
       --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-debug-adapter
-    # prepare the launcher
+    # prepare the launchers
     substituteInPlace $out/lib/launch.sh \
       --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
                 "ERL_LIBS=$out/lib:\$ERL_LIBS" \
+      --replace "exec elixir" "exec ${elixir}/bin/elixir" \
+      --replace 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir"
+    substituteInPlace $out/lib/exec.zsh \
       --replace "exec elixir" "exec ${elixir}/bin/elixir"
     runHook postInstall
   '';

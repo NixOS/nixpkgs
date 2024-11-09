@@ -26,7 +26,7 @@ let
     multiArch = true;
 
     multiPkgs = pkgs: with pkgs; [
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
         xorg.libX11
         xorg.libXext
         xorg.libXrandr

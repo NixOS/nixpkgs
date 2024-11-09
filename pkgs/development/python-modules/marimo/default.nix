@@ -2,13 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  narwhals,
   packaging,
   psutil,
   pygments,
@@ -19,25 +23,25 @@
   uvicorn,
   websockets,
   pyyaml,
-  pytestCheckHook,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.9.1";
+  version = "0.9.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7sG6i1WusNuCpuaojFXhSfPWCA2/nzHXvMF29ApGTDg=";
+    hash = "sha256-Q3dnRuAS8B4cWvF04GGg5OOZtmAJPKa2fHwnoO2DXDs=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  # ruff is not packaged as a python module in nixpkgs
-  pythonRemoveDeps = [ "ruff" ];
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
     click
@@ -45,6 +49,7 @@ buildPythonPackage rec {
     itsdangerous
     jedi
     markdown
+    narwhals
     packaging
     psutil
     pygments
@@ -57,17 +62,21 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "marimo" ];
 
-  meta = with lib; {
+  # The pypi archive does not contain tests so we do not use `pytestCheckHook`
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
     changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "marimo";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       akshayka
       dmadisetti
     ];

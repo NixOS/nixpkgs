@@ -36,21 +36,15 @@
 , xmlto
 }:
 
-let
-  pythonWithGobject = python3Packages.python.withPackages (p: with p; [
-    pygobject3
-  ]);
-in
-
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "318";
+  version = "328";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    hash = "sha256-1SpSzC5wOsv4Ha0ShtuyPsKLm0fVuPt8KFejJHFU8MY=";
+    hash = "sha256-0iCFMwnPtbrCXZMQQB0C7xtvGHFLMPk8otgMrJmVxXw=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +61,6 @@ stdenv.mkDerivation rec {
     openssl
     pam
     pkg-config
-    pythonWithGobject.python
     python3Packages.setuptools
     systemd
     xmlto
@@ -82,6 +75,8 @@ stdenv.mkDerivation rec {
     libssh
     polkit
     udev
+    python3Packages.pygobject3
+    python3Packages.pip
   ];
 
   postPatch = ''
@@ -165,8 +160,6 @@ stdenv.mkDerivation rec {
       src/tls/cockpit-certificate-helper \
       src/ws/cockpit-desktop
 
-    PATH=${pythonWithGobject}/bin patchShebangs src/client/cockpit-client
-
     substituteInPlace src/ws/cockpit-desktop \
       --replace ' /bin/bash' ' ${runtimeShell}'
   '';
@@ -181,8 +174,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/share/cockpit/motd/update-motd \
       --prefix PATH : ${lib.makeBinPath [ gnused ]}
 
+    wrapProgram $out/bin/cockpit-bridge \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+
+    substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
+      --replace-fail libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
-      --replace /usr $out
+      --replace-fail /usr $out
 
     runHook postFixup
   '';
@@ -202,7 +201,6 @@ stdenv.mkDerivation rec {
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    cockpit-bridge --version
     make pytest -j$NIX_BUILD_CORES || true
     make check  -j$NIX_BUILD_CORES || true
     test/static-code

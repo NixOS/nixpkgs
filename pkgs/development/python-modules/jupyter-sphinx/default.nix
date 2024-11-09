@@ -44,6 +44,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://github.com/jupyter/jupyter-sphinx/issues/280"
+    "test_builder_priority"
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';

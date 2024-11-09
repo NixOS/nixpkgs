@@ -205,10 +205,14 @@ in
 
     system.build.installBootLoader = mkOption {
       internal = true;
-      # "; true" => make the `$out` argument from switch-to-configuration.pl
-      #             go to `true` instead of `echo`, hiding the useless path
-      #             from the log.
-      default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      default = pkgs.writeShellScript "no-bootloader" ''
+        echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+      '';
+      defaultText = lib.literalExpression ''
+        pkgs.writeShellScript "no-bootloader" '''
+          echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+        '''
+      '';
       description = ''
         A program that writes a bootloader installation script to the path passed in the first command line argument.
 

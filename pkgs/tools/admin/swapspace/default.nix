@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, installShellFiles, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  installShellFiles,
+  util-linux,
+  binlore,
+  swapspace,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swapspace";
@@ -34,6 +44,15 @@ stdenv.mkDerivation rec {
     installManPage doc/swapspace.8
     install --mode=444 -D 'swapspace.service' "$out/etc/systemd/system/swapspace.service"
   '';
+
+  # Nothing in swapspace --help or swapspace’s man page mentions
+  # anything about swapspace executing its arguments.
+  passthru.binlore.out = binlore.synthesize swapspace ''
+    execer cannot bin/swapspace
+  '';
+  passthru.tests = {
+    inherit (nixosTests) swapspace;
+  };
 
   meta = with lib; {
     description = "Dynamic swap manager for Linux";

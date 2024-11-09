@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "defusedxml"
+    "attrs"
   ];
 
   nativeBuildInputs = with python3.pkgs; [

@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/eworm-de/xcur2png/commit/aa035462d950fab35d322cb87fd2f0d702251e82.patch";
       hash = "sha256-hlmJ/bcDSl1ADs0jp+JrAgAaMzielUSRVPad+plnSZg=";
     })
+
+    # fix gcc-14-build:
+    #   https://github.com/eworm-de/xcur2png/pull/4
+    (fetchpatch {
+      url = "https://github.com/eworm-de/xcur2png/commit/6fb03957aba8aebc3dc98a479fff9cddf85b9e7b.patch";
+      hash = "sha256-COG4/MKfBAwQU5FqZeqEE4jJT4XII7AQ6ayRSuFcUmY=";
+    })
   ];
 
   nativeBuildInputs = [

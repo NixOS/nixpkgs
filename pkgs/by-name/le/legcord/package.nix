@@ -7,23 +7,24 @@
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem
+, nix-update-script
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     rev = "v${version}";
-    hash = "sha256-R2mtE3L2cJgmbWT0aMoDbnM5tiyPk+dnPBedq8ro1lY=";
+    hash = "sha256-YmNRkNN7lWHMbUiGOxPa9b+TaLybj1XE7AonCnB88KY=";
   };
 
   nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-UCErcNNGAVOe1CvbYc1OSwPQzXVM5tpUUtBpLXoaQdY=";
+    hash = "sha256-ZPTp6l7qtvgsYPY6FZvhuYxD8TdkBkaQO2SG1fQzU7s=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";

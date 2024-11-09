@@ -11,7 +11,6 @@
 , python3
 , libxsmm
 , mpi
-, openssh
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    openssh
     mpiCheckPhaseHook
   ];
 

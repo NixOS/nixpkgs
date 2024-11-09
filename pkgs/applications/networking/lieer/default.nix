@@ -1,18 +1,21 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, nix-update-script
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
-  version = "1.5";
+  version = "1.6";
   format = "setuptools";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-z3OGCjLsOi6K1udChlSih8X6e2qvT8kNhh2PWBGB9zU=";
+    sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
   propagatedBuildInputs = with python3Packages; [

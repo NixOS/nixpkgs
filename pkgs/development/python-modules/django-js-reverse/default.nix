@@ -7,7 +7,6 @@
   django,
   packaging,
   nodejs,
-  js2py,
   six,
 }:
 
@@ -25,9 +24,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ] ++ lib.optionals (pythonAtLeast "3.7") [ packaging ];
 
+  # Js2py is needed for tests but it's unmaintained and insecure
+  doCheck = false;
+
   nativeCheckInputs = [
     nodejs
-    js2py
     six
   ];
 

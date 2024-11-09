@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.3.0.71";
+  version = "8.3.0.72";
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = pname;
     rev = version;
-    hash = "sha256-FZerMUzth43p5jvKQalyYcW+mrl6SLjS8GrivY2qWkI=";
+    hash = "sha256-ILS5cUWR04/GePyXHj00Am4HMDAhAaN/uUe7kchjo/8=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
     platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
     license = with licenses; [ gpl2Plus ];
-    maintainers = teams.helsinki-systems.members;
+    maintainers = [ ];
   };
 }

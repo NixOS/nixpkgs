@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ supinie ];
     mainProgram = "aerogramme";
     platforms = lib.platforms.linux;
+    broken = true; # https://github.com/rust-lang/rust/issues/129811
   };
 }

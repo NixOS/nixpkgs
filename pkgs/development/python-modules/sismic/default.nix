@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "1.6.6";
+  version = "1.6.7";
 in
 buildPythonPackage {
   pname = "sismic";
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "AlexandreDecan";
     repo = "sismic";
     rev = "refs/tags/${version}";
-    hash = "sha256-MvJyyERH0l5547cVmpxnHXRf9q1ylK9/ZfyLYBQfsbY=";
+    hash = "sha256-EP78Wc2f6AKqbGBW8wVP0wogEbTo0ndjlRRd+fsUvCo=";
   };
 
   pythonRelaxDeps = [ "behave" ];

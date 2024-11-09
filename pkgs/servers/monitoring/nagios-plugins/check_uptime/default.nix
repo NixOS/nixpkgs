@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "check-uptime";
-  version = "unstable-2016-11-12";
+  version = "0-unstable-2016-11-12";
 
   src = fetchFromGitHub {
     owner = "madrisan";

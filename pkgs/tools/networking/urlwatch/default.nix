@@ -1,32 +1,20 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
-  version = "2.28";
+  version = "2.29";
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "urlwatch";
     rev = version;
-    hash = "sha256-dGohG2+HrsuKegPAn1fmpLYPpovEEUsx+C/0sp2/cX0=";
+    hash = "sha256-X1UR9JrQuujOIUg87W0YqfXsM3A5nttWjjJMIe3hgk8=";
   };
 
-  patches = [
-    # lxml 5 compatibility fix
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://github.com/thp/urlwatch/commit/123de66d019aef7fc18fab6d56cc2a54d81fea3f.patch";
-      excludes = [ "CHANGELOG.md" ];
-      hash = "sha256-C9qb6TYeNcdszunE2B5DWRyXyqnANd32H7m9KmidCD0=";
-    })
-  ];
-
   propagatedBuildInputs = with python3Packages; [
-    appdirs
     cssselect
     jq
     keyring
@@ -35,6 +23,7 @@ python3Packages.buildPythonApplication rec {
     matrix-client
     minidb
     playwright
+    platformdirs
     pushbullet-py
     pycodestyle
     pyyaml

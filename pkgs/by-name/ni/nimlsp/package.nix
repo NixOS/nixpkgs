@@ -1,6 +1,12 @@
-{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-unwrapped-2 }:
+{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-2_0, nim-unwrapped-2_0 }:
 
-buildNimPackage (finalAttrs: {
+let
+  buildNimPackage' = buildNimPackage.override {
+    # Do not build with Nim-2.2.x.
+    nim2 = nim-2_0;
+  };
+in
+buildNimPackage' (finalAttrs: {
   pname = "nimlsp";
   version = "0.4.6";
 
@@ -27,7 +33,7 @@ buildNimPackage (finalAttrs: {
 
   nimFlags = [
     "--threads:on"
-    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2}"
+    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2_0}"
     "-d:tempDir=/tmp"
   ];
 

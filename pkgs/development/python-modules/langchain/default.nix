@@ -12,6 +12,7 @@
 
   # dependencies
   aiohttp,
+  httpx-sse,
   langchain-core,
   langchain-text-splitters,
   langsmith,
@@ -42,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.1";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-Zg+9ZwzTDKCyfz4T/tVIGfRUUmkE939hocxSWpFRngQ=";
+    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -58,8 +59,11 @@ buildPythonPackage rec {
 
   buildInputs = [ bash ];
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   dependencies = [
     aiohttp
+    httpx-sse
     langchain-core
     langchain-text-splitters
     langsmith

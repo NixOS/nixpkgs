@@ -26,6 +26,7 @@
 , Cocoa
 , Foundation
 , OpenGL
+, unstableGitUpdater
 }:
 
 let
@@ -48,13 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-10-05";
+  version = "0-unstable-2024-11-06";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "077bc68a4cbf2d8c97abc818515a22471da42c99";
-    hash = "sha256-zlQEOk9rex9Evpc2+4q2e2QPwGd9kLOQ393DJPuwh7c=";
+    rev = "ad1ba30b27ff2802b6e743c6b8970e4bd1309dfc";
+    hash = "sha256-vrRkUTWHm+2GTJ3axO2oPJ0gKyMSH8Reh3TjYYze/Io=";
   };
 
   postPatch = ''
@@ -64,18 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
-
-    # libwebp is not built with cmake support yet
-    # https://github.com/NixOS/nixpkgs/issues/334148
-    cat > Meta/CMake/FindWebP.cmake <<'EOF'
-    find_package(PkgConfig)
-    pkg_check_modules(WEBP libwebp REQUIRED)
-    include_directories(''${WEBP_INCLUDE_DIRS})
-    link_directories(''${WEBP_LIBRARY_DIRS})
-    EOF
-    substituteInPlace Userland/Libraries/LibGfx/CMakeLists.txt \
-      --replace-fail 'WebP::' "" \
-      --replace-fail libwebpmux webpmux
   '';
 
   preConfigure = ''
@@ -159,6 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";

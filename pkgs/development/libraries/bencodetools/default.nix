@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
 
   # installCheck instead of check due to -install_name'd library on Darwin
-  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckTarget = "check";
 
   meta = with lib; {

@@ -14,17 +14,16 @@
 
 buildPythonPackage rec {
   pname = "parselmouth";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YannickJadoul";
     repo = "Parselmouth";
-    # Stable branch with cherry picked changes to fit to the newer dependencies versions https://github.com/YannickJadoul/Parselmouth/issues/130
-    rev = "c2cbecc0ce4a0b5d3052cc6c6fbddf4bf133655d";
+    rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-+6id0PVfpiVjee7O4ZoskNK0dz5ZmTYRTtum3B3tIgE=";
+    hash = "sha256-/Hde/DpSbmHs8WF3PAk4esYuMgOX6SxMaYJrrHYr/ZU=";
   };
 
   configurePhase = ''

@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Implementation of JavaScript written in Java";
 
-    longDescription =
-      '' Rhino is an open-source implementation of JavaScript written
-         entirely in Java.  It is typically embedded into Java applications
-         to provide scripting to end users.
-      '';
+    longDescription = ''
+      Rhino is an open-source implementation of JavaScript written
+      entirely in Java.  It is typically embedded into Java applications
+      to provide scripting to end users.
+    '';
 
     homepage = "http://www.mozilla.org/rhino/";
 

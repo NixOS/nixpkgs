@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "typer-shell";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "FergusFettes";
     repo = "typer-shell";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pxi4FGxDRMcW4q6h4lQzqGPLhdcfElMaR6aZV85h2Os=";
+    hash = "sha256-fnqI+nKMaQocBWd9i/lqq8OzKwFdxJ8+7aYG5sNQ55E=";
   };
 
   pythonRelaxDeps = [

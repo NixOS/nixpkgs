@@ -34,19 +34,21 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.7";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-s2tqBJpWJNy0SnHWt0RQowmRbBD+7zqFEeDuFrUzr2U=";
+    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     jsonpatch
@@ -117,6 +119,15 @@ buildPythonPackage rec {
       # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
       "test_chat_prompt_template_variable_names"
       "test_create_model_v2"
+
+      # Comparison with magic strings
+      "test_prompt_with_chat_model"
+      "test_prompt_with_chat_model_async"
+      "test_prompt_with_llm"
+      "test_prompt_with_llm_parser"
+      "test_prompt_with_llm_and_async_lambda"
+      "test_prompt_with_chat_model_and_parser"
+      "test_combining_sequences"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
@@ -132,6 +143,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

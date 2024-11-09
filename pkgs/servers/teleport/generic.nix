@@ -150,16 +150,11 @@ buildGoModule rec {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-    (if lib.versionAtLeast version "16" then ./tsh_16.patch else ./tsh.patch)
+    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
-
-  prePatch = ''
-    # TODO: remove after https://github.com/NixOS/nixpkgs/pull/332852 merges
-    sed -i 's/go 1.22.6/go 1.22.5/' go.mod
-  '';
 
   preBuild = ''
     cp -r ${webassets} webassets

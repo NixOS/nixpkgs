@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "optimistix";
-  version = "0.0.8";
+  version = "0.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "optimistix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0ehNApiBoiAb8LFBW81ZCRPsjTVQG8zRTVSAp7oHF8w=";
+    hash = "sha256-s8MRPyPObTpgLRm4bxU8F4Su7FKH+MHqtQsxIHb/DN4=";
   };
 
   build-system = [ hatchling ];

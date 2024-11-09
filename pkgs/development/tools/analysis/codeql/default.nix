@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     freetype
     jdk17
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     curl
   ];
 

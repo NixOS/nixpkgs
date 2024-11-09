@@ -1,6 +1,6 @@
 { buildNpmPackage, lib, testers, shopify-cli }:
 let
-  version = "3.67.1";
+  version = "3.69.3";
 in
 buildNpmPackage {
   pname = "shopify";
@@ -14,7 +14,7 @@ buildNpmPackage {
     ];
   };
 
-  npmDepsHash = "sha256-jb87K1tCMYgWrsAgzvdHW8ChB+dvc9yNM0hqajy8Rbo=";
+  npmDepsHash = "sha256-QhbOKOs/0GEOeySG4uROzgtD4o7C+6tS/TAaPcmC3xk=";
   dontNpmBuild = true;
 
   passthru = {

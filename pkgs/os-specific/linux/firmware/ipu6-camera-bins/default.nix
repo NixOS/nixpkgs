@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     expat
     zlib
   ];

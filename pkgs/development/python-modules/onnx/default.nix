@@ -8,9 +8,6 @@
   pybind11,
   setuptools,
 
-  # nativeBuildInputs
-  protobuf-core,
-
   # buildInputs
   abseil-cpp,
   protobuf,
@@ -46,10 +43,6 @@ buildPythonPackage rec {
     cmake
     protobuf
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    protobuf-core # `protoc` required
   ];
 
   buildInputs = [

@@ -1,21 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses }:
+{ stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "unibilium";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "unibilium";
     rev = "v${version}";
-    sha256 = "sha256-A/WECvma7u/Mmecvzi0cP168dt4v+zwC8CiFBkqWezA=";
+    sha256 = "sha256-6bFZtR8TUZJembRBj6wUUCyurUdsn3vDGnCzCti/ESc=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" "LIBTOOL=${libtool}/bin/libtool" ];
-
   strictDeps = true;
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config perl libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config perl libtool ];
   buildInputs = [ ncurses ];
 
   meta = with lib; {

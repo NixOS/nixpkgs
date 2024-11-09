@@ -14,9 +14,9 @@ in {
         type = lib.types.str;
         description = ''
           The path that surrealdb will write data to. Use null for in-memory.
-          Can be one of "memory", "file://:path", "tikv://:addr".
+          Can be one of "memory", "rocksdb://:path", "surrealkv://:path", "tikv://:addr", "fdb://:addr".
         '';
-        default = "file:///var/lib/surrealdb/";
+        default = "rocksdb:///var/lib/surrealdb/";
         example = "memory";
       };
 
@@ -41,10 +41,9 @@ in {
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [];
-        example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
+        example = [ "--allow-all" "--user" "root" "--pass" "root" ];
         description = ''
-          Specify a list of additional command line flags,
-          which get escaped and are then passed to surrealdb.
+          Specify a list of additional command line flags.
         '';
       };
     };
@@ -61,7 +60,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
+        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${lib.strings.concatStringsSep " " cfg.extraFlags} -- ${cfg.dbPath}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";

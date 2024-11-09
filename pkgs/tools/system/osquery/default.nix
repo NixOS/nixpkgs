@@ -14,7 +14,6 @@
 , jq
 , removeReferencesTo
 , nixosTests
-, file
 , writers
 }:
 
@@ -24,7 +23,7 @@ let
 
   opensslSrc = fetchurl info.openssl;
 
-  toolchain = import ./toolchain-bin.nix { inherit stdenv lib fetchzip file; };
+  toolchain = import ./toolchain-bin.nix { inherit stdenv lib fetchzip autoPatchelfHook; };
 
 in
 

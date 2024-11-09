@@ -308,8 +308,7 @@ in
       # This is not an issue for the final stdenv, because this perl
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
-      # FIXME: Pinning this stage to 538 as 540 doesn't build in stage1 atm
-      perl = super.perl538.override { enableThreading = false; enableCrypt = false; };
+      perl = super.perl.override { enableThreading = false; enableCrypt = false; };
     };
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
@@ -647,10 +646,7 @@ in
             gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
-        ++ map lib.getLib (
-            [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
-          )
+        ++ map lib.getLib [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
         # More complicated cases
         ++ (map (x: lib.getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev

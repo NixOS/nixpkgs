@@ -74,8 +74,6 @@ let
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
-    edk2-uefi-shell = optionalString cfg.edk2-uefi-shell.enable pkgs.edk2-uefi-shell;
-
     checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
       fail() {
         echo "$1 = '$2' is not a mounted partition. Is the path configured correctly?" >&2

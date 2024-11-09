@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation {
@@ -31,9 +32,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     install -Dm644 *.jar -t $out/share/java
-    runHook postBuild
+    runHook postInstall
   '';
 
   meta = {

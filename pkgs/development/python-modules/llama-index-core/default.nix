@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.11.16";
+  version = "0.11.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t4hQMlORpdWXkbKQhVSxD/pdxFtu+sJ4FQQxIXLoH94=";
+    hash = "sha256-r4xedtxoYv6CcxtDrgwau9LY3kOBg3jXlQm1g59L7x4=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -62,6 +62,8 @@ buildPythonPackage rec {
     mkdir -p llama_index/core/_static/nltk_cache/tokenizers/punkt/
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
+
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 
@@ -127,6 +129,8 @@ buildPythonPackage rec {
     # Tests require network access
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
+    # asyncio.exceptions.InvalidStateError: invalid state
+    "test_workflow_context_to_dict_mid_run"
   ];
 
   meta = with lib; {

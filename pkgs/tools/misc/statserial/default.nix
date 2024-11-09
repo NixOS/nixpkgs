@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     description = "Display serial port modem status lines";
     license = licenses.gpl2Plus;
 
-    longDescription =
-      '' Statserial displays a table of the signals on a standard 9-pin or
+    longDescription = ''
+      Statserial displays a table of the signals on a standard 9-pin or
       25-pin serial port, and indicates the status of the handshaking lines. It
       can be useful for debugging problems with serial ports or modems.
-      '';
+    '';
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ rps ];

@@ -249,8 +249,8 @@ in
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
             AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
-            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
-              ++ lib.optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv4" "/proc/sys/net/ipv6" ]
+              ++ lib.optionals useResolvConf ([ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles);
             DeviceAllow = "";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;

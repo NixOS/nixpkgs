@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "pgroll";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "xataio";
     repo = "pgroll";
     rev = "v${version}";
-    hash = "sha256-XZrgJZR6CWdQWgGMXlEyZ5De6bu/u7+YvYvq6id9YzM=";
+    hash = "sha256-7hIdm/qdcwlXC+vrEbjmBunORfEyItsr+Hia5u4ZBZk=";
   };
 
-  vendorHash = "sha256-+6HpxqQxGpIAyfn+38UeW2ksv5WyX67AT5e9JgQBI+k=";
+  vendorHash = "sha256-jP4tTV/4kgT86d46L47Jcr/7ZtP2rL8boZiwqLvYo40=";
 
   # Tests require a running docker daemon
   doCheck = false;

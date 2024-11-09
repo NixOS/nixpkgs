@@ -49,7 +49,7 @@ let
     # feature, but rather to make the program more robustly self-
     # contained.
 
-    postInstall = ''${o.postInstall or ""}
+    postInstall = o.postInstall or "" + ''
       mkdir -p $out/libexec
       mv $out/bin/arion $out/libexec
       makeWrapper $out/libexec/arion $out/bin/arion \

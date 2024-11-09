@@ -50,27 +50,14 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wgujiFvaWejSEXTbq/Re/7Ca1jIqso2uZej3Lb3V4I8=";
+    sha256 = "sha256-bHpPhav9JBPkwJA9o+IFHRWbvxWnGkD1wHBHS4XJ/YE=";
   };
-  patches = [
-    # https://github.com/musescore/MuseScore/pull/24326
-    (fetchpatch {
-      name = "fix-menubar-with-qt6.5+.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
-      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
-    })
-    (fetchpatch {
-      name = "fix-crash-accessing-uninitialized-properties.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
-      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"

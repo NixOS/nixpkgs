@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.8.8";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = pname;
-    rev = version;
-    hash = "sha256-wTKqOw64b+/kdZpSYLwCJATOuo807BWCtVHB4pH58fY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-q9lMU/xA+G2x38yZy3DxCpXTEmg1lZhZ8GFIHDIKE24=";
   };
 
   nativeBuildInputs = [

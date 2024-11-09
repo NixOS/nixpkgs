@@ -43,21 +43,21 @@ flutter324.buildFlutterApplication rec {
 
   postInstall = ''
     # Swap the authenticator-helper symlink with the correct symlink.
-    ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/helper/authenticator-helper"
+    ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
     mkdir $out/share/icons
-    mv $out/app/linux_support/com.yubico.yubioath.png $out/share/icons
+    mv $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons
 
     # Cleanup.
     rm -rf \
-      "$out/app/README.adoc" \
-      "$out/app/desktop_integration.sh" \
-      "$out/app/linux_support" \
+      "$out/app/$pname/README.adoc" \
+      "$out/app/$pname/desktop_integration.sh" \
+      "$out/app/$pname/linux_support" \
       $out/bin/* # We will repopulate this directory later.
 
     # Symlink binary.
-    ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
+    ln -sf "$out/app/$pname/authenticator" "$out/bin/yubioath-flutter"
 
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \

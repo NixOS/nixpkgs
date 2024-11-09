@@ -58,6 +58,7 @@ let
 
     # expressvpnd binary has hard-coded the path /sbin/sysctl hence below workaround.
     extraBuildCommands = ''
+      mkdir -p sbin
       chmod +w sbin
       ln -s ${sysctl}/bin/sysctl sbin/sysctl
     '';

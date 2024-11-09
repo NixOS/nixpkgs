@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , makeDesktopItem
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , copyDesktopItems
 , cairo
@@ -23,11 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.27";
+  version = "7.2.30";
 
-  src = fetchurl {
-    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
-    sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
+  src = fetchFromGitHub {
+    owner = "otfried";
+    repo = "ipe";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
   nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];

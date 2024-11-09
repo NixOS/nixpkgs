@@ -8,7 +8,6 @@
 
 # propagates
 , autobahn
-, future
 , msgpack
 , twisted
 
@@ -27,6 +26,7 @@ buildPythonPackage ({
 
   postPatch = ''
     cd worker
+    touch buildbot_worker/py.typed
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
@@ -37,7 +37,6 @@ buildPythonPackage ({
 
   propagatedBuildInputs = [
     autobahn
-    future
     msgpack
     twisted
   ];

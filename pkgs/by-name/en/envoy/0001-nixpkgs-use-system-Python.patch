@@ -1,7 +1,7 @@
-From 07af89ac82e0c5876590f89284795bffa4b0e1c8 Mon Sep 17 00:00:00 2001
+From 47406ebaf0260e5b66a92baac3717936c8386b69 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:52:59 +0200
-Subject: [PATCH 1/3] nixpkgs: use system Python
+Subject: [PATCH] nixpkgs: use system Python
 
 Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 ---
@@ -10,13 +10,13 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  2 files changed, 5 insertions(+), 23 deletions(-)
 
 diff --git a/bazel/python_dependencies.bzl b/bazel/python_dependencies.bzl
-index b015e851c0..53a2c93c59 100644
+index 9f2b336b1a..53a2c93c59 100644
 --- a/bazel/python_dependencies.bzl
 +++ b/bazel/python_dependencies.bzl
 @@ -1,28 +1,25 @@
  load("@com_google_protobuf//bazel:system_python.bzl", "system_python")
 -load("@envoy_toolshed//:packages.bzl", "load_packages")
--load("@python3_11//:defs.bzl", "interpreter")
+-load("@python3_12//:defs.bzl", "interpreter")
  load("@rules_python//python:pip.bzl", "pip_parse")
  
  def envoy_python_dependencies():
@@ -47,13 +47,13 @@ index b015e851c0..53a2c93c59 100644
          extra_pip_args = ["--require-hashes"],
      )
 diff --git a/bazel/repositories_extra.bzl b/bazel/repositories_extra.bzl
-index 7fd1dc4095..001de36a16 100644
+index b92dd461ba..cef32b3140 100644
 --- a/bazel/repositories_extra.bzl
 +++ b/bazel/repositories_extra.bzl
 @@ -2,19 +2,11 @@ load("@aspect_bazel_lib//lib:repositories.bzl", "aspect_bazel_lib_dependencies")
- load("@com_github_rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains")
+ load("@bazel_features//:deps.bzl", "bazel_features_deps")
  load("@emsdk//:deps.bzl", emsdk_deps = "deps")
- load("@proxy_wasm_cpp_host//bazel/cargo/wasmtime:crates.bzl", "wasmtime_fetch_remote_crates")
+ load("@proxy_wasm_cpp_host//bazel/cargo/wasmtime/remote:crates.bzl", "crate_repositories")
 -load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
 +load("@rules_python//python:repositories.bzl", "py_repositories")
  load("//bazel/external/cargo:crates.bzl", "raze_fetch_remote_crates")
@@ -62,17 +62,17 @@ index 7fd1dc4095..001de36a16 100644
 -    return "_".join(python_version.split(".")[:-1])
 -
 -# Python version for `rules_python`
--PYTHON_VERSION = "3.11.9"
+-PYTHON_VERSION = "3.12.3"
 -PYTHON_MINOR_VERSION = _python_minor_version(PYTHON_VERSION)
 -
  # Envoy deps that rely on a first stage of dependency loading in envoy_dependencies().
  def envoy_dependencies_extra(
 -        python_version = PYTHON_VERSION,
          ignore_root_user_error = False):
+     bazel_features_deps()
      emsdk_deps()
-     raze_fetch_remote_crates()
 @@ -22,11 +14,4 @@ def envoy_dependencies_extra(
-     rules_proto_grpc_toolchains()
+     crate_repositories()
      py_repositories()
  
 -    # Registers underscored Python minor version - eg `python3_10`
@@ -83,6 +83,3 @@ index 7fd1dc4095..001de36a16 100644
 -    )
 -
      aspect_bazel_lib_dependencies()
--- 
-2.45.1
-

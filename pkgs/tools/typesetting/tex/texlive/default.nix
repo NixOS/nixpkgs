@@ -139,7 +139,7 @@ let
         mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource; in
     builtins.removeAttrs mainDrv [ "outputSpecified" ];
   toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet
-    (builtins.groupBy (p: p.pname) pkgs);
+    (lib.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
   allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) tl;

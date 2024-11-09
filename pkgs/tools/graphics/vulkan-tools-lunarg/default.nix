@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.3.290.0";
+  version = "1.3.296.0";
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
    rev = "vulkan-sdk-${version}";
-   hash = "sha256-APJRiO5xNHml3k9goFQKwmxb3BXDN7tmvcs/oNCVU58=";
+   hash = "sha256-RaL7sqy5Rc8syPoM3SedZ6UilV9JUAA96JZh5/gIfPU=";
  };
 
   nativeBuildInputs = [ cmake python3 jq which pkg-config libsForQt5.qt5.wrapQtAppsHook ];
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/VulkanTools";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [ maintainers.expipiplus1 ];
+    maintainers = [];
   };
 }

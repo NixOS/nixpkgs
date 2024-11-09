@@ -12,7 +12,7 @@ let
       "--port" = cfg.port;
       "--auth-mode" = cfg.auth.mode;
       "--userdb" = cfg.auth.userDb;
-    }) ++ [(lib.optionalString (cfg.auth.enable == true) "--enable-auth")])
+    }) ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ] ++ cfg.extraFlags)
   );
 in
 
@@ -39,6 +39,15 @@ in
           Make sure each library path is initialized before service startup.
           The directories of the libraries to serve. They must be readable for the user under which the server runs.
           See the [calibredb documentation](${documentationLink}/generated/en/calibredb.html#add) for details.
+        '';
+      };
+
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Extra flags to pass to the calibre-server command.
+          See the [calibre-server documentation](${generatedDocumentationLink}) for details.
         '';
       };
 
@@ -71,6 +80,13 @@ in
           The port on which to listen for connections.
           See the [calibre-server documentation](${generatedDocumentationLink}#cmdoption-calibre-server-port) for details.
         '';
+      };
+
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description =
+          "Open ports in the firewall for the Calibre Server web interface.";
       };
 
       auth = {
@@ -136,6 +152,9 @@ in
         gid = config.ids.gids.calibre-server;
       };
     };
+
+    networking.firewall =
+      lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
   };
 

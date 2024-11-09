@@ -1,3 +1,10 @@
+let
+  cert = pkgs: pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=muc.example.com' -days 36500
+    mkdir -p $out
+    cp key.pem cert.pem $out
+  '';
+in
 import ../make-test-python.nix ({ pkgs, ... }: {
   name = "ejabberd";
   meta = with pkgs.lib.maintainers; {
@@ -5,6 +12,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
   };
   nodes = {
     client = { nodes, pkgs, ... }: {
+      security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       networking.extraHosts = ''
         ${nodes.server.config.networking.primaryIPAddress} example.com
       '';
@@ -14,6 +22,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
       ];
     };
     server = { config, pkgs, ... }: {
+      security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       networking.extraHosts = ''
         ${config.networking.primaryIPAddress} example.com
       '';
@@ -23,6 +32,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
         configFile = "/etc/ejabberd.yml";
       };
 
+      systemd.services.ejabberd.serviceConfig.TimeoutStartSec = "15min";
       environment.etc."ejabberd.yml" = {
         user = "ejabberd";
         mode = "0600";
@@ -40,6 +50,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
               max_stanza_size: 65536
               shaper: c2s_shaper
               access: c2s
+              starttls: true
             -
               port: 5269
               ip: "::"
@@ -55,6 +66,10 @@ import ../make-test-python.nix ({ pkgs, ... }: {
               module: ejabberd_http
               request_handlers:
                 "/upload": mod_http_upload
+
+          certfiles:
+            - ${cert pkgs}/key.pem
+            - ${cert pkgs}/cert.pem
 
           ## Disabling digest-md5 SASL authentication. digest-md5 requires plain-text
           ## password storage (see auth_password_format option).

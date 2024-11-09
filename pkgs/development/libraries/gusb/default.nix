@@ -5,6 +5,8 @@
 , meson
 , ninja
 , pkg-config
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 , gi-docgen
 , python3
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
   pname = "gusb";
   version = "0.4.9";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -51,6 +54,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     gi-docgen
     vala
@@ -64,7 +68,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    (lib.mesonBool "docs" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "tests" doCheck)
+    (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonOption "usb_ids" "${hwdata}/share/hwdata/usb.ids")
   ];
 

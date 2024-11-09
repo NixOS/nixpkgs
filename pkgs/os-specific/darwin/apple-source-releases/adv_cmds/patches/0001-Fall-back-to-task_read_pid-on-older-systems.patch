@@ -1,0 +1,38 @@
+From c05a83d29349c6ae2fd8084a48ea51c8e8bf23f2 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 18 Aug 2024 10:29:16 -0400
+Subject: [PATCH] Fall back to `task_read_pid` on older systems
+
+---
+ ps/tasks.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/ps/tasks.c b/ps/tasks.c
+index d2fcb07..068c985 100644
+--- a/ps/tasks.c
++++ b/ps/tasks.c
+@@ -25,8 +25,6 @@
+ #include <mach/shared_memory_server.h>
+ #include <mach/mach_vm.h>
+ 
+-extern kern_return_t task_read_for_pid(task_port_t task, pid_t pid, task_port_t *target);
+-
+ #define STATE_MAX       7 
+                 
+ int     
+@@ -98,7 +96,11 @@ int get_task_info (KINFO *ki)
+ 	ki->state = STATE_MAX;
+ 
+ 	pid = KI_PROC(ki)->p_pid;
+-    error = task_read_for_pid(mach_task_self(), pid, &ki->task);
++	if (__builtin_available(macos 11.3, *)) {
++		error = task_read_for_pid(mach_task_self(), pid, &ki->task);
++	} else {
++		error = task_for_pid(mach_task_self(), pid, &ki->task);
++	}
+ 	if (error != KERN_SUCCESS) {
+ #ifdef DEBUG
+         mach_error("Error calling task_read_for_pid()", error);
+-- 
+2.44.1
+

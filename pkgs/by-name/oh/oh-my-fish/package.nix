@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -v ${substituteAll {
       name = "omf-install";
       src = ./omf-install;
-      OMF = placeholder "out";
+      omf = placeholder "out";
       inherit fish runtimeShell;
     }} $out/bin/omf-install
 

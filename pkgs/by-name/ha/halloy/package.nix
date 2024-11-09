@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.11";
+  version = "2024.12";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-kmdsC0SQoL5gppzBhnF0LfOFj14zeI3C6SdCBiVoKj0=";
+    hash = "sha256-NEm6qsU/Kes1rtNCsEauShpJZzrhBtOqo70uzrWpYtE=";
   };
 
   cargoLock = {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
       "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
-      "iced-0.13.0-dev" = "sha256-XQUaI16lGEMGFxqK3UNd8jQfUiBzomxlT/I+yeZncFo=";
+      "iced-0.13.0-dev" = "sha256-VXaE4+qXakYSyO5rcBbCe4QuJv/oguxdqUEbhXfmh2U=";
     };
   };
 

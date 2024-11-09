@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.7.2.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
     rev = finalAttrs.version;
-    hash = "sha256-H2jeKs0h4ZAcP33HB5jptlubq62cwnjPK2wSlEIfFWA=";
+    hash = "sha256-e9oSTk+UlkrkRSipqjjMqwtxEvEZffVBmlSTmsIT7cU=";
   };
 
   dontConfigure = true;
@@ -16,12 +16,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [
+    # https://github.com/89luca89/distrobox/issues/408
+    ./relative-default-icon.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    # https://github.com/89luca89/distrobox/issues/408
-    substituteInPlace ./distrobox-generate-entry \
-      --replace-fail 'icon_default="''${HOME}/.local' "icon_default=\"$out"
     ./install -P $out
 
     runHook postInstall

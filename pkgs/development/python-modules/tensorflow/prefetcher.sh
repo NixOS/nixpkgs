@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-version="2.17.0"
-version_jetson="2.16.1+nv24.07"
+version="2.18.0"
+version_jetson="2.16.1+nv24.08"
 
 bucket="https://storage.googleapis.com/tensorflow/versions/${version}"
-bucket_jetson="https://developer.download.nvidia.com/compute/redist/jp/v60/tensorflow"
+bucket_jetson="https://developer.download.nvidia.com/compute/redist/jp/v61/tensorflow"
 
 # List of binary wheels for Tensorflow.  The most recent versions can be found
 # on the following page:

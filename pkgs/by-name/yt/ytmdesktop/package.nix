@@ -3,7 +3,7 @@
   asar,
   commandLineArgs ? "",
   copyDesktopItems,
-  electron_30,
+  electron_33,
   fetchurl,
   makeDesktopItem,
   makeWrapper,
@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.5";
+  version = "2.0.6";
 
   desktopItems = [
     (makeDesktopItem {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ytmdesktop/ytmdesktop/releases/download/v${finalAttrs.version}/youtube-music-desktop-app_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-0j8HVmkFyTk/Jpq9dfQXFxd2jnLwzfEiqCgRHuc5g9o=";
+    hash = "sha256-uLTnVA9ooGlbtmUGoYtrT9IlOhTAJpEXMr1GSs3ae/8=";
   };
 
   unpackPhase = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   fixupPhase = ''
     runHook preFixup
 
-    makeWrapper ${lib.getExe electron_30} $out/bin/ytmdesktop \
+    makeWrapper ${lib.getExe electron_33} $out/bin/ytmdesktop \
       --add-flags $out/lib/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = finalAttrs.pname;
     maintainers = [ lib.maintainers.cjshearer ];
-    inherit (electron_30.meta) platforms;
+    inherit (electron_33.meta) platforms;
     # While the files we extract from the .deb are cross-platform (javascript), the installation
     # process for darwin is different, and I don't have a test device. PRs are welcome if you can
     # add the correct installation steps. I would suggest looking at the following:

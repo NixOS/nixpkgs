@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "0-unstable-2024-09-10";
+  version = "0-unstable-2024-10-24";
   # from `pdm show`
   realVersion = let
       tag = builtins.elemAt (lib.splitString "-" version) 0;
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "f2c0ecbe0d47d96f940e77f9def209e9c57d3962";
-    sha256 = "sha256-aNzNh/YkWjnHiO+QWbJu2Y3kL/53kDvVn/8Ncz2kpFI=";
+    rev = "3d7a14165f9f5179bcd2a2a119ab4bbf9d81326c";
+    sha256 = "sha256-fhT5xRq4VE8lOTJI470E2PPTSPSUHh90S17MdilFWAA=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   enableParallelBuilding = true;
+
+  __darwinAllowLocalNetworking = true;
 
   preBuild = ''
     make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2

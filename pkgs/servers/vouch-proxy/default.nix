@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "vouch-proxy";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/B7MMRkI5DhDBWa53mgFUME1CR3FSxxQ8UWjlN19EmQ=";
+    hash = "sha256-HQ1NaAHY1YRbNUThW983V8x3ptzTc/zNP6yIMyDiq1s=";
   };
 
   vendorHash = "sha256-1k9YFdackF10iJWJ22XlaENlOfRkZMs+IedDWnd/h8E=";

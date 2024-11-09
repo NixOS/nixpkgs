@@ -15,7 +15,7 @@
   jinja2,
   lxml,
   numpy,
-  opencv4,
+  opencv-python,
   pillow,
   pydantic,
   pydantic-extra-types,
@@ -52,8 +52,6 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
-  pythonRemoveDeps = [ "opencv-python" ];
-
   pythonRelaxDeps = [
     "rtoml"
     "qtpy"
@@ -67,7 +65,7 @@ buildPythonPackage rec {
       jinja2
       lxml
       numpy
-      opencv4
+      opencv-python
       pillow
       pydantic
       pydantic-extra-types

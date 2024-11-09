@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.19.2";
+  version = "3.19.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+HHtU6sxxwISciLxiwa5m1zj7h/SLDmRxOZNqW5FQSY=";
+    hash = "sha256-M6ohYhw7xvZiNVm9uhotvPHeVsBOwYjDpj2sfXAzf0U=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

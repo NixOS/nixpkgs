@@ -35,10 +35,18 @@ in
     };
 
     dataDir = mkOption {
-      type = types.str;
+      type = types.path;
       default = "/var/lib/sftpgo";
       description = ''
         The directory where SFTPGo stores its data files.
+      '';
+    };
+
+    extraReadWriteDirs = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = ''
+        Extra directories where SFTPGo is allowed to write to.
       '';
     };
 
@@ -63,7 +71,7 @@ in
       type = with types; nullOr path;
       description = ''
         Path to a json file containing users and folders to load (or update) on startup.
-        Check the [documentation](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
+        Check the [documentation](https://sftpgo.github.io/latest/config-file/)
         for the `--loaddata-from` command line argument for more info.
       '';
     };
@@ -72,7 +80,7 @@ in
       default = {};
       description = ''
         The primary sftpgo configuration. See the
-        [configuration reference](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
+        [configuration reference](https://sftpgo.github.io/latest/config-file/)
         for possible values.
       '';
       type = with types; submodule {
@@ -324,7 +332,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.dataDir;
-          ReadWritePaths = [ cfg.dataDir ];
+          ReadWritePaths = [ cfg.dataDir ] ++ cfg.extraReadWriteDirs;
           LimitNOFILE = 8192; # taken from upstream
           KillMode = "mixed";
           ExecStart = "${cfg.package}/bin/sftpgo serve ${utils.escapeSystemdExecArgs cfg.extraArgs}";

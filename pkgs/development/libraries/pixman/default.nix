@@ -18,6 +18,8 @@
 
 , gitUpdater
 , testers
+
+, __flattenIncludeHackHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config __flattenIncludeHackHook ];
 
   buildInputs = [ libpng ];
 
@@ -62,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  postInstall = glib.flattenInclude;
 
   passthru = {
     tests = {

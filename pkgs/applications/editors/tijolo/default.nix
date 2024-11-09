@@ -53,5 +53,6 @@ crystal.buildCrystalPackage rec {
     license = licenses.mit;
     mainProgram = "tijolo";
     maintainers = with maintainers; [ sund3RRR ];
+    broken = true;
   };
 }

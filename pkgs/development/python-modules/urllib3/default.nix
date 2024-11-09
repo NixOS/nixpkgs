@@ -6,6 +6,7 @@
 
   # build-system
   hatchling,
+  hatch-vcs,
 
   # optional-dependencies
   brotli,
@@ -24,15 +25,18 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.2";
+    version = "2.2.3";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-3VBUhVSaelUoM9peYGNjnQ0XfATyO8OGTkHl3F9hIWg=";
+      hash = "sha256-59gUqB2tgebK8uyf3tsoTsyccwdrYmVFR8xkzNyuJuk=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [
+      hatchling
+      hatch-vcs
+    ];
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];

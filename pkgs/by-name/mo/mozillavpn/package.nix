@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -30,7 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
   };
-  patches = [ ];
+  patches = [
+    # Fix build errors from deprecated `QByteArray::count()`, `QVariant::type()`, `QEventPoint::pos()` (#9961)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/b4077b9927d9208118e81694dce490dac2f0e76f.patch";
+      hash = "sha256-Vx7aHEBxubthqsmH37ZZDJDPI9jE9vS/p+JNJP6eUlI=";
+    })
+    # Re:#9966 Fix Crash in MZFlickable
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9984/commits/485a2ad8feab6b1dee7c672ce03736d819fd9d37.patch";
+      includes = [ "nebula/ui/components/MZFlickable.qml" ];
+      hash = "sha256-fnOXBTsuQC3kqAvHgoJ7rRGX5ra0R/MO8M9Ysys/l7Q=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";

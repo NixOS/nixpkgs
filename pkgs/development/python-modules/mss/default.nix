@@ -3,27 +3,63 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  stdenv,
+  substituteAll,
+
+  # build-system
+  hatchling,
+
+  # native dependencies
+  xorg,
+
+  # tests
+  lsof,
+  pillow,
+  pytest-cov-stub,
+  pytest,
+  pyvirtualdisplay,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "9.0.1";
-  format = "setuptools";
+  version = "9.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bre5AIzydCiBH6M66zXzM024Hj98wt1J7HxuWpSznxI=";
+    hash = "sha256-yWpOxzIk2n2yK8B+88+qGPi4aQDRhy4pETu87wCToh4=";
   };
 
-  prePatch = ''
-    # By default it attempts to build Windows-only functionality
-    rm src/mss/windows.py
-  '';
+  patches = lib.optionals stdenv.isLinux [
+    (substituteAll {
+      src = ./linux-paths.patch;
+      x11 = "${xorg.libX11}/lib/libX11.so";
+      xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
+      xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
+    })
+  ];
 
-  # Skipping tests due to most relying on DISPLAY being set
-  doCheck = false;
+  build-system = [ hatchling ];
+
+  doCheck = stdenv.isLinux;
+
+  nativeCheckInputs = [
+    lsof
+    pillow
+    pytest-cov-stub
+    pytest
+    pyvirtualdisplay
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run pytest -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "mss" ];
 

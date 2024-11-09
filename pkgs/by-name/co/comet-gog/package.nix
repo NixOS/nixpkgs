@@ -1,15 +1,10 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   protobuf,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "comet-gog";
   version = "0.1.2";
@@ -30,11 +25,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env.PROTOC = lib.getExe' protobuf "protoc";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    SystemConfiguration
-  ];
 
   meta = {
     changelog = "https://github.com/imLinguin/comet/releases/tag/v${version}";

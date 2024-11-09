@@ -258,6 +258,10 @@ in
 
   timerfunctions = ignoreCompilationErrorIfOlder super.timerfunctions "1.4.2.0.20201129.225252";
 
+  # kv is required in triples-test.el
+  # Alternatively, we can delete that file.  But adding a dependency is easier.
+  triples = addPackageRequires super.triples [ self.kv ];
+
   wisitoken-grammar-mode = ignoreCompilationError super.wisitoken-grammar-mode; # elisp error
 
   xeft = super.xeft.overrideAttrs (old: {

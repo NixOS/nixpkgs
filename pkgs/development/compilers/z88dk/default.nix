@@ -30,19 +30,6 @@ let
     };
   };
 
-  IteratorSimple = perlPackages.buildPerlPackage {
-    pname = "Iterator-Simple";
-    version = "0.07";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MICHAEL/Iterator-Simple-0.07.tar.gz";
-      hash = "sha256-y1dNBju0gcj7nLV4GkZFiWqg4e5xW6lHz3ZvH/Tp60Q=";
-    };
-    meta = {
-      description = "Simple iterator and utilities";
-      license = with lib.licenses; [ artistic1 gpl2Only ];
-    };
-  };
-
   IteratorSimpleLookahead = perlPackages.buildPerlPackage {
     pname = "Iterator-Simple-Lookahead";
     version = "0.09";
@@ -50,9 +37,9 @@ let
       url = "mirror://cpan/authors/id/P/PS/PSCUST/Iterator-Simple-Lookahead-0.09.tar.gz";
       hash = "sha256-FmPE1xdU8LAXS21+H4DJaQ87qDi4Q4UkLawsUAqseZw=";
     };
-    propagatedBuildInputs = [ IteratorSimple ] ++ (with perlPackages; [
-      ClassAccessor
-    ]);
+    propagatedBuildInputs = with perlPackages; [
+      ClassAccessor IteratorSimple
+    ];
     meta = {
       description = "Simple iterator with lookahead and unget";
       license = with lib.licenses; [ artistic1 gpl2Only ];
@@ -67,9 +54,9 @@ let
       hash = "sha256-pVTpIqGxZpBxZlAbXuGDapuOxsp3uM/AM5dKUxlej1M=";
     };
     propagatedBuildInputs = [
-        IteratorSimple
         IteratorSimpleLookahead
       ] ++ (with perlPackages; [
+        IteratorSimple
         TextTemplate
         DataDump
         FileSlurp

@@ -181,14 +181,6 @@ in {
       ];
     };
 
-    linux_6_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.10";
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.11";
       kernelPatches = [
@@ -211,6 +203,10 @@ in {
     in if latest.kernelAtLeast testing.baseVersion
        then latest
        else testing;
+
+    linux_default = packageAliases.linux_default.kernel;
+
+    linux_latest = packageAliases.linux_latest.kernel;
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -271,6 +267,7 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_11_hardened = hardenedKernelFor kernels.linux_6_11 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
@@ -280,6 +277,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8 = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -290,6 +288,7 @@ in {
     linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -405,6 +404,8 @@ in {
 
     new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
+    zenergy = callPackage ../os-specific/linux/zenergy { };
+
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
@@ -478,7 +479,7 @@ in {
 
     rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
-    tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
+    tuxedo-drivers = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-drivers { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
 
@@ -523,6 +524,8 @@ in {
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
+
+    corefreq = callPackage ../os-specific/linux/corefreq { };
 
     trelay = callPackage ../os-specific/linux/trelay { };
 
@@ -608,6 +611,7 @@ in {
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
     system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
     system76-scheduler = lib.warn "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
+    tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
@@ -619,7 +623,6 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-    linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
     linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -629,6 +632,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
     linux_6_8 = throw "linux 6.8 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
   };
 
   rtPackages = {
@@ -659,6 +663,7 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_11_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_11_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

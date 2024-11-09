@@ -7,11 +7,12 @@
 , bison
 , flex
 , zlib
+, apple-sdk_11
 }:
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.11.2";
+  version = "1.11.3";
 
   strictDeps = true;
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "zeek";
     repo = "spicy";
     rev = "v${version}";
-    hash = "sha256-cWK/LdV73VkiUpXyK+M7AotD7ucmNvh3HOzpxtCfGQM=";
+    hash = "sha256-SKhNBqZRgeN2cZZ2lv/IsOqaa5LY666OlICewN/iPVA=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +35,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     flex
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
   ];
 
   postPatch = ''
@@ -64,5 +67,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ tobim ];
+    platforms = platforms.unix;
   };
 }

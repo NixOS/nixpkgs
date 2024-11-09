@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, nixosTests }:
+{ stdenv, lib, fetchFromGitHub, nixosTests, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "rss-bridge";
@@ -16,8 +16,11 @@ stdenv.mkDerivation rec {
     cp -R ./* $out
   '';
 
-  passthru.tests = {
-    basic-functionality = nixosTests.rss-bridge;
+  passthru = {
+    tests = {
+      basic-functionality = nixosTests.rss-bridge;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

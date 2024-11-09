@@ -8,15 +8,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitlint-rs";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "KeisukeYamashita";
     repo = "commitlint-rs";
     rev = "v${version}";
-    hash = "sha256-FrYXEh75H0u1rE1YNDL/B1gMYMG43jPDJGUMv9y5/3g=";
+    hash = "sha256-xDEd3jNmqur+ULjXOReolIDiqvpT2tAHj/IbH2op5Po=";
   };
-  cargoHash = "sha256-W6HkLCUoylgQQc2fFprmJeLH8KtpVUD4+BXWbNECVZ4=";
+  cargoHash = "sha256-SNOy0B1QARfoueMsCjLZhJsGQy2jTSeFC/D1+R/FH4Y=";
 
   passthru = {
     updateScript = nix-update-script { };

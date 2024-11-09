@@ -30,7 +30,7 @@ rec {
     cp ${source}/patches/pref-pane/librewolf.css browser/themes/shared/preferences
     cp ${source}/patches/pref-pane/librewolf.inc.xhtml browser/components/preferences
     cp ${source}/patches/pref-pane/librewolf.js browser/components/preferences
-    cat ${source}/patches/pref-pane/preferences.ftl >> browser/locales/en-US/browser/preferences/preferences.ftl
+    cat ${source}/browser/preferences/preferences.ftl >> browser/locales/en-US/browser/preferences/preferences.ftl
   '';
 
   extraPrefsFiles = [ "${source}/settings/librewolf.cfg" ];

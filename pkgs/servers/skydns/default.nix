@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "skydns";
@@ -25,11 +25,13 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed service for announcement and discovery of services";
     homepage = "https://github.com/skynetservices/skydns";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "skydns";
+    # link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

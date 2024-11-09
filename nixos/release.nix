@@ -230,21 +230,6 @@ in rec {
     inherit system;
   });
 
-  # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forMatchingSystems [ "x86_64-linux" ] (system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ versionModule
-          ./modules/installer/virtualbox-demo.nix
-        ];
-    }).config.system.build.virtualBoxOVA)
-
-  );
-
   # KVM image for proxmox in VMA format
   proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
     with import ./.. { inherit system; };
@@ -312,7 +297,7 @@ in rec {
         [ configuration
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
+          ({ ... }: { virtualisation.diskSize = "auto"; })
         ];
     }).config.system.build.amazonImage)
 

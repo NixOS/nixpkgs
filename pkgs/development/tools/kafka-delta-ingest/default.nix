@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, perl
-, rdkafka
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  perl,
+  rdkafka,
+  # these are features in the cargo, where one may be disabled to reduce the final size
+  enableS3 ? true,
+  enableAzure ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+assert lib.assertMsg (enableS3 || enableAzure) "Either S3 or azure support needs to be enabled";
+rustPlatform.buildRustPackage {
   pname = "kafka-delta-ingest";
-  version = "unstable-2021-12-08";
+  version = "0-unstable-2024-11-05";
 
   src = fetchFromGitHub {
     owner = "delta-io";
-    repo = pname;
-    rev = "c48c854145b5aab1b8f36cc04978880794a2273c";
-    sha256 = "sha256-q0jOVZlxMHIhnc8y2N8o7Sl5Eg7DfJ96kXrPIV8RD1Y=";
+    repo = "kafka-delta-ingest";
+    rev = "b7638eda8642985b5bd56741de526ea051d784c0";
+    hash = "sha256-fngPFvCxEaHVenySG5FBbVXporu3Hf957iV3rGWsrzE=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +29,9 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildFeatures = [ "dynamic-linking" ];
+  buildFeatures = [
+    "dynamic-linking"
+  ] ++ lib.optional enableS3 "s3" ++ lib.optional enableAzure "azure";
 
   buildInputs = [
     openssl
@@ -33,10 +40,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "deltalake-0.4.1" = "sha256-0v3n+qMbBhw53qPuZdhGSO+aqc6j8T577fnyEIQmPDU=";
-    };
   };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   # many tests seem to require a running kafka instance
   doCheck = false;

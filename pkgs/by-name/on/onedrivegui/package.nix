@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.1.1a";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     owner = "bpozdena";
     repo = "OneDriveGUI";
     rev = "v${version}";
-    hash = "sha256-d5NAcT3x9R/2DVQKZsw4GH63nTlVFsvkWwMrb42s18s=";
+    hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
   };
 
   nativeBuildInputs = [

@@ -5,10 +5,9 @@
 , pkg-config
 , perl
 , tcl
-, tcllib
+, tclPackages
 , tk
 , expat
-, bwidget
 , python3
 , texliveTeTeX
 , survex
@@ -25,7 +24,6 @@
 , sqlite
 , libtiff
 , curl
-, tkimg
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +57,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    tkimg
+    tclPackages.tkimg
     proj
     wxGTK32
     vtk
@@ -74,8 +72,8 @@ stdenv.mkDerivation rec {
     curl
     fmt
     tcl
-    tcllib
-    bwidget
+    tclPackages.tcllib
+    tclPackages.bwidget
   ];
 
   fixupPhase = ''

@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   absl-py,
-  enum34,
   future,
   mock,
   mpyq,
@@ -40,7 +39,6 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     absl-py
-    enum34
     future
     mock
     mpyq

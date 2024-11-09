@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hkkylXJOhPOC4p+MOuYCzfcmCoHmm+/8afsaPFwD1/s=";
+    hash = "sha256-DtLyVfABMRhEaelOBKV6tnFYezOOyM8C9T50sPuaHXQ=";
   };
 
-  cargoHash = "sha256-Rh96vPLAxz8KCIk9y9TFB2fP0JngnM9LSsClWfgYUG0=";
+  cargoHash = "sha256-Ha9qW+nCG4dMUEL6CYm/gl2Xrsp5gQ2+xi0Se5dxmyU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,6 +49,9 @@ rustPlatform.buildRustPackage rec {
       lib.licenses.mit
       lib.licenses.asl20
     ];
-    maintainers = [ lib.maintainers.nobbz ];
+    maintainers = [
+      lib.maintainers.nobbz
+      lib.maintainers.pmw
+    ];
   };
 }

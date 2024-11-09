@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ola";
-  version = "unstable-2020-07-17";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "OpenLightingProject";
     repo = "ola";
-    rev = "e2cd699c7792570500578fd092fb6bfb3d511023"; # HEAD of "0.10" branch
-    sha256 = "17a3z3zhx00rjk58icd3zlqfw3753f3y8bwy2sza0frdim09lqr4";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8w8ZT3D/+8Pxl9z2KTXeydVxE5xiPjxZevgmMFgrblU=";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config perl ];

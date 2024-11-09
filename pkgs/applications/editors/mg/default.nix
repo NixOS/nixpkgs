@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, buildPackages, darwin }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mg";
   version = "7.3-unstable-2024-06-04";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin [ darwin.libutil ];
 
   meta = with lib; {
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
