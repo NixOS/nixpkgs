@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-  pkg = cfg.package;
   stateDir = "/var/lib/nzbget";
   configFile = "${stateDir}/nzbget.conf";
   configOpts = concatStringsSep " " (mapAttrsToList (name: value: "-o ${name}=${escapeShellArg (toStr value)}") cfg.settings);
@@ -26,6 +25,8 @@ in
   options = {
     services.nzbget = {
       enable = mkEnableOption (lib.mdDoc "NZBGet");
+
+      package = mkPackageOption pkgs "nzbget" { };
 
       user = mkOption {
         type = types.str;
@@ -51,8 +52,6 @@ in
           MainDir = "/data";
         };
       };
-
-      package = mkPackageOption pkgs "nzbget" { };
     };
   };
 
@@ -69,8 +68,8 @@ in
       InfoTarget = "screen";
       DetailTarget = "screen";
       # required paths
-      ConfigTemplate = "${pkg}/share/nzbget/nzbget.conf";
-      WebDir = "${pkg}/share/nzbget/webui";
+      ConfigTemplate = "${cfg.package}/share/nzbget/nzbget.conf";
+      WebDir = "${cfg.package}/share/nzbget/webui";
       # nixos handles package updates
       UpdateCheck = "none";
     };
@@ -86,7 +85,7 @@ in
 
       preStart = ''
         if [ ! -f ${configFile} ]; then
-          ${pkgs.coreutils}/bin/install -m 0700 ${pkg}/share/nzbget/nzbget.conf ${configFile}
+          ${pkgs.coreutils}/bin/install -m 0700 ${cfg.package}/share/nzbget/nzbget.conf ${configFile}
         fi
       '';
 
@@ -97,8 +96,8 @@ in
         Group = cfg.group;
         UMask = "0002";
         Restart = "on-failure";
-        ExecStart = "${pkg}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
-        ExecStop = "${pkg}/bin/nzbget --quit";
+        ExecStart = "${cfg.package}/bin/nzbget --server --configfile ${stateDir}/nzbget.conf ${configOpts}";
+        ExecStop = "${cfg.package}/bin/nzbget --quit";
       };
     };
 
