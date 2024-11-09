@@ -15013,6 +15013,8 @@ self: super: with self; {
 
   sphinx-autodoc-typehints = callPackage ../development/python-modules/sphinx-autodoc-typehints { };
 
+  sphinx-autodoc2 = callPackage ../development/python-modules/sphinx-autodoc2 { };
+
   sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
 
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
