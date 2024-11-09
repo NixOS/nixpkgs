@@ -203,3 +203,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # sqlc: format with nixfmt
 2bdec131b2bb2c8563f4556d741d34ccb77409e2
+
+# treewide: migrate packages to pkgs/by-name, take 1
+571c71e6f73af34a229414f51585738894211408
