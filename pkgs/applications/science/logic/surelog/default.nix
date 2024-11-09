@@ -12,7 +12,6 @@
 , antlr4
 , capnproto
 , nlohmann_json
-, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     capnproto
     antlr4.runtime.cpp
     nlohmann_json
-  ] ++ lib.optional stdenv.isDarwin [ darwin.libutil ];
+  ];
 
   cmakeFlags = [
     "-DSURELOG_USE_HOST_CAPNP=On"

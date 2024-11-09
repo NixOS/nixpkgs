@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , makeWrapper
 , pkg-config
 , libxslt
@@ -53,6 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./i686-test-remove-battery-check.patch
   ] ++ [
     ./installed-tests-path.patch
+
+    # Fix a race condition in test_sibling_priority_no_overwrite
+    # Remove when updating to > 1.90.6
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/upower/upower/-/commit/9ee76826bd41a5d3a377dfd6f5835f42ec50be9a.patch";
+      hash = "sha256-E56iz/iHn+VM7Opo0a13A5nhnB9nf6C7Y1kyWzk4ZnU=";
+    })
   ];
 
   strictDeps = true;

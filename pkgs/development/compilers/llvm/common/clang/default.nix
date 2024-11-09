@@ -79,13 +79,17 @@ let
       # Make sure clang passes the correct location of libLTO to ld64
       substituteInPlace lib/Driver/ToolChains/Darwin.cpp \
         --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
-    '' + (if lib.versionOlder release_version "13" then ''
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
-    '' else ''
-      (cd tools && ln -s ../../clang-tools-extra extra)
-    '') + lib.optionalString stdenv.hostPlatform.isMusl ''
+    '' + (
+      # See the comment on the `add-nostdlibinc-flag.patch` patch in
+      # `../default.nix` for why we skip Darwin here.
+      if lib.versionOlder release_version "13" && (!stdenv.hostPlatform.isDarwin || !stdenv.targetPlatform.isDarwin) then ''
+        sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
+               -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
+               lib/Driver/ToolChains/*.cpp
+      '' else ''
+        (cd tools && ln -s ../../clang-tools-extra extra)
+      ''
+    ) + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 

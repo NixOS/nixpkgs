@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # https://github.com/libffi/libffi/pull/857
+    # function label needs to come before .cfi_startproc
+    ./label-before-cfi_startproc.patch
   ];
 
   strictDeps = true;

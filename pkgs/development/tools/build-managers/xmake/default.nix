@@ -4,24 +4,21 @@
   fetchurl,
   fetchpatch,
   CoreServices,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "xmake";
-  version = "2.9.5";
+  version = "2.9.6";
   src = fetchurl {
     url = "https://github.com/xmake-io/xmake/releases/download/v${version}/xmake-v${version}.tar.gz";
-    hash = "sha256-A/61eH4i+rjdQEGew9hKvTWrzZ+KGyTEiMfrVx1nJMg=";
+    hash = "sha256-R/bvywD5DJigLDlflztNVb3TqP5FJnbc5XtVwFV1loY=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "xmake-fix-configure-compatibility.patch";
-      url = "https://github.com/xmake-io/xmake/commit/2a1220727a367e753b92131577ab0c2fd974bff8.patch";
-      hash = "sha256-xknlyydHvdwqTl975VQogKozT8nAp5+gPZQuRl1yXKE=";
-    })
-  ];
-
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Cross-platform build utility based on Lua";

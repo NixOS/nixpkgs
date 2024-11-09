@@ -87,7 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  # This is part of the Darwin bootstrap, so we don’t always get
+  # `libutil.dylib` automatically propagated through the SDK.
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.getLib darwin.libutil)
+  ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh

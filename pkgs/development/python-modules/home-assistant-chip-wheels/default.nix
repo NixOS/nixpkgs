@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     yapf
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     openssl
     glib
     libnl

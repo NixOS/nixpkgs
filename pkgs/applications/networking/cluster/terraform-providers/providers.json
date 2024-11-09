@@ -206,6 +206,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-PFeWgDw1hkW/ekQfubRSYlaD4d4wJ4GOohOJ00QcEqQ="
   },
+  "ccloud": {
+    "hash": "sha256-bGyVfB9eenE6QZZw0bAxnve0KW0ZQ54slTaaWZXDBOc=",
+    "homepage": "https://registry.terraform.io/providers/sapcc/ccloud",
+    "owner": "sapcc",
+    "repo": "terraform-provider-ccloud",
+    "rev": "v1.6.6",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-uftDCqDU0HeDj7rjAevulsFCVFFQt3eg8vcFM9YJrow="
+  },
   "checkly": {
     "hash": "sha256-4J7pwtlAa920RXF6ZoSoi03qA15NBzUlXQCZRErI2Co=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",

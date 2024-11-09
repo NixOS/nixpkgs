@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/VulkanTools";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [ maintainers.expipiplus1 ];
+    maintainers = [];
   };
 }

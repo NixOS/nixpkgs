@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
 with {
   "12" = {
@@ -27,11 +27,9 @@ with {
   };
 }."${lib.versions.major postgresql.version}" or (throw "pg_safeupdate: version specification for pg ${postgresql.version} missing.");
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg-safeupdate";
   inherit version;
-
-  buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner  = "eradman";
@@ -39,10 +37,6 @@ stdenv.mkDerivation rec {
     rev    = version;
     inherit sha256;
   };
-
-  installPhase = ''
-    install -D safeupdate${postgresql.dlSuffix} -t $out/lib
-  '';
 
   meta = with lib; {
     description = "Simple extension to PostgreSQL that requires criteria for UPDATE and DELETE";

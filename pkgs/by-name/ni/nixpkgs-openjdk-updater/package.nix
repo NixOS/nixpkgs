@@ -43,11 +43,17 @@ python3Packages.buildPythonApplication {
       featureVersionPrefix,
     }:
     let
-      # TODO: Tighten up after update scripts are run.
-      src = fetchFromGitHub (lib.importJSON sourceFile);
+      sourceInfo = lib.importJSON sourceFile;
     in
     {
-      inherit src;
+      src = fetchFromGitHub {
+        inherit (sourceInfo)
+          owner
+          repo
+          rev
+          hash
+          ;
+      };
 
       updateScript = {
         command = [
@@ -57,10 +63,10 @@ python3Packages.buildPythonApplication {
           sourceFile
 
           "--owner"
-          src.owner
+          sourceInfo.owner
 
           "--repo"
-          src.repo
+          sourceInfo.repo
 
           "--feature-version-prefix"
           featureVersionPrefix

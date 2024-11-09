@@ -4,7 +4,7 @@
   fetchPypi,
   isPy27,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   setuptools,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   checkPhase = ''

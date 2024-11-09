@@ -104,25 +104,26 @@ import ./default.nix
       else
         llvmPackages_18;
 
-    # Note: the version MUST be one version prior to the version we're
-    # building
-    bootstrapVersion = "1.81.0";
+    # Note: the version MUST be the same version that we are building. Upstream
+    # ensures that each released compiler can compile itself:
+    # https://github.com/NixOS/nixpkgs/pull/351028#issuecomment-2438244363
+    bootstrapVersion = "1.82.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "0ab6ff2da7218220a2fb6e9538f5582c5d27448e91ff6ea2e296b2aee2b5e2d9";
-      x86_64-unknown-linux-gnu = "4ca7c24e573dae2f382d8d266babfddc307155e1a0a4025f3bc11db58a6cab3e";
-      x86_64-unknown-linux-musl = "2a0829c842425ab316a63adb0d604421be1c4df332388ac26d63aef47e857c12";
-      arm-unknown-linux-gnueabihf = "0da7b4a3b760fa514ba5e1a731fd212f1d082468f118f19e852136a30d2c0253";
-      armv7-unknown-linux-gnueabihf = "5a8d799a09cc605ea3a88dc43bd348bd6335847a0b71ba8e73b40968a0a7bf6f";
-      aarch64-unknown-linux-gnu = "ef4da9c1ecd56bbbb36f42793524cce3062e6a823ae22cb679a945c075c7755b";
-      aarch64-unknown-linux-musl = "fab9a1a69e61326399becab2571381b079ee42f2b648d862b0c3df05004dc864";
-      x86_64-apple-darwin = "f74d8ad24cc3cbfb825da98a08d98319565e4d18ec2c3e9503bf0a33c81ba767";
-      aarch64-apple-darwin = "60a41dea4ae0f4006325745a6400e6fdc3e08ad3f924fac06f04c238cf23f4ec";
-      powerpc64le-unknown-linux-gnu = "bf98b27de08a2fd5a2202a2b621b02bfde2a6fde397df2a735d018aeffcdc5e2";
-      riscv64gc-unknown-linux-gnu = "664e7a50c03848afc86d579a9cbf82cd0b2291a97776f7f81cee9bbf9fc1f648";
-      s390x-unknown-linux-gnu = "e0450ff125cadd3813c7888f5ca42f78e68df13c212b12d5eac3325062632723";
-      x86_64-unknown-freebsd = "b96ebbc043058eedebccd20f1d01e64f2241107665fe2336e6927966d8b9d8d3";
+      i686-unknown-linux-gnu = "77b261fb3d9efa7fe39e87c024987495e03b647b6cb23a66b8e69aeb12a8be61";
+      x86_64-unknown-linux-gnu = "0265c08ae997c4de965048a244605fb1f24a600bbe35047b811c638b8fcf676b";
+      x86_64-unknown-linux-musl = "9dd781c64f71c1d3f854b0937eb751f19e8ebac1110e68e08b94223ad9b022ba";
+      arm-unknown-linux-gnueabihf = "d6a2857d0ab8880c3bc691607b10b68fb2750eae35144e035a9a5eeef820b740";
+      armv7-unknown-linux-gnueabihf = "eff9939c4b98c6ad91a759fa1a2ebdd81b4d05e47ac523218bf9d7093226589b";
+      aarch64-unknown-linux-gnu = "d7db04fce65b5f73282941f3f1df5893be9810af17eb7c65b2e614461fe31a48";
+      aarch64-unknown-linux-musl = "f061eabf0324805637c1e89e7d936365f705be1359699efbda59b637dbe9715f";
+      x86_64-apple-darwin = "b1a289cabc523f259f65116a41374ac159d72fbbf6c373bd5e545c8e835ceb6a";
+      aarch64-apple-darwin = "49b6d36b308addcfd21ae56c94957688338ba7b8985bff57fc626c8e1b32f62c";
+      powerpc64le-unknown-linux-gnu = "44f3a1e70be33f91927ae8d89a11843a79b8b6124d62a9ddd9030a5275ebc923";
+      riscv64gc-unknown-linux-gnu = "a72e8aa3fff374061ff90ada317a8d170c2a15eb079ddc828c97189179d3eebd";
+      s390x-unknown-linux-gnu = "63760886a9b2de6cb38f75a236db358939d904e205e1e2bc9d96cec69e00ae83";
+      x86_64-unknown-freebsd = "f7b51943dbed0af3387e3269c1767fee916fb22b8e7897b3594bf5e422403137";
     };
 
     selectRustPackage = pkgs: pkgs.rust_1_82;

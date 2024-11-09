@@ -14,14 +14,23 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.9DOM.2";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bNMJZWXelHQatW9rhqf3eYs61nJJEBwMXZhUZWQv6S0=";
+    sha256 = "sha256-XKioPk0Rv+I916OLInJEtOaDV9KcBMWSHmPOq2k3LTQ=";
   };
+
+  postPatch = ''
+    EXPECTED_WEBCONSOLE_STRING='DEFAULT_WEBCONSOLE_VERSION=${webconsoleVersion}'
+    if ! grep -F "$EXPECTED_WEBCONSOLE_STRING" Makefile ; then
+      echo "Did not find $EXPECTED_WEBCONSOLE_STRING in Makefile. " \
+        "Our webconsole version may need bumping (or the Makefile may have changed)"
+      exit 3
+    fi
+  '';
 
   preBuild = ''
     mkdir -p webconsole/dist

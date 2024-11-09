@@ -4,9 +4,10 @@
 , libsodium
 , postgresql
 , postgresqlTestExtension
+, buildPostgresqlExtension
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pgsodium";
   version = "3.1.9";
 
@@ -19,20 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsodium
-    postgresql
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib pgsodium${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension sql/pgsodium-*.sql
-    install -D -t $out/share/postgresql/extension pgsodium.control
-
+  postInstall = ''
     install -D -t $out/share/pgsodium/getkey_scripts getkey_scripts/*
     ln -s $out/share/pgsodium/getkey_scripts/pgsodium_getkey_urandom.sh $out/share/postgresql/extension/pgsodium_getkey
-
-    runHook postInstall
   '';
 
   passthru.tests.extension = postgresqlTestExtension {

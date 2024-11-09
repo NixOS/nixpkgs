@@ -1,47 +1,49 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, joker
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  joker,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "goku";
-  version = "0.6.0";
+  version = "0.7.2";
 
-  src = if stdenv.hostPlatform.isAarch64 then
-    fetchurl {
-      url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku-arm.zip";
-      hash = "sha256-TIoda2kDckK1FBLAmKudsDs3LXO4J0KWiAD2JlFb4rk=";
-    }
-    else fetchurl {
-      url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.zip";
-      hash = "sha256-8HdIwtpzR6O2WCbMYIJ6PHcM27Xmb+4Tc5Fmjl0dABQ=";
-    };
+  src =
+    if stdenvNoCC.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
+        hash = "sha256-mjz1JD12U23Pi8kumELtT9ENhXpX8Db4LUS3DOtP5GM=";
+      }
+    else
+      fetchurl {
+        url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku.zip";
+        hash = "sha256-8HdIwtpzR6O2WCbMYIJ6PHcM27Xmb+4Tc5Fmjl0dABQ=";
+      };
 
-  nativeBuildInputs = [
-    unzip
-  ];
+  nativeBuildInputs = [ unzip ];
 
-  buildInputs = [
-    joker
-  ];
+  buildInputs = [ joker ];
 
-  sourceRoot = if stdenv.hostPlatform.isAarch64 then "goku" else ".";
+  sourceRoot = if stdenvNoCC.hostPlatform.isAarch64 then "goku" else ".";
+
+  passthru.updateScript = nix-update-script { };
 
   installPhase = ''
-    chmod +x goku
-    chmod +x gokuw
-    mkdir -p $out/bin
-    cp goku $out/bin
-    cp gokuw $out/bin
+    runHook preInstall
+    mkdir -p "$out/bin"
+    chmod +x {goku,gokuw}
+    cp {goku,gokuw} "$out/bin"
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.nikitavoloboev ];
-    platforms = platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.nikitavoloboev ];
+    platforms = lib.platforms.darwin;
   };
-}
+})

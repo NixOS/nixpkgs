@@ -117,10 +117,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
     ++ lib.optional (!enableSim) "--disable-sim";
 
-  postInstall =
-    '' # Remove Info files already provided by Binutils and other packages.
-       rm -v $out/share/info/bfd.info
-    '';
+  postInstall = ''
+    # Remove Info files already provided by Binutils and other packages.
+    rm -v $out/share/info/bfd.info
+  '';
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;

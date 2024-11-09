@@ -4,7 +4,7 @@
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
   # darwin support
-, darwinMinVersionHook, apple-sdk, apple-sdk_10_14, apple-sdk_14, xcbuild
+, apple-sdk_13, darwinMinVersionHook, xcbuild
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
@@ -38,12 +38,14 @@ let
     then "linux-generic-g++"
     else throw "Please add a qtPlatformCross entry for ${plat.config}";
 
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 14.x.
-  # Note that Qt propagates the 10.14 SDK instead of the 10.13 SDK to make sure that applications linked to Qt
-  # support automatic dark mode on x86_64-darwin (see: https://developer.apple.com/documentation/appkit/nsappearancecustomization/choosing_a_specific_appearance_for_your_macos_app).
-  propagatedAppleSDK = if lib.versionOlder (lib.getVersion apple-sdk) "10.14" then apple-sdk_10_14 else apple-sdk;
-  propagatedMinVersionHook = darwinMinVersionHook "10.13";
-  buildAppleSDK = apple-sdk_14;
+  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 13.x or 14.x.
+  # Despite advertising support for the macOS 14 SDK, the build system sets the maximum to 13 and complains
+  # about 14, so we just use that.
+  deploymentTarget = "10.13";
+  darwinVersionInputs = [
+    apple-sdk_13
+    (darwinMinVersionHook deploymentTarget)
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: ({
@@ -60,11 +62,8 @@ stdenv.mkDerivation (finalAttrs: ({
     # Image formats
     libjpeg libpng
     pcre2
-  ] ++ (
-    if stdenv.hostPlatform.isDarwin then [
-      propagatedAppleSDK
-      propagatedMinVersionHook
-    ] else [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
+    [
       dbus glib udev
 
       # Text rendering
@@ -84,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: ({
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-    ++ lib.optional stdenv.isDarwin buildAppleSDK
+    ++ lib.optional stdenv.isDarwin darwinVersionInputs
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysqlSupport) libmysqlclient
@@ -146,13 +145,27 @@ stdenv.mkDerivation (finalAttrs: ({
     patchShebangs ./bin
   '' + (
     if stdenv.hostPlatform.isDarwin then ''
+      for file in \
+        configure \
+        mkspecs/features/mac/asset_catalogs.prf \
+        mkspecs/features/mac/default_pre.prf \
+        mkspecs/features/mac/sdk.mk \
+        mkspecs/features/mac/sdk.prf
+      do
+        substituteInPlace "$file" \
+          --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
+          --replace-quiet /usr/bin/xcrun '${lib.getExe' xcbuild "xcrun"}' \
+          --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
+      done
+
       substituteInPlace configure \
-        --replace-fail '/usr/bin/xcode-select' '${lib.getBin xcbuild}/bin/xcode-select' \
-        --replace-fail '/usr/bin/xcrun' '${lib.getBin xcbuild}/bin/xcrun' \
-        --replace-fail '/System/Library/Frameworks/Cocoa.framework' "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
-      substituteInPlace ./mkspecs/common/mac.conf \
-        --replace-fail "/System/Library/Frameworks/OpenGL.framework/" "$SDKROOT/System/Library/Frameworks/OpenGL.framework/" \
-        --replace-fail "/System/Library/Frameworks/AGL.framework/" "$SDKROOT/System/Library/Frameworks/AGL.framework/"
+        --replace-fail /System/Library/Frameworks/Cocoa.framework "$SDKROOT/System/Library/Frameworks/Cocoa.framework"
+
+      substituteInPlace mkspecs/common/macx.conf \
+        --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath ' \
+        --replace-fail \
+          'QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13' \
+          'QMAKE_MACOSX_DEPLOYMENT_TARGET = ${deploymentTarget}'
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
@@ -326,6 +339,7 @@ stdenv.mkDerivation (finalAttrs: ({
       "-qt-freetype"
       "-qt-libpng"
       "-no-framework"
+      "-no-rpath"
     ] else [
       "-rpath"
     ] ++ [

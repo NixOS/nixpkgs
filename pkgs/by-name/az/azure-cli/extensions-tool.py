@@ -101,6 +101,7 @@ def _write_extension_set(extensions_generated: Path, extensions: Set[Ext]) -> No
     ls.sort(key=lambda e: e.pname)
     with open(extensions_generated, "w") as f:
         json.dump({ext.pname: asdict(ext) for ext in ls}, f, indent=2)
+        f.write("\n")
 
 
 def _convert_hash_digest_from_hex_to_b64_sri(s: str) -> str:
@@ -113,11 +114,11 @@ def _convert_hash_digest_from_hex_to_b64_sri(s: str) -> str:
     return f"sha256-{base64.b64encode(b).decode('utf-8')}"
 
 
-def _commit(repo: git.Repo, message: str, files: List[Path]) -> None:
+def _commit(repo: git.Repo, message: str, files: List[Path], actor: git.Actor) -> None:
     repo.index.add([str(f.resolve()) for f in files])
     if repo.index.diff("HEAD"):
         logger.info(f'committing to nixpkgs "{message}"')
-        repo.index.commit(message)
+        repo.index.commit(message, author=actor, committer=actor)
     else:
         logger.warning("no changes in working tree to commit")
 
@@ -248,6 +249,10 @@ def main() -> None:
     args = parser.parse_args()
 
     repo = git.Repo(Path(".").resolve(), search_parent_directories=True)
+    # Workaround for https://github.com/gitpython-developers/GitPython/issues/1923
+    author = repo.config_reader().get_value("user", "name").lstrip('"').rstrip('"')
+    email = repo.config_reader().get_value("user", "email").lstrip('"').rstrip('"')
+    actor = git.Actor(author, email)
 
     index = get_extension_index(args.cache_dir)
     assert index["formatVersion"] == "1"  # only support formatVersion 1
@@ -288,6 +293,23 @@ def main() -> None:
     for prev, new in updated:
         logger.info(f"  {prev.pname} {prev.version} -> {new.version}")
 
+    for ext in init:
+        extensions_local.add(ext)
+        commit_msg = f"azure-cli-extensions.{ext.pname}: init at {ext.version}"
+        _write_extension_set(extension_file, extensions_local)
+        if args.commit:
+            _commit(repo, commit_msg, [extension_file], actor)
+
+    for prev, new in updated:
+        extensions_local.remove(prev)
+        extensions_local.add(new)
+        commit_msg = (
+            f"azure-cli-extensions.{prev.pname}: {prev.version} -> {new.version}"
+        )
+        _write_extension_set(extension_file, extensions_local)
+        if args.commit:
+            _commit(repo, commit_msg, [extension_file], actor)
+
     for ext in removed:
         extensions_local.remove(ext)
         # TODO: Add additional check why this is removed
@@ -295,24 +317,7 @@ def main() -> None:
         commit_msg = f"azure-cli-extensions.{ext.pname}: remove"
         _write_extension_set(extension_file, extensions_local)
         if args.commit:
-            _commit(repo, commit_msg, [extension_file])
-
-    for ext in init:
-        extensions_local.add(ext)
-        commit_msg = f"azure-cli-extensions.{ext.pname}: init at {ext.version}"
-        _write_extension_set(extension_file, extensions_local)
-        if args.commit:
-            _commit(repo, commit_msg, [extension_file])
-
-    for prev, new in updated:
-        extensions_local.remove(prev)
-        extensions_local.add(new)
-        commit_msg = (
-            f"azure-cli-extension.{prev.pname}: {prev.version} -> {new.version}"
-        )
-        _write_extension_set(extension_file, extensions_local)
-        if args.commit:
-            _commit(repo, commit_msg, [extension_file])
+            _commit(repo, commit_msg, [extension_file], actor)
 
 
 if __name__ == "__main__":

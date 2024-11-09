@@ -283,14 +283,14 @@ stdenv.mkDerivation ({
     homepage = "https://www.gnu.org/software/libc/";
     description = "GNU C Library";
 
-    longDescription =
-      '' Any Unix-like operating system needs a C library: the library which
-         defines the "system calls" and other basic facilities such as
-         open, malloc, printf, exit...
+    longDescription = ''
+      Any Unix-like operating system needs a C library: the library which
+      defines the "system calls" and other basic facilities such as
+      open, malloc, printf, exit...
 
-         The GNU C library is used as the C library in the GNU system and
-         most systems with the Linux kernel.
-      '';
+      The GNU C library is used as the C library in the GNU system and
+      most systems with the Linux kernel.
+    '';
 
     license = licenses.lgpl2Plus;
 

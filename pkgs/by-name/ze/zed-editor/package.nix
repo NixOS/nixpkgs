@@ -200,9 +200,6 @@ rustPlatform.buildRustPackage rec {
     ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
     # Used by `zed --version`
     RELEASE_VERSION = version;
-    # Required until `-isysroot` can be used with libclang in nixpkgs on darwin, otherwise
-    # rust bindgen will not work as expected
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${apple-sdk_15.sdkroot}/System/Library/Frameworks";
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";

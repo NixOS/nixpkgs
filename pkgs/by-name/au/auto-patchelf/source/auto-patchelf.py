@@ -21,6 +21,9 @@ from elftools.elf.elffile import ELFFile  # type: ignore
 from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI  # type: ignore
 
 
+DEFAULT_BINTOOLS = "@defaultBintools@"
+
+
 @contextmanager
 def open_elf(path: Path) -> Iterator[ELFFile]:
     with path.open('rb') as stream:
@@ -425,7 +428,7 @@ interpreter_arch: str   = None # type: ignore
 libc_lib: Path          = None # type: ignore
 
 if __name__ == "__main__":
-    nix_support = Path(os.environ.get('NIX_BINTOOLS', os.environ['DEFAULT_BINTOOLS'])) / 'nix-support'
+    nix_support = Path(os.environ.get('NIX_BINTOOLS', DEFAULT_BINTOOLS)) / 'nix-support'
     interpreter_path = Path((nix_support / 'dynamic-linker').read_text().strip())
     libc_lib = Path((nix_support / 'orig-libc').read_text().strip()) / 'lib'
 

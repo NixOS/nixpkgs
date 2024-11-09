@@ -131,6 +131,9 @@ in stdenv.mkDerivation {
       ASAN_OPTIONS=use_sigaltstack=0 ${emulator} ./sanitizers
     ''}
 
+    echo "Check whether CC and LD with NIX_X_USE_RESPONSE_FILE hardcodes all required binaries..." >&2
+    NIX_CC_USE_RESPONSE_FILE=1 NIX_LD_USE_RESPONSE_FILE=1 ${CC} -v
+
     touch $out
   '';
 

@@ -17,6 +17,14 @@ let
   spirv-llvm-translator = buildPackages.spirv-llvm-translator.override {
     inherit (buildLlvmTools) llvm;
   };
+
+  # The build requires an unwrapped clang but wrapped clang++ thus we need to
+  # split the unwrapped clang out to prevent the build from finding the
+  # unwrapped clang++
+  clang-only = runCommand "clang-only" { } ''
+    mkdir -p "$out"/bin
+    ln -s "${lib.getExe' buildLlvmTools.clang.cc "clang"}" "$out"/bin
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "libclc";
@@ -78,7 +86,7 @@ stdenv.mkDerivation rec {
       python3
     ]
     ++ lib.optional (lib.versionAtLeast release_version "19") [
-      buildLlvmTools.clang.cc
+      clang-only
       buildLlvmTools.llvm
       spirv-llvm-translator
     ];

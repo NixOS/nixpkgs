@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qcoro";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "danvratil";
     repo = "qcoro";
     rev = "v${version}";
-    sha256 = "sha256-C4k5ClsMwzxURAQBGV5WBwlRr5N0SvUMJobZ+ROT0EY=";
+    sha256 = "sha256-teRuWtNR8r/MHZhqphazr7Jmn43qsHGv9eXOGrhSND0=";
   };
 
   outputs = [ "out" "dev" ];
