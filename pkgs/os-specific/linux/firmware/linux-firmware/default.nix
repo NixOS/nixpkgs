@@ -1,6 +1,5 @@
 { stdenvNoCC
 , fetchzip
-, findutils
 , lib
 , python3
 , rdfind
@@ -13,7 +12,7 @@ let
   # in a perfectly pristine tree, so we can fake just enough of git to run it.
   gitStub = writeShellScriptBin "git" ''
     if [ "$1" == "ls-files" ]; then
-      ${lib.getExe findutils} -type f -printf "%P\n"
+      find -type f -printf "%P\n"
     else
       echo "Git stub called with unexpected arguments $@" >&2
       exit 1
