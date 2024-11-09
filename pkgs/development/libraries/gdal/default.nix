@@ -3,7 +3,6 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -82,26 +81,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.3";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8LY63s5vOVK0V37jQ60qFsaW/2D/13Xuy9/2OPLyTso=";
+    hash = "sha256-pb2xKTmJB7U1jIG80ENmZrR7vFw6YDoees43u/JhU3Y=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
-      sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
-    })
-    (fetchpatch {
-      name = "arrow-18.patch";
-      url = "https://github.com/OSGeo/gdal/commit/9a8c5c031404bbc81445291bad128bc13766cafa.patch";
-      sha256 = "sha256-tF46DmF7ZReqY8ACTTPXohWLsRn8lVxhKF1s+r254KM=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -301,7 +288,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky on macos
       "test_rda_download_queue"
-      "test_ogr_gpkg_arrow_stream_huge_array"
     ]
     ++ lib.optionals (lib.versionOlder proj.version "8") [
       "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
