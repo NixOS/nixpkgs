@@ -15,15 +15,31 @@
   libGL,
 }:
 let
-  pname = "mihomo-party";
-  version = "1.4.5";
-  src = fetchurl {
-    url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-amd64.deb";
-    hash = "sha256-O332nt2kgpDGY84S78Tx2PGUw1Pyj80ab2ZE3woYm4Y=";
-  };
+  version = "1.5.6";
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
+        x86_64-linux = "amd64";
+        aarch64-linux = "arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-4ipAV9kqK/qYAydXMugDI4RbGe/a5Om+hKz/KwPXXSc=";
+        aarch64-linux = "sha256-Fc5fd8fv9qpuCeFny9jL5h4nnHg5Vi50YAqNlmymEIg=";
+      };
+    in
+    fetchurl {
+      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${suffix}.deb";
+      inherit hash;
+    };
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit version src;
+
+  pname = "mihomo-party";
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [
     dpkg
@@ -70,8 +86,10 @@ stdenv.mkDerivation {
     description = "Another Mihomo GUI";
     homepage = "https://github.com/mihomo-party-org/mihomo-party";
     mainProgram = "mihomo-party";
-    platforms = with lib.platforms; linux ++ darwin;
-    broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ aucub ];
