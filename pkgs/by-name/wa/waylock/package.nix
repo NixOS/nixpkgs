@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace pam.d/waylock --replace-fail "system-auth" "login"
   '';
 
-  passthru.updateScript = ./update.nu;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://codeberg.org/ifreund/waylock";
