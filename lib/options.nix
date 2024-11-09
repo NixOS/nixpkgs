@@ -220,6 +220,34 @@ rec {
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
+  /**
+    Creates an Option attribute set for an option that specifies IP address.
+    The difference with `lib.mkOption` is that the `type` field must be an integer version of the IP address used.
+
+    # Examples:
+
+    ```nix
+    mkNetworkingOption {
+      default = "::";
+      type = 6;
+    }
+    => {..., default = "::"; type = lib.types.coercedTo lib.types.ipv6Addr lib.ipv6.fromString lib.ipv6AddAttrs; }
+    ```
+  */
+  mkNetworkingOption =
+    attrSet:
+    let
+      ver = toString attrSet.type;
+    in
+    lib.mkOption (
+      attrSet
+      // {
+        type =
+          lib.types.coercedTo lib.types."ipv${ver}Addr" lib."ipv${ver}".fromString
+            lib.types."ipv${ver}AddrAttrs";
+      }
+    );
+
   /* Deprecated alias of mkPackageOption, to be removed in 25.05.
      Previously used to create options with markdown documentation, which is no longer required.
   */

@@ -14,8 +14,6 @@ let
 
   inherit (lib) lists strings trivial;
 
-  inherit (lib.lists) last;
-
   /*
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
@@ -33,7 +31,7 @@ let
     the list of strings which then can be parsed using `_parseExpanded`.
     Throws an error when the address is malformed.
 
-    # Type: String -> [ String ]
+    # Type: string -> [ string ]
 
     # Example:
 
@@ -94,7 +92,7 @@ let
     functions.
     Throws an error some element is not an u16 integer.
 
-    # Type: [ String ] -> IPv6
+    # Type: [ string ] -> ipv6IR
 
     # Example:
 
@@ -107,7 +105,7 @@ let
     addr:
     assert lib.assertMsg (
       length addr == ipv6Pieces
-    ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
+    ) "parseExpandedIpv6: expected list of integers with ${toString ipv6Pieces} elements";
     let
       u16FromHexStr =
         hex:
@@ -120,13 +118,56 @@ let
           throw "0x${hex} is not a valid u16 integer";
     in
     map (piece: u16FromHexStr piece) addr;
+
+  /**
+    Returns a new list where each element is taken modulo `mod`. The algorithm
+    starts with the last element, the last element becomes the remainder of `mod`
+    and adds an quotient part to the previous element.
+
+    # Type: int -> [ int ] -> [ int ]
+
+    # Example:
+
+    ```nix
+    modList 10 [9 10]
+    => [1 0 0]
+    modList 3 [1 2 10]
+    => [2 2 1]
+    ```
+  */
+  modList =
+    mod: list:
+    assert lib.assertMsg (mod > 0) "modList: module must be positive integer";
+    let
+      modListRec =
+        add: mod: list:
+        let
+          listLen = length list;
+        in
+        if listLen == 0 then
+          if add == 0 then [ ] else [ add ]
+        else
+          # Create a new list. The last element is the remainder and add the
+          # quotient to the previous element.
+          let
+            newValue = lists.last list + add;
+            newList = lists.take (listLen - 1) list;
+          in
+          let
+            quot = newValue / mod;
+            rem = trivial.mod newValue mod;
+            prefix = modListRec quot mod newList;
+          in
+          prefix ++ [ rem ];
+    in
+    modListRec 0 mod list;
 in
 let
   /**
     Parses an IPv6 address from a string to the internal representation (list
     of integers).
 
-    # Type: String -> IPv6
+    # Type: string -> ipv6IR
 
     # Example:
 
@@ -136,31 +177,193 @@ let
     ```
   */
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
+
+  /**
+    Converts an internal representation of an IPv6 address (i.e, a list
+    of integers) to a string. The returned string is not a canonical
+    representation as defined in RFC 5952, i.e zeros are not compressed.
+
+    # Type: ipv6IR -> string
+
+    # Example:
+
+    ```nix
+    parseIpv6FromString [8193 3512 0 0 0 0 0 65535]
+    => "2001:db8:0:0:0:0:0:ffff"
+    ```
+  */
+  toStringFromExpandedIp =
+    pieces:
+    assert lib.assertMsg (
+      length pieces == ipv6Pieces
+    ) "toStringFromExpandedIp: expected a list with ${ipv6Pieces}";
+    (strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces);
+
+  /**
+    Raises `base` to the power of `exponent`.
+
+    # Type: int -> int -> int
+
+    ```nix
+    pow 2 3
+    => 8
+    ```
+  */
+  pow =
+    base: exponent:
+    if exponent < 0 then
+      throw "lib.network.pow: Exponent cannot be negative."
+    else if exponent == 0 then
+      1
+    else
+      lists.foldl' (acc: _: acc * base) 1 (lists.range 1 exponent);
+in
+let
+  /**
+    Calculates the first address in a subnet.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    ```nix
+    calculateFirstAddress [8193 3512 0 0 0 0 0 65535] 16
+    => [8193 0 0 0 0 0 0 0]
+    ```
+  */
+  calculateFirstAddress =
+    addr: prefixLength:
+    let
+      prefixMask = lists.imap0 (
+        idx: piece:
+        # Generate a decimal number, which in binary format will have the format "1111111100000000", where the number of ones is equal to `bits'.
+        let
+          bits = trivial.min (trivial.max (prefixLength - ipv6PieceBits * idx) 0) ipv6PieceBits;
+          # 2^n - 2^(n-k) to pad k bits with ones on the left.
+          maskForPiece = (pow 2 ipv6PieceBits) - (pow 2 (ipv6PieceBits - bits));
+        in
+        maskForPiece
+      ) addr;
+
+      firstAddress = lists.zipListsWith (l: r: trivial.bitAnd l r) addr prefixMask;
+    in
+    firstAddress;
+
+  /**
+    Calculates the last address in a subnet.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    ```nix
+    calculateLastAddress [8193 3512 0 0 0 0 0 65535] 16
+    => [8193 65535 65535 65535 65535 65535 65535 65535]
+    ```
+  */
+  calculateLastAddress =
+    addr: prefixLength:
+    let
+      suffixLength = ipv6Bits - prefixLength;
+      suffixMask = lists.imap0 (
+        idx: piece:
+        # Generate a decimal number, which in binary format will have the format "0000000011111111", where the number of ones is equal to `bits'.
+        let
+          bits = trivial.min (trivial.max (
+            suffixLength - ipv6PieceBits * (ipv6Pieces - idx - 1)
+          ) 0) ipv6PieceBits;
+          # 2^n - 1 to pad k bits with ones on the right.
+          maskForPiece = (pow 2 bits) - 1;
+        in
+        maskForPiece
+      ) addr;
+
+      lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
+    in
+    lastAddress;
+
+  /**
+    Calculates the next address. Returns null if the passed address is the
+    last one.
+
+    # Type: ipv6IR -> int -> ipv6IR
+
+    # Example:
+
+    ```nix
+    calculateNextAddress [8193 3512 0 0 0 0 0 65535]
+    => [8193 3512 0 0 0 0 1 0]
+    ```
+  */
+  calculateNextAddress =
+    addr: prefixLength:
+    if addr == calculateLastAddress addr prefixLength then
+      null
+    else
+      let
+        # Add one to the last piece of the address, then take the modulus - if
+        # it's greater than 65535, make it 0 and add one to the penultimate piece.
+        newAddr = (lists.take (length addr - 1) addr) ++ [ (lists.last addr + 1) ];
+        nextAddr = modList (ipv6PieceMaxValue + 1) newAddr;
+      in
+      nextAddr;
 in
 {
+  _common = {
+    inherit modList;
+  };
+
   /*
-    Internally, an IPv6 address is stored as a list of 16-bit integers with 8
-    elements. Wherever you see `IPv6` in internal functions docs, it means that
-    it is a list of integers produced by one of the internal parsers, such as
-    `parseIpv6FromString`
+    Internally, an IPv6 address is stored as a list of 16-bit integers with
+    8 elements. Wherever you see `ipv6IR` (ipv6 internal representation) in
+    internal functions docs, it means that it is a list of integers produced by
+    one of the internal parsers, such as `parseIpv6FromString`
   */
   _ipv6 = {
-    /**
-      Converts an internal representation of an IPv6 address (i.e, a list
-      of integers) to a string. The returned string is not a canonical
-      representation as defined in RFC 5952, i.e zeros are not compressed.
+    inherit calculateFirstAddress calculateLastAddress calculateNextAddress;
 
-      # Type: IPv6 -> String
+    /*
+      Creates ipv6AddrAttrs. The returned attr set contains most of the basic
+      fields that a user wants to get from an address, such as the URL-formatted
+      address, prefix length, etc.
+
+      We can't just update the attrset because it contains `address` and
+      `addressCidr` strings that depend on the internal address, so when we
+      update the address we need to update all the fields.
+
+      # Type: ipv6IR -> int -> ipv6AddrAttrs
 
       # Example:
 
       ```nix
-      parseIpv6FromString [8193 3512 0 0 0 0 0 65535]
-      => "2001:db8:0:0:0:0:0:ffff"
+      makeIpv6Type [65535 0 0 0 0 0 0 0] 32
+      => {
+        address = "ffff:0:0:0:0:0:0:0";
+        address = "ffff:0:0:0:0:0:0:0/32";
+        url = "[2001:db8:0:0:0:0:0:ffff]";
+        urlWithPort = int -> string;
+        prefixLength = 32;
+        _address = [65535 0 0 0 0 0 0 0];
+      }
       ```
     */
-    toStringFromExpandedIp =
-      pieces: strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces;
+    makeIpv6Type =
+      _address: prefixLength:
+      let
+        address = toStringFromExpandedIp _address;
+        addressCidr = "${address}/${toString prefixLength}";
+        # RFC 2732 section-2:
+        # > To use a literal IPv6 address in a URL, the literal address should be
+        # > enclosed in "[" and "]" characters.
+        url = "[${address}]";
+        urlWithPort = port: "${url}:${toString port}";
+      in
+      {
+        inherit
+          address
+          addressCidr
+          prefixLength
+          url
+          urlWithPort
+          _address
+          ;
+      };
 
     /**
       Extract an address and subnet prefix length from a string. The subnet
@@ -168,7 +371,7 @@ in
       prefix length are validated and converted to an internal representation
       that can be used by other functions.
 
-      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+      # Type: string -> [ {address :: ipv6IR, prefixLength :: int} ]
 
       # Example:
 
@@ -196,7 +399,7 @@ in
           address = parseIpv6FromString (head splitted);
           prefixLength =
             let
-              n = strings.toInt (last splitted);
+              n = strings.toInt (lists.last splitted);
             in
             if 1 <= n && n <= ipv6Bits then
               n
