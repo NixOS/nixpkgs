@@ -2,6 +2,7 @@
 
 {
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
+  flutter_volume_controller = callPackage ./flutter_volume_controller { };
   fvp = callPackage ./fvp { };
   handy_window = callPackage ./handy-window { };
   matrix = callPackage ./matrix { };
