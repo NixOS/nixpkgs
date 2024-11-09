@@ -14306,6 +14306,10 @@ self: super: with self; {
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
+  semgrep = callPackage ../development/python-modules/semgrep {
+    semgrep-core = callPackage ../development/python-modules/semgrep/semgrep-core.nix { };
+  };
+
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
 
   semver = callPackage ../development/python-modules/semver { };
