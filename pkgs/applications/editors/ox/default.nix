@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-2Jk8uDiTGUQqLOOQVlYm5R7qQXIqP0PkFvv5E5qTzT0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   meta = with lib; {
     description = "Independent Rust text editor that runs in your terminal";
