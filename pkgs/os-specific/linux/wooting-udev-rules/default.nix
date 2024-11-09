@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wooting-udev-rules";
-  version = "unstable-2023-03-31";
+  version = "unstable-2024-10-20";
 
   # Source: https://help.wooting.io/en/article/wootility-configuring-device-access-for-wootility-under-linux-udev-rules-r6lb2o/
   src = [ ./wooting.rules ];
