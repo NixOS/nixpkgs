@@ -534,8 +534,8 @@ rec {
       "sha256-KQqb3NdsN8SloK7kIbJoy5I3zhO5CUr9rB8ZqtVLaDc=";
 
   mypy-boto3-firehose =
-    buildMypyBoto3Package "firehose" "1.35.0"
-      "sha256-7ibqWrvc1mwCDzsm/tqha/2Y2EbfxTpsf7omIZg/EbM=";
+    buildMypyBoto3Package "firehose" "1.35.57"
+      "sha256-QsLASn6dGIQs/nedmPXwzHeZRPIEqWjPqfDKMbaFOmM=";
 
   mypy-boto3-fis =
     buildMypyBoto3Package "fis" "1.35.12"
