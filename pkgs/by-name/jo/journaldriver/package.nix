@@ -1,6 +1,6 @@
-{ lib, fetchgit, rustPlatform, pkg-config, openssl, systemd }:
+{ lib, fetchgit, rustPlatform, pkg-config, curl, openssl, systemd }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "journaldriver";
   version = "5656.0.0";
   cargoHash = "sha256-uNzgH9UM2DuC+dBn5N9tC1/AosUP6C+RkGLOh6c+u0s=";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     rev = "4e191353228197ce548d63cb9955e53661244f9c";
   };
 
-  buildInputs = [ openssl systemd ];
+  buildInputs = [ curl openssl systemd ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
