@@ -4,14 +4,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "krabby";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-R4GW0e0tjLiCXQMf8iA+yYyMp43/28GeNsjs+QNQMSM=";
+    hash = "sha256-YEY4bUZV9BpyVXzEGvnLyfG0GdE3xMN9tHlsg6RqMkk=";
   };
 
-  cargoHash = "sha256-eQyU0sMfecOjX5k1qYeetrAhk41FIMcg9QmhhTYOxWc=";
+  cargoHash = "sha256-6NV+kqnloEFTygE5LLuCsgMYXGiDwOTnP6/CK2c9DOs=";
 
   meta = with lib; {
     description = "Print pokemon sprites in your terminal";
