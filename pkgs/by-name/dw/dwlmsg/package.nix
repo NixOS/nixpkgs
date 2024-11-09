@@ -21,20 +21,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      wayland
-    ];
+  buildInputs = [
+    wayland
+  ];
 
   outputs = [
     "out"
   ];
 
-  makeFlags =
-    [
-      "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
-      "PREFIX=$(out)"
-    ];
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "PREFIX=$(out)"
+  ];
 
   strictDeps = true;
 
