@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
   };
 
+  patches = [
+    # https://github.com/ClearcodeHQ/mirakuru/pull/810
+    ./tmpdir.patch
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ psutil ];
