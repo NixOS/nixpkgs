@@ -28,6 +28,7 @@
 , e2fsprogs
 , libnvme
 , keyutils
+, nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblockdev";
@@ -88,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/lvm-cache-stats --prefix PATH : \
       ${lib.makeBinPath [ thin-provisioning-tools ]}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
