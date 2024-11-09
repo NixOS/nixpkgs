@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rcBBCtUlhhwmdJjSNEvmH1SGJASPoh4TNtz+zfQ2OLc=";
+    hash = "sha256-Qao10NyqFLysx/9AvORX+EIrQlnQJQhSYkVHeTwIutQ=";
   };
 
   build-system = [
