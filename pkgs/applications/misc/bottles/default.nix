@@ -112,6 +112,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       psydvl
       shamilton
+      Gliczy
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
