@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A Harlequin adapter for MySQL";
     homepage = "https://pypi.org/project/harlequin-mysql/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pcboy ];
+    maintainers = with lib.maintainers; [ knvpk ];
   };
 }
