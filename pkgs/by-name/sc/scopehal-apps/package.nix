@@ -21,9 +21,13 @@
   glslang,
   spirv-tools,
   ffts,
+  moltenvk,
+  apple-sdk_11,
+  darwinMinVersionHook,
+  llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scopehal-apps";
   version = "0-unstable-2024-09-16";
 
@@ -37,30 +41,42 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    shaderc
-    spirv-tools
-    wrapGAppsHook4
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      shaderc
+      spirv-tools
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wrapGAppsHook4
+    ];
 
-  buildInputs = [
-    cairomm
-    ffts
-    glew
-    glfw
-    glslang
-    gtkmm3
-    liblxi
-    libsigcxx
-    libtirpc
-    vulkan-headers
-    vulkan-loader
-    vulkan-tools
-    yaml-cpp
-    zstd
-  ];
+  buildInputs =
+    [
+      cairomm
+      glew
+      glfw
+      glslang
+      liblxi
+      libsigcxx
+      vulkan-headers
+      vulkan-loader
+      vulkan-tools
+      yaml-cpp
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      ffts
+      gtkmm3
+      libtirpc
+    ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+    ++ lib.optionals stdenv.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "10.15")
+      moltenvk
+    ];
 
   # Targets InitializeSearchPaths
   postPatch = ''
@@ -68,12 +84,19 @@ stdenv.mkDerivation rec {
       --replace-fail '"/share/' '"/../share/'
   '';
 
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    "-DCMAKE_INSTALL_RPATH=${lib.strings.makeLibraryPath [ vulkan-loader ]}"
+  ];
+
   meta = {
     description = "Advanced test & measurement remote control and analysis suite";
     homepage = "https://www.ngscopeclient.org/";
     license = lib.licenses.bsd3;
     mainProgram = "ngscopeclient";
-    maintainers = with lib.maintainers; [ bgamari ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      bgamari
+      carlossless
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
