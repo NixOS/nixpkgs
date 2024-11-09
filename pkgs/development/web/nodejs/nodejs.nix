@@ -321,6 +321,9 @@ let
         "test-watch-mode-files_watcher"
       ] ++ lib.optionals (!lib.versionAtLeast version "22") [
         "test-tls-multi-key"
+      ] ++ lib.optionals stdenv.hostPlatform.is32bit [
+        # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+        "test-fs-utimes-y2K38"
       ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
         # Disable tests that don’t work under macOS sandbox.
         "test-macos-app-sandbox"
