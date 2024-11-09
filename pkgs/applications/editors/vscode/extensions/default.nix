@@ -3633,6 +3633,8 @@ let
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
+      ms-windows-ai-studio.windows-ai-studio = callPackage ./ms-windows-ai-studio.windows-ai-studio { };
+
       mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "veriloghdl";
