@@ -18,21 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-+OS034bikrKy4F27b6ic97fHTW6rSMxQ0dx4caF6cUM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "objprint"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "objprint" ];
 
   meta = {
     description = "Library that can print Python objects in human readable format";
     homepage = "https://github.com/gaogaotiantian/objprint";
+    changelog = "https://github.com/gaogaotiantian/objprint/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drupol ];
   };
