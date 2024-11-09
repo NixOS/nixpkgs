@@ -269,6 +269,7 @@ let
         agda
         alex
         arion
+        aws-spend-summary
         bench
         blucontrol
         cabal-install

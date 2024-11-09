@@ -465,6 +465,7 @@ self: super: builtins.intersectAttrs super {
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;
+  aws-spend-summary = enableSeparateBinOutput super.aws-spend-summary;
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;

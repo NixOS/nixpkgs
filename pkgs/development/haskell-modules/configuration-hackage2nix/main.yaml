@@ -200,6 +200,7 @@ package-maintainers:
     - patat
     - svgcairo
   danielrolls:
+    - aws-spend-summary
     - byte-count-reader
     - shellify
     - specup
