@@ -8,7 +8,6 @@
   pdm-backend,
 
   # dependencies
-  fastapi-cli,
   starlette,
   pydantic,
   typing-extensions,
@@ -25,10 +24,11 @@
   trio,
 
   # optional-dependencies
+  fastapi-cli,
   httpx,
   jinja2,
-  python-multipart,
   itsdangerous,
+  python-multipart,
   pyyaml,
   ujson,
   orjson,
@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.115.3";
+  version = "0.115.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-JIaPgZVbz887liVwd3YtubJm+L4tFCM9Jcn9/smjiKo=";
+    hash = "sha256-jnVk2mdp07YDyC9aReCOIMt/IaJLeNFO8XMkS0y/bgU=";
   };
 
   build-system = [ pdm-backend ];
@@ -60,14 +60,15 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    fastapi-cli
     starlette
     pydantic
     typing-extensions
   ];
 
-  optional-dependencies.all =
+  optional-dependencies = {
+    all =
     [
+      fastapi-cli
       httpx
       jinja2
       python-multipart
@@ -82,7 +83,19 @@ buildPythonPackage rec {
       pydantic-settings
       pydantic-extra-types
     ]
+    ++ fastapi-cli.optional-dependencies.standard
     ++ uvicorn.optional-dependencies.standard;
+    standard = [
+      fastapi-cli
+      httpx
+      jinja2
+      python-multipart
+      email-validator
+      uvicorn
+    ]
+    ++ fastapi-cli.optional-dependencies.standard
+    ++ uvicorn.optional-dependencies.standard;
+  };
 
   nativeCheckInputs = [
     dirty-equals
