@@ -116,7 +116,7 @@ in
       description = ''
         Configuration for Immich.
         See <https://immich.app/docs/install/config-file/> or navigate to
-        <https://your-immich-domain/admin/system-settings> for
+        <https://my.immich.app/admin/system-settings> for
         options and defaults.
         Setting it to `null` allows configuring Immich in the web interface.
       '';
@@ -270,7 +270,7 @@ in
       let
         postgresEnv =
           if isPostgresUnixSocket then
-            { DB_URL = "socket://${cfg.database.host}?dbname=${cfg.database.name}"; }
+            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
           else
             {
               DB_HOSTNAME = cfg.database.host;
@@ -317,6 +317,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
+      path = [
+        # gzip and pg_dumpall are used by the backup service
+        pkgs.gzip
+        config.services.postgresql.package
+      ];
 
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe cfg.package;

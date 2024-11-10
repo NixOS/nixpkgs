@@ -35,6 +35,19 @@ let
       hash = "sha256-Hul2ELwnaDV8TDRMDXoFisle31GATDkf3PdkR2K9QTs=";
     };
 
+    bassmidi = {
+      h = "bassmidi.h";
+      version = "2.4.15.3";
+      so = {
+        i686_linux = "libs/x86/libbassmidi.so";
+        x86_64-linux = "libs/x86_64/libbassmidi.so";
+        armv7l-linux = "libs/armhf/libbassmidi.so";
+        aarch64-linux = "libs/aarch64/libbassmidi.so";
+      };
+      url = "https://web.archive.org/web/20240501180447/http://www.un4seen.com/files/bassmidi24-linux.zip";
+      hash = "sha256-HrF1chhGk32bKN3jwal44Tz/ENGe/zORsrLPeGAv1OE=";
+    };
+
     bassmix = {
       h = "bassmix.h";
       version = "2.4.12";

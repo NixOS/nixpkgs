@@ -206,6 +206,12 @@ pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
 pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
+# Java
+/doc/languages-frameworks/java.section.md @NixOS/java
+/doc/languages-frameworks/gradle.section.md @NixOS/java
+/doc/languages-frameworks/maven.section.md @NixOS/java
+/pkgs/top-level/java-packages.nix @NixOS/java
+
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
@@ -229,7 +235,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
 /nixos/modules/services/databases/postgresql.nix @NixOS/postgres
-/nixos/tests/postgresql.nix @NixOS/postgres
+/nixos/tests/postgresql @NixOS/postgres
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix                       @joachifm
@@ -248,13 +254,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Network Time Daemons
 /pkgs/by-name/ch/chrony @thoughtpolice
-/pkgs/tools/networking/ntp @thoughtpolice
-/pkgs/tools/networking/openntpd @thoughtpolice
+/pkgs/by-name/nt/ntp @thoughtpolice
+/pkgs/by-name/op/openntpd @thoughtpolice
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Network
-/pkgs/tools/networking/kea/default.nix @mweinelt
-/pkgs/tools/networking/babeld/default.nix @mweinelt
+/pkgs/by-name/ke/kea @mweinelt
+/pkgs/by-name/ba/babeld @mweinelt
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
@@ -407,12 +413,12 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 
 # GNU Tar & Zip
 /pkgs/tools/archivers/gnutar        @RossComputerGuy
-/pkgs/tools/archivers/zip           @RossComputerGuy
+/pkgs/by-name/zi/zip           @RossComputerGuy
 
 # SELinux
-/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
-/pkgs/os-specific/linux/libselinux  @RossComputerGuy
-/pkgs/os-specific/linux/libsepol    @RossComputerGuy
+/pkgs/by-name/ch/checkpolicy @RossComputerGuy
+/pkgs/by-name/li/libselinux  @RossComputerGuy
+/pkgs/by-name/li/libsepol    @RossComputerGuy
 
 # installShellFiles
 /pkgs/by-name/in/installShellFiles/*     @Ericson2314

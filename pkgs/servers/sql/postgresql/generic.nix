@@ -20,7 +20,7 @@ let
       , version, hash, muslPatches ? {}
 
       # for tests
-      , testers
+      , testers, nixosTests
 
       # JIT
       , jitSupport
@@ -165,6 +165,12 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
+    ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "17") [
+      # TODO: Remove this with the next set of minor releases
+      (fetchpatch ({
+        url = "https://github.com/postgres/postgres/commit/0a883a067bd78f0ff0607afb18c4f783ac764504.patch";
+        hash = "sha256-F3zCaar6w6bwQDno7Tkg7ZbPJ+rhgi8/2NSvFakzQek=";
+      }))
     ] ++ lib.optionals (olderThan "17") [
       # TODO: Remove this with the next set of minor releases
       (fetchpatch (
@@ -189,6 +195,12 @@ let
       (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
     ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
       ./patches/export-dynamic-darwin-15-.patch
+    ] ++ lib.optionals (atLeast "17") [
+      # Fix flaky test, https://www.postgresql.org/message-id/ba8e1bc0-8a99-45b7-8397-3f2e94415e03@suse.de
+      (fetchpatch {
+        url = "https://github.com/postgres/postgres/commit/a358019159de68d4f045cbb5d89c8c8c2e96e483.patch";
+        hash = "sha256-9joQZo93oUTp6CrcGnhj7o+Mrbj/KCWwwGUc9KAst+s=";
+      })
     ];
 
     installTargets = [ "install-world" ];
@@ -300,18 +312,12 @@ let
                      };
 
       tests = {
-        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+        postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+        postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
       };
     };
 

@@ -32,6 +32,12 @@ buildPythonPackage rec {
     hash = "sha256-KT5Mk0w6EKTUZzGRnQ6XQPZfH5ZXVuiD+EwSflNqHNo=";
   };
 
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "numpy>=2.0.0" "numpy"
+  '';
+
   nativeBuildInputs = [
     cython_0
     setuptools
