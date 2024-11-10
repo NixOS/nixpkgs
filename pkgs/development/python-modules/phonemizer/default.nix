@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Simple text to phones converter for multiple languages";
     mainProgram = "phonemize";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
