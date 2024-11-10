@@ -32,7 +32,7 @@ from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
 import git
@@ -94,7 +94,7 @@ def make_request(url: str, token=None) -> urllib.request.Request:
 
 
 # a dictionary of plugins and their new repositories
-Redirects = Dict["PluginDesc", "Repo"]
+Redirects = dict["PluginDesc", "Repo"]
 
 
 class Repo:
@@ -103,7 +103,7 @@ class Repo:
         """Url to the repo"""
         self._branch = branch
         # Redirect is the new Repo to use
-        self.redirect: Optional["Repo"] = None
+        self.redirect: "Repo | None" = None
         self.token = "dummy_token"
 
     @property
@@ -125,14 +125,14 @@ class Repo:
         return True
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
-    def latest_commit(self) -> Tuple[str, datetime]:
+    def latest_commit(self) -> tuple[str, datetime]:
         log.debug("Latest commit")
         loaded = self._prefetch(None)
         updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
 
         return loaded["rev"], updated
 
-    def _prefetch(self, ref: Optional[str]):
+    def _prefetch(self, ref: str | None):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
         if ref is not None:
             cmd.append(ref)
@@ -141,7 +141,7 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: Optional[str]) -> str:
+    def prefetch(self, ref: str | None) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
@@ -186,7 +186,7 @@ class RepoGitHub(Repo):
         return True
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
-    def latest_commit(self) -> Tuple[str, datetime]:
+    def latest_commit(self) -> tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
         log.debug("Sending request to %s", commit_url)
         commit_req = make_request(commit_url, self.token)
@@ -252,14 +252,14 @@ class RepoGitHub(Repo):
 class PluginDesc:
     repo: Repo
     branch: str
-    alias: Optional[str]
+    alias: str | None
 
     @property
     def name(self):
         return self.alias or self.repo.name
 
     @staticmethod
-    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
+    def load_from_csv(config: FetchConfig, row: dict[str, str]) -> "PluginDesc":
         log.debug("Loading row %s", row)
         branch = row["branch"]
         repo = make_repo(row["repo"], branch.strip())
@@ -292,7 +292,7 @@ class Plugin:
     commit: str
     has_submodules: bool
     sha256: str
-    date: Optional[datetime] = None
+    date: datetime | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -303,7 +303,7 @@ class Plugin:
         assert self.date is not None
         return self.date.strftime("%Y-%m-%d")
 
-    def as_json(self) -> Dict[str, str]:
+    def as_json(self) -> dict[str, str]:
         copy = self.__dict__.copy()
         del copy["date"]
         return copy
@@ -312,7 +312,7 @@ class Plugin:
 def load_plugins_from_csv(
     config: FetchConfig,
     input_file: Path,
-) -> List[PluginDesc]:
+) -> list[PluginDesc]:
     log.debug("Load plugins from csv %s", input_file)
     plugins = []
     with open(input_file, newline="") as csvfile:
@@ -359,10 +359,10 @@ class Editor:
         name: str,
         root: Path,
         get_plugins: str,
-        default_in: Optional[Path] = None,
-        default_out: Optional[Path] = None,
-        deprecated: Optional[Path] = None,
-        cache_file: Optional[str] = None,
+        default_in: Path | None = None,
+        default_out: Path | None = None,
+        deprecated: Path | None = None,
+        cache_file: str | None = None,
     ):
         log.debug("get_plugins:", get_plugins)
         self.name = name
@@ -419,7 +419,7 @@ class Editor:
 
     def get_current_plugins(
         self, config: FetchConfig, nixpkgs: str
-    ) -> List[Tuple[PluginDesc, Plugin]]:
+    ) -> list[tuple[PluginDesc, Plugin]]:
         """To fill the cache"""
         data = run_nix_expr(self.get_plugins, nixpkgs)
         plugins = []
@@ -445,7 +445,7 @@ class Editor:
             plugins.append((pdesc, p))
         return plugins
 
-    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> list[PluginDesc]:
         """CSV spec"""
         return load_plugins_from_csv(config, plugin_file)
 
@@ -454,7 +454,7 @@ class Editor:
         raise NotImplementedError()
 
     def filter_plugins_to_update(
-        self, plugin: PluginDesc, to_update: List[str]
+        self, plugin: PluginDesc, to_update: list[str]
     ) -> bool:
         """Function for filtering out plugins, that user doesn't want to update.
 
@@ -491,7 +491,7 @@ class Editor:
         input_file: str,
         output_file: str,
         config: FetchConfig,
-        to_update: Optional[List[str]],
+        to_update: list[str] | None,
     ):
         if to_update is None:
             to_update = []
@@ -547,13 +547,11 @@ class Editor:
 
     def merge_results(
         self,
-        current: list[Tuple[PluginDesc, Plugin]],
-        fetched: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]],
-    ) -> List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]:
+        current: list[tuple[PluginDesc, Plugin]],
+        fetched: list[tuple[PluginDesc, Exception | Plugin, Repo | None]],
+    ) -> list[tuple[PluginDesc, Exception | Plugin, Repo | None]]:
         # transforming this to dict, so lookup is O(1) instead of O(n) (n is len(current))
-        result: Dict[
-            str, Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]
-        ] = {
+        result: dict[str, tuple[PluginDesc, Exception | Plugin, Repo | None]] = {
             # also adding redirect (third item in the result tuple)
             pl.normalized_name: (pdesc, pl, None)
             for pdesc, pl in current
@@ -714,8 +712,8 @@ class CleanEnvironment(object):
 
 def prefetch_plugin(
     p: PluginDesc,
-    cache: "Optional[Cache]" = None,
-) -> Tuple[Plugin, Optional[Repo]]:
+    cache: "Cache | None" = None,
+) -> tuple[Plugin, Repo | None]:
     commit = None
     log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
     commit, date = p.repo.latest_commit()
@@ -748,10 +746,10 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
 
 
 def check_results(
-    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]],
-) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
+    results: list[tuple[PluginDesc, Exception | Plugin, Repo | None]],
+) -> tuple[list[tuple[PluginDesc, Plugin]], Redirects]:
     """ """
-    failures: List[Tuple[PluginDesc, Exception]] = []
+    failures: list[tuple[PluginDesc, Exception]] = []
     plugins = []
     redirects: Redirects = {}
     for pdesc, result, redirect in results:
@@ -787,7 +785,7 @@ def make_repo(uri: str, branch) -> Repo:
     return repo
 
 
-def get_cache_path(cache_file_name: str) -> Optional[Path]:
+def get_cache_path(cache_file_name: str) -> Path | None:
     xdg_cache = os.environ.get("XDG_CACHE_HOME", None)
     if xdg_cache is None:
         home = os.environ.get("HOME", None)
@@ -799,7 +797,7 @@ def get_cache_path(cache_file_name: str) -> Optional[Path]:
 
 
 class Cache:
-    def __init__(self, initial_plugins: List[Plugin], cache_file_name: str) -> None:
+    def __init__(self, initial_plugins: list[Plugin], cache_file_name: str) -> None:
         self.cache_file = get_cache_path(cache_file_name)
 
         downloads = {}
@@ -808,11 +806,11 @@ class Cache:
         downloads.update(self.load())
         self.downloads = downloads
 
-    def load(self) -> Dict[str, Plugin]:
+    def load(self) -> dict[str, Plugin]:
         if self.cache_file is None or not self.cache_file.exists():
             return {}
 
-        downloads: Dict[str, Plugin] = {}
+        downloads: dict[str, Plugin] = {}
         with open(self.cache_file) as f:
             data = json.load(f)
             for attr in data.values():
@@ -833,7 +831,7 @@ class Cache:
                 data[name] = attr.as_json()
             json.dump(data, f, indent=4, sort_keys=True)
 
-    def __getitem__(self, key: str) -> Optional[Plugin]:
+    def __getitem__(self, key: str) -> Plugin | None:
         return self.downloads.get(key, None)
 
     def __setitem__(self, key: str, value: Plugin) -> None:
@@ -842,7 +840,7 @@ class Cache:
 
 def prefetch(
     pluginDesc: PluginDesc, cache: Cache
-) -> Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]:
+) -> tuple[PluginDesc, Exception | Plugin, Repo | None]:
     try:
         plugin, redirect = prefetch_plugin(pluginDesc, cache)
         cache[plugin.commit] = plugin
@@ -857,7 +855,7 @@ def rewrite_input(
     deprecated: Path,
     # old pluginDesc and the new
     redirects: Redirects = {},
-    append: List[PluginDesc] = [],
+    append: list[PluginDesc] = [],
 ):
     log.info("Rewriting input file %s", input_file)
     plugins = load_plugins_from_csv(config, input_file)
@@ -905,7 +903,7 @@ def rewrite_input(
             writer.writerow(asdict(plugin))
 
 
-def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
+def commit(repo: git.Repo, message: str, files: list[Path]) -> None:
     repo.index.add([str(f.resolve()) for f in files])
 
     if repo.index.diff("HEAD"):
