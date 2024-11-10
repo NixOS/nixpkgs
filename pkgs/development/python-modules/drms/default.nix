@@ -44,7 +44,10 @@ buildPythonPackage rec {
     pytest-doctestplus
   ];
 
-  disabledTests = [ "test_query_hexadecimal_strings" ];
+  disabledTests = [
+    "test_query_hexadecimal_strings"
+    "test_jsocinfoconstants" # Need network
+  ];
 
   disabledTestPaths = [ "docs/tutorial.rst" ];
 
