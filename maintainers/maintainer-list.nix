@@ -16501,6 +16501,13 @@
     githubId = 120342602;
     name = "Michael Paepcke";
   };
+  pagedMov = {
+    email = "kylerclay@proton.me";
+    github = "pagedMov";
+    githubId = 19557376;
+    name = "Kyler Clay";
+    keys = [ { fingerprint = "784B 3623 94E7 8F11 0B9D AE0F 56FD CFA6 2A93 B51E"; } ];
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
