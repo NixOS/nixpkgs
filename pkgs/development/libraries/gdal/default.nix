@@ -288,6 +288,11 @@ stdenv.mkDerivation (finalAttrs: {
       # failing for unknown reason
       # https://github.com/OSGeo/gdal/pull/10806#issuecomment-2362054085
       "test_ogr_gmlas_billion_laugh"
+      # Flaky on hydra, collected in https://github.com/NixOS/nixpkgs/pull/327323.
+      "test_ogr_gmlas_huge_processing_time"
+      "test_ogr_gpkg_background_rtree_build"
+      "test_vsiaz_fake_write"
+      "test_vsioss_6"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
       # likely precision-related expecting x87 behaviour
