@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,10 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1W05b9s0Pg2LzNu0mFo/JKpPw0QORqZkXhbbSuCZIUo=";
   };
   cargoHash = "sha256-i5FRTdilY1T25KefZjVS2aVQjfH6KrvO0c4Wwes6zYQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   checkFlags = [
     # accesses /usr/bin/env
