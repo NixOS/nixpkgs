@@ -498,9 +498,7 @@ with pkgs;
 
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
 
-  perseus-cli = callPackage ../development/tools/perseus-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  perseus-cli = callPackage ../development/tools/perseus-cli { };
 
   pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
 
