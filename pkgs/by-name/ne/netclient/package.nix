@@ -3,7 +3,6 @@
 , lib
 , libX11
 , stdenv
-, darwin
 }:
 
 buildGoModule rec {
@@ -19,8 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-ENrBJ0XbCfLfzTVZEVtDBjGxupdiLI7USGVImkYWDdY=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa
-    ++ lib.optional stdenv.hostPlatform.isLinux libX11;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];
 
