@@ -97,5 +97,8 @@ stdenvNoCC.mkDerivation rec {
     # Broken for Musl at 2024-01-13, tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/280716
     broken = stdenvNoCC.hostPlatform.isMusl;
+
+    # Hangs when run via Rosetta 2 on Apple Silicon
+    hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
   };
 }
