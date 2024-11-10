@@ -2,7 +2,6 @@
   fetchurl,
   runCommand,
   lib,
-  fetchpatch,
   stdenv,
   pkg-config,
   gettext,
@@ -11,26 +10,43 @@
   colord,
   lcms2,
   pango,
-  json-glib,
   libstartup_notification,
   libcanberra,
   ninja,
   xvfb-run,
-  xkeyboard_config,
   libxcvt,
-  libxkbfile,
+  libICE,
+  libX11,
+  libXcomposite,
+  libXcursor,
   libXdamage,
-  libxkbcommon,
+  libXext,
+  libXfixes,
+  libXi,
   libXtst,
+  libxkbfile,
+  xkeyboard_config,
+  libxkbcommon,
+  libXrender,
+  libxcb,
+  libXrandr,
+  libXinerama,
+  libXau,
   libinput,
   libdrm,
+  libei,
+  libdisplay-info,
   gsettings-desktop-schemas,
   glib,
-  gtk3,
+  atk,
+  gtk4,
+  fribidi,
+  harfbuzz,
   gnome-desktop,
   pipewire,
   libgudev,
   libwacom,
+  libSM,
   xwayland,
   mesa,
   meson,
@@ -38,12 +54,11 @@
   xorgserver,
   python3,
   wayland-scanner,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gi-docgen,
   sysprof,
   libsysprof-capture,
   desktop-file-utils,
-  libcap_ng,
   egl-wayland,
   graphene,
   wayland,
@@ -52,7 +67,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.8";
+  version = "46.7";
 
   outputs = [
     "out"
@@ -63,33 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TjTh8XWTS9hJqEvZX6Nb8G6EEuAt8loDbC8RNdUz8oE=";
+    hash = "sha256-+7wVwLB2CS0WwB1cbwxvVNIR84Miy4wjseF9xW1MUl0=";
   };
-
-  patches = [
-    # Fix build with separate sysprof.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
-      hash = "sha256-/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
-    })
-
-    # Remove support for window shading.
-    # The corresponding key was removed in gsettings-desktop-schemas 45.alpha.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2884
-    #
-    # Fetch the patch from magpie as they share same code base and this feature
-    # is never supported on wayland (note that magpie 0.9.x won't support wayland).
-    # https://github.com/BuddiesOfBudgie/magpie/issues/9
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/magpie/commit/4177c466375462ca8ed8fdb60913df4422f19144.patch";
-      hash = "sha256-NVx40WDnlUL050D529KVohvNBdVrheXxmJ73U3+KSeQ=";
-    })
-  ];
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
+    "-Dtests=false"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -100,10 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    # required for pkg-config to detect mutter-clutter
-    json-glib
-    libXtst
-    libcap_ng
+    # required for pkg-config to detect mutter-mtk
     graphene
     mesa  # actually uses eglmesaext
   ];
@@ -118,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wayland-scanner
-    wrapGAppsHook3
+    wrapGAppsHook4
     gi-docgen
     xorgserver
     gobject-introspection
@@ -131,34 +123,50 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
-    gtk3
+    atk
+    fribidi
+    harfbuzz
     libcanberra
     libdrm
+    libei
+    libdisplay-info
     libgudev
     libinput
     libstartup_notification
     libwacom
-    libxkbcommon
-    libxkbfile
-    libXdamage
+    libSM
     colord
     lcms2
     pango
     pipewire
     sysprof # for D-Bus interfaces
     libsysprof-capture
-    xkeyboard_config
     xwayland
     wayland
     wayland-protocols
+    # X11 client
+    gtk4
+    libICE
+    libX11
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXtst
+    libxkbfile
+    xkeyboard_config
+    libxkbcommon
+    libXrender
+    libxcb
+    libXrandr
+    libXinerama
+    libXau
   ];
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3187
-    substituteInPlace meson.build \
-      --replace "dependency('sysprof-4')" "dependency('sysprof-6')"
   '';
 
   postInstall = ''
@@ -168,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-11/doc" "$devdoc"
+    moveToOutput "share/mutter-14/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -177,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''

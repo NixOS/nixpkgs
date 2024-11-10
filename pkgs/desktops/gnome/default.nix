@@ -113,7 +113,7 @@ in
   lightsoff = throw "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly."; # Added on 2024-08-11.
   metacity = throw "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly."; # Added on 2024-08-11.
   mutter = throw "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly."; # Added on 2024-08-28.
-  mutter43 = throw "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly."; # Added on 2024-08-28.
+  mutter43 = throw "The ‘gnome.mutter43’ was removed since it is no longer used by Pantheon."; # Added on 2024-08-28.
   nautilus = throw "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly."; # Added on 2024-06-13.
   networkmanager-openvpn = throw "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly."; # Added on 2024-08-31.
   networkmanager-vpnc = throw "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly."; # Added on 2024-08-31.
