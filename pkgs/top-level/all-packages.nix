@@ -292,9 +292,7 @@ with pkgs;
 
   cloak = callPackage ../applications/misc/cloak { };
 
-  cotp = callPackage ../applications/misc/cotp {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
+  cotp = callPackage ../applications/misc/cotp { };
 
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
