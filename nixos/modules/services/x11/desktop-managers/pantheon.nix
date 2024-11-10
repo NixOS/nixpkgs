@@ -132,7 +132,6 @@ in
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
-      services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
