@@ -2,12 +2,8 @@
   lib,
   buildDotnetModule,
   fetchFromGitHub,
-  glibc,
-  zlib,
-  gtk3,
   copyDesktopItems,
   icoutils,
-  wrapGAppsHook3,
   makeDesktopItem,
 }:
 
@@ -33,20 +29,9 @@ buildDotnetModule rec {
       -n nuget.org --configfile NuGet.Config
   '';
 
-  runtimeDeps = [
-    glibc
-    zlib
-    gtk3
-  ];
-
-  buildInputs = [
-    gtk3
-  ];
-
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
-    wrapGAppsHook3
   ];
 
   doCheck = true;
