@@ -45,6 +45,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/unitedstates/python-us/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
