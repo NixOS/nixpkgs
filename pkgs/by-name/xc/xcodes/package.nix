@@ -5,9 +5,6 @@
 , swiftpm
 , swiftpm2nix
 , makeWrapper
-, CryptoKit
-, LocalAuthentication
-, libcompression
 , aria2
 }:
 let
@@ -25,12 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ swift swiftpm makeWrapper ];
-
-  buildInputs = [
-    CryptoKit
-    LocalAuthentication
-    libcompression
-  ];
 
   configurePhase = generated.configure;
 

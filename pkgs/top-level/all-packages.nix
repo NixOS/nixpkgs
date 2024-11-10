@@ -3791,11 +3791,6 @@ with pkgs;
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
-  xcodes = swiftPackages.callPackage ../development/tools/xcodes {
-    inherit (swiftPackages.apple_sdk.frameworks) CryptoKit LocalAuthentication;
-    inherit (swiftPackages.apple_sdk) libcompression;
-  };
-
   gomobile = callPackage ../development/mobile/gomobile { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
