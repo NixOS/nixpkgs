@@ -82,6 +82,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
+      makeWrapper
       cmake
       llvmPackages.llvm
       python3
@@ -128,11 +129,14 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   # rsync is used here so we can not copy the _schema.json files
+
   postInstall =
     if stdenv.isLinux then
       ''
         mkdir -p $out/share/imhex
         rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
+        # without this imhex is not able to find pattern files
+        wrapProgram $out/bin/imhex --prefix XDG_DATA_DIRS : $out/share
       ''
     else if stdenv.isDarwin then
       ''
