@@ -93,7 +93,7 @@
 , withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
-, withOpenmpt ? withFullDeps # Tracked music files decoder
+, withOpenmpt ? withHeadlessDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux # Pulseaudio input support
