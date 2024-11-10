@@ -140,7 +140,7 @@
 , withXevd ? withFullDeps && lib.versionAtLeast version "7.1" && !xevd.meta.broken # MPEG-5 EVC decoding
 , withXeve ? withFullDeps && lib.versionAtLeast version "7.1" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
-, withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
+, withXml2 ? withHeadlessDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
