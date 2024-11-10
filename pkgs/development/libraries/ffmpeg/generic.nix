@@ -95,7 +95,7 @@
 , withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withHeadlessDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
-, withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
+, withPlacebo ? withSmallDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
