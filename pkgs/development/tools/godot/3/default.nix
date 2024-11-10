@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (self: {
   pname = "godot3";
-  version = "3.5.2";
+  version = "3.6";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
