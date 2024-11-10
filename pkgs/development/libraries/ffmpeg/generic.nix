@@ -63,7 +63,7 @@
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps && withGPL # frei0r video filtering
-, withFribidi ? withFullDeps # Needed for drawtext filter
+, withFribidi ? withHeadlessDeps # Needed for drawtext filter
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
