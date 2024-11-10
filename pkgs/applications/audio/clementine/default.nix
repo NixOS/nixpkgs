@@ -24,7 +24,7 @@
   gvfs,
   libcdio,
   pcre,
-  projectm,
+  projectm_3,
   protobuf,
   qca-qt5,
   pkg-config,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       liblastfm
       libpulseaudio
       pcre
-      projectm
+      projectm_3
       protobuf
       qca-qt5
       qjson
