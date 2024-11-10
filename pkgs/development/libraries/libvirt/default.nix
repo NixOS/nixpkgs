@@ -163,6 +163,9 @@ stdenv.mkDerivation rec {
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
+    # virshtest frequently times out on Darwin
+    substituteInPlace tests/meson.build \
+      --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
   '' + lib.optionalString enableXen ''
     # Has various hardcoded paths that don't exist outside of a Xen dom0.
     sed -i '/libxlxml2domconfigtest/d' tests/meson.build
