@@ -50,6 +50,10 @@ if [ -e @out@/nix-support/cc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
+if [ -e @out@/nix-support/cc-cflags-link ]; then
+    NIX_CFLAGS_LINK_@suffixSalt@="$(< @out@/nix-support/cc-cflags-link) $NIX_CFLAGS_LINK_@suffixSalt@"
+fi
+
 if [[ "$cInclude" = 1 ]] && [ -e @out@/nix-support/libc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
