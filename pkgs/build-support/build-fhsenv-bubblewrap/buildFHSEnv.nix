@@ -87,7 +87,7 @@ let
     destination = "/etc/profile";
     text = ''
       export PS1='${name}-fhsenv:\u@\h:\w\$ '
-      export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
+      export LOCALE_ARCHIVE="''${LOCALE_ARCHIVE:-/usr/lib/locale/locale-archive}"
       export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
       export TZDIR='/etc/zoneinfo'
 
