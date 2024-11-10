@@ -29,6 +29,10 @@
   # instead.
 , withFullDeps ? ffmpegVariant == "full"
 
+  # Enable nothing but the bare minimum. This should only be used for highly
+  # custom builds of ffmpeg.
+, withBareBonesDeps ? ffmpegVariant == "barebones" || withHeadlessDeps
+
 , fetchgit
 , fetchpatch2
 
@@ -150,8 +154,8 @@
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
-, withGPL ? true
-, withVersion3 ? true # When withGPL is set this implies GPLv3 otherwise it is LGPLv3
+, withGPL ? withHeadlessDeps
+, withVersion3 ? withHeadlessDeps # When withGPL is set this implies GPLv3 otherwise it is LGPLv3
 , withGPLv3 ? withGPL && withVersion3
 , withUnfree ? false
 
@@ -164,14 +168,14 @@
 , withSwscaleAlpha ? buildSwscale # Alpha channel support in swscale. You probably want this when buildSwscale.
 , withHardcodedTables ? withHeadlessDeps # Hardcode decode tables instead of runtime generation
 , withSafeBitstreamReader ? withHeadlessDeps # Buffer boundary checking in bitreaders
-, withMultithread ? true # Multithreading via pthreads/win32 threads
+, withMultithread ? withBareBonesDeps # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
   # Currently breaks tests if disabled while libavutil is enabled
   # https://github.com/NixOS/nixpkgs/issues/355077
 , withPixelutils ? buildAvutil # Pixel utils in libavutil
 , withStatic ? stdenv.hostPlatform.isStatic
 , withShared ? !stdenv.hostPlatform.isStatic
-, withPic ? true
+, withPic ? withBareBonesDeps
 , withThumb ? false # On some ARM platforms
 
 /*
@@ -374,7 +378,7 @@ let
 in
 
 
-assert lib.elem ffmpegVariant [ "headless" "small" "full" ];
+assert lib.elem ffmpegVariant [ "barebones" "headless" "small" "full" ];
 
 /*
  *  Licensing dependencies
