@@ -331,9 +331,7 @@ with pkgs;
 
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
-  dynein = callPackage ../development/tools/database/dynein {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  dynein = callPackage ../development/tools/database/dynein { };
 
   ebpf-verifier = callPackage ../tools/networking/ebpf-verifier {
     catch2 = catch2_3;
