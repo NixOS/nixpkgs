@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   nixosTests,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,14 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "23.04" > $out/version_static.txt
+    echo "${version}" > $out/version_static.txt
 
     runHook postInstall
   '';
 
   passthru = {
     inherit (nixosTests) tt-rss;
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   meta = with lib; {
