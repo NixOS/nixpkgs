@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, swift
-, swiftpm
-, swiftpm2nix
-, makeWrapper
-, aria2
+{
+  lib,
+  fetchFromGitHub,
+  swiftPackages,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  makeWrapper,
+  aria2,
 }:
 let
   generated = swiftpm2nix.helpers ./generated;
+  stdenv = swiftPackages.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
     rev = finalAttrs.version;
-    hash = "sha256-vksfvrx0TqtjcOHn38Ey3P6jIFYF4CbD3SVICVFINSU=";
+    hash = "sha256-TwPfASRU98rifyA/mINFfoY0MbbwmAh8JneVpJa38CA=";
   };
 
   nativeBuildInputs = [ swift swiftpm makeWrapper ];
