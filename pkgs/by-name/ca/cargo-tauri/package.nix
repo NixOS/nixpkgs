@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.0.6";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     rev = "refs/tags/tauri-v${version}";
-    hash = "sha256-mWgifvnWN91+jOaGWKNhlEL1oaFkQyNhfPBL8VYu4Vg=";
+    hash = "sha256-n1rSffVef9G9qtLyheuK5k6anAHsZANSu0C73QDdg2o=";
   };
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = "${src}/Cargo.lock";
     outputHashes = {
       "schemars_derive-0.8.21" = "sha256-AmxBKZXm2Eb+w8/hLQWTol5f22uP8UqaIh+LVLbS20g=";
     };
@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage rec {
       dit7ya
       getchoo
       happysalada
+      hannesgith
     ];
     mainProgram = "cargo-tauri";
   };
