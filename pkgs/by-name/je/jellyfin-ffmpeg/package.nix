@@ -1,4 +1,4 @@
-{ ffmpeg_7-headless
+{ ffmpeg
 , fetchFromGitHub
 , fetchpatch
 , lib
@@ -8,7 +8,7 @@ let
   version = "7.0.2-5";
 in
 
-(ffmpeg_7-headless.override {
+(ffmpeg.override {
   inherit version; # Important! This sets the ABI.
   source = fetchFromGitHub {
     owner = "jellyfin";
@@ -17,9 +17,19 @@ in
     hash = "sha256-cqyXQNx65eLEumOoSCucNpAqShMhiPqzsKc/GjKKQOA=";
   };
 
+  ffmpegVariant = "barebones";
+
   # https://github.com/NixOS/nixpkgs/pull/354936#issuecomment-2466628369
   # https://github.com/jellyfin/jellyfin-ffmpeg/blob/jellyfin/debian/rules
   # --enable-gmp # not supported by our ffmpeg drv
+  withDoc = false;
+  buildFfplay = false;
+  withXcb = false;
+  withSdl2 = false;
+  withXlib = false;
+  withGPL = true;
+  withVersion3 = true;
+  withShared = true;
   withGnutls = true;
   withChromaprint = true;
   withOpencl = true;
@@ -44,6 +54,7 @@ in
   withX265 = true;
   withZvbi = true;
   withZimg = true;
+  withFdkAac = true;
 
   withShaderc = true;
   withPlacebo = true;
@@ -51,13 +62,25 @@ in
   withVaapi = true;
   withAmf = true;
   withVpl = true;
-  withMfx = false;
   withNvcodec = true;
   withCuda = true;
   withCudaLLVM = true;
   withCuvid = true;
   withNvdec = true;
   withNvenc = true;
+
+  # Unlike upstream, these aren't enabled in the barebones variant by default
+  # but we do need them to do anything useful.
+  buildFfmpeg = true;
+  # TODO are all of these actually required?
+  buildAvcodec = true;
+  buildAvdevice = true;
+  buildAvfilter = true;
+  buildAvformat = true;
+  buildAvutil = true;
+  buildPostproc = true;
+  buildSwresample = true;
+  buildSwscale = true;
 }).overrideAttrs (old: {
   pname = "jellyfin-ffmpeg";
 
