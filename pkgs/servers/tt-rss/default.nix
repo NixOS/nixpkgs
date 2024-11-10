@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";
     maintainers = with maintainers; [
+      gileri
       globin
       zohl
     ];
