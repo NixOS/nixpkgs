@@ -63,7 +63,9 @@ let
             inherit (stdenvAdapters) overrideCC;
             buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
             targetLlvmLibraries =
-              targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+              # Allow overriding targetLlvmLibraries; this enables custom runtime builds.
+              packageSetArgs.targetLlvmLibraries or targetPackages."llvmPackages_${attrName}".libraries
+                or llvmPackages."${attrName}".libraries;
             targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
             inherit
               officialRelease
