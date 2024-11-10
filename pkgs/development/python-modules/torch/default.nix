@@ -367,6 +367,8 @@ buildPythonPackage rec {
   # Explicitly enable MPS for Darwin
   USE_MPS = setBool stdenv.hostPlatform.isDarwin;
 
+  USE_DISTRIBUTED = setBool true;
+
   cmakeFlags =
     [
       # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
