@@ -13,12 +13,10 @@
 , python3
 , removeReferencesTo
 , cctools
-, xcbuild
 , SDL2
 , fontconfig
 , xorg
 , stdenv
-, darwin
 , libglvnd
 , libxkbcommon
 , enableWayland ? stdenv.hostPlatform.isLinux
@@ -68,7 +66,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     pkg-config
     python3 # skia
     removeReferencesTo
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -76,8 +74,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
   ];
 
   postFixup = let
