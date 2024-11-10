@@ -91,7 +91,7 @@ in
   gnome-session = throw "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly."; # Added on 2024-08-28.
   gnome-session-ctl = throw "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly."; # Added on 2024-08-28.
   gnome-settings-daemon = throw "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly."; # Added on 2024-08-28.
-  gnome-settings-daemon43 = throw "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly."; # Added on 2024-08-28.
+  gnome-settings-daemon43 = throw "The ‘gnome.gnome-settings-daemon43’ was removed since it is no longer used by Pantheon."; # Added on 2024-08-28.
   gnome-shell = throw "The ‘gnome.gnome-shell’ was moved to top-level. Please use ‘pkgs.gnome-shell’ directly."; # Added on 2024-08-28.
   gnome-shell-extensions = throw "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly."; # Added on 2024-08-11.
   gnome-software = throw "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly."; # Added on 2024-08-11.
