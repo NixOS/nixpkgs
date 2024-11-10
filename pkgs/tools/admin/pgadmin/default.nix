@@ -7,8 +7,7 @@
   nixosTests,
   postgresqlTestHook,
   postgresql,
-  yarn,
-  fixup-yarn-lock,
+  yarnBerry3ConfigHook,
   nodejs,
   stdenv,
   server-mode ? true,
@@ -17,7 +16,7 @@
 let
   pname = "pgadmin";
   version = "8.12";
-  yarnHash = "sha256-C5CI8oP9vEana3OEs1yAsSSTvO2uLEuCU1nHhC7LerY=";
+  yarnHash = "sha256-S8+9hvTyfWpjmoCAo6cJb5Eu8JJVoIvZ4UTnf/QfyUs=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
@@ -26,14 +25,15 @@ let
     hash = "sha256-OIFHaU+Ty0xJn42iqYhse8dfFJZpx8AV/10RNxp1Y4o=";
   };
 
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/web/yarn.lock";
+    yarnVersion = 3;
+    hash = yarnHash;
+  };
+
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = yarnHash;
-  };
 
   # don't bother to test kerberos authentication
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
@@ -46,6 +46,24 @@ let
       "browser.server_groups.servers.tests.test_is_password_saved"
     ]
   );
+
+  frontend = stdenv.mkDerivation {
+    inherit version yarnOfflineCache;
+    name = "pgadmin4-frontend";
+    src = "${src}/web";
+
+    nativeBuildInputs = [
+      yarnBerry3ConfigHook
+    ];
+
+    installPhase = ''
+      runHook preInstall
+        yarn webpacker
+        mkdir -p $out
+        mv * $out/
+      runHook postInstall
+    '';
+  };
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -76,9 +94,6 @@ pythonPackages.buildPythonApplication rec {
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
-    # remove packageManager from package.json so we can work without corepack
-    substituteInPlace web/package.json \
-      --replace-fail "\"packageManager\": \"yarn@3.8.3\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
       --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
@@ -108,24 +123,17 @@ pythonPackages.buildPythonApplication rec {
     done
     cd ../
 
-    # mkYarnModules and mkYarnPackage have problems running the webpacker
-    echo Building the web frontend...
-    cd web
-    export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "${offlineCache}"
-    # replace with converted yarn.lock file
-    rm yarn.lock
-    cp ${./yarn.lock} yarn.lock
-    chmod +w yarn.lock
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-    yarn webpacker
-    cp -r * ../pip-build/pgadmin4
+    cp -r ${frontend}/* pip-build/pgadmin4
+    # copy our patched files
+    chmod +w pip-build/pgadmin4/config.py
+    cp -a web/config.py pip-build/pgadmin4/
+    chmod +w pip-build/pgadmin4/pgadmin/model/__init__.py
+    cp -a web/pgadmin/model/__init__.py pip-build/pgadmin4/pgadmin/model/
+    chmod +w pip-build/pgadmin4/pgadmin/evaluate_config.py
+    cp -a web/pgadmin/evaluate_config.py pip-build/pgadmin4/pgadmin/
     # save some disk space
-    rm -rf ../pip-build/pgadmin4/node_modules
-
-    cd ..
+    chmod -R +w pip-build/pgadmin4/node_modules
+    rm -rf pip-build/pgadmin4/node_modules
 
     echo Creating distro config...
     echo HELP_PATH = \'../../docs/en_US/_build/html/\' > pip-build/pgadmin4/config_distro.py
@@ -145,8 +153,6 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn
-    fixup-yarn-lock
     nodejs
   ];
   buildInputs = [
@@ -208,8 +214,10 @@ pythonPackages.buildPythonApplication rec {
     setuptools
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) pgadmin4;
+  passthru = {
+    tests = {
+      inherit (nixosTests) pgadmin4;
+    };
   };
 
   nativeCheckInputs = [
@@ -235,6 +243,7 @@ pythonPackages.buildPythonApplication rec {
     # also ensure Server Mode is set to false. If not, the tests will fail, since pgadmin expects read/write permissions
     # in /var/lib/pgadmin and /var/log/pgadmin
     # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
+    chmod -R +w regression
     cp -v regression/test_config.json.in regression/test_config.json
     substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
     substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
