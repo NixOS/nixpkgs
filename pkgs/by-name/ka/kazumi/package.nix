@@ -12,12 +12,12 @@
   at-spi2-atk,
 }:
 let
-  version = "1.4.1";
+  version = "1.4.2";
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     rev = version;
-    hash = "sha256-LRlJo2zuE3Y3i4vBcjxIYQEDVJ2x85Fn77K4LVtTlg8=";
+    hash = "sha256-irX+BmvJ/WI92RQmaSoBQuUqAEiy3bEstZmKMKHTvPY=";
   };
 in
 flutter.buildFlutterApplication {
