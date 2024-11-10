@@ -24,6 +24,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-4zSaM49TjOaZvrUChM4dNJLondCsQPSArOXZnTHS4yI=";
   };
 
+  patches = [
+    # fix clang-19 build. can drop on next update
+    # https://github.com/doxygen/doxygen/pull/11064
+    (fetchpatch {
+      name = "fix-clang-19-build.patch";
+      url = "https://github.com/doxygen/doxygen/commit/cff64a87dea7596fd506a85521d4df4616dc845f.patch";
+      hash = "sha256-TtkVfV9Ep8/+VGbTjP4NOP8K3p1+A78M+voAIQ+lzOk=";
+    })
+  ];
+
+  # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'JAVACC_CHAR_TYPE=\"unsigned char\"' \
+                     'JAVACC_CHAR_TYPE=\"char8_t\"' \
+      --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
+  '';
+
   nativeBuildInputs = [
     cmake
     python3
