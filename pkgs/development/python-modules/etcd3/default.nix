@@ -11,12 +11,13 @@
   pytestCheckHook,
   six,
   tenacity,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "etcd3";
   version = "0.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kragniz";
@@ -25,7 +26,15 @@ buildPythonPackage rec {
     hash = "sha256-YM72+fkCDYXl6DORJa/O0sqXqHDWQcFLv2ifQ9kEHBo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
+
+  dependencies = [
     grpcio
     protobuf
     six
@@ -49,10 +58,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "etcd3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the etcd API v3";
     homepage = "https://github.com/kragniz/python-etcd3";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
 }

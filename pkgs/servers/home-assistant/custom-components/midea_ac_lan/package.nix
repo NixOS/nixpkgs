@@ -1,6 +1,7 @@
 { lib
 , buildHomeAssistantComponent
 , fetchFromGitHub
+, pycryptodome
 }:
 
 buildHomeAssistantComponent rec {
@@ -14,6 +15,8 @@ buildHomeAssistantComponent rec {
     rev = "v${version}";
     hash = "sha256-xTnbA4GztHOE61QObEJbzUSdbuSrhbcJ280DUDdM+n4=";
   };
+
+  dependencies = [ pycryptodome ];
 
   meta = with lib; {
     description = "Auto-configure and then control your Midea M-Smart devices (Air conditioner, Fan, Water heater, Washer, etc) via local area network";

@@ -38,15 +38,28 @@ let
   };
   releaseRev = v: "v${v}";
 
-  # list of core metacoq packages sorted by dependency order
-  packages = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev"
-     then [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ]
-     else [ "template-coq" "pcuic" "safechecker" "erasure" "all" ];
+  # list of core metacoq packages and their dependencies
+  packages = {
+    "utils"              = [];
+    "common"             = [ "utils" ];
+    "template-coq"       = [ "common" ];
+    "pcuic"              = if (lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev")
+                           then [ "common" ]
+                           else [ "template-coq" ];
+    "safechecker"        = [ "pcuic" ];
+    "template-pcuic"     = [ "template-coq" "pcuic" ];
+    "erasure"            = [ "safechecker" "template-pcuic" ];
+    "quotation"          = [ "template-coq" "pcuic" "template-pcuic" ];
+    "safechecker-plugin" = [ "template-pcuic" "safechecker" ];
+    "erasure-plugin"     = [ "template-pcuic" "erasure" ];
+    "translations"       = [ "template-coq" ];
+    "all"                = [ "safechecker-plugin" "erasure-plugin" "translations" "quotation" ];
+  };
 
   template-coq = metacoq_ "template-coq";
 
   metacoq_ = package: let
-      metacoq-deps = lib.optionals (package != "single") (map metacoq_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
+      metacoq-deps = lib.optionals (package != "single") (map metacoq_ packages.${package});
       pkgpath = if package == "single" then "./" else "./${package}";
       pname = if package == "all" then "metacoq" else "metacoq-${package}";
       pkgallMake = ''
@@ -81,7 +94,7 @@ let
 
         configurePhase = lib.optionalString (package == "all") pkgallMake + ''
           touch ${pkgpath}/metacoq-config
-        '' + lib.optionalString (lib.elem package ["safechecker" "erasure" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin"]) ''
+        '' + lib.optionalString (lib.elem package ["erasure" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin" "translations"]) ''
           echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaCoq/Template/" > ${pkgpath}/metacoq-config
         '' + lib.optionalString (package == "single") ''
           ./configure.sh local
@@ -97,7 +110,7 @@ let
           maintainers = with lib.maintainers; [ cohencyril ];
         };
       } // lib.optionalAttrs (package != "single")
-        { passthru = lib.genAttrs packages metacoq_; })
+        { passthru = lib.mapAttrs (package: deps: metacoq_ package) packages; })
       ).overrideAttrs (o:
         let requiresOcamlStdlibShims = lib.versionAtLeast o.version "1.0-8.16" ||
                                        (o.version == "dev" && (lib.versionAtLeast coq.coq-version "8.16" || coq.coq-version == "dev")) ;
@@ -105,6 +118,14 @@ let
           {
             propagatedBuildInputs = o.propagatedBuildInputs ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
           });
-  in derivation;
+      # utils, common, template-pcuic, quotation, safechecker-plugin, and erasure-plugin
+      # packages didn't exist before 1.2, so bulding nothing in that case
+      patched-derivation = derivation.overrideAttrs (o:
+        lib.optionalAttrs (o.pname != null &&
+          lib.elem package [ "utils" "common" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin" ] &&
+          o.version != null && o.version != "dev" && lib.versions.isLt "1.2" o.version)
+        { patchPhase = ""; configurePhase = ""; preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+      );
+  in patched-derivation;
 in
 metacoq_ (if single then "single" else "all")

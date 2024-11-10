@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.12";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-WWzEIP/JirA4btYVy4+U7PSg6S8VnkZqxPLgLriWbTY=";
+    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -143,6 +143,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

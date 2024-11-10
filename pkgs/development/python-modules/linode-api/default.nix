@@ -6,6 +6,7 @@
   setuptools,
   requests,
   polling,
+  deprecated,
   pytestCheckHook,
   mock,
   httpretty,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.16.0";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "linode";
     repo = "python-linode-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B90BfuAqyncJPIvcni7bthiwSfmeL9CqeTYT1/y5TNY=";
+    hash = "sha256-f9v9xhlOfSCKEWHmzi/tpoMIXccGwA6isoAAIZOf3r4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     polling
+    deprecated
   ];
 
   nativeCheckInputs = [

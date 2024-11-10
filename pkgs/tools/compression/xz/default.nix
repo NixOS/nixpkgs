@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.6.2";
+  version = "5.6.3";
 
   src = fetchurl {
     url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
-    hash = "sha256-qds7s9ZOJIoPrpY/j7a6hRomuhgi5QTcDv0YqAxibK8=";
+    hash = "sha256-2wWQYptvD6NudK6l+XMdxvjfBoznt7r6RTAYMqXuvDo=";
   };
 
   strictDeps = true;

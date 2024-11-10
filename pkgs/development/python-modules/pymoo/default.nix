@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pymoo";
-  version = "0.6.0.1";
+  version = "0.6.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
-    rev = version;
-    hash = "sha256-+qtW7hfSo266n1SRzAgHIu99W5Sl+NYbKOHXv/JI9IA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CbeJwv51lu4cABgGieqy/8DCDJCb8wOPPVqUHk8Jb7E=";
   };
 
   pymoo_data = fetchFromGitHub {

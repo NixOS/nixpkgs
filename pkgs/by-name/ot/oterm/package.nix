@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.4.2";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     rev = "refs/tags/${version}";
-    hash = "sha256-0wiUqpjCHGHOuJJaDzpmMGtCBgUI5Sk29DrOgbLj018=";
+    hash = "sha256-kIuWDu7CpLLRyGPcCQYNaAiZ5F/WEatDmf2XbvLedsI=";
   };
 
   pythonRelaxDeps = [
@@ -26,8 +26,7 @@ python3Packages.buildPythonApplication rec {
     "typer"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
-
+  build-system = with python3Packages; [ hatchling ];
 
   dependencies = with python3Packages; [
     aiohttp

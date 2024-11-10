@@ -85,9 +85,10 @@ in
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+      # Packages used in default config
+      default = with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       defaultText = lib.literalExpression ''
-        with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+        with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       '';
       example = lib.literalExpression ''
         with pkgs; [ i3status i3status-rust termite rofi light ]

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   pnpmDeps = pnpm'.fetchDeps {

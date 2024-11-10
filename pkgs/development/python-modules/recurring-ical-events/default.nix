@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.3.2";
+  version = "3.3.3";
 
   disabled = pythonOlder "3.8";
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
-    rev = "v${version}";
-    hash = "sha256-1cWjOaL+STrHMux/fc+FaRVQIOMcseznNRcghsV+DtM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gEatTTpRiqtDAn+JtoJuVHPYKmEkc5saw3hy4ZYZfX8=";
   };
 
   build-system = [ setuptools ];

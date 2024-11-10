@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "7.2.0";
+  version = "7.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,15 +22,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_freeze";
     inherit version;
-    hash = "sha256-xX9xAbTTUTJGSx7IjLiUjDt8W07OS7NUwWCRWJyzNYM=";
+    hash = "sha256-6bLEvWjr9PuZtq8v8oHA5TewSa7pSIBcxKAo4XGKvGo=";
   };
 
   postPatch = ''
     sed -i /patchelf/d pyproject.toml
     # Build system requirements
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=65.6.3,<71" "setuptools" \
-      --replace-fail "wheel>=0.42.0,<=0.43.0" "wheel"
+      --replace-fail "setuptools>=70.1,<75" "setuptools"
   '';
 
   build-system = [

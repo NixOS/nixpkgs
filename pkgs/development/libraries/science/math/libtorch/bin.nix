@@ -23,7 +23,7 @@ let
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-  libcxx-for-libtorch = if stdenv.hostPlatform.isDarwin then libcxx else stdenv.cc.cc.lib;
+  libcxx-for-libtorch = if stdenv.hostPlatform.isDarwin then libcxx else (lib.getLib stdenv.cc.cc);
 in stdenv.mkDerivation {
   inherit version;
   pname = "libtorch";
@@ -59,7 +59,7 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
   in lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."

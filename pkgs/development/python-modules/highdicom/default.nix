@@ -22,7 +22,7 @@ let
 in
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
+    hash = "sha256-WXNmkaAdbjyPdNtjV6vpxUWGtdPLvrMr5t/5aMKGSLc=";
   };
 
   propagatedBuildInputs = [

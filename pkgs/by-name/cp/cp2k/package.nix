@@ -18,7 +18,6 @@
   mpi,
   gsl,
   scalapack,
-  openssh,
   makeWrapper,
   libxsmm,
   spglib,
@@ -83,7 +82,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
     which
-    openssh
     makeWrapper
     pkg-config
   ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
@@ -225,7 +223,6 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
   ];
 
   checkPhase = ''

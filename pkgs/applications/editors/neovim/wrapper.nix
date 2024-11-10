@@ -29,7 +29,7 @@ let
 
     , withNodeJs ? false
     , withPerl ? false
-    , rubyEnv ? null
+    , withRuby ? true
 
     # wether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
     , vimAlias ? false
@@ -127,8 +127,7 @@ let
           ;
 
     providerLuaRc = neovimUtils.generateProviderRc {
-      inherit (finalAttrs) withPython3 withNodeJs withPerl;
-      withRuby = rubyEnv != null;
+      inherit (finalAttrs) withPython3 withNodeJs withPerl withRuby;
     };
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
@@ -155,10 +154,9 @@ let
 
       __structuredAttrs = true;
       dontUnpack = true;
-      inherit viAlias vimAlias withNodeJs withPython3 withPerl;
+      inherit viAlias vimAlias withNodeJs withPython3 withPerl withRuby;
       inherit wrapRc providerLuaRc packpathDirs;
       inherit python3Env rubyEnv;
-      withRuby = rubyEnv != null;
       inherit wrapperArgs generatedWrapperArgs;
       luaRcContent = rcContent;
       # Remove the symlinks created by symlinkJoin which we need to perform
@@ -171,7 +169,7 @@ let
       + lib.optionalString finalAttrs.withPython3 ''
         makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH --unset PYTHONSAFEPATH
       ''
-      + lib.optionalString (finalAttrs.rubyEnv != null) ''
+      + lib.optionalString (finalAttrs.withRuby) ''
         ln -s ${finalAttrs.rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
       + lib.optionalString finalAttrs.withNodeJs ''

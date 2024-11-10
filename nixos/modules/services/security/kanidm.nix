@@ -198,16 +198,19 @@ let
   '';
 
   serverPort =
+    let
+      address = cfg.serverSettings.bindaddress;
+    in
     # ipv6:
-    if hasInfix "]:" cfg.serverSettings.bindaddress then
-      last (splitString "]:" cfg.serverSettings.bindaddress)
+    if hasInfix "]:" address then
+      last (splitString "]:" address)
     else
     # ipv4:
-    if hasInfix "." cfg.serverSettings.bindaddress then
-      last (splitString ":" cfg.serverSettings.bindaddress)
+    if hasInfix "." address then
+      last (splitString ":" address)
     # default is 8443
     else
-      "8443";
+      throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
   options.services.kanidm = {
@@ -225,6 +228,7 @@ in
           bindaddress = mkOption {
             description = "Address/port combination the webserver binds to.";
             example = "[::1]:8443";
+            default = "127.0.0.1:8443";
             type = types.str;
           };
           # Should be optional but toml does not accept null

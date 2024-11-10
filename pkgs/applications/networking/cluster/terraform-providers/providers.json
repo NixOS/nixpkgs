@@ -206,6 +206,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-PFeWgDw1hkW/ekQfubRSYlaD4d4wJ4GOohOJ00QcEqQ="
   },
+  "ccloud": {
+    "hash": "sha256-bGyVfB9eenE6QZZw0bAxnve0KW0ZQ54slTaaWZXDBOc=",
+    "homepage": "https://registry.terraform.io/providers/sapcc/ccloud",
+    "owner": "sapcc",
+    "repo": "terraform-provider-ccloud",
+    "rev": "v1.6.6",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-uftDCqDU0HeDj7rjAevulsFCVFFQt3eg8vcFM9YJrow="
+  },
   "checkly": {
     "hash": "sha256-4J7pwtlAa920RXF6ZoSoi03qA15NBzUlXQCZRErI2Co=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
@@ -498,13 +507,13 @@
     "vendorHash": "sha256-iJSo5zrJWRpm7kPHxEBBovsn1ICQCNe1fjsp4CdJgBU="
   },
   "google-beta": {
-    "hash": "sha256-9KaTzEbl4kUpl9ttC7VOvstVXcf6R5zNqAUpr/om8nA=",
+    "hash": "sha256-vYMyLjb2OQAVPmc9wSxTCWG1lLUOH/cxayCJPZIF2Bo=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v6.7.0",
+    "rev": "v6.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3cwpIOVynJj9G/sWWXmVbosqlggb5TqMCtMg1pgIGic="
+    "vendorHash": "sha256-N7qOuK/RbmXvpalUQEtop8L99R9Q6cYWVFmPxG4+9T4="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",

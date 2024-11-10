@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # Patch it to make it match a 4 number-long version.
   postPatch = ''
     substituteInPlace plugins/decl_hdf5/cmake/FindHDF5.cmake \
-      --replace-fail '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+)' '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)'
+      --replace-fail '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+)' '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)*)'
   '';
 
   nativeBuildInputs = [

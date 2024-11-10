@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   libusb1,
   pkg-config,
 }:
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
     cp rpiboot $out/bin
     cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/raspberrypi/usbboot";

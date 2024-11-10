@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-kDcOHqHuAyHTQ7ccsCelPOBieXdRLloEvSMjq9PIa30=";
+    hash = "sha256-ohB0LsEnDDe3wygRgvP5mFQ2hu1c9xv2RilSdqOQBxA=";
   };
 
   nativeBuildInputs = [

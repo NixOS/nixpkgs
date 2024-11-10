@@ -6,19 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsdiag";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "farrokhi";
     repo = "dnsdiag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qUbHwbLPDyy24GNu3dDJQKV3B71q1ODNMyRFIWwyRuo=";
+    hash = "sha256-6TDs+ncbVa7LWtGLlqEXJb9zzXZ+nAhbi4QGyCSu3ho=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
+    aioquic
     cryptography
     cymruwhois
     dnspython

@@ -5,6 +5,7 @@
 
   # build-system
   cython,
+  setuptools,
 
   # optional
   numpy,
@@ -13,21 +14,25 @@
   hypothesis,
   pytest-cov-stub,
   pytestCheckHook,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.8";
-  format = "setuptools";
+  version = "1.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     rev = "refs/tags/${version}";
-    hash = "sha256-F52ly3NkrZ0H9XoomMqmWfLl+8X0z26Yx67DB8DUqyU=";
+    hash = "sha256-5S4HN5MFLgURImwFsyyTOxDhrZJ5Oe+Ln/TA/bsCsek=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
@@ -38,10 +43,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ndindex" ];
 
+  preCheck = ''
+    cd $out
+  '';
+
   nativeCheckInputs = [
     hypothesis
     pytest-cov-stub
     pytestCheckHook
+    sympy
   ] ++ optional-dependencies.arrays;
 
   meta = with lib; {

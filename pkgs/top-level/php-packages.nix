@@ -181,8 +181,8 @@ in {
 
       meta = {
         description = "PHP upstream extension: ${name}";
-        inherit (php.meta) maintainers homepage license;
-      };
+        inherit (php.meta) maintainers homepage license platforms;
+      } // args.meta or { };
     }));
 
   php = phpPackage;
@@ -456,14 +456,10 @@ in {
           name = "iconv";
           buildInputs = [ libiconv ];
           configureFlags = [ "--with-iconv" ];
+          # Some other extensions support separate libdirs, but iconv does not. This causes problems with detecting
+          # Darwin’s libiconv because it has separate outputs. Adding `-liconv` works around the issue.
+          env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
           doCheck = stdenv.hostPlatform.isLinux;
-        }
-        {
-          name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
-          # Using version from PECL on new PHP versions.
-          enable = lib.versionOlder php.version "8.3";
         }
         {
           name = "intl";
@@ -559,8 +555,7 @@ in {
           name = "pdo_dblib";
           internalDeps = [ php.extensions.pdo ];
           configureFlags = [ "--with-pdo-dblib=${freetds}" ];
-          # Doesn't seem to work on darwin.
-          enable = (!stdenv.hostPlatform.isDarwin);
+          meta.broken = stdenv.hostPlatform.isDarwin;
           doCheck = false;
         }
         {
@@ -654,8 +649,6 @@ in {
           name = "snmp";
           buildInputs = [ net-snmp openssl ];
           configureFlags = [ "--with-snmp" ];
-          # net-snmp doesn't build on darwin.
-          enable = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {
@@ -667,7 +660,7 @@ in {
           # Some tests are causing issues in the Darwin sandbox with issues
           # such as
           #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
-          doCheck = !stdenv.hostPlatform.isDarwin;
+          doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml2 2.12
@@ -688,6 +681,13 @@ in {
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ]
+          ++ lib.optionals (lib.versionAtLeast php.version "8.3") [
+            # https://github.com/php/php-src/pull/16733 (fix soap test)
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/5c308d61db104854e4ff84ab123e3ea56e1b4046.patch";
+              hash = "sha256-xQ4Sg4kL0cgHYauRW2AzGgFXfcqtxeRVhI9zNh7CsoM=";
             })
           ];
         }
@@ -810,6 +810,13 @@ in {
             "--with-zlib"
           ];
         }
+      ] ++ lib.optionals (lib.versionOlder php.version "8.3") [
+        # Using version from PECL on new PHP versions.
+        {
+          name = "imap";
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+        }
       ];
 
       # Convert the list of attrs:
@@ -818,14 +825,12 @@ in {
       # [ { name = <name>; value = <extension drv>; } ... ]
       #
       # which we later use listToAttrs to make all attrs available by name.
-      #
-      # Also filter out extensions based on the enable property.
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
-          value = mkExtension (builtins.removeAttrs drv [ "enable" ]);
+          value = mkExtension drv;
         })
-        (builtins.filter (i: i.enable or true) extensionData);
+        extensionData;
 
       # Produce the final attribute set of all extensions defined.
     in

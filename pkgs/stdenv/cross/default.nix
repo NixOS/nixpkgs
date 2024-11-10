@@ -75,7 +75,7 @@ in lib.init bootStages ++ [
       baseStdenv = stdenvNoCC.override {
         # Old ones run on wrong platform
         extraBuildInputs = lib.optionals hostPlatform.isDarwin [
-          buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation
+          buildPackages.targetPackages.apple-sdk
         ];
 
         hasCC = !stdenvNoCC.targetPlatform.isGhcjs;

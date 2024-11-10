@@ -1,55 +1,33 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   fetchzip,
-  installShellFiles,
-  testers,
-  writeShellScript,
+  apple-sdk_15,
   common-updater-scripts,
   curl,
-  darwin,
+  installShellFiles,
   jq,
-  xcodebuild,
+  versionCheckHook,
+  writeShellScript,
   xxd,
-  yabai,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
-    ;
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.4";
+  version = "7.1.5";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  env = {
-    # silence service.h error
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
-
   nativeBuildInputs =
     [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      xcodebuild
       xxd
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
+    apple-sdk_15
   ];
 
   dontConfigure = true;
@@ -74,35 +52,27 @@ stdenv'.mkDerivation (finalAttrs: {
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
-        --replace "-arch arm64e" "" \
-        --replace "-arch arm64" "" \
-        --replace "clang" "${stdenv.cc.targetPrefix}clang"
-
-        # `NSScreen::safeAreaInsets` is only available on macOS 12.0 and above, which frameworks aren't packaged.
-        # When a lower OS version is detected upstream just returns 0, so we can hardcode that at compile time.
-        # https://github.com/koekeishiya/yabai/blob/v4.0.2/src/workspace.m#L109
-        substituteInPlace src/workspace.m \
-        --replace 'return screen.safeAreaInsets.top;' 'return 0;'
+        --replace-fail "-arch arm64e" "" \
+        --replace-fail "-arch arm64" ""
       '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = yabai;
-      version = "yabai-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
+  passthru = {
     sources = {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-DAHZwEhPIBIfR2V+jTKje1msB8OMKzwGYgYnDql8zb0=";
+        hash = "sha256-o+9Z3Kxo1ff1TZPmmE6ptdOSsruQzxZm59bdYvhRo3c=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-i/UqmBNTLBYY4ORI1Y7FWr+LZK0f/qMdWLPPuTb9+2w=";
+        hash = "sha256-6HBWJvjVWagtHrfjWaYSRcnQOuwTBVeVxo3wc+jSlyE=";
       };
     };
 

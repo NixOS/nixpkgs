@@ -22,13 +22,14 @@
   requests-toolbelt,
   requests-file,
   requests-mock,
+  setuptools,
   xmlsec,
 }:
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.2.1";
-  format = "setuptools";
+  version = "4.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -36,10 +37,12 @@ buildPythonPackage rec {
     owner = "mvantellingen";
     repo = "python-zeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-8f6kS231gbaZ8qyE8BKMcbnZsm8o2+iBoTlQrs5X+jY=";
+    hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     defusedxml
     isodate

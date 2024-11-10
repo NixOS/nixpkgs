@@ -11,7 +11,7 @@
   (fetchNuGet { pname = "protobuf-net"; version = "3.2.30"; hash = "sha256-keRy5OWT+/tlZt3D7x+9PEdjTvEJcZdYsf/i1ZBtciE="; })
   (fetchNuGet { pname = "protobuf-net.Core"; version = "3.2.30"; hash = "sha256-GMpJNecoBfrV2VgpYOhcZnKZaLFDObNLcX2LBTThrwY="; })
   (fetchNuGet { pname = "QRCoder"; version = "1.6.0"; hash = "sha256-2Ev/6d7PH6K4dVYQQHlZ+ZggkCnDtrlaGygs65mDo28="; })
-  (fetchNuGet { pname = "SteamKit2"; version = "3.0.0-beta.3"; hash = "sha256-G3Apy5g0TT273Ake6/4DnrJGY4lWrTbyHDJMntiSuzE="; })
+  (fetchNuGet { pname = "SteamKit2"; version = "3.0.0-beta.4"; hash = "sha256-7cXlpCuUD8ZuTMtqsT5MdklkZb+XIGBdoI28anjUXtg="; })
   (fetchNuGet { pname = "System.Collections.Immutable"; version = "7.0.0"; hash = "sha256-9an2wbxue2qrtugYES9awshQg+KfJqajhnhs45kQIdk="; })
   (fetchNuGet { pname = "System.IO.Hashing"; version = "8.0.0"; hash = "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="; })
   (fetchNuGet { pname = "System.Security.AccessControl"; version = "5.0.0"; hash = "sha256-ueSG+Yn82evxyGBnE49N4D+ngODDXgornlBtQ3Omw54="; })

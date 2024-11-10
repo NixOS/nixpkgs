@@ -1,6 +1,6 @@
-From cc8269489b56755714f07eee4671f8aa2659c014 Mon Sep 17 00:00:00 2001
+From c8ed69efe3f702b19834c2659be1dd3ec2d41c17 Mon Sep 17 00:00:00 2001
 From: oddlama <oddlama@oddlama.org>
-Date: Mon, 12 Aug 2024 23:17:42 +0200
+Date: Fri, 1 Nov 2024 12:27:43 +0100
 Subject: [PATCH 2/2] recover account
 
 ---
@@ -11,10 +11,10 @@ Subject: [PATCH 2/2] recover account
  4 files changed, 22 insertions(+), 5 deletions(-)
 
 diff --git a/server/core/src/actors/internal.rs b/server/core/src/actors/internal.rs
-index 40c18777f..40d553b40 100644
+index 420e72c6c..5c4353116 100644
 --- a/server/core/src/actors/internal.rs
 +++ b/server/core/src/actors/internal.rs
-@@ -153,25 +153,26 @@ impl QueryServerWriteV1 {
+@@ -171,25 +171,26 @@ impl QueryServerWriteV1 {
      }
  
      #[instrument(
@@ -29,7 +29,7 @@ index 40c18777f..40d553b40 100644
          eventid: Uuid,
      ) -> Result<String, OperationError> {
          let ct = duration_from_epoch_now();
-         let mut idms_prox_write = self.idms.proxy_write(ct).await;
+         let mut idms_prox_write = self.idms.proxy_write(ct).await?;
 -        let pw = idms_prox_write.recover_account(name.as_str(), None)?;
 +        let pw = idms_prox_write.recover_account(name.as_str(), password.as_deref())?;
  
@@ -95,10 +95,10 @@ index 90ccb1927..85e31ddef 100644
                      Some(ctrl_tx) => show_replication_certificate(ctrl_tx).await,
                      None => {
 diff --git a/server/daemon/src/main.rs b/server/daemon/src/main.rs
-index 577995615..a967928c9 100644
+index 7486d34a8..784106352 100644
 --- a/server/daemon/src/main.rs
 +++ b/server/daemon/src/main.rs
-@@ -894,27 +894,39 @@ async fn kanidm_main(
+@@ -903,27 +903,39 @@ async fn kanidm_main(
              } else {
                  let output_mode: ConsoleOutputMode = commonopts.output_mode.to_owned().into();
                  submit_admin_req(
@@ -169,5 +169,5 @@ index f1b45a5b3..9c013e32e 100644
      /// Renew this server's replication certificate
      RenewReplicationCertificate {
 -- 
-2.45.2
+2.46.1
 

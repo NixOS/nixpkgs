@@ -64,7 +64,7 @@ To avoid costly file system access when locating icons, GTK, [as well as Qt](htt
 
 ### Packaging icon themes {#ssec-icon-theme-packaging}
 
-Icon themes may inherit from other icon themes. The inheritance is specified using the `Inherits` key in the `index.theme` file distributed with the icon theme. According to the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html), icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.
+Icon themes may inherit from other icon themes. The inheritance is specified using the `Inherits` key in the `index.theme` file distributed with the icon theme. According to the [icon theme specification](https://specifications.freedesktop.org/icon-theme-spec/latest), icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.
 
 The package `hicolor-icon-theme` provides a setup hook which makes symbolic links for the parent themes into the directory `share/icons` of the current theme directory in the nix store, making sure they can be found at runtime. For that to work the packages providing parent icon themes should be listed as propagated build dependencies, together with `hicolor-icon-theme`.
 

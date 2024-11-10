@@ -60,14 +60,4 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
-
-  # Backport upstream fix for very annoying Tailscale issue
-  # FIXME: remove when merged upstream
-  netfilter-typo-fix = {
-    name = "netfilter-typo-fix";
-    patch = fetchpatch {
-      url = "https://lore.kernel.org/netdev/20241021094536.81487-3-pablo@netfilter.org/raw";
-      hash = "sha256-ZGc1xAIjf+MlV02jhIWZ4jHC742+z/WpN7RenqpU7e4=";
-    };
-  };
 }

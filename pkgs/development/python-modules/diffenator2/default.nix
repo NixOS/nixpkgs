@@ -42,6 +42,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "protobuf"
     "python-bidi"
+    "youseedee"
   ];
 
   build-system = [

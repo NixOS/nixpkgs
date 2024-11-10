@@ -11,8 +11,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
   pname = "smartypants";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = isPyPy;
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "leohemsted";
     repo = "smartypants.py";
-    rev = "v${version}";
-    sha256 = "00p1gnb9pzb3svdq3c5b9b332gsp50wrqqa39gj00m133zadanjp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V1rV1B8jVADkS0NhnDkoVz8xxkqrsIHb1mP9m5Z94QI=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     docutils
@@ -47,9 +47,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python with the SmartyPants";
-    mainProgram = "smartypants";
     homepage = "https://github.com/leohemsted/smartypants.py";
+    changelog = "https://github.com/leohemsted/smartypants.py/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "smartypants";
   };
 }

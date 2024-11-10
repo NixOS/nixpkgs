@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.1.11";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "guidance-ai";
     repo = "guidance";
     rev = "refs/tags/${version}";
-    hash = "sha256-dvIJeSur3DdNBhrEPNPghxqmDEEig59Iz83LWksim6U=";
+    hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
   };
 
   nativeBuildInputs = [ pybind11 ];

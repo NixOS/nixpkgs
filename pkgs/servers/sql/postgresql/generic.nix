@@ -3,25 +3,24 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libuuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
 
       , removeReferencesTo, writeShellApplication
 
-      # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs && !stdenv.hostPlatform.isStatic
-      , enableSystemd ? null
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
       , self, newScope, buildEnv
+      , stdenvNoCC, postgresqlTestHook
 
       # source specification
       , version, hash, muslPatches ? {}
 
       # for tests
-      , testers
+      , testers, nixosTests
 
       # JIT
       , jitSupport
@@ -42,8 +41,6 @@ let
     zstdEnabled = atLeast "15";
 
     dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
-
-    systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
 
     pname = "postgresql";
 
@@ -101,16 +98,16 @@ let
       openssl
       (libxml2.override {enableHttp = true;})
       icu
+      libuuid
     ]
       ++ lib.optionals (olderThan "13") [ libxcrypt ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport' [ systemdLibs ]
+      ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ]
-      ++ lib.optionals (!stdenv'.hostPlatform.isDarwin) [ libossp_uuid ];
+      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -144,8 +141,8 @@ let
       "--sysconfdir=/etc"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
-      (lib.optionalString systemdSupport' "--with-systemd")
-      (if stdenv'.hostPlatform.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
+      (lib.optionalString systemdSupport "--with-systemd")
+      "--with-uuid=e2fs"
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
@@ -168,6 +165,12 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
+    ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "17") [
+      # TODO: Remove this with the next set of minor releases
+      (fetchpatch ({
+        url = "https://github.com/postgres/postgres/commit/0a883a067bd78f0ff0607afb18c4f783ac764504.patch";
+        hash = "sha256-F3zCaar6w6bwQDno7Tkg7ZbPJ+rhgi8/2NSvFakzQek=";
+      }))
     ] ++ lib.optionals (olderThan "17") [
       # TODO: Remove this with the next set of minor releases
       (fetchpatch (
@@ -192,6 +195,12 @@ let
       (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
     ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
       ./patches/export-dynamic-darwin-15-.patch
+    ] ++ lib.optionals (atLeast "17") [
+      # Fix flaky test, https://www.postgresql.org/message-id/ba8e1bc0-8a99-45b7-8397-3f2e94415e03@suse.de
+      (fetchpatch {
+        url = "https://github.com/postgres/postgres/commit/a358019159de68d4f045cbb5d89c8c8c2e96e483.patch";
+        hash = "sha256-9joQZo93oUTp6CrcGnhj7o+Mrbj/KCWwwGUc9KAst+s=";
+      })
     ];
 
     installTargets = [ "install-world" ];
@@ -251,7 +260,7 @@ let
 
     doCheck = !stdenv'.hostPlatform.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
-    checkTarget = "check";
+    checkTarget = "check-world";
 
     passthru = let
       this = self.callPackage generic args;
@@ -273,6 +282,25 @@ let
           inherit (llvmPackages) llvm;
           postgresql = this;
           stdenv = stdenv';
+          postgresqlTestExtension = { finalPackage, withPackages ? [], ... } @ extraArgs:
+            stdenvNoCC.mkDerivation ({
+              name = "${finalPackage.name}-test-extension";
+              dontUnpack = true;
+              doCheck = true;
+              nativeCheckInputs = [
+                postgresqlTestHook
+                (this.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
+              ];
+              failureHook = "postgresqlStop";
+              postgresqlTestUserOptions = "LOGIN SUPERUSER";
+              passAsFile = [ "sql" ];
+              checkPhase = ''
+                runHook preCheck
+                psql -a -v ON_ERROR_STOP=1 -f "$sqlPath"
+                runHook postCheck
+              '';
+              installPhase = "touch $out";
+            } // extraArgs);
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
@@ -281,22 +309,15 @@ let
       withPackages = postgresqlWithPackages {
                        inherit buildEnv;
                        postgresql = this;
-                     }
-                     this.pkgs;
+                     };
 
       tests = {
-        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+        postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+        postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
       };
     };
 
@@ -305,7 +326,7 @@ let
       description = "Powerful, open source object-relational database system";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 wolfgangwalther ];
+      maintainers = with maintainers; [ globin ivan ] ++ teams.postgres.members;
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 
@@ -323,9 +344,9 @@ let
     };
   });
 
-  postgresqlWithPackages = { postgresql, buildEnv }: pkgs: f: buildEnv {
-    name = "postgresql-and-plugins-${postgresql.version}";
-    paths = f pkgs ++ [
+  postgresqlWithPackages = { postgresql, buildEnv }: f: buildEnv {
+    name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+    paths = f postgresql.pkgs ++ [
         postgresql
         postgresql.man   # in case user installs this into environment
     ];
@@ -334,6 +355,14 @@ let
 
     passthru.version = postgresql.version;
     passthru.psqlSchema = postgresql.psqlSchema;
+    passthru.withJIT = postgresqlWithPackages {
+      inherit buildEnv;
+      postgresql = postgresql.withJIT;
+    } f;
+    passthru.withoutJIT = postgresqlWithPackages {
+      inherit buildEnv;
+      postgresql = postgresql.withoutJIT;
+    } f;
   };
 
 in

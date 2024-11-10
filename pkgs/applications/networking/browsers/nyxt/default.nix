@@ -39,14 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  # for sbcl 2.4.3
-  postPatch = ''
-    substituteInPlace _build/cl-gobject-introspection/src/init.lisp \
-       --replace-warn sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
-    substituteInPlace _build/fset/Code/port.lisp \
-       --replace-warn sb-ext::once-only sb-int:once-only
-  '';
-
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [

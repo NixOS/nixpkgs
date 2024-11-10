@@ -31,6 +31,12 @@ qtModule {
       url = "https://github.com/qt/qtdeclarative/commit/2aefbca84d2f3dca2c2697f13710b6907c0c7e59.patch";
       hash = "sha256-a/BX0gpW6juJbjDRo8OleMahOC6WWqreURmYZNiGm5c=";
     })
+    # Backport patch to fix Kirigami applications crashing
+    # FIXME: remove for 6.8.1
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtdeclarative/commit/0ae3697cf40bcd3ae1de20621abad17cf6c5f52d.patch";
+      hash = "sha256-YuTHqHCWOsqUOATfaAZRxPSwMsFNylxoqnqCeW5kPjs=";
+    })
   ];
 
   cmakeFlags = [

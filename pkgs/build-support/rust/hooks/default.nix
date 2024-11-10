@@ -31,7 +31,7 @@
       name = "cargo-check-hook.sh";
       propagatedBuildInputs = [ cargo ];
       substitutions = {
-        inherit (rust.envVars) rustHostPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec setEnv;
       };
     } ./cargo-check-hook.sh) {};
 
@@ -92,7 +92,7 @@
     bindgenHook = callPackage ({}: makeSetupHook {
       name = "rust-bindgen-hook";
       substitutions = {
-        libclang = clang.cc.lib;
+        libclang = (lib.getLib clang.cc);
         inherit clang;
       };
     }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py3langid";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tN4B2tfnAfKdIWoJNeheCWzIZ1kD0j6oRFsrtfCQuW8=";
+    hash = "sha256-CodaAxpYqvnb2nu4KF/XXoAae9J2IW/6vgN5AdS0Sew=";
   };
 
   propagatedBuildInputs = [ numpy ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/checkpointsqlite==${version}";
-    hash = "sha256-aG7kHdlOkrjfYcdDWwCum0mQvWNMlF2CcEDlkzbv4Zw=";
+    hash = "sha256-dh+cjcOp6rGFntz82VNfVyetcrQBdBFdXk5xFb0aR5c=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";

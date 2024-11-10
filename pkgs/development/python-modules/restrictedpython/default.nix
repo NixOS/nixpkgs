@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-gbYpJHE9vSgJF/zq7K8hD+96Sd3fGgjIwhSjYT++tCU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<74" setuptools
+  '';
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [

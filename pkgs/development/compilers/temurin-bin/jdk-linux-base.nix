@@ -59,7 +59,7 @@ let
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
-      stdenv.cc.cc.lib # libstdc++.so.6
+      (lib.getLib stdenv.cc.cc) # libstdc++.so.6
       xorg.libX11
       xorg.libXext
       xorg.libXi
@@ -127,7 +127,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
+      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

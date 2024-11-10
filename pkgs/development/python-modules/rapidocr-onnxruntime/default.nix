@@ -10,7 +10,7 @@
 
   setuptools,
   pyclipper,
-  opencv4,
+  opencv-python,
   numpy,
   six,
   shapely,
@@ -90,7 +90,7 @@ buildPythonPackage {
 
   dependencies = [
     pyclipper
-    opencv4
+    opencv-python
     numpy
     six
     shapely
@@ -98,9 +98,6 @@ buildPythonPackage {
     pillow
     onnxruntime
   ];
-
-  # Remove because we have adopted the `opencv4` as an attribute name.
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonImportsCheck = [ "rapidocr_onnxruntime" ];
 

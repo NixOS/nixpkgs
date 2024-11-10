@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++11-narrowing";
+
   meta = {
     description = "Reference Implementation of SMPTE ST2065-4";
     homepage = "https://github.com/ampas/aces_container";

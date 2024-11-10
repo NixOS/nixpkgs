@@ -6,6 +6,7 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
+  fetchpatch2,
   ftfy,
   httpx,
   netifaces,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-/K2pz3B4H205grDeuMWZmEeA4wJqKhP0XdpmbqFguTM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "pytest-httpx-compat.patch";
+      url = "https://github.com/ol-iver/denonavr/commit/5320aadae91135a8c208c83d82688ddf26eb6498.patch";
+      hash = "sha256-F9R5GJ1XK3lHWLY+OgzKu3+xCosK3nX4EII9J1jhlys=";
+    })
+  ];
 
   pythonRelaxDeps = [ "defusedxml" ];
 

@@ -113,6 +113,13 @@ let
         ];
       });
 
+      inline-snapshot = super.inline-snapshot.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # fixture does not expect pydantic<2
+          "test_pydantic_repr"
+        ];
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -152,6 +159,15 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-dlDytOSp/7npanxXH5uaDv29AP21UciEzIzDlMf6jf8=";
+        };
       });
 
       # Pinned due to API changes in 0.1.0
@@ -219,6 +235,15 @@ let
         };
       });
 
+      pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
+        version = "3.6.9";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ScqxDO0hif8p3C6+vvm7FgSEQjCXBwUPOc7Y/3OfkoI=";
+        };
+      });
+
       pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.12";
         src = fetchFromGitHub {
@@ -236,6 +261,16 @@ let
           repo = "pysnooz";
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
+      # newer versions require pydantic>=2
+      python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
+        version = "0.72.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oKI7zXfoUVmJXLQvyoDEmoCL4AwaYgaFcLKNlFFrC9o=";
         };
       });
 
@@ -318,9 +353,23 @@ let
         ];
       };
 
-      versioningit = super.versioningit.overridePythonAttrs {
-        doCheck = false;
-      };
+      voip-utils = super.voip-utils.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-PG4L6KphH9JIZO76cCN8eClFE2CneEIExlXS+x79k3U=";
+        };
+      });
+
+      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
+        };
+      });
 
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
@@ -390,7 +439,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.10.4";
+  hassVersion = "2024.11.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -408,13 +457,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-uaGGt5qCdyFXuEtg20MzmFd4PXkdPP8h4HJBvRV6sz8=";
+    hash = "sha256-t8f0em5EaWPLZlr+fi/Kn3AE0dFEAyy0FpwdjJOYBCI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-al45WS8SIgOM2TqGPIptZU7iNMapYUg+fK2MLh68lxs=";
+    hash = "sha256-e9RF1oer4FyDEYof7qLTFUkmSxDh71qi+ResNXO6G5o=";
   };
 
   build-system = with python.pkgs; [
@@ -461,12 +510,9 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
-
-    substituteInPlace pyproject.toml --replace-fail "wheel~=0.43.0" wheel
+    substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
-    sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
   dependencies = with python.pkgs; [
@@ -496,6 +542,7 @@ in python.pkgs.buildPythonApplication rec {
     orjson
     packaging
     pillow
+    propcache
     psutil-home-assistant
     pyjwt
     pyopenssl

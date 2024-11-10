@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.58.0";
+  version = "3.60.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-sWlD/n9Qjwiu/UfZrxRxwv2rc4XwRZN35fyjIriGZPY=";
+    hash = "sha256-sLs73356BaFbKtyQc4cTFm7Wp/UemH8J+tkajXAA0do=";
   };
 
   strictDeps = true;
@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/lms/main.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/recommendation/LmsRecommendation.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/db-generator/LmsDbGenerator.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
-    substituteInPlace src/tools/cover/LmsCover.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
+    substituteInPlace src/libs/core/include/core/SystemPaths.hpp --replace-fail "/etc" "$out/share/lms"
   '';
 
   postInstall = ''

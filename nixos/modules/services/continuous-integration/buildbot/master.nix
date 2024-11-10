@@ -5,7 +5,7 @@ let
   opt = options.services.buildbot-master;
 
   package = cfg.package.python.pkgs.toPythonModule cfg.package;
-  python = package.pythonModule;
+  python = cfg.package.python;
 
   escapeStr = lib.escape [ "'" ];
 
@@ -93,13 +93,13 @@ in {
       };
 
       extraConfig = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.lines;
         description = "Extra configuration to append to master.cfg";
         default = "c['buildbotNetUsageData'] = None";
       };
 
       extraImports = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.lines;
         description = "Extra python imports to prepend to master.cfg";
         default = "";
         example = "from buildbot.process.project import Project";

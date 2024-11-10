@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 1939065b94ee3c2033e720b753c5a6bd70e09c07
-  ref: refs/tags/6.4.33
+  revision: e9286ec3faffa15e12ef3e267da335cd4afdfaea
+  ref: refs/tags/6.4.34
   specs:
-    metasploit-framework (6.4.33)
+    metasploit-framework (6.4.34)
       aarch64
       abbrev
       actionpack (~> 7.0.0)
@@ -44,7 +44,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.183)
+      metasploit-payloads (= 2.0.187)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.35)
       mqtt
@@ -69,7 +69,7 @@ GIT
       pg
       puma
       railties
-      rasn1
+      rasn1 (= 0.13.0)
       rb-readline
       recog
       redcarpet
@@ -274,7 +274,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.183)
+    metasploit-payloads (2.0.187)
     metasploit_data_models (6.0.3)
       activerecord (~> 7.0)
       activesupport (~> 7.0)

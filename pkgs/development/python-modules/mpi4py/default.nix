@@ -5,7 +5,6 @@
   cython,
   setuptools,
   mpi,
-  openssh,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    openssh
     mpiCheckPhaseHook
   ];
   doCheck = true;

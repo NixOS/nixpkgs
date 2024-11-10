@@ -6,7 +6,7 @@
   setuptools,
   pytestCheckHook,
   numpy,
-  opencv4,
+  opencv-python,
   stringzilla,
 }:
 
@@ -24,13 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-GwT7Py7pKbpHxx4avj37/hRjSJXdH5uBU11nCITysVw=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
-    opencv4
+    opencv-python
     stringzilla
   ];
 

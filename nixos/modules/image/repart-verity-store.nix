@@ -117,10 +117,6 @@ in
 
               # do not prepare the ESP, this is done in the final image
               systemdRepartFlags = previousAttrs.systemdRepartFlags ++ [ "--defer-partitions=esp" ];
-
-              # the image will be self-contained so we can drop references
-              # to the closure that was used to build it
-              unsafeDiscardReferences.out = true;
             }
           );
 
@@ -210,10 +206,6 @@ in
 
                 rm -v repart-output_orig.json
               '';
-
-              # the image will be self-contained so we can drop references
-              # to the closure that was used to build it
-              unsafeDiscardReferences.out = true;
             }
           );
     };

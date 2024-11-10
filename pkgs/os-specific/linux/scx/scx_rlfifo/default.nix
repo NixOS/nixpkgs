@@ -4,7 +4,7 @@
   mkScxScheduler,
 }:
 
-mkScxScheduler "rust" rec {
+mkScxScheduler "rust" {
   schedulerName = "scx_rlfifo";
 
   cargoRoot = "scheds/rust/scx_rlfifo";
@@ -28,8 +28,9 @@ mkScxScheduler "rust" rec {
   meta = {
     description = "Sched-ext Rust userspace scheduler";
     longDescription = ''
-      scx_rlfifo is a simple FIFO scheduler runs in user-space, based on
-      the scx_rustland_core framework. Not a production ready scheduler.
+      scx_rlfifo is a simple FIFO scheduler runs in user-space, based on the
+      scx_rustland_core framework. Not for production use, but useful to test as a
+      baseline against complex scheduling polices or for a basic FIFO scheduling approach.
     '';
     mainProgram = "scx_rlfifo";
   };

@@ -52,6 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # darwin clang adds `-isysroot` when $SDKROOT is set. this confuses the
+  # regular expressions for the disabled tests below.
+  checkPhase = ''
+    runHook preCheck
+    ctest -E 'cmd.cc-gnu-(src-cxx|c-src-c)-cmd' -j $NIX_BUILD_CORES
+    runHook postCheck
+  '';
+
   passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {

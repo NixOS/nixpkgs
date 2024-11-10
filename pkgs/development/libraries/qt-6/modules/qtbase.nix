@@ -67,15 +67,9 @@
 , unixODBCDrivers
   # darwin
 , moveBuildTree
+, apple-sdk_qt
+, darwinDeploymentTargetDeps
 , xcbuild
-, AGL
-, AVFoundation
-, AppKit
-, Contacts
-, CoreBluetooth
-, EventKit
-, GSS
-, MetalKit
   # mingw
 , pkgsBuildBuild
   # optional dependencies
@@ -161,16 +155,8 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    AppKit
-    Contacts
-    CoreBluetooth
-    EventKit
-    GSS
-    MetalKit
-  ] ++ lib.optionals libGLSupported [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinDeploymentTargetDeps
+  ++ lib.optionals libGLSupported [
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
@@ -181,9 +167,8 @@ stdenv.mkDerivation rec {
     at-spi2-core
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    AppKit
-    CoreBluetooth
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_qt
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
@@ -242,6 +227,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   moveToDev = false;
 

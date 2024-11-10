@@ -19,6 +19,7 @@
   attrs,
   pytestCheckHook,
   setuptools,
+  which,
 
   # for passthru.tests
   enrich,
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.7.1";
+  version = "13.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7LvmPrCpHfPEfJ1r8IFnQhYkBstvtIrWYhGwcchlc0s=";
+    hash = "sha256-k+a64GDGzRDprvJz7s9Sm4z8jDV5TZ+CZLMgXKXXonM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     attrs
     pytestCheckHook
     setuptools
+    which
   ];
 
   disabledTests = [

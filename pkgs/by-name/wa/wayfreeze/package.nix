@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  cargoHash = "sha256-3OjZhWAgfmMZ0OGeRawk3KZpPqz1QCVkwsyGM+E7o88=";
+  cargoHash = "sha256-DOG/IMtHYjdzfPVyFDN20+VB4oEzdSle28F07DydETc=";
 
   buildInputs = [
     libxkbcommon

@@ -10,7 +10,7 @@
   lmdb,
   lxml,
   numpy,
-  opencv4,
+  opencv-python,
   openpyxl,
   pdf2docx,
   pillow,
@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.8.1";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -38,7 +38,7 @@ buildPythonPackage {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8mnSV4ga6G2cbYCX84XJRFiLCoXstTAtqvg9QqVN6GI=";
+    hash = "sha256-TLNpb+CwLKvtmPppDuUbGyJorhmkVVW01J61+XUICYk=";
   };
 
   patches = [
@@ -58,7 +58,6 @@ buildPythonPackage {
   pythonRemoveDeps = [
     "imgaug"
     "visualdl"
-    "opencv-python"
     "opencv-contrib-python"
   ];
 
@@ -71,7 +70,7 @@ buildPythonPackage {
     lmdb
     lxml
     numpy
-    opencv4
+    opencv-python
     openpyxl
     pdf2docx
     pillow

@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build build/choose-tests-locale.sh
+
+    # https://github.com/linuxmint/cjs/issues/123
+    substituteInPlace meson.build --replace-fail "extra_args: '--warn-error'," ""
   '';
 
   meta = with lib; {

@@ -4,7 +4,7 @@
 , cmake
 , pkg-config
 , cppunit
-, swig
+, swig3
 , boost
 , logLib
 , python
@@ -27,7 +27,7 @@ mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
     python
   ];
 

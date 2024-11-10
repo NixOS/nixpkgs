@@ -45,9 +45,9 @@ buildPythonPackage rec {
 
   postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     configargparse
     acme
     configobj
@@ -71,7 +71,11 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = [
+    "-o cache_dir=$(mktemp -d)"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 

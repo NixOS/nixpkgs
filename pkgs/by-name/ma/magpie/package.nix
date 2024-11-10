@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magpie";
-  version = "0.9.3";
+  version = "0.9.4";
 
   outputs = [
     "out"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BuddiesOfBudgie";
     repo = "magpie";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A8FmW2o2p5B5pxTZ6twwufyhfppuMXjnMKopZRD+XdE=";
+    hash = "sha256-a8e0uzbS0HEH/0sOOnwIiQI0/BizKbpdlVdfb3IbmcU=";
   };
 
   patches = [

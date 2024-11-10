@@ -831,7 +831,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2WN5RoM1G2SE6H3g5pmEQvOoSCoaw3xMG8cDdfU2DAo=";
+      hash = "sha256-lguGj8fDqztrvqvEYVcJLmiuxPDaCpXU8aztInKjF+E=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin

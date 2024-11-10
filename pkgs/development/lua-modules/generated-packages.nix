@@ -2515,14 +2515,14 @@ buildLuarocksPackage {
 lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lze";
-  version = "0.1.4-1";
+  version = "0.4.4-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lze-0.1.4-1.rockspec";
-    sha256 = "0j2ll2kcqmk7m78x4bwwm47hr0n8kgz027c4l2yhyfw747s70z1h";
+    url    = "mirror://luarocks/lze-0.4.4-1.rockspec";
+    sha256 = "1qky68bg003d0n57pfb04l4q5sxbwp54kpbwdrwln6qnwbb93fcy";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lze/archive/v0.1.4.zip";
-    sha256 = "1rr8bsxvv53mhkvmc8vb1l6jvbrfzngr3kq8wj3gvpima3jdk1za";
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.4.4.zip";
+    sha256 = "18g865sii3k09dk7ynhy37m27br3lwy003zl1x0fgqpnqd47114j";
   };
 
   disabled = luaOlder "5.1";
@@ -3406,14 +3406,14 @@ buildLuarocksPackage {
 toml-edit = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luarocks-build-rust-mlua }:
 buildLuarocksPackage {
   pname = "toml-edit";
-  version = "0.5.0-1";
+  version = "0.6.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/toml-edit-0.5.0-1.rockspec";
-    sha256 = "1d80s6jcdw7ny52vda7lx4xccmavnl7sji1bcchmbc7krbf6s7v0";
+    url    = "mirror://luarocks/toml-edit-0.6.1-1.rockspec";
+    sha256 = "0crvmigffka3n7583r1a7fgcjfq5b0819a7d155q50m52b7afc4z";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/toml-edit.lua/archive/v0.5.0.zip";
-    sha256 = "0cfsp9h7kjm52mrjf42jrp3np7akql8ynlnvq32m2ayshjdsdx6q";
+    url    = "https://github.com/nvim-neorocks/toml-edit.lua/archive/v0.6.1.zip";
+    sha256 = "03gxfj2km4j08cx8yv70wvzwynnlwai6cdprrxnbf76mwy877hpg";
   };
 
   disabled = luaOlder "5.1";

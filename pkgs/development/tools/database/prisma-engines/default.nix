@@ -13,13 +13,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.21.1";
+  version = "5.22.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-zVGnAFvxBRh7YGXET8YjDI+qXay6StgG618mRfpc4kw=";
+    hash = "sha256-aCzm7pEsgbZ4ZNir3DLNnUlmiydOpLNcW2FpIQ44B6E=";
   };
 
   # Use system openssl.
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
       "cuid-1.3.2" = "sha256-qBu1k/dJiA6rWBwk4nOOqouIneD9h2TTBT8tvs0TDfA=";
       "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
       "mysql_async-0.31.3" = "sha256-2wOupQ/LFV9pUifqBLwTvA0tySv+XWbxHiqs7iTzvvg=";
-      "postgres-native-tls-0.5.0" = "sha256-4CftieImsG2mBqpoJFfyq0R2yd2EyQX4oddAwyXMDZc=";
+      "postgres-native-tls-0.5.0" = "sha256-pzMPNZzlvMaQqBu/V3ExPYVnoIaALeUaYJ4oo/hY9lA=";
       "mongodb-3.0.0" = "sha256-1WQgY0zSZhFjt1nrLYTUBrpqBxpCCgKRSeGJLtkE6pw=";
     };
   };
@@ -43,13 +43,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     protobuf
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
-
-  # FIXME: fix this upstream and remove this patch with the next version update.
-  postPatch = ''
-    file=libs/user-facing-errors/src/schema_engine.rs
-    echo "#![allow(dead_code)]" | cat - $file > $file.new
-    mv $file.new $file
-  '';
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}

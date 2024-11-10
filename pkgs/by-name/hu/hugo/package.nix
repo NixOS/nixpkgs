@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.136.4";
+  version = "0.136.5";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wCv0lZqvJNOwL/naFuGb6k0Xyk58NpgH1mkhoNnkSno=";
+    hash = "sha256-NluV9/tqWTRfs2u9g4cHC1TyrxOXx3ghOZ4GDx7OZFo=";
   };
 
   vendorHash = "sha256-KqDsa7MlSONyn7AYOepQ95q1CEM83AhWk23iYSQ4twU=";

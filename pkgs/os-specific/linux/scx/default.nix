@@ -10,6 +10,9 @@
 }:
 let
   versionInfo = lib.importJSON ./version.json;
+
+  # Useful function for packaging schedulers, should be used unless the build system is too complex
+  # passes some default values like src, version (all of which can be overridden)
   mkScxScheduler =
     packageType:
     args@{ schedulerName, ... }:
@@ -36,14 +39,14 @@ let
             zlib
           ] ++ (args.buildInputs or [ ]);
 
-          env.LIBCLANG_PATH = args.env.LIBCLANG_PATH or "${llvmPackages.libclang.lib}/lib";
+          env.LIBCLANG_PATH = args.env.LIBCLANG_PATH or "${lib.getLib llvmPackages.libclang}/lib";
 
           # Needs to be disabled in BPF builds
           hardeningDisable = [
             "zerocallusedregs"
           ] ++ (args.hardeningDisable or [ ]);
 
-          meta = args.meta // {
+          meta = (args.meta or { }) // {
             description = args.meta.description or "";
             longDescription =
               (args.meta.longDescription or "")
@@ -65,7 +68,9 @@ let
     { layered = import ./scx_layered; }
     { rlfifo = import ./scx_rlfifo; }
     { rustland = import ./scx_rustland; }
-    { csheds = import ./scx_csheds.nix; }
+    { rusty = import ./scx_rusty; }
+    { cscheds = import ./scx_cscheds.nix; }
+    { full = import ./scx_full.nix; }
   ];
 in
 (lib.mapAttrs (name: scheduler: callPackage scheduler { inherit mkScxScheduler; }) schedulers)

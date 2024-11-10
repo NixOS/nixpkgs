@@ -12,6 +12,7 @@
   glib,
   webkitgtk_4_0,
   glib-networking,
+  override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
   nativeBuildInputs =
     [ makeWrapper ]
@@ -53,6 +54,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
   dontBuild = true;
+
+  prePatch = ''
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  '';
 
   installPhase =
     if !stdenvNoCC.hostPlatform.isDarwin then

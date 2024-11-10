@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   patches =
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
-      mv dist/mac*/Vesktop.App $out/Applications
+      mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
     ''
     + ''
       runHook postInstall

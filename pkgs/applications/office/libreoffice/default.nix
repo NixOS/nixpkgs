@@ -99,7 +99,7 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" "zh-TW" ]
 , withFonts ? false
 , withHelp ? true
 , kdeIntegration ? false
@@ -548,7 +548,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  doCheck = true;
+  # Disable tests for the Qt5 build, as they seem even more flaky
+  # than usual, and we will drop the Qt5 build after 24.11 anyway.
+  doCheck = !(kdeIntegration && qtMajor == "5");
 
   preCheck = ''
     export HOME=$(pwd)

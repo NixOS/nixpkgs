@@ -38,8 +38,8 @@ buildGoModule rec {
 
   passthru.tests = {
     simple = runCommand "${pname}-test" { } ''
-      ${lib.getExe mmdbctl} verify ${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb | grep valid
-      ${lib.getExe mmdbctl} metadata ${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb | grep DBIP-Country-Lite
+      ${lib.getExe mmdbctl} verify ${dbip-country-lite.mmdb} | grep valid
+      ${lib.getExe mmdbctl} metadata ${dbip-country-lite.mmdb} | grep DBIP-Country-Lite
       touch $out
     '';
   };
