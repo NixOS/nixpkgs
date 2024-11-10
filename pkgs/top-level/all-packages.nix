@@ -237,9 +237,7 @@ with pkgs;
 
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
-  binserve = callPackage ../servers/binserve {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  binserve = callPackage ../servers/binserve { };
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
