@@ -30,8 +30,8 @@ let
     hash = "sha256-sYy7qNJW7RTuaNA0jq6Yrtfs57ypYrItZ3f8T7kqfPM=";
   };
   tablerIcons = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.10.0/dist/tabler-sprite.svg";
-    hash = "sha256-lEUAtxI+NffqLDllirLgcCRjEgbeCaz9Gkn3Tu9e9F4=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.21.0/dist/tabler-sprite.svg";
+    hash = "sha256-TUlx6LLnZ7sDN7Xzt+/zAuxLYgUkQSqRgdQm8H4cohY=";
   };
   tomselect = fetchurl {
     url = "https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.popular.min.js";
@@ -41,13 +41,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlpage";
-  version = "0.29.0";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     rev = "v${version}";
-    hash = "sha256-wI+nXrjX98vqyCE6Ofa5KxKUvpLfHqd7KFCsILuOnGk=";
+    hash = "sha256-D9+HTRxs+vT+ThkijUsVnNXaw6jU+tUzIx+MxIIiFdA=";
   };
 
   postPatch = ''
@@ -63,18 +63,15 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace sqlpage/sqlpage.js \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js */' \
       "$(cat ${tablerJs})"
-    substituteInPlace sqlpage/sqlpage.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/list.js-fixed@2.3.4/dist/list.min.js */' \
-      "$(cat ${listJsFixed})"
     substituteInPlace sqlpage/tabler-icons.svg \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.10.0/dist/tabler-sprite.svg */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.21.0/dist/tabler-sprite.svg */' \
       "$(cat ${tablerIcons})"
     substituteInPlace sqlpage/tomselect.js \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.popular.min.js */' \
       "$(cat ${tomselect})"
   '';
 
-  cargoHash = "sha256-/B8tayEbyOsc0/po1YQKtp694X12B3I50OU4cMwJo8Q=";
+  cargoHash = "sha256-w1Vekeia7pqZqPk+YsPfX4cqzfveEcDo3eFNL4DSsLA=";
 
   nativeBuildInputs = [
     pkg-config
