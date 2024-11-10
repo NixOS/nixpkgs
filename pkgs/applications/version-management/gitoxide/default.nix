@@ -4,9 +4,7 @@
 , cmake
 , pkg-config
 , stdenv
-, libiconv
-, Security
-, SystemConfiguration
+, apple-sdk_11
 , curl
 , openssl
 , buildPackages
@@ -33,7 +31,7 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
   buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin
-    then [ libiconv Security SystemConfiguration ]
+    then [ apple-sdk_11 ]
     else [ openssl ]);
 
   preFixup = lib.optionalString canRunCmd ''
