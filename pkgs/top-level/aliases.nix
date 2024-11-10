@@ -1182,6 +1182,7 @@ mapAliases {
   poac = cabinpkg; # Added 2025-01-22
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   powerdns = pdns; # Added 2022-03-28
+  projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
 
   # postgresql plugins
   cstore_fdw = postgresqlPackages.cstore_fdw;
