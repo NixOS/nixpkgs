@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "InioX";
     repo = "matugen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SN4m0ka5VHLIQYTszhlCIB+2D+nyWMzJM5n5bZdkG/I=";
+    hash = "sha256-l623fIVhVCU/ylbBmohAtQNbK0YrWlEny0sC/vBJ+dU=";
   };
 
   cargoHash = "sha256-FwQhhwlldDskDzmIOxhwRuUv8NxXCxd3ZmOwqcuWz64=";
