@@ -2024,11 +2024,6 @@ with pkgs;
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
-  xcodes = swiftPackages.callPackage ../development/tools/xcodes {
-    inherit (swiftPackages.apple_sdk.frameworks) CryptoKit LocalAuthentication;
-    inherit (swiftPackages.apple_sdk) libcompression;
-  };
-
   gomobile = callPackage ../development/mobile/gomobile { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
@@ -9940,6 +9935,7 @@ with pkgs;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+  libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
   libbassmix = (callPackage ../development/libraries/audio/libbass { }).bassmix;
 
   libbluray = callPackage ../development/libraries/libbluray {
