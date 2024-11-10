@@ -16,7 +16,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ha64SLJWJdfVt1T2M6UHyFD/OD8lmUQ0vU8OKjN272Y=";
+    hash = "sha256-noY2ey0dDpbwN7iLMNcp+gYF1iROJyVdJ+otZ66Psec=";
   };
 
   ldflags = [
