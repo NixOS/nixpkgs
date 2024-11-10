@@ -145,7 +145,7 @@
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
-, withZvbi ? withFullDeps # Teletext support
+, withZvbi ? withHeadlessDeps # Teletext support
 
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
