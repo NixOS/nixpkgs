@@ -299,9 +299,7 @@ with pkgs;
     perlPackages = perl538Packages;
   };
 
-  cocogitto = callPackage ../development/tools/cocogitto {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cocogitto = callPackage ../development/tools/cocogitto { };
 
   coldsnap = callPackage ../tools/admin/coldsnap {
     inherit (darwin.apple_sdk.frameworks) Security;
