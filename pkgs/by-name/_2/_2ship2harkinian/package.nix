@@ -24,6 +24,7 @@
   tinyxml-2,
   writeTextFile,
   zenity,
+  _2ship2harkinian,
 }:
 
 let
@@ -37,7 +38,7 @@ let
   };
 
   # 2ship needs a specific imgui version
-  imgui' = imgui.overrideAttrs rec {
+  imgui' = imgui.overrideAttrs (prev: rec {
     version = "1.90.6";
     src = fetchFromGitHub {
       owner = "ocornut";
@@ -45,7 +46,14 @@ let
       rev = "v${version}-docking";
       hash = "sha256-Y8lZb1cLJF48sbuxQ3vXq6GLru/WThR78pq7LlORIzc=";
     };
-  };
+    patches = (prev.patches or [ ]) ++ [
+      (fetchpatch {
+        name = "sdl-gamepad-fix.patch";
+        url = "file://${_2ship2harkinian.src}/libultraship/cmake/dependencies/patches/sdl-gamepad-fix.patch";
+        hash = "sha256-jx1yryk8d6rWKiSM+eFqnxCTyu5fkct6BrabhZT0yDc=";
+      })
+    ];
+  });
 
   libgfxd = fetchFromGitHub {
     owner = "glankk";
@@ -81,7 +89,7 @@ let
     patches = (prev.patches or [ ]) ++ [
       (fetchpatch {
         name = "stormlib-optimizations.patch";
-        url = "https://github.com/briaguya-ai/StormLib/commit/ff338b230544f8b2bb68d2fbe075175ed2fd758c.patch";
+        url = "file://${_2ship2harkinian.src}/libultraship/cmake/dependencies/patches/stormlib-optimizations.patch";
         hash = "sha256-Jbnsu5E6PkBifcx/yULMVC//ab7tszYgktS09Azs5+4=";
       })
     ];
@@ -97,13 +105,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-1iSFzroKxwFpsIGNMetSlQKTKRWCy7QtgCTepFdSeY8=";
+    hash = "sha256-lsq2CCDOYZKYntu3B0s4PidpZ3EjyIPSSpHpmq4XN9U=";
     fetchSubmodules = true;
   };
 
