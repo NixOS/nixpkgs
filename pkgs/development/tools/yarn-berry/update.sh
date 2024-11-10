@@ -19,5 +19,5 @@ EOF
 version=$(jq -r "[.data.repository.tag.nodes[].name | select(contains(\"-\")|not)] | max_by(split(\".\") | map(tonumber))" <<< "$payload")
 version3=$(jq -r "[.data.repository.tag.nodes[].name | select(contains(\"-\")|not)] | map(select(. < \"4.0.0\")) | sort | last" <<< "$payload")
 
-update-source-version yarn-berry4 "$version" --version-key="version_4"
-update-source-version yarn-berry3 "$version3" --version-key="version_3"
+update-source-version yarn-berry_4 "$version" --version-key="version_4"
+update-source-version yarn-berry_3 "$version3" --version-key="version_3"

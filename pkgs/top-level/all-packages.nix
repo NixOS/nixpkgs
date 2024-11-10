@@ -488,6 +488,7 @@ with pkgs;
     prefetch-yarn-deps
     yarnConfigHook
     yarnBerry3ConfigHook
+    yarnBerry4ConfigHook
     yarnBuildHook
     yarnInstallHook
     fetchYarnDeps;
