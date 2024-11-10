@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    any
     attrValues
     concatMapStrings
     concatStringsSep
@@ -9,6 +10,7 @@ let
     elem
     escapeShellArgs
     filterAttrs
+    getName
     isString
     literalExpression
     mapAttrs
@@ -30,19 +32,19 @@ let
 
   cfg = config.services.postgresql;
 
-  postgresql =
-    let
-      # ensure that
-      #   services.postgresql = {
-      #     enableJIT = true;
-      #     package = pkgs.postgresql_<major>;
-      #   };
-      # works.
-      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
-    in
-    if cfg.extensions == []
-      then base
-      else base.withPackages cfg.extensions;
+  # ensure that
+  #   services.postgresql = {
+  #     enableJIT = true;
+  #     package = pkgs.postgresql_<major>;
+  #   };
+  # works.
+  basePackage = if cfg.enableJIT
+    then cfg.package.withJIT
+    else cfg.package.withoutJIT;
+
+  postgresql = if cfg.extensions == []
+    then basePackage
+    else basePackage.withPackages cfg.extensions;
 
   toStr = value:
     if true == value then "yes"
@@ -59,6 +61,9 @@ let
   '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
+
+  extensionNames = map getName postgresql.installedExtensions;
+  extensionInstalled = extension: elem extension extensionNames;
 in
 
 {
@@ -630,7 +635,7 @@ in
             PrivateTmp = true;
             ProtectHome = true;
             ProtectSystem = "strict";
-            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off");
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ]));
             NoNewPrivileges = true;
             LockPersonality = true;
             PrivateDevices = true;
@@ -654,10 +659,12 @@ in
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
             SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged @resources"
-            ];
+            SystemCallFilter =
+              [
+                "@system-service"
+                "~@privileged @resources"
+              ]
+              ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
             UMask = if groupAccessAvailable then "0027" else "0077";
           }
           (mkIf (cfg.dataDir != "/var/lib/postgresql") {
