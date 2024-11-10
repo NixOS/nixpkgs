@@ -38,16 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/XcodesOrg/xcodes/releases/tag/${finalAttrs.version}";
     description = "Command-line tool to install and switch between multiple versions of Xcode";
     homepage = "https://github.com/XcodesOrg/xcodes";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # unxip
       lgpl3Only
     ];
-    maintainers = with maintainers; [ _0x120581f emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ _0x120581f emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })
