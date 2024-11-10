@@ -67,24 +67,24 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     all =
-    [
-      fastapi-cli
-      httpx
-      jinja2
-      python-multipart
-      itsdangerous
-      pyyaml
-      ujson
-      orjson
-      email-validator
-      uvicorn
-    ]
-    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-      pydantic-settings
-      pydantic-extra-types
-    ]
-    ++ fastapi-cli.optional-dependencies.standard
-    ++ uvicorn.optional-dependencies.standard;
+      [
+        fastapi-cli
+        httpx
+        jinja2
+        python-multipart
+        itsdangerous
+        pyyaml
+        ujson
+        orjson
+        email-validator
+        uvicorn
+      ]
+      ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+        pydantic-settings
+        pydantic-extra-types
+      ]
+      ++ fastapi-cli.optional-dependencies.standard
+      ++ uvicorn.optional-dependencies.standard;
     standard = [
       fastapi-cli
       httpx
