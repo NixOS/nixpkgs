@@ -1,4 +1,4 @@
-{ ffmpeg_7-full
+{ ffmpeg_7-headless
 , fetchFromGitHub
 , fetchpatch
 , lib
@@ -8,7 +8,7 @@ let
   version = "7.0.2-5";
 in
 
-(ffmpeg_7-full.override {
+(ffmpeg_7-headless.override {
   inherit version; # Important! This sets the ABI.
   source = fetchFromGitHub {
     owner = "jellyfin";
@@ -16,6 +16,48 @@ in
     rev = "v${version}";
     hash = "sha256-cqyXQNx65eLEumOoSCucNpAqShMhiPqzsKc/GjKKQOA=";
   };
+
+  # https://github.com/NixOS/nixpkgs/pull/354936#issuecomment-2466628369
+  # https://github.com/jellyfin/jellyfin-ffmpeg/blob/jellyfin/debian/rules
+  # --enable-gmp # not supported by our ffmpeg drv
+  withGnutls = true;
+  withChromaprint = true;
+  withOpencl = true;
+  withDrm = true;
+  withXml2 = true;
+  withAss = true;
+  withFreetype = true;
+  withFribidi = true;
+  withFontconfig = true;
+  withHarfbuzz = true;
+  withBluray = true;
+  withMp3lame = true;
+  withOpus = true;
+  withTheora = true;
+  withVorbis = true;
+  withOpenmpt = true;
+  withDav1d = true;
+  withSvtav1 = true;
+  withWebp = true;
+  withVpx = true;
+  withX264 = true;
+  withX265 = true;
+  withZvbi = true;
+  withZimg = true;
+
+  withShaderc = true;
+  withPlacebo = true;
+  withVulkan = true;
+  withVaapi = true;
+  withAmf = true;
+  withVpl = true;
+  withMfx = false;
+  withNvcodec = true;
+  withCuda = true;
+  withCudaLLVM = true;
+  withCuvid = true;
+  withNvdec = true;
+  withNvenc = true;
 }).overrideAttrs (old: {
   pname = "jellyfin-ffmpeg";
 
