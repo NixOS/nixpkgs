@@ -1577,6 +1577,7 @@
   ./services/x11/hardware/wacom.nix
   ./services/x11/imwheel.nix
   ./services/x11/picom.nix
+  ./services/x11/quicktile.nix
   ./services/x11/redshift.nix
   ./services/x11/touchegg.nix
   ./services/x11/unclutter-xfixes.nix
