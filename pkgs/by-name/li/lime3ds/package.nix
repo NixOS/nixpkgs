@@ -55,11 +55,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
-  version = "2119";
+  version = "2119.1";
 
   src = fetchzip {
     url = "https://github.com/Lime3DS/Lime3DS/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cBPSzkvvivWGTD2E7fjeY3uJ1nSlALbOgIalGdk6xLU=";
+    hash = "sha256-37KFGCVyc4QW+D00CzN1+lpNYZxCWRkflt7rkIFcdM8=";
   };
 
   nativeBuildInputs = [
