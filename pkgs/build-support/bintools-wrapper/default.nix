@@ -343,10 +343,6 @@ stdenvNoCC.mkDerivation {
       done
     ''
 
-    + optionalString targetPlatform.isDarwin ''
-      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
-    ''
-
     ##
     ## GNU specific extra strip flags
     ##
