@@ -497,6 +497,19 @@ with lib.maintainers;
     shortName = "Input-Output Global employees";
   };
 
+  java = {
+    githubTeams = [ "java" ];
+    members = [
+      chayleaf
+      fliegendewurst
+      infinidoge
+      tomodachi94
+    ];
+    shortName = "Java";
+    scope = "Maintainers of the Nixpkgs Java ecosystem (JDK, JVM, Java, Gradle, Maven, Ant, and adjacent projects)";
+    enableFeatureFreezePing = true;
+  };
+
   jitsi = {
     members = [
       cleeyv
