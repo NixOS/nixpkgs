@@ -3,8 +3,6 @@
   stdenv,
   fetchCrate,
   rustPlatform,
-  CoreFoundation,
-  Security,
   testers,
   nix-update-script,
   dprint,
@@ -20,11 +18,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-EliiKKRt+7IMPR8+0OWn+YKizPT9SZjVALAdbwi301w=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-  ];
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions

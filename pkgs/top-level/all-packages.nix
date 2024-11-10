@@ -8231,9 +8231,7 @@ with pkgs;
 
   dbt = with python3Packages; toPythonApplication dbt-core;
 
-  dprint = callPackage ../development/tools/dprint {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
-  };
+  dprint = callPackage ../development/tools/dprint { };
 
   devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo123Module; };
 
