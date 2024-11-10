@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "htcondor";
-  version = "23.10.1";
+  version = "24.1.1";
 
   src = fetchFromGitHub {
     owner = "htcondor";
     repo = "htcondor";
 
     rev = "v${version}";
-    hash = "sha256-5gxylfqG87dUEQT3e3vNgtTqWk0QTgWXwAdEAiIuc/E=";
+    hash = "sha256-k3GXaBSeRl6GJDm5+NRkV0E18RDUBYuoy2/u3ENsEyM=";
   };
 
   nativeBuildInputs = [ cmake ];

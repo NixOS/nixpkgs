@@ -18,18 +18,18 @@ buildPythonPackage rec {
     hash = "sha256-q6hqteXv600iH7xpCKHgRLkJYSpy9hIf/QnlsYI+jh4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "oldest-supported-numpy" "numpy"
-  '';
-
   build-system = [ meson-python ];
 
   dependencies = [ numpy ];
 
   checkPhase = ''
+    runHook preCheck
+    # "Do not run the tests from the source directory"
     mkdir testdir; cd testdir
-    ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    (set -x
+      ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    )
+    runHook postCheck
   '';
 
   meta = with lib; {

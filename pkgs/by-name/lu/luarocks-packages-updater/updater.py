@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 # format:
-# $ nix run nixpkgs#python3Packages.black -- update.py
+# $ nix run nixpkgs#python3Packages.ruff -- update.py
 # type-check:
 # $ nix run nixpkgs#python3Packages.mypy -- update.py
 # linted:
 # $ nix run nixpkgs#python3Packages.flake8 -- --ignore E501,E265,E402 update.py
 
-import inspect
-import os
-import tempfile
-import shutil
-from dataclasses import dataclass
-import subprocess
 import csv
+import inspect
 import logging
+import os
+import shutil
+import subprocess
+import tempfile
 import textwrap
+from dataclasses import dataclass
 from multiprocessing.dummy import Pool
-import pluginupdate
-from pluginupdate import update_plugins, FetchConfig
-
-from typing import List, Tuple, Optional
 from pathlib import Path
+from typing import List, Optional, Tuple
+
+import pluginupdate
+from pluginupdate import FetchConfig, update_plugins
 
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
@@ -35,9 +35,7 @@ HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with: nix run nixpkgs#luarocks-packages-updater
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
-""".format(
-    GENERATED_NIXFILE=GENERATED_NIXFILE
-)
+""".format(GENERATED_NIXFILE=GENERATED_NIXFILE)
 
 FOOTER = """
 }
@@ -71,7 +69,6 @@ class LuaPlugin:
 
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(pluginupdate.Editor):
-
     def create_parser(self):
         parser = super().create_parser()
         parser.set_defaults(proc=1)
@@ -173,10 +170,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     if plug.rockspec != "":
         if plug.ref or plug.version:
-            msg = (
-                "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
-                % plug.name
-            )
+            msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
             log.warning(msg)
 
         log.debug("Updating from rockspec %s", plug.rockspec)
@@ -193,7 +187,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     if plug.luaversion:
         cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace('.', '')
+        luaver = plug.luaversion.replace(".", "")
         if luaver := os.getenv(f"LUA_{luaver}"):
             cmd.append(f"--lua-dir={luaver}")
 

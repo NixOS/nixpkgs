@@ -35,6 +35,7 @@ stdenv'.mkDerivation (finalAttrs: {
     llvmPackages.llvm
     llvmPackages.libclang
     python.pkgs.qt6.qtbase
+    python.pkgs.qt6.darwinVersionInputs
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools
