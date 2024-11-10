@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  testers,
+  typos,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-WuYAE2msctMf+7C1h5pNGyjrEInnT6PxfZ94bZhzB5w=";
+
+  passthru = {
+    tests.version = testers.testVersion { package = typos; };
+  };
 
   meta = with lib; {
     description = "Source code spell checker";
