@@ -20,6 +20,7 @@
 , gobject-introspection
 , buildPackages
 , installTests ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -167,6 +168,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
+  };
 
   meta = {
     homepage = "https://www.bluez.org/";
