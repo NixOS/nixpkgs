@@ -201,8 +201,7 @@ in
       mkdir -p $out/bin $out/share
 
       ${lib.optionalString (!server) ''
-        mkdir -p $out/share/icons/hicolor/48x48/apps
-        ln $out/lib/rstudio/rstudio.png $out/share/icons/hicolor/48x48/apps
+        install -Dm644 $src/src/node/desktop/resources/freedesktop/icons/48x48/rstudio.png $out/share/icons/hicolor/48x48/apps/rstudio.png
       ''}
 
       for f in {${if server
