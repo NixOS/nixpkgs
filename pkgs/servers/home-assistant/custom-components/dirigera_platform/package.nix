@@ -17,14 +17,12 @@ buildHomeAssistantComponent rec {
     hash = "sha256-ftJUmJ5UWgm22YBfCIBAxRjG+niougw5ekrQNuSRgzI=";
   };
 
-  propagatedBuildInputs = [
-    dirigera
-  ];
-
   postPatch = ''
     substituteInPlace custom_components/dirigera_platform/manifest.json \
       --replace-fail "0.0.1" "${version}"
   '';
+
+  dependencies = [ dirigera ];
 
   meta = with lib; {
     description = "Home-assistant integration for IKEA Dirigera hub";
