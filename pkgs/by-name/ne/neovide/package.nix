@@ -12,12 +12,12 @@
 , pkg-config
 , python3
 , removeReferencesTo
-, xcbuild
+, apple-sdk_11
+, cctools
 , SDL2
 , fontconfig
 , xorg
 , stdenv
-, darwin
 , libglvnd
 , libxkbcommon
 , enableWayland ? stdenv.hostPlatform.isLinux
@@ -62,11 +62,12 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
   nativeBuildInputs = [
+    cctools.libtool
     makeWrapper
     pkg-config
     python3 # skia
     removeReferencesTo
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -74,9 +75,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -118,6 +117,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = platforms.unix;
   };
 }

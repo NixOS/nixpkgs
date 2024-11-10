@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, postgresql, boost182, nixosTests, buildPostgresqlExtension }:
+{ stdenv, lib, fetchFromGitHub, postgresql, boost182, postgresqlTestExtension, buildPostgresqlExtension }:
 
 let
   version = "1.7.0";
@@ -20,7 +20,7 @@ let
   };
 in
 
-buildPostgresqlExtension {
+buildPostgresqlExtension (finalAttrs: {
   pname = "apache_datasketches";
   inherit version;
 
@@ -36,7 +36,13 @@ buildPostgresqlExtension {
     runHook postPatch
   '';
 
-  passthru.tests.apache_datasketches = nixosTests.apache_datasketches;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = ''
+      CREATE EXTENSION datasketches;
+      SELECT hll_sketch_to_string(hll_sketch_build(1));
+    '';
+  };
 
   meta = {
     description = "PostgreSQL extension providing approximate algorithms for distinct item counts, quantile estimation and frequent items detection";
@@ -50,4 +56,4 @@ buildPostgresqlExtension {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mmusnjak ];
   };
-}
+})
