@@ -229,7 +229,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
 /nixos/modules/services/databases/postgresql.nix @NixOS/postgres
-/nixos/tests/postgresql.nix @NixOS/postgres
+/nixos/tests/postgresql @NixOS/postgres
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix                       @joachifm

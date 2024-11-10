@@ -13509,6 +13509,12 @@
     githubId = 322214;
     name = "Mathnerd314";
   };
+  mathstlouis = {
+    email = "matfino+gh@gmail.com";
+    github = "mathstlouis";
+    githubId = 35696151;
+    name = "mathstlouis";
+  };
   matklad = {
     email = "aleksey.kladov@gmail.com";
     github = "matklad";
@@ -21771,6 +21777,12 @@
     github = "therealansh";
     githubId = 57180880;
     name = "Ansh Tyagi";
+  };
+  therealgramdalf = {
+    email = "gramdalftech@gmail.com";
+    github = "TheRealGramdalf";
+    githubId = 79593869;
+    name = "Gramdalf";
   };
   therealr5 = {
     email = "rouven@rfive.de";
