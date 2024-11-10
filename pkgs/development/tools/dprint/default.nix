@@ -6,6 +6,7 @@
   CoreFoundation,
   Security,
   testers,
+  nix-update-script,
   dprint,
 }:
 
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
         DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
       '';
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
