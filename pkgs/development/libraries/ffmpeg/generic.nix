@@ -40,7 +40,7 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAvisynth ? withFullDeps # AviSynth script files reading
-, withBluray ? withFullDeps # BluRay reading
+, withBluray ? withHeadlessDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
