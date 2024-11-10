@@ -12,6 +12,7 @@
 , pkg-config
 , python3
 , removeReferencesTo
+, cctools
 , xcbuild
 , SDL2
 , fontconfig
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
   nativeBuildInputs = [
+    cctools.libtool
     makeWrapper
     pkg-config
     python3 # skia
