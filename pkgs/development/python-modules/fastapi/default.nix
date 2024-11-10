@@ -92,9 +92,7 @@ buildPythonPackage rec {
       python-multipart
       email-validator
       uvicorn
-    ]
-    ++ fastapi-cli.optional-dependencies.standard
-    ++ uvicorn.optional-dependencies.standard;
+    ] ++ fastapi-cli.optional-dependencies.standard ++ uvicorn.optional-dependencies.standard;
   };
 
   nativeCheckInputs = [
