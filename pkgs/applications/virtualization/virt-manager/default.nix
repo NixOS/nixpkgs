@@ -97,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_misc_nonpredicatble_generate"
     "test_disk_dir_searchable"  # does something strange with permissions
     "testCLI0001virt_install_many_devices"  # expects /var to exist
+    "testCLI0263virt_xml"  # depends on a specific libvirt version
   ];
 
   preCheck = ''
