@@ -12,6 +12,7 @@
 , pkg-config
 , python3
 , removeReferencesTo
+, apple-sdk_11
 , cctools
 , SDL2
 , fontconfig
@@ -74,7 +75,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -116,6 +117,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = platforms.unix;
   };
 }
