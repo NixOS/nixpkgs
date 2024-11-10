@@ -88,5 +88,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/firefly-iii/firefly-iii";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.savyajha lib.maintainers.patrickdag ];
+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })
