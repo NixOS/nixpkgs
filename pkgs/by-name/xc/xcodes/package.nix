@@ -23,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TwPfASRU98rifyA/mINFfoY0MbbwmAh8JneVpJa38CA=";
   };
 
-  nativeBuildInputs = [ swift swiftpm makeWrapper ];
+  nativeBuildInputs = [
+    swift
+    swiftpm
+    makeWrapper
+  ];
 
   configurePhase = generated.configure;
 
@@ -47,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
       # unxip
       lgpl3Only
     ];
-    maintainers = with lib.maintainers; [ _0x120581f emilytrau ];
+    maintainers = with lib.maintainers; [
+      _0x120581f
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
   };
 })
