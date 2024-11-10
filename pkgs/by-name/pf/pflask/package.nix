@@ -7,13 +7,13 @@
   wafHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation ({
   pname = "pflask";
   version = "unstable-2018-01-23";
 
   src = fetchFromGitHub {
     owner = "ghedo";
-    repo = pname;
+    repo = "pflask";
     rev = "9ac31ffe2ed29453218aac89ae992abbd6e7cc69";
     hash = "sha256-bAKPUj/EipZ98kHbZiFZZI3hLVMoQpCrYKMmznpSDhg=";
   };
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ghedo.github.io/pflask/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})
