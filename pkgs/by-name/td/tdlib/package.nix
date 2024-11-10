@@ -1,4 +1,23 @@
-{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv }:
+{ fetchFromGitHub, gperf, openssl, readline, zlib, cmake, lib, stdenv,
+  writeShellApplication, common-updater-scripts, jq }:
+
+let
+  updateScript = writeShellApplication {
+      name = "update-tdlib";
+
+      runtimeInputs = [ jq common-updater-scripts ];
+
+      text = ''
+        commit_msg="^Update version to (?<v>\\\\d+.\\\\d+.\\\\d+)\\\\.$"
+        commit=$(curl -s "https://api.github.com/repos/tdlib/td/commits?path=CMakeLists.txt" | jq -c "map(select(.commit.message | test(\"''${commit_msg}\"))) | first")
+
+        rev=$(echo "$commit" | jq -r ".sha")
+        version=$(echo "$commit" | jq -r ".commit.message | capture(\"''${commit_msg}\") | .v")
+
+        update-source-version tdlib "$version" --rev="$rev"
+      '';
+    };
+in
 
 stdenv.mkDerivation {
   pname = "tdlib";
@@ -29,6 +48,8 @@ stdenv.mkDerivation {
   '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     sed -i "/vptr/d" test/CMakeLists.txt
   '';
+
+  passthru.updateScript = lib.getExe updateScript;
 
   meta = with lib; {
     description = "Cross-platform library for building Telegram clients";
