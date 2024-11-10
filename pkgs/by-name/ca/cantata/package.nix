@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qt5,
+  qt6,
   perl,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -19,7 +19,7 @@
   libmusicbrainz5,
 
   withTaglib ? true,
-  taglib,
+  taglib2,
   taglib_extras,
   withHttpStream ? true,
   withReplaygain ? true,
@@ -100,7 +100,7 @@ let
     {
       names = [ "HTTP_STREAM_PLAYBACK" ];
       enable = withHttpStream;
-      pkgs = [ qt5.qtmultimedia ];
+      pkgs = [ qt6.qtmultimedia ];
     }
     {
       names = [ "LAME" ];
@@ -139,7 +139,7 @@ let
       ];
       enable = withTaglib;
       pkgs = [
-        taglib
+        taglib2
         taglib_extras
       ];
     }
@@ -153,13 +153,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "2.5.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
-    owner = "CDrummond";
+    owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+    hash = "sha256-dx0XkMUrxg3+c3fxhXjYK36x5M8xbX+IyVAalvib2iY=";
   };
 
   patches = [
@@ -174,16 +174,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
