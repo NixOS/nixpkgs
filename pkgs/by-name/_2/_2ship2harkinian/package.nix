@@ -1,50 +1,52 @@
 {
   lib,
+  fetchFromGitHub,
+  applyPatches,
+  _2ship2harkinian,
+  fetchurl,
+  writeTextFile,
   stdenv,
-  SDL2,
   cmake,
   copyDesktopItems,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   imagemagick,
-  imgui,
+  lsb-release,
+  makeWrapper,
+  ninja,
+  pkg-config,
+  python3,
+  libGL,
   libpng,
   libpulseaudio,
   libzip,
-  lsb-release,
-  makeDesktopItem,
-  makeWrapper,
-  ninja,
   nlohmann_json,
-  pkg-config,
-  python3,
+  SDL2,
   spdlog,
-  stormlib,
   tinyxml-2,
-  writeTextFile,
   zenity,
+  makeDesktopItem,
 }:
 
 let
 
-  # This would get fetched at build time otherwise, see:
-  # https://github.com/HarbourMasters/2ship2harkinian/blob/1.0.2/mm/CMakeLists.txt#L708
-  gamecontrollerdb = fetchurl {
-    name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/b1759cf84028aab89caa1c395e198c340b8dfd89/gamecontrollerdb.txt";
-    hash = "sha256-7C5EkqBIhLGNJuhi3832y0ffW5Ep7iuTYXb1bL5h2Js=";
+  # The following are either normally fetched during build time or a specific version is required
+
+  gamecontrollerdb = fetchFromGitHub {
+    owner = "mdqinc";
+    repo = "SDL_GameControllerDB";
+    rev = "e84a52679007c6a6346794cda1fdbcb941ac6494";
+    hash = "sha256-npgsTvRQRQkgT8C1nwisJqq2m+DT9q/r/Zev2NipGcU=";
   };
 
-  # 2ship needs a specific imgui version
-  imgui' = imgui.overrideAttrs rec {
-    version = "1.90.6";
+  imgui' = applyPatches {
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      tag = "v${version}-docking";
+      tag = "v1.90.6-docking";
       hash = "sha256-Y8lZb1cLJF48sbuxQ3vXq6GLru/WThR78pq7LlORIzc=";
     };
+    patches = [
+      "${_2ship2harkinian.src}/libultraship/cmake/dependencies/patches/sdl-gamepad-fix.patch"
+    ];
   };
 
   libgfxd = fetchFromGitHub {
@@ -68,24 +70,17 @@ let
     hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
   };
 
-  # Apply 2ship's patch for stormlib
-  stormlib' = stormlib.overrideAttrs (prev: rec {
-    version = "9.25";
+  stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
       repo = "StormLib";
-      tag = "v${version}";
+      tag = "v9.25";
       hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
     };
-    nativeBuildInputs = prev.nativeBuildInputs ++ [ pkg-config ];
-    patches = (prev.patches or [ ]) ++ [
-      (fetchpatch {
-        name = "stormlib-optimizations.patch";
-        url = "https://github.com/briaguya-ai/StormLib/commit/ff338b230544f8b2bb68d2fbe075175ed2fd758c.patch";
-        hash = "sha256-Jbnsu5E6PkBifcx/yULMVC//ab7tszYgktS09Azs5+4=";
-      })
+    patches = [
+      "${_2ship2harkinian.src}/libultraship/cmake/dependencies/patches/stormlib-optimizations.patch"
     ];
-  });
+  };
 
   thread_pool = fetchFromGitHub {
     owner = "bshoshany";
@@ -97,13 +92,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-1iSFzroKxwFpsIGNMetSlQKTKRWCy7QtgCTepFdSeY8=";
+    hash = "sha256-lsq2CCDOYZKYntu3B0s4PidpZ3EjyIPSSpHpmq4XN9U=";
     fetchSubmodules = true;
   };
 
@@ -124,14 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL2
-    imgui'
+    libGL
     libpng
     libpulseaudio
     libzip
     nlohmann_json
+    SDL2
     spdlog
-    stormlib'
     tinyxml-2
     zenity
   ];
@@ -139,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "NON_PORTABLE" true)
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/2s2h")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
@@ -158,13 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir stb
     cp ${stb'} ./stb/${stb'.name}
     cp ${stb_impl} ./stb/${stb_impl.name}
-
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
-      --replace-fail "\''${STB_DIR}" "/build/source/stb"
+      --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
   '';
 
   postBuild = ''
-    cp ${gamecontrollerdb} ${gamecontrollerdb.name}
+    cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
     pushd ../OTRExporter
     python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../mm/assets/xml --custom-assets-path ../mm/assets/custom --custom-otr-file 2ship.o2r --port-ver ${finalAttrs.version}
     popd
