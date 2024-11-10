@@ -22,12 +22,12 @@
     "5.4": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-v5.4.284-hardened1.patch",
-            "sha256": "1skqaq90bigrxg0w075nssqbdq868ii62r8asx0m6wcvd5cl50af",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v5.4.284-hardened1/linux-hardened-v5.4.284-hardened1.patch"
+            "name": "linux-hardened-v5.4.285-hardened1.patch",
+            "sha256": "1zm846mzvz1x88iskfw8513jkhlphxkd4v2qs86maxlgiz5zcxqp",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v5.4.285-hardened1/linux-hardened-v5.4.285-hardened1.patch"
         },
-        "sha256": "0axkwfhvq3w2072xjqww476qa3rjglxyqmf72mlp9b5ymswil8kp",
-        "version": "5.4.284"
+        "sha256": "1722sc365ajxmqyr4r49yp73mzdckay3rx5c2gx29xzny9zc6cmy",
+        "version": "5.4.285"
     },
     "6.1": {
         "patch": {
