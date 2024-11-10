@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   testers,
+  nix-update-script,
   typos,
 }:
 
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = typos; };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
