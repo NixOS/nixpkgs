@@ -23,7 +23,7 @@
 , gvfs
 , libcdio
 , pcre
-, projectm
+, projectm_3
 , protobuf
 , qca-qt5
 , pkg-config
@@ -85,7 +85,7 @@ mkDerivation {
     liblastfm
     libpulseaudio
     pcre
-    projectm
+    projectm_3
     protobuf
     qca-qt5
     qjson

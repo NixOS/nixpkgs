@@ -11233,7 +11233,7 @@ with pkgs;
     jdk = jdk8;
   };
 
-  projectm = libsForQt5.callPackage ../applications/audio/projectm { };
+  projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
 
   proot = callPackage ../tools/system/proot { };
 
