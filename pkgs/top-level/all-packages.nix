@@ -355,11 +355,6 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
-  probe-rs-tools = callPackage ../by-name/pr/probe-rs-tools/package.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-    inherit (darwin) DarwinTools;
-  };
-
   mumps_par = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
   prisma-engines = callPackage ../development/tools/database/prisma-engines {
