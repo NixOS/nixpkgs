@@ -487,6 +487,7 @@ with pkgs;
     fixup-yarn-lock
     prefetch-yarn-deps
     yarnConfigHook
+    yarnBerry3ConfigHook
     yarnBuildHook
     yarnInstallHook
     fetchYarnDeps;
@@ -5728,7 +5729,17 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
-  yarn-berry = callPackage ../development/tools/yarn-berry { };
+  inherit
+    ({
+      yarn-berry_3 = callPackage ../development/tools/yarn-berry { berryVersion = 3; };
+
+      yarn-berry_4 = callPackage ../development/tools/yarn-berry { };
+    })
+    yarn-berry_3
+    yarn-berry_4
+    ;
+
+  yarn-berry = yarn-berry_4;
 
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
 
