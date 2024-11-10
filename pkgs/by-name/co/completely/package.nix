@@ -1,6 +1,7 @@
-{ lib
-, bundlerApp
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -11,12 +12,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "completely";
 
-  meta = with lib; {
+  meta = {
     description = "Generate bash completion scripts using a simple configuration file";
     homepage = "https://github.com/DannyBen/completely";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "completely";
   };
 }
