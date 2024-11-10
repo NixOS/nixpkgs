@@ -301,9 +301,7 @@ with pkgs;
 
   cocogitto = callPackage ../development/tools/cocogitto { };
 
-  coldsnap = callPackage ../tools/admin/coldsnap {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  coldsnap = callPackage ../tools/admin/coldsnap { };
 
   collision = callPackage ../applications/misc/collision { };
 
