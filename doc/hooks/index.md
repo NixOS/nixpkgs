@@ -8,6 +8,7 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 autoconf.section.md
 automake.section.md
 autopatchelf.section.md
+aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md

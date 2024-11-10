@@ -540,8 +540,6 @@ with pkgs;
 
   inherit ({
     mysql-shell_8 = callPackage ../development/tools/mysql-shell/8.nix {
-      inherit (darwin) DarwinTools;
-      inherit (darwin.apple_sdk.frameworks) CoreServices;
       antlr = antlr4_10;
       icu =  icu73;
       protobuf = protobuf_24;
@@ -551,8 +549,6 @@ with pkgs;
   ;
 
   mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
-    inherit (darwin) DarwinTools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     icu =  icu73;
     protobuf = protobuf_24;
@@ -1521,9 +1517,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreBluetooth ForceFeedback IOBluetooth IOKit OpenGL VideoToolbox;
   };
 
-  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
+  dolphin-emu-primehack = qt6.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-    fmt = fmt_8;
   };
 
   ### APPLICATIONS/EMULATORS/RETROARCH
@@ -14860,6 +14855,8 @@ with pkgs;
   kubectl-view-allocations = callPackage ../applications/networking/cluster/kubectl-view-allocations {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  kubelogin-oidc = callPackage ../by-name/ku/kubelogin-oidc/package.nix { buildGoModule = buildGo123Module; };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
 
