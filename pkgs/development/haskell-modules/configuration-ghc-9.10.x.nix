@@ -63,6 +63,7 @@ self: super: {
   aeson = doDistribute self.aeson_2_2_3_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   auto-update = super.auto-update_0_2_2;
+  dependent-sum-template = doJailbreak self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
   extensions = doDistribute self.extensions_0_1_0_2;
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
