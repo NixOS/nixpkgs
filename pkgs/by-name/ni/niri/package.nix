@@ -86,9 +86,14 @@ rustPlatform.buildRustPackage rec {
     + lib.optionalString withDbus ''
       install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     ''
-    + lib.optionalString withSystemd ''
+    + lib.optionalString (withSystemd || withDinit) ''
       install -Dm0755 resources/niri-session -t $out/bin
+    ''
+    + lib.optionalString withSystemd ''
       install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+    ''
+    + lib.optionalString withDinit ''
+      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     '';
 
   env = {
