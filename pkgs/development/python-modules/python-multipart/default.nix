@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.12";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_multipart";
     inherit version;
-    hash = "sha256-BF4fmNcZwc4IXtf34e+djMyMAroCtVZtX3UhQQztWMs=";
+    hash = "sha256-QTMNgxyubi8ikCcE6tKCbqA40EGVMOrf8+qAF1rsVTg=";
   };
 
   nativeBuildInputs = [ hatchling ];
