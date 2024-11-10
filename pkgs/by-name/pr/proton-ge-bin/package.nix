@@ -32,7 +32,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/compatibilitytool.vdf
     sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/proton
-    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/version
 
     runHook postBuild
   '';
