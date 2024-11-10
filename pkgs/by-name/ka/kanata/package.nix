@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.7.0";
+  version = "1.7.0-prerelease-1";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cG9so0x0y8CbTxLOxSQwn5vG72KxHJzzTIH4lQA4MvE=";
+    sha256 = "sha256-eDeGVmh1gI/DhiP6gxJyGH9G9LNH1NHW0+DNuOPUnBY=";
   };
 
-  cargoHash = "sha256-QQrFUJ24Qnrx8+7+h9riycXZSQUdH1sXMhpDzU9AXiI=";
+  cargoHash = "sha256-Om9Thyr10wc39J6adSWgmXtvjckaEW0z68sWxUqa4wc=";
 
   # the dependency native-windows-gui contains both README.md and readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem
