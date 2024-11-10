@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.47.2";
+  version = "0.47.5";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-zafRwiXfRACT6G408pXLCk7t6akabOs1VFLRF9SeNWI=";
+    hash = "sha256-1TfROcng9hF8j2PR+LEXNWnIKLapTPU1QunoCi5NxhI=";
   };
 
-  cargoHash = "sha256-86ecnwDDVvgXgBBodP2rSZOn+R52Jap8RCKILttGOn8=";
+  cargoHash = "sha256-EliiKKRt+7IMPR8+0OWn+YKizPT9SZjVALAdbwi301w=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
