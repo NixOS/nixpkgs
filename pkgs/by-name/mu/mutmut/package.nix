@@ -37,6 +37,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ synthetica ];
+    maintainers = with maintainers; [
+      l0b0
+      synthetica
+    ];
   };
 }
