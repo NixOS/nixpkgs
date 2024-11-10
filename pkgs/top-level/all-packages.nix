@@ -389,9 +389,7 @@ with pkgs;
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
 
-  didyoumean = callPackage ../tools/misc/didyoumean {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
+  didyoumean = callPackage ../tools/misc/didyoumean { };
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
