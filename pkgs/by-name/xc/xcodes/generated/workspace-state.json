@@ -5,6 +5,23 @@
       {
         "basedOn": null,
         "packageRef": {
+          "identity": "big-num",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/adam-fowler/big-num",
+          "name": "big-num"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "5c5511ad06aeb2b97d0868f7394e14a624bfb1c7",
+            "version": "2.0.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "big-num"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
           "identity": "data",
           "kind": "remoteSourceControl",
           "location": "https://github.com/xcodereleases/data",
@@ -136,6 +153,40 @@
           "name": "sourceControlCheckout"
         },
         "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-crypto",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-crypto",
+          "name": "swift-crypto"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
+            "version": "1.1.7"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-crypto"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-srp",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/xcodesOrg/swift-srp",
+          "name": "swift-srp"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "543aa0122a0257b992f6c7d62d18a26e3dffb8fe"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-srp"
       },
       {
         "basedOn": null,
