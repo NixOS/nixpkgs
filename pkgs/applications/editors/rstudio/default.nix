@@ -120,11 +120,13 @@ in
       "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
+      "-DOS_RELEASE_PRETTY_NAME=nixpkgs"
     ] ++ lib.optionals (!server) [
       "-DQT_QMAKE_EXECUTABLE=${qmake}/bin/qmake"
     ];
 
-    # Hack RStudio to only use the input R and provided libclang.
+
+  # Hack RStudio to only use the input R and provided libclang.
     patches = [
       ./r-location.patch
       ./clang-location.patch
@@ -151,11 +153,15 @@ in
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
         --replace-fail '@pandoc@' ${pandoc} \
-        --replace-fail '@quarto@' ${quarto}
+        --replace-fail '@quarto@' ${quarto} \
+        --replace-fail \$\{CMAKE_CURRENT_SOURCE_DIR\}/../../gwt/lib/quarto ${quartoSrc}
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace-fail '@pandoc@' ${pandoc}/bin \
         --replace-fail '@quarto@' ${quarto}
+
+      substituteInPlace package/linux/CMakeLists.txt \
+        --replace-fail 'elseif(RSTUDIO_ELECTRON)' 'else()'
     '';
 
     hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -180,7 +186,9 @@ in
 
       # As of Cranberry Hibiscus, node 20.15.1 is used for runtime
       # node_20 can be used for build.
-      mkdir -p dependencies/common/node/20.15.1
+      # And now the folder name needs the suffix -patched. More info:
+      # https://github.com/rstudio/rstudio/commit/bde8d20a9426c45ced6fde2557d75fb94ab5724e
+      mkdir -p dependencies/common/node/20.15.1-patched
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc
