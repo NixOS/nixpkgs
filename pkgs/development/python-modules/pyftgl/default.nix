@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "umlaeute";
-    repo = "${pname}-${version}";
-    rev = version;
-    sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
+    repo = "pyftgl";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
   postPatch =
