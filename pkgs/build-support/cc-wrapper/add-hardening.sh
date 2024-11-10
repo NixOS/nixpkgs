@@ -97,7 +97,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
       hardeningCFlagsBefore=('-fPIE' "${hardeningCFlagsBefore[@]}")
       if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningCFlagsBefore=('-pie' "${hardeningCFlagsBefore[@]}")
+        hardeningCFlagsLinkBefore=('-pie' "${hardeningCFlagsLinkBefore[@]}")
       fi
       ;;
     pic)

@@ -183,6 +183,7 @@ extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLA
 if [ "$dontLink" != 1 ]; then
     linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
 
+    extraBefore+=(${hardeningCFlagsLinkBefore[@]+"${hardeningCFlagsLinkBefore[@]}"})
     # Add the flags that should only be passed to the compiler when
     # linking.
     extraAfter+=($(filterRpathFlags "$linkType" $NIX_CFLAGS_LINK_@suffixSalt@))
