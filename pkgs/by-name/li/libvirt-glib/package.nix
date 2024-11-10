@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
     sha256 = "m/7DRjgkFqNXXYcpm8ZBsqRkqlGf2bEofjGKpDovO4s=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "relax-max-stack-size-limit.patch";
+      url = "https://gitlab.com/libvirt/libvirt-glib/-/commit/062f21ccaa810087637ae24e0eb69f1a0f0a45f5.patch";
+      hash = "sha256-6mvINDd1HYS7oZsyNiyEwdNJfK5I5nPx86TRMq2RevA=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

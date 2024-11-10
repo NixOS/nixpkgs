@@ -1,35 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, swift
-, swiftpm
-, swiftpm2nix
-, makeWrapper
-, CryptoKit
-, LocalAuthentication
-, libcompression
-, aria2
+{
+  lib,
+  fetchFromGitHub,
+  swiftPackages,
+  swift,
+  swiftpm,
+  swiftpm2nix,
+  makeWrapper,
+  aria2,
 }:
 let
   generated = swiftpm2nix.helpers ./generated;
+  stdenv = swiftPackages.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
     rev = finalAttrs.version;
-    hash = "sha256-vksfvrx0TqtjcOHn38Ey3P6jIFYF4CbD3SVICVFINSU=";
+    hash = "sha256-TwPfASRU98rifyA/mINFfoY0MbbwmAh8JneVpJa38CA=";
   };
 
-  nativeBuildInputs = [ swift swiftpm makeWrapper ];
-
-  buildInputs = [
-    CryptoKit
-    LocalAuthentication
-    libcompression
+  nativeBuildInputs = [
+    swift
+    swiftpm
+    makeWrapper
   ];
 
   configurePhase = generated.configure;
@@ -45,16 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/XcodesOrg/xcodes/releases/tag/${finalAttrs.version}";
     description = "Command-line tool to install and switch between multiple versions of Xcode";
     homepage = "https://github.com/XcodesOrg/xcodes";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # unxip
       lgpl3Only
     ];
-    maintainers = with maintainers; [ _0x120581f emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [
+      _0x120581f
+      emilytrau
+    ];
+    platforms = lib.platforms.darwin;
   };
 })

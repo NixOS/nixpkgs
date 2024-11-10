@@ -1517,9 +1517,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreBluetooth ForceFeedback IOBluetooth IOKit OpenGL VideoToolbox;
   };
 
-  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
+  dolphin-emu-primehack = qt6.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-    fmt = fmt_8;
   };
 
   ### APPLICATIONS/EMULATORS/RETROARCH
@@ -2024,11 +2023,6 @@ with pkgs;
   };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-
-  xcodes = swiftPackages.callPackage ../development/tools/xcodes {
-    inherit (swiftPackages.apple_sdk.frameworks) CryptoKit LocalAuthentication;
-    inherit (swiftPackages.apple_sdk) libcompression;
-  };
 
   gomobile = callPackage ../development/mobile/gomobile { };
 
@@ -9932,6 +9926,7 @@ with pkgs;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+  libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
   libbassmix = (callPackage ../development/libraries/audio/libbass { }).bassmix;
 
   libbluray = callPackage ../development/libraries/libbluray {
@@ -12216,7 +12211,8 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  inherit (import ../servers/sql/postgresql pkgs)
+  postgresqlVersions = import ../servers/sql/postgresql pkgs;
+  inherit (postgresqlVersions)
     postgresql_12
     postgresql_13
     postgresql_14
