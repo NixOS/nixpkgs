@@ -19,6 +19,7 @@
   rich,
   semver,
   setuptools,
+  setuptools-scm,
   tailer,
 }:
 
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-8xdP/qpmfqmXDt1gNhzkAGlBR6dJYznKr9+/Un6N7mA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     apispec
