@@ -17,6 +17,7 @@
   (fetchNuGet { pname = "Ical.Net"; version = "4.2.0"; hash = "sha256-OcUvqj2nIyZ93MUYvRN+752xPkbtE/Uoi6T+W51eDKc="; })
   (fetchNuGet { pname = "ImpromptuInterface"; version = "7.0.1"; hash = "sha256-61KY5H3W/sGX12y0oREPX7W22VJokL9U3VJpOHW50s8="; })
   (fetchNuGet { pname = "Instances"; version = "1.6.1"; hash = "sha256-ge49RXumBAUKHld/5EhxydEVTKc8Lqz7MNgH4Y4ca9E="; })
+  (fetchNuGet { pname = "IPAddressRange"; version = "6.0.0"; hash = "sha256-3qa0BOBto1+SzJjepSWrvjRryw8RBaKOlPFXtVTvyjo="; })
   (fetchNuGet { pname = "Lib.Harmony"; version = "2.0.1"; hash = "sha256-mmzIoIUDbByhbGIA87aVHlyMpFBZnpJPZiD1Gja2MVU="; })
   (fetchNuGet { pname = "MailKit"; version = "3.6.0"; hash = "sha256-ECpS2Bt7e3h/uJ5Twng2/lw3j20C3UZgiivcW+KW7sQ="; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.Cryptography.Internal"; version = "6.0.21"; hash = "sha256-YMveWdyikWEfczNSMSh0LlBS87gsMxMto1RW8Unjnro="; })
