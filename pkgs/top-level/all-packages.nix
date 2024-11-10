@@ -290,9 +290,7 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cloak = callPackage ../applications/misc/cloak {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cloak = callPackage ../applications/misc/cloak { };
 
   cotp = callPackage ../applications/misc/cotp {
     inherit (darwin.apple_sdk.frameworks) AppKit;
