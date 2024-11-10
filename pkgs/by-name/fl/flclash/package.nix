@@ -10,13 +10,13 @@
 }:
 let
   pname = "flclash";
-  version = "0.8.66";
+  version = "0.8.67";
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       rev = "v${version}";
-      hash = "sha256-LkaAALJcP3DGXBMZ3QWLUiyT9Kr4yTxKIRqYhrW1WOw=";
+      hash = "sha256-Z5iZ+7YOHKsf14qSg3dLaKCAC46e27xNdcojEHPaonU=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -27,7 +27,7 @@ let
   libclash = buildGoModule {
     inherit pname version src;
     modRoot = "./core";
-    vendorHash = "sha256-K+PrLFvDHyaxf1NKzcqf0qmfQwT8rctScv1CN+TxY0M=";
+    vendorHash = "sha256-sruM0NM3JZJWtC+Y+faiiCveDXFybA1c3GvuhhnV7sM=";
     buildPhase = ''
       runHook preBuild
 
@@ -68,12 +68,9 @@ flutter.buildFlutterApplication {
     })
   ];
 
-  patchPhase = ''
-    runHook prePatch
-
-    substituteInPlace lib/clash/core.dart --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
-
-    runHook postPatch
+  postPatch = ''
+    substituteInPlace lib/clash/core.dart \
+      --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
   '';
 
   preBuild = ''
