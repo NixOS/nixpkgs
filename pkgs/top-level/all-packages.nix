@@ -192,9 +192,7 @@ with pkgs;
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
 
-  bindle = callPackage ../servers/bindle {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  bindle = callPackage ../servers/bindle { };
 
   stripJavaArchivesHook = makeSetupHook {
     name = "strip-java-archives-hook";
