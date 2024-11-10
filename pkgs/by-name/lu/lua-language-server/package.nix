@@ -2,11 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   ninja,
   makeWrapper,
-  CoreFoundation,
-  Foundation,
-  ditto,
+
+  # buildInputs
+  apple-sdk_11,
+  darwinMinVersionHook,
   nix-update-script,
 }:
 
@@ -28,9 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Foundation
-    ditto
+    darwin.ditto
+    # aligned_alloc
+    apple-sdk_11
+    (darwinMinVersionHook "10.15")
   ];
 
   postPatch =
