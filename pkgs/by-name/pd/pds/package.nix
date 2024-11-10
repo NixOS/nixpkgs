@@ -9,6 +9,7 @@
   nodejs,
   vips,
   pkg-config,
+  nixosTests,
   lib,
 }:
 
@@ -77,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) pds;
+  };
 
   meta = {
     description = "Bluesky Personal Data Server (PDS)";
