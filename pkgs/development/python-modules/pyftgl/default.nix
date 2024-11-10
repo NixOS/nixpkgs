@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
+  setuptools,
   boost,
   freetype,
   ftgl,
@@ -12,14 +13,12 @@
 }:
 
 let
-
   pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
 in
-
 buildPythonPackage rec {
   pname = "pyftgl";
   version = "0.4b";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
@@ -28,9 +27,12 @@ buildPythonPackage rec {
     sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch =
     ''
-      sed -i "s,'boost_python','boost_python${pythonVersion}',g" setup.py
+      substituteInPlace setup.py \
+        --replace-fail boost_python boost_python${pythonVersion}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
@@ -44,8 +46,8 @@ buildPythonPackage rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for FTGL (FreeType for OpenGL)";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }
