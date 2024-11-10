@@ -339,9 +339,7 @@ with pkgs;
 
   edgedb = callPackage ../tools/networking/edgedb { };
 
-  eludris = callPackage ../tools/misc/eludris {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  eludris = callPackage ../tools/misc/eludris { };
 
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
 
