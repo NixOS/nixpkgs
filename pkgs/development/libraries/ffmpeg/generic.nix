@@ -87,7 +87,7 @@
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
-, withOpencl ? withFullDeps
+, withOpencl ? withHeadlessDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin # OpenGL rendering
