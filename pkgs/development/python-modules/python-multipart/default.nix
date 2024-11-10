@@ -50,6 +50,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/Kludex/python-multipart/releases/tag/${version}";
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/andrew-d/python-multipart";
     license = licenses.asl20;
