@@ -8,9 +8,6 @@
   pkg-config,
   curl,
   openssl,
-  Security,
-  CoreServices,
-  libiconv,
   xz,
   substituteAll,
   # for passthru.tests:
@@ -55,9 +52,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      libiconv
       xz
     ];
 

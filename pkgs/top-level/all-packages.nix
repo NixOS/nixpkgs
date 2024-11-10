@@ -337,9 +337,7 @@ with pkgs;
     catch2 = catch2_3;
   };
 
-  edgedb = callPackage ../tools/networking/edgedb {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  edgedb = callPackage ../tools/networking/edgedb { };
 
   eludris = callPackage ../tools/misc/eludris {
     inherit (darwin.apple_sdk.frameworks) Security;
