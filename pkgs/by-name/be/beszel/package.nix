@@ -1,84 +1,92 @@
 {
-  buildGoModule,
+  stdenv,
   lib,
+  buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
-  buildNpmPackage,
-  fetchpatch,
+  bun,
+  nodejs-slim,
 }:
-
 buildGoModule rec {
-  pname = "beszel";
-  version = "0.6.2";
 
-  src = fetchFromGitHub {
+  pname = "beszel-hub";
+  version = "0.7.4";
+
+  repo = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-x9HU+sDjxRthC4ROJaKbuKHPHgxFSpyn/dywyGWE/v8=";
+    rev = "v${version}";
+    hash = "sha256-IXVDpi8mtlk01BKIpH3a9yUZg/2ZfDa/JrPIIcgzO+E=";
   };
 
-  webui = buildNpmPackage {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
+  webui = stdenv.mkDerivation {
+    pname = "beszel-hub-webui";
+    inherit version;
+    src = repo;
+    sourceRoot = "${src.name}/beszel/site";
 
-    npmFlags = [ "--legacy-peer-deps" ];
-
-    patches = [
-      # add missing @esbuild for multi platform
-      # https://github.com/henrygd/beszel/pull/235
-      # add missing @esbuild for multi platform
-      # https://github.com/henrygd/beszel/pull/235
-      ./0001-fix-build.patch
+    depsBuildBuild = [
+      bun
+      nodejs-slim
     ];
 
+    configurePhase = ''
+      bun install --frozen-lockfile
+
+      # `bun run` below will execute scripts that `bun install` dowloaded in
+      # node_modules.
+      # Since some of these scripts' shebangs reference /usr/bin/env, which is
+      # not available in the build sandbox, we'll need to patch them.
+      patchShebangs --build node_modules
+    '';
+
     buildPhase = ''
-      runHook preBuild
+      bun run build
 
-      node --max_old_space_size=1024000 ./node_modules/vite/bin/vite.js build
-
-      runHook postBuild
+      # Nix will complain about references to the nix store (the ones we
+      # introduced above with patchShebangs) and we only need site/dist so
+      # let's just get rid of the whole site/node_modules directory.
+      # rm -fr node_modules
     '';
 
     installPhase = ''
-      runHook preInstall
-
       mkdir -p $out
-      cp -r dist/* $out
-
-      runHook postInstall
+      cp -r --reflink=auto dist/* $out
     '';
 
-    sourceRoot = "${src.name}/beszel/site";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-Pgc+npTmCHEnZbYhmrtZ8ez4LDUiWbmL8BxmYrQCsPA=";
 
-    npmDepsHash = "sha256-t7Qcuvqbt0sPHAu3vcZaU8/Ij2yY5/g1TguozlKu0mU=";
   };
 
+  src = repo;
   sourceRoot = "${src.name}/beszel";
 
-  vendorHash = "sha256-/FePQkqoeuH63mV81v1NxpFw9osMUCcZ1bP+0yN1Qlo=";
+  vendorHash = "sha256-5+/xzgVVQiooXmbJ+8WCCgUJKTQwJECEUcYt7qoEEJs=";
+
+  ldflags = [ "-w -s" ];
+
+  subPackages = [ "cmd/hub" ];
 
   preBuild = ''
     mkdir -p site/dist
-    cp -r ${webui}/* site/dist
+    cp -r --reflink=auto ${webui}/* site/dist
   '';
 
   postInstall = ''
-    mv $out/bin/agent $out/bin/beszel-agent
-    mv $out/bin/hub $out/bin/beszel-hub
+    mv $out/bin/hub $out/bin/${meta.mainProgram}
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
+    description = "Hub for the Beszel server monitoring system.";
+    mainProgram = "beszel";
     homepage = "https://github.com/henrygd/beszel";
     changelog = "https://github.com/henrygd/beszel/releases/tag/v${version}";
-    description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      giorgiga
+    ];
   };
+
 }
