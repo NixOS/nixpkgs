@@ -1,6 +1,5 @@
 { fetchFromGitHub
 , lib
-, Security
 , openssl
 , pkg-config
 , protobuf
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}

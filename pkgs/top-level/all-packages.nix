@@ -357,9 +357,7 @@ with pkgs;
 
   mumps_par = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
-  prisma-engines = callPackage ../development/tools/database/prisma-engines {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  prisma-engines = callPackage ../development/tools/database/prisma-engines { };
 
   protoc-gen-dart = callPackage ../development/tools/protoc-gen-dart { };
 
