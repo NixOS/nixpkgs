@@ -5,9 +5,10 @@
   fetchpatch,
   python3,
   wafHook,
+  waf,
 }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation (finalAttrs: {
   pname = "pflask";
   version = "unstable-2018-01-23";
 
@@ -28,9 +29,20 @@ stdenv.mkDerivation ({
     })
   ];
 
+  waf-version = "2.0.27";
+
   nativeBuildInputs = [
     python3
-    wafHook
+    (wafHook.override {
+      waf = waf.overrideAttrs (old: {
+        version = finalAttrs.waf-version;
+        src = fetchFromGitHub {
+          inherit (old.src) owner repo;
+          rev = "waf-${finalAttrs.waf-version}";
+          hash = "sha256-GeEoD5CHubwR4ndGk7J7czEf0hWtPQr88TqJDPqeK0s=";
+        };
+      });
+    })
   ];
 
   postInstall = ''
