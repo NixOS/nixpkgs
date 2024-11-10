@@ -28,13 +28,13 @@ buildPythonPackage rec {
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };
 
-  postPatch = ''
-    sed -i "s,'boost_python','boost_python${pythonVersion}',g" setup.py
-  '';
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = "-L${libGL}/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries";
-  };
+  postPatch =
+    ''
+      sed -i "s,'boost_python','boost_python${pythonVersion}',g" setup.py
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
+    '';
 
   buildInputs = [
     boost
