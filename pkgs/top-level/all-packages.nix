@@ -16266,6 +16266,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
   };
 
+  inherit (callPackage ../applications/misc/xppen { })
+    xppen_3 xppen_4;
+
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   yabar = callPackage ../applications/window-managers/yabar { };

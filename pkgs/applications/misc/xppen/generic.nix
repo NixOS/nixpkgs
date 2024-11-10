@@ -5,17 +5,18 @@
   autoPatchelfHook,
   qt5,
   libusb1,
+  pname,
+  version,
+  url,
+  hash,
 }:
 
 stdenv.mkDerivation {
-  pname = "xppen_4";
-  version = "4.0.4-240815";
+  inherit pname version;
 
-  # to update: try to find the latest 4.x.x .tar.gz on https://www.xp-pen.com/download
   src = fetchzip {
     extension = "tar.gz";
-    url = "https://www.xp-pen.com/download/file.html?id=3325&pid=1016&ext=gz";
-    hash = "sha256-NVO9VaUmcQDI4rL76BBQDmII8vpmmo9qgcGetv6CIFE=";
+    inherit url hash;
   };
 
   nativeBuildInputs = [
