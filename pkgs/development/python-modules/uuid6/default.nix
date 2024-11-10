@@ -15,6 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-LSnX9j9ZPKruoODQ3QrYEpycZjsp4ZvfiC6GS+3xj7A=";
   };
 
+  # https://github.com/oittaa/uuid6-python/blob/e647035428d984452b9906b75bb007198533dfb1/setup.py#L12-L19
+  env.GITHUB_REF = "refs/tags/${version}";
+
   build-system = [
     setuptools
   ];

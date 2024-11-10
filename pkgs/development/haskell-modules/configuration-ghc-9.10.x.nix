@@ -69,7 +69,7 @@ self: super: {
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20240511;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
-  http2 = self.http2_5_3_4;
+  http2 = super.http2_5_3_4;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
   network-control = super.network-control_0_1_3;
@@ -84,7 +84,6 @@ self: super: {
   time-manager = super.time-manager_0_1_0;
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
   uuid-types = doDistribute self.uuid-types_1_0_6;
-  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_3; # test suite assumes it can freely call curl
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
@@ -127,6 +126,7 @@ self: super: {
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_2; # test suite assumes it can freely call curl
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
 

@@ -174,7 +174,7 @@ rec {
           binaryNativeCode
         ];
         license = licenses.asl20;
-        maintainers = with maintainers; [ lorenzleutgeb liff ];
+        maintainers = with maintainers; [ lorenzleutgeb liff ] ++ lib.teams.java.members;
         mainProgram = "gradle";
       } // meta;
     });

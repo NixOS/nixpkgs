@@ -3,6 +3,7 @@
   stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch2,
   python3,
   nodejs,
   node-gyp,
@@ -17,12 +18,12 @@
   cacert,
   unzip,
   # runtime deps
+  exiftool,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
   libraw,
   libheif,
   vips,
-  perl,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
@@ -146,6 +147,13 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
+  postPatch = ''
+    # pg_dumpall fails without database root access
+    # see https://github.com/immich-app/immich/issues/13971
+    substituteInPlace src/services/backup.service.ts \
+      --replace-fail '`pg_dumpall`' '`pg_dump`'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     python3
@@ -166,7 +174,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   preBuild = ''
-    cd node_modules/sharp
+    pushd node_modules/sharp
 
     mkdir node_modules
     ln -s ${node-addon-api} node_modules/node-addon-api
@@ -175,8 +183,13 @@ buildNpmPackage' {
 
     rm -r node_modules
 
-    cd ../..
+    popd
     rm -r node_modules/@img/sharp*
+
+    # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
+    rm -r node_modules/exiftool-vendored.*
+    substituteInPlace node_modules/exiftool-vendored/dist/DefaultExifToolOptions.js \
+      --replace-fail "checkPerl: !(0, IsWin32_1.isWin32)()," "checkPerl: false,"
   '';
 
   installPhase = ''
@@ -197,7 +210,7 @@ buildNpmPackage' {
       --set IMMICH_BUILD_DATA $out/build --set NODE_ENV production \
       --suffix PATH : "${
         lib.makeBinPath [
-          perl
+          exiftool
           jellyfin-ffmpeg
         ]
       }"
