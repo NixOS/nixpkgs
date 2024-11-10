@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-R/nRHsz4z4phG51YYDwkGqvnXssGoiJxIPexuhAf0BI=";
   };
 
+  patches = [
+    # https://github.com/eventlet/eventlet/pull/988
+    ./python-3.13-compat.patch
+  ];
+
   nativeBuildInputs = [
     hatch-vcs
     hatchling
