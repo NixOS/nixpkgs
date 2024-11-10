@@ -47,8 +47,8 @@ in rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
   unifi8 = generic {
-    version = "8.5.6";
-    suffix = "-1x29lm155t";
-    sha256 = "sha256-ZpCoE8OPb3FcKzf7Nurf9q+g2BpbjZcp1LvWOsV/tpA=";
+    version = "8.6.9";
+    suffix = "-0f45j609pu";
+    sha256 = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
   };
 }
