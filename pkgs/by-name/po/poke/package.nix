@@ -86,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres kira-bruneau ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    hydraPlatforms = lib.platforms.linux; # build hangs on Darwin platforms, needs investigation
   };
 })
