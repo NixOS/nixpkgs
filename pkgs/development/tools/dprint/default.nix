@@ -5,6 +5,8 @@
   rustPlatform,
   CoreFoundation,
   Security,
+  testers,
+  dprint,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +28,17 @@ rustPlatform.buildRustPackage rec {
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions
   doCheck = false;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+
+      package = dprint;
+      command = ''
+        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "Code formatting platform written in Rust";
