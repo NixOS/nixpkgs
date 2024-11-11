@@ -85,8 +85,8 @@ in
   };
 
   fmt_11 = generic {
-    version = "11.0.1";
-    sha256 = "sha256-EPidbZxCvysrL64AzbpJDowiNxqy4ii+qwSWAFwf/Ps=";
+    version = "11.0.2";
+    sha256 = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
     patches = [
       (fetchpatch {
         name = "get-rid-of-std-copy-fix-clang.patch";
