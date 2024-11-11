@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # https://github.com/ueno/libskk/pull/90
     (fetchpatch {
       url = "https://github.com/ueno/libskk/commit/2382ebedc8dca88e745d223ad7badb8b73bbb0de.diff";
-      sha256 = "sha256-e1bKVteNjqmr40XI82Qar63LXPWYIfnUVlo5zQSkPNw=";
+      hash = "sha256-e1bKVteNjqmr40XI82Qar63LXPWYIfnUVlo5zQSkPNw=";
     })
   ];
 
