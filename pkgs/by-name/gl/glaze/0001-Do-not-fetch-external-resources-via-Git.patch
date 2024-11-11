@@ -1,0 +1,33 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index a3bb3998..8c90058d 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -5,9 +5,7 @@ set(BOOST_UT_DISABLE_MODULE ON CACHE INTERNAL "")
+ 
+ FetchContent_Declare(
+   ut
+-  GIT_REPOSITORY https://github.com/openalgz/ut
+-  GIT_TAG v0.0.3
+-  GIT_SHALLOW TRUE
++  SOURCE_DIR @UT_DIR@
+ )
+ 
+ message(STATUS "Fetching dependencies...")
+diff --git a/tests/asio_repe/CMakeLists.txt b/tests/asio_repe/CMakeLists.txt
+index 70417b38..265e49c9 100644
+--- a/tests/asio_repe/CMakeLists.txt
++++ b/tests/asio_repe/CMakeLists.txt
+@@ -2,9 +2,7 @@ project(asio_repe)
+ 
+ FetchContent_Declare(
+     asio
+-    GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+-    GIT_TAG asio-1-30-1
+-    GIT_SHALLOW TRUE
++    SOURCE_DIR @ASIO_DIR@
+ )
+ FetchContent_GetProperties(asio)
+ if(NOT asio_POPULATED)
+-- 
+2.44.1
+
