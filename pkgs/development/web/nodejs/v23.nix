@@ -14,8 +14,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "23.1.0";
-  sha256 = "57cbfd3dd51f9300ea2b8e60a8ed215b1eaa71fbde4c3903a7d31a443a4a4423";
+  version = "23.2.0";
+  sha256 = "3cf7a8a36682775693691f1de901bb5973ad3c0ae2aa87b1add9de515e7b2fc7";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -26,6 +26,11 @@ buildNodejs {
     ./bin-sh-node-run-v22.patch
 
     # Those reverts are due to a mismatch with the libuv version used upstream
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/84fe809535b0954bbfed8658d3ede8a2f0e030db.patch?full_index=1";
+      hash = "sha256-C1xG2K9Ejofqkl/vKWLBz3vE0mIPBjCdfA5GX2wlS0I=";
+      revert = true;
+    })
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/dcbc5fbe65b068a90c3d0970155d3a68774caa38.patch?full_index=1";
       hash = "sha256-Q7YrooolMjsGflTQEj5ra6hRVGhMP6APaydf1MGH54Q=";
