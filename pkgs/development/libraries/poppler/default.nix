@@ -69,6 +69,14 @@ stdenv.mkDerivation (finalAttrs: rec {
       url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
       hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
     })
+
+    (fetchpatch {
+      # fixes build on clang-19
+      # https://gitlab.freedesktop.org/poppler/poppler/-/merge_requests/1526
+      name = "char16_t-not-short.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/b4ac7d9af7cb5edfcfcbda035ed8b8c218ba8564.patch";
+      hash = "sha256-2aEq3VDITJabvB/+bcdULBXbqVbDdL0xJr2TWLiWqX8=";
+    })
   ];
 
   nativeBuildInputs = [
