@@ -4,9 +4,6 @@
   fetchFromGitHub,
   cmake,
   python3,
-  stdenv,
-  gcc,
-  llvmPackages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,29 +14,24 @@ rustPlatform.buildRustPackage rec {
     owner = "Etto48";
     repo = "HexPatch";
     rev = "v${version}";
-    hash = "sha256-yyYxRJ+o+Z5z7PmjcFCsahRXZ9JHFmGmituzGTxY6ec=";
+    hash = "sha256-UhenCrCVUL6mdEpmTU4e1sIHBS8QXVRtKTMlLah56Zs=";
   };
 
-  cargoHash = "sha256-bckZtHzgKQow7l2Cg6Xi1oNk13FH2xKe8cbZ/Xj9E04=";
+  cargoHash = "sha256-jWDntqxWsSzfDFxZnVDxh7n/CjFIj+sYMsyX/UXhoaM=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gcc ]
-    ++ lib.optionals (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isDarwin) [
-      llvmPackages.libclang
-    ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   postFixup = ''
     ln -s $out/bin/hex-patch $out/bin/hexpatch
   '';
 
   meta = {
-    description = "A binary patcher and editor written in Rust with terminal user interface.";
+    description = "Binary patcher and editor written in Rust with a terminal user interface.";
     longDescription = ''
-      HexPatch is a binary patcher and editor with terminal user interface (TUI),
+      HexPatch is a binary patcher and editor with a terminal user interface (TUI),
       capable of disassembling instructions and assembling patches. It supports a
       variety of architectures and file formats, and can edit remote files
       via SSH.
