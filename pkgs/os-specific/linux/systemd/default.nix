@@ -232,6 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+    ./0019-Revert-boot-Make-initrd_prepare-semantically-equival.patch
 
     # https://github.com/systemd/systemd/issues/33392
     (fetchpatch2 {
