@@ -4985,6 +4985,8 @@ self: super: with self; {
 
   gdown = callPackage ../development/python-modules/gdown { };
 
+  gdsfactory = callPackage ../development/python-modules/gdsfactory { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (pkgs.geant4.override {
