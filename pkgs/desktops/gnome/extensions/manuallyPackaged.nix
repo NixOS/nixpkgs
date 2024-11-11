@@ -7,6 +7,7 @@
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };
   "guillotine@fopdoodle.net" = callPackage ./guillotine { };
+  "hanabi-extension@jeffshee.github.io" = callPackage ./hanabi { };
   "impatience@gfxmonk.net" = callPackage ./impatience { };
   "no-title-bar@jonaspoehler.de" = callPackage ./no-title-bar { };
   "pidgin@muffinmad" = callPackage ./pidgin-im-integration { };
