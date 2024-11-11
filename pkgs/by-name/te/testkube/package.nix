@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "kubeshop";
     repo = "testkube";
     rev = "v${version}";
-    sha256 = "sha256-P+A9lUMzQ3M0SEVZBMDSMj8S0uCsEhadv5vDRxbQORA=";
+    hash = "sha256-P+A9lUMzQ3M0SEVZBMDSMj8S0uCsEhadv5vDRxbQORA=";
   };
 
   vendorHash = "sha256-44aIwddMH6CMfTno90xGkHgna4DO2Ii3KhpMwv6Zjmo=";
