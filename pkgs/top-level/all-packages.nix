@@ -9582,9 +9582,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  gpac = callPackage ../applications/video/gpac {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
+  gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme { };
 
