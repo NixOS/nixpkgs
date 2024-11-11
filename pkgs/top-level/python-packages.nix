@@ -9047,6 +9047,8 @@ self: super: with self; {
     inherit (pkgs) nftables;
   };
 
+  ngsolve = toPythonModule (pkgs.ngsolve.override { python3 = python; });
+
   nh3 = callPackage ../development/python-modules/nh3 { };
 
   niaaml = callPackage ../development/python-modules/niaaml { };
