@@ -13755,8 +13755,6 @@ with pkgs;
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
-  completely = callPackage ../tools/misc/completely { };
-
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
