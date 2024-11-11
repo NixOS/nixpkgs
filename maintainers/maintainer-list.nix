@@ -18665,6 +18665,12 @@
     githubId = 82817;
     name = "Robert Kreuzer";
   };
+  rksm = {
+    email = "robert@kra.hn";
+    github = "rksm";
+    githubId = 467450;
+    name = "Robert Krahn";
+  };
   rlupton20 = {
     email = "richard.lupton@gmail.com";
     github = "rlupton20";
