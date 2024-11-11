@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   gnum4,
+  autoreconfHook,
   gitUpdater,
 }:
 
@@ -18,7 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cTizeJt1Br1oP0UdT32FMHepGAO3s12G7GZ/D5zUAc0=";
   };
 
-  nativeBuildInputs = [ gnum4 ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
+
+  nativeBuildInputs = [
+    gnum4
+    autoreconfHook
+  ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isStatic "--disable-dynamic";
 
@@ -27,18 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01347.html for details.
   doCheck = false;
 
-  # darwin executables fail, but I don't want to fail the 100-500 packages depending on this lib
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
-
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
-
-  postInstall =
-    let
-      suffix = lib.versions.majorMinor version;
-    in
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -id $out/lib/libadns.so.${suffix} $out/lib/libadns.so.${suffix}
-    '';
+  doInstallCheck = true;
 
   installCheckPhase = ''
     runHook preInstallCheck
