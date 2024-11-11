@@ -20,19 +20,20 @@
   pythonOlder,
   substituteAll,
   tinycss2,
+  tinyhtml5,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "62.3";
-  format = "pyproject";
+  version = "63.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-jYaA1zL3+g/LxYdpKlpcsJXDUlYnBmkY1uIDy/Qrf80=";
+    hash = "sha256-7CTGT9zGPkFossJOuJse6KcRKBp9f9s+7T9UmVSJydE=";
   };
 
   patches = [
@@ -44,12 +45,13 @@ buildPythonPackage rec {
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
+      harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     cssselect2
     fonttools
@@ -58,6 +60,7 @@ buildPythonPackage rec {
     pydyf
     pyphen
     tinycss2
+    tinyhtml5
   ] ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
@@ -75,6 +78,11 @@ buildPythonPackage rec {
     "test_linear_gradients_12"
   ];
 
+  pythonRelaxDeps = [
+    "pyphen"
+  ];
+  pythonImportsCheck = [ "weasyprint" ];
+
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
@@ -89,8 +97,6 @@ buildPythonPackage rec {
     # Fontconfig wants to create a cache.
     export HOME=$TMPDIR
   '';
-
-  pythonImportsCheck = [ "weasyprint" ];
 
   meta = with lib; {
     description = "Converts web documents to PDF";
