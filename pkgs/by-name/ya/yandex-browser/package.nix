@@ -60,9 +60,9 @@ let
   }.${edition};
 
   hash = {
-    corporate = "";
-    beta = "";
-    stable = "";
+    corporate = "sha256-hHVNpKgMlwXzsZkmC5We6KVtmNuZSsElxbkm6ls7AUw=";
+    beta = "sha256-djwWH2uWXXjHpCvzDWDbtNH3rRHPU84UeEqYYYMpT9s=";
+    stable = "sha256-uBLwsTx6uqzyB8WHl59R85/EylaXedbwQHmiL6x2kZ8=";
   }.${edition};
 
   app = {
