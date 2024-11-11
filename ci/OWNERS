@@ -57,7 +57,7 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/libconfig                 @h7x4
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
