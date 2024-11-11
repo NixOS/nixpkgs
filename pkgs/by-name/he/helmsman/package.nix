@@ -27,6 +27,9 @@ buildGoModule rec {
     mainProgram = "helmsman";
     homepage = "https://github.com/Praqma/helmsman";
     license = licenses.mit;
-    maintainers = with maintainers; [ lynty ];
+    maintainers = with maintainers; [
+      lynty
+      sarcasticadmin
+    ];
   };
 }
