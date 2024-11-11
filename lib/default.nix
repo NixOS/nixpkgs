@@ -121,7 +121,7 @@ let
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
-    inherit (self.derivations) lazyDerivation optionalDrvAttr;
+    inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet licensesSpdx getLicenseFromSpdxId getLicenseFromSpdxIdOr
