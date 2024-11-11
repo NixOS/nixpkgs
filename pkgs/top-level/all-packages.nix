@@ -19094,6 +19094,8 @@ with pkgs;
 
   yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
 
+  zap-chip-gui = zap-chip.override { withGui = true; };
+
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
   };
