@@ -4,6 +4,7 @@
   electron_31,
   fetchFromGitHub,
   writers,
+  makeWrapper,
   withGui ? false,
 }:
 
@@ -58,6 +59,8 @@ buildNpmPackage rec {
       -c.electronVersion=${electron.version}
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postInstall =
     ''
       # this file is also used at runtime
@@ -66,6 +69,19 @@ buildNpmPackage rec {
     + lib.optionalString (!withGui) ''
       # home-assistant chip-* python packages need the executable under the name zap-cli
       mv $out/bin/zap $out/bin/zap-cli
+    ''
+    + lib.optionalString withGui ''
+      pushd dist/linux-*unpacked
+      mkdir -p $out/opt/zap-chip
+      cp -r locales resources{,.pak} $out/opt/zap-chip
+      popd
+
+      rm $out/bin/zap
+      makeWrapper '${lib.getExe electron}' "$out/bin/zap" \
+        --add-flags $out/opt/zap-chip/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
     '';
 
   meta = {
