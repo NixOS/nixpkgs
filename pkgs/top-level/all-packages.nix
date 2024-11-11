@@ -1229,9 +1229,7 @@ with pkgs;
 
   git-branchless = callPackage ../applications/version-management/git-branchless { };
 
-  git-cinnabar = callPackage ../applications/version-management/git-cinnabar {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  git-cinnabar = callPackage ../applications/version-management/git-cinnabar { };
 
   git-cliff = callPackage ../applications/version-management/git-cliff {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
