@@ -56,6 +56,8 @@ let
 
   suffix = if withMono then "-mono" else "";
 
+  arch = stdenv.hostPlatform.linuxArch;
+
   attrs = rec {
     pname = "godot4${suffix}";
     version = "4.3-stable";
@@ -149,9 +151,9 @@ let
     postBuild = lib.optionalString withMono ''
       echo "Generating Glue"
       if [[ ${withPrecision} == *double* ]]; then
-          bin/godot.${withPlatform}.${withTarget}.${withPrecision}.x86_64.mono --headless --generate-mono-glue modules/mono/glue
+          bin/godot.${withPlatform}.${withTarget}.${withPrecision}.${arch}.mono --headless --generate-mono-glue modules/mono/glue
       else
-          bin/godot.${withPlatform}.${withTarget}.x86_64.mono --headless --generate-mono-glue modules/mono/glue
+          bin/godot.${withPlatform}.${withTarget}.${arch}.mono --headless --generate-mono-glue modules/mono/glue
       fi
       echo "Building C#/.NET Assemblies"
       python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
