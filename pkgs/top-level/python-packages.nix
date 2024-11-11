@@ -1402,6 +1402,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  baize = callPackage ../development/python-modules/baize { };
+
   bambi = callPackage ../development/python-modules/bambi { };
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
@@ -1455,8 +1457,6 @@ self: super: with self; {
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
   bagit = callPackage ../development/python-modules/bagit { };
-
-  baize = callPackage ../development/python-modules/baize { };
 
   banal = callPackage ../development/python-modules/banal { };
 
