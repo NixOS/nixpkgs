@@ -1,11 +1,11 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "golangci-lint";
   version = "1.62.0";
 
