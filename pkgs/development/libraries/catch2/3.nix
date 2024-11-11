@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCATCH_DEVELOPMENT_BUILD=ON"
     "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+    "-DCATCH_ENABLE_WERROR=OFF"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && doCheck) [
     # test has a faulty path normalization technique that won't work in
     # our darwin build environment https://github.com/catchorg/Catch2/issues/1691
