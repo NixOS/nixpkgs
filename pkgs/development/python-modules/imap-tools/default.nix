@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-kY6Y8Uu1HwSkcmlKL5+zPh4n+4mofX2aoPVXAZvInlI=";
   };
 
+  patches = [
+    # https://github.com/ikvk/imap_tools/commit/017208a87d497aae6fe90f6d250a1c786615e241
+    ./0001-Fixed-bug-in-3.12.6-after-CVE-2023-27043.patch
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
