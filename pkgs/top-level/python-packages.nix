@@ -5486,6 +5486,8 @@ self: super: with self; {
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
+  great-expectations = callPackage ../development/python-modules/great-expectations { };
+
   great-tables = callPackage ../development/python-modules/great-tables { };
 
   greeclimate = callPackage ../development/python-modules/greeclimate { };
