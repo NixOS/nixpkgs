@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  substitute,
   cmake,
   coreutils,
   libpng,
@@ -43,14 +44,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minetest";
-  version = "5.9.1";
+  version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
     rev = finalAttrs.version;
-    hash = "sha256-0WTDhFt7GDzN4AK8U17iLkjeSMK+gOWZRq46HBTeO3w=";
+    hash = "sha256-sumwm8mJghpSriVflMQSHQM4BTmAhfI/Wl/FroLTVts=";
   };
+
+  patches = [
+    (substitute {
+      src = ./0000-mark-rm-for-substitution.patch;
+      substitutions = [
+        "--subst-var-by"
+        "RM_COMMAND"
+        "${coreutils}/bin/rm"
+      ];
+    })
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
@@ -124,15 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
       hiredis
       prometheus-cpp
     ];
-
-  postPatch =
-    ''
-      substituteInPlace src/filesys.cpp \
-        --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
-    '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
