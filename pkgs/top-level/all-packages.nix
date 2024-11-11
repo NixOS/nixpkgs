@@ -8174,7 +8174,7 @@ with pkgs;
     python3 = python311;
   };
 
-  buck2 = callPackage ../development/tools/build-managers/buck2 { };
+  buck2 = callPackage ../development/tools/build-managers/buck2 { stdenv = stdenvNoCC; };
 
   build2 = callPackage ../development/tools/build-managers/build2 {
     # Break cycle by using self-contained toolchain for bootstrapping
@@ -13758,8 +13758,6 @@ with pkgs;
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix { };
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
-
-  completely = callPackage ../tools/misc/completely { };
 
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
