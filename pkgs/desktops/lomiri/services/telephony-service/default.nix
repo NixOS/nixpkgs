@@ -15,11 +15,11 @@
   gettext,
   glib,
   gnome-keyring,
-  history-service,
   libnotify,
   libphonenumber,
   libpulseaudio,
   libusermetrics,
+  lomiri-history-service,
   lomiri-url-dispatcher,
   makeWrapper,
   pkg-config,
@@ -111,11 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     gettext
     glib
-    history-service
     libnotify
     libphonenumber
     libpulseaudio
     libusermetrics
+    lomiri-history-service
     lomiri-url-dispatcher
     protobuf
     (python3.withPackages (
