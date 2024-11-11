@@ -175,7 +175,6 @@ stdenv.mkDerivation rec {
     libnotify
     libdbusmenu
     pipewire
-    stdenv.cc.cc
     xdg-utils
     wayland
   ];
