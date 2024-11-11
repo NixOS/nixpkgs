@@ -16,6 +16,8 @@ buildGoModule rec {
     sha256 = "sha256-u/Fj3A81hH7i1yTg+kcqCPrwEkj0cyhZvNzRYURDoZU=";
   };
 
+  subPackages = [ "cmd/helmsman" ];
+
   vendorHash = "sha256-3eIMMKMvRzOSMvufETR9H1PnPDeEc+su8UuvbQJZ7kI=";
 
   doCheck = false;
