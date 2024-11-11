@@ -14,7 +14,7 @@ let
     , bzip2, lz4, lzo, snappy, xz, zlib, zstd
     , cracklib, judy, libevent, libxml2
     , linux-pam, numactl
-    , fmt_8
+    , fmt_11
     , withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
     , withStorageRocks ? true
     , withEmbedded ? false
@@ -149,7 +149,7 @@ let
       ];
 
       buildInputs = common.buildInputs
-        ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+        ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
       cmakeFlags = common.cmakeFlags ++ [
         "-DPLUGIN_AUTH_PAM=NO"
@@ -179,7 +179,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
         ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
-        ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+        ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
       propagatedBuildInputs = lib.optional withNuma numactl;
 
