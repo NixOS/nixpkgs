@@ -4769,6 +4769,12 @@
     githubId = 743057;
     name = "Danylo Hlynskyi";
   };
+  danbulant = {
+    name = "Daniel Bulant";
+    email = "danbulant@gmail.com";
+    github = "danbulant";
+    githubId = 30036876;
+  };
   danc86 = {
     name = "Dan Callaghan";
     email = "djc@djc.id.au";
