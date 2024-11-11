@@ -13,6 +13,7 @@
   typing-extensions,
 
   # tests
+  anyio,
   dirty-equals,
   flask,
   inline-snapshot,
@@ -95,17 +96,22 @@ buildPythonPackage rec {
     ] ++ fastapi-cli.optional-dependencies.standard ++ uvicorn.optional-dependencies.standard;
   };
 
-  nativeCheckInputs = [
-    dirty-equals
-    flask
-    inline-snapshot
-    passlib
-    pyjwt
-    pytestCheckHook
-    pytest-asyncio
-    trio
-    sqlalchemy
-  ] ++ optional-dependencies.all;
+  nativeCheckInputs =
+    [
+      anyio
+      dirty-equals
+      flask
+      inline-snapshot
+      passlib
+      pyjwt
+      pytestCheckHook
+      pytest-asyncio
+      trio
+      sqlalchemy
+    ]
+    ++ anyio.optional-dependencies.trio
+    ++ passlib.optional-dependencies.bcrypt
+    ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
