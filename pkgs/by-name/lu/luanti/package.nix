@@ -31,11 +31,7 @@
   libiconv,
   ninja,
   prometheus-cpp,
-  OpenGL,
-  OpenAL ? openal,
-  Carbon,
-  Cocoa,
-  Kernel,
+  darwin,
   buildClient ? true,
   buildServer ? true,
   SDL2,
@@ -43,7 +39,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "minetest";
+  pname = "luanti";
   version = "5.10.0";
 
   src = fetchFromGitHub {
@@ -85,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" "share")
-    (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "share/doc/minetest")
+    (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "share/doc/luanti")
     (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
     (lib.cmakeFeature "CMAKE_INSTALL_LOCALEDIR" "share/locale")
 
@@ -113,11 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      OpenGL
-      OpenAL
-      Carbon
-      Cocoa
-      Kernel
+      darwin.apple_sdk.frameworks.OpenGL
+      darwin.apple_sdk.frameworks.OpenAL
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Kernel
     ]
     ++ lib.optionals buildClient [
       libpng
@@ -147,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv $out/minetest.app $out/Applications
+      mv $out/luanti.app $out/Applications
     '';
 
   doCheck = true;
@@ -158,14 +154,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://minetest.net/";
-    description = "Infinite-world block sandbox game";
+    homepage = "https://www.luanti.org/";
+    description = "An open source voxel game engine (formerly Minetest)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [
       fpletz
       fgaz
     ];
-    mainProgram = if buildClient then "minetest" else "minetestserver";
+    mainProgram = if buildClient then "luanti" else "luantiserver";
   };
 })
