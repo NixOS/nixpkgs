@@ -1619,6 +1619,12 @@
     githubId = 4194320;
     name = "Anton Schirg";
   };
+  anugrahn1 = {
+    email = "pnanugrah@gmail.com";
+    github = "anugrahn1";
+    githubId = 117428605;
+    name = "Anugrah Naranatt";
+  };
   anytimetraveler = {
     email = "simon@simonscode.org";
     github = "AnyTimeTraveler";
