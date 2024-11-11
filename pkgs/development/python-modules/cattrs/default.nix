@@ -61,7 +61,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  depedencies =
+  dependencies =
     [ attrs ]
     ++ lib.optionals (pythonOlder "3.11") [
       exceptiongroup
