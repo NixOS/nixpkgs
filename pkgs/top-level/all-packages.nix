@@ -8165,7 +8165,7 @@ with pkgs;
     python3 = python311;
   };
 
-  buck2 = callPackage ../development/tools/build-managers/buck2 { };
+  buck2 = callPackage ../development/tools/build-managers/buck2 { stdenv = stdenvNoCC; };
 
   build2 = callPackage ../development/tools/build-managers/build2 {
     # Break cycle by using self-contained toolchain for bootstrapping
