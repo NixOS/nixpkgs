@@ -112,7 +112,7 @@
 , withSpeex ? withHeadlessDeps # Speex de/encoder
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
 , withSsh ? withHeadlessDeps # SFTP protocol
-, withSvg ? withFullDeps # SVG protocol
+, withSvg ? withSmallDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
