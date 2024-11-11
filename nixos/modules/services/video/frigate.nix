@@ -526,6 +526,7 @@ in
         ExecStartPre = "-rm /var/cache/frigate/*.mp4";
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
+        SyslogIdentifier = "frigate";
 
         User = "frigate";
         Group = "frigate";
