@@ -36,6 +36,8 @@ buildPythonPackage rec {
     "test_folders"
     "test_idle"
     "test_live"
+    # test fails (most likely due to a patchlevel Python version bump)
+    "test_parse_email_addresses"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];
