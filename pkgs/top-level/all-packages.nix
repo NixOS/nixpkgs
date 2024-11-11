@@ -969,9 +969,7 @@ with pkgs;
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
-  awsbck = callPackage ../tools/backup/awsbck {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  awsbck = callPackage ../tools/backup/awsbck { };
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
