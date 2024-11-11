@@ -91,6 +91,8 @@ buildPythonPackage rec {
     "test_get_bad_default_response"
     "test_schema_response"
     "test_writeonly"
+    # test expects "{'name': 'foo', 'type': 'string'}" rather than "{'type': 'string', 'name': 'foo'}"
+    "test_invalid_type"
   ];
 
   meta = with lib; {
