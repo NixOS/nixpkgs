@@ -16680,10 +16680,6 @@ with pkgs;
     stdenv = gcc9Stdenv;
   };
 
-  xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   xmp = callPackage ../applications/audio/xmp {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
   };

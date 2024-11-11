@@ -11,7 +11,6 @@
 , pcre2
 , wxGTK32
 , xercesc
-, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -46,8 +45,6 @@ stdenv.mkDerivation rec {
     pcre2
     wxGTK32
     xercesc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ];
 
   enableParallelBuilding = true;
