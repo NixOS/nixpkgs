@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  mesonCheckFlags = [
+    # Tests regularly exceed the default timeout on `x86_64-darwin`.
+    "--timeout-multiplier=0"
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postPatch = ''
