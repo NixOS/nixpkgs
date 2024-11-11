@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "ISO 8601 date/time parser";
     homepage = "http://cheeseshop.python.org/pypi/isodate";
     license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }
