@@ -1,4 +1,9 @@
-{ buildGo123Module, fetchFromGitHub, lib, installShellFiles }:
+{
+  buildGo123Module,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 
 buildGo123Module rec {
   pname = "golangci-lint";
@@ -37,6 +42,9 @@ buildGo123Module rec {
     changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
     mainProgram = "golangci-lint";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 mic92 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      mic92
+    ];
   };
 }
