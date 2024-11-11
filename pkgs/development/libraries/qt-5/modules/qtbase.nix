@@ -165,6 +165,9 @@ stdenv.mkDerivation (finalAttrs: ({
         --replace-fail \
           'QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13' \
           "QMAKE_MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
+
+      substituteInPlace src/3rdparty/libpng/pngpriv.h \
+        --replace-fail 'include <fp.h>' 'include <math.h>'
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
