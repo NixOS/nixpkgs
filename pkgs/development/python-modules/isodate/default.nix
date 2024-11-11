@@ -2,32 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  unittestCheckHook,
-  six,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
-
 buildPythonPackage rec {
   pname = "isodate";
-  version = "0.6.1";
-  format = "setuptools";
+  version = "0.7.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "SMWIHefosKDWSMsCTIBi3ITnuEDtgehkx2FP08Envek=";
+    hash = "sha256-TNGqD0PKdvSmxsApKoX0CzXsLkPjFbWfBubTIXGpU+Y=";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  unittestFlagsArray = [
-    "-s"
-    "src/isodate/tests"
+  buildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "isodate" ];
+
+  meta = {
     description = "ISO 8601 date/time parser";
     homepage = "http://cheeseshop.python.org/pypi/isodate";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }
