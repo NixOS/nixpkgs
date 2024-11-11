@@ -1199,9 +1199,7 @@ with pkgs;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
-  gfold = callPackage ../applications/version-management/gfold {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gfold = callPackage ../applications/version-management/gfold { };
 
   gita = python3Packages.callPackage ../applications/version-management/gita { };
 
