@@ -11,6 +11,7 @@
 , libogg
 , curl
 , libxmp
+, mpg123
 , vulkan-headers
 , vulkan-loader
 , copyDesktopItems
@@ -20,11 +21,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ironwail";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://github.com/andrei-drexler/ironwail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-NBG0wwQWqyGWQYJmiLKfxGxpDJLw7Kwf4EnYd33dOpU=";
+    hash = "sha256-IcODVQ0FgfTi74cvJnM6cPh/Der1bbltdTTo5hITUeI=";
   };
 
   sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     libogg
     libxmp
+    mpg123
     vulkan-loader
     SDL2
   ];
