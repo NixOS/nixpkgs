@@ -4599,7 +4599,9 @@ with pkgs;
 
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
-  nerdfonts = callPackage ../data/fonts/nerdfonts { };
+  nerd-fonts = lib.recurseIntoAttrs (import ./nerd-fonts.nix {
+    inherit lib stdenvNoCC newScope;
+  });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
