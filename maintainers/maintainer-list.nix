@@ -3536,6 +3536,12 @@
     github = "scaredmushroom";
     githubId = 45340040;
   };
+  caperren = {
+    name = "Corwin Perren";
+    email = "caperren@gmail.com";
+    github = "caperren";
+    githubId = 4566591;
+  };
   CaptainJawZ = {
     email = "CaptainJawZ@outlook.com";
     name = "Danilo Reyes";
