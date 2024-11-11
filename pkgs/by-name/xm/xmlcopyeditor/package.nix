@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     xercesc
   ];
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   enableParallelBuilding = true;
 
   meta = {
