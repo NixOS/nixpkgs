@@ -30,7 +30,7 @@ let
     "--replace-fail \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "history-service";
+  pname = "lomiri-history-service";
   version = "0.6";
 
   src = fetchFromGitLab {
@@ -159,8 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       Database location: ~/.local/share/history-service/history.sqlite
     '';
-    homepage = "https://gitlab.com/ubports/development/core/history-service";
-    changelog = "https://gitlab.com/ubports/development/core/history-service/-/blob/${finalAttrs.version}/ChangeLog";
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-history-service";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-history-service/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
