@@ -17,7 +17,7 @@ let
           inherit package;
           enable = true;
           enableJIT = lib.hasInfix "-jit-" package.name;
-          extraPlugins = with package.pkgs; [ wal2json ];
+          extensions = with package.pkgs; [ wal2json ];
           settings = {
             wal_level = "logical";
             max_replication_slots = "10";

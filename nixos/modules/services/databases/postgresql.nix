@@ -40,9 +40,9 @@ let
       # works.
       base = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
     in
-    if cfg.extraPlugins == []
+    if cfg.extensions == []
       then base
-      else base.withPackages cfg.extraPlugins;
+      else base.withPackages cfg.extensions;
 
   toStr = value:
     if true == value then "yes"
@@ -59,7 +59,6 @@ let
   '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
-
 in
 
 {
@@ -68,6 +67,7 @@ in
 
     (mkRenamedOptionModule [ "services" "postgresql" "logLinePrefix" ] [ "services" "postgresql" "settings" "log_line_prefix" ])
     (mkRenamedOptionModule [ "services" "postgresql" "port" ] [ "services" "postgresql" "settings" "port" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "extraPlugins" ] [ "services" "postgresql" "extensions" ])
   ];
 
   ###### interface
@@ -371,12 +371,12 @@ in
         '';
       };
 
-      extraPlugins = mkOption {
+      extensions = mkOption {
         type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [];
         example = literalExpression "ps: with ps; [ postgis pg_repack ]";
         description = ''
-          List of PostgreSQL plugins.
+          List of PostgreSQL extensions to install.
         '';
       };
 
