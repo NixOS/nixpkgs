@@ -43,11 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   installCheckPhase = ''
-    set -eo pipefail
+    runHook preInstallCheck
 
     for prog in $out/bin/*; do
       $prog --help > /dev/null && echo $(basename $prog) shows usage
     done
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = gitUpdater {
