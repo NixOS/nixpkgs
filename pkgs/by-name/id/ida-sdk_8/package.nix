@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (
       description = "SDK for the IDA decompiler and disassembler";
       homepage = "https://hex-rays.com";
       license = with lib.licenses; [ unfree ];
-      platforms = with lib.platforms; linux ++ darwin ++ windows;
+      platforms = with lib.platforms; lib.intersectLists x86 (unix ++ windows);
       maintainers = with lib.maintainers; [ pluiedev ];
     };
   }
