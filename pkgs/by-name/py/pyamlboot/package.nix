@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   testers,
+  pyamlboot,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,9 +28,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = "pyamlboot";
+    package = pyamlboot;
     command = "boot.py -v";
-    version = "boot.py ${version}";
+    version = "boot.py ${lib.versions.majorMinor version}";
   };
 
   meta = {
