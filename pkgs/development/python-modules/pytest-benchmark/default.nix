@@ -5,10 +5,10 @@
   elasticsearch,
   elastic-transport,
   fetchFromGitHub,
-  fetchpatch,
   freezegun,
   git,
   mercurial,
+  nbmake,
   py-cpuinfo,
   pygal,
   pytest,
@@ -20,44 +20,28 @@
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
-  version = "4.0.0";
+  version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
+    hash = "sha256-4fD9UfZ6jtY7Gx/PVzd1JNWeQNz+DJ2kQmCku2TgxzI=";
   };
 
-  patches = [
-    # replace distutils.spawn.find_executable with shutil.which
-    (fetchpatch {
-      url = "https://github.com/ionelmc/pytest-benchmark/commit/728752d2976ef53fde7e40beb3e55f09cf4d4736.patch";
-      hash = "sha256-WIQADCLey5Y79UJUj9J5E02HQ0O86xBh/3IeGLpVrWI=";
-    })
-    # fix tests with python3.11+; https://github.com/ionelmc/pytest-benchmark/pull/232
-    (fetchpatch {
-      url = "https://github.com/ionelmc/pytest-benchmark/commit/b2f624afd68a3090f20187a46284904dd4baa4f6.patch";
-      hash = "sha256-cylxPj/d0YzvOGw+ncVSCnQHwq2cukrgXhBHePPwjO0=";
-    })
-    (fetchpatch {
-      url = "https://github.com/ionelmc/pytest-benchmark/commit/2b987f5be1873617f02f24cb6d76196f9aed21bd.patch";
-      hash = "sha256-92kWEd935Co6uc/1y5OGKsc5/or81bORSdaiQFjDyTw=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ py-cpuinfo ];
+  dependencies = [ py-cpuinfo ];
 
   optional-dependencies = {
     aspect = [ aspectlib ];
-    histogram = [ pygal ];
+    histogram = [
+      pygal
+      setuptools
+    ];
     elasticsearch = [ elasticsearch ];
   };
 
@@ -68,17 +52,14 @@ buildPythonPackage rec {
     freezegun
     git
     mercurial
+    nbmake
     pytestCheckHook
     pytest-xdist
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export PATH="$out/bin:$PATH"
+    export HOME=$(mktemp -d)
   '';
 
   disabledTests = lib.optionals (pythonOlder "3.12") [
