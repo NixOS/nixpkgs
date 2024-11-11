@@ -27,7 +27,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.8";
+  version = "0.5.9";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -36,7 +36,7 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
+    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
   };
 
   pythonRemoveDeps = [
@@ -175,6 +175,7 @@ ps.buildPythonApplication rec {
   meta = with lib; {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
+    changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
