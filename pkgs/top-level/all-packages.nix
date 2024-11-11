@@ -17278,12 +17278,11 @@ with pkgs;
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
 
-  mindustry = callPackage ../games/mindustry { };
-  mindustry-wayland = callPackage ../games/mindustry {
+  mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;
   };
 
-  mindustry-server = callPackage ../games/mindustry {
+  mindustry-server = callPackage ../by-name/mi/mindustry/package.nix {
     enableClient = false;
     enableServer = true;
   };
