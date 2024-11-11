@@ -24,7 +24,7 @@
 }:
 
 let
-  replaceDbusService = pkg: name: "--replace \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
+  replaceDbusService = pkg: name: "--replace-fail \"\\\${DBUS_SERVICES_DIR}/${name}\" \"${pkg}/share/dbus-1/services/${name}\"";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "history-service";
@@ -64,18 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     # This replacement script should hopefully achieve the same / a similar-enough result with just sqlite
     cp ${./update_schema.sh.in} plugins/sqlite/schema/update_schema.sh.in
 
-    # libphonenumber -> protobuf -> abseil-cpp demands C++14
-    # But uses std::string_view which is C++17?
-    substituteInPlace CMakeLists.txt \
-      --replace '-std=c++11' '-std=c++17'
-
     # Uses pkg_get_variable, cannot substitute prefix with that
     substituteInPlace daemon/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
 
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
     substituteInPlace CMakeLists.txt \
-      --replace "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
   '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Tests launch these DBus services, fix paths related to them
     substituteInPlace tests/common/dbus-services/CMakeLists.txt \
@@ -84,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       ${replaceDbusService dconf "ca.desrt.dconf.service"}
 
     substituteInPlace cmake/modules/GenerateTest.cmake \
-      --replace '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-      --replace '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
   '';
 
   strictDeps = true;
@@ -147,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Service that provides call log and conversation history";
     longDescription = ''
       History service provides the database and an API to store/retrieve the call log (used by dialer-app) and the sms/mms history (used by messaging-app).
@@ -158,9 +153,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/history-service";
     changelog = "https://gitlab.com/ubports/development/core/history-service/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-history-service"
     ];
