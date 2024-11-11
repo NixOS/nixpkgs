@@ -5841,7 +5841,7 @@
     name = "Sebastian Krohn";
   };
   drawbu = {
-    email = "clement21.boillot@gmail.com";
+    email = "clement2104.boillot@gmail.com";
     github = "drawbu";
     githubId = 69208565;
     name = "Clément Boillot";
