@@ -13633,6 +13633,8 @@ self: super: with self; {
 
   rectpack = callPackage ../development/python-modules/rectpack { };
 
+  rectangle-packer = callPackage ../development/python-modules/rectangle-packer { };
+
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
   recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
