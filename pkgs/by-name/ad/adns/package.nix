@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnum4 ];
 
-  configureFlags = lib.optional stdenv.hostPlatform.isStatic "--disable-dynamic";
+  configureFlags = []
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-dynamic"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-headerpad_max_install_names";
+
 
   preConfigure =
     lib.optionalString stdenv.hostPlatform.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
