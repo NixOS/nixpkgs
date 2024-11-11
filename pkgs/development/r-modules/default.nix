@@ -378,7 +378,7 @@ let
     frailtyMMpen = [ pkgs.gsl ];
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
-    gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
+    gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ expat xorg.libXdmcp ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = with pkgs; [ pkgs.libpng.dev ];
     git2r = with pkgs; [ zlib.dev openssl.dev libssh2.dev libgit2 pkg-config ];
