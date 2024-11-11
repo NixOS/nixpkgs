@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -29,48 +28,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "history-service";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/history-service";
     rev = finalAttrs.version;
-    hash = "sha256-m/ytJoHxW0q1vlVKK6Z9ovHzjoiS1AodCSGHTeKygfQ=";
+    hash = "sha256-pcTYuumywTarW+ZciwwvmmBQQH6aq4+FdVjV62VzSZU=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    # Drop deprecated qt5_use_modules usage
-    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/36 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/b36ab377aca93555b29d1471d6eaa706b5c843ca.patch";
-      hash = "sha256-mOpXqqd4JI7lHtcWDm9LGCrtB8ERge04jMpHIagDM2k=";
-    })
-
-    # Add more / correct existing GNUInstallDirs usage
-    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/37 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/bb4dbdd16e80dcd286d8edfb86b08f0b61bc7fec.patch";
-      hash = "sha256-C/XaygI663yaU06klQD9g0NnbqYxHSmzdbrRxcfiJkk=";
-    })
-
-    # Correct version information
-    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/38 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/98458126f9f494b124134fb35c198af0545f6a98.patch";
-      hash = "sha256-4EfLsaueKTCovl8EilN30cmfNfg19wvyCsbKqOrXtuw=";
-    })
-
-    # Make tests optional
-    # Remove when https://gitlab.com/ubports/development/core/history-service/-/merge_requests/39 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/history-service/-/commit/cb5c80cffc35611657244e15a7eb10edcd598ccd.patch";
-      hash = "sha256-MFHGu4OMScdThq9htUgFMpezP7Ym6YTIZUHWol20wqw=";
-    })
   ];
 
   postPatch = ''
@@ -193,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
     pkgConfigModules = [
-      "history-service"
+      "lomiri-history-service"
     ];
   };
 })
