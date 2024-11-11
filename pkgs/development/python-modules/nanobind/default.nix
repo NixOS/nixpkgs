@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -52,6 +53,8 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
+  # skip testing on platforms disabled for tensorflow-bin
+  doCheck = !(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms);
   nativeCheckInputs = [
     pytestCheckHook
     numpy
