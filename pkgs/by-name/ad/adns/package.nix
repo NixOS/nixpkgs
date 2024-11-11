@@ -54,11 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "adns-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";
     description = "Asynchronous DNS Resolver Library";
-    license = licenses.lgpl2;
-
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 })
