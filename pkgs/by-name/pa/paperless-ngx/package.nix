@@ -25,13 +25,13 @@
 }:
 
 let
-  version = "2.13.4";
+  version = "2.13.5";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-db8omhyngvenAgfGGpMAhGkgqGug/sv7AL1G+sniM/c=";
+    hash = "sha256-AVfm5tC2+hTdEv0ildEj0El1M/sF7ftkEn3pUkG1O7Q=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
