@@ -900,7 +900,6 @@ with pkgs;
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   adlplug = callPackage ../applications/audio/adlplug {
-    inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
     jack = libjack2;
   };
   opnplug = adlplug.override {
