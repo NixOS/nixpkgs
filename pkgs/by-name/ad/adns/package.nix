@@ -6,14 +6,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adns";
   version = "1.6.1";
 
   src = fetchurl {
     urls = [
-      "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
-      "mirror://gnu/adns/adns-${version}.tar.gz"
+      "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${finalAttrs.version}.tar.gz"
+      "mirror://gnu/adns/adns-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-cTizeJt1Br1oP0UdT32FMHepGAO3s12G7GZ/D5zUAc0=";
   };
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
   };
-}
+})
