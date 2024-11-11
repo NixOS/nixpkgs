@@ -9395,6 +9395,8 @@ self: super: with self; {
 
   netdisco = callPackage ../development/python-modules/netdisco { };
 
+  netgen = toPythonModule (pkgs.netgen.override { python3Packages = self; });
+
   nethsm = callPackage ../development/python-modules/nethsm { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
