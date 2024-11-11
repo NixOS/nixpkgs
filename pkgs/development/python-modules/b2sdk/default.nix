@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ pdm-backend ];
-
 
   pythonRemoveDeps = [ "setuptools" ];
 
@@ -81,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pmw ];
   };
 }
