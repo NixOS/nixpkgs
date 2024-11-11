@@ -20,17 +20,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
+  postPatch = lib.optional (!stdenv.hostPlatform.isx86) ''
+    substituteInPlace makefile \
+      --replace-fail "-mavx2" ""
+
+    substituteInPlace makefile.cuda \
+      --replace-fail "-mavx2" ""
+  '';
+
   makeFlags = [
     "CC=$(CXX)"
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance block-sorting data compression library";
     homepage = "http://libbsc.com/";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.asl20;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "bsc";
   };
 })

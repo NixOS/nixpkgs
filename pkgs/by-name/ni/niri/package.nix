@@ -4,6 +4,7 @@
   dbus,
   eudev,
   fetchFromGitHub,
+  fetchpatch,
   libdisplay-info,
   libglvnd,
   libinput,
@@ -25,14 +26,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
+    hash = "sha256-ea15x8+AAm90aeU1zNWXzX7ZfenzQRUgORyjOdn4Uoc=";
   };
+
+  patches = [
+    # Fix scrolling not working with missing mouse config
+    (fetchpatch {
+      url = "https://github.com/YaLTeR/niri/commit/1951d2a9f262196a706f2645efb18dac3c4d6839.patch";
+      hash = "sha256-P/0LMYZ4HD0iG264BMnK4sLNNLmtbefF230GyC+t6qg=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs resources/niri-session
@@ -43,8 +52,8 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-/3BO66yVoo63+5rwrZzoxhSTncvLyHdvtSaApFj3fBg=";
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
+      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
+      "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
     };
   };
 
@@ -86,9 +95,14 @@ rustPlatform.buildRustPackage rec {
     + lib.optionalString withDbus ''
       install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     ''
-    + lib.optionalString withSystemd ''
+    + lib.optionalString (withSystemd || withDinit) ''
       install -Dm0755 resources/niri-session -t $out/bin
+    ''
+    + lib.optionalString withSystemd ''
       install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+    ''
+    + lib.optionalString withDinit ''
+      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     '';
 
   env = {

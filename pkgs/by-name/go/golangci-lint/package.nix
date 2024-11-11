@@ -1,17 +1,22 @@
-{ buildGo123Module, fetchFromGitHub, lib, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.61.0";
+  version = "1.62.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    hash = "sha256-2YzVNOdasal27R92l6eVdeS81mAp0ZU6kYsC/Jfvkcg=";
+    hash = "sha256-9CT9+8wBjXflIYPtqTTMKaPySpDYGa0yUAhApcLIQ1k=";
   };
 
-  vendorHash = "sha256-mFDCRxbLq08yRd0ko3CCPJD2BZiCB0Gwd1g+/1oR6w8=";
+  vendorHash = "sha256-U79OfGm5EPuB8yTxLSLQKIBHuj/zzO4p5pXlvs+pVrU=";
 
   subPackages = [ "cmd/golangci-lint" ];
 
@@ -19,7 +24,6 @@ buildGo123Module rec {
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=${version}"
     "-X main.commit=v${version}"
     "-X main.date=19700101-00:00:00"
@@ -38,6 +42,9 @@ buildGo123Module rec {
     changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
     mainProgram = "golangci-lint";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 mic92 ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      mic92
+    ];
   };
 }

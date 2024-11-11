@@ -12,7 +12,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.7.5";
+  version = "1.7.6";
   appname = "Obsidian";
   meta = with lib; {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -26,7 +26,7 @@ let
   filename = if stdenv.hostPlatform.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash = if stdenv.hostPlatform.isDarwin then "sha256-2gUXA0a7gcVFtTl5qiJFTAu6A9W79DiP0hd8j1Mwv3I=" else "sha256-T177UqPnPLM/2dGUdwhK21AByYrJu9wgEKOWrrGBQkA=";
+    hash = if stdenv.hostPlatform.isDarwin then "sha256-K7NLFbsTVNNH2VEXLiBM1KaG3fEWwaUkvxYh3vtKGvc=" else "sha256-5xkhm87eN36NmwG+t7SYnn20zT+ZELC7g2x+6/UGrHE=";
   };
 
   icon = fetchurl {
@@ -61,7 +61,7 @@ let
         -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick ${icon} -background none -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
+        magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
       done
       runHook postInstall
     '';

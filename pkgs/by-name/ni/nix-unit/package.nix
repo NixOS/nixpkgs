@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.24.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6O4Q51PSUbr/ODVbfEfAAcoRdID3fqn0lAuHERHq+h4=";
+    hash = "sha256-PcT0jtv2QFaht5eSs1Vq4XGDqtMLdPC49ao9uwGYclE=";
   };
 
   buildInputs = [

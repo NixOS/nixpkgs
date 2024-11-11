@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = "scikit-rf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cYQDoEX33fjxekTA2COHMvcLxCFCD7g9bp3y9sE4uUU=";
+    hash = "sha256-tUMOTRazs531OKGUZbh+Ee1omkFY3CAUAMmpKcNCdZU=";
   };
 
   postPatch = ''
@@ -65,6 +65,7 @@ buildPythonPackage rec {
       sphinx
       nbsphinx
       openpyxl
+      nbval
     ];
   };
 
@@ -72,7 +73,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-mock
-    nbval
     matplotlib
     pyvisa
     openpyxl

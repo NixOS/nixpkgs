@@ -168,5 +168,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
     maintainers = with maintainers; [ a1russell robbinch roconnor abbradar numinit shazow ncfavier ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

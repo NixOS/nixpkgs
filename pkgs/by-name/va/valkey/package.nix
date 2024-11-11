@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "7.2.7";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-2kbhUg+rNuIUF/Bna6jFLI6Vhg9TlSi+OZEy6jKl2X0=";
+    hash = "sha256-WB0blQLxQOTkK8UGsH6WISZAisUAtGIDfjoc4RnPSew=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional useSystemJemalloc jemalloc
     ++ lib.optional withSystemd systemd
     ++ lib.optional tlsSupport openssl;
+
+  strictDeps = true;
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile --replace-fail "-flto" ""
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     # disable test "Connect multiple replicas at the same time": even
     # upstream find this test too timing-sensitive
     substituteInPlace tests/integration/replication.tcl \
-      --replace-fail 'foreach mdl {no yes}' 'foreach mdl {}'
+      --replace-fail 'foreach mdl {no yes} dualchannel {no yes}' 'foreach mdl {} dualchannel {}'
 
     substituteInPlace tests/support/server.tcl \
       --replace-fail 'exec /usr/bin/env' 'exec env'

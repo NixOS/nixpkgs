@@ -1,8 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, darwin, fixDarwinDylibNames
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libGL
+, vulkan-loader
+, libXrandr
+, libXinerama
+, libXcursor
+, libX11
+, libXi
+, libXext
+, darwin
+, fixDarwinDylibNames
 , wayland
-, wayland-scanner, wayland-protocols, libxkbcommon, libdecor
+, wayland-scanner
+, wayland-protocols
+, libxkbcommon
+, libdecor
 , withMinecraftPatch ? false
 }:
 let
@@ -51,6 +66,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) [
     "-DCMAKE_C_FLAGS=-D_GLFW_GLX_LIBRARY='\"${lib.getLib libGL}/lib/libGL.so.1\"'"
     "-DCMAKE_C_FLAGS=-D_GLFW_EGL_LIBRARY='\"${lib.getLib libGL}/lib/libEGL.so.1\"'"
+    "-DCMAKE_C_FLAGS=-D_GLFW_VULKAN_LIBRARY='\"${lib.getLib vulkan-loader}/lib/libvulkan.so.1\"'"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.35.0";
+  version = "0.39.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/lA44YwUWwm8ZswCBneT3sutcpQ2GPv0S2bHTUGiwwg=";
+    hash = "sha256-lpW+waHvwgbhK7EnPZy/XI8gK3a8JjFflPqUFbDN1z8=";
   };
 
   build-system = [

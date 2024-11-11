@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-kiara";
-  version = "0-unstable-2024-07-07";
+  version = "0-unstable-2024-07-13";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "kiara";
-    rev = "7daaa0a2e3822d949e6c4abf93af159eae9a544a";
-    hash = "sha256-5j83e2kcCStPgbwAkr3OFjOpJIErXAPJ6z06BlmtuHE=";
+    rev = "186b00a460c9dd8179f9af42fb9a420506ac3aff";
+    hash = "sha256-e89/x66S+MpJFtqat1hYEyRVUYFjef62LDN2hQPjNVw=";
   };
 
   cargoLock = {

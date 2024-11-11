@@ -6,7 +6,7 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev85";
+  version = "0.5.0b3.dev87";
   pname = "pyload-ng";
   pyproject = true;
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit version;
     # The uploaded tarball uses an underscore in recent releases
     pname = "pyload_ng";
-    hash = "sha256-KLpfh53JKqe0kZLcQ1C4fXFFYeO5pPhia9fRxWsbIHY=";
+    hash = "sha256-LbixaUfsWeU8WVpZsSLJmFR/hVLhCr1DRsIeFYCcxFA=";
   };
 
   patches = [

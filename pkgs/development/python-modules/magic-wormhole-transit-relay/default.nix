@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   autobahn,
-  mock,
   twisted,
   python,
   pytestCheckHook,
@@ -12,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LvLvvk008OYkhw+EIln9czuncVLtMQr0NJd0piiEkA4=";
+    hash = "sha256-kS2DXaIbESZsdxEdybXlgAJj/AuY8KF5liJn30GBnow=";
   };
 
   postPatch = ''
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
     twisted
   ];
 

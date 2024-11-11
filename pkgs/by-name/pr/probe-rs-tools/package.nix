@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -7,8 +6,6 @@
 , pkg-config
 , libusb1
 , openssl
-, DarwinTools
-, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,9 +31,9 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/probe-rs/probe-rs/pull/2492
     gitMinimal
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+  ];
 
-  buildInputs = [ libusb1 openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ libusb1 openssl ];
 
   checkFlags = [
     # require a physical probe

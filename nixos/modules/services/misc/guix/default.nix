@@ -275,7 +275,7 @@ in
       systemd.services.guix-daemon = {
         environment = serviceEnv;
         script = ''
-          ${lib.getExe' package "guix-daemon"} \
+          exec ${lib.getExe' package "guix-daemon"} \
             --build-users-group=${cfg.group} \
             ${lib.optionalString (cfg.substituters.urls != [ ])
               "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"} \
@@ -384,7 +384,7 @@ in
             }
         '';
         script = ''
-          ${lib.getExe' package "guix"} publish \
+          exec ${lib.getExe' package "guix"} publish \
             --user=${cfg.publish.user} --port=${builtins.toString cfg.publish.port} \
             ${lib.escapeShellArgs cfg.publish.extraArgs}
         '';
@@ -440,12 +440,10 @@ in
         description = "Guix garbage collection";
         startAt = cfg.gc.dates;
         script = ''
-          ${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}
+          exec ${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}
         '';
-
         serviceConfig = {
           Type = "oneshot";
-
           PrivateDevices = true;
           PrivateNetwork = true;
           ProtectControlGroups = true;

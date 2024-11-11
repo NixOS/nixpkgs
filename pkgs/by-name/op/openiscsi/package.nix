@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     kmod
-    (lib.getLib open-isns)
+    open-isns
     openssl
     systemd
     util-linux

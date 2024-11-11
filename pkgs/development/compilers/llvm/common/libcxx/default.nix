@@ -44,6 +44,8 @@ let
       cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
     '' + (lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
+    '') + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+      cp -r ${monorepoSrc}/libc "$out"
     '') + ''
       cp -r ${monorepoSrc}/runtimes "$out"
     '' + (lib.optionalString (cxxabi == null) ''

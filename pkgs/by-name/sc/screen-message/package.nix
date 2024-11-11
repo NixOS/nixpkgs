@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "screen-message";
-  version = "0.28";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "nomeata";
     repo = "screen-message";
     rev = version;
-    hash = "sha256-KHJL1N72Hc1B1m0olxoZxBHIpq/d/T3m2VdS5XC9+tk=";
+    hash = "sha256-fwKle+aXZuiNo5ksrigj7BGLv2fUILN2GluHHZ6co6s=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

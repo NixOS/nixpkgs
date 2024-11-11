@@ -122,5 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

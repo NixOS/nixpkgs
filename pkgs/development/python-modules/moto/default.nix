@@ -162,6 +162,7 @@ buildPythonPackage rec {
       pyyaml
       py-partiql-parser
     ];
+    sns = [ ];
     stepfunctions = [
       antlr4-python3-runtime
       jsonpath-ng

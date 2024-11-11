@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, zstd
-, testers, buck2 # for passthru.tests
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zstd,
+  installShellFiles,
+  testers,
+  buck2, # for passthru.tests
 }:
 
 # NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
@@ -74,7 +80,10 @@ in stdenv.mkDerivation {
   version = "unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   inherit src;
 
-  nativeBuildInputs = [ zstd ];
+  nativeBuildInputs = [
+    installShellFiles
+    zstd
+  ];
 
   doCheck = true;
   dontConfigure = true;
@@ -86,6 +95,12 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
+  '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd buck2 \
+      --bash <( $out/bin/buck2 completion bash ) \
+      --fish <( $out/bin/buck2 completion fish ) \
+      --zsh <( $out/bin/buck2 completion zsh )
   '';
 
   passthru = {

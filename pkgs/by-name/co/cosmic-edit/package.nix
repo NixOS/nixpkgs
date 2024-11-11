@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/cosmic-edit" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon wayland
+        xorg.libX11 xorg.libXcursor xorg.libXi vulkan-loader libxkbcommon wayland
       ]}
   '';
 

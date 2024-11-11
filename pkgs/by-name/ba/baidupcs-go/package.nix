@@ -1,21 +1,25 @@
 {
+  fetchFromGitHub,
   buildGo122Module,
   lib,
-  fetchFromGitHub,
   versionCheckHook,
 }:
 buildGo122Module rec {
   pname = "baidupcs-go";
-  version = "3.9.5";
+  version = "3.9.5-unstable-2024-06-23";
   src = fetchFromGitHub {
     owner = "qjfoidnh";
     repo = "BaiduPCS-Go";
-    rev = "v${version}";
-    hash = "sha256-zNodRQzflOOB3hAeq4KbjRFlHQwknVy+4ucipUcoufY=";
+    rev = "5612fc337b9556ed330274987a2f876961639cff";
+    hash = "sha256-4mCJ5gVHjjvR6HNo47NTJvQEu7cdZZMfO8qQA7Kqzqo=";
   };
 
   vendorHash = "sha256-msTlXtidxLTe3xjxTOWCqx/epFT0XPdwGPantDJUGpc=";
   doCheck = false;
+
+  ldflags = [
+    "-X main.Version=${version}"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -24,10 +28,10 @@ buildGo122Module rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
   meta = {
+    mainProgram = "BaiduPCS-Go";
     maintainers = with lib.maintainers; [ xddxdd ];
     description = "Baidu Netdisk commandline client, mimicking Linux shell file handling commands";
     homepage = "https://github.com/qjfoidnh/BaiduPCS-Go";
     license = lib.licenses.asl20;
-    mainProgram = "BaiduPCS-Go";
   };
 }

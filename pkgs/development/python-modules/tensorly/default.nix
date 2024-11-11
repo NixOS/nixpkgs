@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kYKyLY2V6M53co+26ZTZP4U6bHkFebKI5Uhh1x1/N58=";
+    hash = "sha256-kj32N0hwdI/DS0WwpH4cr3xhq+3X53edodU3/SEorqw=";
   };
 
   propagatedBuildInputs = [

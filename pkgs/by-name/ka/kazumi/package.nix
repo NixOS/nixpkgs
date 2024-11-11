@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   flutter,
-  stdenv,
   webkitgtk_4_1,
   alsa-lib,
   libayatana-appindicator,
@@ -11,24 +10,18 @@
   wrapGAppsHook3,
   gst_all_1,
   at-spi2-atk,
-  fetchurl,
 }:
 let
-  version = "1.4.1";
+  version = "1.4.2";
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     rev = version;
-    hash = "sha256-LRlJo2zuE3Y3i4vBcjxIYQEDVJ2x85Fn77K4LVtTlg8=";
-  };
-  mdk-sdk = fetchurl {
-    url = "https://github.com/wang-bin/mdk-sdk/releases/download/v0.29.1/mdk-sdk-linux-x64.tar.xz";
-    hash = "sha256-7dkvm5kP3gcQwXOE9DrjoOTzKRiwk/PVeRr7poLdCU0=";
+    hash = "sha256-irX+BmvJ/WI92RQmaSoBQuUqAEiy3bEstZmKMKHTvPY=";
   };
 in
 flutter.buildFlutterApplication {
   pname = "kazumi";
-
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -52,41 +45,6 @@ flutter.buildFlutterApplication {
     gst_all_1.gst-plugins-base
   ];
 
-  customSourceBuilders = {
-    flutter_volume_controller =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "flutter_volume_controller";
-        inherit version src;
-        inherit (src) passthru;
-        postPatch = ''
-          substituteInPlace linux/CMakeLists.txt \
-            --replace-fail '# Include ALSA' 'find_package(PkgConfig REQUIRED)' \
-            --replace-fail 'find_package(ALSA REQUIRED)' 'pkg_check_modules(ALSA REQUIRED alsa)'
-        '';
-        installPhase = ''
-          runHook preInstall
-          mkdir $out
-          cp -r ./* $out/
-          runHook postInstall
-        '';
-      };
-    fvp =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "fvp";
-        inherit version src;
-        inherit (src) passthru;
-        installPhase = ''
-          runHook preInstall
-          tar -xf ${mdk-sdk} -C ./linux
-          mkdir $out
-          cp -r ./* $out/
-          runHook postInstall
-        '';
-      };
-  };
-
   gitHashes = {
     desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
     webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
@@ -94,8 +52,8 @@ flutter.buildFlutterApplication {
 
   postInstall = ''
     mkdir -p $out/share/applications/ $out/share/icons/hicolor/512x512/apps/
-    cp ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications
-    cp ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+    install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
+    install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
 
   meta = {
@@ -104,6 +62,6 @@ flutter.buildFlutterApplication {
     mainProgram = "kazumi";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

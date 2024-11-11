@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "GTK application to display Tor circuits and streams";
     mainProgram = "onioncircuits";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ milran ];
+    maintainers = with maintainers; [ wattmto ];
   };
 }
 

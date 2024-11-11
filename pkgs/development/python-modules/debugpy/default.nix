@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.7";
+  version = "1.8.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JFVhEAfdSfl2ACfXLMdoO/1otdif9bHialdQXucTM5A=";
+    hash = "sha256-zkNV+tFRAxTdl+lCPD4XYI1Oz0dVyX4GGuNdfzy2sJU=";
   };
 
   patches =
@@ -73,13 +73,12 @@ buildPythonPackage rec {
       })
     ];
 
-  # Remove pre-compiled "attach" libraries and recompile for host platform
-  # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
+  # Compile attach library for host platform
+  # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
         set -x
         cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        rm *.so *.dylib *.dll *.exe *.pdb
         $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
           {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";

@@ -28,22 +28,25 @@
 , stdenv
 , darwin
 , makeBinaryWrapper
+
+# passthru
+, nix-update-script
 }:
 
 assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaudio" "rodio" "portaudio" "jackaudio" "rodiojack" "sdl" "gstreamer" ];
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-heycCm2Nwyo+DegMKeXZ+dF+ZqiFT/6P08/28buJc6I=";
+    hash = "sha256-SKlESIw8eAyAqR1HVW004yyL2nNVEnb4/xmf0ch3ZMo=";
   };
 
-  cargoHash = "sha256-U3a/6uF7vOV3QnxqPnooBdvjyyIPLnQXiXtTwKeHAxA=";
+  cargoHash = "sha256-VlJ8Bz4EY2rERyOn6ifC7JAL5Mvjt0ZOzlPBOwiH6WA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -93,12 +96,16 @@ rustPlatform.buildRustPackage rec {
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
     changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya xyven1 _71zenith ];
+    maintainers = with lib.maintainers; [ dit7ya xyven1 _71zenith caperren ];
   };
 }

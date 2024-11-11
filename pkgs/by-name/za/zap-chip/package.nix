@@ -4,6 +4,7 @@
   electron_31,
   fetchFromGitHub,
   writers,
+  withGui ? false,
 }:
 
 let
@@ -50,25 +51,28 @@ buildNpmPackage rec {
       cat .version.json
     '';
 
-  postBuild = ''
+  postBuild = lib.optionalString withGui ''
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
   '';
 
-  postInstall = ''
-    # this file is also used at runtime
-    install -m644 .version.json $out/lib/node_modules/zap/
-    # home-assistant chip-* python packages need the executable under the name zap-cli
-    ln -s $out/bin/zap $out/bin/zap-cli
-  '';
+  postInstall =
+    ''
+      # this file is also used at runtime
+      install -m644 .version.json $out/lib/node_modules/zap/
+    ''
+    + lib.optionalString (!withGui) ''
+      # home-assistant chip-* python packages need the executable under the name zap-cli
+      mv $out/bin/zap $out/bin/zap-cli
+    '';
 
   meta = {
     description = "Generic generation engine and user interface for applications and libraries based on Zigbee Cluster Library (ZCL)";
     changelog = "https://github.com/project-chip/zap/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
-    mainProgram = "zap-cli";
+    mainProgram = "zap" + lib.optionalString (!withGui) "-cli";
   };
 }

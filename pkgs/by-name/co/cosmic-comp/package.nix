@@ -83,14 +83,13 @@ rustPlatform.buildRustPackage rec {
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  # Use default stdenv installPhase, not the buildRustPackage one.
-  installPhase = "installPhase";
+  dontCargoInstall = true;
 
   # These libraries are only used by the X11 backend, which will not
   # be the common case, so just make them available, don't link them.
   postInstall = ''
     wrapProgramArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+        xorg.libX11 xorg.libXcursor xorg.libXi
     ]})
   '' + lib.optionalString useXWayland ''
     wrapProgramArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})

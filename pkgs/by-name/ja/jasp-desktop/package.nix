@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildEnv,
   linkFarm,
-  substituteAll,
+  replaceVars,
   R,
   rPackages,
   cmake,
@@ -58,9 +59,14 @@ stdenv.mkDerivation {
 
   patches = [
     # remove unused cmake deps, ensure boost is dynamically linked, patch readstat path
-    (substituteAll {
-      src = ./cmake.patch;
+    (replaceVars ./cmake.patch {
       inherit readstat;
+    })
+
+    (fetchpatch {
+      name = "fix-qt-6.8-crash.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/d96a35d262312f72081ac3f96ae8c2ae7c796b0.patch";
+      hash = "sha256-KcsFy1ImPTHwDKN5Umfoa9CbtQn7B3FNu/Srr0dEJGA=";
     })
   ];
 

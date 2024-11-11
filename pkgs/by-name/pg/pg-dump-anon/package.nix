@@ -14,7 +14,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-CwU1zoIayxvfnGL9kPdummPJiV+ECfSz4+q6gZGb8pw=";
 
-  passthru.tests = { inherit (nixosTests) pg_anonymizer; };
+  passthru.tests = { inherit (nixosTests.postgresql) anonymizer; };
 
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''

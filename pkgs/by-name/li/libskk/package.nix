@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchpatch,
   libtool, gettext, pkg-config,
   vala, gnome-common, gobject-introspection,
   libgee, json-glib, skkDictionaries, libxkbcommon }:
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0y279pcgs3jrsi9vzx086xhz9jbz23dqqijp4agygc9ackp9sxy5";
   };
+
+  patches = [
+    # fix parse error in default.json
+    # https://github.com/ueno/libskk/pull/90
+    (fetchpatch {
+      url = "https://github.com/ueno/libskk/commit/2382ebedc8dca88e745d223ad7badb8b73bbb0de.diff";
+      hash = "sha256-e1bKVteNjqmr40XI82Qar63LXPWYIfnUVlo5zQSkPNw=";
+    })
+  ];
 
   buildInputs = [ libxkbcommon ];
   nativeBuildInputs = [ vala gnome-common gobject-introspection libtool gettext pkg-config ];

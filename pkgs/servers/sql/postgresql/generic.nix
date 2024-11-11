@@ -20,7 +20,7 @@ let
       , version, hash, muslPatches ? {}
 
       # for tests
-      , testers
+      , testers, nixosTests
 
       # JIT
       , jitSupport
@@ -312,18 +312,12 @@ let
                      };
 
       tests = {
-        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+        postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+        postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
-          inherit (stdenv) system;
-          pkgs = self;
-          package = this;
-        };
+        postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
       };
     };
 

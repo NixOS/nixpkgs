@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -20,23 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-p9N8Pblt15+BHcvlLjdPRyquM8w7ipieTcmUHpcMd6k=";
+    sha256 = "sha256-tLqLGkcryXGe1wsupgwtnNtFj5aXXUPrwkpxUQmyJFM=";
   };
-
-  patches = [
-    # WelcomeView: Fix missing handler when a row activated
-    # https://github.com/elementary/onboarding/pull/243
-    (fetchpatch {
-      url = "https://github.com/elementary/onboarding/commit/391fab7867885578015abbebbe678e8d4f0f331d.patch";
-      hash = "sha256-NnnvPQV2GBe8A6TiW5lq3J8hb4ruCSmri5UZ2W0fBIA=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

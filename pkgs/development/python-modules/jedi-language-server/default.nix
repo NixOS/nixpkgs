@@ -1,37 +1,45 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  docstring-to-markdown,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  docstring-to-markdown,
   jedi,
   lsprotocol,
-  poetry-core,
-  pygls,
   pydantic,
-  pyhamcrest,
+  pygls,
+
+  # tests
   pytestCheckHook,
+  pyhamcrest,
   python-lsp-jsonrpc,
-  pythonOlder,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
   version = "0.42.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pappasam";
-    repo = pname;
+    repo = "jedi-language-server";
     rev = "refs/tags/v${version}";
     hash = "sha256-KWkKIKiaRR26CctDFrHJAITM+nmRKGxLeC5HHwVZz4s=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docstring-to-markdown
     jedi
     lsprotocol
@@ -57,12 +65,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jedi_language_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server for the latest version(s) of Jedi";
     mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
-    changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    changelog = "https://github.com/pappasam/jedi-language-server/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

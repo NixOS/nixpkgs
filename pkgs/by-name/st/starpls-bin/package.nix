@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "aarch64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "starpls";
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

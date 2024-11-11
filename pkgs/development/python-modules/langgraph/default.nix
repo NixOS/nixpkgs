@@ -88,8 +88,6 @@ buildPythonPackage rec {
     postgresqlTestHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
-
   disabledTests = [
     # test is flaky due to pydantic error on the exception
     "test_doesnt_warn_valid_schema"
@@ -116,9 +114,7 @@ buildPythonPackage rec {
     "tests/test_pregel.py"
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
-  };
+  passthru.updateScript = langgraph-sdk.updateScript;
 
   meta = {
     description = "Build resilient language agents as graphs";

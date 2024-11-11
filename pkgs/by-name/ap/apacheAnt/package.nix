@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
 
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ ] ++ lib.teams.java.members;
     platforms = lib.platforms.all;
   };
 }

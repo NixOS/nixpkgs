@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.9.1";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dwWEcLowNlIoxeVQnEpmI+PK18DQRiW4A4qfWHSqRw8=";
+    hash = "sha256-9VoJyQfT9rUXK1vkQrUPvWogVYTbDLhSq3JDu3gJwg8=";
   };
 
   nativeBuildInputs = [

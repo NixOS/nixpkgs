@@ -6,17 +6,19 @@
 , stdenv
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, mimalloc
+, mimallocSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.72";
+  version = "5.73";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PVMpQSga41MxlzUUTkrbmuSJoQt+MJxYpIFX8I9C6Uk=";
+    hash = "sha256-vJF8O82UOk1jI2DAZ5d6MeheOF9fSEX2l0m86IGDyzg=";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ] ++ lib.optionals systemdSupport [
     systemd
+  ] ++ lib.optionals mimallocSupport [
+    mimalloc
   ];
 
   configureFlags = [

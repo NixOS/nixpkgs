@@ -31,21 +31,30 @@ import ../make-test-python.nix (
       machine.succeed("curl --fail http://localhost:2283/")
 
       machine.succeed("""
-        curl -H 'Content-Type: application/json' --data '{ "email": "test@example.com", "name": "Admin", "password": "admin" }' -X POST http://localhost:2283/api/auth/admin-sign-up
+        curl -f --json '{ "email": "test@example.com", "name": "Admin", "password": "admin" }' http://localhost:2283/api/auth/admin-sign-up
       """)
       res = machine.succeed("""
-        curl -H 'Content-Type: application/json' --data '{ "email": "test@example.com", "password": "admin" }' -X POST http://localhost:2283/api/auth/login
+        curl -f --json '{ "email": "test@example.com", "password": "admin" }' http://localhost:2283/api/auth/login
       """)
       token = json.loads(res)['accessToken']
 
       res = machine.succeed("""
-        curl -H 'Content-Type: application/json' -H 'Cookie: immich_access_token=%s' --data '{ "name": "API Key", "permissions": ["all"] }' -X POST http://localhost:2283/api/api-keys
+        curl -f -H 'Cookie: immich_access_token=%s' --json '{ "name": "API Key", "permissions": ["all"] }' http://localhost:2283/api/api-keys
       """ % token)
       key = json.loads(res)['secret']
 
       machine.succeed(f"immich login http://localhost:2283/api {key}")
       res = machine.succeed("immich server-info")
       print(res)
+
+      machine.succeed("""
+        curl -f -X PUT -H 'Cookie: immich_access_token=%s' --json '{ "command": "start" }' http://localhost:2283/api/jobs/backupDatabase
+      """ % token)
+      res = machine.succeed("""
+        curl -f -H 'Cookie: immich_access_token=%s' http://localhost:2283/api/jobs
+      """ % token)
+      assert json.loads(res)["backupDatabase"]["jobCounts"]["active"] == 1
+      machine.wait_until_succeeds("ls /var/lib/immich/backups/*.sql.gz")
     '';
   }
 )

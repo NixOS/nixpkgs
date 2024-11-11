@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p ripgrep common-updater-scripts nodejs prefetch-npm-deps jq
+#!nix-shell -i bash -p ripgrep sd common-updater-scripts nodejs prefetch-npm-deps jq
 
 set -xeu -o pipefail
 

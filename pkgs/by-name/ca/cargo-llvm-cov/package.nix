@@ -1,9 +1,7 @@
 # If the tests are broken, it's probably for one of two reasons:
 #
 # 1. The version of llvm used doesn't match the expectations of rustc and/or
-#    cargo-llvm-cov. This is relatively unlikely because we pull llvm out of
-#    rustc's attrset, so it *should* be the right version as long as this is the
-#    case.
+#    cargo-llvm-cov.
 # 2. Nixpkgs has changed its rust infrastructure in a way that causes
 #    cargo-llvm-cov to misbehave under test. It's likely that even though the
 #    tests are failing, cargo-llvm-cov will still function properly in actual
@@ -20,24 +18,24 @@
 , fetchurl
 , fetchFromGitHub
 , rustPlatform
-, rustc
+, llvmPackages_19
 , git
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.12";
+  version = "0.6.14";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  llvm = rustc.llvmPackages.llvm;
+  inherit (llvmPackages_19) llvm;
 
   # Download `Cargo.lock` from crates.io so we don't clutter up Nixpkgs
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-QMO5J5c8MQr84w6X74oQrHV99cjSUVfpC8Ub1csQ0gI=";
+    sha256 = "sha256-f0xO+UxB9f6q6q8QyjtP+z+U146+8GLmLKgGmAs/YYA=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,7 +53,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BlXgbCWjGya/I94nqfjBqQPSWnVhyhNn0oSRL9xiS6k=";
+    sha256 = "sha256-iJrnNDSMich5OzEbPgnQWLVz6Zj/MUIzEsaBzqVdoDg=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -63,7 +61,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoHash = "sha256-nabO19JePQRuhxsbm5wVIU4+5si6p0VgqR2QLmLeivU=";
+  cargoHash = "sha256-kYKQ7ddgoSvarF0HG/yESu5cU87DUgYm9tDkem5a/gw=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests

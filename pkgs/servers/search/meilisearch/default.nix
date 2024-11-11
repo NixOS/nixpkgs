@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.11.1";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "meiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OKy4y11akNGGrRzMHbIWe3MpZCz7qyofsJMAL06NDpo=";
+    hash = "sha256-SxmN6CDgS4QrCdJPF36RyljvKXXhCuYzaJnpqROSY5U=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "rhai-1.20.0" = "sha256-lirpciSMM+OJh6Z4Ok3nZyJSdP8SNyUG15T9QqPNjII=";
       "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
       "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
     };

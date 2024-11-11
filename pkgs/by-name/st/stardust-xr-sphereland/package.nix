@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-sphereland";
-  version = "0-unstable-2023-11-06";
+  version = "0-unstable-2023-11-07";
 
   src = fetchFromGitHub {
     owner = "stardustxr";

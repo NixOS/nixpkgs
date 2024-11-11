@@ -20,7 +20,7 @@
 }:
 
 let
-  rpathLibs = [ fontconfig libGL xorg.libxcb xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi ]
+  rpathLibs = [ fontconfig libGL xorg.libxcb xorg.libX11 xorg.libXcursor xorg.libXi ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libxkbcommon wayland ];
 in
 rustPlatform.buildRustPackage rec {

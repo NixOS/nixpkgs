@@ -482,6 +482,9 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+
+        # Resolving sysroot symlinks without code exec
+        "${pkgs.chroot-realpath}/bin/chroot-realpath"
       ] ++ optionals cfg.package.withCryptsetup [
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
@@ -522,7 +525,7 @@ in {
 
         script = /* bash */ ''
           set -uo pipefail
-          export PATH="/bin:${cfg.package.util-linux}/bin"
+          export PATH="/bin:${cfg.package.util-linux}/bin:${pkgs.chroot-realpath}/bin"
 
           # Figure out what closure to boot
           closure=
@@ -543,7 +546,7 @@ in {
 
           # Resolve symlinks in the init parameter. We need this for some boot loaders
           # (e.g. boot.loader.generationsDir).
-          closure="$(chroot /sysroot ${pkgs.coreutils}/bin/realpath "$closure")"
+          closure="$(chroot-realpath /sysroot "$closure")"
 
           # Assume the directory containing the init script is the closure.
           closure="$(dirname "$closure")"
@@ -578,14 +581,10 @@ in {
       ];
 
       services.initrd-nixos-activation = {
-        requires = [
-          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-        ];
-        after = [
-          "initrd-fs.target"
-          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-        ];
-        requiredBy = [ "initrd.target" ];
+        after = [ "initrd-switch-root.target" ];
+        requiredBy = [ "initrd-switch-root.service" ];
+        before = [ "initrd-switch-root.service" ];
+        unitConfig.DefaultDependencies = false;
         unitConfig = {
           AssertPathExists = "/etc/initrd-release";
           RequiresMountsFor = [
