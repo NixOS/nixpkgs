@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Suru Icon Theme for Lomiri Operating Environment";
     homepage = "https://gitlab.com/ubports/development/core/suru-icon-theme";
     changelog = "https://gitlab.com/ubports/development/core/suru-icon-theme/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.cc-by-sa-30;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.all;
   };
 })
