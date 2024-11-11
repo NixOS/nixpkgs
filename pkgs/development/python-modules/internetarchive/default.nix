@@ -28,9 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-0+tD+CtbR9MdqXH2CXWsXxyr5YM9gToExFnDQZa+gWM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     tqdm
     requests
     jsonpatch
