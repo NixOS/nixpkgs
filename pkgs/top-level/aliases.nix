@@ -824,7 +824,6 @@ mapAliases {
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
-  nitrokey-udev-rules = libnitrokey; # Added 2023-03-25
   nix-direnv-flakes = nix-direnv;
   nix-ld-rs = nix-ld; # Added 2024-08-17
   nix-repl = throw (

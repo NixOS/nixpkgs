@@ -4382,6 +4382,8 @@ self: super: with self; {
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
+  fastcrc = callPackage ../development/python-modules/fastcrc { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
@@ -5483,6 +5485,8 @@ self: super: with self; {
   graspologic-native = callPackage ../development/python-modules/graspologic-native { };
 
   greatfet = callPackage ../development/python-modules/greatfet { };
+
+  great-expectations = callPackage ../development/python-modules/great-expectations { };
 
   great-tables = callPackage ../development/python-modules/great-tables { };
 
