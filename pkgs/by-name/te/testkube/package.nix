@@ -23,7 +23,6 @@ buildGoModule rec {
     "-X main.date=1970-01-01-00:00:01"
   ];
 
-  doCheck = false;
   subPackages = [ "cmd/kubectl-testkube" ];
 
   meta = {
