@@ -1,0 +1,13 @@
+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+index c95c4430..7480f6b7 100644
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -43,7 +43,7 @@ else()
+   else()
+   message("-- Found pybind11-stubgen version: ${stubgen_version}")
+   install(CODE "\
+-  set(ENV{PYTHONPATH} ${CMAKE_INSTALL_PREFIX}/${NG_INSTALL_DIR_PYTHON})\n \
++  set(ENV{PYTHONPATH} ${CMAKE_INSTALL_PREFIX}/${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH})\n \
+   execute_process(COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen --ignore-all-errors netgen)\n \
+   execute_process(COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen --ignore-all-errors pyngcore)\n \
+   ")

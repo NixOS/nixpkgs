@@ -1,0 +1,22 @@
+diff --git a/libsrc/core/simd_arm64.hpp b/libsrc/core/simd_arm64.hpp
+index 9e0bcce..3607c4f 100644
+--- a/libsrc/core/simd_arm64.hpp
++++ b/libsrc/core/simd_arm64.hpp
+@@ -153,7 +153,7 @@ namespace ngcore
+   {
+     return FNMA(SIMD<double,2> (a), b, c);
+   }
+-
++#ifdef __ARM_FEATURE_COMPLEX
+   // ARM complex mult:
+   // https://arxiv.org/pdf/1901.07294.pdf
+   // c += a*b    (a0re, a0im, a1re, a1im, ...), 
+@@ -162,7 +162,7 @@ namespace ngcore
+     auto tmp = vcmlaq_f64(c.Data(), a.Data(), b.Data());   // are * b
+     c = vcmlaq_rot90_f64(tmp, a.Data(), b.Data());    // += i*aim * b
+   }
+-  
++#endif  
+ 
+   NETGEN_INLINE SIMD<double,2> operator+ (SIMD<double,2> a, SIMD<double,2> b)
+   { return a.Data()+b.Data(); }

@@ -1,0 +1,13 @@
+diff --git a/cmake/generate_version_file.cmake b/cmake/generate_version_file.cmake
+index 780c287b..e84461cc 100644
+--- a/cmake/generate_version_file.cmake
++++ b/cmake/generate_version_file.cmake
+@@ -5,7 +5,7 @@ endif()
+ if(NETGEN_VERSION_GIT)
+     set(git_version_string ${NETGEN_VERSION_GIT})
+ else()
+-    find_package(Git REQUIRED)
++    find_package(Git)
+     execute_process(COMMAND git describe --tags --match "v[0-9]*" --long --dirty
+         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+         OUTPUT_VARIABLE git_version_string
