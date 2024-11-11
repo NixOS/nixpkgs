@@ -2,12 +2,12 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python3,
+  python311,
   bash,
 }:
 
 let
-  python = python3;
+  python = python311;
 
 in
 python.pkgs.buildPythonApplication rec {
