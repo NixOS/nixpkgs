@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openvsp";
-  version = "3.40.1";
+  version = "3.41.0";
 
   src = fetchFromGitHub {
     owner = "OpenVSP";
     repo = "OpenVSP";
     rev = "OpenVSP_${version}";
-    hash = "sha256-PfXqnd75D06vER7X5w+VOm12mvLbcSe4sxmhtwBmPps=";
+    hash = "sha256-/wtOmVfvL+CpGfhxSNnJ93/iX14eZABzf85xlEarsdg=";
   };
 
   nativeBuildInputs = [
