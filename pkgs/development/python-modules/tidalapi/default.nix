@@ -2,22 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python-dateutil,
   poetry-core,
   requests,
+  python-dateutil,
+  typing-extensions,
   isodate,
   ratelimit,
-  typing-extensions,
   mpegdash,
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.6";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X6U34T1sM4P+JFpOfcI7CmULcGZ4SCXwP2fFHKi1cWE=";
+    hash = "sha256-60jkJgBTNRMWH9n8mx7gbJeI2+HhEbuOkbmqlgOrOms=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -25,13 +25,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     python-dateutil
-    mpegdash
+    typing-extensions
     isodate
     ratelimit
-    typing-extensions
+    mpegdash
   ];
-
-  doCheck = false; # tests require internet access
 
   pythonImportsCheck = [ "tidalapi" ];
 
