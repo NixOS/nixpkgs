@@ -1208,9 +1208,8 @@ with pkgs;
   };
 
   github-cli = gh;
-  git-absorb = callPackage ../applications/version-management/git-absorb {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+
+  git-absorb = callPackage ../applications/version-management/git-absorb { };
 
   git-annex-metadata-gui = libsForQt5.callPackage ../applications/version-management/git-annex-metadata-gui {
     inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
