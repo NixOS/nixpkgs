@@ -12,7 +12,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "MAR1D";
   version = "unstable-2023-02-02";
 
@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     rev = "fa5dc36e1819a15539ced339ad01672e5a498c5c";
     repo = "MAR1D";
     owner = "Radvendii";
+  };
+
+  env = {
+    NIXPKGS_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-parameter"
+    ];
   };
 
   nativeBuildInputs = [
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "First person Super Mario Bros";
     mainProgram = "MAR1D";
     longDescription = ''
@@ -55,8 +61,8 @@ stdenv.mkDerivation rec {
       You must view the world as mario does, as a one dimensional line.
     '';
     homepage = "https://mar1d.com";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ taeer ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ taeer ];
+    platforms = lib.platforms.unix;
   };
-}
+})
