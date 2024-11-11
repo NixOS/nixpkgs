@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "67";
+  version = "69.3";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4TgM0NkvVvdSEJ01SULu+GqpfqokTTErHAt3QkxkLIs=";
+    hash = "sha256-gmNgRlMgPxjLxpc1Pt+py+ojEcwBZSzSsZHF5ymgE6k=";
   };
 
   buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];
@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
