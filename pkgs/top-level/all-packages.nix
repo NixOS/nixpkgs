@@ -1011,9 +1011,7 @@ with pkgs;
     python3Packages = python311Packages;
   });
 
-  gh-cal = callPackage ../tools/misc/gh-cal {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gh-cal = callPackage ../tools/misc/gh-cal { };
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
 
