@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.65.0";
+  version = "2.66.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-IeiAB0AI6KNpXwx2Iv55LBARcwemakbblFlbfLheuGE=";
+    hash = "sha256-iWDKvtEvH6ZwK+5Zp9P2fgXP+4f4kXH+xXfBkYmsPl0=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -169,8 +169,10 @@ py.pkgs.toPythonApplication (
         azure-mgmt-media
         azure-mgmt-monitor
         azure-mgmt-msi
+        azure-mgmt-mysqlflexibleservers
         azure-mgmt-netapp
         azure-mgmt-policyinsights
+        azure-mgmt-postgresqlflexibleservers
         azure-mgmt-privatedns
         azure-mgmt-rdbms
         azure-mgmt-recoveryservicesbackup
