@@ -80,11 +80,15 @@ stdenv.mkDerivation {
   inherit pname version;
 
   unpackPhase = ''
+    runHook preUnpack
+
     cp -r ${Mindustry} Mindustry
     cp -r ${Arc} Arc
     chmod -R u+w -- Mindustry Arc
     cp -r ${soloud} Arc/arc-core/csrc/soloud
     chmod -R u+w -- Arc/arc-core/csrc/soloud
+
+    runHook postUnpack
   '';
 
   patches = [
@@ -125,18 +129,25 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch = ''
-    # Ensure the prebuilt shared objects don't accidentally get shipped
-    rm -r Arc/natives/natives-*/libs/*
-    rm -r Arc/backends/backend-*/libs/*
+  postPatch =
+    ''
+      # Ensure the prebuilt shared objects don't accidentally get shipped
+      rm -r Arc/natives/natives-*/libs/*
+      rm -r Arc/backends/backend-*/libs/*
 
-    cd Mindustry
+      cd Mindustry
 
-    # Remove unbuildable iOS stuff
-    sed -i '/^project(":ios"){/,/^}/d' build.gradle
-    sed -i '/robo(vm|VM)/d' build.gradle
-    rm ios/build.gradle
-  '';
+      # Remove unbuildable iOS stuff
+      sed -i '/^project(":ios"){/,/^}/d' build.gradle
+      sed -i '/robo(vm|VM)/d' build.gradle
+      rm ios/build.gradle
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isx86) ''
+      substituteInPlace ../Arc/arc-core/build.gradle \
+        --replace-fail "-msse" ""
+      substituteInPlace ../Arc/backends/backend-sdl/build.gradle \
+        --replace-fail "-m64" ""
+    '';
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -172,7 +183,10 @@ stdenv.mkDerivation {
   ];
 
   buildPhase =
-    lib.optionalString enableServer ''
+    ''
+      runHook preBuild
+    ''
+    + lib.optionalString enableServer ''
       gradle server:dist
     ''
     + lib.optionalString enableClient ''
@@ -190,6 +204,9 @@ stdenv.mkDerivation {
       popd
 
       gradle desktop:dist
+    ''
+    + ''
+      runHook postBuild
     '';
 
   installPhase =
