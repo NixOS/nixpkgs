@@ -20,14 +20,14 @@ callPackage ./generic.nix args {
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.3.0-rc2";
+  version = "2.3.0-rc3";
   # rev = "";
 
   tests = {
     inherit (nixosTests.zfs) unstable;
   };
 
-  hash = "sha256-/INlfiPpRm5JprcORzJJKyjpGIMY1LceY3yZ811uf2A=";
+  hash = "sha256-9s8Sb5+vksFsFI2Ra432QXexmbX3R17dzYzzLZviel0=";
 
   extraLongDescription = ''
     This is "unstable" ZFS, and will usually be a pre-release version of ZFS.
