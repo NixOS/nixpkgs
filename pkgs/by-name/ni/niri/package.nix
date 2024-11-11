@@ -4,6 +4,7 @@
   dbus,
   eudev,
   fetchFromGitHub,
+  fetchpatch,
   libdisplay-info,
   libglvnd,
   libinput,
@@ -33,6 +34,14 @@ rustPlatform.buildRustPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-ea15x8+AAm90aeU1zNWXzX7ZfenzQRUgORyjOdn4Uoc=";
   };
+
+  patches = [
+    # Fix scrolling not working with missing mouse config
+    (fetchpatch {
+      url = "https://github.com/YaLTeR/niri/commit/1951d2a9f262196a706f2645efb18dac3c4d6839.patch";
+      hash = "sha256-P/0LMYZ4HD0iG264BMnK4sLNNLmtbefF230GyC+t6qg=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs resources/niri-session
