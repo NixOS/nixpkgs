@@ -3319,6 +3319,10 @@ self: super: with self; {
   # Pre-release
   django_5 = callPackage ../development/python-modules/django/5.nix { };
 
+  djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
+
+  djangocms-text-ckeditor = callPackage ../development/python-modules/djangocms-text-ckeditor { };
+
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
@@ -3368,6 +3372,8 @@ self: super: with self; {
   django-classy-tags = callPackage ../development/python-modules/django-classy-tags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
+
+  django-cms = callPackage ../development/python-modules/django-cms { };
 
   django-colorful = callPackage ../development/python-modules/django-colorful { };
 
