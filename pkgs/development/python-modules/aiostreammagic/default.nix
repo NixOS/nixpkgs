@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiostreammagic";
-  version = "2.8.4";
+  version = "2.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "noahhusby";
     repo = "aiostreammagic";
     rev = "refs/tags/${version}";
-    hash = "sha256-TleCQjx1s8S1YTxh/d1T3oozQAwzPTCurzjLjDCebik=";
+    hash = "sha256-1/9cpdKRr7O4Ji34OSkbBudSedTAt50oGZBc88XNI18=";
   };
 
   pythonRelaxDeps = [ "websockets" ];
