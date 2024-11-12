@@ -8622,8 +8622,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MV/MVZ/Email-Outlook-Message-0.921.tar.gz";
       hash = "sha256-+0q+6hTNpRweYLwhHPlSG7uq50uEEYym1Y8KciNoA4g=";
     };
-    propagatedBuildInputs = [ EmailMIME EmailSender IOAll IOString OLEStorage_Lite ];
-    preCheck = "rm t/internals.t t/plain_jpeg_attached.t"; # these tests expect EmailMIME version 1.946 and fail with 1.949 (the output difference in benign)
+    propagatedBuildInputs = [ EmailAddress EmailMIME EmailSender IOAll IOString OLEStorage_Lite ];
     meta = {
       homepage = "https://www.matijs.net/software/msgconv/";
       description = ".MSG to mbox converter";
