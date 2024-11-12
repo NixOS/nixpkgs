@@ -5,7 +5,7 @@
 let
 
   cfg = config.programs.xonsh;
-
+  package = cfg.package.override { inherit (cfg) extraPackages; };
 in
 
 {
@@ -32,6 +32,21 @@ in
         type = lib.types.lines;
       };
 
+      extraPackages = lib.mkOption {
+        default = (ps: [ ]);
+        type = with lib.types; coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+        description = ''
+          Add the specified extra packages to the xonsh package.
+          Preferred over using `programs.xonsh.package` as it composes with `programs.xonsh.xontribs`.
+
+          Take care in using this option along with manually defining the package
+          option above, as the two can result in conflicting sets of build dependencies.
+          This option assumes that the package option has an overridable argument
+          called `extraPackages`, so if you override the package option but also
+          intend to use this option, be sure that your resulting package still honors
+          the necessary option.
+        '';
+      };
     };
 
   };
@@ -64,11 +79,11 @@ in
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ package ];
 
     environment.shells = [
       "/run/current-system/sw/bin/xonsh"
-      "${lib.getExe cfg.package}"
+      "${lib.getExe package}"
     ];
   };
 }
