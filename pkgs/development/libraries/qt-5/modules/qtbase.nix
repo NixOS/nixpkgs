@@ -7,7 +7,7 @@
 , apple-sdk_13, darwinMinVersionHook, xcbuild
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
+, libXcursor, libXext, libXi, libXrender, libjpeg, libpng , libxcb
 , libxkbcommon, libxml2, libxslt, openssl, pcre2, sqlite, udev, xcbutil
 , xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
@@ -15,6 +15,7 @@
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
 , withQttranslation ? true, qttranslations ? null
+, withLibinput ? false, libinput
 
   # options
 , libGLSupported ? !stdenv.hostPlatform.isDarwin
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: ({
   buildInputs = [ python3 at-spi2-core ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin)
     (
-      [ libinput ]
+      lib.optional withLibinput libinput
       ++ lib.optional withGtk3 gtk3
     )
     ++ lib.optional stdenv.isDarwin darwinVersionInputs
@@ -352,14 +353,13 @@ stdenv.mkDerivation (finalAttrs: ({
       "-L" "${libXrender.out}/lib"
       "-I" "${libXrender.out}/include"
 
-      "-libinput"
-
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
     ] ++ [
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
+      ++ lib.optional withLibinput "-libinput"
       ++ [
         "-inotify"
     ] ++ lib.optionals (cups != null) [

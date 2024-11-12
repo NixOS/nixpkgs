@@ -44,7 +44,6 @@
 , libXext
 , libXi
 , libXrender
-, libinput
 , libjpeg
 , libpng
 , libxcb
@@ -78,6 +77,8 @@
 , withGtk3 ? false
 , dconf
 , gtk3
+, withLibinput ? false
+, libinput
   # options
 , libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
@@ -163,10 +164,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
-    libinput
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
   ++ lib.optional withGtk3 gtk3
+  ++ lib.optional withLibinput libinput
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 
