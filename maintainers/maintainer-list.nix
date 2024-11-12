@@ -14352,12 +14352,6 @@
     githubId = 5378535;
     name = "Milo Gertjejansen";
   };
-  milran = {
-    email = "milranmike@protonmail.com";
-    github = "wattmto";
-    githubId = 93639059;
-    name = "Milran Mike";
-  };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
     github = "mimame";
@@ -23326,6 +23320,12 @@
     name = "Varun Narravula";
     github = "water-sucks";
     githubId = 68445574;
+  };
+  wattmto = {
+    email = "dev@wattmto.dev";
+    github = "wattmto";
+    githubId = 93639059;
+    name = "wattmto";
   };
   waynr = {
     name = "Wayne Warren";
