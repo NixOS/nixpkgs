@@ -1,6 +1,5 @@
 { ffmpeg
 , fetchFromGitHub
-, fetchpatch
 , lib
 }:
 
