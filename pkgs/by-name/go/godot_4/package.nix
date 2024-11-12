@@ -231,6 +231,11 @@ let
       };
     };
 
+    requiredSystemFeatures = [
+      # fixes: No space left on device
+      "big-parallel"
+    ];
+
     meta = {
       changelog = "https://github.com/godotengine/godot/releases/tag/${version}";
       description = "Free and Open Source 2D and 3D game engine";
