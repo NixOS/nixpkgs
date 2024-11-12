@@ -95,7 +95,7 @@ let
             --replace-fail "poetry>=1.0.0b1" "poetry-core" \
             --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or []) ++ [
           self.pytz
         ];
       });

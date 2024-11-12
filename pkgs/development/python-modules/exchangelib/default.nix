@@ -1,6 +1,5 @@
 {
   lib,
-  backports-zoneinfo,
   buildPythonPackage,
   cached-property,
   defusedxml,
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     requests-kerberos
     tzdata
     tzlocal
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   optional-dependencies = {
     complete = [
