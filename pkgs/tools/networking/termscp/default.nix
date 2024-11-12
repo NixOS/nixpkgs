@@ -54,8 +54,13 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  # Requires network access
-  doCheck = false;
+  checkFeatures = [ "isolated-tests" ];
+  checkFlags = [
+    # requires networking
+    "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
