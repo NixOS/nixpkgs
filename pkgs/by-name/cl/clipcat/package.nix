@@ -5,7 +5,6 @@
   rustPlatform,
   protobuf,
   installShellFiles,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,12 +19,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-qDcUEJSBd8c/ept/Y+GQCrp5b7xkSdX6ktdO9/c3k8o=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
 
   nativeBuildInputs = [
     protobuf
