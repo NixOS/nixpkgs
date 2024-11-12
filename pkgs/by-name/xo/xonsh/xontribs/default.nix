@@ -7,4 +7,5 @@
   xontrib-bashisms = callPackage ./xontrib-bashisms { };
   xontrib-debug-tools = callPackage ./xontrib-debug-tools { };
   xontrib-distributed = callPackage ./xontrib-distributed { };
+  xontrib-fish-completer = callPackage ./xontrib-fish-completer { };
 }
