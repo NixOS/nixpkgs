@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "i3";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       A tiling window manager primarily targeted at advanced users and
