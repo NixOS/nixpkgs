@@ -6,6 +6,7 @@ lib.makeScope pkgs.newScope (self:
   in {
     firedecor = callPackage ./firedecor.nix { };
     focus-request = callPackage ./focus-request.nix { };
+    pixdecor = callPackage ./pixdecor.nix { };
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
     wayfire-shadows = callPackage ./wayfire-shadows.nix { };
     wcm = callPackage ./wcm.nix { };
