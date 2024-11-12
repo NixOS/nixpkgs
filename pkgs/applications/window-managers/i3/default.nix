@@ -1,5 +1,5 @@
 {
-  fetchurl,
+  fetchFromGitHub,
   lib,
   stdenv,
   pkg-config,
@@ -33,15 +33,18 @@
   docbook_xsl,
   findXMLCatalogs,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i3";
   version = "4.24";
 
-  src = fetchurl {
-    url = "https://i3wm.org/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-W679Dl548br7eshd7qQrzTy/5l8SeaqW9+SWYWN6yYE=";
+  src = fetchFromGitHub {
+    owner = "i3";
+    repo = "i3";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-2tuhfB/SMN+osCBfZtw/yDPhNNEhBH4Qo6dexpqVWYk=";
   };
 
   nativeBuildInputs = [
@@ -141,8 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  passthru.tests = {
-    inherit (nixosTests) i3wm;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) i3wm;
+    };
   };
 
   meta = {
