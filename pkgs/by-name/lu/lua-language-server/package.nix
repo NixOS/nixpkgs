@@ -2,11 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   ninja,
   makeWrapper,
-  CoreFoundation,
-  Foundation,
-  ditto,
+
+  # buildInputs
+  apple-sdk_11,
+  darwinMinVersionHook,
+  rsync,
+
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -17,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-wyQ4oXGemoT5QVZughFKd386RjzlW4ArtQL0ofMnhpU=";
     fetchSubmodules = true;
   };
@@ -28,36 +34,49 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Foundation
-    ditto
+    # aligned_alloc
+    apple-sdk_11
+    (darwinMinVersionHook "10.15")
+    rsync
   ];
 
   postPatch =
     ''
       # filewatch tests are failing on darwin
       # this feature is not used in lua-language-server
-      sed -i /filewatch/d 3rd/bee.lua/test/test.lua
+      substituteInPlace 3rd/bee.lua/test/test.lua \
+        --replace-fail 'require "test_filewatch"' ""
 
       # flaky tests on linux
       # https://github.com/LuaLS/lua-language-server/issues/2926
-      sed -i /load-relative-library/d test/tclient/init.lua
+      substituteInPlace test/tclient/init.lua \
+        --replace-fail "require 'tclient.tests.load-relative-library'" ""
 
       pushd 3rd/luamake
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin (
       # This package uses the program clang for C and C++ files. The language
       # is selected via the command line argument -std, but this do not work
       # in combination with the nixpkgs clang wrapper. Therefor we have to
       # find all c++ compiler statements and replace $cc (which expands to
       # clang) with clang++.
-      sed -i compile/ninja/macos.ninja \
-        -e '/c++/s,$cc,clang++,' \
-        -e '/test.lua/s,= .*,= true,' \
-        -e '/ldl/s,$cc,clang++,'
-      sed -i scripts/compiler/gcc.lua \
-        -e '/cxx_/s,$cc,clang++,'
-    '';
+      ''
+        sed -i compile/ninja/macos.ninja \
+          -e '/c++/s,$cc,clang++,' \
+          -e '/test.lua/s,= .*,= true,' \
+          -e '/ldl/s,$cc,clang++,'
+        sed -i scripts/compiler/gcc.lua \
+          -e '/cxx_/s,$cc,clang++,'
+      ''
+      # Avoid relying on ditto (impure)
+      + ''
+        substituteInPlace compile/ninja/macos.ninja \
+          --replace-fail "ditto" "rsync -a"
+
+        substituteInPlace scripts/writer.lua \
+          --replace-fail "ditto" "rsync -a"
+      ''
+    );
 
   ninjaFlags = [
     "-fcompile/ninja/${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}.ninja"
@@ -91,19 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
   # some tests require local networking
   __darwinAllowLocalNetworking = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       gepbird
       sei40kr
     ];
     mainProgram = "lua-language-server";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -7938,11 +7938,6 @@ with pkgs;
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
-  lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/lua-language-server {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
-    inherit (darwin) ditto;
-  };
-
   inherit (callPackages ../development/tools/language-servers/nixd {
     llvmPackages = llvmPackages_16;
     nix = nixVersions.nix_2_19;
@@ -8174,7 +8169,7 @@ with pkgs;
     python3 = python311;
   };
 
-  buck2 = callPackage ../development/tools/build-managers/buck2 { };
+  buck2 = callPackage ../development/tools/build-managers/buck2 { stdenv = stdenvNoCC; };
 
   build2 = callPackage ../development/tools/build-managers/build2 {
     # Break cycle by using self-contained toolchain for bootstrapping
@@ -13761,8 +13756,6 @@ with pkgs;
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
-  completely = callPackage ../tools/misc/completely { };
-
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
@@ -19106,6 +19099,8 @@ with pkgs;
   yandex-browser-beta = yandex-browser.override { edition = "beta"; };
 
   yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
+
+  zap-chip-gui = zap-chip.override { withGui = true; };
 
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;

@@ -137,6 +137,12 @@
     "sha256": "1r0jfcy7qmrcclnhfqja6rixs3w3ipadblpgk54s36b11gnkfs9q",
     "version": "1.1.3"
   },
+  "so-clean-up-wp-seo": {
+    "path": "so-clean-up-wp-seo/tags/4.0.2",
+    "rev": "3068954",
+    "sha256": "1ypvbpzaxgfgpk29b8snfvsmbb166irpb739rzyfs3b3857nnrvn",
+    "version": "4.0.2"
+  },
   "static-mail-sender-configurator": {
     "path": "static-mail-sender-configurator/tags/0.10.0",
     "rev": "2941521",
