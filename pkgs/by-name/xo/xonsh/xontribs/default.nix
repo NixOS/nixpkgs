@@ -8,4 +8,5 @@
   xontrib-debug-tools = callPackage ./xontrib-debug-tools { };
   xontrib-distributed = callPackage ./xontrib-distributed { };
   xontrib-fish-completer = callPackage ./xontrib-fish-completer { };
+  xontrib-jedi = callPackage ./xontrib-jedi { };
 }
