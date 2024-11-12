@@ -15410,6 +15410,10 @@ with pkgs;
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
+  okms-cli = callPackage ../by-name/ok/okms-cli/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   omegat = callPackage ../applications/misc/omegat.nix { };
 
   inherit (callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
