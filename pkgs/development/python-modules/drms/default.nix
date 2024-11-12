@@ -44,16 +44,19 @@ buildPythonPackage rec {
     pytest-doctestplus
   ];
 
-  disabledTests = [ "test_query_hexadecimal_strings" ];
+  disabledTests = [
+    "test_query_hexadecimal_strings"
+    "test_jsocinfoconstants" # Need network
+  ];
 
   disabledTestPaths = [ "docs/tutorial.rst" ];
 
   pythonImportsCheck = [ "drms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    license = licenses.bsd2;
-    maintainers = [ ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
