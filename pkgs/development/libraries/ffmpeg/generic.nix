@@ -166,7 +166,9 @@
 , withSafeBitstreamReader ? withHeadlessDeps # Buffer boundary checking in bitreaders
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
-, withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
+  # Currently breaks tests if disabled while libavutil is enabled
+  # https://github.com/NixOS/nixpkgs/issues/355077
+, withPixelutils ? buildAvutil # Pixel utils in libavutil
 , withStatic ? stdenv.hostPlatform.isStatic
 , withShared ? !stdenv.hostPlatform.isStatic
 , withPic ? true
