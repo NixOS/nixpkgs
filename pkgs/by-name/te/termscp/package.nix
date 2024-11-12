@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "termscp";
     maintainers = with lib.maintainers; [
       fab
+      gepbird
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
