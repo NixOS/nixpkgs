@@ -32,17 +32,19 @@ buildPythonPackage rec {
     hash = "sha256-O/ErD9poRHgGp62Ee/pZFhMXcnXTW2ckse5XP6o3BOM=";
   };
 
+  postPatch = ''
+    rm -rf vendor
+
+    substituteInPlace setup.py \
+      --replace-fail "use_system_libuv = False" "use_system_libuv = True"
+  '';
+
   build-system = [
     cython
     setuptools
   ];
 
   env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
-
-  pypaBuildFlags = [
-    "-C--global-option=build_ext"
-    "-C--global-option=--use-system-libuv"
-  ];
 
   buildInputs =
     [ libuv ]
