@@ -5469,9 +5469,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  termscp = callPackage ../tools/networking/termscp {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation Security;
-  };
+  termscp = callPackage ../tools/networking/termscp { };
 
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
