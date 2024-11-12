@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, aspell
-, boost
-, expat
-, intltool
-, pkg-config
-, libxml2
-, libxslt
-, pcre2
-, wxGTK32
-, xercesc
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  aspell,
+  boost,
+  expat,
+  intltool,
+  pkg-config,
+  libxml2,
+  libxslt,
+  pcre2,
+  wxGTK32,
+  xercesc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlcopyeditor";
   version = "1.3.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xml-copy-editor/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6HHKl7hqyvF3gJ9vmjLjTT49prJ8KhEEV0qPsJfQfJE=";
+    url = "mirror://sourceforge/xml-copy-editor/xmlcopyeditor-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6HHKl7hqyvF3gJ9vmjLjTT49prJ8KhEEV0qPsJfQfJE=";
   };
 
   patches = [ ./xmlcopyeditor.patch ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   #        with an rvalue of type 'const xmlError *' (aka 'const _xmlError *')
   postPatch = ''
     substituteInPlace src/wraplibxml.cpp \
-      --replace "xmlErrorPtr err" "const xmlError *err"
+      --replace-fail "xmlErrorPtr err" "const xmlError *err"
   '';
 
   nativeBuildInputs = [
@@ -46,18 +46,21 @@ stdenv.mkDerivation rec {
     pcre2
     wxGTK32
     xercesc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fast, free, validating XML editor";
     homepage = "https://xml-copy-editor.sourceforge.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ candeira wegank ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      candeira
+      wegank
+    ];
     mainProgram = "xmlcopyeditor";
   };
-}
+})
