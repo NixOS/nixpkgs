@@ -6,7 +6,7 @@
 , libevent
 , double-conversion
 , glog
-, fmt_8
+, fmt_9
 , gflags
 , openssl
 , fizz
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt_8
+    fmt_9
     libsodium
     zlib
     boost
