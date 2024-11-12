@@ -13874,10 +13874,6 @@ with pkgs;
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
-  dust = callPackage ../by-name/du/dust/package.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
-  };
-
   dexed = darwin.apple_sdk_11_0.callPackage ../applications/audio/dexed {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
     inherit (darwin.apple_sdk_11_0.libs) simd;
