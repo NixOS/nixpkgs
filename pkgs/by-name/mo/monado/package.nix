@@ -59,6 +59,9 @@
   # instead of via the monado-service program. For more information see:
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
 , serviceSupport ? true
+  # Set to 'true' to add support for profiling with Tracy. For more information see:
+  # https://gitlab.freedesktop.org/monado/monado/-/blob/main/doc/tracing-tracy.md
+, enableTracy ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -84,11 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_TRACY" true)
-    (lib.cmakeBool "XRT_FEATURE_TRACING" true)
     (lib.cmakeBool "XRT_HAVE_STEAM" true)
     (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
-  ];
+  ] ++ (lib.optionals enableTracy [ 
+    (lib.cmakeBool "XRT_FEATURE_TRACING" true)
+    (lib.cmakeBool "XRT_HAVE_TRACY" true)
+  ]);
 
   buildInputs = [
     bluez
@@ -124,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     SDL2
     shaderc
-    tracy
     udev
     vulkan-headers
     vulkan-loader
@@ -133,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     zlib
     zstd
-  ];
+  ] ++ (lib.optionals enableTracy [ tracy ]);
 
   # known disabled drivers/features:
   #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core (See https://github.com/NixOS/nixpkgs/issues/292618)
