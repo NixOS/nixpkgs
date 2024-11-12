@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, alembic
-, lz4
-, numpy
-, oauthlib
-, openpyxl
-, pandas
-, poetry-core
-, pyarrow
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sqlalchemy
-, thrift
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  alembic,
+  lz4,
+  numpy,
+  oauthlib,
+  openpyxl,
+  pandas,
+  poetry-core,
+  pyarrow,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  thrift,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "2.4.0";
+  version = "3.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,17 +29,16 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V8Nl6xr96Xnd1gkw9R0aqXkitLESsAyW7ufTYn6ttLg=";
+    hash = "sha256-8q5qWN+i2mGbzXvkop/G6mjZegzZ/6kr1Fl7FaHwLYA=";
   };
 
   pythonRelaxDeps = [
-    "numpy"
+    "pyarrow"
     "thrift"
   ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,19 +51,15 @@ buildPythonPackage rec {
     pyarrow
     sqlalchemy
     thrift
+    requests
+    urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "databricks"
-  ];
+  pythonImportsCheck = [ "databricks" ];
 
   meta = with lib; {
     description = "Databricks SQL Connector for Python";
@@ -70,8 +67,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/databricks/databricks-sql-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ harvidsen ];
-    # No SQLAlchemy 2.0 support
-    # https://github.com/databricks/databricks-sql-python/issues/91
-    broken = true;
   };
 }

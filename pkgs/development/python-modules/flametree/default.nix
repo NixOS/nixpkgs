@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fontconfig
-, matplotlib
-, pandas
-, pytestCheckHook
-, weasyprint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fontconfig,
+  matplotlib,
+  pandas,
+  pytestCheckHook,
+  weasyprint,
 }:
 
 buildPythonPackage rec {
   pname = "flametree";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";

@@ -156,6 +156,14 @@ if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source $cc_wrapper/nix-support/add-flags.sh
 fi
 
+# Only add darwin min version flag and set up `DEVELOPER_DIR` if a default darwin min version is set,
+# which is a signal that we're targeting darwin. (Copied from add-flags in libc but tailored for Swift).
+if [ "@darwinMinVersion@" ]; then
+    # Make sure the wrapped Swift compiler can find the overlays in the SDK.
+    NIX_SWIFTFLAGS_COMPILE+=" -I $SDKROOT/usr/lib/swift"
+    NIX_LDFLAGS_@suffixSalt@+=" -L $SDKROOT/usr/lib/swift"
+fi
+
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
         NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
@@ -242,17 +250,26 @@ if [[ -e $cc_wrapper/nix-support/add-local-cc-cflags-before.sh ]]; then
     source $cc_wrapper/nix-support/add-local-cc-cflags-before.sh
 fi
 
-# May need to transform the triple injected by the above.
-for ((i = 1; i < ${#extraBefore[@]}; i++)); do
-    if [[ "${extraBefore[i]}" = -target ]]; then
+for ((i=0; i < ${#extraBefore[@]}; i++));do
+    case "${extraBefore[i]}" in
+    -target)
         i=$((i + 1))
         # On Darwin only, need to change 'aarch64' to 'arm64'.
         extraBefore[i]="${extraBefore[i]/aarch64-apple-/arm64-apple-}"
         # On Darwin, Swift requires the triple to be annotated with a version.
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
-        break
-    fi
+        ;;
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
+        [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
+        extraBefore=(
+            "${extraBefore[@]:0:i}"
+            -Xcc
+            "${extraBefore[@]:i:${#extraBefore[@]}}"
+        )
+        i=$((i + 1))
+        ;;
+    esac
 done
 
 # As a very special hack, if the arguments are just `-v', then don't

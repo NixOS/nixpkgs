@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, aioresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  aioresponses,
+  orjson,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bond-async";
-  version = "0.1.23";
+  version = "0.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -20,11 +22,12 @@ buildPythonPackage rec {
     owner = "bondhome";
     repo = "bond-async";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kht2O/+F7Nw78p1Q6NGugm2bfAwZAUWAs30htoWkafI=";
+    hash = "sha256-YRJHUOYFLf4dtQGIFKHLdUQxWTnZzG1MPirMsGvDor8=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    orjson
   ];
 
   nativeCheckInputs = [
@@ -33,15 +36,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bond_async"
-  ];
+  pythonImportsCheck = [ "bond_async" ];
 
-  meta = {
+  meta = with lib; {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/bondhome/bond-async";
     changelog = "https://github.com/bondhome/bond-async/releases/tag/v${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

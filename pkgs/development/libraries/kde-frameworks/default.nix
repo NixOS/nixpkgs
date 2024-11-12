@@ -120,7 +120,8 @@ let
       kwindowsystem = callPackage ./kwindowsystem {};
       modemmanager-qt = callPackage ./modemmanager-qt.nix {};
       networkmanager-qt = callPackage ./networkmanager-qt.nix {};
-      oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
+      oxygen-icons = callPackage ./oxygen-icons.nix {};
+      oxygen-icons5 = oxygen-icons;
       prison = callPackage ./prison.nix {};
       qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
       solid = callPackage ./solid {};

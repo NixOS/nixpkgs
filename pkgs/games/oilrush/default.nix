@@ -26,25 +26,25 @@ stdenv.mkDerivation {
     do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
     done
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
              launcher_$arch
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib\
              libNetwork_$arch.so
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib\
              libQtCoreUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
              libQtGuiUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib\
              libQtNetworkUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
              libQtWebKitUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib\
              libQtXmlUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${lib.getLib stdenv.cc.cc}/lib\
              libRakNet_$arch.so
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
              libUnigine_$arch.so
-    patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
+    patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXinerama libXrandr ]}\
              OilRush_$arch
   '';
   installPhase = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/oilrush"
   '';
   meta = {
-    description = "A naval strategy game";
+    description = "Naval strategy game";
     longDescription = ''
       Oil Rush is a real-time naval strategy game based on group control. It
       combines the strategic challenge of a classical RTS with the sheer fun

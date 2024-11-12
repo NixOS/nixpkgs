@@ -12,6 +12,7 @@
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
 , baseUrl
+, versionSuffix ? ""
 }:
 
 let
@@ -27,7 +28,7 @@ in writeScript "update-${pname}" ''
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
 
-  gpg --receive-keys ADD7079479700DCADFDD5337E36D3B13F3D93274
+  curl https://keys.openpgp.org/vks/v1/by-fingerprint/14F26682D0916CDD81E37B6D61B7B526D98F0353 | gpg --import -
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -47,7 +48,7 @@ in writeScript "update-${pname}" ''
            grep "^[0-9]" | \
            sort --version-sort | \
            grep -v "funnelcake" | \
-           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
+           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)${versionSuffix}$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
            tail -1`
 
   curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"

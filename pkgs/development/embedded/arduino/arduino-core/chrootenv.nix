@@ -14,7 +14,6 @@ buildFHSEnv {
         pyserial
       ]))
     ]);
-  multiPkgs = null;
 
   extraInstallCommands = ''
     ${lib.optionalString withGui ''

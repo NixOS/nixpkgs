@@ -1,18 +1,19 @@
-{ lib
-, assertpy
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, regex
-, typing-extensions
+{
+  lib,
+  assertpy,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "gruebel";
     repo = "pycep";
     rev = "refs/tags/${version}";
-    hash = "sha256-OSdxdhGAZhl625VdIDHQ1aepQR5B0pCTLavfxer1tqc=";
+    hash = "sha256-qogUjj/GwMGwFEin+xJCSOCf5Ut8bgsFakyoMhkyKgU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     lark
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pycep"
-  ];
+  pythonImportsCheck = [ "pycep" ];
 
   meta = with lib; {
     description = "Python based Bicep parser";

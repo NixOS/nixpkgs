@@ -11,10 +11,10 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma-bigscreen-x11";
+    services.displayManager.sddm.enable = true;
+    services.displayManager.defaultSession = "plasma-bigscreen-x11";
     services.xserver.desktopManager.plasma5.bigscreen.enable = true;
-    services.xserver.displayManager.autoLogin = {
+    services.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };
@@ -22,14 +22,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
     users.users.alice.extraGroups = ["uinput"];
   };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.users.users.alice;
-    xdo = "${pkgs.xdotool}/bin/xdotool";
-  in ''
+  testScript = { nodes, ... }: ''
     with subtest("Wait for login"):
         start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")

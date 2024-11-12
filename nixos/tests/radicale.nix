@@ -6,7 +6,7 @@ let
   port = "5232";
   filesystem_folder = "/data/radicale";
 
-  cli = "${pkgs.calendar-cli}/bin/calendar-cli --caldav-user ${user} --caldav-pass ${password}";
+  cli = "${lib.getExe pkgs.calendar-cli} --caldav-user ${user} --caldav-pass ${password}";
 in {
   name = "radicale3";
   meta.maintainers = with lib.maintainers; [ dotlambda ];

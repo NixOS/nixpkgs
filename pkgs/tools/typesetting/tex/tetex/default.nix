@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # fixes "error: conflicting types for 'calloc'", etc.
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
-  preConfigure = if stdenv.isCygwin then ''
+  preConfigure = if stdenv.hostPlatform.isCygwin then ''
     find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
   '' else null;
 
@@ -31,12 +31,17 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  env = {
+    CFLAGS = "-std=gnu89";
+    CXXFLAGS = "-std=c++03";
+  };
+
   configureFlags =
     [ "--disable-multiplatform" "--without-x11" "--without-xdvik"
       "--without-oxdvik" "--without-texinfo" "--without-texi2html"
       "--with-system-zlib" "--with-system-pnglib" "--with-system-ncurses" ]
     # couldn't get gsftopk working on darwin
-    ++ lib.optional stdenv.isDarwin "--without-gsftopk";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--without-gsftopk";
 
   postUnpack = ''
     mkdir -p $out/share/texmf
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "A full-featured (La)TeX distribution";
+    description  = "Full-featured (La)TeX distribution";
     homepage     = "http://www.tug.org/tetex/";
     maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;

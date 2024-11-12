@@ -18,64 +18,54 @@ addGnustepInstallFlags() {
     )
 }
 
-preInstallPhases+=" addGnustepInstallFlags"
+appendToVar preInstallPhases addGnustepInstallFlags
 
-addEnvVars() {
+addGNUstepEnvVars() {
     local filename
 
+    gsAddToSearchPath() {
+        if [[ -d "$2" && "${!1-}" != *"$2"* ]]; then
+            addToSearchPath "$1" "$2"
+        fi
+    }
+
+    gsAddToIncludeSearchPath() {
+        local -n ref="$1"
+
+        # NOTE: contrary to the one in wrapGNUstepAppsHook, use -e here instead of -d since it's also used for the makefiles
+        if [[ -e "$2" && "${ref-}" != *"$2"* ]]; then
+            if [[ "${ref-}" != "" ]]; then
+                ref+=" "
+            fi
+
+            ref+="$2"
+        fi
+    }
+
     for filename in $1/share/GNUstep/Makefiles/Additional/*.make ; do
-    if case "${NIX_GNUSTEP_MAKEFILES_ADDITIONAL-}" in *"{$filename}"*) false;; *) true;; esac; then
-        export NIX_GNUSTEP_MAKEFILES_ADDITIONAL+=" $filename"
-    fi
+        gsAddToIncludeSearchPath NIX_GNUSTEP_MAKEFILES_ADDITIONAL "$filename"
     done
 
-    local tmp="$1/lib/GNUstep/Applications"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_APPS-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
-    fi
-    tmp="$1/lib/GNUstep/Applications"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_ADMIN_APPS-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
-    fi
-    tmp="$1/lib/GNUstep/WebApplications"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_WEB_APPS-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
-    fi
-    tmp="$1/bin"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_TOOLS-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
-    fi
-    tmp="$1/sbin"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
-    fi
-    tmp="$1/lib/GNUstep"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_LIBRARY-}" in *"${tmp}"*) false;; *) true;; esac; then
-        addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
-    fi
-    tmp="$1/include"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_HEADERS-}" in *"${tmp}"*) false;; *) true;; esac; then
-        if [ -z "${NIX_GNUSTEP_SYSTEM_HEADERS-}" ]; then
-            export NIX_GNUSTEP_SYSTEM_HEADERS="$tmp"
-        else
-            export NIX_GNUSTEP_SYSTEM_HEADERS+=" $tmp"
-        fi
-    fi
-    tmp="$1/lib"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_LIBRARIES-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
-    fi
-    tmp="$1/share/GNUstep/Documentation"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_DOC-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
-    fi
-    tmp="$1/share/man"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_DOC_MAN-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
-    fi
-    tmp="$1/share/info"
-    if [ -d "$tmp" ] && case "${NIX_GNUSTEP_SYSTEM_DOC_INFO-}" in *"${tmp}"*) false;; *) true;; esac; then
-    addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
-    fi
+    export NIX_GNUSTEP_MAKEFILES_ADDITIONAL
+
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$1/lib/GNUstep/Applications"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$1/lib/GNUstep/Applications"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$1/lib/GNUstep/WebApplications"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$1/bin"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$1/sbin"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$1/lib/GNUstep"
+    gsAddToIncludeSearchPath NIX_GNUSTEP_SYSTEM_HEADERS "$1/include"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$1/lib"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$1/share/GNUstep/Documentation"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$1/share/man"
+    gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$1/share/info"
 }
-addEnvHooks "$targetOffset" addEnvVars
+addEnvHooks "$targetOffset" addGNUstepEnvVars
+
+gsmakeSetup() {
+    export GNUSTEP_MAKEFILES="$(gnustep-config --variable=GNUSTEP_MAKEFILES)"
+
+    . $GNUSTEP_MAKEFILES/GNUstep.sh
+}
+
+preConfigureHooks+=(gsmakeSetup)

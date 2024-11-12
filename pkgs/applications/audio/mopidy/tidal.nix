@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/tehkillerbee/mopidy-tidal";
     license = licenses.mit;
-    maintainers = [ maintainers.rodrgz ];
+    maintainers = [ ];
   };
 }
 

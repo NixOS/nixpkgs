@@ -1,24 +1,38 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+
+  # for passthru.tests
+  distributed,
+  jupyter-server,
+  jupyterlab,
+  matplotlib,
+  mitmproxy,
+  pytest-tornado,
+  pytest-tornasync,
+  pyzmq,
+  sockjs-tornado,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.2.0";
+  version = "6.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
     rev = "v${version}";
-    hash = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
+    hash = "sha256-vWiTLKL5gzrf3J6T3u8I1HHg5Ww0sf5ybSbZX6G3UXM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
@@ -38,10 +52,25 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit
+      distributed
+      jupyter-server
+      jupyterlab
+      matplotlib
+      mitmproxy
+      pytest-tornado
+      pytest-tornasync
+      pyzmq
+      sockjs-tornado
+      urllib3
+      ;
+  };
+
   meta = with lib; {
-    description = "A web framework and asynchronous networking library";
+    description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

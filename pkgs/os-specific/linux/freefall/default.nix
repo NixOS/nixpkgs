@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     inherit (kernel.meta) homepage license;
 
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";
+    mainProgram = "freefall";
     longDescription = ''
       Provides a shock protection facility in modern laptops with spinning hard
       drives, by stopping all input/output operations on the internal hard drive

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C interface library to i3wm";
+    description = "C interface library to i3wm";
     homepage = "https://github.com/acrisci/i3ipc-glib";
     maintainers = with maintainers; [teto];
     license = licenses.gpl3;

@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitea
-, pythonImportsCheckHook
+, six
 , sphinxHook
 , sphinx-rtd-theme
 }:
@@ -20,7 +20,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonImportsCheckHook
+    six
     sphinxHook
     sphinx-rtd-theme
   ];

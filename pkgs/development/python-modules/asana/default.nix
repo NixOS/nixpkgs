@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
-, responses
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  python-dotenv,
+  pythonOlder,
+  setuptools,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "5.0.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,21 +23,26 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hvAyKGoNkX3bs7Mz2h7SnOa5T6J88c0YiTR/L8fgfi8=";
+    hash = "sha256-nuBvRqrs00OIY3UzN7bF5dB15TZqeE43o1BIpBaJZcQ=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    requests-oauthlib
+  build-system = [ setuptools ];
+
+  dependencies = [
+    certifi
+    six
+    python-dateutil
+    python-dotenv
+    urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    responses
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "asana"
+  pythonImportsCheck = [ "asana" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "build_tests/"
   ];
 
   meta = with lib; {
@@ -41,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/asana/python-asana";
     changelog = "https://github.com/Asana/python-asana/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

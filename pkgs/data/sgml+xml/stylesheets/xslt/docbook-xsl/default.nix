@@ -3,7 +3,7 @@
 let
 
   common = { pname, sha256, suffix ? "" }: let
-    legacySuffix = if suffix == "-nons" then "" else "-ns";
+    legacySuffix = lib.optionalString (suffix != "-nons") "-ns";
     self = stdenv.mkDerivation rec {
       inherit pname;
       version = "1.79.2";
@@ -70,7 +70,7 @@ let
         homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
         license = lib.licenses.mit;
-        maintainers = [ lib.maintainers.eelco ];
+        maintainers = [ ];
         platforms = lib.platforms.all;
       };
     };

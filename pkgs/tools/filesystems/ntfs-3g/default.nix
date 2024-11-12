@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext libuuid ]
     ++ lib.optionals crypto [ gnutls libgcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ macfuse-stubs DiskArbitration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ macfuse-stubs DiskArbitration ];
 
   # Note: libgcrypt is listed here non-optionally because its m4 macros are
   # being used in ntfs-3g's configure.ac.
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "--enable-extras"
     "--with-mount-helper=${mount}/bin/mount"
     "--with-umount-helper=${mount}/bin/umount"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--with-modprobe-helper=${kmod}/bin/modprobe"
   ];
 

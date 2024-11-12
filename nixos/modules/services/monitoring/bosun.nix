@@ -22,21 +22,14 @@ in {
 
     services.bosun = {
 
-      enable = mkEnableOption (lib.mdDoc "bosun");
+      enable = mkEnableOption "bosun";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bosun;
-        defaultText = literalExpression "pkgs.bosun";
-        description = lib.mdDoc ''
-          bosun binary to use.
-        '';
-      };
+      package = mkPackageOption pkgs "bosun" { };
 
       user = mkOption {
         type = types.str;
         default = "bosun";
-        description = lib.mdDoc ''
+        description = ''
           User account under which bosun runs.
         '';
       };
@@ -44,7 +37,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "bosun";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which bosun runs.
         '';
       };
@@ -52,7 +45,7 @@ in {
       opentsdbHost = mkOption {
         type = types.nullOr types.str;
         default = "localhost:4242";
-        description = lib.mdDoc ''
+        description = ''
           Host and port of the OpenTSDB database that stores bosun data.
           To disable opentsdb you can pass null as parameter.
         '';
@@ -62,7 +55,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "localhost:8086";
-        description = lib.mdDoc ''
+        description = ''
            Host and port of the influxdb database.
         '';
       };
@@ -70,7 +63,7 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = ":8070";
-        description = lib.mdDoc ''
+        description = ''
           The host address and port that bosun's web interface will listen on.
         '';
       };
@@ -78,7 +71,7 @@ in {
       stateFile = mkOption {
         type = types.path;
         default = "/var/lib/bosun/bosun.state";
-        description = lib.mdDoc ''
+        description = ''
           Path to bosun's state file.
         '';
       };
@@ -86,7 +79,7 @@ in {
       ledisDir = mkOption {
         type = types.path;
         default = "/var/lib/bosun/ledis_data";
-        description = lib.mdDoc ''
+        description = ''
           Path to bosun's ledis data dir
         '';
       };
@@ -94,7 +87,7 @@ in {
       checkFrequency = mkOption {
         type = types.str;
         default = "5m";
-        description = lib.mdDoc ''
+        description = ''
           Bosun's check frequency
         '';
       };
@@ -102,13 +95,13 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options for Bosun. You should describe your
           desired templates, alerts, macros, etc through this configuration
           option.
 
           A detailed description of the supported syntax can be found at-spi2-atk
-          http://bosun.org/configuration.html
+          https://bosun.org/configuration.html
         '';
       };
 

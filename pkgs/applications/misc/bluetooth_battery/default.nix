@@ -22,6 +22,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fetch the battery charge level of some Bluetooth headsets";
+    mainProgram = "bluetooth_battery";
     homepage = "https://github.com/TheWeirdDev/Bluetooth_Headset_Battery_Level";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

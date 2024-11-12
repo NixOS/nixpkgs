@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, irctokens
-, pendulum
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  irctokens,
+  pendulum,
+  freezegun,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ircstates";
-  version = "0.11.8";
-  disabled = pythonOlder "3.6";  # f-strings
+  version = "0.13.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0scxqcgby4vzh2q937r0wy2mb46aghjf47q3z6fp6di1b6hlj7zh";
+    hash = "sha256-Mq9aOj6PXzPjaz3ofoPcAbur59oUWffmEg8aHt0v+0Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     irctokens
     pendulum
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest test
-  '';
+  nativeCheckInputs = [
+    freezegun
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "ircstates" ];
 

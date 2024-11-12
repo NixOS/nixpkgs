@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C++ cross-platform lightweight GUI library";
+    description = "C++ cross-platform lightweight GUI library";
     homepage = "https://www.fltk.org";
     platforms = platforms.unix;
     # LGPL2 with static linking exception

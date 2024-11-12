@@ -68,6 +68,13 @@
               (sqlite:execute-single db
                  "select count(*) from sha256")))))
 
+(defparameter *broken-systems*
+  '(
+    ;; Infinite recursion through dependencies in 2024-10-12 dist
+    "cl-quil" "qvm"
+    )
+  "List of broken systems, which should be omitted from the package graph")
+
 (defmethod import-lisp-packages ((repository quicklisp-repository)
                                  (database sqlite-database))
 
@@ -113,12 +120,23 @@
                                                                asds
                                                                'vector))))))
 
+      ;; Skip known broken systems and their dependents
+      (dolist (system *broken-systems*)
+        (sql-query
+         "with recursive broken(name) as (
+            select ?
+            union
+            select s.name from quicklisp_system s, broken b
+            where b.name in (select value from json_each(deps))
+          ) delete from quicklisp_system where name in (select name from broken)"
+          system))
+
       (sqlite:with-transaction db
         ;; Should these be temp tables, that then get queried by
         ;; system name? This looks like it uses a lot of memory.
         (let ((systems
                 (sql-query
-                 "with pkg as (
+                 "with pkgs as (
                     select
                       name, asd, url, deps,
                       ltrim(replace(prefix, r.project, ''), '-_') as version
@@ -128,10 +146,11 @@
                   select
                     name, version, asd, url,
                     (select json_group_array(
-                       json_array(value, (select version from pkg where name=value))
+                       json_array(value, (select version from pkgs where name=value))
                      )
-                     from json_each(deps)) as deps
-                  from pkg"
+                     from json_each(deps)
+                     where value <> 'asdf') as deps
+                  from pkgs"
                  )))
 
           ;; First pass: insert system and source tarball informaton.

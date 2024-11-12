@@ -7,8 +7,8 @@
 , libjpeg
 , zlib
 , libewf
-, enableNtfs ? !stdenv.isDarwin, ntfs3g ? null
-, enableExtFs ? !stdenv.isDarwin, e2fsprogs ? null
+, enableNtfs ? !stdenv.hostPlatform.isDarwin, ntfs3g ? null
+, enableExtFs ? !stdenv.hostPlatform.isDarwin, e2fsprogs ? null
 , enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
 }:
 
@@ -25,6 +25,11 @@ assert enableQt -> qwt != null;
     url = "https://www.cgsecurity.org/testdisk-${version}.tar.bz2";
     sha256 = "1zlh44w67py416hkvw6nrfmjickc2d43v51vcli5p374d5sw84ql";
   };
+
+  postPatch = ''
+    substituteInPlace linux/qphotorec.desktop \
+      --replace "/usr" "$out"
+  '';
 
   enableParallelBuilding = true;
 
@@ -63,6 +68,6 @@ assert enableQt -> qwt != null;
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with maintainers; [ fgaz eelco ];
+    maintainers = with maintainers; [ fgaz ];
   };
 }

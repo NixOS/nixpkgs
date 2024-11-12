@@ -10,9 +10,9 @@ in
 deployAndroidPackage rec {
   inherit package os;
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-  autoPatchelfIgnoreMissingDeps = true;
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  autoPatchelfIgnoreMissingDeps = [ "*" ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx (lib.getLib stdenv.cc.cc) ];
 
   patchElfBnaries = ''
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
@@ -24,7 +24,11 @@ deployAndroidPackage rec {
       addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
     fi
 
-    find toolchains -type d -name bin -or -name lib64 | while read dir; do
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib
+    fi
+
+    find toolchains -type d -name bin -or -name lib64 -or -name lib | while read dir; do
       autoPatchelf "$dir"
     done
 
@@ -67,7 +71,7 @@ deployAndroidPackage rec {
   '';
 
   patchInstructions = patchOsAgnostic
-    + lib.optionalString stdenv.isLinux patchElfBnaries;
+    + lib.optionalString stdenv.hostPlatform.isLinux patchElfBnaries;
 
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
 }

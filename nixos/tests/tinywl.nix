@@ -16,6 +16,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         systemPackages = with pkgs; [ tinywl foot wayland-utils ];
       };
 
+      hardware.graphics.enable = true;
+
       # Automatically start TinyWL when logging in on tty1:
       programs.bash.loginShellInit = ''
         if [ "$(tty)" = "/dev/tty1" ]; then

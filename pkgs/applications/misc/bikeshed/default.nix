@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
+    hash = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
   };
 
   # Relax requirements from "==" to ">="
@@ -63,6 +63,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Preprocessor for anyone writing specifications that converts source files into actual specs";
+    mainProgram = "bikeshed";
     longDescription = ''
       Bikeshed is a pre-processor for spec documents, turning a source document
       (containing only the actual spec content, plus several shorthands for linking
@@ -72,6 +73,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
     license = licenses.cc0;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

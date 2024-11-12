@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "minidb";
-  version = "2.0.7";
-  format = "setuptools";
+  version = "2.0.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,16 +18,14 @@ buildPythonPackage rec {
     owner = "thp";
     repo = "minidb";
     rev = "refs/tags/${version}";
-    hash = "sha256-0f2usKoHs4NO/Ir8MhyiAVZFYnUkVH5avdh3QdHzY6s=";
+    hash = "sha256-e7wVR+xr+5phNoRnGIxnmrjB1QU9JmyfQiu88PYapA8=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "minidb"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "minidb" ];
 
   meta = with lib; {
     description = "SQLite3-based store for Python objects";
@@ -34,4 +34,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ tv ];
   };
 }
-

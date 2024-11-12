@@ -14,28 +14,63 @@ rec {
       pkgs.alacritty
     ];
 
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = "alice";
+    };
+
     services.xserver = {
       enable = true;
-
-      displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
-      };
-
+      displayManager.lightdm.enable = true;
       desktopManager.xfce.enable = true;
     };
 
     i18n.inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = [
         pkgs.fcitx5-chinese-addons
         pkgs.fcitx5-hangul
         pkgs.fcitx5-m17n
         pkgs.fcitx5-mozc
       ];
+      fcitx5.settings = {
+        globalOptions = {
+          "Hotkey"."EnumerateSkipFirst" = "False";
+          "Hotkey/TriggerKeys"."0" = "Control+space";
+          "Hotkey/EnumerateForwardKeys"."0" = "Alt+Shift_L";
+          "Hotkey/EnumerateBackwardKeys"."0" = "Alt+Shift_R";
+        };
+        inputMethod = {
+          "GroupOrder" = {
+            "0" = "NixOS_test";
+          };
+          "Groups/0" = {
+            "Default Layout" = "us";
+            "DefaultIM" = "wbx";
+            "Name" = "NixOS_test";
+          };
+          "Groups/0/Items/0" = {
+            "Name" = "keyboard-us";
+          };
+          "Groups/0/Items/1" = {
+            "Layout" = "us";
+            "Name" = "wbx";
+          };
+          "Groups/0/Items/2" = {
+            "Layout" = "us";
+            "Name" = "hangul";
+          };
+          "Groups/0/Items/3" = {
+            "Layout" = "us";
+            "Name" = "m17n_sa_harvard-kyoto";
+          };
+          "Groups/0/Items/4" = {
+            "Layout" = "us";
+            "Name" = "mozc";
+          };
+        };
+      };
     };
   };
 
@@ -43,7 +78,6 @@ rec {
     let
       user = nodes.machine.users.users.alice;
       xauth         = "${user.home}/.Xauthority";
-      fcitx_confdir = "${user.home}/.config/fcitx5";
     in
       ''
             start_all()
@@ -53,19 +87,13 @@ rec {
             machine.succeed("xauth merge ${xauth}")
             machine.sleep(5)
 
+            machine.wait_until_succeeds("pgrep fcitx5")
             machine.succeed("su - ${user.name} -c 'kill $(pgrep fcitx5)'")
             machine.sleep(1)
 
-            machine.copy_from_host(
-                "${./profile}",
-                "${fcitx_confdir}/profile",
-            )
-            machine.copy_from_host(
-                "${./config}",
-                "${fcitx_confdir}/config",
-            )
-
             machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
+            machine.wait_for_window("alice@machine")
+
             machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
             machine.sleep(10)
 

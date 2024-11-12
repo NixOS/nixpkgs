@@ -7,18 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
-  version = "2.71";
+  version = "2.72";
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
-    sha256 = "197sl23irn6s9pd54rxj5vcp5y8dv65jb9yfqgr2g56cxg7q6k7i";
+    hash = "sha256-uohcExlXjWyU1G6bDc60AUyq/iSQ5Deg28o/JwoiP1o=";
   };
-  patches = [
-    # fix stale autom4te cache race condition:
-    #  https://savannah.gnu.org/support/index.php?110521
-    ./2.71-fix-race.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [ m4 perl texinfo ];
@@ -35,7 +30,7 @@ stdenv.mkDerivation rec {
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
-  doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
+  doCheck = ((!stdenv.hostPlatform.isCygwin) && (!stdenv.hostPlatform.isSunOS));
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!

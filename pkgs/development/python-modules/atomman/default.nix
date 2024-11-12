@@ -1,49 +1,45 @@
-{ lib
-, ase
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, phonopy
-, potentials
-, pymatgen
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
-, requests
-, scipy
-, setuptools
-, toolz
-, xmltodict
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  datamodeldict,
+  fetchFromGitHub,
+  matplotlib,
+  numericalunits,
+  numpy,
+  pandas,
+  phonopy,
+  potentials,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  setuptools,
+  toolz,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
-  version = "1.4.6";
   pname = "atomman";
-  format = "pyproject";
+  version = "1.4.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    rev = "v${version}";
-    hash = "sha256-tcsxtFbBdMC6+ixzqhnR+5UNwcQmnPQSvuyNA2IYelI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2yxHv9fSgLM5BeUkXV9NX+xyplXtyfWodwS9sVUVzqU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
+    numpy
+    cython
   ];
 
-  propagatedBuildInputs = [
-    cython
+  dependencies = [
     datamodeldict
     matplotlib
     numericalunits
@@ -56,7 +52,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonRelaxDeps = [ "potentials" ];
+  pythonRelaxDeps = [ "atomman" ];
 
   preCheck = ''
     # By default, pytestCheckHook imports atomman from the current directory
@@ -67,10 +63,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    ase
     phonopy
-    pymatgen
-    pytest
     pytestCheckHook
   ];
 
@@ -78,14 +71,13 @@ buildPythonPackage rec {
     "test_unique_shifts_prototype" # needs network access to download database files
   ];
 
-  pythonImportsCheck = [
-    "atomman"
-  ];
+  pythonImportsCheck = [ "atomman" ];
 
   meta = with lib; {
+    changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

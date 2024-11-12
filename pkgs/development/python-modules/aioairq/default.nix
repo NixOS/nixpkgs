@@ -1,35 +1,49 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioairq";
-  version = "0.2.4";
-  format = "setuptools";
+  version = "0.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CorantGmbH";
-    repo = pname;
+    repo = "aioairq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
+    hash = "sha256-ppjhGBAoA5iV+ZfUKkUCNJRYN82JtclRe36pbe85i5w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     pycryptodome
   ];
 
   # Module has no tests
-  doCheck = false;
+  #doCheck = false;
 
-  pythonImportsCheck = [
-    "aioairq"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "aioairq" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_core_on_device.py"
   ];
 
   meta = with lib; {

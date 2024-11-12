@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, requests
-, pytestCheckHook
-, waitress
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pbr,
+  requests,
+  pytestCheckHook,
+  waitress,
 }:
 
 buildPythonPackage rec {
@@ -17,22 +19,31 @@ buildPythonPackage rec {
     hash = "sha256-KDBCg+qTV9Rf/1itWxHkdwjPv1gGgXqlmyo2Mijulx4=";
   };
 
-  nativeBuildInputs = [
-    pbr
+  patches = [
+    # https://github.com/msabramo/requests-unixsocket/pull/69
+    (fetchpatch {
+      name = "urllib3-2-compatibility.patch";
+      url = "https://github.com/msabramo/requests-unixsocket/commit/39b9c64847a52ddc8c6d14ff414a6a7a3f6358d9.patch";
+      hash = "sha256-DFtjhk33JLCu7FW6XI7uf2klNmwzvh2QNwxUb4W223Q=";
+    })
+    # https://github.com/msabramo/requests-unixsocket/pull/72
+    (fetchpatch {
+      name = "requests-2.32-compatibility.patch";
+      url = "https://github.com/msabramo/requests-unixsocket/commit/8b02ed531d8def03b4cf767e8a925be09db43dff.patch";
+      hash = "sha256-rCmdCPGB2gf+aY/AikSCPuzGCYf1GFWcUKraqgS26vc=";
+    })
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  nativeBuildInputs = [ pbr ];
+
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     waitress
   ];
 
-  pythonImportsCheck = [
-    "requests_unixsocket"
-  ];
+  pythonImportsCheck = [ "requests_unixsocket" ];
 
   meta = with lib; {
     description = "Use requests to talk HTTP via a UNIX domain socket";

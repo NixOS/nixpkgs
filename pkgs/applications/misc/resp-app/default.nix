@@ -1,5 +1,4 @@
-{ stdenv
-, mkDerivation
+{ mkDerivation
 , lib
 , fetchFromGitHub
 , fetchpatch
@@ -39,7 +38,7 @@ mkDerivation rec {
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
+    hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +76,7 @@ mkDerivation rec {
       --replace '/opt/resp_app' "${placeholder "out"}" \
       --replace 'target.path = $$LINUX_INSTALL_PATH' 'target.path = $$LINUX_INSTALL_PATH/bin' \
       --replace '/usr/' "$out/"
+    rm -r 3rdparty/snappy
   '';
 
   qmakeFlags = [
@@ -95,9 +95,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform Developer GUI for Redis";
+    mainProgram = "resp";
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = [ ];
   };
 }

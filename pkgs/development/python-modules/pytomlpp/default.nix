@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pybind11
-, pytestCheckHook
-, python-dateutil
-, doxygen
-, python
-, pelican
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pybind11,
+  pytestCheckHook,
+  python-dateutil,
+  doxygen,
+  python,
+  pelican,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "pytomlpp";
   version = "1.0.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";
@@ -53,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytomlpp" ];
 
   meta = with lib; {
-    description = "A python wrapper for tomlplusplus";
+    description = "Python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
     license = licenses.mit;
     maintainers = with maintainers; [ evils ];

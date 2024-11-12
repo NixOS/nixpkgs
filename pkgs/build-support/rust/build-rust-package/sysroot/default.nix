@@ -1,4 +1,4 @@
-{ lib, stdenv, rust, rustPlatform, buildPackages }:
+{ lib, stdenv, rustPlatform, buildPackages }:
 
 { shortTarget, originalCargoToml, target, RUSTFLAGS }:
 
@@ -14,7 +14,7 @@ in rustPlatform.buildRustPackage {
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
-  cargoSha256 = "sha256-zgkwevitxsu1C4OgGTsqNSc0gDxaNXYK1WPbfER48d0=";
+  cargoHash = "sha256-zgkwevitxsu1C4OgGTsqNSc0gDxaNXYK1WPbfER48d0=";
 
   doCheck = false;
 
@@ -26,7 +26,7 @@ in rustPlatform.buildRustPackage {
     done
 
     export RUST_SYSROOT=$(rustc --print=sysroot)
-    host=${rust.toRustTarget stdenv.buildPlatform}
+    host=${stdenv.buildPlatform.rust.rustcTarget}
     cp -r $RUST_SYSROOT/lib/rustlib/$host $out
   '';
 

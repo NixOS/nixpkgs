@@ -1,48 +1,51 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython
-, pkg-config
-, fuse3
-, trio
-, python
-, pytestCheckHook
-, pytest-trio
-, which
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  pkg-config,
+  setuptools,
+  fuse3,
+  trio,
+  python,
+  pytestCheckHook,
+  pytest-trio,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.2";
+  version = "3.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y9Haz3MMhTXkvYFOGNWJnoGNnvoK6wiQ+s3AwJhBD8Q=";
+    hash = "sha256-J4xHiaV8GCtUQ9GJS8YRXpMsuzuwbtnzspvuIonHT24=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
+      --replace-fail "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    pkg-config
+    setuptools
   ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fuse3 ];
 
-  propagatedBuildInputs = [ trio ];
+  dependencies = [ trio ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   nativeCheckInputs = [
@@ -64,7 +67,10 @@ buildPythonPackage rec {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ nyanloutre dotlambda ];
+    maintainers = with maintainers; [
+      nyanloutre
+      dotlambda
+    ];
     changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
   };
 }

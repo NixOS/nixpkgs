@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-aiohttp
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-aiohttp,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,22 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-Zr68gx8ZR9jKrogmqaFLvpBAIHE9ptHm0zZ/b49cCLw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohttp_retry"
-  ];
+  pythonImportsCheck = [ "aiohttp_retry" ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   meta = with lib; {
     description = "Retry client for aiohttp";

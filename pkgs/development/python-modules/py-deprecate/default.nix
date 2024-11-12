@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  scikit-learn,
 }:
 
 let
   pname = "py-deprecate";
   version = "0.3.2";
+  format = "setuptools";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,12 +29,9 @@ buildPythonPackage {
   pythonImportsCheck = [ "deprecate" ];
 
   meta = with lib; {
-    description = "A module for marking deprecated functions or classes and re-routing to the new successors' instance. Used by torchmetrics";
+    description = "Module for marking deprecated functions or classes and re-routing to the new successors' instance. Used by torchmetrics";
     homepage = "https://borda.github.io/pyDeprecate/";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      SomeoneSerge
-    ];
+    maintainers = with maintainers; [ SomeoneSerge ];
   };
 }
-

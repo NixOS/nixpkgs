@@ -1,31 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, hatch-jupyter-builder
-, ipywidgets
-, jupyter-ui-poll
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  pythonOlder,
+  nodejs,
+  npmHooks,
+  hatchling,
+  hatch-vcs,
+  anywidget,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ipyniivue";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "2.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vFbEV/ZMXvKZeQUR536OZQ/5uIkt4tOWcCGRPMdc34I";
+  src = fetchFromGitHub {
+    owner = "niivue";
+    repo = "ipyniivue";
+    rev = "v${version}";
+    hash = "sha256-6DZmHVVxJspjUhJ9pzTmTvwAnQfvTp8OL2xZONz2XbU=";
   };
 
-  nativeBuildInputs = [ hatchling hatch-jupyter-builder ];
+  npmDeps = fetchNpmDeps {
+    name = "${pname}-${version}-npm-deps";
+    inherit src;
+    hash = "sha256-ZJRBGMNn5clxMavimfl6Jwqf7M2pRo+WLne0gUWOiJ8=";
+  };
 
-  propagatedBuildInputs = [ ipywidgets jupyter-ui-poll ];
+  # We do not need the build hooks, because we do not need to
+  # build any JS components; these are present already in the PyPI artifact.
+  env.HATCH_BUILD_NO_HOOKS = true;
 
-  nativeCheckImports = [ pytestCheckHook ];
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  preBuild = ''
+    npm run build
+  '';
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [ anywidget ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ipyniivue" ];
 
   meta = with lib; {

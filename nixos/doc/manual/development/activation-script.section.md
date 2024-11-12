@@ -17,13 +17,15 @@ activation script will take these dependencies into account and order the
 snippets accordingly. As a simple example:
 
 ```nix
-system.activationScripts.my-activation-script = {
-  deps = [ "etc" ];
-  # supportsDryActivation = true;
-  text = ''
-    echo "Hallo i bims"
-  '';
-};
+{
+  system.activationScripts.my-activation-script = {
+    deps = [ "etc" ];
+    # supportsDryActivation = true;
+    text = ''
+      echo "Hallo i bims"
+    '';
+  };
+}
 ```
 
 This example creates an activation script snippet that is run after the `etc`
@@ -69,4 +71,4 @@ do:
   `/etc/group` and `/etc/shadow`. This also creates home directories
 - `usrbinenv` creates `/usr/bin/env`
 - `var` creates some directories in `/var` that are not service-specific
-- `wrappers` creates setuid wrappers like `ping` and `sudo`
+- `wrappers` creates setuid wrappers like `sudo`

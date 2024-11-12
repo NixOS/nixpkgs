@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autoconf
-, cython
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  autoconf,
+  automake,
+  cython,
+  pkg-config,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dtlssocket";
-  version = "0.1.15";
-
-  format = "pyproject";
+  version = "0.2.2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "DTLSSocket";
-    inherit version;
-    hash = "sha256-RWscUxJsmLkI2GPjnpS1oJVPsJ+xbqPAKk4Q1G7ISu4=";
+    inherit pname version;
+    hash = "sha256-TnbXFXJuDEbcCeNdqbZxewY8I4mwbBcj3sw7o4tzh/Q=";
   };
+
+  build-system = [
+    cython
+    setuptools
+  ];
 
   nativeBuildInputs = [
     autoconf
-    cython
-    setuptools
+    automake
+    pkg-config
   ];
 
   # no tests on PyPI, no tags on GitLab

@@ -1,29 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, anyio
-, httpx
-, pytest-asyncio
-, pytest-vcr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  anyio,
+  httpx,
+  pytest-asyncio,
+  pytest-vcr,
 }:
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.0.0";
+  version = "2.2.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramnes";
     repo = "notion-sdk-py";
-    rev = version;
-    hash = "sha256-zfG1OgH/2ytDUC+ogIY9/nP+xkgjiMt9+HVcWEMXoj8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IEWFrdqrawFbuwA8bUewanmBoGWsjHJ7ucgvHQEaMcA=";
   };
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ httpx ];
 
   # disable coverage options as they don't provide us value, and they break the default pytestCheckHook
   preCheck = ''
@@ -37,8 +41,11 @@ buildPythonPackage rec {
     pytest-vcr
   ];
 
-  pythonImportsCheck = [
-    "notion_client"
+  pythonImportsCheck = [ "notion_client" ];
+
+  disabledTests = [
+    # requires network access
+    "test_api_http_response_error"
   ];
 
   meta = with lib; {

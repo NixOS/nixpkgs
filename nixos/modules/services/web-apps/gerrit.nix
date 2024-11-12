@@ -59,21 +59,11 @@ in
 {
   options = {
     services.gerrit = {
-      enable = mkEnableOption (lib.mdDoc "Gerrit service");
+      enable = mkEnableOption "Gerrit service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gerrit;
-        defaultText = literalExpression "pkgs.gerrit";
-        description = lib.mdDoc "Gerrit package to use";
-      };
+      package = mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkOption {
-        type = types.package;
-        default = pkgs.jre_headless;
-        defaultText = literalExpression "pkgs.jre_headless";
-        description = lib.mdDoc "Java Runtime Environment package to use";
-      };
+      jvmPackage = mkPackageOption pkgs "jre_headless" { };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;
@@ -81,13 +71,13 @@ in
           "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance"
           "-Dflogger.logging_context=com.google.gerrit.server.logging.LoggingContext#getInstance"
         ];
-        description = lib.mdDoc "A list of JVM options to start gerrit with.";
+        description = "A list of JVM options to start gerrit with.";
       };
 
       jvmHeapLimit = mkOption {
         type = types.str;
         default = "1024m";
-        description = lib.mdDoc ''
+        description = ''
           How much memory to allocate to the JVM heap
         '';
       };
@@ -95,7 +85,7 @@ in
       listenAddress = mkOption {
         type = types.str;
         default = "[::]:8080";
-        description = lib.mdDoc ''
+        description = ''
           `hostname:port` to listen for HTTP traffic.
 
           This is bound using the systemd socket activation.
@@ -105,7 +95,7 @@ in
       settings = mkOption {
         type = gitIniType;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Gerrit configuration. This will be generated to the
           `etc/gerrit.config` file.
         '';
@@ -114,7 +104,7 @@ in
       replicationSettings = mkOption {
         type = gitIniType;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Replication configuration. This will be generated to the
           `etc/replication.config` file.
         '';
@@ -123,7 +113,7 @@ in
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of plugins to add to Gerrit. Each derivation is a jar file
           itself where the name of the derivation is the name of plugin.
         '';
@@ -132,7 +122,7 @@ in
       builtinPlugins = mkOption {
         type = types.listOf (types.enum cfg.package.passthru.plugins);
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of builtins plugins to install. Those are shipped in the
           `gerrit.war` file.
         '';
@@ -140,7 +130,7 @@ in
 
       serverId = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Set a UUID that uniquely identifies the server.
 
           This can be generated with
@@ -232,6 +222,27 @@ in
         StandardOutput = "journal";
         StateDirectory = "gerrit";
         WorkingDirectory = "%S/gerrit";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "full";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 027;
       };
     };
   };

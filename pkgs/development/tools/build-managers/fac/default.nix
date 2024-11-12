@@ -7,17 +7,17 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "fac";
-    sha256 = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
+    hash = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
 
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
-  cargoSha256 = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  cargoHash = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
 
   # fac includes a unit test called ls_files_works which assumes it's
   # running in a git repo. Nix's sandbox runs cargo build outside git,
   # so this test won't work.
-  checkFlagsArray = [ "--skip=ls_files_works" ];
+  checkFlags = [ "--skip=ls_files_works" ];
 
   # fac calls git at runtime, expecting it to be in the PATH,
   # so we need to patch it to call git by absolute path instead.
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';

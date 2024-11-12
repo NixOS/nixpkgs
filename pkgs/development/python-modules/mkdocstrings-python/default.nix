@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, griffe
-, mkdocs-material
-, mkdocstrings
-, pdm-backend
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  griffe,
+  mkdocs-material,
+  mkdocstrings,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "1.12.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
-    rev = version;
-    hash = "sha256-VGPlOHQNtXrfmcne93xDIxN20KDGlTQrjeAKhX/L6K0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dc9RXbrwZS/7eAF0BrGS2kJxG62rB5RLxf3yNZ6+g4Q=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     griffe
     mkdocstrings
   ];
@@ -37,13 +36,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}' \
-  '';
+  pythonImportsCheck = [ "mkdocstrings_handlers" ];
 
-  pythonImportsCheck = [
-    "mkdocstrings_handlers"
+  disabledTests = [
+    # Tests fails with AssertionError
+    "test_windows_root_conversion"
   ];
 
   meta = with lib; {

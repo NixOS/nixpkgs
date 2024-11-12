@@ -6,12 +6,11 @@
 , gnome-power-manager
 , pkg-config
 , meson
-, python3
 , ninja
 , vala
+, elementary-settings-daemon
 , gtk3
 , granite
-, bamf
 , libgtop
 , libnotify
 , udev
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.2.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TxrskbwitsilTidWifSWg9IP6BzH1y/OOrFohlENJmM=";
+    sha256 = "sha256-zMvw96uRr9hrgXck+OhMiPku9qu8/zUtusiaJLUcuys=";
   };
 
   patches = [
@@ -41,12 +40,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
   buildInputs = [
-    bamf
+    elementary-settings-daemon
     granite
     gtk3
     libgee
@@ -55,11 +53,6 @@ stdenv.mkDerivation rec {
     udev
     wingpanel
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

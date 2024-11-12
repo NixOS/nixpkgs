@@ -1,71 +1,50 @@
-{ lib
-, aiohttp
-, aiounittest
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg-python
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  aiortsp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pycryptodomex,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.11.0b1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-4+gJcW5wi1MH3OskcfWyDNaT4FKJO5boHaxdORZUwPs=";
+    hash = "sha256-kLrdhwIUdmZh08I7XOHT2ciiVn8JE9lcfVcMJf05bkk=";
   };
 
-  postPatch = ''
-    # Packages in nixpkgs is different than the module name
-    substituteInPlace setup.py \
-      --replace "ffmpeg" "ffmpeg-python"
-  '';
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    ffmpeg-python
-    requests
+    aiortsp
+    orjson
+    pycryptodomex
+    typing-extensions
   ];
 
-  doCheck = false; # all testse require a network device
+  pythonImportsCheck = [ "reolink_aio" ];
 
-  nativeCheckInputs = [
-    aiounittest
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
-
-  disabledTests = [
-    # Tests require network access
-    "test1_settings"
-    "test2_states"
-    "test3_images"
-    "test4_properties"
-    "test_succes"
-    "test_wrong_host"
-    "test_wrong_password"
-    "test_wrong_user"
-  ];
-
-  pythonImportsCheck = [
-    "reolink_aio"
-  ];
+  # All tests require a network device
+  doCheck = false;
 
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/starkillerOG/reolink_aio";
     changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

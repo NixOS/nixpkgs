@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pip
-, pretend
-, pytestCheckHook
-, pythonOlder
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pip,
+  pretend,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "pip-api";
-  version = "0.0.30";
-  format = "setuptools";
+  version = "0.0.34";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oF3yx6qbcVc3S89Cc1RCAaDHuuYKnGW8+E85We84lvM=";
+  src = fetchFromGitHub {
+    owner = "di";
+    repo = "pip-api";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
   };
 
-  propagatedBuildInputs = [
-    pip
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ pip ];
 
   nativeCheckInputs = [
     pretend
@@ -30,9 +34,7 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  pythonImportsCheck = [
-    "pip_api"
-  ];
+  pythonImportsCheck = [ "pip_api" ];
 
   disabledTests = [
     "test_hash"
@@ -46,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Importable pip API";
     homepage = "https://github.com/di/pip-api";
+    changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

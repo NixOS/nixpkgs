@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.8";
+  version = "2.13.15";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
     rev = "v${version}";
-    hash = "sha256-6ohWsGUGFz7QlHkKWyW5edpSsBTE9DFS3v6EsH9wNZo=";
+    hash = "sha256-cEiv1EjsEvyreRERrCGKKpJdA1IKvuyVmgA7S3EkEnU=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -29,9 +34,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux kernel modules for LTTng tracing";
     homepage = "https://lttng.org/";
-    license = with licenses; [ lgpl21Only gpl2Only mit ];
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+      mit
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) == "5.10" || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
+    broken =
+      (lib.versions.majorMinor kernel.modDirVersion) == "5.10"
+      || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
 }

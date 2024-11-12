@@ -1,55 +1,68 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, hatchling
-, importlib-metadata
-, jinja2
-, packaging
-, pytestCheckHook
-, pythonOlder
-, tox
-, typing-extensions
-, virtualenv
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  hatchling,
+  jinja2,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  tox,
+  uv,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2023.04.22";
-  format = "pyproject";
+  version = "2024.10.09";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wntrblm";
-    repo = pname;
+    repo = "nox";
     rev = "refs/tags/${version}";
-    hash = "sha256-WuyNp3jxIktI72zbk+1CK8xflTKrYE5evn/gVdMx+cQ=";
+    hash = "sha256-GdNz34A8IKwPG/270sY5t3SoggGCZMWfDq/Wyhk0ez8=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    argcomplete
-    colorlog
-    packaging
-    virtualenv
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      argcomplete
+      colorlog
+      packaging
+      virtualenv
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      tomli
+    ];
 
-  checkInputs = [
-    jinja2
-    tox
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    tox_to_nox = [
+      jinja2
+      tox
+    ];
+    uv = [ uv ];
+  };
 
-  pythonImportsCheck = [
-    "nox"
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "nox" ];
+
+  disabledTests = [
+    # our conda is not available on 3.11
+    "test__create_venv_options"
+    # Assertion errors
+    "test_uv"
   ];
 
   disabledTestPaths = [
@@ -62,6 +75,9 @@ buildPythonPackage rec {
     homepage = "https://nox.thea.codes/";
     changelog = "https://github.com/wntrblm/nox/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar fab ];
+    maintainers = with maintainers; [
+      doronbehar
+      fab
+    ];
   };
 }

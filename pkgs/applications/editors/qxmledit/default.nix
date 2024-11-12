@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml
-, qtquick1, libGLU }:
+, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "qxmledit";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ];
+  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml libGLU ];
 
   qmakeFlags = [ "CONFIG+=release" ];
 
@@ -32,11 +32,12 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Simple XML editor based on qt libraries";
     homepage = "https://sourceforge.net/projects/qxmledit";
     license = licenses.lgpl2;
     platforms = platforms.unix;
     changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
+    mainProgram = "qxmledit";
   };
 }

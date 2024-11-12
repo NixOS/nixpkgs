@@ -37,13 +37,17 @@ stdenv.mkDerivation rec {
       extraPrefix = "";
       sha256 = "sha256-9dNawJaYtkugR+2NvhQOhgsf6w9ZXHkBgsDRh8yAJc0=";
     })
+    (fetchpatch {
+      url = "https://github.com/SFML/SFML/commit/bf92efe9a4035fee0258386173d53556aa196e49.patch";
+      hash = "sha256-1htwPfpn7Z6s/3b+/i1tQ+btjr/tWv5m6IyDVMBNqQA=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
-    ++ lib.optional stdenv.isLinux udev
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+    ++ lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXrandr libXrender xcbutilimage ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Foundation AppKit OpenAL ];
 
   cmakeFlags = [
     "-DSFML_INSTALL_PKGCONFIG_FILES=yes"

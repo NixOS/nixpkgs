@@ -17,8 +17,21 @@ in stdenv.mkDerivation rec {
     sha256 = "01ap9pr6zzzbp4ky0vy7i1983fwyqy27pl0ld55s30fdxka3ciih";
   };
 
+  # Do not install the en_US dictionary.
+  installPhase = ''
+    runHook preInstall
+    make install-libLTLIBRARIES
+    make install-binSCRIPTS
+    make install-includeHEADERS
+
+    # license
+    install -D -m644 COPYING "$out/share/licenses/${pname}/LICENSE"
+    runHook postInstall
+  '';
+
   meta = with lib; {
-    description = "A text hyphenation library";
+    description = "Text hyphenation library";
+    mainProgram = "substrings.pl";
     homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
     platforms = platforms.all;
     license = with licenses; [ gpl2 lgpl21 mpl11 ];

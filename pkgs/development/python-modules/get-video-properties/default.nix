@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg-headless,
 }:
 
 buildPythonPackage rec {
   pname = "get-video-properties";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mvasilkov";
@@ -20,7 +22,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace videoprops/__init__.py \
-      --replace "which('ffprobe')" "'${ffmpeg}/bin/ffprobe'"
+      --replace "which('ffprobe')" "'${ffmpeg-headless}/bin/ffprobe'"
+
+    # unused and vulnerable to various CVEs
+    rm -r videoprops/binary_dependencies
   '';
 
   pythonImportsCheck = [ "videoprops" ];
@@ -31,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
-
 }

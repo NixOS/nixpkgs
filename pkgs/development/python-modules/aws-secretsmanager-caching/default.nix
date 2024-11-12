@@ -1,33 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, setuptools-scm
-, botocore
-, pytestCheckHook
+{
+  lib,
+  botocore,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
-  pname = "aws_secretsmanager_caching";
-  version = "1.1.1.5";
-  format = "setuptools";
+  pname = "aws-secretsmanager-caching";
+  version = "1.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cee2762bb89b72f3e5123feee8e45fbe44ffe163bfca08b28f27b2e2b7772e1";
+    pname = "aws_secretsmanager_caching";
+    inherit version;
+    hash = "sha256-9tbsnUPg2+T21d6982tMtpHRWpZ7NYsldfXZGXSmwP8=";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
-    botocore
-    setuptools  # Needs pkg_resources at runtime.
-  ];
 
   patches = [
     # Remove coverage tests from the pytest invocation in setup.cfg.
@@ -36,21 +30,39 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    botocore
+    setuptools # Needs pkg_resources at runtime.
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Integration tests require networking.
     "test/integ"
   ];
 
-  pythonImportsCheck = [
-    "aws_secretsmanager_caching"
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # TypeError: 'float' object cannot be interpreted as an integer
+    "test_calls_hook_binary"
+    "test_calls_hook_string"
+    "test_get_secret_binary"
+    "test_get_secret_string"
+    "test_invalid_json"
+    "test_missing_key"
+    "test_string_with_additional_kwargs"
+    "test_string"
+    "test_valid_json_with_mixed_args"
+    "test_valid_json_with_no_secret_kwarg"
+    "test_valid_json"
   ];
+
+  pythonImportsCheck = [ "aws_secretsmanager_caching" ];
 
   meta = with lib; {
     description = "Client-side AWS secrets manager caching library";

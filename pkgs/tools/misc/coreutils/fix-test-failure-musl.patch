@@ -1,0 +1,23 @@
+From 1defda6356c29c7f731bddb9e9231f594e01d9c9
+(adjusted so it can be applied on coreutils to coreutils tarball)
+
+Reported by Adept's Lab via Pádraig Brady at
+<https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00086.html>.
+
+diff --git a/gnulib-tests/test-canonicalize.c b/gnulib-tests/test-canonicalize.c
+index 6763a525c9..5d19285c00 100644
+--- a/gnulib-tests/test-canonicalize.c
++++ b/gnulib-tests/test-canonicalize.c
+@@ -394,9 +394,9 @@ main (void)
+     ASSERT (stat ("/", &st1) == 0);
+     ASSERT (stat ("//", &st2) == 0);
+     bool same = psame_inode (&st1, &st2);
+-#if defined __MVS__ || defined MUSL_LIBC
+-    /* On IBM z/OS and musl libc, "/" and "//" both canonicalize to
+-       themselves, yet they both have st_dev == st_ino == 1.  */
++#if defined __MVS__
++    /* On IBM z/OS, "/" and "//" both canonicalize to themselves, yet they both
++       have st_dev == st_ino == 1.  */
+     same = false;
+ #endif
+     if (same)

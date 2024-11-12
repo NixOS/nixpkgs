@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, kinparse
-, pyspice
-, graphviz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  kinparse,
+  pyspice,
+  graphviz,
 }:
 
 buildPythonPackage rec {
   pname = "skidl";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xesscorp";
@@ -31,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module that extends Python with the ability to design electronic circuits";
+    mainProgram = "netlist_to_skidl";
     homepage = "https://xess.com/skidl/docs/_site/";
     license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];

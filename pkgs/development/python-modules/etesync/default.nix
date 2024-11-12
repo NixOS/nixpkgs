@@ -1,13 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27,
-  appdirs, asn1crypto, cffi, cryptography, furl, idna, orderedmultidict,
-  packaging, peewee, py, pyasn1, pycparser, pyparsing, pyscrypt,
-  python-dateutil, pytz, requests, six, vobject,
-  pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  appdirs,
+  asn1crypto,
+  cffi,
+  cryptography,
+  furl,
+  idna,
+  orderedmultidict,
+  packaging,
+  peewee,
+  py,
+  pyasn1,
+  pycparser,
+  pyparsing,
+  pyscrypt,
+  python-dateutil,
+  pytz,
+  requests,
+  six,
+  vobject,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "etesync";
   version = "0.12.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -37,9 +58,7 @@ buildPythonPackage rec {
     vobject
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest tests/test_collections.py
@@ -48,7 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";
-    description = "A python API to interact with an EteSync server.";
+    description = "Python API to interact with an EteSync server";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ valodim ];
   };

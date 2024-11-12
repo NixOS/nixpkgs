@@ -1,12 +1,9 @@
-{  buildPythonPackage
-, stestr
-}:
+{ buildPythonPackage, stestr }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "stestr-tests";
-  inherit (stestr) version;
-
-  src = stestr.src;
+  inherit (stestr) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -20,9 +17,7 @@ buildPythonPackage rec {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  nativeCheckInputs = [
-    stestr
-  ];
+  nativeCheckInputs = [ stestr ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH

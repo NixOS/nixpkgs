@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchgit
 , gn, ninja, python3, glib, pkg-config, icu
-, xcbuild, darwin
+, xcbuild
 , fetchpatch
 , llvmPackages
 , symlinkJoin
@@ -79,6 +79,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
+
+    # gcc-13 build fix for mixxign <cstdint> includes
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url  = "https://chromium.googlesource.com/v8/v8/+/c2792e58035fcbaa16d0cb70998852fbeb5df4cc^!?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-hoPAkSaCmzXflPFXaKUwVPLECMpt6N6/8m8mBSTAHbU=";
+    })
   ];
 
   src = v8Src;
@@ -93,11 +101,11 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    ${lib.optionalString stdenv.isAarch64 ''
+    ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     ''}
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build/config/compiler/compiler.gni \
         --replace 'strip_absolute_paths_from_debug_symbols = true' \
                   'strip_absolute_paths_from_debug_symbols = false'
@@ -105,7 +113,7 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build/config/compiler/BUILD.gn \
         --replace "-Wl,-fatal_warnings" ""
     ''}
@@ -133,17 +141,21 @@ stdenv.mkDerivation rec {
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${llvmCcAndBintools}"''
-  ++ lib.optional stdenv.isDarwin ''use_lld=false'';
+  ++ lib.optional stdenv.hostPlatform.isDarwin ''use_lld=false'';
 
-  env.NIX_CFLAGS_COMPILE = "-O2";
-  FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-O2"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=enum-constexpr-conversion"
+  ]);
+  FORCE_MAC_SDK_MIN = stdenv.hostPlatform.sdkVer or "10.12";
 
   nativeBuildInputs = [
     myGn
     ninja
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     llvmPackages.llvm
     python3.pkgs.setuptools
@@ -174,8 +186,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://v8.dev/";
     description = "Google's open source JavaScript engine";
-    maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
+    mainProgram = "d8";
+    maintainers = with maintainers; [ proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    knownVulnerabilities = [ "Severely outdated with multiple publicly known vulnerabilities" ];
   };
 }

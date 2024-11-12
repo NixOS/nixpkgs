@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook, fixDarwinDylibNames, zlib, krb5, openssl, icu, nixosTests }:
 
 let
-  os = if stdenv.isDarwin then "osx" else "linux";
+  os = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
   arch = {
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
@@ -10,14 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-3gvR82JiWvw+jkF68Xm/UH7OsOPqmDlVwYDaNbNf7Jg=";
-    arm64-linux_hash = "sha256-4ckLs7vwTffB205Pa9BOkw+6PbVOb8tVp8S2D+Ic8fM=";
-    x64-osx_hash = "sha256-by2+rf/pODD7RuxTEeyh1pJ+kGYVmwlVSwxDPgeNzW4=";
+    x64-linux_hash = "sha256-wyGvTXsXSsfTrlWVBaqbeDhj5s6w31+Ixi0sxsHcOjA=";
+    arm64-linux_hash = "sha256-iqgyCNY62FBIyjcHXDk1zZY0RzFhUA5IQ8EDzAonKRE=";
+    x64-osx_hash = "sha256-h9qKe1GL2DSBAFhtztS254ILMCeIZqlCXyO0AvSA5Zo=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.39.1";
+  version = "4.44.1";
 
   sourceRoot = ".";
 
@@ -53,5 +53,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ woky ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "Ombi";
   };
 }

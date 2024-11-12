@@ -1,32 +1,27 @@
-import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
-let firefoxPackage' = firefoxPackage.override (args: {
-      extraPrefsFiles = (args.extraPrefsFiles or []) ++ [
-        # make sure that autoplay is enabled by default for the audio test
-        (builtins.toString (builtins.toFile "autoplay-pref.js" ''defaultPref("media.autoplay.default",0);''))
-      ];
-  });
-
-in
+import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
 {
-  name = firefoxPackage'.unwrapped.pname;
+  name = firefoxPackage.pname;
+
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
+    maintainers = [ shlevy ];
   };
 
   nodes.machine =
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages = [
-        firefoxPackage'
-        pkgs.xdotool
-      ];
+      environment.systemPackages = [ pkgs.xdotool ];
+
+      programs.firefox = {
+        enable = true;
+        preferences."media.autoplay.default" = 0;
+        package = firefoxPackage;
+      };
 
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
       boot.kernelModules = [ "snd-aloop" ];
-      sound.enable = true;
-      sound.extraConfig = ''
+      environment.etc."asound.conf".text = ''
         pcm.!default {
           type plug
           slave.pcm pcm.dmixer
@@ -58,7 +53,9 @@ in
 
     };
 
-  testScript = ''
+  testScript = let
+    exe = lib.getExe firefoxPackage;
+  in ''
       from contextlib import contextmanager
 
 
@@ -97,7 +94,7 @@ in
 
       with subtest("Wait until Firefox has finished loading the Valgrind docs page"):
           machine.execute(
-              "xterm -e '${firefoxPackage'.unwrapped.binaryName} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &"
+              "xterm -e '${exe} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &"
           )
           machine.wait_for_window("Valgrind")
           machine.sleep(40)
@@ -105,7 +102,7 @@ in
       with subtest("Check whether Firefox can play sound"):
           with record_audio(machine):
               machine.succeed(
-                  "${firefoxPackage'.unwrapped.binaryName} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
+                  "${exe} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )
               wait_for_sound(machine)
           machine.copy_from_vm("/tmp/record.wav")

@@ -42,6 +42,7 @@ import ./make-test-python.nix (
       start_all()
 
       with subtest("Wait for zrepl and network ready"):
+          host.systemctl("start network-online.target")
           host.wait_for_unit("network-online.target")
           host.wait_for_unit("zrepl.service")
 

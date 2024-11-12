@@ -1,26 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, funcy
-, redis
-, pytest-django
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  funcy,
+  redis,
+  six,
+  pytestCheckHook,
+  pytest-django,
+  mock,
+  dill,
+  jinja2,
+  before-after,
+  pythonOlder,
+  nettools,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "6.2";
+  version = "7.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zHP9ChwUeZJT/yCopFeRo8jSgCIXswHnDPoIroGeQ48=";
+    hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
   };
+
+  pythonRelaxDeps = [ "funcy" ];
 
   propagatedBuildInputs = [
     django
@@ -29,31 +38,36 @@ buildPythonPackage rec {
     six
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+    mock
+    dill
+    jinja2
+    before-after
+    nettools
+    pkgs.redis
   ];
 
-  disabledTests = [
-    # Tests require networking
-    "test_cached_as"
-    "test_invalidation_signal"
-    "test_queryset"
-    "test_queryset_empty"
-    "test_lock"
-    "test_context_manager"
-    "test_decorator"
-    "test_in_transaction"
-    "test_nested"
-    "test_unhashable_args"
-    "test_db_agnostic_by_default"
-    "test_db_agnostic_disabled"
-  ];
+  preCheck = ''
+    redis-server &
+    REDIS_PID=$!
+    while ! redis-cli --scan ; do
+      echo waiting for redis to be ready
+      sleep 1
+    done
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
-    description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
+    description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;

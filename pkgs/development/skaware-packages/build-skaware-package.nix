@@ -5,7 +5,9 @@
   # : string
 , version
   # : string
-, sha256
+, sha256 ? lib.fakeSha256
+  # : drv | null
+, manpages ? null
   # : string
 , description
   # : list Platform
@@ -24,7 +26,8 @@
 , maintainers ? [ ]
   # : passthru arguments (e.g. tests)
 , passthru ? { }
-
+  # : attributes to be merged into meta
+, broken ? false
 }:
 
 let
@@ -63,7 +66,15 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  inherit outputs;
+  outputs =
+    if manpages == null
+    then outputs
+    else
+    assert (lib.assertMsg (!lib.elem "man" outputs) "If you pass `manpages` to `skawarePackages.buildPackage`, you cannot have a `man` output already!");
+    # insert as early as posible, but keep the first element
+    if lib.length outputs > 0
+    then [(lib.head outputs) "man"] ++ lib.tail outputs
+    else ["man"];
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
@@ -73,7 +84,7 @@ stdenv.mkDerivation {
     # We assume every nix-based cross target has urandom.
     # This might not hold for e.g. BSD.
     "--with-sysdep-devurandom=yes"
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
     then "--disable-shared"
     else "--enable-shared")
   ]
@@ -82,7 +93,7 @@ stdenv.mkDerivation {
     # Explicitly setting target ensures code can be compiled against a skalibs
     # binary built on a different version of darwin.
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
-    ++ (lib.optional stdenv.isDarwin
+    ++ (lib.optional stdenv.hostPlatform.isDarwin
     "--build=${stdenv.hostPlatform.system}");
 
   inherit postConfigure;
@@ -97,6 +108,13 @@ stdenv.mkDerivation {
        docFiles = commonMetaFiles;
      }} $doc/share/doc/${pname}
 
+    ${if manpages == null
+      then ''echo "no manpages for this package"''
+      else ''
+        echo "copying manpages"
+        cp -vr ${manpages} $man
+      ''}
+
     ${postInstall}
   '';
 
@@ -104,14 +122,14 @@ stdenv.mkDerivation {
     ${cleanPackaging.checkForRemainingFiles}
   '';
 
+  passthru = passthru // (if manpages == null then {} else { inherit manpages; });
+
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
-    inherit description platforms;
+    inherit broken description platforms;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch qyliss ] ++ maintainers;
   };
-
-  inherit passthru;
 
 }

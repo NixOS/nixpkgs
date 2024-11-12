@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, google-api-core
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  google-api-core,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "1.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0dBaSz7G+DC73Md5p0DpY6gNMkpP1u9Bp8JIoHz5ZIk=";
+    pname = "google_cloud_compute";
+    inherit version;
+    hash = "sha256-q32xYqLCWV+tpJKgBnAV3DDjWCxPFOTtbMdDNyHIcp0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -39,8 +44,8 @@ buildPythonPackage rec {
     "google.cloud.compute_v1"
   ];
 
-  # disable tests that require credentials
   disabledTestPaths = [
+    # Disable tests that require credentials
     "tests/system/test_addresses.py"
     "tests/system/test_instance_group.py"
     "tests/system/test_pagination.py"
@@ -49,8 +54,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "API Client library for Google Cloud Compute";
-    homepage = "https://github.com/googleapis/python-compute";
-    changelog = "https://github.com/googleapis/python-compute/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${version}/packages/google-cloud-compute/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jpetrucciani ];
   };

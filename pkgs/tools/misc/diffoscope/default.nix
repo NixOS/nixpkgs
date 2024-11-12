@@ -1,34 +1,120 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles, fetchpatch
-, abootimg, acl, apksigcopier, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, html2text, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
-, enableBloat ? true
-, enableUnfree ? false
-# updater only
-, writeScript
+{
+  lib,
+  stdenv,
+  abootimg,
+  acl,
+  apksigcopier,
+  apksigner,
+  apktool,
+  binutils-unwrapped-all-targets,
+  bzip2,
+  cbfstool,
+  cdrkit,
+  colord,
+  colordiff,
+  coreutils,
+  cpio,
+  db,
+  diffutils,
+  docutils,
+  dtc,
+  e2fsprogs,
+  enableBloat ? true,
+  enjarify,
+  fetchurl,
+  file,
+  findutils,
+  fontforge-fonttools,
+  ffmpeg,
+  fpc,
+  gettext,
+  ghc,
+  ghostscriptX,
+  giflib,
+  gnumeric,
+  gnupg,
+  gnutar,
+  gzip,
+  hdf5,
+  help2man,
+  html2text,
+  imagemagick,
+  installShellFiles,
+  jdk,
+  libarchive,
+  libcaca,
+  libxmlb,
+  llvm,
+  lz4,
+  lzip,
+  mono,
+  ocaml,
+  odt2txt,
+  oggvideotools,
+  openssh,
+  openssl,
+  pdftk,
+  pgpdump,
+  poppler_utils,
+  procyon,
+  python3,
+  qemu,
+  R,
+  sng,
+  sqlite,
+  squashfsTools,
+  tcpdump,
+  ubootTools,
+  unzip,
+  wabt,
+  xmlbeans,
+  xxd,
+  xz,
+  zip,
+  zstd,
+  # updater only
+  writeScript,
 }:
 
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = final: prev: {
+      # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
+      # ValueError: argument TNULL is not a TLSH hex string
+      tlsh = prev.tlsh.overridePythonAttrs (
+        { src, ... }:
+        let
+          version = "3.19.1";
+        in
+        {
+          inherit version;
+          src = src.override {
+            rev = version;
+            hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
+          };
+        }
+      );
+    };
+  };
+in
+
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3Packages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "233";
+  version = "283";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-A2GYnhdjkzSFnMsy99FmckiOsbRdymAdtjp55hyFLp4=";
+    hash = "sha256-4kAM1MmWbFh0fqFSnulhm4lHR59PMNPR3z5nzBgI6WY=";
   };
 
-  outputs = [ "out" "man" ];
-
-  patches = [
-    ./ignore_links.patch
-    # test_text_proper_indentation requires file >= 5.44
-    (fetchpatch {
-      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/9fdb78ec0bbc69f1980499dfdcbf6f1dd5e55cc8.patch";
-      sha256 = "sha256-F0N3L9yymj2NjeIKtSnOEDsxPe+ZTb0m/M4f8LPRHg0=";
-    })
+  outputs = [
+    "out"
+    "man"
   ];
+
+  patches = [ ./ignore_links.patch ];
 
   postPatch = ''
     # Upstream doesn't provide a PKG-INFO file
@@ -38,43 +124,137 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man installShellFiles ];
+  nativeBuildInputs = [
+    docutils
+    help2man
+    installShellFiles
+  ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt lipo otool r2pipe
+  # Still missing these tools:
+  # Android-specific tools:
+  # aapt2
+  # dexdump
+  # Darwin-specific tools:
+  # lipo
+  # otool
+  # Other tools:
+  # docx2txt <- makes tests broken:
+  # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # radare2
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
+  #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
-  pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
-      binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
-      e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      html2text libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd cdrkit dtc
+  # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
+  pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
+    [
+      acl
+      binutils-unwrapped-all-targets
+      bzip2
+      cdrkit
+      colordiff
+      coreutils
+      cpio
+      db
+      diffutils
+      dtc
+      e2fsprogs
+      file
+      findutils
+      fontforge-fonttools
+      gettext
+      gnutar
+      gzip
+      html2text
+      libarchive
+      libxmlb
+      lz4
+      lzip
+      openssl
+      pgpdump
+      sng
+      sqlite
+      squashfsTools
+      unzip
+      xxd
+      xz
+      zip
+      zstd
     ]
-    ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 tlsh pyxattr rpm
+    ++ (with python.pkgs; [
+      argcomplete
+      debian
+      defusedxml
+      jsbeautifier
+      jsondiff
+      libarchive-c
+      progressbar33
+      pypdf
+      python-magic
+      pyxattr
+      rpm
+      tlsh
     ])
     ++ lib.optionals enableBloat (
       [
-        apksigcopier apksigner enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg pdftk
-        hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt openssh
-        poppler_utils procyon qemu R tcpdump wabt radare2 xmlbeans
-        abootimg cbfstool colord ubootTools
+        abootimg
+        apksigcopier
+        apksigner
+        apktool
+        cbfstool
+        colord
+        enjarify
+        ffmpeg
+        fpc
+        ghc
+        ghostscriptX
+        giflib
+        gnupg
+        hdf5
+        imagemagick
+        jdk
+        libcaca
+        llvm
+        mono
+        ocaml
+        odt2txt
+        openssh
+        pdftk
+        poppler_utils
+        procyon
+        qemu
+        R
+        tcpdump
+        ubootTools
+        wabt
+        xmlbeans
       ]
-      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six guestfs ])
+      ++ (with python.pkgs; [
+        androguard
+        binwalk
+        guestfs
+        h5py
+        pdfminer-six
+        r2pipe
+        # docx2txt, nixpkgs packages another project named the same, which does not work
+      ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
       # This doesn't work on aarch64-darwin
-      ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-      # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
-      ++ lib.optionals enableUnfree [ apktool ]
-    ));
+      ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
+    )
+  );
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
   pytestFlagsArray = [
-    # always show more information when tests fail
+    # Always show more information when tests fail
     "-vv"
   ];
 
@@ -83,22 +263,32 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  disabledTests = [
-    "test_sbin_added_to_path"
-    "test_diff_meta"
-    "test_diff_meta2"
+  disabledTests =
+    [
+      "test_sbin_added_to_path"
+      "test_diff_meta"
+      "test_diff_meta2"
 
-    # fails because it fails to determine llvm version
-    "test_item3_deflate_llvm_bitcode"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Disable flaky tests on Darwin
-    "test_non_unicode_filename"
-    "test_listing"
-    "test_symlink_root"
-  ];
+      # Fails because it fails to determine llvm version
+      "test_item3_deflate_llvm_bitcode"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Disable flaky tests on Darwin
+      "test_non_unicode_filename"
+      "test_listing"
+      "test_symlink_root"
 
-  # flaky tests on Darwin
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+      # Appears to be a sandbox related issue
+      "test_trim_stderr_in_command"
+      # Seems to be a bug caused by having different versions of rdata than
+      # expected. Will file upstream.
+      "test_item_rdb"
+      # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+      # setup, could be upstream bug. Will file upstream.
+      "test_libmix_differences"
+    ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"
@@ -106,7 +296,7 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_macho.py"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = writeScript "update-diffoscope" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -117,7 +307,7 @@ python3Packages.buildPythonApplication rec {
       newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
       update-source-version ${pname} "$newVersion"
     '';
-   };
+  };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
@@ -132,8 +322,14 @@ python3Packages.buildPythonApplication rec {
       project and was formerly known as "debbindiff".
     '';
     homepage = "https://diffoscope.org/";
+    changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
+    maintainers = with maintainers; [
+      dezgeg
+      danielfullmer
+      raitobezarius
+    ];
     platforms = platforms.unix;
+    mainProgram = "diffoscope";
   };
 }

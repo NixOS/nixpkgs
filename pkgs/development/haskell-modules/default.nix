@@ -9,6 +9,7 @@
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
+, configurationJS ? import ./configuration-ghcjs-9.x.nix
 }:
 
 let
@@ -18,17 +19,23 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
+    inherit stdenv haskellLib ghc extensible-self all-cabal-hashes;
+
+    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
+    buildHaskellPackages = buildHaskellPackages // { __attrsFailEvaluation = true; };
   };
 
   platformConfigurations = lib.optionals stdenv.hostPlatform.isAarch [
     (configurationArm { inherit pkgs haskellLib; })
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (configurationDarwin { inherit pkgs haskellLib; })
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isGhcjs [
+    (configurationJS { inherit pkgs haskellLib; })
+  ]
+  ;
 
   extensions = lib.composeManyExtensions ([
-    nonHackagePackages
+    (nonHackagePackages { inherit pkgs haskellLib; })
     (configurationNix { inherit pkgs haskellLib; })
     (configurationCommon { inherit pkgs haskellLib; })
   ] ++ platformConfigurations ++ [

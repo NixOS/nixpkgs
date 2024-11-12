@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "sabyenc";
   version = "3.3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,5 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.georgewhewell ];
   };
-
 }

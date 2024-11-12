@@ -11,7 +11,7 @@ let
       # Rootfs diffs for layers 1 and 2 are identical (and empty)
       layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
       layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
-      repeatedRootfsDiffs = pkgs.runCommandNoCC "image-with-links.tar" {
+      repeatedRootfsDiffs = pkgs.runCommand "image-with-links.tar" {
         nativeBuildInputs = [pkgs.jq];
       } ''
         mkdir contents
@@ -46,6 +46,32 @@ let
         echo 'runAsRoot has run.'
       '';
     };
+
+  chownTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "chown-test";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        touch /testfile
+        chown 12345:12345 /testfile
+      '';
+      config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
+    };
+
+  nonRootTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "non-root-test";
+      tag = "latest";
+      uid = 1000;
+      gid = 1000;
+      uname = "user";
+      gname = "user";
+      config = {
+        User = "user";
+        Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "${pkgs.coreutils}/bin/stat" ];
+      };
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -55,7 +81,7 @@ in {
   nodes = {
     docker = { ... }: {
       virtualisation = {
-        diskSize = 2048;
+        diskSize = 3072;
         docker.enable = true;
       };
     };
@@ -71,12 +97,27 @@ in {
             docker.succeed("${examples.helloOnRoot} | docker load")
             docker.succeed("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+
         with subtest("includeStorePath = false; breaks example"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; breaks example (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
+            docker.fail("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+
+        with subtest("Ensure ZERO paths are added to the store"):
+            docker.fail("${examples.helloOnRootNoStore} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+        with subtest("Ensure ZERO paths are added to the store (fakechroot)"):
+            docker.fail("${examples.helloOnRootNoStoreFakechroot} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; works with mounted store (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
             docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
 
@@ -128,6 +169,23 @@ in {
         docker.succeed("docker images --format '{{.Tag}}' | grep -F '${examples.nixLayered.imageTag}'")
         docker.succeed("docker rmi ${examples.nixLayered.imageName}")
 
+    with subtest("Check that images with alternative compression schemas load"):
+        docker.succeed(
+            "docker load --input='${examples.bashZstdCompressed}'",
+            "docker rmi ${examples.bashZstdCompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashUncompressed}'",
+            "docker rmi ${examples.bashUncompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredUncompressed}'",
+            "docker rmi ${examples.bashLayeredUncompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredZstdCompressed}'",
+            "docker rmi ${examples.bashLayeredZstdCompressed.imageName}",
+        )
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "
@@ -145,7 +203,7 @@ in {
     ):
         docker.succeed(
             "docker load --input='${examples.bashLayeredWithUser}'",
-            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
+            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 755 == $(stat --format=%a /nix) && test 755 == $(stat --format=%a /nix/store)'",
             "docker rmi ${examples.bashLayeredWithUser.imageName}",
         )
 
@@ -449,6 +507,18 @@ in {
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
         )
 
+    with subtest("mergeImage correctly deals with varying compression schemas in inputs"):
+        docker.succeed("docker load --input='${examples.mergeVaryingCompressor}'")
+
+        for sub_image, tag in [
+            ("${examples.redis.imageName}", "${examples.redis.imageTag}"),
+            ("${examples.bashUncompressed.imageName}", "${examples.bashUncompressed.imageTag}"),
+            ("${examples.bashZstdCompressed.imageName}", "${examples.bashZstdCompressed.imageTag}"),
+        ]:
+            docker.succeed(f"docker images --format '{{{{.Repository}}}}-{{{{.Tag}}}}' | grep -F '{sub_image}-{tag}'")
+            docker.succeed(f"docker rmi {sub_image}")
+
+
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
@@ -497,58 +567,16 @@ in {
         docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
         docker.succeed("docker image rm image-with-certs:latest")
 
-    with subtest("buildNixShellImage: Can build a basic derivation"):
+    with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
         docker.succeed(
-            "${examples.nix-shell-basic} | docker load",
-            "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
+            "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
 
-    with subtest("buildNixShellImage: Runs the shell hook"):
+    with subtest("streamLayeredImage: with non-root user"):
         docker.succeed(
-            "${examples.nix-shell-hook} | docker load",
-            "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
-        )
-
-    with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
-        docker.succeed(
-            "${examples.nix-shell-inputs} | docker load",
-            "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
-        )
-
-    with subtest("buildNixShellImage: passAsFile works"):
-        docker.succeed(
-            "${examples.nix-shell-pass-as-file} | docker load",
-            "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
-        )
-
-    with subtest("buildNixShellImage: run argument works"):
-        docker.succeed(
-            "${examples.nix-shell-run} | docker load",
-            "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
-        )
-
-    with subtest("buildNixShellImage: command argument works"):
-        docker.succeed(
-            "${examples.nix-shell-command} | docker load",
-            "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
-        )
-
-    with subtest("buildNixShellImage: home directory is writable by default"):
-        docker.succeed(
-            "${examples.nix-shell-writable-home} | docker load",
-            "docker run --rm -it nix-shell-writable-home"
-        )
-
-    with subtest("buildNixShellImage: home directory can be made non-existent"):
-        docker.succeed(
-            "${examples.nix-shell-nonexistent-home} | docker load",
-            "docker run --rm -it nix-shell-nonexistent-home"
-        )
-
-    with subtest("buildNixShellImage: can build derivations"):
-        docker.succeed(
-            "${examples.nix-shell-build-derivation} | docker load",
-            "docker run --rm -it nix-shell-build-derivation"
+            "${nonRootTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
 })

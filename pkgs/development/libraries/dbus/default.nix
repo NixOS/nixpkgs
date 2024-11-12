@@ -13,20 +13,20 @@
 , xmlto
 , autoreconfHook
 , autoconf-archive
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.8";
+  version = "1.14.10";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-pr1brFzxnww8WUva4lZaCVaWmApoOg7zfLYhLgk73jU=";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
 
   postPatch = ''
     substituteInPlace bus/Makefile.am \
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
+  separateDebugInfo = true;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
       libICE
       libSM
     ]) ++ lib.optional enableSystemd systemdMinimal
-    ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
@@ -83,10 +84,10 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
   ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
+  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--as-needed";
 
   enableParallelBuilding = true;
 
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple interprocess messaging system";
-    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+    homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
     changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);

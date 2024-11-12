@@ -3,17 +3,18 @@
 with lib;
 
 let
-  cfg = config.i18n.inputMethod.uim;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.uim;
 in
 {
   options = {
 
     i18n.inputMethod.uim = {
       toolbar = mkOption {
-        type    = types.enum [ "gtk" "gtk3" "gtk-systray" "gtk3-systray" "qt4" ];
+        type    = types.enum [ "gtk" "gtk3" "gtk-systray" "gtk3-systray" "qt5" ];
         default = "gtk";
         example = "gtk-systray";
-        description = lib.mdDoc ''
+        description = ''
           selected UIM toolbar.
         '';
       };
@@ -21,7 +22,7 @@ in
 
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "uim") {
+  config = mkIf (imcfg.enable && imcfg.type == "uim") {
     i18n.inputMethod.package = pkgs.uim;
 
     environment.variables = {

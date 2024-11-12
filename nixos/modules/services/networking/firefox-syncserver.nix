@@ -77,7 +77,7 @@ in
 {
   options = {
     services.firefox-syncserver = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         the Firefox Sync storage service.
 
         Out of the box this will not be very useful unless you also configure at least
@@ -92,13 +92,13 @@ in
         ```
 
         {option}`${opt.singleNode.enable}` does this automatically when enabled
-      '');
+      '';
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.syncstorage-rs;
         defaultText = lib.literalExpression "pkgs.syncstorage-rs";
-        description = lib.mdDoc ''
+        description = ''
           Package to use.
         '';
       };
@@ -109,7 +109,7 @@ in
         # behavior ever change.
         type = lib.types.strMatching "[a-z_][a-z0-9_]*";
         default = defaultDatabase;
-        description = lib.mdDoc ''
+        description = ''
           Database to use for storage. Will be created automatically if it does not exist
           and `config.${opt.database.createLocally}` is set.
         '';
@@ -118,7 +118,7 @@ in
       database.user = lib.mkOption {
         type = lib.types.str;
         default = defaultUser;
-        description = lib.mdDoc ''
+        description = ''
           Username for database connections.
         '';
       };
@@ -126,7 +126,7 @@ in
       database.host = lib.mkOption {
         type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Database host name. `localhost` is treated specially and inserts
           systemd dependencies, other hostnames or IP addresses of the local machine do not.
         '';
@@ -135,7 +135,7 @@ in
       database.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create database and user on the local machine if they do not exist.
           This includes enabling unix domain socket authentication for the configured user.
         '';
@@ -144,7 +144,7 @@ in
       logLevel = lib.mkOption {
         type = lib.types.str;
         default = "error";
-        description = lib.mdDoc ''
+        description = ''
           Log level to run with. This can be a simple log level like `error`
           or `trace`, or a more complicated logging expression.
         '';
@@ -152,7 +152,7 @@ in
 
       secrets = lib.mkOption {
         type = lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           A file containing the various secrets. Should be in the format expected by systemd's
           `EnvironmentFile` directory. Two secrets are currently available:
           `SYNC_MASTER_SECRET` and
@@ -161,15 +161,15 @@ in
       };
 
       singleNode = {
-        enable = lib.mkEnableOption (lib.mdDoc "auto-configuration for a simple single-node setup");
+        enable = lib.mkEnableOption "auto-configuration for a simple single-node setup";
 
-        enableTLS = lib.mkEnableOption (lib.mdDoc "automatic TLS setup");
+        enableTLS = lib.mkEnableOption "automatic TLS setup";
 
-        enableNginx = lib.mkEnableOption (lib.mdDoc "nginx virtualhost definitions");
+        enableNginx = lib.mkEnableOption "nginx virtualhost definitions";
 
         hostname = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc ''
+          description = ''
             Host name to use for this service.
           '';
         };
@@ -177,7 +177,7 @@ in
         capacity = lib.mkOption {
           type = lib.types.ints.unsigned;
           default = 10;
-          description = lib.mdDoc ''
+          description = ''
             How many sync accounts are allowed on this server. Setting this value
             equal to or less than the number of currently active accounts will
             effectively deny service to accounts not yet registered here.
@@ -190,7 +190,7 @@ in
           defaultText = lib.literalExpression ''
             ''${if cfg.singleNode.enableTLS then "https" else "http"}://''${config.${opt.singleNode.hostname}}
           '';
-          description = lib.mdDoc ''
+          description = ''
             URL of the host. If you are not using the automatic webserver proxy setup you will have
             to change this setting or your sync server may not be functional.
           '';
@@ -205,7 +205,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 5000;
-              description = lib.mdDoc ''
+              description = ''
                 Port to bind to.
               '';
             };
@@ -213,21 +213,23 @@ in
             tokenserver.enabled = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to enable the token service as well.
               '';
             };
           };
         };
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Settings for the sync server. These take priority over values computed
           from NixOS options.
 
-          See the doc comments on the `Settings` structs in
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs>
+          See the example config in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/config/local.example.toml>
+          and the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage-settings/src/lib.rs>
           and
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs>
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/tokenserver-settings/src/lib.rs>
           for available options.
         '';
       };
@@ -314,7 +316,7 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ pennae ];
+    maintainers = [ ];
     doc = ./firefox-syncserver.md;
   };
 }

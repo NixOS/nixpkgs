@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
-  version = "1.2.31";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "mirror://apache/tomcat/tomcat-connectors/native/${version}/source/${pname}-${version}-src.tar.gz";
-    sha512 = "2aaa93f0acf3eb780d39faeda3ece3cf053d3b6e2918462f7183070e8ab32232e035e9062f7c07ceb621006d727d3596d9b4b948f4432b4f625327b72fdb0e49";
+    hash = "sha256-x8U4L8taZHpc5v7QuWch6UGY+i9XJc9RJPW2URsF3+8=";
   };
 
   sourceRoot = "${pname}-${version}-src/native";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
+    description = "Optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
     homepage = "https://tomcat.apache.org/native-doc/";
     license = licenses.asl20;
     platforms = platforms.unix;

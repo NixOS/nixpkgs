@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchhg
-, fetchpatch
 , runCommand
 
 , arpa2common
@@ -11,17 +10,19 @@
 , curl
 , expat
 , fdk_aac
-, ffmpeg
+, ffmpeg-headless
+, ffmpeg_6-headless
 , geoip
 , libbsd
 , libiconv
+, libjpeg
 , libkrb5
 , libmaxminddb
 , libmodsecurity
 , libuuid
 , libxml2
 , lmdb
-, luajit
+, luajit_openresty
 , msgpuck
 , openssl
 , opentracing-cpp
@@ -41,8 +42,9 @@ let
       name = "http_proxy_connect_module_generic";
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
-      rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
-      sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
+      # 2023-06-19
+      rev = "dcb9a2c614d376b820d774db510d4da12dfe1e5b";
+      hash = "sha256-AzMhTSzmk3osSYy2q28/hko1v2AOTnY/dP5IprqGlQo=";
     };
 
     patches = [
@@ -53,7 +55,7 @@ let
       description = "Forward proxy module for CONNECT request handling";
       homepage = "https://github.com/chobits/ngx_http_proxy_connect_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -75,8 +77,8 @@ let self = {
     meta = with lib; {
       description = "Validates Akamai v2 query string tokens";
       homepage = "https://github.com/kaltura/nginx-akamai-token-validate-module";
-      license = with licenses; [ agpl3 ];
-      maintainers = with maintainers; [ ];
+      license = with licenses; [ agpl3Only ];
+      maintainers = [ ];
     };
   };
 
@@ -108,7 +110,7 @@ let self = {
       description = "Integrate ARPA2 Resource ACLs into nginx";
       homepage = "https://gitlab.com/arpa2/nginx-auth-a2aclr";
       license = with licenses; [ isc ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -126,7 +128,7 @@ let self = {
       description = "Proxy to authenticated AWS services";
       homepage = "https://github.com/anomalizer/ngx_aws_auth";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -151,7 +153,7 @@ let self = {
       description = "Brotli compression";
       homepage = "https://github.com/google/ngx_brotli";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -169,7 +171,7 @@ let self = {
       description = "Adds ability to purge content from FastCGI, proxy, SCGI and uWSGI caches";
       homepage = "https://github.com/nginx-modules/ngx_cache_purge";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -187,7 +189,7 @@ let self = {
       description = "Collection of small and useful nginx add-ons";
       homepage = "https://github.com/FRiCKLE/ngx_coolkit";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -207,7 +209,7 @@ let self = {
       description = "WebDAV PROPFIND,OPTIONS,LOCK,UNLOCK support";
       homepage = "https://github.com/arut/nginx-dav-ext-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -217,33 +219,35 @@ let self = {
       name = "develkit";
       owner = "vision5";
       repo = "ngx_devel_kit";
-      rev = "v0.3.1";
-      sha256 = "1c5zfpvm0hrd9lp8rasmw79dnr2aabh0i6y11wzb783bp8m3p2sq";
+      rev = "v0.3.3";
+      hash= "sha256-/RQUVHwIdNqm3UemQ/oNs2ksg8beziA4Pxejd5Yg0Pg=";
     };
 
     meta = with lib; {
       description = "Adds additional generic tools that module developers can use in their own modules";
       homepage = "https://github.com/vision5/ngx_devel_kit";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
-  echo = {
+  echo = rec {
     name = "echo";
+    version = "0.63";
+
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v0.62";
-      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
+      rev = "v${version}";
+      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
     };
 
     meta = with lib; {
       description = "Brings echo, sleep, time, exec and more shell-style goodies to Nginx";
       homepage = "https://github.com/openresty/echo-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -279,7 +283,7 @@ let self = {
       description = "Fluentd data collector";
       homepage = "https://github.com/fluent/nginx-fluentd-module";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -303,12 +307,12 @@ let self = {
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
+  http_proxy_connect_module_v24 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "24";
   };
 
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
+  http_proxy_connect_module_v25 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "25";
   };
 
   ipscrub = {
@@ -327,7 +331,7 @@ let self = {
       description = " IP address anonymizer";
       homepage = "https://github.com/masonicboom/ipscrub";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -345,7 +349,7 @@ let self = {
       description = "Limit the total speed from the specific user";
       homepage = "https://github.com/yaoweibin/nginx_limit_speed_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -363,37 +367,32 @@ let self = {
       description = "HTTP live module";
       homepage = "https://github.com/arut/nginx-live-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
   lua = rec {
     name = "lua";
+    version = "0.10.26";
+
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.22";
-      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
+      rev = "v${version}";
+      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
 
-    preConfigure = let
-      # fix compilation against nginx 1.23.0
-      nginx-1-23-patch = fetchpatch {
-        url = "https://github.com/openresty/lua-nginx-module/commit/b6d167cf1a93c0c885c28db5a439f2404874cb26.patch";
-        sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
-      };
-    in ''
-      export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+    preConfigure = ''
+      export LUAJIT_LIB="${luajit_openresty}/lib"
+      export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src
       cp -r "${src}/" "$lua_src"
       chmod -R +w "$lua_src"
-      patch -p1 -d $lua_src -i ${nginx-1-23-patch}
       export configureFlags="''${configureFlags//"${src}"/"$lua_src"}"
       unset lua_src
     '';
@@ -404,7 +403,7 @@ let self = {
       description = "Embed the Power of Lua";
       homepage = "https://github.com/openresty/lua-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -418,14 +417,14 @@ let self = {
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
     allowMemoryWriteExecute = true;
 
     meta = with lib; {
       description = "Expose Lua API to ngx_lua for Nginx upstreams";
       homepage = "https://github.com/openresty/lua-upstream-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -446,7 +445,7 @@ let self = {
       description = "Open source, cross platform web application firewall (WAF)";
       homepage = "https://github.com/SpiderLabs/ModSecurity";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -456,15 +455,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -482,7 +481,7 @@ let self = {
       description = "MPEG-TS Live Module";
       homepage = "https://github.com/arut/nginx-ts-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -500,7 +499,7 @@ let self = {
       description = "Open-source, high performance, low rules maintenance WAF";
       homepage = "https://github.com/nbs-system/naxsi";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -508,8 +507,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.10";
-      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
+      rev = "0.8.4";
+      sha256 = "sha256-SooPFx4WNEezPD+W/wmMLY+FdkGRoojLNUFbhn3Riyg=";
       name = "nginx-njs";
     };
 
@@ -530,7 +529,7 @@ let self = {
       description = "Subset of the JavaScript language that allows extending nginx functionality";
       homepage = "https://nginx.org/en/docs/njs/";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -552,7 +551,7 @@ let self = {
       description = "Enable requests served by nginx for distributed tracing via The OpenTracing Project";
       homepage = "https://github.com/opentracing-contrib/nginx-opentracing";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -585,7 +584,7 @@ let self = {
       description = "Automatic PageSpeed optimization";
       homepage = "https://github.com/apache/incubator-pagespeed-ngx";
       license = with licenses; [ asl20 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -602,10 +601,10 @@ let self = {
     inputs = [ pam ];
 
     meta = with lib; {
-      description = "Use PAM for simple http authentication ";
+      description = "Use PAM for simple http authentication";
       homepage = "https://github.com/sto/ngx_http_auth_pam_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -623,7 +622,7 @@ let self = {
       description = "Pinba module for nginx";
       homepage = "https://github.com/tony2001/ngx_http_pinba_module";
       license = with licenses; [ unfree ]; # no license in repo
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -641,7 +640,7 @@ let self = {
       description = "Pure stream http push technology";
       homepage = "https://github.com/wandenberg/nginx-push-stream-module";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -659,7 +658,7 @@ let self = {
       description = "Media Streaming Server";
       homepage = "https://github.com/arut/nginx-rtmp-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -679,8 +678,8 @@ let self = {
     meta = with lib; {
       description = "Generates CDN tokens, either as a cookie or as a query string parameter";
       homepage = "https://github.com/kaltura/nginx-secure-token-module";
-      license = with licenses; [ agpl3 ];
-      maintainers = with maintainers; [ ];
+      license = with licenses; [ agpl3Only ];
+      maintainers = [ ];
     };
   };
 
@@ -690,15 +689,15 @@ let self = {
       name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.32";
-      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
+      rev = "v0.33";
+      hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
     };
 
     meta = with lib; {
       description = "Various set_xxx directives added to the rewrite module (md5/sha1, sql/json quoting and many more)";
       homepage = "https://github.com/openresty/set-misc-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -716,7 +715,7 @@ let self = {
       description = "Shibboleth auth request";
       homepage = "https://github.com/nginx-shib/nginx-http-shibboleth";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -734,7 +733,7 @@ let self = {
       description = "Implements a collection of augmented statistics based on HTTP-codes and upstreams response time";
       homepage = "https://github.com/goldenclone/nginx-sla";
       license = with licenses; [ unfree ]; # no license in repo
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -752,7 +751,7 @@ let self = {
       description = "Adds ability to cache static files";
       homepage = "https://github.com/friCKLE/ngx_slowfs_cache";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -770,7 +769,7 @@ let self = {
       description = "Expose querystring parameters sorted in a variable";
       homepage = "https://github.com/wandenberg/nginx-sorted-querystring-module";
       license = with licenses; [ mit ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -780,8 +779,8 @@ let self = {
       name = "spnego-http-auth";
       owner = "stnoonan";
       repo = "spnego-http-auth-nginx-module";
-      rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
-      sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
+      rev = "3575542b3147bd03a6c68a750c3662b0d72ed94e";
+      hash = "sha256-s0m5h7m7dsPD5o2SvBb9L2kB57jwXZK5SkdkGuOmlgs=";
     };
 
     inputs = [ libkrb5 ];
@@ -790,7 +789,7 @@ let self = {
       description = "SPNEGO HTTP Authentication Module";
       homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -808,7 +807,7 @@ let self = {
       description = "Send statistics to statsd";
       homepage = "https://github.com/harvesthq/nginx-statsd";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -826,7 +825,7 @@ let self = {
       description = "Stream server traffic status core module";
       homepage = "https://github.com/vozlt/nginx-module-stream-sts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -844,7 +843,7 @@ let self = {
       description = "Stream server traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-sts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -862,7 +861,7 @@ let self = {
       description = "Filter module which can do both regular expression and fixed string substitutions";
       homepage = "https://github.com/yaoweibin/ngx_http_substitutions_filter_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -880,7 +879,7 @@ let self = {
       description = "Nginx sysguard module";
       homepage = "https://github.com/vozlt/nginx-module-sysguard";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -898,7 +897,7 @@ let self = {
       description = "Handle file uploads using multipart/form-data encoding and resumable uploads";
       homepage = "https://github.com/fdintino/nginx-upload-module";
       license = with licenses; [ bsd3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -916,7 +915,7 @@ let self = {
       description = "Support upstream health check";
       homepage = "https://github.com/yaoweibin/nginx_upstream_check_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -936,7 +935,7 @@ let self = {
       description = "Tarantool NginX upstream module (REST, JSON API, websockets, load balancing)";
       homepage = "https://github.com/tarantool/nginx_upstream_module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -954,27 +953,28 @@ let self = {
       description = "URL encoding converting module";
       homepage = "https://github.com/vozlt/nginx-module-url";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
-  video-thumbextractor = {
+  video-thumbextractor = rec {
     name = "video-thumbextractor";
+    version = "1.0.0";
     src = fetchFromGitHub {
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
-      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
+      rev = "refs/tags/${version}";
+      hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
     };
 
-    inputs = [ ffmpeg ];
+    inputs = [ ffmpeg-headless libjpeg ];
 
     meta = with lib; {
       description = "Extract thumbs from a video file";
       homepage = "https://github.com/wandenberg/nginx-video-thumbextractor-module";
       license = with licenses; [ gpl3 ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -984,17 +984,21 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.31";
-      hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
+      rev = "1.33";
+      hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
+      postFetch = ''
+        substituteInPlace $out/vod/media_set.h \
+          --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+      '';
     };
 
-    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg_6-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";
       homepage = "https://github.com/kaltura/nginx-vod-module";
-      license = with licenses; [ agpl3 ];
-      maintainers = with maintainers; [ ];
+      license = with licenses; [ agpl3Only ];
+      maintainers = [ ];
     };
   };
 
@@ -1022,8 +1026,8 @@ let self = {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
-      sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+      rev = "0.1.1";
+      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
     };
 
     inputs = [ zstd ];

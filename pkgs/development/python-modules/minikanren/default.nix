@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, toolz
-, cons
-, multipledispatch
-, etuples
-, logical-unification
-, py
-, pytestCheckHook
-, pytest-html
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  toolz,
+  cons,
+  multipledispatch,
+  etuples,
+  logical-unification,
+  py,
+  pytestCheckHook,
+  pytest-html,
 }:
 
 buildPythonPackage rec {
   pname = "minikanren";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";

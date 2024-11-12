@@ -1,26 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, sphinx
-, setuptools-scm
-, django
-, redis
-, celery
-, pytest-django
-, pytestCheckHook
-, mock
-, gitMinimal }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  sphinx,
+  setuptools-scm,
+  django,
+  redis,
+  celery,
+  boto3,
+  django-storages,
+  pytest-django,
+  pytestCheckHook,
+  mock,
+  gitMinimal,
+}:
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.17.0";
+  version = "3.18.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f87dgB2pDc+A0h41FX13qTj6Zzw5I4QwsDoC6yPkvAE=";
-    leaveDotGit = true;
+    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
   };
 
   buildInputs = [
@@ -34,11 +38,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    boto3
+    django-storages
     pytest-django
     pytestCheckHook
     mock
     celery
     redis
+  ];
+
+  disabledTests = [
+    # commandline output mismatch
+    "test_command_with_non_existence_subset"
   ];
 
   postPatch = ''

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-9AVXm3+VJFLQwe7EHwI8LmWKxfX1r0yjmKeaReQvxR4=";
   };
 
-  vendorSha256 = "sha256-DhvaXC/n4yiVDibB8kymzltNhEIxKdTsEDN9Sfc/wxU=";
+  vendorHash = "sha256-DhvaXC/n4yiVDibB8kymzltNhEIxKdTsEDN9Sfc/wxU=";
 
   ldflags = [
     "-s" "-w"
@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "flannel CNI plugin";
+    mainProgram = "flannel";
     homepage = "https://github.com/flannel-io/cni-plugin/";
     license = licenses.asl20;
     platforms = platforms.linux;

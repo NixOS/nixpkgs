@@ -1,52 +1,81 @@
-{ callPackage, lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret  }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, libsecret
+, asar
+, glib
+, desktop-file-utils
+, callPackage
+}:
 
 let
+
   srcjson = builtins.fromJSON (builtins.readFile ./src.json);
-  version = srcjson.version;
-  pname = "standardnotes";
-  name = "${pname}-${version}";
+
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  src = fetchurl (srcjson.appimage.${stdenv.hostPlatform.system} or throwSystem);
+in
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+stdenv.mkDerivation rec {
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
+  pname = "standardnotes";
 
-in appimageTools.wrapType2 rec {
-  inherit name src;
+  src = fetchurl (srcjson.deb.${stdenv.hostPlatform.system} or throwSystem);
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  inherit (srcjson) version;
 
-  extraInstallCommands = ''
-    # directory in /nix/store so readonly
-    cd $out
-    chmod -R +w $out
-    mv $out/bin/${name} $out/bin/${pname}
+  dontConfigure = true;
 
-    # fixup and install desktop file
+  dontBuild = true;
+
+  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils asar ];
+
+  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+
+  installPhase = let
+    libPath = lib.makeLibraryPath [
+      libsecret
+      glib
+      (lib.getLib stdenv.cc.cc)
+    ];
+  in
+    ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/standardnotes
+    cp -R usr/share/{applications,icons} $out/share
+    cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+    asar e $out/share/standardnotes/app.asar asar-unpacked
+    find asar-unpacked -name '*.node' -exec patchelf \
+      --add-rpath "${libPath}" \
+      {} \;
+    asar p asar-unpacked $out/share/standardnotes/app.asar
+
+    makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
+      --add-flags $out/share/standardnotes/app.asar
+
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
-    ln -s ${appimageContents}/usr/share/icons share
+      --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
+
+    runHook postInstall
   '';
 
   passthru.updateScript = callPackage ./update.nix {};
 
   meta = with lib; {
-    description = "A simple and private notes app";
+    description = "Simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
     homepage = "https://standardnotes.org";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    platforms = builtins.attrNames srcjson.appimage;
+    platforms = builtins.attrNames srcjson.deb;
+    mainProgram = "standardnotes";
   };
 }

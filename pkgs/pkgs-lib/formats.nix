@@ -28,15 +28,30 @@ rec {
       generate = ...;
 
     });
+
+  Please note that `pkgs` may not always be available for use due to the split
+  options doc build introduced in fc614c37c653, so lazy evaluation of only the
+  'type' field is required.
+
   */
 
 
   inherit (import ./formats/java-properties/default.nix { inherit lib pkgs; })
     javaProperties;
 
+  libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
+
+  hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
+
+  php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
+
+  inherit (lib) mkOptionType;
+  inherit (lib.types) nullOr oneOf coercedTo listOf nonEmptyListOf attrsOf either;
+  inherit (lib.types) bool int float str path;
+
   json = {}: {
 
-    type = with lib.types; let
+    type = let
       valueType = nullOr (oneOf [
         bool
         int
@@ -54,6 +69,7 @@ rec {
       nativeBuildInputs = [ jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       jq . "$valuePath"> $out
     '') {};
@@ -66,11 +82,12 @@ rec {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       json2yaml "$valuePath" "$out"
     '') {};
 
-    type = with lib.types; let
+    type = let
       valueType = nullOr (oneOf [
         bool
         int
@@ -86,53 +103,129 @@ rec {
 
   };
 
-  ini = {
-    # Represents lists as duplicate keys
-    listsAsDuplicateKeys ? false,
-    # Alternative to listsAsDuplicateKeys, converts list to non-list
-    # listToValue :: [IniAtom] -> IniAtom
-    listToValue ? null,
-    ...
-    }@args:
-    assert !listsAsDuplicateKeys || listToValue == null;
-    {
-
-    type = with lib.types; let
-
-      singleIniAtom = nullOr (oneOf [
-        bool
-        int
-        float
-        str
-      ]) // {
+  # the ini formats share a lot of code
+  inherit (
+    let
+      singleIniAtom = nullOr (oneOf [ bool int float str ]) // {
         description = "INI atom (null, bool, int, float or string)";
       };
-
-      iniAtom =
+      iniAtom = { listsAsDuplicateKeys, listToValue, atomsCoercedToLists }:
+        let
+          singleIniAtomOr = if atomsCoercedToLists then coercedTo singleIniAtom lib.singleton else either singleIniAtom;
+        in
         if listsAsDuplicateKeys then
-          coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
+          singleIniAtomOr (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
         else if listToValue != null then
-          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+          singleIniAtomOr (nonEmptyListOf singleIniAtom) // {
             description = singleIniAtom.description + " or a non-empty list of them";
           }
         else
           singleIniAtom;
+      iniSection = { listsAsDuplicateKeys, listToValue, atomsCoercedToLists }@args:
+        attrsOf (iniAtom args) // {
+          description = "section of an INI file (attrs of " + (iniAtom args).description + ")";
+        };
 
-    in attrsOf (attrsOf iniAtom);
+      maybeToList = listToValue: if listToValue != null then lib.mapAttrs (key: val: if lib.isList val then listToValue val else val) else lib.id;
+    in {
+      ini = {
+        # Represents lists as duplicate keys
+        listsAsDuplicateKeys ? false,
+        # Alternative to listsAsDuplicateKeys, converts list to non-list
+        # listToValue :: [IniAtom] -> IniAtom
+        listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
+        ...
+        }@args:
+        assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+        in
+        {
 
-    generate = name: value:
-      let
-        transformedValue =
-          if listToValue != null
-          then
-            lib.mapAttrs (section: lib.mapAttrs (key: val:
-              if lib.isList val then listToValue val else val
-            )) value
-          else value;
-      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
+        type = lib.types.attrsOf (
+          iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; }
+        );
 
+        generate = name: value:
+          lib.pipe value
+          [
+            (lib.mapAttrs (_: maybeToList listToValue))
+            (lib.generators.toINI (removeAttrs args ["listToValue" "atomsCoercedToLists"]))
+            (pkgs.writeText name)
+          ];
+      };
+
+      iniWithGlobalSection = {
+        # Represents lists as duplicate keys
+        listsAsDuplicateKeys ? false,
+        # Alternative to listsAsDuplicateKeys, converts list to non-list
+        # listToValue :: [IniAtom] -> IniAtom
+        listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
+        ...
+        }@args:
+        assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+        in
+        {
+          type = lib.types.submodule {
+            options = {
+              sections = lib.mkOption rec {
+                type = lib.types.attrsOf (
+                  iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; }
+                );
+                default = {};
+                description = type.description;
+              };
+              globalSection = lib.mkOption rec {
+                type = iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; };
+                default = {};
+                description = "global " + type.description;
+              };
+            };
+          };
+          generate = name: { sections ? {}, globalSection ? {}, ... }:
+            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue" "atomsCoercedToLists"])
+            {
+              globalSection = maybeToList listToValue globalSection;
+              sections = lib.mapAttrs (_: maybeToList listToValue) sections;
+            });
+        };
+
+      gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
+        type = let
+          atom = iniAtom {
+            listsAsDuplicateKeys = listsAsDuplicateKeys;
+            listToValue = null;
+            atomsCoercedToLists = false;
+          };
+        in attrsOf (attrsOf (either atom (attrsOf atom)));
+
+        generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
+      };
+
+    }) ini iniWithGlobalSection gitIni;
+
+  # As defined by systemd.syntax(7)
+  #
+  # null does not set any value, which allows for RFC42 modules to specify
+  # optional config options.
+  systemd = let
+    mkValueString = lib.generators.mkValueStringDefault {};
+    mkKeyValue = k: v:
+      if v == null then "# ${k} is unset"
+      else "${k} = ${mkValueString v}";
+  in ini {
+    listsAsDuplicateKeys = true;
+    inherit mkKeyValue;
   };
 
   keyValue = {
@@ -143,10 +236,10 @@ rec {
     listToValue ? null,
     ...
     }@args:
-    assert !listsAsDuplicateKeys || listToValue == null;
+    assert listsAsDuplicateKeys -> listToValue == null;
     {
 
-    type = with lib.types; let
+    type = let
 
       singleAtom = nullOr (oneOf [
         bool
@@ -184,19 +277,8 @@ rec {
 
   };
 
-  gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
-
-    type = with lib.types; let
-
-      iniAtom = (ini args).type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped;
-
-    in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
-
-    generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
-  };
-
   toml = {}: json {} // {
-    type = with lib.types; let
+    type = let
       valueType = oneOf [
         bool
         int
@@ -214,6 +296,7 @@ rec {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       json2toml "$valuePath" "$out"
     '') {};
@@ -253,18 +336,18 @@ rec {
     [Tuple]: <https://hexdocs.pm/elixir/Tuple.html>
   */
   elixirConf = { elixir ? pkgs.elixir }:
-    with lib; let
-      toElixir = value: with builtins;
+    let
+      toElixir = value:
         if value == null then "nil" else
         if value == true then "true" else
         if value == false then "false" else
-        if isInt value || isFloat value then toString value else
-        if isString value then string value else
-        if isAttrs value then attrs value else
-        if isList value then list value else
+        if lib.isInt value || lib.isFloat value then toString value else
+        if lib.isString value then string value else
+        if lib.isAttrs value then attrs value else
+        if lib.isList value then list value else
         abort "formats.elixirConf: should never happen (value = ${value})";
 
-      escapeElixir = escape [ "\\" "#" "\"" ];
+      escapeElixir = lib.escape [ "\\" "#" "\"" ];
       string = value: "\"${escapeElixir value}\"";
 
       attrs = set:
@@ -272,11 +355,11 @@ rec {
         else
           let
             toKeyword = name: value: "${name}: ${toElixir value}";
-            keywordList = concatStringsSep ", " (mapAttrsToList toKeyword set);
+            keywordList = lib.concatStringsSep ", " (lib.mapAttrsToList toKeyword set);
           in
           "[" + keywordList + "]";
 
-      listContent = values: concatStringsSep ", " (map toElixir values);
+      listContent = values: lib.concatStringsSep ", " (map toElixir values);
 
       list = values: "[" + (listContent values) + "]";
 
@@ -290,7 +373,7 @@ rec {
       elixirMap = set:
         let
           toEntry = name: value: "${toElixir name} => ${toElixir value}";
-          entries = concatStringsSep ", " (mapAttrsToList toEntry set);
+          entries = lib.concatStringsSep ", " (lib.mapAttrsToList toEntry set);
         in
         "%{${entries}}";
 
@@ -300,17 +383,17 @@ rec {
         let
           keyConfig = rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
-          keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
-          rootConfigs = flatten (mapAttrsToList keyConfigs values);
+          keyConfigs = rootKey: values: lib.mapAttrsToList (keyConfig rootKey) values;
+          rootConfigs = lib.flatten (lib.mapAttrsToList keyConfigs values);
         in
         ''
           import Config
 
-          ${concatStringsSep "\n" rootConfigs}
+          ${lib.concatStringsSep "\n" rootConfigs}
         '';
     in
     {
-      type = with lib.types; let
+      type = let
         valueType = nullOr
           (oneOf [
             bool
@@ -370,7 +453,7 @@ rec {
              It also reexports standard types, wrapping them so that they can
              also be raw Elixir.
           */
-          types = with lib.types; let
+          types = let
             isElixirType = type: x: (x._elixirType or "") == type;
 
             rawElixir = mkOptionType {
@@ -411,6 +494,7 @@ rec {
           value = toConf value;
           passAsFile = [ "value" ];
           nativeBuildInputs = [ elixir ];
+          preferLocalBuild = true;
         } ''
         cp "$valuePath" "$out"
         mix format "$out"
@@ -420,7 +504,7 @@ rec {
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars = {}: {
-    type = with lib.types; let
+    type = let
       valueType = nullOr(oneOf [
         bool
         float
@@ -445,6 +529,7 @@ rec {
                 print(f"{key} = {repr(value)}")
       '';
       passAsFile = [ "value" "pythonGen" ];
+      preferLocalBuild = true;
     } ''
       cat "$valuePath"
       python3 "$pythonGenPath" > $out

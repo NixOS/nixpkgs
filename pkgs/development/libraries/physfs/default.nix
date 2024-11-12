@@ -16,7 +16,7 @@ let
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ zlib ]
-      ++ lib.optionals stdenv.isDarwin [ Foundation ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
     doInstallCheck = true;
 
@@ -27,6 +27,7 @@ let
     meta = with lib; {
       homepage = "https://icculus.org/physfs/";
       description = "Library to provide abstract access to various archives";
+      mainProgram = "test_physfs";
       changelog = "https://github.com/icculus/physfs/releases/tag/release-${version}";
       license = licenses.zlib;
       platforms = platforms.all;

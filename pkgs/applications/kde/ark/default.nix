@@ -3,13 +3,13 @@
 , kiconthemes, kitemmodels, khtml, kio, kparts, kpty, kservice, kwidgetsaddons
 , libarchive, libzip
 # Archive tools
-, p7zip, lrzip
+, p7zip, lrzip, unar
 # Unfree tools
 , unfreeEnableUnrar ? false, unrar
 }:
 
 let
-  extraTools = [ p7zip lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
+  extraTools = [ p7zip lrzip unar ] ++ lib.optional unfreeEnableUnrar unrar;
 in
 
 mkDerivation {
@@ -31,6 +31,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/ark/";
     description = "Graphical file compression/decompression utility";
+    mainProgram = "ark";
     license = with licenses; [ gpl2 lgpl3 ] ++ optional unfreeEnableUnrar unfree;
     maintainers = [ maintainers.ttuegel ];
   };

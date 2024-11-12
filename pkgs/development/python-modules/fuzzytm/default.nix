@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gensim
-, numpy
-, pandas
-, pyfume
-, scipy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gensim,
+  numpy,
+  pandas,
+  pyfume,
+  setuptools,
+  scipy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fuzzytm";
-  version = "2.0.5";
-  format = "setuptools";
+  version = "2.0.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "FuzzyTM";
     inherit version;
-    hash = "sha256-IELkjd3/yc2lBYsLP6mms9LEcXOfVtNNooEKCMf9BtU=";
+    hash = "sha256-z0ESYtB7BqssxIHlrd0F+/qapOM1nrDi3Zih5SvgDGY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gensim
     numpy
     pandas
@@ -33,9 +37,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "FuzzyTM"
-  ];
+  pythonImportsCheck = [ "FuzzyTM" ];
 
   meta = with lib; {
     description = "Library for Fuzzy Topic Models";

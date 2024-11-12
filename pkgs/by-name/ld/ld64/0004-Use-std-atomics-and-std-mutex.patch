@@ -1,0 +1,181 @@
+From 5e92d65ef2b5cc07dc25b5b1bf645b314599f5d1 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 6 Apr 2024 20:29:25 -0400
+Subject: [PATCH 4/8] Use std::atomics and std::mutex
+
+---
+ src/ld/InputFiles.cpp | 13 ++++++-------
+ src/ld/InputFiles.h   |  9 +++++----
+ src/ld/OutputFile.cpp | 13 ++++++-------
+ src/ld/ld.cpp         | 11 +++++------
+ 4 files changed, 22 insertions(+), 24 deletions(-)
+
+diff --git a/src/ld/InputFiles.cpp b/src/ld/InputFiles.cpp
+index ec53a60..427ab09 100644
+--- a/src/ld/InputFiles.cpp
++++ b/src/ld/InputFiles.cpp
+@@ -42,7 +42,6 @@
+ #include <mach-o/dyld.h>
+ #include <mach-o/fat.h>
+ #include <sys/sysctl.h>
+-#include <libkern/OSAtomic.h>
+ #if HAVE_LIBDISPATCH
+ #include <dispatch/dispatch.h>
+ #endif
+@@ -387,16 +386,16 @@ ld::File* InputFiles::makeFile(const Options::FileInfo& info, bool indirectDylib
+ 
+ 	ld::relocatable::File* objResult = mach_o::relocatable::parse(p, len, info.path, info.modTime, info.ordinal, objOpts);
+ 	if ( objResult != NULL ) {
+-		OSAtomicAdd64(len, &_totalObjectSize);
+-		OSAtomicIncrement32(&_totalObjectLoaded);
++		_totalObjectSize += len;
++		++_totalObjectLoaded;
+ 		return objResult;
+ 	}
+ 
+ 	// see if it is an llvm object file
+ 	objResult = lto::parse(p, len, info.path, info.modTime, info.ordinal, _options.architecture(), _options.subArchitecture(), _options.logAllFiles(), _options.verboseOptimizationHints());
+ 	if ( objResult != NULL ) {
+-		OSAtomicAdd64(len, &_totalObjectSize);
+-		OSAtomicIncrement32(&_totalObjectLoaded);
++		_totalObjectSize += len;
++		++_totalObjectLoaded;
+ 		return objResult;
+ 	}
+ 
+@@ -444,8 +443,8 @@ ld::File* InputFiles::makeFile(const Options::FileInfo& info, bool indirectDylib
+ 	ld::archive::File* archiveResult = ::archive::parse(p, len, info.path, info.modTime, info.ordinal, archOpts);
+ 	if ( archiveResult != NULL ) {
+ 	
+-		OSAtomicAdd64(len, &_totalArchiveSize);
+-		OSAtomicIncrement32(&_totalArchivesLoaded);
++		_totalArchiveSize += len;
++		++_totalArchivesLoaded;
+ 		return archiveResult;
+ 	}
+ 	
+diff --git a/src/ld/InputFiles.h b/src/ld/InputFiles.h
+index c18ccf8..ffff26b 100644
+--- a/src/ld/InputFiles.h
++++ b/src/ld/InputFiles.h
+@@ -46,6 +46,7 @@
+ #include <pthread.h>
+ #endif
+ 
++#include <atomic>
+ #include <vector>
+ 
+ #include "Options.h"
+@@ -78,10 +79,10 @@ public:
+ 	size_t						count() const { return _inputFiles.size(); }
+ 
+ 	// for -print_statistics
+-	volatile int64_t			_totalObjectSize;
+-	volatile int64_t			_totalArchiveSize;
+-	volatile int32_t			_totalObjectLoaded;
+-	volatile int32_t			_totalArchivesLoaded;
++	std::atomic<int64_t>			_totalObjectSize;
++	std::atomic<int64_t>			_totalArchiveSize;
++	std::atomic<int32_t>			_totalObjectLoaded;
++	std::atomic<int32_t>			_totalArchivesLoaded;
+ 	         int32_t			_totalDylibsLoaded;
+ 	
+ 	
+diff --git a/src/ld/OutputFile.cpp b/src/ld/OutputFile.cpp
+index e2c0397..15912a2 100644
+--- a/src/ld/OutputFile.cpp
++++ b/src/ld/OutputFile.cpp
+@@ -43,11 +43,10 @@
+ #include <mach-o/dyld.h>
+ #include <mach-o/fat.h>
+ #include <dispatch/dispatch.h>
+-#include <os/lock_private.h>
+ extern "C" {
+     #include <corecrypto/ccsha2.h>
+ }
+-#include <string>
++#include <mutex>
+ #include <string>
+ #include <list>
+ #include <algorithm>
+@@ -1362,7 +1361,7 @@ void OutputFile::rangeCheckRISCVBranch20(int64_t displacement, ld::Internal& sta
+ 
+ 
+ #if SUPPORT_ARCH_arm64e
+-static os_lock_unfair_s  sAuthenticatedFixupDataLock = OS_LOCK_UNFAIR_INIT; // to serialize building of _authenticatedFixupData
++static std::mutex sAuthenticatedFixupDataLock; // to serialize building of _authenticatedFixupData
+ #endif
+ 
+ void OutputFile::applyFixUps(ld::Internal& state, uint64_t mhAddress, const ld::Atom* atom, uint8_t* buffer)
+@@ -1737,11 +1736,11 @@ void OutputFile::applyFixUps(ld::Internal& state, uint64_t mhAddress, const ld::
+ 					}
+ 					else {
+ 						auto fixupOffset = (uintptr_t)(fixUpLocation - mhAddress);
+-						os_lock_lock(&sAuthenticatedFixupDataLock);
++						sAuthenticatedFixupDataLock.lock();
+ 							assert(_authenticatedFixupData.find(fixupOffset) == _authenticatedFixupData.end());
+ 							auto authneticatedData = std::make_pair(authData, accumulator);
+ 							_authenticatedFixupData[fixupOffset] = authneticatedData;
+-						os_lock_unlock(&sAuthenticatedFixupDataLock);
++						sAuthenticatedFixupDataLock.unlock();
+ 						// Zero out this entry which we will expect later.
+ 						set64LE(fixUpLocation, 0);
+ 					}
+@@ -1768,11 +1767,11 @@ void OutputFile::applyFixUps(ld::Internal& state, uint64_t mhAddress, const ld::
+ 					}
+ 					else {
+ 						auto fixupOffset = (uintptr_t)(fixUpLocation - mhAddress);
+-						os_lock_lock(&sAuthenticatedFixupDataLock);
++						sAuthenticatedFixupDataLock.lock();
+ 							assert(_authenticatedFixupData.find(fixupOffset) == _authenticatedFixupData.end());
+ 							auto authneticatedData = std::make_pair(authData, accumulator);
+ 							_authenticatedFixupData[fixupOffset] = authneticatedData;
+-						os_lock_unlock(&sAuthenticatedFixupDataLock);
++						sAuthenticatedFixupDataLock.unlock();
+ 						// Zero out this entry which we will expect later.
+ 						set64LE(fixUpLocation, 0);
+ 					}
+diff --git a/src/ld/ld.cpp b/src/ld/ld.cpp
+index b7590a3..f1bf9df 100644
+--- a/src/ld/ld.cpp
++++ b/src/ld/ld.cpp
+@@ -47,9 +47,8 @@ extern "C" double log2 ( double );
+ #include <mach-o/dyld.h>
+ #include <dlfcn.h>
+ #include <AvailabilityMacros.h>
+-#include <os/lock_private.h>
+ 
+-#include <string>
++#include <mutex>
+ #include <map>
+ #include <set>
+ #include <string>
+@@ -1603,8 +1602,8 @@ int main(int argc, const char* argv[])
+ 								statistics.vmEnd.faults-statistics.vmStart.faults);
+ 			fprintf(stderr, "memory active: %lu, wired: %lu\n", statistics.vmEnd.active_count * vm_page_size, statistics.vmEnd.wire_count * vm_page_size);
+ 			char temp[40];
+-			fprintf(stderr, "processed %3u object files,  totaling %15s bytes\n", inputFiles._totalObjectLoaded, commatize(inputFiles._totalObjectSize, temp));
+-			fprintf(stderr, "processed %3u archive files, totaling %15s bytes\n", inputFiles._totalArchivesLoaded, commatize(inputFiles._totalArchiveSize, temp));
++			fprintf(stderr, "processed %3u object files,  totaling %15s bytes\n", inputFiles._totalObjectLoaded.load(), commatize(inputFiles._totalObjectSize.load(), temp));
++			fprintf(stderr, "processed %3u archive files, totaling %15s bytes\n", inputFiles._totalArchivesLoaded.load(), commatize(inputFiles._totalArchiveSize.load(), temp));
+ 			fprintf(stderr, "processed %3u dylib files\n", inputFiles._totalDylibsLoaded);
+ 			fprintf(stderr, "wrote output file            totaling %15s bytes\n", commatize(out.fileSize(), temp));
+ 		}
+@@ -1634,12 +1633,12 @@ int main(int argc, const char* argv[])
+ #ifndef NDEBUG
+ 
+ //  now that the linker is multi-threaded, only allow one assert() to be processed 
+-static os_lock_unfair_s  sAssertLock = OS_LOCK_UNFAIR_INIT;
++static std::mutex sAssertLock;
+ 
+ // implement assert() function to print out a backtrace before aborting
+ void __assert_rtn(const char* func, const char* file, int line, const char* failedexpr)
+ {
+-	os_lock_lock(&sAssertLock);
++    sAssertLock.lock();
+ 
+     Snapshot *snapshot = Snapshot::globalSnapshot;
+     
+-- 
+2.45.1
+

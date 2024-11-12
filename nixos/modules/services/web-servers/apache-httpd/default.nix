@@ -33,7 +33,9 @@ let
     certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
   }) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
-  dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo = hostOpts:
     if hostOpts.listen != [] then
@@ -371,7 +373,7 @@ let
       echo "$options" >> $out
     '';
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 
 
@@ -404,23 +406,16 @@ in
 
     services.httpd = {
 
-      enable = mkEnableOption (lib.mdDoc "the Apache HTTP Server");
+      enable = mkEnableOption "the Apache HTTP Server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.apacheHttpd;
-        defaultText = literalExpression "pkgs.apacheHttpd";
-        description = lib.mdDoc ''
-          Overridable attribute of the Apache HTTP Server package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "apacheHttpd" { };
 
       configFile = mkOption {
         type = types.path;
         default = confFile;
         defaultText = literalExpression "confFile";
         example = literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
-        description = lib.mdDoc ''
+        description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
         '';
@@ -429,7 +424,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines appended to the generated Apache
           configuration file. Note that this mechanism will not work
           when {option}`configFile` is overridden.
@@ -442,10 +437,10 @@ in
         example = literalExpression ''
           [
             "proxy_connect"
-            { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
+            { name = "jk"; path = "''${pkgs.apacheHttpdPackages.mod_jk}/modules/mod_jk.so"; }
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
@@ -458,14 +453,14 @@ in
         type = types.nullOr types.str;
         example = "admin@example.org";
         default = null;
-        description = lib.mdDoc "E-mail address of the server administrator.";
+        description = "E-mail address of the server administrator.";
       };
 
       logFormat = mkOption {
         type = types.str;
         default = "common";
         example = "combined";
-        description = lib.mdDoc ''
+        description = ''
           Log format for log files. Possible values are: combined, common, referer, agent, none.
           See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
         '';
@@ -474,7 +469,7 @@ in
       logPerVirtualHost = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, each virtual host gets its own
           {file}`access.log` and
           {file}`error.log`, namely suffixed by the
@@ -485,7 +480,7 @@ in
       user = mkOption {
         type = types.str;
         default = "wwwrun";
-        description = lib.mdDoc ''
+        description = ''
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
@@ -499,7 +494,7 @@ in
       group = mkOption {
         type = types.str;
         default = "wwwrun";
-        description = lib.mdDoc ''
+        description = ''
           Group under which httpd children processes run.
         '';
       };
@@ -507,7 +502,7 @@ in
       logDir = mkOption {
         type = types.path;
         default = "/var/log/httpd";
-        description = lib.mdDoc ''
+        description = ''
           Directory for Apache's log files. It is created automatically.
         '';
       };
@@ -538,39 +533,20 @@ in
             };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Specification of the virtual hosts served by Apache. Each
           element should be an attribute set specifying the
           configuration of the virtual host.
         '';
       };
 
-      enableMellon = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Whether to enable the mod_auth_mellon module.";
-      };
+      enableMellon = mkEnableOption "the mod_auth_mellon module";
 
-      enablePHP = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Whether to enable the PHP module.";
-      };
+      enablePHP = mkEnableOption "the PHP module";
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = lib.mdDoc ''
-          Overridable attribute of the PHP package to use.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
-      enablePerl = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Whether to enable the Perl module (mod_perl).";
-      };
+      enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
         type = types.lines;
@@ -579,7 +555,7 @@ in
           ''
             date.timezone = "CET"
           '';
-        description = lib.mdDoc ''
+        description = ''
           Options appended to the PHP configuration file {file}`php.ini`.
         '';
       };
@@ -588,8 +564,7 @@ in
         type = types.enum [ "event" "prefork" "worker" ];
         default = "event";
         example = "worker";
-        description =
-          lib.mdDoc ''
+        description = ''
             Multi-processing module to be used by Apache. Available
             modules are `prefork` (handles each
             request in a separate child process), `worker`
@@ -604,14 +579,14 @@ in
         type = types.int;
         default = 150;
         example = 8;
-        description = lib.mdDoc "Maximum number of httpd processes (prefork)";
+        description = "Maximum number of httpd processes (prefork)";
       };
 
       maxRequestsPerChild = mkOption {
         type = types.int;
         default = 0;
         example = 500;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited.
         '';
       };
@@ -619,14 +594,14 @@ in
       sslCiphers = mkOption {
         type = types.str;
         default = "HIGH:!aNULL:!MD5:!EXP";
-        description = lib.mdDoc "Cipher Suite available for negotiation in SSL proxy handshake.";
+        description = "Cipher Suite available for negotiation in SSL proxy handshake.";
       };
 
       sslProtocols = mkOption {
         type = types.str;
         default = "All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1";
         example = "All -SSLv2 -SSLv3";
-        description = lib.mdDoc "Allowed SSL/TLS protocol versions.";
+        description = "Allowed SSL/TLS protocol versions.";
       };
     };
 
@@ -668,10 +643,10 @@ in
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) dependentCertNames;
+      services = [ config.systemd.services.httpd ] ++ lib.optional (vhostCertNames != []) config.systemd.services.httpd-config-reload;
+    }) vhostCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -774,8 +749,10 @@ in
     systemd.services.httpd = {
         description = "Apache HTTPD";
         wantedBy = [ "multi-user.target" ];
-        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
-        after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
+        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+        after = [ "network.target" ]
+          ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+          ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
         before = map (certName: "acme-${certName}.service") dependentCertNames;
         restartTriggers = [ cfg.configFile ];
 
@@ -816,9 +793,9 @@ in
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
-    in mkIf (sslServices != []) {
+      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+    in mkIf (vhostCertNames != []) {
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
@@ -828,7 +805,7 @@ in
       restartTriggers = [ cfg.configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames;
+      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames;
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;

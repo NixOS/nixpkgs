@@ -13,14 +13,12 @@ let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
   pname = "gmp${lib.optionalString cxx "-with-cxx"}";
-  version = "6.2.1";
+  version = "6.3.0";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/gmp-${version}.tar.bz2" "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2" ];
-    sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
+    hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
   };
-
-  patches = [ ./6.2.1-CVE-2021-43618.patch ];
 
   #outputs TODO: split $cxx due to libstdc++ dependency
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
@@ -40,13 +38,13 @@ let self = stdenv.mkDerivation rec {
     # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    (lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    (lib.enableFeature (!stdenv.hostPlatform.isSunOS && stdenv.hostPlatform.isx86) "fat")
     # The config.guess in GMP tries to runtime-detect various
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
     "--build=${stdenv.buildPlatform.config}"
-  ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+  ] ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
     ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
@@ -89,7 +87,7 @@ let self = stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
   };
 };
   in self

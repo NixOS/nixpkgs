@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "types-urllib3";
-  version = "1.26.25.13";
+  version = "1.26.25.14";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MwBTjJ3BHa0y6uSCesMT9dmGuLIUlIAfG/l6GsbAOuU=";
+    hash = "sha256-Ipt/V3yVG4wbksG8Ky/bC0mEe9KvbRzCouPdNA872o8=";
   };
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "urllib3-stubs"
-  ];
+  pythonImportsCheck = [ "urllib3-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for urllib3";

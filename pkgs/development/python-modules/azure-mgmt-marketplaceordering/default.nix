@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
-, isPy3k
-, azure-mgmt-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-nspkg,
+  isPy3k,
+  azure-mgmt-core,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-marketplaceordering";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,9 +26,7 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
-  ];
+  ] ++ lib.optionals (!isPy3k) [ azure-mgmt-nspkg ];
 
   # has no tests
   doCheck = false;

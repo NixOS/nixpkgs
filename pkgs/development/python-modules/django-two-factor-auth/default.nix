@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, django
-, django-formtools
-, django-otp
-, django-phonenumber-field
-, fetchFromGitHub
-, phonenumbers
-, pydantic
-, pythonOlder
-, pythonRelaxDepsHook
-, qrcode
-, setuptools-scm
-, twilio
-, webauthn
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-formtools,
+  django-otp,
+  django-phonenumber-field,
+  fetchFromGitHub,
+  phonenumbers,
+  pydantic,
+  pythonOlder,
+  qrcode,
+  setuptools-scm,
+  twilio,
+  webauthn,
 }:
 
 buildPythonPackage rec {
   pname = "django-two-factor-auth";
-  version = "1.15.1";
-  format = "setuptools";
+  version = "1.15.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,19 +26,17 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-two-factor-auth";
     rev = "refs/tags/${version}";
-    hash = "sha256-+E6kSD00ChPiRLT2i43dNlVkbvuR1vKkbSZfD1Bf3qc=";
+    hash = "sha256-Sr7L3ioeofyADHb1NSgs0GmVbzX7rro7yhhG9Gq6GJE=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "django-phonenumber-field"
+    "qrcode"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-formtools
     django-otp
@@ -46,13 +44,9 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  passthru.optional-dependencies = {
-    call = [
-      twilio
-    ];
-    sms = [
-      twilio
-    ];
+  optional-dependencies = {
+    call = [ twilio ];
+    sms = [ twilio ];
     webauthn = [
       pydantic
       webauthn
@@ -60,9 +54,7 @@ buildPythonPackage rec {
     # yubikey = [
     #   django-otp-yubikey
     # ];
-    phonenumbers = [
-      phonenumbers
-    ];
+    phonenumbers = [ phonenumbers ];
     # phonenumberslite = [
     #   phonenumberslite
     # ];
@@ -71,9 +63,7 @@ buildPythonPackage rec {
   # Tests require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "two_factor"
-  ];
+  pythonImportsCheck = [ "two_factor" ];
 
   meta = with lib; {
     description = "Complete Two-Factor Authentication for Django";

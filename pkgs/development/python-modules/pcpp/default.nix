@@ -1,24 +1,27 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "pcpp";
-  version = "1.21";
+  version = "1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ned14";
     repo = "pcpp";
-    rev = "v${version}";
-    sha256 = "0k52qyxzdngdhyn4sya2qn1w1a4ll0mcla4h4gb1v91fk4lw25dm";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Fs+CMV4eRKcB+KdV93ncgcqaMnO5etnMY/ivmSJh3Wc=";
     fetchSubmodules = true;
   };
 
   meta = with lib; {
     homepage = "https://github.com/ned14/pcpp";
-    description = "A C99 preprocessor written in pure Python";
+    description = "C99 preprocessor written in pure Python";
+    mainProgram = "pcpp";
     license = licenses.bsd0;
     maintainers = with maintainers; [ rakesh4g ];
- };
+  };
 }

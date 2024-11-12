@@ -1,14 +1,22 @@
 { lib, stdenv, fetchFromGitHub, cmake, zlib, boost
 , openal, glm, freetype, libGLU, SDL2, libepoxy
 , dejavu_fonts, inkscape, optipng, imagemagick
-, withCrashReporter ? !stdenv.isDarwin
+, withCrashReporter ? !stdenv.hostPlatform.isDarwin
 ,   qtbase ? null
 ,   wrapQtAppsHook ? null
 ,   curl ? null
 ,   gdb  ? null
 }:
 
-with lib;
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optionals
+    optionalString
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "arx-libertatis";
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
     zlib boost openal glm
     freetype libGLU SDL2 libepoxy
   ] ++ optionals withCrashReporter [ qtbase curl ]
-    ++ optionals stdenv.isLinux    [ gdb ];
+    ++ optionals stdenv.hostPlatform.isLinux    [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"

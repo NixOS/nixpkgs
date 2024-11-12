@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pytestCheckHook
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
+  isPy3k,
 }:
 
 buildPythonPackage {
@@ -22,9 +23,7 @@ buildPythonPackage {
     hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
     numpy
@@ -36,6 +35,6 @@ buildPythonPackage {
     homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

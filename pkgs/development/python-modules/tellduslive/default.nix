@@ -1,43 +1,46 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, requests
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  requests,
+  requests-oauthlib,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tellduslive";
-  version = "0.10.11";
-  format = "setuptools";
+  version = "0.10.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "molobrakos";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0aqhj6fq2z2qb4jyk23ygjicf5nlj8lkya7blkyqb7jra5k1gyg0";
+    repo = "tellduslive";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     requests
     requests-oauthlib
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tellduslive"
-  ];
+  pythonImportsCheck = [ "tellduslive" ];
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";
     homepage = "https://github.com/molobrakos/tellduslive";
-    license = with licenses; [ unlicense ];
+    license = licenses.unlicense;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tellduslive";
   };
 }

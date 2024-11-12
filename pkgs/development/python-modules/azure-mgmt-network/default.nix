@@ -1,48 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "23.1.0";
   pname = "azure-mgmt-network";
-  format = "setuptools";
+  version = "27.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-NxcmmRE4MdfOG7naNcY1AHxzz/xUmoWlj1VUK1SxK/M=";
+    pname = "azure_mgmt_network";
+    inherit version;
+    hash = "sha256-XBxh2LsTrUD3iKJv11acHZ1g6y5MsZwqG12cAq6GIxY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonNamespaces = [
-    "azure.mgmt"
-  ];
+  pythonNamespaces = [ "azure.mgmt" ];
 
-  pythonImportsCheck = [
-    "azure.mgmt.network"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.network" ];
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-network";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-network_${version}/sdk/network/azure-mgmt-network/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson jonringer ];
+    maintainers = with maintainers; [
+      olcai
+      maxwilson
+    ];
   };
 }

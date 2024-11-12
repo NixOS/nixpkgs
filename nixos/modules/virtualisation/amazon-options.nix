@@ -8,13 +8,13 @@ in {
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether the EC2 instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -27,13 +27,13 @@ in {
           type = types.attrsOf (types.submodule {
             options = {
               mount = lib.mkOption {
-                description = lib.mdDoc "Where to mount this dataset.";
+                description = "Where to mount this dataset.";
                 type = types.nullOr types.str;
                 default = null;
               };
 
               properties = lib.mkOption {
-                description = lib.mdDoc "Properties to set on this dataset.";
+                description = "Properties to set on this dataset.";
                 type = types.attrsOf types.str;
                 default = {};
               };
@@ -45,7 +45,7 @@ in {
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the EC2 instance is using EFI.
         '';
       };

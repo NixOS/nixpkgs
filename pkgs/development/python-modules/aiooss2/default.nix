@@ -1,22 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, oss2
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oss2,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aiooss2";
-  version = "0.2.6";
-  format = "pyproject";
+  version = "0.2.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,23 +24,21 @@ buildPythonPackage rec {
     owner = "karajan1001";
     repo = "aiooss2";
     rev = "refs/tags/${version}";
-    hash = "sha256-VVfDH9QWF9gBhd2pOjKH5+VdNSvl1q0iauAbo88wNaM=";
+    hash = "sha256-6tkJG6Jjvo2OaN9cRbs/7ApcrKiZ5tGSPUfugAx7iJU=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "aiohttp"
     "oss2"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+
+  dependencies = [
     aiohttp
     oss2
   ];
@@ -52,9 +50,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "aiooss2"
-  ];
+  pythonImportsCheck = [ "aiooss2" ];
 
   disabledTestPaths = [
     # Tests require network access

@@ -35,10 +35,11 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? wineRelease != "stable",
-  waylandSupport ? wineRelease == "wayland",
+  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  waylandSupport ? false,
+  x11Support ? false,
   embedInstallers ? false, # The Mono and Gecko MSI installers
-  moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
+  moltenvk # Allow users to override MoltenVK easily
 }:
 
 let wine-build = build: release:
@@ -46,12 +47,14 @@ let wine-build = build: release:
         wineRelease = release;
         supportFlags = {
           inherit
-            cupsSupport gettextSupport dbusSupport cairoSupport
-            odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
-            v4lSupport saneSupport gphoto2Support krb5Support fontconfigSupport
-            alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
-            tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport usbSupport mingwSupport waylandSupport embedInstallers;
+            alsaSupport cairoSupport cupsSupport cursesSupport dbusSupport
+            embedInstallers fontconfigSupport gettextSupport gphoto2Support
+            gstreamerSupport gtkSupport krb5Support mingwSupport netapiSupport
+            odbcSupport openclSupport openglSupport pcapSupport
+            pulseaudioSupport saneSupport sdlSupport tlsSupport udevSupport
+            usbSupport v4lSupport vaSupport vulkanSupport waylandSupport
+            x11Support xineramaSupport
+          ;
         };
         inherit moltenvk;
       });

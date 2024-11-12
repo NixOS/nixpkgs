@@ -1,16 +1,16 @@
 { stdenv, fetchurl, lib
-, ncurses, openssl, aspell, gnutls, gettext
+, ncurses, openssl, aspell, cjson, gnutls, gettext
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
 , asciidoctor # manpages
-, enableTests ? !stdenv.isDarwin, cpputest
+, enableTests ? !stdenv.hostPlatform.isDarwin, cpputest
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
 , pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, phpSupport ? !stdenv.isDarwin, php, systemd, libxml2, pcre2, libargon2
+, phpSupport ? !stdenv.hostPlatform.isDarwin, php, systemd, libxml2, pcre2, libargon2
 , extraBuildInputs ? []
 }:
 
@@ -29,48 +29,50 @@ let
     { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
     { name = "php"; enabled = phpSupport; cmakeFlag = "ENABLE_PHP"; buildInputs = [
       php-embed.unwrapped.dev libxml2 pcre2 libargon2
-    ] ++ lib.optional stdenv.isLinux systemd; }
+    ] ++ lib.optional stdenv.hostPlatform.isLinux systemd; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.8";
+      version = "4.4.3";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
-        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-objxAUGvBhTkbQl4GshDP3RsCkAW4z917L9WyaVoYj4=";
+        url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
+        hash = "sha256-KVYS+NwkryjJGCV9MBTrUzQqXQd9Xj2aPq3zA72P6/o=";
       };
+
+      # Why is this needed? https://github.com/weechat/weechat/issues/2031
+      patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      cmakeFlags = with lib; [
+      cmakeFlags = [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
-      buildInputs = with lib; [
-          ncurses openssl aspell gnutls gettext zlib curl
-          libgcrypt ]
-        ++ optionals stdenv.isDarwin [ libobjc libresolv ]
-        ++ concatMap (p: p.buildInputs) enabledPlugins
+      buildInputs = [ ncurses openssl aspell cjson gnutls gettext zlib curl libgcrypt ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc libresolv ]
+        ++ lib.concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
-        + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
+        + (lib.optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-      postInstall = with lib; ''
-        for p in ${concatMapStringsSep " " (p: p.name) enabledPlugins}; do
+      postInstall = ''
+        for p in ${lib.concatMapStringsSep " " (p: p.name) enabledPlugins}; do
           from=$out/lib/weechat/plugins/$p.so
           to=''${!p}/lib/weechat/plugins/$p.so
           mkdir -p $(dirname $to)
@@ -84,15 +86,17 @@ let
       '';
 
       meta = {
-        homepage = "http://www.weechat.org/";
-        description = "A fast, light and extensible chat client";
+        homepage = "https://weechat.org/";
+        changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
+        description = "Fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
-          (eg. adding python modules for scripts that would require them, etc.)
+          (e.g. adding python modules for scripts that would require them, etc.)
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
         maintainers = with lib.maintainers; [ ncfavier ];
+        mainProgram = "weechat";
         platforms = lib.platforms.unix;
       };
     }

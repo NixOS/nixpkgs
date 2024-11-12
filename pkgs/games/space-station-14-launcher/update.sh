@@ -3,8 +3,6 @@
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-deps_file="$(realpath "./deps.nix")"
-
 new_version="$(curl -s "https://api.github.com/repos/space-wizards/SS14.Launcher/releases?per_page=1" | jq -r '.[0].tag_name' | sed 's/v//')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./space-station-14-launcher.nix)"
 
@@ -15,4 +13,4 @@ fi
 
 cd ../../..
 update-source-version space-station-14-launcher.unwrapped "$new_version"
-$(nix-build -A space-station-14-launcher.fetch-deps --no-out-link) "$deps_file"
+$(nix-build -A space-station-14-launcher.fetch-deps --no-out-link)

@@ -1,48 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "1.2.2";
-  format = "setuptools";
+  version = "1.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zSLRugaUE4RBDNln2KmdWuJEL1ffr+/y/aXejcXAVEY=";
+    hash = "sha256-sp3t/NptXo4IPOcbK1QnU61Iz+xEA3s/x5cC4pgKiek=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    # Staticmethods in 3.10+ are now callable, prevent freezegun to attempt to decorate them
-    (fetchpatch {
-      url = "https://github.com/spulec/freezegun/pull/397/commits/e63874ce75a74a1159390914045fe8e7955b24c4.patch";
-      hash = "sha256-FNABqVN5DFqVUR88lYzwbfsZj3xcB9/MvQtm+I2VjnI=";
-    })
+  build-system = [ setuptools ];
+
+  dependencies = [ python-dateutil ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/spulec/freezegun/issues/547
+    "test_method_decorator_works_on_unittest_kwarg_frozen_time"
+    "test_method_decorator_works_on_unittest_kwarg_frozen_time_with_func"
+    "test_method_decorator_works_on_unittest_kwarg_hello"
   ];
 
-  propagatedBuildInputs = [
-    python-dateutil
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "freezegun"
-  ];
+  pythonImportsCheck = [ "freezegun" ];
 
   meta = with lib; {
     description = "Library that allows your Python tests to travel through time";
     homepage = "https://github.com/spulec/freezegun";
+    changelog = "https://github.com/spulec/freezegun/blob/${version}/CHANGELOG";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

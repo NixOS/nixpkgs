@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
           ];
           image = "nginx-container";
-          imageFile = pkgs.dockerTools.examples.nginx;
+          imageStream = pkgs.dockerTools.examples.nginxStream;
         };
       };
 

@@ -1,54 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pydantic,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.0";
-  format = "pyproject";
+  version = "4.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sanders41";
-    repo = pname;
+    repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SUuSaQU6o2OtjDNrDcO3nS0EZH2ammEkP7AEp4H5ysI=";
+    hash = "sha256-cHrMaf5PyFWacoi4t+Clow9qFAxbdn71p8ckuYMt27w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=camel_converter --cov-report term-missing" ""
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  passthru.optional-dependencies = {
-    pydantic = [
-      pydantic
-    ];
+  optional-dependencies = {
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.pydantic;
+    pytest-cov-stub
+  ] ++ optional-dependencies.pydantic;
 
-  pythonImportsCheck = [
-    "camel_converter"
+  pythonImportsCheck = [ "camel_converter" ];
+
+  disabledTests = [
+    # AttributeError: 'Test' object has no attribute 'model_dump'
+    "test_camel_config"
   ];
 
   meta = with lib; {
-    description = "Client for the Meilisearch API";
+    description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
     changelog = "https://github.com/sanders41/camel-converter/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

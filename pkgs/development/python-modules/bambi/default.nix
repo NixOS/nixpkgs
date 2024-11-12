@@ -1,79 +1,106 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, arviz
-, blackjax
-, formulae
-, graphviz
-, numpy
-, numpyro
-, pandas
-, pymc
-, scipy
-, setuptools
+{
+  lib,
+  arviz,
+  blackjax,
+  buildPythonPackage,
+  fetchFromGitHub,
+  formulae,
+  graphviz,
+  numpyro,
+  pandas,
+  pymc,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bambinos";
-    repo = pname;
+    repo = "bambi";
     rev = "refs/tags/${version}";
-    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
+    hash = "sha256-kxrNNbZfC96/XHb1I7aUHYZdFJvGR80ZI8ell/0FQXc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arviz
     formulae
-    numpy
+    graphviz
     pandas
     pymc
-    scipy
+  ];
+
+  # bayeux-ml is not available in nixpkgs
+  # optional-dependencies = {
+  #   jax = [ bayeux-ml ];
+  # };
+
+  nativeCheckInputs = [
+    blackjax
+    numpyro
+    pytestCheckHook
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [
-    blackjax
-    graphviz
-    numpyro
-    pytestCheckHook
-  ];
-
   disabledTests = [
     # Tests require network access
+    "test_alias_equal_to_name"
+    "test_average_by"
+    "test_ax"
+    "test_basic"
+    "test_censored_response"
     "test_custom_prior"
     "test_data_is_copied"
     "test_distributional_model"
+    "test_elasticity"
+    "test_extra_namespace"
+    "test_fig_kwargs"
     "test_gamma_with_splines"
-    "test_non_distributional_model_with_categories"
+    "test_group_effects"
+    "test_hdi_prob"
+    "test_legend"
+    "test_model_with_group_specific_effects"
+    "test_model_with_intercept"
+    "test_model_without_intercept"
     "test_non_distributional_model"
     "test_normal_with_splines"
+    "test_predict_new_groups_fail"
+    "test_predict_new_groups"
     "test_predict_offset"
-    # Assertion issue
-    "test_custom_likelihood_function"
+    "test_set_alias_warnings"
+    "test_subplot_kwargs"
+    "test_transforms"
+    "test_use_hdi"
+    "test_with_group_and_panel"
+    "test_with_groups"
+    "test_with_user_values"
   ];
 
-  pythonImportsCheck = [
-    "bambi"
+  disabledTestPaths = [
+    # bayeux-ml is not available
+    "tests/test_alternative_samplers.py"
+    # Tests require network access
+    "tests/test_interpret.py"
+    "tests/test_interpret_messages.py"
   ];
+
+  pythonImportsCheck = [ "bambi" ];
 
   meta = with lib; {
-    homepage = "https://bambinos.github.io/bambi";
     description = "High-level Bayesian model-building interface";
+    homepage = "https://bambinos.github.io/bambi";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

@@ -1,47 +1,41 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "2.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = version;
-    hash = "sha256-ngyLe6sbTTQ7n4WdV06OlQnn/vqkD+JUruyMYS1Ym+Q=";
+    repo = "pytraccar";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-  ];
+  propagatedBuildInputs = [ aiohttp ];
+
+  # https://github.com/ludeeus/pytraccar/issues/31
+  doCheck = lib.versionOlder aiohttp.version "3.9.0";
 
   nativeCheckInputs = [
-    aresponses
     pytestCheckHook
     pytest-asyncio
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo
@@ -49,13 +43,12 @@ buildPythonPackage rec {
       --replace 'version = "0"' 'version = "${version}"'
   '';
 
-  pythonImportsCheck = [
-    "pytraccar"
-  ];
+  pythonImportsCheck = [ "pytraccar" ];
 
   meta = with lib; {
     description = "Python library to handle device information from Traccar";
     homepage = "https://github.com/ludeeus/pytraccar";
+    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -13,7 +13,7 @@ mkDerivation {
   pname = "umbrello";
   meta = {
     homepage = "https://umbrello.kde.org/";
-    description = "A Unified Modelling Language (UML) diagram program";
+    description = "Unified Modelling Language (UML) diagram program";
     license = [ lib.licenses.gpl2 ];
   };
   nativeBuildInputs = [

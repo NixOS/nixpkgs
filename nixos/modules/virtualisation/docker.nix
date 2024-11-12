@@ -20,8 +20,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description =
-          lib.mdDoc ''
+        description = ''
             This option enables docker, a daemon that manages
             linux containers. Users in the "docker" group can interact with
             the daemon (e.g. to start or stop containers) using the
@@ -33,8 +32,7 @@ in
       mkOption {
         type = types.listOf types.str;
         default = ["/run/docker.sock"];
-        description =
-          lib.mdDoc ''
+        description = ''
             A list of unix and tcp docker should listen to. The format follows
             ListenStream as described in systemd.socket(5).
           '';
@@ -44,8 +42,7 @@ in
       mkOption {
         type = types.bool;
         default = true;
-        description =
-          lib.mdDoc ''
+        description = ''
             When enabled dockerd is started on boot. This is required for
             containers which are created with the
             `--restart=always` flag to work. If this option is
@@ -55,13 +52,29 @@ in
 
     daemon.settings =
       mkOption {
-        type = settingsFormat.type;
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            live-restore = mkOption {
+              type = types.bool;
+              # Prior to NixOS 24.11, this was set to true by default, while upstream defaulted to false.
+              # Keep the option unset to follow upstream defaults
+              default = versionOlder config.system.stateVersion "24.11";
+              defaultText = literalExpression "lib.versionOlder config.system.stateVersion \"24.11\"";
+              description = ''
+                Allow dockerd to be restarted without affecting running container.
+                This option is incompatible with docker swarm.
+              '';
+            };
+          };
+        };
         default = { };
         example = {
           ipv6 = true;
+          "live-restore" = true;
           "fixed-cidr-v6" = "fd00::/80";
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
           See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
         '';
@@ -71,30 +84,30 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
+          **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
+
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
-      };
-
-    liveRestore =
-      mkOption {
-        type = types.bool;
-        default = true;
-        description =
-          lib.mdDoc ''
-            Allow dockerd to be restarted without affecting running container.
-            This option is incompatible with docker swarm.
-          '';
       };
 
     storageDriver =
       mkOption {
         type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
         default = null;
-        description =
-          lib.mdDoc ''
-            This option determines which Docker storage driver to use. By default
-            it let's docker automatically choose preferred storage driver.
+        description = ''
+            This option determines which Docker
+            [storage driver](https://docs.docker.com/storage/storagedriver/select-storage-driver/)
+            to use.
+            By default it lets docker automatically choose the preferred storage
+            driver.
+            However, it is recommended to specify a storage driver explicitly, as
+            docker's default varies over versions.
+
+            ::: {.warning}
+            Changing the storage driver will cause any existing containers
+            and images to become inaccessible.
+            :::
           '';
       };
 
@@ -102,8 +115,7 @@ in
       mkOption {
         type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs" "local"];
         default = "journald";
-        description =
-          lib.mdDoc ''
+        description = ''
             This option determines which Docker log driver to use.
           '';
       };
@@ -112,8 +124,7 @@ in
       mkOption {
         type = types.separatedString " ";
         default = "";
-        description =
-          lib.mdDoc ''
+        description = ''
             The extra command-line options to pass to
             {command}`docker` daemon.
           '';
@@ -123,7 +134,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to periodically prune Docker resources. If enabled, a
           systemd timer will run `docker system prune -f`
           as specified by the `dates` option.
@@ -134,7 +145,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--all" ];
-        description = lib.mdDoc ''
+        description = ''
           Any additional flags passed to {command}`docker system prune`.
         '';
       };
@@ -142,7 +153,7 @@ in
       dates = mkOption {
         default = "weekly";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
           which the prune will occur.
@@ -150,15 +161,22 @@ in
       };
     };
 
-    package = mkOption {
-      default = pkgs.docker;
-      defaultText = literalExpression "pkgs.docker";
-      type = types.package;
-      description = lib.mdDoc ''
-        Docker package to be used in the module.
+    package = mkPackageOption pkgs "docker" { };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression "with pkgs; [ criu ]";
+      description = ''
+        Extra packages to add to PATH for the docker daemon process.
       '';
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
+  ];
 
   ###### implementation
 
@@ -172,6 +190,16 @@ in
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
+
+      # Docker 25.0.0 supports CDI by default
+      # (https://docs.docker.com/engine/release-notes/25.0/#new). Encourage
+      # moving to CDI as opposed to having deprecated runtime
+      # wrappers.
+      warnings = lib.optionals (cfg.enableNvidia && (lib.strings.versionAtLeast cfg.package.version "25")) [
+        ''
+          You have set virtualisation.docker.enableNvidia. This option is deprecated, please set hardware.nvidia-container-toolkit.enable instead.
+        ''
+      ];
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
@@ -194,7 +222,8 @@ in
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
-          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker
+          ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {
@@ -226,8 +255,8 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
-          message = "Option enableNvidia requires 32bit support libraries";
+        { assertion = cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64 -> config.hardware.graphics.enable32Bit or false;
+          message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
         }];
 
       virtualisation.docker.daemon.settings = {
@@ -235,18 +264,16 @@ in
         hosts = [ "fd://" ];
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
-        live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            # Use the legacy nvidia-container-runtime wrapper to allow
+            # the `--runtime=nvidia` approach to expose
+            # GPU's. Starting with Docker > 25, CDI can be used
+            # instead, removing the need for runtime wrappers.
+            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
           };
         };
       };
     }
   ]);
-
-  imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
-  ];
-
 }

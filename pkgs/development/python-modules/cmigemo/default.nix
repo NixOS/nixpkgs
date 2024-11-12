@@ -1,8 +1,17 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  cmigemo,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "cmigemo";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,9 +37,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cmigemo" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
-    description = "A pure python binding for C/Migemo";
+    description = "Pure python binding for C/Migemo";
     license = licenses.mit;
     maintainers = with maintainers; [ illustris ];
   };

@@ -1,11 +1,22 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkMerge
+    mkIf
+    optionals
+    mkDefault
+    nameValuePair
+    listToAttrs
+    filterAttrs
+    mapAttrsToList
+    foldl';
 
-  inInitrd = any (fs: fs == "btrfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "btrfs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
+  inSystem = config.boot.supportedFilesystems.btrfs or false;
 
   cfgScrub = config.services.btrfs.autoScrub;
 
@@ -19,16 +30,17 @@ in
     # One could also do regular btrfs balances, but that shouldn't be necessary
     # during normal usage and as long as the filesystems aren't filled near capacity
     services.btrfs.autoScrub = {
-      enable = mkEnableOption (lib.mdDoc "regular btrfs scrub");
+      enable = mkEnableOption "regular btrfs scrub";
 
       fileSystems = mkOption {
         type = types.listOf types.path;
         example = [ "/" ];
-        description = lib.mdDoc ''
+        description = ''
           List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
-          If you mount a filesystem multiple times or additionally mount subvolumes,
-          you need to manually specify this list to avoid scrubbing multiple times.
+          Note that if you have filesystems that span multiple devices (e.g. RAID), you should
+          take care to use the same device for any given mount point and let btrfs take care
+          of automatically mounting the rest, in order to avoid scrubbing the same data multiple times.
         '';
       };
 
@@ -36,7 +48,7 @@ in
         default = "monthly";
         type = types.str;
         example = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           Systemd calendar expression for when to scrub btrfs filesystems.
           The recommended period is a month but could be less
           ({manpage}`btrfs-scrub(8)`).
@@ -52,34 +64,37 @@ in
   config = mkMerge [
     (mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
+    })
 
-      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" ];
-      boot.initrd.availableKernelModules = mkIf inInitrd (
+    (mkIf inInitrd {
+      boot.initrd.kernelModules = [ "btrfs" ];
+      boot.initrd.availableKernelModules =
         [ "crc32c" ]
         ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
           # Needed for mounting filesystems with new checksums
           "xxhash_generic"
           "blake2b_generic"
           "sha256_generic" # Should be baked into our kernel, just to be sure
-        ]
-      );
+        ];
 
-      boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)
       ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         btrfs device scan
       '';
+
+      boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
     (mkIf enableAutoScrub {
@@ -94,12 +109,18 @@ in
         }
       ];
 
-      # This will yield duplicated units if the user mounts a filesystem multiple times
-      # or additionally mounts subvolumes, but going the other way around via devices would
-      # yield duplicated units when a filesystem spans multiple devices.
-      # This way around seems like the more sensible default.
-      services.btrfs.autoScrub.fileSystems = mkDefault (mapAttrsToList (name: fs: fs.mountPoint)
-      (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems));
+      # This will remove duplicated units from either having a filesystem mounted multiple
+      # time, or additionally mounted subvolumes, as well as having a filesystem span
+      # multiple devices (provided the same device is used to mount said filesystem).
+      services.btrfs.autoScrub.fileSystems =
+      let
+        isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
+
+        uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
+      in
+      mkDefault (map (e: e.mountPoint)
+        (uniqueDeviceList (mapAttrsToList (name: fs: { mountPoint = fs.mountPoint; device = fs.device; })
+          (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems))));
 
       # TODO: Did not manage to do it via the usual btrfs-scrub@.timer/.service
       # template units due to problems enabling the parameterized units,

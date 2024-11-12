@@ -1,39 +1,29 @@
 . @fix_qmake_libtool@
 
-qmakeFlags=(${qmakeFlags-})
-
 qmakePrePhase() {
-    qmakeFlags_orig=("${qmakeFlags[@]}")
-
     # These flags must be added _before_ the flags specified in the derivation.
     # TODO: these flags also need a patch which isn't applied
     # can we either remove these flags or update the qt5 patch?
     # "NIX_OUTPUT_DOC=${!outputDev}/${qtDocPrefix:?}" \
-    qmakeFlags=(
-        "PREFIX=$out"
-        "NIX_OUTPUT_OUT=$out"
-        "NIX_OUTPUT_DEV=${!outputDev}"
-        "NIX_OUTPUT_BIN=${!outputBin}"
-        "NIX_OUTPUT_QML=${!outputBin}/${qtQmlPrefix:?}"
-        "NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?}"
-    )
-
-    if [ -n "@debug@" ]; then
-        qmakeFlags+=("CONFIG+=debug")
-    else
-        qmakeFlags+=("CONFIG+=release")
-    fi
-
-    qmakeFlags+=("${qmakeFlags_orig[@]}")
+    prependToVar qmakeFlags \
+      "PREFIX=$out" \
+      "NIX_OUTPUT_OUT=$out" \
+      "NIX_OUTPUT_DEV=${!outputDev}" \
+      "NIX_OUTPUT_BIN=${!outputBin}" \
+      "NIX_OUTPUT_QML=${!outputBin}/${qtQmlPrefix:?}" \
+      "NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?}"
 }
-prePhases+=" qmakePrePhase"
+appendToVar prePhases qmakePrePhase
 
 qmakeConfigurePhase() {
     runHook preConfigure
 
+    local flagsArray=()
+    concatTo flagsArray qmakeFlags
+
     echo "QMAKEPATH=$QMAKEPATH"
-    echo qmake "${qmakeFlags[@]}"
-    qmake "${qmakeFlags[@]}"
+    echo qmake "${flagsArray[@]}"
+    qmake "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

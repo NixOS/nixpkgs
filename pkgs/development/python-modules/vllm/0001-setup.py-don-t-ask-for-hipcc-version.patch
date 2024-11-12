@@ -1,0 +1,24 @@
+From f6a7748bee79fc2e1898968fef844daacfa7860b Mon Sep 17 00:00:00 2001
+From: SomeoneSerge <else@someonex.net>
+Date: Wed, 31 Jul 2024 12:02:53 +0000
+Subject: [PATCH 1/2] setup.py: don't ask for hipcc --version
+
+---
+ setup.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/setup.py b/setup.py
+index 72ef26f1..01e006f9 100644
+--- a/setup.py
++++ b/setup.py
+@@ -279,6 +279,7 @@ def _install_punica() -> bool:
+ 
+ 
+ def get_hipcc_rocm_version():
++    return "0.0" # `hipcc --version` misbehaves ("unresolved paths") inside the nix sandbox
+     # Run the hipcc --version command
+     result = subprocess.run(['hipcc', '--version'],
+                             stdout=subprocess.PIPE,
+-- 
+2.45.1
+

@@ -1,10 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-asyncio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "janus";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,11 +20,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  nativeCheckInputs = [ pytest-asyncio pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   # also fails upstream: https://github.com/aio-libs/janus/pull/258
   disabledTests = [ "test_format" ];

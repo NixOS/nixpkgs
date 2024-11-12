@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, fetchpatch, unzip }:
 
 let
   version = "2.6.2";
@@ -21,6 +21,17 @@ in stdenv.mkDerivation {
 
     # Use CC, CXX, and LD from environment
     ./2.6.2-cxx.patch
+
+    (fetchpatch {
+      name = "CVE-2023-34194.patch";
+      url = "https://salsa.debian.org/debian/tinyxml/-/raw/2366e1f23d059d4c20c43c54176b6bd78d6a83fc/debian/patches/CVE-2023-34194.patch";
+      hash = "sha256-ow4LmLQV24SAU6M1J8PXpW5c95+el3t8weM9JK5xJfg=";
+    })
+    (fetchpatch {
+      name = "CVE-2021-42260.patch";
+      url = "https://salsa.debian.org/debian/tinyxml/-/raw/dc332a9f4e05496c8342b778c14b256083beb1ee/debian/patches/CVE-2021-42260.patch";
+      hash = "sha256-pIM0uOnUQOW93w/PEPuW3yKq1mdvNT/ClCYVc2hLoY8=";
+    })
   ];
 
   preConfigure = "export LD=${stdenv.cc.targetPrefix}c++";
@@ -28,7 +39,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+    lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.9";
 
   nativeBuildInputs = [ unzip ];
   buildPhase = ''
@@ -67,14 +78,14 @@ in stdenv.mkDerivation {
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
   '';
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
-    license = lib.licenses.free;
+    license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
   };
 }

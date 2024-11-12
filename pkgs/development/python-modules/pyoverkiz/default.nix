@@ -1,58 +1,51 @@
-{ lib
-, aiohttp
-, attrs
-, backoff
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyhumps
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, warrant-lite
+{
+  lib,
+  aiohttp,
+  attrs,
+  backoff,
+  backports-strenum,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyhumps,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  warrant-lite,
 }:
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.14.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Mo28QpPJqfzzb/bq4W+OUcyptWCaLJSon99VdJ9Ss80=";
+    hash = "sha256-6ytfmdyVd7AFIWLSKCDpPHEKCy/EsGnOS+1i/bTO0Xs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     aiohttp
+    attrs
     backoff
-    pyhumps
     boto3
+    pyhumps
     warrant-lite
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyoverkiz"
-  ];
+  pythonImportsCheck = [ "pyoverkiz" ];
 
   meta = with lib; {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";

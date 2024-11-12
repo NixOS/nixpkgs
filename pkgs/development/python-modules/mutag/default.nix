@@ -1,29 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "mutag";
-  version = "0.0.2-2ffa0258ca";
-  disabled = ! isPy3k;
+  version = "0.0.2-unstable-2018-08-20";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aroig";
     repo = "mutag";
-    rev = "2ffa0258cadaf79313241f43bf2c1caaf197d9c2";
-    hash = "sha256-YT3DGvYPyTuB70gg6p/3oXcTahEPcNuSIqe56xu3rSs=";
+    rev = "9425169eb5d4aa9eb09f2809a09b83855b3acbef";
+    hash = "sha256-fEMmFRoFyLkqusAuhdx3XEPaPsu1x86ACAz9Vkl9YfA=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
+
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "mutag" ];
 
   meta = with lib; {
+    description = "Script to change email tags in a mu indexed maildir";
     homepage = "https://github.com/aroig/mutag";
-    description = "A script to change email tags in a mu indexed maildir";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    mainProgram = "mutag";
   };
-
 }

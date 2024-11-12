@@ -9,13 +9,8 @@ with lib;
   options = {
 
     netboot.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString isx86 "-Xbcj x86"
-                # Untested but should also reduce size for these platforms
-                + lib.optionalString isAarch "-Xbcj arm"
-                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
-      description = lib.mdDoc ''
+      default = "zstd -Xcompression-level 19";
+      description = ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
@@ -24,7 +19,7 @@ with lib;
 
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';
@@ -37,12 +32,6 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    # !!! Hack - attributes expected by other modules.
-    environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
-          then []
-          else [ pkgs.grub2 pkgs.syslinux ]);
-
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
         options = [ "mode=0755" ];
@@ -53,7 +42,7 @@ with lib;
     fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
         neededForBoot = true;
       };
 
@@ -64,19 +53,12 @@ with lib;
       };
 
     fileSystems."/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
+      { overlay = {
+          lowerdir = [ "/nix/.ro-store" ];
+          upperdir = "/nix/.rw-store/store";
+          workdir = "/nix/.rw-store/work";
+        };
+        neededForBoot = true;
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
@@ -101,8 +83,8 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
+        [ { source = config.system.build.squashfsStore;
+            target = "/nix-store.squashfs";
           }
         ];
     };

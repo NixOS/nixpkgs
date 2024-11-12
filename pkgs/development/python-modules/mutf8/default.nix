@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-4Ojn3t0EbOVdrYEiY8JegJuvW9sz8jt9tKFwOluiGQo=";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     # Using pytestCheckHook results in test failures
     pytest
   '';
 
-  pythonImportsCheck = [
-    "mutf8"
-  ];
+  pythonImportsCheck = [ "mutf8" ];
 
   meta = with lib; {
     description = "Fast MUTF-8 encoder & decoder";

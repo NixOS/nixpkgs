@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gettext
-, python3Packages
-, perlPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  python3Packages,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-gettext-tools";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5Dd2QU6JYwuktusssNDfA7IHa6HbFcWo9sZf5PS7NtI=";
+    sha256 = "sha256-V6X0E80352Vb6zwaBTRfZZnXEVCmBRbO2bca9A9OL6c=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     perlPackages.XMLLibXML
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postFixup = ''
     wrapPythonPrograms

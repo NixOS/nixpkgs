@@ -1,61 +1,88 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
-, pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell, removeReferencesTo
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, overrideSDK, buildPackages
+, pixman, vde2, alsa-lib, flex, pcre2
+, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
+, sigtool
+, makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
-, CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
-, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
+, CoreServices, Cocoa, Hypervisor, Kernel, rez, setfile, vmnet
+, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
+, numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal, numactl
+, seccompSupport ? stdenv.hostPlatform.isLinux && !minimal, libseccomp
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal
+, pulseSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, libpulseaudio
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, pipewire
+, sdlSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, SDL2, SDL2_image
+, jackSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, libjack2
+, gtkSupport ? !stdenv.hostPlatform.isDarwin && !xenSupport && !nixosTestRunner && !minimal, gtk3, gettext, vte, wrapGAppsHook3
+, vncSupport ? !nixosTestRunner && !minimal, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner && !minimal, libcacard
+, spiceSupport ? true && !nixosTestRunner && !minimal, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner && !minimal, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
+, rutabagaSupport ? openGLSupport && !minimal && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
+, libiscsiSupport ? !minimal, libiscsi
 , smbdSupport ? false, samba
-, tpmSupport ? true
-, uringSupport ? stdenv.isLinux, liburing
-, canokeySupport ? false, canokey-qemu
-, capstoneSupport ? true, capstone
-, enableDocs ? true
+, tpmSupport ? !minimal
+, uringSupport ? stdenv.hostPlatform.isLinux && !userOnly, liburing
+, canokeySupport ? !minimal, canokey-qemu
+, capstoneSupport ? !minimal, capstone
+, pluginsSupport ? !stdenv.hostPlatform.isStatic
+, enableDocs ? !minimal || toolsOnly
+, enableTools ? !minimal || toolsOnly
+, enableBlobs ? !minimal || toolsOnly
 , hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
+, hostCpuTargets ? (if toolsOnly
+                    then [ ]
+                    else if xenSupport
+                    then [ "i386-softmmu" ]
+                    else if hostCpuOnly
+                    then (lib.optional stdenv.hostPlatform.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
-, doCheck ? false
-, qemu  # for passthru.tests
+, toolsOnly ? false
+, userOnly ? false
+, minimal ? toolsOnly || userOnly
+, gitUpdater
+, qemu-utils # for tests attribute
 }:
+
+assert lib.assertMsg (xenSupport -> hostCpuTargets == [ "i386-softmmu" ]) "Xen should not use any other QEMU architecture other than i386.";
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+
+  buildPlatformStdenv =
+    if stdenv.buildPlatform.isDarwin then
+      overrideSDK buildPackages.stdenv {
+        # Keep these values in sync with `all-packages.nix`.
+        darwinSdkVersion = "12.3";
+        darwinMinVersion = "12.0";
+      }
+    else
+      buildPackages.stdenv;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
-    + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.2";
+    + lib.optionalString nixosTestRunner "-for-vm-tests"
+    + lib.optionalString toolsOnly "-utils"
+    + lib.optionalString userOnly "-user";
+  version = "9.1.1";
 
   src = fetchurl {
-    url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "8GCr1DX75nlBJeLDmFaP/Dz6VABCWWkHqLGO3KNM9qU=";
+    url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fcD52lSR/0SVAPMxAGOja2GfI27kVwb9CEbrN9S7qIk=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]
+  depsBuildBuild = [ buildPlatformStdenv.cc ]
     ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
@@ -63,22 +90,24 @@ stdenv.mkDerivation rec {
     pkg-config flex bison meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+    python3Packages.python
   ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
+    ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals hexagonSupport [ glib ]
-    ++ lib.optionals stdenv.isDarwin [ sigtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ]
+    ++ lib.optionals (!userOnly) [ dtc ];
 
-  buildInputs = [ zlib glib pixman
-    vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl libslirp
-  ]
+  buildInputs = [ glib zlib ]
+    ++ lib.optionals (!minimal) [ dtc pixman vde2 lzo snappy libtasn1 gnutls nettle libslirp ]
+    ++ lib.optionals (!userOnly) [ curl ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Cocoa Hypervisor Kernel rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
@@ -86,11 +115,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ libaio libcap_ng libcap attr ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [ libcap_ng libcap attr libaio ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
     ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
+    ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
@@ -99,32 +129,30 @@ stdenv.mkDerivation rec {
     ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
-  separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
+  separateDebugInfo = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
 
-    # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
-    # support on nix requires utimensat fallback. The patch adding this fallback
-    # set was removed during the process of upstreaming this functionality, and
-    # will still be needed in nix until the macOS SDK reaches 10.13+.
-    ./provide-fallback-for-utimensat.patch
-    # Cocoa clipboard support only works on macOS 10.14+
-    ./revert-ui-cocoa-add-clipboard-support.patch
-    # Standard about panel requires AppKit and macOS 10.13+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
-      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
-      revert = true;
-    })
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
+    })
+
+    # musl changes https://gitlab.com/qemu-project/qemu/-/issues/2215
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/ac1bbe8ca46c550b3ad99c85744119a3ace7b4f4.diff";
+      sha256 = "sha256-wSlf8+7WHk2Z4I5cLFa37MRroQucPIuFzzyWnG9IpeY=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/99174ce39e86ec6aea7bb7ce326b16e3eed9e3da.diff";
+      sha256 = "sha256-Cpt01d1ARoCTuJuC66no4doPgL+4/ZqnJTWwjU2MxnY=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
@@ -151,12 +179,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     (lib.enableFeature enableDocs "docs")
-    "--enable-tools"
+    (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    # Always use our Meson, not the bundled version, which doesn't
-    # have our patches and will be subtly broken because of that.
-    "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
@@ -165,8 +190,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
-    ++ lib.optional stdenv.isLinux "--enable-linux-aio"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux && !userOnly) "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
     ++ lib.optional cephSupport "--enable-rbd"
@@ -178,7 +203,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional capstoneSupport "--enable-capstone";
+    ++ lib.optional capstoneSupport "--enable-capstone"
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
+    ++ lib.optional userOnly "--disable-system"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static";
 
   dontWrapGApps = true;
 
@@ -186,7 +215,7 @@ stdenv.mkDerivation rec {
   # voiding the entitlements and making it non-operational.
   # The alternative is to re-sign with entitlements after stripping:
   # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # the .desktop is both invalid and pointless
@@ -202,11 +231,16 @@ stdenv.mkDerivation rec {
     for f in $out/bin/qemu-system-*; do
       wrapGApp $f
     done
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # HACK: Otherwise the result will have the entire buildInputs closure
+    # injected by the pkgsStatic stdenv
+    # <https://github.com/NixOS/nixpkgs/issues/83667>
+    rm -f $out/nix-support/propagated-build-inputs
   '';
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
-  inherit doCheck;
+  doCheck = false;
   nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
@@ -220,6 +254,7 @@ stdenv.mkDerivation rec {
 
     # point tests towards correct binaries
     substituteInPlace ../tests/unit/test-qga.c \
+      --replace '/bin/bash' "$(type -P bash)" \
       --replace '/bin/echo' "$(type -P echo)"
     substituteInPlace ../tests/unit/test-io-channel-command.c \
       --replace '/bin/socat' "$(type -P socat)"
@@ -232,7 +267,11 @@ stdenv.mkDerivation rec {
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
       ../tests/unit/test-qga.c
-  '' + lib.optionalString stdenv.isDarwin ''
+
+    # xattrs are not allowed in the sandbox
+    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+      --replace-fail mapped-xattr mapped-file
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
     substituteInPlace ../tests/unit/meson.build \
@@ -240,14 +279,21 @@ stdenv.mkDerivation rec {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = ''
+  postInstall = lib.optionalString (!minimal) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
-    tests = {
-      qemu-tests = qemu.override { doCheck = true; };
+    tests = lib.optionalAttrs (!toolsOnly) {
+      qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      qemu-utils-builds = qemu-utils;
+    };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://gitlab.com/qemu-project/qemu.git";
+      rev-prefix = "v";
+      ignoredVersions = "(alpha|beta|rc).*";
     };
   };
 
@@ -255,11 +301,20 @@ stdenv.mkDerivation rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
-    description = "A generic and open source machine emulator and virtualizer";
+    homepage = "https://www.qemu.org/";
+    description = "Generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    mainProgram = "qemu-kvm";
-    maintainers = with maintainers; [ eelco qyliss ];
+    maintainers = with maintainers; [ qyliss ] ++ lib.optionals xenSupport xen.meta.maintainers;
     platforms = platforms.unix;
+  }
+  # toolsOnly: Does not have qemu-kvm and there's no main support tool
+  # userOnly: There's one qemu-<arch> for every architecture
+  // lib.optionalAttrs (!toolsOnly && !userOnly) {
+    mainProgram = "qemu-kvm";
+  }
+  # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
+  // lib.optionalAttrs userOnly {
+    platforms = with platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+    description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
   };
-}
+})

@@ -17,12 +17,13 @@
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , shared-mime-info
 , libical
 , db
 , sqlite
+, adwaita-icon-theme
 , gnome
 , gnome-desktop
 , librsvg
@@ -44,11 +45,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.48.3";
+  version = "3.54.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZhJexH/XcBcRdNDAhYZu/7aoNEQBW34sdkEpUtbLDiM=";
+    hash = "sha256-qEQzdJd6AcY70Dr9tcY+c6SOZ0XX1Fm08mgj3Vz5lxs=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +59,11 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     bogofilter
     db
     evolution-data-server
@@ -126,8 +127,9 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Evolution";
+    homepage = "https://gitlab.gnome.org/GNOME/evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
+    mainProgram = "evolution";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

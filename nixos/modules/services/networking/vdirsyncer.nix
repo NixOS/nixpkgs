@@ -20,9 +20,11 @@ let
     else
       pkgs.writeText "vdirsyncer-${name}.conf" (toIniJson (
         {
-          general = cfg'.config.general // (lib.optionalAttrs (cfg'.config.statusPath == null) {
-            status_path = "/var/lib/vdirsyncer/${name}";
-          });
+          general = cfg'.config.general // {
+            status_path = if cfg'.config.statusPath == null
+                          then "/var/lib/vdirsyncer/${name}"
+                          else cfg'.config.statusPath;
+          };
         } // (
           mapAttrs' (name: nameValuePair "pair ${name}") cfg'.config.pairs
         ) // (
@@ -69,15 +71,15 @@ in
 {
   options = {
     services.vdirsyncer = {
-      enable = mkEnableOption (mdDoc "vdirsyncer");
+      enable = mkEnableOption "vdirsyncer";
 
-      package = mkPackageOptionMD pkgs "vdirsyncer" {};
+      package = mkPackageOption pkgs "vdirsyncer" {};
 
       jobs = mkOption {
-        description = mdDoc "vdirsyncer job configurations";
+        description = "vdirsyncer job configurations";
         type = types.attrsOf (types.submodule {
           options = {
-            enable = (mkEnableOption (mdDoc "this vdirsyncer job")) // {
+            enable = (mkEnableOption "this vdirsyncer job") // {
               default = true;
               example = false;
             };
@@ -85,7 +87,7 @@ in
             user = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = mdDoc ''
+              description = ''
                 User account to run vdirsyncer as, otherwise as a systemd
                 dynamic user
               '';
@@ -94,19 +96,19 @@ in
             group = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = mdDoc "group to run vdirsyncer as";
+              description = "group to run vdirsyncer as";
             };
 
             additionalGroups = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = mdDoc "additional groups to add the dynamic user to";
+              description = "additional groups to add the dynamic user to";
             };
 
             forceDiscover = mkOption {
               type = types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Run `yes | vdirsyncer discover` prior to `vdirsyncer sync`
               '';
             };
@@ -117,13 +119,13 @@ in
                 OnBootSec = "1h";
                 OnUnitActiveSec = "6h";
               };
-              description = mdDoc "systemd timer configuration";
+              description = "systemd timer configuration";
             };
 
             configFile = mkOption {
               type = types.nullOr types.path;
               default = null;
-              description = mdDoc "existing configuration file";
+              description = "existing configuration file";
             };
 
             config = {
@@ -131,19 +133,19 @@ in
                 type = types.nullOr types.str;
                 default = null;
                 defaultText = literalExpression "/var/lib/vdirsyncer/\${attrName}";
-                description = mdDoc "vdirsyncer's status path";
+                description = "vdirsyncer's status path";
               };
 
               general = mkOption {
                 type = types.attrs;
                 default = {};
-                description = mdDoc "general configuration";
+                description = "general configuration";
               };
 
               pairs = mkOption {
                 type = types.attrsOf types.attrs;
                 default = {};
-                description = mdDoc "vdirsyncer pair configurations";
+                description = "vdirsyncer pair configurations";
                 example = literalExpression ''
                   {
                     my_contacts = {
@@ -160,7 +162,7 @@ in
               storages = mkOption {
                 type = types.attrsOf types.attrs;
                 default = {};
-                description = mdDoc "vdirsyncer storage configurations";
+                description = "vdirsyncer storage configurations";
                 example = literalExpression ''
                   {
                     my_cloud_contacts = {

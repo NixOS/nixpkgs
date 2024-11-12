@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.13.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
-    sha256 = "sha256-bkTbnf7vyTxA623JVGUgrwAuXK7d8kzijOK1F4Sh4yY=";
+    hash = "sha256-qBDpNyBxcW/OPnrbmL+NmKWIF69p1OoZFqlP6mwPi9U=";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = [ cunit ]
-    ++ lib.optional stdenv.isDarwin ncurses;
+    ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "an effort to implement RFC9000 QUIC protocol.";
+    description = "Effort to implement RFC9000 QUIC protocol";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vcunat/* for knot-dns */ ];

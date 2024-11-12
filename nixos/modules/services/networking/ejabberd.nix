@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.ejabberd;
@@ -11,7 +8,7 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  ectl = ''${cfg.package}/bin/ejabberdctl ${lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
 
@@ -23,66 +20,61 @@ in {
 
     services.ejabberd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable ejabberd server";
+        description = "Whether to enable ejabberd server";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ejabberd;
-        defaultText = literalExpression "pkgs.ejabberd";
-        description = lib.mdDoc "ejabberd server package to use";
-      };
+      package = lib.mkPackageOption pkgs "ejabberd" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "ejabberd";
-        description = lib.mdDoc "User under which ejabberd is ran";
+        description = "User under which ejabberd is ran";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "ejabberd";
-        description = lib.mdDoc "Group under which ejabberd is ran";
+        description = "Group under which ejabberd is ran";
       };
 
-      spoolDir = mkOption {
-        type = types.path;
+      spoolDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/ejabberd";
-        description = lib.mdDoc "Location of the spooldir of ejabberd";
+        description = "Location of the spooldir of ejabberd";
       };
 
-      logsDir = mkOption {
-        type = types.path;
+      logsDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/log/ejabberd";
-        description = lib.mdDoc "Location of the logfile directory of ejabberd";
+        description = "Location of the logfile directory of ejabberd";
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
-        description = lib.mdDoc "Configuration file for ejabberd in YAML format";
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        description = "Configuration file for ejabberd in YAML format";
         default = null;
       };
 
-      ctlConfig = mkOption {
-        type = types.lines;
+      ctlConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc "Configuration of ejabberdctl";
+        description = "Configuration of ejabberdctl";
       };
 
-      loadDumps = mkOption {
-        type = types.listOf types.path;
+      loadDumps = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
-        description = lib.mdDoc "Configuration dumps that should be loaded on the first startup";
-        example = literalExpression "[ ./myejabberd.dump ]";
+        description = "Configuration dumps that should be loaded on the first startup";
+        example = lib.literalExpression "[ ./myejabberd.dump ]";
       };
 
-      imagemagick = mkOption {
-        type = types.bool;
+      imagemagick = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Add ImageMagick to server's path; allows for image thumbnailing";
+        description = "Add ImageMagick to server's path; allows for image thumbnailing";
       };
     };
 
@@ -91,10 +83,10 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users = optionalAttrs (cfg.user == "ejabberd") {
+    users.users = lib.optionalAttrs (cfg.user == "ejabberd") {
       ejabberd = {
         group = cfg.group;
         home = cfg.spoolDir;
@@ -103,7 +95,7 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "ejabberd") {
+    users.groups = lib.optionalAttrs (cfg.group == "ejabberd") {
       ejabberd.gid = config.ids.gids.ejabberd;
     };
 
@@ -124,6 +116,12 @@ in {
       preStart = ''
         if [ -z "$(ls -A '${cfg.spoolDir}')" ]; then
           touch "${cfg.spoolDir}/.firstRun"
+        fi
+
+        if ! test -e ${cfg.spoolDir}/.erlang.cookie; then
+          touch ${cfg.spoolDir}/.erlang.cookie
+          chmod 600 ${cfg.spoolDir}/.erlang.cookie
+          dd if=/dev/random bs=16 count=1 | base64 > ${cfg.spoolDir}/.erlang.cookie
         fi
       '';
 

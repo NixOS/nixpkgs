@@ -1,32 +1,45 @@
-with import ../../../../.. { };
+{ pkgs ? (import ../../../../.. { }) }:
 
-with lib; let
-  # NOTE: the fixed naming scheme must match default.nix
-  # name for the URL
-  mkURLName = { pname, tlType, ... }: pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
-  # name + revision for the fixed output hashes
-  mkFixedName = { tlType, revision, extraRevision ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + ".r${toString revision}${extraRevision}";
+let
+  inherit (pkgs) runCommand writeText texlive nix;
+  inherit (pkgs.lib)
+    attrValues
+    concatMap
+    concatMapStrings
+    isDerivation
+    filter
+    optional
+    optionalString
+    sort
+    strings
+    ;
 
-  uniqueByName = fods: catAttrs "fod" (genericClosure {
-    startSet = map (fod: { key = fod.name; inherit fod; }) fods;
-    operator = _: [ ];
-  });
+  getFods = drv: optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
+    ++ optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; })
+    ++ optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
+    ++ optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; });
 
-  # ugly hack to extract combine from collection-latexextra, since it is masked by texlive.combine
-  combine = lib.findFirst (p: (lib.head p.pkgs).pname == "combine") { pkgs = []; } (lib.head texlive.collection-latexextra.pkgs).tlDeps;
-  all = concatLists (map (p: p.pkgs or []) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ]))) ++ combine.pkgs;
+  sorted = sort (a: b: a.pname < b.pname) (attrValues texlive.pkgs);
+  fods = concatMap getFods sorted;
 
-  # fixed hashes only for run, doc, source, tlpkg types
-  fods = sort (a: b: a.name < b.name) (uniqueByName (filter (p: isDerivation p && p.tlType != "bin") all));
-
-  computeHash = fod: runCommand "${fod.name}-fixed-hash"
+  computeHash = fod: runCommand "${fod.pname}-${fod.tlType}-fixed-hash"
     { buildInputs = [ nix ]; inherit fod; }
     ''echo -n "$(nix-hash --base32 --type sha256 "$fod")" >"$out"'';
 
   hash = fod: fod.outputHash or (builtins.readFile (computeHash fod));
-  hashLine = fod: ''
-    "${mkFixedName fod}"="${hash fod}";
-  '';
+
+  hashes = fods:
+    concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
+
+  hashLine = { pname, revision, extraRevision ? "", ... }@drv:
+    let
+      fods = getFods drv;
+      # NOTE: the fixed naming scheme must match default.nix
+      fixedName = "${pname}-${toString revision}${extraRevision}";
+    in
+    optionalString (fods != [ ]) ''
+      ${strings.escapeNixIdentifier fixedName}={${hashes fods}};
+    '';
 in
 {
   # fixedHashesNix uses 'import from derivation' which does not parallelize well
@@ -34,8 +47,8 @@ in
   newHashes = map computeHash (filter (fod: ! fod ? outputHash) fods);
 
   fixedHashesNix = writeText "fixed-hashes.nix"
-  ''
-    {
-    ${lib.concatMapStrings hashLine fods}}
-  '';
+    ''
+      {
+      ${concatMapStrings hashLine sorted}}
+    '';
 }

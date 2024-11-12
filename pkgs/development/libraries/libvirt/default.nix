@@ -34,7 +34,7 @@
 , stdenv
 , substituteAll
 , xhtml1
-, yajl
+, json_c
 , writeScript
 , nixosTests
 
@@ -72,14 +72,14 @@
 , enableIscsi ? false
 , openiscsi
 , libiscsi
-, enableXen ? false
+, enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
 , xen
-, enableZfs ? stdenv.isLinux
+, enableZfs ? stdenv.hostPlatform.isLinux
 , zfs
 }:
 
 let
-  inherit (stdenv) isDarwin isLinux isx86_64;
+  inherit (stdenv.hostPlatform) isDarwin isLinux isx86_64;
   binPath = lib.makeBinPath ([
     dnsmasq
   ] ++ lib.optionals isLinux [
@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.4.0";
+  version = "10.9.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aYLXiZtbNXwJ8qmTHXv2OnyrYWK7KbwQWulTeuTbe0k=";
+    hash = "sha256-LYQYA5UIKYs+8rSNZDymmrxuTWsgmukP5Y17lGB5UQs=";
     fetchSubmodules = true;
   };
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     sed -i '/commandtest/d' tests/meson.build
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
-    sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+    sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
 
   '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
@@ -155,16 +155,22 @@ stdenv.mkDerivation rec {
       src/storage/storage_backend_disk.c \
       src/storage/storage_util.c
   '' + lib.optionalString isDarwin ''
-    sed -i '/qemucapabilitiestest/d' tests/meson.build
-    sed -i '/vircryptotest/d' tests/meson.build
-    sed -i '/domaincapstest/d' tests/meson.build
+    # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
+    # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
+    sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
-  '' + lib.optionalString (isDarwin && isx86_64) ''
-    sed -i '/qemucaps2xmltest/d' tests/meson.build
-    sed -i '/qemuhotplugtest/d' tests/meson.build
-    sed -i '/virnetdaemontest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
+    # virshtest frequently times out on Darwin
+    substituteInPlace tests/meson.build \
+      --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
+  '' + lib.optionalString enableXen ''
+    # Has various hardcoded paths that don't exist outside of a Xen dom0.
+    sed -i '/libxlxml2domconfigtest/d' tests/meson.build
+    substituteInPlace src/libxl/libxl_capabilities.h \
+     --replace-fail /usr/lib/xen ${xen}/libexec/xen
   '';
 
   strictDeps = true;
@@ -199,7 +205,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     xhtml1
-    yajl
+    json_c
   ] ++ lib.optionals isLinux [
     acl
     attr
@@ -254,6 +260,9 @@ stdenv.mkDerivation rec {
       substituteInPlace src/util/virpolkit.h \
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
+      substituteInPlace src/util/virpci.c \
+         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
@@ -271,7 +280,8 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/var/lib"
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
-      (cfg "runstatedir" "/run")
+      (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
+      (cfg "sshconfdir" "/etc/ssh/ssh_config.d")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
       (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))
@@ -302,9 +312,10 @@ stdenv.mkDerivation rec {
       (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
+      (feat "ssh_proxy" isLinux)
       (feat "tests" true)
       (feat "udev" isLinux)
-      (feat "yajl" true)
+      (feat "json_c" true)
 
       (driver "ch" isLinux)
       (driver "esx" true)
@@ -376,7 +387,7 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = with lib; {
-    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;

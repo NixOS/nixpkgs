@@ -1,64 +1,66 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, jinja2
-, pygments
-, markupsafe
-, astunparse
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  jinja2,
+  pdoc-pyo3-sample-library,
+  pygments,
+  markupsafe,
+  pytestCheckHook,
+  hypothesis,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "13.0.0";
-  disabled = pythonOlder "3.7";
+  version = "15.0.0";
+  disabled = pythonOlder "3.9";
 
-  format = "pyproject";
+  pyproject = true;
 
-  # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-UzUAprvBimk2POi0QZdFuRWEeGDp+MLmdUYR0UiIubs=";
+    hash = "sha256-6XEcHhaKkxY/FU748f+OsTcSgrM4iQTmJAL8rJ3EqnY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     pygments
     markupsafe
-  ] ++ lib.optional (pythonOlder "3.9") astunparse;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    pdoc-pyo3-sample-library
   ];
   disabledTestPaths = [
-    # "test_snapshots" tries to match generated output against stored snapshots.
-    # They are highly sensitive dep versions, which we unlike upstream do not pin.
+    # "test_snapshots" tries to match generated output against stored snapshots,
+    # which are highly sensitive to dep versions.
     "test/test_snapshot.py"
   ];
 
   pytestFlagsArray = [
-    ''-m "not slow"'' # skip tests marked slow
+    ''-m "not slow"'' # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pdoc" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
+    mainProgram = "pdoc";
     license = licenses.unlicense;
     maintainers = with maintainers; [ pbsds ];
   };

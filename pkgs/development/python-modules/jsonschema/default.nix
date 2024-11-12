@@ -1,62 +1,67 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, importlib-metadata
-, importlib-resources
-, pyrsistent
-, pythonOlder
-, twisted
-, typing-extensions
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  importlib-resources,
+  jsonschema-specifications,
+  pkgutil-resolve-name,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  referencing,
+  rpds-py,
 
-# optionals
-, fqdn
-, idna
-, isoduration
-, jsonpointer
-, rfc3339-validator
-, rfc3986-validator
-, rfc3987
-, uri-template
-, webcolors
+  # optionals
+  fqdn,
+  idna,
+  isoduration,
+  jsonpointer,
+  rfc3339-validator,
+  rfc3986-validator,
+  rfc3987,
+  uri-template,
+  webcolors,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.17.3";
-  format = "pyproject";
+  version = "4.23.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D4ZEN6uLYHa6ZwdFPvj5imoNUSqA6T+KvbZ29zfstg0=";
+    hash = "sha256-1xSX/vJjUaMyZTN/p3/+uCQj8+ohKDzZRnuwOZkma8Q=";
   };
 
   postPatch = ''
     patchShebangs json/bin/jsonschema_suite
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    pyrsistent
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  dependencies =
+    [
+      attrs
+      jsonschema-specifications
+      referencing
+      rpds-py
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+      pkgutil-resolve-name
+    ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     format = [
       fqdn
       idna
@@ -80,22 +85,18 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    twisted
+    pip
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export JSON_SCHEMA_TEST_SUITE=json
-    trial jsonschema
-  '';
-
-  pythonImportsCheck = [
-    "jsonschema"
-  ];
+  pythonImportsCheck = [ "jsonschema" ];
 
   meta = with lib; {
-    description = "An implementation of JSON Schema validation for Python";
+    description = "Implementation of JSON Schema validation";
     homepage = "https://github.com/python-jsonschema/jsonschema";
+    changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
+    mainProgram = "jsonschema";
   };
 }

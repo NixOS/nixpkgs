@@ -1,20 +1,36 @@
-{ lib, fetchPypi, buildPythonPackage, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-    pname = "pytimeparse";
-    version = "1.1.8";
+  pname = "pytimeparse";
+  version = "1.1.8";
+  pyproject = true;
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "e86136477be924d7e670646a98561957e8ca7308d44841e21f5ddea757556a0a";
-    };
+  disabled = pythonOlder "3.7";
 
-    nativeCheckInputs = [ nose ];
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-6GE2R3vpJNfmcGRqmFYZV+jKcwjUSEHiH13ep1dVago=";
+  };
 
-    meta = with lib; {
-      description = "A small Python library to parse various kinds of time expressions";
-      homepage    = "https://github.com/wroberts/pytimeparse";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "pytimeparse/tests/testtimeparse.py" ];
+
+  pythonImportsCheck = [ "pytimeparse" ];
+
+  meta = with lib; {
+    description = "Library to parse various kinds of time expressions";
+    homepage = "https://github.com/wroberts/pytimeparse";
+    changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = [ ];
+  };
 }

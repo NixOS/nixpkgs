@@ -1,31 +1,51 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  cmake,
+  rustPlatform,
+  pkg-config,
+  fetchFromGitHub,
+  atk,
+  gtk3,
+  glib,
+  openssl,
+  Security,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
     rev = "v${version}";
-    hash = "sha256-DQ7BPRd90GNQVfD5NoVcxoyd2L3WZvIkecmRJVUY1R4=";
+    hash = "sha256-kvtfEEydwonoDux1VbAxqrF/Hf8Qh8mhprYnROGOC6g=";
   };
 
-  cargoHash = "sha256-BounjGGhbU5dxNV8WjVDQtV7YONNVRldc/t+wet1Gh8=";
+  cargoHash = "sha256-6v/3b6BHh/n7M2ZhLVKRvv0Va2xbLUSsxUb5paOStbQ=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    atk
+    glib
+    gtk3
+    openssl
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
-    description = "An advanced geospatial data analysis platform";
-    license = licenses.mit;
-    maintainers = [ maintainers.mpickering ];
+    description = "Advanced geospatial data analysis platform";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ mpickering ]);
   };
 }

@@ -2,9 +2,7 @@
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.4";
-
-  duneVersion = "3";
+  version = "1.3.6";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,10 +10,8 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    sha256 = "sha256-a7SBGHNKUstfrdHx9KI33tYpvzTwIGhs4Hfie5EeKww=";
+    hash = "sha256-EgRpC58NBVFO1w0xx11CnonatU2H7bECsEk6Y4c/odY=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ cmdliner re ];
@@ -24,7 +20,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://www.typerex.org/ocp-index.html";
-    description = "A simple and light-weight documentation extractor for OCaml";
+    description = "Simple and light-weight documentation extractor for OCaml";
     changelog = "https://github.com/OCamlPro/ocp-index/raw/${version}/CHANGES.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ vbgl ];

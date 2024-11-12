@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.10";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-smJDWlJB6Jv6UcPKvVEzdTlS96e3uT8y4Iy52W9YDWk=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://net-tools.sourceforge.net/";
-    description = "A set of tools for controlling the network subsystem in Linux";
+    description = "Set of tools for controlling the network subsystem in Linux";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

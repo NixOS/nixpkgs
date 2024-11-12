@@ -1,57 +1,73 @@
-{ stable
-, branch
-, version
-, sha256Hash
-, mkOverride
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  fetchFromGitHub,
+  gns3-gui,
+  lib,
+  python3Packages,
+  qt5,
+  testers,
+  wrapQtAppsHook,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "gns3-gui";
   inherit version;
 
   src = fetchFromGitHub {
+    inherit hash;
     owner = "GNS3";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = sha256Hash;
+    repo = "gns3-gui";
+    rev = "refs/tags/v${version}";
   };
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = with python3Packages; [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  propagatedBuildInputs = [ qt5.qtwayland ];
+
+  dependencies = with python3Packages; [
     distro
     jsonschema
     psutil
     sentry-sdk
     setuptools
-    sip_4 (pyqt5.override { withWebSockets = true; })
+    sip
+    (pyqt5.override { withWebSockets = true; })
+    truststore
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
-
-  doCheck = false; # Failing
 
   dontWrapQtApps = true;
 
-  postFixup = ''
-      wrapQtApp "$out/bin/gns3"
+  preFixup = ''
+    wrapQtApp "$out/bin/gns3"
   '';
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "psutil==" "psutil>=" \
-      --replace "jsonschema>=4.17.0,<4.18" "jsonschema" \
-      --replace "sentry-sdk==1.10.1,<1.11" "sentry-sdk"
+  doCheck = true;
+
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
+    export QT_QPA_PLATFORM=offscreen
   '';
 
-  meta = with lib; {
-    description = "Graphical Network Simulator 3 GUI (${branch} release)";
+  passthru.tests.version = testers.testVersion {
+    package = gns3-gui;
+    command = "${lib.getExe gns3-gui} --version";
+  };
+
+  meta = {
+    description = "Graphical Network Simulator 3 GUI (${channel} release)";
     longDescription = ''
       Graphical user interface for controlling the GNS3 network simulator. This
       requires access to a local or remote GNS3 server (it's recommended to
@@ -59,9 +75,9 @@ python3.pkgs.buildPythonPackage rec {
     '';
     homepage = "https://www.gns3.com/";
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };
 }

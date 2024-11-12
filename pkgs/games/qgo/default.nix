@@ -4,7 +4,7 @@
 , qmake
 , qtbase
 , qtmultimedia
-, qttranslations
+, qttools
 }:
 
 mkDerivation {
@@ -12,7 +12,8 @@ mkDerivation {
   version = "unstable-2017-12-18";
 
   meta = with lib; {
-    description = "A Go client based on Qt5";
+    description = "Go client based on Qt5";
+    mainProgram = "qgo";
     longDescription = ''
       qGo is a Go Client based on Qt 5. It supports playing online at
       IGS-compatible servers (including some special tweaks for WING and LGS,
@@ -26,7 +27,7 @@ mkDerivation {
       Chinese, "囲碁(Yi Go)" in Japanese, "바둑(Baduk)" in Korean.
     '';
     homepage = "https://github.com/pzorin/qgo";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zalakain ];
   };
 
@@ -41,6 +42,6 @@ mkDerivation {
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtmultimedia qttranslations ];
+  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtbase qtmultimedia ];
 }

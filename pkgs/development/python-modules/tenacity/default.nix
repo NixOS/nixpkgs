@@ -1,31 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tornado
-, typeguard
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tornado,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "8.2.2";
-  format = "pyproject";
+  version = "9.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q68DeCK9ACkCWHfzstl8xNe7DCmRAAo9WdcVF8XJaeA=";
+    hash = "sha256-gH83ypfWKqNhJk1Jew4x6SuAJwRJQr+nVhYNkIMg1zs=";
   };
 
-  nativeBuildInputs = [
-    pbr
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -34,12 +31,11 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pythonImportsCheck = [
-    "tenacity"
-  ];
+  pythonImportsCheck = [ "tenacity" ];
 
   meta = with lib; {
     homepage = "https://github.com/jd/tenacity";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
     description = "Retrying library for Python";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakewaksbaum ];

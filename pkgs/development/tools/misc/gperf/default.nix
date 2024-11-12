@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gperf/";
     platforms = lib.platforms.unix;
+    mainProgram = "gperf";
   };
 }

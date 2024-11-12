@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

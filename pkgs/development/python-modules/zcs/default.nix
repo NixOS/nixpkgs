@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, yacs
-, boxx
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  yacs,
+  boxx,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,21 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-/QIyRQtxLDVW+vcQi5bL8rJ0o3+OhqGhQEALR1YO1pg=";
   };
 
-  patches = [
-    ./fix-test-yaml.patch
-  ];
+  patches = [ ./fix-test-yaml.patch ];
 
-  propagatedBuildInputs = [
-    yacs
-  ];
+  propagatedBuildInputs = [ yacs ];
 
-  pythonImportsCheck = [
-    "zcs"
-  ];
+  pythonImportsCheck = [ "zcs" ];
 
-  nativeCheckInputs = [
-    boxx
-  ];
+  nativeCheckInputs = [ boxx ];
 
   checkPhase = ''
     ${python.interpreter} test/test_zcs.py

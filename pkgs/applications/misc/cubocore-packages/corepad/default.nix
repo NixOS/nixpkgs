@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corepad";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MZdEdGfCaQp5DuDDYRNXi37O+O/aRS8XgAN0Jma/J3k=";
+    hash = "sha256-qiw6P+I9iAcFcBWiMKAzyxM6waXx/2TPVQHLcLjAnoY=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A document editor from the C Suite";
+    description = "Document editor from the C Suite";
+    mainProgram = "corepad";
     homepage = "https://gitlab.com/cubocore/coreapps/corepad";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

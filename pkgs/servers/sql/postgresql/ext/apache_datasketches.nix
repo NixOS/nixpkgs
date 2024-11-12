@@ -1,38 +1,44 @@
-{ stdenv, lib, fetchFromGitHub, postgresql, boost182, nixosTests }:
+{ stdenv, lib, fetchFromGitHub, postgresql, boost182, postgresqlTestExtension }:
+
+let
+  version = "1.7.0";
+
+  main_src = fetchFromGitHub {
+    name   = "datasketches-postgresql";
+    owner  = "apache";
+    repo   = "datasketches-postgresql";
+    rev    = "refs/tags/${version}";
+    hash   = "sha256-W41uAs3W4V7c9O/wBw3rut65bcmY8EdQS1/tPszMGqA=";
+  };
+
+  cpp_src = fetchFromGitHub {
+    name   = "datasketches-cpp";
+    owner  = "apache";
+    repo   = "datasketches-cpp";
+    rev    = "refs/tags/5.0.2";
+    hash   = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache_datasketches";
-  version = "1.6.0";
+  inherit version;
 
-  srcs = [
-    ( fetchFromGitHub {
-        name   = "datasketches-postgresql";
-        owner  = "apache";
-        repo   = "datasketches-postgresql";
-        rev    = "refs/tags/${finalAttrs.version}";
-        hash   = "sha256-sz94fIe7nyWhjiw8FAm6ZzVpB0sAK5YxUrtbaZt/guA=";
-    })
-    ( fetchFromGitHub {
-        name   = "datasketches-cpp";
-        owner  = "apache";
-        repo   = "datasketches-cpp";
-        rev    = "refs/tags/4.1.0";
-        hash   = "sha256-vPoFzRxOXlEAiiHH9M5S6255ahzaKsGNYS0cdHwrRYw=";
-    })
-  ];
-  sourceRoot = "datasketches-postgresql";
+  srcs = [ main_src cpp_src ];
+
+  sourceRoot = main_src.name;
 
   buildInputs = [ postgresql boost182 ];
 
   patchPhase = ''
     runHook prePatch
-    cp -r ../datasketches-cpp .
+    cp -r ../${cpp_src.name} .
     runHook postPatch
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D -m 644 ./datasketches.so -t $out/lib/
+    install -D -m 644 ./datasketches${postgresql.dlSuffix} -t $out/lib/
     cat \
       sql/datasketches_cpc_sketch.sql \
       sql/datasketches_kll_float_sketch.sql \
@@ -43,18 +49,25 @@ stdenv.mkDerivation (finalAttrs: {
       sql/datasketches_aod_sketch.sql \
       sql/datasketches_req_float_sketch.sql \
       sql/datasketches_quantiles_double_sketch.sql \
-      > sql/datasketches--${finalAttrs.version}.sql
+      > sql/datasketches--${version}.sql
     install -D -m 644 ./datasketches.control -t $out/share/postgresql/extension
     install -D -m 644 \
-      ./sql/datasketches--${finalAttrs.version}.sql \
+      ./sql/datasketches--${version}.sql \
       ./sql/datasketches--1.3.0--1.4.0.sql \
       ./sql/datasketches--1.4.0--1.5.0.sql \
       ./sql/datasketches--1.5.0--1.6.0.sql \
+      ./sql/datasketches--1.6.0--1.7.0.sql \
       -t $out/share/postgresql/extension
     runHook postInstall
   '';
 
-  passthru.tests.apache_datasketches = nixosTests.apache_datasketches;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = ''
+      CREATE EXTENSION datasketches;
+      SELECT hll_sketch_to_string(hll_sketch_build(1));
+    '';
+  };
 
   meta = {
     description = "PostgreSQL extension providing approximate algorithms for distinct item counts, quantile estimation and frequent items detection";

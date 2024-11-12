@@ -1,54 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, antlr4
-, antlr4-python3-runtime
-, igraph
-, pygments
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  igraph,
+  pygments,
+  scikit-build-core,
+  pybind11,
+  ninja,
+  ruff,
+  cmake,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.2";
+  version = "0.2.1.post2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-REQYyxB2sb/gG54+OkMw+M4Agg9SWfAyqAhiSNnd3tE=";
+    hash = "sha256-cKEceWr7XmZbuomPOmjQ32ptAjz3LZDQBWAgZEFadDY=";
+    # Include a pinned antlr4 fork used as a C++ library
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    antlr4
+    setuptools
+    scikit-build-core
+    ninja
+    cmake
+    ruff
   ];
+
+  # The source include some auto-generated ANTLR code that could be recompiled, but trying that resulted in a crash while decompiling unionall.ssb.
+  # We thus do not rebuild them.
 
   postPatch = ''
-    sed -i "s/antlr4-python3-runtime.*/antlr4-python3-runtime',/" setup.py
-    antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
+    substituteInPlace Makefile \
+      --replace-fail ./generate_parser_bindings.py "python3 ./generate_parser_bindings.py"
+
+    # Doesn’t detect that package for some reason
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"scikit-build-core<=0.9.8\"," ""
   '';
 
+  dontUseCmakeConfigure = true;
+
   propagatedBuildInputs = [
-    antlr4-python3-runtime
     igraph
+    pybind11
   ];
 
-  passthru.optional-dependencies.pygments = [
-    pygments
-  ];
+  optional-dependencies.pygments = [ pygments ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pygments;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pygments;
 
-  pythonImportsCheck = [
-    "explorerscript"
-  ];
+  pythonImportsCheck = [ "explorerscript" ];
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/explorerscript";
-    description = "A programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
+    description = "Programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

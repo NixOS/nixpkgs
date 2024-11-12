@@ -1,49 +1,47 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# docs
-, python
-, sphinx
-, sphinx-rtd-theme
+  # build-system
+  setuptools,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # docs
+  python,
+  sphinx,
+  sphinx-rtd-theme,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.46.0";
+  version = "1.47.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bl+LqEg2uZ/mC+X7J/hL5K2Rm7trScqmroHnBYS1Xlg=";
+    hash = "sha256-cZ+t7wqXjDG0zzyVYmGzxYtpSLMgIweKIRex3gnw/Jk=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
+    setuptools
     sphinx
     sphinx-rtd-theme
   ];
 
-  patches = [
-    (fetchpatch {
-      # docs: Make extlinks compatible with sphinx 6.0
-      # https://github.com/quodlibet/mutagen/pull/590
-      url = "https://github.com/quodlibet/mutagen/commit/37b4e6bddc03e1f715425c418ea84bac15116907.patch";
-      hash = "sha256-CnGfHY4RhRhOLvlRTH/NZwzCnAL3VhU6xosuh6fkqGQ=";
-    })
-  ];
-
   postInstall = ''
-    ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_sphinx --build-dir=$doc
   '';
 
   nativeCheckInputs = [
@@ -59,9 +57,7 @@ buildPythonPackage rec {
     "test_mock_fileobj"
   ];
 
-  pythonImportsCheck = [
-    "mutagen"
-  ];
+  pythonImportsCheck = [ "mutagen" ];
 
   meta = with lib; {
     description = "Python module for handling audio metadata";
@@ -76,8 +72,10 @@ buildPythonPackage rec {
       manipulate Ogg streams on an individual packet/page level.
     '';
     homepage = "https://mutagen.readthedocs.io";
-    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -38,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.255";
+  version = "0.270";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-pdPKxEHxynBIB2lUG6yjKNcY8MlOlk4pfr7WwqaA9Dk=";
+    hash = "sha256-l1mgkPhYO/U/77veC0Mpyzr6hzz/FSkn+4GMAdLSfOk=";
   };
 
   outputs = [ "out" "tools" ];
@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
     sqlite
     qtbase
   ]
-  ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-  ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.mamedev.org/";
-    description = "A multi-purpose emulation framework";
+    description = "Multi-purpose emulation framework";
     longDescription = ''
       MAME's purpose is to preserve decades of software history. As electronic
       technology continues to rush forward, MAME prevents this important
@@ -195,6 +195,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 gpl2Plus ];
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "mame";
   };
 }

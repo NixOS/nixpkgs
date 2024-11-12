@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
 
   cfg = config.services.erigon;
@@ -11,25 +9,27 @@ in {
 
   options = {
     services.erigon = {
-      enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
+      enable = lib.mkEnableOption "Ethereum implementation on the efficiency frontier";
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
-        description = lib.mdDoc "Additional arguments passed to Erigon";
+      package = lib.mkPackageOption pkgs "erigon" { };
+
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description = "Additional arguments passed to Erigon";
         default = [ ];
       };
 
-      secretJwtPath = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
+      secretJwtPath = lib.mkOption {
+        type = lib.types.path;
+        description = ''
           Path to the secret jwt used for the http api authentication.
         '';
         default = "";
         example = "config.age.secrets.ERIGON_JWT.path";
       };
 
-      settings = mkOption {
-        description = lib.mdDoc ''
+      settings = lib.mkOption {
+        description = ''
           Configuration for Erigon
           Refer to <https://github.com/ledgerwatch/erigon#usage> for details on supported values.
         '';
@@ -50,7 +50,7 @@ in {
           "log.console.verbosity" = 3; # info
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             datadir = "/var/lib/erigon";
             chain = "mainnet";
@@ -69,20 +69,20 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Default values are the same as in the binary, they are just written here for convenience.
     services.erigon.settings = {
-      datadir = mkDefault "/var/lib/erigon";
-      chain = mkDefault "mainnet";
-      http = mkDefault true;
-      "http.port" = mkDefault 8545;
-      "http.api" = mkDefault ["eth" "debug" "net" "trace" "web3" "erigon"];
-      ws = mkDefault true;
-      port = mkDefault 30303;
-      "authrpc.port" = mkDefault 8551;
-      "torrent.port" = mkDefault 42069;
-      "private.api.addr" = mkDefault "localhost:9090";
-      "log.console.verbosity" = mkDefault 3; # info
+      datadir = lib.mkDefault "/var/lib/erigon";
+      chain = lib.mkDefault "mainnet";
+      http = lib.mkDefault true;
+      "http.port" = lib.mkDefault 8545;
+      "http.api" = lib.mkDefault ["eth" "debug" "net" "trace" "web3" "erigon"];
+      ws = lib.mkDefault true;
+      port = lib.mkDefault 30303;
+      "authrpc.port" = lib.mkDefault 8551;
+      "torrent.port" = lib.mkDefault 42069;
+      "private.api.addr" = lib.mkDefault "localhost:9090";
+      "log.console.verbosity" = lib.mkDefault 3; # info
     };
 
     systemd.services.erigon = {
@@ -92,7 +92,7 @@ in {
 
       serviceConfig = {
         LoadCredential = "ERIGON_JWT:${cfg.secretJwtPath}";
-        ExecStart = "${pkgs.erigon}/bin/erigon --config ${configFile} --authrpc.jwtsecret=%d/ERIGON_JWT ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package}/bin/erigon --config ${configFile} --authrpc.jwtsecret=%d/ERIGON_JWT ${lib.escapeShellArgs cfg.extraArgs}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "erigon";

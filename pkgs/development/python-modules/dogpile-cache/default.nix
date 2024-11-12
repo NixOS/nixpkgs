@@ -1,43 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
-, mock
-, mako
-, decorator
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  mako,
+  decorator,
+  stevedore,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dogpile-cache";
-  version = "1.2.0";
+  version = "1.3.3";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "dogpile.cache";
     inherit version;
-    hash = "sha256-R1VMhgzrSE3Vrvn/H4j+yz1K72u5IRlFD1vLqgJrv7E=";
+    hash = "sha256-+EuO0LD7KX0VEFVEf6jcr3uuVm1Nve/s3MHzdmKrWIs=";
   };
 
-  preCheck = ''
-    # Disable concurrency tests that often fail,
-    # probably some kind of timing issue.
-    rm tests/test_lock.py
-    # Failing tests. https://bitbucket.org/zzzeek/dogpile.cache/issues/116
-    rm tests/cache/test_memcached_backend.py
-  '';
+  nativeBuildInputs = [ setuptools ];
 
-  dontUseSetuptoolsCheck = true;
+  propagatedBuildInputs = [
+    decorator
+    stevedore
+    typing-extensions
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook mock mako ];
-
-  propagatedBuildInputs = [ decorator stevedore ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mako
+  ];
 
   meta = with lib; {
-    description = "A caching front-end based on the Dogpile lock";
-    homepage = "https://bitbucket.org/zzzeek/dogpile.cache";
+    description = "Caching front-end based on the Dogpile lock";
+    homepage = "https://github.com/sqlalchemy/dogpile.cache";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

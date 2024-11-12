@@ -1,37 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, azure-common
-, azure-mgmt-core
-, msrest
-, msrestazure
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
   pname = "azure-mgmt-deploymentmanager";
-  disabled = isPy27;
+  version = "1.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9badb768617209149c33e68ca2e59c35b1d3d11427e2969872f2e236e14eee78";
+    hash = "sha256-m623aGFyCRScM+aMouWcNbHT0RQn4paYcvLiNuFO7ng=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     msrest
-    msrestazure
   ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.deploymentmanager" ];
+  pythonImportsCheck = [
+    "azure.common"
+    "azure.mgmt.deploymentmanager"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Deployment Manager Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/deploymentmanager/azure-mgmt-deploymentmanager";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-deploymentmanager_${version}/sdk/deploymentmanager/azure-mgmt-deploymentmanager/setup.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

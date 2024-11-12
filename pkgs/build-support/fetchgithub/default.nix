@@ -4,6 +4,7 @@ lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
+, fetchLFS ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
@@ -19,16 +20,20 @@ let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
     homepage = meta.homepage or baseUrl;
-
+  } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
-  varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != []);
+  varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
+  useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || fetchLFS || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if useFetchGit then fetchgit else fetchzip;
+  fetcher =
+    if useFetchGit then fetchgit
+    # fetchzip may not be overridable when using external tools, for example nix-prefetch
+    else if fetchzip ? override then fetchzip.override { withUnzip = false; }
+    else fetchzip;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -48,7 +53,7 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
+      inherit rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${rev}.tar.gz";

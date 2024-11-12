@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoconf
 , autoconf-archive
 , automake
@@ -35,14 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "workrave";
-  version = "1.10.50";
+  version = "1.10.52";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
-    rev = with lib;
-      "v" + concatStringsSep "_" (splitVersion version);
-    sha256 = "sha256-fSUfgk0PmiteVQis+0NmMMZXBe/377X2k9oS2yp2Qzo=";
+    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
+    sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +52,9 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     jinja2
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     libSM
     libXScrnSaver
     libXtst
-    gobject-introspection
     glib
     glibmm
     gtkmm3
@@ -86,8 +85,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A program to help prevent Repetitive Strain Injury";
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "Program to help prevent Repetitive Strain Injury";
+    mainProgram = "workrave";
     longDescription = ''
       Workrave is a program that assists in the recovery and prevention of
       Repetitive Strain Injury (RSI). The program frequently alerts you to

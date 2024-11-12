@@ -1,55 +1,100 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, hyprland-protocols
-, hyprland-share-picker
-, inih
-, libdrm
-, libuuid
-, mesa
-, pipewire
-, systemd
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  wrapQtAppsHook,
+  nix-update-script,
+  hyprland,
+  hyprland-protocols,
+  hyprlang,
+  hyprutils,
+  hyprwayland-scanner,
+  libdrm,
+  mesa,
+  pipewire,
+  qtbase,
+  qttools,
+  qtwayland,
+  sdbus-cpp,
+  slurp,
+  systemd,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
-let
-  source = import ./source.nix { inherit lib fetchFromGitHub wayland; };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  inherit (source) src version meta;
+  version = "1.3.6";
 
-  strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
+  src = fetchFromGitHub {
+    owner = "hyprwm";
+    repo = "xdg-desktop-portal-hyprland";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-1DGktDtSWIJpnDbVoj/qpvJSH5zg6JbOfuh6xqZMap0=";
+  };
+
+  depsBuildBuild = [
     pkg-config
-    wayland-scanner
   ];
+
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    wrapQtAppsHook
+    hyprwayland-scanner
+  ];
+
   buildInputs = [
     hyprland-protocols
-    inih
+    hyprlang
+    hyprutils
     libdrm
-    libuuid
     mesa
     pipewire
+    qtbase
+    qttools
+    qtwayland
+    sdbus-cpp
     systemd
     wayland
     wayland-protocols
+    wayland-scanner
   ];
 
-  mesonFlags = [
-    "-Dsd-bus-provider=libsystemd"
-  ];
+  dontWrapQtApps = true;
 
   postInstall = ''
-    wrapProgram $out/libexec/xdg-desktop-portal-hyprland --prefix PATH ":" ${lib.makeBinPath [hyprland-share-picker]}
+    wrapProgramShell $out/bin/hyprland-share-picker \
+      "''${qtWrapperArgs[@]}" \
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          slurp
+          hyprland
+        ]
+      }
+
+    wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
+      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
   '';
-}
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "xdg-desktop-portal backend for Hyprland";
+    homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
+    changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
+    mainProgram = "hyprland-share-picker";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      fufexan
+      khaneliman
+    ];
+    platforms = lib.platforms.linux;
+  };
+})

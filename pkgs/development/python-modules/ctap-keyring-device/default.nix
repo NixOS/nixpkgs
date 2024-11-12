@@ -1,34 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-# install requirements
-, fido2
-, keyring
-, cryptography
-# test requirements
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  # install requirements
+  six,
+  fido2,
+  keyring,
+  cryptography,
+  # test requirements
+  pytestCheckHook,
+  unittestCheckHook,
+  mock,
 }:
 
 let
   fido2_0 = fido2.overridePythonAttrs (oldAttrs: rec {
     version = "0.9.3";
-    format = "setuptools";
     src = fetchPypi {
       inherit (oldAttrs) pname;
       inherit version;
       hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
     };
+    postPatch = ''
+      substituteInPlace setup.py test/test_attestation.py \
+        --replace-fail "distutils.version" "setuptools._distutils.version"
+    '';
+    build-system = [ setuptools-scm ];
+    dependencies = oldAttrs.dependencies ++ [ six ];
+    nativeCheckInputs = [
+      unittestCheckHook
+      mock
+    ];
   });
 in
 buildPythonPackage rec {
   pname = "ctap-keyring-device";
   version = "1.0.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
+    hash = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
   };
 
   # removing optional dependency needing pyobjc
@@ -37,17 +50,14 @@ buildPythonPackage rec {
       --replace "--flake8 --black --cov" ""
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
-  ];
-
   pythonRemoveDeps = [
     # This is a darwin requirement missing pyobjc
     "pyobjc-framework-LocalAuthentication"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     keyring
     fido2_0
     cryptography
@@ -55,7 +65,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ctap_keyring_device" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disabled tests that needs pyobjc or windows

@@ -4,10 +4,11 @@
 , adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.isDarwin, pinentry
+, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
+, nixosTests
 }:
 
-assert guiSupport -> enableMinimal == false;
+assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
@@ -47,10 +48,10 @@ stdenv.mkDerivation rec {
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
-    "--with-npth-prefix=${npth}"
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
-  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
   then ''
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests.connman = lib.nixosTests.gnupg;
+  passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

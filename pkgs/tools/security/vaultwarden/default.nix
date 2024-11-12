@@ -1,6 +1,6 @@
-{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
-, libiconv, Security, CoreServices
+, libiconv, Security, CoreServices, SystemConfiguration
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
 let
@@ -9,24 +9,25 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.28.1";
+  version = "1.32.4";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
-    repo = pname;
+    repo = "vaultwarden";
     rev = version;
-    hash = "sha256-YIR8if6lFJ+534qBN9k1ltFp5M7KBU5qYaI1KppTYwI=";
+    hash = "sha256-fT1o+nR7k1fLFS4TeoP1Gm1P0uLTu6Dai6hMGraAKjE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-xidkmkRVIyQ3mutkmR3oObEwi1uRLCiRSyF5GpWVM9w=";
+
+  # used for "Server Installed" version in admin panel
+  env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
-    ++ optional (dbBackend == "mysql") libmysqlclient
-    ++ optional (dbBackend == "postgresql") postgresql;
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
+    ++ lib.optional (dbBackend == "mysql") libmysqlclient
+    ++ lib.optional (dbBackend == "postgresql") postgresql;
 
   buildFeatures = dbBackend;
 
@@ -39,7 +40,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ msteen ivan ];
+    maintainers = with maintainers; [ dotlambda SuperSandro2000 ];
+    mainProgram = "vaultwarden";
   };
 }

@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config llvmPackages.llvm.dev ];
   buildInputs = [ llvmPackages.llvm llvmPackages.libclang openssl emacs ]
     ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
-    ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 
   src = fetchFromGitHub {
     owner = "andersbakken";
     repo = "rtags";
     rev = "v${version}";
-    sha256 = "sha256-EJ5pC53S36Uu7lM6KuLvLN6MAyrQW/Yk5kPqZNS5m8c=";
+    hash = "sha256-EJ5pC53S36Uu7lM6KuLvLN6MAyrQW/Yk5kPqZNS5m8c=";
     fetchSubmodules = true;
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation

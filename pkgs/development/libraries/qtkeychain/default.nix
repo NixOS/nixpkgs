@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.14.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
-    rev = "${version}";
-    sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
+    rev = version;
+    sha256 = "sha256-+1WX3ARH+jWeDiaJnX+ZlRMj+l3qvgBwcGKjB9QEJNI=";
   };
 
   dontWrapQtApps = true;
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ [ qtbase qttools ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
   ];

@@ -1,6 +1,11 @@
 # nix-build '<nixpkgs/nixos>' -A config.system.build.openstackImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/openstack-image.nix ]; }"
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   copyChannel = true;
@@ -10,26 +15,40 @@ in
 {
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
+    ../../../modules/virtualisation/disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "openstackImage"
+        "sizeMB"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
-
 
   options.openstackImage = {
     name = mkOption {
       type = types.str;
-      description = lib.mdDoc "The name of the generated derivation";
+      description = "The name of the generated derivation";
       default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
-    sizeMB = mkOption {
+    ramMB = mkOption {
       type = types.int;
-      default = 8192;
-      description = lib.mdDoc "The size in MB of the image";
+      default = (3 * 1024);
+      description = "RAM allocation for build VM";
     };
 
     format = mkOption {
-      type = types.enum [ "raw" "qcow2" ];
+      type = types.enum [
+        "raw"
+        "qcow2"
+      ];
       default = "qcow2";
-      description = lib.mdDoc "The image format to output";
+      description = "The image format to output";
     };
   };
 
@@ -48,24 +67,28 @@ in
       };
     };
 
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSizeAutoSupported = false;
+
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
       inherit lib config;
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      configFile = pkgs.writeText "configuration.nix"
-        ''
-          { modulesPath, ... }: {
-            imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
-            openstack.zfs.enable = true;
-          }
-        '';
+      configFile = pkgs.writeText "configuration.nix" ''
+        { modulesPath, ... }: {
+          imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
+          openstack.zfs.enable = true;
+        }
+      '';
 
       includeChannel = copyChannel;
 
       bootSize = 1000;
-
-      rootSize = cfg.sizeMB;
+      memSize = cfg.ramMB;
+      rootSize = config.virtualisation.diskSize;
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";

@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (any (fs: fs == "exfat") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.exfat or false) {
     system.fsPackages = if config.boot.kernelPackages.kernelOlder "5.7" then [
       pkgs.exfat # FUSE
     ] else [

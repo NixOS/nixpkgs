@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     hash  = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   buildInputs = [ libedit zlib ncurses ]
-    ++ lib.optionals stdenv.isDarwin ([
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
       Accelerate
-    ] ++ lib.optionals stdenv.isx86_64 /* && isDarwin */ [
+    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 /* && isDarwin */ [
       CoreGraphics CoreVideo
     ]);
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "implicit-function-declaration"
     "gnu-variable-sized-type-not-at-end"
     "unused-result"
-  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-fcommon" ]);
 
   patchPhase = ''
     substituteInPlace ./Makefile \
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Columnar tick database and time-series language";
+    mainProgram = "kerf";
     longDescription = ''
       Kerf is a columnar tick database and small programming
       language that is a superset of JSON and SQL. It can be
@@ -87,6 +88,6 @@ stdenv.mkDerivation rec {
 
     # aarch64-linux seems hopeless, with over 2,000 warnings
     # generated?
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

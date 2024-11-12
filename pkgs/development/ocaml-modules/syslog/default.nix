@@ -1,30 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "4.03.0";
+buildDunePackage rec {
+  pname = "syslog";
+  version = "2.0.2";
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-syslog";
-  version = "1.5";
+  minimalOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
-    owner = "rixed";
+    owner = "geneanet";
     repo = "ocaml-syslog";
     rev = "v${version}";
-    sha256 = "1kqpc55ppzv9n555qgqpda49n7nvkqimzisyjx2a7338r7q4r5bw";
+    hash = "sha256-WybNZBPhv4fhjzzb95E+6ZHcZUnfROLlNF3PMBGO9ys=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ];
-  strictDeps = true;
-
-  buildFlags = [ "all" "opt" ];
-
-  createFindlibDestdir = true;
-
   meta = with lib; {
-    homepage = "https://github.com/rixed/ocaml-syslog";
+    homepage = "https://github.com/geneanet/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = licenses.lgpl21Plus;
-    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.rixed ];
   };
 }

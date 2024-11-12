@@ -1,44 +1,51 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, bitarray
-, chacha20poly1305-reuseable
-, cryptography
-, deepdiff
-, fetchFromGitHub
-, mediafile
-, miniaudio
-, netifaces
-, protobuf
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-httpserver
-, pytest-timeout
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, requests
-, srptools
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  aiohttp,
+  async-timeout,
+  chacha20poly1305-reuseable,
+  cryptography,
+  deepdiff,
+  fetchFromGitHub,
+  ifaddr,
+  mediafile,
+  miniaudio,
+  protobuf,
+  pydantic,
+  pyfakefs,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  setuptools,
+  srptools,
+  stdenv,
+  tabulate,
+  tinytag,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "0.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "postlund";
-    repo = pname;
+    repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xRQsPj44ydciOMj8wKTqJbKUJOxcItPi64qu4nhHY4U=";
+    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
   pythonRelaxDeps = [
@@ -56,26 +63,28 @@ buildPythonPackage rec {
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    bitarray
+    async-timeout
     chacha20poly1305-reuseable
     cryptography
+    ifaddr
     mediafile
     miniaudio
-    netifaces
     protobuf
+    pydantic
     requests
     srptools
+    tabulate
+    tinytag
     zeroconf
   ];
 
   nativeCheckInputs = [
     deepdiff
+    pyfakefs
     pytest-aiohttp
     pytest-asyncio
     pytest-httpserver
@@ -83,9 +92,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/postlund/pyatv/issues/2365
+      "test_simple_dispatch"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+      "test_stream_retransmission"
+    ];
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox
@@ -95,9 +110,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pyatv"
-  ];
+  pythonImportsCheck = [ "pyatv" ];
 
   meta = with lib; {
     description = "Python client library for the Apple TV";

@@ -1,32 +1,69 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
-, dateparser, humanize, pendulum, ruamel-yaml, tzlocal }:
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  freezegun,
+  humanize,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  snaptime,
+  tzlocal,
+}:
 
 buildPythonPackage rec {
   pname = "maya";
-  version = "0.3.3";
+  version = "0.6.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1x88k4irpckvd7jf2yvqjw1s52hjqbxym1r1d928yb3fkj7rvlxs";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "timofurrer";
+    repo = "maya";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/kennethreitz/maya/issues/112
-      # Merged, so should be in next release.
-      url = "https://github.com/kennethreitz/maya/commit/f69a93b1103130139cdec30511777823957fb659.patch";
-      sha256 = "152ba7amv9dhhx1wcklfalsdzsxggik9f7rsrikms921lq9xqc8h";
-    })
+  postPatch = ''
+    # function was made private in humanize
+    substituteInPlace maya/core.py \
+      --replace-fail "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    dateparser
+    humanize
+    pendulum
+    pytz
+    snaptime
+    tzlocal
   ];
 
-  propagatedBuildInputs = [ dateparser humanize pendulum ruamel-yaml tzlocal ];
+  nativeCheckInputs = [
+    freezegun
+    pytest-mock
+    pytestCheckHook
+  ];
 
-  # No tests
-  doCheck = false;
+  pythonImportsCheck = [ "maya" ];
+
+  disabledTests = [
+    # https://github.com/timofurrer/maya/issues/202
+    "test_parse_iso8601"
+  ];
 
   meta = with lib; {
     description = "Datetimes for Humans";
-    homepage = "https://github.com/kennethreitz/maya";
+    homepage = "https://github.com/timofurrer/maya";
+    changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

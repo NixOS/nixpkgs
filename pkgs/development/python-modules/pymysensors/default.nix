@@ -1,19 +1,20 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, click
-, crcmod
-, fetchFromGitHub
-, getmac
-, intelhex
-, paho-mqtt
-, pyserial
-, pyserial-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  click,
+  crcmod,
+  fetchFromGitHub,
+  getmac,
+  intelhex,
+  paho-mqtt,
+  pyserial,
+  pyserial-asyncio,
+  pytest-sugar,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -41,10 +42,8 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
-    mqtt-client = [
-      paho-mqtt
-    ];
+  optional-dependencies = {
+    mqtt-client = [ paho-mqtt ];
   };
 
   nativeCheckInputs = [
@@ -53,12 +52,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mysensors"
-  ];
+  pythonImportsCheck = [ "mysensors" ];
 
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";
+    mainProgram = "pymysensors";
     homepage = "https://github.com/theolind/pymysensors";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

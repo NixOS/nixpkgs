@@ -1,19 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
-  version = "0.8.post1";
+  version = "1.0.2";
+  format = "setuptools";
   pname = "pyfiglet";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6c2321755d09267b438ec7b936825a4910fec696292139e664ca8670e103639";
+    hash = "sha256-dYeIAYq4+q3cCYTh6gX/Mw08ZL5mPFE8wfEF9qMGbas=";
   };
 
   doCheck = false;
 
   meta = with lib; {
     description = "FIGlet in pure Python";
-    license     = licenses.gpl2Plus;
+    mainProgram = "pyfiglet";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

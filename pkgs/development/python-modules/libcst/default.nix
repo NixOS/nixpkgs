@@ -1,94 +1,104 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, hypothesis
-, libiconv
-, pytestCheckHook
-, python
-, pythonOlder
-, pyyaml
-, rustPlatform
-, rustc
-, setuptools-rust
-, setuptools-scm
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  callPackage,
+  cargo,
+  hypothesmith,
+  libcst,
+  libiconv,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  pyyaml,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  setuptools-scm,
+  typing-extensions,
+  typing-inspect,
+  ufmt,
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.9";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "instagram";
-    repo = pname;
+    owner = "Instagram";
+    repo = "LibCST";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ikddvKsvXMNHMfA9jUhvyiDXII0tTs/rE97IGI/azgA=";
+    hash = "sha256-0r2xQ8QVmA4I6eZHBWd/U1fQ8nK5rdblIoMACudOYPY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-FWQGv3E5X+VEnTYD0uKN6W4USth8EQlEGbYgUAWZ5EQ=";
+    hash = "sha256-mexXuOsL1+F/GL2wMf/pwK7bJLFRgPtPSYE4W3E0VQ0=";
   };
 
   cargoRoot = "native";
 
-  postPatch = ''
-    # test try to format files, which isn't necessary when consuming releases
-    sed -i libcst/codegen/generate.py \
-      -e '/ufmt/c\        pass'
-  '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools-rust
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
     typing-inspect
     pyyaml
   ];
 
   nativeCheckInputs = [
-    hypothesis
+    hypothesmith
     pytestCheckHook
+    ufmt
   ];
 
   preCheck = ''
-    ${python.interpreter} -m libcst.codegen.generate visitors
-    ${python.interpreter} -m libcst.codegen.generate return_types
-    # Can't run all tests due to circular dependency on hypothesmith -> libcst
-    rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
+    # import from $out instead
+    rm libcst/__init__.py
   '';
 
   disabledTests = [
-    # No files are generated
-    "test_codemod_formatter_error_input"
+    # FIXME package pyre-test
+    "TypeInferenceProviderTest"
+    # we'd need to run `python -m libcst.codegen.generate all` but shouldn't modify $out
+    "test_codegen_clean_visitor_functions"
   ];
 
-  pythonImportsCheck = [
-    "libcst"
-  ];
+  # circular dependency on hypothesmith and ufmt
+  doCheck = false;
 
-  meta = with lib; {
+  passthru.tests = {
+    pytest = libcst.overridePythonAttrs { doCheck = true; };
+  };
+
+  pythonImportsCheck = [ "libcst" ];
+
+  meta = {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
-    homepage = "https://github.com/Instagram/libcst";
-    license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/Instagram/LibCST";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      mit
+      asl20
+      psfl
+    ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

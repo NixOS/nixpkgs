@@ -1,32 +1,40 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "omnikinverter";
-  version = "0.9.1";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-omnikinverter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vjfnwk9iIe5j+s/zJHQ2X095Eexp/aKtIi/k0sK45q0=";
+    hash = "sha256-W9VeRhsCXLLgOgvJcNNCGNmPvakPtKHAtwQAGtYJbcY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -39,16 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
-
-  pythonImportsCheck = [
-    "omnikinverter"
-  ];
+  pythonImportsCheck = [ "omnikinverter" ];
 
   meta = with lib; {
     description = "Python module for the Omnik Inverter";

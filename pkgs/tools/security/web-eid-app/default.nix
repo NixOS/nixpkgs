@@ -5,35 +5,35 @@
 , gtest
 , pcsclite
 , pkg-config
-, qmake
-, qttranslations
+, qttools
 }:
 
 mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.3.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    sha256 = "sha256-X6/vfCDEGXFn05DUSyy7koGVxUAPJ0lv8dnTaoansKk=";
+    hash = "sha256-UqHT85zuoT/ISFP2qgG2J1518eGEvm5L96ntZ/lx9BE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    qttools
   ];
 
   buildInputs = [
     gtest # required during build of lib/libelectronic-id/lib/libpcsc-cpp
     pcsclite
-    qttranslations
   ];
 
   meta = with lib; {
     description = "signing and authentication operations with smart cards for the Web eID browser extension";
+    mainProgram = "web-eid";
     longDescription = ''
       The Web eID application performs cryptographic digital signing and
       authentication operations with electronic ID smart cards for the Web eID

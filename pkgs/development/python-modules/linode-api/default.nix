@@ -1,30 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
+  polling,
+  deprecated,
+  pytestCheckHook,
+  mock,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.0.0";
+  version = "5.22.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    rev = version;
-    sha256 = "0lqi15vks4fxbki1l7n1bfzygjy3w17d9wchjxvp22ijmas44yai";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f9v9xhlOfSCKEWHmzi/tpoMIXccGwA6isoAAIZOf3r4=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    requests
+    polling
+    deprecated
+  ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+    mock
+    httpretty
+  ];
+
+  disabledTestPaths = [
+    # needs api token
+    "test/integration"
   ];
 
   pythonImportsCheck = [ "linode_api4" ];

@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, bash
+, clang-tools
 , cmake
 , colordiff
 , flex
@@ -16,14 +16,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.8.0";
+  version = "2.11.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9HFCFgpRXqefFJLulwvi6nx0fl0G6IXI9gSinekJXRU=";
+    hash = "sha256-xaX3QMnTKXTXPuLzui0e0WgaQNvbz8u1JNRBkfe4QWg=";
   };
 
   patches = [
@@ -35,15 +35,11 @@ buildPythonApplication rec {
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     substituteInPlace CMakeLists.txt \
-      --replace " -Werror " " "
-
-    # 'cvise --command=...' generates a script with hardcoded shebang.
-    substituteInPlace cvise.py \
-      --replace "#!/bin/bash" "#!${bash}/bin/bash"
+      --replace-fail " -Werror " " "
 
     substituteInPlace cvise/utils/testing.py \
-      --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
-      --replace "'colordiff'" "'${colordiff}/bin/colordiff'"
+      --replace-fail "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
+      --replace-fail "'colordiff'" "'${colordiff}/bin/colordiff'"
   '';
 
   nativeBuildInputs = [
@@ -68,6 +64,12 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     pytestCheckHook
     unifdef
+  ];
+
+  cmakeFlags = [
+    # By default `cvise` looks it up in `llvm` bin directory. But
+    # `nixpkgs` moves it into a separate derivation.
+    "-DCLANG_FORMAT_PATH=${clang-tools}/bin/clang-format"
   ];
 
   disabledTests = [

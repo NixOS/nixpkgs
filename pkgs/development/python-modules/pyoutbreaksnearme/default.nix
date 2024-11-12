@@ -1,38 +1,43 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, ujson
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  ujson,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyoutbreaksnearme";
     rev = "refs/tags/${version}";
-    hash = "sha256-D7oXkKDSg+yF+j1WyG/VVY12hLU6oyhEtxLrF6IkMSA=";
+    hash = "sha256-oR/DApOxNSSczrBeH4sytd/vasbD4rA1poW4zNoeAnU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     ujson
+    yarl
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses
@@ -46,9 +51,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyoutbreaksnearme"
-  ];
+  pythonImportsCheck = [ "pyoutbreaksnearme" ];
 
   meta = with lib; {
     description = "Library for retrieving data from for Outbreaks Near Me";

@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.23.5";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-gdf3+EsAIf2yfuw75bNAPlwZbi9NFhVB9Q5MmS6KSo8=";
+    hash = "sha256-cfet+A2i33iHbVRouPS4Ul8TmHolrcIMTRba6Olqfeg=";
   };
-
-  postPatch = ''
-    substituteInPlace src/libbson/CMakeLists.txt src/libmongoc/CMakeLists.txt \
-      --replace "\\\''${prefix}/" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -40,14 +35,15 @@ stdenv.mkDerivation rec {
     icu
     cyrus_sasl
     snappy
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
   ];
 
   cmakeFlags = [
     "-DBUILD_VERSION=${version}"
     "-DENABLE_UNINSTALL=OFF"
     "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # remove forbidden reference to $TMPDIR
@@ -56,8 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin && stdenv.isx86_64;
-    description = "The official C client library for MongoDB";
+    description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
     mainProgram = "mongoc-stat";

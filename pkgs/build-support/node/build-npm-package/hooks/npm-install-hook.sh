@@ -5,30 +5,33 @@ npmInstallHook() {
 
     runHook preInstall
 
-    # `npm pack` writes to cache
-    npm config delete cache
-
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
+    # `npm pack` writes to cache so temporarily override it
     while IFS= read -r file; do
         local dest="$packageOut/$(dirname "$file")"
         mkdir -p "$dest"
-        cp "$file" "$dest"
-    done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
+        cp "${npmWorkspace-.}/$file" "$dest"
+    done < <(@jq@ --raw-output '.[0].files | map(.path | select(. | startswith("node_modules/") | not)) | join("\n")' <<< "$(npm_config_cache="$HOME/.npm" npm pack --json --dry-run --loglevel=warn --no-foreground-scripts ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
-    while IFS=" " read -ra bin; do
-        mkdir -p "$out/bin"
-        makeWrapper @hostNode@ "$out/bin/${bin[0]}" --add-flags "$packageOut/${bin[1]}"
-    done < <(@jq@ --raw-output '(.bin | type) as $typ | if $typ == "string" then
-        .name + " " + .bin
-        elif $typ == "object" then .bin | to_entries | map(.key + " " + .value) | join("\n")
-        else "invalid type " + $typ | halt_error end' package.json)
+    nodejsInstallExecutables "${npmWorkspace-.}/package.json"
+
+    nodejsInstallManuals "${npmWorkspace-.}/package.json"
 
     local -r nodeModulesPath="$packageOut/node_modules"
 
     if [ ! -d "$nodeModulesPath" ]; then
         if [ -z "${dontNpmPrune-}" ]; then
-            npm prune --omit dev --no-save $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+            if ! npm prune --omit=dev --no-save ${npmWorkspace+--workspace=$npmWorkspace} $npmPruneFlags "${npmPruneFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+              echo
+              echo
+              echo "ERROR: npm prune step failed"
+              echo
+              echo 'If npm tried to download additional dependencies above, try setting `dontNpmPrune = true`.'
+              echo
+
+              exit 1
+            fi
         fi
 
         find node_modules -maxdepth 1 -type d -empty -delete

@@ -1,28 +1,28 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.0.2";
+  version = "2.1.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CKOsUb35+7WjSNf4Xo0SK5loIqWJbEnHdmhw9QXWFAI=";
+    hash = "sha256-Xi3B/Nl5bMbW0lYwrkEbBgFTEl07YkFyN18kN0WyGyw=";
   };
 
   patches = [
@@ -34,14 +34,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    attrs
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -49,9 +44,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "todoist_api_python"
-  ];
+  pythonImportsCheck = [ "todoist_api_python" ];
 
   meta = with lib; {
     description = "Library for the Todoist REST API";

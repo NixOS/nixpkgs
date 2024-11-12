@@ -7,7 +7,7 @@
 , pkg-config
 , volk
 , cppunit
-, swig
+, swig3
 , orc
 , boost
 , log4cpp
@@ -40,11 +40,7 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.8";
-  minor = "5";
-  patch = "0";
-}
+, version ? "3.8.5.0"
 }:
 
 let
@@ -87,7 +83,7 @@ let
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
-        swig
+        swig3
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -102,16 +98,16 @@ let
     gr-ctrlport = {
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
-        swig
+        swig3
       ];
       runtime = [
         thrift
       ];
-      pythonRuntime = with python.pkgs; [
+      pythonRuntime = [
         python.pkgs.thrift
         # For gr-perf-monitorx
-        matplotlib
-        networkx
+        python.pkgs.matplotlib
+        python.pkgs.networkx
       ];
     };
     gnuradio-companion = {
@@ -154,8 +150,8 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
-        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libjack2 ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
@@ -163,7 +159,7 @@ let
       cmakeEnableFlag = "GR_CHANNELS";
     };
     gr-qtgui = {
-      runtime = [ qt5.qtbase libsForQt5.qwt ];
+      runtime = [ qt5.qtbase libsForQt5.qwt6_1 ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
       cmakeEnableFlag = "GR_QTGUI";
     };
@@ -204,6 +200,11 @@ let
     gr-zeromq = {
       runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
   };
   shared = (import ./shared.nix {
@@ -214,7 +215,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -222,23 +223,17 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
+  # Some of the tests we know why they fail, but others simply hang-out and
+  # timeout...
+  doCheck = false;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.3_8.patch
@@ -260,7 +255,7 @@ stdenv.mkDerivation {
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
-    inherit (libsForQt5) qwt;
+    qwt = libsForQt5.qwt6_1;
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
@@ -288,7 +283,7 @@ stdenv.mkDerivation {
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
-}
+}))

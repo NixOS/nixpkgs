@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtklock-playerctl-module";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kzGgqFDTeKL6Pfjram7pqVcIm8Avxsvpn1qFrcpd8dw=";
+    hash = "sha256-eN4E3+jv8IyRvV8pvfCjCc6pl8y7qSLRlj7tYkX0JrE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "Gtklock module adding power controls to the lockscreen";
-    homepage = "https://github.com/jovanlanik/gtklock-powerbar-module";
+    description = "Gtklock module adding media player controls to the lockscreen";
+    homepage = "https://github.com/jovanlanik/gtklock-playerctl-module";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;

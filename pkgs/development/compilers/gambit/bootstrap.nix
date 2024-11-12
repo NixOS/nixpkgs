@@ -1,16 +1,16 @@
 # This derivation is a reduced-functionality variant of Gambit stable,
 # used to compile the full version of Gambit stable *and* unstable.
 
-{ gccStdenv, lib, fetchurl, autoconf, gcc, coreutils, gambit-support, ... }:
+{ gccStdenv, fetchurl, autoconf, gcc, coreutils, gambit-support, ... }:
 # As explained in build.nix, GCC compiles Gambit 10x faster than Clang, for code 3x better
 
 gccStdenv.mkDerivation {
   pname = "gambit-bootstrap";
-  version = "4.9.3";
+  version = "4.9.5";
 
   src = fetchurl {
-    url = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.9/source/gambit-v4_9_3.tgz";
-    sha256 = "1p6172vhcrlpjgia6hsks1w4fl8rdyjf9xjh14wxfkv7dnx8a5hk";
+    url = "https://gambitscheme.org/4.9.5/gambit-v4_9_5.tgz";
+    sha256 = "sha256-4o74218OexFZcgwVAFPcq498TK4fDlyDiUR5cHP4wdw=";
   };
 
   buildInputs = [ autoconf ];

@@ -1,34 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpc-google-iam-v1
-, google-api-core
-, google-cloud-access-context-manager
-, google-cloud-org-policy
-, google-cloud-os-config
-, google-cloud-testutils
-, libcst
-, protobuf
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-access-context-manager,
+  google-cloud-org-policy,
+  google-cloud-os-config,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.19.0";
-  format = "setuptools";
+  version = "3.27.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oOGs6qAFq9Y17ktJeiQvd/UgUgV3nEt2m/dpZyRb0fs=";
+    pname = "google_cloud_asset";
+    inherit version;
+    hash = "sha256-AuFuc3Qu1N2iWtNlYKhNQX2ETwjLB2e8ydrGO9ozR+E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager
@@ -39,10 +44,8 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -63,9 +66,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Client for Google Cloud Asset API";
-    homepage = "https://github.com/googleapis/python-asset";
-    changelog = "https://github.com/googleapis/python-asset/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

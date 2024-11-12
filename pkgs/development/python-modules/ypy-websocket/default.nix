@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, aiofiles
-, aiosqlite
-, y-py
-, pytest-asyncio
-, pytestCheckHook
-, pythonRelaxDepsHook
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  aiosqlite,
+  anyio,
+  y-py,
+  pytest-asyncio,
+  pytestCheckHook,
+  uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "ypy-websocket";
-  version = "0.8.4";
+  version = "0.12.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,31 +24,27 @@ buildPythonPackage rec {
     owner = "y-crdt";
     repo = "ypy-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jl2ciIA3enJRfPgcu96MZN+BmNL+bBet54AFDBy3seY=";
+    hash = "sha256-48x+MUhev9dErC003XOP3oGKd5uOghlBFgcR8Nm/0xs=";
   };
 
-  pythonRelaxDeps = [
-    "aiofiles"
-  ];
+  pythonRelaxDeps = [ "aiofiles" ];
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    aiofiles
     aiosqlite
+    anyio
     y-py
   ];
 
-  pythonImportsCheck = [
-    "ypy_websocket"
-  ];
+  pythonImportsCheck = [ "ypy_websocket" ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    uvicorn
     websockets
   ];
 
@@ -57,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/y-crdt/ypy-websocket/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/y-crdt/ypy-websocket/blob/${src.rev}/CHANGELOG.md";
     description = "WebSocket Connector for Ypy";
     homepage = "https://github.com/y-crdt/ypy-websocket";
     license = lib.licenses.mit;

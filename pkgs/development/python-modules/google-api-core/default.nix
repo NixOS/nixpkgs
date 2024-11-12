@@ -1,31 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, googleapis-common-protos
-, grpcio
-, grpcio-gcp
-, grpcio-status
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-auth,
+  googleapis-common-protos,
+  grpcio,
+  grpcio-gcp,
+  grpcio-status,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.11.0";
-  format = "setuptools";
+  version = "2.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S5u11aOAoL76BXOzAmUbipqJJiwXMON79CPOxRGATCI=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-api-core";
+    rev = "v${version}";
+    hash = "sha256-ccjkGQNaPRefI6+j/O+NwdBGEVNuZ5q5m1d8EAJGcbs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     googleapis-common-protos
@@ -35,17 +41,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     grpc = [
       grpcio
       grpcio-status
     ];
-    grpcgcp = [
-      grpcio-gcp
-    ];
-    grpcio-gcp = [
-      grpcio-gcp
-    ];
+    grpcgcp = [ grpcio-gcp ];
+    grpcio-gcp = [ grpcio-gcp ];
   };
 
   nativeCheckInputs = [
@@ -74,9 +76,7 @@ buildPythonPackage rec {
     "test_exception_with_error_code"
   ];
 
-  pythonImportsCheck = [
-    "google.api_core"
-  ];
+  pythonImportsCheck = [ "google.api_core" ];
 
   meta = with lib; {
     description = "Core Library for Google Client Libraries";
@@ -87,6 +87,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

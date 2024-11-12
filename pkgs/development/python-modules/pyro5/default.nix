@@ -1,32 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, serpent
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  serpent,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyro5";
-  version = "5.14";
+  version = "5.15";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Pyro5";
     inherit version;
-    hash = "sha256-ZP3OE3sP5TLohhTSRrfJi74KT0JnhsUkU5rNxeaUCGo=";
+    hash = "sha256-gsPfyYYLSfiXso/yT+ZxbIQWcsYAr4/kDQ46f6yaP14=";
   };
 
-  propagatedBuildInputs = [
-    serpent
-  ];
+  propagatedBuildInputs = [ serpent ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Ignore network related tests, which fail in sandbox
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     "GetIP"
     "TestNameServer"
     "TestBCSetup"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "Socket"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "Socket" ];
 
-  pythonImportsCheck = [
-    "Pyro5"
-  ];
+  pythonImportsCheck = [ "Pyro5" ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";

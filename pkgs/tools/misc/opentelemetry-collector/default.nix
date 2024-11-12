@@ -1,21 +1,27 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, testers
+, nixosTests
+, opentelemetry-collector
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.79.0";
+  version = "0.109.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-OTddX0hTrcxvU1XI5DSXOYPhVrn3dJ9Ryvr/wf1AHQ0=";
+    hash = "sha256-ShVUBohSnIoeq2aTWJ9IMXKt0CeRv3CZjlqpYHR9DhY=";
   };
   # there is a nested go.mod
-  sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-Efsgogk3C7oroniRPrl5GwTogBk7lT0XPkbz0ygJh48=";
+  sourceRoot = "${src.name}/cmd/otelcorecol";
+  vendorHash = "sha256-rXC4lm2ZvO3k6h1ZiYB+FskhW0c2uJyPLZg6n125MZE=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
@@ -29,10 +35,26 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
+  postInstall = ''
+    installShellCompletion --cmd otelcorecol \
+      --bash <($out/bin/otelcorecol completion bash) \
+      --fish <($out/bin/otelcorecol completion fish) \
+      --zsh <($out/bin/otelcorecol completion zsh)
+  '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      inherit version;
+      package = opentelemetry-collector;
+      command = "otelcorecol -v";
+    };
+    inherit (nixosTests) opentelemetry-collector;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "Vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

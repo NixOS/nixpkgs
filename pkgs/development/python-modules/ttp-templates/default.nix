@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.3.5";
+  version = "0.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,12 +17,10 @@ buildPythonPackage rec {
     owner = "dmulyalin";
     repo = "ttp_templates";
     rev = "refs/tags/${version}";
-    hash = "sha256-NlTTydGdjn+hwAKYEyINg/9k/EdnLq2gU9cnujpZQLM=";
+    hash = "sha256-Pntm/wUv/K0ci8U/+nBUVszuX8KT95gyp+i2N6NshKo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     # Drop circular dependency on ttp

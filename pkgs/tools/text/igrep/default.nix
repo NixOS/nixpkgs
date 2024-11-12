@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "igrep";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "konradsz";
     repo = "igrep";
     rev = "v${version}";
-    sha256 = "sha256-g6DY3+HwBNQ+jxByXyTJK5CjAaC48FpmsDf1qGGO/Lk=";
+    hash = "sha256-ZZhzBGLpzd9+rok+S/ypKpWXVzXaA1CnviC7LfgP/CU=";
   };
 
-  cargoHash = "sha256-7cSUIwWyWPxFDuRWplidbI93zbBV84T7e4Q//Uwj6N4=";
+  cargoHash = "sha256-raSz/+u7P04qHmvdfYoWKOKtNtaFlgmT8Nw0ImhCMkU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.tests = {
     version = testers.testVersion { package = igrep; command = "ig --version"; };

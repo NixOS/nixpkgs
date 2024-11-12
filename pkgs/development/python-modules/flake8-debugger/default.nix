@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, pycodestyle
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  pycodestyle,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     pycodestyle
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flake8_debugger"
-  ];
+  pythonImportsCheck = [ "flake8_debugger" ];
 
   meta = with lib; {
     description = "ipdb/pdb statement checker plugin for flake8";

@@ -1,43 +1,57 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, flask
-, brotli
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPyPy,
+  setuptools,
+  setuptools-scm,
+  flask,
+  flask-caching,
+  zstandard,
+  brotli,
+  brotlicffi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "1.13";
-  pname = "Flask-Compress";
-  format = "pyproject";
+  version = "1.17";
+  pname = "flask-compress";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7pbxi/mwDy3rTjQGykoFCTqoDi7wV4Ulo7TTLs3/Ep0=";
+  src = fetchFromGitHub {
+    owner = "colour-science";
+    repo = "flask-compress";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-87fjJxaS7eJbOkSUljnhqFIeahoS4L2tAOhmv4ryVUM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
-    brotli
-  ];
+    zstandard
+  ] ++ lib.optionals (!isPyPy) [ brotli ] ++ lib.optionals isPyPy [ brotlicffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    flask-caching
   ];
 
-  pythonImportsCheck = [
-    "flask_compress"
-  ];
+  pythonImportsCheck = [ "flask_compress" ];
 
-  meta = with lib; {
-    description = "Compress responses in your Flask app with gzip";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm[toml]<8" "setuptools_scm"
+  '';
+
+  meta = {
+    description = "Compress responses in your Flask app with gzip, deflate or brotli";
     homepage = "https://github.com/colour-science/flask-compress";
     changelog = "https://github.com/colour-science/flask-compress/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

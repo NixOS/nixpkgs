@@ -1,66 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools
-, setuptools-scm
-, cython
-, entrypoints
-, numpy
-, msgpack
-, py-cpuinfo
-, pytestCheckHook
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  cython,
+  py-cpuinfo,
+
+  # dependencies
+  numpy,
+
+  # tests
+  msgpack,
+  pytestCheckHook,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.11.0";
-  format ="pyproject";
-  disabled = isPy27;
+  version = "0.13.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
+    hash = "sha256-o883iB3wiY86nA1Ed9+IEz/oUYW//le6MbzC+iB3Cbw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     cython
     py-cpuinfo
   ];
 
-  propagatedBuildInputs = [
-    entrypoints
-    numpy
-    msgpack
-  ];
+  dependencies = [ numpy ];
+
+  optional-dependencies = {
+    msgpack = [ msgpack ];
+    # zfpy = [ zfpy ];
+  };
+
+  preBuild = lib.optionalString (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) ''
+    export DISABLE_NUMCODECS_AVX2=1
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
+    msgpack
+    importlib-metadata
   ];
 
-  pytestFlagsArray = [
-    "$out/${python.sitePackages}/numcodecs"
-  ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  pytestFlagsArray = [ "$out/${python.sitePackages}/numcodecs" ];
 
-  disabledTests = [
-    "test_backwards_compatibility"
-
-    "test_encode_decode"
-    "test_legacy_codec_broken"
-    "test_bytes"
-
-    # ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (3,) + inhomogeneous part.
-    # with numpy 1.24
-    "test_non_numpy_inputs"
-  ];
-
-  meta = with lib;{
+  meta = {
     homepage = "https://github.com/zarr-developers/numcodecs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

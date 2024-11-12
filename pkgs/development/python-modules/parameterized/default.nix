@@ -1,51 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "parameterized";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "0.9.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
+    hash = "sha256-f8kFJyzvpPNkwaNCnLvpwPmLeTmI77W/kKrIDwjbCbE=";
   };
+
+  postPatch = ''
+    # broken with pytest 7 and python 3.12
+    # https://github.com/wolever/parameterized/issues/167
+    # https://github.com/wolever/parameterized/pull/162
+    substituteInPlace parameterized/test.py \
+      --replace 'assert_equal(missing, [])' "" \
+      --replace "assertRaisesRegexp" "assertRaisesRegex"
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   checkInputs = [
     mock
-    nose
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "parameterized/test.py"
-  ];
+  pytestFlagsArray = [ "parameterized/test.py" ];
 
-  disabledTests = [
-    # Tests seem outdated
-    "test_method"
-    "test_with_docstring_0_value1"
-    "test_with_docstring_1_v_l_"
-    "testCamelCaseMethodC"
-  ];
-
-  pythonImportsCheck = [
-    "parameterized"
-  ];
+  pythonImportsCheck = [ "parameterized" ];
 
   meta = with lib; {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
     changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpiozero
-, mock
-, pyserial
-, pyserial-asyncio
-, pyusb
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpiozero,
+  mock,
+  pyserial,
+  pyserial-asyncio,
+  pyusb,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.11.0";
-  format = "setuptools";
+  version = "0.13.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,8 +25,16 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-zigate";
     rev = "refs/tags/${version}";
-    hash = "sha256-eGN2QvPHZ8gfPPFdUbAP9cs43jzUHDBS/w1tni1shB0=";
+    hash = "sha256-MlAX7dcRZziMYCpG64OemZ8czwvDXpdoRaDVo1sUCno=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     gpiozero
@@ -40,9 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "zigpy_zigate"
-  ];
+  pythonImportsCheck = [ "zigpy_zigate" ];
 
   disabledTestPaths = [
     # Fails in sandbox

@@ -1,37 +1,35 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, qtsvg
-, xorg
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-picker";
-  version = "5.0.28";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-b463PqrCpt/DQqint5Xb0cRT66iHNPavj0lsTMv801k=";
+    hash = "sha256-vChSlP+lGufurvLkYbljAhc8qqqbc1bxQ2UIROreK2o=";
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
+    libsForQt5.qtbase
     dtkwidget
-    qtsvg
+    libsForQt5.qtsvg
     xorg.libXtst
   ];
 
@@ -50,6 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Color picker application";
+    mainProgram = "deepin-picker";
     homepage = "https://github.com/linuxdeepin/deepin-picker";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

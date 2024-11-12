@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pillow
-, zbar
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pillow,
+  zbar,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyzbar";
   version = "0.1.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";
@@ -19,7 +21,12 @@ buildPythonPackage rec {
     sha256 = "8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
   };
 
-  propagatedBuildInputs = [ zbar pillow numpy ];
+  buildInputs = [ zbar ];
+
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -42,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyzbar" ];
 
   meta = with lib; {
-    description = "Read one-dimensional barcodes and QR codes from Python using the zbar library.";
+    description = "Read one-dimensional barcodes and QR codes from Python using the zbar library";
     homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

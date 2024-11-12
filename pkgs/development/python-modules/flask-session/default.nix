@@ -1,26 +1,77 @@
-{ lib, fetchPypi, buildPythonPackage, pytestCheckHook, flask, cachelib }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  flask,
+  cachelib,
+  msgspec,
+
+  # checks
+  boto3,
+  flask-sqlalchemy,
+  pytestCheckHook,
+  redis,
+  pymongo,
+  pymemcache,
+  python-memcached,
+  pkgs,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Session";
-  version = "0.4.0";
+  pname = "flask-session";
+  version = "0.8.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ye1UMh+oxMoBMv/TNpWCdZ7aclL7SzvuSA5pDRukH0Y=";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-session";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QLtsM0MFgZbuLJPLc5/mUwyYc3bYxildNKNxOF8Z/3Y=";
   };
 
-  propagatedBuildInputs = [ flask cachelib ];
+  build-system = [ flit-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    cachelib
+    flask
+    msgspec
+  ];
 
-  # The rest of the tests require database servers and optional db connector dependencies
-  pytestFlagsArray = [ "-k" "'null_session or filesystem_session'" ];
+  nativeCheckInputs = [
+    flask-sqlalchemy
+    pytestCheckHook
+    redis
+    pymongo
+    pymemcache
+    python-memcached
+    boto3
+  ];
+
+  preCheck = ''
+    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.memcached}/bin/memcached &
+  '';
+
+  postCheck = ''
+    kill %%
+    kill %%
+  '';
+
+  disabledTests = [ "test_mongo_default" ]; # unfree
+
+  disabledTestPaths = [ "tests/test_dynamodb.py" ];
 
   pythonImportsCheck = [ "flask_session" ];
 
   meta = with lib; {
-    description = "A Flask extension that adds support for server-side sessions";
-    homepage = "https://github.com/fengsp/flask-session";
+    description = "Flask extension that adds support for server-side sessions";
+    homepage = "https://github.com/pallets-eco/flask-session";
+    changelog = "https://github.com/pallets-eco/flask-session/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zhaofengli ];
   };

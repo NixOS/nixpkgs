@@ -1,54 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, lark
-, libcst
-, parso
-, pytestCheckHook
-, pytest-xdist
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  lark,
+  libcst,
+  parso,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-xdist,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
-  version = "0.2.3";
+  version = "0.3.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
+    hash = "sha256-lsFIAtbI6F2JdSZBdoeNtUso0u2SH9v+3C5rjOPIFxY=";
   };
 
-  patches = [
-    ./remove-black.patch
+  build-system = [ setuptools ];
+
+  dependencies = [
+    hypothesis
+    lark
+    libcst
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "lark-parser" "lark"
-
-    substituteInPlace tox.ini \
-      --replace "--cov=hypothesmith" "" \
-      --replace "--cov-branch" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--cov-fail-under=100" ""
-  '';
-
-  propagatedBuildInputs = [ hypothesis lark libcst ];
-
-  nativeCheckInputs = [ parso pytestCheckHook pytest-xdist ];
-
-  pytestFlagsArray = [
-    "-v"
+  nativeCheckInputs = [
+    black
+    parso
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-xdist
   ];
 
   disabledTests = [
-    # https://github.com/Zac-HD/hypothesmith/issues/21
+    # super slow
     "test_source_code_from_libcst_node_type"
-  ];
-
-  disabledTestPaths = [
-    # missing blib2to3
-    "tests/test_syntactic.py"
+    # https://github.com/Zac-HD/hypothesmith/issues/38
+    "test_black_autoformatter_from_grammar"
   ];
 
   pythonImportsCheck = [ "hypothesmith" ];
@@ -56,7 +54,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
+    changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

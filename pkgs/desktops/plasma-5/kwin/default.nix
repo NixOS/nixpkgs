@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, wayland-scanner
 , fetchpatch
 , libepoxy
 , lcms2
@@ -55,14 +56,13 @@
 , kxmlgui
 , plasma-framework
 , libqaccessibilityclient
-, python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
   pname = "kwin";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     libepoxy
     lcms2

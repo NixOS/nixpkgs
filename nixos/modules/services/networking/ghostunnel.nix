@@ -9,6 +9,7 @@ let
     mapAttrs'
     mkDefault
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     nameValuePair
@@ -23,21 +24,21 @@ let
       options = {
 
         listen = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Address and port to listen on (can be HOST:PORT, unix:PATH).
           '';
           type = types.str;
         };
 
         target = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Address to forward connections to (can be HOST:PORT or unix:PATH).
           '';
           type = types.str;
         };
 
         keystore = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
             NB: storepass is not supported because it would expose credentials via `/proc/*/cmdline`.
@@ -49,7 +50,7 @@ let
         };
 
         cert = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Path to certificate (PEM with certificate chain).
 
             Not required if `keystore` is set.
@@ -59,7 +60,7 @@ let
         };
 
         key = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Path to certificate private key (PEM with private key).
 
             Not required if `keystore` is set.
@@ -69,14 +70,14 @@ let
         };
 
         cacert = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
           type = types.nullOr types.str;
         };
 
         disableAuthentication = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Disable client authentication, no client certificate will be required.
           '';
           type = types.bool;
@@ -84,7 +85,7 @@ let
         };
 
         allowAll = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             If true, allow all clients, do not check client cert subject.
           '';
           type = types.bool;
@@ -92,7 +93,7 @@ let
         };
 
         allowCN = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Allow client if common name appears in the list.
           '';
           type = types.listOf types.str;
@@ -100,7 +101,7 @@ let
         };
 
         allowOU = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Allow client if organizational unit name appears in the list.
           '';
           type = types.listOf types.str;
@@ -108,7 +109,7 @@ let
         };
 
         allowDNS = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Allow client if DNS subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
@@ -116,7 +117,7 @@ let
         };
 
         allowURI = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Allow client if URI subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
@@ -124,13 +125,13 @@ let
         };
 
         extraArguments = mkOption {
-          description = lib.mdDoc "Extra arguments to pass to `ghostunnel server`";
+          description = "Extra arguments to pass to `ghostunnel server`";
           type = types.separatedString " ";
           default = "";
         };
 
         unsafeTarget = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             If set, does not limit target to localhost, 127.0.0.1, [::1], or UNIX sockets.
 
             This is meant to protect against accidental unencrypted traffic on
@@ -213,17 +214,12 @@ in
 {
 
   options = {
-    services.ghostunnel.enable = mkEnableOption (lib.mdDoc "ghostunnel");
+    services.ghostunnel.enable = mkEnableOption "ghostunnel";
 
-    services.ghostunnel.package = mkOption {
-      description = lib.mdDoc "The ghostunnel package to use.";
-      type = types.package;
-      default = pkgs.ghostunnel;
-      defaultText = literalExpression "pkgs.ghostunnel";
-    };
+    services.ghostunnel.package = mkPackageOption pkgs "ghostunnel" { };
 
     services.ghostunnel.servers = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
       type = types.attrsOf (types.submodule module);

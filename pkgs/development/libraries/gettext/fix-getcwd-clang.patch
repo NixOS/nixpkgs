@@ -1,0 +1,63 @@
+From cb2c1486336462c8180f487221181ee798b0e73e Mon Sep 17 00:00:00 2001
+From: Bruno Haible <bruno@clisp.org>
+Date: Thu, 9 Feb 2023 16:58:20 +0100
+Subject: [PATCH] Fix compilation errors with ISO C 23 compilers.
+
+* gettext-runtime/intl/dcigettext.c (getwd, getcwd): Assume a declaration in the
+system header files.
+* gettext-runtime/intl/gettextP.h (SWAP): Drop K&C compatibility.
+---
+ gettext-runtime/intl/dcigettext.c | 5 +----
+ gettext-runtime/intl/gettextP.h   | 7 +------
+ 2 files changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/gettext-runtime/intl/dcigettext.c b/gettext-runtime/intl/dcigettext.c
+index e7cb9b962..666a624b0 100644
+--- a/gettext-runtime/intl/dcigettext.c
++++ b/gettext-runtime/intl/dcigettext.c
+@@ -1,5 +1,5 @@
+ /* Implementation of the internal dcigettext function.
+-   Copyright (C) 1995-2020 Free Software Foundation, Inc.
++   Copyright (C) 1995-2023 Free Software Foundation, Inc.
+ 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+@@ -139,13 +139,10 @@ extern int errno;
+ # define tfind __tfind
+ #else
+ # if !defined HAVE_GETCWD
+-char *getwd ();
+ #  define getcwd(buf, max) getwd (buf)
+ # else
+ #  if VMS
+ #   define getcwd(buf, max) (getcwd) (buf, max, 0)
+-#  else
+-char *getcwd ();
+ #  endif
+ # endif
+ # ifndef HAVE_STPCPY
+diff --git a/gettext-runtime/intl/gettextP.h b/gettext-runtime/intl/gettextP.h
+index bb00555ee..536e8bd43 100644
+--- a/gettext-runtime/intl/gettextP.h
++++ b/gettext-runtime/intl/gettextP.h
+@@ -1,5 +1,5 @@
+ /* Header describing internals of libintl library.
+-   Copyright (C) 1995-2020 Free Software Foundation, Inc.
++   Copyright (C) 1995-2023 Free Software Foundation, Inc.
+    Written by Ulrich Drepper <drepper@cygnus.com>, 1995.
+ 
+    This program is free software: you can redistribute it and/or modify
+@@ -113,12 +113,7 @@ extern char *libintl_dcigettext (const char *__domainname,
+ # define SWAP(i) bswap_32 (i)
+ #else
+ static inline nls_uint32
+-# ifdef __cplusplus
+ SWAP (nls_uint32 i)
+-# else
+-SWAP (i)
+-     nls_uint32 i;
+-# endif
+ {
+   return (i << 24) | ((i & 0xff00) << 8) | ((i >> 8) & 0xff00) | (i >> 24);
+ }
+

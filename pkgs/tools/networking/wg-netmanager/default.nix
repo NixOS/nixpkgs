@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, wireguard-go, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
-  cargoSha256 = "sha256-cOxkWMFPVmi+/BQWIvExzX5LDyC7C8kaTf5dGwfXj+s=";
+  cargoHash = "sha256-cOxkWMFPVmi+/BQWIvExzX5LDyC7C8kaTf5dGwfXj+s=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = true;
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit asl20 bsd3 mpl20 ];
     maintainers = with maintainers; [ gin66 ];
     platforms = platforms.linux;
+    mainProgram = "wg_netmanager";
   };
 }

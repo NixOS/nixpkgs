@@ -4,15 +4,14 @@
 , libICE
 , vimPlugins
 , makeWrapper
-, wrapGAppsHook
-, runtimeShell
+, wrapGAppsHook3
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
+, guiSupport        ? config.vim.gui or (if stdenv.hostPlatform.isDarwin then "gtk2" else "gtk3")
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -66,7 +65,7 @@ in stdenv.mkDerivation {
 
   pname = "vim-full";
 
-  inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version outputs postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
     default = common.src; # latest release
@@ -105,7 +104,7 @@ in stdenv.mkDerivation {
     "vim_cv_memmove_handles_overlap=yes"
   ]
     ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
-  ++ lib.optional stdenv.isDarwin
+  ++ lib.optional stdenv.hostPlatform.isDarwin
      (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
@@ -135,7 +134,7 @@ in stdenv.mkDerivation {
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
-  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
   ;
 
   buildInputs = [
@@ -164,7 +163,7 @@ in stdenv.mkDerivation {
     ++ lib.optional sodiumSupport libsodium;
 
   # error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fdeclspec";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
 
   preConfigure = lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
@@ -177,11 +176,11 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
-  postFixup = lib.optionalString wrapPythonDrv ''
+  postFixup = common.postFixup + lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
       --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
   '';

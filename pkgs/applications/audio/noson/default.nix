@@ -8,22 +8,24 @@
 , qtgraphicaleffects
 , qtquickcontrols2
 , wrapQtAppsHook
+, makeWrapper
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noson";
-  version = "5.4.1";
+  version = "5.6.8";
 
   src = fetchFromGitHub {
     owner = "janbar";
     repo = "noson-app";
     rev = finalAttrs.version;
-    hash = "sha256-7RrBfkUCRVzUGl+OT3OuoMlu4D3Sa7RpBefFgmfX1Fs=";
+    hash = "sha256-hCVGi+++6CcTRMXeRKH8xRncm/Gl83GgU3aAIPI/yGU=";
   };
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -36,7 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # wrapQtAppsHook doesn't automatically find noson-gui
   dontWrapQtApps = true;
+
   preFixup = ''
+    wrapProgram "$out/bin/noson-app" --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
     wrapQtApp "$out/lib/noson/noson-gui"
   '';
 

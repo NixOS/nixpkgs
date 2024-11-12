@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.16.1";
+  version = "2.28.13";
 
   src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dpkg
   ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    if ${ lib.boolToString stdenv.isLinux }
+    if ${ lib.boolToString stdenv.hostPlatform.isLinux }
     then
       dpkg-deb -x $src $out
       mv $out/usr/* $out
@@ -57,23 +57,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "G+uiPCt7AJQsxkY2Snc2941nkyo9NY3wv3uNCAFfSmE=";
+        sha256 = "cNzmvdsFkDj2W4KG8ZxVY2mfRHTAgq+XOTQtnl3UwvU=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "F2uRmxe8fAPAN/z7T7Kr0h4zcVS4I9mg6nqNXmcwxpE=";
+        sha256 = "ZJ2fNJ2W66u0E48wgUO/XlsHSfifhcikb0LG2JncWJ0=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "0MJDqRU+2phJ9P/c8GpB+btde0rSkR1gPx8Jbc4gIGo=";
+        sha256 = "PculxxgMBMpUCsKB2YCQKZ7s8SrT2rIY7La1s8mCQ4g=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "j6EfHRIN81uyro0QlzAjRSl3BLzObqI1EVuT9WaACu0=";
+        sha256 = "FVQrzZr0LBSLmcK8k3QIWQiCk9WMVXOJY2MNW+w/1g8=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "n02ABC8HzmQXWpgmXgCNBNFl1xw/kW/ncTNIeoJCUB0=";
+        sha256 = "/MCihH97/W8iMsW10EMdSaj+ZWBigaWDF3GR2WYnh+A=";
       };
     };
 
@@ -88,8 +88,7 @@ stdenv.mkDerivation rec {
       fi
 
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "blackfire" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
-        update-source-version "blackfire" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "blackfire" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

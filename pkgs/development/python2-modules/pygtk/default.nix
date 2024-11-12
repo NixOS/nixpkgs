@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   buildPhase = "buildPhase";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-ObjC"
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -lpython2.7";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-ObjC"
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) " -lpython2.7";
 
   installPhase = "installPhase";
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   postInstall = ''
     rm $out/bin/pygtk-codegen-2.0
     ln -s ${pygobject2}/bin/pygobject-codegen-2.0  $out/bin/pygtk-codegen-2.0
-    ln -s ${pygobject2}/lib/${python.libPrefix}/site-packages/pygobject-${pygobject2.version}.pth \
-                  $out/lib/${python.libPrefix}/site-packages/${pname}-${version}.pth
+    ln -s ${pygobject2}/${python.sitePackages}/pygobject-${pygobject2.version}.pth \
+                  $out/${python.sitePackages}/${pname}-${version}.pth
   '';
 
   meta = with lib; {

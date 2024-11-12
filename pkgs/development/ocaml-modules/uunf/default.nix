@@ -1,11 +1,15 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, cmdliner
 , cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0"
 }:
 
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
-  version = "15.0.0";
+  hash = {
+    "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+    "16.0.0" = "sha256-iQNkT1av6ONJXn3yWbNbEVV8lKGYOKh/nPU0tkUdX64=";
+  }."${version}";
 in
 
 if lib.versionOlder ocaml.version "4.03"
@@ -18,18 +22,16 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+    inherit hash;
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg uutf ]
   ++ lib.optional cmdlinerSupport cmdliner;
 
-  propagatedBuildInputs = [ uchar ];
-
   strictDeps = true;
 
-  prePatch = lib.optionalString stdenv.isAarch64 "ulimit -s 16384";
+  prePatch = lib.optionalString stdenv.hostPlatform.isAarch64 "ulimit -s 16384";
 
   buildPhase = ''
     runHook preBuild
@@ -42,7 +44,7 @@ stdenv.mkDerivation {
   inherit (topkg) installPhase;
 
   meta = with lib; {
-    description = "An OCaml module for normalizing Unicode text";
+    description = "OCaml module for normalizing Unicode text";
     homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

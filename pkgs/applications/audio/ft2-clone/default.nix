@@ -13,24 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.67";
+  version = "1.86";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "sha256-v/yGHWd/hhE2jDdAQhyQbZOuHSS0FSG4WlVe8Oc6tMc=";
+    hash = "sha256-/sdMBRCZvuKTp8ygCrLmIy0DiWJC6lLWdsY+ZxRY+pY=";
   };
-
-  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
          libiconv
          CoreAudio
          CoreMIDI
@@ -38,25 +33,18 @@ stdenv.mkDerivation rec {
          Cocoa
        ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
-    "-framework CoreAudio"
-    "-framework CoreMIDI"
-    "-framework CoreServices"
-    "-framework Cocoa"
-  ];
-
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
   };
 
   meta = with lib; {
-    description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
+    description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "ft2-clone";
   };
 }
-

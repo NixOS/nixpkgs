@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "http://tibia.com";
     license = lib.licenses.unfree;
     platforms = ["i686-linux"];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

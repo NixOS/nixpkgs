@@ -1,4 +1,4 @@
-{ pkgs, lib, makeInstalledTest, ... }:
+{ pkgs, makeInstalledTest, ... }:
 
 makeInstalledTest {
   tested = pkgs.ostree;

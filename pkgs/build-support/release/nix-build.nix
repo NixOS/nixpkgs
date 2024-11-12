@@ -146,7 +146,7 @@ stdenv.mkDerivation (
 
     postPhases = postPhases ++ ["finalPhase"];
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (lib.optionalAttrs (args ? meta) args.meta) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.hostPlatform.system}";
     };
 
@@ -154,13 +154,14 @@ stdenv.mkDerivation (
 
   //
 
-  (if buildOutOfSourceTree
-   then {
+  (lib.optionalAttrs buildOutOfSourceTree
+   {
      preConfigure =
        # Build out of source tree and make the source tree read-only.  This
        # helps catch violations of the GNU Coding Standards (info
        # "(standards) Configuration"), like `make distcheck' does.
-       '' mkdir "../build"
+       ''
+          mkdir "../build"
           cd "../build"
           configureScript="../$sourceRoot/configure"
           chmod -R a-w "../$sourceRoot"
@@ -170,5 +171,5 @@ stdenv.mkDerivation (
           ${lib.optionalString (preConfigure != null) preConfigure}
        '';
    }
-   else {})
+  )
 )

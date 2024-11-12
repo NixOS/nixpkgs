@@ -1,51 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cacert
-, cached-property
-, cffi
-, fetchPypi
-, isPyPy
-, libgit2
-, pycparser
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cacert,
+  cached-property,
+  cffi,
+  fetchPypi,
+  isPyPy,
+  libgit2,
+  pycparser,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.12.0";
-  format = "setuptools";
+  version = "1.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6UQNCGZeNSeJiZOVkKU/N6k46tpPlEaESTCqLuMNc74=";
+    hash = "sha256-eymmeWuqFfyJ1EOsjVF3VBHZseWwbcQNRYxWyFdrSKI=";
   };
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  buildInputs = [
-    libgit2
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  buildInputs = [ libgit2 ];
 
   propagatedBuildInputs = [
     cached-property
     pycparser
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ];
+  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Disable tests that require networking
@@ -58,22 +54,13 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  # setup.py check is broken
-  # https://github.com/libgit2/pygit2/issues/868
-  dontUseSetuptoolsCheck = true;
-
-  # TODO: Test collection is failing
-  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "pygit2"
-  ];
+  pythonImportsCheck = [ "pygit2" ];
 
   meta = with lib; {
-    description = "A set of Python bindings to the libgit2 shared library";
+    description = "Set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
+    changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

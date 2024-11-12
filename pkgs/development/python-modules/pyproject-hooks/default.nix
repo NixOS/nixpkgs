@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, testpath
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pyproject-hooks,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  testpath,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-hooks";
-  version = "1.0.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,39 +21,48 @@ buildPythonPackage rec {
   src = fetchPypi rec {
     pname = "pyproject_hooks";
     inherit version;
-    hash = "sha256-8nGymLl/WVXVP7ErcsH7GUjCLBprcLMVxUztrKAmTvU=";
+    hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    setuptools
-    testpath
-  ];
+  # We need to disable tests because this package is part of the bootstrap chain
+  # and its test dependencies cannot be built yet when this is being built.
+  doCheck = false;
 
-  disabledTests = [
-    # fail to import setuptools
-    "test_setup_py"
-    "test_issue_104"
-  ];
+  passthru.tests = {
+    pytest = buildPythonPackage {
+      pname = "${pname}-pytest";
+      inherit version;
+      format = "other";
 
-  pythonImportsCheck = [
-    "pyproject_hooks"
-  ];
+      dontBuild = true;
+      dontInstall = true;
+
+      nativeCheckInputs = [
+        pyproject-hooks
+        pytestCheckHook
+        setuptools
+        testpath
+      ];
+
+      disabledTests = [
+        # fail to import setuptools
+        "test_setup_py"
+        "test_issue_104"
+      ];
+    };
+  };
+
+  pythonImportsCheck = [ "pyproject_hooks" ];
 
   meta = with lib; {
-    description = "Low-level library for calling build-backends in `pyproject.toml`-based project ";
+    description = "Low-level library for calling build-backends in `pyproject.toml`-based project";
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = teams.python.members;
   };
 }

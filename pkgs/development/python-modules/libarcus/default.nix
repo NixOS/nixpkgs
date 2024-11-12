@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub
-, fetchpatch
-, cmake, sip_4, protobuf, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  sip4,
+  protobuf,
+}:
 
 buildPythonPackage rec {
   pname = "libarcus";
@@ -23,9 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = pythonOlder "3.4";
-
-  propagatedBuildInputs = [ sip_4 ];
+  propagatedBuildInputs = [ sip4 ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
@@ -34,10 +39,14 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Communication library between internal components for Ultimaker software";
     homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar gebner ];
+    maintainers = with maintainers; [
+      abbradar
+      gebner
+    ];
   };
 }

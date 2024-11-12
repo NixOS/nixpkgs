@@ -15,7 +15,8 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://michaelcmartin.github.io/Ophis/";
-    description = "A cross-assembler for the 6502 series of microprocessors";
+    description = "Cross-assembler for the 6502 series of microprocessors";
+    mainProgram = "ophis";
     longDescription = ''
       Ophis is an assembler for the 6502 microprocessor - the famous chip used
       in the vast majority of the classic 8-bit computers and consoles. Its

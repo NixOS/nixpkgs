@@ -1,63 +1,105 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
-, openh264, usrsctp, libevent, libvpx
-, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
-, glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, libepoxy, libglvnd, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  ninja,
+  python3,
+  libjpeg,
+  openssl,
+  libopus,
+  ffmpeg_6,
+  openh264,
+  crc32c,
+  libvpx,
+  libX11,
+  libXtst,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXrender,
+  libXrandr,
+  libXi,
+  glib,
+  abseil-cpp,
+  pipewire,
+  mesa,
+  libdrm,
+  libGL,
+  apple-sdk_15,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-05-01";
+  version = "0-unstable-2024-10-28";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "dcb5069ff76bd293e86928804208737e6cee2ccc";
-    sha256 = "0c3wnx51kbpzy9x8i9wm0ng16h35kgqsigrygrmwvxxn7zgv72ma";
+    rev = "8198c4d8b91e22d68eb5c7327fd408e3b6abcc79";
+    hash = "sha256-3sLa3Px0VWgRYqnnLlwLnx+WWnneqZyhQPrRMBriXQA=";
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
+      --replace-fail '"libEGL.so.1"' '"${lib.getLib libGL}/lib/libEGL.so.1"' \
+      --replace-fail '"libGL.so.1"' '"${lib.getLib libGL}/lib/libGL.so.1"' \
+      --replace-fail '"libgbm.so.1"' '"${lib.getLib mesa}/lib/libgbm.so.1"' \
+      --replace-fail '"libdrm.so.2"' '"${lib.getLib libdrm}/lib/libdrm.so.2"'
+  '';
 
-  nativeBuildInputs = [ pkg-config cmake ninja yasm ];
-
-  buildInputs = [
-    libjpeg libopus ffmpeg alsa-lib libpulseaudio protobuf
-    openh264 usrsctp libevent libvpx
-    libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
-    glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
-    mesa libepoxy libglvnd
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  patches = [
-    # GCC 12 Fix
-    (fetchpatch {
-      url = "https://github.com/desktop-app/tg_owt/pull/101/commits/86d2bcd7afb8706663d29e30f65863de5a626142.patch";
-      hash = "sha256-iWS0mB8R0vqPU/0qf6Ax54UCAKYDVCPac2mi/VHbFm0=";
-    })
-    # additional fix for GCC 12 + musl
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/tg_owt/gcc12.patch?id=8120df03fa3b6db5b8ff92c7a52b680290ad6e20";
-      hash = "sha256-ikgxUH1e7pz0n0pKUemrPXXa4UkECX+w467M9gU68zs=";
-    })
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
   ];
 
-  cmakeFlags = [
-    # Building as a shared library isn't officially supported and may break at any time.
-    "-DBUILD_SHARED_LIBS=OFF"
-  ];
-
-  propagatedBuildInputs = [
-    # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx openssl
-  ];
+  propagatedBuildInputs =
+    [
+      libjpeg
+      openssl
+      libopus
+      ffmpeg_6
+      openh264
+      crc32c
+      libvpx
+      abseil-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXtst
+      libXcomposite
+      libXdamage
+      libXext
+      libXrender
+      libXrandr
+      libXi
+      glib
+      pipewire
+      mesa
+      libdrm
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+    ];
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oxalica ];
+  meta = {
+    description = "Fork of Google's webrtc library for telegram-desktop";
+    homepage = "https://github.com/desktop-app/tg_owt";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oxalica ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

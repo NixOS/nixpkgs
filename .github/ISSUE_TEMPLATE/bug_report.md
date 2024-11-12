@@ -33,9 +33,12 @@ If in doubt, check `git blame` for whoever last touched something.
 -->
 
 ### Metadata
-Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
 
-```console
-[user@system:~]$ nix-shell -p nix-info --run "nix-info -m"
-output here
-```
+<!-- Please insert the output of running `nix-shell -p nix-info --run "nix-info -m"` below this line -->
+
+---
+
+Add a :+1: [reaction] to [issues you find important].
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+[issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

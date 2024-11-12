@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj_7 openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
-    ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
       cp "../data/img/xyGrib.icns" "$out/XyGrib/XyGrib.app/Contents/Resources/xyGrib.icns"
       mv $out/XyGrib/XyGrib.app $out/Applications
@@ -26,11 +26,16 @@ stdenv.mkDerivation rec {
       wrapQtApp $out/XyGrib/XyGrib
       mkdir -p $out/bin
       ln -s $out/XyGrib/XyGrib $out/bin/xygrib
+      install -Dm444 $src/debian/xygrib.png -t $out/share/icons/hicolor/32x32/apps
+      install -Dm444 $src/debian/xygrib.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/xygrib.desktop \
+        --replace 'Exec=XyGrib' 'Exec=xygrib'
     '';
 
   meta = with lib; {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
+    mainProgram = "xygrib";
     longDescription = ''
       XyGrib is a leading opensource weather visualization package.
       It interacts with OpenGribs's Grib server providing a choice

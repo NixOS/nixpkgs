@@ -1,32 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, glibcLocales
-, importlib-resources
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "netaddr";
-  version = "0.8.0";
+  version = "1.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hx2npi0wnhwlcybilgwlddw6qffx1mb7a3sj4p9s7bvl33mgk6n";
+    hash = "sha256-XDw9mJW1Ubdjd5un23oDSH3B+OOzha+BmvNBrp725Io=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [ glibcLocales pytestCheckHook ];
+  pythonImportsCheck = [ "netaddr" ];
 
   meta = with lib; {
-    homepage = "https://netaddr.readthedocs.io/en/latest/";
+    description = "Network address manipulation library for Python";
+    mainProgram = "netaddr";
+    homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
-    changelog = "https://netaddr.readthedocs.io/en/latest/changes.html";
-    description = "A network address manipulation library for Python";
+    changelog = "https://github.com/netaddr/netaddr/blob/${version}/CHANGELOG";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
   # Projec thas no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "xmind"
-  ];
+  pythonImportsCheck = [ "xmind" ];
 
   meta = with lib; {
     description = "Python module to create mindmaps";

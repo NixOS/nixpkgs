@@ -1,11 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, wrapQtAppsHook
-, libisoburn
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsForQt5,
+  libisoburn,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [ libisoburn ];
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A libisoburn wrapper class for Qt";
+    description = "Libisoburn wrapper class for Qt";
     homepage = "https://github.com/linuxdeepin/disomaster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

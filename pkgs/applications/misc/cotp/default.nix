@@ -8,24 +8,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cotp";
-  version = "1.2.5";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "replydev";
     repo = "cotp";
     rev = "v${version}";
-    hash = "sha256-c2QjFDJmRLlXU1ZMOjb0BhIRgqubCTRyncc2KUKOhsg=";
+    hash = "sha256-5wVIjh16AYwrzjbPgvjsQhihu/vwdQfzU2kZS6eSTWs=";
   };
 
-  cargoHash = "sha256-NnxgNk/C1DmEmPb2AcocsPsp2ngdyjbMP71M+fNL1qA=";
+  cargoHash = "sha256-DMswC+Qp6w7Dcp5YYV4EGWUylv/ouG0ukAdCdDnOA/8=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   meta = with lib; {
     homepage = "https://github.com/replydev/cotp";
     description = "Trustworthy, encrypted, command-line TOTP/HOTP authenticator app with import functionality";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ davsanchez ];
+    mainProgram = "cotp";
   };
 }

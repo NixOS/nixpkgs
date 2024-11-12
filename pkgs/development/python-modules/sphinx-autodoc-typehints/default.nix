@@ -1,49 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, pythonOlder
-, sphinx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pythonOlder,
+  sphinx,
+  pytestCheckHook,
 }:
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "1.22";
+  version = "2.4.4";
 in
 
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-cfyi1e7psDQgTkxoarILTY9euUCTliFryubIfDjhjqY=";
+    hash = "sha256-50NRLaWLZ6BleaFGJ5imkHZkq3dGB1ikMjSt6sNQr78=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "sphinx" ];
+
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  dependencies = [ sphinx ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # requires spobjinv, nbtyping
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sphinx_autodoc_typehints"
-  ];
+  pythonImportsCheck = [ "sphinx_autodoc_typehints" ];
 
   meta = with lib; {
     changelog = "https://github.com/tox-dev/sphinx-autodoc-typehints/releases/tag/${version}";

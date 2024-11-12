@@ -7,12 +7,12 @@ in {
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
-    enable = lib.mkEnableOption (lib.mdDoc "Hockeypuck OpenPGP Key Server");
+    enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
 
     port = lib.mkOption {
       default = 11371;
       type = lib.types.port;
-      description = lib.mdDoc "HKP port to listen on.";
+      description = "HKP port to listen on.";
     };
 
     settings = lib.mkOption {
@@ -37,7 +37,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration file for hockeypuck, here you can override
         certain settings (`loglevel` and
         `openpgp.db.dsn`) by just setting those values.
@@ -55,7 +55,7 @@ in {
             ensureDatabases = [ "hockeypuck" ];
             ensureUsers = [{
               name = "hockeypuck";
-              ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
+              ensureDBOwnership = true;
             }];
           };
         ```

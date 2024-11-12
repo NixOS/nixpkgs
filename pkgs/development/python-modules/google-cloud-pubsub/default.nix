@@ -1,45 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, grpcio
-, grpcio-status
-, libcst
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  grpcio-status,
+  grpcio,
+  libcst,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.17.1";
-  format = "setuptools";
+  version = "2.25.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BZNCjsuwJJy150G0A+lcPUIbRpfIPrftTBaE3/F2x1M=";
+    pname = "google_cloud_pubsub";
+    inherit version;
+    hash = "sha256-Kg/RYQDBbHE3Q45G1M42y++kvXnPk8h3aruf3oPPWQQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     grpcio
     grpcio-status
     libcst
+    opentelemetry-api
+    opentelemetry-sdk
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -58,15 +65,14 @@ buildPythonPackage rec {
     "tests/unit/pubsub_v1"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.pubsub"
-  ];
+  pythonImportsCheck = [ "google.cloud.pubsub" ];
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
+    mainProgram = "fixup_pubsub_v1_keywords.py";
   };
 }

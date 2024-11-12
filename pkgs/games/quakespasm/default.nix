@@ -1,24 +1,29 @@
 { lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad, flac, libopus, opusfile, libogg, libxmp
 , Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
 , copyDesktopItems, makeDesktopItem, pkg-config
-, useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+, useSDL2 ? stdenv.hostPlatform.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
 stdenv.mkDerivation rec {
   pname = "quakespasm";
-  version = "0.95.1";
+  version = "0.96.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
-    sha256 = "sha256-hBmEV3s65yQysMiq4zEP4swfCgCCiT5dzZdhg7bSNOI=";
+    sha256 = "sha256-Sa4lLALB3xpMGVjpKnzGl1OBEJcLOHDcFGEFsO0wwOw=";
   };
 
   sourceRoot = "${pname}-${version}/Quake";
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Makes Darwin Makefile use system libraries instead of ones from app bundle
     ./quakespasm-darwin-makefile-improvements.patch
   ];
+
+  # Quakespasm tries to set a 10.6 deployment target, but that’s too low for SDL2.
+  postPatch = ''
+    sed -i Makefile.darwin -e '/-mmacosx-version-min/d'
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -28,9 +33,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gzip libvorbis libmad flac libopus opusfile libogg libxmp
     (if useSDL2 then SDL2 else SDL)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa CoreAudio IOKit OpenGL
-  ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
     CoreFoundation
   ];
 
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec {
     "USE_SDL2=1"
   ];
 
-  makefile = if (stdenv.isDarwin) then "Makefile.darwin" else "Makefile";
+  makefile = if (stdenv.hostPlatform.isDarwin) then "Makefile.darwin" else "Makefile";
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.darwin --replace "/usr/local/games" "$out/bin"
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Let's build app bundle
     mkdir -p $out/Applications/Quake.app/Contents/MacOS
     mkdir -p $out/Applications/Quake.app/Contents/Resources
@@ -87,7 +92,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An engine for iD software's Quake";
+    description = "Engine for iD software's Quake";
     homepage = "https://quakespasm.sourceforge.net/";
     longDescription = ''
       QuakeSpasm is a modern, cross-platform Quake 1 engine based on FitzQuake.

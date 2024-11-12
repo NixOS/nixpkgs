@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "lml";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,6 +28,6 @@ buildPythonPackage rec {
     description = "Load me later. A lazy plugin management system for Python";
     homepage = "http://lml.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

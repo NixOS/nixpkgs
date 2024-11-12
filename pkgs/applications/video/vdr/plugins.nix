@@ -1,6 +1,6 @@
 { lib, stdenv, vdr, fetchFromGitHub
-, graphicsmagick, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
+, graphicsmagick
+, boost, libgcrypt, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -11,6 +11,12 @@
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  epgsearch = callPackage ./epgsearch {};
+
+  markad = callPackage ./markad {};
+
+  nopacity = callPackage ./nopacity {};
 
   softhddevice = callPackage ./softhddevice {};
 
@@ -53,101 +59,6 @@ in {
 
   };
 
-  markad = stdenv.mkDerivation rec {
-    pname = "vdr-markad";
-    version = "3.1.1";
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-markad";
-      owner = "kfb77";
-      sha256 = "sha256-h2a400T6mHzZRWAVFXF5Wzhu4Zp1D3btEKlxnCtB13M=";
-      rev = "V${version}";
-    };
-
-    buildInputs = [ vdr ffmpeg ];
-
-    postPatch = ''
-      substituteInPlace command/Makefile --replace '/usr' ""
-
-      substituteInPlace plugin/markad.cpp \
-        --replace "/usr/bin" "$out/bin" \
-        --replace "/var/lib/markad" "$out/var/lib/markad"
-
-      substituteInPlace command/markad-standalone.cpp \
-        --replace "/var/lib/markad" "$out/var/lib/markad"
-    '';
-
-    buildFlags = [
-      "DESTDIR=$(out)"
-      "LIBDIR=/lib/vdr"
-      "BINDIR=/bin"
-      "MANDIR=/share/man"
-      "APIVERSION=${vdr.version}"
-      "VDRDIR=${vdr.dev}/include/vdr"
-      "LOCDIR=/share/locale"
-    ];
-
-    installFlags = buildFlags;
-
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = "MarkAd marks advertisements in VDR recordings.";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
-  epgsearch = stdenv.mkDerivation rec {
-    pname = "vdr-epgsearch";
-    version = "2.4.2";
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-epgsearch";
-      owner = "vdr-projects";
-      sha256 = "sha256-C+WSdGTnDBTWLvpjG5GBaK8pYbht431nL5iaL/a0H4Y=";
-      rev = "v${version}";
-    };
-
-    postPatch = ''
-      for f in *.sh; do
-        patchShebangs "$f"
-      done
-    '';
-
-    nativeBuildInputs = [
-      perl # for pod2man and pos2html
-      util-linux
-      groff
-    ];
-
-    buildInputs = [
-      vdr
-      pcre
-    ];
-
-    buildFlags = [
-      "SENDMAIL="
-      "REGEXLIB=pcre"
-    ];
-
-    installFlags = [
-      "DESTDIR=$(out)"
-    ];
-
-    outputs = [ "out" "man" ];
-
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = "Searchtimer and replacement of the VDR program menu";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
     version = "1.8.3";
@@ -165,7 +76,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "VDR plugin to handle KODI clients.";
+      description = "VDR plugin to handle KODI clients";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;
@@ -217,7 +128,7 @@ in {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      sha256 = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
       fetchSubmodules = true;
     };
 
@@ -227,7 +138,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "A plugin for VDR to access AVMs Fritz Box routers";
+      description = "Plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

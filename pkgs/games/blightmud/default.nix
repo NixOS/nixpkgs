@@ -6,27 +6,35 @@
 , alsa-lib
 , openssl
 , withTTS ? false
-, speechd
+, speechd-minimal
+, darwin
 }:
-
+let
+  inherit (darwin.apple_sdk.frameworks)
+    CoreAudio AudioUnit AVFoundation AppKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "5.2.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sLqkDuohCgHJTMte1WIa2Yu43oWXVvnIpeiDBoQpKY8=";
+    hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
-  cargoHash = "sha256-ffADKoMysYY2vwX3asHnjR2EiND4RJsf/W334PWvkGs=";
+  cargoHash = "sha256-84m5dihmiEGrFCajqaMW05MQtBceLodBzqtjW+zh6kg=";
 
   buildFeatures = lib.optional withTTS "tts";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals (withTTS && stdenv.hostPlatform.isDarwin) [ AVFoundation AppKit ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio AudioUnit ];
 
   checkFlags =
     let
@@ -43,13 +51,18 @@ rustPlatform.buildRustPackage rec {
         "test_lua_script"
         "timer_test"
         "validate_assertion_fail"
+        "regex_smoke_test"
+        "test_tls_init_verify_err"
+        "test_tls_init_no_verify"
+        "test_tls_init_verify"
       ];
       skipFlag = test: "--skip " + test;
     in
     builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
   meta = with lib; {
-    description = "A terminal MUD client written in Rust";
+    description = "Terminal MUD client written in Rust";
+    mainProgram = "blightmud";
     longDescription = ''
       Blightmud is a terminal client for connecting to Multi User Dungeon (MUD)
       games. It is written in Rust and supports TLS, GMCP, MSDP, MCCP2, tab
@@ -62,6 +75,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Blightmud/Blightmud";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cpu ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

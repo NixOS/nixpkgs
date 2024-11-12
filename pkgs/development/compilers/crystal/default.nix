@@ -17,7 +17,9 @@
 , libxml2
 , libyaml
 , libffi
-, llvmPackages
+, llvmPackages_13
+, llvmPackages_15
+, llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
@@ -53,28 +55,29 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
-    stdenv.mkDerivation rec {
-      pname = "crystal-binary";
-      inherit version;
+  stdenv.mkDerivation rec {
+    pname = "crystal-binary";
+    inherit version;
 
-      src = fetchurl {
-        url = binaryUrl version rel;
-        sha256 = sha256s.${stdenv.system};
-      };
-
-      buildCommand = ''
-        mkdir -p $out
-        tar --strip-components=1 -C $out -xf ${src}
-        patchShebangs $out/bin/crystal
-      '';
-
-      meta.platforms = lib.attrNames sha256s;
+    src = fetchurl {
+      url = binaryUrl version rel;
+      sha256 = sha256s.${stdenv.system};
     };
 
-  generic = (
+    buildCommand = ''
+      mkdir -p $out
+      tar --strip-components=1 -C $out -xf ${src}
+      patchShebangs $out/bin/crystal
+    '';
+
+    meta.platforms = lib.attrNames sha256s;
+  };
+
+  generic =
     { version
     , sha256
     , binary
+    , llvmPackages
     , doCheck ? true
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
@@ -142,10 +145,15 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
+      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
+      '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
+        # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
+        # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
+        substituteInPlace src/llvm/lib_llvm.cr \
+          --replace '@[Link("stdc++")]' '@[Link("c++")]'
       '';
 
       # Defaults are 4
@@ -168,7 +176,7 @@ let
         libxml2
         openssl
       ] ++ extraBuildInputs
-      ++ lib.optionals stdenv.isDarwin [ libiconv ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -197,6 +205,9 @@ let
         wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
+          --suffix PKG_CONFIG_PATH : ${
+            lib.makeSearchPathOutput "dev" "lib/pkgconfig" finalAttrs.buildInputs
+          } \
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath finalAttrs.buildInputs
           }
@@ -236,17 +247,17 @@ let
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = finalAttrs.finalPackage;
       };
+      passthru.llvmPackages = llvmPackages;
 
       meta = with lib; {
         inherit (binary.meta) platforms;
-        description = "A compiled language with Ruby like syntax and type inference";
+        description = "Compiled language with Ruby like syntax and type inference";
+        mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+        maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
-    })
-  );
-
+    });
 in
 rec {
   binaryCrystal_1_2 = genericBinary {
@@ -259,10 +270,21 @@ rec {
     };
   };
 
+  binaryCrystal_1_10 = genericBinary {
+    version = "1.10.1";
+    sha256s = {
+      x86_64-linux = "sha256-F0LjdV02U9G6B8ApHxClF/o5KvhxMNukSX7Z2CwSNIs=";
+      aarch64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
+    };
+  };
+
   crystal_1_2 = generic {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
     extraBuildInputs = [ libatomic_ops ];
   };
 
@@ -270,13 +292,45 @@ rec {
     version = "1.7.3";
     sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
   };
 
   crystal_1_8 = generic {
     version = "1.8.2";
     sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_8;
+  crystal_1_9 = generic {
+    version = "1.9.2";
+    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
+    binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
+  };
+
+  crystal_1_11 = generic {
+    version = "1.11.2";
+    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_15;
+  };
+
+  crystal_1_12 = generic {
+    version = "1.12.1";
+    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+  crystal_1_14 = generic {
+    version = "1.14.0";
+    sha256 = "sha256-ayMF5yinHVOUaZxhlmqxb/iiGJHmloeYuKcnrPmxo9Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
+  };
+
+
+  crystal = crystal_1_14;
 }

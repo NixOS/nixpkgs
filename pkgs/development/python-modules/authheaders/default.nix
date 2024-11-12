@@ -1,18 +1,20 @@
-{ lib
-, authres
-, buildPythonPackage
-, dkimpy
-, dnspython
-, fetchFromGitHub
-, publicsuffix2
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  authres,
+  buildPythonPackage,
+  dkimpy,
+  dnspython,
+  fetchFromGitHub,
+  publicsuffix2,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "authheaders";
-  version = "0.15.2";
-  format = "setuptools";
+  version = "0.16.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,22 +22,26 @@ buildPythonPackage rec {
     owner = "ValiMail";
     repo = "authentication-headers";
     rev = "refs/tags/${version}";
-    hash = "sha256-vtLt7JUdLF0gBWgMzP65UAR6A9BnTech5n0alFErcSQ=";
+    hash = "sha256-BFMZpSJ4qCEL42xTiM/D5dkatxohiCrOWAkNZHFUhac=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     authres
     dnspython
     dkimpy
     publicsuffix2
+    setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "authheaders"
+  pythonImportsCheck = [ "authheaders" ];
+
+  disabledTests = [
+    # Test fails with timeout even if the resolv.conf hack is present
+    "test_authenticate_dmarc_psdsub"
   ];
 
   meta = with lib; {
@@ -43,6 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ValiMail/authentication-headers";
     changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "dmarc-policy-find";
   };
 }

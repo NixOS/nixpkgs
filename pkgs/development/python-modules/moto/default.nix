@@ -1,161 +1,263 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-# build
-, setuptools
-
-# runtime
-, aws-xray-sdk
-, boto3
-, botocore
-, cfn-lint
-, cryptography
-, docker
-, flask
-, flask-cors
-, graphql-core
-, idna
-, jinja2
-, jsondiff
-, openapi-spec-validator
-, pyparsing
-, python-dateutil
-, python-jose
-, pyyaml
-, requests
-, responses
-, sshpubkeys
-, werkzeug
-, xmltodict
-
-# tests
-, freezegun
-, pytestCheckHook
-, pytest-xdist
-, sure
+{
+  lib,
+  antlr4-python3-runtime,
+  aws-xray-sdk,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cfn-lint,
+  crc32c,
+  cryptography,
+  docker,
+  fetchPypi,
+  flask-cors,
+  flask,
+  freezegun,
+  graphql-core,
+  jinja2,
+  joserfc,
+  jsondiff,
+  jsonpath-ng,
+  multipart,
+  openapi-spec-validator,
+  py-partiql-parser,
+  pyparsing,
+  pytest-order,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  setuptools,
+  werkzeug,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.1.3";
-  format = "pyproject";
+  version = "5.0.16";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yCAMyqlEDC6dqgvV4L12inGdtaLILqjXgvDj+gmjxeI=";
+    hash = "sha256-9K+xdqlkzXpw2pvF4FPUMQlhTOPKsmBEvLtTYQQ13/Q=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aws-xray-sdk
+  dependencies = [
     boto3
     botocore
-    cfn-lint
     cryptography
-    docker
-    flask
-    flask-cors
-    graphql-core
-    idna
-    jinja2
-    jsondiff
-    openapi-spec-validator
-    pyparsing
-    python-dateutil
-    python-jose
-    pyyaml
     requests
-    responses
-    sshpubkeys
-    werkzeug
     xmltodict
+    werkzeug
+    python-dateutil
+    responses
+    jinja2
   ];
+
+  optional-dependencies = {
+    all = [
+      antlr4-python3-runtime
+      aws-xray-sdk
+      cfn-lint
+      docker
+      flask
+      flask-cors
+      graphql-core
+      joserfc
+      jsondiff
+      jsonpath-ng
+      multipart
+      openapi-spec-validator
+      py-partiql-parser
+      pyparsing
+      pyyaml
+      setuptools
+    ];
+    proxy = [
+      antlr4-python3-runtime
+      aws-xray-sdk
+      cfn-lint
+      docker
+      graphql-core
+      joserfc
+      jsondiff
+      jsonpath-ng
+      multipart
+      openapi-spec-validator
+      py-partiql-parser
+      pyparsing
+      pyyaml
+      setuptools
+    ];
+    server = [
+      antlr4-python3-runtime
+      aws-xray-sdk
+      cfn-lint
+      docker
+      flask
+      flask-cors
+      graphql-core
+      joserfc
+      jsondiff
+      jsonpath-ng
+      openapi-spec-validator
+      py-partiql-parser
+      pyparsing
+      pyyaml
+      setuptools
+    ];
+    cognitoidp = [ joserfc ];
+    apigateway = [
+      pyyaml
+      joserfc
+      openapi-spec-validator
+    ];
+    apigatewayv2 = [
+      pyyaml
+      openapi-spec-validator
+    ];
+    cloudformation = [
+      aws-xray-sdk
+      cfn-lint
+      docker
+      graphql-core
+      joserfc
+      jsondiff
+      openapi-spec-validator
+      py-partiql-parser
+      pyparsing
+      pyyaml
+      setuptools
+    ];
+    dynamodb = [
+      docker
+      py-partiql-parser
+    ];
+    dynamodbstreams = [
+      docker
+      py-partiql-parser
+    ];
+    events = [ jsonpath-ng ];
+    glue = [ pyparsing ];
+    iotdata = [ jsondiff ];
+    resourcegroupstaggingapi = [
+      cfn-lint
+      docker
+      graphql-core
+      joserfc
+      jsondiff
+      openapi-spec-validator
+      py-partiql-parser
+      pyparsing
+      pyyaml
+    ];
+    s3 = [
+      pyyaml
+      py-partiql-parser
+    ];
+    sns = [ ];
+    stepfunctions = [
+      antlr4-python3-runtime
+      jsonpath-ng
+    ];
+    s3crc32c = [
+      pyyaml
+      py-partiql-parser
+      crc32c
+    ];
+  };
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     freezegun
+    pytest-order
+    pytest-xdist
     pytestCheckHook
-    sure
-  ];
+  ] ++ optional-dependencies.all;
+
+  # Some tests depend on AWS credentials environment variables to be set.
+  env.AWS_ACCESS_KEY_ID = "ak";
+  env.AWS_SECRET_ACCESS_KEY = "sk";
 
   pytestFlagsArray = [
-    # Disable tests that try to access the network
-    "--deselect=tests/test_cloudformation/test_cloudformation_custom_resources.py::test_create_custom_lambda_resource__verify_cfnresponse_failed"
-    "--deselect=tests/test_cloudformation/test_server.py::test_cloudformation_server_get"
-    "--deselect=tests/test_core/test_decorator_calls.py::test_context_manager"
-    "--deselect=tests/test_core/test_decorator_calls.py::test_decorator_start_and_stop"
-    "--deselect=tests/test_core/test_request_mocking.py::test_passthrough_requests"
-    "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_batch_http_destination"
-    "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_http_destination"
-    "--deselect=tests/test_logs/test_integration.py::test_put_subscription_filter_with_lambda"
-    "--deselect=tests/test_sqs/test_integration.py::test_invoke_function_from_sqs_exception"
-    "--deselect=tests/test_sqs/test_sqs_integration.py::test_invoke_function_from_sqs_exception"
-    "--deselect=tests/test_stepfunctions/test_stepfunctions.py::test_state_machine_creation_fails_with_invalid_names"
-    "--deselect=tests/test_stepfunctions/test_stepfunctions.py::test_state_machine_list_executions_with_pagination"
-    "--deselect=tests/test_iotdata/test_iotdata.py::test_update"
-    "--deselect=tests/test_iotdata/test_iotdata.py::test_basic"
-    "--deselect=tests/test_iotdata/test_iotdata.py::test_delete_field_from_device_shadow"
-    "--deselect=tests/test_iotdata/test_iotdata.py::test_publish"
-    "--deselect=tests/test_s3/test_server.py::test_s3_server_bucket_versioning"
-    "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
+    "-m"
+    "'not network and not requires_docker'"
 
-    # Disable tests that require docker daemon
-    "--deselect=tests/test_events/test_events_lambdatriggers_integration.py::test_creating_bucket__invokes_lambda"
-    "--deselect=tests/test_s3/test_s3_lambda_integration.py::test_objectcreated_put__invokes_lambda"
-
-    # json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-    "--deselect=tests/test_cloudformation/test_cloudformation_stack_integration.py::test_lambda_function"
-
-    # AssertionError: CloudWatch log event was not found.
-    "--deselect=tests/test_logs/test_integration.py::test_subscription_filter_applies_to_new_streams"
-
-    # KeyError: 'global'
-    "--deselect=tests/test_iotdata/test_server.py::test_iotdata_list"
-    "--deselect=tests/test_iotdata/test_server.py::test_publish"
-
-    # Blocks test execution
-    "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_load_data_from_inmemory_client"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    "--deselect=tests/test_utilities/test_threaded_server.py::test_threaded_moto_server__different_port"
-    "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_server_can_handle_multiple_services"
-    "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_server_is_reachable"
-
-    # AssertionError: expected `{0}` to be greater than `{1}`
-    "--deselect=tests/test_databrew/test_databrew_recipes.py::test_publish_recipe"
-  ];
-
-  disabledTestPaths = [
-    # xml.parsers.expat.ExpatError: out of memory: line 1, column 0
-    "tests/test_sts/test_sts.py"
-    # botocore.exceptions.NoCredentialsError: Unable to locate credentials
-    "tests/test_redshiftdata/test_redshiftdata.py"
-    # Tries to access the network
-    "tests/test_appsync/test_appsync_schema.py"
-    "tests/test_awslambda/test_lambda_eventsourcemapping.py"
-    "tests/test_awslambda/test_lambda_invoke.py"
-    "tests/test_batch/test_batch_jobs.py"
-    "tests/test_kinesis/test_kinesis.py"
-    "tests/test_kinesis/test_kinesis_stream_consumers.py"
+    # Matches upstream configuration, presumably due to expensive setup/teardown.
+    "--dist"
+    "loadscope"
   ];
 
   disabledTests = [
-    # only appears in aarch64 currently, but best to be safe
-    "test_state_machine_list_executions_with_filter"
-    # tests fail with 404 after Werkzeug 2.2 upgrade, see https://github.com/spulec/moto/issues/5341#issuecomment-1206995825
-    "test_appsync_list_tags_for_resource"
-    "test_s3_server_post_to_bucket_redirect"
+    # Fails at local name resolution
+    "test_with_custom_request_header"
+    "test_s3_server_post_cors_multiple_origins"
+    "test_create_multipart"
+    "test_aws_and_http_requests"
+    "test_http_requests"
+
+    # Fails at resolving google.com
+    "test_put_record_http_destination"
+    "test_put_record_batch_http_destination"
+
+    # Fails at resolving s3.amazonaws.com
+    "test_passthrough_calls_for_wildcard_urls"
+    "test_passthrough_calls_for_specific_url"
+    "test_passthrough_calls_for_entire_service"
+
+    # Download recordings returns faulty JSON
+    "test_ec2_instance_creation_recording_on"
+    "test_ec2_instance_creation__recording_off"
+
+    # Connection Reset by Peer, when connecting to localhost:5678
+    "test_replay"
+
+    # Flaky under parallel execution
+    "test_cloudformation_server_get"
+    "test_should_find_bucket"
+
+    # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
+    "test_delete_object_with_version"
+
+    # KeyError beucase of ap-southeast-5-apse5-az
+    "test_zoneId_in_availability_zones"
+
+    # Parameter validation fails
+    "test_conditional_write"
+  ];
+
+  disabledTestPaths = [
+    # Flaky under parallel execution, Connection Reset errors to localhost.
+    "tests/test_moto_api/recorder/test_recorder.py"
+
+    # Flaky under parallel execution
+    "tests/test_resourcegroupstaggingapi/*.py"
+
+    # Tries to access the network
+    "tests/test_batch/test_batch_jobs.py"
+
+    # Threading tests regularly blocks test execution
+    "tests/test_utilities/test_threaded_server.py"
+    "tests/test_s3/test_s3_bucket_policy.py"
+
+    # https://github.com/getmoto/moto/issues/7786
+    "tests/test_dynamodb/test_dynamodb_import_table.py"
+
+    # Infinite recursion with pycognito
+    "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
   meta = with lib; {
-    description = "Allows your tests to easily mock out AWS Services";
-    homepage = "https://github.com/spulec/moto";
+    description = "Module to allow your tests to easily mock out AWS Services";
+    homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];

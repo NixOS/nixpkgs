@@ -25,18 +25,18 @@
 , gdk-pixbuf
 , dbus
 , accountsservice
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "sha256-6rjZOX9JOTjZwqWVWTtKjGNy8KgWllE9VQZzwhuBAwE=";
+    sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # A hook does this but after wrapGAppsHook so the files never get wrapped.
+    # A hook does this but after wrapGAppsHook3 so the files never get wrapped.
     "--sbindir=${placeholder "out"}/bin"
     # baked into the program for discovery of the greeter configuration
     "--sysconfdir=/etc"

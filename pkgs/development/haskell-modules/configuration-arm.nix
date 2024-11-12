@@ -46,6 +46,9 @@ self: super: {
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
 
+  # Corrupted store path https://github.com/NixOS/nixpkgs/pull/272097#issuecomment-1848414265
+  cachix = triggerRebuild 1 super.cachix;
+
   # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
   # TODO: figure out if needed on aarch32 as well
@@ -67,7 +70,6 @@ self: super: {
   headroom = dontCheck super.headroom;
   hgeometry = dontCheck super.hgeometry;
   hhp = dontCheck super.hhp;
-  hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hsakamai = dontCheck super.hsakamai;
   hsemail-ns = dontCheck super.hsemail-ns;
   html-validator-cli = dontCheck super.html-validator-cli;
@@ -96,13 +98,6 @@ self: super: {
   xml-html-qq = dontCheck super.xml-html-qq;
   yaml-combinators = dontCheck super.yaml-combinators;
   yesod-paginator = dontCheck super.yesod-paginator;
-  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
-  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
-  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
-  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
-  hls-class-plugin = dontCheck super.hls-class-plugin;
-  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
@@ -113,11 +108,6 @@ self: super: {
   # Similar RTS issue in test suite:
   # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
   # These still fail sporadically on ghc 9.2
-  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
-  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-  hls-rename-plugin = dontCheck super.hls-rename-plugin;
-  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
-  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 

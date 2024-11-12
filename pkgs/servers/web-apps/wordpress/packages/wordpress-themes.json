@@ -1,7 +1,8 @@
-[
-  "twentynineteen"
-, "twentytwenty"
-, "twentytwentytwo"
-, "twentytwentyone"
-, "twentytwentythree"
-]
+{
+  "twentynineteen": "gpl2Plus",
+  "twentytwenty": "gpl2Plus",
+  "twentytwentyone": "gpl2Plus",
+  "twentytwentytwo": "gpl2Plus",
+  "twentytwentythree": "gpl2Plus",
+  "twentytwentyfour": "gpl2Plus"
+}

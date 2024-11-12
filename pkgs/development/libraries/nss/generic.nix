@@ -1,13 +1,13 @@
 { version, hash }:
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , nspr
 , perl
 , zlib
 , sqlite
 , ninja
-, darwin
+, cctools
 , fixDarwinDylibNames
 , buildPackages
 , useP11kit ? true
@@ -16,6 +16,7 @@
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
 , nixosTests
+, nss_latest
 }:
 
 let
@@ -25,15 +26,17 @@ stdenv.mkDerivation rec {
   pname = "nss";
   inherit version;
 
-  src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "nss-dev";
+    repo = "nss";
+    rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
     inherit hash;
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
 
@@ -41,41 +44,24 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    (if (lib.versionOlder version "3.84") then
-      ./85_security_load_3.77+.patch
-    else
-      ./85_security_load_3.85+.patch
-    )
+    ./85_security_load_3.85+.patch
     ./fix-cross-compilation.patch
-  ] ++ lib.optionals (lib.versionOlder version "3.89") [
-    # Backport gcc-13 build fix:
-    #  https://bugzilla.mozilla.org/show_bug.cgi?id=1771273
-    #  https://hg.mozilla.org/projects/nss/raw-rev/21e7aaa1f7d94bca15d997e5b4c2329b32fad21a
-    ./gcc-13-esr.patch
-  ] ++ lib.optionals (lib.versionAtLeast version "3.90") [
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1836925
-    # https://phabricator.services.mozilla.com/D180068
-    ./remove-c25519-support.patch
   ];
 
-  patchFlags = [ "-p0" ];
-
   postPatch = ''
-    patchShebangs nss
+    patchShebangs .
 
-    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
+    for f in coreconf/config.gypi build.sh; do
       substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
     done
 
-    substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+    substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-    substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+    substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
   '';
 
   outputs = [ "out" "dev" "tools" ];
-
-  preConfigure = "cd nss";
 
   buildPhase =
     let
@@ -107,7 +93,7 @@ stdenv.mkDerivation rec {
         --enable-libpkix \
         -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
-        ${lib.optionalString stdenv.isDarwin "--clang"} \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "--clang"} \
         ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
       runHook postBuild
@@ -169,7 +155,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString enableFIPS (''
       for libname in freebl3 nssdbm3 softokn3
       do libfile="$out/lib/lib$libname${stdenv.hostPlatform.extensions.sharedLibrary}"'' +
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
     then ''
       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '' else ''
@@ -189,15 +175,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
-    inherit (nixosTests) firefox-esr-91;
-  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
-    inherit (nixosTests) firefox firefox-esr-102;
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
+    inherit (nixosTests) firefox-esr-115;
+  } // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
+    inherit (nixosTests) firefox;
   };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
-    description = "A set of libraries for development of security-enabled client and server applications";
+    description = "Set of libraries for development of security-enabled client and server applications";
     changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
     maintainers = with maintainers; [ hexa ajs124 ];
     license = licenses.mpl20;

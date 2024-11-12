@@ -1,4 +1,8 @@
-{ lzallright, buildPythonPackage, pytestCheckHook }:
+{
+  lzallright,
+  buildPythonPackage,
+  pytestCheckHook,
+}:
 
 buildPythonPackage {
   inherit (lzallright) version src;

@@ -1,47 +1,43 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, appdirs
-, black
-, importlib-metadata
-, isPy3k
-, jedi
-, prompt-toolkit
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  appdirs,
+  jedi,
+  prompt-toolkit,
+  pygments,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.23";
-  format = "setuptools";
+  version = "3.0.29";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n8m+wsxRvEAAwSJNjFYkHOikBrPUnsjcJm94zTzQS6Q=";
+    hash = "sha256-udYlGDrvk6Zz/DLL4cH8r1FBLnpPGVkFIc2syt8lGG4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
-    black # yes, this is in install_requires
     jedi
     prompt-toolkit
     pygments
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   # no tests to run
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ptpython"
-  ];
+  pythonImportsCheck = [ "ptpython" ];
 
   meta = with lib; {
-    description = "An advanced Python REPL";
+    description = "Advanced Python REPL";
     homepage = "https://github.com/prompt-toolkit/ptpython";
     changelog = "https://github.com/prompt-toolkit/ptpython/blob/${version}/CHANGELOG";
     license = licenses.bsd3;

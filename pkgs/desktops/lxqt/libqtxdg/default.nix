@@ -1,27 +1,33 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , qtbase
 , qtsvg
 , lxqt-build-tools
+, wrapQtAppsHook
 , gitUpdater
+, version ? "4.1.0"
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.11.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "b3XR0Tn/roiCjNGb3EMf4ilECNaUjGYi11ykVBppBuc=";
+    hash = {
+      "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
+      "4.1.0" = "sha256-Efn08a8MkR459Ww0WiEb5GXKgQzJwKupIdL2TySpivE=";
+    }."${version}";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    wrapQtAppsHook
   ];
 
   buildInputs = [

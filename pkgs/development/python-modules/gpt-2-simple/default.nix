@@ -1,9 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, regex, requests, tqdm, numpy
-, toposort, tensorflow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  regex,
+  requests,
+  setuptools,
+  tqdm,
+  numpy,
+  toposort,
+  tensorflow,
+}:
 
 buildPythonPackage rec {
   pname = "gpt-2-simple";
   version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minimaxir";
@@ -12,15 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-WwD4sDcc28zXEOISJsq8e+rgaNrrgIy79Wa4J3E7Ovc=";
   };
 
-  propagatedBuildInputs = [ regex requests tqdm numpy toposort tensorflow ];
+  build-system = [ setuptools ];
 
-  dontCheck = true; # no tests in upstream
+  propagatedBuildInputs = [
+    regex
+    requests
+    tqdm
+    numpy
+    toposort
+    tensorflow
+  ];
+
+  doCheck = false; # no tests in upstream
 
   meta = with lib; {
-    description =
-      "Easily retrain OpenAI's GPT-2 text-generating model on new texts";
+    description = "Easily retrain OpenAI's GPT-2 text-generating model on new texts";
     homepage = "https://github.com/minimaxir/gpt-2-simple";
     license = licenses.mit;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

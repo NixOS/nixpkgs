@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-executable";
-  version = "1.3";
-  format = "pyproject";
+  version = "1.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,24 +20,20 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.executable";
     rev = "refs/tags/${version}";
-    hash = "sha256-YGpClgRVW8l5Ln6e3RrH1RhOSuZ/A6Kfjf1plomWE9U=";
+    hash = "sha256-qr8t+k0m9VoF2hLNilCLJ9BfATLRlZupF2C9l+6OMDo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  pythonImportsCheck = [
-    "dissect.executable"
-  ];
+  pythonImportsCheck = [ "dissect.executable" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for various executable formats such as PE, ELF and Macho-O";

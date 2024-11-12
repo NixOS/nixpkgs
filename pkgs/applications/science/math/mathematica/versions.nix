@@ -8,6 +8,62 @@
 
 let versions = [
   {
+    version = "14.1.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-PCpjwqA6NC+iwvYxddYBlmF5+vl76r+MoIYAL91WFns=";
+    installer = "Wolfram_14.1.0_LIN.sh";
+  }
+  {
+    version = "14.1.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-pnu60Pv3xo3+MAkDLiU3yTPVbbQ00diV45vSVL8B310=";
+    installer = "Wolfram_14.1.0_LIN_Bndl.sh";
+  }
+  {
+    version = "14.0.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-NzMhGQZq6o6V4UdtJxUH/yyP2s7wjTR86SRA7lW7JfI=";
+    installer = "Mathematica_14.0.0_LINUX.sh";
+  }
+  {
+    version = "14.0.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-UrcBEg6G6nbVX++X0z0oG5JjieXL0AquAqtjzY5EBn4=";
+    installer = "Mathematica_14.0.0_BNDL_LINUX.sh";
+  }
+  {
+    version = "13.3.1";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-0+mYVGiF4Qn3eiLIoINSHVIqT8GtlBPFRYIOF+nHyQo=";
+    installer = "Mathematica_13.3.1_LINUX.sh";
+  }
+  {
+    version = "13.3.1";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-03R4s05fmTcZnlZIMSI6xlLER58MIoccoCr27F8BXOk=";
+    installer = "Mathematica_13.3.1_BNDL_LINUX.sh";
+  }
+  {
+    version = "13.3.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-24MC0O+kBUe3TrwXUb+7QZt8tQHvWVIT8F9B6Ih+4k8=";
+    installer = "Mathematica_13.3.0_LINUX.sh";
+  }
+  {
+    version = "13.3.0";
+    lang = "en";
+    language = "English";
+    sha256 = "sha256-91bw7+4ht+7g+eF32BNYf77yEQWyuPffisj4kB63pcI=";
+    installer = "Mathematica_13.3.0_BNDL_LINUX.sh";
+  }
+  {
     version = "13.2.1";
     lang = "en";
     language = "English";
@@ -104,34 +160,6 @@ let versions = [
     language = "English";
     sha256 = "sha256-uftx4a/MHXLCABlv+kNFEtII+ikg4geHhDP1BOWK6dc=";
     installer = "Mathematica_12.0.0_LINUX.sh";
-  }
-  {
-    version = "11.3.0";
-    lang = "en";
-    language = "English";
-    sha256 = "sha256-D8/iCMHqyESOe+OvC9uENwsXvZxdBmwBOSjI7pWu0Q4=";
-    installer = "Mathematica_11.3.0_LINUX.sh";
-  }
-  {
-    version = "11.2.0";
-    lang = "ja";
-    language = "Japanese";
-    sha256 = "sha256-kWOS7dMr7YYiI430Nd2OhkJrsEMDijM28w3xDYGbSbE=";
-    installer = "Mathematica_11.2.0_ja_LINUX.sh";
-  }
-  {
-    version = "9.0.0";
-    lang = "en";
-    language = "English";
-    sha256 = "sha256-mKgxdd7dLWa5EOuR5C37SeU+UC9Cv5YTbY5xSK9y34A=";
-    installer = "Mathematica_9.0.0_LINUX.sh";
-  }
-  {
-    version = "10.0.2";
-    lang = "en";
-    language = "English";
-    sha256 = "sha256-NHUg1jzLos1EsIr8TdYdNaA5+3jEcFqVZIr9GVVUXrQ=";
-    installer = "Mathematica_10.0.2_LINUX.sh";
   }
 ];
 

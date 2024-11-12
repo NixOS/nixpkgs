@@ -2,8 +2,14 @@
 
 lib.makeScope pkgs.newScope (self:
   let
-    gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
+    inheritedArgs = {
+      inherit (pkgs.darwin) sigtool;
+      inherit (pkgs.darwin.apple_sdk.frameworks)
+        Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
+        Quartz QuartzCore WebKit;
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) UniformTypeIdentifiers;
+    };
   in {
     sources = import ./sources.nix {
       inherit lib;
@@ -12,18 +18,7 @@ lib.makeScope pkgs.newScope (self:
         fetchFromSavannah;
     };
 
-    emacs28 = callPackage (self.sources.emacs28) {
-      inherit gconf;
-
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
-
-    emacs28-gtk2 = self.emacs28.override {
-      withGTK2 = true;
-    };
+    emacs28 = callPackage (self.sources.emacs28) inheritedArgs;
 
     emacs28-gtk3 = self.emacs28.override {
       withGTK3 = true;
@@ -33,14 +28,7 @@ lib.makeScope pkgs.newScope (self:
       noGui = true;
     });
 
-    emacs29 = callPackage (self.sources.emacs29) {
-      inherit gconf;
-
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
+    emacs29 = callPackage (self.sources.emacs29) inheritedArgs;
 
     emacs29-gtk3 = self.emacs29.override {
       withGTK3 = true;
@@ -54,12 +42,21 @@ lib.makeScope pkgs.newScope (self:
       withPgtk = true;
     };
 
-    emacs-macport = callPackage (self.sources.emacs-macport) {
-      inherit gconf;
+    emacs30 = callPackage (self.sources.emacs30) inheritedArgs;
 
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
+    emacs30-gtk3 = self.emacs30.override {
+      withGTK3 = true;
     };
+
+    emacs30-nox = self.emacs30.override {
+      noGui = true;
+    };
+
+    emacs30-pgtk = self.emacs30.override {
+      withPgtk = true;
+    };
+
+    emacs28-macport = callPackage (self.sources.emacs28-macport) inheritedArgs;
+
+    emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
   })

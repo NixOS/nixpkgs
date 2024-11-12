@@ -12,14 +12,14 @@ mkCoqDerivation {
   };
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.10" "8.17"; out = "1.0.1"; }
+    { case = range "8.10" "8.20"; out = "1.0.1"; }
     { case = range "8.5"  "8.14"; out = "1.0.0"; }
   ] null;
 
   propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   meta = {
-    description = "A small library to do epsilon - N reasonning";
+    description = "Small library to do epsilon - N reasonning";
     license = lib.licenses.cecill-b;
   };
 }

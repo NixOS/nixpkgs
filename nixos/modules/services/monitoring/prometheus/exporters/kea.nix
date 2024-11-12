@@ -1,26 +1,35 @@
 { config
 , lib
 , pkgs
-, options
+, utils
+, ...
 }:
-
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.kea;
+  inherit (lib)
+    mkOption
+    types
+    mkRenamedOptionModule
+    literalExpression
+    ;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "controlSocketPaths" ] [ "targets" ])
+  ];
   port = 9547;
   extraOpts = {
-    controlSocketPaths = mkOption {
+    targets = mkOption {
       type = types.listOf types.str;
       example = literalExpression ''
         [
           "/run/kea/kea-dhcp4.socket"
           "/run/kea/kea-dhcp6.socket"
+          "http://127.0.0.1:8547"
         ]
       '';
-      description = lib.mdDoc ''
-        Paths to kea control sockets
+      description = ''
+        Paths or URLs to the Kea control socket.
       '';
     };
   };
@@ -31,13 +40,14 @@ in {
     ];
     serviceConfig = {
       User = "kea";
-      ExecStart = ''
-        ${pkgs.prometheus-kea-exporter}/bin/kea-exporter \
-          --address ${cfg.listenAddress} \
-          --port ${toString cfg.port} \
-          ${concatStringsSep " " cfg.controlSocketPaths}
-      '';
-      SupplementaryGroups = [ "kea" ];
+      DynamicUser = true;
+      ExecStart = utils.escapeSystemdExecArgs ([
+        (lib.getExe pkgs.prometheus-kea-exporter)
+        "--address" cfg.listenAddress
+        "--port" cfg.port
+      ] ++ cfg.extraFlags ++ cfg.targets);
+      RuntimeDirectory = "kea";
+      RuntimeDirectoryPreserve = true;
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-dtoa";
-    description = "Converts OCaml floats into strings (doubles to ascii, \"d to a\"), using the efficient Grisu3 algorithm.";
+    description = "Converts OCaml floats into strings (doubles to ascii, \"d to a\"), using the efficient Grisu3 algorithm";
     license = licenses.mit;
     maintainers = [ maintainers.eqyiel ];
   };

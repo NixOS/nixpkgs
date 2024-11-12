@@ -1,11 +1,12 @@
 { lib
-, acl
-, autoreconfHook
-, dbus
 , fetchFromGitHub
 , flatpak
 , fuse3
 , bubblewrap
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, docbook_xsl
+, docutils
 , systemdMinimal
 , geoclue2
 , glib
@@ -13,21 +14,27 @@
 , json-glib
 , libportal
 , libxml2
+, meson
+, ninja
 , nixosTests
 , pipewire
 , gdk-pixbuf
 , librsvg
+, gobject-introspection
 , python3
 , pkg-config
 , stdenv
 , runCommand
-, wrapGAppsHook
+, wrapGAppsHook3
+, xmlto
+, bash
 , enableGeoLocation ? true
+, enableSystemd ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.16.0";
+  version = "1.18.4";
 
   outputs = [ "out" "installedTests" ];
 
@@ -35,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-5VNauinTvZrSaQzyP/quL/3p2RPcTJUDLscEQMJpvYA=";
+    hash = "sha256-o+aO7uGewDPrtgOgmp/CE2uiqiBLyo07pVCFrtlORFQ=";
   };
 
   patches = [
@@ -46,22 +53,46 @@ stdenv.mkDerivation (finalAttrs: {
       substitute "${flatpak.icon-validator-patch}" "$out" \
         --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
     '')
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
+
+    # Look for portal definitions under path from `NIX_XDG_DESKTOP_PORTAL_DIR` environment variable.
+    # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
+    # any configs from being loaded from anywhere else.
+    ./nix-pkgdatadir-env.patch
+
+    # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
+    ./trash-test.patch
+
+    # Install files required to be in XDG_DATA_DIR of the installed tests
+    # Merged PR https://github.com/flatpak/xdg-desktop-portal/pull/1444
+    ./installed-tests-share.patch
   ];
 
+  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+  '';
+
   nativeBuildInputs = [
-    autoreconfHook
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    docbook_xsl
+    docutils # for rst2man
     libxml2
+    meson
+    ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    xmlto
   ];
 
   buildInputs = [
-    acl
-    dbus
     flatpak
     fuse3
     bubblewrap
-    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
@@ -76,20 +107,61 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (pp: with pp; [
       pygobject3
     ]))
+    bash
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
   ];
 
-  configureFlags = [
-    "--enable-installed-tests"
+  nativeCheckInputs = [
+    gobject-introspection
+    python3.pkgs.pytest
+    python3.pkgs.python-dbusmock
+    python3.pkgs.pygobject3
+    python3.pkgs.dbus-python
+  ];
+
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dinstalled-tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
-    "--disable-geoclue"
+    "-Dgeoclue=disabled"
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dpytest=disabled"
   ];
 
-  makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
-  ];
+  strictDeps = true;
+
+  doCheck = true;
+
+  preCheck = ''
+    # For test_trash_file
+    export HOME=$(mktemp -d)
+
+    # Upstream disables a few tests in CI upstream as they are known to
+    # be flaky. Let's disable those downstream as hydra exhibits similar
+    # flakes:
+    #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
+    export TEST_IN_CI=1
+  '';
+
+  postFixup = let
+    documentFuse = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-document-fuse.py";
+    testPortals = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-portals";
+
+  in ''
+    if [ -x '${documentFuse}' ] ; then
+      wrapGApp '${documentFuse}'
+      wrapGApp '${testPortals}'
+      # (xdg-desktop-portal:995): xdg-desktop-portal-WARNING **: 21:21:55.673: Failed to get GeoClue client: Timeout was reached
+      # xdg-desktop-portal:ERROR:../tests/location.c:22:location_cb: 'res' should be TRUE
+      # https://github.com/flatpak/xdg-desktop-portal/blob/1d6dfb57067dec182b546dfb60c87aa3452c77ed/tests/location.c#L21
+      rm $installedTests/share/installed-tests/xdg-desktop-portal/test-portals-location.test
+    fi
+  '';
 
   passthru = {
     tests = {
@@ -104,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
+    homepage = "https://flatpak.github.io/xdg-desktop-portal/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

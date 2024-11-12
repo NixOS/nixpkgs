@@ -8,20 +8,20 @@ in
 
 {
   options.services.weechat = {
-    enable = mkEnableOption (lib.mdDoc "weechat");
+    enable = mkEnableOption "weechat";
     root = mkOption {
-      description = lib.mdDoc "Weechat state directory.";
+      description = "Weechat state directory.";
       type = types.str;
       default = "/var/lib/weechat";
     };
     sessionName = mkOption {
-      description = lib.mdDoc "Name of the `screen` session for weechat.";
+      description = "Name of the `screen` session for weechat.";
       default = "weechat-screen";
       type = types.str;
     };
     binary = mkOption {
       type = types.path;
-      description = lib.mdDoc "Binary to execute.";
+      description = "Binary to execute.";
       default = "${pkgs.weechat}/bin/weechat";
       defaultText = literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
       example = literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';

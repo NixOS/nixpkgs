@@ -1,23 +1,29 @@
-{ pkgs, lib, bundlerApp, bundlerUpdateScript }:
+{ lib, bundlerEnv, bundlerUpdateScript, defaultGemConfig, yasm }:
 
-bundlerApp {
-  pname = "ronin";
+bundlerEnv {
+  name = "ronin";
   gemdir = ./.;
-  exes = [
-    "ronin"
-    "ronin-db"
-    "ronin-exploits"
-    "ronin-fuzzer"
-    "ronin-payloads"
-    "ronin-repos"
-    "ronin-vulns"
-    "ronin-web"
-  ];
+
+  gemConfig = defaultGemConfig // {
+    ronin-code-asm = attrs: {
+      dontBuild = false;
+      postPatch = ''
+        substituteInPlace lib/ronin/code/asm/program.rb \
+          --replace "YASM::Command.run(" "YASM::Command.run(
+          command_path: '${yasm}/bin/yasm',"
+      '';
+    };
+  };
+
+  postBuild = ''
+    shopt -s extglob
+    rm $out/bin/!(ronin*)
+  '';
 
   passthru.updateScript = bundlerUpdateScript "ronin";
 
   meta = with lib; {
-    description = "A free and Open Source Ruby toolkit for security research and development";
+    description = "Free and Open Source Ruby toolkit for security research and development";
     homepage    = "https://ronin-rb.dev";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ Ch1keen ];

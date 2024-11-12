@@ -4,20 +4,34 @@
 , SDL2
 , makeWrapper
 , wget
+, which
 , Accelerate
 , CoreGraphics
+, CoreML
 , CoreVideo
+, MetalKit
+
+, config
+, autoAddDriverRunpath
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? {}
 }:
 
-stdenv.mkDerivation rec {
+let
+  # It's necessary to consistently use backendStdenv when building with CUDA support,
+  # otherwise we get libstdc++ errors downstream.
+  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.4.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
-    rev = "refs/tags/v${version}" ;
-    hash = "sha256-176MpooVQrq1dXC62h8Yyyhw6IjCA50tp1J4DQPSePQ=";
+    rev = "refs/tags/v${finalAttrs.version}" ;
+    hash = "sha256-EDFUVjud79ZRCzGbOh9L9NcXfN3ikvsqkVSOME9F9oo=";
   };
 
   # The upstream download script tries to download the models to the
@@ -26,18 +40,56 @@ stdenv.mkDerivation rec {
   # the models to the current directory of where it is being run from.
   patches = [ ./download-models.patch ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+      which
+      makeWrapper
+    ] ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
+  buildInputs = [
+      SDL2
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+      CoreGraphics
+      CoreML
+      CoreVideo
+      MetalKit
+    ] ++ lib.optionals cudaSupport ( with cudaPackages; [
+      cuda_cccl # provides nv/target
+      cuda_cudart
+      libcublas
+    ]);
 
-  makeFlags = [ "main" "stream" ];
+  postPatch = let
+    cudaOldStr = "-lcuda ";
+    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
+  in lib.optionalString cudaSupport ''
+    substituteInPlace Makefile \
+      --replace-fail '${cudaOldStr}' '${cudaNewStr}'
+  '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    WHISPER_COREML = "1";
+    WHISPER_COREML_ALLOW_FALLBACK = "1";
+    WHISPER_METAL_EMBED_LIBRARY = "1";
+  } // lib.optionalAttrs cudaSupport {
+    GGML_CUDA = "1";
+  };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
     cp ./main $out/bin/whisper-cpp
-    cp ./stream $out/bin/whisper-cpp-stream
+
+    for file in *; do
+      if [[ -x "$file" && -f "$file" && "$file" != "main" ]]; then
+        cp "$file" "$out/bin/whisper-cpp-$file"
+      fi
+    done
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 
@@ -58,4 +110,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ dit7ya hughobrien ];
   };
-}
+})

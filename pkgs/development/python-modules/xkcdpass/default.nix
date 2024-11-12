@@ -1,35 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.19.3";
-  format = "setuptools";
+  version = "1.19.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xaLpSHRtpv5QToQEKE9FfY6Y2m31BHxrs/cbGIgunSo=";
+    hash = "sha256-qU+HG9qHBmjlxl64QpbpOWADYt8swDa5HFyjgVvSktc=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "xkcdpass"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "xkcdpass" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     # https://github.com/redacted/XKCD-password-generator/issues/138
@@ -46,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/redacted/XKCD-password-generator";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "xkcdpass";
   };
 }

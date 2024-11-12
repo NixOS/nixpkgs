@@ -1,47 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# runtime
-, editables
-, importlib-metadata # < 3.8
-, packaging
-, pathspec
-, pluggy
-, tomli
+  # runtime
+  editables,
+  packaging,
+  pathspec,
+  pluggy,
+  tomli,
+  trove-classifiers,
 
-# tests
-, build
-, python
-, requests
-, virtualenv
+  # tests
+  build,
+  python,
+  requests,
+  virtualenv,
 }:
 
-let
+buildPythonPackage rec {
   pname = "hatchling";
-  version = "1.13.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "1.25.0";
   format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+NJ1osxyBzUoa3wuK8NdoFdh5tNpXC+kFlUDlfEMU8c=";
+    hash = "sha256-cGRjGlEmELUiUKTT/xvYFVHW0UMcTre3LnNN9sdPQmI=";
   };
 
-  # listed in backend/src/hatchling/ouroboros.py
+  # listed in backend/pyproject.toml
   propagatedBuildInputs = [
     editables
     packaging
     pathspec
     pluggy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+    trove-classifiers
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [
     "hatchling"
@@ -54,7 +50,6 @@ buildPythonPackage {
   # listed in /backend/tests/downstream/requirements.txt
   nativeCheckInputs = [
     build
-    packaging
     requests
     virtualenv
   ];
@@ -71,9 +66,13 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Modern, extensible Python build backend";
+    mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ofek ];
+    maintainers = with maintainers; [
+      hexa
+      ofek
+    ];
   };
 }

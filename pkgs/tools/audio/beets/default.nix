@@ -1,6 +1,7 @@
 { lib
 , callPackage
 , fetchFromGitHub
+, python3Packages
 }:
 /*
 ** To customize the enabled beets plugins, use the pluginOverrides input to the
@@ -19,29 +20,37 @@ lib.makeExtensible (self: {
   beets = self.beets-stable;
 
   beets-stable = callPackage ./common.nix rec {
-    version = "1.6.0";
+    inherit python3Packages;
+    # NOTE: ./builtin-plugins.nix and ./common.nix can have some conditionals
+    # be removed when stable version updates
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
       rev = "v${version}";
-      hash = "sha256-fT+rCJJQR7bdfAcmeFRaknmh4ZOP4RCx8MXpq7/D8tM=";
+      hash = "sha256-6pmImyopy0zFBDYoqDyWcBv61FK1kGsZwW2+7fzAnq8=";
     };
+    extraPatches = [
+      # Bash completion fix for Nix
+      ./patches/bash-completion-always-print.patch
+    ];
   };
 
   beets-minimal = self.beets.override { disableAllPlugins = true; };
 
   beets-unstable = callPackage ./common.nix {
-    version = "unstable-2022-08-27";
+    inherit python3Packages;
+    version = "2.0.0-unstable-2024-05-25";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "50bd693057de472470ab5175fae0cdb5b75811c6";
-      hash = "sha256-91v1StaByG60ryhQqByBXu6sFCjk0qT0nsUPnocSEE4=";
+      rev = "2130404217684f22f36de00663428602b3f96d84";
+      hash = "sha256-trqF6YVBcv+i5H4Ez3PKnRQ6mV2Ly/cw3UJC7pl19og=";
     };
-    pluginOverrides = {
-      # unstable has a new plugin, so we register it here.
-      limit = { builtin = true; };
-    };
+    extraPatches = [
+      # Bash completion fix for Nix
+      ./patches/bash-completion-always-print.patch
+    ];
   };
 
   alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };

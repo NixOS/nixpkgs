@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , resto
 , resto-directory
 , resto-acl

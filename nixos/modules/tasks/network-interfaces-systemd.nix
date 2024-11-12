@@ -28,21 +28,20 @@ let
     # TODO: warn the user that any address configured on those interfaces will be useless
     ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
-  domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
-  genericNetwork = override:
-    let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
-      ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-        makeGateway = gateway: {
-          routeConfig = {
-            Gateway = gateway;
-            GatewayOnLink = false;
-          };
-        };
-    in optionalAttrs (gateway != [ ]) {
-      routes = override (map makeGateway gateway);
-    } // optionalAttrs (domains != [ ]) {
-      domains = override domains;
-    };
+  defaultGateways = mkMerge (forEach [ cfg.defaultGateway cfg.defaultGateway6 ] (gateway:
+    optionalAttrs (gateway != null && gateway.interface != null) {
+      networks."40-${gateway.interface}" = {
+        matchConfig.Name = gateway.interface;
+        routes = [
+          ({
+            Gateway = gateway.address;
+          } // optionalAttrs (gateway.metric != null) {
+            Metric = gateway.metric;
+          })
+        ];
+      };
+    }
+  ));
 
   genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
     networks."99-ethernet-default-dhcp" = {
@@ -59,23 +58,14 @@ let
       # more likely to result in interfaces being configured to
       # use DHCP when they shouldn't.
 
-      # When wait-online.anyInterface is enabled, RequiredForOnline really
-      # means "sufficient for online", so we can enable it.
-      # Otherwise, don't block the network coming online because of default networks.
       matchConfig.Name = ["en*" "eth*"];
       DHCP = "yes";
-      linkConfig.RequiredForOnline =
-        lib.mkDefault (if initrd
-        then config.boot.initrd.systemd.network.wait-online.anyInterface
-        else config.systemd.network.wait-online.anyInterface);
       networkConfig.IPv6PrivacyExtensions = "kernel";
     };
     networks."99-wireless-client-dhcp" = {
       # Like above, but this is much more likely to be correct.
       matchConfig.WLANInterfaceType = "station";
       DHCP = "yes";
-      linkConfig.RequiredForOnline =
-        lib.mkDefault config.systemd.network.wait-online.anyInterface;
       networkConfig.IPv6PrivacyExtensions = "kernel";
       # We also set the route metric to one more than the default
       # of 1024, so that Ethernet is preferred if both are
@@ -98,79 +88,105 @@ let
         };
       };
     });
-    networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
+    networks."40-${i.name}" = {
       name = mkDefault i.name;
       DHCP = mkForce (dhcpStr
-        (if i.useDHCP != null then i.useDHCP else false));
+        (if i.useDHCP != null then i.useDHCP else (config.networking.useDHCP && i.ipv4.addresses == [ ])));
       address = forEach (interfaceIps i)
         (ip: "${ip.address}/${toString ip.prefixLength}");
       routes = forEach (interfaceRoutes i)
-        (route: {
+        (route: mkMerge [
           # Most of these route options have not been tested.
           # Please fix or report any mistakes you may find.
-          routeConfig =
-            optionalAttrs (route.address != null && route.prefixLength != null) {
-              Destination = "${route.address}/${toString route.prefixLength}";
-            } //
-            optionalAttrs (route.options ? fastopen_no_cookie) {
-              FastOpenNoCookie = route.options.fastopen_no_cookie;
-            } //
-            optionalAttrs (route.via != null) {
-              Gateway = route.via;
-            } //
-            optionalAttrs (route.type != null) {
-              Type = route.type;
-            } //
-            optionalAttrs (route.options ? onlink) {
-              GatewayOnLink = true;
-            } //
-            optionalAttrs (route.options ? initrwnd) {
-              InitialAdvertisedReceiveWindow = route.options.initrwnd;
-            } //
-            optionalAttrs (route.options ? initcwnd) {
-              InitialCongestionWindow = route.options.initcwnd;
-            } //
-            optionalAttrs (route.options ? pref) {
-              IPv6Preference = route.options.pref;
-            } //
-            optionalAttrs (route.options ? mtu) {
-              MTUBytes = route.options.mtu;
-            } //
-            optionalAttrs (route.options ? metric) {
-              Metric = route.options.metric;
-            } //
-            optionalAttrs (route.options ? src) {
-              PreferredSource = route.options.src;
-            } //
-            optionalAttrs (route.options ? protocol) {
-              Protocol = route.options.protocol;
-            } //
-            optionalAttrs (route.options ? quickack) {
-              QuickAck = route.options.quickack;
-            } //
-            optionalAttrs (route.options ? scope) {
-              Scope = route.options.scope;
-            } //
-            optionalAttrs (route.options ? from) {
-              Source = route.options.from;
-            } //
-            optionalAttrs (route.options ? table) {
-              Table = route.options.table;
-            } //
-            optionalAttrs (route.options ? advmss) {
-              TCPAdvertisedMaximumSegmentSize = route.options.advmss;
-            } //
-            optionalAttrs (route.options ? ttl-propagate) {
-              TTLPropagate = route.options.ttl-propagate == "enabled";
-            };
-        });
+          (mkIf (route.address != null && route.prefixLength != null) {
+            Destination = "${route.address}/${toString route.prefixLength}";
+          })
+          (mkIf (route.options ? fastopen_no_cookie) {
+            FastOpenNoCookie = route.options.fastopen_no_cookie;
+          })
+          (mkIf (route.via != null) {
+            Gateway = route.via;
+          })
+          (mkIf (route.type != null) {
+            Type = route.type;
+          })
+          (mkIf (route.options ? onlink) {
+            GatewayOnLink = true;
+          })
+          (mkIf (route.options ? initrwnd) {
+            InitialAdvertisedReceiveWindow = route.options.initrwnd;
+          })
+          (mkIf (route.options ? initcwnd) {
+            InitialCongestionWindow = route.options.initcwnd;
+          })
+          (mkIf (route.options ? pref) {
+            IPv6Preference = route.options.pref;
+          })
+          (mkIf (route.options ? mtu) {
+            MTUBytes = route.options.mtu;
+          })
+          (mkIf (route.options ? metric) {
+            Metric = route.options.metric;
+          })
+          (mkIf (route.options ? src) {
+            PreferredSource = route.options.src;
+          })
+          (mkIf (route.options ? protocol) {
+            Protocol = route.options.protocol;
+          })
+          (mkIf (route.options ? quickack) {
+            QuickAck = route.options.quickack;
+          })
+          (mkIf (route.options ? scope) {
+            Scope = route.options.scope;
+          })
+          (mkIf (route.options ? from) {
+            Source = route.options.from;
+          })
+          (mkIf (route.options ? table) {
+            Table = route.options.table;
+          })
+          (mkIf (route.options ? advmss) {
+            TCPAdvertisedMaximumSegmentSize = route.options.advmss;
+          })
+          (mkIf (route.options ? ttl-propagate) {
+            TTLPropagate = route.options.ttl-propagate == "enabled";
+          })
+        ]);
       networkConfig.IPv6PrivacyExtensions = "kernel";
       linkConfig = optionalAttrs (i.macAddress != null) {
         MACAddress = i.macAddress;
       } // optionalAttrs (i.mtu != null) {
         MTUBytes = toString i.mtu;
       };
-    }];
+    };
+  }));
+
+  bridgeNetworks = mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
+    netdevs."40-${name}" = {
+      netdevConfig = {
+        Name = name;
+        Kind = "bridge";
+      };
+    };
+    networks = listToAttrs (forEach bridge.interfaces (bi:
+      nameValuePair "40-${bi}" {
+        DHCP = mkOverride 0 (dhcpStr false);
+        networkConfig.Bridge = name;
+      }));
+  }));
+
+  vlanNetworks = mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
+    netdevs."40-${name}" = {
+      netdevConfig = {
+        Name = name;
+        Kind = "vlan";
+      };
+      vlanConfig.Id = vlan.id;
+    };
+    networks."40-${vlan.interface}" = {
+      vlan = [ name ];
+    };
   }));
 
 in
@@ -182,7 +198,16 @@ in
     # Note this is if initrd.network.enable, not if
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
-    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks true) interfaceNetworks];
+    boot.initrd.systemd.network = mkMerge [
+      defaultGateways
+      (genericDhcpNetworks true)
+      interfaceNetworks
+      bridgeNetworks
+      vlanNetworks
+    ];
+    boot.initrd.availableKernelModules =
+      optional (cfg.bridges != {}) "bridge" ++
+      optional (cfg.vlans != {}) "8021q";
   })
 
   (mkIf cfg.useNetworkd {
@@ -191,11 +216,11 @@ in
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
-      assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
-      message = "networking.defaultGateway.interface is not supported by networkd.";
+      assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
+      message = "networking.defaultGateway.interface is not optional when using networkd.";
     } {
-      assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
-      message = "networking.defaultGateway6.interface is not supported by networkd.";
+      assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
+      message = "networking.defaultGateway6.interface is not optional when using networkd.";
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -210,21 +235,10 @@ in
       mkMerge [ {
         enable = true;
       }
+      defaultGateways
       (genericDhcpNetworks false)
       interfaceNetworks
-      (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
-        netdevs."40-${name}" = {
-          netdevConfig = {
-            Name = name;
-            Kind = "bridge";
-          };
-        };
-        networks = listToAttrs (forEach bridge.interfaces (bi:
-          nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
-            DHCP = mkOverride 0 (dhcpStr false);
-            networkConfig.Bridge = name;
-          } ])));
-      })))
+      bridgeNetworks
       (mkMerge (flip mapAttrsToList cfg.bonds (name: bond: {
         netdevs."40-${name}" = {
           netdevConfig = {
@@ -291,10 +305,10 @@ in
         };
 
         networks = listToAttrs (forEach bond.interfaces (bi:
-          nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
+          nameValuePair "40-${bi}" {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bond = name;
-          } ])));
+          }));
       })))
       (mkMerge (flip mapAttrsToList cfg.macvlans (name: macvlan: {
         netdevs."40-${name}" = {
@@ -304,9 +318,9 @@ in
           };
           macvlanConfig = optionalAttrs (macvlan.mode != null) { Mode = macvlan.mode; };
         };
-        networks."40-${macvlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+        networks."40-${macvlan.interface}" = {
           macvlan = [ name ];
-        } ]);
+        };
       })))
       (mkMerge (flip mapAttrsToList cfg.fooOverUDP (name: fou: {
         netdevs."40-${name}" = {
@@ -351,9 +365,9 @@ in
               })));
         };
         networks = mkIf (sit.dev != null) {
-          "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          "40-${sit.dev}" = {
             tunnel = [ name ];
-          } ]);
+          };
         };
       })))
       (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
@@ -372,23 +386,12 @@ in
             });
         };
         networks = mkIf (gre.dev != null) {
-          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          "40-${gre.dev}" = {
             tunnel = [ name ];
-          } ]);
-        };
-      })))
-      (mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
-        netdevs."40-${name}" = {
-          netdevConfig = {
-            Name = name;
-            Kind = "vlan";
           };
-          vlanConfig.Id = vlan.id;
         };
-        networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
-          vlan = [ name ];
-        } ]);
       })))
+      vlanNetworks
     ];
 
     # We need to prefill the slaved devices with networking options
@@ -438,7 +441,7 @@ in
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
               echo "Shutting down internal ${n} interface"
-              ip link set ${n} down || true
+              ip link set dev ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
               echo "Deleting Open vSwitch ${n}"

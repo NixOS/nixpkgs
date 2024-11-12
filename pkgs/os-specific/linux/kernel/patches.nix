@@ -19,6 +19,16 @@
       patch = ./bridge-stp-helper.patch;
     };
 
+  # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
+  dell_xps_regression = {
+    name = "dell_xps_regression";
+    patch = fetchpatch {
+      name = "Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      url = "https://raw.githubusercontent.com/openSUSE/kernel-source/1b02b1528a26f4e9b577e215c114d8c5e773ee10/patches.suse/Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      sha256 = "sha256-RHJdQ4p0msTOVPR+/dYiKuwwEoG9IpIBqT4dc5cJjf8=";
+    };
+  };
+
   request_key_helper =
     { name = "request-key-helper";
       patch = ./request-key-helper.patch;
@@ -28,13 +38,6 @@
     { name = "request-key-helper-updated";
       patch = ./request-key-helper-updated.patch;
     };
-
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
-
-  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
@@ -56,14 +59,5 @@
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
-  };
-
-  CVE-2023-32233 = rec {
-    name = "CVE-2023-32233";
-    patch = fetchpatch {
-      name = name + ".patch";
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
-      hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
-    };
   };
 }

@@ -6,26 +6,27 @@
 , asciidoctor
 , openssl
 , Security
+, SystemConfiguration
 , ansi2html
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.0.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-S47xJmwOCDrJJSYP9WiUKFWR9UZDNgY3mc/fTHaKsvA=";
+    hash = "sha256-Y0tWhqRGrjex/yKWmRu4+hSRM9/vchsYyx26x/HBuRw=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
-  cargoSha256 = "sha256-g/Il3Sff9NtEfGTXBOGyRw6/GXje9kVwco0URyhv4TI=";
+  cargoHash = "sha256-f2YmrmRlQTCBTzG7DWJVldP/lOhl2iCnhnOLHx1QJDc=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -43,18 +44,19 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
     ln -sr $out/bin/{mdcat,mdless}
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for bin in mdcat mdless; do
-      installShellCompletion \
-        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
-        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
-        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+      installShellCompletion --cmd $bin \
+        --bash <($out/bin/$bin --completions bash) \
+        --fish <($out/bin/$bin --completions fish) \
+        --zsh <($out/bin/$bin --completions zsh)
     done
   '';
 
   meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/swsnr/mdcat";
+    changelog = "https://github.com/swsnr/mdcat/releases/tag/mdcat-${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

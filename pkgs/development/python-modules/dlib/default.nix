@@ -1,28 +1,37 @@
-{ stdenv, buildPythonPackage, dlib, python, pytest, more-itertools
-, sse4Support ? stdenv.hostPlatform.sse4_1Support
-, avxSupport ? stdenv.hostPlatform.avxSupport
+{
+  stdenv,
+  buildPythonPackage,
+  dlib,
+  python,
+  pytestCheckHook,
+  more-itertools,
+  sse4Support ? stdenv.hostPlatform.sse4_1Support,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
 
 buildPythonPackage {
-  inherit (dlib) pname version src nativeBuildInputs buildInputs meta;
+  inherit (dlib)
+    pname
+    version
+    src
+    nativeBuildInputs
+    buildInputs
+    meta
+    ;
 
-  patches = [
-    ./build-cores.patch
+  format = "setuptools";
+
+  patches = [ ./build-cores.patch ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    more-itertools
   ];
-
-  nativeCheckInputs = [ pytest more-itertools ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "more-itertools<6.0.0" "more-itertools" \
       --replace "pytest==3.8" "pytest"
-  '';
-
-  # although AVX can be enabled, we never test with it. Some Hydra machines
-  # fail because of this, however their build results are probably used on hardware
-  # with AVX support.
-  checkPhase = ''
-    ${python.interpreter} nix_run_setup test --no USE_AVX_INSTRUCTIONS
   '';
 
   setupPyBuildFlags = [

@@ -1,63 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, markdown-it-py
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  markdown-it-py,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.16";
-  format = "pyproject";
+  version = "0.7.18";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = version;
-    hash = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
+    repo = "mdformat";
+    rev = "refs/tags/${version}";
+    hash = "sha256-t2yx8cIq8es3XOc2nbHPKjUUium5+RPZuD8oNWZxVV0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
-  ];
+  dependencies =
+    [ markdown-it-py ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # AssertionError
-    "test_no_codeblock_trailing_newline"
-    # Issue with upper/lower case
-    "default_style.md-options0"
-  ];
+  pythonImportsCheck = [ "mdformat" ];
 
-  pythonImportsCheck = [
-    "mdformat"
-  ];
+  passthru = {
+    withPlugins = throw "Use pkgs.mdformat.withPlugins, i.e. the top-level attribute.";
+  };
 
   meta = with lib; {
     description = "CommonMark compliant Markdown formatter";
     homepage = "https://mdformat.rtfd.io/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      fab
+      aldoborrero
+    ];
+    mainProgram = "mdformat";
   };
 }

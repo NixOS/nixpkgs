@@ -1,43 +1,53 @@
-{ lib, fetchFromGitHub, stdenv, autoreconfHook, pkg-config
+{ lib, fetchFromGitHub, fetchpatch2, stdenv, autoreconfHook, pkg-config
 , ncurses
 , IOKit
 , libcap
 , libnl
-, sensorsSupport ? stdenv.isLinux, lm_sensors
+, sensorsSupport ? stdenv.hostPlatform.isLinux, lm_sensors
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
-assert systemdSupport -> stdenv.isLinux;
+assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OrlNE1A71q4XAauYNfumV1Ev1wBpFIBxPiw7aF++yjM=";
+    hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
   };
 
+  patches = [
+    # See https://github.com/htop-dev/htop/pull/1412
+    # Remove when updating to 3.4.0
+    (fetchpatch2 {
+      name = "htop-resolve-configuration-path.patch";
+      url = "https://github.com/htop-dev/htop/commit/0dac8e7d38ec3aeae901a987717b5177986197e4.patch";
+      hash = "sha256-Er1d/yV1fioYfEmXNlLO5ayAyXkyy+IaGSx1KWXvlv0=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optional stdenv.isLinux pkg-config
+    ++ lib.optional stdenv.hostPlatform.isLinux pkg-config
   ;
 
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.isDarwin IOKit
-    ++ lib.optionals stdenv.isLinux [ libcap libnl ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap libnl ]
     ++ lib.optional sensorsSupport lm_sensors
     ++ lib.optional systemdSupport systemd
   ;
 
   configureFlags = [ "--enable-unicode" "--sysconfdir=/etc" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-affinity"
       "--enable-capabilities"
       "--enable-delayacct"
     ]
-    ++ lib.optional sensorsSupport "--with-sensors"
+    ++ lib.optional sensorsSupport "--enable-sensors"
   ;
 
   postFixup =
@@ -49,11 +59,12 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "An interactive process viewer";
+    description = "Interactive process viewer";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod SuperSandro2000 ];
     changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+    mainProgram = "htop";
   };
 }

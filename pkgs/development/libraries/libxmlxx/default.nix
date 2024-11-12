@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
   };
 
+  configureFlags = [
+    # remove if library is updated
+    "CXXFLAGS=-std=c++11"
+  ];
+
   outputs = [ "out" "devdoc" ];
 
   nativeBuildInputs = [ pkg-config perl ];
@@ -29,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "C++ wrapper for the libxml2 XML parser library";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -12,7 +12,9 @@
 , python3
 , esbuild
 , nodejs
+, node-gyp
 , libsecret
+, libkrb5
 , xorg
 , ripgrep
 , AppKit
@@ -37,12 +39,12 @@ let
 
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.16.17";
+      version = "0.17.14";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+        hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -58,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.79.1";
+  version = "1.88.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-yMJo66RYcbVyIFKNNxDe0U9CPvaez/kTu9sPGcaESPw=";
+    hash = "sha256-Yc16L13Z8AmsGoSFbvy+4+KBdHxvqLMwZLeU2/dAQVU=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -87,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-P6mzeE3HnS/KoP7kCXJlDkFWkTKiGjJkOUXfGOru/xE=";
+    outputHash = "sha256-89c6GYLT2RzHqwxBKegYqB6g5rEJ6/nH53cnfV7b0Ts=";
   };
 
   nativeBuildInputs = [
@@ -101,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Security
@@ -114,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch out remote download of nodejs from build script
     ./remove-node-download.patch
   ];
+
+  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
+  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
 
   postPatch = ''
     export HOME=$PWD
@@ -140,8 +145,16 @@ stdenv.mkDerivation (finalAttrs: {
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodejs}"
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
+    # use updated node-gyp. fixes the following error on Darwin:
+    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
 
     runHook postConfigure
   '';
@@ -168,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     find -path "*@vscode/ripgrep" -type d \
       -execdir mkdir -p {}/bin \; \
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229)
     pushd ./remote/node_modules/@parcel/watcher
@@ -219,5 +232,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dguenther ghuntley emilytrau ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "openvscode-server";
   };
 })

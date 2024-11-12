@@ -1,24 +1,16 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.litestream;
   settingsFormat = pkgs.formats.yaml {};
 in
 {
   options.services.litestream = {
-    enable = mkEnableOption (lib.mdDoc "litestream");
+    enable = lib.mkEnableOption "litestream";
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.litestream;
-      defaultText = literalExpression "pkgs.litestream";
-      type = types.package;
-    };
+    package = lib.mkPackageOption pkgs "litestream" { };
 
-    settings = mkOption {
-      description = lib.mdDoc ''
+    settings = lib.mkOption {
+      description = ''
         See the [documentation](https://litestream.io/reference/config/).
       '';
       type = settingsFormat.type;
@@ -36,11 +28,11 @@ in
       };
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/secrets/litestream";
-      description = lib.mdDoc ''
+      description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the
@@ -66,7 +58,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     environment.etc = {
       "litestream.yml" = {
@@ -79,7 +71,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = {
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/litestream replicate";
         Restart = "always";
         User = "litestream";

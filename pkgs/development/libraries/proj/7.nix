@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
   ];
+  CXXFLAGS = [
+    # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+    "-include cstdint"
+  ];
 
   doCheck = true;
 

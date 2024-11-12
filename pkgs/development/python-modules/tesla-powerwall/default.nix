@@ -1,16 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  aiohttp,
+  urllib3,
+  orjson,
+  aresponses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.3.19";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,25 +22,30 @@ buildPythonPackage rec {
     owner = "jrester";
     repo = "tesla_powerwall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ClrMgPAMBtDMfD6hCJIN1u4mp75QW+c3re28v3FreQg=";
+    hash = "sha256-cAsJKFM0i0e7w2T4HP4a5ybJGuDvBAGCGmPEKFzNFAY=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    requests
+    aiohttp
+    urllib3
+    orjson
   ];
 
   nativeCheckInputs = [
+    aresponses
     pytestCheckHook
-    responses
   ];
 
-  pytestFlagsArray = [
-    "tests/unit"
+  disabledTests = [
+    # yarl compat issue https://github.com/jrester/tesla_powerwall/issues/68
+    "test_parse_endpoint"
   ];
 
-  pythonImportsCheck = [
-    "tesla_powerwall"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
+
+  pythonImportsCheck = [ "tesla_powerwall" ];
 
   meta = with lib; {
     description = "API for Tesla Powerwall";

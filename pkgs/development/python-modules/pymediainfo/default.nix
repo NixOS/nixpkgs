@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, libmediainfo
-, setuptools-scm
-, pytest
-, glibcLocales
-, pythonOlder
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  libmediainfo,
+  setuptools-scm,
+  pytest,
+  glibcLocales,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymediainfo";
-  version = "6.0.1";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-luBLrA38tya+1wwxSxIZEhxLk0TGapj0Js4n1/mr/7A=";
+    hash = "sha256-GGoLQalFJPCYTQhcprlFx5olRGW3CX8lYNwMBOjR2KU=";
   };
 
   postPatch = ''
@@ -31,9 +32,7 @@ buildPythonPackage rec {
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   nativeCheckInputs = [
     glibcLocales
@@ -45,15 +44,13 @@ buildPythonPackage rec {
     py.test -k 'not test_parse_url' tests
   '';
 
-  pythonImportsCheck = [
-    "pymediainfo"
-  ];
+  pythonImportsCheck = [ "pymediainfo" ];
 
   meta = with lib; {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
     changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = [ ];
   };
 }

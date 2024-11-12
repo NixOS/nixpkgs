@@ -1,23 +1,22 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, gtk-engine-murrine
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  gtk-engine-murrine,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-gtk-theme";
-  version = "unstable-2022-07-26";
+  version = "23.11.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-gtk-theme";
-    rev = "5ac53cbdfba4e6804451605db726876a3be9fb07";
-    sha256 = "sha256-NJ5URKYs4rVzddXxkwJK9ih40f8McVEbj3G1tPFAiMs";
+    rev = version;
+    hash = "sha256-2B2BtbPeg3cEbnEIgdGFzy8MjCMWlbP/Sq4jzG5cjmc=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

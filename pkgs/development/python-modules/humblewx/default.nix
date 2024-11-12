@@ -1,13 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, wxPython_4_2
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  wxpython,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "humblewx";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thetimelineproj";
@@ -16,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0fv8gwlbcj000qq34inbwgxf0xgibs590dsyqnw0mmyb7f1iq210";
   };
 
-  propagatedBuildInputs = [ wxPython_4_2 ];
+  propagatedBuildInputs = [ wxpython ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,112 +1,117 @@
-{ nixosTests
-, pkgs
-, poetry2nix
-, lib
-, overrides ? (self: super: {})
-}:
+{ lib, python3, emptyFile }:
 
 let
+  inherit (lib) extends;
 
-  interpreter = (
-    poetry2nix.mkPoetryPackages {
-      projectDir = ./.;
-      python = pkgs.python310;
-      overrides = [
-        poetry2nix.defaultPoetryOverrides
-        (import ./poetry-git-overlay.nix { inherit pkgs; })
-        (
-          self: super: {
+  # doc: https://github.com/NixOS/nixpkgs/pull/158781/files#diff-854251fa1fe071654921224671c8ba63c95feb2f96b2b3a9969c81676780053a
+  encapsulate = layerZero:
+    let
+      fixed = layerZero ({ extend = f: encapsulate (extends f layerZero); } // fixed);
+    in fixed.public;
 
-            nixops = super.nixops.overridePythonAttrs (
-              old: {
-                version = "${old.version}-pre-${lib.substring 0 7 super.nixops.src.rev or "dirty"}";
+  nixopsContextBase = this: {
 
-                postPatch = ''
-                  substituteInPlace nixops/args.py --subst-var version
-                '';
+    python = python3.override {
+      self = this.python;
+      packageOverrides = self: super: {
+        nixops = self.callPackage ./unwrapped.nix { };
+      } // (this.plugins self super);
+    };
 
-                meta = old.meta // {
-                  homepage = "https://github.com/NixOS/nixops";
-                  description = "NixOS cloud provisioning and deployment tool";
-                  maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
-                  platforms = lib.platforms.unix;
-                  license = lib.licenses.lgpl3;
-                  mainProgram = "nixops";
-                };
+    plugins = ps: _super: with ps; rec {
+      nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
+      nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
+      nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
+      nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
+      nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
 
-              }
-            );
-          }
-        )
+      nixops-aws = throw "nixops-aws was broken and was removed from nixpkgs";
+      nixops-gce = throw "nixops-gce was broken and was removed from nixpkgs";
+      nixops-libvirtd = throw "nixops-libvirtd was broken and was removed from nixpkgs";
+      nixops-hetzner = throw "nixops-hetzner was broken and was removed from nixpkgs";
+      nixops-hetznercloud = throw "nixops-hetznercloud was broken and was removed from nixpkgs";
 
-        # User provided overrides
-        overrides
+      # aliases for backwards compatibility
+      nixops-virtd = nixops-libvirtd;
+      nixopsvbox = nixops-vbox;
+    };
 
-        # Make nixops pluginable
-        (self: super: let
-          # Create a fake sphinx directory that doesn't pull the entire setup hook and incorrect python machinery
-          sphinx = pkgs.runCommand "sphinx" {} ''
-            mkdir -p $out/bin
-            for f in ${pkgs.python3.pkgs.sphinx}/bin/*; do
-              ln -s $f $out/bin/$(basename $f)
-            done
-          '';
+    # We should not reapply the overlay, but it tends to work out. (It's been this way since poetry2nix was dropped.)
+    availablePlugins = this.plugins this.python.pkgs this.python.pkgs;
 
-        in {
-          nixops = super.__toPluginAble {
-            drv = super.nixops;
-            finalDrv = self.nixops;
+    selectedPlugins = [];
 
-            nativeBuildInputs = [ sphinx ];
+    # selector is a function mapping pythonPackages to a list of plugins
+    # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-digitalocean ])
+    withPlugins = selector:
+      this.extend (this: _old: {
+        selectedPlugins = selector this.availablePlugins;
+      });
 
-            postInstall = ''
-              doc_cache=$(mktemp -d)
-              sphinx-build -b man -d $doc_cache doc/ $out/share/man/man1
+    rawPackage = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ this.selectedPlugins;
 
-              html=$(mktemp -d)
-              sphinx-build -b html -d $doc_cache doc/ $out/share/nixops/doc
-            '';
+      # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+      # when used in nix-shell.
+      postFixup = ''
+        rm $out/nix-support/propagated-build-inputs
+      '';
+    }));
 
-          };
-        })
+    # Extra package attributes that aren't derivation attributes, just like `mkDerivation`'s `passthru`.
+    extraPackageAttrs = {
+      inherit (this) selectedPlugins availablePlugins withPlugins python;
+      tests = this.rawPackage.tests // {
+        nixos = this.rawPackage.tests.nixos.passthru.override {
+          nixopsPkg = this.rawPackage;
+        };
+        commutative_addAvailablePlugins_withPlugins =
+          assert
+            (this.public.addAvailablePlugins (self: super: { inherit emptyFile; })).withPlugins (ps: [ emptyFile ])
+            ==
+            # Note that this value proves that the package is not instantiated until the end, where it's valid again.
+            (this.public.withPlugins (ps: [ emptyFile ])).addAvailablePlugins (self: super: { inherit emptyFile; });
+          emptyFile;
+      }
+        # Make sure we also test with a configuration that's been extended with a plugin.
+        // lib.optionalAttrs (this.selectedPlugins == [ ]) {
+        withAPlugin =
+          lib.recurseIntoAttrs
+            (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
+      };
+      overrideAttrs = f: this.extend (this: oldThis: {
+        rawPackage = oldThis.rawPackage.overrideAttrs f;
+      });
+      /**
+       * nixops.addAvailablePlugins: Overlay -> Package
+       *
+       * Add available plugins to the package. You probably also want to enable
+       * them with the `withPlugins` method.
+       */
+      addAvailablePlugins = newPlugins: this.extend (finalThis: oldThis: {
+        plugins = lib.composeExtensions oldThis.plugins newPlugins;
+      });
 
-        (self: super: {
-          cryptography = super.cryptography.overridePythonAttrs (old: {
-            meta = old.meta // {
-              knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
-                ++ lib.optionals (lib.versionOlder old.version "39.0.1") [
-                  "CVE-2022-4304"
-                  "CVE-2023-0215"
-                  "CVE-2023-0216"
-                  "CVE-2023-0217"
-                  "CVE-2023-0401"
-                  "CVE-2022-4203"
-                  "CVE-2022-4450"
-                  "CVE-2023-23931"
-                ];
-            };
-          });
-        })
+      # For those who need or dare.
+      internals = this;
+    };
 
-      ];
-    }
-  ).python;
+    package = lib.lazyDerivation { outputs = [ "out" "dist" ]; derivation = this.rawPackage; } // this.extraPackageAttrs;
 
-  pkg = interpreter.pkgs.nixops.withPlugins(ps: [
-    ps.nixops-aws
+    public = this.package;
+  };
+
+  minimal = encapsulate nixopsContextBase;
+
+in
+{
+  nixops_unstable_minimal = minimal;
+
+  # Not recommended; too fragile.
+  nixops_unstable_full = minimal.withPlugins (ps: [
     ps.nixops-digitalocean
     ps.nixops-encrypted-links
-    ps.nixops-gcp
     ps.nixops-hercules-ci
-    ps.nixops-hetzner
-    ps.nixopsvbox
-    ps.nixops-virtd
-    ps.nixops-hetznercloud
-  ]) // rec {
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/119407
-    # TODO after #1199407: Use .overrideAttrs(pkg: old: { passthru.tests = .....; })
-    tests = nixosTests.nixops.unstable.override { nixopsPkg = pkg; };
-    # Not strictly necessary, but probably expected somewhere; part of the workaround:
-    passthru.tests = tests;
-  };
-in pkg
+    ps.nixops-vbox
+  ]);
+}

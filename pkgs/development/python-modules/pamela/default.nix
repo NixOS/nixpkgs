@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "pamela";
-  version = "1.0.0";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65c9389bef7d1bb0b168813b6be21964df32016923aac7515bdf05366acbab6c";
+    hash = "sha256-DqbiqZ3e2Md4OkoG8tMfW9ytiU15EB6PCTIuOHo0qs8=";
   };
 
   postUnpack = ''
@@ -26,5 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/minrk/pamela";
     license = licenses.mit;
   };
-
 }

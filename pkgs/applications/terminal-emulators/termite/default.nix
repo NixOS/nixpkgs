@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook3, nixosTests }:
 
 let
 
@@ -47,13 +47,13 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/thestinger/termite/commit/7e9a93b421b9596f8980645a46ac2ad5468dac06.patch";
       sha256 = "0vph2m5919f7w1xnc8i6z0j44clsm1chxkfg7l71nahxyfw5yh4j";
     })
-  ] ++ lib.optional stdenv.isDarwin ./remove_ldflags_macos.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./remove_ldflags_macos.patch;
 
   makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
   buildInputs = [ vte-ng gtk3 ncurses pcre2 ];
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
 
   outputs = [ "out" "terminfo" ];
 
@@ -71,10 +71,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple VTE-based terminal";
+    description = "Simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
     maintainers = with maintainers; [ koral ];
     platforms = platforms.all;
+    mainProgram = "termite";
   };
 }

@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, cmake
-, wrapQtAppsHook
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  cmake,
+  libsForQt5,
+  doxygen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-app-services";
-  version = "0.0.20";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M9XXNV3N4CifOXitT6+UxaGsLoVuoNGqC5SO/mF+bLw=";
+    hash = "sha256-/lHiSUOTD8nC0WDLAHAFzm1YC0WjSS5W5JNC0cjeVEo=";
   };
 
   postPatch = ''
@@ -28,11 +29,17 @@ stdenv.mkDerivation rec {
     substituteInPlace dconfig-center/CMakeLists.txt \
       --replace 'add_subdirectory("example")' " " \
       --replace 'add_subdirectory("tests")'   " "
+
+    substituteInPlace dconfig-center/dde-dconfig-daemon/services/dde-dconfig-daemon.service \
+      --replace "/usr/bin" "$out/bin" \
+      --replace "/usr/share" "/run/current-system/sw/share"
   '';
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.qttools
+    doxygen
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -44,7 +51,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDVERSION=${version}"
     "-DDSG_DATA_DIR=/run/current-system/sw/share/dsg"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "out"}/${libsForQt5.qtbase.qtDocPrefix}"
   ];
+
+  preConfigure = ''
+    # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
+    # A workaround is to set QT_PLUGIN_PATH explicitly
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
+  '';
 
   meta = with lib; {
     description = "Provids dbus service for reading and writing DSG configuration";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib
+{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, bash
 , withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
 , gnumake42
 , enableParallelBuilding ? true
@@ -18,10 +18,28 @@ stdenv.mkDerivation rec {
     url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
-  nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    cmake
+    libtool
+    perl
+    pkg-config
+    python3
+    which
+    gnumake42
+  ];
   buildInputs = [
-    glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation libobjc ];
+    glib
+    gettext
+    libgdiplus
+    libX11
+    ncurses
+    zlib
+    bash
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation libobjc ];
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
@@ -76,11 +94,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
-    broken = stdenv.isDarwin && stdenv.isAarch64 && lib.versionOlder version "6.12.0.129";
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && lib.versionOlder version "6.12.0.129";
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    maintainers = with maintainers; [ thoughtpolice obadz ];
     license = with licenses; [
       /* runtime, compilers, tools and most class libraries licensed */ mit
       /* runtime includes some code licensed */ bsd3

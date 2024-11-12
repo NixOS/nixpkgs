@@ -1,7 +1,6 @@
 { lib
-, python3
 , pkgconfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , gtk3
 , glib
@@ -34,21 +33,21 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(buildPythonApplication {
+(buildPythonApplication rec {
   pname = "input-remapper";
-  version = "1.5.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
-    rev = "e31a1b2bc5d23fe13130afcc242063196335399f";
     owner = "sezanzeb";
     repo = "input-remapper";
-    hash = "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU=";
+    rev = version;
+    hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
   };
 
   postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
-      --replace "/usr/share/input-remapper"  "$out/usr/share/input-remapper"
+      --replace "/usr/share"  "$out/usr/share"
   '' + lib.optionalString withDebugLogLevel ''
     # if debugging
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
@@ -89,7 +88,7 @@ in
       python tests/test.py --start-dir unit
   '';
 
-  # Nixpkgs 15.9.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+  # Nixpkgs 15.9.4.3. When using wrapGAppsHook3 with special derivers you can end up with double wrapped binaries.
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
@@ -99,7 +98,7 @@ in
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext # needed to build translations
     gtk3
     glib
@@ -118,18 +117,21 @@ in
   ];
 
   postInstall = ''
-    sed -r "s#RUN\+\=\"/bin/input-remapper-control#RUN\+\=\"$out/bin/input-remapper-control#g" -i data/99-input-remapper.rules
-    sed -r "s#ExecStart\=/usr/bin/input-remapper-service#ExecStart\=$out/bin/input-remapper-service#g" -i data/input-remapper.service
+    substituteInPlace data/99-input-remapper.rules \
+      --replace-fail 'RUN+="/bin/input-remapper-control' "RUN+=\"$out/bin/input-remapper-control"
+    substituteInPlace data/input-remapper.service \
+      --replace-fail 'ExecStart=/usr/bin/input-remapper-service' "ExecStart=$out/bin/input-remapper-service"
+    substituteInPlace data/input-remapper-*.desktop \
+      --replace-fail 'Icon=/usr/share/input-remapper/input-remapper.svg' 'Icon=input-remapper.svg'
 
-    chmod +x data/*.desktop
-
-    install -D -t $out/share/applications/ data/*.desktop
-    install -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
-    install -D data/99-input-remapper.rules $out/etc/udev/rules.d/99-input-remapper.rules
-    install -D data/input-remapper.service $out/lib/systemd/system/input-remapper.service
-    install -D data/input-remapper.policy $out/share/polkit-1/actions/input-remapper.policy
-    install -D data/inputremapper.Control.conf $out/etc/dbus-1/system.d/inputremapper.Control.conf
-    install -D -t $out/usr/share/input-remapper/ data/*
+    install -m644 -D -t $out/share/applications/ data/*.desktop
+    install -m644 -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
+    install -m644 -D data/99-input-remapper.rules $out/etc/udev/rules.d/99-input-remapper.rules
+    install -m644 -D data/input-remapper.service $out/lib/systemd/system/input-remapper.service
+    install -m644 -D data/input-remapper.policy $out/share/polkit-1/actions/input-remapper.policy
+    install -m644 -D data/inputremapper.Control.conf $out/etc/dbus-1/system.d/inputremapper.Control.conf
+    install -m644 -D data/input-remapper.svg $out/share/icons/hicolor/scalable/apps/input-remapper.svg
+    install -m644 -D -t $out/usr/share/input-remapper/ data/*
 
     # Only install input-remapper prefixed binaries, we don't care about deprecated key-mapper ones
     install -m755 -D -t $out/bin/ bin/input-remapper*
@@ -138,7 +140,7 @@ in
   passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
-    description = "An easy to use tool to change the mapping of your input device buttons";
+    description = "Easy to use tool to change the mapping of your input device buttons";
     homepage = "https://github.com/sezanzeb/input-remapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -4,6 +4,7 @@
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, fstrm, protobufc # more optionals
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -17,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.6.0";
+  version = "5.7.4";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "0c82ae937b685dc477fb3176098e3dc106c898b7cd83553e5bc54dccb83c80d7";
+    hash = "sha256-a22m7PBoKAQa+tRN+iJ3gfCuNK0YOmZwCFCTVdGL2cg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -62,9 +63,10 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
+    ## the rest are optional dependencies
+    ++ optionals stdenv.hostPlatform.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
-    ## optional dependencies; TODO: dnstap
+    ++ [ fstrm protobufc ] # dnstap support
     ;
 
   mesonFlags = [
@@ -76,14 +78,14 @@ unwrapped = stdenv.mkDerivation rec {
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
   ++ optional doInstallCheck "-Dconfig_tests=enabled"
-  ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
+  ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
 
   postInstall = ''
     rm "$out"/lib/libkres.a
     rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
-  '' + optionalString stdenv.targetPlatform.isLinux ''
+  '' + optionalString stdenv.hostPlatform.isLinux ''
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
@@ -110,7 +112,8 @@ wrapped-full = runCommand unwrapped.name
       # For http module, prefill module, trust anchor bootstrap.
       # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
       http
-      # psl isn't in nixpkgs yet, but policy.slice_randomize_psl() seems not important.
+      # used by policy.slice_randomize_psl()
+      psl
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;

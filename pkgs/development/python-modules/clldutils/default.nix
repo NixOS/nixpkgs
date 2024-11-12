@@ -1,43 +1,47 @@
-{ lib
-, attrs
-, buildPythonPackage
-, colorlog
-, csvw
-, fetchFromGitHub
-, git
-, isPy27
-, lxml
-, markdown
-, markupsafe
-, mock
-, postgresql
-, pylatexenc
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, tabulate
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  git,
+  lxml,
+  markdown,
+  markupsafe,
+  mock,
+  postgresql,
+  pylatexenc,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.19.0";
-  disabled = isPy27;
+  version = "3.21.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dva0lbbTxvETDPkACxpI3PPzWh5gz87Fv6W3lTjNv3Q=";
+    hash = "sha256-OD+WJ9JuYZb/oXDgVqL4i5YlcVEt0+swq0SB3cutyRo=";
   };
 
   patchPhase = ''
-    substituteInPlace setup.cfg --replace "--cov" ""
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov" ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
     colorlog
-    csvw
     lxml
     markdown
     markupsafe
@@ -54,13 +58,8 @@ buildPythonPackage rec {
     git
   ];
 
-  disabledTests = [
-    # uses pytest.approx which is not supported in a boolean context in pytest7
-    "test_to_dec"
-    "test_roundtrip"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/clld/clldutils/blob/${src.rev}/CHANGES.md";
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";
     license = licenses.asl20;

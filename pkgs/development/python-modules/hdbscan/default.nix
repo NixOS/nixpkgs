@@ -1,41 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, cython
-, numpy
-, pytestCheckHook
-, scipy
-, scikit-learn
-, fetchPypi
-, joblib
-, six
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  numpy,
+  pytestCheckHook,
+  scipy,
+  scikit-learn,
+  fetchPypi,
+  joblib,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.28";
+  version = "0.8.38.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7tr3Hy87vt/Ew42hrUiXRUzl69R5LhponJecKFPtwFo=";
+    hash = "sha256-X726L/tamai1L6KRVljO1r7Vn00NX0CxxnNkbJKKrAs=";
   };
-  patches = [
-    # should be included in next release
-    (fetchpatch {
-      name = "joblib-1.2.0-compat.patch";
-      url = "https://github.com/scikit-learn-contrib/hdbscan/commit/d829c639923f6866e1917e46ddbde45b513913f3.patch";
-      excludes = [
-        "docs/basic_hdbscan.rst"
-        "docs/how_hdbscan_works.rst"
-      ];
-      hash = "sha256-t0D4OsHEcMwmBZM8Mk1N0uAKi6ra+TOzEks9/efsvWI=";
-    })
-  ];
 
   pythonRemoveDeps = [ "cython" ];
-  nativeBuildInputs = [ pythonRelaxDepsHook cython ];
-  propagatedBuildInputs = [ numpy scipy scikit-learn joblib six ];
+  nativeBuildInputs = [
+    cython
+  ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    scikit-learn
+    joblib
+    six
+  ];
   preCheck = ''
     cd hdbscan/tests
     rm __init__.py
@@ -57,8 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";
-    homepage =  "https://github.com/scikit-learn-contrib/hdbscan";
+    homepage = "https://github.com/scikit-learn-contrib/hdbscan";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

@@ -1,11 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, cram, bash }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  setuptools,
+  pytest_7,
+  cram,
+  bash,
+}:
 
 buildPythonPackage rec {
-  version = "0.2.2";
   pname = "pytest-cram";
+  version = "0.2.2";
+  pyproject = true;
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ cram ];
+  # relies on the imp module
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +27,13 @@ buildPythonPackage rec {
     substituteInPlace pytest_cram/tests/test_options.py \
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ cram ];
+
+  # https://github.com/tbekolay/pytest-cram/issues/15
+  nativeCheckInputs = [ pytest_7 ];
 
   # Remove __init__.py from tests folder, otherwise pytest raises an error that
   # the imported and collected modules are different.

@@ -1,54 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rednose
-, six
-, mock
-, isPyPy
-, pythonOlder
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  mock,
+  six,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
   pname = "sure";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34ae88c846046742ef074036bf311dc90ab152b7bc09c342b281cebf676727a2";
+    hash = "sha256-yPxvq8Dn9phO6ruUJUDkVkblvvC7mf5Z4C2mNOTUuco=";
   };
 
-  patches = [
-    # https://github.com/gabrielfalcao/sure/issues/169
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/055baa81cd987e566de62a5657513937521a90d4/trunk/python310.diff";
-      hash = "sha256-BKylV8xpTOuO/X4hzZKpoIcAQcdAK0kXYENRad7AGPc=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "rednose = 1" "" \
+      --replace-fail "--cov=sure" ""
+  '';
 
-  propagatedBuildInputs = [
-    six
+  build-system = [ setuptools ];
+
+  dependencies = [
     mock
+    six
   ];
 
   nativeCheckInputs = [
-    rednose
+    pytestCheckHook
+    mock
   ];
 
-  doCheck = pythonOlder "3.11";
-
-  pythonImportsCheck = [
-    "sure"
+  disabledTestPaths = [
+    "tests/test_old_api.py" # require nose
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "sure" ];
+
+  meta = {
     description = "Utility belt for automated testing";
+    mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
-    changelog = "https://github.com/gabrielfalcao/sure/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

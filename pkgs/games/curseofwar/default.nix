@@ -4,14 +4,14 @@
 , SDL
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "curseofwar";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "a-nikolaev";
-    repo = pname;
-    rev = "v${version}";
+    repo = "curseofwar";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wd71wdnj9izg5d95m81yx3684g4zdi7fsy0j5wwnbd9j34ilz1i";
   };
 
@@ -27,11 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fast-paced action strategy game";
+    description = "Fast-paced action strategy game";
     homepage = "https://a-nikolaev.github.io/curseofwar/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
-
+})

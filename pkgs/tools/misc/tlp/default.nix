@@ -24,13 +24,13 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    sha256 = "sha256-hHel3BVMzTYfE59kxxADnm8tqtUFntqS3RzmJSZlWjM=";
+    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -38,6 +38,10 @@
     ./patches/0001-makefile-correctly-sed-paths.patch
     ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail ' ?= /usr/' ' ?= /'
+  '';
 
   buildInputs = [ perl ];
   nativeBuildInputs = [ makeWrapper ];
@@ -55,16 +59,6 @@
     "TLP_WITH_SYSTEMD=1"
 
     "DESTDIR=${placeholder "out"}"
-    "TLP_BATD=/share/tlp/bat.d"
-    "TLP_BIN=/bin"
-    "TLP_CONFDEF=/share/tlp/defaults.conf"
-    "TLP_CONFREN=/share/tlp/rename.conf"
-    "TLP_FLIB=/share/tlp/func.d"
-    "TLP_MAN=/share/man"
-    "TLP_META=/share/metainfo"
-    "TLP_SBIN=/sbin"
-    "TLP_SHCPL=/share/bash-completion/completions"
-    "TLP_TLIB=/share/tlp"
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
@@ -100,7 +94,6 @@
         $out/share/tlp/tlp-pcilist
         $out/share/tlp/tlp-readconfs
         $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
       )
       for f in "''${fixup_perl[@]}"; do
         wrapProgram "$f" --prefix PATH : "${paths}"
@@ -127,7 +120,9 @@
     description = "Advanced Power Management for Linux";
     homepage =
       "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
     platforms = platforms.linux;
+    mainProgram = "tlp";
     maintainers = with maintainers; [ abbradar lovesegfault ];
     license = licenses.gpl2Plus;
   };

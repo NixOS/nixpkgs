@@ -1,24 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, isPy3k
-, backports_functools_lru_cache
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "2.4";
+  version = "2.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4o26nKbHwAFz405LpXRI8GiLtoG3xei/SXHar8CT1po=";
+    hash = "sha256-4uaEF3d681nsZdqsEFdASjyKVFW7irw28amGarGlGrs=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   # Circular dependency on beautifulsoup4
   doCheck = false;
@@ -27,9 +24,9 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "soupsieve" ];
 
   meta = with lib; {
-    description = "A CSS4 selector implementation for Beautiful Soup";
+    description = "CSS4 selector implementation for Beautiful Soup";
     license = licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

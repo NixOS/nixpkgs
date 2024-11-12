@@ -1,32 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytest-cov, mock
-, pytest-xdist, covCore, glibcLocales }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-933etYrKRgSqJfOMIuIDL4Uv4/RdSEFMNWFtW5qiPpA=";
+    hash = "sha256-933etYrKRgSqJfOMIuIDL4Uv4/RdSEFMNWFtW5qiPpA=";
   };
 
-  buildInputs = [ glibcLocales ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytest
-    pytest-cov
-    mock
-    pytest-xdist
-    covCore
-  ];
-  # Disable checks because they are not stateless and require internet access.
+  # Module has no tests
   doCheck = false;
 
-  LC_ALL="en_US.UTF-8";
+  pythonImportsCheck = [ "dyn" ];
 
   meta = with lib; {
     description = "Dynect dns lib";
-    homepage = "https://dyn.readthedocs.org/en/latest/intro.html";
+    homepage = "https://dyn.readthedocs.org";
+    changelog = "https://github.com/dyninc/dyn-python/blob/${version}/HISTORY.rst";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

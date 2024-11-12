@@ -1,61 +1,71 @@
-{ lib
-, stdenv
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hyperlink
-, hypothesis
-, incremental
-, python
-, pythonOlder
-, treq
-, tubes
-, twisted
-, typing-extensions
-, werkzeug
-, zope_interface
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  attrs,
+  hyperlink,
+  incremental,
+  tubes,
+  twisted,
+  werkzeug,
+  zope-interface,
+
+  # tests
+  idna,
+  python,
+  treq,
 }:
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "unstable-2022-06-26";
-  format = "setuptools";
+  version = "24.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twisted";
-    repo = pname;
-    rev = "d8c2b92a3c77aa64c596696fb6f07172ecf94a74";
-    hash = "sha256-RDZqavkteUbARV78OctZtLIrE4RoYDVAanjwE5i/ZeM=";
+    repo = "klein";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2/zl4fS9ZP73quPmGnz2+brEt84ODgVS89Om/cUsj0M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    incremental
+    setuptools
+  ];
+
+  dependencies = [
     attrs
     hyperlink
     incremental
     twisted
     tubes
     werkzeug
-    zope_interface
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    zope-interface
   ];
 
   nativeCheckInputs = [
-    hypothesis
+    idna
     treq
   ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} -m twisted.trial klein
+    runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "klein"
-  ];
+  pythonImportsCheck = [ "klein" ];
 
   meta = with lib; {
+    changelog = "https://github.com/twisted/klein/releases/tag/${version}";
     description = "Klein Web Micro-Framework";
     homepage = "https://github.com/twisted/klein";
     license = licenses.mit;

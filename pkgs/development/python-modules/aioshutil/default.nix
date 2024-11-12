@@ -1,50 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.3";
-  format = "pyproject";
+  version = "1.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kumaraditya303";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XIGjiLjoyS/7vUDIyBPvHNMyHOBa0gsg/c/vGgrhZAg=";
+    repo = "aioshutil";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hSUNx43sIUPs4YfQ+H39FXTpj3oCMUqRzDdHX2OdRdE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail " --cov aioshutil --cov-report xml" ""
+  '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov aioshutil --cov-report xml" ""
-  '';
-
-  pythonImportsCheck = [
-    "aioshutil"
-  ];
+  pythonImportsCheck = [ "aioshutil" ];
 
   meta = with lib; {
     description = "Asynchronous version of function of shutil module";
     homepage = "https://github.com/kumaraditya303/aioshutil";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

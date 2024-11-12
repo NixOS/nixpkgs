@@ -1,45 +1,38 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.locate;
-  isMLocate = hasPrefix "mlocate" cfg.locate.name;
-  isPLocate = hasPrefix "plocate" cfg.locate.name;
-  isMorPLocate = (isMLocate || isPLocate);
-  isFindutils = hasPrefix "findutils" cfg.locate.name;
+  isMLocate = lib.hasPrefix "mlocate" cfg.package.name;
+  isPLocate = lib.hasPrefix "plocate" cfg.package.name;
+  isMorPLocate = isMLocate || isPLocate;
+  isFindutils = lib.hasPrefix "findutils" cfg.package.name;
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
+    (lib.mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (lib.mkRenamedOptionModule [ "services" "locate" "locate" ] [ "services" "locate" "package" ])
+    (lib.mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
   ];
 
-  options.services.locate = with types; {
-    enable = mkOption {
-      type = bool;
+  options.services.locate = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, NixOS will periodically update the database of
         files used by the {command}`locate` command.
       '';
     };
 
-    locate = mkOption {
-      type = package;
-      default = pkgs.findutils.locate;
-      defaultText = literalExpression "pkgs.findutils";
-      example = literalExpression "pkgs.mlocate";
-      description = lib.mdDoc ''
-        The locate implementation to use
-      '';
+    package = lib.mkPackageOption pkgs [ "findutils" "locate" ] {
+      example = "mlocate";
     };
 
-    interval = mkOption {
-      type = str;
+    interval = lib.mkOption {
+      type = lib.types.str;
       default = "02:15";
       example = "hourly";
-      description = lib.mdDoc ''
+      description = ''
         Update the locate database at this interval. Updates by
         default at 2:15 AM every day.
 
@@ -51,33 +44,33 @@ in
       '';
     };
 
-    extraFlags = mkOption {
-      type = listOf str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Extra flags to pass to {command}`updatedb`.
       '';
     };
 
-    output = mkOption {
-      type = path;
+    output = lib.mkOption {
+      type = lib.types.path;
       default = "/var/cache/locatedb";
-      description = lib.mdDoc ''
+      description = ''
         The database file to build.
       '';
     };
 
-    localuser = mkOption {
-      type = nullOr str;
+    localuser = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = "nobody";
-      description = lib.mdDoc ''
+      description = ''
         The user to search non-network directories as, using
         {command}`su`.
       '';
     };
 
-    pruneFS = mkOption {
-      type = listOf str;
+    pruneFS = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [
         "afs"
         "anon_inodefs"
@@ -158,13 +151,13 @@ in
         "vboxsf"
         "vperfctrfs"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Which filesystem types to exclude from indexing
       '';
     };
 
-    prunePaths = mkOption {
-      type = listOf path;
+    prunePaths = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
       default = [
         "/tmp"
         "/var/tmp"
@@ -175,37 +168,37 @@ in
         "/nix/store"
         "/nix/var/log/nix"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Which paths to exclude from indexing
       '';
     };
 
-    pruneNames = mkOption {
-      type = listOf str;
+    pruneNames = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = lib.optionals (!isFindutils) [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
-      defaultText = literalMD ''
+      defaultText = lib.literalMD ''
         `[ ".bzr" ".cache" ".git" ".hg" ".svn" ]`, if
         supported by the locate implementation (i.e. mlocate or plocate).
       '';
-      description = lib.mdDoc ''
+      description = ''
         Directory components which should exclude paths containing them from indexing
       '';
     };
 
-    pruneBindMounts = mkOption {
-      type = bool;
+    pruneBindMounts = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether not to index bind mounts
       '';
     };
 
   };
 
-  config = mkIf cfg.enable {
-    users.groups = mkMerge [
-      (mkIf isMLocate { mlocate = { }; })
-      (mkIf isPLocate { plocate = { }; })
+  config = lib.mkIf cfg.enable {
+    users.groups = lib.mkMerge [
+      (lib.mkIf isMLocate { mlocate = { }; })
+      (lib.mkIf isPLocate { plocate = { }; })
     ];
 
     security.wrappers =
@@ -216,48 +209,46 @@ in
           setgid = true;
           setuid = false;
         };
-        mlocate = (mkIf isMLocate {
+        mlocate = lib.mkIf isMLocate {
           group = "mlocate";
-          source = "${cfg.locate}/bin/locate";
-        });
-        plocate = (mkIf isPLocate {
+          source = "${cfg.package}/bin/locate";
+        };
+        plocate = lib.mkIf isPLocate {
           group = "plocate";
-          source = "${cfg.locate}/bin/plocate";
-        });
+          source = "${cfg.package}/bin/plocate";
+        };
       in
-      mkIf isMorPLocate {
-        locate = mkMerge [ common mlocate plocate ];
-        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
+      lib.mkIf isMorPLocate {
+        locate = lib.mkMerge [ common mlocate plocate ];
+        plocate = lib.mkIf isPLocate (lib.mkMerge [ common plocate ]);
       };
 
-    nixpkgs.config = { locate.dbfile = cfg.output; };
-
-    environment.systemPackages = [ cfg.locate ];
-
-    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
-
-    environment.etc = {
+    environment = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
-      "updatedb.conf" = {
-        text = ''
-          PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
-          PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
-          PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
-        '';
+      etc."updatedb.conf".text = ''
+        PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
+        PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
+        PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
+        PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
+      '';
+
+      systemPackages = [ cfg.package ];
+
+      variables = lib.mkIf isFindutils {
+        LOCATE_PATH = cfg.output;
       };
     };
 
-    warnings = optional (isMorPLocate && cfg.localuser != null)
+    warnings = lib.optional (isMorPLocate && cfg.localuser != null)
       "mlocate and plocate do not support the services.locate.localuser option. updatedb will run as root. Silence this warning by setting services.locate.localuser = null."
-    ++ optional (isFindutils && cfg.pruneNames != [ ])
+    ++ lib.optional (isFindutils && cfg.pruneNames != [ ])
       "findutils locate does not support pruning by directory component"
-    ++ optional (isFindutils && cfg.pruneBindMounts)
+    ++ lib.optional (isFindutils && cfg.pruneBindMounts)
       "findutils locate does not support skipping bind mounts";
 
     systemd.services.update-locatedb = {
       description = "Update Locate Database";
-      path = mkIf (!isMorPLocate) [ pkgs.su ];
+      path = lib.mkIf (!isMorPLocate) [ pkgs.su ];
 
       # mlocate's updatedb takes flags via a configuration file or
       # on the command line, but not by environment variable.
@@ -265,46 +256,51 @@ in
         if isMorPLocate then
           let
             toFlags = x:
-              optional (cfg.${x} != [ ])
-                "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-            args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+              lib.optional (cfg.${x} != [ ])
+                "--${lib.toLower x} '${lib.concatStringsSep " " cfg.${x}}'";
+            args = lib.concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
           in
           ''
-            exec ${cfg.locate}/bin/updatedb \
-              --output ${toString cfg.output} ${concatStringsSep " " args} \
+            exec ${cfg.package}/bin/updatedb \
+              --output ${toString cfg.output} ${lib.concatStringsSep " " args} \
               --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
-              ${concatStringsSep " " cfg.extraFlags}
+              ${lib.concatStringsSep " " cfg.extraFlags}
           ''
         else ''
-          exec ${cfg.locate}/bin/updatedb \
-            ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
-            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+          exec ${cfg.package}/bin/updatedb \
+            ${lib.optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
+            --output=${toString cfg.output} ${lib.concatStringsSep " " cfg.extraFlags}
         '';
-      environment = optionalAttrs (!isMorPLocate) {
-        PRUNEFS = concatStringsSep " " cfg.pruneFS;
-        PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
-        PRUNENAMES = concatStringsSep " " cfg.pruneNames;
+      environment = lib.optionalAttrs (!isMorPLocate) {
+        PRUNEFS = lib.concatStringsSep " " cfg.pruneFS;
+        PRUNEPATHS = lib.concatStringsSep " " cfg.prunePaths;
+        PRUNENAMES = lib.concatStringsSep " " cfg.pruneNames;
         PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
       };
-      serviceConfig.Nice = 19;
-      serviceConfig.IOSchedulingClass = "idle";
-      serviceConfig.PrivateTmp = "yes";
-      serviceConfig.PrivateNetwork = "yes";
-      serviceConfig.NoNewPrivileges = "yes";
-      serviceConfig.ReadOnlyPaths = "/";
-      # Use dirOf cfg.output because mlocate creates temporary files next to
-      # the actual database. We could specify and create them as well,
-      # but that would make this quite brittle when they change something.
-      # NOTE: If /var/cache does not exist, this leads to the misleading error message:
-      # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
-      serviceConfig.ReadWritePaths = dirOf cfg.output;
+      serviceConfig = {
+        Nice = 19;
+        IOSchedulingClass = "idle";
+        PrivateTmp = "yes";
+        PrivateNetwork = "yes";
+        NoNewPrivileges = "yes";
+        ReadOnlyPaths = "/";
+        # Use dirOf cfg.output because mlocate creates temporary files next to
+        # the actual database. We could specify and create them as well,
+        # but that would make this quite brittle when they change something.
+        # NOTE: If /var/cache does not exist, this leads to the misleading error message:
+        # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
+        ReadWritePaths = dirOf cfg.output;
+      };
     };
 
-    systemd.timers.update-locatedb = mkIf (cfg.interval != "never") {
+    systemd.timers.update-locatedb = lib.mkIf (cfg.interval != "never") {
       description = "Update timer for locate database";
       partOf = [ "update-locatedb.service" ];
       wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = cfg.interval;
+      timerConfig = {
+        OnCalendar = cfg.interval;
+        Persistent = true;
+      };
     };
   };
 

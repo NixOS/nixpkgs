@@ -11,10 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "02m25y9m46pb6n46s51av62kpd936lkfv3b13kfpckgvmh5lxpm8";
   };
 
+  # fortify breaks the libcompat vsnprintf implementation
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isMusl && (stdenv.hostPlatform != stdenv.buildPlatform)) [ "fortify" ];
+
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
 
-  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   meta = with lib; {
     description = "Unit testing framework for C";

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapPython qt5.wrapQtAppsHook dos2unix ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/opt/sumorobot-manager
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop App for managing SumoRobots";
+    mainProgram = "sumorobot-manager";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];

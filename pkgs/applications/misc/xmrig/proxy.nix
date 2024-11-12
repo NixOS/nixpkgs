@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
-  version = "6.19.2";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
-    hash = "sha256-3nEfg2hmOMjevo5VhjelIeV2xRwkIOVhLNxBmPzdWog=";
+    hash = "sha256-qRn/FiYvogGFUIUj3CojtfO6fXRZghH+bgRP+ysI6mc=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libuv
     libmicrohttpd
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     IOKit
   ];
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Monero (XMR) Stratum protocol proxy";
+    mainProgram = "xmrig-proxy";
     homepage = "https://github.com/xmrig/xmrig-proxy";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aij ];

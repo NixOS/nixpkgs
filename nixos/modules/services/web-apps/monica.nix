@@ -32,22 +32,22 @@ with lib; let
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 in {
   options.services.monica = {
-    enable = mkEnableOption (lib.mdDoc "monica");
+    enable = mkEnableOption "monica";
 
     user = mkOption {
       default = "monica";
-      description = lib.mdDoc "User monica runs as.";
+      description = "User monica runs as.";
       type = types.str;
     };
 
     group = mkOption {
       default = "monica";
-      description = lib.mdDoc "Group monica runs as.";
+      description = "Group monica runs as.";
       type = types.str;
     };
 
     appKeyFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
         generated with <code>head -c 32 /dev/urandom | base64</code>.
@@ -64,13 +64,13 @@ in {
         else config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "monica.example.com";
-      description = lib.mdDoc ''
+      description = ''
         The hostname to serve monica on.
       '';
     };
 
     appURL = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The root URL that you want to host monica on. All URLs in monica will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
         Command example: <code>php artisan monica:update-url https://old.example.com https://new.example.com</code>
@@ -82,7 +82,7 @@ in {
     };
 
     dataDir = mkOption {
-      description = lib.mdDoc "monica data directory";
+      description = "monica data directory";
       default = "/var/lib/monica";
       type = types.path;
     };
@@ -91,29 +91,29 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = lib.mdDoc "Database host port.";
+        description = "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "monica";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = user;
         defaultText = lib.literalExpression "user";
-        description = lib.mdDoc "Database username.";
+        description = "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/monica-dbpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           <option>database.user</option>.
         '';
@@ -121,7 +121,7 @@ in {
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
@@ -129,39 +129,39 @@ in {
       driver = mkOption {
         type = types.enum ["smtp" "sendmail"];
         default = "smtp";
-        description = lib.mdDoc "Mail driver to use.";
+        description = "Mail driver to use.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Mail host address.";
+        description = "Mail host address.";
       };
       port = mkOption {
         type = types.port;
         default = 1025;
-        description = lib.mdDoc "Mail host port.";
+        description = "Mail host port.";
       };
       fromName = mkOption {
         type = types.str;
         default = "monica";
-        description = lib.mdDoc "Mail \"from\" name.";
+        description = "Mail \"from\" name.";
       };
       from = mkOption {
         type = types.str;
         default = "mail@monica.com";
-        description = lib.mdDoc "Mail \"from\" email.";
+        description = "Mail \"from\" email.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "monica";
-        description = lib.mdDoc "Mail username.";
+        description = "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/monica-mailpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           <option>mail.user</option>.
         '';
@@ -169,7 +169,7 @@ in {
       encryption = mkOption {
         type = with types; nullOr (enum ["tls"]);
         default = null;
-        description = lib.mdDoc "SMTP encryption mechanism to use.";
+        description = "SMTP encryption mechanism to use.";
       };
     };
 
@@ -177,7 +177,7 @@ in {
       type = types.str;
       default = "18M";
       example = "1G";
-      description = lib.mdDoc "The maximum size for uploads (e.g. images).";
+      description = "The maximum size for uploads (e.g. images).";
     };
 
     poolConfig = mkOption {
@@ -190,7 +190,7 @@ in {
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the monica PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
       '';
@@ -212,7 +212,7 @@ in {
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
@@ -233,7 +233,7 @@ in {
               options = {
                 _secret = mkOption {
                   type = nullOr str;
-                  description = lib.mdDoc ''
+                  description = ''
                     The path to a file containing the value the
                     option should be set to in the final
                     configuration file.
@@ -255,7 +255,7 @@ in {
           OIDC_ISSUER_DISCOVER = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         monica configuration options to set in the
         <filename>.env</filename> file.
 

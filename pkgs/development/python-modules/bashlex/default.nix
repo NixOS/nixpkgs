@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +21,10 @@ buildPythonPackage rec {
 
   # workaround https://github.com/idank/bashlex/issues/51
   preBuild = ''
-    ${python.pythonForBuild.interpreter} -c 'import bashlex'
+    ${python.pythonOnBuildForHost.interpreter} -c 'import bashlex'
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bashlex" ];
 

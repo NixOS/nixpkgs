@@ -1,47 +1,48 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, click
-, colorama
-, cryptography
-, exrex
-, fetchFromGitHub
-, poetry-core
-, pyopenssl
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, questionary
-, requests
-, requests-mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  click,
+  colorama,
+  cryptography,
+  exrex,
+  fetchFromGitHub,
+  poetry-core,
+  pyopenssl,
+  pyperclip,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  questionary,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "myjwt";
-  version = "1.6.1";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
     rev = "refs/tags/${version}";
-    hash = "sha256-qdDA8DpJ9kAPTvCkQcPBHNlUqxwsS0vAESglvUygXhg=";
+    hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "1.6.0" "${version}" \
-      --replace 'cryptography = "^39.0.2"' 'cryptography = "^39.0.0"'
-  '';
+  pythonRelaxDeps = [
+    "cryptography"
+    "pyopenssl"
+    "questionary"
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     colorama
     cryptography
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "myjwt"
-  ];
+  pythonImportsCheck = [ "myjwt" ];
 
   meta = with lib; {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
@@ -69,6 +68,6 @@ buildPythonPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Build failures
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

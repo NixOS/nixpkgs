@@ -4,20 +4,15 @@
 , toVimPlugin
 }:
 
-rec {
-  addRtp = drv:
-    drv // {
-      rtp = lib.warn "`rtp` attribute is deprecated, use `outPath` instead." drv.outPath;
-      overrideAttrs = f: addRtp (drv.overrideAttrs f);
-    };
+{
+  addRtp = drv: lib.warn "`addRtp` is deprecated, does nothing." drv;
 
   buildVimPlugin =
     { name ? "${attrs.pname}-${attrs.version}"
-    , namePrefix ? "vimplugin-"
     , src
     , unpackPhase ? ""
-    , configurePhase ? ""
-    , buildPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
     , preInstall ? ""
     , postInstall ? ""
     , path ? "."
@@ -27,8 +22,9 @@ rec {
     }@attrs:
     let
       drv = stdenv.mkDerivation (attrs // {
-        name = namePrefix + name;
+        name = lib.warnIf (attrs ? vimprefix) "The 'vimprefix' is now hardcoded in toVimPlugin" name;
 
+        __structuredAttrs = true;
         inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
         installPhase = ''
@@ -46,11 +42,6 @@ rec {
         } // meta;
       });
     in
-    addRtp (toVimPlugin drv);
+      toVimPlugin drv;
 
-  buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
-    # vim plugins may override this
-    buildPhase = ":";
-    configurePhase = ":";
-  } // attrs);
 }

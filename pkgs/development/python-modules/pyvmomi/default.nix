@@ -1,14 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, six
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  requests,
+  six,
+  pyopenssl,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "8.0.1.0.1";
+  version = "8.0.3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,13 +20,20 @@ buildPythonPackage rec {
     owner = "vmware";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MT0jT4wT8+4OEsIDWZbiqWK+3YASfVtOQT2KkadfwbM=";
+    hash = "sha256-wJe45r9fWNkg8oWJZ47bcqoWzOvxpO4soV2SU4N0tb0=";
   };
 
   propagatedBuildInputs = [
     requests
     six
   ];
+
+  optional-dependencies = {
+    sso = [
+      lxml
+      pyopenssl
+    ];
+  };
 
   # Requires old version of vcrpy
   doCheck = false;
@@ -38,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vmware/pyvmomi";
     changelog = "https://github.com/vmware/pyvmomi/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , perlPackages
 , intltool
 , autoreconfHook
@@ -8,7 +9,6 @@
 , glib
 , libxml2
 , sqlite
-, zlib
 , sg3_utils
 , gdk-pixbuf
 , taglib
@@ -24,10 +24,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
-    sha256 = "0pcmgv1ra0ymv73mlj4qxzgyir026z9jpl5s5bkg35afs1cpk2k3";
+    hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      name = "libplist-2.3.0-compatibility.patch";
+      url = "https://sourceforge.net/p/gtkpod/patches/48/attachment/libplist-2.3.0-compatibility.patch";
+      hash = "sha256-aVkuYE1N/jdEhVhiXEVhApvOC+8csIMMpP20rAJwEVQ=";
+    })
+  ];
 
   postPatch = ''
     # support libplist 2.2
@@ -59,9 +67,17 @@ stdenv.mkDerivation rec {
     libimobiledevice
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";
+    mainProgram = "ipod-read-sysinfo-extended";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ ];

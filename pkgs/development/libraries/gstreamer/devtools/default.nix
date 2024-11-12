@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.22.3";
+  version = "1.24.7";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-RGrJxC1QLL/ZCBc3zBuFOzwfUNt3ynzNAa6hD2h1UME=";
+    hash = "sha256-56p6I/pYfVjcWnu1Hvta159vKkxZh1ZMZvYztbvTixc=";
   };
 
   outputs = [
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     cairo
     python3
     json-glib
-    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -65,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

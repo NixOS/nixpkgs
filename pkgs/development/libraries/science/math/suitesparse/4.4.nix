@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, gfortran, blas, lapack
-, enableCuda ? false, cudatoolkit
+, config
+, enableCuda ? config.cudaSupport, cudatoolkit
 }:
 
 let
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
         -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
         -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
   ''
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     "LAPACK=-llapack"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -DNTIMER";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
         for i in "$out"/lib/lib*.a; do
           ar -x $i
         done
-        ${if enableCuda then cudatoolkit else stdenv.cc.outPath}/bin/${if enableCuda then "nvcc" else "cc"} *.o ${if stdenv.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse${SHLIB_EXT}" -lblas ${lib.optionalString enableCuda "-lcublas"}
+        ${if enableCuda then cudatoolkit else stdenv.cc.outPath}/bin/${if enableCuda then "nvcc" else "cc"} *.o ${if stdenv.hostPlatform.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse${SHLIB_EXT}" -lblas ${lib.optionalString enableCuda "-lcublas"}
     )
     for i in umfpack cholmod amd camd colamd spqr; do
       ln -s libsuitesparse${SHLIB_EXT} "$out"/lib/lib$i${SHLIB_EXT}
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
-    description = "A suite of sparse matrix algorithms";
+    description = "Suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];
     platforms = with platforms; unix;

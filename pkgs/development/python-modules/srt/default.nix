@@ -1,20 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "srt";
   version = "3.5.3";
-
-  disabled = pythonOlder "2.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SIQxUEOk8HQP0fh47WyqN2rAbXDhNfMGptxEYy7tDMA=";
+    hash = "sha256-SIQxUEOk8HQP0fh47WyqN2rAbXDhNfMGptxEYy7tDMA=";
   };
 
   nativeCheckInputs = [
@@ -26,8 +25,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/cdown/srt";
-    description = "A tiny but featureful Python library for parsing, modifying, and composing SRT files";
+    description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = [ ];
   };
 }

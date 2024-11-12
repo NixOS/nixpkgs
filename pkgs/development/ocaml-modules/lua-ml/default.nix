@@ -7,13 +7,13 @@ else
 stdenv.mkDerivation rec {
   pname = "lua-ml";
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "lindig";
     repo = pname;
     rev = version;
-    sha256 = "04lv98nxmzanvyn4c0k6k0ax29f5xfdl8qzpf5hwadslq213a044";
+    sha256 = "sha256-xkjsjKD89W7Y5XK8kfL/ZErYKS14z0u0QCARN0DbTC8=";
   };
 
   nativeBuildInputs = [ opaline ocaml findlib ocamlbuild ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An embeddable Lua 2.5 interpreter implemented in OCaml";
+    description = "Embeddable Lua 2.5 interpreter implemented in OCaml";
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
     license = lib.licenses.bsd2;

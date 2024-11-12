@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "reiserfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.reiserfs or false;
 
 in
 
 {
-  config = mkIf (any (fs: fs == "reiserfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.reiserfs or false) {
 
     system.fsPackages = [ pkgs.reiserfsprogs ];
 
@@ -20,6 +20,8 @@ in
         copy_bin_and_libs ${pkgs.reiserfsprogs}/sbin/reiserfsck
         ln -s reiserfsck $out/bin/fsck.reiserfs
       '';
+
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.reiserfsprogs ];
 
   };
 }

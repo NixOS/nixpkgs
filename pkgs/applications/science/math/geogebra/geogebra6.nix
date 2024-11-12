@@ -1,7 +1,15 @@
-{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+  electron,
+  makeWrapper,
+  geogebra,
+}:
 let
   pname = "geogebra";
-  version = "6-0-745-0";
+  version = "6-0-794-0";
 
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
@@ -14,14 +22,17 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ voidless sikmir ];
+    maintainers = with maintainers; [
+      voidless
+      sikmir
+    ];
     license = licenses.geogebra;
     sourceProvenance = with sourceTypes; [
       binaryBytecode
-      binaryNativeCode  # some jars include native binaries
+      binaryNativeCode # some jars include native binaries
     ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {
@@ -30,9 +41,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
-        "https://web.archive.org/web/20221126110648/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
+        "https://web.archive.org/web/20230824011801/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
       ];
-      hash = "sha256-UksHZt7bEs/aRzFiJrT1Quz/SFSvA88sdhoi1IEVdBc=";
+      hash = "sha256-sNCq1Xcx/Y5r+SIRiqQYcG9dVsfIC2Ef5KJf+tgfxC8=";
     };
 
     dontConfigure = true;
@@ -50,7 +61,9 @@ let
     installPhase = ''
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
-      makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
+      makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra \
+        --add-flags "$out/resources/app" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm644 "${desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
@@ -65,9 +78,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
-        "https://web.archive.org/web/20221126111123/https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
+        "https://web.archive.org/web/20230824012900/https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
       ];
-      hash = "sha256-Qn2MD3W5icX45Tfs19oRV8J3lYmL8T+hp7A+crRb9tQ=";
+      hash = "sha256-CrSoKAjXiejfJHyv8wIpcRr2d8u/50HnatiDm1CdnGQ=";
     };
 
     dontUnpack = true;
@@ -84,6 +97,4 @@ let
     };
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+if stdenv.hostPlatform.isDarwin then darwinPkg else linuxPkg

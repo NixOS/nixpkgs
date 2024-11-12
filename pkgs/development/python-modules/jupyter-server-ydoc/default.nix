@@ -1,60 +1,52 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, jupyter-server-fileid
-, jupyter-ydoc
-, ypy-websocket
-, pytest-jupyter
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  jsonschema,
+  jupyter-events,
+  jupyter-server,
+  jupyter-server-fileid,
+  jupyter-ydoc,
+  pycrdt,
+  pycrdt-websocket,
+  jupyter-collaboration,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-server-ydoc";
-  version = "0.8.0";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
-
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = "jupyter_collaboration";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KLb7kU5jsj6ihGO6HU3Y7uF+0PcwKoQlqQAhtO0oaJw=";
+  src = fetchPypi {
+    pname = "jupyter_server_ydoc";
+    inherit version;
+    hash = "sha256-MBdSTB2gaIFbdIyPHr5+wI7aBH/Fl85ywSWxgAmjkek=";
   };
 
-  postPatch = ''
-    sed -i "/^timeout/d" pyproject.toml
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    jsonschema
+    jupyter-events
+    jupyter-server
     jupyter-server-fileid
     jupyter-ydoc
-    ypy-websocket
+    pycrdt
+    pycrdt-websocket
   ];
 
   pythonImportsCheck = [ "jupyter_server_ydoc" ];
 
-  nativeCheckInputs = [
-    pytest-jupyter
-    pytestCheckHook
-  ];
+  # no tests
+  doCheck = false;
 
-  preCheck = ''
-    export HOME=$TEMP
-  '';
+  passthru.tests = jupyter-collaboration.tests;
 
   meta = {
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${src.rev}/CHANGELOG.md";
-    description = "A Jupyter Server Extension Providing Y Documents";
-    homepage = "https://github.com/jupyterlab/jupyter_collaboration";
+    description = "Jupyter-server extension integrating collaborative shared models";
+    homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-server-ydoc";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

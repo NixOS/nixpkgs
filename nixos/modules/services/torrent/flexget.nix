@@ -14,42 +14,42 @@ let
 in {
   options = {
     services.flexget = {
-      enable = mkEnableOption (lib.mdDoc "Run FlexGet Daemon");
+      enable = mkEnableOption "FlexGet daemon";
 
-      package = mkPackageOptionMD pkgs "flexget" {};
+      package = mkPackageOption pkgs "flexget" {};
 
       user = mkOption {
         default = "deluge";
         example = "some_user";
         type = types.str;
-        description = lib.mdDoc "The user under which to run flexget.";
+        description = "The user under which to run flexget.";
       };
 
       homeDir = mkOption {
         default = "/var/lib/deluge";
         example = "/home/flexget";
         type = types.path;
-        description = lib.mdDoc "Where files live.";
+        description = "Where files live.";
       };
 
       interval = mkOption {
         default = "10m";
         example = "1h";
         type = types.str;
-        description = lib.mdDoc "When to perform a {command}`flexget` run. See {command}`man 7 systemd.time` for the format.";
+        description = "When to perform a {command}`flexget` run. See {command}`man 7 systemd.time` for the format.";
       };
 
       systemScheduler = mkOption {
         default = true;
         example = false;
         type = types.bool;
-        description = lib.mdDoc "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
+        description = "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
       };
 
       config = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "The YAML configuration for FlexGet.";
+        description = "The YAML configuration for FlexGet.";
       };
     };
   };
@@ -64,7 +64,6 @@ in {
         path = [ pkg ];
         serviceConfig = {
           User = cfg.user;
-          Environment = "TZ=${config.time.timeZone}";
           ExecStartPre = "${pkgs.coreutils}/bin/install -m644 ${ymlFile} ${configFile}";
           ExecStart = "${pkg}/bin/flexget -c ${configFile} daemon start";
           ExecStop = "${pkg}/bin/flexget -c ${configFile} daemon stop";

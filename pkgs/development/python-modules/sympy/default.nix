@@ -1,17 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, mpmath
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  mpmath,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.11.1";
+  version = "1.13.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4yOA3OY8t8AQjtUlVwCS/UUWi9ri+qF+UoIh73Lohlg=";
+    hash = "sha256-sn/SxlMOCrOeJ1/JtoOJU2flHV2pG6qNPWTbJWX+xNk=";
   };
 
   nativeCheckInputs = [ glibcLocales ];
@@ -26,10 +31,15 @@ buildPythonPackage rec {
     export LANG="en_US.UTF-8"
   '';
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
-    description = "A Python library for symbolic mathematics";
-    homepage    = "https://www.sympy.org/";
-    license     = licenses.bsd3;
+    description = "Python library for symbolic mathematics";
+    mainProgram = "isympy";
+    homepage = "https://www.sympy.org/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;
   };
 }

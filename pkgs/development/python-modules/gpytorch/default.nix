@@ -1,49 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, linear_operator
-, scikit-learn
-, torch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaxtyping,
+  linear-operator,
+  mpmath,
+  scikit-learn,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  torch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.10";
-  format = "pyproject";
+  version = "1.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KY3ItkVjBfIYMkZAmD56EBGR9YN/MRN7b2K3zrK6Qmk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jdEJdUFIyM7TTKUHY8epjyZCGolH8nrr7FCyfw+x56s=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'find_version("gpytorch", "version.py")' \"$version\"
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
-    linear_operator
+  pythonRelaxDeps = [ "jaxtyping" ];
+
+  dependencies = [
+    jaxtyping
+    linear-operator
+    mpmath
     scikit-learn
+    scipy
     torch
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "gpytorch" ];
+
   disabledTests = [
     # AssertionError on number of warnings emitted
     "test_deprecated_methods"
     # flaky numerical tests
     "test_classification_error"
     "test_matmul_matrix_broadcast"
+    "test_optimization_optimal_error"
+    # https://github.com/cornellius-gp/gpytorch/issues/2396
+    "test_t_matmul_matrix"
   ];
 
   meta = with lib; {
-    description = "A highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
+    description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

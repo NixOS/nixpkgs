@@ -4,16 +4,15 @@
 
 let
   pname = "elixir-ls";
-  version = "0.14.6";
+  version = "0.24.1";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-O977DZLWPyLafIaOTPZKI4MOtK9E9TDProf2xyk05aI";
-    fetchSubmodules = true;
+    hash = "sha256-d5O7DGEKuwHbjxwJa3HNtaycQIzFTi74UxszRH7TVzQ=";
   };
 in
-mixRelease  {
+mixRelease {
   inherit pname version src elixir;
 
   stripDebug = true;
@@ -21,7 +20,7 @@ mixRelease  {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-jF1Plkz1D85aWkiNgeBlJmHndhr7us+8+m/gMkXHvDw=";
+    hash = "sha256-OxQeIdqjY/k02q+nLQnZ+/Zxy/bdjjSCRrVu0usQcsc=";
   };
 
   # elixir-ls is an umbrella app
@@ -37,7 +36,7 @@ mixRelease  {
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
-    mix do compile --no-deps-check, elixir_ls.release
+    mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
     runHook postBuild
   '';
 
@@ -49,10 +48,17 @@ mixRelease  {
     substitute release/language_server.sh $out/bin/elixir-ls \
       --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
-    # prepare the launcher
+
+    substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-debug-adapter
+    # prepare the launchers
     substituteInPlace $out/lib/launch.sh \
       --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
                 "ERL_LIBS=$out/lib:\$ERL_LIBS" \
+      --replace "exec elixir" "exec ${elixir}/bin/elixir" \
+      --replace 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir"
+    substituteInPlace $out/lib/exec.zsh \
       --replace "exec elixir" "exec ${elixir}/bin/elixir"
     runHook postInstall
   '';
@@ -70,6 +76,7 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
   passthru.updateScript = nix-update-script { };

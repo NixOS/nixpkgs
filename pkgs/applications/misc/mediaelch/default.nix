@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , qttools
@@ -24,24 +23,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.10.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "sha256-hipOOG+ibfsJZKLcnB6a5+OOvSs4WUdpEY+RiVKJc+k=";
+    hash = "sha256-m2d4lnyD8HhhqovMdeG36dMK+4kJA7rlPHE2tlhfevo=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # https://github.com/Komet/MediaElch/issues/1557
-    # build: Fix build issue with Qt 6.5 on macOS (also other platforms)
-    (fetchpatch {
-      url = "https://github.com/Komet/MediaElch/commit/872b21decf95d70073400bedbe1ad183a8267791.patch";
-      hash = "sha256-D1Ui5xg5cpvNX4IHfXQ7wN9I7Y3SuPFOWxWidcAlLEA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -79,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
+    mainProgram = "MediaElch";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;

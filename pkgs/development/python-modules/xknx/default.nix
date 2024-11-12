@@ -1,53 +1,60 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, ifaddr
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  ifaddr,
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.10.0";
-  format = "pyproject";
+  version = "3.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
+    repo = "xknx";
     rev = "refs/tags/${version}";
-    hash = "sha256-3eSS3V1EgLRf8lB3icG4pNGq0VbXjfgwEQ91mMRKyAE=";
+    hash = "sha256-FLGOY7IUdLvRbwSWUYbJl0VzOCJVwiG+2C+CjFAqI6g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    async-timeout
+  dependencies = [
     cryptography
     ifaddr
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xknx"
-  ];
+  pythonImportsCheck = [ "xknx" ];
 
   disabledTests = [
     # Test requires network access
     "test_scan_timeout"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
+    # RuntimeError: Event loop is closed
+    "test_has_group_address_localtime"
+    "test_invalid_authentication"
+    "test_invalid_frames"
+    "test_no_authentication"
+    "test_process_read_localtime"
+    "test_sync_date"
+    "test_sync_datetime"
+    "test_sync_time_local"
   ];
 
   meta = with lib; {

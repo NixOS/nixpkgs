@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
-, fetchpatch
 , legacySupport ? false
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.hostPlatform.isStatic # generates static libraries *only*
+, enableStatic ? static
 # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -21,17 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "sha256-tHHHIsQU7vJySrVhJuMKUSq11MzkmC+Pcsj00uFJdnQ=";
+    hash = "sha256-qcd92hQqVBjMT3hyntjcgk29o9wGQsg5Hg7HE5C0UNc=";
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
@@ -46,16 +46,14 @@ stdenv.mkDerivation rec {
     substituteInPlace build/cmake/tests/CMakeLists.txt \
       --replace 'libzstd_static' 'libzstd_shared'
     sed -i \
-      "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      "1aexport ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
   '';
-
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   cmakeFlags = lib.attrsets.mapAttrsToList
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
-      BUILD_STATIC = static;
+      BUILD_STATIC = enableStatic;
       BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;
@@ -89,7 +87,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString buildContrib (
     ''
       cp contrib/pzstd/pzstd $bin/bin/pzstd
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
     ''
   );
@@ -124,7 +122,7 @@ stdenv.mkDerivation rec {
     homepage = "https://facebook.github.io/zstd/";
     changelog = "https://github.com/facebook/zstd/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
-
+    mainProgram = "zstd";
     platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
   };

@@ -44,6 +44,7 @@
 
   meta = with lib; {
     description = "6DoF Head tracking software";
+    mainProgram = "aitrack";
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
     license = licenses.mit;

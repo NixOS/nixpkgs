@@ -12,13 +12,12 @@
   # tag command must create file named $TAG_FILE
   sourceWithTagsDerivation = {name, src, srcDir ? ".", tagSuffix ? "_tags", createTagFiles ? []} :
     stdenv.mkDerivation {
-    phases = "unpackPhase buildPhase";
     inherit src srcDir tagSuffix;
     name = "${name}-source-with-tags";
     nativeBuildInputs = [ unzip ];
     # using separate tag directory so that you don't have to glob that much files when starting your editor
     # is this a good choice?
-    buildPhase =
+    installPhase =
       let createTags = lib.concatStringsSep "\n"
           (map (a: ''
             TAG_FILE="$SRC_DEST/${a.name}$tagSuffix"
@@ -59,7 +58,7 @@
                     # without this creating tag files for lifted-base fails
                     export LC_ALL=en_US.UTF-8
                     export LANG=en_US.UTF-8
-                    ${lib.optionalString stdenv.isLinux "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;"}
+                    ${lib.optionalString stdenv.hostPlatform.isLinux "export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive;"}
 
                     ${toString hasktags}/bin/hasktags --ignore-close-implementation --ctags .
                     mv tags \$TAG_FILE

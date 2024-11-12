@@ -767,7 +767,7 @@ xml.sax.parse(f, TemplateHandler())
 f.close()
 
 f = os.popen("bunzip2 -c %s" % fn, "r")
-out = os.popen("dictfmt -p wiktionary-en --locale en_US.UTF-8 --columns 0 -u http://en.wiktionary.org", "w")
+out = os.popen("dictfmt -p wiktionary-en --utf8 --columns 0 -u http://en.wiktionary.org", "w")
 
 out.write("%%h English Wiktionary\n%s" % info)
 xml.sax.parse(f, WordHandler())

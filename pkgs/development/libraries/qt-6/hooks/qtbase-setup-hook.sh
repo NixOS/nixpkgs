@@ -15,20 +15,6 @@ else # Only set up Qt once.
     . @fix_qt_builtin_paths@
     . @fix_qt_module_paths@
 
-    # Disable debug symbols if qtbase was built without debugging.
-    # This stops -dev paths from leaking into other outputs.
-    if [ -z "@debug@" ]; then
-        NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE-}${NIX_CFLAGS_COMPILE:+ }-DQT_NO_DEBUG"
-    fi
-
-    # Integration with CMake:
-    # Set the CMake build type corresponding to how qtbase was built.
-    if [ -n "@debug@" ]; then
-        cmakeBuildType="Debug"
-    else
-        cmakeBuildType="Release"
-    fi
-
     # Build tools are often confused if QMAKE is unset.
     export QMAKE=@out@/bin/qmake
 
@@ -85,7 +71,7 @@ else # Only set up Qt once.
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
-        postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+        appendToVar postPhases postPatchMkspecs
     fi
 
     qtPreHook() {
@@ -95,7 +81,7 @@ else # Only set up Qt once.
             exit 1
         fi
     }
-    prePhases+=" qtPreHook"
+    appendToVar prePhases qtPreHook
 
     addQtModulePrefix() {
         addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1

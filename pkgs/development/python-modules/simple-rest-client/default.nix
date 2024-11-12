@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, python-slugify
-, python-status
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  python-slugify,
+  python-status,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simple-rest-client";
-  version = "1.1.3";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "allisson";
     repo = "python-simple-rest-client";
     rev = version;
-    hash = "sha256-HdGYLDrqQvd7hvjwhC5dY2amdHUZHTYJvD1QP89lcXU=";
+    hash = "sha256-IaLo7nBMIabi4ZjZ4ZLJliCL/dzidaCBCmn0cq7Fzdw=";
   };
 
   propagatedBuildInputs = [
@@ -45,13 +46,9 @@ buildPythonPackage rec {
       --replace "asyncmock" ""
   '';
 
-  disabledTestPaths = [
-    "tests/test_decorators.py"
-  ];
+  disabledTestPaths = [ "tests/test_decorators.py" ];
 
-  pythonImportsCheck = [
-    "simple_rest_client"
-  ];
+  pythonImportsCheck = [ "simple_rest_client" ];
 
   meta = with lib; {
     description = "Simple REST client for Python";

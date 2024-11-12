@@ -40,10 +40,10 @@ assert enableXinetdService -> xinetd != null;
 
 stdenv.mkDerivation rec {
   pname = "dysnomia";
-  version = "0.10.1";
+  version = "0.10.2";
   src = fetchurl {
     url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-${version}/dysnomia-${version}.tar.gz";
-    sha256 = "0w9601g8zpaxrmynx6mh8zz85ldpb8psp7cc6ls8v3srjpj1l5n3";
+    sha256 = "08ijqbijs2h584dvsb3z858ha385fqd5jfxc51lks9lxxv0sfkr4";
   };
 
   configureFlags = [
@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
      (if enableNginxWebApplication then "--with-nginx" else "--without-nginx")
      (if enableXinetdService then "--with-xinetd" else "--without-xinetd")
      (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
-     (if stdenv.isDarwin then "--with-launchd" else "--without-launchd")
+     (if stdenv.hostPlatform.isDarwin then "--with-launchd" else "--without-launchd")
      "--with-job-template=${jobTemplate}"
    ] ++ lib.optional enableLegacy "--enable-legacy";
 
   buildInputs = [ getopt netcat ]
-    ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.hostPlatform.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
     ++ lib.optional enableMySQLDatabase mariadb.out
     ++ lib.optional enablePostgreSQLDatabase postgresql

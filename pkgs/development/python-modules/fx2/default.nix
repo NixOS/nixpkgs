@@ -1,26 +1,34 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchFromGitHub
-, sdcc
-, libusb1
-, crcmod
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sdcc,
+  libusb1,
+  setuptools-scm,
+  crcmod,
 }:
 
 buildPythonPackage rec {
   pname = "fx2";
-  version = "0.11";
+  version = "0.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
     rev = "v${version}";
-    hash = "sha256-uJpXsUMFqJY7mjj1rtfc0XWEfNDxO1xXobgBDGFHnp4=";
+    hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
   };
 
-  nativeBuildInputs = [ sdcc ];
+  nativeBuildInputs = [
+    setuptools-scm
+    sdcc
+  ];
 
-  propagatedBuildInputs = [ libusb1 crcmod ];
+  propagatedBuildInputs = [
+    libusb1
+    crcmod
+  ];
 
   preBuild = ''
     make -C firmware
@@ -38,8 +46,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
+    mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = [ ];
   };
 }

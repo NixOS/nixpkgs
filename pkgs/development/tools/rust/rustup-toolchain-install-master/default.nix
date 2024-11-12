@@ -41,13 +41,13 @@ rustPlatform.buildRustPackage rec {
           --subst-var libPath
       '';
     in
-    lib.optionals stdenv.isLinux [ patchelfPatch ];
+    lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Install a rustc master toolchain usable from rustup";
+    mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];

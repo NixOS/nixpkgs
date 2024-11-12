@@ -1,36 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, levenshtein
-, pytesseract
-, opencv4
-, fuzzywuzzy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  levenshtein,
+  pytesseract,
+  opencv-python,
+  fuzzywuzzy,
 }:
 
 buildPythonPackage rec {
   pname = "videocr";
   version = "0.1.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1clifwczvhvbaw2spgxkkyqsbqh21vyfw3rh094pxfmq89ylyj63";
+    hash = "sha256-w0hPfUK4un5JAjAP7vwOAuKlsZ+zv6sFV2vD/Rl3kbI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     levenshtein
     pytesseract
-    opencv4
+    opencv-python
     fuzzywuzzy
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "python-Levenshtein" "Levenshtein" \
-      --replace "opencv-python" "opencv"
+      --replace-fail "python-Levenshtein" "Levenshtein"
     substituteInPlace videocr/constants.py \
-      --replace "master" "main"
+      --replace-fail "master" "main"
     substituteInPlace videocr/video.py \
-      --replace '--tessdata-dir "{}"' '--tessdata-dir="{}"'
+      --replace-fail '--tessdata-dir "{}"' '--tessdata-dir="{}"'
   '';
 
   # Project has no tests

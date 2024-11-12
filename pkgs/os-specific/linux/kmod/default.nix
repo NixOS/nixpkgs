@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoconf, automake, docbook_xml_dtd_42
+{ stdenv, lib, fetchzip, fetchpatch, autoconf, automake, docbook_xml_dtd_42
 , docbook_xml_dtd_43, docbook_xsl, gtk-doc, libtool, pkg-config
 , libxslt, xz, zstd, elf-header
 , withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -12,7 +12,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "30";
+  version = "31";
 
   # autogen.sh is missing from the release tarball,
   # and we need to run it to regenerate gtk_doc.make,
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   # https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/commit/.gitignore?id=61a93a043aa52ad62a11ba940d4ba93cb3254e78
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${version}.tar.gz";
-    sha256 = "sha256-/dih2LoqgRrAsVdHRwld28T8pXgqnzapnQhqkXnxbbc=";
+    hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
   };
 
   outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";
@@ -48,8 +48,14 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withDevdoc "gtk-doc")
   ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ]
-    ++ lib.optional withStatic ./enable-static.patch;
+  patches = [
+    ./module-dir.patch
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
+      hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
+    })
+  ] ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do

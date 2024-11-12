@@ -1,25 +1,26 @@
-{ lib
-, attrs
-, boltons
-, buildPythonPackage
-, face
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pyyaml
+{
+  lib,
+  attrs,
+  boltons,
+  buildPythonPackage,
+  face,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "23.3.0";
+  version = "23.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AxaZKA+kZmBI5D0uq2i+EET/zUh6t0rLeS3i7rC8JRU=";
+    hash = "sha256-Bq9eNIaqzFk4K6NOU+vqvXqTRdePfby+4m8DuqS4O6w=";
   };
 
   postPatch = ''
@@ -43,20 +44,21 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests = [
-    # Test is outdated (was made for PyYAML 3.x)
-    "test_main_yaml_target"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    "test_regular_error_stack"
-    "test_long_target_repr"
-  ];
+  disabledTests =
+    [
+      # Test is outdated (was made for PyYAML 3.x)
+      "test_main_yaml_target"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      "test_regular_error_stack"
+      "test_long_target_repr"
+    ];
 
-  pythonImportsCheck = [
-    "glom"
-  ];
+  pythonImportsCheck = [ "glom" ];
 
   meta = with lib; {
     description = "Restructuring data, the Python way";
+    mainProgram = "glom";
     longDescription = ''
       glom helps pull together objects from other objects in a
       declarative, dynamic, and downright simple way.

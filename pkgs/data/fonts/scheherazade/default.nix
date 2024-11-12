@@ -1,10 +1,11 @@
-{ lib, stdenvNoCC, fetchzip, version ? "3.300" }:
+{ lib, stdenvNoCC, fetchzip, version ? "4.000" }:
 
 let
   new = lib.versionAtLeast version "3.000";
   hash = {
     "2.100" = "sha256-d2UyOOOnmE1afCwyIrM1bL3lQC7XRwh03hzetk/4V30=";
     "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
+    "4.000" = "sha256-FhgHlHCfojIl3Y11EDYhNTmLYwQ60OrwnA9nbZbZGJE=";
   }."${version}";
   pname = "scheherazade${lib.optionalString new "-new"}";
 in
@@ -28,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
-    description = "A font designed in a similar style to traditional Naskh typefaces";
+    description = "Font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
 
       Scheherazade${lib.optionalString new " New"}, named after the heroine of

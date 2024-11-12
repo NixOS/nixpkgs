@@ -1,30 +1,35 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, lib
-, numpy
-, pandas
-, pyarrow
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  lib,
+  numpy,
+  pandas,
+  pyarrow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "embedding-reader";
-  version = "1.5.0";
+  version = "1.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-uyeIcAW9O9PR4cqmifC6Lx+Hn6XPb1RH/ksmUWvbdtw=";
+    hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pyarrow" ];
 
-  propagatedBuildInputs = [ fsspec numpy pandas pyarrow ];
+  propagatedBuildInputs = [
+    fsspec
+    numpy
+    pandas
+    pyarrow
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

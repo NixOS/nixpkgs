@@ -26,12 +26,12 @@ let
         inherit hash;
       };
 
-      ldflags = [ "-s" "-w" ];
+      ldflags = [ "-s" "-w" "-X 'github.com/hashicorp/terraform/version.dev=no'" ];
 
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-          --replace "/bin/stty" "${coreutils}/bin/stty"
+          --replace-fail "/bin/stty" "${coreutils}/bin/stty"
       '';
 
       nativeBuildInputs = [ installShellFiles ];
@@ -53,18 +53,17 @@ let
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
         changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-        license = licenses.mpl20;
+        license = licenses.bsl11;
         maintainers = with maintainers; [
           Chili-Man
-          babariviere
           kalbasit
-          marsam
-          maxeaubrey
           timstott
           zimbatm
           zowoq
           techknowlogick
+          qjoly
         ];
+        mainProgram = "terraform";
       };
     } // attrs');
 
@@ -166,9 +165,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.5.1";
-    hash = "sha256-dqnJGIoUJP37Z77TR2RBxP94Hx3AZbx90m8z1FoYdw0=";
-    vendorHash = "sha256-tfCfJj39VP+P4qhJTpEIAi4XB+6VYtVKkV/bTrtnFA0=";
+    version = "1.9.8";
+    hash = "sha256-0xBhOdaIbw1fLmbI4KDvQoHD4BmVZoiMT/zv9MnwuD4=";
+    vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

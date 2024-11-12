@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, setuptools
-, isPyPy
-, fetchPypi
-, pythonOlder
-, cffi
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  fetchPypi,
+  pythonOlder,
+  cffi,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -21,26 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-QzxBDCF3BXcF2iqfLNAd0VdJOyp6wUyFk6FrPatra/s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     six
     cffi
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bcrypt"
-  ];
+  pythonImportsCheck = [ "bcrypt" ];
 
   meta = with lib; {
     description = "Modern password hashing for your software and your servers";

@@ -1,53 +1,51 @@
-{ lib
-, buildPythonPackage
-, environs
-, fetchFromGitHub
-, poetry-core
-, pytest-mock
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  environs,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "5.12.0";
-  format = "pyproject";
+  version = "7.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
-    repo = pname;
+    repo = "deezer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fJRGtes5EdGHiTJ5SDOyZT9NEnghbu+7I9OD2h4JOjw=";
+    hash = "sha256-d+cN6f6jw8D+noxyYl/TpDAkeTb8Krt+r0/Ai65cvdU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     environs
+    pytest-cov-stub
     pytest-mock
     pytest-vcr
     pytestCheckHook
-  ];
-
-  propagatedBuildInputs = [
-    requests
     tornado
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=deezer" ""
-  '';
+  pythonImportsCheck = [ "deezer" ];
 
-  pythonImportsCheck = [
-    "deezer"
+  disabledTests = [
+    # JSONDecodeError issue
+    "test_get_user_flow"
+    "test_with_language_header"
   ];
 
   meta = with lib; {

@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     mongoc
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
   ];
 
   cmakeFlags = [

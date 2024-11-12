@@ -108,6 +108,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+     */
+  dontCheckIf = condition: if condition then dontCheck else lib.id;
 
   /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
@@ -178,6 +183,13 @@ rec {
   unmarkBroken = overrideCabal (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
   markUnbroken = overrideCabal (drv: { broken = false; });
+
+  /* disableParallelBuilding drops the -j<n> option from the GHC
+     command line for the given package. This can be useful in rare
+     situations where parallel building of a package causes GHC to
+     fail for some reason.
+   */
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 
   enableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = false; });
@@ -285,9 +297,9 @@ rec {
   /* link executables statically against haskell libs to reduce
      closure size
    */
-  justStaticExecutables = overrideCabal (drv: {
+ justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
     postFixup = drv.postFixup or "" + ''
@@ -295,6 +307,7 @@ rec {
       # Remove every directory which could have links to other store paths.
       rm -rf $out/lib $out/nix-support $out/share/doc
     '';
+    disallowGhcReference = true;
   });
 
   /* Build a source distribution tarball instead of using the source files
@@ -339,14 +352,14 @@ rec {
     , ignorePackages     ? []
     } : drv :
       overrideCabal (_drv: {
-        postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
+        postBuild =
+          let args = lib.concatStringsSep " " (
+                       lib.optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       lib.optional ignoreMainModule   "--ignore-main-module" ++
                        map (pkg: "--ignore-package ${pkg}") ignorePackages
                      );
           in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
+             lib.optionalString (args != "") " ${args}";
       }) (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
 
   buildStackProject = pkgs.callPackage ../generic-stack-builder.nix { };
@@ -354,7 +367,12 @@ rec {
   /* Add a dummy command to trigger a build despite an equivalent
      earlier build that is present in the store or cache.
    */
-  triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+  triggerRebuild = i: overrideCabal (drv: {
+    postUnpack = drv.postUnpack or "" + ''
+
+      # trigger rebuild ${toString i}
+    '';
+  });
 
   /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
@@ -393,7 +411,7 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  { doCheck ? !isCross
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };
@@ -407,7 +425,9 @@ rec {
 
     self: super:
       let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
+        haskellPaths =
+          lib.filter (lib.hasSuffix ".nix")
+            (builtins.attrNames (builtins.readDir directory));
 
         toKeyVal = file: {
           name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
@@ -446,7 +466,7 @@ rec {
     which is cross aware instead.
   */
   generateOptparseApplicativeCompletions = commands: pkg:
-    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
       (pkgs.lib.foldr __generateOptparseApplicativeCompletion pkg commands);
 
   /*
@@ -455,7 +475,7 @@ rec {
     which is cross aware instead.
   */
   generateOptparseApplicativeCompletion = command: pkg:
-    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
       (__generateOptparseApplicativeCompletion command pkg);
 
   # Don't fail at configure time if there are multiple versions of the

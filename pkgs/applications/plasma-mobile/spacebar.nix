@@ -49,8 +49,9 @@ mkDerivation {
 
   meta = with lib; {
     description = "SMS application for Plasma Mobile";
+    mainProgram = "spacebar";
     homepage = "https://invent.kde.org/plasma-mobile/spacebar";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

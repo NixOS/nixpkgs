@@ -1,26 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
   pname = "xxhash";
+  version = "3.5.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gv1Hr4lVxdtzD2MK1TrnmM9/rgrLZM67PPlNNcR90Ig=";
+    hash = "sha256-hPLK3flRycv43C4iqJ1Mz12GORrGQY/oHjxn0M9gtF8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  pythonImportsCheck = [ "xxhash" ];
 
   meta = with lib; {
+    description = "Python Binding for xxHash";
     homepage = "https://github.com/ifduyue/python-xxhash";
-    description = "Python Binding for xxHash https://pypi.org/project/xxhash/";
+    changelog = "https://github.com/ifduyue/python-xxhash/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
-    maintainers = [ maintainers.teh ];
+    maintainers = with maintainers; [ teh ];
   };
 }

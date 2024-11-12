@@ -25,11 +25,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchurl {
-    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
-    hash = "sha256-VOG//e0wMoKKcN4iwqGpTRwJf8RRPg/b/P2/O/9rcJI=";
+    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
+    hash = "sha256-VvXkIOfCVFWk6WwZtnL4D5oKNftb7MkkfJ49XcxhfzQ=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -84,6 +84,8 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
+  enableParallelBuilding = true;
+
   NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
@@ -99,6 +101,11 @@ in stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep ]}
     wrapProgram $out/libexec/postfix/postfix-script \
       --prefix PATH ":" ${lib.makeBinPath [ coreutils findutils gnugrep gawk gnused ]}
+
+    # Avoid dev-only outputs from being retained in final closure.
+    # `makedefs.out` is a documenttation-only file. It should be safe
+    # to store invalid store paths there.
+    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i $out/etc/postfix/makedefs.out
   '';
 
   passthru = {
@@ -109,7 +116,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";
-    description = "A fast, easy to administer, and secure mail server";
+    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+    description = "Fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin dotlambda lewo ];

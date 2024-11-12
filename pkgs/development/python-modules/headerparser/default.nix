@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "headerparser";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jwodder";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-KJJt85iC/4oBoIelB2zUJVyHSppFem/22v6F30P5nYM=";
+    repo = "headerparser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CWXha7BYVO5JFuhWP8OZ95fhUsZ3Jo0cgPAM+O5bfec=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    six
+    attrs
+    deprecated
   ];
 
   nativeCheckInputs = [
@@ -35,20 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace "--cov=headerparser" "" \
-      --replace "--no-cov-on-fail" "" \
-      --replace "--flakes" ""
-  '';
-
-  pythonImportsCheck = [
-    "headerparser"
-  ];
+  pythonImportsCheck = [ "headerparser" ];
 
   meta = with lib; {
     description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
     homepage = "https://github.com/jwodder/headerparser";
+    changelog = "https://github.com/wheelodex/headerparser/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ayazhafiz ];
   };

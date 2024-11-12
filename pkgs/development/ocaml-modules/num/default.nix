@@ -28,7 +28,7 @@ stdenv.mkDerivation (rec {
     inherit (ocaml.meta) platforms;
     inherit (src.meta) homepage;
   };
-} // (if lib.versions.majorMinor ocaml.version == "4.06" then {
+} // (lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "4.06") {
     env.NIX_CFLAGS_COMPILE = "-fcommon";
-  } else {})
+  })
 )

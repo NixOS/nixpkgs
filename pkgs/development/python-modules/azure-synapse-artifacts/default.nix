@@ -1,26 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi
-, azure-common
-, azure-core
-, msrest
+{
+  lib,
+  azure-common,
+  azure-core,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.16.0";
+  version = "0.19.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-J96cBqCCajK34M7v+2h6t2ptm7QwmfQt25674Q4Nr94=";
+    hash = "sha256-UvCSsiZ315IoDwvMI02JLJ9zjpPI4Ut0wZUQG5uicYQ=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-core
-    msrest
+    azure-mgmt-core
+    isodate
   ];
 
-  # zero tests run
+  # Tests are only available in mono-repo
   doCheck = false;
 
   pythonImportsCheck = [ "azure.synapse.artifacts" ];
@@ -28,7 +36,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Azure Synapse Artifacts Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-artifacts_${version}/sdk/synapse/azure-synapse-artifacts/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

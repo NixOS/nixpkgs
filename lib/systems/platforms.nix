@@ -201,13 +201,21 @@ rec {
       target = "zImage";
     };
     gcc = {
-      arch = "armv6";
-      fpu = "vfp";
+      # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
+      arch = "armv6kz";
+      fpu = "vfpv2";
     };
   };
 
   # Legacy attribute, for compatibility with existing configs only.
   raspberrypi2 = armv7l-hf-multiplatform;
+
+  # Nvidia Bluefield 2 (w. crypto support)
+  bluefield2 = {
+    gcc = {
+      arch = "armv8-a+fp+simd+crc+crypto";
+    };
+  };
 
   zero-gravitas = {
     linux-kernel = {
@@ -528,11 +536,9 @@ rec {
       name = "riscv-multiplatform";
       target = "Image";
       autoModules = true;
+      preferBuiltin = true;
       baseConfig = "defconfig";
       DTB = true;
-      extraConfig = ''
-        SERIAL_OF_PLATFORM y
-      '';
     };
   };
 

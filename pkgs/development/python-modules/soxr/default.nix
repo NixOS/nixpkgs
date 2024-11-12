@@ -1,51 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-sytem
-, cython_3
-, numpy
-, setuptools
-, setuptools-scm
-, gnutar
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  scikit-build-core,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 
-# native
-, libsoxr
+  # native dependencies
+  libsoxr,
 
-# tests
-, pytestCheckHook
+  # dependencies
+  numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.3.5";
-  format = "pyproject";
+  version = "0.5.0.post1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
+    hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  patches = [ ./cmake-nanobind.patch ];
 
   nativeBuildInputs = [
-    cython_3
-    gnutar
-    numpy
-    setuptools
-    setuptools-scm
+    cmake
+    ninja
   ];
 
-  pythonImportsCheck = [
-    "soxr"
+  dontUseCmakeConfigure = true;
+
+  pypaBuildFlags = [
+    "--config=cmake.define.USE_SYSTEM_LIBSOXR=ON"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system =
+    [
+      scikit-build-core
+      nanobind
+      setuptools
+      setuptools-scm
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      typing-extensions
+    ];
+
+  buildInputs = [ libsoxr ];
+
+  dependencies = [ numpy ];
+
+  pythonImportsCheck = [ "soxr" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "High quality, one-dimensional sample-rate conversion library";

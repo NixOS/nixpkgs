@@ -4,6 +4,7 @@
 , ncurses6, gmp, libiconv, numactl
 , llvmPackages
 , coreutils
+, rcodesign
 , targetPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
@@ -190,7 +191,15 @@ stdenv.mkDerivation rec {
   #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
   #       and update this comment accordingly.
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    # Upstream binaries may not be linker-signed, which invalidates their signatures
+    # because `install_name_tool` will only replace a signature if it is both
+    # an ad hoc signature and the signature is flagged as linker-signed.
+    #
+    # rcodesign is used to replace the signature instead of sigtool because it
+    # supports setting the linker-signed flag, which will ensure future processing
+    # of the binaries does not invalidate their signatures.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ rcodesign ];
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -210,6 +219,7 @@ stdenv.mkDerivation rec {
       (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
         lib.concatStringsSep "\n" [
           (''
+            shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
@@ -235,20 +245,27 @@ stdenv.mkDerivation rec {
         ])
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin (''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
         install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+    '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        # Resign the binary and set the linker-signed flag. Ignore failures when the file is an object file.
+        # Object files don’t have signatures, so ignoring the failures is harmless.
+        rcodesign sign --code-signature-flags linker-signed $exe || true
+    '' + ''
       done
-    '' +
+    '') +
 
     # Some scripts used during the build need to have their shebangs patched
     ''
       patchShebangs ghc-${version}/utils/
       patchShebangs ghc-${version}/configure
+      test -d ghc-${version}/inplace/bin && \
+        patchShebangs ghc-${version}/inplace/bin
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
     # Note that musl bindists do not contain them,
@@ -257,7 +274,7 @@ stdenv.mkDerivation rec {
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
@@ -268,7 +285,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '' +
@@ -297,7 +314,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-includes=${lib.getDev gmp}/include"
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-  ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
@@ -332,7 +349,7 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString stdenv.isLinux
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
@@ -360,7 +377,7 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
         fi
       done
-    '') + lib.optionalString stdenv.isDarwin ''
+    '') + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -417,7 +434,10 @@ stdenv.mkDerivation rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
-  } // lib.optionalAttrs (binDistUsed.isHadrian or false) {
+  }
+  # We duplicate binDistUsed here since we have a sensible default even if no bindist is avaible,
+  # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
+  // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
     # Normal GHC derivations expose the hadrian derivation used to build them
     # here. In the case of bindists we just make sure that the attribute exists,
     # as it is used for checking if a GHC derivation has been built with hadrian.
@@ -428,7 +448,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     # HACK: since we can't encode the libc / abi in platforms, we need
     # to make the platform list dependent on the evaluation platform
@@ -436,7 +456,7 @@ stdenv.mkDerivation rec {
     # platforms than the default libcs (i. e. glibc / libSystem).
     # This is done for the benefit of Hydra, so `packagePlatforms`
     # won't return any platforms that would cause an evaluation
-    # failure for `pkgsMusl.haskell.compiler.ghc8102Binary`, as
+    # failure for `pkgsMusl.haskell.compiler.ghc8107Binary`, as
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};

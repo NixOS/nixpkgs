@@ -1,54 +1,27 @@
-# Based on previous attempts:
-#  -  <https://github.com/msteen/nixos-vsliveshare/blob/master/pkgs/vsliveshare/default.nix>
-#  -  <https://github.com/NixOS/nixpkgs/issues/41189>
-{ lib, gccStdenv, vscode-utils
-, autoPatchelfHook, bash, makeWrapper
-, curl, gcc, libsecret, libunwind, libX11, lttng-ust, util-linux
-, desktop-file-utils, xsel
+{
+  lib,
+  vscode-utils,
+  xsel,
 }:
 
-let
-  # https://docs.microsoft.com/en-us/visualstudio/liveshare/reference/linux#install-prerequisites-manually
-  libs = [
-    # Credential Storage
-    libsecret
-
-    # NodeJS
-    libX11
-
-    # https://github.com/flathub/com.visualstudio.code.oss/issues/11#issuecomment-392709170
-    libunwind
-    lttng-ust
-    curl
-
-    # General
-    gcc.cc.lib
-    util-linux # libuuid
-  ];
-
-in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.5834";
-    sha256 = "sha256-+KfivY8W1VtUxhdXuUKI5e1elo6Ert1Tsf4xVXsKB3Y=";
+    version = "1.0.5918";
+    hash = "sha256-Tk0mKydUF8M7l7NC9wEA7t2rzJWy/mq4/HvIHI2/ldQ=";
   };
-}).overrideAttrs({ buildInputs ? [], ... }: {
-  buildInputs = buildInputs ++ libs;
 
-  # Using a patch file won't work, because the file changes too often, causing the patch to fail on most updates.
-  # Rather than patching the calls to functions, we modify the functions to return what we want,
-  # which is less likely to break in the future.
   postPatch = ''
     substituteInPlace extension.js \
-      --replace "'xsel'" "'${xsel}/bin/xsel'"
+      --replace-fail '"xsel"' '"${xsel}/bin/xsel"'
   '';
 
   meta = {
-    description = "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
+    description = "Real-time collaborative development for VS Code";
     homepage = "https://aka.ms/vsls-docs";
+    changelog = "https://marketplace.visualstudio.com/items/MS-vsliveshare.vsliveshare/changelog";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.V ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = builtins.attrValues { inherit (lib.maintainers) jraygauthier V; };
   };
-})
+}

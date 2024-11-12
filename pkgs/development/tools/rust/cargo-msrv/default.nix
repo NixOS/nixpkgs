@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-msrv";
-  version = "0.15.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rmWPkxxrpVamYHII0xkZq62ubL3/jrcqXUvFH9VuNtg=";
+    sha256 = "sha256-pgSwyq5KK9PCsmMnquufaw2oW7VSm93xRmozi/uqzNc=";
   };
 
-  cargoSha256 = "sha256-/Bspy94uIP/e4uJY8qo+UPK1tnPjglxiMWeYWx2qoHk=";
+  cargoHash = "sha256-4eGoNKv76+3QVRUbTPiqTiLbQoOX6mVouJ3puxN6pMY=";
 
   passthru = {
     updateScript = gitUpdater {
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs = if stdenv.isDarwin
+  buildInputs = if stdenv.hostPlatform.isDarwin
     then [ libiconv Security ]
     else [ openssl ];
 
@@ -47,8 +47,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
+    mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with maintainers; [ otavio matthiasbeyer ];
   };
 }

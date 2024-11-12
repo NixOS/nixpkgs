@@ -2,15 +2,13 @@
 , stdenv
 , fetchurl
 , fetchFromGitLab
+, fetchpatch
 , cairo
 , cmake
-, pcre
 , boost
-, cups-filters
 , curl
 , fontconfig
 , freetype
-, inkscape
 , lcms
 , libiconv
 , libintl
@@ -19,15 +17,23 @@
 , openjpeg
 , pkg-config
 , python3
-, scribus
-, texlive
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
+, gpgmeSupport ? false, gpgme ? null
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
+
+# for passthru.tests
+, cups-filters
+, gdal
+, gegl
+, inkscape
+, pdfslicer
+, scribus
+, vips
 }:
 
 let
@@ -41,20 +47,29 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "920c89f8f43bdfe8966c8e397e7f67f5302e9435";
-    hash = "sha256-ySP7zcVI3HW4lk8oqVMPTlFh5pgvBwqcE0EXE71iWos=";
+    rev = "400f3ff05b2b1c0ae17797a0bd50e75e35c1f1b1";
+    hash = "sha256-Y4aNOJLqo4g6tTW6TAb60jAWtBhRgT/JXsub12vi3aU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "23.02.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
+  version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    hash = "sha256-MxXdonD+KzXPH0HSdZSMOWUvqGO5DeB2b2spPZpVj8k=";
+    hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://access.redhat.com/security/cve/CVE-2024-6239
+      name = "CVE-2024-6239.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
+      hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs = [
     boost
-    pcre
     libiconv
     libintl
   ] ++ lib.optionals withData [
@@ -88,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     qtbase
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
+  ] ++ lib.optionals gpgmeSupport [
+    gpgme
   ];
 
   cmakeFlags = [
@@ -95,19 +111,34 @@ stdenv.mkDerivation (finalAttrs: rec {
     (mkFlag (!minimal) "GLIB")
     (mkFlag (!minimal) "CPP")
     (mkFlag (!minimal) "LIBCURL")
+    (mkFlag (!minimal) "LCMS")
+    (mkFlag (!minimal) "LIBTIFF")
+    (mkFlag (!minimal) "NSS3")
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
-  ] ++ lib.optionals finalAttrs.doCheck [
+    (mkFlag gpgmeSupport "GPGME")
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
     "-DTESTDATADIR=${testData}"
   ];
-  disallowedReferences = lib.optional finalAttrs.doCheck testData;
+  disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
 
   # Workaround #54606
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
+
+  # Work around gpgme trying to write to $HOME during qt5 and qt6 tests:
+  preCheck = lib.optionalString gpgmeSupport ''
+    HOME_orig="$HOME"
+    export HOME="$(mktemp -d)"
+  '';
+
+  postCheck = lib.optionalString gpgmeSupport ''
+    export HOME="$HOME_orig"
+    unset -v HOME_orig
   '';
 
   doCheck = true;
@@ -116,13 +147,26 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters texlive scribus;
+      inherit
+        cups-filters
+        inkscape
+        scribus
+      ;
+
+      inherit
+        gegl
+        pdfslicer
+        vips
+      ;
+      gdal = gdal.override { usePoppler = true; };
+      python-poppler-qt5 = python3.pkgs.poppler-qt5;
     };
   };
 
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
-    description = "A PDF rendering library";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
+    description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.

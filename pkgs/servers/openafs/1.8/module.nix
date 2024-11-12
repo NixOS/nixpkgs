@@ -14,11 +14,9 @@
 , fetchpatch
 }:
 
-with (import ./srcs.nix {
-  inherit fetchurl;
-});
-
 let
+  inherit (import ./srcs.nix { inherit fetchurl; }) src version;
+
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -32,58 +30,38 @@ stdenv.mkDerivation {
   version = "${version}-${kernel.modDirVersion}";
   inherit src;
 
+  patches = [
+    # Linux-6.10: Use filemap_alloc_folio when avail
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/0f6a3a402f4a66114da9231032bd68cdc4dee7bc.patch";
+      hash = "sha256-1D0mijyF4hbd+xCONT50cd6T9eCpeM8Li3nCI7HgLPA=";
+    })
+    # Linux-6.10: define a wrapper for vmalloc
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/658942f2791fad5e33ec7542158c16dfc66eed39.patch";
+      hash = "sha256-MhfAUX/eNOEkjO0cGVbnIdObMlGtLdCnnGfJECDwO+A=";
+    })
+    # Linux-6.10: remove includes for asm/ia32_unistd.h
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/03b280649f5e22ed74c217d7c98c3416a2fa9052.patch";
+      hash = "sha256-ZdXz2ziuflqz7zNzjepuGvwDAPM31FIzsoEa4iNdLmo=";
+    })
+    # afs: avoid empty-body warning
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/d8b56f21994ce66d8daebb7d69e792f34c1a19ed.patch";
+      hash = "sha256-10VUfZdZiOC8xSPM0nq8onqiv7X/Vv4/WwGlkqWkNkQ=";
+    })
+    # Linux 6.10: Move 'inline' before func return type
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/7097eec17bc01bcfc12c4d299136b2d3b94ec3d7.patch";
+      hash = "sha256-PZmqeXWJL3EQFD9250YfDwCY1rvSGVCbAhzyHP1pE0Q=";
+    })
+  ];
+
   nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
-
-  patches = [
-    # LINUX: Run the 'sparse' checker if available
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=2cf76b31ce4c912b1151c141818f6e8c5cddcab2";
-      hash = "sha256-//7HSlotx70vWDEMB8P8or4ZmmXZthgioUOkvOcJpgk=";
-    })
-    # cf: Detect how to pass CFLAGS to linux kbuild
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=57df4dff496ca9bea04510759b8fdd9cd2cc0009";
-      hash = "sha256-pJnW9bVz2ZQZUvZ+PcZ5gEgCL5kcbTGxsyMNvM2IseU=";
-    })
-    # cf: Handle autoconf linux checks with -Werror
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b17625959386459059f6f43875d8817383554481";
-      hash = "sha256-Kqx5QEX1p4UoIsWxqvJVX4IyCQFiWxtAOgvAtk+ULuQ=";
-    })
-    # Linux: Fix functions without prototypes
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=3084117f10bd62acb1182cb54fc85b1d96738f70";
-      hash = "sha256-nNyqDQfS9zzlS2i3dbfud2tQOaTQ1x/rZcQEsaLu3qc=";
-    })
-    # Linux: Check for block_dirty_folio
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=f0fee2c7752d18ff183d60bcfba4c98c3348cd5f";
-      hash = "sha256-tnNlVjZ5exC+jo78HC/y8yp0L8KQroFvVRzTC+O6vlY=";
-    })
-    # Linux: Replace lru_cache_add with folio_add_lru
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b885159cc2bc6c746aec1d54cdd8a515d1115d14";
-      hash = "sha256-ptPALSbZPSGu8PMmZiOkHUd5x0UItqIM7U7wJlxtSL8=";
-    })
-    # LINUX 5.13: set .proc_lseek in proc_ops
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=cba2b88851c3ae0ab1b18ea3ce77f7f5e8200b2f";
-      hash = "sha256-suj7n0U0odHXZHLPqeB/k96gyBh52uoS3AuHvOzPyd8=";
-    })
-    # Linux 6.3: Include linux/filelock.h if available
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/15388/revisions/ddb99d32012c43c76ae37f6a7563f1ca32f0e964/patch";
-      hash = "sha256-0Cql4+0ISfW4J4D7PhlSYNfIKAeDVWEz57PHOu5TRXg=";
-    })
-    # Linux 6.3: Use mnt_idmap for inode op functions
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/15389/revisions/ff0d53d2fb38fc3b262f02fb1c5f49b286ff13dd/patch";
-      hash = "sha256-KyVAI/A+/lNrLyKY6O8DgMKzgnF6P5sOfSq3qcs6Qq0=";
-    })
-  ];
 
   hardeningDisable = [ "pic" ];
 

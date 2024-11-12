@@ -1,3 +1,7 @@
-{ pkgs ? import ../. { } }:
-(import ./default.nix { }).overrideAttrs
-(x: { buildInputs = (x.buildInputs or [ ]) ++ [ pkgs.xmloscopy pkgs.ruby ]; })
+let
+  pkgs = import ../. {
+    config = { };
+    overlays = [ ];
+  };
+in
+pkgs.nixpkgs-manual.shell

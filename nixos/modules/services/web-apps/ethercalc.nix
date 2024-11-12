@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           ethercalc, an online collaborative spreadsheet server.
 
           Persistent state will be maintained under
@@ -24,23 +24,18 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.ethercalc;
-        defaultText = literalExpression "pkgs.ethercalc";
-        type = types.package;
-        description = lib.mdDoc "Ethercalc package to use.";
-      };
+      package = mkPackageOption pkgs "ethercalc" { };
 
       host = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc "Address to listen on (use 0.0.0.0 to allow access from any address).";
+        description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
       port = mkOption {
         type = types.port;
         default = 8000;
-        description = lib.mdDoc "Port to bind to.";
+        description = "Port to bind to.";
       };
     };
   };

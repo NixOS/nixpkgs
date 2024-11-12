@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchFromGitHub,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-rest-registration";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "apragacz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kGZ88Z5nV3HChImmPurHoewobsjotZQ4q9RngBYGe5g=";
+    hash = "sha256-EaS1qN7GpfPPeSLwwQdVWSRO2dv0DG5LD7vnXckz4Bg=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pytest-django
   ];
 
-  pythonImportsCheck = [
-    "rest_registration"
-  ];
+  pythonImportsCheck = [ "rest_registration" ];
 
   disabledTests = [
     # This test fails on Python 3.10

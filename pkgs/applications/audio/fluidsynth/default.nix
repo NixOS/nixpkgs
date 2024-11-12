@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.3.2";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    sha256 = "sha256-BSJu3jB7b5G2ThXBUHUNnBGl55EXe3nIzdBdgfOWDSM=";
+    hash = "sha256-bmA4eUh7MC4dXPsOOi9Q5jneSE5OGUWrztv+46LxaW0=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -19,20 +19,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [
     "-Denable-framework=off"
-    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
     homepage    = "https://www.fluidsynth.org";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ goibhniu lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    mainProgram = "fluidsynth";
   };
 }

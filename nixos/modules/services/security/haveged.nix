@@ -15,16 +15,16 @@ in
 
     services.haveged = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         haveged entropy daemon, which refills /dev/random when low.
-        NOTE: does nothing on kernels newer than 5.6.
-      '');
+        NOTE: does nothing on kernels newer than 5.6
+      '';
       # source for the note https://github.com/jirka-h/haveged/issues/57
 
       refill_threshold = mkOption {
         type = types.int;
         default = 1024;
-        description = lib.mdDoc ''
+        description = ''
           The number of bits of available entropy beneath which
           haveged should refill the entropy pool.
         '';

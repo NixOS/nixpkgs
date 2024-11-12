@@ -9,6 +9,7 @@
 , orc
 , boost
 , spdlog
+, swig
 , mpir
 , doxygen
 , python
@@ -44,15 +45,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.10";
-  minor = "6";
-  patch = "0";
-}
+, version ? "3.10.11.0"
 }:
 
 let
-  sourceSha256 = "sha256-WLxb9vJBlRfo9bKWEIsCI0Zb040XkLNjYw84j6ivOrk=";
+  sourceSha256 = "sha256-QOZXUj+ZmfpazsrHEs8Gx3WSmoHG/zO43NEpyhIjpN8=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -107,11 +104,11 @@ let
         libunwind
         thrift
       ];
-      pythonRuntime = with python.pkgs; [
+      pythonRuntime = [
         python.pkgs.thrift
         # For gr-perf-monitorx
-        matplotlib
-        networkx
+        python.pkgs.matplotlib
+        python.pkgs.networkx
       ];
       cmakeEnableFlag = "GR_CTRLPORT";
     };
@@ -160,6 +157,7 @@ let
       pythonRuntime = with python.pkgs; [
         scipy
         pyqtgraph
+        pyqt5
       ];
     };
     gr-analog = {
@@ -173,8 +171,8 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
-        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libjack2 ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
@@ -251,6 +249,11 @@ let
     gr-zeromq = {
       runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
@@ -270,7 +273,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -278,24 +281,14 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    cmakeFlags
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
@@ -320,9 +313,9 @@ stdenv.mkDerivation {
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
-      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
-}
+}))

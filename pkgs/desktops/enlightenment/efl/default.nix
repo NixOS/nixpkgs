@@ -44,12 +44,12 @@
 , openjpeg
 , openssl
 , poppler
-, python3Packages
 , systemd
 , udev
 , util-linux
 , wayland
 , wayland-protocols
+, wayland-scanner
 , writeText
 , xorg
 , zlib
@@ -58,11 +58,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.26.3";
+  version = "1.27.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2fg6oP2TNPRN7rTklS3A5RRGg6+seG/uvOYDCVFhfRU=";
+    sha256 = "sha256-PfuZ+8wmjAvHl+L4PoxQPvneZihPQLOBu1l6CBhcAPQ=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     gtk3
     pkg-config
     check
+    wayland-scanner
   ];
 
   buildInputs = [

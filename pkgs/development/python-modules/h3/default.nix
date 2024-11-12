@@ -1,40 +1,46 @@
-{ autoPatchelfHook
-, buildPythonPackage
-, cmake
-, cython
-, fetchFromGitHub
-, h3
-, lib
-, numpy
-, pytestCheckHook
-, scikit-build
-, stdenv
+{
+  autoPatchelfHook,
+  buildPythonPackage,
+  cmake,
+  cython,
+  fetchFromGitHub,
+  h3,
+  lib,
+  numpy,
+  pytestCheckHook,
+  scikit-build,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.6";
+  version = "3.7.7";
+  format = "setuptools";
 
   # pypi version does not include tests
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QNiuiHJ4IMxpi39iobPSSlYUUj5oxpxO4B2+HXVQ/Zk=";
+    hash = "sha256-wXQaSMXQI0f7zfyj37mubxdqGFv7vhHQd6rH08H57d4=";
   };
 
   dontConfigure = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeBuildInputs = [
-    scikit-build cmake cython
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # On Linux the .so files ends up referring to libh3.so instead of the full
-    # Nix store path. I'm not sure why this is happening! On Darwin it works
-    # fine.
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      scikit-build
+      cmake
+      cython
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # On Linux the .so files ends up referring to libh3.so instead of the full
+      # Nix store path. I'm not sure why this is happening! On Darwin it works
+      # fine.
+      autoPatchelfHook
+    ];
 
   # This is not needed per-se, it's only added for autoPatchelfHook to work
   # correctly. See the note above ^^
@@ -49,10 +55,11 @@ buildPythonPackage rec {
   prePatch =
     let
       cmakeCommands = ''
-        include_directories(${h3}/include/h3)
+        include_directories(${lib.getDev h3}/include/h3)
         link_directories(${h3}/lib)
       '';
-    in ''
+    in
+    ''
       rm -r src/h3lib
       substituteInPlace CMakeLists.txt --replace "add_subdirectory(src/h3lib)" "${cmakeCommands}"
     '';

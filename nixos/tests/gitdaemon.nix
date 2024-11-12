@@ -20,7 +20,7 @@ in {
 
         systemd.tmpfiles.rules = [
           # type path mode user group age arg
-          " d    /git 0755 root root  -   -"
+          " d    /git 0755 git  git   -   -"
         ];
 
         services.gitDaemon = {
@@ -56,9 +56,16 @@ in {
             "rm -r /project",
         )
 
+    # Change user/group to default daemon user/group from module
+    # to avoid "fatal: detected dubious ownership in repository at '/git/project.git'"
+    server.succeed("chown git:git -R /git/project.git")
+
     with subtest("git daemon starts"):
         server.wait_for_unit("git-daemon.service")
 
+
+    server.systemctl("start network-online.target")
+    client.systemctl("start network-online.target")
     server.wait_for_unit("network-online.target")
     client.wait_for_unit("network-online.target")
 

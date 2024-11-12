@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, python }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "authres";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

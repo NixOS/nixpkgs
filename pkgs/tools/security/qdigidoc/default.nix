@@ -1,7 +1,9 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , cmake
+, flatbuffers
 , gettext
 , pkg-config
 , libdigidocpp
@@ -10,26 +12,34 @@
 , openssl
 , pcsclite
 , qtbase
-, qttranslations
 , qtsvg
+, qttools
 }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.12";
+  version = "4.6.0";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-6bso1qvhVhbBfrcTq4S+aHtHli7X2A926N4r45ztq4E=";
+    hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
+      hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
+    })
+  ];
+
+  # Check https://dss.nowina.lu/tl-info, "Pivots loaded" section
   tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
-    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
+    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-341.xml";
+    hash = "sha256-/TI8qYxXzourjGFPBpsQzi9Depi7lLQ2JaV+FyP0FtE=";
   };
 
-  nativeBuildInputs = [ cmake gettext pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -37,6 +47,7 @@ mkDerivation rec {
   '';
 
   buildInputs = [
+    flatbuffers
     libdigidocpp
     opensc
     openldap
@@ -44,7 +55,6 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
-    qttranslations
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,
@@ -59,9 +69,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
+    mainProgram = "qdigidoc4";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut yana ];
+    maintainers = with maintainers; [ flokli mmahut ];
   };
 }

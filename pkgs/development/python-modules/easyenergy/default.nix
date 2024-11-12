@@ -1,28 +1,29 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-freezer
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-freezer,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "0.3.1";
-  format = "pyproject";
+  version = "2.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-n+dF2bR4BUpQAI+M8gPvFVZ+c5cDdAVoENSGpZtbv+M=";
+    hash = "sha256-tWKfcGznxck8VLK3YshOIbPet2CEbUZbT8JzgaAhAso=";
   };
 
   postPatch = ''
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace 'addopts = "--cov"' ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "easyenergy"
-  ];
+  pythonImportsCheck = [ "easyenergy" ];
 
   disabledTests = [
     # Tests require network access

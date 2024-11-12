@@ -1,105 +1,129 @@
-{ buildFHSEnv
-, symlinkJoin
-, bottles-unwrapped
-, gst_all_1
-, extraPkgs ? pkgs: [ ]
-, extraLibraries ? pkgs: [ ]
+{
+  buildFHSEnv,
+  symlinkJoin,
+  bottles-unwrapped,
+  extraPkgs ? pkgs: [ ],
+  extraLibraries ? pkgs: [ ],
 }:
 
-let fhsEnv = {
-  targetPkgs = pkgs: with pkgs; [
-    bottles-unwrapped
-    # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
-    # See https://github.com/bottlesdevs/Bottles/issues/2401
-    vkbasalt
-  ] ++ extraPkgs pkgs;
+let
+  fhsEnv = {
+    # Many WINE games need 32bit
+    multiArch = true;
 
-  multiPkgs =
-    let
-      xorgDeps = pkgs: with pkgs.xorg; [
-        libpthreadstubs
-        libSM
-        libX11
-        libXaw
-        libxcb
-        libXcomposite
-        libXcursor
-        libXdmcp
-        libXext
-        libXi
-        libXinerama
-        libXmu
-        libXrandr
-        libXrender
-        libXv
-        libXxf86vm
-      ];
-    in
-    pkgs: with pkgs; [
-      # https://wiki.winehq.org/Building_Wine
-      alsa-lib
-      cups
-      dbus
-      fontconfig
-      freetype
-      glib
-      gnutls
-      libglvnd
-      gsm
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-libav
-      libgphoto2
-      libjpeg_turbo
-      libkrb5
-      libpcap
-      libpng
-      libpulseaudio
-      libtiff
-      libunwind
-      libusb1
-      libv4l
-      libxml2
-      mpg123
-      ocl-icd
-      openldap
-      samba4
-      sane-backends
-      SDL2
-      udev
-      vulkan-loader
+    targetPkgs =
+      pkgs:
+      with pkgs;
+      [
+        bottles-unwrapped
+        # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
+        # See https://github.com/bottlesdevs/Bottles/issues/2401
+        vkbasalt
+      ]
+      ++ extraPkgs pkgs;
 
-      # https://www.gloriouseggroll.tv/how-to-get-out-of-wine-dependency-hell/
-      alsa-plugins
-      dosbox
-      giflib
-      gtk3
-      libva
-      libxslt
-      ncurses
-      openal
+    multiPkgs =
+      let
+        xorgDeps =
+          pkgs: with pkgs.xorg; [
+            libpthreadstubs
+            libSM
+            libX11
+            libXaw
+            libxcb
+            libXcomposite
+            libXcursor
+            libXdmcp
+            libXext
+            libXi
+            libXinerama
+            libXmu
+            libXrandr
+            libXrender
+            libXv
+            libXxf86vm
+          ];
+        gstreamerDeps =
+          pkgs: with pkgs.gst_all_1; [
+            gstreamer
+            gst-plugins-base
+            gst-plugins-good
+            gst-plugins-ugly
+            gst-plugins-bad
+            gst-libav
+          ];
+      in
+      pkgs:
+      with pkgs;
+      [
+        # https://wiki.winehq.org/Building_Wine
+        alsa-lib
+        cups
+        dbus
+        fontconfig
+        freetype
+        glib
+        gnutls
+        libglvnd
+        gsm
+        libgphoto2
+        libjpeg_turbo
+        libkrb5
+        libpcap
+        libpng
+        libpulseaudio
+        libtiff
+        libunwind
+        libusb1
+        libv4l
+        libxml2
+        mpg123
+        ocl-icd
+        openldap
+        samba4
+        sane-backends
+        SDL2
+        udev
+        vulkan-loader
 
-      # Steam runtime
-      libgcrypt
-      libgpg-error
-      p11-kit
-      zlib # Freetype
-    ] ++ xorgDeps pkgs
-    ++ extraLibraries pkgs;
+        # https://www.gloriouseggroll.tv/how-to-get-out-of-wine-dependency-hell/
+        alsa-plugins
+        dosbox
+        giflib
+        gtk3
+        libva
+        libxslt
+        ncurses
+        openal
 
-  profile = ''
-    export GST_PLUGIN_PATH=/usr/lib32/gstreamer-1.0:/usr/lib64/gstreamer-1.0
-  '';
-};
+        # Steam runtime
+        libgcrypt
+        libgpg-error
+        p11-kit
+        zlib # Freetype
+      ]
+      ++ xorgDeps pkgs
+      ++ gstreamerDeps pkgs
+      ++ extraLibraries pkgs;
+  };
 in
 symlinkJoin {
   name = "bottles";
   paths = [
-    (buildFHSEnv (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
-    (buildFHSEnv (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
+    (buildFHSEnv (
+      fhsEnv
+      // {
+        name = "bottles";
+        runScript = "bottles";
+      }
+    ))
+    (buildFHSEnv (
+      fhsEnv
+      // {
+        name = "bottles-cli";
+        runScript = "bottles-cli";
+      }
+    ))
   ];
   postBuild = ''
     mkdir -p $out/share

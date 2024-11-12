@@ -1,34 +1,39 @@
-{ lib
-, buildPythonPackage
-, acpi
-, alsa-utils
-, coreutils
-, dbus-python
-, fetchPypi
-, file
-, i3
-, i3ipc
-, libnotify
-, lm_sensors
-, procps
-, pydbus
-, pygobject3
-, pyserial
-, pytz
-, requests
-, setuptools
-, tzlocal
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  acpi,
+  alsa-utils,
+  coreutils,
+  dbus-python,
+  fetchPypi,
+  file,
+  hatchling,
+  i3,
+  i3ipc,
+  libnotify,
+  lm_sensors,
+  procps,
+  pydbus,
+  pygobject3,
+  pyserial,
+  pytz,
+  requests,
+  setuptools,
+  tzlocal,
+  xorg,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.50";
+  version = "3.59";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LUFLc7GNEoPIAsTQDhVTt0/NqhwaZHBRLoHF+2nqTUg=";
+    hash = "sha256-3m/34xfPpe8T4yicbTtQtTqfq5Zz2T0AZl8fCKRg/CE=";
   };
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     pytz
@@ -63,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

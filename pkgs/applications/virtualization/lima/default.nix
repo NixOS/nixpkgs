@@ -11,19 +11,19 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.16.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6BNUuYAy3rUpPeUsbLRpz0+LdgVeHjlVjmQRcuFSXEg=";
+    sha256 = "sha256-ZX2FSZz9q56zWPSHPvXUOf2lzBupjgdTXgWpH1SBJY8=";
   };
 
-  vendorHash = "sha256-KuMEAlXvW5FhTC7HQa3CoqRlhtwSBzjk+dgAnzScfno=";
+  vendorHash = "sha256-P0Qnfu/cqLveAwz9jf/wTXxkoh0jvazlE5C/PcUrWsA=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
 
   # clean fails with read only vendor dir
   postPatch = ''
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   # It attaches entitlements with codesign and strip removes those,
   # voiding the entitlements and making it non-operational.
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   buildPhase = ''
     runHook preBuild

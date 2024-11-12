@@ -1,8 +1,8 @@
 { lib
 , bundlerApp
 , ruby
+, stdenv
 , bundlerUpdateScript
-, defaultGemConfig
 , nixosTests
 }:
 
@@ -24,6 +24,7 @@ bundlerApp {
   };
 
   meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Schleuder is an encrypting mailing list manager with remailing-capabilities";
     longDescription = ''
       Schleuder is a group's email-gateway: subscribers can exchange
@@ -33,6 +34,6 @@ bundlerApp {
     homepage = "https://schleuder.org";
     changelog = "https://0xacab.org/schleuder/schleuder/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa lheckemann ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

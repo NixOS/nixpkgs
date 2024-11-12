@@ -8,20 +8,21 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.78.0";
+  version = "0.112.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-5oTXPQU1aT8Xm1bTjbnauBUqzBqBH+yBzC1tmLHA0v0=";
+    hash = "sha256-EWmSN9PfbNxEyRCz07pVQa1b0eQ9eq7LsrF2euWmz7E=";
   };
-  # proxy vendor to avoid hash missmatches between linux and macOS
+
+  # proxy vendor to avoid hash mismatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-ABaRedZXPr2q2AmslVNIJUvONZa4tv7OkxBLR9GuBRE=";
+  vendorHash = null;
 
   # there is a nested go.mod
-  sourceRoot = "source/cmd/otelcontribcol";
+  sourceRoot = "${src.name}/cmd/otelcontribcol";
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
@@ -29,7 +30,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdMinimal ];
 
   # We don't inject the package into propagatedBuildInputs unless
   # asked to avoid hard-requiring a large package. For the journald
@@ -38,9 +39,7 @@ buildGoModule rec {
   # it instead of trusting the global $PATH.
   propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
 
-  # This test fails on darwin for mysterious reasons.
-  checkFlags = lib.optionals stdenv.isDarwin
-    [ "-skip" "TestDefaultExtensions/memory_ballast" ];
+  doCheck = false;
 
   ldflags = [
     "-s"

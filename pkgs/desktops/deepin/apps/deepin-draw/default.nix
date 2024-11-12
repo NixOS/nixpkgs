@@ -1,26 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-draw";
-  version = "6.0.5";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WeubXsshN4tUlIwEHTxHXv1L2dvJ2DZ6qtSPyiVtc98=";
+    hash = "sha256-WeubXsshN4tUlIwEHTxHXv1L2dvJ2DZ6qtSPyiVtc98=";
   };
 
   postPatch = ''
@@ -30,15 +28,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     qt5integration
-    qtsvg
+    libsForQt5.qtsvg
     dtkwidget
     qt5platform-plugins
   ];
@@ -47,11 +45,12 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight drawing tool for users to freely draw and simply edit images";
+    mainProgram = "deepin-draw";
     homepage = "https://github.com/linuxdeepin/deepin-draw";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

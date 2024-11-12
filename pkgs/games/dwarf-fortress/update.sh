@@ -2,9 +2,7 @@
 #! nix-shell -i bash -p jq nix coreutils curl
 
 # systems to generate hashes for
-systems='linux linux32 osx osx32
-     win win_s win32 win32_s
-         legacy legacy_s legacy32 legacy32_s'
+systems='linux osx'
 
 if [ $# -eq 0 ]; then
     versions="$(curl http://www.bay12games.com/dwarves/ \
@@ -38,5 +36,5 @@ done | jq --slurp --raw-input \
 
 # Append $tmp1 to game.json. There should be a better way to handle
 # this but all other attempts failed for me.
-jq -M --argfile a "$tmp1" '. + $a' < "$(dirname "$0")/game.json" > "$tmp2"
+jq -M --slurpfile a "$tmp1" '. + $a[]' < "$(dirname "$0")/game.json" > "$tmp2"
 cat "$tmp2" > "$(dirname "$0")/game.json"

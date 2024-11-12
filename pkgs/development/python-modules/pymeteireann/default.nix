@@ -1,15 +1,17 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytz
-, xmltodict
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytz,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pymeteireann";
   version = "2021.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "DylanGore";

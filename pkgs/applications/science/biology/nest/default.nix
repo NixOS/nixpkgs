@@ -13,20 +13,19 @@
 , boost
 , python3
 , readline
-, autoPatchelfHook
 , withPython ? false
 , withMpi ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "nest";
-  version = "3.4";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    hash = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
+    hash = "sha256-hysOe1ZZpCClVOGo0+UeCP7imAakXrZlnJ4V95zfiyA=";
   };
 
   postPatch = ''
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     python3
     python3.pkgs.cython
   ] ++ lib.optional withMpi mpi
-    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = with python3.pkgs; [
     numpy

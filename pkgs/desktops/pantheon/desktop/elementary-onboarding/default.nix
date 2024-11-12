@@ -5,12 +5,12 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , wrapGAppsHook4
 , appcenter
 , elementary-settings-daemon
 , glib
+, gnome-settings-daemon
 , granite7
 , gtk4
 , libadwaita
@@ -19,20 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "7.1.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-OWALEcVOOh7wjEEvysd+MQhB/iK3105XCIVp5pklMwY=";
+    sha256 = "sha256-tLqLGkcryXGe1wsupgwtnNtFj5aXXUPrwkpxUQmyJFM=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
@@ -41,16 +40,12 @@ stdenv.mkDerivation rec {
     appcenter # settings schema
     elementary-settings-daemon # settings schema
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.color
     granite7
     gtk4
     libadwaita
     libgee
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

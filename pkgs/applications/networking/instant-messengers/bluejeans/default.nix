@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         freetype
         nspr
         glib
-        stdenv.cc.cc.lib
+        stdenv.cc.cc
         nss
         libX11
         libXrandr
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bluejeans.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

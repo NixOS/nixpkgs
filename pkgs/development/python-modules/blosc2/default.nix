@@ -1,59 +1,76 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, scikit-build
-, cython
-, cmake
-, ninja
+  # build-system
+  cmake,
+  cython,
+  ninja,
+  oldest-supported-numpy,
+  pkg-config,
+  scikit-build,
+  setuptools,
+  wheel,
 
-# propagates
-, msgpack
-, ndindex
-, numpy
-, py-cpuinfo
-, rich
+  # c library
+  c-blosc2,
 
-# tests
-, psutil
-, pytestCheckHook
-, torch
+  # propagates
+  msgpack,
+  ndindex,
+  numexpr,
+  numpy,
+  py-cpuinfo,
+  rich,
+
+  # tests
+  psutil,
+  pytestCheckHook,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "2.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-nbPMLkTye0/Q05ubE35LssN677sUIQErPTxjAtSuGgI=";
+    hash = "sha256-2aLfyd+/I8cy9OqdU4yNXY/bkf0AdXu+hZPLDdM3g5g=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0" "numpy"
     substituteInPlace requirements-runtime.txt \
       --replace "pytest" ""
   '';
+
+  pythonRelaxDeps = [ "numpy" ];
 
   nativeBuildInputs = [
     cmake
     cython
     ninja
-    numpy
+    oldest-supported-numpy
+    pkg-config
     scikit-build
     setuptools
+    wheel
   ];
 
+  buildInputs = [ c-blosc2 ];
+
   dontUseCmakeConfigure = true;
+  env.CMAKE_ARGS = "-DUSE_SYSTEM_BLOSC2:BOOL=YES";
 
   propagatedBuildInputs = [
     msgpack
     ndindex
+    numexpr
     numpy
     py-cpuinfo
     rich
@@ -65,11 +82,13 @@ buildPythonPackage rec {
     torch
   ];
 
+  passthru.c-blosc2 = c-blosc2;
+
   meta = with lib; {
     description = "Python wrapper for the extremely fast Blosc2 compression library";
     homepage = "https://github.com/Blosc/python-blosc2";
     changelog = "https://github.com/Blosc/python-blosc2/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ris ];
   };
 }

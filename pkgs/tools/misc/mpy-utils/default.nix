@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, buildPythonApplication, fetchPypi, fusepy, pyserial }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, fusepy, pyserial }:
 
 buildPythonApplication rec {
   pname = "mpy-utils";
@@ -16,6 +16,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/nickzoic/mpy-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ aciceri ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

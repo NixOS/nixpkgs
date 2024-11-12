@@ -1,18 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  docutils,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "credstash";
   version = "1.17.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6c04e8734ef556ab459018da142dd0b244093ef176b3be5583e582e9a797a120";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "fugue";
+    repo = "credstash";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a6OzffGt5piHgi0AWEXJED0R/+8RETh/9hYJi/lUVu0=";
   };
 
   patches = [
+    # setup_requires -> tests_requires for pytest
     (fetchpatch {
       url = "https://github.com/fugue/credstash/commit/9c02ee43ed6e37596cafbca2fe80c532ec19d2d8.patch";
-      sha256 = "dlybrpfLK+PqwWWhH9iXgXHYysZGmcZAFGWNOwsG0xA=";
+      hash = "sha256-dlybrpfLK+PqwWWhH9iXgXHYysZGmcZAFGWNOwsG0xA=";
     })
   ];
   # The install phase puts an executable and a copy of the library it imports in
@@ -23,16 +41,29 @@ buildPythonPackage rec {
   # file ensures that Python imports the module from site-packages library.
   postInstall = "rm $out/bin/credstash.py";
 
-  nativeBuildInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
+  dependencies = [
+    boto3
+    cryptography
+    docutils
+    pyyaml
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Tests require a region
+    "integration_tests/test_credstash_lib.py"
+    "tests/key_service_test.py"
+  ];
 
   meta = with lib; {
-    description = "A utility for managing secrets in the cloud using AWS KMS and DynamoDB";
+    description = "Utility for managing secrets in the cloud using AWS KMS and DynamoDB";
     homepage = "https://github.com/LuminalOSS/credstash";
+    changelog = "https://github.com/fugue/credstash/releases/tag/v${version}";
     license = licenses.asl20;
+    maintainers = [ ];
+    mainProgram = "credstash";
   };
 }

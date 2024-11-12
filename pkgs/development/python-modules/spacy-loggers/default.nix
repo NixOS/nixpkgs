@@ -1,18 +1,19 @@
-{ lib
-, callPackage
-, fetchPypi
-, buildPythonPackage
-, wandb
-, wasabi
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  wandb,
+  wasabi,
 }:
 
 buildPythonPackage rec {
   pname = "spacy-loggers";
-  version = "1.0.4";
+  version = "1.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5vmDv3EjAJHVu3sRv2S9VEFeyoORCNX4PZFV0LqTvyg=";
+    hash = "sha256-1gsL2/kVpg5RbMLmU7rv+Ubwz8RhtFLRGk1UWMb+XyQ=";
   };
 
   propagatedBuildInputs = [

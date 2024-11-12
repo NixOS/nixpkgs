@@ -1,12 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "pyeverlights";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joncar";

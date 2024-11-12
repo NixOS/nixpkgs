@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
+{ lib, buildDunePackage, dune-configurator, pkg-config, callPackage
 , AppKit
 , AudioToolbox
 , AVFoundation
@@ -17,11 +17,11 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src duneVersion;
+  inherit (ffmpeg-base) version src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     AudioToolbox
     AVFoundation

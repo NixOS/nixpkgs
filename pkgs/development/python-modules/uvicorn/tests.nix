@@ -1,21 +1,19 @@
-{ stdenv
-, buildPythonPackage
-, asgiref
-, uvicorn
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pytest-mock
-, requests
-, trustme
-, watchgod
-, wsproto
+{
+  stdenv,
+  buildPythonPackage,
+  a2wsgi,
+  uvicorn,
+  httpx,
+  pytestCheckHook,
+  pytest-mock,
+  trustme,
+  watchgod,
+  wsproto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
-
   format = "other";
 
   src = uvicorn.testsout;
@@ -24,22 +22,19 @@ buildPythonPackage rec {
   dontInstall = true;
 
   nativeCheckInputs = [
-    asgiref
     uvicorn
     httpx
     pytestCheckHook
-    pytest-asyncio
     pytest-mock
-    requests
     trustme
 
     # strictly optional dependencies
+    a2wsgi
     watchgod
     wsproto
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  ] ++ uvicorn.optional-dependencies.standard;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 
@@ -50,4 +45,3 @@ buildPythonPackage rec {
     "test_multiple_server_header"
   ];
 }
-

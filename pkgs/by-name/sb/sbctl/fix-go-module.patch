@@ -1,0 +1,108 @@
+From cf12e591c6007c6e32bd86167816e316f5b70c26 Mon Sep 17 00:00:00 2001
+From: Sefa Eyeoglu <contact@scrumplex.net>
+Date: Sat, 25 May 2024 15:38:41 +0200
+Subject: [PATCH] Fix go module
+
+Signed-off-by: Sefa Eyeoglu <contact@scrumplex.net>
+---
+ go.mod |  4 +++-
+ go.sum | 10 ++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/go.mod b/go.mod
+index 2e23dd6..7668f57 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,6 +1,8 @@
+ module github.com/foxboron/sbctl
+ 
+-go 1.20
++go 1.21
++
++toolchain go1.22.3
+ 
+ require (
+ 	github.com/fatih/color v1.13.0
+diff --git a/go.sum b/go.sum
+index 9f29d75..d3f4af4 100644
+--- a/go.sum
++++ b/go.sum
+@@ -314,6 +314,7 @@ github.com/google/go-cmp v0.5.4/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
+ github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
+ github.com/google/go-cmp v0.5.6/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
+ github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
++github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
+ github.com/google/go-github/v28 v28.1.1/go.mod h1:bsqJWQX05omyWVmc00nEUql9mhQyv38lDZ8kPZcQVoM=
+ github.com/google/go-licenses v0.0.0-20210329231322-ce1d9163b77d/go.mod h1:+TYOmkVoJOpwnS0wfdsJCV9CoD5nJYsHoFk/0CrTK4M=
+ github.com/google/go-querystring v1.0.0/go.mod h1:odCYkC5MyYFN7vkCjXpyrEuKhc/BUO6wN/zVPAxq5ck=
+@@ -322,9 +323,11 @@ github.com/google/go-replayers/httpreplay v0.1.0/go.mod h1:YKZViNhiGgqdBlUbI2MwG
+ github.com/google/go-tpm v0.9.0 h1:sQF6YqWMi+SCXpsmS3fd21oPy/vSddwZry4JnmltHVk=
+ github.com/google/go-tpm v0.9.0/go.mod h1:FkNVkc6C+IsvDI9Jw1OveJmxGZUUaKxtrpOS47QWKfU=
+ github.com/google/go-tpm-tools v0.4.2 h1:iyaCPKt2N5Rd0yz0G8ANa022SgCNZkMpp+db6QELtvI=
++github.com/google/go-tpm-tools v0.4.2/go.mod h1:fGUDZu4tw3V4hUVuFHmiYgRd0c58/IXivn9v3Ea/ck4=
+ github.com/google/go-tspi v0.3.0 h1:ADtq8RKfP+jrTyIWIZDIYcKOMecRqNJFOew2IT0Inus=
+ github.com/google/go-tspi v0.3.0/go.mod h1:xfMGI3G0PhxCdNVcYr1C4C+EizojDg/TXuX5by8CiHI=
+ github.com/google/goexpect v0.0.0-20210430020637-ab937bf7fd6f h1:7MmqygqdeJtziBUpm4Z9ThROFZUaVGaePMfcDnluf1E=
++github.com/google/goexpect v0.0.0-20210430020637-ab937bf7fd6f/go.mod h1:n1ej5+FqyEytMt/mugVDZLIiqTMO+vsrgY+kM6ohzN0=
+ github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+ github.com/google/goterm v0.0.0-20200907032337-555d40f16ae2 h1:CVuJwN34x4xM2aT4sIKhmeib40NeBPhRihNjQmpJsA4=
+ github.com/google/goterm v0.0.0-20200907032337-555d40f16ae2/go.mod h1:nOFQdrUlIlx6M6ODdSpBj1NVA+VgLC6kmw60mkw34H4=
+@@ -422,6 +425,7 @@ github.com/huandu/xstrings v1.0.0/go.mod h1:4qWG/gcEcfX4z/mBDHJ++3ReCw9ibxbsNJbc
+ github.com/huandu/xstrings v1.2.0/go.mod h1:DvyZB1rfVYsBIigL8HwpZgxHwXozlTgGqn63UyNX5k4=
+ github.com/hudl/fargo v1.3.0/go.mod h1:y3CKSmjA+wD2gak7sUSXTAoopbhU08POFhmITJgmKTg=
+ github.com/hugelgupf/socketpair v0.0.0-20190730060125-05d35a94e714 h1:/jC7qQFrv8CrSJVmaolDVOxTfS9kc36uB6H40kdbQq8=
++github.com/hugelgupf/socketpair v0.0.0-20190730060125-05d35a94e714/go.mod h1:2Goc3h8EklBH5mspfHFxBnEoURQCGzQQH1ga9Myjvis=
+ github.com/hugelgupf/vmtest v0.0.0-20240110072021-f6f07acb7aa1 h1:aa9+0fjwoGotyC8A3QjdITMAX89g/+qvDAhKPrK1NKE=
+ github.com/hugelgupf/vmtest v0.0.0-20240110072021-f6f07acb7aa1/go.mod h1:a4SVM0HTMEt2IqrtCMOF44++nnzhrkHmQpkpw6Yrpso=
+ github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
+@@ -554,6 +558,7 @@ github.com/nats-io/nkeys v0.1.0/go.mod h1:xpnFELMwJABBLVhffcfd1MZx6VsNRFpEugbxzi
+ github.com/nats-io/nkeys v0.1.3/go.mod h1:xpnFELMwJABBLVhffcfd1MZx6VsNRFpEugbxziKVo7w=
+ github.com/nats-io/nuid v1.0.1/go.mod h1:19wcPz3Ph3q0Jbyiqsd0kePYG7A95tJPxeL+1OSON2c=
+ github.com/ncruces/go-fs v0.2.2 h1:ak7h7jdihotXtXqjrBb2YZViJ+n41tLIqMG9ZY7bJMQ=
++github.com/ncruces/go-fs v0.2.2/go.mod h1:07xkoGj//ID8iICNv3rcD2PtMjia3mABv1yZzdq7qZ8=
+ github.com/nishanths/predeclared v0.0.0-20200524104333-86fad755b4d3/go.mod h1:nt3d53pc1VYcphSCIaYAJtnPYnr3Zyn8fMq2wvPGPso=
+ github.com/oklog/oklog v0.3.2/go.mod h1:FCV+B7mhrz4o+ueLpx+KqkyXRGMWOYEvfiXtdGtbWGs=
+ github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
+@@ -641,6 +646,7 @@ github.com/pseudomuto/protoc-gen-doc v1.5.0/go.mod h1:exDTOVwqpp30eV/EDPFLZy3Pwr
+ github.com/pseudomuto/protokit v0.2.0/go.mod h1:2PdH30hxVHsup8KpBTOXTBeMVhJZVio3Q8ViKSAXT0Q=
+ github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
+ github.com/rekby/gpt v0.0.0-20200219180433-a930afbc6edc h1:goZGTwEEn8mWLcY012VouWZWkJ8GrXm9tS3VORMxT90=
++github.com/rekby/gpt v0.0.0-20200219180433-a930afbc6edc/go.mod h1:scrOqOnnHVKCHENvFw8k9ajCb88uqLQDA4BvuJNJ2ew=
+ github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af/go.mod h1:XWv6SoW27p1b0cqNHllgS5HIMJraePCO15w5zCzIWYg=
+ github.com/rogpeppe/fastuuid v1.1.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
+ github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
+@@ -705,6 +711,7 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
+ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+ github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+ github.com/stretchr/testify v1.7.1 h1:5TQK59W5E3v0r2duFAb7P95B6hEeOyEnHRa8MjYSMTY=
++github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+ github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
+ github.com/tj/assert v0.0.0-20171129193455-018094318fb0/go.mod h1:mZ9/Rh9oLWpLLDRpvE+3b7gP/C2YyLFYxNmcLnPTMe0=
+ github.com/tj/go-elastic v0.0.0-20171221160941-36157cbbebc2/go.mod h1:WjeM0Oo1eNAjXGDx2yma7uG2XoyRZTq1uv3M/o7imD0=
+@@ -774,6 +781,7 @@ go.etcd.io/etcd/tests/v3 v3.5.0/go.mod h1:f+mtZ1bE1YPvgKdOJV2BKy4JQW0nAFnQehgOE7
+ go.etcd.io/etcd/v3 v3.5.0-alpha.0/go.mod h1:JZ79d3LV6NUfPjUxXrpiFAYcjhT+06qqw+i28snx8To=
+ go.etcd.io/etcd/v3 v3.5.0/go.mod h1:FldM0/VzcxYWLvWx1sdA7ghKw7C3L2DvUTzGrcEtsC4=
+ go.mozilla.org/pkcs7 v0.0.0-20200128120323-432b2356ecb1 h1:A/5uWzF44DlIgdm/PQFwfMkW0JX+cIcQi/SwLAmZP5M=
++go.mozilla.org/pkcs7 v0.0.0-20200128120323-432b2356ecb1/go.mod h1:SNgMg+EgDFwmvSmLRTNKC5fegJjB7v23qTQ0XLGUNHk=
+ go.opencensus.io v0.15.0/go.mod h1:UffZAU+4sDEINUGP/B7UfBBkq4fqLu9zXAX7ke6CHW0=
+ go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=
+ go.opencensus.io v0.20.2/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=
+@@ -1277,6 +1285,7 @@ google.golang.org/grpc v1.39.0/go.mod h1:PImNr+rS9TWYb2O4/emRugxiyHZ5JyHW5F+RPnD
+ google.golang.org/grpc v1.39.1/go.mod h1:PImNr+rS9TWYb2O4/emRugxiyHZ5JyHW5F+RPnDzfrE=
+ google.golang.org/grpc v1.40.0/go.mod h1:ogyxbiOoUXAkP+4+xa6PZSE9DZgIHtSpzjDTB9KAK34=
+ google.golang.org/grpc v1.53.0 h1:LAv2ds7cmFV/XTS3XG1NneeENYrXGmorPxsBbptIjNc=
++google.golang.org/grpc v1.53.0/go.mod h1:OnIrk0ipVdj4N5d9IUoFUx72/VlD7+jUsHwZgwSMQpw=
+ google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0/go.mod h1:6Kw0yEErY5E/yWrBtf03jp27GLLJujG4z/JK95pnjjw=
+ google.golang.org/protobuf v0.0.0-20200109180630-ec00e32a8dfd/go.mod h1:DFci5gLYBciE7Vtevhsrf46CRTquxDuWsQurQQe4oz8=
+ google.golang.org/protobuf v0.0.0-20200221191635-4d8936d0db64/go.mod h1:kwYJMbMJ01Woi6D6+Kah6886xMZcty6N08ah7+eCXa0=
+@@ -1328,6 +1337,7 @@ gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
+ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+ gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+ gopkg.in/yaml.v3 v3.0.0 h1:hjy8E9ON/egN1tAYqKb61G10WtihqetD4sz2H+8nIeA=
++gopkg.in/yaml.v3 v3.0.0/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+ honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+ honnef.co/go/tools v0.0.0-20190106161140-3f1c8253044a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+-- 
+2.44.1
+

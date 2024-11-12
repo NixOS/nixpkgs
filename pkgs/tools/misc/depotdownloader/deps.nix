@@ -2,11 +2,18 @@
 # Please dont edit it manually, your changes might get overwritten!
 
 { fetchNuGet }: [
-  (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "5.0.0"; sha256 = "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc"; })
-  (fetchNuGet { pname = "Microsoft.Win32.Registry"; version = "5.0.0"; sha256 = "102hvhq2gmlcbq8y2cb7hdr2dnmjzfp2k3asr1ycwrfacwyaak7n"; })
-  (fetchNuGet { pname = "protobuf-net"; version = "3.1.17"; sha256 = "1pyx9gnzd91m6viph8gyf57l10jspfphczm5m11wriy3ydrzh6yc"; })
-  (fetchNuGet { pname = "protobuf-net.Core"; version = "3.1.17"; sha256 = "0gk3zi1iaxssgjw4kdkpj98sy6hyx8m18fijxy413p19zknvnb0n"; })
-  (fetchNuGet { pname = "SteamKit2"; version = "2.4.1"; sha256 = "13f7jra2d0kjlvnk4dghzhx8nhkd001i4xrkf6m19gisjvpjhpdr"; })
-  (fetchNuGet { pname = "System.Security.AccessControl"; version = "5.0.0"; sha256 = "17n3lrrl6vahkqmhlpn3w20afgz09n7i6rv0r3qypngwi7wqdr5r"; })
-  (fetchNuGet { pname = "System.Security.Principal.Windows"; version = "5.0.0"; sha256 = "1mpk7xj76lxgz97a5yg93wi8lj0l8p157a5d50mmjy3gbz1904q8"; })
+  (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "5.0.0"; hash = "sha256-LIcg1StDcQLPOABp4JRXIs837d7z0ia6+++3SF3jl1c="; })
+  (fetchNuGet { pname = "Microsoft.Win32.Registry"; version = "5.0.0"; hash = "sha256-9kylPGfKZc58yFqNKa77stomcoNnMeERXozWJzDcUIA="; })
+  (fetchNuGet { pname = "Microsoft.Windows.CsWin32"; version = "0.3.106"; hash = "sha256-S1uQa684taPb6uh69784ebVpXoirMoX+pxBRA+Rrzlg="; })
+  (fetchNuGet { pname = "Microsoft.Windows.SDK.Win32Docs"; version = "0.1.42-alpha"; hash = "sha256-6DvzmNzrGVfWmNJNqooj+Ya+7bAQlyeg7pmyKaUlIws="; })
+  (fetchNuGet { pname = "Microsoft.Windows.SDK.Win32Metadata"; version = "60.0.34-preview"; hash = "sha256-KdRe73sXipzMvm2BLmwwBZGh+l9isZDC9l8WFyUR1zM="; })
+  (fetchNuGet { pname = "Microsoft.Windows.WDK.Win32Metadata"; version = "0.11.4-experimental"; hash = "sha256-b3oKUKbr+3Udfl7RWzUY9BR/XWNsN+VmEkBxk6KiFo0="; })
+  (fetchNuGet { pname = "protobuf-net"; version = "3.2.30"; hash = "sha256-keRy5OWT+/tlZt3D7x+9PEdjTvEJcZdYsf/i1ZBtciE="; })
+  (fetchNuGet { pname = "protobuf-net.Core"; version = "3.2.30"; hash = "sha256-GMpJNecoBfrV2VgpYOhcZnKZaLFDObNLcX2LBTThrwY="; })
+  (fetchNuGet { pname = "QRCoder"; version = "1.6.0"; hash = "sha256-2Ev/6d7PH6K4dVYQQHlZ+ZggkCnDtrlaGygs65mDo28="; })
+  (fetchNuGet { pname = "SteamKit2"; version = "3.0.0-beta.4"; hash = "sha256-7cXlpCuUD8ZuTMtqsT5MdklkZb+XIGBdoI28anjUXtg="; })
+  (fetchNuGet { pname = "System.Collections.Immutable"; version = "7.0.0"; hash = "sha256-9an2wbxue2qrtugYES9awshQg+KfJqajhnhs45kQIdk="; })
+  (fetchNuGet { pname = "System.IO.Hashing"; version = "8.0.0"; hash = "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="; })
+  (fetchNuGet { pname = "System.Security.AccessControl"; version = "5.0.0"; hash = "sha256-ueSG+Yn82evxyGBnE49N4D+ngODDXgornlBtQ3Omw54="; })
+  (fetchNuGet { pname = "System.Security.Principal.Windows"; version = "5.0.0"; hash = "sha256-CBOQwl9veFkrKK2oU8JFFEiKIh/p+aJO+q9Tc2Q/89Y="; })
 ]

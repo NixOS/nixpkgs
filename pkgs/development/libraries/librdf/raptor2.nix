@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , libxml2
+, curl
 , libxslt
 , pkg-config
 , cmake
@@ -14,13 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "raptor2";
-  version = "unstable-2022-06-06";
+  version = "2.0.16";
+  underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "dajobe";
     repo = "raptor";
-    rev = "3cca62a33da68143b687c9e486eefc7c7cbb4586";
-    sha256 = "sha256-h03IyFH1GHPqajfHBBTb19lCEu+VXzQLGC1wiEGVvgY=";
+    rev = "${pname}_${underscoredVersion}";
+    sha256 = "sha256-Eic63pV2p154YkSmkqWr86fGTr+XmVGy5l5/6q14LQM=";
   };
 
   cmakeFlags = [
@@ -29,19 +31,25 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://github.com/dajobe/raptor/pull/52
+    # pull upstream fix for libxml2-2.11 API compatibility, part of unreleased 2.0.17
+    #   https://github.com/dajobe/raptor/pull/58
     (fetchpatch {
-      name = "fix-cmake-generated-pc-file";
-      url = "https://github.com/dajobe/raptor/commit/fa1ef9a27d8762f5588ac2e92554a188e73dee9f.diff";
-      sha256 = "sha256-zXIbrYGgC9oTpiD0WUikT4vRdc9b6bsyfnDkwUSlqao=";
+      name = "libxml2-2.11.patch";
+      url = "https://github.com/dajobe/raptor/commit/4dbc4c1da2a033c497d84a1291c46f416a9cac51.patch";
+      hash = "sha256-fHfvncGymzMtxjwtakCNSr/Lem12UPIHAAcAac648w4=";
     })
   ];
 
   nativeBuildInputs = [ pkg-config cmake perl bison flex ];
-  buildInputs = [ libxml2 libxslt ];
+  buildInputs = [
+    curl
+    libxml2
+    libxslt
+  ];
 
   meta = {
-    description = "The RDF Parser Toolkit";
+    description = "RDF Parser Toolkit";
+    mainProgram = "rapper";
     homepage = "https://librdf.org/raptor";
     license = with lib.licenses; [ lgpl21 asl20 ];
     maintainers = with lib.maintainers; [ marcweber ];

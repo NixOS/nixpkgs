@@ -243,7 +243,7 @@ rec {
   # fonts.
   fontsConf = pkgs.makeFontsConf {
     fontDirectories = [
-      "${pkgs.ghostscript}/share/ghostscript/fonts"
+      "${pkgs.ghostscript.fonts}/share/fonts"
     ];
   };
 

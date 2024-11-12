@@ -6,10 +6,10 @@
 # run-time) of a package to a consumer that isn't used to thinking so cleverly.
 #
 # The solution is to splice the package sets together as we do below, so every
-# `callPackage`d expression in fact gets both versions. Each# derivation (and
-# each derivation's outputs) consists of the run-time version, augmented with a
-# `__spliced.buildHost` field for the build-time version, and `__spliced.hostTarget` field for the
-# run-time version.
+# `callPackage`d expression in fact gets both versions. Each derivation (and
+# each derivation's outputs) consists of the run-time version, augmented with
+# a `__spliced.buildHost` field for the build-time version, and
+# `__spliced.hostTarget` field for the run-time version.
 #
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
@@ -45,9 +45,6 @@ let
             valueHostTarget = pkgsHostTarget.${name} or { };
             valueTargetTarget = pkgsTargetTarget.${name} or { };
             augmentedValue = defaultValue
-              # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-              // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = lib.warn "use ${name}.__spliced.buildHost instead of ${name}.nativeDrv" valueBuildHost; })
-              // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = lib.warn "use ${name}.__spliced.hostTarget instead of ${name}.crossDrv" valueHostTarget; })
               // {
               __spliced =
                 (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
@@ -122,7 +119,6 @@ let
       pkgsTargetTarget
       buildPackages pkgs targetPackages
       ;
-    inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
   splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [
@@ -131,6 +127,15 @@ let
     "overrideScope"
     "packages"
   ];
+
+  packagesWithXorg = pkgs // builtins.removeAttrs pkgs.xorg [
+    "callPackage"
+    "newScope"
+    "overrideScope"
+    "packages"
+  ];
+
+  pkgsForCall = if actuallySplice then splicedPackagesWithXorg else packagesWithXorg;
 
 in
 
@@ -142,29 +147,36 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope { };
 
-  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
+  callPackages = lib.callPackagesWith pkgsForCall;
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
+  makeScopeWithSplicing' = lib.makeScopeWithSplicing' { inherit splicePackages; inherit (pkgs) newScope; };
 
   # generate 'otherSplices' for 'makeScopeWithSplicing'
-  generateSplicesForMkScope = attr:
+  generateSplicesForMkScope = attrs:
     let
-      split = X: lib.splitString "." "${X}.${attr}";
+      split = X: [ X ] ++ (
+        if builtins.isList attrs
+          then attrs
+        else if builtins.isString attrs
+          then lib.splitString "." attrs
+        else throw "generateSplicesForMkScope must be passed a list of string or string"
+      );
+      bad = throw "attribute should be found";
     in
     {
-      # nulls should never be reached
-      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") null pkgs;
-      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") null pkgs;
-      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") null pkgs;
-      selfHostHost = lib.attrByPath (split "pkgsHostHost") null pkgs;
-      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") null pkgs;
+      selfBuildBuild = lib.attrByPath (split "pkgsBuildBuild") bad pkgs;
+      selfBuildHost = lib.attrByPath (split "pkgsBuildHost") bad pkgs;
+      selfBuildTarget = lib.attrByPath (split "pkgsBuildTarget") bad pkgs;
+      selfHostHost = lib.attrByPath (split "pkgsHostHost") bad pkgs;
+      selfHostTarget = lib.attrByPath (split "pkgsHostTarget") bad pkgs;
       selfTargetTarget = lib.attrByPath (split "pkgsTargetTarget") { } pkgs;
     };
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
-  __splicedPackages = splicedPackages // { recurseForDerivations = false; };
+  __splicedPackages = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 }

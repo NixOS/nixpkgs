@@ -1,29 +1,33 @@
-{ lib
-, anyio
-, curio
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, hypothesis
-, poetry-core
-, pytestCheckHook
-, pytest-aio
-, pytest-subtests
-, setuptools
-, trio
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  httpx,
+  hypothesis,
+  poetry-core,
+  pytest-aio,
+  pytest-subtests,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  trio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.20.0";
+  version = "0.23.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     rev = "refs/tags/${version}";
-    hash = "sha256-28WYjrjmu3hQ8+Snuvl3ykTd86eWYI97AE60p6SVwDQ=";
+    hash = "sha256-4ZP/wvPgqQQec/BaXuL9r7BEc2G+LztMdFul0NeEJTc=";
   };
 
   postPatch = ''
@@ -32,17 +36,9 @@ buildPythonPackage rec {
       -e '/--mypy.*/d'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
-
-  preCheck = ''
-    rm -rf returns/contrib/mypy
-  '';
+  propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [
     anyio
@@ -56,12 +52,19 @@ buildPythonPackage rec {
     trio
   ];
 
+  preCheck = ''
+    rm -rf returns/contrib/mypy
+  '';
+
+  pythonImportsCheck = [ "returns" ];
+
   pytestFlagsArray = [ "--ignore=typesafety" ];
 
   meta = with lib; {
     description = "Make your functions return something meaningful, typed, and safe!";
     homepage = "https://github.com/dry-python/returns";
+    changelog = "https://github.com/dry-python/returns/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = [ maintainers.jessemoore ];
+    maintainers = with maintainers; [ jessemoore ];
   };
 }

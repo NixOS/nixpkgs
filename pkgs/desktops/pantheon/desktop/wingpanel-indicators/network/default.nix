@@ -1,9 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, substituteAll
 , pkg-config
 , meson
 , ninja
@@ -11,6 +9,7 @@
 , gtk3
 , granite
 , networkmanager
+, polkit
 , libnma
 , wingpanel
 , libgee
@@ -18,23 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "7.0.1";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pz2sWN33d20/fMByR+XrNz2lxPdgCA6vxism3E/Fh/I=";
+    sha256 = "sha256-B3loX1yAUQktqNztikUCOHM1DgIu48fMFFol1N4BN7A=";
   };
-
-  patches = [
-    # PopoverWidget: fix flowbox child focus
-    # https://github.com/elementary/wingpanel-indicator-network/pull/288
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-network/commit/88db9004249334e1316321e0373a3065900fe6f1.patch";
-      sha256 = "sha256-rpAULo4qVPO3yr7cBVeKyT7L43zHVEdYLJD4x0ukBs4=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -48,6 +38,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     networkmanager
+    polkit
     libnma
     wingpanel
   ];

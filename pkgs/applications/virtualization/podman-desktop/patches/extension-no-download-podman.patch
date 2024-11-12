@@ -1,13 +1,24 @@
-diff --git a/extensions/podman/package.json b/extensions/podman/package.json
-index 5f86bbe9..92c0ef3b 100644
---- a/extensions/podman/package.json
-+++ b/extensions/podman/package.json
-@@ -86,7 +86,7 @@
+From f6dfc258742d03bd0270e9fded925ffa75cc60b0 Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Sat, 21 Sep 2024 18:56:02 -0400
+Subject: [PATCH] Don't download podman
+
+---
+ extensions/podman/packages/extension/package.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/extensions/podman/packages/extension/package.json b/extensions/podman/packages/extension/package.json
+index 1824d817f1..d1cc9a5dbf 100644
+--- a/extensions/podman/packages/extension/package.json
++++ b/extensions/podman/packages/extension/package.json
+@@ -369,7 +369,7 @@
      }
    },
    "scripts": {
--    "build": "rollup --bundleConfigAsCjs --config rollup.config.js --compact --environment BUILD:production && npx ts-node ./scripts/download.ts  && node ./scripts/build.js",
-+    "build": "rollup --bundleConfigAsCjs --config rollup.config.js --compact --environment BUILD:production && node ./scripts/build.js",
-     "watch": "rollup --bundleConfigAsCjs --config rollup.config.js -w",
-     "test": "vitest run --passWithNoTests"
-   },
+-    "build": "vite build && tsx ./scripts/download.ts && node ./scripts/build.cjs",
++    "build": "vite build && node ./scripts/build.cjs",
+     "test": "vitest run --coverage --passWithNoTests",
+     "test:watch": "vitest watch --coverage --passWithNoTests",
+     "watch": "vite build -w"
+-- 
+2.46.0

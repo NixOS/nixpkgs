@@ -7,23 +7,18 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ danderson ];
+    maintainers = [ ];
   };
 
   options = {
     services.pppd = {
-      enable = mkEnableOption (lib.mdDoc "pppd");
+      enable = mkEnableOption "pppd";
 
-      package = mkOption {
-        default = pkgs.ppp;
-        defaultText = literalExpression "pkgs.ppp";
-        type = types.package;
-        description = lib.mdDoc "pppd package to use.";
-      };
+      package = mkPackageOption pkgs "ppp" { };
 
       peers = mkOption {
         default = {};
-        description = lib.mdDoc "pppd peers.";
+        description = "pppd peers.";
         type = types.attrsOf (types.submodule (
           { name, ... }:
           {
@@ -32,27 +27,27 @@ in
                 type = types.str;
                 default = name;
                 example = "dialup";
-                description = lib.mdDoc "Name of the PPP peer.";
+                description = "Name of the PPP peer.";
               };
 
               enable = mkOption {
                 type = types.bool;
                 default = true;
                 example = false;
-                description = lib.mdDoc "Whether to enable this PPP peer.";
+                description = "Whether to enable this PPP peer.";
               };
 
               autostart = mkOption {
                 type = types.bool;
                 default = true;
                 example = false;
-                description = lib.mdDoc "Whether the PPP session is automatically started at boot time.";
+                description = "Whether the PPP session is automatically started at boot time.";
               };
 
               config = mkOption {
                 type = types.lines;
                 default = "";
-                description = lib.mdDoc "pppd configuration for this peer, see the pppd(8) man page.";
+                description = "pppd configuration for this peer, see the pppd(8) man page.";
               };
             };
           }));

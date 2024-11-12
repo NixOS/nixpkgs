@@ -13,13 +13,14 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "INSTALL=install" ];
 
   buildInputs = []
-    ++ lib.optional stdenv.isDarwin IOKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   meta = with lib; {
     homepage = "http://linukz.org/cd-discid.shtml";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     description = "Command-line utility to get CDDB discid information from a CD-ROM disc";
+    mainProgram = "cd-discid";
 
     longDescription = ''
       cd-discid is a backend utility to get CDDB discid information

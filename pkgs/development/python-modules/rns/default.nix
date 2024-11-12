@@ -1,16 +1,20 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, netifaces
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  esptool,
+  fetchFromGitHub,
+  netifaces,
+  pyserial,
+  pythonOlder,
+  replaceVars,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.5.5";
-  format = "setuptools";
+  version = "0.8.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,10 +22,18 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-gyEf6Sck+qmbnepiBoHrN9t018BwBM4iJQBjU9Iqhn4=";
+    hash = "sha256-3Eif3AVpjNH803XXkPGQ5ZgSpVwV1W4DDm9rYBj6AEo=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (replaceVars ./unvendor-esptool.patch {
+      esptool = lib.getExe esptool;
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     netifaces
     pyserial
@@ -30,15 +42,16 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "RNS"
-  ];
+  pythonImportsCheck = [ "RNS" ];
 
   meta = with lib; {
     description = "Cryptography-based networking stack for wide-area networks";
     homepage = "https://github.com/markqvist/Reticulum";
     changelog = "https://github.com/markqvist/Reticulum/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      qbit
+    ];
   };
 }

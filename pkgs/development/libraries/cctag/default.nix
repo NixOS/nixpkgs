@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 , cmake
-, boost
+, boost179
 , eigen
 , opencv
 , tbb
@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost179
     eigen
-    opencv
+    opencv.cxxdev
   ];
 
   # Tests are broken on Darwin (linking issue)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Detection of CCTag markers made up of concentric circles";

@@ -1,7 +1,15 @@
-{stdenv, lib, buildPythonPackage, fetchPypi, bash, which}:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bash,
+  which,
+}:
 
 buildPythonPackage rec {
   version = "0.7";
+  format = "setuptools";
   pname = "cram";
 
   nativeCheckInputs = [ which ];
@@ -22,11 +30,12 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A simple testing framework for command line applications";
+    description = "Simple testing framework for command line applications";
+    mainProgram = "cram";
     homepage = "https://bitheap.org/cram/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jluttine ];
     # Tests fail on i686: https://hydra.nixos.org/build/52896671/nixlog/4
-    broken = stdenv.isi686;
+    broken = stdenv.hostPlatform.isi686;
   };
 }

@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Punch clock to track time spent on projects";
+    mainProgram = "kapow";
     homepage = "https://gottcode.org/kapow/";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;

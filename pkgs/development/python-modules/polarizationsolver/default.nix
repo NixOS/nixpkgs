@@ -1,16 +1,17 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, python
-, numpy
-, scipy
-, periodictable
-, fields
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  numpy,
+  scipy,
+  periodictable,
+  fields,
 }:
 
 buildPythonPackage rec {
   pname = "polarizationsolver";
   version = "unstable-2021-11-02";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "reinholdt";

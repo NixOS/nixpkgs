@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   dontUseQmakeConfigure = true;
   configureFlags = [ "-config" "release" ]
     # Build mixes up dylibs/frameworks if one is not explicitly specified.
-    ++ lib.optionals stdenv.isDarwin [ "-config" "qt_framework" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-config" "qt_framework" ];
 
   dontWrapQtApps = true;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm -rf lib";
 
   meta = with lib; {
-    description = "A cross-platform IRC framework written with Qt";
+    description = "Cross-platform IRC framework written with Qt";
     homepage = "https://communi.github.io";
     license = licenses.bsd3;
     platforms = platforms.all;

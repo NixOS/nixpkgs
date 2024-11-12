@@ -1,33 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.13.13";
-  format = "setuptools";
+  version = "8.13.46";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S9+MmJr/DNsQWu8XCtLCHxS0U3vLMs80nx9xDfmSpAo=";
+    hash = "sha256-lL8Yupclu2ho0pRzsT947wHiWFxctWHsAgC+dnbndFI=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pytestFlagsArray = [
-    "tests/*.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "phonenumbers"
-  ];
+  pytestFlagsArray = [ "tests/*.py" ];
+
+  pythonImportsCheck = [ "phonenumbers" ];
 
   meta = with lib; {
     description = "Python module for handling international phone numbers";

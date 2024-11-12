@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, click
-, isPy3k
-, futures ? null
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  click,
+  isPy3k,
+  futures ? null,
 }:
 
 buildPythonPackage rec {
   pname = "click-threading";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utility for communicating with WebOS devices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

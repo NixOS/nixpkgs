@@ -50,19 +50,19 @@ let
     options = {
       package = mkOption {
         type = types.package;
-        description = mdDoc "Akkoma frontend package.";
+        description = "Akkoma frontend package.";
         example = literalExpression "pkgs.akkoma-frontends.akkoma-fe";
       };
 
       name = mkOption {
         type = types.nonEmptyStr;
-        description = mdDoc "Akkoma frontend name.";
+        description = "Akkoma frontend name.";
         example = "akkoma-fe";
       };
 
       ref = mkOption {
         type = types.nonEmptyStr;
-        description = mdDoc "Akkoma frontend reference.";
+        description = "Akkoma frontend reference.";
         example = "stable";
       };
     };
@@ -86,7 +86,7 @@ let
   # Erlang/Elixir uses a somewhat special format for IP addresses
   erlAddr = addr: fileContents
     (pkgs.runCommand addr {
-      nativeBuildInputs = with pkgs; [ elixir ];
+      nativeBuildInputs = [ cfg.package.elixirPackage ];
       code = ''
         case :inet.parse_address('${addr}') do
           {:ok, addr} -> IO.inspect addr
@@ -96,7 +96,7 @@ let
       passAsFile = [ "code" ];
     } ''elixir "$codePath" >"$out"'');
 
-  format = pkgs.formats.elixirConf { };
+  format = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
   configFile = format.generate "config.exs"
     (replaceSec
       (attrsets.updateManyAttrsByPath [{
@@ -119,7 +119,7 @@ let
         -o ${escapeShellArg cfg.user } \
         -g ${escapeShellArg cfg.group} \
         <(hexdump -n 16 -e '"%02x"' /dev/urandom) \
-        "$RUNTIME_DIRECTORY/cookie"
+        "''${RUNTIME_DIRECTORY%%:*}/cookie"
     '';
   };
 
@@ -131,7 +131,7 @@ let
         -o ${escapeShellArg cfg.user} \
         -g ${escapeShellArg cfg.group} \
         ${escapeShellArg cfg.dist.cookie._secret} \
-        "$RUNTIME_DIRECTORY/cookie"
+        "''${RUNTIME_DIRECTORY%%:*}/cookie"
     '';
   };
 
@@ -146,7 +146,7 @@ let
 
   initSecretsScript = writeShell {
     name = "akkoma-init-secrets";
-    runtimeInputs = with pkgs; [ coreutils elixir ];
+    runtimeInputs = with pkgs; [ coreutils cfg.package.elixirPackage ];
     text = let
       key-base = web.secret_key_base;
       jwt-signer = ex.":joken".":default_signer";
@@ -181,7 +181,7 @@ let
     name = "akkoma-config";
     runtimeInputs = with pkgs; [ coreutils replace-secret ];
     text = ''
-      cd "$RUNTIME_DIRECTORY"
+      cd "''${RUNTIME_DIRECTORY%%:*}"
       tmp="$(mktemp config.exs.XXXXXXXXXX)"
       trap 'rm -f "$tmp"' EXIT TERM
 
@@ -279,15 +279,15 @@ let
         cd "${cfg.package}"
 
         RUNTIME_DIRECTORY="''${RUNTIME_DIRECTORY:-/run/akkoma}"
-        AKKOMA_CONFIG_PATH="$RUNTIME_DIRECTORY/config.exs" \
+        AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS="${concatStringsSep " " [
-          "-kernel inet_dist_use_interface '${erlAddr cfg.dist.address}'"
-          "-kernel inet_dist_listen_min ${toString cfg.dist.portMin}"
-          "-kernel inet_dist_listen_max ${toString cfg.dist.portMax}"
-        ]}" \
-        RELEASE_COOKIE="$(<"$RUNTIME_DIRECTORY/cookie")" \
+        ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
+          "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
+          "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
+          "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
+        ] ++ cfg.dist.extraFlags))} \
+        RELEASE_COOKIE="$(<"''${RUNTIME_DIRECTORY%%:*}/cookie")" \
         RELEASE_NAME="akkoma" \
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
       '';
@@ -350,32 +350,27 @@ let
 in {
   options = {
     services.akkoma = {
-      enable = mkEnableOption (mdDoc "Akkoma");
+      enable = mkEnableOption "Akkoma";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.akkoma;
-        defaultText = literalExpression "pkgs.akkoma";
-        description = mdDoc "Akkoma package to use.";
-      };
+      package = mkPackageOption pkgs "akkoma" { };
 
       user = mkOption {
         type = types.nonEmptyStr;
         default = "akkoma";
-        description = mdDoc "User account under which Akkoma runs.";
+        description = "User account under which Akkoma runs.";
       };
 
       group = mkOption {
         type = types.nonEmptyStr;
         default = "akkoma";
-        description = mdDoc "Group account under which Akkoma runs.";
+        description = "Group account under which Akkoma runs.";
       };
 
       initDb = {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = mdDoc ''
+          description = ''
             Whether to automatically initialise the database on startup. This will create a
             database role and database if they do not already exist, and (re)set the role password
             and the ownership of the database.
@@ -408,7 +403,7 @@ in {
           type = types.nonEmptyStr;
           default = config.services.postgresql.superUser;
           defaultText = literalExpression "config.services.postgresql.superUser";
-          description = mdDoc ''
+          description = ''
             Name of the database user to initialise the database with.
 
             This user is required to have the `CREATEROLE` and `CREATEDB` capabilities.
@@ -418,7 +413,7 @@ in {
         password = mkOption {
           type = types.nullOr secret;
           default = null;
-          description = mdDoc ''
+          description = ''
             Password of the database user to initialise the database with.
 
             If set to `null`, no password will be used.
@@ -431,7 +426,7 @@ in {
       initSecrets = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to initialise non‐existent secrets with random values.
 
           If enabled, appropriate secrets for the following options will be created automatically
@@ -449,7 +444,7 @@ in {
       installWrapper = mkOption {
         type = types.bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Whether to install a wrapper around `pleroma_ctl` to simplify administration of the
           Akkoma instance.
         '';
@@ -457,10 +452,10 @@ in {
 
       extraPackages = mkOption {
         type = with types; listOf package;
-        default = with pkgs; [ exiftool ffmpeg_5-headless graphicsmagick-imagemagick-compat ];
-        defaultText = literalExpression "with pkgs; [ exiftool graphicsmagick-imagemagick-compat ffmpeg_5-headless ]";
-        example = literalExpression "with pkgs; [ exiftool imagemagick ffmpeg_5-full ]";
-        description = mdDoc ''
+        default = with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ];
+        defaultText = literalExpression "with pkgs; [ exiftool ffmpeg-headless graphicsmagick-imagemagick-compat ]";
+        example = literalExpression "with pkgs; [ exiftool ffmpeg-full imagemagick ]";
+        description = ''
           List of extra packages to include in the executable search path of the service unit.
           These are needed by various configurable components such as:
 
@@ -472,7 +467,7 @@ in {
       };
 
       frontends = mkOption {
-        description = mdDoc "Akkoma frontends.";
+        description = "Akkoma frontends.";
         type = with types; attrsOf (submodule frontend);
         default = {
           primary = {
@@ -504,7 +499,7 @@ in {
 
       extraStatic = mkOption {
         type = with types; nullOr (attrsOf package);
-        description = mdDoc ''
+        description = ''
           Attribute set of extra packages to add to the static files directory.
 
           Do not add frontends here. These should be configured through
@@ -542,7 +537,7 @@ in {
         address = mkOption {
           type = ipAddress;
           default = "127.0.0.1";
-          description = mdDoc ''
+          description = ''
             Listen address for Erlang distribution protocol and Port Mapper Daemon (epmd).
           '';
         };
@@ -550,26 +545,33 @@ in {
         epmdPort = mkOption {
           type = types.port;
           default = 4369;
-          description = mdDoc "TCP port to bind Erlang Port Mapper Daemon to.";
+          description = "TCP port to bind Erlang Port Mapper Daemon to.";
+        };
+
+        extraFlags = mkOption {
+          type = with types; listOf str;
+          default = [ ];
+          description = "Extra flags to pass to Erlang";
+          example = [ "+sbwt" "none" "+sbwtdcpu" "none" "+sbwtdio" "none" ];
         };
 
         portMin = mkOption {
           type = types.port;
           default = 49152;
-          description = mdDoc "Lower bound for Erlang distribution protocol TCP port.";
+          description = "Lower bound for Erlang distribution protocol TCP port.";
         };
 
         portMax = mkOption {
           type = types.port;
           default = 65535;
-          description = mdDoc "Upper bound for Erlang distribution protocol TCP port.";
+          description = "Upper bound for Erlang distribution protocol TCP port.";
         };
 
         cookie = mkOption {
           type = types.nullOr secret;
           default = null;
           example = { _secret = "/var/lib/secrets/akkoma/releaseCookie"; };
-          description = mdDoc ''
+          description = ''
             Erlang release cookie.
 
             If set to `null`, a temporary random cookie will be generated.
@@ -578,7 +580,7 @@ in {
       };
 
       config = mkOption {
-        description = mdDoc ''
+        description = ''
           Configuration for Akkoma. The attributes are serialised to Elixir DSL.
 
           Refer to <https://docs.akkoma.dev/stable/configuration/cheatsheet/> for
@@ -595,17 +597,17 @@ in {
               ":instance" = {
                 name = mkOption {
                   type = types.nonEmptyStr;
-                  description = mdDoc "Instance name.";
+                  description = "Instance name.";
                 };
 
                 email = mkOption {
                   type = types.nonEmptyStr;
-                  description = mdDoc "Instance administrator email.";
+                  description = "Instance administrator email.";
                 };
 
                 description = mkOption {
                   type = types.nonEmptyStr;
-                  description = mdDoc "Instance description.";
+                  description = "Instance description.";
                 };
 
                 static_dir = mkOption {
@@ -617,7 +619,7 @@ in {
                     - [{option}`services.akkoma.frontends`](#opt-services.akkoma.frontends)
                     - [{option}`services.akkoma.extraStatic`](#opt-services.akkoma.extraStatic)
                   '';
-                  description = mdDoc ''
+                  description = ''
                     Directory of static files.
 
                     This directory can be built using a derivation, or it can be managed as mutable
@@ -628,7 +630,7 @@ in {
                 upload_dir = mkOption {
                   type = absolutePath;
                   default = "/var/lib/akkoma/uploads";
-                  description = mdDoc ''
+                  description = ''
                     Directory where Akkoma will put uploaded files.
                   '';
                 };
@@ -650,7 +652,7 @@ in {
                     database = "akkoma";
                   }
                 '';
-                description = mdDoc ''
+                description = ''
                   Database configuration.
 
                   Refer to
@@ -665,19 +667,19 @@ in {
                     type = types.nonEmptyStr;
                     default = config.networking.fqdn;
                     defaultText = literalExpression "config.networking.fqdn";
-                    description = mdDoc "Domain name of the instance.";
+                    description = "Domain name of the instance.";
                   };
 
                   scheme = mkOption {
                     type = types.nonEmptyStr;
                     default = "https";
-                    description = mdDoc "URL scheme.";
+                    description = "URL scheme.";
                   };
 
                   port = mkOption {
                     type = types.port;
                     default = 443;
-                    description = mdDoc "External port number.";
+                    description = "External port number.";
                   };
                 };
 
@@ -686,7 +688,7 @@ in {
                     type = types.either absolutePath ipAddress;
                     default = "/run/akkoma/socket";
                     example = "::1";
-                    description = mdDoc ''
+                    description = ''
                       Listener IP address or Unix socket path.
 
                       The value is automatically converted to Elixir’s internal address
@@ -702,7 +704,7 @@ in {
                         then 0
                         else 4000;
                     '';
-                    description = mdDoc ''
+                    description = ''
                       Listener port number.
 
                       Must be 0 if using a Unix socket.
@@ -713,7 +715,7 @@ in {
                 secret_key_base = mkOption {
                   type = secret;
                   default = { _secret = "/var/lib/secrets/akkoma/key-base"; };
-                  description = mdDoc ''
+                  description = ''
                     Secret key used as a base to generate further secrets for encrypting and
                     signing data.
 
@@ -731,7 +733,7 @@ in {
                   signing_salt = mkOption {
                     type = secret;
                     default = { _secret = "/var/lib/secrets/akkoma/liveview-salt"; };
-                    description = mdDoc ''
+                    description = ''
                       LiveView signing salt.
 
                       The attribute `_secret` should point to a file containing the secret.
@@ -748,7 +750,7 @@ in {
                 signing_salt = mkOption {
                   type = secret;
                   default = { _secret = "/var/lib/secrets/akkoma/signing-salt"; };
-                  description = mdDoc ''
+                  description = ''
                     Signing salt.
 
                     The attribute `_secret` should point to a file containing the secret.
@@ -762,6 +764,26 @@ in {
                 };
               };
 
+              "Pleroma.Upload" = let
+                httpConf = cfg.config.":pleroma"."Pleroma.Web.Endpoint".url;
+              in {
+                base_url = mkOption {
+                    type = types.nonEmptyStr;
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                              else null;
+                    defaultText = literalExpression ''
+                      if lib.versionOlder config.system.stateVersion "24.05"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      else null;
+                    '';
+                    description = ''
+                      Base path which uploads will be stored at.
+                      Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
+                    '';
+                };
+              };
+
               ":frontends" = mkOption {
                 type = elixirValue;
                 default = mapAttrs
@@ -772,18 +794,48 @@ in {
                     (pkgs.formats.elixirConf { }).lib.mkMap { name = val.name; ref = val.ref; })
                     config.services.akkoma.frontends;
                 '';
-                description = mdDoc ''
+                description = ''
                   Frontend configuration.
 
                   Users should rely on the default value and prefer to configure frontends through
                   [{option}`config.services.akkoma.frontends`](#opt-services.akkoma.frontends).
                 '';
               };
+
+
+              ":media_proxy" = let
+                httpConf = cfg.config.":pleroma"."Pleroma.Web.Endpoint".url;
+              in {
+                enabled = mkOption {
+                    type = types.bool;
+                    default = false;
+                    defaultText = literalExpression "false";
+                    description = ''
+                      Whether to enable proxying of remote media through the instance's proxy.
+                    '';
+                };
+                base_url = mkOption {
+                    type = types.nullOr types.nonEmptyStr;
+                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                              then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
+                              else null;
+                    defaultText = literalExpression ''
+                      if lib.versionOlder config.system.stateVersion "24.05"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}"
+                      else null;
+                    '';
+                    description = ''
+                      Base path for the media proxy.
+                      Whilst this can just be set to a subdirectory of the main domain, it is now recommended to use a different subdomain.
+                    '';
+                };
+              };
+
             };
 
             ":web_push_encryption" = mkOption {
               default = { };
-              description = mdDoc ''
+              description = ''
                 Web Push Notifications configuration.
 
                 The necessary key pair can be generated as follows:
@@ -802,19 +854,19 @@ in {
                       defaultText = literalExpression ''
                         "mailto:''${config.services.akkoma.config.":pleroma".":instance".email}"
                       '';
-                      description = mdDoc "mailto URI for administrative contact.";
+                      description = "mailto URI for administrative contact.";
                     };
 
                     public_key = mkOption {
                       type = with types; either nonEmptyStr secret;
                       default = { _secret = "/var/lib/secrets/akkoma/vapid-public"; };
-                      description = mdDoc "base64-encoded public ECDH key.";
+                      description = "base64-encoded public ECDH key.";
                     };
 
                     private_key = mkOption {
                       type = secret;
                       default = { _secret = "/var/lib/secrets/akkoma/vapid-private"; };
-                      description = mdDoc ''
+                      description = ''
                         base64-encoded private ECDH key.
 
                         The attribute `_secret` should point to a file containing the secret.
@@ -829,7 +881,7 @@ in {
               ":default_signer" = mkOption {
                 type = secret;
                 default = { _secret = "/var/lib/secrets/akkoma/jwt-signer"; };
-                description = mdDoc ''
+                description = ''
                   JWT signing secret.
 
                   The attribute `_secret` should point to a file containing the secret.
@@ -864,7 +916,7 @@ in {
                   apply = format.lib.mkAtom;
                   default = ":info";
                   example = ":warning";
-                  description = mdDoc ''
+                  description = ''
                     Log level.
 
                     Refer to
@@ -892,7 +944,7 @@ in {
         type = with types; nullOr (submodule
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
         default = null;
-        description = mdDoc ''
+        description = ''
           Extra configuration for the nginx virtual host of Akkoma.
 
           If set to `null`, no virtual host will be added to the nginx configuration.
@@ -902,7 +954,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optionals (!config.security.sudo.enable) [''
+    assertions = optionals (cfg.config.":pleroma".":media_proxy".enabled && cfg.config.":pleroma".":media_proxy".base_url == null) [''
+      `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set when the media proxy is enabled.
+    ''];
+    warnings = optionals (with config.security; cfg.installWrapper && (!sudo.enable) && (!sudo-rs.enable)) [''
       The pleroma_ctl wrapper enabled by the installWrapper option relies on
       sudo, which appears to have been disabled through security.sudo.enable.
     ''];
@@ -929,7 +984,7 @@ in {
         RemainAfterExit = true;
         UMask = "0077";
 
-        RuntimeDirectory = "akkoma";
+        RuntimeDirectory = mkBefore "akkoma";
 
         ExecStart = mkMerge [
           (mkIf (cfg.dist.cookie == null) [ genScript ])
@@ -972,7 +1027,7 @@ in {
       # This service depends on network-online.target and is sequenced after
       # it because it requires access to the Internet to function properly.
       bindsTo = [ "akkoma-config.service" ];
-      wants = [ "network-online.service" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [
         "akkoma-config.target"
@@ -1017,7 +1072,7 @@ in {
 
         ProtectProc = "noaccess";
         ProcSubset = "pid";
-        ProtectSystem = mkIf (!isConfined) "strict";
+        ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;

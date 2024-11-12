@@ -1,17 +1,19 @@
 { lib
 , stdenv
-, fetchurl
-, sconsPackages
+, fetchFromGitHub
+, buildPackages
 , boost
 , gperftools
+, pcre2
 , pcre-cpp
 , snappy
 , zlib
 , yaml-cpp
 , sasl
+, net-snmp
+, openldap
 , openssl
 , libpcap
-, python3
 , curl
 , Security
 , CoreFoundation
@@ -23,47 +25,26 @@
 #   The command line administrative tools are part of other packages:
 #   see pkgs.mongodb-tools and pkgs.mongosh.
 
-with lib;
-
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
+, avxSupport ? stdenv.hostPlatform.avxSupport
+, passthru ? {}
 }:
 
 let
-  variants =
-    if versionAtLeast version "6.0" then rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-        packaging
-        pymongo
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    } else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-      ]);
-
-      scons = sconsPackages.scons_3_1_2;
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    };
+  scons = buildPackages.scons;
+  python = scons.python.withPackages (ps: with ps; [
+    pyyaml
+    cheetah3
+    psutil
+    setuptools
+    distutils
+    packaging
+    pymongo
+  ]);
 
   system-libraries = [
     "boost"
-    "pcre"
     "snappy"
     "yaml"
     "zlib"
@@ -71,20 +52,30 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ]
+    ++ lib.optionals (lib.versionOlder version "7.0") [
+      "pcre"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "7.0") [
+      "pcre2"
+    ];
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
-  inherit version;
+  inherit version passthru;
   pname = "mongodb";
 
-  src = fetchurl {
-    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "mongodb";
+    repo = "mongo";
+    rev = "r${version}";
     inherit sha256;
   };
 
-  nativeBuildInputs = [ variants.scons ]
-    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+  nativeBuildInputs = [
+    scons
+    python
+  ] ++ lib.optional stdenv.hostPlatform.isLinux net-snmp;
 
   buildInputs = [
     boost
@@ -93,12 +84,15 @@ in stdenv.mkDerivation rec {
     libpcap
     yaml-cpp
     openssl
+    openldap
+    pcre2
     pcre-cpp
-    variants.python
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreFoundation cctools ]
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
+  ++ [ xz ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -109,29 +103,16 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
-   '' + lib.optionalString (versionAtLeast version "4.4") ''
+   '' + ''
     # Fix debug gcc 11 and clang 12 builds on Fedora
     # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
     substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString (versionOlder version "5.0") ''
-    # remove -march overriding, we know better.
-    sed -i 's/env.Append.*-march=.*$/pass/' SConstruct
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
-    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
-  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
-    substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
-    substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
-    substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
-    substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
-    substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
-  '' + lib.optionalString stdenv.isi686 ''
-
-    # don't fail by default on i686
-    substituteInPlace src/mongo/db/storage/storage_options.h \
-      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+  '' + lib.optionalString (!avxSupport) ''
+    substituteInPlace SConstruct \
+      --replace-fail "default=['+sandybridge']," 'default=[],'
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
@@ -146,13 +127,20 @@ in stdenv.mkDerivation rec {
     "--use-sasl-client"
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-  ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
-    ++ map (lib: "--use-system-${lib}") system-libraries;
+    "--link-model=static"
+    "MONGO_VERSION=${version}"
+  ]
+  ++ map (lib: "--use-system-${lib}") system-libraries;
+
+  # This seems to fix mongodb not able to find OpenSSL's crypto.h during build
+  hardeningDisable = [ "fortify3" ];
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
-  '' + optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    sconsFlags+=" AR=$AR"
+  '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
@@ -171,24 +159,20 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  installTargets =
-    if (versionAtLeast version "6.0") then "install-devcore"
-    else if (versionAtLeast version "4.4") then "install-core"
-    else "install";
+  installTargets = "install-devcore";
 
-  prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
+  prefixKey = "DESTDIR=";
 
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
 
-  meta = {
-    description = "A scalable, high-performance, open source NoSQL database";
+  meta = with lib; {
+    description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
+    maintainers = with maintainers; [ bluescreen303 offline ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
-    broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };
 }

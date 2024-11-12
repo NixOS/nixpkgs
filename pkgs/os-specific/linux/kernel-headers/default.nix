@@ -104,22 +104,22 @@ let
 
     meta = with lib; {
       description = "Header files and scripts for Linux kernel";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       platforms = platforms.linux;
     };
   };
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.3"; in
+  linuxHeaders = let version = "6.10"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-ujSR9e1r0nCjcMRAQ049aQhfzdUoki+gHnPXZX23Ox4=";
+        hash = "sha256-d0aYQi7lTF8ecERW83xlwGtRtOmosIZvNFgNhv744iY=";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
     };
 }

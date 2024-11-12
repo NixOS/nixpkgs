@@ -1,29 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.13.1";
-  format = "setuptools";
+  version = "2.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mbhFBVx6Gye3M0lCny1vag659Am0ze7InfmeFr0ZeDM=";
+    pname = "google_cloud_tasks";
+    inherit version;
+    hash = "sha256-5tcJsIrzsXO2w/uA/wK2bi1ZVPkulNVHTYCzA4R6OME=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus
@@ -50,9 +55,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Tasks API API client library";
-    homepage = "https://github.com/googleapis/python-tasks";
-    changelog = "https://github.com/googleapis/python-tasks/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-tasks";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-tasks-v${version}/packages/google-cloud-tasks/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

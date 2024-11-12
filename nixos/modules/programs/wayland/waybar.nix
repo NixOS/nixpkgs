@@ -1,25 +1,30 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
   cfg = config.programs.waybar;
 in
 {
   options.programs.waybar = {
-    enable = mkEnableOption (lib.mdDoc "waybar");
-    package = mkPackageOptionMD pkgs "waybar" { };
+    enable = lib.mkEnableOption "waybar, a highly customizable Wayland bar for Sway and Wlroots based compositors";
+    package =
+      lib.mkPackageOption pkgs "waybar" { }
+      // lib.mkOption {
+        apply = pkg: pkg.override { systemdSupport = true; };
+      };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    systemd.user.services.waybar = {
-      description = "Waybar as systemd service";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      script = "${cfg.package}/bin/waybar";
+    systemd = {
+      packages = [ cfg.package ];
+      user.services.waybar.wantedBy = [ "graphical-session.target" ];
     };
   };
 
-  meta.maintainers = [ maintainers.FlorianFranzen ];
+  meta.maintainers = [ lib.maintainers.FlorianFranzen ];
 }

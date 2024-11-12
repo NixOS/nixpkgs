@@ -1,12 +1,27 @@
-{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
-
+{ fetchFromGitHub
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
 , callPackage
-
 , SystemConfiguration
-
 , modules ? null
 , nixosTests
 }:
@@ -75,7 +90,7 @@ defaultModules = mods: with mods; [
   xml_int.cdr
   xml_int.rpc
   xml_int.scgi
-] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
+] ++ lib.optionals stdenv.hostPlatform.isLinux [ endpoints.gsmopen ];
 
 enabledModules = (if modules != null then modules else defaultModules) availableModules;
 
@@ -88,12 +103,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.9";
+  version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-65DH2HxiF8wqzmzbIqaQZjSa/JPERHIS2FW6F18c6Pw=";
+    hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
 
   postPatch = ''
@@ -119,7 +134,7 @@ stdenv.mkDerivation rec {
     libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
-  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration ];
 
   enableParallelBuilding = true;
 
@@ -151,8 +166,8 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

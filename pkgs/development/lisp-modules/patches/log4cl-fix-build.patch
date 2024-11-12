@@ -1,5 +1,0 @@
---- a/src/naming-sbcl.lisp
-+++ b/src/naming-sbcl.lisp
-@@ -108,1 +108,1 @@
--              then (sb-c::lambda-parent lambda)
-+              then (sb-c::lexenv-lambda (sb-c::lambda-lexenv lambda))

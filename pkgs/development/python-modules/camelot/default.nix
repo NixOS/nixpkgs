@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, chardet
-, openpyxl
-, charset-normalizer
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, pandas
-, tabulate
-, click
-, pdfminer
-, pypdf
-, opencv3
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  openpyxl,
+  charset-normalizer,
+  fetchPypi,
+  pythonOlder,
+  pandas,
+  tabulate,
+  click,
+  pdfminer-six,
+  pypdf,
+  opencv4,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "camelot-py";
   version = "0.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,26 +27,27 @@ buildPythonPackage rec {
     hash = "sha256-l6fZBtaF5AWaSlSaY646UfCrcqPIJlV/hEPGWhGB3+Y=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
     charset-normalizer
     chardet
     pandas
     tabulate
     click
-    pdfminer
+    pdfminer-six
     openpyxl
     pypdf
-    opencv3
+    opencv4
   ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "camelot"
-  ];
+  pythonImportsCheck = [ "camelot" ];
 
   meta = with lib; {
-    description = "A Python library to extract tabular data from PDFs";
+    description = "Python library to extract tabular data from PDFs";
+    mainProgram = "camelot";
     homepage = "http://camelot-py.readthedocs.io";
     changelog = "https://github.com/camelot-dev/camelot/blob/v${version}/HISTORY.md";
     license = licenses.mit;

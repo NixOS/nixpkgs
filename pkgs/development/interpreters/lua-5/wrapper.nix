@@ -10,7 +10,7 @@
 # Create a lua executable that knows about additional packages.
 let
   env = let
-    paths =  requiredLuaModules (extraLibs ++ [ lua ] );
+    paths = [ lua ] ++ requiredLuaModules extraLibs;
   in buildEnv {
     name = "${lua.name}-env";
 
@@ -20,17 +20,17 @@ let
 
     nativeBuildInputs = [
       makeWrapper
-      (lua.pkgs.lua-setup-hook lua.LuaPathSearchPaths lua.LuaCPathSearchPaths)
     ];
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''
+      source ${lua}/nix-support/utils.sh
       if [ -L "$out/bin" ]; then
           unlink "$out/bin"
       fi
       mkdir -p "$out/bin"
 
-      addToLuaPath "$out"
+      buildLuaPath "$out"
 
       # take every binary from lua packages and put them into the env
       for path in ${lib.concatStringsSep " " paths}; do
@@ -60,8 +60,8 @@ let
     passthru = lua.passthru // {
       interpreter = "${env}/bin/lua";
       inherit lua;
-      luaPath = lua.pkgs.lib.genLuaPathAbsStr env;
-      luaCpath = lua.pkgs.lib.genLuaCPathAbsStr env;
+      luaPath = lua.pkgs.luaLib.genLuaPathAbsStr env;
+      luaCpath = lua.pkgs.luaLib.genLuaCPathAbsStr env;
       env = stdenv.mkDerivation {
         name = "interactive-${lua.name}-environment";
         nativeBuildInputs = [ env ];

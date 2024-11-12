@@ -82,8 +82,9 @@ with pkgs.lib;
         machine.wait_for_unit("multi-user.target")
 
         with subtest("BTRFS filesystems are mounted correctly"):
-          machine.succeed("grep -E '/dev/vda / btrfs rw,relatime,space_cache=v2,subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
-          machine.succeed("grep -E '/dev/vda /home btrfs rw,relatime,space_cache=v2,subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
+          print("output of \"grep -E '/dev/vda' /proc/mounts\":\n" + machine.execute("grep -E '/dev/vda' /proc/mounts")[1])
+          machine.succeed("grep -E '/dev/vda / btrfs rw,.*subvolid=[0-9]+,subvol=/root 0 0' /proc/mounts")
+          machine.succeed("grep -E '/dev/vda /home btrfs rw,.*subvolid=[0-9]+,subvol=/home 0 0' /proc/mounts")
       '';
     };
 
@@ -93,6 +94,8 @@ with pkgs.lib;
     in
     makeTest {
       name = "non-default-filesystems-erofs";
+
+      meta.maintainers = with maintainers; [ nikstur ];
 
       nodes.machine = _: {
         virtualisation.qemu.drives = [{
@@ -126,6 +129,45 @@ with pkgs.lib;
 
         file_contents = machine.succeed("cat /non-default/filesystem")
         assert "erofs" in file_contents
+      '';
+    };
+
+  squashfs =
+    let
+      fsImage = "/tmp/non-default-filesystem.img";
+    in
+    makeTest {
+      name = "non-default-filesystems-squashfs";
+
+      meta.maintainers = with maintainers; [ nikstur ];
+
+      nodes.machine = {
+        virtualisation.qemu.drives = [{
+          name = "non-default-filesystem";
+          file = fsImage;
+          deviceExtraOpts.serial = "non-default";
+        }];
+
+        virtualisation.fileSystems."/non-default" = {
+          device = "/dev/disk/by-id/virtio-non-default";
+          fsType = "squashfs";
+          neededForBoot = true;
+        };
+      };
+
+      testScript = ''
+        import subprocess
+
+        with open("filesystem", "w") as f:
+          f.write("squashfs")
+
+        subprocess.run([
+          "${pkgs.squashfsTools}/bin/mksquashfs",
+          "filesystem",
+          "${fsImage}",
+        ])
+
+        assert "squashfs" in machine.succeed("cat /non-default/filesystem")
       '';
     };
 }

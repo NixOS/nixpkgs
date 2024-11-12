@@ -1,24 +1,25 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, click-completion
-, click-didyoumean
-, click-help-colors
-, colorama
-, fetchPypi
-, gradient_statsd
-, gradient-utils
-, gql
-, halo
-, marshmallow
-, progressbar2
-, pyopenssl
-, pyyaml
-, requests
-, requests-toolbelt
-, terminaltables
-, websocket-client
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     click-help-colors
     colorama
     gql
-    gradient_statsd
+    gradient-statsd
     gradient-utils
     halo
     marshmallow
@@ -72,7 +73,8 @@ buildPythonPackage rec {
   # ];
 
   meta = with lib; {
-    description = "The command line interface for Gradient";
+    description = "Command line interface for Gradient";
+    mainProgram = "gradient";
     homepage = "https://github.com/Paperspace/gradient-cli";
     license = licenses.isc;
     platforms = platforms.unix;

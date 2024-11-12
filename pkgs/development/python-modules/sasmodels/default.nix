@@ -1,20 +1,24 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytest
-, numpy
-, scipy
-, matplotlib
-, docutils
-, pyopencl
-, opencl-headers
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  bumps,
+  docutils,
+  matplotlib,
+  opencl-headers,
+  pycuda,
+  pyopencl,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.7";
-  format = "setuptools";
+  version = "1.0.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,34 +26,37 @@ buildPythonPackage rec {
     owner = "SasView";
     repo = "sasmodels";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GZQYVvQ4bEBizTmJ+o5fIfGr8gn2/4uD3PxIswEjzSE=";
+    hash = "sha256-fa6/13z11AuTRItZOEmTbjpU1aT6Ur7evi6UvVvXQck=";
   };
 
-  buildInputs = [
-    opencl-headers
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    docutils
-    matplotlib
+  buildInputs = [ opencl-headers ];
+
+  dependencies = [
     numpy
     scipy
-    pyopencl
   ];
 
-  # Note: the 1.0.5 release should be compatible with pytest6, so this can
-  # be set back to 'pytest' at that point
-  nativeCheckInputs = [
-    pytest
-  ];
+  optional-dependencies = {
+    full = [
+      docutils
+      bumps
+      matplotlib
+      # columnize
+    ];
+    server = [ bumps ];
+    opencl = [ pyopencl ];
+    cuda = [ pycuda ];
+  };
 
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test -c ./pytest.ini
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [
-    "sasmodels"
-  ];
+  pythonImportsCheck = [ "sasmodels" ];
 
   meta = with lib; {
     description = "Library of small angle scattering models";

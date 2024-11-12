@@ -1,4 +1,4 @@
-From 5c5d878bf49bae5920c330482217477819ba9bc2 Mon Sep 17 00:00:00 2001
+From 6500d02a70572f94e7b7df4d70b391ac27ac8bcb Mon Sep 17 00:00:00 2001
 From: Bernardo Meurer <bernardo@meurer.org>
 Date: Fri, 15 Oct 2021 23:22:50 -0700
 Subject: [PATCH 1/2] makefile: correctly sed paths
@@ -19,10 +19,10 @@ being a bit "different."
  1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index e9bbab4..ab05720 100644
+index 41eb38d..df3abb7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -51,19 +51,19 @@ _TPACPIBAT = $(DESTDIR)$(TPACPIBAT)
+@@ -57,17 +57,17 @@ _VAR     = $(DESTDIR)$(TLP_VAR)
  
  SED = sed \
  	-e "s|@TLPVER@|$(TLPVER)|g" \
@@ -40,17 +40,15 @@ index e9bbab4..ab05720 100644
  	-e "s|@TLP_CONFDIR@|$(TLP_CONFDIR)|g" \
 -	-e "s|@TLP_CONFDEF@|$(TLP_CONFDEF)|g" \
 -	-e "s|@TLP_CONFREN@|$(TLP_CONFREN)|g" \
+-	-e "s|@TLP_CONFDPR@|$(TLP_CONFDPR)|g" \
 -	-e "s|@TLP_CONF@|$(TLP_CONF)|g" \
 +	-e "s|@TLP_CONFDEF@|$(_CONFDEF)|g" \
 +	-e "s|@TLP_CONFREN@|$(_CONFREN)|g" \
++	-e "s|@TLP_CONFDPR@|$(_CONFDPR)|g" \
 +	-e "s|@TLP_CONF@|$(_CONF)|g" \
  	-e "s|@TLP_RUN@|$(TLP_RUN)|g"   \
- 	-e "s|@TLP_VAR@|$(TLP_VAR)|g"   \
--	-e "s|@TPACPIBAT@|$(TPACPIBAT)|g"
-+	-e "s|@TPACPIBAT@|$(_TPACPIBAT)|g"
+ 	-e "s|@TLP_VAR@|$(TLP_VAR)|g"
  
- INFILES = \
- 	tlp \
 -- 
-2.33.0
+2.44.1
 

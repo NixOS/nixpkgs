@@ -9,28 +9,20 @@
 , gtk2-x11
 , withGTK3 ? true
 , gtk3
+, libglvnd
 , libXt
 , libpulseaudio
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
+, writeScript
 , testers
-, palemoon-bin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.2.0";
+  version = "33.4.1";
 
-  src = fetchzip {
-    urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-    ];
-    hash = if withGTK3 then
-      "sha256-Bw8L5+3f46lOGJ5xR3bBF7sQWwEFxoK/NH3ngs1i4lU="
-    else
-      "sha256-eP7GIsWPFLYmBPUcMPn6vAlsFEAP3Oyy9mhj0oGeMT4=";
-  };
+  src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
   preferLocalBuild = true;
 
@@ -39,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -47,13 +39,13 @@ stdenv.mkDerivation rec {
     dbus-glib
     gtk2-x11
     libXt
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ] ++ lib.optionals withGTK3 [
     gtk3
   ];
 
   desktopItems = [(makeDesktopItem rec {
-    name = pname;
+    name = "palemoon-bin";
     desktopName = "Pale Moon Web Browser";
     comment = "Browse the World Wide Web";
     keywords = [
@@ -148,22 +140,62 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ffmpeg
+        libglvnd
         libpulseaudio
       ]}"
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = palemoon-bin;
+  passthru = {
+    sources = let
+      urlRegionVariants = buildVariant: map
+        (region: "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz")
+        [
+          "eu"
+          "us"
+        ];
+    in {
+      gtk3 = fetchzip {
+        urls = urlRegionVariants "gtk3";
+        hash = "sha256-pjOzU8atFNzYujxxoVihn0Cvq4Xvh7U2auSznE29Wpc=";
+      };
+      gtk2 = fetchzip {
+        urls = urlRegionVariants "gtk2";
+        hash = "sha256-ikgO0vVTySw3I6gdSu5k2e35xZ95bJY4f18Fjh+c0rA=";
+      };
+    };
+
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = writeScript "update-palemoon-bin" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+      set -eu -o pipefail
+
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+
+      for variant in gtk3 gtk2; do
+        update-source-version palemoon-bin "$version" --ignore-same-version --source-key="sources.$variant"
+      done
+    '';
   };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
+
       Pale Moon offers you a browsing experience in a browser completely built
       from its own, independently developed source that has been forked off from
       Firefox/Mozilla code a number of years ago, with carefully selected
@@ -171,7 +203,7 @@ stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
       licenses.mpl20
       {
@@ -180,10 +212,10 @@ stdenv.mkDerivation rec {
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
-}
+})

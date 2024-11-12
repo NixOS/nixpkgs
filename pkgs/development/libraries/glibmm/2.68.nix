@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.76.0";
+  version = "2.82.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hjfYDOq9lP3dbkiXCggqJkVY1KuCaE4V/8h+fvNGKrI=";
+    hash = "sha256-OGhM/zFyc2FcZ7j6mAbxYpnVHlUG2bkJuuFbWJ+pnLY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

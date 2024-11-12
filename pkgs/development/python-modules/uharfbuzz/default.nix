@@ -1,42 +1,47 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cython
-, setuptools-scm
-, pytestCheckHook
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cython,
+  pkgconfig,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  ApplicationServices,
 }:
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.24.1";
-  format = "setuptools";
+  version = "0.41.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
-  # Fetching from GitHub as Pypi contains different versions
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "uharfbuzz";
-    rev = "v${version}";
-    hash = "sha256-DyFXbwB28JH2lvmWDezRh49tjCvleviUNSE5LHG3kUg=";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
+    hash = "sha256-N/Vprr1lJmDLUzf+aX374YbJhDuHOpPzNeYXpLOANeI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 36.4, < 72.2" setuptools
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    pkgconfig
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "uharfbuzz" ];
 
@@ -44,6 +49,6 @@ buildPythonPackage rec {
     description = "Streamlined Cython bindings for the harfbuzz shaping engine";
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

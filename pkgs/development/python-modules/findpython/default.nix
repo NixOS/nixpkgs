@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build time
-, pdm-pep517
+  # build time
+  pdm-backend,
 
-# runtime
-, packaging
+  # runtime
+  packaging,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
   pname = "findpython";
-  version = "0.2.5";
+  version = "0.6.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,27 +26,20 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4P1HO0Jl5+DnhD7Hb+rIwMRBuGlXH0Zb7+nmlZSQaf4=";
+    hash = "sha256-4MdbqfNaf5u0Qj6zG9FzWMzPFXYbaDcxdxkXeu/0ZyM=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "findpython"
-  ];
+  pythonImportsCheck = [ "findpython" ];
 
   meta = with lib; {
-    description = "A utility to find python versions on your system";
+    description = "Utility to find python versions on your system";
+    mainProgram = "findpython";
     homepage = "https://github.com/frostming/findpython";
     changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
     license = licenses.mit;

@@ -1,112 +1,106 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, google-api-core
-, imagesize
-, nbconvert
-, nbformat
-, ndjson
-, numpy
-, opencv
-  # , opencv-python
-, packaging
-, pillow
-, pydantic
-  # , pygeotile
-, pyproj
-, pytest-cases
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, rasterio
-, requests
-, shapely
-, tqdm
-, typeguard
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  google-api-core,
+  hatchling,
+  imagesize,
+  mypy,
+  nbconvert,
+  nbformat,
+  numpy,
+  opencv-python-headless,
+  pillow,
+  pydantic,
+  pyproj,
+  pytest-cov-stub,
+  pytest-order,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  shapely,
+  strenum,
+  tqdm,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.38.0";
-  format = "setuptools";
+  version = "5.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-AyQPI19As49GML3kVXtHtRNOKthrpkQ7MCmww+F6owc=";
+    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--reruns 5 --reruns-delay 10" ""
-  '';
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  sourceRoot = "${src.name}/libs/labelbox";
 
   pythonRelaxDeps = [
-    "backoff"
+    "mypy"
+    "python-dateutil"
   ];
 
-  propagatedBuildInputs = [
-    backoff
+  build-system = [ hatchling ];
+
+  dependencies = [
     google-api-core
-    ndjson
     pydantic
+    python-dateutil
     requests
+    strenum
     tqdm
+    geojson
+    mypy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     data = [
       shapely
-      geojson
       numpy
       pillow
-      # opencv-python
+      opencv-python-headless
       typeguard
       imagesize
       pyproj
       # pygeotile
       typing-extensions
-      packaging
     ];
   };
 
   nativeCheckInputs = [
     nbconvert
     nbformat
-    pytest-cases
+    pytest-cov-stub
+    pytest-order
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.data;
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
     "tests/integration"
     # Missing requirements
     "tests/data"
+    "tests/unit/test_label_data_type.py"
   ];
 
-  pytestFlagsArray = [
-    # see tox.ini
-    "-k 'not notebooks'"
-  ];
-
-  pythonImportsCheck = [
-    "labelbox"
-  ];
+  pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

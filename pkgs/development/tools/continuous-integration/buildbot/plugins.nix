@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
+{ lib, buildPythonPackage, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
   www = buildPythonPackage rec {
-    pname = "buildbot-www";
+    pname = "buildbot_www";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-6hLJADdd84LTpxVB8C+i8rea9/65QfcCPuZC/7+55Co=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-+ZiOkTZLdwqsZfApW6aQxoNkbcFCaB4BHEjMTZIl+Rg=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -24,18 +24,18 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
 
   console-view = buildPythonPackage rec {
-    pname = "buildbot-console-view";
+    pname = "buildbot_console_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-JA+3WnZAN4224LbrluHJcnTmQ8VnuAmoEqqLtw0H10M=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-IgG/afjU//zrcHuTXMBLlz1gCmB31fWaECIm+UqaMgA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -46,18 +46,18 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
 
   waterfall-view = buildPythonPackage rec {
-    pname = "buildbot-waterfall-view";
+    pname = "buildbot_waterfall_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-NwLb9aQQwOxo9AqvsYbl/g8mNUeufdPrCwFMJNzdfQM=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-E0yFY3PtTZ8XtJGDMh0aRljhTNsWHqHQzcBORTgrCIA=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -68,18 +68,18 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
 
   grid-view = buildPythonPackage rec {
-    pname = "buildbot-grid-view";
+    pname = "buildbot_grid_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-hIBH8+RvZ53Txxl2FyrCs+ZFzRAAbK2th5Im2gZCs3c=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-KR4M7RSULCM1aS7vYjWuMXIHGpO+xFjfhC8+YncAmlE=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -90,18 +90,18 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
-      maintainers = with maintainers; [ lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
 
   wsgi-dashboards = buildPythonPackage rec {
-    pname = "buildbot-wsgi-dashboards";
+    pname = "buildbot_wsgi_dashboards";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-iK9MwE5Nzc0tHMui0LquCqTFIPbRTEYeHam+5hiOQJE=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-L7DayDddqrwOyBwgy4w1waCL+49GMtdrCdZNpcLrFXk=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -112,18 +112,18 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = with maintainers; [ lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
 
   badges = buildPythonPackage rec {
-    pname = "buildbot-badges";
+    pname = "buildbot_badges";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-HtVleYQE+pfwso7oBNucRjHEkwjgQSZJ6Ts1x7ncLsA=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-CnRTSnwhSj6cjrATUuVerGrqt7XxJZYgC5XjUC4+Xrs=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -135,7 +135,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
-      maintainers = with maintainers; [ julienmalka ];
+      maintainers = teams.buildbot.members ++ [ maintainers.julienmalka ];
       license = licenses.gpl2;
     };
   };

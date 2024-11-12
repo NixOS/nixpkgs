@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, installShellFiles
 , lib
 , libglvnd
 , pkg-config
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "netmaker";
-  version = "0.20.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1h/UQXaLcc962IMw9Vt79GR0qx1rYcmy5E+duisi0ck=";
+    hash = "sha256-f6R7Dc5M3MUjsCXvQAqamU9FFuqYEZoxYKwKhk4ilPc=";
   };
 
-  vendorHash = "sha256-0iByCr//nOaEjfGT2alxZpzSl57x2GxXAOIiza4gnGQ=";
+  vendorHash = "sha256-g9JyIuqYJZK47xQYM0+d1hcHcNBGLH3lW60hI6UkD84=";
 
   inherit subPackages;
 
@@ -38,7 +37,8 @@ buildGoModule rec {
     description = "WireGuard automation from homelab to enterprise";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
-    license = licenses.sspl;
-    maintainers = with maintainers; [ urandom ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ urandom qjoly ];
+    mainProgram = "netmaker";
   };
 }

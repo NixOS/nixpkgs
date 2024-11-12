@@ -40,7 +40,7 @@ let
         socket = mkOption {
           type = types.str;
           readOnly = true;
-          description = lib.mdDoc ''
+          description = ''
             Path to the unix socket file on which to accept FastCGI requests.
 
             ::: {.note}
@@ -54,7 +54,7 @@ let
           type = types.str;
           default = "";
           example = "/path/to/unix/socket";
-          description = lib.mdDoc ''
+          description = ''
             The address on which to accept FastCGI requests.
           '';
         };
@@ -63,14 +63,14 @@ let
           type = types.package;
           default = cfg.phpPackage;
           defaultText = literalExpression "config.services.phpfpm.phpPackage";
-          description = lib.mdDoc ''
+          description = ''
             The PHP package to use for running this PHP-FPM pool.
           '';
         };
 
         phpOptions = mkOption {
           type = types.lines;
-          description = lib.mdDoc ''
+          description = ''
             "Options appended to the PHP configuration file {file}`php.ini` used for this PHP-FPM pool."
           '';
         };
@@ -78,7 +78,7 @@ let
         phpEnv = lib.mkOption {
           type = with types; attrsOf str;
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             Environment variables used for this PHP-FPM pool.
           '';
           example = literalExpression ''
@@ -93,18 +93,18 @@ let
 
         user = mkOption {
           type = types.str;
-          description = lib.mdDoc "User account under which this pool runs.";
+          description = "User account under which this pool runs.";
         };
 
         group = mkOption {
           type = types.str;
-          description = lib.mdDoc "Group account under which this pool runs.";
+          description = "Group account under which this pool runs.";
         };
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ str int bool ]);
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             PHP-FPM pool directives. Refer to the "List of pool directives" section of
             <https://www.php.net/manual/en/install.fpm.configuration.php>
             for details. Note that settings names must be enclosed in quotes (e.g.
@@ -125,7 +125,7 @@ let
         extraConfig = mkOption {
           type = with types; nullOr lines;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Extra lines that go into the pool configuration.
             See the documentation on `php-fpm.conf` for
             details on configuration directives.
@@ -157,7 +157,7 @@ in {
       settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           PHP-FPM global directives. Refer to the "List of global php-fpm.conf directives" section of
           <https://www.php.net/manual/en/install.fpm.configuration.php>
           for details. Note that settings names must be enclosed in quotes (e.g.
@@ -170,7 +170,7 @@ in {
       extraConfig = mkOption {
         type = with types; nullOr lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration that should be put in the global section of
           the PHP-FPM configuration file. Do not specify the options
           `error_log` or
@@ -179,14 +179,7 @@ in {
         '';
       };
 
-      phpPackage = mkOption {
-        type = types.package;
-        default = pkgs.php;
-        defaultText = literalExpression "pkgs.php";
-        description = lib.mdDoc ''
-          The PHP package to use for running the PHP-FPM service.
-        '';
-      };
+      phpPackage = mkPackageOption pkgs "php" { };
 
       phpOptions = mkOption {
         type = types.lines;
@@ -195,7 +188,7 @@ in {
           ''
             date.timezone = "CET"
           '';
-        description = lib.mdDoc ''
+        description = ''
           Options appended to the PHP configuration file {file}`php.ini`.
         '';
       };
@@ -219,7 +212,7 @@ in {
              };
            }
          }'';
-        description = lib.mdDoc ''
+        description = ''
           PHP-FPM pools. If no pools are defined, the PHP-FPM
           service is disabled.
         '';
@@ -246,8 +239,8 @@ in {
       daemonize = false;
     };
 
-    systemd.slices.phpfpm = {
-      description = "PHP FastCGI Process manager pools slice";
+    systemd.slices.system-phpfpm = {
+      description = "PHP FastCGI Process Manager Slice";
     };
 
     systemd.targets.phpfpm = {
@@ -265,7 +258,7 @@ in {
           cfgFile = fpmCfgFile pool poolOpts;
           iniFile = phpIni poolOpts;
         in {
-          Slice = "phpfpm.slice";
+          Slice = "system-phpfpm.slice";
           PrivateDevices = true;
           PrivateTmp = true;
           ProtectSystem = "full";

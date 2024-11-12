@@ -2,7 +2,7 @@
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args@{ name, version ? null, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
+args@{ name, version ? null, runScript ? "bash", nativeBuildInputs ? [], extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
 
 let
   env = buildFHSEnv (removeAttrs args [ "version" "runScript" "extraInstallCommands" "meta" "passthru" ]);
@@ -28,7 +28,7 @@ let
   nameAndVersion = name + versionStr;
 
 in runCommandLocal nameAndVersion {
-  inherit meta;
+  inherit nativeBuildInputs meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {

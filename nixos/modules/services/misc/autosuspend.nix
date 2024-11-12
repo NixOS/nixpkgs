@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
   inherit (lib) mapAttrs' nameValuePair filterAttrs types mkEnableOption
-    mdDoc mkPackageOptionMD mkOption literalExpression mkIf flatten
+    mkPackageOption mkOption literalExpression mkIf flatten
     maintainers attrValues;
 
   cfg = config.services.autosuspend;
@@ -38,7 +38,7 @@ let
   checkType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption (mdDoc "this activity check") // { default = true; };
+    options.enabled = mkEnableOption "this activity check" // { default = true; };
 
     options.class = mkOption {
       default = null;
@@ -61,7 +61,7 @@ let
         "XIdleTime"
         "XPath"
       ]);
-      description = mdDoc ''
+      description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.
       '';
@@ -71,7 +71,7 @@ let
   wakeupType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption (mdDoc "this wake-up check") // { default = true; };
+    options.enabled = mkEnableOption "this wake-up check" // { default = true; };
 
     options.class = mkOption {
       default = null;
@@ -84,7 +84,7 @@ let
         "XPath"
         "XPathDelta"
       ]);
-      description = mdDoc ''
+      description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.
       '';
@@ -94,9 +94,9 @@ in
 {
   options = {
     services.autosuspend = {
-      enable = mkEnableOption (mdDoc "the autosuspend daemon");
+      enable = mkEnableOption "the autosuspend daemon";
 
-      package = mkPackageOptionMD pkgs "autosuspend" { };
+      package = mkPackageOption pkgs "autosuspend" { };
 
       settings = mkOption {
         type = types.submodule {
@@ -107,7 +107,7 @@ in
             suspend_cmd = mkOption {
               default = "systemctl suspend";
               type = with types; str;
-              description = mdDoc ''
+              description = ''
                 The command to execute in case the host shall be suspended. This line can contain
                 additional command line arguments to the command to execute.
               '';
@@ -115,7 +115,7 @@ in
             wakeup_cmd = mkOption {
               default = ''sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm && echo {timestamp:.0f} > /sys/class/rtc/rtc0/wakealarm' '';
               type = with types; str;
-              description = mdDoc ''
+              description = ''
                 The command to execute for scheduling a wake up of the system. The given string is
                 processed using Python’s `str.format()` and a format argument called `timestamp`
                 encodes the UTC timestamp of the planned wake up time (float). Additionally `iso`
@@ -132,7 +132,7 @@ in
             idle_time = 120;
           }
         '';
-        description = mdDoc ''
+        description = ''
           Configuration for autosuspend, see
           <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#general-configuration>
           for supported values.
@@ -142,7 +142,7 @@ in
       checks = mkOption {
         default = { };
         type = with types; attrsOf checkType;
-        description = mdDoc ''
+        description = ''
           Checks for activity.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#activity-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_checks.html>
@@ -184,7 +184,7 @@ in
       wakeups = mkOption {
         default = { };
         type = with types; attrsOf wakeupType;
-        description = mdDoc ''
+        description = ''
           Checks for wake up.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#wake-up-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_wakeups.html>

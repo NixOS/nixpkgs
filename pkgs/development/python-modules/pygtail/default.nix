@@ -1,24 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pygtail";
-  version = "0.8.0";
+  version = "0.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bgreenlee";
-    repo = pname;
+    repo = "pygtail";
     rev = version;
-    sha256 = "1f8qlijiwn10jxg1bsi6q42fznbg8rw039yaxfh6rzbaj2gaxbz1";
+    hash = "sha256-TlXTlxeGDd+elGpMjxcJCmRuJmp5k9xj6MrViRzcST4=";
   };
 
-  # remove at next bump, tag is one commit early for 0.8.0
-  postPatch = ''
-    substituteInPlace pygtail/core.py \
-      --replace 0.7.0 0.8.0
-  '';
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "pygtail" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A library for reading log file lines that have not been read";
+    description = "Library for reading log file lines that have not been read";
+    mainProgram = "pygtail";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/bgreenlee/pygtail";
   };

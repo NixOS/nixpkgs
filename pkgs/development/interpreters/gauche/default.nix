@@ -1,26 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, gaucheBootstrap, pkg-config, texinfo
-, libiconv, gdbm, openssl, zlib, mbedtls, cacert }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  gaucheBootstrap,
+  pkg-config,
+  texinfo,
+  libiconv,
+  gdbm,
+  openssl,
+  zlib,
+  mbedtls,
+  cacert,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gauche";
-  version = "0.9.10";
+  version = "0.9.15";
 
   src = fetchFromGitHub {
     owner = "shirok";
     repo = pname;
     rev = "release${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0ki1w7sa10ivmg51sqjskby0gsznb0d3738nz80x589033km5hmb";
+    hash = "sha256-M2vZqTMkob+WxUnCo4NDxS4pCVNleVBqkiiRp9nG/KA=";
   };
 
-  nativeBuildInputs = [ gaucheBootstrap pkg-config texinfo autoreconfHook ];
+  nativeBuildInputs = [
+    gaucheBootstrap
+    pkg-config
+    texinfo
+    autoreconfHook
+  ];
 
-  buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ];
+  buildInputs = [
+    libiconv
+    gdbm
+    openssl
+    zlib
+    mbedtls
+    cacert
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   autoreconfPhase = ''
     ./DIST gen
   '';
 
   postPatch = ''
+    substituteInPlace ext/package-templates/configure \
+      --replace "#!/usr/bin/env gosh" "#!$out/bin/gosh"
     patchShebangs .
   '';
 
@@ -42,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "R7RS Scheme scripting engine";
     homepage = "https://practical-scheme.net/gauche/";
+    mainProgram = "gosh";
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;

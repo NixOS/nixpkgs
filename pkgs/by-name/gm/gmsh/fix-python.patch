@@ -1,0 +1,13 @@
+diff --git a/api/gmsh.py b/api/gmsh.py
+index f525284..a225c85 100644
+--- a/api/gmsh.py
++++ b/api/gmsh.py
+@@ -78,6 +78,8 @@ if not libpath:
+     else:
+         libpath = find_library("gmsh")
+ 
++libpath = "@LIBPATH@"
++
+ # ... and print a warning if everything failed
+ if not libpath:
+     print("Warning: could not find Gmsh shared library " + libname +

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
 }:
 
 buildPythonPackage rec {
   pname = "linecache2";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A backport of linecache to older supported Pythons";
+    description = "Backport of linecache to older supported Pythons";
     homepage = "https://github.com/testing-cabal/linecache2";
     license = licenses.psfl;
   };

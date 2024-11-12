@@ -1,35 +1,43 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
+{ lib
+, stdenv
+, fetchurl
+, perl
+, pkg-config
 , buildsystem
 , libparserutils
 , libwapcaplet
 }:
 
-stdenv.mkDerivation rec {
-  pname = "netsurf-${libname}";
-  libname = "libcss";
-  version = "0.9.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netsurf-libcss";
+  version = "0.9.2";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "sha256-0tzhbpM5Lo1qcglCDUfC1Wo4EXAaDoGnJPxUHGPTxtw=";
+    url = "http://download.netsurf-browser.org/libs/releases/libcss-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-LfIVu+w01R1gwaBLAbLfTV0Y9RDx86evS4DN21ZxFU4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     perl
+    buildsystem
     libparserutils
     libwapcaplet
-    buildsystem ];
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" "-Wno-error=maybe-uninitialized" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-fallthrough"
+    "-Wno-error=${if stdenv.cc.isGNU then "maybe-uninitialized" else "uninitialized"}"
+  ];
 
-  meta = with lib; {
-    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+  meta = {
+    homepage = "https://www.netsurf-browser.org/projects/libcss/";
     description = "Cascading Style Sheets library for netsurf browser";
     longDescription = ''
       LibCSS is a CSS parser and selection engine. It aims to parse the forward
@@ -37,8 +45,7 @@ stdenv.mkDerivation rec {
       and is available for use by other software, under a more permissive
       license.
     '';
-    license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

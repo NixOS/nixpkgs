@@ -1,25 +1,25 @@
 { lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
 , llvmPackages
-, symlinkJoin, makeWrapper, substituteAll, fetchpatch
+, symlinkJoin, makeWrapper, substituteAll
 , buildNpmPackage
 , emscripten
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.24";
+  version = "3.1.64";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
+    paths = with llvmPackages; [ clang-unwrapped (lib.getLib clang-unwrapped)  lld llvm ];
   };
 
   nodeModules = buildNpmPackage {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-ejuHR2BpAUStWjuvQuGE6ko4byF4GBl6FJBshxlknQk=";
+    npmDepsHash = "sha256-2dsIuB6P+Z3wflIsn6QaZvjHeHHGzsFAI3GcP3SfiP4=";
 
     dontBuild = true;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "sha256-1jW6ThxK6dThOO90l4Mc5yehVF3tI4HWipBWZAOztrk=";
+    hash = "sha256-AbO1b4pxZ7I6n1dRzxhLC7DnXIUnaCK9SbLy96Qxqr0=";
     rev = version;
   };
 
@@ -42,17 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
-      resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
-    })
-    # https://github.com/emscripten-core/emscripten/pull/18219
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/afbc14950f021513c59cbeaced8807ef8253530a.patch";
-      sha256 = "sha256-+gJNTQJng9rWcGN3GAcMBB0YopKPnRp/r8CN9RSTClU=";
-    })
-    # https://github.com/emscripten-core/emscripten/pull/18220
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/852982318f9fb692ba1dd1173f62e1eb21ae61ca.patch";
-      sha256 = "sha256-hmIOtpRx3PD3sDAahUcreSydydqcdSqArYvyLGgUgd8=";
+      resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];
 
@@ -64,12 +54,7 @@ stdenv.mkDerivation rec {
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
-    # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    # required for wasm2c
-    ln -s ${nodeModules} node_modules
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
@@ -98,6 +83,9 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
+    mkdir -p $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules
+
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
@@ -108,17 +96,21 @@ stdenv.mkDerivation rec {
 
     # precompile libc (etc.) in all variants:
     pushd $TMPDIR
-    echo 'int __main_argc_argv() { return 42; }' >test.c
+    echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
-      # wasm2c doesn't work with PIC
-      $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
-
       for BIND in "" "--bind"; do
-        for MT in "" "-s USE_PTHREADS"; do
-          for RELOCATABLE in "" "-s RELOCATABLE"; do
-            $out/bin/emcc $RELOCATABLE $BIND $MT $LTO test.c
-          done
-        done
+        # starting with emscripten 3.1.32+,
+        # if pthreads and relocatable are both used,
+        # _emscripten_thread_exit_joinable must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/18376)
+        # TODO: get library cache to build with both enabled and function exported
+        $out/bin/emcc $LTO $BIND test.c
+        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
+        # starting with emscripten 3.1.48+,
+        # to use pthreads, _emscripten_check_mailbox must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/20604)
+        # TODO: get library cache to build with pthreads at all
+        # $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
       done
     done
     popd
@@ -141,9 +133,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/emscripten-core/emscripten";
-    description = "An LLVM-to-JavaScript Compiler";
+    description = "LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer raitobezarius ];
+    maintainers = with maintainers; [ qknight matthewbauer raitobezarius willcohen ];
     license = licenses.ncsa;
   };
 }

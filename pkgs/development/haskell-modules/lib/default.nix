@@ -105,6 +105,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = compose.dontCheck;
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+   */
+  dontCheckIf = drv: condition: compose.dontCheckIf condition drv;
 
   /* doBenchmark enables dependency checking, compilation and execution
      for benchmarks listed in the package description file.
@@ -170,6 +175,8 @@ rec {
   unmarkBroken = compose.unmarkBroken;
   markBrokenVersion = compose.markBrokenVersion;
   markUnbroken = compose.markUnbroken;
+
+  disableParallelBuilding = compose.disableParallelBuilding;
 
   enableLibraryProfiling = compose.enableLibraryProfiling;
   disableLibraryProfiling = compose.disableLibraryProfiling;

@@ -14,19 +14,32 @@
 , re
 , stdune
 , chrome-trace
-, dune_3
 , csexp
 , result
 , pp
 , cmdliner
 , ordering
 , ocamlformat-rpc-lib
+, ocaml
+, version ?
+    if lib.versionAtLeast ocaml.version "5.02" then
+      "1.19.0"
+    else if lib.versionAtLeast ocaml.version "4.14" then
+      "1.18.0"
+    else if lib.versionAtLeast ocaml.version "4.13" then
+      "1.10.5"
+    else if lib.versionAtLeast ocaml.version "4.12" then
+      "1.9.0"
+    else
+      "1.4.1"
 }:
 
+let jsonrpc_v = jsonrpc.override {
+  inherit version;
+}; in
 buildDunePackage rec {
   pname = "lsp";
-  inherit (jsonrpc) version src;
-  duneVersion = "3";
+  inherit (jsonrpc_v) version src;
   minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"
@@ -72,7 +85,7 @@ buildDunePackage rec {
         stdune
       ]
     else if lib.versionAtLeast version "1.7.0" then
-      [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
+      [ re octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
       [
         ppx_yojson_conv_lib
@@ -100,7 +113,7 @@ buildDunePackage rec {
     ] else if lib.versionAtLeast version "1.7.0" then [
       csexp
       jsonrpc
-      pp
+      (pp.override { version = "1.2.0"; })
       ppx_yojson_conv_lib
       result
       uutf

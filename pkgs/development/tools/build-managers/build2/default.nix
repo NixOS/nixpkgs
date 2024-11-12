@@ -4,6 +4,7 @@
 , fixDarwinDylibNames
 , libbutl
 , libpkgconf
+, buildPackages
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
@@ -16,7 +17,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.15.0";
+  version = "0.17.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    sha256 = "07369gw6zlad6nk29564kj17yp145l3dzbgrx04pyiyl1s84aa1r";
+    hash = "sha256-Kx5X/GV3GjFSbjo1mzteiHnnm4mr6+NAKIR/mEE+IdA=";
   };
 
   patches = [
@@ -32,8 +33,6 @@ stdenv.mkDerivation rec {
     ./remove-config-store-paths.patch
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
-
-    ./remove-const-void-param.patch
   ];
 
   strictDeps = true;
@@ -57,6 +56,10 @@ stdenv.mkDerivation rec {
   # LC_LOAD_DYLIB entries containing @rpath, requiring manual fixup
   propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
     fixDarwinDylibNames
+
+    # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
+    # which ld64 does not support.
+    (lib.getBin buildPackages.llvmPackages_16.lld)
   ];
 
   postPatch = ''
@@ -69,8 +72,13 @@ stdenv.mkDerivation rec {
     "config.build2.libpkgconf=true"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "''${!outputLib}/lib" "''${!outputBin}/bin/b"
+  '';
+
+  postFixup = ''
+    substituteInPlace $dev/nix-support/setup-hook \
+      --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
   passthru = {

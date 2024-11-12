@@ -1,10 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-, zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
@@ -17,49 +15,26 @@
     (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
+, enableHttp ? false
 }:
 
-let
-  # Newer versions fail with minimal python, probably because
-  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
-  # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
-  # Beware that the old version has known security issues, so the final set shouldn't use it.
-  oldVer = python.pname == "python3-minimal";
-in
-  assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
-
-let
-libxml = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.10.4";
+  version = "2.13.4";
 
-  outputs = [ "bin" "dev" "out" "doc" ]
+  outputs = [ "bin" "dev" "out" "devdoc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "7QyRxYRQCPGTZznk7uIDVTHByUdCxlQfRO5m2IWUjUU=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ZdBC4cgBAkPmF++wKv2iC4XCFgrNv7y1smuAzsZRVlA=";
   };
-
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
-  ];
 
   strictDeps = true;
 
@@ -74,19 +49,13 @@ libxml = stdenv.mkDerivation rec {
     gettext
   ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
     ncurses
-  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [
-    zlib
     findXMLCatalogs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals icuSupport [
     icu
@@ -98,8 +67,8 @@ libxml = stdenv.mkDerivation rec {
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
-  ];
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+  ] ++ lib.optional enableHttp "--with-http";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
@@ -111,7 +80,7 @@ libxml = stdenv.mkDerivation rec {
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
     stdenv.hostPlatform.libc != "musl";
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
   '';
 
@@ -120,7 +89,7 @@ libxml = stdenv.mkDerivation rec {
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
+    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
   postFixup = ''
@@ -131,12 +100,16 @@ libxml = stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit version;
-    pythonSupport = pythonSupport;
+    inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxml2";
       versionPolicy = "none";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -145,17 +118,7 @@ libxml = stdenv.mkDerivation rec {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-};
-in
-if oldVer then
-  libxml.overrideAttrs (attrs: rec {
-    version = "2.10.1";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      sha256 = "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8";
-    };
-  })
-else
-  libxml
+})

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , xxd
 , enableMpi ? false
@@ -17,6 +18,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-kjNqJddioCZoh/cZL3YNplweIGopWIGzCYQOnKDqZmw=";
   };
+
+  patches = [
+    # Should be removable as soon as this upstream PR is merged: https://github.com/soedinglab/hh-suite/pull/357
+    (fetchpatch {
+      name = "fix-gcc13-build-issues.patch";
+      url = "https://github.com/soedinglab/hh-suite/commit/cec47cba5dcd580e668b1ee507c9282fbdc8e7d7.patch";
+      hash = "sha256-Msdmj9l8voPYXK0SSwUA6mEbFLBhTjjE/Kjp0VL4Kf4=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake xxd ];
   cmakeFlags = lib.optional stdenv.hostPlatform.isx86 "-DHAVE_SSE2=1"

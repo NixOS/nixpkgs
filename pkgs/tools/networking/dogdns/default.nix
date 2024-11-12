@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ installShellFiles just pandoc ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   outputs = [ "out" "man" ];
 
@@ -40,6 +40,10 @@ rustPlatform.buildRustPackage rec {
       "mutagen-0.2.0" = "sha256-FnSeNI9lAcxonRFTu7wnP/M/d5UbMzSZ97w+mUqoEg8=";
     };
   };
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+  dontUseJustInstall = true;
 
   postPatch = ''
     # update Cargo.lock to work with openssl 3
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line DNS client";
     homepage = "https://dns.lookup.dog";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ bbigras figsoda ];
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "dog";
   };
 }

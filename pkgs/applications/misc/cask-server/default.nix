@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -24,6 +23,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Public server and API to interface with Cask features";
+    mainProgram = "CaskServer";
     homepage = "https://github.com/Nitrux/cask-server";
     license = with licenses; [
       bsd2

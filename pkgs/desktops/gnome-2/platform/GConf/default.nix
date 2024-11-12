@@ -11,18 +11,20 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ ORBit2 libxml2 python3 ]
+  strictDeps = true;
+
+  buildInputs = [ ORBit2 libxml2 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
-    ++ lib.optional (!stdenv.isDarwin) polkit;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
 
   propagatedBuildInputs = [ glib dbus-glib ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [ pkg-config intltool python3 glib ];
 
   configureFlags =
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
-    lib.optionals stdenv.isDarwin [ "--enable-static" ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-static" ];
 
   postPatch = ''
     2to3 --write --nobackup gsettings/gsettings-schema-convert

@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, aiohttp, isPy27 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  isPy27,
+}:
 
 buildPythonPackage rec {
   pname = "plexauth";
   version = "0.0.6";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -18,9 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   # at least guarantee the module can be imported
-  pythonImportsCheck = [
-    "plexauth"
-  ];
+  pythonImportsCheck = [ "plexauth" ];
 
   meta = with lib; {
     homepage = "https://github.com/jjlawren/python-plexauth/";

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "scripttest";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,9 +21,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library for testing interactive command-line applications";
+    description = "Library for testing interactive command-line applications";
     homepage = "https://pypi.org/project/scripttest/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

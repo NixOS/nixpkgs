@@ -10,18 +10,18 @@ let
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
 in {
   options.services.grafana-image-renderer = {
-    enable = mkEnableOption (lib.mdDoc "grafana-image-renderer");
+    enable = mkEnableOption "grafana-image-renderer";
 
     chromium = mkOption {
       type = types.package;
-      description = lib.mdDoc ''
+      description = ''
         The chromium to use for image rendering.
       '';
     };
 
-    verbose = mkEnableOption (lib.mdDoc "verbosity for the service");
+    verbose = mkEnableOption "verbosity for the service";
 
-    provisionGrafana = mkEnableOption (lib.mdDoc "Grafana configuration for grafana-image-renderer");
+    provisionGrafana = mkEnableOption "Grafana configuration for grafana-image-renderer";
 
     settings = mkOption {
       type = types.submodule {
@@ -32,14 +32,14 @@ in {
             port = mkOption {
               type = types.port;
               default = 8081;
-              description = lib.mdDoc ''
+              description = ''
                 The TCP port to use for the rendering server.
               '';
             };
             logging.level = mkOption {
               type = types.enum [ "error" "warning" "info" "debug" ];
               default = "info";
-              description = lib.mdDoc ''
+              description = ''
                 The log-level of the {file}`grafana-image-renderer.service`-unit.
               '';
             };
@@ -48,21 +48,21 @@ in {
             width = mkOption {
               default = 1000;
               type = types.ints.positive;
-              description = lib.mdDoc ''
+              description = ''
                 Width of the PNG used to display the alerting graph.
               '';
             };
             height = mkOption {
               default = 500;
               type = types.ints.positive;
-              description = lib.mdDoc ''
+              description = ''
                 Height of the PNG used to display the alerting graph.
               '';
             };
             mode = mkOption {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
-              description = lib.mdDoc ''
+              description = ''
                 Rendering mode of `grafana-image-renderer`:
 
                 - `default:` Creates on browser-instance
@@ -77,7 +77,7 @@ in {
             args = mkOption {
               type = types.listOf types.str;
               default = [ "--no-sandbox" ];
-              description = lib.mdDoc ''
+              description = ''
                 List of CLI flags passed to `chromium`.
               '';
             };
@@ -87,7 +87,7 @@ in {
 
       default = {};
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration attributes for `grafana-image-renderer`.
 
         See <https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json>
@@ -108,7 +108,7 @@ in {
 
     services.grafana.settings.rendering = mkIf cfg.provisionGrafana {
       server_url = "http://localhost:${toString cfg.settings.service.port}/render";
-      callback_url = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
+      callback_url = "http://${config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
     };
 
     services.grafana-image-renderer.chromium = mkDefault pkgs.chromium;

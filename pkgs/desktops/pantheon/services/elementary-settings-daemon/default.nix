@@ -5,30 +5,33 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , accountsservice
 , dbus
 , desktop-file-utils
+, fwupd
+, gdk-pixbuf
 , geoclue2
+, gexiv2
 , glib
 , gobject-introspection
 , gtk3
 , granite
 , libgee
+, packagekit
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "1.2.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-5QdCj2Z31t7dxZi7ZZ5g6qLgsMyw7rM5dRw0G8uoC6o=";
+    sha256 = "sha256-w5dRQPRsM52wqusTLLPmKmVwoBFS+pHOokfDmCDxVWM=";
   };
 
   nativeBuildInputs = [
@@ -37,26 +40,24 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
     dbus
+    fwupd
+    gdk-pixbuf
     geoclue2
+    gexiv2
     glib
     gtk3
     granite
     libgee
+    packagekit
     systemd
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

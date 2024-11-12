@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
-, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
+, wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
 , systemd, libGL, libX11, mesa
 , xwayland ? null
 , nixosTests
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.4";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "Hjdskes";
+    owner = "cage-kiosk";
     repo = "cage";
-    rev = "v${version}";
-    sha256 = "0vm96gxinhy48m3x9p1sfldyd03w3gk6iflb7n9kn06j1vqyswr6";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2SFtz62z0EF8cpFTC6wGi125MD4a5mkXqP/C+7fH+3g=";
   };
 
   depsBuildBuild = [
@@ -24,18 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
 
   buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon
+    wlroots wayland wayland-protocols pixman libxkbcommon xcbutilwm
     mesa # for libEGL headers
     systemd libGL libX11
   ];
 
-  # https://github.com/cage-kiosk/cage/issues/231
-  # cage will segfault on start with `-m last` without this
-  CFLAGS = "-O0";
-
-  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
-
-  postFixup = lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString wlroots.enableXWayland ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
@@ -43,10 +37,11 @@ stdenv.mkDerivation rec {
   passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
 
   meta = with lib; {
-    description = "A Wayland kiosk that runs a single, maximized application";
+    description = "Wayland kiosk that runs a single, maximized application";
     homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    mainProgram = "cage";
   };
 }

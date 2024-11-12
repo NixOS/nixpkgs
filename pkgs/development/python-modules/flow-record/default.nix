@@ -1,73 +1,72 @@
-{ lib
-, buildPythonPackage
-, elasticsearch
-, fastavro
-, fetchFromGitHub
-, lz4
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, wheel
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  duckdb,
+  elastic-transport,
+  elasticsearch,
+  fastavro,
+  fetchFromGitHub,
+  httpx,
+  lz4,
+  maxminddb,
+  msgpack,
+  pytest7CheckHook,
+  pythonOlder,
+  pytz,
+  setuptools-scm,
+  setuptools,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.10";
-  format = "pyproject";
+  version = "3.17";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-pOEK53+rIwzTxDEla1xoWo/xgy+eN0nxR0MeW7VQFds=";
+    hash = "sha256-fFP2bdO4wTR9Y+9no3FabtVmLicTD76Jw5aWDMPOB0w=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  dependencies = [ msgpack ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compression = [
       lz4
       zstandard
     ];
-    elastic = [
-      elasticsearch
+    duckdb = [
+      duckdb
+      pytz
     ];
-    avro = [
-      fastavro
-    ] ++ fastavro.optional-dependencies.snappy;
+    elastic = [ elasticsearch ];
+    geoip = [ maxminddb ];
+    avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
+    splunk = [ httpx ];
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    elastic-transport
+    pytest7CheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "flow.record"
-  ];
+  pythonImportsCheck = [ "flow.record" ];
 
   disabledTestPaths = [
     # Test requires rdump
     "tests/test_rdump.py"
   ];
 
-  disabledTests = [
-    "test_rdump_fieldtype_path_json"
-  ];
+  disabledTests = [ "test_rdump_fieldtype_path_json" ];
 
   meta = with lib; {
     description = "Library for defining and creating structured data";

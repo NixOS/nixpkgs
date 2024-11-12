@@ -1,31 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, perl }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, perl, makeWrapper
+, rresult, bos, re, camlp-streams
+, legacy ? false
+}:
 
 if lib.versionOlder ocaml.version "4.02"
-|| lib.versionOlder "4.13" ocaml.version
 then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation rec {
+let params =
+  if lib.versionAtLeast ocaml.version "4.12" && !legacy
+  then rec {
+    version = "8.03.00";
 
-  pname = "camlp5";
-  version = "7.14";
+    src = fetchFromGitHub {
+      owner = "camlp5";
+      repo = "camlp5";
+      rev = version;
+      hash = "sha256-hu/279gBvUc7Z4jM6EHiar6Wm4vjkGXl+7bxowj+vlM=";
+    };
 
-  src = fetchFromGitHub {
-    owner = "camlp5";
-    repo = "camlp5";
-    rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
-    sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
-  };
+    nativeBuildInputs = [ makeWrapper ocaml findlib perl ];
+    buildInputs = [ bos re rresult ];
+    propagatedBuildInputs = [ camlp-streams ];
+
+  } else rec {
+    version = "7.14";
+    src = fetchFromGitHub {
+      owner = "camlp5";
+      repo = "camlp5";
+      rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
+      sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
+    };
+    nativeBuildInputs = [ ocaml perl ];
+  }
+; in
+
+stdenv.mkDerivation (params // {
+
+  pname = "ocaml${ocaml.version}-camlp5";
 
   strictDeps = true;
-
-  nativeBuildInputs = [ ocaml perl ];
 
   prefixKey = "-prefix ";
 
   preConfigure = ''
     configureFlagsArray=(--strict --libdir $out/lib/ocaml/${ocaml.version}/site-lib)
-    patchShebangs ./config/find_stuffversion.pl
+    patchShebangs ./config/find_stuffversion.pl etc/META.pl
   '';
 
   buildFlags = [ "world.opt" ];
@@ -45,4 +65,4 @@ stdenv.mkDerivation rec {
       maggesi vbgl
     ];
   };
-}
+})

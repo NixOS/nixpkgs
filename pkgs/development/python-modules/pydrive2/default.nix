@@ -1,38 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-python-client
-, oauth2client
-, pyopenssl
-, pyyaml
-, pythonOlder
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchPypi,
+  fsspec,
+  funcy,
+  google-api-python-client,
+  oauth2client,
+  pyopenssl,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.15.4";
-  format = "setuptools";
+  version = "1.20.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "PyDrive2";
-    inherit version;
-    hash = "sha256-DAEbdOvCTzxspyggYmt38d/groj1dAxaXPlug915upk=";
+    inherit pname version;
+    hash = "sha256-Foum622DybCC8FvIy5Xuk85iOJ2ztVn/DnabW7iysQo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     google-api-python-client
     oauth2client
     pyopenssl
     pyyaml
   ];
 
+  optional-dependencies = {
+    fsspec = [
+      appdirs
+      fsspec
+      funcy
+      tqdm
+    ];
+  };
+
+  # Tests require a account and network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydrive2"
-  ];
+  pythonImportsCheck = [ "pydrive2" ];
 
   meta = with lib; {
     description = "Google Drive API Python wrapper library";

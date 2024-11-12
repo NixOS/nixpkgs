@@ -1,38 +1,38 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 maturinBuildHook() {
     echo "Executing maturinBuildHook"
 
     runHook preBuild
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    # Put the wheel to dist/ so that regular Python tooling can find it.
+    local dist="$PWD/dist"
+
+    if [ -n "${buildAndTestSubdir-}" ]; then
         pushd "${buildAndTestSubdir}"
     fi
 
-    (
-    set -x
-    env \
-      "CC_@rustBuildPlatform@=@ccForBuild@" \
-      "CXX_@rustBuildPlatform@=@cxxForBuild@" \
-      "CC_@rustTargetPlatform@=@ccForHost@" \
-      "CXX_@rustTargetPlatform@=@cxxForHost@" \
-      maturin build \
-        --jobs=$NIX_BUILD_CORES \
-        --frozen \
-        --target @rustTargetPlatformSpec@ \
-        --manylinux off \
-        --strip \
-        --release \
-        ${maturinBuildFlags-}
+    local flagsArray=(
+        "--jobs=$NIX_BUILD_CORES"
+        "--offline"
+        "--target" "@rustTargetPlatformSpec@"
+        "--manylinux" "off"
+        "--strip"
+        "--release"
+        "--out" "$dist"
     )
 
-    runHook postBuild
+    concatTo flagsArray maturinBuildFlags
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
+    @setEnv@ maturin build "${flagsArray[@]}"
+
+    if [ -n "${buildAndTestSubdir-}" ]; then
         popd
     fi
 
-    # Move the wheel to dist/ so that regular Python tooling can find it.
-    mkdir -p dist
-    mv target/wheels/*.whl dist/
+    # These are python build hooks and may depend on ./dist
+    runHook postBuild
 
     echo "Finished maturinBuildHook"
 }

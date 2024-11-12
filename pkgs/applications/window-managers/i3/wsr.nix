@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mq4TpQDiIYePUS3EwBfOe2+QmvF6+WEDK12WahbuhSU=";
   };
 
-  cargoSha256 = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
+  cargoHash = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];
@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    mainProgram = "i3wsr";
     description = "Automatically change i3 workspace names based on their contents";
     longDescription = ''
       Automatically sets the workspace names to match the windows on the workspace.

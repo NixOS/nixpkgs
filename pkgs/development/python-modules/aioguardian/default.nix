@@ -1,40 +1,41 @@
-{ lib
-, aiohttp
-, async-timeout
-, asyncio-dgram
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  asyncio-dgram,
+  buildPythonPackage,
+  certifi,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioguardian";
     rev = "refs/tags/${version}";
-    hash = "sha256-plgO+pyKmG0mYnFZxDcrENcuEg5AG2Og2xWipzuzyHo=";
+    hash = "sha256-7fY8+aAxlDtOBLu8SadY5qiH6+RvxnFpOw1RXTonP2o=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
     asyncio-dgram
+    certifi
     docutils
     voluptuous
   ];
@@ -46,13 +47,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "examples/"
-  ];
+  disabledTestPaths = [ "examples/" ];
 
-  pythonImportsCheck = [
-    "aioguardian"
-  ];
+  pythonImportsCheck = [ "aioguardian" ];
 
   meta = with lib; {
     description = " Python library to interact with Elexa Guardian devices";

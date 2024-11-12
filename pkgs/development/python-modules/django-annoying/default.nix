@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, django
-, six
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  django,
+  six,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-annoying";
   version = "0.10.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A django application that tries to eliminate annoying things in the Django framework";
+    description = "Django application that tries to eliminate annoying things in the Django framework";
     homepage = "https://skorokithakis.github.io/django-annoying/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];

@@ -2,7 +2,7 @@
 
 { lib, fetchFromGitHub
 , cmake, ninja, python3, openjdk8, mono, pkg-config
-, msgpack, toml11
+, msgpack-cxx, toml11
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -37,7 +37,7 @@ let
           inherit rev hash;
         };
 
-        buildInputs = [ ssl boost msgpack toml11 ];
+        buildInputs = [ ssl boost msgpack-cxx toml11 ];
 
         nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk8 mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];
@@ -81,7 +81,7 @@ let
           # Needed with GCC 12
           "-Wno-error=missing-template-keyword"
           # Needed to compile on aarch64
-          (lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc")
+          (lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc")
         ];
 
         inherit patches;

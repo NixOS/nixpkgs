@@ -48,25 +48,33 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create files with the system generations in
           `/boot`.
           `/boot/old` will hold files from old generations.
+
+          ::: {.note}
+          These options are deprecated, unsupported, and may not work like expected.
+          :::
         '';
       };
 
       version = mkOption {
         default = 2;
         type = types.enum [ 0 1 2 3 4 ];
-        description = lib.mdDoc "";
+        description = "";
       };
 
       uboot = {
         enable = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Enable using uboot as bootmanager for the raspberry pi.
+
+            ::: {.note}
+            These options are deprecated, unsupported, and may not work like expected.
+            :::
           '';
         };
 
@@ -74,8 +82,12 @@ in
           default = 20;
           example = 10;
           type = types.int;
-          description = lib.mdDoc ''
+          description = ''
             Maximum number of configurations in the boot menu.
+
+            ::: {.note}
+            These options are deprecated, unsupported, and may not work like expected.
+            :::
           '';
         };
 
@@ -84,22 +96,56 @@ in
       firmwareConfig = mkOption {
         default = null;
         type = types.nullOr types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
+
+          ::: {.note}
+          These options are deprecated, unsupported, and may not work like expected.
+          :::
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
-      message = "Only Raspberry Pi >= 3 supports aarch64.";
-    };
+  config = mkMerge[
+    (mkIf cfg.uboot.enable {
+      warnings = [
+        ''
+          The option set for `boot.loader.raspberrypi.uboot` has been recommended against
+          for years, and is now formally deprecated.
 
-    system.build.installBootLoader = builder;
-    system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
-  };
+          It is possible it already did not work like you expected.
+
+          It never worked on the Raspberry Pi 4 family.
+
+          These options will be removed by NixOS 24.11.
+        ''
+      ];
+    })
+    (mkIf cfg.enable {
+      warnings = [
+        ''
+          The option set for `boot.loader.raspberrypi` has been recommended against
+          for years, and is now formally deprecated.
+
+          It is possible it already did not work like you expected.
+
+          It never worked on the Raspberry Pi 4 family.
+
+          These options will be removed by NixOS 24.11.
+        ''
+      ];
+    })
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
+        message = "Only Raspberry Pi >= 3 supports aarch64.";
+      };
+
+      system.build.installBootLoader = builder;
+      system.boot.loader.id = "raspberrypi";
+      system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
+    })
+  ];
 }

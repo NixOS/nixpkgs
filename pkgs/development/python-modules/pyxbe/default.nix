@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyxbe";
-  version = "1.0.1";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,22 +17,18 @@ buildPythonPackage rec {
     owner = "mborgerson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-oOY0g1F5sxGUxXAT19Ygq5q7pnxEhIAKmyYELR1PHEA=";
+    hash = "sha256-iLzGGgizUbaEG1xrNq4WDaWrGtcaLwAYgn4NGYiSDBo=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Update location for run with pytest
   preCheck = ''
     substituteInPlace tests/test_load.py \
-      --replace "'xbefiles'" "'tests/xbefiles'"
+      --replace '"xbefiles"' '"tests/xbefiles"'
   '';
 
-  pythonImportsCheck = [
-    "xbe"
-  ];
+  pythonImportsCheck = [ "xbe" ];
 
   meta = with lib; {
     description = "Library to work with XBE files";

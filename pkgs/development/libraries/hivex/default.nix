@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hivex";
-  version = "1.3.21";
+  version = "1.3.24";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ms4+9KL/LKUKmb4Gi2D7H9vJ6rivU+NF6XznW6S2O1Y=";
+    hash = "sha256-pS+kXOzJp4rbLShgXWgmHk8f1FFKd4pUcwE9LMyKGTw=";
   };
 
   patches = [ ./hivex-syms.patch ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
-  ++ lib.optionals stdenv.isDarwin [ libintl ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
   enableParallelBuilding = true;
 

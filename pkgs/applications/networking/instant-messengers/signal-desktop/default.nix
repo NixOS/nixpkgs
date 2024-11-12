@@ -1,12 +1,15 @@
-{ callPackage }: builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit pname; })) {
-  signal-desktop = {
-    dir = "Signal";
-    version = "6.21.0";
-    hash = "sha256-MDjh2slEmGCMn0Q4YsIzVQO2I7ZE5XUJX5qH4OYFFxw=";
-  };
-  signal-desktop-beta = {
-    dir = "Signal Beta";
-    version = "6.22.0-beta.3";
-    hash = "sha256-Obc7JHfsFrkJkcgm/i9/6hDsoHczqz7txg4W+u/Jems=";
-  };
+{ stdenv, callPackage }:
+{
+  signal-desktop =
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      callPackage ./signal-desktop-aarch64.nix { }
+    else if stdenv.hostPlatform.isDarwin then
+      callPackage ./signal-desktop-darwin.nix { }
+    else
+      callPackage ./signal-desktop.nix { };
+  signal-desktop-beta = (callPackage ./signal-desktop-beta.nix { }).overrideAttrs (old: {
+    meta = old.meta // {
+      platforms = [ "x86_64-linux" ];
+    };
+  });
 }

@@ -1,39 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.2.0";
-  format = "setuptools";
+  version = "9.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-PAaBkR77Ho2YI5I+lmazR/8vxEZWpbvM427yRu1ET0k=";
+    pname = "azure_mgmt_cosmosdb";
+    inherit version;
+    hash = "sha256-Znx9io9UKw55cuYydK9TatmFGH4kpswuPI7vNVYIgfw=";
   };
 
-  propagatedBuildInputs = [
-    msrest
-    msrestazure
+  build-system = [ setuptools ];
+
+  dependencies = [
+    isodate
     azure-common
     azure-mgmt-core
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.cosmosdb" ];
+
   meta = with lib; {
-    description = "This is the Microsoft Azure Cosmos DB Management Client Library";
+    description = "Module to work with the Microsoft Azure Cosmos DB Management";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-cosmosdb_${version}/sdk/cosmos/azure-mgmt-cosmosdb/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

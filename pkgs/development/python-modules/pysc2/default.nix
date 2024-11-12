@@ -1,23 +1,23 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, absl-py
-, enum34
-, future
-, mock
-, mpyq
-, numpy
-, portpicker
-, protobuf
-, pygame
-, s2clientprotocol
-, six
-, websocket-client
-, sc2-headless
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  absl-py,
+  future,
+  mock,
+  mpyq,
+  numpy,
+  portpicker,
+  protobuf,
+  pygame,
+  s2clientprotocol,
+  six,
+  websocket-client,
+  sc2-headless,
 }:
 
 buildPythonPackage {
-  pname = "PySC2";
+  pname = "pysc2";
   version = "1.2";
 
   src = fetchFromGitHub {
@@ -39,7 +39,6 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     absl-py
-    enum34
     future
     mock
     mpyq
@@ -54,10 +53,10 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "Starcraft II environment and library for training agents.";
+    description = "Starcraft II environment and library for training agents";
     homepage = "https://github.com/deepmind/pysc2";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

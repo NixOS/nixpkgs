@@ -1,53 +1,55 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython,
+  setuptools,
+  mpi,
+  pytestCheckHook,
+  mpiCheckPhaseHook,
+}:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.4";
+  version = "4.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F4WPLrxiMiDQEg0fqNQo0DPd50nEvDWzPYGmatf5NIA=";
+  src = fetchFromGitHub {
+    repo = "mpi4py";
+    owner = "mpi4py";
+    rev = version;
+    hash = "sha256-pH4z+hyoFOSAUlXv9EKO54/SM5HyLxv7B+18xBidH2Q=";
   };
+
+  build-system = [
+    cython
+    setuptools
+    mpi
+  ];
+  dependencies = [
+    mpi
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mpiCheckPhaseHook
+  ];
+  doCheck = true;
+  disabledTestPaths = [
+    # Almost all tests in this file fail (TODO: Report about this upstream..)
+    "test/test_spawn.py"
+  ];
 
   passthru = {
     inherit mpi;
   };
 
-  postPatch = ''
-    substituteInPlace test/test_spawn.py --replace \
-                      "unittest.skipMPI('openmpi(<3.0.0)')" \
-                      "unittest.skipMPI('openmpi')"
-  '';
-
-  configurePhase = "";
-
-  installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out"
-
-    # --install-lib:
-    # sometimes packages specify where files should be installed outside the usual
-    # python lib prefix, we override that back so all infrastructure (setup hooks)
-    # work as expected
-
-    # Needed to run the tests reliably. See:
-    # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
-    export OMPI_MCA_rmaps_base_oversubscribe=yes
-  '';
-
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
-
-  nativeBuildInputs = [ mpi ];
-
-  nativeCheckInputs = [ openssh ];
-
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

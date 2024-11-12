@@ -3,7 +3,6 @@
 , fetchpatch
 , fetchFromGitHub
 , cmake
-, extra-cmake-modules
 , qtbase
 , wrapQtAppsHook
 , libraw
@@ -17,12 +16,12 @@
 
 mkDerivation rec {
   pname = "hdrmerge";
-  version = "unstable-2020-11-12";
+  version = "0.5.0-unstable-2024-08-02";
   src = fetchFromGitHub {
     owner = "jcelaya";
     repo = "hdrmerge";
-    rev = "f5a2538cffe3e27bd9bea5d6a199fa211d05e6da";
-    sha256 = "1bzf9wawbdvdbv57hnrmh0gpjfi5hamgf2nwh2yzd4sh1ssfa8jz";
+    rev = "e2a46f97498b321b232cc7f145461212677200f1";
+    hash = "sha256-471gJtF9M36pAId9POG8ZIpNk9H/157EdHqXSAPlhN0=";
   };
 
   nativeBuildInputs = [
@@ -38,19 +37,9 @@ mkDerivation rec {
     "-DALGLIB_DIR:PATH=${alglib}"
   ];
 
-  patches = [
-    (fetchpatch {
-      # patch FindAlglib.cmake to respect ALGLIB_DIR
-      # see https://github.com/jcelaya/hdrmerge/pull/213
-      name = "patch-hdrmerge-CMake.patch";
-      url = "https://github.com/mkroehnert/hdrmerge/commit/472b2dfe7d54856158aea3d5412a02d0bab1da4c.patch";
-      sha256 = "0jc713ajr4w08pfbi6bva442prj878nxp1fpl9112i3xj34x9sdi";
-    })
-    (fetchpatch {
-      name = "support-libraw-0.21.patch";
-      url = "https://github.com/jcelaya/hdrmerge/commit/779e566b3e2807280b78c79affda2cdfa64bde87.diff";
-      sha256 = "48sivCfJWEtGiBXTrO+SWTVlT9xyx92w2kkB8Wt/clk=";
-    })
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
   ];
 
   desktopItems = [
@@ -74,6 +63,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jcelaya/hdrmerge";
     description = "Combines two or more raw images into an HDR";
+    mainProgram = "hdrmerge";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.paperdigits ];

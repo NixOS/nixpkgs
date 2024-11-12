@@ -1,13 +1,13 @@
-{ lib
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy
+{
+  lib,
+  asynctest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  zigpy,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +32,8 @@ buildPythonPackage rec {
     zigpy
   ];
 
+  doCheck = pythonOlder "3.11"; # asynctest is unsupported on python3.11
+
   nativeCheckInputs = [
     asynctest
     pytest-asyncio
@@ -46,9 +48,7 @@ buildPythonPackage rec {
     "tests/test_application.py "
   ];
 
-  pythonImportsCheck = [
-    "zigpy_cc"
-  ];
+  pythonImportsCheck = [ "zigpy_cc" ];
 
   meta = with lib; {
     description = "Library which communicates with Texas Instruments CC2531 radios for zigpy";

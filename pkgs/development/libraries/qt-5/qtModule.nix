@@ -1,8 +1,17 @@
-{ lib, mkDerivation, perl }:
+{ lib
+, stdenv
+, buildPackages
+, mkDerivation
+, apple-sdk_14
+, apple-sdk_for_qt ? apple-sdk_14
+, perl
+, qmake
+, patches
+, srcs
+, pkgsHostTarget
+}:
 
 let inherit (lib) licenses maintainers platforms; in
-
-{ self, srcs, patches }:
 
 args:
 
@@ -16,8 +25,23 @@ mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+  buildInputs =
+    args.buildInputs or [ ]
+    # Per https://doc.qt.io/qt-5/macos.html#supported-versions
+    ++ lib.optionals stdenv.isDarwin [ apple-sdk_for_qt ];
+
+  nativeBuildInputs =
+    (args.nativeBuildInputs or []) ++ [
+      perl qmake
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      pkgsHostTarget.qt5.qtbase.dev
+    ];
+  propagatedBuildInputs =
+    (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
+    (args.propagatedBuildInputs or []);
+} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or []);
+} // {
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
@@ -69,7 +93,7 @@ mkDerivation (args // {
 
   meta = {
     homepage = "https://www.qt.io";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;

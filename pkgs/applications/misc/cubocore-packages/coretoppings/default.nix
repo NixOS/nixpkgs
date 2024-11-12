@@ -30,13 +30,13 @@
 
 mkDerivation rec {
   pname = "coretoppings";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3wLDTN3SrbQNs43nQmSBrSB0bD6YineBQ8eNPDws1G8=";
+    hash = "sha256-IYUkPGgFGI6889IyromMBobIoqSZtALVsSswQ7O1Bp0=";
   };
 
   patches = [
@@ -79,6 +79,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Additional features,plugins etc for CuboCore Application Suite";
+    mainProgram = "shareIT";
     homepage = "https://gitlab.com/cubocore/coreapps/coretoppings";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

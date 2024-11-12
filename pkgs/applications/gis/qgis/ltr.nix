@@ -1,10 +1,22 @@
-{ lib, makeWrapper, symlinkJoin
+{ makeWrapper
+, nixosTests
+, symlinkJoin
+
 , extraPythonPackages ? (ps: [ ])
+
 , libsForQt5
+
+# unwrapped package parameters
+, withGrass ? false
+, withServer ? false
+, withWebKit ? false
 }:
-with lib;
 let
-  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
+  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {
+    withGrass = withGrass;
+    withServer = withServer;
+    withWebKit = withWebKit;
+  };
 in symlinkJoin rec {
 
   inherit (qgis-ltr-unwrapped) version;
@@ -12,22 +24,28 @@ in symlinkJoin rec {
 
   paths = [ qgis-ltr-unwrapped ];
 
-  nativeBuildInputs = [ makeWrapper qgis-ltr-unwrapped.py.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    makeWrapper
+    qgis-ltr-unwrapped.py.pkgs.wrapPython
+  ];
 
   # extend to add to the python environment of QGIS without rebuilding QGIS application.
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);
 
   postBuild = ''
-    # unpackPhase
-
     buildPythonPath "$pythonInputs"
 
-    wrapProgram $out/bin/qgis \
-      --prefix PATH : $program_PATH \
-      --set PYTHONPATH $program_PYTHONPATH
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : $program_PATH \
+        --set PYTHONPATH $program_PYTHONPATH
+    done
   '';
 
-  passthru.unwrapped = qgis-ltr-unwrapped;
+  passthru = {
+    unwrapped = qgis-ltr-unwrapped;
+    tests.qgis-ltr = nixosTests.qgis-ltr;
+  };
 
   inherit (qgis-ltr-unwrapped) meta;
 }

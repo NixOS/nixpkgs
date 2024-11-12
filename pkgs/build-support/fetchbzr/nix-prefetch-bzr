@@ -9,7 +9,7 @@ if test -z "$hashType"; then
     hashType=sha256
 fi
 if test -z "$hashFormat"; then
-    hashFormat=--base32
+    hashFormat=--sri
 fi
 
 if test -z "$url"; then

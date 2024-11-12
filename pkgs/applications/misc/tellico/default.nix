@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitLab
 , mkDerivation
 , cmake
@@ -20,30 +21,27 @@
 , qtwebengine
 , solid
 , taglib
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "tellico";
-  version = "3.5";
+  version = "4.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uMq/iqPAbjR85wkgqUS1pk2BL/eatNFpyKcagjN5rJ4=";
+    hash = "sha256-5oP/uGUw1oYnrnOU83Pocr9YdwAU+DaUaGHg+6NzmRU=";
   };
-
-  postPatch = ''
-    substituteInPlace src/gui/imagewidget.h \
-      --replace ksane_version.h KF5/ksane_version.h
-  '';
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     kdoctools
     makeWrapper
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -66,6 +64,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Collection management software, free and simple";
+    mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
     license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
     maintainers = with maintainers; [ numkem ];

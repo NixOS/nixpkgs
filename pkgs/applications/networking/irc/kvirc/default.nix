@@ -24,7 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Advanced IRC Client";
-    homepage = "http://www.kvirc.net/";
+    homepage = "https://www.kvirc.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.suhr ];
     platforms = platforms.linux;

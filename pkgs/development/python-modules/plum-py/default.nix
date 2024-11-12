@@ -1,9 +1,10 @@
-{ lib
-, baseline
-, buildPythonPackage
-, fetchFromGitLab
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  baseline,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,12 +31,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plum"
-  ];
+  pythonImportsCheck = [ "plum" ];
 
-  pytestFlagsArray = [
-    "tests"
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTestPaths = [
+    # tests enum.IntFlag behaviour which has been disallowed in python 3.11.6
+    # https://gitlab.com/dangass/plum/-/issues/150
+    "tests/flag/test_flag_invalid.py"
   ];
 
   meta = with lib; {

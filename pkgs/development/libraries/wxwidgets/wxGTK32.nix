@@ -20,9 +20,9 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
-, withMesa ? !stdenv.isDarwin
-, withWebKit ? stdenv.isDarwin
-, webkitgtk
+, withMesa ? !stdenv.hostPlatform.isDarwin
+, withWebKit ? true
+, webkitgtk_4_0
 , setfile
 , AGL
 , Carbon
@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.2.1";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-u+INjo9EkW433OYoCDZpw5pcW1DyF/t/J5ntLZX+6aA=";
+    hash = "sha256-7dc7NGiKSonFFaWp3UxLYqDc1Cc6no1Eba0QmtzX5mM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     zlib
     pcre2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     libSM
     libXinerama
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && stdenv.isLinux) webkitgtk
-  ++ lib.optional (withWebKit && stdenv.isDarwin) WebKit
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
+  ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat
     setfile
     Carbon
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     WebKit
   ];
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   configureFlags = [
     "--disable-precomp-headers"
@@ -100,11 +100,13 @@ stdenv.mkDerivation rec {
     "--disable-monolithic"
     "--enable-mediactrl"
     "--with-nanosvg"
+    "--disable-rpath"
+    "--enable-repro-build"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ] ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-osx_cocoa"
     "--with-libiconv"
   ] ++ lib.optionals withWebKit [
@@ -112,12 +114,12 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib";
+  SEARCH_LIB = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib";
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/
     cp -r ${nanosvg}/* 3rdparty/nanosvg/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace 'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' 'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
     substituteInPlace configure \
@@ -138,7 +140,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.wxwidgets.org/";
-    description = "A Cross-Platform C++ GUI Library";
+    description = "Cross-Platform C++ GUI Library";
     longDescription = ''
       wxWidgets gives you a single, easy-to-use API for writing GUI applications
       on multiple platforms that still utilize the native platform's controls

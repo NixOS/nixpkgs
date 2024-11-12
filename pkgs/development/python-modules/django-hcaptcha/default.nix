@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
 
 buildPythonPackage rec {
   pname = "django-hcaptcha";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -14,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-slGerwzJeGWscvglMBEixc9h4eSFLWiVmUFgIirLbBo=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # No tests
   doCheck = false;

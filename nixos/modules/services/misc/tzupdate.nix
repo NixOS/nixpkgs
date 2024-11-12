@@ -9,7 +9,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable the tzupdate timezone updating service. This provides
         a one-shot service which can be activated with systemctl to
         update the timezone.
@@ -30,16 +30,15 @@ in {
       description = "tzupdate timezone update service";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      script = ''
+        timedatectl set-timezone $(${lib.getExe pkgs.tzupdate} --print-only)
+      '';
 
       serviceConfig = {
         Type = "oneshot";
-        # We could link directly into pkgs.tzdata, but at least timedatectl seems
-        # to expect the symlink to point directly to a file in etc.
-        # Setting the "debian timezone file" to point at /dev/null stops it doing anything.
-        ExecStart = "${pkgs.tzupdate}/bin/tzupdate -z /etc/zoneinfo -d /dev/null";
       };
     };
   };
 
-  meta.maintainers = [ maintainers.michaelpj ];
+  meta.maintainers = with lib.maintainers; [ doronbehar ];
 }

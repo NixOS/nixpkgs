@@ -1,16 +1,18 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pythonOlder,
 
-# Python dependencies
-, uvloop
-, pytest
+  # Python dependencies
+  uvloop,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "aioextensions";
   version = "21.7.2261349";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

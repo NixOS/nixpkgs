@@ -1,79 +1,50 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
-, attrs
-, certifi
-, h11
-, httpcore
-, idna
-, httpx
-, iso8601
-, pydantic
-, pyjwt
-, pyquil
-, python-dateutil
-, pythonOlder
-, qcs-api-client
-, retrying
-, rfc3339
-, rfc3986
-, six
-, sniffio
-, toml
+{
+  lib,
+  buildPythonPackage,
+  cirq-core,
+  fetchpatch2,
+  pyquil,
+  pytestCheckHook,
+  pythonOlder,
+  qcs-sdk-python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-rigetti";
-  inherit (cirq-core) version src meta;
+  pyproject = true;
+  inherit (cirq-core) version src;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  sourceRoot = "source/${pname}";
+  patches = [
+    # https://github.com/quantumlib/Cirq/pull/6734
+    (fetchpatch2 {
+      name = "fix-rigetti-check-for-aspen-family-device-kind.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/dd395fb71fb7f92cfd34f008bf2a98fc70b57fae.patch";
+      stripLen = 1;
+      hash = "sha256-EWB2CfMS2+M3zNFX5PwFNtEBdgJkNVUVNd+I/E6n9kI=";
+    })
+  ];
+
+  sourceRoot = "${src.name}/${pname}";
+
+  pythonRelaxDeps = [ "pyquil" ];
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "attrs~=20.3.0" "attrs" \
-      --replace "certifi~=2021.5.30" "certifi" \
-      --replace "h11~=0.9.0" "h11" \
-      --replace "httpcore~=0.11.1" "httpcore" \
-      --replace "httpx~=0.15.5" "httpx" \
-      --replace "idna~=2.10" "idna" \
-      --replace "pyjwt~=1.7.1" "pyjwt" \
-      --replace "qcs-api-client~=0.8.0" "qcs-api-client" \
-      --replace "iso8601~=0.1.14" "iso8601" \
-      --replace "rfc3986~=1.5.0" "rfc3986" \
-      --replace "pyquil~=3.0.0" "pyquil" \
-      --replace "pydantic~=1.8.2" "pydantic"
     # Remove outdated test
     rm cirq_rigetti/service_test.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cirq-core
-    attrs
-    certifi
-    h11
-    httpcore
-    httpx
-    idna
-    iso8601
-    pydantic
-    pyjwt
     pyquil
-    python-dateutil
-    qcs-api-client
-    retrying
-    rfc3339
-    rfc3986
-    six
-    sniffio
-    toml
+    qcs-sdk-python
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # No need to test the version number

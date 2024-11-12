@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices AudioUnit
     ];
 
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "man" ];
+
+  # std::unary_function has been removed in c++17
+  makeFlags = [ "CXXFLAGS=-std=c++11" ];
 
   # Even when statically linking, libstdc++.la is put in dependency_libs here,
   # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the

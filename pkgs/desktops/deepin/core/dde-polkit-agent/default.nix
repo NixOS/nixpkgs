@@ -1,50 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, pkg-config
-, cmake
-, qttools
-, wrapQtAppsHook
-, polkit-qt
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  pkg-config,
+  cmake,
+  libsForQt5,
 }:
+
 stdenv.mkDerivation rec {
   pname = "dde-polkit-agent";
-  version = "5.5.22";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4wAqMymLPxKXbfAx2PtkEGfwenphPxBZn+qCdcyqNc0=";
+    hash = "sha256-r2WVyy1lqcBJIQnRsPWlBFWQtSeZkq98J1S4dkipCys=";
   };
-
-  postPatch = ''
-    substituteInPlace AuthDialog.cpp \
-      --replace "/usr/share/dde-session-shell/dde-session-shell.conf" "/etc/dde-session-shell/dde-session-shell.conf"
-  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
-    polkit-qt
-  ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+    libsForQt5.polkit-qt
   ];
 
   postFixup = ''

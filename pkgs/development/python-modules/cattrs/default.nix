@@ -1,26 +1,31 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, exceptiongroup
-, hypothesis
-, immutables
-, motor
-, msgpack
-, orjson
-, poetry-core
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, typing-extensions
-, ujson
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  fetchpatch2,
+  exceptiongroup,
+  hatchling,
+  hatch-vcs,
+  hypothesis,
+  immutables,
+  motor,
+  msgpack,
+  msgspec,
+  orjson,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomlkit,
+  typing-extensions,
+  ujson,
 }:
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "22.2.0";
+  version = "24.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,41 +33,59 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Qnrq/mIA/t0mur6IAen4vTmMIhILWS6v5nuf+Via2hA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LSP8a/JduK0h9GytfbN7/CjFlnGGChaa3VbbCHQ3AFE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  patches = [
+    # https://github.com/python-attrs/cattrs/pull/576
+    (fetchpatch2 {
+      name = "attrs-24_2-compatibility1.patch";
+      url = "https://github.com/python-attrs/cattrs/commit/2d37226ff19506e23bbc291125a29ce514575819.patch";
+      excludes = [
+        "pyproject.toml"
+        "pdm.lock"
+      ];
+      hash = "sha256-nbk7rmOFk42DXYdOgw4Oe3gl3HbxNEtaJ7ZiVSBb3YA=";
+    })
+    (fetchpatch2 {
+      name = "attrs-24_2-compatibility2.patch";
+      url = "https://github.com/python-attrs/cattrs/commit/4bd6dde556042241c6381e1993cedd6514921f58.patch";
+      hash = "sha256-H1xSAYjvVUI8/jON3LWg2F2TlSxejf6TU1jpCeqly6I=";
+    })
   ];
 
-  propagatedBuildInputs = [
-    attrs
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing-extensions
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
   ];
+
+  propagatedBuildInputs =
+    [ attrs ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   nativeCheckInputs = [
+    cbor2
     hypothesis
     immutables
     motor
     msgpack
+    msgspec
     orjson
     pytest-xdist
     pytestCheckHook
     pyyaml
     tomlkit
+    typing-extensions
     ujson
   ];
 
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" "" \
-      --replace 'orjson = "^3.5.2"' "" \
-      --replace "[tool.poetry.group.dev.dependencies]" "[tool.poetry.dev-dependencies]"
+      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace tests/test_preconf.py \
       --replace "from orjson import dumps as orjson_dumps" "" \
       --replace "from orjson import loads as orjson_loads" ""
@@ -85,15 +108,17 @@ buildPythonPackage rec {
     "test_orjson"
     # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
     "test_tomlkit"
+    # msgspec causes a segmentation fault for some reason
+    "test_simple_classes"
+    "test_msgspec_json_converter"
   ];
 
-  pythonImportsCheck = [
-    "cattr"
-  ];
+  pythonImportsCheck = [ "cattr" ];
 
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
+    changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

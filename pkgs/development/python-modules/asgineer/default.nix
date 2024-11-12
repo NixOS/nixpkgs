@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "asgineer";
-  version = "0.8.1";
+  version = "0.8.2";
+  format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0hd1i9pc8m7sc8bkn31q4ygkmnl5vklrcziq9zkdiqaqm8clyhcx";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UYnVlsdEhEAJF21zVmjAXX01K6LQR2I+Dfw5tSsmf5E=";
   };
 
   nativeCheckInputs = [
@@ -23,10 +25,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A really thin ASGI web framework";
+    description = "Really thin ASGI web framework";
     license = licenses.bsd2;
     homepage = "https://asgineer.readthedocs.io";
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-

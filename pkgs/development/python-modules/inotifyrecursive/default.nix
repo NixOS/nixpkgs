@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inotify-simple
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  inotify-simple,
 }:
 
 buildPythonPackage rec {
   pname = "inotifyrecursive";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

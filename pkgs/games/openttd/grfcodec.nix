@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
     homepage    = "http://openttd.org/";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ToxicFrog ];
   };
 }

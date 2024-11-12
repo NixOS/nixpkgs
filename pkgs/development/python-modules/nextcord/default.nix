@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, ffmpeg
-, libopus
-, aiohttp
-, aiodns
-, brotli
-, faust-cchardet
-, orjson
-, pynacl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  ffmpeg,
+  libopus,
+  aiohttp,
+  aiodns,
+  brotli,
+  faust-cchardet,
+  orjson,
+  pynacl,
 }:
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.5.0";
+  version = "2.6.1";
 
   format = "setuptools";
 
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oo1C2tasuNIpUaKACbapnoZs7WVS1uncS1akErzQrqI=";
+    hash = "sha256-bv4I+Ol/N4kbp/Ch7utaUpo0GmF+Mpx4zWmHL7uIveM=";
   };
 
   patches = [

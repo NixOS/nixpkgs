@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "isosurfaces";
-  version = "0.1.0";
+  version = "0.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa1b44e5e59d2f429add49289ab89e36f8dcda49b7badd99e0beea273be331f4";
+    hash = "sha256-+lHr6GTqk1WyaDDif91qQdWli0GfqNS0fjuLgHGNbiE=";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -31,6 +33,6 @@ buildPythonPackage rec {
       many far from the implicit surface.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,34 @@
+From https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92061#c5
+
+--- a/gcc/genconditions.c	2019-01-01 12:37:19.064943662 +0100
++++ b/gcc/genconditions.c	2019-10-11 10:57:11.464595789 +0200
+@@ -57,8 +57,9 @@ write_header (void)
+ \n\
+ /* It is necessary, but not entirely safe, to include the headers below\n\
+    in a generator program.  As a defensive measure, don't do so when the\n\
+-   table isn't going to have anything in it.  */\n\
+-#if GCC_VERSION >= 3001\n\
++   table isn't going to have anything in it.\n\
++   Clang 9 is buggy and doesn't handle __builtin_constant_p correctly.  */\n\
++#if GCC_VERSION >= 3001 && __clang_major__ < 9\n\
+ \n\
+ /* Do not allow checking to confuse the issue.  */\n\
+ #undef CHECKING_P\n\
+@@ -170,7 +171,7 @@ struct c_test\n\
+    vary at run time.  It works in 3.0.1 and later; 3.0 only when not\n\
+    optimizing.  */\n\
+ \n\
+-#if GCC_VERSION >= 3001\n\
++#if GCC_VERSION >= 3001 && __clang_major__ < 9\n\
+ static const struct c_test insn_conditions[] = {\n");
+ 
+   traverse_c_tests (write_one_condition, 0);
+@@ -191,7 +192,7 @@ write_writer (void)
+ 	"  unsigned int i;\n"
+         "  const char *p;\n"
+         "  puts (\"(define_conditions [\");\n"
+-	"#if GCC_VERSION >= 3001\n"
++	"#if GCC_VERSION >= 3001 && __clang_major__ < 9\n"
+ 	"  for (i = 0; i < ARRAY_SIZE (insn_conditions); i++)\n"
+ 	"    {\n"
+ 	"      printf (\"  (%d \\\"\", insn_conditions[i].value);\n"

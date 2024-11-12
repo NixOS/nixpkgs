@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.4";
+  version = "3.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,32 +19,22 @@ buildPythonPackage rec {
     owner = "dfm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-K2cPSbR7jnl9Vzf2sEiPZqk2vTwgChNWAf6CAerhZCg=";
+    hash = "sha256-JVZK3kvDwWENho0OxZ9OxATcm3XpGmX+e7alPclRsHY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "emcee"
-  ];
+  pythonImportsCheck = [ "emcee" ];
 
   meta = with lib; {
     description = "Kick ass affine-invariant ensemble MCMC sampling";
     homepage = "https://emcee.readthedocs.io/";
     changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

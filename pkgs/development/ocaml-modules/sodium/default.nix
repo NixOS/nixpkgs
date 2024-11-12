@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, ctypes, libsodium }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "sodium is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-sodium";
   version = "0.6.0";
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
   meta = with lib; {
     homepage = "https://github.com/dsheets/ocaml-sodium";

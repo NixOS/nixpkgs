@@ -1,15 +1,19 @@
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, buildPackages, targetPackages
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
+, autoreconfHook, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
 , xattr, autoSignDarwinBinariesHook
 , bash
 
 , libiconv ? null, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
+  # we explicitly use libffi-3.3 here because 3.4 removes a flag that causes
+  # problems for ghc-8.10.7's RTS. See #324384.
+  # Save for aarch_darwin since libffi-3.3 is broken there but the issue isn't present anyway
   libffi ? null
+, libffi_3_3 ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
@@ -28,15 +32,19 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+  # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
+  # A riscv64 cross-compiler fits into the limit comfortably.
+, enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
 , # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
+  enableTerminfo ? !(stdenv.targetPlatform.isWindows
+                     # terminfo can't be built for cross
+                     || (stdenv.buildPlatform != stdenv.hostPlatform)
+                     || (stdenv.hostPlatform != stdenv.targetPlatform))
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -45,33 +53,37 @@
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
-}:
+
+, # Whether to build an unregisterised version of GHC.
+  # GHC will normally auto-detect whether it can do a registered build, but this
+  # option will force it to do an unregistered build when set to true.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
+  enableUnregisterised ? false
+}@args:
 
 assert !enableIntegerSimple -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
-assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+assert (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-
-  inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString
@@ -85,6 +97,8 @@ let
     endif
     BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
     BUILD_SPHINX_PDF = NO
+
+    WITH_TERMINFO = ${if enableTerminfo then "YES" else "NO"}
   '' +
   # Note [HADDOCK_DOCS]:
   # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
@@ -107,7 +121,7 @@ let
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
   '' + lib.optionalString (!enableProfiledLibs) ''
-    GhcLibWays = "v dyn"
+    BUILD_PROF_LIBS = NO
   '' + lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
@@ -123,7 +137,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [args.${libffi_name}]
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -133,25 +147,50 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
 
-  # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
-  # derivation for certain tools depending on the platform.
-  bintoolsFor = {
-    # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-    # part of the bintools wrapper (due to codesigning requirements), but not on
-    # x86_64-darwin.
-    install_name_tool =
-      if stdenv.targetPlatform.isAarch64
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-    # Same goes for strip.
-    strip =
-      # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-  };
+  # toolPath calculates the absolute path to the name tool associated with a
+  # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
+  # the tool from (cc, cc.bintools, cc.bintools.bintools) and adds the correct
+  # subpath of the tool.
+  toolPath = name: cc:
+    let
+      tools = {
+        "cc" = cc;
+        "c++" = cc;
+        as = cc.bintools;
+
+        ar = cc.bintools;
+        ranlib = cc.bintools;
+        nm = cc.bintools;
+        readelf = cc.bintools;
+        objdump = cc.bintools;
+
+        ld = cc.bintools;
+        "ld.gold" = cc.bintools;
+
+        otool = cc.bintools.bintools;
+
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
+        strip =
+          # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
+          if stdenv.targetPlatform.isDarwin
+          then cc.bintools
+          else cc.bintools.bintools;
+
+        # clang is used as an assembler on darwin with the LLVM backend
+        clang = cc;
+      }.${name};
+    in
+    "${tools}/bin/${tools.targetPrefix}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -165,14 +204,40 @@ let
     (lib.optionalString enableIntegerSimple "-integer-simple")
   ];
 
-in
+  libffi_name =
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    then "libffi"
+    else "libffi_3_3";
 
-# C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
-assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
-assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+  # These libraries are library dependencies of the standard libraries bundled
+  # by GHC (core libs) users will link their compiled artifacts again. Thus,
+  # they should be taken from targetPackages.
+  #
+  # We need to use pkgsHostTarget if we are cross compiling a native GHC compiler,
+  # though (when native compiling GHC, pkgsHostTarget == targetPackages):
+  #
+  # 1. targetPackages would be empty(-ish) in this situation since we can't
+  #    execute cross compiled compilers in order to obtain the libraries
+  #    that would be in targetPackages.
+  # 2. pkgsHostTarget is fine to use since hostPlatform == targetPlatform in this
+  #    situation.
+  # 3. The core libs used by the final GHC (stage 2) for user artifacts are also
+  #    used to build stage 2 GHC itself, i.e. the core libs are both host and
+  #    target.
+  targetLibs =
+    let
+      basePackageSet =
+        if hostPlatform != targetPlatform
+        then targetPackages
+        else pkgsHostTarget;
+    in
+      {
+        inherit (basePackageSet) gmp ncurses;
+        # dynamic inherits are not possible in Nix
+        libffi = basePackageSet.${libffi_name};
+      };
+
+in
 
 stdenv.mkDerivation (rec {
   version = "8.10.7";
@@ -227,7 +292,27 @@ stdenv.mkDerivation (rec {
       stripLen = 3;
       extraPrefix = "libraries/Cabal/Cabal/";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+
+    # We need to be able to set AR_STAGE0 and LD_STAGE0 when cross-compiling
+    (fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
+      hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
+    })
+
+    # Backport part of <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7111> to 8.10.7
+    # The change we are interested in is that Cabal no longer sets include-dirs
+    # for the GHCi library delegating to the system search path or (in our case)
+    # cc-wrapper. Without this patch, the target libffi ends up in there (which
+    # we provide via --with-ffi-includes) which breaks bootstrapping e.g. when
+    # cross compiling GHC. Without include-dirs, cc-wrapper and splicing will
+    # correctly pick the suitable libffi out of the build environment.
+    (fetchpatch {
+      name = "ghci-no-libffi-include.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/b2721819f391ab49871271283f32df54810c4387.patch";
+      sha256 = "1rmv3132xhxbka97v0rx7r6larx5f5nnvs4mgm9q3rmgpjyd1vf9";
+      includes = [ "libraries/ghci/ghci.cabal.in" ];
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
@@ -251,34 +336,51 @@ stdenv.mkDerivation (rec {
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
+    # Stage0 (build->build) which builds stage 1
+    export GHC="${bootPkgs.ghc}/bin/ghc"
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
+    export CC="${toolPath "cc" targetCC}"
+    export CXX="${toolPath "c++" targetCC}"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
+    export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+    export AS="${toolPath "as" targetCC}"
+    export AR="${toolPath "ar" targetCC}"
+    export NM="${toolPath "nm" targetCC}"
+    export RANLIB="${toolPath "ranlib" targetCC}"
+    export READELF="${toolPath "readelf" targetCC}"
+    export STRIP="${toolPath "strip" targetCC}"
+    export OBJDUMP="${toolPath "objdump" targetCC}"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
-    export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
-    export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
+    export OTOOL="${toolPath "otool" targetCC}"
+    export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
   '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+    # The executable we specify via $CLANG is used as an assembler (exclusively, it seems, but this isn't
+    # clarified in any user facing documentation). As such, it'll be called on assembly produced by $CC
+    # which usually comes from the darwin stdenv. To prevent a situation where $CLANG doesn't understand
+    # the assembly it is given, we need to make sure that it matches the LLVM version of $CC if possible.
+    # It is unclear (at the time of writing 2024-09-01)  whether $CC should match the LLVM version we use
+    # for llc and opt which would require using a custom darwin stdenv for targetCC.
+    export CLANG="${
+      if targetCC.isClang
+      then toolPath "clang" targetCC
+      else "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+    }"
   '' + ''
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
@@ -303,21 +405,26 @@ stdenv.mkDerivation (rec {
       done
   '';
 
+  # Although it is usually correct to pass --host, we don't do that here because
+  # GHC's usage of build, host, and target is non-standard.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/cross-compiling
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" ]
+    ++ lib.optional (buildPlatform != hostPlatform || targetPlatform != hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi != null) [
+  ] ++ lib.optionals enableTerminfo [
+    "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
+    "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
+  ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibs.libffi.dev}/include"
+    "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
-    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetLibs.gmp.dev}/include"
+    "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
@@ -329,6 +436,8 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ lib.optionals enableUnregisterised [
+    "--enable-unregisterised"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -338,18 +447,36 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    perl autoreconfHook autoconf automake m4 python3
+    bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    bootPkgs.ghc-settings-edit
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
   ];
 
+  # Everything the stage0 compiler needs to build stage1: CC, bintools, extra libs.
+  # See also GHC, {CC,LD,AR}_STAGE0 in preConfigure.
+  depsBuildBuild = [
+    # N.B. We do not declare bootPkgs.ghc in any of the stdenv.mkDerivation
+    # dependency lists to prevent the bintools setup hook from adding ghc's
+    # lib directory to the linker flags. Instead we tell configure about it
+    # via the GHC environment variable.
+    buildCC
+    # stage0 builds terminfo unconditionally, so we always need ncurses
+    ncurses
+  ];
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
+  # Prevent stage0 ghc from leaking into the final result. This was an issue
+  # with GHC 9.6.
+  disallowedReferences = [
+    bootPkgs.ghc
+  ];
+
+  buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
@@ -376,6 +503,39 @@ stdenv.mkDerivation (rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   postInstall = ''
+    settingsFile="$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings"
+
+    # Make the installed GHC use the host->target tools.
+    ghc-settings-edit "$settingsFile" \
+      "C compiler command" "${toolPath "cc" installCC}" \
+      "Haskell CPP command" "${toolPath "cc" installCC}" \
+      "C++ compiler command" "${toolPath "c++" installCC}" \
+      "ld command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+      "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+      "ar command" "${toolPath "ar" installCC}" \
+      "ranlib command" "${toolPath "ranlib" installCC}"
+  ''
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    ghc-settings-edit "$settingsFile" \
+      "otool command" "${toolPath "otool" installCC}" \
+      "install_name_tool command" "${toolPath "install_name_tool" installCC}"
+  ''
+  + lib.optionalString useLLVM ''
+    ghc-settings-edit "$settingsFile" \
+      "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
+      "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+  ''
+  + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    ghc-settings-edit "$settingsFile" \
+      "LLVM clang command" "${
+        # See comment for CLANG in preConfigure
+        if installCC.isClang
+        then toolPath "clang" installCC
+        else "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+      }"
+  ''
+  + ''
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
@@ -396,12 +556,13 @@ stdenv.mkDerivation (rec {
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    platforms = lib.platforms.all;
+    inherit (bootPkgs.ghc.meta) license;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

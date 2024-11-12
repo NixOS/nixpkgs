@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
     version = "2.4.1";
 
     src = fetchurl {
-      url = "http://www.cs.nyu.edu/acsys/cvc3/releases/${version}/${pname}-${version}.tar.gz";
+      url = "https://cs.nyu.edu/acsys/cvc3/releases/${version}/${pname}-${version}.tar.gz";
       sha256 = "1xxcwhz3y6djrycw8sm6xz83wb4hb12rd1n0skvc7fng0rh1snym";
     };
 
@@ -27,16 +27,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A prover for satisfiability modulo theory (SMT)";
+    description = "Prover for satisfiability modulo theory (SMT)";
+    mainProgram = "cvc3";
     maintainers = with maintainers;
       [ raskin ];
     platforms = platforms.unix;
     license = licenses.free;
-    homepage = "http://www.cs.nyu.edu/acsys/cvc3/index.html";
+    homepage = "https://cs.nyu.edu/acsys/cvc3/index.html";
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://www.cs.nyu.edu/acsys/cvc3/download.html";
+      downloadPage = "https://cs.nyu.edu/acsys/cvc3/download.html";
     };
   };
 }

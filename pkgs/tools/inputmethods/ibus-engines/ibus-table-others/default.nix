@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table-others";
-  version = "1.3.15";
+  version = "1.3.18";
 
   src = fetchurl {
     url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-nOj5gwhFodZv29hAN6S8EhQ+XlWp31FDOGIXtyAOM1E=";
+    hash = "sha256-4ZM5WZPh6Y5M50KDS+86j00v4pWTRdcdVYh4DcEYXAA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ibus ibus-table python3 ];
+  nativeBuildInputs = [ pkg-config python3 ];
+  buildInputs = [ ibus ibus-table ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage     = "https://github.com/moebiuscurve/ibus-table-others";
     license      = licenses.gpl3;
     platforms    = platforms.linux;
-    maintainers  = with maintainers; [ mudri ];
+    maintainers  = with maintainers; [ mudri McSinyx ];
   };
 }

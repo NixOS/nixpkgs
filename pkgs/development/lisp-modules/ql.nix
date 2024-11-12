@@ -1,4 +1,4 @@
-{ pkgs, lib, build-asdf-system, ... }:
+{ pkgs, lib, stdenv, build-asdf-system, ... }:
 
 let
 
@@ -65,7 +65,7 @@ let
       nativeLibs = [ pkgs.sqlite ];
     });
     cl-webkit2 = super.cl-webkit2.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.webkitgtk ];
+      nativeLibs = [ pkgs.webkitgtk_4_0 ];
     });
     dbd-mysql = super.dbd-mysql.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.mariadb.client ];
@@ -73,9 +73,20 @@ let
     lla = super.lla.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.openblas ];
     });
+    cffi = super.cffi.overrideLispAttrs (o: {
+      javaLibs = [
+        (pkgs.fetchMavenArtifact {
+          groupId = "net.java.dev.jna";
+          artifactId = "jna";
+          version = "5.9.0";
+          sha256 = "0qbis8acv04fi902qzak1mbagqaxcsv2zyp7b8y4shs5nj0cgz7a";
+        })
+      ];
+    });
     cffi-libffi = super.cffi-libffi.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libffi ];
       nativeLibs = [ pkgs.libffi ];
+      patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
     });
     cl-rabbit = super.cl-rabbit.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.rabbitmq-c ];
@@ -86,6 +97,9 @@ let
     });
     sqlite = super.sqlite.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.sqlite ];
+    });
+    duckdb = super.duckdb.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.duckdb ];
     });
     cl-libuv = super.cl-libuv.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libuv ];
@@ -110,6 +124,15 @@ let
     sdl2 = super.sdl2.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL2 ];
     });
+    sdl2-image = super.sdl2-image.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_image ];
+    });
+    sdl2-mixer = super.sdl2-mixer.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_mixer ];
+    });
+    sdl2-ttf = super.sdl2-ttf.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_ttf ];
+    });
     lispbuilder-sdl-cffi = super.lispbuilder-sdl-cffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL ];
     });
@@ -120,7 +143,7 @@ let
       nativeLibs = [ pkgs.libGLU ];
     });
     cl-glut = super.cl-glut.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.freeglut ];
+      nativeLibs = [ pkgs.libglut ];
     });
     cl-glfw = super.cl-glfw.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.glfw ];
@@ -163,9 +186,6 @@ let
     });
     cl-readline = super.cl-readline.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.readline ];
-    });
-    log4cl = super.log4cl.overrideLispAttrs (o: {
-      patches = [ ./patches/log4cl-fix-build.patch ];
     });
     md5 = super.md5.overrideLispAttrs (o: {
       lispLibs = [ super.flexi-streams ];
@@ -226,12 +246,47 @@ let
       lispLibs = o.lispLibs ++ [
         self.mcclim
       ];
-});
+    });
+    cl-charms = super.cl-charms.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.ncurses ];
+    });
+    libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libusb-compat-0_1 ];
+    });
+    jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libjpeg_turbo ];
+    });
+    vorbisfile-ffi = super.vorbisfile-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libvorbis ];
+    });
+    png = super.png.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libpng ];
+    });
+    zmq = super.zmq.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.czmq ];
+    });
+    consfigurator = super.consfigurator.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.acl pkgs.libcap ];
+    });
+    cl-gss = super.cl-gss.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libkrb5 ];
+    });
+    magicffi = super.magicffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.file ];
+    });
+    keystone = super.keystone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.keystone ];
+    });
+    capstone = super.capstone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.capstone ];
+    });
+    vk = super.vk.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.vulkan-loader ];
+    });
   });
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
-in qlpkgs.overrideScope' overrides
+in qlpkgs.overrideScope overrides

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, mox3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aprslib";
   version = "0.7.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
@@ -24,10 +25,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeCheckInputs = [
-    mox3
-    pytestCheckHook
-  ];
+  doCheck = false; # mox3 is disabled on python311
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aprslib" ];
 

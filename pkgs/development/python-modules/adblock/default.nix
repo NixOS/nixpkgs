@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, rustPlatform
-, pkg-config
-, openssl
-, publicsuffix-list
-, pythonOlder
-, libiconv
-, CoreFoundation
-, Security
-, pytestCheckHook
-, toml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  publicsuffix-list,
+  pythonOlder,
+  libiconv,
+  CoreFoundation,
+  Security,
+  pytestCheckHook,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -50,20 +51,20 @@ buildPythonPackage rec {
     hash = "sha256-1xmYmF5P7a5O9MilxDy+CVhmWMGRetdM2fGvTPy7JmM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreFoundation
-    Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      CoreFoundation
+      Security
+    ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";
 
@@ -92,6 +93,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ArniDagur/python-adblock/";
     changelog = "https://github.com/ArniDagur/python-adblock/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ dotlambda ];
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
   };
 }

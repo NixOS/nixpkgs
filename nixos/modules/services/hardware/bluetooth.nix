@@ -4,7 +4,7 @@ let
   package = cfg.package;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption
+    mkDefault mkEnableOption mkIf mkOption mkPackageOption
     mkRenamedOptionModule mkRemovedOptionModule
     concatStringsSep escapeShellArgs literalExpression
     optional optionals optionalAttrs recursiveUpdate types;
@@ -36,29 +36,22 @@ in
   options = {
 
     hardware.bluetooth = {
-      enable = mkEnableOption (lib.mdDoc "support for Bluetooth");
+      enable = mkEnableOption "support for Bluetooth";
 
-      hsphfpd.enable = mkEnableOption (lib.mdDoc "support for hsphfpd[-prototype] implementation");
+      hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
 
       powerOnBoot = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to power up the default Bluetooth controller on boot.";
+        description = "Whether to power up the default Bluetooth controller on boot.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bluez;
-        defaultText = literalExpression "pkgs.bluez";
-        description = lib.mdDoc ''
-          Which BlueZ package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "bluez" { };
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc "Built-in plugins to disable";
+        description = "Built-in plugins to disable";
       };
 
       settings = mkOption {
@@ -69,7 +62,10 @@ in
             ControllerMode = "bredr";
           };
         };
-        description = lib.mdDoc "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
+        description = ''
+          Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).
+          See <https://github.com/bluez/bluez/blob/master/src/main.conf> for full list of options.
+        '';
       };
 
       input = mkOption {
@@ -81,7 +77,10 @@ in
             ClassicBondedOnly = true;
           };
         };
-        description = lib.mdDoc "Set configuration for the input service (/etc/bluetooth/input.conf).";
+        description = ''
+          Set configuration for the input service (/etc/bluetooth/input.conf).
+          See <https://github.com/bluez/bluez/blob/master/profiles/input/input.conf> for full list of options.
+        '';
       };
 
       network = mkOption {
@@ -92,7 +91,10 @@ in
             DisableSecurity = true;
           };
         };
-        description = lib.mdDoc "Set configuration for the network service (/etc/bluetooth/network.conf).";
+        description = ''
+          Set configuration for the network service (/etc/bluetooth/network.conf).
+          See <https://github.com/bluez/bluez/blob/master/profiles/network/network.conf> for full list of options.
+        '';
       };
     };
   };

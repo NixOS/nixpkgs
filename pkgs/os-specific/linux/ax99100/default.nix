@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     ./kernel-6.1-set_termios-const-ktermios.patch
   ] ++ lib.optionals (lib.versionAtLeast kernel.version "6.2") [
     ./kernel-6.2-fix-pointer-type.patch
+    ./kernel-6.4-fix-define-semaphore.patch
   ];
 
   patchFlags = [ "-p0" ];
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
     description = "ASIX AX99100 Serial and Parallel Port driver";
     homepage = "https://www.asix.com.tw/en/product/Interface/PCIe_Bridge/AX99100";
     # According to the source code in the tarball, the license is gpl2.
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
 
     # Older Linux versions need more patches to work.

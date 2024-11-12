@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, msgpack
-, nose2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  nose2,
+  msgpack,
+  cbor2,
 }:
 
 buildPythonPackage rec {
   pname = "persist-queue";
-  version = "0.8.0";
+  version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vapNz8SyCpzh9cttoxFrbLj+N1J9mR/SQoVu8szNIY4=";
+    hash = "sha256-P/t0aQLTAj/QnrRol2Cf3ubHexZB8Z4vyNmNdEvfyEU=";
   };
 
   disabled = pythonOlder "3.6";
 
   nativeCheckInputs = [
-    msgpack
     nose2
+    msgpack
+    cbor2
   ];
 
   checkPhase = ''

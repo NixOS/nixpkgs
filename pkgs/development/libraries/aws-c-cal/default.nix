@@ -1,15 +1,20 @@
 { lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix, openssl, Security }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
-  version = "0.5.21";
+  version = "0.6.15";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WMCLVwRrgwFsaqoKtbQNt0bHVYi1LUZt5r0i3oAfWFE=";
+    repo = "aws-c-cal";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
   };
+
+  patches = [
+    # Fix openssl adaptor code for musl based static binaries.
+    ./aws-c-cal-musl-compat.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -26,10 +31,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "AWS Crypto Abstraction Layer ";
+    description = "AWS Crypto Abstraction Layer";
     homepage = "https://github.com/awslabs/aws-c-cal";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
   };
-}
+})

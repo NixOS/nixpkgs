@@ -1,18 +1,39 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, gitUpdater
+, unstableGitUpdater
 }:
+
+# NOTE:
+#
+# In order to use the qogir sddm theme, the packages
+# kdePackages.plasma-desktop and kdePackages.qtsvg should be added to
+# the option services.displayManager.sddm.extraPackages of the sddm
+# module:
+#
+# environment.systemPackages = with pkgs; [
+#   qogir-kde
+# ];
+#
+# services.displayManager.sddm = {
+#     enable = true;
+#     package = pkgs.kdePackages.sddm;
+#     theme = "Qogir";
+#     extraPackages = with pkgs; [
+#       kdePackages.plasma-desktop
+#       kdePackages.qtsvg
+#     ];
+# };
 
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-kde";
-  version = "unstable-2022-07-08";
+  version = "0-unstable-2024-10-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "f240eae10978c7fee518f7a8be1c41a21a9d5c2e";
-    hash = "sha256-AV60IQWwgvLwDO3ylILwx1DkKadwo4isn3JX3WpKoxQ=";
+    rev = "f2fdab049c403a356a79c9c3b9d45ec4357c1649";
+    hash = "sha256-6Hl2ozxqufin0fe33HZVuofk61E8Vggyk8/XX2R+2H0=";
   };
 
   postPatch = ''
@@ -21,6 +42,9 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace install.sh \
       --replace '$HOME/.local' $out \
       --replace '$HOME/.config' $out/share
+
+    substituteInPlace sddm/*/Main.qml \
+      --replace /usr $out
   '';
 
   installPhase = ''
@@ -36,13 +60,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
-    description = "A flat Design theme for KDE Plasma desktop";
+  meta = {
+    description = "Flat Design theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/Qogir-kde";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

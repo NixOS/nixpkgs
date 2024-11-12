@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchurl
 , cups
 , libssh
@@ -15,7 +16,7 @@
 , pkg-config
 }:
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "x2goclient";
   version = "4.1.2.2";
 
@@ -60,8 +61,9 @@ qt5.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
+    mainProgram = "x2goclient";
     homepage = "http://x2go.org/";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = [ ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -5,8 +5,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.command-not-found;
   commandNotFound = pkgs.substituteAll {
@@ -23,28 +21,28 @@ in
 {
   options.programs.command-not-found = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
       '';
     };
 
-    dbPath = mkOption {
+    dbPath = lib.mkOption {
       default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite" ;
-      description = lib.mdDoc ''
+      description = ''
         Absolute path to programs.sqlite.
 
         By default this file will be provided by your channel
         (nixexprs.tar.xz).
       '';
-      type = types.path;
+      type = lib.types.path;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.bash.interactiveShellInit =
       ''
         # This function is called whenever a command is not found.

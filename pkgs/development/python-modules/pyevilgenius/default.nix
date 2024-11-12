@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyevilgenius"
-  ];
+  pythonImportsCheck = [ "pyevilgenius" ];
 
   meta = with lib; {
     description = "Python SDK to interact with Evil Genius Labs devices";

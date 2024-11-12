@@ -9,19 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-EvCxBwzpi3riSBhlHr6MmIUYKTCp02y5gz7pDJCEC1Q=";
+    sha256 = "sha256-3UKAwhYaYZ42+d+wiW/AB6x5TSOel8d++d3HeZqAg/8=";
   };
 
-  configureFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
 
   nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optionals stdenv.isDarwin [ cctools autoSignDarwinBinariesHook fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools autoSignDarwinBinariesHook fixDarwinDylibNames ];
 
   meta = {
     homepage = "https://liquidsdr.org/";

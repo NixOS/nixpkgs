@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "openhantek6022";
-  version = "3.3.2.2";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "OpenHantek";
     repo = "OpenHantek6022";
     rev = version;
-    sha256 = "sha256-0k9Q60+T28m1hPYf5viSdpt0s4d828lfjVo3GjLDm7c=";
+    sha256 = "sha256-y2pNLAa0P/r0YEdKjQ3iP66cqtTWERG8lTOZDR64WTk=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -23,6 +23,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free software for Hantek and compatible (Voltcraft/Darkwire/Protek/Acetech) USB digital signal oscilloscopes";
+    mainProgram = "OpenHantek";
     homepage = "https://github.com/OpenHantek/OpenHantek6022";
     license = licenses.gpl3;
     maintainers = with maintainers; [ baracoder ];

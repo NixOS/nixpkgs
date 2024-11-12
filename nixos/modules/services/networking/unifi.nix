@@ -1,58 +1,51 @@
 { config, options, lib, pkgs, utils, ... }:
-with lib;
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = ''
-    @${cfg.jrePackage}/bin/java java \
-        ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
-        ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
-        -jar ${stateDir}/lib/ace.jar
-  '';
+  cmd = lib.escapeShellArgs ([
+      "@${cfg.jrePackage}/bin/java" "java"
+      "--add-opens=java.base/java.lang=ALL-UNNAMED"
+      "--add-opens=java.base/java.time=ALL-UNNAMED"
+      "--add-opens=java.base/sun.security.util=ALL-UNNAMED"
+      "--add-opens=java.base/java.io=ALL-UNNAMED"
+      "--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+    ]
+    ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
+    ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
+    ++ cfg.extraJvmOptions
+    ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
 in
 {
 
   options = {
 
-    services.unifi.enable = mkOption {
-      type = types.bool;
+    services.unifi.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to enable the unifi controller service.
       '';
     };
 
-    services.unifi.jrePackage = mkOption {
-      type = types.package;
-      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
-      defaultText = literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
-      description = lib.mdDoc ''
-        The JRE package to use. Check the release notes to ensure it is supported.
+    services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
+      default = "jdk17_headless";
+      extraDescription = ''
+        Check the UniFi controller release notes to ensure it is supported.
       '';
     };
 
-    services.unifi.unifiPackage = mkOption {
-      type = types.package;
-      default = pkgs.unifi5;
-      defaultText = literalExpression "pkgs.unifi5";
-      description = lib.mdDoc ''
-        The unifi package to use.
-      '';
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" {
+      default = "unifi8";
     };
 
-    services.unifi.mongodbPackage = mkOption {
-      type = types.package;
-      default = pkgs.mongodb-4_4;
-      defaultText = literalExpression "pkgs.mongodb";
-      description = lib.mdDoc ''
-        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.4.
-      '';
+    services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
+      default = "mongodb-7_0";
     };
 
-    services.unifi.openFirewall = mkOption {
-      type = types.bool;
+    services.unifi.openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -61,29 +54,61 @@ in
       '';
     };
 
-    services.unifi.initialJavaHeapSize = mkOption {
-      type = types.nullOr types.int;
+    services.unifi.initialJavaHeapSize = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       example = 1024;
-      description = lib.mdDoc ''
+      description = ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
     };
 
-    services.unifi.maximumJavaHeapSize = mkOption {
-      type = types.nullOr types.int;
+    services.unifi.maximumJavaHeapSize = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       example = 4096;
-      description = lib.mdDoc ''
+      description = ''
         Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
     };
 
+    services.unifi.extraJvmOptions = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = lib.literalExpression ''["-Xlog:gc"]'';
+      description = ''
+        Set extra options to pass to the JVM.
+      '';
+    };
+
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = lib.versionAtLeast config.system.stateVersion "24.11"
+        || (
+          options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
+          && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
+        );
+        message = ''
+          Support for UniFi < 8 has been dropped; please explicitly set
+          `services.unifi.unifiPackage` and `services.unifi.mongodbPackage`.
+
+          Note that the previous default MongoDB version was 5.0 and MongoDB
+          only supports migrating one major version at a time; therefore, you
+          may wish to set `services.unifi.mongodbPackage = pkgs.mongodb-6_0;`
+          and activate your configuration before upgrading again to the default
+          `mongodb-7_0` supported by `unifi8`.
+
+          For more information, see the MongoDB upgrade notes:
+          <https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/#upgrade-recommendations-and-checklists>
+        '';
+      }
+    ];
 
     users.users.unifi = {
       isSystemUser = true;
@@ -93,7 +118,7 @@ in
     };
     users.groups.unifi = {};
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
@@ -119,8 +144,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${(removeSuffix "\n" cmd)} start";
-        ExecStop = "${(removeSuffix "\n" cmd)} stop";
+        ExecStart = "${cmd} start";
+        ExecStop = "${cmd} stop";
         Restart = "on-failure";
         TimeoutSec = "5min";
         User = "unifi";
@@ -162,7 +187,7 @@ in
         StateDirectory = "unifi";
         RuntimeDirectory = "unifi";
         LogsDirectory = "unifi";
-        CacheDirectory= "unifi";
+        CacheDirectory = "unifi";
 
         TemporaryFileSystem = [
           # required as we want to create bind mounts below
@@ -172,7 +197,7 @@ in
         # We must create the binary directories as bind mounts instead of symlinks
         # This is because the controller resolves all symlinks to absolute paths
         # to be used as the working directory.
-        BindPaths =  [
+        BindPaths = [
           "/var/log/unifi:${stateDir}/logs"
           "/run/unifi:${stateDir}/run"
           "${cfg.unifiPackage}/dl:${stateDir}/dl"
@@ -190,7 +215,7 @@ in
 
   };
   imports = [
-    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
-    (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
+    (lib.mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data")
+    (lib.mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 }

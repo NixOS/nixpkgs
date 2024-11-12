@@ -1,46 +1,52 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeWrapper
-, pkg-config
-, perl
-, openssl
-, python3
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, xdg-utils
-, substituteAll
-, buildNpmPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  makeWrapper,
+  pkg-config,
+  perl,
+  openssl,
+  rust-jemalloc-sys,
+  python3,
+  python3Packages,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  xdg-utils,
+  substituteAll,
+  buildNpmPackage,
 }:
 
 let
-  version = "0.12.2";
+  version = "0.13.2";
   sources = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "activitywatch";
     rev = "v${version}";
-    sha256 = "sha256-IvRXfxTOSgBVlxy4SVij+POr7KgvXTEjGN3lSozhHkY=";
+    sha256 = "sha256-Z3WAg3b1zN0nS00u0zIose55JXRzQ7X7qy39XMY7Snk=";
     fetchSubmodules = true;
   };
 in
 rec {
-  aw-watcher-afk = python3.pkgs.buildPythonApplication {
+  aw-watcher-afk = python3Packages.buildPythonApplication {
     pname = "aw-watcher-afk";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-watcher-afk";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-    ];
+    pyproject = true;
+    build-system = [ python3Packages.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-client
       xlib
       pynput
+    ];
+
+    pythonRelaxDeps = [
+      "python-xlib"
     ];
 
     pythonImportsCheck = [ "aw_watcher_afk" ];
@@ -53,21 +59,22 @@ rec {
     };
   };
 
-  aw-watcher-window = python3.pkgs.buildPythonApplication {
+  aw-watcher-window = python3Packages.buildPythonApplication {
     pname = "aw-watcher-window";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-watcher-window";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-    ];
+    pyproject = true;
+    build-system = [ python3Packages.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-client
       xlib
+    ];
+
+    pythonRelaxDeps = [
+      "python-xlib"
     ];
 
     pythonImportsCheck = [ "aw_watcher_window" ];
@@ -77,28 +84,29 @@ rec {
       homepage = "https://github.com/ActivityWatch/aw-watcher-window";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;
+      badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
 
-  aw-qt = python3.pkgs.buildPythonApplication {
+  aw-qt = python3Packages.buildPythonApplication {
     pname = "aw-qt";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-qt";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-      wrapQtAppsHook
-    ];
+    pyproject = true;
+    build-system = [ python3Packages.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aw-core
       qtbase
       qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
+    ];
+
+    nativeBuildInputs = [
+      wrapQtAppsHook
     ];
 
     # Prevent double wrapping
@@ -107,10 +115,6 @@ rec {
     makeWrapperArgs = [
       "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
     ];
-
-    postPatch = ''
-      sed -E 's#PyQt6 = "6.3.1"#PyQt6 = "^6.4.0"#g' -i pyproject.toml
-    '';
 
     postInstall = ''
       install -D resources/aw-qt.desktop $out/share/applications/aw-qt.desktop
@@ -138,6 +142,35 @@ rec {
       homepage = "https://github.com/ActivityWatch/aw-qt";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;
+      badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
+    };
+  };
+
+  aw-notify = python3Packages.buildPythonApplication {
+    pname = "aw-notify";
+    inherit version;
+
+    src = "${sources}/aw-notify";
+
+    pyproject = true;
+    build-system = [ python3Packages.poetry-core ];
+
+    dependencies = with python3Packages; [
+      aw-client
+      desktop-notifier
+    ];
+
+    pythonRelaxDeps = [
+      "desktop-notifier"
+    ];
+
+    pythonImportsCheck = [ "aw_notify" ];
+
+    meta = with lib; {
+      description = "Desktop notification service for ActivityWatch";
+      homepage = "https://github.com/ActivityWatch/aw-notify";
+      maintainers = with maintainers; [ huantian ];
+      license = licenses.mpl20;
     };
   };
 
@@ -147,15 +180,7 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "rocket_cors-0.6.0-alpha1" = "sha256-GuMekgnsyuOg6lMiVvi4TwMba4sAFJ/zkgrdzSeBrv0=";
-      };
-    };
-
-    # Bypass rust nightly features not being available on rust stable
-    RUSTC_BOOTSTRAP = 1;
+    cargoHash = "sha256-2KnfLNVw48VVQ1Ec8MS2MaiA3BpGeFd/uIrJRHhaJR8=";
 
     patches = [
       # Override version string with hardcoded value as it may be outdated upstream.
@@ -173,15 +198,10 @@ rec {
 
     buildInputs = [
       openssl
+      rust-jemalloc-sys
     ];
 
-    postFixup = ''
-      wrapProgram "$out/bin/aw-server" \
-        --prefix XDG_DATA_DIRS : "$out/share"
-
-      mkdir -p "$out/share/aw-server"
-      ln -s "${aw-webui}" "$out/share/aw-server/static"
-    '';
+    env.AW_WEBUI_DIR = aw-webui;
 
     preCheck = ''
       # Fake home folder for tests that use ~/.cache and ~/.local/share
@@ -204,7 +224,9 @@ rec {
 
     src = "${sources}/aw-server-rust/aw-webui";
 
-    npmDepsHash = "sha256-yds2P2PKfTB6yUGnc+P73InV5+MZP9kmz2ZS4CRqlmA=";
+    npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
+
+    makeCacheWritable = true;
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
@@ -217,7 +239,7 @@ rec {
     installPhase = ''
       runHook preInstall
       mv dist $out
-      cp media/logo/logo.{png,svg} $out/static/
+      mv media/logo/logo.{png,svg} $out
       runHook postInstall
     '';
 
@@ -229,7 +251,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A web-based UI for ActivityWatch, built with Vue.js";
+      description = "Web-based UI for ActivityWatch, built with Vue.js";
       homepage = "https://github.com/ActivityWatch/aw-webui/";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;

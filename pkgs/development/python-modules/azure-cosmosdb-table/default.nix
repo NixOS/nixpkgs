@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, azure-common
-, azure-storage-common
-, azure-cosmosdb-nspkg
-, futures ? null
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  azure-common,
+  azure-storage-common,
+  azure-cosmosdb-nspkg,
+  futures ? null,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "azure-cosmosdb-table";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,9 +25,7 @@ buildPythonPackage rec {
     azure-common
     azure-storage-common
     azure-cosmosdb-nspkg
-  ] ++ lib.optionals (!isPy3k) [
-    futures
-  ];
+  ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # has no tests
   doCheck = false;

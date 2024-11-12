@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 }:
 
@@ -15,18 +16,22 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-7k81eEcM+BXNrln6+Lu0+1LjsZdYkUidrRQCdlBbQB8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --no-cov-on-fail" ""
-  '';
+  patches = [
+    # https://github.com/thegeeklab/ansible-later/pull/658
+    (fetchpatch {
+      name = "poetry-dynamic-versioning-pep517.patch";
+      url = "https://github.com/thegeeklab/ansible-later/commit/a2c278fb45769648df1439df5bb25883dddfc58a.patch";
+      hash = "sha256-++CiwwHZoaPC8XHaYbNQeU3zqEi2a4eIYbuSQkO0jTI=";
+    })
+  ];
 
   pythonRelaxDeps = [
+    "anyconfig"
     "flake8"
     "jsonschema"
     "pathspec"
     "python-json-logger"
-    "pyyaml"
+    "PyYAML"
     "toolz"
     "unidiff"
     "yamllint"
@@ -34,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
+    poetry-dynamic-versioning
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -52,9 +57,11 @@ python3.pkgs.buildPythonApplication rec {
     toolz
     unidiff
     yamllint
+    distutils
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -69,6 +76,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Best practice scanner for Ansible roles and playbooks";
+    mainProgram = "ansible-later";
     homepage = "https://github.com/thegeeklab/ansible-later";
     changelog = "https://github.com/thegeeklab/ansible-later/releases/tag/v${version}";
     license = licenses.mit;

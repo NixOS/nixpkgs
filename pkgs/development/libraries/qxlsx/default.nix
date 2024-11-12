@@ -1,30 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
-  version = "1.4.6";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
-    hash = "sha256-8plnvyb4sQRfEac1TVWgr2yrtAVAPKucgAnsybdUd3U=";
+    hash = "sha256-mMhe4yztU9I/zJFbj/0GNiIoSy7U4rQ1Y3mDvvHNKXk=";
   };
-
-  patches = [
-    # Fix header include path
-    # https://github.com/QtExcel/QXlsx/pull/279
-    (fetchpatch {
-      url = "https://github.com/QtExcel/QXlsx/commit/9d6db9efb92b93c3663ccfef3aec05267ba43723.patch";
-      hash = "sha256-EbE5CNACAcgENCQh81lBZJ52hCIcBsFhNnYOS0Wr25I=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase ];

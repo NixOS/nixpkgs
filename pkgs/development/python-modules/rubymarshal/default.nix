@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
   version = "1.2.7";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

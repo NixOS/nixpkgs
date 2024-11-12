@@ -1,52 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.32.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J5Y5G3/8d9hAtDFqweqA73amnXUpPbmb0uTrCslpl9k=";
+    hash = "sha256-YwpNwtSTyCd78Q4zjvdCoXxpFd1XItcV5dq/O9z1dMw=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
+    setuptools
+    setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpx"
-  ];
+  pythonImportsCheck = [ "pytest_httpx" ];
 
   meta = with lib; {
     description = "Send responses to httpx";

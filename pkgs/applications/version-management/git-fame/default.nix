@@ -15,7 +15,8 @@ bundlerEnv {
       '';
     homepage    = "http://oleander.io/git-fame-rb";
     license     = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski ];
     platforms   = platforms.unix;
+    mainProgram = "git-fame";
   };
 }

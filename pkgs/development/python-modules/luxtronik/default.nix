@@ -1,9 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +22,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "luxtronik"
-  ];
+  pythonImportsCheck = [ "luxtronik" ];
 
   meta = with lib; {
     description = "Python library to interact with Luxtronik heatpump controllers";

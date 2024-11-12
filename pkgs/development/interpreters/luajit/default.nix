@@ -1,11 +1,10 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildPackages
 , version
 , src
+, substituteAll
 , extraMeta ? { }
-, callPackage
 , self
 , packageOverrides ? (final: prev: {})
 , pkgsBuildBuild
@@ -24,6 +23,7 @@
 , enableGDBJITSupport ? false
 , enableAPICheck ? false
 , enableVMAssertions ? false
+, enableRegisterAllocationRandomization ? false
 , useSystemMalloc ? false
 # Upstream generates randomized string id's by default for security reasons
 # https://github.com/LuaJIT/LuaJIT/issues/626. Deterministic string id's should
@@ -40,29 +40,30 @@ let
 
   luaPackages = self.pkgs;
 
-  XCFLAGS = with lib;
-    optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
-    ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
-    ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
-    ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
-    ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
-    ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
-    ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
-    ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
-    ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
+  XCFLAGS =
+    lib.optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+    ++ lib.optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+    ++ lib.optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+    ++ lib.optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
+    ++ lib.optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+    ++ lib.optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+    ++ lib.optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+    ++ lib.optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+    ++ lib.optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ lib.optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
+    ++ lib.optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 
   # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
   # TODO support also other build architectures. The ideal way would be to use
   # stdenv_32bit but that doesn't work due to host platform mismatch:
   # https://github.com/NixOS/nixpkgs/issues/212494
-  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+  buildStdenv = if buildPackages.stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.is32bit
     then buildPackages.pkgsi686Linux.buildPackages.stdenv
     else buildPackages.stdenv;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luajit";
   inherit version src;
 
@@ -73,17 +74,8 @@ stdenv.mkDerivation rec {
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own
-      substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
+      substituteInPlace src/Makefile --replace-fail "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
-
-    {
-      echo -e '
-        #undef  LUA_PATH_DEFAULT
-        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
-        #undef  LUA_CPATH_DEFAULT
-        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
-      '
-    } >> src/luaconf.h
   '';
 
   dontConfigure = true;
@@ -98,11 +90,18 @@ stdenv.mkDerivation rec {
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
     "HOST_CC=${buildStdenv.cc}/bin/cc"
-  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
+    ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
+    mkdir -p $out/nix-support
+    cp ${substituteAll {
+      src = ../lua-5/utils.sh;
+      luapathsearchpaths=lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
+      luacpathsearchpaths=lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
+    }} $out/nix-support/utils.sh
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
     if [[ ! -e "$out"/bin/luajit ]]; then
@@ -113,7 +112,10 @@ stdenv.mkDerivation rec {
   LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
   LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
+  setupHook = builtins.toFile "lua-setup-hook" ''
+      source @out@/nix-support/utils.sh
+      addEnvHooks "$hostOffset" luaEnvHook
+      '';
 
   # copied from python
   passthru = let
@@ -121,13 +123,14 @@ stdenv.mkDerivation rec {
     inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
   in passthruFun rec {
-    inherit self luaversion packageOverrides luaAttr;
+    inherit self packageOverrides luaAttr;
+    inherit (finalAttrs) luaversion;
     executable = "lua";
     luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
     luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
     luaOnHostForHost = override pkgsHostHost.${luaAttr};
-    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
+    luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
   };
 
   meta = with lib; {
@@ -141,4 +144,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
-}
+})

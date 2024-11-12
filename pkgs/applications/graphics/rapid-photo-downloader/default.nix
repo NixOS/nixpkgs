@@ -26,6 +26,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     file
     intltool
+    gobject-introspection
   ];
 
   # Package has no generally usable unit tests.
@@ -37,13 +38,9 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     $out/bin/rapid-photo-downloader --detailed-version
   '';
 
-  # NOTE: Without gobject-introspection in buildInputs and strictDeps = false,
-  #       launching fails with:
-  #       "Namespace [Notify / GExiv2 / GUdev] not available"
   buildInputs = [
     gdk-pixbuf
     gexiv2
-    gobject-introspection
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -54,6 +51,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     udisks
   ];
 
+  # NOTE: Check if strictDeps can be renabled
+  # at the time of writing this the dependency easygui fails to build
+  #       launching fails with:
+  #       "Namespace [Notify / GExiv2 / GUdev] not available"
   strictDeps = false;
 
   propagatedBuildInputs = with python3Packages; [
@@ -96,9 +97,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
+    mainProgram = "rapid-photo-downloader";
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = [ ];
   };
 }

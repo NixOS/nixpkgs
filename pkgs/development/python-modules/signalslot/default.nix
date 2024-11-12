@@ -1,24 +1,23 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, contexter
-, eventlet
-, mock
-, pytest-xdist
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  contexter,
+  eventlet,
+  mock,
+  pytest-xdist,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "signalslot";
-  version = "0.1.2";
+  version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z26RPNau+4719e82jMhb2LyIR6EvsANI8r3+eKuw494=";
+    hash = "sha256-ZNodibNGfCOa8xd3myN+cRa28rY3/ynNUia1kwjTIOU=";
   };
 
   postPatch = ''
@@ -27,9 +26,6 @@ buildPythonPackage rec {
       --replace "--cov-report html" ""
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     contexter

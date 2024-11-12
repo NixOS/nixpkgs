@@ -66,14 +66,9 @@ stdenv.mkDerivation rec {
     "-Dui=enabled"
   ];
 
-  postPatch = ''
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/-/merge_requests/148
-    substituteInPlace build-aux/meson_post_install.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
-
   meta = with lib; {
     description = "UI components for parental controls library";
+    mainProgram = "malcontent-control";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

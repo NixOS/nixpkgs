@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";
-    description = "A Protocol Buffers codec generator for OCaml";
+    description = "Protocol Buffers codec generator for OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.vyorkin ];
   };

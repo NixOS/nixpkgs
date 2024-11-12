@@ -1,62 +1,101 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 
-# build time
-, astropy-extension-helpers
-, astropy-helpers
-, cython
-, jinja2
-, setuptools-scm
+  # build time
+  astropy-extension-helpers,
+  cython,
+  setuptools,
+  setuptools-scm,
 
-# runtime
-, numpy
-, packaging
-, pyerfa
-, pyyaml
+  # testing
+  pytestCheckHook,
+  stdenv,
+  pytest-xdist,
+  pytest-astropy,
+
+  # runtime
+  astropy-iers-data,
+  numpy,
+  packaging,
+  pyerfa,
+  pyyaml,
 }:
 
-let
+buildPythonPackage rec {
   pname = "astropy";
-  version = "5.2.1";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "pyproject";
+  version = "6.1.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
+    hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0"  "numpy"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     astropy-extension-helpers
-    astropy-helpers
     cython
-    jinja2
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    astropy-iers-data
     numpy
     packaging
     pyerfa
     pyyaml
   ];
 
-  # infinite recursion with pytest-astropy (pytest-astropy-header depends on astropy itself)
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    pytest-astropy
+  ];
 
-  meta = with lib; {
+  # Not running it inside the build directory. See:
+  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  preCheck = ''
+    cd "$out"
+    export HOME="$(mktemp -d)"
+    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+  '';
+  pythonImportsCheck = [ "astropy" ];
+  disabledTests = [
+    # May fail due to parallelism, see:
+    # https://github.com/astropy/astropy/issues/15441
+    "TestUnifiedOutputRegistry"
+
+    # flaky
+    "test_timedelta_conversion"
+    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
+    "test_sidereal_lon_independent"
+    "test_timedelta_full_precision_arithmetic"
+    "test_datetime_to_timedelta"
+
+    "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
+
+    # SAMPProxyError 1: 'Timeout expired!'
+    "TestStandardProfile.test_main"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
+
+  meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.kentjames ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      kentjames
+      doronbehar
+    ];
   };
 }

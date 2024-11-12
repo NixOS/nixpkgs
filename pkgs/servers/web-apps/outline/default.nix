@@ -1,33 +1,34 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
+, nix-update-script
+, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , yarn
-, yarn2nix-moretea
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.69.2";
+  version = "0.80.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-XevrCUvPmAbPTysJ/o7i2xAZTQ+UFYtVal/aZKvt+Ls=";
+    hash = "sha256-kmi6H2vdzg7ftUOrzs2b5e9n1bSFHiQ0wk6Q6T/lDdk=";
   };
 
-  nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
-  # Replace the inline calls to yarn with our sequalize wrapper. These should be
-  # the two occurrences:
-  # https://github.com/outline/outline/search?l=TypeScript&q=yarn
-  patches = [ ./sequelize-command.patch ];
-
-  yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-Ibgn/J2OCP2F0hbPQi35uGAOfoZ2D5HD/E85oOTr6G0=";
+  };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline \
       --frozen-lockfile \
@@ -64,29 +65,27 @@ stdenv.mkDerivation rec {
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
-      --set NODE_PATH $node_modules
-
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-sequelize \
-      --add-flags $node_modules/.bin/sequelize \
-      --add-flags "--migrations-path $server/migrations" \
-      --add-flags "--models-path $server/models" \
-      --add-flags "--seeders-path $server/models/fixtures" \
-      --set NODE_ENV production \
-      --set NODE_PATH $node_modules
+      --set NODE_PATH $node_modules \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]} # required to run migrations
 
     runHook postInstall
   '';
 
-  passthru.tests = {
-    basic-functionality = nixosTests.outline;
+  passthru = {
+    tests = {
+      basic-functionality = nixosTests.outline;
+    };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = yarnOfflineCache;
   };
 
   meta = with lib; {
-    description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
+    description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd xanderio ];
+    maintainers = with maintainers; [ cab404 yrd ] ++ teams.cyberus.members;
     platforms = platforms.linux;
   };
 }

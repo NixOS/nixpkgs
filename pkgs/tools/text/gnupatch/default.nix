@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=b5a91a01e5d0897facdd0f49d64b76b0f02b43e1
     ./Allow_input_files_to_be_missing_for_ed-style_patches.patch
 
+    # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=b7b028a77bd855f6f56b17c8837fc1cca77b469d
+    ./Abort_when_cleaning_up_fails.patch
+
     # https://git.savannah.gnu.org/cgit/patch.git/patch/?id=123eaff0d5d1aebe128295959435b9ca5909c26d
     ./CVE-2018-1000156.patch
 
@@ -42,12 +45,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
+    mainProgram = "patch";
 
-    longDescription =
-      '' GNU Patch takes a patch file containing a difference listing
-         produced by the diff program and applies those differences to one or
-         more original files, producing patched versions.
-      '';
+    longDescription = ''
+      GNU Patch takes a patch file containing a difference listing
+      produced by the diff program and applies those differences to one or
+      more original files, producing patched versions.
+    '';
 
     homepage = "https://savannah.gnu.org/projects/patch";
 

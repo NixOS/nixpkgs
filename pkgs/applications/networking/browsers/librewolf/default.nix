@@ -3,16 +3,19 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-((buildMozillaMach rec {
+(buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
+  requireSigning = false;
+  allowAddonSideload = true;
+  branding = "browser/branding/librewolf";
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
-    description = "A fork of Firefox, focused on privacy, security and freedom";
+    description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [ squalus ];
     platforms = lib.platforms.unix;
@@ -21,14 +24,13 @@ in
                                            # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
+    mainProgram = "librewolf";
   };
-  tests = [ nixosTests.librewolf ];
+  tests = { inherit (nixosTests) librewolf; };
   updateScript = callPackage ./update.nix {
     attrPath = "librewolf-unwrapped";
   };
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-}).overrideAttrs (prev: {
-  MOZ_REQUIRE_SIGNING = "";
-})
+}

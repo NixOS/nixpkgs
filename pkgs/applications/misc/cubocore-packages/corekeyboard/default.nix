@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corekeyboard";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zOH/w4QroMaVjWnFuWAJQ11RYlpXwIXRG9QYGDkfLVY=";
+    hash = "sha256-Hylz1x9Wsk0iVhpNBFZJChsl3gIvJDICgpITjIXDZAg=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A virtual keyboard for X11 from the C Suite";
+    description = "Virtual keyboard for X11 from the C Suite";
+    mainProgram = "corekeyboard";
     homepage = "https://gitlab.com/cubocore/coreapps/corekeyboard";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

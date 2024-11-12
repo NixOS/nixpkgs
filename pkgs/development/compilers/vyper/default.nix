@@ -1,26 +1,25 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, writeText
 , asttokens
-, pycryptodome
+, buildPythonPackage
+, cbor2
+, fetchPypi
+, git
 , importlib-metadata
+, packaging
+, pycryptodome
+, pythonOlder
 , recommonmark
-, semantic-version
+, setuptools-scm
 , sphinx
 , sphinx-rtd-theme
-, pytest-runner
-, setuptools-scm
-, git
+, writeText
 }:
 
 let
   sample-contract = writeText "example.vy" ''
     count: int128
 
-    @external
+    @deploy
     def __init__(foo: address):
         self.count = 1
   '';
@@ -28,33 +27,42 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.9";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4UBSH4qRBgsy+VO9XzosWedM65R1lTo9ml2C95T9OAA=";
+    hash = "sha256-locUXGoL9C3lLpIgLOmpE2SNPGV6yOXPubNaEA3EfjQ=";
   };
+
+  postPatch = ''
+    # pythonRelaxDeps doesn't work
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0" \
+      --replace-fail '"pytest-runner",' ""
+  '';
 
   nativeBuildInputs = [
     # Git is used in setup.py to compute version information during building
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pythonRelaxDepsHook
-    pytest-runner
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [ "asttokens" "semantic-version" ];
+  pythonRelaxDeps = [
+    "asttokens"
+    "packaging"
+  ];
 
   propagatedBuildInputs = [
     asttokens
-    pycryptodome
-    semantic-version
+    cbor2
     importlib-metadata
+    packaging
+    pycryptodome
 
     # docs
     recommonmark
@@ -66,9 +74,14 @@ buildPythonPackage rec {
     $out/bin/vyper "${sample-contract}"
   '';
 
+  pythonImportsCheck = [
+    "vyper"
+  ];
+
   meta = with lib; {
     description = "Pythonic Smart Contract Language for the EVM";
     homepage = "https://github.com/vyperlang/vyper";
+    changelog = "https://github.com/vyperlang/vyper/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];
   };

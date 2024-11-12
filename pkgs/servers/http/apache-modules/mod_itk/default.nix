@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "an MPM (Multi-Processing Module) for the Apache web server.";
+    description = "MPM (Multi-Processing Module) for the Apache web server";
     maintainers = [ maintainers.zupo ];
     homepage = "http://mpm-itk.sesse.net/";
     license = licenses.asl20;

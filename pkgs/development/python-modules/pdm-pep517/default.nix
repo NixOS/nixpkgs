@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, git
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pdm-pep517";
-  version = "1.1.2";
+  version = "1.1.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1PpzWmRffpWmvrNKK19+jgDZPdBDnXPzHMguQLW4/c4=";
+    hash = "sha256-f0kSHnC0Lcopb6yWIhDdLaB6OVdfxWcxN61mFjOyzz8=";
   };
 
   preCheck = ''
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-pep517";
-    description = "Yet another PEP 517 backend.";
+    description = "Yet another PEP 517 backend";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

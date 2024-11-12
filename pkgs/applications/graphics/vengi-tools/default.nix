@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, writeText
 
 , cmake
 , pkg-config
@@ -9,33 +8,40 @@
 , python3
 , makeWrapper
 
+, backward-cpp
+, curl
+, enet
+, freetype
 , glm
+, gtest
+, libbfd
+, libdwarf
+, libjpeg
+, libuuid
+, libuv
 , lua5_4
+, lzfse
+, opencl-headers
 , SDL2
 , SDL2_mixer
-, enet
-, libuv
-, libuuid
 , wayland-protocols
 , Carbon
 , CoreServices
-# optionals
-, opencl-headers
 , OpenCL
 
 , callPackage
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.24";
+  version = "0.0.33";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
-    rev = "v${version}";
-    sha256 = "sha256-ZkO2CLSuuJcFJFBO4XS8Qec0CxxAJdzOGfFa2zy+4uI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ljB36A5b8K1KBBuQVISb1fkWxb/tTTwojE31KPMg1xQ=";
   };
 
   nativeBuildInputs = [
@@ -47,39 +53,40 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libbfd
+    libdwarf
+    backward-cpp
+    curl
+    enet
+    freetype
     glm
+    libjpeg
+    libuuid
+    libuv
     lua5_4
+    lzfse
     SDL2
     SDL2_mixer
-    enet
-    libuv
-    libuuid
-    # Only needed for the game
-    #postgresql
-    #libpqxx
-    #mosquitto
-  ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
-    ++ lib.optional (!stdenv.isDarwin) opencl-headers;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon CoreServices OpenCL ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
-  cmakeFlags = [
-    # Disable tests due to a problem in linking gtest:
-    # ld: /build/vengi-tests-core.LDHlV1.ltrans0.ltrans.o: in function `main':
-    # <artificial>:(.text.startup+0x3f): undefined reference to `testing::InitGoogleMock(int*, char**)'
-    "-DUNITTESTS=OFF"
-    "-DVISUALTESTS=OFF"
-    # We're only interested in the generic tools
-    "-DGAMES=OFF"
-    "-DMAPVIEW=OFF"
-    "-DAIDEBUG=OFF"
-  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+  cmakeFlags =
+    lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+
+  # error: "The plain signature for target_link_libraries has already been used"
+  doCheck = false;
+
+  checkInputs = [
+    gtest
+  ];
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
   # one.
   # This is not needed on darwin, since on that platform data files are saved
   # in *.app/Contents/Resources/ too, and are picked up automatically.
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
         --set CORE_PATH $out/share/$(basename "$prog")/
@@ -106,5 +113,6 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

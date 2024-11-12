@@ -1,15 +1,14 @@
-{ lib
+{ stdenv
+, lib
 , qt5
 , qtbase
-, qtsvg
-, qtx11extras
 , qttools
 , qtwebsockets
 , qtmultimedia
 , fetchFromGitHub
 }:
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "r3ctl";
   version = "a82cb5b3123224e706835407f21acea9dc7ab0f0";
 
@@ -41,7 +40,8 @@ qt5.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A cmdline tool to control the r3 hackerspace lights";
+    description = "Cmdline tool to control the r3 hackerspace lights";
+    mainProgram = "r3ctl";
     homepage = "https://github.com/0xfeedc0de64/r3ctl";
     maintainers = with maintainers; [ mkg20001 ];
     license = licenses.gpl3Only;

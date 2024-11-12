@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-cpdf";
-  version = "2.5";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
-    sha256 = "sha256:1qmx229nij7g6qmiacmyy4mcgx3k9509p4slahivshqm79d6wiwl";
+    hash = "sha256-lFI7f1t70Pw0LJjDrhaB7yQKR1N5906xNYB+fnrz55M=";
   };
 
   nativeBuildInputs = [ ocaml findlib ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PDF Command Line Tools";
     homepage = "https://www.coherentpdf.com/";
-    license = licenses.unfree;
+    license = licenses.agpl3Only;
     maintainers = [ maintainers.vbgl ];
     mainProgram = "cpdf";
     inherit (ocaml.meta) platforms;

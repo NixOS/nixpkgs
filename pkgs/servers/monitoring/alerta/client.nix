@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta";
-  version = "8.5.1";
+  version = "8.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O13Ic2iHjNF/llp6vdaAiiWExcTBPsz46GAWY3oGDY8=";
+    hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://alerta.io";
     description = "Alerta Monitoring System command-line interface";
+    mainProgram = "alerta";
     license = licenses.asl20;
   };
 }

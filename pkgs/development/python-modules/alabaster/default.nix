@@ -1,14 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pygments,
+}:
 
 buildPythonPackage rec {
   pname = "alabaster";
-  version = "0.7.13";
+  version = "0.7.16";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-onpKCE1eaQ4W4B4DrSsuVSxhplRpQZuQckMZPeGoSuI=";
+    hash = "sha256-dai5nCil2tUN1/jM3UR6Eh3bOJLanlPRylzKMQbVjWU=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ pygments ];
 
@@ -17,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/bitprophet/alabaster";
-    description = "A Sphinx theme";
+    description = "Sphinx theme";
     license = licenses.bsd3;
   };
 }

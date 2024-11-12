@@ -1,45 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-, flask
-, limits
-, ordered-set
-, rich
-, typing-extensions
-
-, asgiref
-, hiro
-, pymemcache
-, pytest-mock
-, pytestCheckHook
-, redis
-, pymongo
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-eAJRqyAH1j1NHYfagRZM2fPE6hm9+tJHD8FMqvgvMBI=";
+    hash = "sha256-RkeG5XdanSp2syKrQgYUZ4r8D28Zt33/MsW0UxWxaU0=";
   };
 
   postPatch = ''
-    substituteInPlace requirements/main.txt \
-      --replace "rich>=12,<13" "rich"
-
-    sed -i "/--cov/d" pytest.ini
-
     # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
+    substituteInPlace tests/test_views.py \
+      --replace-fail "import flask_restful" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     limits
     ordered-set
@@ -47,8 +49,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    redis = limits.optional-dependencies.redis;
+    memcached = limits.optional-dependencies.memcached;
+    mongodb = limits.optional-dependencies.mongodb;
+  };
+
   nativeCheckInputs = [
     asgiref
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     hiro
@@ -87,7 +96,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

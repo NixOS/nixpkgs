@@ -42,7 +42,8 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A native desktop app for Pleroma and Mastodon servers";
+    description = "Native desktop app for Pleroma and Mastodon servers";
+    mainProgram = "Michabo";
     homepage = "https://git.pleroma.social/kaniini/michabo";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];

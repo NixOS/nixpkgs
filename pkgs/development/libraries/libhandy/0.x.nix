@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "-Dintrospection=enabled"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library full of GTK widgets for mobile phones";
+    description = "Library full of GTK widgets for mobile phones";
+    mainProgram = "handy-0.0-demo";
     homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

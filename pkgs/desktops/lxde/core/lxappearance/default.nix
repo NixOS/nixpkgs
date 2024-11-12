@@ -5,7 +5,7 @@
 , libX11
 , gtk2
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGtk3 ? true
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
+    mainProgram = "lxappearance";
     homepage = "https://lxde.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

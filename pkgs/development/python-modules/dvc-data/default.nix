@@ -1,44 +1,39 @@
-{ lib
-, buildPythonPackage
-, dictdiffer
-, diskcache
-, dvc-objects
-, fetchFromGitHub
-, funcy
-, nanotime
-, pygtrie
-, pythonOlder
-, setuptools-scm
-, shortuuid
-, sqltrie
+{
+  lib,
+  buildPythonPackage,
+  dictdiffer,
+  diskcache,
+  dvc-objects,
+  fetchFromGitHub,
+  funcy,
+  pygtrie,
+  pythonOlder,
+  setuptools-scm,
+  shortuuid,
+  sqltrie,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "2.0.2";
-  format = "pyproject";
+  version = "3.16.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-data";
     rev = "refs/tags/${version}";
-    hash = "sha256-QtMt6bNq6nN5crITkRie/nE1TqnXM4Daf1VMPPY2Qcs=";
+    hash = "sha256-HT+IcfUA1QMkWhQKNwjKexzG04WJj+WTyHV+15DDoCI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     dictdiffer
     diskcache
     dvc-objects
     funcy
-    nanotime
     pygtrie
     shortuuid
     sqltrie
@@ -47,17 +42,11 @@ buildPythonPackage rec {
   # Tests depend on upath which is unmaintained and only available as wheel
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "dvc-objects==" "dvc-objects>="
-  '';
-
-  pythonImportsCheck = [
-    "dvc_data"
-  ];
+  pythonImportsCheck = [ "dvc_data" ];
 
   meta = with lib; {
     description = "DVC's data management subsystem";
+    mainProgram = "dvc-data";
     homepage = "https://github.com/iterative/dvc-data";
     changelog = "https://github.com/iterative/dvc-data/releases/tag/${version}";
     license = licenses.asl20;

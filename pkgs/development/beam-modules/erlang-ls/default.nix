@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib, erlang }:
+, stdenv, writeScript, lib }:
 let
-  version = "0.47.1";
+  version = "1.1.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -16,6 +16,15 @@ let
           substituteInPlace rebar.config --replace ", warnings_as_errors" ""
           '';
       });
+      json_polyfill = super.json_polyfill.overrideAttrs (_: {
+        # When compiling with erlang >= 27, the json_polyfill rebar script will
+        # delete the json.beam file as it's not needed. However, we need to
+        # adjust this path as the nix build will put the beam file under `ebin`
+        # instead of `$REBAR_DEPS_DIR/json_polyfill/ebin`.
+        postPatch = ''
+          substituteInPlace rebar.config.script --replace "{erlc_compile, \"rm \\\"\$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\\\"\"}" "{erlc_compile, \"rm \\\"ebin/json.beam\\\"\"}"
+          '';
+      });
     });
   };
 in
@@ -24,7 +33,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-pW78CBOM0Yi5taPHdCfTTb9H1fbhuQFpf6jaf0cTQdA=";
+    hash = "sha256-MSDBU+blsAdeixaHMMXmeMJ+9Yrzn3HekE8KbIc/Guo=";
     rev = version;
   };
   releaseType = "escript";
@@ -45,15 +54,11 @@ rebar3Relx {
     HOME=. rebar3 proper --constraint_tries 100
   '';
   # tests seem to be a bit flaky on darwin, skip them for now
-  doCheck = !stdenv.isDarwin;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp _build/default/bin/erlang_ls $out/bin/
-    cp _build/dap/bin/els_dap $out/bin/
-  '';
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  installFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     homepage = "https://github.com/erlang-ls/erlang_ls";
-    description = "The Erlang Language Server";
+    description = "Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
     mainProgram = "erlang_ls";

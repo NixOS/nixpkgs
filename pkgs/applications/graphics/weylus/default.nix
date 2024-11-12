@@ -17,7 +17,7 @@
 , git
 , autoconf
 , libtool
-, nodePackages
+, typescript
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     ffmpeg
     x264
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Carbon
     Cocoa
     VideoToolbox
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     libva
     gst_all_1.gst-plugins-base
@@ -65,9 +65,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     git
-    nodePackages.typescript
+    typescript
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
     autoconf
     libtool
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
       gst_all_1.gst-plugins-base
       pipewire
     ];
-  in lib.optionalString stdenv.isLinux ''
+  in lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
   '';
 
@@ -97,8 +97,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";
+    mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ lom ];

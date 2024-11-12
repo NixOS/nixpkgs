@@ -11,11 +11,6 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
       nix.settings.sandbox = false;
-      nixpkgs.overlays = [
-        (final: super: {
-          dhcpcd = super.dhcpcd.override { enablePrivSep = false; };
-        })
-      ];
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
@@ -28,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         };
       };
       boot.extraModulePackages =
-        optional (versionOlder config.boot.kernelPackages.kernel.version "5.6")
+        pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6")
           config.boot.kernelPackages.wireguard;
       boot.kernelModules = [ "wireguard" ];
     };

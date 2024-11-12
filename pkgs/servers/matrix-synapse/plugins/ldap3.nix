@@ -4,7 +4,7 @@
 , fetchPypi
 , ldap3
 , ldaptor
-, matrix-synapse
+, matrix-synapse-unwrapped
 , pytestCheckHook
 , service-identity
 , setuptools
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-s4jZVpNIbu9pra79D9noRGPVL+F7AhSgDvyqZptzy3Q=";
+    hash = "sha256-s4jZVpNIbu9pra79D9noRGPVL+F7AhSgDvyqZptzy3Q=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ service-identity ldap3 twisted ];
 
-  nativeCheckInputs = [ ldaptor matrix-synapse pytestCheckHook ];
+  nativeCheckInputs = [ ldaptor matrix-synapse-unwrapped pytestCheckHook ];
 
   pythonImportsCheck = [ "ldap_auth_provider" ];
 

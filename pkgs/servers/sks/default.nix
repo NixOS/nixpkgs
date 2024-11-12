@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   postInstall = "cp -R sampleWeb $webSamples";
 
   meta = with lib; {
-    description = "An easily deployable & decentralized OpenPGP keyserver";
+    description = "Easily deployable & decentralized OpenPGP keyserver";
     longDescription = ''
       SKS is an OpenPGP keyserver whose goal is to provide easy to deploy,
       decentralized, and highly reliable synchronization. That means that a key
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }
 

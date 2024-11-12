@@ -7,10 +7,19 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome-desktop gnome.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ zenity gtksourceview gnome-desktop libgnome-keyring webkitgtk_4_0 ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
+    libXfixes libXtst libXScrnSaver libICE libXt
+  ];
+  gstreamerDeps = pkgs: with pkgs.gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    gst-libav
   ];
 
 in buildFHSEnv {
@@ -18,11 +27,17 @@ in buildFHSEnv {
 
   runScript = "lutris";
 
+  # Many native and WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
     # Adventure Game Studio
     allegro dumb
+
+    # Battle.net
+    jansson
 
     # Curl
     libnghttp2
@@ -48,10 +63,10 @@ in buildFHSEnv {
     fluidsynth hidapi mesa libdrm
 
     # MAME
-    qt48 fontconfig SDL2_ttf
+    fontconfig SDL2_ttf
 
     # Mednafen
-    freeglut mesa_glu
+    libglut mesa_glu
 
     # MESS
     expat
@@ -61,9 +76,6 @@ in buildFHSEnv {
 
     # Mupen64Plus
     boost dash
-
-    # Osmose
-    qt4
 
     # Overwatch 2
     libunwind
@@ -119,8 +131,9 @@ in buildFHSEnv {
     libselinux
 
     # Winetricks
-    fribidi
+    fribidi pango
   ] ++ xorgDeps pkgs
+    ++ gstreamerDeps pkgs
     ++ extraLibraries pkgs;
 
   extraInstallCommands = ''

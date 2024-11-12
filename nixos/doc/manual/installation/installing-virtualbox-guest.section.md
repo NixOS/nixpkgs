@@ -1,10 +1,8 @@
 # Installing in a VirtualBox guest {#sec-installing-virtualbox-guest}
 
 Installing NixOS into a VirtualBox guest is convenient for users who
-want to try NixOS without installing it on bare metal. If you want to
-use a pre-made VirtualBox appliance, it is available at [the downloads
-page](https://nixos.org/nixos/download.html). If you want to set up a
-VirtualBox guest manually, follow these instructions:
+want to try NixOS without installing it on bare metal. If you want to set
+up a VirtualBox guest, follow these instructions:
 
 1.  Add a New Machine in VirtualBox with OS Type "Linux / Other Linux"
 
@@ -29,14 +27,18 @@ There are a few modifications you should make in configuration.nix.
 Enable booting:
 
 ```nix
-boot.loader.grub.device = "/dev/sda";
+{
+  boot.loader.grub.device = "/dev/sda";
+}
 ```
 
 Also remove the fsck that runs at startup. It will always fail to run,
 stopping your boot until you press `*`.
 
 ```nix
-boot.initrd.checkJournalingFS = false;
+{
+  boot.initrd.checkJournalingFS = false;
+}
 ```
 
 Shared folders can be given a name and a path in the host system in the

@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cachelib
-, flask
-, asgiref
-, pytest-asyncio
-, pytest-xprocess
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cachelib,
+  flask,
+  asgiref,
+  pytest-asyncio,
+  pytest-xprocess,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
-  version = "2.0.2";
+  pname = "flask-caching";
+  version = "2.3.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
+    pname = "flask_caching";
+    inherit version;
+    hash = "sha256-1+TKZKM7Sf6zOfzdF+a6JfXgEWjPiF5TeQ6IX4Ok0s8=";
   };
 
   postPatch = ''
@@ -39,22 +41,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # backend_cache relies on pytest-cache, which is a stale package from 2013
-    "backend_cache"
-    # optional backends
-    "Redis"
-    "Memcache"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # ignore flaky test
-    "test_cached_view_class"
-  ];
+  disabledTests =
+    [
+      # backend_cache relies on pytest-cache, which is a stale package from 2013
+      "backend_cache"
+      # optional backends
+      "Redis"
+      "Memcache"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ignore flaky test
+      "test_cache_timeout_dynamic"
+      "test_cached_view_class"
+    ];
 
   meta = with lib; {
-    description = "A caching extension for Flask";
+    description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

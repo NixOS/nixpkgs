@@ -1,5 +1,6 @@
-{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers, OpenCL
-, cudaSupport ? false, cudatoolkit ? null
+{ cmake, fetchFromGitHub, makeWrapper, opencv4, lib, stdenv, ocl-icd, opencl-headers, OpenCL
+, config
+, cudaSupport ? config.cudaSupport, cudatoolkit ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -19,14 +20,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    opencv3
+    opencv4
   ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optional stdenv.isDarwin OpenCL
-    ++ lib.optionals stdenv.isLinux [ ocl-icd opencl-headers ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin OpenCL
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ ocl-icd opencl-headers ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"
   '';
 
@@ -41,5 +42,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.xzfc ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "waifu2x-converter-cpp";
   };
 }

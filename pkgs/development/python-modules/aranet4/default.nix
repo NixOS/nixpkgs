@@ -1,16 +1,18 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.1.3";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,20 +20,23 @@ buildPythonPackage rec {
     owner = "Anrijs";
     repo = "Aranet4-Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5q4eOC9iuN8pUmDsiQ7OwEXkxi4KdL+bhGVjlQlTBAg=";
+    hash = "sha256-PdEOEVHri9bhsRFtSqZIaTJ7perD6nZcYoF2sDrWXqg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bleak
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aranet4"
+  pythonImportsCheck = [ "aranet4" ];
+
+  disabledTests = [
+    # Test compares rendered output
+    "test_current_values"
   ];
 
   meta = with lib; {
@@ -39,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Anrijs/Aranet4-Python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aranetctl";
   };
 }

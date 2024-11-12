@@ -1,31 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, grpcio
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  grpcio,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.19.0";
-  format = "setuptools";
+  version = "2.26.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EebMccj9DmrPj+/GCECLkqplq3bSmRkNqlI3gYq0qzo=";
+    pname = "google_cloud_bigtable";
+    inherit version;
+    hash = "sha256-g88QrbMzNISzme+uWk0kEhfBiFxj/bmwTCaTAXYrGLc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
@@ -33,10 +38,8 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -50,9 +53,7 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  disabledTests = [
-    "policy"
-  ];
+  disabledTests = [ "policy" ];
 
   pythonImportsCheck = [
     "google.cloud.bigtable_admin_v2"
@@ -65,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = [ ];
   };
 }

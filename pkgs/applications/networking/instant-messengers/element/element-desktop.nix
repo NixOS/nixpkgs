@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, fixup_yarn_lock
+, fixup-yarn-lock
 , yarn
 , nodejs
 , fetchYarnDeps
+, jq
 , electron
 , element-web
 , sqlcipher
@@ -16,6 +17,8 @@
 , CoreServices
 , desktopToDarwinBundle
 , useKeytar ? true
+# command line arguments which are always set
+, commandLineArgs ? ""
 }:
 
 let
@@ -29,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = desktopSrcHash;
+    hash = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
@@ -40,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
@@ -50,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -76,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase =
+  ''
     runHook preInstall
 
     # resources
@@ -104,13 +108,14 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
     exec = "${executableName} %u";
@@ -119,11 +124,11 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     genericName = "Matrix Client";
     comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "element";
+    startupWMClass = "Element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
   '';
 
@@ -145,9 +150,10 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
+    mainProgram = "element-desktop";
   };
 })

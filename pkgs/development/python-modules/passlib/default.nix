@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argon2-cffi
-, bcrypt
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argon2-cffi,
+  bcrypt,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-xdist,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,22 +23,27 @@ buildPythonPackage rec {
     hash = "sha256-3v1Q9ytlxUAqssVzgwppeOXyAq0NmEeTyN3ixBUuvgQ";
   };
 
-  passthru.optional-dependencies = {
+  dependencies = [ setuptools ];
+
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
     totp = [ cryptography ];
   };
 
+  # Fix for https://foss.heptapod.net/python-libs/passlib/-/issues/190
+  postPatch = ''
+    substituteInPlace passlib/handlers/bcrypt.py \
+      --replace-fail "version = _bcrypt.__about__.__version__" \
+      "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
+  '';
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-  ] ++ passthru.optional-dependencies.argon2
-  ++ passthru.optional-dependencies.bcrypt
-  ++ passthru.optional-dependencies.totp;
+  ] ++ optional-dependencies.argon2 ++ optional-dependencies.bcrypt ++ optional-dependencies.totp;
 
-  pythonImportsCheck = [
-    "passlib"
-  ];
+  pythonImportsCheck = [ "passlib" ];
 
   disabledTests = [
     # timming sensitive
@@ -54,9 +61,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A password hashing library for Python";
+    description = "Password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

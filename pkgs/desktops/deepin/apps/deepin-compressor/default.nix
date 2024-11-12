@@ -1,45 +1,43 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, udisks2-qt5
-, cmake
-, qtbase
-, qttools
-, pkg-config
-, kcodecs
-, karchive
-, wrapQtAppsHook
-, minizip
-, libzip
-, libarchive
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  minizip,
+  libzip,
+  libuuid,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.15";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6grnbv9hMKntOmpVcmU5IpAbHM7r0dQWb+SoQYtc5YY=";
+    hash = "sha256-DUpYb1xNmWpBcKo9kajeVm/+z4yj2OBE+qOyEkCHbUI=";
   };
 
   postPatch = ''
     substituteInPlace src/source/common/pluginmanager.cpp \
-      --replace "/usr/lib/" "$out/lib/"
+      --replace-fail "/usr/lib" "$out/lib"
     substituteInPlace src/desktop/deepin-compressor.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -47,10 +45,11 @@ stdenv.mkDerivation rec {
     qt5integration
     qt5platform-plugins
     udisks2-qt5
-    kcodecs
-    karchive
+    libsForQt5.kcodecs
+    libsForQt5.karchive
     minizip
     libzip
+    libuuid
     libarchive
   ];
 
@@ -62,7 +61,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A fast and lightweight application for creating and extracting archives";
+    description = "Fast and lightweight application for creating and extracting archives";
+    mainProgram = "deepin-compressor";
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

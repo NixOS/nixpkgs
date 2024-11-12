@@ -1,50 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, grpcio
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  grpcio,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "grpc-interceptor";
-  version = "0.15.1";
-  format = "pyproject";
+  version = "0.15.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "d5h-foss";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "md7pwlahF5kiaydLATdW7Yde8iVVcBEjCIGP5qRLwXw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GJkVCslPXShJNDrqhFtCsAK5+VaG8qFJo0RQTsiMIFY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     grpcio
     protobuf
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "grpc_interceptor"
-  ];
+  pythonImportsCheck = [ "grpc_interceptor" ];
 
   meta = with lib; {
     description = "Simplified gRPC interceptors";

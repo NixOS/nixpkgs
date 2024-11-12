@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-esedb";
-  version = "3.7";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.esedb";
     rev = "refs/tags/${version}";
-    hash = "sha256-FQow4zuN1B6irX3ovz5K4xe6Z3PojtC9N+VLtb+UWzA=";
+    hash = "sha256-IDLarSiI7GHjOOLibk2s/KqKwmozgIHdSfClPQXOsXI=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.esedb"
-  ];
+  pythonImportsCheck = [ "dissect.esedb" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for Microsofts Extensible Storage Engine Database (ESEDB)";

@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bsdiff4";
-  version = "1.2.3";
+  version = "1.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G5XOk7nzBoRvbJHJ0OPrZZCkyFrCu+crX2DZ24KtKhw=";
+    hash = "sha256-zdg/gg7Ljx72ek5fCxUsYdMnyver81qpp2NBORWyE2g=";
   };
 
-  pythonImportsCheck = [
-    "bsdiff4"
-  ];
+  pythonImportsCheck = [ "bsdiff4" ];
 
   checkPhase = ''
     mv bsdiff4 _bsdiff4

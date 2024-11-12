@@ -1,38 +1,37 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "life360";
-  version = "5.5.0";
-  format = "setuptools";
+  version = "7.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pnbruckner";
-    repo = pname;
+    repo = "life360";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F/j3qIdz63pEQ+nj1poP3lBFWSpSq4nLseYg+N2tykU=";
+    hash = "sha256-GkCs479lXcnCvb5guxyc+ZuZdiH4n8uD2VbkC+yijgg=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  build-system = [ setuptools ];
 
-  # Project has no tests
+  dependencies = [ aiohttp ];
+
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "life360"
-  ];
+  pythonImportsCheck = [ "life360" ];
 
   meta = with lib; {
-    description = "Python module to interact with Life360";
+    description = "Module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
     changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
     license = licenses.mit;

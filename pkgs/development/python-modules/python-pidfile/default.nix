@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
 }:
 
 buildPythonPackage rec {
   pname = "python-pidfile";
   version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pgQBL2iagsHMRFEKI85ZwyaIL7kcIftAy6s+lX958M0=";
   };
 
-  propagatedBuildInputs = [
-    psutil
-  ];
+  propagatedBuildInputs = [ psutil ];
 
   pythonImportsCheck = [ "pidfile" ];
 

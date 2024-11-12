@@ -1,8 +1,0 @@
---- a/bin/quarto
-+++ b/bin/quarto
-@@ -125,4 +125,4 @@ fi
- # Be sure to include any already defined QUARTO_DENO_OPTIONS
- QUARTO_DENO_OPTIONS="--unstable --no-config --cached-only --allow-read --allow-write --allow-run --allow-env --allow-net --allow-ffi ${QUARTO_DENO_OPTIONS}"
- 
--"${QUARTO_DENO}" ${QUARTO_ACTION} ${QUARTO_DENO_OPTIONS} ${QUARTO_DENO_EXTRA_OPTIONS} "${QUARTO_IMPORT_ARGMAP}" "${QUARTO_TARGET}" "$@"
-+deno ${QUARTO_ACTION} ${QUARTO_DENO_OPTIONS} ${QUARTO_DENO_EXTRA_OPTIONS} "${QUARTO_IMPORT_ARGMAP}" "${QUARTO_TARGET}" "$@"

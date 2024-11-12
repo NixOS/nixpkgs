@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,19 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-uBppM4w9GlMgYqKFGw1Rcjvq+mnU04K3E74jCgK9YYo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "teletype"
-  ];
+  pythonImportsCheck = [ "teletype" ];
 
   meta = with lib; {
-    description = "A high-level cross platform tty library";
+    description = "High-level cross platform tty library";
     homepage = "https://github.com/jkwill87/teletype";
     license = licenses.mit;
     maintainers = with maintainers; [ urlordjames ];

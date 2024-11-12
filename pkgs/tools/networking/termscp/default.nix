@@ -9,20 +9,21 @@
 , Cocoa
 , Foundation
 , Security
+, samba
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.11.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
-    repo = pname;
+    repo = "termscp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bQvoTy48eYK369Ei6B8l6F5/pfQGYiHdz3KsQV7Bi9Y=";
+    hash = "sha256-/WYhwt/GAULX/UY1GyqzauaMRlVuvAwwS0DNfYB7aD4=";
   };
 
-  cargoHash = "sha256-/nadstDHzLOrimL+xK7/ldOozz7ZS1nRQmkIhGHK8p8=";
+  cargoHash = "sha256-OqrJpVb9EF22OGP5SOIfEUg66+T96qcN3GH+fs72+7A=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     dbus
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+    samba
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -41,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework" "AppKit"
   ]);
 
@@ -49,10 +51,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Terminal tool for file transfer and explorer";
+    description = "Feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
     homepage = "https://github.com/veeso/termscp";
     changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "termscp";
   };
 }

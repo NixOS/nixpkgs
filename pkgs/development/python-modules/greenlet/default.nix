@@ -1,37 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, objgraph
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # tests
+  objgraph,
+  psutil,
+  python,
+  unittestCheckHook,
 }:
 
+let
+  greenlet = buildPythonPackage rec {
+    pname = "greenlet";
+    version = "3.1.1";
+    pyproject = true;
 
-buildPythonPackage rec {
-  pname = "greenlet";
-  version = "2.0.2";
-  format = "setuptools";
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-TOOsbNtq33lGR11+8xd3wm2UvMw3fgcKeYa9LVxRVGc=";
+    };
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-58jcE699sJe+1koFHS3Unp8K9JXCaZXACp7oQmkNNMA=";
-  };
+    build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    objgraph
-    psutil
-    pytestCheckHook
-  ];
+    # tests in passthru, infinite recursion via objgraph/graphviz
+    doCheck = false;
 
-  doCheck = false; # installed tests need to be executed, not sure how to accomplish that
-
-  meta = with lib; {
-    homepage = "https://github.com/python-greenlet/greenlet";
-    description = "Module for lightweight in-process concurrent programming";
-    license = with licenses; [
-      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
-      mit
+    nativeCheckInputs = [
+      objgraph
+      psutil
+      unittestCheckHook
     ];
+
+    preCheck = ''
+      pushd ${placeholder "out"}/${python.sitePackages}
+    '';
+
+    unittestFlagsArray = [ "greenlet.tests" ];
+
+    postCheck = ''
+      popd
+    '';
+
+    passthru.tests.pytest = greenlet.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    meta = with lib; {
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      homepage = "https://github.com/python-greenlet/greenlet";
+      description = "Module for lightweight in-process concurrent programming";
+      license = with licenses; [
+        psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+        mit
+      ];
+    };
   };
-}
+in
+greenlet

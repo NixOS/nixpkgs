@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
-  version = "unstable-2022-02-26";
+  version = "unstable-2024-06-09";
 
   # Original is no longer maintained.
   # This is the same upstream as the AUR uses.
   src = fetchFromGitHub {
     owner = "frankcrawford";
     repo = "it87";
-    rev = "c93d61adadecb009c92f3258cd3ff14a66efb193";
-    sha256 = "sha256-wVhs//iwZUUGRTk1DpV/SnA7NZ7cFyYbsUbtazlxb6Q=";
+    rev = "a82899557b4779b87d444a43caf126615e03bb4a";
+    hash = "sha256-aMMK3QoeXr6mPbo4SDXE8UuWc/oJ3lpgyK7wyEDKaEM=";
   };
 
   hardeningDisable = [ "pic" ];

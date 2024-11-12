@@ -83,8 +83,9 @@ let
     openvpn-restart = {
       wantedBy = [ "sleep.target" ];
       path = [ pkgs.procps ];
-      script = "pkill --signal SIGHUP --exact openvpn";
-      #SIGHUP makes openvpn process to self-exit and then it got restarted by systemd because of Restart=always
+      script = let
+        unitNames = map (n: "openvpn-${n}.service") (builtins.attrNames cfg.servers);
+      in "systemctl try-restart ${lib.escapeShellArgs unitNames}";
       description = "Sends a signal to OpenVPN process to trigger a restart after return from sleep";
     };
   };
@@ -134,7 +135,7 @@ in
         }
       '';
 
-      description = lib.mdDoc ''
+      description = ''
         Each attribute of this option defines a systemd service that
         runs an OpenVPN instance.  These can be OpenVPN servers or
         clients.  The name of each systemd service is
@@ -149,7 +150,7 @@ in
 
           config = mkOption {
             type = types.lines;
-            description = lib.mdDoc ''
+            description = ''
               Configuration of this OpenVPN instance.  See
               {manpage}`openvpn(8)`
               for details.
@@ -162,7 +163,7 @@ in
           up = mkOption {
             default = "";
             type = types.lines;
-            description = lib.mdDoc ''
+            description = ''
               Shell commands executed when the instance is starting.
             '';
           };
@@ -170,7 +171,7 @@ in
           down = mkOption {
             default = "";
             type = types.lines;
-            description = lib.mdDoc ''
+            description = ''
               Shell commands executed when the instance is shutting down.
             '';
           };
@@ -178,13 +179,13 @@ in
           autoStart = mkOption {
             default = true;
             type = types.bool;
-            description = lib.mdDoc "Whether this OpenVPN instance should be started automatically.";
+            description = "Whether this OpenVPN instance should be started automatically.";
           };
 
           updateResolvConf = mkOption {
             default = false;
             type = types.bool;
-            description = lib.mdDoc ''
+            description = ''
               Use the script from the update-resolv-conf package to automatically
               update resolv.conf with the DNS information provided by openvpn. The
               script will be run after the "up" commands and before the "down" commands.
@@ -199,7 +200,7 @@ in
 
           authUserPass = mkOption {
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               This option can be used to store the username / password credentials
               with the "auth-user-pass" authentication method.
 
@@ -209,12 +210,12 @@ in
 
               options = {
                 username = mkOption {
-                  description = lib.mdDoc "The username to store inside the credentials file.";
+                  description = "The username to store inside the credentials file.";
                   type = types.str;
                 };
 
                 password = mkOption {
-                  description = lib.mdDoc "The password to store inside the credentials file.";
+                  description = "The password to store inside the credentials file.";
                   type = types.str;
                 };
               };
@@ -229,7 +230,7 @@ in
     services.openvpn.restartAfterSleep = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc "Whether OpenVPN client should be restarted after sleep.";
+      description = "Whether OpenVPN client should be restarted after sleep.";
     };
 
   };
@@ -239,7 +240,7 @@ in
 
   config = mkIf (cfg.servers != { }) {
 
-    systemd.services = (listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
+    systemd.services = (listToAttrs (mapAttrsToList (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
       // restartService;
 
     environment.systemPackages = [ openvpn ];

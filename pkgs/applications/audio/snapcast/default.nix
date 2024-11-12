@@ -1,35 +1,33 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, libopus, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
+    hash = "sha256-FWOGBXYWLHHZhvC5/BpkDd70ZupzALZ3ks3qTcrtwKQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    boost17x
-    asio avahi flac libogg libvorbis
+    boost179
+    asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit AudioToolbox ];
 
-  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
+  TARGET=lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

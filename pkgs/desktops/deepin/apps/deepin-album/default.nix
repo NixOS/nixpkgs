@@ -1,64 +1,50 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtbase
-, qtsvg
-, udisks2-qt5
-, gio-qt
-, image-editor
-, glibmm
-, freeimage
-, opencv
-, ffmpeg
-, ffmpegthumbnailer
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  dtkdeclarative,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  gio-qt,
+  freeimage,
+  ffmpeg_6,
+  ffmpegthumbnailer,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-album";
-  version = "5.10.9";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-S/oVRD72dtpnvfGV6YfN5/syrmWA44H/1BbmAe0xjAY=";
+    hash = "sha256-kTcVmROsqLH8GwJzAf3zMq/wGYWNvhFBiHODaROt7Do=";
   };
-
-  # This patch should be removed after upgrading to 6.0.0
-  postPatch = ''
-    substituteInPlace libUnionImage/CMakeLists.txt \
-      --replace "/usr" "$out"
-    substituteInPlace src/CMakeLists.txt \
-      --replace "/usr" "$out"
-  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
+    dtkdeclarative
     qt5integration
     qt5platform-plugins
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     udisks2-qt5
     gio-qt
-    image-editor
-    glibmm
     freeimage
-    opencv
-    ffmpeg
+    ffmpeg_6
     ffmpegthumbnailer
   ];
 
@@ -67,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   meta = with lib; {
-    description = "A fashion photo manager for viewing and organizing pictures";
+    description = "Fashion photo manager for viewing and organizing pictures";
     homepage = "https://github.com/linuxdeepin/deepin-album";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

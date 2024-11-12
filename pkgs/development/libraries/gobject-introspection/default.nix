@@ -8,7 +8,6 @@
 , ninja
 , gtk-doc
 , docbook-xsl-nons
-, docbook_xml_dtd_43
 , docbook_xml_dtd_45
 , pkg-config
 , libffi
@@ -22,6 +21,7 @@
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
 , testers
+, propagateFullGlib ? true
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
@@ -32,11 +32,15 @@ let
   pythonModules = pp: [
     pp.mako
     pp.markdown
+    pp.setuptools
   ];
+
+  # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701
+  glib' = glib.override { withIntrospection = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.76.1";
+  version = "1.82.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -45,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    sha256 = "GWF4v2Q0VQHc3E2EabNqpv6ASJNU7+cct8uKuCo3OL8=";
+    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
   };
 
   patches = [
@@ -86,13 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools # for otool
   ];
 
   propagatedBuildInputs = [
     libffi
-    glib
+    (if propagateFullGlib then glib else glib')
   ];
 
   mesonFlags = [
@@ -113,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   # During configurePhase, two python scripts are generated and need this. See
   # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
@@ -153,11 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A middleware layer between C libraries and language bindings";
+    description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''

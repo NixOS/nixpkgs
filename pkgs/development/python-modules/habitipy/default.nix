@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, requests
-, setuptools
-, hypothesis
-, nose
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  plumbum,
+  requests,
+  setuptools,
+  hypothesis,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "habitipy";
-  version = "0.3.0";
+  version = "0.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
-    rev = "v${version}";
-    sha256 = "1vf485z5m4h61p64zr3sgkcil2s3brq7dja4n7m49d1fvzcirylv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     plumbum
     requests
     setuptools
@@ -28,18 +32,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    nose
+    pytestCheckHook
     responses
   ];
 
-  checkPhase = ''
-    HOME=$TMPDIR nosetests
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
+
+  disabledTests = [
+    # network access
+    "test_content_cache"
+    # hypothesis.errors.InvalidArgument: tests/test_cli.py::test_data is a function that returns a Hypothesis strategy, but pytest has collected it as a test function.
+    "test_data"
+  ];
 
   pythonImportsCheck = [ "habitipy" ];
 
   meta = with lib; {
     description = "Tools and library for Habitica restful API";
+    mainProgram = "habitipy";
     homepage = "https://github.com/ASMfreaK/habitipy";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

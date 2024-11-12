@@ -10,7 +10,7 @@
     type = lib.types.bool;
     default = true;
     internal = true;
-    description = lib.mdDoc ''
+    description = ''
       Whether to enable the resolver that automatically discovers zone in the
       test network.
 
@@ -31,10 +31,11 @@
     services.bind.forwarders = lib.mkForce [];
     services.bind.zones = lib.singleton {
       name = ".";
+      master = true;
       file = let
         addDot = zone: zone + lib.optionalString (!lib.hasSuffix "." zone) ".";
         mkNsdZoneNames = zones: map addDot (lib.attrNames zones);
-        mkBindZoneNames = zones: map (zone: addDot zone.name) zones;
+        mkBindZoneNames = zones: map addDot (lib.attrNames zones);
         getZones = cfg: mkNsdZoneNames cfg.services.nsd.zones
                      ++ mkBindZoneNames cfg.services.bind.zones;
 
@@ -63,7 +64,7 @@
             matched = builtins.match "[ \t]+(${reHost})(.*)" str;
             continue = lib.singleton (lib.head matched)
                     ++ matchAliases (lib.last matched);
-          in if matched == null then [] else continue;
+          in lib.optional (matched != null) continue;
 
           matchLine = str: let
             result = builtins.match "[ \t]*(${reIp})[ \t]+(${reHost})(.*)" str;

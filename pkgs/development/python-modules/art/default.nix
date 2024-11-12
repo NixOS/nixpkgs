@@ -1,19 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "art";
-  version = "6.0";
-  format = "setuptools";
+  version = "6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "art";
-    rev = "v${version}";
-    hash = "sha256-ZF7UvqJU7KxNccMXL7tsL/s5KYpgGeGqaEATHo4WyNI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9kz6uyLdcrQqgWzT9g2qI9a+IituY/OFmbot+HlQsCE=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "art" ];
 
@@ -30,6 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ASCII art library for Python";
+    mainProgram = "art";
     homepage = "https://github.com/sepandhaghighi/art";
     changelog = "https://github.com/sepandhaghighi/art/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

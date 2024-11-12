@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, inform
-, pythonOlder
-, sly
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  inform,
+  pythonOlder,
+  sly,
 }:
 
 buildPythonPackage rec {
   pname = "quantiphy-eval";
   version = "0.5";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -19,6 +21,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-7VHcuINhe17lRNkHUnZkVOEtD6mVWk5gu0NbrLZwprg=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     inform

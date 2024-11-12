@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "power";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,10 +18,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Cross-platform system power status information";
     homepage = "https://github.com/Kentzo/Power";
     license = licenses.mit;
   };
-
 }

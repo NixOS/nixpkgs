@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, itsdangerous
-, python-multipart
-, pytestCheckHook
-, starlette
-, httpx
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  itsdangerous,
+  python-multipart,
+  pytestCheckHook,
+  starlette,
+  httpx,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
-  version = "0.9";
+  version = "0.10";
+  format = "setuptools";
   pname = "asgi-csrf";
   disabled = isPy27;
 
@@ -19,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    hash = "sha256-mmOsN2mW6eGtapq3xLqHK8hhSD0Gjzp3DsY5AGUlI8g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VclgePMQh60xXofrquI3sCyPUPlkV4maZ5yybt+4HCs=";
   };
 
   propagatedBuildInputs = [

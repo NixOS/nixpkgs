@@ -1,27 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi
-, pika
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pika,
 }:
 
 buildPythonPackage rec {
   pname = "pika-pool";
   version = "0.1.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "f3985888cc2788cdbd293a68a8b5702a9c955db6f7b8b551aeac91e7f32da397";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "pika >=0.9,<0.11" "pika"
-  '';
+  pythonRelaxDeps = [ "pika" ];
+
+  build-system = [ setuptools ];
 
   # Tests require database connections
   doCheck = false;
 
-  propagatedBuildInputs = [ pika ];
+  dependencies = [ pika ];
   meta = with lib; {
     homepage = "https://github.com/bninja/pika-pool";
     license = licenses.bsdOriginal;
-    description = "Pools for pikas.";
+    description = "Pools for pikas";
   };
 }

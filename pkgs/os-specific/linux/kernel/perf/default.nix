@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
+, fetchpatch
 , kernel
 , elfutils
 , python3
@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libpfm
 , libtraceevent
 , openssl
 , systemtap
@@ -56,14 +57,30 @@ in
 
 stdenv.mkDerivation {
   pname = "perf-linux";
-  version = kernel.version;
+  inherit (kernel) version src;
 
-  inherit (kernel) src;
+  patches = lib.optionals (lib.versionAtLeast kernel.version "5.10") [
+    # fix wrong path to dmesg
+    ./fix-dmesg-path.diff
+  ] ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
+      hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=366e17409f1f17ad872259ce4a4f8a92beb4c4ee";
+      hash = "sha256-NZK1u40qvMwWcgkgJPGpEax2eMo9xHrCQxSYYOK0rbo=";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
+      hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
+    })
+  ];
 
   postPatch = ''
     # Linux scripts
     patchShebangs scripts
-
+    patchShebangs tools/perf/check-headers.sh
   '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
     # perf-specific scripts
     patchShebangs tools/perf/pmu-events
@@ -125,7 +142,13 @@ stdenv.mkDerivation {
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
+  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
+  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
+  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
+  ++ lib.optional (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12") [
+    python3.pkgs.distutils
+    python3.pkgs.packaging
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -157,7 +180,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
-    maintainers = with maintainers; [ viric ];
+    mainProgram = "perf";
+    maintainers = with maintainers; [ tobim ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5";
   };

@@ -2,41 +2,67 @@
 
 let
   cfg = config.services.kavita;
-in {
+  settingsFormat = pkgs.formats.json { };
+  appsettings = settingsFormat.generate "appsettings.json" ({ TokenKey = "@TOKEN@"; } // cfg.settings);
+in
+{
+  imports = [
+    (lib.mkChangedOptionModule [ "services" "kavita" "ipAdresses" ] [ "services" "kavita" "settings" "IpAddresses" ] (config:
+      let value = lib.getAttrFromPath [ "services" "kavita" "ipAdresses" ] config; in
+      lib.concatStringsSep "," value
+    ))
+    (lib.mkRenamedOptionModule [ "services" "kavita" "port" ] [ "services" "kavita" "settings" "Port" ])
+  ];
+
   options.services.kavita = {
-    enable = lib.mkEnableOption (lib.mdDoc "Kavita reading server");
+    enable = lib.mkEnableOption "Kavita reading server";
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "kavita";
-      description = lib.mdDoc "User account under which Kavita runs.";
+      description = "User account under which Kavita runs.";
     };
 
-    package = lib.mkPackageOptionMD pkgs "kavita" { };
+    package = lib.mkPackageOption pkgs "kavita" { };
 
     dataDir = lib.mkOption {
       default = "/var/lib/kavita";
       type = lib.types.str;
-      description = lib.mdDoc "The directory where Kavita stores its state.";
+      description = "The directory where Kavita stores its state.";
     };
 
     tokenKeyFile = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc ''
-        A file containing the TokenKey, a secret with at 128+ bits.
-        It can be generated with `head -c 32 /dev/urandom | base64`.
+      description = ''
+        A file containing the TokenKey, a secret with at 512+ bits.
+        It can be generated with `head -c 64 /dev/urandom | base64 --wrap=0`.
       '';
     };
-    port = lib.mkOption {
-      default = 5000;
-      type = lib.types.port;
-      description = lib.mdDoc "Port to bind to.";
-    };
-    ipAdresses = lib.mkOption {
-      default = ["0.0.0.0" "::"];
-      type = lib.types.listOf lib.types.str;
-      description = lib.mdDoc "IP Addresses to bind to. The default is to bind
-      to all IPv4 and IPv6 addresses.";
+
+    settings = lib.mkOption {
+      default = { };
+      description = ''
+        Kavita configuration options, as configured in {file}`appsettings.json`.
+      '';
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+
+        options = {
+          Port = lib.mkOption {
+            default = 5000;
+            type = lib.types.port;
+            description = "Port to bind to.";
+          };
+
+          IpAddresses = lib.mkOption {
+            default = "0.0.0.0,::";
+            type = lib.types.commas;
+            description = ''
+              IP Addresses to bind to. The default is to bind to all IPv4 and IPv6 addresses.
+            '';
+          };
+        };
+      };
     };
   };
 
@@ -46,18 +72,15 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = ''
-        umask u=rwx,g=rx,o=
-        cat > "${cfg.dataDir}/config/appsettings.json" <<EOF
-        {
-          "TokenKey": "$(cat ${cfg.tokenKeyFile})",
-          "Port": ${toString cfg.port},
-          "IpAddresses": "${lib.concatStringsSep "," cfg.ipAdresses}"
-        }
-        EOF
+        install -m600 ${appsettings} ${lib.escapeShellArg cfg.dataDir}/config/appsettings.json
+        ${pkgs.replace-secret}/bin/replace-secret '@TOKEN@' \
+          ''${CREDENTIALS_DIRECTORY}/token \
+          '${cfg.dataDir}/config/appsettings.json'
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
-        ExecStart = "${lib.getExe cfg.package}";
+        LoadCredential = [ "token:${cfg.tokenKeyFile}" ];
+        ExecStart = lib.getExe cfg.package;
         Restart = "always";
         User = cfg.user;
       };

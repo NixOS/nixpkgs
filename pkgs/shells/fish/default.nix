@@ -79,7 +79,7 @@ let
     # note that this is required:
     #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
-    builtin status --is-login
+    builtin status is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
     ${if fishEnvPreInit != null then ''
     and begin
@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.6.1";
+    version = "3.7.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,8 +145,22 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-VUArtHymc52KuiXkF4CQW1zhvOCl4N0X3KkItbwLSbI=";
+      hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
     };
+
+    patches = [
+      # We don’t want to run `/usr/libexec/path_helper` on nix-darwin,
+      # as it pulls in paths not tracked in the system configuration
+      # and messes up the order of `$PATH`. Upstream are unfortunately
+      # unwilling to accept a change for this and have recommended that
+      # it should be a distro‐specific patch instead.
+      #
+      # See:
+      #
+      # * <https://github.com/LnL7/nix-darwin/issues/122>
+      # * <https://github.com/fish-shell/fish-shell/issues/7142>
+      ./nix-darwin-path.patch
+    ];
 
     # Fix FHS paths in tests
     postPatch = ''
@@ -156,6 +170,8 @@ let
       sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
       sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
       sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
+      # disable flakey test
+      sed -i '/{TEST_GROUP("history_races"), history_tests_t::test_history_races},/d' src/fish_tests.cpp
 
       # tests/checks/cd.fish
       sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
@@ -175,7 +191,7 @@ let
 
       # tests/checks/complete.fish
       sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Tests use pkill/pgrep which are currently not built on Darwin
       # See https://github.com/NixOS/nixpkgs/pull/103180
       rm tests/pexpects/exit.py
@@ -185,7 +201,7 @@ let
       # pexpect tests are flaky in general
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/bind.py
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/exit_handlers.py
@@ -206,12 +222,12 @@ let
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
     # Fish’s test suite needs to be able to look up process information and send signals.
-    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+    sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
       (allow mach-lookup mach-task-name)
       (allow signal (target children))
     '';
@@ -233,7 +249,7 @@ let
       gnused
       groff
       gettext
-    ] ++ lib.optional (!stdenv.isDarwin) man-db;
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
     doCheck = true;
 
@@ -247,7 +263,7 @@ let
       make test
     '';
 
-    postInstall = with lib; ''
+    postInstall = ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
@@ -260,7 +276,7 @@ let
              "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
-      sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
+      sed -e "s|clear;|${lib.getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
@@ -268,7 +284,7 @@ let
           -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
              $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
-    '' + optionalString usePython ''
+    '' + lib.optionalString usePython ''
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython
           echo ${python3.interpreter}
@@ -276,18 +292,18 @@ let
       end
       EOF
 
-    '' + optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 
-    '' + optionalString (!stdenv.isDarwin) ''
+    '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
               "$out/share/fish/tools/create_manpage_completions.py"
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
               "$out/share/fish/functions/man.fish"
-    '' + optionalString useOperatingSystemEtc ''
+    '' + lib.optionalString useOperatingSystemEtc ''
       tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
@@ -296,15 +312,17 @@ let
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
       homepage = "https://fishshell.com/";
-      license = licenses.gpl2;
+      changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
+      license = licenses.gpl2Only;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h winter srapenne ];
+      maintainers = with maintainers; [ adamcstephens cole-h winter ];
+      mainProgram = "fish";
     };
 
     passthru = {
       shellPath = "/bin/fish";
       tests = {
-        nixos = nixosTests.fish;
+        nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.fish;
 
         # Test the fish_config tool by checking the generated splash page.
         # Since the webserver requires a port to run, it is not started.
@@ -318,18 +336,17 @@ let
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
+            ${lib.getExe gnused} -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
-            sed -e '/fileurl =/q' -i webconfig.py
+            ${lib.getExe gnused} -e '/fileurl =/q' -i webconfig.py
             echo "print(fileurl)" >> webconfig.py
 
             # and check whether the message appears on the page
-            cat (${python3}/bin/python ./webconfig.py \
-              | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
-            ) | grep 'a href="http://localhost.*Start the Fish Web config'
-
             # cannot test the http server because it needs a localhost port
+            cat (${python3}/bin/python ./webconfig.py \
+              | tail -n1 | ${lib.getExe gnused} -e 's|file://||' \
+            ) | ${lib.getExe gnugrep} -q 'a href="http://localhost.*Start the Fish Web config'
           '';
           in
           runCommand "test-web-config" { } ''

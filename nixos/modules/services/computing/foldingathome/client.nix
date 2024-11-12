@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.foldingathome;
 
@@ -11,37 +10,30 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "foldingAtHome" ] [ "services" "foldingathome" ])
-    (mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
-    (mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
+    (lib.mkRenamedOptionModule [ "services" "foldingAtHome" ] [ "services" "foldingathome" ])
+    (lib.mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
+    (lib.mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
       Use <literal>services.foldingathome.extraArgs instead<literal>
     '')
   ];
   options.services.foldingathome = {
-    enable = mkEnableOption (lib.mdDoc "Folding@home client");
+    enable = lib.mkEnableOption "Folding@home client";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.fahclient;
-      defaultText = literalExpression "pkgs.fahclient";
-      description = lib.mdDoc ''
-        Which Folding@home client to use.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "fahclient" { };
 
-    user = mkOption {
-      type = types.nullOr types.str;
+    user = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         The user associated with the reported computation results. This will
         be used in the ranking statistics.
       '';
     };
 
-    team = mkOption {
-      type = types.int;
+    team = lib.mkOption {
+      type = lib.types.int;
       default = 236565;
-      description = lib.mdDoc ''
+      description = ''
         The team ID associated with the reported computation results. This
         will be used in the ranking statistics.
 
@@ -49,32 +41,32 @@ in
       '';
     };
 
-    daemonNiceLevel = mkOption {
-      type = types.ints.between (-20) 19;
+    daemonNiceLevel = lib.mkOption {
+      type = lib.types.ints.between (-20) 19;
       default = 0;
-      description = lib.mdDoc ''
+      description = ''
         Daemon process priority for FAHClient.
         0 is the default Unix process priority, 19 is the lowest.
       '';
     };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Extra startup options for the FAHClient. Run
-        `FAHClient --help` to find all the available options.
+        `fah-client --help` to find all the available options.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.foldingathome = {
       description = "Folding@home client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        exec ${cfg.package}/bin/FAHClient ${lib.escapeShellArgs args}
+        exec ${lib.getExe cfg.package} ${lib.escapeShellArgs args}
       '';
       serviceConfig = {
         DynamicUser = true;

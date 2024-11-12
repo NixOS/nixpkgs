@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-FI8hUgb/KglTkubZ+StzptoSsYal71ITyyFNg7j48yk=";
   };
 
-  propagatedBuildInputs = [
-    ruamel-yaml
+  patches = [
+    # https://github.com/rabix/cwl-format/pull/21
+    (fetchpatch {
+      name = "fix-for-ruamel-yaml-0.17.23.patch";
+      url = "https://github.com/rabix/cwl-format/commit/9d54330c73c454d2ccacd55e2d51a4145f282041.patch";
+      hash = "sha256-TZGK7T2gzxMvreCLtl3nkuPrqL2KzgrO3yCNmd5lY3g=";
+    })
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ ruamel-yaml ];
 
-  pythonImportsCheck = [
-    "cwlformat"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "cwlformat" ];
 
   meta = with lib; {
     description = "Code formatter for CWL";

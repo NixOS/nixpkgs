@@ -1,47 +1,61 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, fetchPypi
-, fsspec
-, pandas
-, pythonOlder
-, tenacity
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  fastparquet,
+  fetchPypi,
+  fsspec,
+  hatchling,
+  pandas,
+  pyarrow,
+  python-dateutil,
+  pythonOlder,
+  sqlalchemy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.23.0";
-  format = "setuptools";
+  version = "3.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6T2qr0fcHzgDPZvc3StZwIH2ZRvTOJFXDLPc3iFmwCQ=";
+    hash = "sha256-SxHUnfAyVcVW4R9j0ONGzCXqGWdaeseP/QU3vNhMtI8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     boto3
     botocore
     fsspec
-    pandas
     tenacity
+    python-dateutil
   ];
+
+  optional-dependencies = {
+    pandas = [ pandas ];
+    sqlalchemy = [ sqlalchemy ];
+    arrow = [ pyarrow ];
+    fastparquet = [ fastparquet ];
+  };
 
   # Nearly all tests depend on a working AWS Athena instance,
   # therefore deactivating them.
   # https://github.com/laughingman7743/PyAthena/#testing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyathena"
-  ];
+  pythonImportsCheck = [ "pyathena" ];
 
   meta = with lib; {
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     homepage = "https://github.com/laughingman7743/PyAthena/";
+    changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ turion ];
+    maintainers = [ ];
   };
 }

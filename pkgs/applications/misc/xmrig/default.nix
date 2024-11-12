@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.19.3";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-mvEmxN7spyQkavAcjW4bVt7xjtRTP77OwHzJ5UqsSoE=";
+    hash = "sha256-kFjUAOs92xExCV/ph81TFvgRXC6ZRi1m0G51c4JmeMA=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libmicrohttpd
     openssl
     hwloc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     CoreServices
     OpenCL
@@ -59,10 +59,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/245534
+  hardeningDisable = [ "fortify" ];
+
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kim0 ];
   };

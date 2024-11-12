@@ -1,13 +1,13 @@
 diff --git a/meson.build b/meson.build
-index 35c3b95..f27e472 100644
+index 8e28f2a..c8d1dc9 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -16,7 +16,7 @@ config_h.set_quoted('PACKAGE', meson.project_name())
  config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
  
  cc_args = []
--if host_machine.system() != 'freebsd'
-+if host_machine.system() not in ['darwin', 'freebsd']
+-if host_machine.system() not in ['freebsd', 'openbsd']
++if host_machine.system() not in ['darwin', 'freebsd', 'openbsd']
  	cc_args += ['-D_POSIX_C_SOURCE=200809L']
  endif
  add_project_arguments(cc_args, language: 'c')
@@ -24,16 +24,16 @@ index 35c3b95..f27e472 100644
  config_h.set10('HAVE_BROKEN_MSG_CMSG_CLOEXEC', have_broken_msg_cmsg_cloexec)
  
  if get_option('libraries')
--	if host_machine.system() == 'freebsd'
-+	if host_machine.system() in ['darwin', 'freebsd']
+-	if host_machine.system() in ['freebsd', 'openbsd']
++	if host_machine.system() in ['darwin', 'freebsd', 'openbsd']
  		# When building for FreeBSD, epoll(7) is provided by a userspace
  		# wrapper around kqueue(2).
  		epoll_dep = dependency('epoll-shim')
 diff --git a/src/event-loop.c b/src/event-loop.c
-index 37cf95d..49a38cb 100644
+index 45222f7..fb3b464 100644
 --- a/src/event-loop.c
 +++ b/src/event-loop.c
-@@ -48,6 +48,13 @@
+@@ -49,6 +49,13 @@
  
  #define TIMER_REMOVED -2
  
@@ -48,22 +48,22 @@ index 37cf95d..49a38cb 100644
  struct wl_event_source_interface;
  struct wl_event_source_timer;
 diff --git a/src/wayland-os.c b/src/wayland-os.c
-index a9066ca..483fe64 100644
+index f00ead4..4dc01d0 100644
 --- a/src/wayland-os.c
 +++ b/src/wayland-os.c
-@@ -69,17 +69,19 @@ wl_os_socket_cloexec(int domain, int type, int protocol)
+@@ -75,17 +75,19 @@ wl_os_socket_cloexec(int domain, int type, int protocol)
  {
  	int fd;
  
 +#ifdef SOCK_CLOEXEC
- 	fd = socket(domain, type | SOCK_CLOEXEC, protocol);
+ 	fd = wl_socket(domain, type | SOCK_CLOEXEC, protocol);
  	if (fd >= 0)
  		return fd;
  	if (errno != EINVAL)
  		return -1;
 +#endif
  
- 	fd = socket(domain, type, protocol);
+ 	fd = wl_socket(domain, type, protocol);
  	return set_cloexec_or_close(fd);
  }
  

@@ -1,0 +1,30 @@
+diff --git a/jenkinsapi_tests/unittests/test_build.py b/jenkinsapi_tests/unittests/test_build.py
+index 2e2c2f4..9de816a 100644
+--- a/jenkinsapi_tests/unittests/test_build.py
++++ b/jenkinsapi_tests/unittests/test_build.py
+@@ -3,6 +3,7 @@ import pytest
+ import pytz
+ from . import configs
+ import datetime
++import warnings
+ from jenkinsapi.build import Build
+ from jenkinsapi.job import Job
+ 
+@@ -252,7 +253,7 @@ def test_build_env_vars_wo_injected_env_vars_plugin(monkeypatch, build):
+     monkeypatch.setattr(Build, "get_data", fake_get_data)
+ 
+     with pytest.raises(requests.HTTPError) as excinfo:
+-        with pytest.warns(None) as record:
++        with warnings.catch_warnings(record=True) as record:
+             build.get_env_vars()
+     assert "404" == str(excinfo.value)
+     assert len(record) == 1
+@@ -269,7 +270,7 @@ def test_build_env_vars_other_exception(monkeypatch, build):
+     monkeypatch.setattr(Build, "get_data", fake_get_data)
+ 
+     with pytest.raises(Exception) as excinfo:
+-        with pytest.warns(None) as record:
++        with warnings.catch_warnings(record=True) as record:
+             build.get_env_vars()
+     assert "" == str(excinfo.value)
+     assert len(record) == 0

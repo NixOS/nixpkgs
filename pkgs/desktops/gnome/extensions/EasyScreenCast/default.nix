@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq, intltool }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome-shell, gettext, jq, intltool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
-    rev = version;
-    hash = "sha256-+cH/gczCdxoSrLp5nD82Spo8bSGyRnUUut3Xkmr9f3o=";
+    rev = finalAttrs.version;
+    hash = "sha256-5PJB+lm4NKeNpS2vg9xaVl5aUR0Rofmt6sEKXfuGG6c=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-gi-path.patch;
-      gnomeShell = gnome.gnome-shell;
+      gnomeShell = gnome-shell;
     })
   ];
 
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux;
-    broken = true;
   };
-}
+})

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, csdr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  csdr,
+}:
 
 buildPythonPackage rec {
   pname = "pycsdr";
   version = "0.18.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";

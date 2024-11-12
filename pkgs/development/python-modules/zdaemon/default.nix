@@ -1,38 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, zconfig
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  zconfig,
 }:
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "4.4";
+  version = "5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SCHjvbRzh88eklWwREusQ3z3KqC1nRQHuTLjH9QyPvw=";
+    hash = "sha256-Iun+UFDq67ngPZrWTk9jzNheBMOP2zUc8RO+9vaNt6Q=";
   };
 
-  propagatedBuildInputs = [
-    zconfig
-  ];
+  propagatedBuildInputs = [ zconfig ];
 
   # too many deps..
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zdaemon"
-  ];
+  pythonImportsCheck = [ "zdaemon" ];
 
   meta = with lib; {
-    description = "A daemon process control library and tools for Unix-based systems";
+    description = "Daemon process control library and tools for Unix-based systems";
+    mainProgram = "zdaemon";
     homepage = "https://pypi.python.org/pypi/zdaemon";
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
-    license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    license = licenses.zpl21;
+    maintainers = [ ];
   };
 }

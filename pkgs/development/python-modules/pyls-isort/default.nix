@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, python-lsp-server, isort
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  python-lsp-server,
+  isort,
 }:
 
 buildPythonPackage rec {
   pname = "pyls-isort";
   version = "0.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "pyls-isort";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "0xba0aiyjfdi9swjzxk26l94dwlwvn17kkfjfscxl8gvspzsn057";
   };
 
@@ -18,14 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_isort" ];
 
-  propagatedBuildInputs = [
-    isort python-lsp-server
+  build-system = [ setuptools ];
+
+  dependencies = [
+    isort
+    python-lsp-server
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paradoxxxzero/pyls-isort";
     description = "Isort plugin for python-lsp-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

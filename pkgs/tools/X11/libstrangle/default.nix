@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, libGL, libX11 }:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, libGL, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
@@ -10,13 +10,20 @@ stdenv.mkDerivation rec {
     owner = "torkel104";
     repo = pname;
     rev = "0273e318e3b0cc759155db8729ad74266b74cb9b";
-    sha256 = "sha256-h10QA7m7hIQHq1g/vCYuZsFR2NVbtWBB46V6OWP5wgM=";
+    hash = "sha256-h10QA7m7hIQHq1g/vCYuZsFR2NVbtWBB46V6OWP5wgM=";
   };
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   patches = [
-      ./nixos.patch
+    ./nixos.patch
+    # Pull the fix pending upstream inclusion for gcc-13:
+    #   https://gitlab.com/torkel104/libstrangle/-/merge_requests/29
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://gitlab.com/torkel104/libstrangle/-/commit/4e17025071de1d99630febe7270b4f63056d0dfa.patch";
+      hash = "sha256-AKMHAZhCPcn62pi4fBGhw2r8SNSkCDMUCpR3IlmJ7wQ=";
+    })
   ];
 
   postPatch = ''

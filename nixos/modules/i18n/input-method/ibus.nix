@@ -3,10 +3,12 @@
 with lib;
 
 let
-  cfg = config.i18n.inputMethod.ibus;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = types.package // {
+  ibusEngine = lib.types.mkOptionType {
     name  = "ibus-engine";
+    inherit (lib.types.package) descriptionClass merge;
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
 
@@ -41,19 +43,18 @@ in
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
             engines = concatStringsSep ", "
               (map (name: "`${name}`") (attrNames enginesDrv));
-          in
-            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
+          in "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
-        description = lib.mdDoc "Replace the IBus panel with another panel.";
+        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
+        description = "Replace the IBus panel with another panel.";
       };
     };
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+  config = mkIf (imcfg.enable && imcfg.type == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
     environment.systemPackages = [

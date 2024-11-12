@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.46.5";
+  version = "0.50.30";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    hash = "sha256-5F8BQ42hun+qUk6/X1dSTlhRGXBEPq9h0IfJHA77OOw=";
+    hash = "sha256-55B80V6xcWVM/gSGrQ3bh97AFigwOuMQ/0zHcyDBcfE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The easy, open source way for everyone in your company to ask questions and learn from data";
+    description = "Easy, open source way for everyone in your company to ask questions and learn from data";
     homepage    = "https://metabase.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license     = licenses.agpl3Only;
     platforms   = platforms.all;
     maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+    mainProgram = "metabase";
   };
   passthru.tests = {
     inherit (nixosTests) metabase;

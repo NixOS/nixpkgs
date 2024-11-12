@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, poetry-core
-, snapshottest
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  python,
+  duckdb,
+  hypothesis,
+  pandas,
+  pyarrow,
+  poetry-core,
+  pytest-remotedata,
+  snapshottest,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.7.3";
-  format = "pyproject";
+  version = "0.13.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z9m1+Bc/csWKdPDuwf82xX0qOiD1Y5LBgJjUlLntAO8=";
+    hash = "sha256-B9vh8OILmRZKKznBbEkkm3zlAwGwMGdiuc378msiywE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     duckdb
@@ -39,25 +42,40 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # this test tries to download the httpfs extension
-    "test_preload_extension"
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  checkInputs = [
     hypothesis
-    ipython-sql
-    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
-    snapshottest
+    pandas
+    pytest-remotedata
     typing-extensions
+    pyarrow
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
+  pytestFlagsArray = [
+    "-m"
+    "'not remote_data'"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTests = [
+    # incompatible with duckdb 1.1.1
+    "test_with_cache"
+  ] ++ lib.optionals (python.pythonVersion == "3.11") [
+    # incompatible with duckdb 1.1.1
+    "test_all_types_reflection"
+    "test_nested_types"
+  ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
 
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";

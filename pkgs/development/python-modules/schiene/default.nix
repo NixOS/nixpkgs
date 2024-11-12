@@ -1,9 +1,10 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "schiene"
-  ];
+  pythonImportsCheck = [ "schiene" ];
 
   meta = with lib; {
     description = "Python library for interacting with Bahn.de";

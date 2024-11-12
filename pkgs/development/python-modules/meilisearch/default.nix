@@ -1,38 +1,35 @@
-{ lib
-, buildPythonPackage
-, camel-converter
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, requests
+{
+  lib,
+  buildPythonPackage,
+  camel-converter,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.28.0";
-  format = "pyproject";
+  version = "0.31.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meilisearch-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gSJ7B2QaO6ei1wJwxpN/ciZ7VH6Bg1Qp8bUlrdLxtCs=";
+    hash = "sha256-YMKspKryhcxecIDLg3PiKHJoRtQBsIi8N//ZtAMBvMg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     camel-converter
     requests
   ] ++ camel-converter.optional-dependencies.pydantic;
 
-  pythonImportsCheck = [
-    "meilisearch"
-  ];
+  pythonImportsCheck = [ "meilisearch" ];
 
   # Tests spin up a local server and are not mocking the requests
   doCheck = false;

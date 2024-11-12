@@ -1,33 +1,29 @@
-{ lib, stdenvNoCC, fetchFromGitHub, mpv-unwrapped }:
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  buildLua,
+  mpv-unwrapped,
+}:
 
-stdenvNoCC.mkDerivation {
-  name = "mpv-thumbfast";
-  version = "unstable-2023-06-04";
+buildLua {
+  pname = "mpv-thumbfast";
+  version = "0-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "6f1d92da25a7b807427f55f085e7ad4d60c4e0d7";
-    hash = "sha256-7CCxMPmZZRDIcWn+YbV4xzZFL80qZS5UFA25E+Y2P2Q=";
+    rev = "f1fdf10b17f394f2d42520d0e9bf22feaa20a9f4";
+    hash = "sha256-cygLf+0PMH7cVXBcY12PdcxBHmy38DNoXQubKAlerHM=";
   };
+  passthru.updateScript = unstableGitUpdater { };
 
-  postPatch = ''
-    substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getBin mpv-unwrapped}/bin/mpv"'
-  '';
-
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/mpv/scripts
-    cp -r thumbfast.lua $out/share/mpv/scripts/thumbfast.lua
-
-    runHook postInstall
-  '';
-
-  passthru.scriptName = "thumbfast.lua";
+  passthru.extraWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ mpv-unwrapped ])
+  ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";

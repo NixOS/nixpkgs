@@ -1,58 +1,77 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-# install requirements
-, pycryptodome
-, yarl
-, flatdict
-, python-jose
-, aenum
-, aiohttp
-, pydash
-, xmltodict
-, pyyaml
-# test requirements
-, pytestCheckHook
-, pytest-recording
-, pytest-asyncio
-, pytest-mock
-, pyfakefs
+{
+  lib,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  flatdict,
+  jwcrypto,
+  pycryptodome,
+  pycryptodomex,
+  pydash,
+  pyfakefs,
+  pyjwt,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-recording,
+  pytestCheckHook,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.8.0";
+  version = "2.9.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yIVJoKX9b9Y7Ydl28twHxgPbUa58LJ12Oz3tvpU7CAc=";
+    hash = "sha256-RDnRiPsc4p5yI9jFzOtRI+r00tvska8x4uCSjl+cWvo=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-    yarl
-    flatdict
-    python-jose
+  pythonRelaxDeps = [ "aenum" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aenum
     aiohttp
+    flatdict
+    jwcrypto
+    pycryptodome
+    pycryptodomex
     pydash
-    xmltodict
+    pyjwt
+    python-jose
     pyyaml
+    xmltodict
+    yarl
   ];
 
   checkInputs = [
-    pytestCheckHook
+    pyfakefs
     pytest-asyncio
     pytest-mock
     pytest-recording
-    pyfakefs
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"
+    # vcr.errors.CannotOverwriteExistingCassetteException: Can't overwrite existing cassette
+    "test_get_org_contact_user"
+    "test_update_org_contact_user"
+    "test_get_role_subscription"
+    "test_subscribe_unsubscribe"
+    "test_client_invalid_url"
   ];
 
   pythonImportsCheck = [
@@ -68,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
+    changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jbgosselin ];
   };

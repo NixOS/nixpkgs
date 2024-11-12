@@ -1,46 +1,80 @@
-{ stdenv, lib, fetchgit, pkg-config, makeWrapper, gtk3, libX11, libXrandr
-, libpulseaudio, gpu-screen-recorder }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  addDriverRunpath,
+  desktop-file-utils,
+  makeWrapper,
+  meson,
+  ninja,
+  gtk3,
+  libayatana-appindicator,
+  libpulseaudio,
+  libdrm,
+  gpu-screen-recorder,
+  libglvnd,
+  libX11,
+  libXrandr,
+  wayland,
+  wrapGAppsHook3,
+  wrapperDir ? "/run/wrappers/bin",
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
-  version = "0.1.0";
+  version = "4.2.3";
 
-  src = fetchgit {
-    url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
-    rev = "4c317abd0531f8e155fbbbcd32850bbeebbf2ead";
-    sha256 = "sha256-5W6qmUMP31ndRDxMHuQ/XnZysPQgaie0vVlMTzfODU4=";
+  src = fetchurl {
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.${finalAttrs.version}.tar.gz";
+    hash = "sha256-pMUjglgRM51hjPbt6VP0aqM0oo7IiyPXTY/kLwwdR/k=";
   };
 
-  patches = [ ./fix-nvfbc-check.patch ];
+  sourceRoot = ".";
 
   nativeBuildInputs = [
+    desktop-file-utils
     pkg-config
     makeWrapper
+    meson
+    ninja
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gtk3
+    libayatana-appindicator
+    libpulseaudio
+    libdrm
     libX11
     libXrandr
-    libpulseaudio
+    wayland
   ];
 
-  buildPhase = ''
-    ./build.sh
-  '';
+  preFixup =
+    let
+      gpu-screen-recorder-wrapped = gpu-screen-recorder.override {
+        inherit wrapperDir;
+      };
+    in
+    ''
+      gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
+      gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libglvnd
+          addDriverRunpath.driverLink
+        ]
+      })
+    '';
 
-  installPhase = ''
-    install -Dt $out/bin/ gpu-screen-recorder-gtk
-    install -Dt $out/share/applications/ gpu-screen-recorder-gtk.desktop
-
-    wrapProgram $out/bin/gpu-screen-recorder-gtk --prefix PATH : ${lib.makeBinPath [ gpu-screen-recorder ]}
-  '';
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
     description = "GTK frontend for gpu-screen-recorder.";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ babbaj ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "gpu-screen-recorder-gtk";
+    maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

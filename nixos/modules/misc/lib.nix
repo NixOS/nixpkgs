@@ -7,7 +7,7 @@
 
       type = lib.types.attrsOf lib.types.attrs;
 
-      description = lib.mdDoc ''
+      description = ''
         This option allows modules to define helper functions, constants, etc.
       '';
     };

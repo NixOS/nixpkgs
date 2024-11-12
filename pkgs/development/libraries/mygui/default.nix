@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mygui";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
     rev = "MyGUI${version}";
-    hash = "sha256-5u9whibYKPj8tCuhdLOhL4nDisbFAB0NxxdjU/8izb8=";
+    hash = "sha256-yBV0ImOFJlqBPqqOjXYe4SFO2liSGZCEwvehED5Ubj4=";
   };
 
   patches = [
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     ois
   ] ++ lib.optionals withOgre [
     ogre
-  ] ++ lib.optionals (!withOgre && stdenv.isLinux) [
+  ] ++ lib.optionals (!withOgre && stdenv.hostPlatform.isLinux) [
     libGL
     libGLU
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

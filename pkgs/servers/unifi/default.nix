@@ -1,7 +1,7 @@
 { lib, stdenv, dpkg, fetchurl, zip, nixosTests }:
 
 let
-  generic = { version, sha256, suffix ? "", ... } @ args:
+  generic = { version, sha256, suffix ? "", knownVulnerabilities ? [ ], ... } @ args:
   stdenv.mkDerivation (args // {
     pname = "unifi-controller";
 
@@ -39,34 +39,16 @@ let
       license = licenses.unfree;
       platforms = platforms.unix;
       maintainers = with maintainers; [ globin patryk27 ];
+      inherit knownVulnerabilities;
     };
   });
 
 in rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
-  unifiLTS = generic {
-    version = "5.6.42";
-    sha256 = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
-  };
-
-  unifi5 = generic {
-    version = "5.14.23";
-    sha256 = "1aar05yjm3z5a30x505w4kakbyz35i7mk7xyg0wm4ml6h94d84pv";
-
-    postInstall = ''
-      # Remove when log4j is updated to 2.12.2 or 2.16.0.
-      ${zip}/bin/zip -q -d $out/lib/log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class
-    '';
-  };
-
-  unifi6 = generic {
-    version = "6.5.55";
-    sha256 = "sha256-NUGRO+f6JzWvYPwiitZsgp+LQwnGSncnost03mgNVxA=";
-  };
-
-  unifi7 = generic {
-    version = "7.3.83";
-    sha256 = "sha256-mDbF9vfoWjvABxcOIRngStji7xBllgZfUhVA9kF6ERU=";
+  unifi8 = generic {
+    version = "8.5.6";
+    suffix = "-1x29lm155t";
+    sha256 = "sha256-ZpCoE8OPb3FcKzf7Nurf9q+g2BpbjZcp1LvWOsV/tpA=";
   };
 }

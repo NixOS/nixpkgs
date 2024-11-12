@@ -1,28 +1,27 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, flit-core
-, jinja2
-, pytestCheckHook
-, railroad-diagrams
-, pyparsing
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  flit-core,
+  jinja2,
+  pytestCheckHook,
+  railroad-diagrams,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
   pname = "pyparsing";
-  version = "3.0.9";
+  version = "3.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyparsing";
     repo = pname;
-    rev = "pyparsing_${version}";
-    hash = "sha256-aCRyJQyLf8qQ6NO41q+HC856TjIHzIt0vyVBLV+3teE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-caHkwMFL1IFCQ+yZTp9o4yXfemoPx1xL4Nvb85oJzEI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # circular dependencies with pytest if enabled by default
   doCheck = false;
@@ -35,7 +34,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyparsing" ];
 
   passthru.tests = {
-    check = pyparsing.overridePythonAttrs (_: { doCheck = true; });
+    check = pyparsing.overridePythonAttrs (_: {
+      doCheck = true;
+    });
   };
 
   meta = with lib; {
@@ -46,7 +47,7 @@ buildPythonPackage rec {
       simple grammars, vs. the traditional lex/yacc approach, or the use of
       regular expressions. The pyparsing module provides a library of classes
       that client code uses to construct the grammar directly in Python code.
-   '';
+    '';
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

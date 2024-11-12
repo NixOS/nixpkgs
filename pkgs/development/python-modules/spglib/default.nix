@@ -1,23 +1,57 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, pytest, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  scikit-build-core,
+  cmake,
+  pathspec,
+  ninja,
+  pyproject-metadata,
+  setuptools-scm,
+
+  # dependencies
+  numpy,
+
+  # tests
+  pytestCheckHook,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.0.2";
+  version = "2.5.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HQgewi2kq0/DGY6URd2tbewiYcQ5J4MRUdk+OUImEKo=";
+    hash = "sha256-+LtjiJe+kbnb1MCF2f3h9pBI9ZSeIPODLLlDjldBjUs=";
   };
+
+  nativeBuildInputs = [
+    scikit-build-core
+    cmake
+    pathspec
+    ninja
+    pyproject-metadata
+    setuptools-scm
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  postPatch = ''
+    # relax v2 constrain in [build-system] intended for binary backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy~=2.0" "numpy"
+  '';
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ pytest pyyaml ];
-
-  # pytestCheckHook doesn't work
-  # ImportError: cannot import name '_spglib' from partially initialized module 'spglib'
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "spglib" ];
 

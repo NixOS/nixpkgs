@@ -1,10 +1,7 @@
-Don't remove sys.path entries that come from PYTHONPATH, or else the app cannot
-be used in Nixpkgs.
-
-Author: Bjørn Forsman <bjorn.forsman@gmail.com>
-diff -uNr spyder-5.4.0.orig/spyder/app/start.py spyder-5.4.0/spyder/app/start.py
---- spyder-5.4.0.orig/spyder/app/start.py	2022-08-30 02:02:28.000000000 +0200
-+++ spyder-5.4.0/spyder/app/start.py	2023-01-02 11:38:28.138744879 +0100
+diff --git a/spyder/app/start.py b/spyder/app/start.py
+index ad9f2b8d0..442b4fc46 100644
+--- a/spyder/app/start.py
++++ b/spyder/app/start.py
 @@ -6,16 +6,8 @@
  # (see spyder/__init__.py for details)
  # -----------------------------------------------------------------------------

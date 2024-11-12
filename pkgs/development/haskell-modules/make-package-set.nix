@@ -199,23 +199,33 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen
     # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}:
+    callHackageDirect = {pkg, ver, sha256, rev ? { revision = null; sha256 = null; }}: args:
       let pkgver = "${pkg}-${ver}";
-      in self.callCabal2nix pkg (pkgs.fetchzip {
-           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
-           inherit sha256;
-         });
+          firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
+            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+            inherit sha256;
+          }) args;
+      in overrideCabal (orig: {
+        revision = rev.revision;
+        editedCabalFile = rev.sha256;
+      }) firstRevision;
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
+    callCabal2nixWithOptions = name: src: opts: args:
       let
-        filter = path: type:
+        extraCabal2nixOptions = if builtins.isString opts
+                                then opts
+                                else opts.extraCabal2nixOptions or "";
+        srcModifier = opts.srcModifier or null;
+        defaultFilter = path: type:
                    pkgs.lib.hasSuffix ".cabal" path ||
                    baseNameOf path == "package.yaml";
         expr = self.haskellSrc2nix {
           inherit name extraCabal2nixOptions;
-          src = if pkgs.lib.canCleanSource src
-                  then pkgs.lib.cleanSourceWith { inherit src filter; }
+          src = if srcModifier != null
+                then srcModifier src
+                else if pkgs.lib.canCleanSource src
+                then pkgs.lib.cleanSourceWith { inherit src; filter = defaultFilter; }
                 else src;
         };
       in overrideCabal (orig: {
@@ -625,4 +635,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         else pkg
       ) { };
 
+    /*
+      Modify given Haskell package to force GHC to employ the LLVM
+      codegen backend when compiling. Useful when working around bugs
+      in a native codegen backend GHC defaults to.
+
+      Example:
+        forceLlvmCodegenBackend tls
+
+      Type: drv -> drv
+    */
+    forceLlvmCodegenBackend = overrideCabal (drv: {
+      configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
+      buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    });
   }

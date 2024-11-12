@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, python-dateutil
-, celery
-, redis
-, tenacity
-, pytestCheckHook
-, pytz
-, fakeredis
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  python-dateutil,
+  celery,
+  redis,
+  tenacity,
+  pytestCheckHook,
+  pytz,
+  fakeredis,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
-  version = "2.1.0";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
-    rev = "v${version}";
-    hash = "sha256-WW/OYa7TWEKkata1eULir29wHaCnavBJebn4GrBzmWY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lAEbhRTp0jYrCgHaTvPrl+lW1NRezmmTqAnUmLdpVwY=";
   };
 
   patches = [

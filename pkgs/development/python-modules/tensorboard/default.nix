@@ -1,21 +1,20 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, pythonRelaxDepsHook
-, numpy
-, wheel
-, werkzeug
-, protobuf
-, grpcio
-, markdown
-, absl-py
-, google-auth-oauthlib
-, setuptools
-, tensorboard-data-server
-, tensorboard-plugin-wit
-, tensorboard-plugin-profile
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  numpy,
+  wheel,
+  werkzeug,
+  protobuf,
+  grpcio,
+  markdown,
+  absl-py,
+  google-auth-oauthlib,
+  setuptools,
+  tensorboard-data-server,
+  tensorboard-plugin-wit,
+  tensorboard-plugin-profile,
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -24,20 +23,17 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.11.0";
+  version = "2.18.0";
   format = "wheel";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-oOWS7oeWLhevPw3Of6rj+70jkDAVnp5iXM6BC341xT0=";
+    hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "google-auth-oauthlib"
@@ -77,9 +73,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
     license = licenses.asl20;
+    mainProgram = "tensorboard";
     maintainers = with maintainers; [ abbradar ];
   };
 }

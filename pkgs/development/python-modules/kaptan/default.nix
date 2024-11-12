@@ -1,17 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "kaptan";
-  version = "0.5.12";
+  version = "0.6.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1abd1f56731422fce5af1acc28801677a51e56f5d3c3e8636db761ed143c3dd2";
+    hash = "sha256-EBMwpE/e3oiFhvMBC9FFwOxIpIBrxWQp+lSHpndAIfg=";
   };
 
   postPatch = ''
@@ -20,15 +23,17 @@ buildPythonPackage rec {
     substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
   '';
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [ pyyaml ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Configuration manager for python applications";
+    mainProgram = "kaptan";
     homepage = "https://kaptan.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
-
 }

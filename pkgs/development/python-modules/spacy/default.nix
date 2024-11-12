@@ -1,71 +1,77 @@
-{ lib
-, stdenv
-, blis
-, buildPythonPackage
-, callPackage
-, catalogue
-, cymem
-, fetchPypi
-, jinja2
-, jsonschema
-, langcodes
-, murmurhash
-, numpy
-, packaging
-, pathy
-, preshed
-, pydantic
-, pytest
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, spacy-legacy
-, spacy-loggers
-, srsly
-, thinc
-, tqdm
-, typer
-, typing-extensions
-, wasabi
-, writeScript
-, nix
-, git
-, nix-update
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  callPackage,
+  catalogue,
+  cymem,
+  cython_0,
+  fetchPypi,
+  hypothesis,
+  jinja2,
+  langcodes,
+  mock,
+  murmurhash,
+  numpy,
+  packaging,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  spacy-legacy,
+  spacy-loggers,
+  srsly,
+  thinc,
+  tqdm,
+  typer,
+  wasabi,
+  weasel,
+  writeScript,
+  nix,
+  git,
+  nix-update,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.5.3";
-  format = "setuptools";
+  version = "3.8.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NZcdZyFXZTjWxCPGagnOAL9m4Q5AcmpXt6gZkxgMJIw=";
+    hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
   };
 
+  postPatch = ''
+    # spaCy is compatible with NumPy v1 and v2
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
+  '';
+
+  build-system = [
+    cymem
+    cython_0
+    murmurhash
+    numpy
+    thinc
+  ];
+
   pythonRelaxDeps = [
-    "typer"
+    "thinc"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
-    blis
+  dependencies = [
     catalogue
     cymem
     jinja2
-    jsonschema
     langcodes
     murmurhash
     numpy
     packaging
-    pathy
     preshed
     pydantic
     requests
@@ -77,46 +83,57 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
-  '';
+    weasel
+  ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
+    hypothesis
+    mock
   ];
 
-  doCheck = false;
-
-  checkPhase = ''
-    ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
+  # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
+  preCheck = ''
+    cd $out
   '';
 
-  pythonImportsCheck = [
-    "spacy"
+  pytestFlagsArray = [ "-m 'slow'" ];
+
+  disabledTests = [
+    # touches network
+    "test_download_compatibility"
+    "test_validate_compatibility_table"
+    "test_project_assets"
   ];
+
+  pythonImportsCheck = [ "spacy" ];
 
   passthru = {
     updateScript = writeScript "update-spacy" ''
-    #!${stdenv.shell}
-    set -eou pipefail
-    PATH=${lib.makeBinPath [ nix git nix-update ]}
+      #!${stdenv.shell}
+      set -eou pipefail
+      PATH=${
+        lib.makeBinPath [
+          nix
+          git
+          nix-update
+        ]
+      }
 
-    nix-update python3Packages.spacy
+      nix-update python3Packages.spacy
 
-    # update spacy models as well
-    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+      # update spacy models as well
+      echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
     '';
     tests.annotation = callPackage ./annotation-test { };
   };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
+    mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

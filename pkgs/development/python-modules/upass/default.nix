@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyperclip
-, urwid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyperclip,
+  urwid,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "upass";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kwpolska";
     repo = "upass";
     rev = "v${version}";
-    sha256 = "0bgplq07dmlld3lp6jag1w055glqislfgwwq2k7cb2bzjgvysdnj";
+    hash = "sha256-IlNqPmDaRZ3yRV8O6YKjQkZ3fKNcFgzJHtIX0ADrOyU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyperclip
     urwid
   ];
@@ -30,14 +34,13 @@ buildPythonPackage rec {
     mkdir $HOME/.config
   '';
 
-  pythonImportsCheck = [
-    "upass"
-  ];
+  pythonImportsCheck = [ "upass" ];
 
   meta = with lib; {
     description = "Console UI for pass";
+    mainProgram = "upass";
     homepage = "https://github.com/Kwpolska/upass";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

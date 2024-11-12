@@ -11,25 +11,25 @@ let
     options = {
       autoStart = mkOption {
         default = true;
-        description = lib.mdDoc "Whether this VPN connection should be started automatically.";
+        description = "Whether this VPN connection should be started automatically.";
         type = types.bool;
       };
 
       gateway = mkOption {
-        description = lib.mdDoc "Gateway server to connect to.";
+        description = "Gateway server to connect to.";
         example = "gateway.example.com";
         type = types.str;
       };
 
       protocol = mkOption {
-        description = lib.mdDoc "Protocol to use.";
+        description = "Protocol to use.";
         example = "anyconnect";
         type =
           types.enum [ "anyconnect" "array" "nc" "pulse" "gp" "f5" "fortinet" ];
       };
 
       user = mkOption {
-        description = lib.mdDoc "Username to authenticate with.";
+        description = "Username to authenticate with.";
         example = "example-user";
         type = types.nullOr types.str;
         default = null;
@@ -39,7 +39,7 @@ let
       # set an authentication cookie, because they have to be requested
       # for every new connection and would only work once.
       passwordFile = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           File containing the password to authenticate with. This
           is passed to `openconnect` via the
           `--passwd-on-stdin` option.
@@ -50,21 +50,21 @@ let
       };
 
       certificate = mkOption {
-        description = lib.mdDoc "Certificate to authenticate with.";
+        description = "Certificate to authenticate with.";
         default = null;
         example = "/var/lib/secrets/openconnect_certificate.pem";
         type = with types; nullOr (either path pkcs11);
       };
 
       privateKey = mkOption {
-        description = lib.mdDoc "Private key to authenticate with.";
+        description = "Private key to authenticate with.";
         example = "/var/lib/secrets/openconnect_private_key.pem";
         default = null;
         type = with types; nullOr (either path pkcs11);
       };
 
       extraOptions = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Extra config to be appended to the interface config. It should
           contain long-format options as would be accepted on the command
           line by `openconnect`
@@ -117,10 +117,10 @@ let
   };
 in {
   options.networking.openconnect = {
-    package = mkPackageOptionMD pkgs "openconnect" { };
+    package = mkPackageOption pkgs "openconnect" { };
 
     interfaces = mkOption {
-      description = lib.mdDoc "OpenConnect interfaces.";
+      description = "OpenConnect interfaces.";
       default = { };
       example = {
         openconnect0 = {

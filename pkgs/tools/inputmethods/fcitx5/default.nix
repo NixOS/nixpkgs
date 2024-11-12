@@ -5,8 +5,10 @@
 , pkg-config
 , cmake
 , extra-cmake-modules
+, wayland-scanner
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -18,7 +20,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
 , libuuid
 , libselinux
 , libXdmcp
@@ -28,6 +29,7 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
@@ -42,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.23";
+  version = "5.1.11";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
+    hash = "sha256-8J2gr2quZvJELd3zzhgwZUowjkOylpM6VZGJ1G3VomI=";
   };
 
   prePatch = ''
@@ -59,9 +61,11 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -76,13 +80,13 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
     libuuid
     libselinux
     libsepol
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit
@@ -101,6 +105,7 @@ stdenv.mkDerivation rec {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };

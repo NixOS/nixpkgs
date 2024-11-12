@@ -1,47 +1,52 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.20";
-  format = "setuptools";
+  version = "0.2.25";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
-    repo = pname;
-    rev = version;
-    sha256 = "1irjix9kr6qih84gii7k1a9c67n8133gpnmwfd09550jsqdmg006";
+    repo = "pyvlx";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
+    typing-extensions
+    zeroconf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyvlx"
-  ];
+  pythonImportsCheck = [ "pyvlx" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Python client to work with Velux units";
     longDescription = ''
       PyVLX uses the Velux KLF 200 interface to control io-Homecontrol
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
-    license = with licenses; [ lgpl2Only ];
+    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
+    license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

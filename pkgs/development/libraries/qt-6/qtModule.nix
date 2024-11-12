@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, apple-sdk_qt
 , cmake
 , ninja
 , perl
@@ -19,22 +20,30 @@ stdenv.mkDerivation (args // {
   inherit pname version src;
   patches = args.patches or patches.${pname} or [ ];
 
-  buildInputs = args.buildInputs or [ ];
+  buildInputs =
+    args.buildInputs or [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_qt ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
-    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
-  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+  propagatedBuildInputs =
+    (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
+    (args.propagatedBuildInputs or []);
 
   moveToDev = false;
 
   outputs = args.outputs or [ "out" "dev" ];
+  separateDebugInfo = args.separateDebugInfo or true;
 
   dontWrapQtApps = args.dontWrapQtApps or true;
-
-  meta = with lib; {
+}) // {
+  meta = with lib; let
+    pos = builtins.unsafeGetAttrPos "pname" args;
+  in {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao ];
     platforms = platforms.unix;
+    position = "${pos.file}:${toString pos.line}";
   } // (args.meta or { });
-})
+}

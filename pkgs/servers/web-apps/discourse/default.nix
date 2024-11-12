@@ -35,22 +35,25 @@
 , icu
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodePackages
-, nodejs_16
-, dart-sass-embedded
+, nodejs_18
+, jq
+, moreutils
+, terser
+, uglify-js
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.1.0.beta4";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-22GXFYPjPYL20amR4xFB4L/dCp32H4Z3uf0GLGEghUE=";
+    sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
   };
 
   ruby = ruby_3_2;
@@ -63,6 +66,7 @@ let
     gnutar
     git
     brotli
+    nodejs_18
 
     # Misc required system utils
     which
@@ -160,9 +164,9 @@ let
                 cd ../..
 
                 mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-                ln -s "${nodejs_16.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+                ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-                ln -s ${nodejs_16.libv8}/include vendor/v8/include
+                ln -s ${nodejs_18.libv8}/include vendor/v8/include
 
                 mkdir -p ext/libv8-node
                 echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -184,21 +188,7 @@ let
             # available for aarch64. It has to be called
             # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
-            '';
-          };
-          sass-embedded = gems.sass-embedded // {
-            dontBuild = false;
-            # `sass-embedded` depends on `dart-sass-embedded` and tries to
-            # fetch that as `.tar.gz` from GitHub releases. That `.tar.gz`
-            # can also be specified via `SASS_EMBEDDED`. But instead of
-            # compressing our `dart-sass-embedded` just to decompress it
-            # again, we simply patch the Rakefile to symlink that path.
-            patches = [
-              ./rubyEnv/sass-embedded-static.patch
-            ];
-            postPatch = ''
-              export SASS_EMBEDDED=${dart-sass-embedded}/bin
+              cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
         };
@@ -213,21 +203,22 @@ let
     inherit version src;
 
     yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "0a20kns4irdpzzx2dvdjbi0m3s754gp737q08z5nlcnffxqvykrk";
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-cSQofaULCmPuWGxS+hK4KlRq9lSkCPiYvhax9X6Dor8=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      nodePackages.uglify-js
-      nodePackages.terser
-      nodePackages.patch-package
+      uglify-js
+      terser
       yarn
-      nodejs_16
+      jq
+      moreutils
+      fixup-yarn-lock
     ];
 
-    outputs = [ "out" "javascripts" ];
+    outputs = [ "out" "javascripts" "node_modules" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -243,12 +234,13 @@ let
       # assets precompilation task.
       ./assets_rake_command.patch
 
-      # `app/assets/javascripts/discourse/package.json`'s postinstall
-      # hook tries to call `../node_modules/.bin/patch-package`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `patch-package` from `nativeBuildInputs`.
-      ./asserts_patch-package_from_path.patch
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
+
+    env.RAILS_ENV = "production";
 
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
@@ -258,17 +250,29 @@ let
       # Yarn wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
 
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+      yarn_install() {
+        local offlineCache=$1 yarnLock=$2
 
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
+        # Make yarn install packages from our offline cache, not the registry
+        yarn config --offline set yarn-offline-mirror $offlineCache
 
+        # Fixup "resolved"-entries in yarn.lock to match our offline cache
+        fixup-yarn-lock $yarnLock
+
+        # Install while ignoring hook scripts
+        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
+      }
+
+      # Install runtime and devDependencies.
+      # The dev deps are necessary for generating the theme-transpiler executed as dependent task
+      # assets:precompile:theme_transpiler before db:migrate and unfortunately also in the runtime
+      yarn_install $yarnOfflineCache yarn.lock
+
+      # Patch before running postinstall hook script
+      patchShebangs node_modules/
+      patchShebangs --build app/assets/javascripts
+      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
-      yarn install --offline --cwd app/assets/javascripts/discourse
-
-      patchShebangs app/assets/javascripts/node_modules/
 
       redis-server >/dev/null &
 
@@ -286,13 +290,7 @@ let
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
 
-      # Create a temporary home dir to stop bundler from complaining
-      mkdir $NIX_BUILD_TOP/tmp_home
-      export HOME=$NIX_BUILD_TOP/tmp_home
-
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
-
-      export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
       chmod -R +w tmp
@@ -310,6 +308,8 @@ let
       runHook preInstall
 
       mv public/assets $out
+
+      mv node_modules $node_modules
 
       rm -r app/assets/javascripts/plugins
       mv app/assets/javascripts $javascripts
@@ -352,6 +352,11 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
+
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
 
     postPatch = ''
@@ -384,6 +389,9 @@ let
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
+      # This needs to be copied because of symlinks in node_modules
+      # Also this needs to be full node_modules (including dev deps) because without loader.js it just throws 500
+      cp -r ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       rm -r $out/share/discourse/app/assets/javascripts
       ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
@@ -402,6 +410,9 @@ let
 
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
+      inherit (pkgs)
+        discourseAllPlugins
+      ;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;

@@ -5,12 +5,12 @@
 , llvm
 , pkg-config
 , makeWrapper
+, elfutils
 , file
 , hyperscan
 , jansson
 , libbpf
 , libcap_ng
-, libelf
 , libevent
 , libmaxminddb
 , libnet
@@ -22,8 +22,7 @@
 , luajit
 , lz4
 , nspr
-, nss
-, pcre
+, pcre2
 , python
 , zlib
 , redisSupport ? true, redis, hiredis
@@ -34,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.13";
+  version = "7.0.7";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-4J8vgA0ODNL5fyHFBZUMzD27nOXP6AjflWe22EmjEFU=";
+    hash = "sha256-JtCjYZTVMID8iwm5mbK1qDxASfQK0H72rmnHIlpyi4Y=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +49,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
+  propagatedBuildInputs = with python.pkgs; [
+    pyyaml
+  ];
+
   buildInputs = [
+    elfutils
     jansson
     libbpf
     libcap_ng
-    libelf
     libevent
     libmagic
     libmaxminddb
@@ -67,8 +70,7 @@ stdenv.mkDerivation rec {
     luajit
     lz4
     nspr
-    nss
-    pcre
+    pcre2
     python
     zlib
   ]
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = lib.optional stdenv.is64bit ./bpf_stubs_workaround.patch;
+  patches = lib.optional stdenv.hostPlatform.is64bit ./bpf_stubs_workaround.patch;
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -101,7 +103,6 @@ stdenv.mkDerivation rec {
     "--enable-nflog"
     "--enable-nfqueue"
     "--enable-pie"
-    "--disable-prelude"
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"
@@ -124,7 +125,10 @@ stdenv.mkDerivation rec {
     sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
-  hardeningDisable = [ "stackprotector" ];
+  # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
+
+  doCheck = true;
 
   installFlags = [
     "e_datadir=\${TMPDIR}"
@@ -150,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free and open source, mature, fast and robust network threat detection engine";
+    description = "Free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;

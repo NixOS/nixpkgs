@@ -1,40 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "2.7.1";
-  format = "setuptools";
+  version = "3.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-shr0ZHx7u4SP7y8CBhbGsCidy5+UtPmRpVMQ/5vsV0k=";
+    pname = "python_crontab";
+    inherit version;
+    hash = "sha256-QAZ9HdOa3jRgsq2FV8dlFRTNOFHe//9hxcYOEifFw2s=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ python-dateutil ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_07_non_posix_shell"
     # doctest that assumes /tmp is writeable, awkward to patch
     "test_03_usage"
+    # Test is assuming $CURRENT_YEAR is not a leap year
+    "test_19_frequency_at_month"
+    "test_20_frequency_at_year"
   ];
 
-  pythonImportsCheck = [
-    "crontab"
-  ];
+  pythonImportsCheck = [ "crontab" ];
 
   meta = with lib; {
     description = "Python API for crontab";

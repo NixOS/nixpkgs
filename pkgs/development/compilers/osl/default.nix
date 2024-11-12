@@ -4,6 +4,7 @@
 , cmake
 , clang
 , libclang
+, libxml2
 , zlib
 , openexr
 , openimageio
@@ -23,13 +24,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
-  version = "1.12.12.0";
+  version = "1.13.11.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
-    hash = "sha256-kxfDhqF8uTdLqt99rTOk8TWBdN5NF7zm98CT0DbLrW0=";
+    hash = "sha256-E/LUTtT0ZU0SBuwtJPA0FznvOuc2a3aJn2/n3ru5l0s=";
   };
 
   cmakeFlags = [
@@ -67,6 +68,8 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pybind11
     util-linux # needed just for hexdump
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxml2
   ];
 
   postFixup = ''
@@ -79,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://opensource.imageworks.com/osl.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

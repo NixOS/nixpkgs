@@ -3,46 +3,67 @@
 }:
 
 let
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = [ av ];
-    bluetooth = [ pyswitchbot ];
-    bthome = [ xiaomi-ble ];
-    camera = [ av ];
-    cloud = [ mutagen ];
-    config = [ pydispatcher ];
-    generic = [ av ];
-    google_translate = [ mutagen ];
-    google_sheets = [ oauth2client ];
-    govee_ble = [ ibeacon-ble ];
-    hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
-    homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    lovelace = [ pychromecast ];
-    mopeka = [ pyswitchbot ];
-    nest = [ av ];
-    onboarding = [ pymetno radios rpi-bad-power ];
-    otbr = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    raspberry_pi = [ rpi-bad-power ];
-    shelly = [ pyswitchbot ];
-    tilt_ble = [ govee-ble ibeacon-ble ];
-    tomorrowio = [ pyclimacell ];
-    version = [ aioaseko ];
-    xiaomi_miio = [ arrow ];
-    voicerss = [ mutagen ];
-    yandextts = [ mutagen ];
-    zha = [ pydeconz ];
-    zwave_js = [ homeassistant-pyozw ];
+    axis = getComponentDeps "deconz";
+    gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
+    govee_ble = [
+      ibeacon-ble
+    ];
+    hassio = getComponentDeps "homeassistant_yellow";
+    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
+    lovelace = [
+      pychromecast
+    ];
+    matrix = [
+      pydantic
+    ];
+    onboarding = [
+      pymetno
+      radios
+      rpi-bad-power
+    ];
+    raspberry_pi = [
+      rpi-bad-power
+    ];
+    shelly = [
+      pyswitchbot
+    ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
+    tesla_fleet = getComponentDeps "teslemetry";
+    xiaomi_miio = [
+      arrow
+    ];
+    zeroconf = [
+      aioshelly
+    ];
+    zha = [
+      pydeconz
+    ];
   };
 
   extraDisabledTestPaths = {
   };
 
   extraDisabledTests = {
-    vesync = [
-      # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
-      "test_async_get_config_entry_diagnostics__single_humidifier"
-      "test_async_get_device_diagnostics__single_fan"
+    shell_command = [
+      # tries to retrieve file from github
+      "test_non_text_stdout_capture"
+    ];
+    sma = [
+      # missing operating_status attribute in entity
+      "test_sensor_entities"
+    ];
+    websocket_api = [
+      # AssertionError: assert 'unknown_error' == 'template_error'
+      "test_render_template_with_timeout"
     ];
   };
 
@@ -51,26 +72,42 @@ let
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
     ];
-    history_stats = [
-      # Flaky: AssertionError: assert '0.0' == '12.0'
-      "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
+    honeywell = [
+      # Failed: Unused ignore translations: component.honeywell.config.abort.reauth_successful. Please remove them from the ignore_translations fixture.
+      "--deselect=tests/components/honeywell/test_config_flow.py::test_reauth_flow"
     ];
-    modbus = [
-      # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
-      "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
+    jellyfin = [
+      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
+      "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
+    ];
+    jewish_calendar = [
+      # Failed: Unused ignore translations: component.jewish_calendar.config.abort.reconfigure_successful. Please remove them from the ignore_translations fixture.
+      "--deselect tests/components/jewish_calendar/test_config_flow.py::test_reconfigure"
     ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
-    unifiprotect = [
-      # "TypeError: object Mock can't be used in 'await' expression
-      "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
+    nina = [
+      # Failed: Unused ignore translations: component.nina.options.error.unknown. Please remove them from the ignore_translations fixture.
+      "--deselect tests/components/nina/test_config_flow.py::test_options_flow_unexpected_exception"
+    ];
+    sql = [
+      "-W"
+      "ignore::sqlalchemy.exc.SAWarning"
+    ];
+    vicare = [
+      # Snapshot 'test_all_entities[sensor.model0_electricity_consumption_today-entry]' does not exist!
+      "--deselect=tests/components/vicare/test_sensor.py::test_all_entities"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
+    pyproject = null;
     format = "other";
 
     dontBuild = true;
@@ -95,8 +132,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     '';
 
     meta = old.meta // {
-      broken = lib.elem component [
-      ];
+      broken = lib.elem component [ ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
     };

@@ -1,37 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpcio
-, protobuf
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  grpcio,
+  protobuf,
+  pythonOlder,
+  setuptools,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.54.2";
-  format = "setuptools";
+  version = "1.66.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qCMOjSfe7eGIWyomTLiLrLrt/GekmLdlMO2VnPihgI0=";
+    pname = "grpcio_testing";
+    inherit version;
+    hash = "sha256-pje9w7MSutXZKQd2dP0TS0zJbkm0P39OwQVLR28ZRgQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'grpcio>={version}'.format(version=grpc_version.VERSION)" "'grpcio'"
+      --replace-fail '"grpcio>={version}".format(version=grpc_version.VERSION)' '"grpcio"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     grpcio
     protobuf
   ];
 
-  pythonImportsCheck = [
-    "grpc_testing"
-  ];
+  pythonImportsCheck = [ "grpc_testing" ];
 
   # Module has no tests
   doCheck = false;

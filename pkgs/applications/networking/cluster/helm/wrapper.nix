@@ -31,13 +31,16 @@ in
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper ];
-    passthru = { unwrapped = helm; };
+    passthru = {
+      inherit pluginsDir;
+      unwrapped = helm;
+    };
 
     meta = helm.meta // {
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (helm.meta.priority or 0) - 1;
+      priority = (helm.meta.priority or lib.meta.defaultPriority) - 1;
     };
   };
 in

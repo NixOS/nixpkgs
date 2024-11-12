@@ -12,7 +12,7 @@
 , gdbm
 , gnutls
 , gss
-, guile
+, guile_2_2
 , libmysqlclient
 , mailcap
 , nettools
@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.16";
+  version = "3.17";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-BB0VjTCMA3YYQ4jpyTbPqEGlHNwl1Nt1mEp3Gj+gAsA=";
+    hash = "sha256-+km6zsN1Zv5S+IIh04cWc6Yzru4M2SPMOo5lu+8rhOk=";
   };
 
   separateDebugInfo = true;
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
     readline
     sasl
     libxcrypt
-  ] ++ lib.optionals stdenv.isLinux [ nettools ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
   ++ lib.optionals pythonSupport [ python3 ]
-  ++ lib.optionals guileSupport [ guile ];
+  ++ lib.optionals guileSupport [ guile_2_2 ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!guileSupport) "--without-guile";
 
   nativeCheckInputs = [ dejagnu mkpasswd ];
-  doCheck = !stdenv.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
+  doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
   doInstallCheck = false; # fails
 
   preCheck = ''
@@ -142,7 +143,7 @@ stdenv.mkDerivation rec {
       gpl3Plus /* tools */
     ];
 
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [ orivej ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";

@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, requests-mock
-, sseclient-py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  sseclient-py,
 }:
 
 buildPythonPackage rec {
   pname = "pyarlo";
   version = "0.2.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tchellomello";

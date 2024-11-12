@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.odoo, ...} : {
   name = "odoo";
   meta.maintainers = with lib.maintainers; [ mkg20001 ];
 
@@ -11,6 +11,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
       services.odoo = {
         enable = true;
+        package = package;
+        autoInit = true;
+        autoInitExtraFlags = [ "--without-demo=all" ];
         domain = "localhost";
       };
     };

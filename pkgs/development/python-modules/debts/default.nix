@@ -1,15 +1,17 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitLab
-, isPy27
-, jinja2
-, pytest
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitLab,
+  isPy27,
+  jinja2,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "debts";
   version = "0.5";
+  format = "setuptools";
 
   # pypi does not ship tests
   src = fetchFromGitLab {
@@ -35,7 +37,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A simple library and cli-tool to help you solve some debts settlement scenarios";
+    description = "Simple library and cli-tool to help you solve some debts settlement scenarios";
+    mainProgram = "debts";
     license = licenses.beerware;
     maintainers = [ maintainers.symphorien ];
   };

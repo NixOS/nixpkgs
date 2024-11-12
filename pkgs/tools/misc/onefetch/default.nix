@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.18.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = version;
-    hash = "sha256-XjsKdfz4uQ1W8ul/2dbKiz7oVksUv5UNBF0U0MNsUPs=";
+    hash = "sha256-KQs7b+skXQhHbfHIJkgowNY2FB6oS2V8TQFdkmElC/k=";
   };
 
-  cargoHash = "sha256-G7cJoUxkOn6pQtRwzI8/KFvvbkN8JLgZcdUUZffIydo=";
+  cargoHash = "sha256-gKA1MMahoaDFia8LR33GG3jRttZzHwpUpFawlCQcy7g=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake installShellFiles pkg-config ];
 
   buildInputs = [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation libresolv Security ];
 
   nativeCheckInputs = [
     git
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     git commit -m test
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd onefetch \
       --bash <($out/bin/onefetch --generate bash) \
       --fish <($out/bin/onefetch --generate fish) \
@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/o2sh/onefetch";
     changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk ];
+    mainProgram = "onefetch";
   };
 }

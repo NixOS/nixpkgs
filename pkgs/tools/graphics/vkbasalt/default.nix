@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkbasalt";
-  version = "0.3.2.9";
+  version = "0.3.2.10";
 
   src = fetchFromGitHub {
     owner = "DadSchoorse";
     repo = "vkBasalt";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IVlZ6o+1EEEh547rFPN7z+W+EY7MrIM/yUh6+PPkNeI=";
+    hash = "sha256-GC6JKYnsfcUBg+CX6v7MyE4FeLmjadFwighaiyureDg=";
   };
 
   nativeBuildInputs = [ glslang meson ninja pkg-config ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A Vulkan post processing layer for Linux";
+    description = "Vulkan post processing layer for Linux";
     homepage = "https://github.com/DadSchoorse/vkBasalt";
     license = licenses.zlib;
     maintainers = with maintainers; [ kira-bruneau ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd nspr
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace '@executable_path/' "$out/lib/"
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
@@ -34,23 +34,23 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
-  ] ++ lib.optional stdenv.is64bit "--enable-64bit";
+  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
   postInstall = ''
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit (nixosTests) firefox firefox-esr-91 firefox-esr-102;
+    inherit (nixosTests) firefox firefox-esr-115;
   };
 
   meta = with lib; {
-    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
+    homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
     maintainers = with maintainers; [ ajs124 hexa ];
     platforms = platforms.all;

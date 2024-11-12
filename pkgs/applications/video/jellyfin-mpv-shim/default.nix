@@ -13,21 +13,21 @@
 , python-mpv-jsonipc
 , pywebview
 , tkinter
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-90Z2vgYT/9hBQZgfXeY7l6sGwT5KEY8X4rZMgrbTwrM=";
+    hash = "sha256-EANaNmvD8hcdGB2aoGemKvA9syS1VvIqGsP1jk0b+lE=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -61,6 +61,10 @@ buildPythonApplication rec {
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
+    # python-mpv renamed to mpv with 1.0.4
+    substituteInPlace setup.py \
+      --replace "python-mpv" "mpv" \
+      --replace "mpv-jsonipc" "python_mpv_jsonipc"
   '';
 
   # Install all the icons for the desktop item
@@ -116,5 +120,6 @@ buildPythonApplication rec {
       unlicense
     ];
     maintainers = with maintainers; [ jojosch ];
+    mainProgram = "jellyfin-mpv-shim";
   };
 }

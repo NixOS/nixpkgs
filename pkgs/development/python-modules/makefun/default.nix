@@ -1,31 +1,37 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.1";
+  version = "1.15.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QLDxGLbe0NjXjHjx62ebi2skYuPBs+BfsbLajNRrSKU=";
+    hash = "sha256-JrxjRCphgvt17+2LUXQd0tHbLxdr7Ixk4gpYYla48Uk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools>=39.2,<72"' '"setuptools"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "makefun" ];
 

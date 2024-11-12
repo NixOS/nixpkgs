@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, async-timeout
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  async-timeout,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "3.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sheNYtmp1panthglpEqJTdaCgGBTUJRswikl5hu9k7s=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = "ha-ffmpeg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TbSoKoOiLx3O7iykiTri5GBHGj7WoB8iSCpFIrV4ZgU=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ async-timeout ];
 
   # only manual tests
   doCheck = false;

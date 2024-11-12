@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, edlib
-, cython
-, python
+{
+  buildPythonPackage,
+  pythonOlder,
+  edlib,
+  cython,
+  python,
 }:
 
 buildPythonPackage {
   inherit (edlib) pname src meta;
   version = "1.3.9";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${edlib.src.name}/bindings/python";
 
   preBuild = ''
     ln -s ${edlib.src}/edlib .
@@ -32,5 +32,4 @@ buildPythonPackage {
   '';
 
   pythonImportsCheck = [ "edlib" ];
-
 }

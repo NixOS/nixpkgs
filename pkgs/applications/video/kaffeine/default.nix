@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, kio
 , cmake
 , extra-cmake-modules
 , libvlc
@@ -48,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.pasqui23 ];
     platforms = platforms.all;
+    mainProgram = "kaffeine";
   };
 }

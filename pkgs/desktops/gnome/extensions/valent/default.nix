@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-valent";
-  version = "unstable-2023-03-18";
+  version = "unstable-2023-11-10";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-valent";
-    rev = "e7f759047c45833cd211ef18a8554008cb1b8b12";
-    hash = "sha256-ylCyQbFbzCuSM2YrLuI36eXL2qQjTt1mYewJlCywKvI=";
+    rev = "c0fad083db3c23382efca623488834054bbbd5cd";
+    hash = "sha256-H0EjR7sYK0mepT59PoHgecbk4ksQN8Vyisf6Y+2vT8g=";
   };
 
   nativeBuildInputs = [
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "valent";
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Shell integration for Valent";
     homepage = "https://valent.andyholmes.ca/";
     changelog = "https://github.com/andyholmes/gnome-shell-extension-valent/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.federicoschonborn ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

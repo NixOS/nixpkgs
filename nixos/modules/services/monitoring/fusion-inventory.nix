@@ -22,11 +22,11 @@ in {
 
     services.fusionInventory = {
 
-      enable = mkEnableOption (lib.mdDoc "Fusion Inventory Agent");
+      enable = mkEnableOption "Fusion Inventory Agent";
 
       servers = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The urls of the OCS/GLPI servers to connect to.
         '';
       };
@@ -34,7 +34,7 @@ in {
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Configuration that is injected verbatim into the configuration file.
         '';
       };

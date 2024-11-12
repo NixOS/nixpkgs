@@ -68,6 +68,11 @@ for i in $(< $closureInfo/store-paths); do
     addPath "${i:1}" "$i"
 done
 
+# If needed, build a squashfs and add that
+if [[ -n "$squashfsCommand" ]]; then
+    (out="nix-store.squashfs" eval "$squashfsCommand")
+    addPath "nix-store.squashfs" "nix-store.squashfs"
+fi
 
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.

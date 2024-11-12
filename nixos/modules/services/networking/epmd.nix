@@ -1,36 +1,25 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.epmd;
 in
 {
   ###### interface
   options.services.epmd = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable socket activation for Erlang Port Mapper Daemon (epmd),
         which acts as a name server on all hosts involved in distributed
         Erlang computations.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.erlang;
-      defaultText = literalExpression "pkgs.erlang";
-      description = lib.mdDoc ''
-        The Erlang package to use to get epmd binary. That way you can re-use
-        an Erlang runtime that is already installed for other purposes.
-      '';
-    };
-    listenStream = mkOption
+    package = lib.mkPackageOption pkgs "erlang" { };
+    listenStream = lib.mkOption
       {
-        type = types.str;
+        type = lib.types.str;
         default = "[::]:4369";
-        description = lib.mdDoc ''
+        description = ''
           the listenStream used by the systemd socket.
           see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
           use this to change the port epmd will run on.
@@ -40,7 +29,7 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [{
       assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
       message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
@@ -68,5 +57,5 @@ in
     };
   };
 
-  meta.maintainers = teams.beam.members;
+  meta.maintainers = lib.teams.beam.members;
 }

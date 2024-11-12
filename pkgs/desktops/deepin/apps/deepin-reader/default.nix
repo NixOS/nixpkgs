@@ -1,47 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, qtwebengine
-, karchive
-, poppler
-, libchardet
-, libspectre
-, openjpeg
-, djvulibre
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  poppler,
+  libchardet,
+  libspectre,
+  openjpeg,
+  djvulibre,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-reader";
-  version = "5.10.29";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IpgmTmnrPWc9EFZVM+S2nFxdpPjbgXqEWUnK/O9FmUg=";
+    hash = "sha256-G5UZ8lBrUo5G3jMae70p/zi9kOVqHWMNCedOy45L1PA=";
   };
 
-  patches = [ ./use-pkg-config.diff ];
+  patches = [ ./0001-build-tests-with-cpp-14.patch ];
 
+  # don't use vendored htmltopdf
   postPatch = ''
-    substituteInPlace reader/{reader.pro,document/Model.cpp} htmltopdf/htmltopdf.pro 3rdparty/deepin-pdfium/src/src.pro \
-      --replace "/usr" "$out"
+    substituteInPlace deepin_reader.pro \
+      --replace "SUBDIRS += htmltopdf" " "
+    substituteInPlace reader/document/Model.cpp \
+      --replace "/usr/lib/deepin-reader/htmltopdf" "htmltopdf"
   '';
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -49,21 +49,21 @@ stdenv.mkDerivation rec {
     qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
-    qtwebengine
-    karchive
+    libsForQt5.qtwebengine
+    libsForQt5.karchive
     poppler
     libchardet
     libspectre
     djvulibre
     openjpeg
+    gtest
   ];
 
-  qmakeFlags = [
-    "DEFINES+=VERSION=${version}"
-  ];
+  qmakeFlags = [ "DEFINES+=VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A simple memo software with texts and voice recordings";
+    description = "Simple memo software with texts and voice recordings";
+    mainProgram = "deepin-reader";
     homepage = "https://github.com/linuxdeepin/deepin-reader";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, libpulseaudio, alsa-lib, libcap
+{ stdenv, lib, fetchFromGitHub, fetchpatch
+, autoreconfHook, pkg-config, libpulseaudio, alsa-lib, libcap
 , CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
@@ -14,6 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
 
+  patches = [
+    # add header time.h for nanosecond
+    (fetchpatch {
+      name = "nanosecond-header.patch";
+      url = "https://github.com/xiph/libao/commit/1f998f5d6d77674dad01b181811638578ad68242.patch";
+      hash = "sha256-cvlyhQq1YS4pVya44LfsKD1R6iSOONsHJGRbP5LlanQ=";
+    })
+  ];
+
   configureFlags = [
     "--disable-broken-oss"
     "--enable-alsa-mmap"
@@ -23,8 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ] ++
     lib.optional  usePulseAudio   libpulseaudio ++
-    lib.optionals stdenv.isLinux  [ alsa-lib libcap ] ++
-    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
+    lib.optionals stdenv.hostPlatform.isLinux  [ alsa-lib libcap ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

@@ -10,6 +10,7 @@
 , libffi
 , libtool
 , libunistring
+, libxcrypt
 , makeWrapper
 , pkg-config
 , pkgsBuildBuild
@@ -25,11 +26,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GiYlrHKyNm6VeS8/51j9Lfd1tARKkKSpeHMm5mwNdQ0=";
+    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -48,6 +49,8 @@ builder rec {
     libtool
     libunistring
     readline
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxcrypt
   ];
   propagatedBuildInputs = [
     boehmgc
@@ -59,6 +62,8 @@ builder rec {
     # flags, see below.
     libtool
     libunistring
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxcrypt
   ];
 
   # According to
@@ -70,7 +75,7 @@ builder rec {
   patches = [
     ./eai_system.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
-  ++ lib.optional stdenv.isDarwin
+  ++ lib.optional stdenv.hostPlatform.isDarwin
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
       sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
@@ -85,7 +90,7 @@ builder rec {
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
-  ] ++ lib.optionals stdenv.isSunOS [
+  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
     # /usr/include/mp.h from OpenSolaris.  See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -98,12 +103,9 @@ builder rec {
     # See below.
     "--without-threads"
   ]
-  # Disable JIT on Apple Silicon, as it is not yet supported
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
-  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no"
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
-  ++ lib.optional (stdenv.isDarwin) "--disable-lto";
+  ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -114,8 +116,9 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|-lcrypt|-L${libxcrypt}/lib -lcrypt|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|includedir=$out|includedir=$dev|g
             "
     '';
@@ -125,9 +128,16 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.hostPlatform.isDarwin;
+
   setupHook = ./setup-hook-3.0.sh;
 
-  passthru = {
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -153,7 +163,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

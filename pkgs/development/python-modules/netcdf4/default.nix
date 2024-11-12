@@ -1,41 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, python
-, setuptools
-, numpy
-, zlib
-, netcdf
-, hdf5
-, curl
-, libjpeg
-, cython
-, cftime
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cftime,
+  curl,
+  cython,
+  fetchPypi,
+  hdf5,
+  isPyPy,
+  libjpeg,
+  netcdf,
+  numpy,
+  oldest-supported-numpy,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  stdenv,
+  wheel,
+  zlib,
 }:
 
 buildPythonPackage rec {
-  pname = "netCDF4";
-  version = "1.6.2";
-  format = "pyproject";
+  pname = "netcdf4";
+  version = "1.7.1.post2";
+  pyproject = true;
 
-  disabled = isPyPy;
+  disabled = isPyPy || pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
+    hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
   };
 
-  nativeBuildInputs = [ setuptools cython ];
+  postPatch = ''
+    sed -i "/numpy>=/d" pyproject.toml
+  '';
+
+  build-system = [
+    cython
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
+    certifi
     cftime
+    curl
+    hdf5
+    libjpeg
+    netcdf
     numpy
     zlib
-    netcdf
-    hdf5
-    curl
-    libjpeg
   ];
 
   checkPhase = ''
@@ -43,12 +59,14 @@ buildPythonPackage rec {
     NO_NET=1 NO_CDL=1 ${python.interpreter} run_all.py
   '';
 
-  # Variables used to configure the build process
-  USE_NCCONFIG = "0";
-  HDF5_DIR = lib.getDev hdf5;
-  NETCDF4_DIR = netcdf;
-  CURL_DIR = curl.dev;
-  JPEG_DIR = libjpeg.dev;
+  env = {
+    # Variables used to configure the build process
+    USE_NCCONFIG = "0";
+    HDF5_DIR = lib.getDev hdf5;
+    NETCDF4_DIR = netcdf;
+    CURL_DIR = curl.dev;
+    JPEG_DIR = libjpeg.dev;
+  } // lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion"; };
 
   pythonImportsCheck = [ "netCDF4" ];
 
@@ -56,7 +74,7 @@ buildPythonPackage rec {
     description = "Interface to netCDF library (versions 3 and 4)";
     homepage = "https://github.com/Unidata/netcdf4-python";
     changelog = "https://github.com/Unidata/netcdf4-python/raw/v${version}/Changelog";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

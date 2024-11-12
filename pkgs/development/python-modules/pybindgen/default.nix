@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, pygccxml
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  pygccxml,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-jH8iORpJqEUY9aKtBuOlseg50Q402nYxUZyKKPy6N2Q=";
   };
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pygccxml
-  ];
+  nativeCheckInputs = [ pygccxml ];
 
-  pythonImportsCheck = [
-    "pybindgen"
-  ];
+  pythonImportsCheck = [ "pybindgen" ];
 
   # Fails to import module 'cxxfilt' from pygccxml on Py3k
   doCheck = (!isPy3k);

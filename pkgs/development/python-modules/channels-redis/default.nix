@@ -1,14 +1,15 @@
-{ lib
-, aioredis
-, asgiref
-, buildPythonPackage
-, channels
-, cryptography
-, fetchFromGitHub
-, hiredis
-, msgpack
-, pythonOlder
-, redis
+{
+  lib,
+  aioredis,
+  asgiref,
+  buildPythonPackage,
+  channels,
+  cryptography,
+  fetchFromGitHub,
+  hiredis,
+  msgpack,
+  pythonOlder,
+  redis,
 }:
 
 buildPythonPackage rec {
@@ -37,19 +38,15 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  passthru.optional-dependencies = {
-    cryptography = [
-      cryptography
-    ];
+  optional-dependencies = {
+    cryptography = [ cryptography ];
   };
 
   # Fails with : ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 6379)
   # (even with a local Redis instance running)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "channels_redis"
-  ];
+  pythonImportsCheck = [ "channels_redis" ];
 
   meta = with lib; {
     description = "Redis-backed ASGI channel layer implementation";

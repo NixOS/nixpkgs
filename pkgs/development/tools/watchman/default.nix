@@ -1,7 +1,6 @@
 { boost
 , cargo
 , cmake
-, config
 , CoreServices
 , cpptoml
 , double-conversion
@@ -10,6 +9,7 @@
 , fb303
 , fbthrift
 , fetchFromGitHub
+, fetchpatch
 , fizz
 , fmt_8
 , folly
@@ -22,9 +22,8 @@
 , libunwind
 , lz4
 , openssl
-, pcre
+, pcre2
 , pkg-config
-, python3
 , rustPlatform
 , rustc
 , stateDir ? "/tmp"
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2023.01.30.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "sha256-ZtCUlxx3YgfwKa9J8o9GkdkHquJbh+EytLiGNRlABls=";
+    hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
   cmakeFlags = [
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
     "-DWATCHMAN_STATE_DIR=${stateDir}"
     "-DWATCHMAN_VERSION_OVERRIDE=${version}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -64,9 +63,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pcre
+    pcre2
     openssl
-    python3
     gtest
     glog
     boost
@@ -86,13 +84,21 @@ stdenv.mkDerivation rec {
     lz4
     zstd
     libiconv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cargoRoot = "watchman/cli";
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
+
+  patches = [
+    # fix build with rustc >=1.79
+    (fetchpatch {
+      url = "https://github.com/facebook/watchman/commit/c3536143cab534cdd9696eb3e2d03c4ac1e2f883.patch";
+      hash = "sha256-lpGr5H28gfVXkWNdfDo4SCbF/p5jB4SNlHj6km/rfw4=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -102,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with maintainers; [ cstrahan kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

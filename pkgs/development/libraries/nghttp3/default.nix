@@ -1,31 +1,33 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
-, cunit, ncurses
+, CoreServices
 , curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "0.12.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jbD//8BNqzX2T2F0JH+Vsoi/D+8HZIPXGnHoj3hzqPk=";
+    hash = "sha256-5QsJLN79SkbrCfIGfeJ91AUEf9/V6BWkNE60wOkxdow=";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  nativeCheckInputs = [ cunit ncurses ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreServices
+  ];
 
   cmakeFlags = [
-    "-DENABLE_STATIC_LIB=OFF"
+    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
   ];
 
   doCheck = true;
-  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit curlHTTP3;
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
-    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C.";
+    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];

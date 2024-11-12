@@ -1,35 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, flake8
-, stestr
-, ddt
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchPypi,
+  flake8,
+  pbr,
+  pythonOlder,
+  setuptools,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "5.0.0";
+  version = "7.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qzWyCK8/FHpvlZUnMxw4gK5BrCHMzra/1oqE9OtW4CY=";
+    hash = "sha256-ubbC5SgPfVT6gsWP4JmD9oxbb2NKw/ozn4uhalcVyrc=";
   };
 
   postPatch = ''
     sed -i 's/flake8.*/flake8/' requirements.txt
-    substituteInPlace hacking/checks/python23.py \
-      --replace 'H236: class Foo(object):\n    __metaclass__ = \' 'Okay: class Foo(object):\n    __metaclass__ = \'
-    substituteInPlace hacking/checks/except_checks.py \
-      --replace 'H201: except:' 'Okay: except:'
   '';
 
-  nativeBuildInputs = [ pbr ];
-
-  propagatedBuildInputs = [
-    flake8
+  build-system = [
+    pbr
+    setuptools
   ];
+
+  dependencies = [ flake8 ];
 
   nativeCheckInputs = [
     ddt
@@ -38,10 +41,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # tries to trigger flake8 and fails
-    rm hacking/tests/test_doctest.py
-
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "hacking" ];

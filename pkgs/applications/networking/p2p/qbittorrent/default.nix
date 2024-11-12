@@ -1,58 +1,100 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, pkg-config
-, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false
-, guiSupport ? true, dbus ? null # GUI (disable to run headless)
-, webuiSupport ? true # WebUI
-, trackerSearch ? true, python3 ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+
+, boost
+, cmake
+, Cocoa
+, libtorrent-rasterbar
+, ninja
+, qtbase
+, qtsvg
+, qttools
+, wrapGAppsHook3
+, wrapQtAppsHook
+
+, guiSupport ? true
+, dbus
+, qtwayland
+
+, trackerSearch ? true
+, python3
+
+, webuiSupport ? true
 }:
 
-assert guiSupport -> (dbus != null);
-assert trackerSearch -> (python3 != null);
-
-mkDerivation rec {
-  pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "4.5.3";
+let
+  qtVersion = lib.versions.major qtbase.version;
+in
+stdenv.mkDerivation rec {
+  pname = "qbittorrent"
+    + lib.optionalString (!guiSupport) "-nox";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-d3WYNMeM6ccn0M+EuCm4OBEq8NKU0Nx276Av5cobzfU=";
+    hash = "sha256-BmfTQGftQIkRrlSpJy0yHTh0r3D2CWLIo+tnL0+OeA4=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook3
+    wrapQtAppsHook
+  ];
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    boost
+    libtorrent-rasterbar
+    qtbase
+    qtsvg
+    qttools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+  ] ++ lib.optionals guiSupport [
+    dbus
+  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [
+    qtwayland
+  ] ++ lib.optionals trackerSearch [
+    python3
+  ];
 
-  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
-    ++ lib.optional guiSupport dbus # D(esktop)-Bus depends on GUI support
-    ++ lib.optional trackerSearch python3;
+  cmakeFlags = lib.optionals (!guiSupport) [
+    "-DGUI=OFF"
+    "-DSYSTEMD=ON"
+    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+  ] ++ lib.optionals (!webuiSupport) [
+    "-DWEBUI=OFF"
+  ];
 
-  # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
-  QMAKE_LRELEASE = "lrelease";
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
+  ];
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}" ]
-    ++ lib.optionals (!guiSupport) [ "--disable-gui" "--enable-systemd" ] # Also place qbittorrent-nox systemd service files
-    ++ lib.optional (!webuiSupport) "--disable-webui"
-    ++ lib.optional debugSupport "--enable-debug";
+  dontWrapGApps = true;
 
-  qtWrapperArgs = lib.optional trackerSearch "--prefix PATH : ${lib.makeBinPath [ python3 ]}";
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
-    cp -R src/${pname}.app $out/Applications
-    makeWrapper $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
+    cp -R $APP_NAME.app $out/Applications
+    makeWrapper $out/{Applications/$APP_NAME.app/Contents/MacOS,bin}/$APP_NAME
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
     description = "Featureful free software BitTorrent client";
-    homepage    = "https://www.qbittorrent.org/";
-    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha ];
+    homepage = "https://www.qbittorrent.org";
+    changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+    mainProgram =
+      "qbittorrent"
+      + lib.optionalString (!guiSupport) "-nox";
   };
 }

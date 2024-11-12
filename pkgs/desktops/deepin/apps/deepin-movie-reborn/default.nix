@@ -1,128 +1,112 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qttools
-, qtx11extras
-, qtmultimedia
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtmpris
-, qtdbusextended
-, gsettings-qt
-, elfutils
-, ffmpeg
-, ffmpegthumbnailer
-, mpv
-, xorg
-, pcre
-, libdvdread
-, libdvdnav
-, libunwind
-, libva
-, zstd
-, glib
-, gst_all_1
-, gtest
-, libpulseaudio
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  gsettings-qt,
+  elfutils,
+  ffmpeg_6,
+  ffmpegthumbnailer,
+  mpv,
+  xorg,
+  pcre,
+  libdvdread,
+  libdvdnav,
+  libunwind,
+  libva,
+  zstd,
+  glib,
+  gst_all_1,
+  gtest,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "5.10.23";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0m8wYRQGsdN4zpnHUJKCfF05SdvTauRSp6gCu2F9ZAI";
+    hash = "sha256-1UbrNufetedla8TMFPze1hP/R2cZN7SEYEtrK4/5/RQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "feat-rewrite-libPath-to-read-LD_LIBRARY_PATH.patch";
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/432bf452ed244c256e99ecaf80bb6a0eef9b4a74.patch";
-      sha256 = "sha256-5hRQ8D9twBKgouVpIBa1pdAGk0lI/wEdQaHBBHFCZBA";
-    })
+  patches = [ ./dont_use_libPath.diff ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
-
-  postPatch = ''
-    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
-    substituteInPlace src/common/diskcheckthread.cpp \
-      --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
-    substituteInPlace src/widgets/toolbox_proxy.cpp \
-      --replace "/bin/bash" "${runtimeShell}"
-
-    # libdmr always assume that these libraries exist
-    # otherwise it will lead to coredump
-    # This affects the preview plugin for dde-file-manager
-
-    substituteInPlace src/libdmr/{filefilter.cpp,playlist_model.cpp,gstutils.cpp} \
-      --replace 'LibraryLoader::libPath("libavcodec.so")' '"${lib.getLib ffmpeg}/lib/libavcodec.so"' \
-      --replace 'LibraryLoader::libPath("libavformat.so")' '"${lib.getLib ffmpeg}/lib/libavformat.so"' \
-      --replace 'LibraryLoader::libPath("libavutil.so")' '"${lib.getLib ffmpeg}/lib/libavutil.so"' \
-      --replace 'LibraryLoader::libPath("libffmpegthumbnailer.so")' '"${lib.getLib ffmpegthumbnailer}/lib/libffmpegthumbnailer.so"' \
-      --replace 'LibraryLoader::libPath("libgstreamer-1.0.so")' '"${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.so"' \
-      --replace 'LibraryLoader::libPath("libgstpbutils-1.0.so")' '"${lib.getLib gst_all_1.gst-plugins-base}/lib/libgstpbutils-1.0.so"'
-  '';
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-    qt5integration
-    qt5platform-plugins
-    qtx11extras
-    qtmultimedia
-    qtdbusextended
-    qtmpris
-    gsettings-qt
-    elfutils.dev
-    ffmpeg
+  buildInputs =
+    [
+      dtkwidget
+      qt5integration
+      qt5platform-plugins
+      libsForQt5.qtx11extras
+      libsForQt5.qtmultimedia
+      libsForQt5.qtdbusextended
+      libsForQt5.qtmpris
+      gsettings-qt
+      elfutils
+      ffmpeg_6
+      ffmpegthumbnailer
+      xorg.libXtst
+      xorg.libXdmcp
+      xorg.xcbproto
+      pcre.dev
+      libdvdread
+      libdvdnav
+      libunwind
+      libva
+      zstd
+      mpv
+      gtest
+      libpulseaudio
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
+
+  propagatedBuildInputs = [
+    libsForQt5.qtmultimedia
+    libsForQt5.qtx11extras
     ffmpegthumbnailer
-    xorg.libXtst
-    xorg.libXdmcp
-    xorg.xcbproto
-    pcre.dev
-    libdvdread
-    libdvdnav
-    libunwind
-    libva
-    zstd.dev
-    mpv
-    gtest
-    libpulseaudio
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-  ]);
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ mpv ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        mpv
+        ffmpeg_6
+        ffmpegthumbnailer
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+      ]
+    }"
   ];
 
   preFixup = ''
@@ -132,6 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Full-featured video player supporting playing local and streaming media in multiple video formats";
+    mainProgram = "deepin-movie";
     homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

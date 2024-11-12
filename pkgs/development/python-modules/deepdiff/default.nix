@@ -1,23 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, ordered-set
-, orjson
-, clevercsv
-, jsonpickle
-, numpy
-, pytestCheckHook
-, python-dateutil
-, pyyaml
-, toml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  click,
+  orderly-set,
+  orjson,
+
+  # optional-dependencies
+  clevercsv,
+
+  # tests
+  jsonpickle,
+  numpy,
+  pytestCheckHook,
+  python-dateutil,
+  pyyaml,
+  toml,
+  tomli-w,
+  polars,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.3.0";
-  format = "setuptools";
+  version = "8.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,20 +38,26 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-txZ1X1J8DwueDRpLP3OuRA+S9hc5G3YCmEG+AS6ZAkI=";
+    hash = "sha256-e6eTPSGoJ8r/4vGi/iGVFW/BruBADtVMtnO001Qs0IQ=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
-
-  propagatedBuildInputs = [
-    ordered-set
-    orjson
+  build-system = [
+    setuptools
   ];
 
-  passthru.optional-dependencies = {
+  dependencies = [
+    click
+    orderly-set
+    orjson
+  ];
+  pythonRelaxDeps = [
+    # Upstream develops this package as well, and from some reason pins this
+    # dependency to a patch version below this one. No significant changes
+    # happend in that relase, so we shouldn't worry, especially if tests pass.
+    "orderly-set"
+  ];
+
+  optional-dependencies = {
     cli = [
       clevercsv
       click
@@ -52,17 +71,31 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     python-dateutil
-  ] ++ passthru.optional-dependencies.cli;
+    tomli-w
+    polars
+    pandas
+  ] ++ optional-dependencies.cli;
 
-  pythonImportsCheck = [
-    "deepdiff"
+  disabledTests = [
+    # not compatible with pydantic 2.x
+    "test_pydantic1"
+    "test_pydantic2"
+    # Require pytest-benchmark
+    "test_cache_deeply_nested_a1"
+    "test_lfu"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "deepdiff" ];
+
+  meta = {
     description = "Deep Difference and Search of any Python object/data";
+    mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
     changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mic92
+      doronbehar
+    ];
   };
 }

@@ -6,12 +6,6 @@ set -eou pipefail
 latest_linux_version=$(curl -L --silent https://slack.com/downloads/linux | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
 latest_mac_version=$(curl -L --silent https://slack.com/downloads/mac | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
 
-# Double check that the latest mac and linux versions are in sync.
-if [[ "$latest_linux_version" != "$latest_mac_version" ]]; then
-  echo "the latest linux ($latest_linux_version) and mac ($latest_mac_version) versions are not the same"
-  exit 1
-fi
-
 nixpkgs="$(git rev-parse --show-toplevel)"
 slack_nix="$nixpkgs/pkgs/applications/networking/instant-messengers/slack/default.nix"
 nixpkgs_linux_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-linux-version = \"\([0-9\.]\+\)\";.*/\1/p')
@@ -25,9 +19,9 @@ if [[ "$nixpkgs_linux_version" == "$latest_linux_version" && \
   exit 0
 fi
 
-linux_url="https://downloads.slack-edge.com/releases/linux/${latest_linux_version}/prod/x64/slack-desktop-${latest_linux_version}-amd64.deb"
-mac_url="https://downloads.slack-edge.com/releases/macos/${latest_mac_version}/prod/x64/Slack-${latest_mac_version}-macOS.dmg"
-mac_arm_url="https://downloads.slack-edge.com/releases/macos/${latest_mac_version}/prod/arm64/Slack-${latest_mac_version}-macOS.dmg"
+linux_url="https://downloads.slack-edge.com/desktop-releases/linux/x64/${latest_linux_version}/slack-desktop-${latest_linux_version}-amd64.deb"
+mac_url="https://downloads.slack-edge.com/desktop-releases/mac/universal/${latest_mac_version}/Slack-${latest_mac_version}-macOS.dmg"
+mac_arm_url="https://downloads.slack-edge.com/desktop-releases/mac/arm64/${latest_mac_version}/Slack-${latest_mac_version}-macOS.dmg"
 linux_sha256=$(nix-prefetch-url ${linux_url})
 mac_sha256=$(nix-prefetch-url ${mac_url})
 mac_arm_sha256=$(nix-prefetch-url ${mac_arm_url})
@@ -39,7 +33,7 @@ sed -i "s/x86_64-linux-sha256 = \".*\"/x86_64-linux-sha256 = \"${linux_sha256}\"
 sed -i "s/x86_64-darwin-sha256 = \".*\"/x86_64-darwin-sha256 = \"${mac_sha256}\"/" "$slack_nix"
 sed -i "s/aarch64-darwin-sha256 = \".*\"/aarch64-darwin-sha256 = \"${mac_arm_sha256}\"/" "$slack_nix"
 
-if ! nix-build -A slack "$nixpkgs"; then
+if ! nix-build -A slack "$nixpkgs" --arg config '{ allowUnfree = true; }'; then
   echo "The updated slack failed to build."
   exit 1
 fi

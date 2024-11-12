@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelAtLeast }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "isgx-${version}-${kernel.version}";
@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/intel/linux-sgx-driver";
     license = with licenses; [ bsd3 /* OR */ gpl2Only ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    # This kernel module is now in mainline so newer kernels should
+    # use that rather than this out-of-tree version (officially
+    # deprecated by Intel)
+    broken = kernel.kernelAtLeast "6.4";
   };
 }

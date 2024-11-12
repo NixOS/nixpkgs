@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.12.4";
+  version = "2.14.6";
   format = "other";
 
   pythonPath = [ setuptools ];
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9E2qEdPfxnvx7WCHE/I2rP6Qk9CtsVrisQbq202+2uE=";
+    sha256 = "sha256-sZHrEDb3uuogSjG2qKSm6V+nHZq/FdMq9xQgTIerjuE=";
   };
 
   installPhase = ''
@@ -44,7 +44,7 @@ buildPythonApplication rec {
   '';
 
   meta  = with lib; {
-    description = "A Python based monitoring and tracking tool for Plex Media Server";
+    description = "Python based monitoring and tracking tool for Plex Media Server";
     homepage = "https://tautulli.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,56 +1,53 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7.1";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          rev = "v${version}";
-          hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.296";
-  format = "setuptools";
+  version = "3.2.286";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
-    repo = pname;
+    repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-wzSM+PlgpM4+gBkQ0WhGildgumLqY1MdBMvlbDShJlA=";
+    hash = "sha256-HW1maTuRqieOzvdpMAxs4h5SpTZ3FyKGmmDof0UItOE=";
   };
 
-  patches = [
-    ./flake8-compat-5.x.patch
-  ];
+  patches = [ ./flake8-compat-5.x.patch ];
 
   pythonRelaxDeps = [
     "bc-detect-secrets"
     "bc-python-hcl2"
+    "boto3"
+    "botocore"
+    "cloudsplaining"
+    "cyclonedx-python-lib"
     "dpath"
+    "igraph"
+    "importlib-metadata"
     "license-expression"
     "networkx"
+    "openai"
+    "packageurl-python"
+    "packaging"
+    "pycep-parser"
+    "rustworkx"
+    "schema"
+    "termcolor"
+    "urllib3"
+  ];
+
+  pythonRemoveDeps = [
+    # pythonRelaxDeps doesn't work with that one
     "pycep-parser"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
-  ];
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -65,7 +62,6 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
     docker
     dockerfile-parse
     dpath
@@ -83,16 +79,18 @@ buildPythonApplication rec {
     prettytable
     pycep-parser
     pyyaml
+    pydantic
+    rustworkx
     semantic-version
     spdx-tools
     tabulate
     termcolor
     tqdm
     typing-extensions
-    update_checker
+    update-checker
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     aioresponses
     mock
     pytest-asyncio
@@ -119,12 +117,14 @@ buildPythonApplication rec {
     # Tests are comparing console output
     "cli"
     "console"
-    # Starting to fail after 2.3.205
-    "test_non_multiline_pair"
-    "test_secret_value_in_keyword"
-    "test_runner_verify_secrets_skip_invalid_suppressed"
-    "test_runner_verify_secrets_skip_all_no_effect"
+    # Assertion error
     "test_runner"
+    # AssertionError: assert ['<?xml versi...
+    "test_get_cyclonedx_report"
+    # Test fails on Hydra
+    "test_sast_js_filtered_files_by_ts"
+    # Timing sensitive
+    "test_non_multiline_pair_time_limit_creating_report"
   ];
 
   disabledTestPaths = [
@@ -144,15 +144,15 @@ buildPythonApplication rec {
     "tests/kubernetes/"
     "tests/sca_package_2"
     "tests/terraform/"
+    "cdk_integration_tests/"
+    "sast_integration_tests"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
     # No Helm
     "dogfood_tests/test_checkov_dogfood.py"
   ];
 
-  pythonImportsCheck = [
-    "checkov"
-  ];
+  pythonImportsCheck = [ "checkov" ];
 
   postInstall = ''
     chmod +x $out/bin/checkov
@@ -167,6 +167,9 @@ buildPythonApplication rec {
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 fab ];
+    maintainers = with maintainers; [
+      anhdle14
+      fab
+    ];
   };
 }

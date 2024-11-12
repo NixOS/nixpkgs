@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  future,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "2.7.0";
-  format = "setuptools";
+  version = "2.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,29 +19,23 @@ buildPythonPackage rec {
     owner = "andrivet";
     repo = "python-asn1";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pXLG2Mkrv6EeJn6Dk+SefzNtrPdQ6of95LbVTKjTADQ=";
+    hash = "sha256-xdkSJIe7qmz0Zu5IZ3Rl/h4v2j3YFrm1gz7lsNQ0ORs=";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ future ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "enum-compat" ""
   '';
 
-  pytestFlagsArray = [
-    "tests/test_asn1.py"
-  ];
+  pytestFlagsArray = [ "tests/test_asn1.py" ];
 
-  pythonImportsCheck = [
-    "asn1"
-  ];
+  pythonImportsCheck = [ "asn1" ];
 
   meta = with lib; {
     description = "Python ASN.1 encoder and decoder";

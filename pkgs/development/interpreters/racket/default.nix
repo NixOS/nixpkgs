@@ -1,77 +1,110 @@
-{ lib, stdenv, fetchurl, makeFontsConf
-, cacert
-, cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp
-, gtk3
-, glibcLocales
-, libedit, libffi
-, libiconv
-, libGL
-, libGLU
-, libjpeg
-, xorg
-, ncurses
-, libpng, libtool, mpfr, openssl, pango, poppler
-, readline, sqlite
-, disableDocs ? false
-, CoreFoundation
-, gsettings-desktop-schemas
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeFontsConf,
+  cacert,
+  cairo,
+  coreutils,
+  fontconfig,
+  freefont_ttf,
+  glib,
+  gmp,
+  gtk3,
+  glibcLocales,
+  libedit,
+  libffi,
+  libiconv,
+  libGL,
+  libGLU,
+  libjpeg,
+  ncurses,
+  libpng,
+  libtool,
+  mpfr,
+  openssl,
+  pango,
+  poppler,
+  readline,
+  sqlite,
+  disableDocs ? false,
+  CoreFoundation,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
 }:
 
 let
 
-  fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
-  libPath = lib.makeLibraryPath [
-    cairo
-    fontconfig
-    glib
-    gmp
-    gtk3
-    gsettings-desktop-schemas
-    libedit
-    libGL
-    libGLU
-    libjpeg
-    libpng
-    mpfr
-    ncurses
-    openssl
-    pango
-    poppler
-    readline
-    sqlite
-  ];
-
+  libPath = lib.makeLibraryPath (
+    [
+      cairo
+      fontconfig
+      glib
+      gmp
+      gtk3
+      gsettings-desktop-schemas
+      libedit
+      libjpeg
+      libpng
+      mpfr
+      ncurses
+      openssl
+      pango
+      poppler
+      readline
+      sqlite
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libGL
+      libGLU
+    ]
+  );
 in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.9"; # always change at once with ./minimal.nix
+  version = "8.14"; # always change at once with ./minimal.nix
 
-  src = (lib.makeOverridable ({ name, sha256 }:
-    fetchurl {
-      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-      inherit sha256;
-    }
-  )) {
-    name = "${pname}-${version}";
-    sha256 = "sha256-OuIl6E4Rn0zRpH8bFhM1aPx9NcKQxQVJVWbZ3M78UiQ=";
-  };
+  src =
+    (lib.makeOverridable (
+      { name, hash }:
+      fetchurl {
+        url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+        inherit hash;
+      }
+    ))
+      {
+        name = "${pname}-${version}";
+        hash = "sha256-qrjMDbM27S04KAPHCK1VqV/FKkQ2yRL2FvfEnUhFriw=";
+      };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
-    (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
+    (lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isDarwin) "-lgcc_s")
   ];
 
-  nativeBuildInputs = [ cacert wrapGAppsHook ];
+  nativeBuildInputs = [
+    cacert
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
+  buildInputs =
+    [
+      fontconfig
+      libffi
+      libtool
+      sqlite
+      gsettings-desktop-schemas
+      gtk3
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      CoreFoundation
+    ];
 
   patches = [
     # Hardcode variant detection because we wrap the Racket binary making it
@@ -87,34 +120,36 @@ stdenv.mkDerivation rec {
     ./force-remove-codesign-then-add.patch
   ];
 
-  preConfigure = ''
-    unset AR
-    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
-      substituteInPlace "$f" \
-        --replace /usr/bin/uname ${coreutils}/bin/uname \
-        --replace /bin/cp ${coreutils}/bin/cp \
-        --replace /bin/ln ${coreutils}/bin/ln \
-        --replace /bin/rm ${coreutils}/bin/rm \
-        --replace /bin/true ${coreutils}/bin/true
-    done
+  preConfigure =
+    ''
+      unset AR
+      for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
+        substituteInPlace "$f" \
+          --replace /usr/bin/uname ${coreutils}/bin/uname \
+          --replace /bin/cp ${coreutils}/bin/cp \
+          --replace /bin/ln ${coreutils}/bin/ln \
+          --replace /bin/rm ${coreutils}/bin/rm \
+          --replace /bin/true ${coreutils}/bin/true
+      done
 
-    # The configure script forces using `libtool -o` as AR on Darwin. But, the
-    # `-o` option is only available from Apple libtool. GNU ar works here.
-    substituteInPlace src/ChezScheme/zlib/configure \
-        --replace 'ARFLAGS="-o"' 'AR=ar; ARFLAGS="rc"'
+      # The configure script forces using `libtool -o` as AR on Darwin. But, the
+      # `-o` option is only available from Apple libtool. GNU ar works here.
+      substituteInPlace src/ChezScheme/zlib/configure \
+          --replace 'ARFLAGS="-o"' 'AR=ar; ARFLAGS="rc"'
 
-    mkdir src/build
-    cd src/build
+      mkdir src/build
+      cd src/build
 
-  '' + lib.optionalString stdenv.isLinux ''
-    gappsWrapperArgs+=("--prefix"   "LD_LIBRARY_PATH" ":" ${libPath})
-    gappsWrapperArgs+=("--set"      "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
-  '' + lib.optionalString stdenv.isDarwin ''
-    gappsWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" ${libPath})
-  ''
-  ;
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      gappsWrapperArgs+=("--prefix"   "LD_LIBRARY_PATH" ":" ${libPath})
+      gappsWrapperArgs+=("--set"      "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      gappsWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" ${libPath})
+    '';
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Cannot set DYLD_LIBRARY_PATH as an attr of this drv, becasue dynamic
     # linker environment variables like this are purged.
     # See: https://apple.stackexchange.com/a/212954/167199
@@ -128,17 +163,26 @@ stdenv.mkDerivation rec {
     export DYLD_FALLBACK_LIBRARY_PATH="${libPath}"
   '';
 
-  shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ lib.optionals disableDocs [ "--disable-docs" ]
-                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
+  shared = if stdenv.hostPlatform.isDarwin then "dylib" else "shared";
+  configureFlags =
+    [
+      "--enable-${shared}"
+      "--enable-lt=${libtool}/bin/libtool"
+    ]
+    ++ lib.optionals disableDocs [ "--disable-docs" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-strip"
+      "--enable-xonx"
+    ];
 
   configureScript = "../configure";
 
   enableParallelBuilding = false;
 
+  dontStrip = stdenv.hostPlatform.isDarwin;
+
   meta = with lib; {
-    description = "A programmable programming language";
+    description = "Programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond
       Lisp and Scheme with dialects that support objects, types,
@@ -149,8 +193,17 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ henrytill vrthra ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+    changelog = "https://github.com/racket/racket/releases/tag/v${version}";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = [ ];
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 }

@@ -1,19 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  ci-info,
+  ci-py,
+  requests,
+  setuptools,
+}:
 
 buildPythonPackage rec {
-  version = "0.2.1";
   pname = "etelemetry";
-  disabled = isPy27;
+  version = "0.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rw8im09ppnb7z7p7rx658rp5ib8zca8byxg1kiflqwgx5c8zddz";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sensein";
+    repo = "etelemetry-client";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UaE5JQhv2AtzXKY7YD2/g6Kj1igKhmnY3zlf1P9B/iQ=";
   };
 
-  propagatedBuildInputs = [ ci-info ci-py requests ];
+  nativeBuildInputs = [ setuptools ];
 
-  # all 2 of the tests both try to pull down from a url
-  doCheck = false;
+  propagatedBuildInputs = [
+    ci-info
+    ci-py
+    requests
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "etelemetry"
@@ -23,8 +42,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Lightweight python client to communicate with the etelemetry server";
-    homepage = "https://github.com/mgxd/etelemetry-client";
+    homepage = "https://github.com/sensein/etelemetry-client";
+    changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

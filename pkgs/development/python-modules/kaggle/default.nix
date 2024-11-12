@@ -1,40 +1,49 @@
-{ buildPythonPackage
-, certifi
-, fetchPypi
-, lib
-, python-dateutil
-, python-slugify
-, six
-, requests
-, tqdm
-, urllib3
+{
+  bleach,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  fetchPypi,
+  hatchling,
+  idna,
+  lib,
+  python-dateutil,
+  python-slugify,
+  requests,
+  setuptools,
+  six,
+  text-unidecode,
+  tqdm,
+  urllib3,
+  webencodings,
 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.5.13";
+  version = "1.6.17";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-g2TFbDYSXLgZWHbZEdC8nvvBcxZ+ljuenveTeJupp/4=";
+    hash = "sha256-Q5p96h1QOfMg/WrV7CG2iNz6cNQFy0IJW4H0HtxAG4E=";
   };
 
-  # The version bounds in the setup.py file are unnecessarily restrictive.
-  # They have both python-slugify and slugify, don't know why
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
-      --replace " 'slugify'," " "
-    '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    bleach
     certifi
+    charset-normalizer
+    idna
     python-dateutil
     python-slugify
     requests
+    setuptools
     six
+    text-unidecode
     tqdm
     urllib3
+    webencodings
   ];
 
   # Tests try to access the network.
@@ -48,8 +57,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
+    mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }

@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# tests
-, django
-, djangorestframework
-, python
+  # build-system
+  setuptools,
+
+  # tests
+  django,
+  djangorestframework,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "rules";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dfunckt";
     repo = "django-rules";
-    rev = "v${version}";
-    hash = "sha256-UFRfRwcvxEn0fD3ScJJ7f/EHd93BOpY3cEF9QDryJZY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8Kay2b2uwaI/ml/cPpcj9svoDQI0ptV8tyGeZ76SgZw=";
   };
 
-  pythonImportsCheck = [
-    "rules"
-  ];
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "rules" ];
 
   nativeCheckInputs = [
     django

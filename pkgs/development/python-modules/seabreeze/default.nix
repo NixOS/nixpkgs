@@ -1,16 +1,26 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, git
-, pkgconfig
-, setuptools-scm
-, future
-, numpy
-, pyusb
-, mock
-, pytestCheckHook
-, zipp
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cython,
+  git,
+  pkgconfig,
+  setuptools,
+  setuptools-scm,
+
+  # dependneices
+  numpy,
+  libusb-compat-0_1,
+
+  # optional-dependenices
+  pyusb,
+
+  # tests
+  mock,
+  pytestCheckHook,
+  zipp,
 }:
 
 ## Usage
@@ -20,33 +30,42 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "1.3.0";
+  version = "2.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "v${version}";
-    sha256 = "1hm9aalpb9sdp8s7ckn75xvyiacp5678pv9maybm5nz0z2h29ibq";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
     leaveDotGit = true;
   };
 
+  enableParallelBuilding = true;
+
   postPatch = ''
+    # pkgconfig cant find libusb, doing it manually
     substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
+      --replace-fail 'pkgconfig.parse("libusb")' \
+        "{'include_dirs': ['${libusb-compat-0_1}/include'], 'library_dirs': ['${libusb-compat-0_1}/lib'], 'libraries': ['usb']}"
   '';
 
   nativeBuildInputs = [
     cython
     git
     pkgconfig
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    future
     numpy
-    pyusb
+    libusb-compat-0_1
   ];
+
+  optional-dependencies = {
+    pyseabreeze = [ pyusb ];
+  };
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
@@ -58,14 +77,16 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
-    description = "A python library to access Ocean Optics spectrometers";
-    maintainers = [];
+    description = "Python library to access Ocean Optics spectrometers";
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

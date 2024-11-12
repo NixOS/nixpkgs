@@ -1,14 +1,14 @@
-{ buildPythonPackage
-, oslo-config
-, oslotest
-, stestr
+{
+  buildPythonPackage,
+  oslo-config,
+  oslotest,
+  stestr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "oslotest-tests";
-  inherit (oslotest) version;
-
-  src = oslotest.src;
+  inherit (oslotest) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

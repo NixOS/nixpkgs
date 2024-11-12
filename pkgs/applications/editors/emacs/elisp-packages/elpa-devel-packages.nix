@@ -22,20 +22,13 @@ formats commits for you.
 
 */
 
-{ lib, stdenv, texinfo, writeText, gcc, pkgs, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
-  markBroken = pkg: pkg.override {
-    elpaBuild = args: self.elpaBuild (args // {
-      meta = (args.meta or {}) // { broken = true; };
-    });
-  };
-
-  elpaBuild = import ../../../../build-support/emacs/elpa.nix {
-    inherit lib stdenv texinfo writeText gcc;
-    inherit (self) emacs;
-  };
+  inherit (import ./lib-override-helper.nix pkgs lib)
+    markBroken
+    ;
 
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
@@ -50,13 +43,16 @@ self: let
       });
     };
 
-    super = removeAttrs imported [ "dash" ];
+    super = imported;
 
-    overrides = {
+    commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
+
+    overrides = self: super: {
     };
 
-    elpaDevelPackages = super // overrides;
+    elpaDevelPackages =
+      let super' = super // (commonOverrides self super); in super' // (overrides self super');
 
-  in elpaDevelPackages // { inherit elpaBuild; });
+  in elpaDevelPackages);
 
 in generateElpa { }

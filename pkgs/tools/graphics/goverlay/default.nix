@@ -26,7 +26,7 @@
 
 let
   # Finds data files using the XDG Base Directory Specification
-  # See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+  # See https://specifications.freedesktop.org/basedir-spec/latest
   find-xdg-data-files = writeScriptBin "find-xdg-data-files" ''
     #!${bash}/bin/sh
     IFS=:
@@ -108,10 +108,11 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An opensource project that aims to create a Graphical UI to help manage Linux overlays";
+    description = "Opensource project that aims to create a Graphical UI to help manage Linux overlays";
     homepage = "https://github.com/benjamimgois/goverlay";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "goverlay";
   };
 }

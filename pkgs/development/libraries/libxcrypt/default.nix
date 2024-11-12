@@ -8,12 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.35";
+  version = "4.4.36";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qMk1UFtV8d8NF/i/1ZRox8Zwmh0xgxsPjj4EWrj9RV0=";
+    hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/m4-autogen/config.guess --replace-fail /usr/bin/uname uname
+  '';
 
   outputs = [
     "out"
@@ -24,9 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
+    # required for musl, android, march=native
     "--disable-werror"
   ];
+
+  makeFlags = let
+    lld17Plus = stdenv.cc.bintools.isLLVM
+      && lib.versionAtLeast stdenv.cc.bintools.version "17";
+  in []
+    # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS+=-no-undefined" ]
+
+    # lld 17 sets `--no-undefined-version` by default and `libxcrypt`'s
+    # version script unconditionally lists legacy compatibility symbols, even
+    # when not exported: https://github.com/besser82/libxcrypt/issues/181
+    ++ lib.optionals lld17Plus [ "LDFLAGS+=-Wl,--undefined-version" ]
+  ;
 
   nativeBuildInputs = [
     perl

@@ -1,78 +1,72 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, pythonOlder
-, importlib-metadata
-, jbig2dec
-, deprecation
-, lxml
-, mupdf
-, packaging
-, pillow
-, psutil
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, python-xmp-toolkit
-, qpdf
-, setuptools
-, setuptools-scm
-, substituteAll
-, wheel
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  pythonOlder,
+  jbig2dec,
+  deprecated,
+  lxml,
+  mupdf-headless,
+  numpy,
+  packaging,
+  pillow,
+  psutil,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  python-xmp-toolkit,
+  qpdf,
+  setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "7.2.0";
-  format = "pyproject";
+  version = "9.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
     repo = "pikepdf";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-acGIhIWC1nUQiN0iwb1kLKxz+ytIqYIW4VXF45Tx50g=";
+    hash = "sha256-k50Wg/JvHgOULocUsYRjYH+q1M+5DTFLBZzHC6io+To=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
-      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+      jbig2dec = lib.getExe' jbig2dec "jbig2dec";
+      mutool = lib.getExe' mupdf-headless "mutool";
     })
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
+      --replace-fail "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  buildInputs = [ qpdf ];
 
-  buildInputs = [
-    qpdf
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools
-    setuptools-scm
-    wheel
   ];
 
   nativeCheckInputs = [
     attrs
     hypothesis
+    numpy
     pytest-xdist
     psutil
     pytestCheckHook
@@ -80,13 +74,11 @@ buildPythonPackage rec {
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [
-    deprecation
+  dependencies = [
+    deprecated
     lxml
     packaging
     pillow
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "pikepdf" ];
@@ -95,7 +87,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, isPy27
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
   pname = "azure-mgmt-redhatopenshift";
-  disabled = isPy27; # don't feel like fixing namespace issues on python2
+  version = "1.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
+    hash = "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   pythonNamespaces = "azure.mgmt";
 
-  # no included
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "azure.mgmt.redhatopenshift" ];
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Red Hat Openshift Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

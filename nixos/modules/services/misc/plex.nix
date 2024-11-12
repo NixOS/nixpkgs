@@ -12,12 +12,12 @@ in
 
   options = {
     services.plex = {
-      enable = mkEnableOption (lib.mdDoc "Plex Media Server");
+      enable = mkEnableOption "Plex Media Server";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/plex";
-        description = lib.mdDoc ''
+        description = ''
           The directory where Plex stores its data files.
         '';
       };
@@ -25,7 +25,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the media server.
         '';
       };
@@ -33,7 +33,7 @@ in
       user = mkOption {
         type = types.str;
         default = "plex";
-        description = lib.mdDoc ''
+        description = ''
           User account under which Plex runs.
         '';
       };
@@ -41,7 +41,7 @@ in
       group = mkOption {
         type = types.str;
         default = "plex";
-        description = lib.mdDoc ''
+        description = ''
           Group under which Plex runs.
         '';
       };
@@ -49,7 +49,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of paths to extra plugin bundles to install in Plex's plugin
           directory. Every time the systemd unit for Plex starts up, all of the
           symlinks in Plex's plugin directory will be cleared and this module
@@ -73,7 +73,7 @@ in
       extraScanners = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of paths to extra scanners to install in Plex's scanners
           directory.
 
@@ -93,13 +93,21 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.plex;
-        defaultText = literalExpression "pkgs.plex";
-        description = lib.mdDoc ''
-          The Plex package to use. Plex subscribers may wish to use their own
-          package here, pointing to subscriber-only server versions.
+      accelerationDevices = mkOption {
+        type = types.listOf types.str;
+        default = ["*"];
+        example = [ "/dev/dri/renderD128" ];
+        description = ''
+          A list of device paths to hardware acceleration devices that Plex should
+          have access to. This is useful when transcoding media files.
+          The special value `"*"` will allow all devices.
+        '';
+      };
+
+      package = mkPackageOption pkgs "plex" {
+        extraDescription = ''
+          Plex subscribers may wish to use their own package here,
+          pointing to subscriber-only server versions.
         '';
       };
     };
@@ -136,6 +144,24 @@ in
         KillSignal = "SIGQUIT";
         PIDFile = "${cfg.dataDir}/Plex Media Server/plexmediaserver.pid";
         Restart = "on-failure";
+
+        # Hardening
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = cfg.accelerationDevices == [];
+        DeviceAllow = mkIf (cfg.accelerationDevices != [] && !lib.elem "*" cfg.accelerationDevices) cfg.accelerationDevices;
+        ProtectSystem = true;
+        ProtectHome = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        # This could be made to work if the namespaces needed were known
+        # RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
       };
 
       environment = {

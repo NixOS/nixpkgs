@@ -2,14 +2,23 @@
     and out-of-tree mod packages (mod.nix).
 */
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
-, lua, mono, dotnetPackages, python3
+, lua, mono, python3
 , libGL, freetype, openal, SDL2
+# It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
+# rather than having to look to the logs why it is not starting.
 , zenity
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    makeBinPath
+    makeLibraryPath
+    optional
+    platforms
+    ;
+
   path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook {
@@ -40,24 +49,7 @@ in {
   '';
 
   packageAttrs = {
-    buildInputs = with dotnetPackages; [
-      FuzzyLogicLibrary
-      MaxMindDb
-      MaxMindGeoIP2
-      MonoNat
-      NewtonsoftJson
-      NUnit3
-      NUnitConsole
-      OpenNAT
-      RestSharp
-      SharpFont
-      SharpZipLib
-      SmartIrc4net
-      StyleCopMSBuild
-      StyleCopPlusMSBuild
-    ] ++ [
-      libGL
-    ];
+    buildInputs = [ libGL ];
 
     # TODO: Test if this is correct.
     nativeBuildInputs = [
@@ -78,7 +70,7 @@ in {
     dontStrip = true;
 
     meta = {
-      maintainers = with maintainers; [ fusion809 msteen rardiol ];
+      maintainers = with maintainers; [ fusion809 msteen ];
       license = licenses.gpl3;
       platforms = platforms.linux;
     };

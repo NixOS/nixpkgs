@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.n8n;
   format = pkgs.formats.json {};
@@ -9,26 +6,35 @@ let
 in
 {
   options.services.n8n = {
-    enable = mkEnableOption (lib.mdDoc "n8n server");
+    enable = lib.mkEnableOption "n8n server";
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc "Open ports in the firewall for the n8n web interface.";
+      description = "Open ports in the firewall for the n8n web interface.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.
       '';
     };
 
+    webhookUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = ''
+        WEBHOOK_URL for n8n, in case we're running behind a reverse proxy.
+        This cannot be set through configuration and must reside in an environment variable.
+      '';
+    };
+
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.n8n.settings = {
       # We use this to open the firewall, so we need to know about the default at eval time
       port = lib.mkDefault 5678;
@@ -44,6 +50,7 @@ in
         N8N_USER_FOLDER = "/var/lib/n8n";
         HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+        WEBHOOK_URL = "${cfg.webhookUrl}";
 
         # Don't phone home
         N8N_DIAGNOSTICS_ENABLED = "false";
@@ -75,7 +82,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.settings.port ];
     };
   };

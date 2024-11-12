@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs =
-    if stdenv.isDarwin then [ AppKit ApplicationServices Carbon ]
+    if stdenv.hostPlatform.isDarwin then [ AppKit ApplicationServices Carbon ]
     else [
       libX11
       libxkbcommon
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C library to provide global keyboard and mouse hooks from userland";
+    description = "C library to provide global keyboard and mouse hooks from userland";
     homepage = "https://github.com/kwhat/libuiohook";
     license = licenses.gpl3Only;
     platforms = platforms.all;

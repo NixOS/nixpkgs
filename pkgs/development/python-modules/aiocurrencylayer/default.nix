@@ -1,35 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiocurrencylayer";
-  version = "1.0.5";
-  format = "pyproject";
+  version = "1.0.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
-    repo = pname;
+    repo = "aiocurrencylayer";
     rev = "refs/tags/${version}";
-    hash = "sha256-468OBQV7ISnPRUfi/CM3dCh1ez0jwSVnM6DduPvAgPI=";
+    hash = "sha256-VOzgWN+dDPaGEcahFPSWjBR989b9eNkx4zcnI9o2Xiw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiocurrencylayer"
-  ];
+  pythonImportsCheck = [ "aiocurrencylayer" ];
 
   meta = with lib; {
     description = "Python API for interacting with currencylayer";

@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pgvector";
-  version = "0.4.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector";
     rev = "v${version}";
-    hash = "sha256-D2jB0rks4zmWtGB7SCXG5XW0PCun8OPawp3W/VGRQn0=";
+    hash = "sha256-r+TpFJg6WrMn0L2B7RpmSRvw3XxpHzMRtpFWDCzLvgs=";
   };
 
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D -t $out/lib vector.so
+    install -D -t $out/lib vector${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension sql/vector-*.sql
     install -D -t $out/share/postgresql/extension vector.control
   '';
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pgvector/pgvector/raw/v${version}/CHANGELOG.md";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

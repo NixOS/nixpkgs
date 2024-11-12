@@ -1,43 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, djangorestframework, python, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  django,
+  djangorestframework,
+  pytestCheckHook,
+  pytest-django,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "22.1";
+  version = "24.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7Uc7duhPfoOyURuyBQw++zbRNSB9ASjf465LNuNZS6U=";
+  src = fetchFromGitHub {
+    owner = "carltongibson";
+    repo = "django-filter";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4q/x9FO9ErKnGeJDEXDMcvUKA4nlA7nkwwM2xj3WGWs=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ flit-core ];
 
-  pythonImportsCheck = [
-    "django_filters"
-  ];
+  dependencies = [ django ];
 
-  # Tests fail (needs the 'crispy_forms' module not packaged on nixos)
-  doCheck = false;
+  pythonImportsCheck = [ "django_filters" ];
 
   nativeCheckInputs = [
     djangorestframework
-    django
-    mock
+    pytestCheckHook
+    pytest-django
+    pytz
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} runtests.py tests
-    runHook postCheck
-  '';
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
-    homepage = "https://pypi.org/project/django-filter/";
+    homepage = "https://github.com/carltongibson/django-filter";
+    changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

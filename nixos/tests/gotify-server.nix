@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gotify-server";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ ];
   };
 
   nodes.machine = { pkgs, ... }: {
@@ -9,7 +9,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     services.gotify = {
       enable = true;
-      port = 3000;
+      environment = {
+        GOTIFY_SERVER_PORT = 3000;
+      };
     };
   };
 

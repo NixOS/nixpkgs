@@ -1,31 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, lockfile
-, pytestCheckHook
-, testscenarios
-, testtools
-, twine
-, python
-, pythonOlder
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  lockfile,
+  packaging,
+  pytestCheckHook,
+  testscenarios,
+  testtools,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-daemon";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
+    hash = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
   };
 
+  postPatch = ''
+    sed -i "s/setuptools\.extern\.//g" version.py test_version.py
+  '';
+
   nativeBuildInputs = [
-    twine
+    setuptools
+    packaging
   ];
 
   propagatedBuildInputs = [
@@ -66,7 +71,10 @@ buildPythonPackage rec {
     description = "Library to implement a well-behaved Unix daemon process";
     homepage = "https://pagure.io/python-daemon/";
     # See "Copying" section in https://pagure.io/python-daemon/blob/main/f/README
-    license = with licenses; [ gpl3Plus asl20 ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [
+      gpl3Plus
+      asl20
+    ];
+    maintainers = [ ];
   };
 }

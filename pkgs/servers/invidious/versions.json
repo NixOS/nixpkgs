@@ -1,18 +1,11 @@
 {
-  "boringssl": {
-    "rev": "251b5169fd44345f455438312ec4e18ae07fd58c",
-    "sha256": "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A="
-  },
   "invidious": {
-    "rev": "545a5937d87d31622e87bb2ba8151f8aecd66c81",
-    "sha256": "sha256-1Ra3nLO2DsnTvyovteF0cOIl07GHbJyPbTYBRIyKuAs=",
-    "version": "unstable-2023-06-06"
-  },
-  "lsquic": {
-    "sha256": "sha256-hG8cUvhbCNeMOsKkaJlgGpzUrIx47E/WhmPIdI5F3qM=",
-    "version": "2.18.1"
+    "hash": "sha256-O5Uv5Qat7Is/0gk0HVi8Hr2UPMLXQw7AwYnjOFaaTP8=",
+    "version": "2.20241110.0",
+    "date": "2024.11.10",
+    "commit": "5d2dd40b"
   },
   "videojs": {
-    "sha256": "0zj8fgxdg6jsllaxn795xipa6yxh4yf08hb8x0idyg74q37gfh4c"
+    "hash": "sha256-jED3zsDkPN8i6GhBBJwnsHujbuwlHdsVpVqa1/pzSH4="
   }
 }

@@ -18,7 +18,7 @@
       ln -s nom "$out/bin/nom-build"
       ln -s nom "$out/bin/nom-shell"
       chmod a+x $out/bin/nom-build
-      installShellCompletion --zsh --name _nom-build completions/completion.zsh
+      installShellCompletion completions/*
     '';
   };
   raw-pkg = haskellPackages.callPackage ./generated-package.nix {};

@@ -5,18 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "23.4";
+  version = "24.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    sha256 = "sha256-1D/j/im1Xlx689k8zgnaRzJJYWHNviVhxyVzmLlfJps=";
+    sha256 = "sha256-iH/y2dHeQL3ZHwKl5qkrXpSDgrqI/U31BwpwFAzBzEE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fftw gsl motif ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices CoreMIDI ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices CoreMIDI ]
     ++ (with xorg; [ libXext libXft libXpm libXt ]);
 
   configureFlags = [ "--with-motif" ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ccrma.stanford.edu/software/snd/";
     platforms = platforms.unix;
     license = licenses.free;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "snd";
   };
 }

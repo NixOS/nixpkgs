@@ -6,17 +6,18 @@
 , gst_all_1
 , ipu6-camera-hal
 , libdrm
+, libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2023-03-09";
+  version = "unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    rev = "17841ab6249aaa69bd9b3959262bf182dee74111";
-    hash = "sha256-j8ZYe4nyy5yfo10CGeXDwbAaAPvdr0ptMWB8hQDyESQ=";
+    rev = "refs/tags/20240926_1446";
+    hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
   };
 
   nativeBuildInputs = [
@@ -34,11 +35,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
     ipu6-camera-hal
     libdrm
+    libva
   ];
 
   NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
     # gstcameradeinterlace.cpp:55:10: fatal error: gst/video/video.h: No such file or directory
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];
@@ -53,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "GStreamer Plugin for MIPI camera support through the IPU6/IPU6EP/IPU6SE on Intel Tigerlake/Alderlake/Jasperlake platforms";
     homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

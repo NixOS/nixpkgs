@@ -6,8 +6,11 @@
 , freetype
 , libgepub
 , libgsf
+, libjxl
+, librsvg
 , poppler
 , gst_all_1
+, webp-pixbuf-loader
 , libxfce4util
 }:
 
@@ -16,9 +19,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "4.18.1";
+  version = "4.18.2";
 
-  sha256 = "sha256-hn77W8IsvwNc9xSuDe9rXw9499olOvvJ2P7q+26HIG8=";
+  sha256 = "sha256-thioE0q2qnV4weJFPz8OWoHIRuUcXnQEviwBtCWsSV4=";
 
   buildInputs = [
     libxfce4util
@@ -32,13 +35,20 @@ mkXfceDerivation {
     poppler # technically the glib binding
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ libjxl librsvg webp-pixbuf-loader ]}"
+    )
+  '';
+
   # WrapGAppsHook won't touch this binary automatically, so we wrap manually.
   postFixup = ''
     wrapProgram $out/lib/tumbler-1/tumblerd "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with lib; {
-    description = "A D-Bus thumbnailer service";
+    description = "D-Bus thumbnailer service";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -1,9 +1,6 @@
-{ vimUtils, vim-full, writeText, vimPlugins
-, lib, fetchFromGitHub
-, pkgs
-}:
+{ vimUtils, vim-full, vimPlugins, pkgs }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix;
+  inherit (vimUtils) buildVimPlugin;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 

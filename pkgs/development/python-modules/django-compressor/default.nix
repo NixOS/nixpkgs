@@ -1,54 +1,79 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rcssmin
-, rjsmin
-, django-appconf
-, beautifulsoup4
-, brotli
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  calmjs,
+  django-appconf,
+  jinja2,
+  rcssmin,
+  rjsmin,
+
+  # tests
+  beautifulsoup4,
+  brotli,
+  csscompressor,
+  django-sekizai,
+  pytestCheckHook,
+  pytest-django,
+
 }:
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.3.1";
-  format = "setuptools";
+  version = "4.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-aIWMDabMCZzCmgIthsO6iu0RTanXCe7OsNe4GBtfiUI=";
+    hash = "sha256-wdikii7k2LfyPEEeucl+LYjbGKGLocnoF41fW4NmqCI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rcssmin == 1.1.0" "rcssmin>=1.1.0" \
-      --replace "rjsmin == 1.2.0" "rjsmin>=1.2.0"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "rcssmin"
+    "rjsmin"
+  ];
+
+  dependencies = [
+    beautifulsoup4
+    calmjs
+    django-appconf
+    jinja2
     rcssmin
     rjsmin
-    django-appconf
   ];
 
-  pythonImportsCheck = [
-    "compressor"
-  ];
-
-  doCheck = false; # missing package django-sekizai
+  env.DJANGO_SETTINGS_MODULE = "compressor.test_settings";
 
   nativeCheckInputs = [
     beautifulsoup4
     brotli
+    csscompressor
+    django-sekizai
     pytestCheckHook
+    pytest-django
   ];
 
-  DJANGO_SETTINGS_MODULE = "compressor.test_settings";
+  # Getting error: compressor.exceptions.OfflineGenerationError: You have
+  # offline compression enabled but key "..." is missing from offline manifest.
+  # You may need to run "python manage.py compress"
+  disabledTestPaths = [ "compressor/tests/test_offline.py" ];
+
+  pythonImportsCheck = [ "compressor" ];
 
   meta = with lib; {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
-    homepage = "https://django-compressor.readthedocs.org/en/latest/";
+    homepage = "https://django-compressor.readthedocs.org/";
+    changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ desiderius ];
   };

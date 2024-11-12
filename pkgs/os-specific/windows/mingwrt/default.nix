@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mingwrt";
@@ -14,5 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   dontStrip = true;
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 }

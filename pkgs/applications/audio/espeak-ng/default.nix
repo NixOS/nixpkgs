@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoconf
 , automake
 , which
@@ -15,6 +16,9 @@
 , pcaudiolib
 , sonicSupport ? true
 , sonic
+, CoreAudio
+, AudioToolbox
+, AudioUnit
 , alsa-plugins
 , makeWrapper
 }:
@@ -30,7 +34,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-aAJ+k+kkOS6k835mEW7BvgAIYGhUHxf7Q4P5cKO8XTk=";
   };
 
-  patches = lib.optionals mbrolaSupport [
+  patches = [
+    # Fix build with Clang 16.
+    (fetchpatch {
+      url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
+      hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
+    })
+  ] ++ lib.optionals mbrolaSupport [
     # Hardcode correct mbrola paths.
     (substituteAll {
       src = ./mbrola.patch;
@@ -42,9 +52,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
-    ++ lib.optional sonicSupport sonic;
+    ++ lib.optional sonicSupport sonic
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreAudio
+    AudioToolbox
+    AudioUnit
+  ];
 
-  preConfigure = "./autogen.sh";
+  # touch ChangeLog to avoid below error on darwin:
+  # Makefile.am: error: required file './ChangeLog.md' not found
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    touch ChangeLog
+  '' + ''
+    ./autogen.sh
+  '';
 
   configureFlags = [
     "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
@@ -58,7 +79,7 @@ stdenv.mkDerivation rec {
       --replace '../src/espeak-ng --compile' "${lib.getExe buildPackages.espeak-ng} --compile"
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
     wrapProgram $out/bin/espeak-ng \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
@@ -75,5 +96,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.all;
+    mainProgram = "espeak-ng";
   };
 }

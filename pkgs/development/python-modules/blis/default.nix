@@ -1,58 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, hypothesis
-, numpy
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  hypothesis,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  blis,
+  numpy_2,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.7.9";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ke9MJQB3hakP/C8Ks9O9O3XNLXhWqaSCt9DayNURoJ0=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "cython-blis";
+    rev = "refs/tags/release-v${version}";
+    hash = "sha256-8JaQgTda1EBiZdSrZtKwJ8e/aDENQ+dMmTiH/t1ax5I=";
   };
 
   postPatch = ''
+    # The commit pinning numpy to version 2 doesn't have any functional changes:
+    # https://github.com/explosion/cython-blis/pull/108
+    # BLIS should thus work with numpy and numpy_2.
+    substituteInPlace pyproject.toml setup.py \
+      --replace-fail "numpy>=2.0.0,<3.0.0" numpy
+
     # See https://github.com/numpy/numpy/issues/21079
+    # has no functional difference as the name is only used in log output
     substituteInPlace blis/benchmark.py \
-      --replace "numpy.__config__.blas_ilp64_opt_info" "numpy.__config__.blas_opt_info"
+      --replace-fail 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
   '';
 
-  nativeBuildInputs = [
-    cython
-  ];
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -rf ./blis
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    cython
     numpy
   ];
 
+  dependencies = [ numpy ];
+
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "blis"
-  ];
+  pythonImportsCheck = [ "blis" ];
 
   passthru = {
-    # Do not update to BLIS 0.9.x until the following issue is resolved:
-    # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
-    skipBulkUpdate = true;
+    tests = {
+      numpy_2 = blis.overridePythonAttrs (old: {
+        numpy = numpy_2;
+      });
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "release-v";
+    };
   };
 
   meta = with lib; {
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

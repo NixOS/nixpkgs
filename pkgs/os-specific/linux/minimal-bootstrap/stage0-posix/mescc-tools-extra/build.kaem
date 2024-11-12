@@ -19,7 +19,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with mescc-tools.  If not, see <http://www.gnu.org/licenses/>.
 
-alias CC="${mescc-tools}/bin/M2-Mesoplanet --operating-system ${OPERATING_SYSTEM} --architecture ${ARCH} -f"
+alias CC="${mescc-tools}/bin/M2-Mesoplanet --operating-system ${m2libcOS} --architecture ${m2libcArch} -f"
 cd ${src}/mescc-tools-extra
 
 # Create output folder

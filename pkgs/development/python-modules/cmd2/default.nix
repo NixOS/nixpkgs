@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, attrs
-, buildPythonPackage
-, colorama
-, fetchPypi
-, glibcLocales
-, importlib-metadata
-, pyperclip
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, typing-extensions
-, wcwidth
+{
+  lib,
+  stdenv,
+  attrs,
+  buildPythonPackage,
+  colorama,
+  fetchPypi,
+  glibcLocales,
+  importlib-metadata,
+  pyperclip,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  typing-extensions,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
@@ -29,19 +30,19 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    attrs
-    colorama
-    pyperclip
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      colorama
+      pyperclip
+      wcwidth
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -55,22 +56,22 @@ buildPythonPackage rec {
     "test_transcript"
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    mkdir bin
-    echo '#!${stdenv.shell}' > bin/pbpaste
-    echo '#!${stdenv.shell}' > bin/pbcopy
-    chmod +x bin/{pbcopy,pbpaste}
-    export PATH=$(realpath bin):$PATH
-  '';
+  postPatch =
+    ''
+      sed -i "/--cov/d" setup.cfg
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Fake the impure dependencies pbpaste and pbcopy
+      mkdir bin
+      echo '#!${stdenv.shell}' > bin/pbpaste
+      echo '#!${stdenv.shell}' > bin/pbcopy
+      chmod +x bin/{pbcopy,pbpaste}
+      export PATH=$(realpath bin):$PATH
+    '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  pythonImportsCheck = [
-    "cmd2"
-  ];
+  pythonImportsCheck = [ "cmd2" ];
 
   meta = with lib; {
     description = "Enhancements for standard library's cmd module";

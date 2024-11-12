@@ -1,34 +1,44 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, matplotlib
-, networkx
-, nose
-, numpy
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  matplotlib,
+  networkx,
+  numpy,
+  scipy,
+  pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scikit-fuzzy";
-  version = "unstable-2022-11-07";
-  format = "setuptools";
+  version = "0.4.2-unstable-2023-09-14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "d8c45c259d62955004379592e45bc64c8e002fc3";
-    hash = "sha256-kS48aHC719wUdc2WcJa9geoMUcLHSj7ZsoRZYAhF2a0=";
+    owner = "scikit-fuzzy";
+    repo = "scikit-fuzzy";
+    rev = "d7551b649f34c2f5e98836e9b502279226d3b225";
+    hash = "sha256-91Udm2dIaIwTVG6V1EqYA/4qryuS4APgaa7tIa3sSQE=";
   };
 
-  propagatedBuildInputs = [ networkx numpy scipy ];
-  nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
+  build-system = [ setuptools ];
 
-  # numpy API breakage: "AttributeError: module 'numpy' has no attribute 'float'"
-  disabledTests = [ "test_fuzzy_compare" ];
+  propagatedBuildInputs = [
+    networkx
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    matplotlib
+    pytest7CheckHook
+  ];
+
+  preCheck = "rm -rf build";
 
   pythonImportsCheck = [ "skfuzzy" ];
 

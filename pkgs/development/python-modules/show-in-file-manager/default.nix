@@ -1,31 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, packaging
-, pyxdg
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  argparse-manpage,
+  setuptools,
+  packaging,
+  pyxdg,
 }:
 
 buildPythonPackage rec {
   pname = "show-in-file-manager";
-  version = "1.1.4";
+  version = "1.1.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FdFuSodbniF7A40C8CnDgAxKatZF4/c8nhB+omurOts=";
+    hash = "sha256-7ROhgKHUj9iP3UxYv7yzhgJoZBo4gFGSyBTUE4cZLYQ=";
   };
 
-  propagatedBuildInputs = [
-    packaging
-  ]
-  ++ lib.optional (stdenv.isLinux) pyxdg
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  nativeBuildInputs = [
+    argparse-manpage
+    setuptools
+  ];
+
+  propagatedBuildInputs = [ packaging ] ++ lib.optional (stdenv.hostPlatform.isLinux) pyxdg;
 
   meta = with lib; {
     homepage = "https://github.com/damonlynch/showinfilemanager";
     description = "Open the system file manager and select files in it";
+    mainProgram = "showinfilemanager";
     longDescription = ''
       Show in File Manager is a Python package to open the system file
       manager and optionally select files in it. The point is not to
@@ -34,6 +38,6 @@ buildPythonPackage rec {
       something with them.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

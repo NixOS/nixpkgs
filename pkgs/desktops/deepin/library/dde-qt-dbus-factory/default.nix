@@ -1,32 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qtbase
-, wrapQtAppsHook
-, python3
-, dtkcore
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libsForQt5,
+  python3,
+  dtkcore,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";
-  version = "5.5.22";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jqk04S+i3py3rVJcHmkPKHsU+eNEN1yoUBBlfXBbcwM=";
+    hash = "sha256-B9SrApvjTIW2g9VayrmCsWXS9Gkg55Voi1kPP+KYp3s=";
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
     python3
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkcore
   ];
 
@@ -37,17 +36,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libdframeworkdbus/libdframeworkdbus.pro \
-     --replace "/usr" ""
-
+      --replace-fail "/usr" ""
     substituteInPlace libdframeworkdbus/DFrameworkdbusConfig.in \
-      --replace "/usr/include" "$out/include"
+      --replace-fail "/usr/include" "$out/include"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repo of auto-generated D-Bus source code which DDE used";
     homepage = "https://github.com/linuxdeepin/dde-qt-dbus-factory";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

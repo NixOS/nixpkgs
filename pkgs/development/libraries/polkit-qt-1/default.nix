@@ -27,10 +27,10 @@ mkDerivation rec {
     glib
     pcre
     polkit
-  ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libselinux libsepol util-linux ];
 
   meta = with lib; {
-    description = "A Qt wrapper around PolKit";
+    description = "Qt wrapper around PolKit";
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.linux;
   };

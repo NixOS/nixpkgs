@@ -3,12 +3,19 @@
 , fetchurl
 , unzip
 , qtbase
-, qtmacextras
+, qtmacextras ? null
 , qmake
 , fixDarwinDylibNames
+, darwin
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.hostPlatform.isDarwin then
+    darwin.apple_sdk_11_0.stdenv
+  else
+    stdenv
+  ;
+in stdenv'.mkDerivation rec {
   pname = "qscintilla-qt5";
   version = "2.13.2";
 
@@ -21,10 +28,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
 
   nativeBuildInputs = [ unzip qmake ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -44,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Qt port of the Scintilla text editing library";
+    description = "Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
       control.
@@ -63,5 +70,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    # ld: library not found for -lcups
+    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
 }

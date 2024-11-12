@@ -64,7 +64,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://munt.sourceforge.net/";
-    description = "A synthesizer application built on Qt and libmt32emu";
+    description = "Synthesizer application built on Qt and libmt32emu";
+    mainProgram = "mt32emu-qt";
     longDescription = ''
       mt32emu-qt is a synthesiser application that facilitates both realtime
       synthesis and conversion of pre-recorded SMF files to WAVE making use of

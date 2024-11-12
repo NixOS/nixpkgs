@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  patches = [ ./check-state-changed.patch ];
+
   cmakeFlags = [
     "-DOBS_SOURCE=${obs-studio.src}"
     "-DGLOBAL_INSTALLATION=ON"
@@ -33,6 +35,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ algram ];
     platforms = [ "x86_64-linux" ];
-    broken = true; # Not compatible with qt6 yet but required by OBS28
   };
 }

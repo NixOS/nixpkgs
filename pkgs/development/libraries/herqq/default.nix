@@ -9,7 +9,7 @@ mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  sourceRoot = "source/herqq";
+  sourceRoot = "${src.name}/herqq";
   src = fetchFromGitHub {
     owner = "ThomArmax";
     repo = "HUPnP";
@@ -19,7 +19,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://herqq.org";
-    description = "A software library for building UPnP devices and control points";
+    description = "Software library for building UPnP devices and control points";
     platforms = platforms.linux;
     maintainers = [ ];
   };

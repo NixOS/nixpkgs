@@ -1,42 +1,38 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, jaconv
-, py-cpuinfo
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitea,
+  importlib-resources,
+  jaconv,
+  py-cpuinfo,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pykakasi";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "2.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "miurahr";
-    repo = pname;
+    repo = "pykakasi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
+    hash = "sha256-b2lYYdg1RW1xRD3hym7o1EnxzN/U5txVTWRifwZn3k0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     jaconv
     deprecated
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [
     py-cpuinfo
@@ -49,17 +45,18 @@ buildPythonPackage rec {
     "test_benchmark"
     "pytest_benchmark_update_machine_info"
     "pytest_benchmark_update_json"
+    # Assertion error
+    "test_aozora"
   ];
 
-  pythonImportsCheck = [
-    "pykakasi"
-  ];
+  pythonImportsCheck = [ "pykakasi" ];
 
   meta = with lib; {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
-    homepage = "https://github.com/miurahr/pykakasi";
-    changelog = "https://github.com/miurahr/pykakasi/releases/tag/v${version}";
-    license = licenses.mit;
+    homepage = "https://codeberg.org/miurahr/pykakasi";
+    changelog = "https://codeberg.org/miurahr/pykakasi/src/tag/v${version}/CHANGELOG.rst";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kakasi";
   };
 }

@@ -1,35 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoPackage
-, pkg-config
-, deepin-gettext-tools
-, go-dbus-factory
-, go-gir-generator
-, go-lib
-, gtk3
-, glib
-, libxcrypt
-, gettext
-, iniparser
-, cracklib
-, linux-pam
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gtk3,
+  glib,
+  libxcrypt,
+  gettext,
+  iniparser,
+  cracklib,
+  linux-pam,
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "deepin-pw-check";
-  version = "5.1.18";
-
-  goPackagePath = "github.com/linuxdeepin/deepin-pw-check";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v1Z4ArkrejjOCO1vD+BhfEl9pTfuvKgLM6Ont0IUCQk=";
+    hash = "sha256-kBrkcB0IWGUV4ZrkFzwdPglRgDcnVvYDFhTXS20pKOk=";
   };
 
-  goDeps = ./deps.nix;
+  patches = [ "${src}/rpm/0001-Mangle-Suit-Cracklib2.9.6.patch" ];
+
+  vendorHash = "sha256-L0vUEkUN70Hrx5roIvTfaZBHbbq7mf3WpQJeFAMU5HY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,9 +35,6 @@ buildGoPackage rec {
   ];
 
   buildInputs = [
-    go-dbus-factory
-    go-gir-generator
-    go-lib
     glib
     libxcrypt
     gtk3
@@ -50,25 +44,20 @@ buildGoPackage rec {
   ];
 
   postPatch = ''
-    sed -i 's|iniparser/||' */*.c
-    substituteInPlace misc/pkgconfig/libdeepin_pw_check.pc \
-      --replace "/usr" "$out"
-    substituteInPlace misc/system-services/com.deepin.daemon.PasswdConf.service \
-      --replace "/usr/lib/deepin-pw-check/deepin-pw-check" "$out/lib/deepin-pw-check/deepin-pw-check"
+    sed -i '1i#include <stdlib.h>\n#include <string.h>' tool/pwd_conf_update.c
+    substituteInPlace misc/{pkgconfig/libdeepin_pw_check.pc,system-services/org.deepin.dde.PasswdConf1.service} \
+      --replace-fail "/usr" "$out"
   '';
 
   buildPhase = ''
     runHook preBuild
-    addToSearchPath GOPATH "${go-dbus-factory}/share/gocode"
-    addToSearchPath GOPATH "${go-gir-generator}/share/gocode"
-    addToSearchPath GOPATH "${go-lib}/share/gocode"
-    make -C go/src/${goPackagePath}
+    make
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    make install PREFIX="$out" PKG_FILE_DIR=$out/lib/pkg-config PAM_MODULE_DIR=$out/etc/pam.d -C go/src/${goPackagePath}
+    make install PREFIX="$out" PKG_FILE_DIR=$out/lib/pkgconfig PAM_MODULE_DIR=$out/etc/pam.d
     # https://github.com/linuxdeepin/deepin-pw-check/blob/d5597482678a489077a506a87f06d2b6c4e7e4ed/debian/rules#L21
     ln -s $out/lib/libdeepin_pw_check.so $out/lib/libdeepin_pw_check.so.1
     runHook postInstall
@@ -76,6 +65,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Tool to verify the validity of the password";
+    mainProgram = "pwd-conf-update";
     homepage = "https://github.com/linuxdeepin/deepin-pw-check";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

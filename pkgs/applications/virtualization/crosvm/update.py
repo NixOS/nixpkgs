@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -p common-updater-scripts python3
+#! nix-shell -p common-updater-scripts nix-update python3
 #! nix-shell -i python
 
 import csv
@@ -52,3 +52,6 @@ with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log
 
 # Update the version, git revision, and hash in crosvm's default.nix.
 subprocess.run(['update-source-version', 'crosvm', f'--rev={rev}', version])
+
+# Update cargoHash.
+subprocess.run(['nix-update', '--version=skip', 'crosvm'])

@@ -26,7 +26,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the Apache ActiveMQ message broker service.
         '';
       };
@@ -34,7 +34,7 @@ in
         default = "${activemq}/conf";
         defaultText = literalExpression ''"''${pkgs.activemq}/conf"'';
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
           which should contain the configuration for the broker service.
@@ -43,7 +43,7 @@ in
       configurationURI = mkOption {
         type = types.str;
         default = "xbean:activemq.xml";
-        description = lib.mdDoc ''
+        description = ''
           The URI that is passed along to the BrokerFactory to
           set up the configuration of the ActiveMQ broker service.
           You should not need to change this. For custom configuration,
@@ -54,7 +54,7 @@ in
       baseDir = mkOption {
         type = types.str;
         default = "/var/activemq";
-        description = lib.mdDoc ''
+        description = ''
           The base directory where ActiveMQ stores its persistent data and logs.
           This will be overridden if you set "activemq.base" and "activemq.data"
           in the `javaProperties` option. You can also override
@@ -75,7 +75,7 @@ in
           "activemq.conf" = "${cfg.configurationDir}";
           "activemq.home" = "${activemq}";
         } // attrs;
-        description = lib.mdDoc ''
+        description = ''
           Specifies Java properties that are sent to the ActiveMQ
           broker service with the "-D" option. You can set properties
           here to change the behaviour and configuration of the broker.
@@ -87,7 +87,7 @@ in
         type = types.separatedString " ";
         default = "";
         example = "-Xmx2G -Xms2G -XX:MaxPermSize=512M";
-        description = lib.mdDoc ''
+        description = ''
           Add extra options here that you want to be sent to the
           Java runtime when the broker service is started.
         '';

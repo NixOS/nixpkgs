@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
-  version = "2.18.2";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "sha256-D7GPS/46jiIY8K0qPlMlYhmn+yWhTA+I6jAuxclNJSU=";
+    sha256 = "sha256-CmhdhNNRO2j8lH7awp9YiKWMvV17GTBsXdrNY06jT2w=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
 
   meta = with lib; {
-    description = "A collection of utilities and examples for VA-API";
+    description = "Collection of utilities and examples for VA-API";
     longDescription = ''
       libva-utils is a collection of utilities and examples to exercise VA-API
       in accordance with the libva project.

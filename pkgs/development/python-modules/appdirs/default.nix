@@ -1,20 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "appdirs";
   version = "1.4.4";
+  pypoject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41";
+    hash = "sha256-fV0BZ7KxuoIWR2Fq9Gp0nRxlN0DdDSQVEA/ibiev30E=";
   };
 
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "appdirs" ];
+
   meta = {
-    description = "A python module for determining appropriate platform-specific dirs";
+    description = "Python module for determining appropriate platform-specific dirs";
     homepage = "https://github.com/ActiveState/appdirs";
+    changelog = "https://github.com/ActiveState/appdirs/releases/tag/${version}";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

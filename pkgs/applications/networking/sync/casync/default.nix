@@ -57,6 +57,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Content-Addressable Data Synchronizer";
+    mainProgram = "casync";
     homepage = "https://github.com/systemd/casync";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

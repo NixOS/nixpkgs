@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, buildFHSEnvChroot
+, buildFHSEnv
+, copyDesktopItems
 , fetchurl
 , gsettings-desktop-schemas
 , makeDesktopItem
@@ -10,7 +11,7 @@
 , configText ? ""
 }:
 let
-  version = "2303";
+  version = "2312.1";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -19,17 +20,13 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [
-    "vmware-view"
-    "vmware-usbarbitrator"
-  ];
 
   mainProgram = "vmware-view";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
-  wrapBinCommands = name: ''
-    makeWrapper "$out/bin/${name}" "$out/bin/${name}_wrapper" \
+  wrapBinCommands = path: name: ''
+    makeWrapper "$out/${path}/${name}" "$out/bin/${name}_wrapper" \
     --set GTK_THEME Adwaita \
     --suffix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
     --suffix LD_LIBRARY_PATH : "$out/lib/vmware/view/crtbora:$out/lib/vmware"
@@ -39,14 +36,17 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART24FQ1_LIN_2303_TARBALL/VMware-Horizon-Client-Linux-2303-8.9.0-21435420.tar.gz";
-      sha256 = "a4dcc6afc0be7641e10e922ccbbab0a10adbf8f2a83e4b5372dfba095091fb78";
+      url = "https://download3.vmware.com/software/CART25FQ1_LIN_2312.1_TARBALL/VMware-Horizon-Client-Linux-2312.1-8.12.1-23543969.tar.gz";
+      sha256 = "23d18be2955ba60ab3cca941a529fa3b804af97ebf1602d246ca6147cced8135";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
-      mkdir ext $out
+      mkdir ext
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
-      mv ext/bin ext/lib ext/share "$out"/
+
+      chmod -R u+w ext/usr/lib
+      mv ext/usr $out
+      cp -r ext/lib $out/
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
@@ -54,19 +54,20 @@ let
       # Deleting the bundled library is the simplest way to force it to use our version.
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
-      # This library causes the program to core-dump occasionally. Use ours instead.
-      rm -r $out/lib/vmware/view/crtbora
+      # This bundled version of libpng causes browser issues, and would prevent web-based sign-on.
+      rm "$out/lib/vmware/libpng16.so.16"
 
       # This opensc library is required to support smartcard authentication during the
       # initial connection to Horizon.
       mkdir $out/lib/vmware/view/pkcs11
       ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
-      ${lib.concatMapStrings wrapBinCommands bins}
+      ${wrapBinCommands "bin" "vmware-view"}
+      ${wrapBinCommands "lib/vmware/view/usb" "vmware-usbarbitrator"}
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSEnvChroot {
+  vmwareFHSUserEnv = name: buildFHSEnv {
     inherit name;
 
     runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
@@ -76,6 +77,7 @@ let
       atk
       cairo
       dbus
+      file
       fontconfig
       freetype
       gdk-pixbuf
@@ -120,11 +122,6 @@ let
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
-  binLinkCommands = lib.concatMapStringsSep
-    "\n"
-    (bin: "ln -s ${vmwareFHSUserEnv bin}/bin/${bin} $out/bin/")
-    bins;
-
 in
 stdenv.mkDerivation {
   pname = "vmware-horizon-client";
@@ -132,10 +129,16 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [ desktopItem ];
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-    ${binLinkCommands}
+    runHook preInstall
+    mkdir -p $out/bin
+    ln -s ${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view $out/bin/
+    ln -s ${vmwareFHSUserEnv "vmware-usbarbitrator"}/bin/vmware-usbarbitrator $out/bin/
+    runHook postInstall
   '';
 
   unwrapped = vmwareHorizonClientFiles;
@@ -148,6 +151,6 @@ stdenv.mkDerivation {
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ buckley310 ];
+    maintainers = [ ];
   };
 }

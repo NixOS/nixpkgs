@@ -1,29 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, pip
-, pkgs
-, stevedore
-, virtualenv
-, virtualenv-clone
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  pip,
+  pkgs,
+  stevedore,
+  virtualenv,
+  virtualenv-clone,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenvwrapper";
-  version = "4.8.4";
+  version = "6.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51a1a934e7ed0ff221bdd91bf9d3b604d875afbb3aa2367133503fee168f5bfa";
+    hash = "sha256-1Ge+rFpEvgD7XNG88zI5jD2rX7O9OveBXqhrTWuz06Q=";
   };
 
   # pip depend on $HOME setting
   preConfigure = "export HOME=$TMPDIR";
 
-  buildInputs = [ pbr pip pkgs.which ];
-  propagatedBuildInputs = [ stevedore virtualenv virtualenv-clone ];
+  buildInputs = [
+    pbr
+    pip
+    pkgs.which
+  ];
+  propagatedBuildInputs = [
+    stevedore
+    virtualenv
+    virtualenv-clone
+  ];
 
   postPatch = ''
     for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
@@ -45,25 +55,25 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    # This might look like a dirty hack but we can't use the makeWrapper function because
-    # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
-    # aren't normal executables. Instead, the user has to evaluate them.
+        # This might look like a dirty hack but we can't use the makeWrapper function because
+        # the wrapped file were then called via "exec". The virtualenvwrapper shell scripts
+        # aren't normal executables. Instead, the user has to evaluate them.
 
-    for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
-      local wrapper="$out/bin/$file"
-      local wrapped="$out/bin/.$file-wrapped"
-      mv "$wrapper" "$wrapped"
+        for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
+          local wrapper="$out/bin/$file"
+          local wrapped="$out/bin/.$file-wrapped"
+          mv "$wrapper" "$wrapped"
 
-      # WARNING: Don't indent the lines below because that would break EOF
-      cat > "$wrapper" << EOF
-export PATH="${python}/bin:\$PATH"
-export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
-source "$wrapped"
-EOF
+          # WARNING: Don't indent the lines below because that would break EOF
+          cat > "$wrapper" << EOF
+    export PATH="${python}/bin:\$PATH"
+    export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
+    source "$wrapped"
+    EOF
 
-      chmod -x "$wrapped"
-      chmod +x "$wrapper"
-    done
+          chmod -x "$wrapped"
+          chmod +x "$wrapper"
+        done
   '';
 
   meta = with lib; {
@@ -71,5 +81,4 @@ EOF
     homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
     license = licenses.mit;
   };
-
 }

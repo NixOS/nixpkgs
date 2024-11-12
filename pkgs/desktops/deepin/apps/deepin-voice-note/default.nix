@@ -1,77 +1,89 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, qtmultimedia
-, qtwebengine
-, libvlc
-, gst_all_1
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  deepin-movie-reborn,
+  libvlc,
+  gst_all_1,
+  gtest,
 }:
+
 stdenv.mkDerivation rec {
   pname = "deepin-voice-note";
-  version = "5.11.1";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JX4OuVu+5/a3IhkfnvaWVDaKl+xg/8qxlvp9hM0nHNU=";
+    hash = "sha256-GbSYXwJoNfbg+31454GjMbXRqrtk2bSZJCk18ILfAn4=";
   };
 
+  patches = [ ./use_v23_dbus_interface.diff ];
+
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/usr" "$out"
     substituteInPlace src/common/audiowatcher.cpp \
       --replace "/usr/share" "$out/share"
-    substituteInPlace assets/deepin-voice-note.desktop \
-      --replace "/usr/bin" "$out/bin"
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    dtkwidget
-    qt5integration
-    qt5platform-plugins
-    dde-qt-dbus-factory
-    qtmultimedia
-    qtwebengine
-    libvlc
-    gtest
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
+      dtkwidget
+      qt5integration
+      qt5platform-plugins
+      dde-qt-dbus-factory
+      deepin-movie-reborn
+      libsForQt5.qtmultimedia
+      libsForQt5.qtwebengine
+      libvlc
+      gtest
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
 
   strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${dde-qt-dbus-factory}/include/libdframeworkdbus-2.0";
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+      ]
+    }"
+  ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple memo software with texts and voice recordings";
+    mainProgram = "deepin-voice-note";
     homepage = "https://github.com/linuxdeepin/deepin-voice-note";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

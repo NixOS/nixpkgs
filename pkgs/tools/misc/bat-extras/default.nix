@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2023.03.21";
+    version = "2024.07.10";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
-      repo   = pname;
+      repo   = "bat-extras";
       rev    = "v${version}";
-      sha256 = "sha256-0Ged4qBeGi0p29unXrnQjoxWc6Fcl2oJThxkfL+t50A=";
+      hash   = "sha256-6IRAKSy5f/WcQZBcJKVSweTjHLznzdxhsyx074bXnUQ=";
       fetchSubmodules = true;
     };
 
@@ -55,7 +55,7 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
-    nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+    nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -86,7 +86,7 @@ let
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ bbigras lilyball ];
+      maintainers = with maintainers; [ bbigras ];
       platforms   = platforms.all;
     };
   };
@@ -94,7 +94,7 @@ let
     name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
-      pname = "${core.pname}-${name}";
+      pname = name;
       inherit (core) version;
 
       src = core;
@@ -112,7 +112,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
-      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+      nativeCheckInputs = [ bat bash fish zsh ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
@@ -133,7 +133,9 @@ let
       # We already patched
       dontPatchShebangs = true;
 
-      inherit (core) meta;
+      meta = core.meta // {
+        mainProgram = name;
+      };
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;
@@ -142,7 +144,7 @@ in
 {
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
-  batman = script "batman" (lib.optionals stdenv.isLinux [ util-linux ]);
+  batman = script "batman" (lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]);
   batpipe = script "batpipe" [ less ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-5IXadb5mjrMwr+L9S1iMN5kba5VGrzYt1p8nBvvLCh4=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "umodbus"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "umodbus" ];
 
   meta = with lib; {
     description = "Implementation of the Modbus protocol";

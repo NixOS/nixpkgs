@@ -1,38 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "sipyco";
-  version = "1.4";
-
-  disabled = pythonOlder "3.7";
+  version = "1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "sipyco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sEYWtp11piUIa8YyuTOdFIIJ2GfcrUb+HEzPVKr4hW8=";
+    hash = "sha256-PPnAyDedUQ7Og/Cby9x5OT9wMkNGTP8GS53V6N/dk4w=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ numpy ];
 
-  pythonImportsCheck = [
-    "sipyco"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "sipyco" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Simple Python Communications - used by the ARTIQ experimental control package";
+    mainProgram = "sipyco_rpctool";
     homepage = "https://github.com/m-labs/sipyco";
     changelog = "https://github.com/m-labs/sipyco/releases/tag/v${version}";
     license = licenses.lgpl3Plus;

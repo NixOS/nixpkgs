@@ -9,6 +9,7 @@
 , wrapGAppsHook4
 , glib
 , granite7
+, gsettings-desktop-schemas
 , gtk4
 , systemd
 , xorg
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-Rfo9Z5rCJgk36Db3ce8dYBJswy8owjvRMrJVB/RfwyI=";
+    sha256 = "sha256-0pXb4GPUThHfe0mCqoYuQzMgRCeejsEI3fK7PxjrtJM=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     granite7
+    gsettings-desktop-schemas
     gtk4
     systemd
     xorg.libX11

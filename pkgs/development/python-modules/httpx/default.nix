@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, brotli
-, brotlicffi
-, buildPythonPackage
-, certifi
-, chardet
-, click
-, fetchFromGitHub
-, h2
-, hatch-fancy-pypi-readme
-, hatchling
-, httpcore
-, isPyPy
-, multipart
-, pygments
-, python
-, pythonOlder
-, rfc3986
-, rich
-, sniffio
-, socksio
-, pytestCheckHook
-, pytest-asyncio
-, pytest-trio
-, trustme
-, uvicorn
+{
+  lib,
+  stdenv,
+  anyio,
+  brotli,
+  brotlicffi,
+  buildPythonPackage,
+  certifi,
+  chardet,
+  click,
+  fetchFromGitHub,
+  h2,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpcore,
+  idna,
+  isPyPy,
+  multipart,
+  pygments,
+  python,
+  pythonOlder,
+  rich,
+  sniffio,
+  socksio,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-trio,
+  trustme,
+  uvicorn,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.3";
+  version = "0.27.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,42 +41,36 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
+    hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
   propagatedBuildInputs = [
+    anyio
     certifi
     httpcore
-    rfc3986
+    idna
     sniffio
   ];
 
-  passthru.optional-dependencies = {
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
-    brotli = if isPyPy then [
-      brotlicffi
-    ] else [
-      brotli
-    ];
+  optional-dependencies = {
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
     cli = [
       click
       rich
       pygments
     ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    zstd = [ zstandard ];
   };
 
   # trustme uses pyopenssl
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   nativeCheckInputs = [
     chardet
@@ -83,14 +80,7 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.socks;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
-  '';
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
@@ -98,8 +88,10 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -110,21 +102,18 @@ buildPythonPackage rec {
     "test_sync_proxy_close"
   ];
 
-  disabledTestPaths = [
-    "tests/test_main.py"
-  ];
+  disabledTestPaths = [ "tests/test_main.py" ];
 
-  pythonImportsCheck = [
-    "httpx"
-  ];
+  pythonImportsCheck = [ "httpx" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
-    description = "The next generation HTTP client";
+    description = "Next generation HTTP client";
+    mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

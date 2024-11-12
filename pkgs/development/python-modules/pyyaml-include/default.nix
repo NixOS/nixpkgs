@@ -1,30 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
-, setuptools-scm-git-archive
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyyaml-include";
-  version = "1.3";
+  version = "1.3.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9/vrjnG1C+Dm4HRy98edv7GhW63pyToHg2n/SeV+Z3E=";
+  src = fetchFromGitHub {
+    owner = "tanbro";
+    repo = "pyyaml-include";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xsNMIEBYqMVQp+H8R7XpFCwROXA8I6bFvAuHrRvC+DI=";
   };
 
   nativeBuildInputs = [
-    pyyaml
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
-    toml
+    wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ pyyaml ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yamlinclude" ];
 
@@ -32,6 +37,6 @@ buildPythonPackage rec {
     description = "Extending PyYAML with a custom constructor for including YAML files within YAML files";
     homepage = "https://github.com/tanbro/pyyaml-include";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

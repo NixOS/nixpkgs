@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, jaraco_text
-, jaraco_collections
-, keyring
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  aiosmtpd,
+  jaraco-text,
+  jaraco-collections,
+  keyring,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-email";
-  version = "3.1.0";
+  version = "3.1.1";
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.email";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MR/SX5jmZvEMULgvQbh0JBZjIosNCPWl1wvEoJbdw4Y=";
+    hash = "sha256-2dU+tbrP86Oy8ej1Xa0+fNRB83tGBTUsOWbZyQsMKu8=";
   };
 
   nativeBuildInputs = [
@@ -31,19 +32,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
-    jaraco_text
-    jaraco_collections
+    aiosmtpd
+    jaraco-text
+    jaraco-collections
     keyring
   ];
 
   pythonImportsCheck = [ "jaraco.email" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/jaraco/jaraco.email/blob/${src.rev}/CHANGES.rst";

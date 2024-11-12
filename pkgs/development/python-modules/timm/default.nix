@@ -1,32 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, expecttest
-, pytest-timeout
-, huggingface-hub
-, pyyaml
-, safetensors
-, torch
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  huggingface-hub,
+  pyyaml,
+  safetensors,
+  torch,
+  torchvision,
+
+  # checks
+  expecttest,
+  pytestCheckHook,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "0.9.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gYrc8ds6urZvwDsTnzPjxjSTiAGzUD3RlCf0wogCrDI=";
+    hash = "sha256-+e4+k1Oyxf94rLsOTWfMl5YWTteXgSoecvbyxL348kg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ pdm-backend ];
+
+  dependencies = [
     huggingface-hub
     pyyaml
     safetensors
@@ -40,9 +47,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTestPaths = [
     # Takes too long and also tries to download models
@@ -59,11 +64,11 @@ buildPythonPackage rec {
     "timm.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch image models, scripts, and pretrained weights";
     homepage = "https://huggingface.co/docs/timm/index";
     changelog = "https://github.com/huggingface/pytorch-image-models/blob/v${version}/README.md#whats-new";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -8,6 +8,7 @@
 , qtbase
 , qtdeclarative
 , qttools
+, qtwayland
 , qtsvg
 , zlib
 , zstd
@@ -15,18 +16,18 @@
 }:
 
 let
-  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools ];
+  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools qtwayland ];
 in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zrDka6yXJ++UuGFepn8glQ1r7ufBcjsnNZuH+jnkJw0=";
+    sha256 = "sha256-cFS1OSYfGMsnw+VkZD/HO4+D+pxNKuifWjNhy0FoxN0=";
   };
 
   nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
       bsd2	# libtiled and tmxviewer
       gpl2Plus	# all the rest
     ];
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir ryan4yin ];
     platforms = platforms.linux;
   };
 }

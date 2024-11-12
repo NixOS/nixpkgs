@@ -1,53 +1,47 @@
-{ lib
-, stdenv
-, cython
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  cython,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.64.0";
-  format = "pyproject";
+  version = "0.136.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-u9MZoJyTmbUBeFbsw2EtwfNDzXKAZOwNc+4TanbQg3A=";
+    hash = "sha256-q1Dk2lUiChjDFJeRCUqkPAIO1I+PsnvuLSx6UgXHPU4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];
-
-  preCheck = ''
-    sed -i '/addopts/d' pyproject.toml
-  '';
 
   disabledTests = [
     # OSError: [Errno 19] No such device
@@ -66,9 +60,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

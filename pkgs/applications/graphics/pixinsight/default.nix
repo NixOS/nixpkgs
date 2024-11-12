@@ -1,18 +1,59 @@
-{ stdenv, lib, requireFile, wrapQtAppsHook, autoPatchelfHook, makeWrapper, unixtools, fakeroot
-, mailcap, libGL, libpulseaudio, alsa-lib, nss, gd, gst_all_1, nspr, expat, fontconfig
-, dbus, glib, zlib, openssl, libdrm, cups, avahi-compat, xorg, wayland, libudev0-shim
-# Qt 5 subpackages
-, qtbase, qtgamepad, qtserialport, qtserialbus, qtvirtualkeyboard, qtmultimedia, qt3d, mlt
+{ stdenv
+, lib
+, requireFile
+, wrapQtAppsHook
+, autoPatchelfHook
+, unixtools
+, fakeroot
+, mailcap
+, libGL
+, libpulseaudio
+, alsa-lib
+, nss
+, gd
+, gst_all_1
+, nspr
+, expat
+, fontconfig
+, dbus
+, glib
+, zlib
+, openssl
+, libdrm
+, cups
+, avahi-compat
+, xorg
+, wayland
+, libudev0-shim
+, bubblewrap
+, libjpeg8
+, gdk-pixbuf
+, gtk3
+, pango
+  # Qt 6 subpackages
+, qtbase
+, qtserialport
+, qtserialbus
+, qtvirtualkeyboard
+, qtmultimedia
+, qt3d
+, mlt
+, qtlocation
+, qtwebengine
+, qtquick3d
+, qtwayland
+, qtwebview
+, qtscxml
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixinsight";
-  version = "1.8.9-1";
+  version = "1.8.9-3-20240625";
 
   src = requireFile rec {
-    name = "PI-linux-x64-${version}-20220518-c.tar.xz";
+    name = "PI-linux-x64-${finalAttrs.version}-c.tar.xz";
     url = "https://pixinsight.com/";
-    sha256 = "sha256-AVeDJ7YYqCo7KfelUUQurjglNnTwCf0pOzJCV/bQrrw=";
+    hash = "sha256-jqp5pt+fC7QvENCwRjr7ENQiCZpwNhC5q76YdzRBJis=";
     message = ''
       PixInsight is available from ${url} and requires a commercial (or trial) license.
       After a license has been obtained, PixInsight can be downloaded from the software distribution
@@ -30,10 +71,11 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     mailcap
     libudev0-shim
+    bubblewrap
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     stdenv.cc
     libGL
     libpulseaudio
@@ -53,15 +95,25 @@ stdenv.mkDerivation rec {
     wayland
     cups
     avahi-compat
+    libjpeg8
+    gdk-pixbuf
+    gtk3
+    pango
     # Qt stuff
     qt3d
     mlt
     qtbase
-    qtgamepad
+    #qtgamepad
     qtserialport
     qtserialbus
     qtvirtualkeyboard
     qtmultimedia
+    qtlocation
+    qtwebengine
+    qtquick3d
+    qtwayland
+    qtwebview
+    qtscxml
   ] ++ (with xorg; [
     libX11
     libXdamage
@@ -71,12 +123,13 @@ stdenv.mkDerivation rec {
     libXext
     libXfixes
     libXrandr
+    libxkbfile
   ]);
 
   postPatch = ''
     patchelf ./installer \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${stdenv.cc.cc.lib}/lib
+      --set-rpath ${lib.getLib stdenv.cc.cc}/lib
   '';
 
   dontConfigure = true;
@@ -85,9 +138,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/opt/PixInsight $out/share/{applications,mime/packages,icons/hicolor}
 
-    fakeroot script -ec "./installer \
+    bwrap --bind /build /build --bind $out/opt /opt --bind /nix /nix --dev /dev fakeroot script -ec "./installer \
       --yes \
-      --install-dir=$out/opt/PixInsight \
       --install-desktop-dir=$out/share/applications \
       --install-mime-dir=$out/share/mime \
       --install-icons-dir=$out/share/icons/hicolor \
@@ -96,6 +148,11 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/opt/PixInsight-old-0
     ln -s $out/opt/PixInsight/bin/PixInsight $out/bin/.
+    ln -s $out/opt/PixInsight/bin/lib $out/lib
+
+    # Remove signatures of plugins, as they are only working if actually installed
+    # under /opt. In the Nix setup, they are causing trouble.
+    find $out/opt/PixInsight/ -name "*.xsgn" -exec rm {} \;
   '';
 
   # Some very exotic Qt libraries are not available in nixpkgs
@@ -117,7 +174,7 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
   postFixup = ''
-    wrapProgram $out/opt/PixInsight/bin/PixInsight ${builtins.toString qtWrapperArgs}
+    wrapProgram $out/opt/PixInsight/bin/PixInsight ${builtins.toString finalAttrs.qtWrapperArgs}
   '';
 
   meta = with lib; {
@@ -127,7 +184,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.sheepforce ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     mainProgram = "PixInsight";
   };
-}
+})

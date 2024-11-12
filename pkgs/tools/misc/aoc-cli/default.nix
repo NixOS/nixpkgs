@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   cargoHash = "sha256-EluP4N3UBQeEKVdHTs4O0THXji+nAyE52nGKsxA3AA4=";
 
@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/scarvalhojr/aoc-cli/";
     license = licenses.mit;
     maintainers = with maintainers; [ jordanisaacs ];
+    mainProgram = "aoc";
   };
 }

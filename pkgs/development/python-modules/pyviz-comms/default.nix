@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, param
-, panel
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  param,
+  panel,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "Launch jobs, organize the output, and dissect the results";
     homepage = "https://pyviz.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

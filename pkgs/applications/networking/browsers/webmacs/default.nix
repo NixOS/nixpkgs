@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivationWith
 , fetchFromGitHub
 , python3Packages
@@ -6,6 +7,8 @@
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
+  inherit stdenv;
+
   pname = "webmacs";
   version = "0.8";
 
@@ -57,6 +60,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Keyboard-based web browser with Emacs/conkeror heritage";
+    mainProgram = "webmacs";
     longDescription = ''
       webmacs is yet another browser for keyboard-based web navigation.
 

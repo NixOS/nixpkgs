@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
     rev = version;
-    sha256 = "sha256-09zN6OVqVohk153gqXy6C0uHcBhZX2JJL4d6f4BU4Lg=";
+    sha256 = "sha256-7dgckFscyms+HW3xrsr3+lMua/H82U2jLkm/OKw3YWE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

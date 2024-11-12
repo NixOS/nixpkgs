@@ -8,7 +8,7 @@
 # special snowflake due to different authors writing in different times.]
 #
 # The second goal is consistency across each stdenv's stage functions. By
-# writing each stage it terms of the previous stage, commonalities between them
+# writing each stage in terms of the previous stage, commonalities between them
 # are more easily observable. [Before, there usually was a big attribute set
 # with each stage, and stages would access the previous stage by name.]
 #
@@ -130,7 +130,7 @@ stageFuns: let
         # code here, we'll cause an infinite recursion. Since a set with
         # clang as its default compiler always means libc++, we can infer this
         # decision statically.
-        then buildPackages.llvmPackages.libcxxClang
+        then buildPackages.pkgsBuildTarget.llvmPackages.libcxxClang
         else buildPackages.gcc
       else
         # This will blow up if anything uses it, but that's OK. The `if

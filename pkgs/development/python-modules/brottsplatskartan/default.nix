@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "brottsplatskartan";
   version = "1.0.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "chrillux";
@@ -20,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

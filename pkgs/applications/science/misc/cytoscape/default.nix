@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
-  version = "3.10.0";
+  version = "3.10.3";
 
   src = fetchurl {
     url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
-    sha256 = "sha256-xfEVNOXptMpcrisr+a62JruXki1V0YjA/j4US7X8mXA=";
+    sha256 = "sha256-62i3F6uGNoC8z55iUIYQDAimWcQocsZ52USdpruZRLQ=";
   };
 
   patches = [
@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.cytoscape.org";
-    description = "A general platform for complex network analysis and visualization";
+    description = "General platform for complex network analysis and visualization";
+    mainProgram = "cytoscape";
     license = lib.licenses.lgpl21;
     maintainers = [lib.maintainers.mimame];
     platforms = lib.platforms.unix;

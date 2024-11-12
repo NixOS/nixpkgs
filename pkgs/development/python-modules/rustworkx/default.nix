@@ -1,48 +1,66 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, cargo
-, rustPlatform
-, rustc
-, setuptools-rust
-, numpy
-, fixtures
-, networkx
-, libiconv
-, stdenv
-, lib
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools,
+  setuptools-rust,
+  numpy,
+  fixtures,
+  networkx,
+  testtools,
+  libiconv,
+  stdenv,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rustworkx";
-  version = "0.12.1";
+  version = "0.15.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
-    repo = pname;
+    repo = "rustworkx";
     rev = version;
-    hash = "sha256-d/KCxhJdyzhTjwJZ+GsXJE4ww30iPaXcPngpCi4hBZw=";
+    hash = "sha256-0WYgShihTBM0e+MIhON0dnhZug6l280tZcVp3KF1Jq0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-imhiPj763iumRQb+oeBOpICD1nCvzZx+3yQWu1QRRQQ=";
+    hash = "sha256-AgHfCKLna30WERAFGEs8yRxxZHwvLzR+/S+ivwKHXXE=";
   };
 
   nativeBuildInputs = [
-    setuptools-rust
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
 
-  buildInputs = [ numpy ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
 
-  checkInputs = [ fixtures networkx ];
+  buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  nativeCheckInputs = [
+    fixtures
+    networkx
+    pytestCheckHook
+    testtools
+  ];
+
+  preCheck = ''
+    rm -r rustworkx
+  '';
 
   pythonImportsCheck = [ "rustworkx" ];
 
   meta = with lib; {
-    description = "A high performance Python graph library implemented in Rust.";
+    description = "High performance Python graph library implemented in Rust";
     homepage = "https://github.com/Qiskit/rustworkx";
     license = licenses.asl20;
     maintainers = with maintainers; [ raitobezarius ];

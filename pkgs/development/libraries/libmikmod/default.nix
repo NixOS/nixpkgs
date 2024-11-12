@@ -13,21 +13,22 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ]
-    ++ optional stdenv.isLinux alsa-lib
-    ++ optional stdenv.isDarwin CoreAudio;
+    ++ optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ optional stdenv.hostPlatform.isDarwin CoreAudio;
   propagatedBuildInputs =
-    optional stdenv.isLinux libpulseaudio;
+    optional stdenv.hostPlatform.isLinux libpulseaudio;
 
   outputs = [ "out" "dev" "man" ];
 
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lasound";
+  NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
 
   postInstall = ''
     moveToOutput bin/libmikmod-config "$dev"
   '';
 
   meta = with lib; {
-    description = "A library for playing tracker music module files";
+    description = "Library for playing tracker music module files";
+    mainProgram = "libmikmod-config";
     homepage    = "https://mikmod.shlomifish.org/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ astsmtl lovek323 ];

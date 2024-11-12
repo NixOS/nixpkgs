@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "rpdb";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,5 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tamentis/rpdb";
     license = licenses.bsd2;
   };
-
 }

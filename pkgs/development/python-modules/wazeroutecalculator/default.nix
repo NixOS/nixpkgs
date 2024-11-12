@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # there are no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "WazeRouteCalculator"
-  ];
+  pythonImportsCheck = [ "WazeRouteCalculator" ];
 
   meta = with lib; {
     description = "Calculate actual route time and distance with Waze API";

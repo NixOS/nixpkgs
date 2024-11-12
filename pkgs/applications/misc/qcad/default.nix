@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
@@ -14,18 +13,19 @@
 , qtsvg
 , qtxmlpatterns
 , qtmacextras
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.28.1.0";
+  version = "3.31.1.2";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-NizAUyj6YbfjxXDQkVaqzkp11WMJlt4FMr72i3Cn564=";
+    hash = "sha256-lTe/XCW/qUARfIpcps1RMjubLiIR7cvYMZ0XgebaDrk=";
   };
 
   patches = [
@@ -47,6 +47,7 @@ mkDerivation rec {
     pkg-config
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,7 +58,7 @@ mkDerivation rec {
     qtscript
     qtsvg
     qtxmlpatterns
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
@@ -65,23 +66,23 @@ mkDerivation rec {
     "MUPARSER_DIR=${muparser}"
     "INSTALLROOT=$(out)"
     "BOOST_DIR=${boost.dev}"
+    "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
-  qtWrapperArgs =
-    lib.optionals stdenv.isLinux [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ]
-    ++
-    lib.optionals stdenv.isDarwin [ "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ];
 
   installPhase = ''
     runHook preInstall
-
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
-  '' +
-  ''
+  '' + ''
     install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
@@ -121,11 +122,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ yvesf ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "qcad";
+    maintainers = with lib.maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
   };
 }
