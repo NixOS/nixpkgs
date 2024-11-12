@@ -81,5 +81,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       fab
     ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
