@@ -1,22 +1,22 @@
 {
   lib,
   findutils,
-  mkShell,
   nodejs_latest,
   parallel,
   rsync,
   watchexec,
   writeShellScriptBin,
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
-  buildArgs,
+  buildArgs ? "",
   # what path to open a browser at
-  open,
+  open ? "/index.html",
 }:
 let
   inherit (nodejs_latest.pkgs) live-server;
 
-  error_page = writeShellScriptBin "error_page" ''
-    echo "<!DOCTYPE html>
+  error-page = writeShellScriptBin "error-page" ''
+    cat << EOF
+    <!DOCTYPE html>
     <html>
     <head>
       <style>
@@ -26,7 +26,8 @@ let
       </style>
     </head>
     <body><pre>$1</pre></body>
-    </html>"
+    </html>
+    EOF
   '';
 
   # The following would have been simpler:
@@ -38,7 +39,7 @@ let
   # Using rsync here, instead of `cp`, to get as close to an atomic
   # directory copy operation as possible. `--delay-updates` should
   # also go towards that.
-  build_and_copy = writeShellScriptBin "build_and_copy" ''
+  build-and-copy = writeShellScriptBin "build-and-copy" ''
     set -euxo pipefail
 
     set +e
@@ -49,7 +50,7 @@ let
     if [ $exit_status -eq 0 ];
     then
       # setting permissions to be able to clean up
-      ${lib.getBin rsync}/bin/rsync \
+      ${lib.getExe rsync} \
         --recursive \
         --chmod=u=rwX \
         --delete-before \
@@ -58,10 +59,10 @@ let
         $serve/
     else
       set +x
-      ${lib.getBin error_page}/bin/error_page "$stderr" > $error_page_absolute
+      ${lib.getExe error-page} "$stderr" > $error_page_absolute
       set -x
 
-      ${lib.getBin findutils}/bin/find $serve \
+      ${lib.getExe findutils} $serve \
         -type f \
         ! -name $error_page_relative \
         -delete
@@ -72,20 +73,20 @@ let
   watcher = writeShellScriptBin "watcher" ''
     set -euxo pipefail
 
-    ${lib.getBin watchexec}/bin/watchexec \
+    ${lib.getExe watchexec} \
       --shell=none \
       --restart \
       --print-events \
-      ${lib.getBin build_and_copy}/bin/build_and_copy
+      ${lib.getExe build-and-copy}
   '';
 
-  # A Rust alternative to live-server exists, but it was not in nixpkgs.
+  # A Rust alternative to live-server exists, but it fails to open the temporary directory.
   # `--no-css-inject`: without this it seems that only CSS is auto-reloaded.
   # https://www.npmjs.com/package/live-server
   server = writeShellScriptBin "server" ''
     set -euxo pipefail
 
-    ${lib.getBin live-server}/bin/live-server \
+    ${lib.getExe' live-server "live-server"} \
       --host=127.0.0.1 \
       --verbose \
       --no-css-inject \
@@ -93,34 +94,29 @@ let
       --open=${open} \
       $serve
   '';
-
-  devmode = writeShellScriptBin "devmode" ''
-    set -euxo pipefail
-
-    function handle_exit {
-      rm -rf "$tmpdir"
-    }
-
-    tmpdir=$(mktemp -d)
-    trap handle_exit EXIT
-
-    export out_link="$tmpdir/result"
-    export serve="$tmpdir/serve"
-    mkdir $serve
-    export error_page_relative=error.html
-    export error_page_absolute=$serve/$error_page_relative
-    ${lib.getBin error_page}/bin/error_page "building …" > $error_page_absolute
-
-    ${lib.getBin parallel}/bin/parallel \
-      --will-cite \
-      --line-buffer \
-      --tagstr '{/}' \
-      ::: \
-      "${lib.getBin watcher}/bin/watcher" \
-      "${lib.getBin server}/bin/server"
-  '';
 in
-mkShell {
-  name = "web-devmode";
-  packages = [ devmode ];
-}
+writeShellScriptBin "devmode" ''
+  set -euxo pipefail
+
+  function handle_exit {
+    rm -rf "$tmpdir"
+  }
+
+  tmpdir=$(mktemp -d)
+  trap handle_exit EXIT
+
+  export out_link="$tmpdir/result"
+  export serve="$tmpdir/serve"
+  mkdir $serve
+  export error_page_relative=error.html
+  export error_page_absolute=$serve/$error_page_relative
+  ${lib.getExe error-page} "building …" > $error_page_absolute
+
+  ${lib.getExe parallel} \
+    --will-cite \
+    --line-buffer \
+    --tagstr '{/}' \
+    ::: \
+    "${lib.getExe watcher}" \
+    "${lib.getExe server}"
+''

@@ -1616,6 +1616,7 @@ with pkgs;
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
+    inherit (darwin) autoSignDarwinBinariesHook;
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks)
       Cocoa
@@ -10514,9 +10515,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
-  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
+  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix { };
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
