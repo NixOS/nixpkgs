@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pixel™ phone flashing GUI utility with features";
     homepage = "https://github.com/badabing2005/PixelFlasher";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ cjshearer ];
+    maintainers = with lib.maintainers; [
+      cjshearer
+      samueltardieu
+    ];
     mainProgram = "pixelflasher";
     platforms = lib.platforms.all;
   };
