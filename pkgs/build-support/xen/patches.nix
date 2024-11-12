@@ -153,4 +153,17 @@ in
     cve = [ "CVE-2024-45817" ];
     hash = "sha256-01lzjaT2f69UfEdTUCkm92DDOmd+Mo8sNPZsHJfgJEM=";
   };
+  "XSA_464" = xsaPatch {
+    id = "464";
+    title = "libxl leaks data to PVH guests via ACPI tables";
+    description = ''
+      PVH guests have their ACPI tables constructed by the toolstack.  The
+      construction involves building the tables in local memory, which are
+      then copied into guest memory.  While actually used parts of the local
+      memory are filled in correctly, excess space that is being allocated is
+      left with its prior contents.
+    '';
+    cve = [ "CVE-2024-45819" ];
+    hash = "sha256-oQa4NuX4Y1hhfnqHV6kvsJZiQ/NAz/WwO0Kidbcyayc=";
+  };
 }
