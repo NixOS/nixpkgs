@@ -8,8 +8,8 @@ let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "sha256-2L7+k/tgI6trkstDTY4xxfFzmNDlxbCHDRKAFaERQeM=";
-  version = "5.0a";
+  hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
+  version = "5.2";
 
   inherit (kernel) stdenv;
 
@@ -17,7 +17,7 @@ let
   stapBuild = stdenv.mkDerivation {
     pname = "systemtap";
     inherit version;
-    src = fetchgit { inherit url rev sha256; };
+    src = fetchgit { inherit url rev hash; };
     nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
     buildInputs = [ elfutils gettext python3 ];
     enableParallelBuilding = true;
