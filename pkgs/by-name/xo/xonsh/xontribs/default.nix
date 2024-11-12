@@ -6,4 +6,5 @@
   xontrib-abbrevs = callPackage ./xontrib-abbrevs { };
   xontrib-bashisms = callPackage ./xontrib-bashisms { };
   xontrib-debug-tools = callPackage ./xontrib-debug-tools { };
+  xontrib-distributed = callPackage ./xontrib-distributed { };
 }
