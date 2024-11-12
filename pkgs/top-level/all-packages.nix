@@ -1250,9 +1250,7 @@ with pkgs;
 
   gita = python3Packages.callPackage ../applications/version-management/gita { };
 
-  gitoxide = darwin.apple_sdk_11_0.callPackage ../applications/version-management/gitoxide {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
-  };
+  gitoxide = callPackage ../applications/version-management/gitoxide { };
 
   github-cli = gh;
   git-absorb = callPackage ../applications/version-management/git-absorb {
