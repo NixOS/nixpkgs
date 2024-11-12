@@ -26,6 +26,7 @@
   scons,
   speechd-minimal,
   stdenv,
+  testers,
   udev,
   vulkan-loader,
   wayland,
@@ -58,7 +59,7 @@ let
 
   arch = stdenv.hostPlatform.linuxArch;
 
-  attrs = rec {
+  attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
     version = "4.3-stable";
     commitHash = "77dcf97d82cbfe4e4615475fa52ca03da645dbd8";
@@ -223,6 +224,13 @@ let
         runHook postInstall
       '';
 
+    passthru.tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = lib.replaceStrings [ "-" ] [ "." ] version;
+      };
+    };
+
     meta = {
       changelog = "https://github.com/godotengine/godot/releases/tag/${version}";
       description = "Free and Open Source 2D and 3D game engine";
@@ -242,7 +250,6 @@ let
 
 in
 stdenv.mkDerivation (
-  finalAttrs:
   if withMono then
     dotnetCorePackages.addNuGetDeps {
       nugetDeps = ./deps.nix;
@@ -252,7 +259,7 @@ stdenv.mkDerivation (
           old.buildInputs
           ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_8.targetPackages));
       };
-    } attrs finalAttrs
+    } attrs
   else
     attrs
 )
