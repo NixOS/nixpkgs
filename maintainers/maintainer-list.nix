@@ -1834,6 +1834,12 @@
     githubId = 10587952;
     name = "Armijn Hemel";
   };
+  arminius-smh = {
+    email = "armin@sprejz.de";
+    github = "arminius-smh";
+    githubId = 159054879;
+    name = "Armin Manfred Sprejz";
+  };
   arnarg = {
     email = "arnarg@fastmail.com";
     github = "arnarg";
