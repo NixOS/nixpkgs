@@ -18,7 +18,6 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
   pythonOlder,
 }:
 
@@ -50,7 +49,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest-cov
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
