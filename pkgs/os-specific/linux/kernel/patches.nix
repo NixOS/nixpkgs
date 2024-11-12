@@ -29,6 +29,11 @@
     };
   };
 
+  vm_tools_semicolon =
+    { name = "vm-tools-semicolon";
+      patch = ./vm-tools-semicolon;
+    };
+
   request_key_helper =
     { name = "request-key-helper";
       patch = ./request-key-helper.patch;

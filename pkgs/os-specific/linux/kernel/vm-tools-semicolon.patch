@@ -1,0 +1,36 @@
+From 2c52c5ce71e7156edd9cba486370e5bab59e3fe3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Motiejus=20Jak=C5=A1tys?= <motiejus@jakstys.lt>
+Date: Tue, 12 Nov 2024 18:55:23 +0200
+Subject: [PATCH] tools/mm: fix compile error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Not much to be said here, add a missing semicolon.
+
+Fixes: ece5897e5a10 ("tools/mm: -Werror fixes in page-types/slabinfo")
+Closes: https://github.com/NixOS/nixpkgs/issues/355369
+Signed-off-by: Motiejus Jakštys <motiejus@jakstys.lt>
+Cc: <stable@vger.kernel.org>
+---
+ tools/mm/page-types.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/mm/page-types.c b/tools/mm/page-types.c
+index 6eb17cc1a06c..bcac7ebfb51f 100644
+--- a/tools/mm/page-types.c
++++ b/tools/mm/page-types.c
+@@ -420,7 +420,7 @@ static void show_page(unsigned long voffset, unsigned long offset,
+ 	if (opt_file)
+ 		printf("%lx\t", voffset);
+ 	if (opt_list_cgroup)
+-		printf("@%" PRIu64 "\t", cgroup)
++		printf("@%" PRIu64 "\t", cgroup);
+ 	if (opt_list_mapcnt)
+ 		printf("%" PRIu64 "\t", mapcnt);
+ 
+
+base-commit: 2d5404caa8c7bb5c4e0435f94b28834ae5456623
+-- 
+2.44.2
+
