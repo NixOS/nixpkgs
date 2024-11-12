@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     description = "Linux System call fuzz tester";
