@@ -6,7 +6,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "0.2.0";
+  version = "0.2.1";
 
   pname = "lunarml";
 
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "minoki";
     repo = "LunarML";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-w0DWvFegAdpJTab60cDLA+tketmMYeKApx1rCNr27i4=";
+    hash = "sha256-wNcsvtIR/MbvwAIhybc7zzbS+RgfwndQ1jdDVdte+44=";
   };
 
   outputs = [ "out" "doc" ];
