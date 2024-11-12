@@ -8,7 +8,6 @@
   curl,
   fetchFromGitHub,
   ffmpeg,
-  freeimage,
   hicolor-icon-theme,
   icu,
   libmediainfo,
@@ -59,7 +58,6 @@ mkDerivation rec {
     cryptopp
     curl
     ffmpeg
-    freeimage
     hicolor-icon-theme
     icu
     libmediainfo
@@ -82,7 +80,6 @@ mkDerivation rec {
   ];
 
   patches = [
-    ./010-megasync-freeimage-remove-obsolete-ffmpeg-macros.patch
     ./020-megasync-sdk-fix-cmake-dependencies-detection.patch
     ./030-megasync-app-fix-cmake-dependencies-detection.patch #Thanks Arch Linux
     ./040-megasync-fix-cmake-install-bindir.patch
@@ -99,8 +96,8 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_MODULE_PATH:PATH=${src}/src/MEGASync/mega/contrib/cmake/modules/packages"
-    "-Wno-dev"
-    "-DUSE_PDFIUM=FALSE" # PDFIUM is not in nixpkgs
+    (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
+    (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
   ];
 
   meta = with lib; {
