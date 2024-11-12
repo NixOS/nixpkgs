@@ -4,14 +4,14 @@
 , elfutils
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libsystemtap";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
-    rev = "release-5.1";
-    hash = "sha256-3rhDllsgYGfh1gb5frUrlkzdz57A6lcvBELtgvb5Q7M=";
+    rev = "release-${version}";
+    hash = "sha256-SUPNarZW8vdK9hQaI2kU+rfKWIPiXB4BvJvRNC1T9tU=";
   };
 
   dontBuild = true;
