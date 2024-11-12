@@ -46,16 +46,6 @@
   useBundledLuaJIT ? false,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
-    OpenAL;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
   version = "3.3.3";
@@ -106,15 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-  ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
-  ];
+  ++ lib.optionals spellcheckSupport [ hunspell ];
 
   hardeningDisable = [
     "bindnow"
@@ -161,9 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
-    license = with lib.licenses; [
-      bsd3
-    ];
+    license = with lib.licenses; [ bsd3 ];
     mainProgram = "aegisub";
     maintainers = with lib.maintainers; [ AndersonTorres wegank ];
     platforms = lib.platforms.unix;
