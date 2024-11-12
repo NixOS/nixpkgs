@@ -75,6 +75,7 @@
 let
   # Inherit helper functions from lib and builtins.
   inherit (builtins) elemAt isAttrs;
+  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
   inherit (lib.strings)
     concatLines
     enableFeature
@@ -83,7 +84,6 @@ let
     removeSuffix
     versionOlder
     ;
-  inherit (lib.platforms) linux aarch64;
   inherit (lib) teams;
   inherit (lib.licenses)
     cc-by-40
@@ -207,8 +207,6 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  # TODO: Split $out in $bin for binaries and $lib for libraries.
-  # TODO: Python package to be in separate output/package.
   outputs = [
     "out"
     "man"
@@ -217,7 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  # Main Xen source.
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xen.git";
     inherit rev hash;
@@ -465,8 +462,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mainProgram = "xl";
 
-    #TODO: Migrate meta.platforms to the new lib.systems.inspect.patterns.* format.
-    platforms = linux;
-    badPlatforms = aarch64;
+    platforms = [ isLinux ];
+    badPlatforms = [ isAarch64 ];
   } // meta;
 })
