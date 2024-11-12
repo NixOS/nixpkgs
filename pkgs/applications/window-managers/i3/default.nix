@@ -35,12 +35,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i3";
   version = "4.24";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
+    url = "https://i3wm.org/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-W679Dl548br7eshd7qQrzTy/5l8SeaqW9+SWYWN6yYE=";
   };
 
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddocs=true"
-    "-Dmans=true"
+    (lib.mesonBool "docs" true)
+    (lib.mesonBool "mans" true)
   ];
 
   buildInputs =
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       perlPackages.ExtUtilsPkgConfig
       perlPackages.InlineC
     ]
-    ++ lib.optionals doCheck [
+    ++ lib.optionals finalAttrs.doCheck [
       xorgserver
       xvfb-run
       xdotool
@@ -94,8 +94,6 @@ stdenv.mkDerivation rec {
       which
     ];
 
-  configureFlags = [ "--disable-builddir" ];
-
   postPatch = ''
     patchShebangs .
 
@@ -103,7 +101,7 @@ stdenv.mkDerivation rec {
     # patchShebangs can't replace a shebang in the middle of a file.
     if [ -f testcases/t/318-i3-dmenu-desktop.t ]; then
       substituteInPlace testcases/t/318-i3-dmenu-desktop.t \
-        --replace-fail "#!/usr/bin/env perl" "#!${perl}/bin/perl"
+        --replace-fail "#!/usr/bin/env perl" "#!${lib.getExe perl}"
     fi
   '';
 
@@ -111,6 +109,8 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
+    runHook preCheck
+
     test_failed=
     # "| cat" disables fancy progress reporting which makes the log unreadable.
     ./complete-run.pl -p 1 --keep-xserver-output | cat || test_failed="complete-run.pl returned $?"
@@ -126,6 +126,8 @@ stdenv.mkDerivation rec {
       echo "===== End of test log ====="
       false
     fi
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -143,16 +145,16 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) i3wm;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiling window manager";
     homepage = "https://i3wm.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       modulistic
       fpletz
     ];
     mainProgram = "i3";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
 
     longDescription = ''
       A tiling window manager primarily targeted at advanced users and
@@ -162,5 +164,4 @@ stdenv.mkDerivation rec {
       UTF-8 clean.
     '';
   };
-
-}
+})
