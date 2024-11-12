@@ -6,17 +6,17 @@
 let
   pname = "miru";
   version = "5.5.8";
-  meta = with lib; {
+  meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       d4ilyrun
       matteopacini
     ];
     mainProgram = "miru";
 
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 
     longDescription = ''
