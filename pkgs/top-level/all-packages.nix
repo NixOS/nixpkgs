@@ -16008,7 +16008,7 @@ with pkgs;
   };
 
   torrenttools = callPackage ../tools/misc/torrenttools {
-    fmt = fmt_8;
+    fmt = fmt_9;
   };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
