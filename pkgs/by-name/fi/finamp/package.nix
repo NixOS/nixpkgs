@@ -1,5 +1,5 @@
 { lib
-, flutter324
+, flutter327
 , mpv-unwrapped
 , xdg-user-dirs
 , patchelf
@@ -8,16 +8,16 @@
 , makeDesktopItem
 }:
 let
-  version = "0.9.11-beta";
+  version = "0.9.12-beta";
 in
-flutter324.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-ruHjLM68c/k+Q64eeoezj5gmmniLBAOt3PEmmaO81xo=";
+    hash = "sha256-hY+1BMQEACrpjKZnVwPqWY5M4m4U/Ys/bcqhGMeCE6U=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
