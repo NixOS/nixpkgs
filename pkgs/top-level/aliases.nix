@@ -439,7 +439,7 @@ mapAliases {
   glew-egl = lib.warn "'glew-egl' is now provided by 'glew' directly" glew; # Added 2024-08-11
   glfw-wayland = glfw; # Added 2024-04-19
   glfw-wayland-minecraft = glfw3-minecraft; # Added 2024-05-08
-  globalprotect-openconnect = throw "'globalprotect-openconnect' has been renamed to/replaced by 'gpauth' and 'gpclient'"; # Added 2024-09-21
+  globalprotect-openconnect = throw "'globalprotect-openconnect' has been renamed to/replaced by 'globalprotect-openconnect_2'"; # Added 2024-11-12
   glxinfo = mesa-demos; # Added 2024-07-04
   gmailieer = throw "'gmailieer' has been renamed to/replaced by 'lieer'"; # Converted to throw 2024-10-17
   gnatboot11 = gnat-bootstrap11;
