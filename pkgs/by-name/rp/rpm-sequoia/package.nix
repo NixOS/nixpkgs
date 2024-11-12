@@ -55,13 +55,17 @@ rustPlatform.buildRustPackage rec {
     ''
     +
       # Dependents will rely on the versioned symlinks
-      ''
+      lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         install -d $out/lib
         find target/release/ \
           -maxdepth 1 \
           -type l -name 'librpm_sequoia.*' \
           -exec cp --no-dereference {} $out/lib/ \;
-      '';
+      ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install -d $out/lib
+      ln -s librpm_sequoia.dylib $out/lib/librpm_sequoia.${version}.dylib
+    '';
 
   passthru.updateScript = nix-update-script { };
 
