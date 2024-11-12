@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withSystemd systemd
     ++ lib.optional tlsSupport openssl;
 
+  strictDeps = true;
+
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile --replace-fail "-flto" ""
   '';
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     # disable test "Connect multiple replicas at the same time": even
     # upstream find this test too timing-sensitive
     substituteInPlace tests/integration/replication.tcl \
-      --replace-fail 'foreach mdl {no yes}' 'foreach mdl {}'
+      --replace-fail 'foreach mdl {no yes} dualchannel {no yes}' 'foreach mdl {} dualchannel {}'
 
     substituteInPlace tests/support/server.tcl \
       --replace-fail 'exec /usr/bin/env' 'exec env'
