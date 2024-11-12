@@ -265,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
     (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
-    (if withIPXE then "--with-system-ipxe=${ipxe}" else "--disable-ipxe")
+    (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];
 
