@@ -69,11 +69,6 @@ let
     };
 in
 {
-  fmt_8 = generic {
-    version = "8.1.1";
-    sha256 = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
-  };
-
   fmt_9 = generic {
     version = "9.1.0";
     sha256 = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
