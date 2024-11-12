@@ -3,7 +3,6 @@
   atk,
   cairo,
   callPackage,
-  darwin,
   fetchFromGitHub,
   gdk-pixbuf,
   glib,
@@ -44,22 +43,14 @@ let
       wrapGAppsHook4
     ];
 
-    buildInputs =
-      [
-        atk
-        cairo
-        gdk-pixbuf
-        glib
-        gtk4
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with darwin.apple_sdk.frameworks;
-        [
-          AppKit
-          Foundation
-        ]
-      );
+    buildInputs = [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk4
+      pango
+    ];
 
     nativeCheckInputs = [ xvfb-run ];
 
@@ -81,9 +72,7 @@ let
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
     '';
 
-    nativeInstallCheckInputs = [
-      versionCheckHook
-    ];
+    nativeInstallCheckInputs = [ versionCheckHook ];
     versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
     versionCheckProgramArg = [ "--version" ];
     doInstallCheck = true;
@@ -93,9 +82,7 @@ let
         package = self;
         command = "czkawka_cli --version";
       };
-      wrapper = callPackage ./wrapper.nix {
-        czkawka = self;
-      };
+      wrapper = callPackage ./wrapper.nix { czkawka = self; };
     };
 
     meta = {
