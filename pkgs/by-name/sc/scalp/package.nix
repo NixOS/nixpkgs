@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchgit
-, cmake
-, withGurobi ? false
-, gurobi
-, withCplex ? false
-, cplex
-, withLpsolve ? true
-, lp_solve
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  withGurobi ? false,
+  gurobi,
+  withCplex ? false,
+  cplex,
+  withLpsolve ? true,
+  lp_solve,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,26 +26,32 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = lib.optionals withGurobi [
-    gurobi
-  ] ++ lib.optionals withCplex [
-    cplex
-  ] ++ lib.optionals withLpsolve [
-    lp_solve
-  ];
+  buildInputs =
+    lib.optionals withGurobi [
+      gurobi
+    ]
+    ++ lib.optionals withCplex [
+      cplex
+    ]
+    ++ lib.optionals withLpsolve [
+      lp_solve
+    ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "\''$ORIGIN" "\''${CMAKE_INSTALL_PREFIX}/lib"
   '';
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=${lib.boolToString doCheck}"
-  ] ++ lib.optionals withGurobi [
-    "-DGUROBI_DIR=${gurobi}"
-  ] ++ lib.optionals withCplex [
-    "-DCPLEX_DIR=${cplex}"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_TESTS=${lib.boolToString doCheck}"
+    ]
+    ++ lib.optionals withGurobi [
+      "-DGUROBI_DIR=${gurobi}"
+    ]
+    ++ lib.optionals withCplex [
+      "-DCPLEX_DIR=${cplex}"
+    ];
 
   doCheck = true;
 
