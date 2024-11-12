@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "9pfs";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "ftrvxmtrx";
     repo = "9pfs";
     rev = version;
-    sha256 = "sha256-ywWG/H2ilt36mjlDSgIzYpardCFXpmbLiml6wy47XuA=";
+    sha256 = "sha256-nlJ4Zh13T78r0Dn3Ky/XLhipeMbMFbn0qGCJnUCBd3Y=";
   };
 
   postPatch = ''
