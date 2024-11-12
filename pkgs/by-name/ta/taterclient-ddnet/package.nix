@@ -27,7 +27,7 @@
   glslang,
   spirv-tools,
   gtest,
-  darwin,
+  apple-sdk_11,
 }:
 let
   clientExecutable = "TaterClient-DDNet";
@@ -80,15 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
       spirv-tools
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Carbon
-        Cocoa
-        OpenGL
-        Security
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+    ];
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
