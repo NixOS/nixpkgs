@@ -35,6 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail "import imp" "import importlib.util" \
+      --replace-fail "imp.find_module" "importlib.util.find_spec" \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
+
   buildInputs = [
     gtk3
     goocanvas2
