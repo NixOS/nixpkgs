@@ -5,7 +5,7 @@
   lib,
   makeDesktopItem,
   nix-update-script,
-  python311,
+  python3,
   stdenv,
   substituteAll,
   wrapGAppsHook3,
@@ -22,9 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5LKvLb7QiHZl80+T3+IcuhLyySkVQJl4E6ItJ8Cmdsw=";
   };
 
+  disabled = python3.pythonOlder "3.11";
+
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = with python311.pkgs; [
+  buildInputs = with python3.pkgs; [
     android-tools
     attrdict
     beautifulsoup4
