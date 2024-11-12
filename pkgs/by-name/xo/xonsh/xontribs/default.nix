@@ -13,4 +13,5 @@ in
   xontrib-fish-completer = callPackage ./xontrib-fish-completer { };
   xontrib-jedi = callPackage ./xontrib-jedi { };
   xontrib-jupyter = callPackage ./xontrib-jupyter { };
+  xontrib-vox = callPackage ./xontrib-vox { };
 }
