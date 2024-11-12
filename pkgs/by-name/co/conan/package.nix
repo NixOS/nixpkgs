@@ -68,6 +68,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "TestFTP"
+    # Unstable test
+    "test_shared_windows_find_libraries"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Rejects paths containing nix
     "test_conditional_os"
