@@ -12504,8 +12504,6 @@ self: super: with self; {
 
   pytablewriter = callPackage ../development/python-modules/pytablewriter { };
 
-  pytado = callPackage ../development/python-modules/pytado { };
-
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
   pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
