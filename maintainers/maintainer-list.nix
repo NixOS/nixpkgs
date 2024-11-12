@@ -2832,6 +2832,12 @@
     githubId = 24254289;
     name = "Payas Relekar";
   };
+  bhasherbel = {
+    email = "nixos.maintainer@bhasher.com";
+    github = "bhasherbel";
+    githubId = 45831883;
+    name = "Brieuc Dubois";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
@@ -5841,7 +5847,7 @@
     name = "Sebastian Krohn";
   };
   drawbu = {
-    email = "clement21.boillot@gmail.com";
+    email = "clement2104.boillot@gmail.com";
     github = "drawbu";
     githubId = 69208565;
     name = "Clément Boillot";
@@ -10940,6 +10946,12 @@
     github = "jtcoolen";
     githubId = 54635632;
     keys = [ { fingerprint = "4C68 56EE DFDA 20FB 77E8  9169 1964 2151 C218 F6F5"; } ];
+  };
+  jthulhu = {
+    name = "Adrien Mathieu";
+    email = "adrien.lc.mathieu@gmail.com";
+    github = "jthulhu";
+    githubId = 23179762;
   };
   jtobin = {
     email = "jared@jtobin.io";
