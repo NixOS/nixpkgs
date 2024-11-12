@@ -9,7 +9,6 @@
 , fetchpatch
 , fetchpatch2
 , runCommand
-, overrideSDK
 , buildPackages
 , Security
 
@@ -210,22 +209,13 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_23";
   };
 
-  nix_2_24 = (common {
+  nix_2_24 = common {
     version = "2.24.10";
     hash = "sha256-XdeVy1/d6DEIYb3nOA6JIYF4fwMKNxtwJMgT3pHi+ko=";
     self_attribute_name = "nix_2_24";
-  }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
-  git = (common rec {
+  git = common rec {
     version = "2.25.0";
     suffix = "pre20241101_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
@@ -235,16 +225,7 @@ in lib.makeExtensible (self: ({
       hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
     };
     self_attribute_name = "git";
-  }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
   latest = self.nix_2_24;
 
