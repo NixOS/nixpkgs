@@ -743,9 +743,9 @@
   },
   "networkcloud": {
     "pname": "networkcloud",
-    "version": "2.0.0b5",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/networkcloud-2.0.0b5-py3-none-any.whl",
-    "hash": "sha256-rHLPxU7TWDTKbNXHJ6D91x5JQ7zWbmXND/YH6K5JXHo=",
+    "version": "2.0.0b6",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/networkcloud-2.0.0b6-py3-none-any.whl",
+    "hash": "sha256-1T+IepVTU7DLHQ7CfcEltQG+/lryktzUFB7RY9O9hzM=",
     "description": "Support for Azure Operator Nexus network cloud commands based on 2024-07-01 API version"
   },
   "new-relic": {
