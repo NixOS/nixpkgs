@@ -23,6 +23,7 @@
   imagemagick,
   libraw,
   libheif,
+  perl,
   vips,
 }:
 let
@@ -188,8 +189,6 @@ buildNpmPackage' {
 
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm -r node_modules/exiftool-vendored.*
-    substituteInPlace node_modules/exiftool-vendored/dist/DefaultExifToolOptions.js \
-      --replace-fail "checkPerl: !(0, IsWin32_1.isWin32)()," "checkPerl: false,"
   '';
 
   installPhase = ''
@@ -212,6 +211,7 @@ buildNpmPackage' {
         lib.makeBinPath [
           exiftool
           jellyfin-ffmpeg
+          perl # exiftool-vendored checks for Perl even if exiftool comes from $PATH
         ]
       }"
 

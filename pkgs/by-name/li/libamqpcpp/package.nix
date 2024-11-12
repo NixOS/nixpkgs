@@ -1,29 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libamqpcpp";
   version = "4.3.27";
 
   src = fetchFromGitHub {
     owner = "CopernicaMarketingSoftware";
     repo = "AMQP-CPP";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iaOXdDIJOBXHyjE07CvU4ApTh71lmtMCyU46AV+MGXQ=";
   };
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ openssl ];
 
   patches = [ ./libamqpcpp-darwin.patch ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
   enableParallelBuilding = true;
+  doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for communicating with a RabbitMQ server";
     homepage = "https://github.com/CopernicaMarketingSoftware/AMQP-CPP";
-    license = licenses.asl20;
-    maintainers = [ maintainers.mjp ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mjp ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,24 +1,36 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.11.0";
+  version = "1.12.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YW3mjYfSuxi/XmaetrWmjVuTfqgaitQ5wfUaJdHIH1Y=";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "dbcli";
+    repo = "litecli";
+    rev = "v${version}";
+    hash = "sha256-TPwzXfb4n6wTe6raQ5IowKdhGkKrf2pmSS2+Q03NKYk=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    cli-helpers
-    click
-    configobj
-    prompt-toolkit
-    pygments
-    sqlparse
+  dependencies =
+    with python3Packages;
+    [
+      cli-helpers
+      click
+      configobj
+      prompt-toolkit
+      pygments
+      sqlparse
+    ]
+    ++ cli-helpers.optional-dependencies.styles;
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
