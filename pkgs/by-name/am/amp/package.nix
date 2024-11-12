@@ -9,7 +9,6 @@
   xorg,
   cmake,
   libgit2,
-  darwin,
   curl,
 }:
 
@@ -33,20 +32,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     python3
   ];
-  buildInputs =
-    [
-      openssl
-      xorg.libxcb
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        curl
-        Security
-        AppKit
-      ]
-    );
+  buildInputs = [
+    openssl
+    xorg.libxcb
+    libgit2
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";
