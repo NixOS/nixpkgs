@@ -10500,9 +10500,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
-  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
+  mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix { };
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
