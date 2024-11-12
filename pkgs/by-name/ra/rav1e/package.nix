@@ -4,15 +4,10 @@
   stdenv,
   rustPlatform,
   fetchCrate,
-  pkg-config,
   cargo-c,
-  darwin,
-  libgit2,
-  libiconv,
   nasm,
   nix-update-script,
   testers,
-  zlib,
   rav1e,
 }:
 
@@ -27,28 +22,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
 
-  depsBuildBuild = [ pkg-config ];
-
   nativeBuildInputs = [
     cargo-c
-    libgit2
     nasm
   ];
 
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  postPatch =
+    ''
+      # remove feature that requires libgit2 and is only used to print a version string
+      substituteInPlace Cargo.toml --replace-fail '"git_version",' ""
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
+      # and linking it with cctools ld64.
+      substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
 
-  # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
-  # and linking it with cctools ld64.
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
-    # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
-    substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
-  '';
+      # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
+      substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
+    '';
 
   checkType = "debug";
 
