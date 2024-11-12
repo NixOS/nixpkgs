@@ -6,7 +6,7 @@
 , double-conversion
 , glog
 , lib
-, fmt_8
+, fmt_9
 , zstd
 , gflags
 , libiberty
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_LDFLAGS = "-lz";
 
   buildInputs = [
-    fmt_8
+    fmt_9
     boost
     double-conversion
     folly

@@ -8,7 +8,7 @@
 , libsodium
 , fizz
 , flex
-, fmt_8
+, fmt_9
 , folly
 , glog
 , gflags
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     boost
     double-conversion
     fizz
-    fmt_8
+    fmt_9
     folly
     glog
     gflags

@@ -4,7 +4,7 @@
 , boost
 , cmake
 , double-conversion
-, fmt_8
+, fmt_9
 , gflags
 , glog
 , libevent
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     xz
     zlib
     libunwind
-    fmt_8
+    fmt_9
     zstd
   ] ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     # folly-config.cmake, will `find_package` these, thus there should be
     # a way to ensure abi compatibility.
     inherit boost;
-    fmt = fmt_8;
+    fmt = fmt_9;
 
     tests = {
       inherit watchman;
