@@ -722,9 +722,9 @@
   },
   "multicloud-connector": {
     "pname": "multicloud-connector",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/multicloud_connector-1.0.0-py3-none-any.whl",
-    "hash": "sha256-8Gb946+K7DwMm5s5GROUciYRkvYvxgB7rB5Y3MRn5t8=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/multicloud_connector-1.0.1-py3-none-any.whl",
+    "hash": "sha256-q5tuqnN94FS1opr9oLx2LHFYuFX6PTDaBmuvrByXTsI=",
     "description": "Microsoft Azure Command-Line Tools MulticloudConnector Extension"
   },
   "neon": {
