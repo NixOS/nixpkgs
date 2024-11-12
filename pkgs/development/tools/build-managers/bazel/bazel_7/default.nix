@@ -251,7 +251,7 @@ let
           lib.fakeHash
         else
           # x86_64-darwin
-          lib.fakeHash;
+          "sha256-VDrqS9YByYxboF6AcjAR0BRZa5ioGgX1pjx09zPfWTE=";
       outputHashAlgo = "sha256";
 
     };
