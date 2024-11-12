@@ -8,7 +8,7 @@
   runCommand,
   installShellFiles,
   python3,
-  writeScriptBin,
+  writeShellScriptBin,
 
   black,
   isort,
@@ -387,7 +387,7 @@ py.pkgs.toPythonApplication (
         inherit (azure-cli) extensions-tool;
       };
 
-      generate-extensions = writeScriptBin "${pname}-update-extensions" ''
+      generate-extensions = writeShellScriptBin "${pname}-update-extensions" ''
         ${lib.getExe azure-cli.extensions-tool} --cli-version ${azure-cli.version} --commit
       '';
 
