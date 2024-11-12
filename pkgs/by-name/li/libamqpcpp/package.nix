@@ -17,8 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-iaOXdDIJOBXHyjE07CvU4ApTh71lmtMCyU46AV+MGXQ=";
   };
 
-  buildInputs = [ openssl ];
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ openssl ];
 
   patches = [ ./libamqpcpp-darwin.patch ];
 
