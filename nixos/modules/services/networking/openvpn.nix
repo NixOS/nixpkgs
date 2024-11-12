@@ -195,7 +195,7 @@ in
           authUserPassFile = mkOption {
             default = null;
             description = ''Specify a file path to use as `auth-user-pass ''${authUserPass}`. File will not be included in the nix store unless you specify it as a path `authUserFile = ./myauthfile`'';
-            type = types.nullOr types.str;
+            type = types.nullOr types.path;
           };
 
           authUserPass = mkOption {
