@@ -15,14 +15,14 @@
 }:
 
 let
-  version = "2.58.3";
+  version = "2.64.1";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-RXcJwGO8OQ38lbuy2uLTSkh6yUbyqY42FpwgMXC3g6c=";
+    hash = "sha256-Wte36HympuOBySj6uoXMAeptU1uZzRnBHEsf2jrDCrM=";
   };
-  goModulesHash = "sha256-gp17dP67HX7Tx3Gq+kEu9xCYkfs/rGpqLFiKT7cKlrc=";
+  goModulesHash = "sha256-X9j+sJEBoEwTF5RIkt2FZAaPEwEKSkaSb+QLceOoXiM=";
 
   buildZitadelProtocGen = name:
     buildGoModule {
@@ -91,7 +91,7 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-KRf11PNn7LtVFjG3NYUtPEJtLNbnxfzR4B69US07B3k=";
+    hash = "sha256-j5SZr1hm1OppNGIjcYjexCEHHOthg2PjzyvqapJdjjg=";
   };
 in
 buildGoModule rec {
