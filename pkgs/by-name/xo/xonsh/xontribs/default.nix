@@ -14,4 +14,5 @@ in
   xontrib-jedi = callPackage ./xontrib-jedi { };
   xontrib-jupyter = callPackage ./xontrib-jupyter { };
   xontrib-vox = callPackage ./xontrib-vox { };
+  xontrib-whole-word-jumping = callPackage ./xontrib-whole-word-jumping { };
 }
