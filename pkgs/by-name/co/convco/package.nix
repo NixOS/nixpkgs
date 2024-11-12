@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, libiconv
-, openssl
-, pkg-config
-, darwin
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  libiconv,
+  openssl,
+  pkg-config,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oQBCPfwlMJ0hLZskv+KUNVBHH550yAUI1jY40Eah3Bc=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   checkFlags = [
     # disable test requiring networking
@@ -36,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hoverbear cafkafk ];
+    maintainers = with maintainers; [
+      hoverbear
+      cafkafk
+    ];
   };
 }
