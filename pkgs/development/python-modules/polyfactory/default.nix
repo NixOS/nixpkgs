@@ -45,6 +45,8 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  pythonImporeCheck = [ "polyfactory" ];
+
   meta = {
     homepage = "https://polyfactory.litestar.dev/";
     platforms = lib.platforms.unix;
