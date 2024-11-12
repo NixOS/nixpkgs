@@ -197,8 +197,8 @@ let
       buildPhase = ''
         runHook preBuild
         export HOME=$(mktemp -d)
-        (cd bazel_src; ${bazelForDeps}/bin/bazel --batch --server_javabase=${runJdk} mod deps --curses=no;
-        ${bazelForDeps}/bin/bazel --batch --server_javabase=${runJdk} vendor src:bazel_nojdk \
+        (cd bazel_src; ${bazelForDeps}/bin/bazel --batch --toolchain_resolution_debug --server_javabase=${runJdk} mod deps --curses=no;
+        ${bazelForDeps}/bin/bazel --batch --toolchain_resolution_debug --server_javabase=${runJdk} vendor src:bazel_nojdk \
         --curses=no \
         --vendor_dir ../vendor_dir \
         --verbose_failures \
