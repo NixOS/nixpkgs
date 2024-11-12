@@ -1072,9 +1072,9 @@
   },
   "virtual-network-tap": {
     "pname": "virtual-network-tap",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_tap-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-7l9tz8CfwJ4MO704a007xswfij3ejtVQgE9D7Uw8t7o=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_tap-1.0.0b2-py2.py3-none-any.whl",
+    "hash": "sha256-h5yPHrfrkt4+ZzlH/gvGJuK23y7oF1yW/zYmxDW4Gx4=",
     "description": "Manage virtual network taps (VTAP)"
   },
   "virtual-wan": {
