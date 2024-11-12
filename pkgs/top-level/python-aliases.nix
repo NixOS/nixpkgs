@@ -68,6 +68,7 @@ mapAliases ({
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   azure-functions-devops-build = throw "azure-functions-devops-build has been removed, because it is abandoned"; # added 2024-10-04
   Babel = babel; # added 2022-05-06
+  backports-cached-property = throw "backports-cached-property has been removed, since we no longer need to backport to python3.7"; # added 2024-11-12
   backports-shutil-get-terminal-size = throw "backports-shutil-get-terminal-size has been removed, since we no longer need to backport to python3.2"; # added 2024-11-12
   backports-shutil-which = throw "backports-shutil-which has been removed, since we no longer need to backport to python3.2"; # added 2024-11-12
   backports-zoneinfo = throw "backports-zoneinfo has been removed, since we no longer need to backport to python3.8"; # added 2024-11-12
