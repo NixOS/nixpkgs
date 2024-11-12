@@ -56,12 +56,14 @@ rustPlatform.buildRustPackage rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     description = "Feature rich terminal UI file transfer and explorer with support for SCP/SFTP/FTP/S3/SMB";
     homepage = "https://github.com/veeso/termscp";
-    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
     mainProgram = "termscp";
+    maintainers = with lib.maintainers; [
+      fab
+    ];
   };
 }
