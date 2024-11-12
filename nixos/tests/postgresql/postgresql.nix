@@ -40,8 +40,9 @@ let
         { ... }:
         {
           services.postgresql = {
-            inherit (package) ;
+            inherit package;
             enable = true;
+            enableJIT = lib.hasInfix "-jit-" package.name;
           };
 
           services.postgresqlBackup = {
@@ -158,6 +159,7 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
+            enableJIT = lib.hasInfix "-jit-" package.name;
             ensureUsers = [
               {
                 name = "all-clauses";
