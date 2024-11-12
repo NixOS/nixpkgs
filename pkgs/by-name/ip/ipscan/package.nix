@@ -53,7 +53,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza totoroot ];
-    # Very similar issue to hdfview, see: https://github.com/NixOS/nixpkgs/issues/340048
-    broken = true;
   };
 }
