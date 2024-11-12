@@ -9,7 +9,6 @@
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
-  buildFHSEnv,
   # this package (through the fixpoint glass)
   # TODO probably still need for tests at some point
   bazel_self,
@@ -157,19 +156,13 @@ let
     meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  bazelFhs = buildFHSEnv {
-    name = "bazel";
-    targetPkgs = _: [ bazelBootstrap ];
-    runScript = "bazel";
-  };
-
   # A FOD that vendors the Bazel dependencies using Bazel's new vendor mode.
   # See https://bazel.build/versions/7.3.0/external/vendor for details.
   # Note that it may be possible to vendor less than the full set of deps in
   # the future, as this is approximately 16GB.
   bazelDeps =
     let
-      bazelForDeps = if stdenv.hostPlatform.isDarwin then bazelBootstrap else bazelFhs;
+      bazelForDeps = bazelBootstrap;
     in
     stdenv.mkDerivation {
       name = "bazelDeps";
@@ -728,6 +721,6 @@ stdenv.mkDerivation rec {
     # tests = callPackage ./tests.nix { inherit Foundation bazelDeps bazel_self; };
 
     # For ease of debugging
-    inherit bazelDeps bazelFhs bazelBootstrap;
+    inherit bazelDeps bazelBootstrap;
   };
 }
