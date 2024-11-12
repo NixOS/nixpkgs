@@ -23,6 +23,7 @@
 
   nix-update-script,
   python,
+  callPackage,
 }:
 
 buildPythonPackage rec {
@@ -122,6 +123,7 @@ buildPythonPackage rec {
     shellPath = "/bin/xonsh";
     wrapper = throw "The top-level xonsh package is now wrapped. Use it directly.";
     updateScript = nix-update-script { };
+    xontribs = import ./xontribs { inherit callPackage; };
   };
 
   meta = {
