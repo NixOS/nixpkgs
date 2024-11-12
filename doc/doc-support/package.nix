@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation (
         ../anchor-use.js
         ../anchor.min.js
         ../manpage-urls.json
+        ../redirects.json
       ];
     };
 
@@ -62,6 +63,7 @@ stdenvNoCC.mkDerivation (
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
+        --redirects ./redirects.json \
         --revision ${nixpkgs.rev or "master"} \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \
