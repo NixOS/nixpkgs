@@ -202,13 +202,6 @@
     "hash": "sha256-nqYWLTf8M5C+Tc5kywXFxYgHAQTz6SpwGrR1RzVlqKk=",
     "description": "Translate ARM template to executable Azure CLI scripts"
   },
-  "compute-diagnostic-rp": {
-    "pname": "compute-diagnostic-rp",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/compute_diagnostic_rp-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-gQ6TzgDH0D322poPr1e5ZvttpYIxH5yudLK34ePEFCM=",
-    "description": "Microsoft Azure Command-Line Tools ComputeDiagnosticRp Extension"
-  },
   "confidentialledger": {
     "pname": "confidentialledger",
     "version": "1.0.0",
