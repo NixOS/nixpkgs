@@ -1440,8 +1440,6 @@ self: super: with self; {
 
   backports-shutil-get-terminal-size = callPackage ../development/python-modules/backports-shutil-get-terminal-size { };
 
-  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
-
   backports-strenum = callPackage ../development/python-modules/backports-strenum { };
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
