@@ -11,7 +11,7 @@
 , fetchFromGitHub
 , fetchpatch
 , fizz
-, fmt_8
+, fmt_9
 , folly
 , glog
 , gtest
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     glog
     boost
     libevent
-    fmt_8
+    fmt_9
     libsodium
     zlib
     folly
