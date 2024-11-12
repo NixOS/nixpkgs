@@ -1065,9 +1065,9 @@
   },
   "virtual-network-manager": {
     "pname": "virtual-network-manager",
-    "version": "1.3.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_manager-1.3.0-py3-none-any.whl",
-    "hash": "sha256-8W+ZL5j9A8AdzvikD5uE3iNn/56IULSGY6m7HLVbe9Q=",
+    "version": "1.3.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_manager-1.3.1-py3-none-any.whl",
+    "hash": "sha256-y5VTXAV6YZk4S8nlwwqZQtvFic8M6tsqYtJqp/cNTh0=",
     "description": "Microsoft Azure Command-Line Tools NetworkManagementClient Extension"
   },
   "virtual-network-tap": {
