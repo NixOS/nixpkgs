@@ -288,6 +288,7 @@ filterAndCreateOverrides {
       cudaOlder,
       gst_all_1,
       lib,
+      libssh,
       nss,
       numactl,
       pulseaudio,
@@ -315,7 +316,9 @@ filterAndCreateOverrides {
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
         "nsight-systems/*/*/lib{arrow,jpeg}*"
-        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
+        "nsight-systems/*/*/libssl*"
+        "nsight-systems/*/*/libssh*"
+        "nsight-systems/*/*/libcrypto*"
         "nsight-systems/*/*/libboost*"
         "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/libQt*"
@@ -328,7 +331,7 @@ filterAndCreateOverrides {
         prevAttrs.postPatch or ""
         + ''
           for path in $rmPatterns; do
-            rm -r "$path"
+            rm -r $path
           done
         ''
         + ''
@@ -353,6 +356,7 @@ filterAndCreateOverrides {
         xorg.libXdamage
         xorg.libXrandr
         xorg.libXtst
+        libssh
       ];
 
       brokenConditions = prevAttrs.brokenConditions // {
