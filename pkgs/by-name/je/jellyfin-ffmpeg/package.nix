@@ -19,8 +19,11 @@ in
 
   ffmpegVariant = "barebones";
 
-  # https://github.com/NixOS/nixpkgs/pull/354936#issuecomment-2466628369
+  # These flags are intended to be the exact same as upstream's which can be
+  # found here:
   # https://github.com/jellyfin/jellyfin-ffmpeg/blob/jellyfin/debian/rules
+  # Please update these when upstream changes them.
+
   # --enable-gmp # not supported by our ffmpeg drv
   withDoc = false;
   buildFfplay = false;
