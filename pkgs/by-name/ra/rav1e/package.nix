@@ -5,8 +5,6 @@
   rustPlatform,
   fetchCrate,
   cargo-c,
-  darwin,
-  libiconv,
   nasm,
   nix-update-script,
   testers,
@@ -27,11 +25,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cargo-c
     nasm
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   postPatch =
