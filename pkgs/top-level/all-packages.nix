@@ -10560,7 +10560,7 @@ with pkgs;
 
   nghttp3 = callPackage ../development/libraries/nghttp3 { inherit (darwin.apple_sdk.frameworks) CoreServices; };
 
-  ngtcp2 = callPackage ../development/libraries/ngtcp2 { inherit (darwin.apple_sdk.frameworks) CoreServices; };
+  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
   ngtcp2-gnutls = callPackage ../development/libraries/ngtcp2/gnutls.nix { };
 
   non = callPackage ../applications/audio/non {
