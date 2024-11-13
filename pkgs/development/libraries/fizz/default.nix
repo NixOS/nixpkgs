@@ -14,6 +14,8 @@
   libsodium,
   gtest,
   zlib,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,29 +33,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../fizz";
 
-  cmakeFlags =
-    [
-      "-Wno-dev"
-      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-    ];
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   NIX_LDFLAGS = "-lz";
 
-  buildInputs = [
-    double-conversion
-    folly
-    glog
-    gflags
-    libevent
-    libiberty
-    libsodium
-    openssl
-    zlib
-    zstd
-  ];
+  buildInputs =
+    [
+      double-conversion
+      folly
+      glog
+      gflags
+      libevent
+      libiberty
+      libsodium
+      openssl
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
+    ];
 
   doCheck = true;
   checkInputs = [
