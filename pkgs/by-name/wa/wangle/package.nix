@@ -28,13 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeDir = "../wangle";
-
-  cmakeFlags = [
-    "-Wno-dev"
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ];
-
   buildInputs =
     [
       double-conversion
@@ -50,10 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  doCheck = true;
   checkInputs = [
     gtest
   ];
+
+  cmakeDir = "../wangle";
+
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
+
   preCheck =
     let
       disabledTests =
