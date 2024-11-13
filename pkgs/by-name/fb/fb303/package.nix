@@ -12,7 +12,6 @@
   fbthrift,
   fizz,
   wangle,
-  python3,
   apple-sdk_11,
   darwinMinVersionHook,
 }:
@@ -38,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
       fbthrift
       fizz
       wangle
-      python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
