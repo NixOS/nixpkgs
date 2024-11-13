@@ -33,10 +33,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
+    # Disabled until I can get distutils to be found in checkPhase
+    # pytestCheckHook
   ];
 
-  doCheck = false; # Disabled until I can get distutils to be found in checkPhase
+  pythonImportCheck = [ "rosdistro" ];
 
   passthru = {
     updateScript = nix-update-script { };
