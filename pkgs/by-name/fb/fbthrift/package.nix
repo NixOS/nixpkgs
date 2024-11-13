@@ -62,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Facebook's branch of Apache Thrift";
     mainProgram = "thrift1";
     homepage = "https://github.com/facebook/fbthrift";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       pierreis
       kylesferrazza
     ];
