@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , installShellFiles
 , qemu
-, xcbuild
 , sigtool
 , makeWrapper
 , nix-update-script
@@ -25,7 +24,7 @@ buildGoModule rec {
   vendorHash = "sha256-nNSBwvhKSWs6to37+RLziYQqVOYfvjYib3fRRALACho=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
