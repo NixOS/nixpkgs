@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
     homepage = "https://github.com/facebook/fb303";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kylesferrazza ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kylesferrazza ];
   };
 })
