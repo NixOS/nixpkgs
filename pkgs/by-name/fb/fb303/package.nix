@@ -25,9 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [
-    "-DPYTHON_EXTENSIONS=OFF"
-  ];
 
   buildInputs =
     [
@@ -42,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  cmakeFlags = [
+    "-DPYTHON_EXTENSIONS=OFF"
+  ];
 
   meta = {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
