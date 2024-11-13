@@ -21,14 +21,14 @@
   darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
   version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iCiiKNDlfKm1Y4SGzcSP6o/OdiRRrj9UEawW6qpBpSY=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
       kylesferrazza
     ];
   };
-}
+})
