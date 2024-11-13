@@ -8,6 +8,7 @@
   pkg-config,
   rustPlatform,
   rustc,
+  apple-sdk_11,
   curl,
   freetype,
   libGLU,
@@ -27,10 +28,6 @@
   glslang,
   spirv-tools,
   gtest,
-  Carbon,
-  Cocoa,
-  OpenGL,
-  Security,
   buildClient ? true,
 }:
 
@@ -91,10 +88,7 @@ stdenv.mkDerivation rec {
         libX11
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Carbon
-        Cocoa
-        OpenGL
-        Security
+        apple-sdk_11
       ]
     );
 
