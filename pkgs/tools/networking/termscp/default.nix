@@ -11,6 +11,7 @@
   Foundation,
   Security,
   samba,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -53,6 +54,11 @@ rustPlatform.buildRustPackage rec {
       "AppKit"
     ]
   );
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   checkFeatures = [ "isolated-tests" ];
   checkFlags = [
