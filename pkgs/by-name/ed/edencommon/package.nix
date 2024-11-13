@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
     homepage = "https://github.com/facebookexperimental/edencommon";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kylesferrazza ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kylesferrazza ];
   };
 })
