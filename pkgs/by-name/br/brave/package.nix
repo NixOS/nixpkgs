@@ -14,6 +14,14 @@ let
       url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
       hash = "sha256-fJczTAra+j8+veicz4lIyKSNJyxJK4q9gpZoAyQwkxQ=";
     };
+    aarch64-darwin = {
+      url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-v${version}-darwin-arm64.zip";
+      hash = "sha256-kDiZ6NKQ+v1jBEUexItKTCKFsbnOtSzPmGEVWI5JoXI=";
+    };
+    x86_64-darwin = {
+      url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-v${version}-darwin-x64.zip";
+      hash = "sha256-/yl4k/XvmL7oBW1XU4wVNHfa07Z+XMHYTkkufhDCXUc=";
+    };
   };
 
   archive =
@@ -27,6 +35,5 @@ callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ]) (
   archive
   // {
     inherit pname version;
-    platform = stdenv.system;
   }
 )

@@ -48,6 +48,7 @@ buildPythonPackage rec {
     + lib.optionalString (pythonOlder "3.11") ''
       # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
       sed -i "s/def test_reject_invalid_server_certificate(/def skip_test_reject_invalid_server_certificate(/" tests/sync/test_client.py
+      sed -i "s/def test_reject_invalid_server_certificate(/def skip_test_reject_invalid_server_certificate(/" tests/asyncio/test_client.py
     '';
 
   nativeCheckInputs = [ unittestCheckHook ];

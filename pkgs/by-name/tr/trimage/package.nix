@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, python3
-, installShellFiles
-, makeWrapper
-, wrapQtAppsHook
+  python3,
+  installShellFiles,
+  makeWrapper,
+  qt5,
 
-, advancecomp
-, jpegoptim
-, optipng
-, pngcrush
+  advancecomp,
+  jpegoptim,
+  optipng,
+  pngcrush,
 }:
 
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pyqt5 ]);
+
   binPath = lib.makeBinPath [
     advancecomp
     jpegoptim
@@ -36,7 +38,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   dontWrapQtApps = true;
