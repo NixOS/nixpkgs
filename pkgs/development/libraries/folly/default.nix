@@ -18,6 +18,8 @@
   zlib,
   zstd,
   jemalloc,
+  apple-sdk_11,
+  darwinMinVersionHook,
   follyMobile ? false,
 
   # for passthru.tests
@@ -42,21 +44,27 @@ stdenv.mkDerivation rec {
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
-  buildInputs = [
-    boost
-    double-conversion
-    glog
-    gflags
-    libevent
-    libiberty
-    openssl
-    lz4
-    xz
-    zlib
-    libunwind
-    fmt_8
-    zstd
-  ] ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+  buildInputs =
+    [
+      boost
+      double-conversion
+      glog
+      gflags
+      libevent
+      libiberty
+      openssl
+      lz4
+      xz
+      zlib
+      libunwind
+      fmt_8
+      zstd
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux jemalloc
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
+    ];
 
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
@@ -65,22 +73,19 @@ stdenv.mkDerivation rec {
     "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
     "-fpermissive"
   ];
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
 
-      # temporary hack until folly builds work on aarch64,
-      # see https://github.com/facebook/folly/issues/1880
-      "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
 
-      # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
-      # see https://github.com/NixOS/nixpkgs/issues/144170
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
-    ];
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
+
+    # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
+    # see https://github.com/NixOS/nixpkgs/issues/144170
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
   # split outputs to reduce downstream closure sizes
   outputs = [

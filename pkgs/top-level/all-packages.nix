@@ -9148,7 +9148,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  folly = darwin.apple_sdk_11_0.callPackage ../development/libraries/folly { };
+  folly = callPackage ../development/libraries/folly { };
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
 
