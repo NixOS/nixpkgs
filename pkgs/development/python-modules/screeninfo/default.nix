@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

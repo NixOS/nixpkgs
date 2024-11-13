@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "elgato";
   version = "5.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

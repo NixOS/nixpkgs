@@ -5,7 +5,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "xorex";
   version = "0.3.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Neo23x0";

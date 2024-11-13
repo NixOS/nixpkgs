@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "graphinder";
   version = "1.11.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Escape-Technologies";

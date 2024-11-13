@@ -13,7 +13,7 @@ buildPythonApplication {
   pname = "scfbuild";
   version = "2.0.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "13rac1";

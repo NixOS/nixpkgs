@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "flammkuchen";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

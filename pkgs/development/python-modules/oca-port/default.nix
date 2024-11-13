@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "oca-port";
   version = "0.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

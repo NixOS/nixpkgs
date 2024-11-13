@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ablog";
   version = "0.11.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";

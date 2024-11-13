@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "parametrize-from-file";
   version = "0.20.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

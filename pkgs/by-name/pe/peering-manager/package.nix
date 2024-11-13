@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [
     # Fix compatibility with pyixapi 0.2.3

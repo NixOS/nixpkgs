@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "hatch-vcs";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

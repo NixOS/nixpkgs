@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "astroquery";
   version = "0.4.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

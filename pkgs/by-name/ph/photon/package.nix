@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "photon";
   version = "1.3.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "s0md3v";

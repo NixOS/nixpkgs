@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "jsonschema-specifications";
   version = "2023.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

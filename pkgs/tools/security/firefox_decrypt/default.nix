@@ -12,7 +12,7 @@
 buildPythonApplication rec {
   pname = "firefox_decrypt";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unode";

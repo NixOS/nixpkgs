@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
   version = "unstable-2023-03-15";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

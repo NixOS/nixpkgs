@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "tesla-wall-connector";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

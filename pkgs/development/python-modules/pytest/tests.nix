@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "pytest-tests";
   inherit (pytest) version;
-  format = "other";
+  pyproject = false;
 
   src = pytest.testout;
 

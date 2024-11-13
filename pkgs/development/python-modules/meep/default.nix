@@ -44,7 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-TB85obdk8pSWRaz3+3I6P6+dQtCHosWHRnKGck/wG9Q=";
   };
 
-  format = "other";
+  pyproject = false;
 
   # https://github.com/NanoComp/meep/issues/2819
   postPatch = lib.optionalString (!pythonOlder "3.12") ''

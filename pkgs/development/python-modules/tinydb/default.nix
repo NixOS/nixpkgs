@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "tinydb";
   version = "4.8.0";
   disabled = pythonOlder "3.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "msiemens";

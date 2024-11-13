@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "formbox";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchzip {

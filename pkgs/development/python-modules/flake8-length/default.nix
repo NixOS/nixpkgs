@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "flake8-length";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

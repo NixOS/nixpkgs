@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "mirakuru";
   version = "2.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

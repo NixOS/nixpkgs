@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "anytree";
   version = "2.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

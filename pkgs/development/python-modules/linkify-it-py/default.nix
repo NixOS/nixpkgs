@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "linkify-it-py";
   version = "2.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

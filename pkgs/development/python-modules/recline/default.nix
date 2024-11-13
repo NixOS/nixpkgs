@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "recline";
   version = "2024.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";

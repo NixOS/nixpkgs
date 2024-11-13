@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mbstrdecoder";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";

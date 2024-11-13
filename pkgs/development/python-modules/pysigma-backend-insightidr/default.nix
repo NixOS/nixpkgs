@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pysigma-backend-insightidr";
   version = "0.2.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

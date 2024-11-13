@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "flask-socketio";
   version = "5.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudhunter";
   version = "0.7.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "belane";

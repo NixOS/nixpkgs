@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "8.2.6";
 
   # format is for pythonModule conversion
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     cmake

@@ -11,7 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mozphab";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";

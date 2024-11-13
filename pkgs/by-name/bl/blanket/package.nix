@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py

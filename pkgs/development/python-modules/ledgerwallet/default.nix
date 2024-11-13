@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "ledgerwallet";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";

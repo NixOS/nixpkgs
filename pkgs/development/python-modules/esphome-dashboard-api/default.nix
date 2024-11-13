@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "esphome-dashboard-api";
   version = "1.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";

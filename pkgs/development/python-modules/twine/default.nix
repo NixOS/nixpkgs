@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "twine";
   version = "5.1.1";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "diagrams";
   version = "0.23.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

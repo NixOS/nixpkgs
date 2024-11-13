@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "ntc-templates";
   version = "6.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

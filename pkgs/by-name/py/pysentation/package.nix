@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pysentation";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mimseyedi";

@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "curtsies";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -38,7 +38,7 @@ in
 
 buildPythonPackage {
   inherit pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

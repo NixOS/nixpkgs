@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core

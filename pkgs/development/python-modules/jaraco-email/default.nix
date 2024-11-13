@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";

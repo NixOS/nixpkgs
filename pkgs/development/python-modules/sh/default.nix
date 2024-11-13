@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sh";
   version = "2.0.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amoffat";

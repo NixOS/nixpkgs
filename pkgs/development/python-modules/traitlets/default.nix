@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "traitlets";
   version = "5.14.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

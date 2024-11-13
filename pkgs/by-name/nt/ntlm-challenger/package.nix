@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "ntlm-challenger";
   version = "0-unstable-2022-11-10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "nopfor";

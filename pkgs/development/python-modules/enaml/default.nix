@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "enaml";
   version = "0.18.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

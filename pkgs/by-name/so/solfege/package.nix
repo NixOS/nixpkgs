@@ -24,7 +24,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "solfege";
   version = "3.23.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://alpha.gnu.org/gnu/solfege/solfege-${version}.tar.gz";

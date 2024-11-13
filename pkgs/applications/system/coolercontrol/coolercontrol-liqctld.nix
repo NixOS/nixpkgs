@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication {
   pname = "coolercontrol-liqctld";
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-liqctld";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools

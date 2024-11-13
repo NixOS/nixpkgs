@@ -45,7 +45,7 @@ let
     passthru = {
       tests.pytest = self.overridePythonAttrs (old: {
         pname = "${old.pname}-tests";
-        format = "other";
+        pyproject = false;
 
         postPatch = "rm openTSNE -rf";
 

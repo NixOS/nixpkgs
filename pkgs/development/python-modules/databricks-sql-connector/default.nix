@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
   version = "3.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

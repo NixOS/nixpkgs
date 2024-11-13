@@ -17,7 +17,7 @@ buildPythonPackage rec {
     src
     meta
     ;
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   sourceRoot = "${src.name}/Wrapping/Python";

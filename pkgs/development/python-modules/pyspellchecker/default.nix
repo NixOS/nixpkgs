@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pyspellchecker";
   version = "0.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "barrust";

@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "build";
   version = "1.2.2.post1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit src version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "logmap";
   version = "unstable-2021-12-15";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zhzyker";

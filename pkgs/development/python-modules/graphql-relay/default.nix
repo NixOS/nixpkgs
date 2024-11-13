@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "graphql-relay";
   version = "3.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

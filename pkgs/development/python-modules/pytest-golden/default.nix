@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pytest-golden";
   version = "0.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

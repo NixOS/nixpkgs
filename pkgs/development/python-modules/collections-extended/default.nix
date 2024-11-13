@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "collections-extended";
   version = "2.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   # https://github.com/mlenzen/collections-extended/issues/198
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";

@@ -14,7 +14,7 @@ let
   deid-data = buildPythonPackage rec {
     pname = "deid-data";
     version = "unstable-2022-12-06";
-    format = "pyproject";
+    pyproject = true;
     disabled = pythonOlder "3.7";
 
     nativeBuildInputs = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pname = "deid";
   version = "0.3.22";
 
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   # Pypi version has no tests

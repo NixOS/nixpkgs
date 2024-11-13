@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "dtschema";
   version = "2024.02";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

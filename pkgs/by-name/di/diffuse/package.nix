@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "6GdUtdVhhIQL1cD9/e7Byv37PVKXmzVWhJC6GROK7OA=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     wrapGAppsHook3

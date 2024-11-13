@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "rich-argparse-plus";
   version = "0.3.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

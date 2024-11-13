@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "distlib";
   version = "0.3.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

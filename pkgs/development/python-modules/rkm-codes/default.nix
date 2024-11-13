@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "rkm-codes";
   version = "0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";

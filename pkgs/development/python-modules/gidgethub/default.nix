@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "gidgethub";
   version = "5.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

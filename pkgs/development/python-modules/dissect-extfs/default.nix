@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "dissect-extfs";
   version = "3.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

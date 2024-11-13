@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "diffsync";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";

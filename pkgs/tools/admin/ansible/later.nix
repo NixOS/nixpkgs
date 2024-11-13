@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-later";
   version = "3.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";

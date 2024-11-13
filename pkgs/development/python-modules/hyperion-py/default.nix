@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "hyperion-py";
   version = "0.7.5";
   disabled = pythonOlder "3.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dermotduffy";

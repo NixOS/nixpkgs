@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "django-crispy-forms";
   version = "2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";

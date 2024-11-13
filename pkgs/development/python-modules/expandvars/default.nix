@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "expandvars";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

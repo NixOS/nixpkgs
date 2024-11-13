@@ -3,7 +3,7 @@
 buildPythonApplication rec {
   pname = "Tautulli";
   version = "2.14.6";
-  format = "other";
+  pyproject = false;
 
   pythonPath = [ setuptools ];
   nativeBuildInputs = [ wrapPython makeWrapper ];

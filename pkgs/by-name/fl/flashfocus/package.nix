@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
   version = "2.4.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

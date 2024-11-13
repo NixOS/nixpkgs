@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "elegy";
   version = "0.8.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

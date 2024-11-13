@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "withings-api";
   version = "2.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

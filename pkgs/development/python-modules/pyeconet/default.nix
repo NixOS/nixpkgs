@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyeconet";
   version = "0.1.23";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

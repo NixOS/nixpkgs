@@ -15,7 +15,7 @@ let
 in python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     python3.pkgs.hatchling

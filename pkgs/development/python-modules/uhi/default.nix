@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "uhi";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

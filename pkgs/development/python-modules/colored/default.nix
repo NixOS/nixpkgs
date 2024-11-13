@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "colored";
   version = "2.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "dslackw";

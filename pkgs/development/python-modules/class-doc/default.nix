@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "class-doc";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danields761";

@@ -11,7 +11,7 @@ buildPythonPackage {
   pname = "tkinter";
   version = python.version;
   src = py;
-  format = "other";
+  pyproject = false;
 
   disabled = isPyPy;
 

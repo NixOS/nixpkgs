@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "quantiphy-eval";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

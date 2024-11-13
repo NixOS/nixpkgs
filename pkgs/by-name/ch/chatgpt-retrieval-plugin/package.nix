@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication {
   pname = "chatgpt-retrieval-plugin";
   version = "unstable-2023-03-28";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";

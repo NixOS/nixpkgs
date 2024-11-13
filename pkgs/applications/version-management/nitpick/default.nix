@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "nitpick";
   version = "1.1";
 
-  format = "other";
+  pyproject = false;
   disabled = !isPy27;
 
   src = fetchFromGitHub {

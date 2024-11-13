@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   version = "0.9.0";
   pname = "tabulate";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "check-esxi-hardware";
   version = "20221230";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Napsty";

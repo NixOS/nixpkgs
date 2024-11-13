@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "luftdaten";
   version = "0.7.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

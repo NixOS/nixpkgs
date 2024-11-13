@@ -28,7 +28,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
   version = "46.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";

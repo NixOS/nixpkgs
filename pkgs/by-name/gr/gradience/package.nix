@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-5jloFbimJC4jP1C1uS8a9VlqyR5qqDuqcKvUXwr9SjY=";
   };
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true;
 
   nativeBuildInputs = [

@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-ZYFAWkcDdX10024hc+gdARyaJFpNNcXf+gGLxBP5VlA=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook

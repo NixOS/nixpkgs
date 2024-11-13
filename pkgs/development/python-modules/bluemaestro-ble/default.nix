@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "bluemaestro-ble";
   version = "0.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

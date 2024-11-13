@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "todoist-api-python";
   version = "2.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

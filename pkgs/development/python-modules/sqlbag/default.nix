@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "sqlbag";
   version = "0.1.1617247075";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "djrobstep";

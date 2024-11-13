@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "construct-classes";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {

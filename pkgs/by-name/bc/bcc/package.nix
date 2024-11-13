@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-ludgmHFOyBu1CwUiaqczmNui0J8bUBAA5QGBiado8yw=";
   };
-  format = "other";
+  pyproject = false;
 
   buildInputs = with llvmPackages; [
     llvm llvm.dev libclang

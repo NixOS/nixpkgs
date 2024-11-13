@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "django-auth-ldap";
   version = "4.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 

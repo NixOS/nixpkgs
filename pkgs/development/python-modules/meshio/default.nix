@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "meshio";
   version = "5.3.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

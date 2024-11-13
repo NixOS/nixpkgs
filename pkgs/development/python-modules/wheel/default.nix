@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "wheel";
   version = "0.44.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

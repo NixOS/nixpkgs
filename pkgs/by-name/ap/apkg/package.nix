@@ -5,7 +5,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";

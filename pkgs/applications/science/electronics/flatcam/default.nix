@@ -41,7 +41,7 @@ buildPythonApplication rec {
     hash = "sha256-QKkBPEM+HVYmSZ83b4JRmOmCMp7C3EUqbJKPqUXMiKE=";
   };
 
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
 

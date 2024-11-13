@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "tweedledum";
   version = "1.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boschmitt";

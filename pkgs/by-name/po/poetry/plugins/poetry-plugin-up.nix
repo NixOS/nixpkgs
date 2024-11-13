@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "poetry-plugin-up";
   version = "0.7.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MousaZeidBaker";

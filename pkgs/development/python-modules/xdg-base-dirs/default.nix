@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "xdg-base-dirs";
   version = "6.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

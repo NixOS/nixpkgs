@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyqtchart";
   version = "5.15.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

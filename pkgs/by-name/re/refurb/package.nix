@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "refurb";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dosisod";

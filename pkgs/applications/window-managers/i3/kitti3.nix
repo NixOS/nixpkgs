@@ -8,7 +8,7 @@
 buildPythonApplication rec {
   pname = "kitti3";
   version = "unstable-2021-09-11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LandingEllipse";

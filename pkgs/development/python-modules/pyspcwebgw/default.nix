@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyspcwebgw";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

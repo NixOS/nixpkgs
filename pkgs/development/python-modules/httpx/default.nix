@@ -33,7 +33,7 @@
 buildPythonPackage rec {
   pname = "httpx";
   version = "0.27.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -137,9 +137,9 @@ in
 # Several package formats are supported.
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
-# "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
+# "pyproject": [DEPRECATED] Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
 # "egg": Install a package from an egg.
-# "other" : Provide your own buildPhase and installPhase.
+# "other" : [DEPRECATED] Provide your own buildPhase and installPhase.
 , format ? null
 
 , meta ? {}
@@ -163,6 +163,8 @@ let
       else
         "other"
     else if format != null then
+      lib.warnIf (format == "other") "${namePrefix}${attrs.pname}: `format = \"other\"` is deprecated. Use `pyproject = false` instead."
+      lib.warnIf (format == "pyproject") "${namePrefix}${attrs.pname}: `format = \"pyproject\"` is deprecated. Use `pyproject = true` instead."
       format
     else
       "setuptools";

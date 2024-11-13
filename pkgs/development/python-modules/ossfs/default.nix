@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "ossfs";
   version = "2023.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

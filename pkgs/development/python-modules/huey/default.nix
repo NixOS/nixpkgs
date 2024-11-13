@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "huey";
   version = "2.5.2";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";

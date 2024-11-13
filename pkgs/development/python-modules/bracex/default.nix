@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "bracex";
   version = "2.5.post1";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {

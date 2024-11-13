@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "asttokens";
   version = "2.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

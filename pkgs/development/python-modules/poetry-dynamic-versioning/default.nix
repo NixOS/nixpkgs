@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "pyproject-api";
   version = "1.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

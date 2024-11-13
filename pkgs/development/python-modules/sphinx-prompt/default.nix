@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "sphinx-prompt";
   version = "1.7.0"; # read before updating past 1.7.0 https://github.com/sbrunner/sphinx-prompt/issues/398
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbrunner";

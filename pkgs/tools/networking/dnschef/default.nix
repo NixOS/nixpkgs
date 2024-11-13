@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "0ll3hw6w5zhzyqc2p3c9443gcp12sx6ddybg5rjpl01dh3svrk1q";
   };
 
-  format = "other";
+  pyproject = false;
   installPhase = ''
     install -D ./dnschef.py $out/bin/dnschef
   '';

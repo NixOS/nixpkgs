@@ -14,7 +14,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "1.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

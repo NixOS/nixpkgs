@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = with python3Packages; [ dbus-next i3ipc psutil tenacity xlib ];
 

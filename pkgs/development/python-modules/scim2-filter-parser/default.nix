@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "scim2-filter-parser";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15five";

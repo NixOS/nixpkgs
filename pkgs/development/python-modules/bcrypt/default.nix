@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "bcrypt";
   version = "4.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

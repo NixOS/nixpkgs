@@ -14,7 +14,7 @@
 buildPythonPackage {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
-  format = "other";
+  pyproject = false;
 
   src = uvicorn.testsout;
 

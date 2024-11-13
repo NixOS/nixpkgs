@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "social-engineer-toolkit";
   version = "8.0.3";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "trustedsec";

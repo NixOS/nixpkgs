@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "lc7001";
   version = "1.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

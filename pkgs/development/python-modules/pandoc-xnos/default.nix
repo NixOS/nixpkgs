@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pandoc-xnos";
   version = "2.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";

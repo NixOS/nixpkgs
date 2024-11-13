@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "github3.py";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

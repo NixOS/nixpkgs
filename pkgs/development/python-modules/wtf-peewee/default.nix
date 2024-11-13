@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "wtf-peewee";
   version = "3.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

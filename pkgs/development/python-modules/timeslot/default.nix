@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

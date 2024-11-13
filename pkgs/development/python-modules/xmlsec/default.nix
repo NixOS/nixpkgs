@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "xmlsec";
   version = "1.3.14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
 
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     sed -i font-patcher \

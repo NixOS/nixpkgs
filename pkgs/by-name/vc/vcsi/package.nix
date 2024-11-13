@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "vcsi";
   version = "7.0.16";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amietn";

@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pysvn";
   version = "1.9.22";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";

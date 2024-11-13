@@ -36,7 +36,7 @@
 buildPythonPackage rec {
   pname = "librosa";
   version = "0.10.2.post1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librosa";

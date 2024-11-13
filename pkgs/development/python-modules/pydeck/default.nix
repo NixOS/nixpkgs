@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pydeck";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

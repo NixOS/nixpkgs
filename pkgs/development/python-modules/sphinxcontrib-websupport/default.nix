@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
   version = "1.2.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_websupport";

@@ -19,7 +19,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "polychromatic";
   version = "0.9.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "polychromatic";

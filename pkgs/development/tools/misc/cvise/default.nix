@@ -17,7 +17,7 @@
 buildPythonApplication rec {
   pname = "cvise";
   version = "2.11.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "marxin";

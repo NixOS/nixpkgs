@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

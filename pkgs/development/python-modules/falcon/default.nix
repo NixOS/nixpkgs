@@ -31,7 +31,7 @@
 buildPythonPackage rec {
   pname = "falcon";
   version = "3.1.3";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "flit-scm";
   version = "1.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "WillDaSilva";

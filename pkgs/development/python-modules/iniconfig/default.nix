@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "iniconfig";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "filecheck";
   version = "0.0.24";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mull-project";

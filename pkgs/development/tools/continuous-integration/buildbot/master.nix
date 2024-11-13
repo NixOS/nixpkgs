@@ -48,7 +48,7 @@ let
   withPlugins = plugins: buildPythonApplication {
     pname = "${buildbot.pname}-with-plugins";
     inherit (buildbot) version;
-    format = "other";
+    pyproject = false;
 
     dontUnpack = true;
     dontBuild = true;
@@ -74,7 +74,7 @@ in
 buildPythonApplication rec {
   pname = "buildbot";
   version = "4.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

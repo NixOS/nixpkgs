@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "pyqt6";
   version = "6.8.0.dev2410141303";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

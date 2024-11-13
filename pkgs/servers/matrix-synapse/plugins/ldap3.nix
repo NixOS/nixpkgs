@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
   version = "0.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

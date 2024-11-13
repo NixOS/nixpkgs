@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "greeneye-monitor";
   version = "5.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

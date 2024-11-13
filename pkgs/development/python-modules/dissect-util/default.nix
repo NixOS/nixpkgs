@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "dissect-util";
   version = "3.18";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

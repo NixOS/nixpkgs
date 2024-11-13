@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "zephyr-python-api";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "zephyr_python_api";

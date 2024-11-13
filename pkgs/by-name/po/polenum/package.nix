@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "polenum";
   version = "1.6.1-unstable-2024-07-30";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Wh1t3Fox";

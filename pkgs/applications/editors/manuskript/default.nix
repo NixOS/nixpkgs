@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "manuskript";
   version = "0.16.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     repo = pname;

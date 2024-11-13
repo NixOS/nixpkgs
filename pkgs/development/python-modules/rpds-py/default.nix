@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "rpds-py";
   version = "0.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

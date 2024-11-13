@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
   version = "24.9.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

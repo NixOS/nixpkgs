@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "magic-filter";
   version = "1.0.12";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

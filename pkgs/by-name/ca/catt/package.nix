@@ -26,7 +26,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "catt";
   version = "0.12.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "uSSKiceHurk+qGVnaYa4uJEuq9FQROdhcotQxPBgPIs=";
   };
 
-  format = "other";
+  pyproject = false;
 
   strictDeps = false;
 

@@ -51,7 +51,7 @@ assert withPlugin -> builtins.elem hplipArch pluginArches
 
 python311Packages.buildPythonApplication {
   inherit pname version src;
-  format = "other";
+  pyproject = false;
 
   buildInputs = [
     libjpeg

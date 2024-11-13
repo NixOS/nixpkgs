@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "more-itertools";
   version = "10.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

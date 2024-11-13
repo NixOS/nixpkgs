@@ -30,7 +30,7 @@ in buildPythonApplication rec {
     substituteInPlace sonota.py --subst-var out
   '';
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = [ httplib2 netifaces tornado ];
 

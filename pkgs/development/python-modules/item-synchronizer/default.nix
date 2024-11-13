@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "item-synchronizer";
   version = "1.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";

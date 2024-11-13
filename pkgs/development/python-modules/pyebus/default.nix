@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pyebus";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

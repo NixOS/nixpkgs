@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyqt-builder";
   version = "1.16.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt_builder";

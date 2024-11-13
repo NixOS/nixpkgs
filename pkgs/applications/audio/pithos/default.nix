@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     chmod +x meson_post_install.py

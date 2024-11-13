@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "django-allauth-2fa";
   version = "0.11.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

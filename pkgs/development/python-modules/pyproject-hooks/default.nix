@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyproject-hooks";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;

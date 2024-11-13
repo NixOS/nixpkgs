@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "pysaml2";
   version = "7.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

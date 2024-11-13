@@ -17,7 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "binary";
   version = "5.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";

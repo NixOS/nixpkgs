@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "imia";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -23,7 +23,7 @@ in
 buildPythonPackage rec {
   pname = "pyrad";
   version = "2.4-unstable-2023-06-13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyradius";

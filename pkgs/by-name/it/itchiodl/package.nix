@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-XuNkqTAT9LlSwruchGQbombAKHZvKhpnqLfvJdDcrj0=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with python3Packages; [
     poetry-core

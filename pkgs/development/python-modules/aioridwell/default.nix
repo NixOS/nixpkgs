@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "aioridwell";
   version = "2024.01.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

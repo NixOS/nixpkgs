@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "stevedore-tests";
   inherit (stevedore) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

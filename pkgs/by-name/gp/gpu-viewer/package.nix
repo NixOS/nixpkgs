@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   pname = "gpu-viewer";
   version = "3.06";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";

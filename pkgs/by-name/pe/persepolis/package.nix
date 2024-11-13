@@ -15,7 +15,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
   version = "4.0.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "persepolisdm";

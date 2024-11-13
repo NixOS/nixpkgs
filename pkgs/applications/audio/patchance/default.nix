@@ -9,7 +9,7 @@ buildPythonApplication rec {
     sha256 = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     pyqt5   # pyuic5 and pyrcc5 to build resources.

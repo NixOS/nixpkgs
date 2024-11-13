@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "dill";
   version = "0.3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

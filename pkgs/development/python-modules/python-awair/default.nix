@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "python-awair";
   version = "0.2.4";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

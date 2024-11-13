@@ -18,7 +18,7 @@ buildPythonPackage rec {
                       --subst-var-by libeduvpn-common ${libeduvpn-common.out}/lib/lib${pname}-${version}.so
   '';
 
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     libeduvpn-common

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "frogmouth";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";

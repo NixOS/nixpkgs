@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "reactivex";
   version = "4.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

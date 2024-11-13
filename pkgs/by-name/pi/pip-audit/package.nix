@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
   version = "2.7.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";

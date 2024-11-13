@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "nestedtext";
   version = "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

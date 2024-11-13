@@ -18,7 +18,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.118.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";

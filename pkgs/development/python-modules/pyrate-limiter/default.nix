@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "pyrate-limiter";
   version = "2.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";

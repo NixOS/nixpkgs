@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   pname = "switcheroo-control";
   version = "2.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

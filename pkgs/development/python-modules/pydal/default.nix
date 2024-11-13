@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pydal";
   version = "20240713.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

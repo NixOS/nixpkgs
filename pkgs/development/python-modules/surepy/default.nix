@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "surepy";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

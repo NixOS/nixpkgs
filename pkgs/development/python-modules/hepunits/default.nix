@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "hepunits";
   version = "2.3.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -37,7 +37,7 @@ let
       ({ buildPythonPackage, pythonOlder, parver, pip, pulumi, semver, setuptools }:
       buildPythonPackage rec {
         inherit pname meta src version;
-        format = "pyproject";
+        pyproject = true;
 
         disabled = pythonOlder "3.7";
 

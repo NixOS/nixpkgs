@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "sphinx-external-toc";
   version = "1.0.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

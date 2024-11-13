@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "flask-sqlalchemy";
   version = "3.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

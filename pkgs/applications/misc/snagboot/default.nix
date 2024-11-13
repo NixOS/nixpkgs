@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
   version = "1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";

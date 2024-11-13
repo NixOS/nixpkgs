@@ -18,7 +18,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "wordbook";
   version = "unstable-2022-11-02";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fushinari";

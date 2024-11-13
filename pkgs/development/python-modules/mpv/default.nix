@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "mpv";
   version = "1.0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaseg";

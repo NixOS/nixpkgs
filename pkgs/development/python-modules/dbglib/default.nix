@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "dbglib";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.9";
   src = fetchPypi {
     inherit pname version;

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "kml2geojson";
   version = "5.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

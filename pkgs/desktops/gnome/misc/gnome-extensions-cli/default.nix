@@ -15,7 +15,7 @@
 buildPythonApplication rec {
   pname = "gnome-extensions-cli";
   version = "0.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "gnome_extensions_cli";

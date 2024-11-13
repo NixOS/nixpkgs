@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "backports-cached-property";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

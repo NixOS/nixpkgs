@@ -48,7 +48,7 @@ buildPythonPackage rec {
     inherit patches;
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     pkg-config

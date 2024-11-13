@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "demes";
   version = "0.2.3";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

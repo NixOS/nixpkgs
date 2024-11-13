@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "tiny-proxy";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

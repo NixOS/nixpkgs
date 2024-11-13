@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "1.10.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

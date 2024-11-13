@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "aplpy";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

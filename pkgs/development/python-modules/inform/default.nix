@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "inform";
   version = "1.31";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

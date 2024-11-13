@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "jefferson";
   version = "0.4.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";

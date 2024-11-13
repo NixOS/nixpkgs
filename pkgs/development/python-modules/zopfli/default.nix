@@ -20,7 +20,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ setuptools-scm ];
 

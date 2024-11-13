@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nmap-parse";
   version = "0-unstable-2022-09-26";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jonny1102";

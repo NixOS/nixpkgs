@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "offensive-azure";
   version = "0.4.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";

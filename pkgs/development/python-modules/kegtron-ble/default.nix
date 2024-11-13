@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "kegtron-ble";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

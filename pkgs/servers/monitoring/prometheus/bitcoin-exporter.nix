@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "bitcoin-prometheus-exporter";
   version = "0.7.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jvstein";

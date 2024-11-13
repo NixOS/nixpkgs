@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "entry-points-txt";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

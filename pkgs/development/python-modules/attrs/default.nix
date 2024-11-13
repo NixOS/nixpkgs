@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "attrs";
   version = "24.2.0";
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

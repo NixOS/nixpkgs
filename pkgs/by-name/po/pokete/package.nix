@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pokete";
   version = "0.9.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lxgr-linux";

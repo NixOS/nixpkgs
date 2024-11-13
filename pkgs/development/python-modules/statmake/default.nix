@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "statmake";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

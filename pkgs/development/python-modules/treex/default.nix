@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "treex";
   version = "0.6.11";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgarciae";

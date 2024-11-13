@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pkgutil-resolve-name";
   version = "1.3.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "yalexs-ble";
   version = "2.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

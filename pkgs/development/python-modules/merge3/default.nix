@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "merge3";
   version = "0.0.15";
 
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

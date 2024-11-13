@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "mullvad-closest";
   version = "unstable-2023-07-09";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ch00k";

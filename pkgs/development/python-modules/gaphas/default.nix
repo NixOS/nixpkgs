@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "gaphas";
   version = "4.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

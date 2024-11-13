@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyqtdatavisualization";
   version = "5.15.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

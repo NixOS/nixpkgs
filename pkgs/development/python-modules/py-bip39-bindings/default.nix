@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
   version = "0.1.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

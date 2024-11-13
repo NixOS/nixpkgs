@@ -20,7 +20,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

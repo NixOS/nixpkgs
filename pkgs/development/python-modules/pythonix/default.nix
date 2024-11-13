@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pythonix";
   version = "0.1.7";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Mic92";

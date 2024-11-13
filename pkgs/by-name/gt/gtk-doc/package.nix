@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   outputDevdoc = "out";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
   version = "2023.03";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";

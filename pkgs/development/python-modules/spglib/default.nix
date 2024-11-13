@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "spglib";
   version = "2.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

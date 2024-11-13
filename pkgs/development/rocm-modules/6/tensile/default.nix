@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "tensile";
   version = "6.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";

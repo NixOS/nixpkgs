@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "emborg";
   version = "1.41";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

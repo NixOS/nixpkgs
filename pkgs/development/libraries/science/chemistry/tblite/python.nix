@@ -60,7 +60,7 @@ buildPythonPackage {
     })
   ];
 
-  format = "other";
+  pyproject = false;
   pythonImportsCheck = [ "tblite" "tblite.interface" ];
   mesonFlags = [ "-Dpython=true" ];
 }

@@ -15,7 +15,7 @@
 buildPythonPackage {
   pname = "pycangjie";
   version = "unstable-2015-05-03";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Cangjians";

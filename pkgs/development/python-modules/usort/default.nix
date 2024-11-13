@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "usort";
   version = "1.0.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "pytest-factoryboy";
   version = "2.6.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

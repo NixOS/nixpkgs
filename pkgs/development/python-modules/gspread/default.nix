@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "gspread";
   version = "6.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

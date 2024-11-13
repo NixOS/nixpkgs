@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   pname = "weasyprint";
   version = "62.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

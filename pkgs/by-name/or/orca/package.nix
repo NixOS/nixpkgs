@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "orca";
   version = "47.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";

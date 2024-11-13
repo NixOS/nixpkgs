@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "vaa";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "life4";

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "quantiphy";
   version = "2.20";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

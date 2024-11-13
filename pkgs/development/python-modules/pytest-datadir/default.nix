@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-datadir";
   version = "1.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

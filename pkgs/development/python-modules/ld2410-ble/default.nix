@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "ld2410-ble";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

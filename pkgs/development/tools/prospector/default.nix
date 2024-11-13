@@ -10,7 +10,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "prospector";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";

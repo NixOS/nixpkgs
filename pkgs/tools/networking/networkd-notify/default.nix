@@ -12,7 +12,7 @@ buildPythonApplication rec {
   pname = "networkd-notify";
   version = "unstable-2022-11-29";
   # There is no setup.py, just a single Python script.
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "wavexx";

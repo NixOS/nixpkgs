@@ -43,7 +43,7 @@
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchPypi {
     pname = "wxPython";

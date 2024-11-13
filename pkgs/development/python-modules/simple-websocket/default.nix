@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "simple-websocket";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

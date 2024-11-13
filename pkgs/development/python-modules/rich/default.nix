@@ -31,7 +31,7 @@
 buildPythonPackage rec {
   pname = "rich";
   version = "13.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

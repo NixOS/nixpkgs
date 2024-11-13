@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "log4jcheck";
   version = "unstable-2021-12-14";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "NorthwaveSecurity";

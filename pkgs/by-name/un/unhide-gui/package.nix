@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "unhide-gui";
   version = "20220611";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "YJesus";

@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "powersupply";
   version = "0.9.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "martijnbraam";

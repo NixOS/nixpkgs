@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pname = "qscintilla-qt5";
   version = qscintilla.version;
   src = qscintilla.src;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = !isPy3k;
 

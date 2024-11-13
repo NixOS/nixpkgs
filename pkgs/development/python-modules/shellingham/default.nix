@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "shellingham";
   version = "1.5.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

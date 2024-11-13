@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "chispa";
   version = "0.10.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

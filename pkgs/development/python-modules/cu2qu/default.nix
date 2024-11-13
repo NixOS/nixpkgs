@@ -22,7 +22,7 @@ let
 in
 buildPythonPackage rec {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "zarr";
   version = "2.18.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

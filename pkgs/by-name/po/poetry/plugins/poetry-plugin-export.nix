@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
   version = "1.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "faadelays";
   version = "2023.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

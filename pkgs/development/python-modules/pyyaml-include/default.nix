@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyyaml-include";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tanbro";

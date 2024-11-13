@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "termcolor";
   version = "2.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

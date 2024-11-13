@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "jenkinsapi";
   version = "0.3.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

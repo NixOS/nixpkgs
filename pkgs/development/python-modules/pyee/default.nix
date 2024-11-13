@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pyee";
   version = "12.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

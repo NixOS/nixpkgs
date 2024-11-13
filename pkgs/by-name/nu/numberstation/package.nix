@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "numberstation";
   version = "1.4.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";

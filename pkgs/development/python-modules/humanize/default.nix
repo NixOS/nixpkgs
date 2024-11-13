@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "humanize";
   version = "4.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

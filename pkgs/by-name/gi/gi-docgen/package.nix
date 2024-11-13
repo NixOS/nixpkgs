@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
   version = "2024.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";

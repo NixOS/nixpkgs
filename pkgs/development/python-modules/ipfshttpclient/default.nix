@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

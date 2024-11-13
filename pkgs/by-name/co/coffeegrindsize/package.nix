@@ -5,7 +5,7 @@ python3.pkgs.buildPythonApplication {
   # no tags in the repo
   version = "0-unstable-2021-04-20";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jgagneastro";

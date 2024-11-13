@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyfma";
   version = "0.1.6";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

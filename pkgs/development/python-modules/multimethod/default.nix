@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "multimethod";
   version = "1.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

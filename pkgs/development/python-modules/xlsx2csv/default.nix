@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "xlsx2csv";
   version = "0.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

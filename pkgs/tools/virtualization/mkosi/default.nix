@@ -49,7 +49,7 @@ in
 buildPythonApplication rec {
   pname = "mkosi";
   version = "24.3-unstable-2024-08-28";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"

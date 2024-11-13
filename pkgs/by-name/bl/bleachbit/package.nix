@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   pname = "bleachbit";
   version = "4.6.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";

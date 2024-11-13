@@ -16,7 +16,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
   version = "595";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";

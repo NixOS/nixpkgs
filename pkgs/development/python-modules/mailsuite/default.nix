@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "mailsuite";
   version = "1.9.16";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

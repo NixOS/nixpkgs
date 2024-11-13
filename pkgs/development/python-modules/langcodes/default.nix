@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "langcodes";
   version = "3.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

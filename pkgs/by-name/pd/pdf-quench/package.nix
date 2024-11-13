@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication {
   ];
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pypdf2 ];
 
-  format = "other";
+  pyproject = false;
   doCheck = false;
 
   installPhase = ''

@@ -13,7 +13,7 @@ pythonOutputDistPhase() {
 The build contains no ./dist directory.
 If this project is not setuptools-based, pass
 
-  format = "other";
+  pyproject = false;
 
 to buildPythonApplication/buildPythonPackage or another appropriate value as described here:
 

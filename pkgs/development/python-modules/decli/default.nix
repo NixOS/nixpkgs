@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "decli";
   version = "0.6.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

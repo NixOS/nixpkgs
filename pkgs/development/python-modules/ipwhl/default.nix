@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "ipwhl";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {

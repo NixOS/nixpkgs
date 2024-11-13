@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   inherit (piper-phonemize-native) pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     pybind11

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-smNwp67HYbZuMrl0uf2X2yox2JqeEV6WzIBp4dALwgw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   pythonPath = with python3Packages; [
    certifi

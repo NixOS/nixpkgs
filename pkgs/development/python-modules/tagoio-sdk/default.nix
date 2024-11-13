@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "tagoio-sdk";
   version = "4.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

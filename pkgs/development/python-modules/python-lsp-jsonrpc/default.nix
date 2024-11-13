@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "python-lsp-jsonrpc";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "adafruit-pureio";
   version = "1.1.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

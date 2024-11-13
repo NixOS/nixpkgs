@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "datrie";
   version = "0.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

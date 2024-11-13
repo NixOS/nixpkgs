@@ -12,7 +12,7 @@ let
   zipp = buildPythonPackage rec {
     pname = "zipp";
     version = "3.20.2";
-    format = "pyproject";
+    pyproject = true;
 
     disabled = pythonOlder "3.7";
 

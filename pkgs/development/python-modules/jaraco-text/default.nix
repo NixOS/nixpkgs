@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "jaraco-text";
   version = "3.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

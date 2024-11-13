@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;
 
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python.pythonOlder "3.6";
 

@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "typer";
   version = "0.12.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

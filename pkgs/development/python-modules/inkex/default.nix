@@ -23,7 +23,7 @@ buildPythonPackage {
   pname = "inkex";
   inherit (inkscape) version;
 
-  format = "pyproject";
+  pyproject = true;
 
   inherit (inkscape) src;
 

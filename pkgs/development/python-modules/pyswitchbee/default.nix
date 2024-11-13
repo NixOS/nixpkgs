@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyswitchbee";
   version = "1.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

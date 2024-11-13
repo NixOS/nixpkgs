@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
   version = "1.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

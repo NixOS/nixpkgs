@@ -42,7 +42,7 @@ buildPythonPackage rec {
     })
   ];
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [ poetry-core ];
 

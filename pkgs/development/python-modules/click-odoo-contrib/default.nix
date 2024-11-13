@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
   version = "1.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "click_odoo_contrib";

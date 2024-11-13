@@ -3,7 +3,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";
   version = "7.1.12";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "nanos";

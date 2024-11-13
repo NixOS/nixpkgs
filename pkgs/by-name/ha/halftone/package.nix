@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-o55eimlDy86mbwveARxVXauMQEneAchVi2RNaj6FYxs=";
   };
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true;
 
   nativeBuildInputs = [

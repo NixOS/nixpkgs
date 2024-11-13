@@ -16,7 +16,7 @@ py.pkgs.buildPythonApplication rec {
   pname = "netbox";
   version = "4.0.11";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";

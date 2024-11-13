@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "nbxmpp";
   version = "5.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "quaternion";
   version = "2023.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moble";

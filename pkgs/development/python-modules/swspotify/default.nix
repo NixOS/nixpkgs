@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "swspotify";
   version = "1.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

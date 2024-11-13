@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "led-ble";
   version = "1.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

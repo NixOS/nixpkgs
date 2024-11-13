@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pygobject";

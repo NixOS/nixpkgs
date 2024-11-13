@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "simplepush";
   version = "2.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

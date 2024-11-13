@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "in-n-out";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

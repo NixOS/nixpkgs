@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "asyncmy";
   version = "0.2.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "json-stream";
   version = "2.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

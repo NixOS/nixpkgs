@@ -24,7 +24,7 @@ in
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
   version = "4.9.0";
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"

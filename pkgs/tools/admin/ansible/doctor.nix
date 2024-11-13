@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-doctor";
   version = "2.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";

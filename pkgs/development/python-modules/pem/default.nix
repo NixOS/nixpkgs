@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pem";
   version = "23.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "erosmb";
   version = "0.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viktor02";

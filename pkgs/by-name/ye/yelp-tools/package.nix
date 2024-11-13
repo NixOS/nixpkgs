@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
   version = "42.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "autoslot";
   version = "2022.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

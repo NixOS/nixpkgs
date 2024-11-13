@@ -17,7 +17,7 @@
 buildPythonPackage {
   pname = "openstacksdk-tests";
   inherit (openstacksdk) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

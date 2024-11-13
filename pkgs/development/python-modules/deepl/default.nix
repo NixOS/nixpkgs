@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "deepl";
   version = "1.19.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "pytest-aiohttp";
   version = "1.0.5";
 
-  format = "pyproject";
+  pyproject = true;
 
   __darwinAllowLocalNetworking = true;
 

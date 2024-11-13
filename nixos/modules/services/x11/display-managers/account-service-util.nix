@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication {
   name = "set-session";
 
-  format = "other";
+  pyproject = false;
 
   src = ./set-session.py;
 

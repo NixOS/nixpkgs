@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "entrypoints";
   version = "0.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

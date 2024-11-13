@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "kea_exporter";

@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "twspace-dl";
   version = "2024.7.2.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

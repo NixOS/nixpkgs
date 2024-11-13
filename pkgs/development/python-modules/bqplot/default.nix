@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "bqplot";
   version = "0.12.43";
 
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

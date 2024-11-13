@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "eufylife-ble-client";
   version = "0.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

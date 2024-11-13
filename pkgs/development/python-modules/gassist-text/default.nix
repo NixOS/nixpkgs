@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "gassist-text";
   version = "0.0.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

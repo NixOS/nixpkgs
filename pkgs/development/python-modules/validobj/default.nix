@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "validobj";
   version = "1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -141,7 +141,7 @@ let
   apparmor-utils = python.pkgs.buildPythonApplication {
     pname = "apparmor-utils";
     version = apparmor-version;
-    format = "other";
+    pyproject = false;
 
     src = apparmor-sources;
 

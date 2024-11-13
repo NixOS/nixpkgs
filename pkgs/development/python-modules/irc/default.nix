@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "irc";
   version = "20.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

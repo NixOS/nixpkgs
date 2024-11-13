@@ -21,7 +21,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
   version = "0.6.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

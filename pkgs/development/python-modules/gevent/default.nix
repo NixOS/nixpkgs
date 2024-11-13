@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "gevent";
   version = "24.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

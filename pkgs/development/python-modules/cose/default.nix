@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pname = "cose";
   version = "1.0.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TimothyClaeys";

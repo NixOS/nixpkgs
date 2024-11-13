@@ -12,7 +12,7 @@
 let
   automat = buildPythonPackage rec {
     version = "24.8.1";
-    format = "pyproject";
+    pyproject = true;
     pname = "automat";
 
     src = fetchPypi {

@@ -13,7 +13,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "tremc";
   version = "0.9.3";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tremc";
