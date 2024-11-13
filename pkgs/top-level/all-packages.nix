@@ -5250,6 +5250,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  inherit ({
+    sdformat_13 = callPackage ../development/libraries/sdformat/13.nix { };
+    sdformat_9 = callPackage ../development/libraries/sdformat/9.nix { };
+  })
+    sdformat_13
+    sdformat_9;
+
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
