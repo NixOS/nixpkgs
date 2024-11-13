@@ -13510,6 +13510,10 @@ self: super: with self; {
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
+  qubes-vmm-xen = toPythonModule (pkgs.qubes-vmm-xen.override {
+    inherit python;
+  });
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
