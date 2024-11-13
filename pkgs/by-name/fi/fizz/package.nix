@@ -15,7 +15,6 @@
   gflags,
   zlib,
   libevent,
-  libiberty,
   apple-sdk_11,
   darwinMinVersionHook,
 
@@ -46,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       gflags
       zlib
       libevent
-      libiberty
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
