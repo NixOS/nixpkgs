@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchurl, glib, dpkg, wrapGAppsHook3, openjdk17, openjfx17 }:
+{ lib, stdenv, fetchurl, glib, dpkg, wrapGAppsHook3, openjdk21 }:
 let
-  openjdk = openjdk17.override {
+  openjdk = openjdk21.override {
     withJavaFX = true;
-    openjfx_jdk = openjfx17.override { withWebKit = true; };
   };
 in
 stdenv.mkDerivation rec {
   pname = "bluej";
-  version = "5.2.0";
+  version = "5.4.1";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
