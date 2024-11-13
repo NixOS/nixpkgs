@@ -20,6 +20,7 @@
   darwinMinVersionHook,
 
   mvfst,
+
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
       (lib.cmakeBool "thriftpy" false)
+
+      # TODO: Can’t figure out where the C++ tests are wired up in the
+      # CMake build, if anywhere, and this requires Python.
+      #(lib.cmakeBool "enable_tests" finalAttrs.finalPackage.doCheck)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Homebrew sets this, and the shared library build fails without
