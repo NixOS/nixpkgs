@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wmii";
-  version = "unstable-2022-04-04";
+  version = "0-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "0intro";
     repo = "wmii";
-    rev = "ff120c7fee6e1b3a30a4a800074394327fb1da9d";
-    hash = "sha256-KEmWnobpT/5TdgT2HGPCpG1duz9Q6Z6PFSEBs2Ce+7g=";
+    rev = "26848c93457606b350f57d6d313112a745a0cf3d";
+    hash = "sha256-5l2aYAoThbA0Aq8M2vPTzaocQO1AvrnWqgXhmBLADVk=";
   };
 
   # for dlopen-ing
@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  # Remove optional python2 functionality
-  postInstall = ''
-    rm -rf $out/lib/python* $out/etc/wmii-hg/python
-  '';
+  patches = [
+    # the python alternative wmiirc was not building due to errors with pyxp
+    # this patch disables building it altogether
+    ./001-disable-python2-build.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
