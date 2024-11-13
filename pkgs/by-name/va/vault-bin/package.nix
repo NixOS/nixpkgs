@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
         psyanticy
         Chili-Man
         techknowlogick
-        mkaito
       ];
     mainProgram = "vault";
     platforms = [
