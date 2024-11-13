@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, folly
-, glog
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  folly,
+  glog,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
