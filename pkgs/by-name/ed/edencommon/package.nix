@@ -10,14 +10,14 @@
   darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
   version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ kylesferrazza ];
   };
-}
+})
