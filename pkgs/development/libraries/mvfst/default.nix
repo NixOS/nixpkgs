@@ -6,8 +6,6 @@
 , folly
 , gflags
 , glog
-, libsodium
-, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +30,6 @@ stdenv.mkDerivation rec {
     folly
     gflags
     glog
-    libsodium
-    zlib
   ];
 
   meta = with lib; {
