@@ -194,6 +194,39 @@ in
         Open ports needed for the functionality of the program.
       '';
     };
+
+    nginx = mkOption {
+      default = { };
+      description = ''
+        Configuration for nginx reverse proxy.
+      '';
+      type = types.submodule {
+        options = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Configure the nginx reverse proxy settings.
+            '';
+          };
+
+          enableSSL = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Forces SSL for the nginx reverse proxy settings.
+            '';
+          };
+
+          hostName = mkOption {
+            type = types.str;
+            description = ''
+              The hostname use to setup the virtualhost configuration.
+            '';
+          };
+        };
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -210,7 +243,7 @@ in
     networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     systemd.sockets.pr-tracker = {
-      listenStreams = [ "${cfg.listen}:${toString cfg.port}" ];
+      listenStreams = optionals (!cfg.nginx.enable) [ "${cfg.listen}:${toString cfg.port}" ];
       wantedBy = [ "sockets.target" ];
     };
 
@@ -286,6 +319,20 @@ in
       serviceConfig = commonUnitSettings // {
         Requires = "pr-tracker";
         Type = "oneshot";
+      };
+    };
+
+    services.nginx = mkIf (cfg.nginx.enable) {
+      enable = true;
+      virtualHosts."${cfg.nginx.hostName}" = {
+        forceSSL = cfg.nginx.enableSSL;
+        enableACME = cfg.nginx.enableSSL;
+        locations."/" = {
+          proxyPass = "http://unix:/run/pr-tracker/pr-tracker.sock:/pr-tracker.html";
+          extraConfig = ''
+            proxy_http_version 1.1;
+          '';
+        };
       };
     };
   };
