@@ -2,13 +2,13 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  giflib,
   python3,
   pkg-config,
   pixman,
   cairo,
   pango,
   stdenv,
-  darwin,
   olm,
 }:
 
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall
