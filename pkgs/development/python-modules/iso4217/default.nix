@@ -40,15 +40,15 @@ buildPythonPackage rec {
     # The table is already downloaded
     export ISO4217_DOWNLOAD=0
     # Copy the table file to satifiy the build process
-    cp -r ${table} $pname/table.xml
+    cp -r ${table} iso4217/table.xml
   '';
 
   postInstall = ''
     # Copy the table file
-    cp -r ${table} $out/${python.sitePackages}/$pname/table.xml
+    cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [ "$pname/test.py" ];
+  pytestFlagsArray = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 
