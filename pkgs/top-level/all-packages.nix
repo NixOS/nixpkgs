@@ -3939,8 +3939,6 @@ with pkgs;
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
-  invidious = callPackage ../servers/invidious { };
-
   iocextract = with python3Packages; toPythonApplication iocextract;
 
   iocsearcher = with python3Packages; toPythonApplication iocsearcher;

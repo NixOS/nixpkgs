@@ -51,7 +51,7 @@ json_set '.invidious.date' "$date"
 json_set '.invidious.commit' "$commit"
 json_set '.invidious.version' "$new_version"
 
-new_hash=$(nix-prefetch -I 'nixpkgs=../../..' "$pkg")
+new_hash=$(nix-prefetch -I 'nixpkgs=../../../..' "$pkg")
 json_set '.invidious.hash' "$new_hash"
 
 # fetch video.js dependencies
