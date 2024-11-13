@@ -7,7 +7,6 @@
   testers,
   which,
   fetchgit,
-  fetchpatch,
 
   # Xen
   acpica-tools,
@@ -65,7 +64,6 @@
   withSeaBIOS ? true,
   withOVMF ? true,
   withIPXE ? true,
-  useDefaultPatchList ? true,
   rev,
   hash,
   patches ? [ ],
@@ -73,115 +71,25 @@
 }:
 
 let
-  # Inherit helper functions from lib and builtins.
-  inherit (builtins) elemAt isAttrs;
+  inherit (lib.meta) getExe';
+  inherit (lib.lists) optional optionals;
+  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
+  inherit (lib) teams;
   inherit (lib.strings)
-    concatLines
     enableFeature
     makeSearchPathOutput
     optionalString
-    removeSuffix
     versionOlder
     ;
-  inherit (lib.platforms) linux aarch64;
-  inherit (lib) teams;
   inherit (lib.licenses)
     cc-by-40
     gpl2Only
     lgpl21Only
     mit
     ;
-  inherit (lib.meta) getExe';
-  inherit (lib.lists)
-    count
-    flatten
-    optional
-    optionals
-    range
-    remove
-    zipListsWith
-    ;
-  inherit (lib.attrsets) attrByPath;
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.16";
-
-  ## Generic Patch Handling ##
-
-  upstreamPatches = import ./patches.nix {
-    inherit lib fetchpatch;
-  };
-
-  upstreamPatchList = flatten (
-    with upstreamPatches;
-    [
-      QUBES_REPRODUCIBLE_BUILDS
-      XSA_460
-      XSA_461
-      XSA_462
-    ]
-  );
-
-  ## XSA Patches Description Builder ##
-
-  # Simple counter for the number of attrsets (patches) in the patches list after normalisation.
-  numberOfPatches = count (patch: isAttrs patch) upstreamPatchList;
-
-  # builtins.elemAt's index begins at 0, so we subtract 1 from the number of patches in order to
-  # produce the range that will be used in the following builtin.map calls.
-  availablePatchesToTry = range 0 (numberOfPatches - 1);
-
-  # Takes in an attrByPath input, and outputs the attribute value for each patch in a list.
-  # If a patch does not have a given attribute, returns `null`. Use lib.lists.remove null
-  # to remove these junk values, if necessary.
-  retrievePatchAttributes =
-    attributeName:
-    map (x: attrByPath attributeName null (elemAt upstreamPatchList x)) availablePatchesToTry;
-
-  # Produces a list of newline-separated strings that lists the vulnerabilities this
-  # Xen is NOT affected by, due to the applied Xen Security Advisory patches. This is
-  # then used in meta.longDescription, to let users know their Xen is patched against
-  # known vulnerabilities, as the package version isn't always the best indicator.
-  #
-  # Produces something like this: (one string for each XSA)
-  #  * [Xen Security Advisory #1](https://xenbits.xenproject.org/xsa/advisory-1.html): **Title for XSA.**
-  #  >Description of issue in XSA
-  #Extra lines
-  #are not indented,
-  #but markdown should be
-  #fine with it.
-  #  Fixes:
-  #  * [CVE-1999-00001](https://www.cve.org/CVERecord?id=CVE-1999-00001)
-  #  * [CVE-1999-00002](https://www.cve.org/CVERecord?id=CVE-1999-00002)
-  #  * [CVE-1999-00003](https://www.cve.org/CVERecord?id=CVE-1999-00003)
-  writeAdvisoryDescription =
-    if (remove null (retrievePatchAttributes [ "xsa" ]) != [ ]) then
-      zipListsWith (a: b: a + b)
-        (zipListsWith (a: b: a + "**" + b + ".**\n  >")
-          (zipListsWith (a: b: "* [Xen Security Advisory #" + a + "](" + b + "): ")
-            (remove null (retrievePatchAttributes [ "xsa" ]))
-            (
-              remove null (retrievePatchAttributes [
-                "meta"
-                "homepage"
-              ])
-            )
-          )
-          (
-            remove null (retrievePatchAttributes [
-              "meta"
-              "description"
-            ])
-          )
-        )
-        (
-          remove null (retrievePatchAttributes [
-            "meta"
-            "longDescription"
-          ])
-        )
-    else
-      [ ];
 
   #TODO: fix paths instead.
   scriptEnvPath = makeSearchPathOutput "out" "bin" [
@@ -204,10 +112,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
+  inherit pname version patches;
 
-  # TODO: Split $out in $bin for binaries and $lib for libraries.
-  # TODO: Python package to be in separate output/package.
   outputs = [
     "out"
     "man"
@@ -216,13 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  # Main Xen source.
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xen.git";
     inherit rev hash;
   };
-
-  patches = optionals useDefaultPatchList upstreamPatchList ++ patches;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -264,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
     (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
-    (if withIPXE then "--with-system-ipxe=${ipxe}" else "--disable-ipxe")
+    (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];
 
@@ -435,14 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
       + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
       + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
       + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
-      + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains."
-      # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
-      # This will hopefully give users the peace of mind that their Xen is secure, without needing
-      # to search the source code for the XSA patches.
-      + optionalString (writeAdvisoryDescription != [ ]) (
-        "\n\nThis Xen Project Hypervisor (${version}) has been patched against the following known security vulnerabilities:\n"
-        + removeSuffix "\n" (concatLines writeAdvisoryDescription)
-      );
+      + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
 
     homepage = "https://xenproject.org/";
     downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
@@ -464,8 +360,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mainProgram = "xl";
 
-    #TODO: Migrate meta.platforms to the new lib.systems.inspect.patterns.* format.
-    platforms = linux;
-    badPlatforms = aarch64;
+    platforms = [ isLinux ];
+    badPlatforms = [ isAarch64 ];
   } // meta;
 })

@@ -11951,6 +11951,13 @@
     name = "André Kugland";
     keys = [ { fingerprint = "6A62 5E60 E3FF FCAE B3AA  50DC 1DA9 3817 80CD D833"; } ];
   };
+  kuglimon = {
+    name = "Tatu Argillander";
+    email = "tatu.argillander@kouralabs.com";
+    github = "kuglimon";
+    githubId = 629430;
+    keys = [ { fingerprint = "2843 750C B1AB E256 94BE  40E2 D843 D30B 42CA 0E2D"; } ];
+  };
   kupac = {
     github = "Kupac";
     githubId = 8224569;
