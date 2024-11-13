@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtklock";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = "gtklock";
     rev = "v${version}";
-    hash = "sha256-B6pySjiwPBRFb4avE9NHsS1KkWMPW81DAqYro/wtrmQ=";
+    hash = "sha256-e/JRJtQAyIvQhL5hSbY7I/f12Z9g2N0MAHQvX+aXz8Q=";
   };
 
   nativeBuildInputs = [
