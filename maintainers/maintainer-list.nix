@@ -11835,6 +11835,12 @@
     githubId = 26622971;
     name = "Ronnie Ebrin";
   };
+  kraftnix = {
+    email = "kraftnix@protonmail.com";
+    github = "kraftnix";
+    githubId = 83026656;
+    name = "kraftnix";
+  };
   kragniz = {
     email = "louis@kragniz.eu";
     github = "kragniz";
