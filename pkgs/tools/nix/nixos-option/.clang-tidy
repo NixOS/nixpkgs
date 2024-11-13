@@ -5,8 +5,8 @@ Checks:
 # don't find them too problematic
 - -bugprone-easily-swappable-parameters
 - performance-*
+- modernize-*
 # TODO
-#  - modernize-*
 #  - readability-*
 #  - misc-*
 #  - portability-*

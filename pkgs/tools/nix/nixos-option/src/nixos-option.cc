@@ -82,8 +82,8 @@ class Out
     {}
     Out(const Out &) = delete;
     Out(Out &&) = default;
-    Out & operator=(const Out &) = delete;
-    Out & operator=(Out &&) = delete;
+    auto operator=(const Out &) -> Out & = delete;
+    auto operator=(Out &&) -> Out & = delete;
     ~Out() { ostream << end; }
 
   private:
@@ -92,9 +92,9 @@ class Out
     std::string end;
     LinePolicy policy;
     bool writeSinceSep;
-    template <typename T> friend Out & operator<<(Out & o, T thing);
+    template <typename T> friend auto operator<<(Out & o, T thing) -> Out &;
 
-    friend void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path);
+    friend auto printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path) -> void;
 };
 
 template <typename T> Out & operator<<(Out & o, T thing)
