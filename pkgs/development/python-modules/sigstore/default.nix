@@ -20,11 +20,14 @@
   sigstore-protobuf-specs,
   sigstore-rekor-types,
   tuf,
+  rfc8785,
+  pyasn1,
+  platformdirs,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "2.1.5";
+  version = "3.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +36,7 @@ buildPythonPackage rec {
     owner = "sigstore";
     repo = "sigstore-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lqmrM4r1yPVCcvWNC9CKYMyryuIyliI2Y+TAYgAwA1Y=";
+    hash = "sha256-AMKe+R1sTXdxFAelJmRiEyDNe+T55KaGK3HUARqz3Tw=";
   };
 
   build-system = [ flit-core ];
@@ -46,6 +49,9 @@ buildPythonPackage rec {
     pydantic
     pyjwt
     pyopenssl
+    pyasn1
+    rfc8785
+    platformdirs
     requests
     rich
     securesystemslib
@@ -76,6 +82,10 @@ buildPythonPackage rec {
     "test_sign_rekor_entry_consistent"
     "test_verification_materials_retrieves_rekor_entry"
     "test_verifier"
+    "test_fix_bundle_fixes_missing_checkpoint"
+    "test_trust_root_bundled_get"
+    "test_fix_bundle_upgrades_bundle"
+    "test_trust_root_tuf_caches_and_requests"
   ];
 
   passthru.updateScript = nix-update-script { };
