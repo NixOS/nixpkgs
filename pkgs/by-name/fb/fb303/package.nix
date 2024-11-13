@@ -6,6 +6,7 @@
 
   cmake,
 
+  gflags,
   glog,
   folly,
   fbthrift,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      gflags
       glog
       folly
       fbthrift
