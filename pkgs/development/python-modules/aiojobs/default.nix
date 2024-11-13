@@ -26,13 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-FNc71YyAjtR+hd0UOqFAy6XW0PwHSlM76C3ecPM5vsU=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/aio-libs/aiojobs/commit/1b88049841397b01f88aee7d92174ac5a15217c1.patch";
-      hash = "sha256-b38Ipa29T6bEVsPe04ZO3WCcs6+0fOQDCJM+w8K1bVY=";
-    })
-  ];
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
@@ -56,11 +49,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jobs scheduler for managing background task (asyncio)";
     homepage = "https://github.com/aio-libs/aiojobs";
     changelog = "https://github.com/aio-libs/aiojobs/blob/v${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }
