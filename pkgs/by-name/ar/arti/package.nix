@@ -6,7 +6,6 @@
   pkg-config,
   sqlite,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,15 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-      ]
-    );
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isLinux [ openssl ];
 
   cargoBuildFlags = [
     "--package"
