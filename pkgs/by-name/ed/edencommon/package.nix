@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
+    hash = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
