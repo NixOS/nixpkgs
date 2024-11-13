@@ -10349,7 +10349,7 @@ with pkgs;
 
   mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
 
-  mvfst = darwin.apple_sdk_11_0.callPackage ../development/libraries/mvfst { };
+  mvfst = callPackage ../development/libraries/mvfst { };
 
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
