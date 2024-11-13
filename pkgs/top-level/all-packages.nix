@@ -10530,8 +10530,6 @@ with pkgs;
 
   mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
 
-  mvfst = callPackage ../development/libraries/mvfst { };
-
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
