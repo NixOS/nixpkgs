@@ -31,15 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeDir = "../fizz";
-
-  cmakeFlags = [
-    "-Wno-dev"
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ];
-
-  NIX_LDFLAGS = "-lz";
-
   buildInputs =
     [
       double-conversion
@@ -58,10 +49,21 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  doCheck = true;
   checkInputs = [
     gtest
   ];
+
+  cmakeDir = "../fizz";
+
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  NIX_LDFLAGS = "-lz";
+
+  doCheck = true;
+
   preCheck =
     let
       disabledTests = [
