@@ -26,5 +26,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = teams.geospatial.members;
     mainProgram = "t_rex";
     platforms = platforms.unix;
+    broken = true; # At 2024-11-13
+                   # https://github.com/NixOS/nixpkgs/issues/355705
   };
 }
