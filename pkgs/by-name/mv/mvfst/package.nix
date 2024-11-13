@@ -11,14 +11,14 @@
   darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
   version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "mvfst";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KjNTDgpiR9EG42Agl2JFJoPo5+8GlS27oPMWpdLq2v8=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ ris ];
   };
-}
+})
