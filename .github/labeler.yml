@@ -358,8 +358,9 @@
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/php.section.md
+        - nixos/tests/php/**/*
         - pkgs/build-support/php/**/*
-        - pkgs/development/interpreters/php/*
+        - pkgs/development/interpreters/php/**/*
         - pkgs/development/php-packages/**/*
         - pkgs/test/php/default.nix
         - pkgs/top-level/php-packages.nix
