@@ -1,14 +1,17 @@
 {
-  stdenv,
   lib,
+  stdenv,
+
   fetchFromGitHub,
+
   cmake,
+
+  glog,
+  folly,
   fbthrift,
   fizz,
-  folly,
-  glog,
-  python3,
   wangle,
+  python3,
   apple-sdk_11,
   darwinMinVersionHook,
 }:
@@ -28,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      glog
+      folly
       fbthrift
       fizz
-      folly
-      glog
-      python3
       wangle
+      python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
