@@ -8,7 +8,6 @@
   pkg-config,
   stdenv,
   installShellFiles,
-  darwin,
   crates ? [ "attic-client" ],
 }:
 rustPlatform.buildRustPackage {
@@ -27,14 +26,10 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      nix
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks; [ SystemConfiguration ]
-    );
+  buildInputs = [
+    nix
+    boost
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
