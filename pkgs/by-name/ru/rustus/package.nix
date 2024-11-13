@@ -11,7 +11,7 @@
 
 let
   pname = "rustus";
-  version = "0.7.6";
+  version = "0.7.6-unstable-2024-05-10";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -19,15 +19,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "s3rius";
     repo = pname;
-    rev = version;
-    hash = "sha256-osxdqwNUONCScFarpQV48C7CR1DVR/mCttaglqiAKPo=";
+    rev = "a7ebbc3f4c367b0c71b49972b1f6ebbeb08634b8";
+    hash = "sha256-S3hq6G78HRQVLJuuwfC6U7NQXMSdllrC/ZolVPZRTsA=";
   };
 
-  cargoPatch = [
-    ./0001-update-time-rs.diff
-  ];
-
-  cargoHash = "sha256-10mJ+9VznzHDmdKAsT3YamyG/P0JF8oPeVHaX44NWM4=";
+  cargoHash = "sha256-uN0nXI15LxtSQpUCOJ8QIdgw2OyQO3i5alTik/fI8GI=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -67,12 +63,12 @@ rustPlatform.buildRustPackage {
   #   "--skip=util::tests::test_process_multi_addr"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "TUS protocol implementation in Rust";
     mainProgram = "rustus";
     homepage = "https://s3rius.github.io/rustus/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.all;
   };
 }
