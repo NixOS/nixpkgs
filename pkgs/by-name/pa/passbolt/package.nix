@@ -1,20 +1,29 @@
-{ lib,
-fetchFromGitHub,
-php,
-bash,
-imagemagick,
-zlib,
-makeWrapper,
-dataDir ? "/var/lib/passbolt",
-runtimeDir ? "/run/passbolt",
+{
+  lib,
+  fetchFromGitHub,
+  php,
+  bash,
+  imagemagick,
+  zlib,
+  makeWrapper,
+  dataDir ? "/var/lib/passbolt",
+  runtimeDir ? "/run/passbolt",
 }:
 
 let
   phpWithExt = php.buildEnv {
-   extensions = ({ all, enabled }: enabled ++ (with all; [
-     gnupg xsl imagick openssl curl
-   ]));
-   };
+    extensions = (
+      { all, enabled }:
+      enabled
+      ++ (with all; [
+        gnupg
+        xsl
+        imagick
+        openssl
+        curl
+      ])
+    );
+  };
 in
 php.buildComposerProject (finalAttrs: {
   pname = "passbolt_api";
@@ -41,7 +50,7 @@ php.buildComposerProject (finalAttrs: {
 
     ## [WIP] Install process requires lot of patching ##
     patchShebangs $out/bin/*
-    substituteInPlace $out/bin/cake --replace-fail "/usr/local/bin/php" "${lib.makeBinPath [phpWithExt]}/php"
+    substituteInPlace $out/bin/cake --replace-fail "/usr/local/bin/php" "${lib.makeBinPath [ phpWithExt ]}/php"
     substituteInPlace $out/bin/cake.php --replace-fail "dirname(__DIR__)" "\"$out\""
     # TODO: Need to patch tmp directory/cache directory to where ??
     # Need to patch logs directory out of nix store to where ??
