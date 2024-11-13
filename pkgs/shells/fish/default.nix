@@ -315,7 +315,7 @@ let
       changelog = "https://github.com/fish-shell/fish-shell/releases/tag/${version}";
       license = licenses.gpl2Only;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ adamcstephens cole-h winter ];
+      maintainers = with maintainers; [ adamcstephens cole-h winter sigmasquadron ];
       mainProgram = "fish";
     };
 
