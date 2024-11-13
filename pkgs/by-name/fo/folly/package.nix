@@ -99,10 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
-    "-fpermissive"
-  ];
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+    [
+      "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
+    ]
+    ++ lib.optionals (stdenv.cc.isGNU && stdenv.hostPlatform.isAarch64) [
+      # /build/source/folly/algorithm/simd/Movemask.h:156:32: error: cannot convert '__Uint64x1_t' to '__Uint8x8_t'
+      "-flax-vector-conversions"
+    ]
+  );
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
