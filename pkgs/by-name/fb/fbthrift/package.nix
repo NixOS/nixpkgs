@@ -55,11 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
-    (lib.cmakeBool "thriftpy" false)
-  ];
+      (lib.cmakeBool "thriftpy" false)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Homebrew sets this, and the shared library build fails without
+      # it. I don‘t know, either. It scares me.
+      (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
+    ];
 
   meta = {
     description = "Facebook's branch of Apache Thrift";
