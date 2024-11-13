@@ -2826,6 +2826,8 @@ self: super: with self; {
 
   cymruwhois = callPackage ../development/python-modules/cymruwhois { };
 
+  cynthion = callPackage ../development/python-modules/cynthion { };
+
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
   cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
