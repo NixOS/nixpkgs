@@ -1,34 +1,38 @@
 {
-  cargo,
-  cmake,
-  cpptoml,
-  double-conversion,
-  edencommon,
-  ensureNewerSourcesForZipFilesHook,
-  fb303,
-  fbthrift,
+  lib,
+  stdenv,
+
   fetchFromGitHub,
   fetchpatch,
-  fizz,
-  folly,
-  glog,
-  gtest,
-  lib,
-  libevent,
-  libsodium,
-  libunwind,
-  lz4,
-  openssl,
-  pcre2,
+
+  cmake,
   pkg-config,
-  rustPlatform,
   rustc,
-  stateDir ? "/tmp",
-  stdenv,
+  cargo,
+  rustPlatform,
+  ensureNewerSourcesForZipFilesHook,
+
+  pcre2,
+  openssl,
+  glog,
+  libevent,
+  edencommon,
+  folly,
+  fizz,
   wangle,
+  fbthrift,
+  fb303,
+  cpptoml,
+  gtest,
+  libunwind,
+  libsodium,
+  double-conversion,
+  lz4,
   zstd,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  stateDir ? "/tmp",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,27 +57,27 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    ensureNewerSourcesForZipFilesHook
-    rustPlatform.cargoSetupHook
-    cargo
     rustc
+    cargo
+    rustPlatform.cargoSetupHook
+    ensureNewerSourcesForZipFilesHook
   ];
 
   buildInputs =
     [
       pcre2
       openssl
-      gtest
       glog
       libevent
-      libsodium
+      edencommon
       folly
       fizz
       wangle
       fbthrift
       fb303
       cpptoml
-      edencommon
+      gtest
+      libsodium
       libunwind
       double-conversion
       lz4
