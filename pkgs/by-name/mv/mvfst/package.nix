@@ -141,6 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/facebook/mvfst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      emily
+    ];
   };
 })
