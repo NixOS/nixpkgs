@@ -24,9 +24,9 @@ let
   '';
 
   makeTestFor =
-    postgresqlPackage:
+    package:
     makeTest {
-      name = "pgvecto-rs-${postgresqlPackage.name}";
+      name = "pgvecto-rs-${package.name}";
       meta = with lib.maintainers; {
         maintainers = [ diogotcorreia ];
       };
@@ -35,8 +35,9 @@ let
         { ... }:
         {
           services.postgresql = {
+            inherit package;
             enable = true;
-            package = postgresqlPackage;
+            enableJIT = lib.hasInfix "-jit-" package.name;
             extraPlugins =
               ps: with ps; [
                 pgvecto-rs
