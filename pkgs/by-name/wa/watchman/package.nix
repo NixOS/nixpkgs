@@ -14,6 +14,7 @@
 
   pcre2,
   openssl,
+  gflags,
   glog,
   libevent,
   edencommon,
@@ -23,14 +24,10 @@
   fbthrift,
   fb303,
   cpptoml,
-  gtest,
-  libunwind,
-  libsodium,
-  double-conversion,
-  lz4,
-  zstd,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  gtest,
 
   stateDir ? "/tmp",
 }:
@@ -67,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       pcre2
       openssl
+      gflags
       glog
       libevent
       edencommon
@@ -76,17 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
       fbthrift
       fb303
       cpptoml
-      gtest
-      libsodium
-      libunwind
-      double-conversion
-      lz4
-      zstd
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  checkInputs = [
+    gtest
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
