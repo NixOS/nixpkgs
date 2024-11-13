@@ -5656,6 +5656,8 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
+  globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
+
   sssd = callPackage ../os-specific/linux/sssd {
     inherit (perlPackages) Po4a;
     # python312Packages.python-ldap is broken
