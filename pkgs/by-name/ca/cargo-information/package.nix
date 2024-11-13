@@ -7,8 +7,6 @@
   openssl,
   curl,
   rustc,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     curl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/cargo-info \
