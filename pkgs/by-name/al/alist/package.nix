@@ -33,7 +33,8 @@ buildGoModule rec {
     hash = "sha256-jHbWhjvHfgtdocuuELbOwrMzL8tOQfBVdH9MxasEwGo=";
   };
 
-  vendorHash = "sha256-qSbvb2/y5rdS/OCutNEcRDUQBCAgNudux8XDnY9TRSo=";
+  proxyVendor = true;
+  vendorHash = "sha256-Q5E86bNedXOqMKS3WrXicWg27vnjyGao0nE34Ws2l9E=";
 
   buildInputs = [ fuse ];
 
