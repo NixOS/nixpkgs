@@ -11,6 +11,8 @@
   fizz,
   folly,
   gtest,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,24 +30,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../wangle";
 
-  cmakeFlags =
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  buildInputs =
     [
-      "-Wno-dev"
-      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+      double-conversion
+      fizz
+      folly
+      glog
+      gflags
+      libevent
+      openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
     ];
-
-  buildInputs = [
-    double-conversion
-    fizz
-    folly
-    glog
-    gflags
-    libevent
-    openssl
-  ];
 
   doCheck = true;
   checkInputs = [

@@ -11283,7 +11283,7 @@ with pkgs;
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
-  wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
+  wangle = callPackage ../development/libraries/wangle { };
 
   wayland = darwin.apple_sdk_11_0.callPackage ../development/libraries/wayland { };
   wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };
