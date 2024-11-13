@@ -11483,6 +11483,13 @@
     name = "Khushraj Rathod";
     keys = [ { fingerprint = "1988 3FD8 EA2E B4EC 0A93  1E22 B77B 2A40 E770 2F19"; } ];
   };
+  kiara = {
+    name = "kiara";
+    email = "cinereal@riseup.net";
+    github = "KiaraGrouwstra";
+    githubId = 3059397;
+    matrix = "@cinerealkiara:matrix.org";
+  };
   KibaFox = {
     email = "kiba.fox@foxypossibilities.com";
     github = "KibaFox";
