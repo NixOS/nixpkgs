@@ -7,6 +7,7 @@
   cmake,
 
   glog,
+  gflags,
   folly,
   gtest,
   apple-sdk_11,
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       glog
+      gflags
       folly
       gtest
     ]
