@@ -1,0 +1,21 @@
+Checks:
+# TODO
+#  - bugprone-*
+#  - performance-*
+#  - modernize-*
+#  - readability-*
+#  - misc-*
+#  - portability-*
+#  - concurrency-*
+#  - google-*
+#  - -google-readability-todo
+#
+#  # don't find them too problematic
+#  - -readability-identifier-length
+#  - -readability-magic-numbers
+#
+#  - cppcoreguidelines-*
+#  - -cppcoreguidelines-avoid-magic-numbers
+UseColor: true
+CheckOptions:
+  misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: True
