@@ -6,6 +6,7 @@
   fetchpatch,
 
   cmake,
+  ninja,
   pkg-config,
   rustc,
   cargo,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
     rustc
     cargo
