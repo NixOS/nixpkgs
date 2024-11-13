@@ -15,6 +15,7 @@
   wangle,
   zlib,
   zstd,
+  xxHash,
   mvfst,
   apple-sdk_11,
   darwinMinVersionHook,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2024.03.11.00";
+  version = "2024.11.18.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-iCiiKNDlfKm1Y4SGzcSP6o/OdiRRrj9UEawW6qpBpSY=";
+    hash = "sha256-dJf4vaIcat24WiKLFNEqeCnJYiO+c5YkuFu+hrS6cPE=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       wangle
       zlib
       zstd
+      xxHash
       mvfst
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+
+    (lib.cmakeBool "thriftpy" false)
   ];
 
   meta = {
