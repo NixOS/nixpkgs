@@ -25,7 +25,7 @@
   darwinMinVersionHook,
 
   boost,
-  fmt_8,
+  fmt_11,
   jemalloc,
 
   follyMobile ? false,
@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
       libiberty
       libunwind
-      fmt_8
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
@@ -86,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # `folly-config.cmake` pulls these in.
       boost
-      fmt_8
+      fmt_11
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # jemalloc headers are required in include/folly/portability/Malloc.h
@@ -138,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit boost;
-    fmt = fmt_8;
+    fmt = fmt_11;
 
     tests = {
       inherit watchman;
