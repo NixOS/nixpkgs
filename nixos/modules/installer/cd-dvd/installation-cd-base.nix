@@ -46,5 +46,11 @@
 
   programs.git.enable = lib.mkDefault true;
 
+  specialisation.latest_kernel.configuration = {
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+    isoImage.configurationName = "Latest Kernel (${pkgs.linuxPackages_latest.kernel.version})";
+    boot.supportedFilesystems.zfs = false;
+  };
+
   system.stateVersion = lib.mkDefault lib.trivial.release;
 }
