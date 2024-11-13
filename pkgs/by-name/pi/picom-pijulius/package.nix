@@ -21,6 +21,8 @@ picom.overrideAttrs (previousAttrs: {
   buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ pcre ];
   nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ asciidoctor ];
 
+  dontVersionCheck = true;
+
   meta = {
     inherit (previousAttrs.meta)
       license
