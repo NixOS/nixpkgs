@@ -13474,6 +13474,12 @@
     githubId = 1709273;
     name = "Robin Hack";
   };
+  marnym = {
+    email = "markus@nyman.dev";
+    github = "marnym";
+    githubId = 56825922;
+    name = "Markus Nyman";
+  };
   marsupialgutz = {
     email = "mars@possums.xyz";
     github = "pupbrained";

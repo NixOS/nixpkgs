@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
-  version = "4.4.2";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-o1bFz3INtJRm9gdm2b9+sHW6r+l/RNCZr62ucI73N9w=";
+    hash = "sha256-GFfBiGMOyBwMKjpD1kj3vRpvjR0ydji3QNDyoOQoQsw=";
   };
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.52.tar.xz";
-    hash = "sha256-FZGrNIOZ1KpTEhFYUlBWppyM8P4OkJNbAJXppY43tLg=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.59.tar.xz";
+    hash = "sha256-I2FoCNjAjxKBX/iY9O20wROXorKEPQKe5iRS0hgzp20=";
   };
 
   postPatch = ''
