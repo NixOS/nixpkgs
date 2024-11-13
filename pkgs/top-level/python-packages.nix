@@ -11167,6 +11167,8 @@ self: super: with self; {
 
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
+  pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
+
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
@@ -14927,6 +14929,8 @@ self: super: with self; {
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
   sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
+
+  sphinx-click = callPackage ../development/python-modules/sphinx-click { };
 
   sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
 

@@ -4,22 +4,26 @@
   jq,
   lib,
   python3,
+  sphinxHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
+    hash = "sha256-sk5LgFNo5Dc+oHCLu464Q1g0bk1QGsA7xMtMiits/8c=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+    sphinxHook
+    python3.pkgs.sphinx-click
+    python3.pkgs.sphinx-rtd-theme
   ];
 
   build-system = with python3.pkgs; [
@@ -34,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     humanize
     icalendar
     parsedatetime
-    python-dateutil
     pyxdg
-    pytz
     tabulate
     urwid
   ];
@@ -44,8 +46,9 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     freezegun
     hypothesis
-    pytestCheckHook
     pytest-cov-stub
+    pytestCheckHook
+    pytz
   ];
 
   postInstall = ''

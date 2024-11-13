@@ -148,8 +148,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "-m 'not serial'"
     "--hypothesis-profile ci"
