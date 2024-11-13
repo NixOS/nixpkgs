@@ -5,7 +5,7 @@
 , nix-update-script
 , pkg-config
 , openssl
-, Security
+, darwin,
 }:
 
 let
@@ -22,7 +22,11 @@ rustPlatform.buildRustPackage {
     hash = "sha256-osxdqwNUONCScFarpQV48C7CR1DVR/mCttaglqiAKPo=";
   };
 
-  cargoHash = "sha256-M0mJ+9VznzHDmdKAsT3YamyG/P0JF8oPeVHaX44NWM4=";
+  cargoPatch = [
+    ./0001-update-time-rs.diff
+  ];
+
+  cargoHash = "sha256-10mJ+9VznzHDmdKAsT3YamyG/P0JF8oPeVHaX44NWM4=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -33,7 +37,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   passthru.updateScript = nix-update-script { };

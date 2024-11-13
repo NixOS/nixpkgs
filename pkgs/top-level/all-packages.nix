@@ -11824,10 +11824,6 @@ with pkgs;
 
   eventstore = callPackage ../servers/nosql/eventstore { };
 
-  rustus = callPackage ../servers/networking/rustus {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   fedigroups = callPackage ../servers/fedigroups {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
