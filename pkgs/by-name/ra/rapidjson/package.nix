@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-nixpkgs-gtest.patch
     # https://github.com/Tencent/rapidjson/issues/2214
     ./suppress-valgrind-failures.patch
+
+    # disable tests which don't build on clang-19
+    # https://github.com/Tencent/rapidjson/issues/2318
+    ./char_traits-clang-19-errors.diff
   ];
 
   postPatch = ''
