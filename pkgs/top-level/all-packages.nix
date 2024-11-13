@@ -1231,9 +1231,7 @@ with pkgs;
 
   git-cliff = callPackage ../applications/version-management/git-cliff { };
 
-  git-credential-keepassxc = darwin.apple_sdk_11_0.callPackage ../applications/version-management/git-credential-keepassxc {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
-  };
+  git-credential-keepassxc = callPackage ../applications/version-management/git-credential-keepassxc { };
 
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
