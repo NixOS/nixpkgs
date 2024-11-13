@@ -31,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
   version = "2024.03.11.00";
 
+  # split outputs to reduce downstream closure sizes
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
@@ -69,11 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
-    "-fpermissive"
-  ];
-
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
 
@@ -87,10 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  # split outputs to reduce downstream closure sizes
-  outputs = [
-    "out"
-    "dev"
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
+    "-fpermissive"
   ];
 
   # patch prefix issues again
