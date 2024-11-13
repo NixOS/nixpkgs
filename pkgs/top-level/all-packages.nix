@@ -3895,7 +3895,7 @@ with pkgs;
     stdenv = llvmPackages_13.libcxxStdenv;
     libcxx = llvmPackages_13.libcxx;
     boost = boost178.override { inherit stdenv; };
-    fmt = fmt_8.override { inherit stdenv; };
+    fmt = fmt_9.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
     spdlog_llvm = spdlog.override { inherit stdenv fmt; };
@@ -9188,7 +9188,7 @@ with pkgs;
   fltk = fltk13;
   fltk-minimal = fltk13-minimal;
 
-  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9 fmt_10 fmt_11;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_9 fmt_10 fmt_11;
 
   fmt = fmt_10;
 
@@ -11081,7 +11081,7 @@ with pkgs;
     harfbuzz = harfbuzzFull;
   };
 
-  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_8; };
+  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_11; };
 
   texpresso = callPackage ../tools/typesetting/tex/texpresso {
     texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
@@ -16008,7 +16008,7 @@ with pkgs;
   };
 
   torrenttools = callPackage ../tools/misc/torrenttools {
-    fmt = fmt_8;
+    fmt = fmt_9;
   };
 
   tony = libsForQt5.callPackage ../applications/audio/tony { };
@@ -18393,7 +18393,7 @@ with pkgs;
   kmonad = haskellPackages.kmonad.bin;
 
   kompute = callPackage ../development/libraries/kompute {
-    fmt = fmt_8;
+    fmt = fmt_10;
   };
 
   # In general we only want keep the last three minor versions around that
