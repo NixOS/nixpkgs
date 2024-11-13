@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
-    "-DPYTHON_EXTENSIONS=OFF"
+    (lib.cmakeBool "PYTHON_EXTENSIONS" false)
   ];
 
   meta = {
