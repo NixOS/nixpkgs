@@ -11,6 +11,7 @@
   Foundation,
   Security,
   samba,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -55,6 +56,10 @@ rustPlatform.buildRustPackage rec {
 
   # Requires network access
   doCheck = false;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
