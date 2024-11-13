@@ -7,6 +7,7 @@
   cmake,
   ninja,
   pkg-config,
+  removeReferencesTo,
 
   boost,
   double-conversion,
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    removeReferencesTo
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
@@ -111,6 +113,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         ${lib.escapeShellArg "\${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"} \
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  postFixup = ''
+    # Sanitize header paths to avoid runtime dependencies leaking in
+    # through `__FILE__`.
+    (
+      shopt -s globstar
+      for header in "$dev/include"/**/*.h; do
+        sed -i "1i#line 1 \"$header\"" "$header"
+        remove-references-to -t "$dev" "$header"
+      done
+    )
   '';
 
   passthru = {
