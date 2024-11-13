@@ -1,10 +1,13 @@
 {
-  stdenv,
   lib,
+  stdenv,
+
   fetchFromGitHub,
+
   cmake,
-  folly,
+
   glog,
+  folly,
   gtest,
   apple-sdk_11,
   darwinMinVersionHook,
