@@ -15,6 +15,7 @@
   pythonOlder,
   requests,
   rich,
+  nix-update-script,
   securesystemslib,
   sigstore-protobuf-specs,
   sigstore-rekor-types,
@@ -77,12 +78,14 @@ buildPythonPackage rec {
     "test_verifier"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Codesigning tool for Python packages";
     homepage = "https://github.com/sigstore/sigstore-python";
     changelog = "https://github.com/sigstore/sigstore-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "sigstore";
   };
 }
