@@ -50,6 +50,10 @@
   xorg,
   zlib,
 
+  # Darwin dependencies
+  unzip,
+  makeWrapper,
+
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
 
@@ -76,7 +80,6 @@
   version,
   hash,
   url,
-  platform,
 }:
 
 let
@@ -161,16 +164,21 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
-  doInstallCheck = true;
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  nativeBuildInputs = [
-    dpkg
-    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
-    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      unzip
+      makeWrapper
+    ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # needed for GSETTINGS_SCHEMAS_PATH
     glib
     gsettings-desktop-schemas
@@ -181,57 +189,73 @@ stdenv.mkDerivation {
     adwaita-icon-theme
   ];
 
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+  unpackPhase =
+    if stdenv.hostPlatform.isLinux then
+      "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner"
+    else
+      "unzip $src";
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      runHook preInstall
 
-    mkdir -p $out $out/bin
+      mkdir -p $out $out/bin
 
-    cp -R usr/share $out
-    cp -R opt/ $out/opt
+      cp -R usr/share $out
+      cp -R opt/ $out/opt
 
-    export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
+      export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
 
-    # Fix path to bash in $BINARYWRAPPER
-    substituteInPlace $BINARYWRAPPER \
-        --replace /bin/bash ${stdenv.shell}
+      # Fix path to bash in $BINARYWRAPPER
+      substituteInPlace $BINARYWRAPPER \
+          --replace /bin/bash ${stdenv.shell}
 
-    ln -sf $BINARYWRAPPER $out/bin/brave
+      ln -sf $BINARYWRAPPER $out/bin/brave
 
-    for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
-        patchelf \
-            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            --set-rpath "${rpath}" $exe
-    done
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
+          patchelf \
+              --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+              --set-rpath "${rpath}" $exe
+      done
 
-    # Fix paths
-    substituteInPlace $out/share/applications/brave-browser.desktop \
-        --replace /usr/bin/brave-browser-stable $out/bin/brave
-    substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-        --replace /opt/brave.com $out/opt/brave.com
-    substituteInPlace $out/share/menu/brave-browser.menu \
-        --replace /opt/brave.com $out/opt/brave.com
-    substituteInPlace $out/opt/brave.com/brave/default-app-block \
-        --replace /opt/brave.com $out/opt/brave.com
+      # Fix paths
+      substituteInPlace $out/share/applications/brave-browser.desktop \
+          --replace /usr/bin/brave-browser-stable $out/bin/brave
+      substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
+          --replace /opt/brave.com $out/opt/brave.com
+      substituteInPlace $out/share/menu/brave-browser.menu \
+          --replace /opt/brave.com $out/opt/brave.com
+      substituteInPlace $out/opt/brave.com/brave/default-app-block \
+          --replace /opt/brave.com $out/opt/brave.com
 
-    # Correct icons location
-    icon_sizes=("16" "24" "32" "48" "64" "128" "256")
+      # Correct icons location
+      icon_sizes=("16" "24" "32" "48" "64" "128" "256")
 
-    for icon in ''${icon_sizes[*]}
-    do
-        mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
-        ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
-    done
+      for icon in ''${icon_sizes[*]}
+      do
+          mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
+          ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
+      done
 
-    # Replace xdg-settings and xdg-mime
-    ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-    ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+      # Replace xdg-settings and xdg-mime
+      ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+      ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      runHook preInstall
 
-  preFixup = ''
+      mkdir -p $out/{Applications,bin}
+
+      cp -r "Brave Browser.app" $out/Applications/
+
+      makeWrapper "$out/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" $out/bin/brave
+
+      runHook postInstall
+    '';
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Add command line args to wrapGApp.
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
@@ -286,10 +310,13 @@ stdenv.mkDerivation {
       jefflabonte
       nasirhm
       buckley310
+      matteopacini
     ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
     ];
     mainProgram = "brave";
   };

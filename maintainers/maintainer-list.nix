@@ -4179,6 +4179,12 @@
     githubId = 69784758;
     matrix = "@clot27:matrix.org";
   };
+  cloudripper = {
+    email = "other.wing8806@fastmail.com";
+    github = "cloudripper";
+    githubId = 70971768;
+    name = "cloudripper";
+  };
   clr-cera = {
     email = "clrcera05@gmail.com";
     github = "clr-cera";
@@ -5167,6 +5173,12 @@
     email = "declan.fraser.rixon@gmail.com";
     github = "DeclanRixon";
     githubId = 57464835;
+  };
+  deeengan = {
+    github = "deeengan";
+    githubId = 87693324;
+    name = "Dee Engan";
+    keys = [ { fingerprint = "9C24 79F5 F0CE 48F4 00EE  4A5B B8ED 46EB 468B F72D"; } ];
   };
   deejayem = {
     email = "nixpkgs.bu5hq@simplelogin.com";
@@ -11920,6 +11932,12 @@
     github = "krzaczek";
     githubId = 5773701;
   };
+  KSJ2000 = {
+    email = "katsho123@outlook.com";
+    name = "KSJ2000";
+    github = "KSJ2000";
+    githubId = 184105270;
+  };
   ktf = {
     email = "giulio.eulisse@cern.ch";
     github = "ktf";
@@ -14377,12 +14395,6 @@
     github = "milogert";
     githubId = 5378535;
     name = "Milo Gertjejansen";
-  };
-  milran = {
-    email = "milranmike@protonmail.com";
-    github = "wattmto";
-    githubId = 93639059;
-    name = "Milran Mike";
   };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
@@ -19624,6 +19636,13 @@
     githubId = 5104601;
     name = "schnusch";
   };
+  schrobingus = {
+    email = "brent.monning.jr@gmail.com";
+    name = "Brent Monning";
+    github = "schrobingus";
+    githubId = 72168352;
+    matrix = "@schrobingus:matrix.org";
+  };
   Schweber = {
     github = "Schweber";
     githubId = 64630479;
@@ -23359,6 +23378,12 @@
     name = "Varun Narravula";
     github = "water-sucks";
     githubId = 68445574;
+  };
+  wattmto = {
+    email = "dev@wattmto.dev";
+    github = "wattmto";
+    githubId = 93639059;
+    name = "wattmto";
   };
   waynr = {
     name = "Wayne Warren";

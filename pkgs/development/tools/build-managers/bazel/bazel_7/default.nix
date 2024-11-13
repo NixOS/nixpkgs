@@ -47,7 +47,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.3.1",
+  version ? "7.4.0",
 }:
 
 let
@@ -55,7 +55,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-8FAfkMn8dM1pM9vcWeF7jWJy1sCfi448QomFxYlxR8c=";
+    hash = "sha256-GY1wu3O5O7K2MMJv6wjE+DLnUgwjkHdmcqhT1o9G9Cg=";
   };
 
   defaultShellUtils =
@@ -112,23 +112,23 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-05fHtz47OilpOVYawB17VRVEDpycfYTIHBmwYCOyPjI=";
+          hash = "sha256-0glQLNAU0aT7+3Hzv0+IzgvJlfs7y8wflEwFssIvnkk=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-olrlIia/oXWleXp12E+LGXv+F1m4/S4jj/t7p2/xGdM=";
+          hash = "sha256-736PrTFckHyChRh0Uv8zNtCppQYhfZWECl9+44cs6Qo=";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-LraN6MSVJQ3NzkyeLl5LvGxf+VNDJiVo/dVJIkyF1jU=";
+          hash = "sha256-FX7ZKKG7uoteEvx0fBqpsoB3Gj0aJNaC2IXgJ2ffgz4=";
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
-          hash = "sha256-mB+CpHC60TSTIrb1HJxv+gqikdqxAU+sQRVDwS5mHf8=";
+          hash = "sha256-+EP+HssT4aISUZwLKkSuuXjGQm9lheNJDr7WZw1v0pU=";
         };
 
     nativeBuildInputs = defaultShellUtils;
@@ -244,14 +244,14 @@ let
       outputHashMode = "recursive";
       outputHash =
         if stdenv.hostPlatform.system == "x86_64-linux" then
-          "sha256-II5R2YjaIejcO4Topdcz1H268eplYsYrW2oLJHKEkYw="
+          "sha256-yKy6IBIkjvN413kFMgkWCH3jAgF5AdpxrVnQyhgfWPA="
         else if stdenv.hostPlatform.system == "aarch64-linux" then
-          "sha256-n8RMKf8OxJsEkcxLe7xZgMu9RyeU58NESFF9F0nLNC4="
+          "sha256-NW/JMVC7k2jBW+d8syMl9L5tDB7SQENJtlMFjAKascI="
         else if stdenv.hostPlatform.system == "aarch64-darwin" then
-          "sha256-E6j31Sl+aGs6+Xdx+c0Xi6ryfYZ/ms5/HzIyc3QpMHY="
+          "sha256-QVk0Qr86U350oLJ5P50SE6CUYqn5XEqgGCXVf+89wVY="
         else
           # x86_64-darwin
-          "sha256-VVuNGY4+SFDhcv9iEo8JToYPzqk9NQCrYlLhhae89MM=";
+          "sha256-VDrqS9YByYxboF6AcjAR0BRZa5ioGgX1pjx09zPfWTE=";
       outputHashAlgo = "sha256";
 
     };

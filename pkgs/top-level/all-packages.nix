@@ -1100,8 +1100,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
   };
 
-  trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
@@ -3940,8 +3938,6 @@ with pkgs;
   input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
-
-  invidious = callPackage ../servers/invidious { };
 
   iocextract = with python3Packages; toPythonApplication iocextract;
 
@@ -9535,9 +9531,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  gpac = callPackage ../applications/video/gpac {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
-  };
+  gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme { };
 
@@ -17224,12 +17218,11 @@ with pkgs;
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
 
-  mindustry = callPackage ../games/mindustry { };
-  mindustry-wayland = callPackage ../games/mindustry {
+  mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;
   };
 
-  mindustry-server = callPackage ../games/mindustry {
+  mindustry-server = callPackage ../by-name/mi/mindustry/package.nix {
     enableClient = false;
     enableServer = true;
   };

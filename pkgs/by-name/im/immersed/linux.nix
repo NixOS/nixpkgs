@@ -1,9 +1,10 @@
-{ pname
-, version
-, src
-, meta
-, appimageTools
-, libgpg-error
+{
+  pname,
+  version,
+  src,
+  meta,
+  appimageTools,
+  libgpg-error,
 }:
 
 let
@@ -22,23 +23,24 @@ appimageTools.wrapAppImage rec {
   inherit pname version meta;
   src = src';
 
-  extraPkgs = pkgs: with pkgs; [
-    libgpg-error
-    fontconfig
-    libGL
-    mesa
-    wayland
-    pipewire
-    fribidi
-    harfbuzz
-    freetype
-    libthai
-    e2fsprogs
-    zlib
-    libp11
-    xorg.libX11
-    xorg.libSM
-  ];
+  extraPkgs =
+    pkgs: with pkgs; [
+      libgpg-error
+      fontconfig
+      libGL
+      mesa
+      wayland
+      pipewire
+      fribidi
+      harfbuzz
+      freetype
+      libthai
+      e2fsprogs
+      zlib
+      libp11
+      xorg.libX11
+      xorg.libSM
+    ];
 
   multiArch = true;
 }

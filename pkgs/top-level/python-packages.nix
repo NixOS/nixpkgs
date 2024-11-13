@@ -1603,6 +1603,8 @@ self: super: with self; {
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
 
+  bidsschematools = callPackage ../development/python-modules/bidsschematools { };
+
   biliass = callPackage ../development/python-modules/biliass { };
 
   bilibili-api-python = callPackage ../development/python-modules/bilibili-api-python { };
@@ -9122,6 +9124,8 @@ self: super: with self; {
   nkdfu = callPackage ../development/python-modules/nkdfu { };
 
   nlpcloud = callPackage ../development/python-modules/nlpcloud { };
+
+  nlpo3 =  callPackage ../development/python-modules/nlpo3 { };
 
   nltk = callPackage ../development/python-modules/nltk { };
 
