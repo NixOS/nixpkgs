@@ -30,6 +30,7 @@
   xorgproto,
   xwininfo,
   withDebug ? false,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -100,6 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withDebug ''
       cp -r ../src $out/
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
