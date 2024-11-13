@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
+  passthru.updateScript = { };
+
   meta = with lib; {
     description = "GTK-based lockscreen for Wayland";
     longDescription = ''
