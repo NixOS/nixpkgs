@@ -45,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/${src.owner}/${src.repo}";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ binary-eater ];
+    maintainers = with maintainers; [
+      binary-eater
+      m1dugh
+    ];
   };
 }
