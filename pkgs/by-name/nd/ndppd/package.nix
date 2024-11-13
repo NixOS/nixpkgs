@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ndppd";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "DanielAdolfsson";
     repo = "ndppd";
     rev = version;
-    sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
+    hash = "sha256-FqOoN7MxewmOxd4SKnOx4W/c3X4Jso/kFdiTzIRqHaw=";
   };
 
   nativeBuildInputs = [ gzip ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace /bin/gzip gzip
+    substituteInPlace Makefile --replace-fail /bin/gzip gzip
+    substituteInPlace src/ndppd.h --replace-fail "0.2.4" "${version}"
   '';
 
   postInstall = ''
