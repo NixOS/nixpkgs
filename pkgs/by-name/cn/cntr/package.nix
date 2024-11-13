@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 sigmasquadron ];
     mainProgram = "cntr";
   };
 }
