@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
     # Folly uses these instead of the standard CMake variables for some reason.
     (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
