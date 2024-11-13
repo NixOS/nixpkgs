@@ -1,0 +1,43 @@
+diff --git a/Utils.py b/Utils.py
+index f89330cf..b1a10d68 100644
+--- a/Utils.py
++++ b/Utils.py
+@@ -138,7 +138,7 @@ def local_path(*path: str) -> str:
+         import __main__
+         if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+             # we are running in a normal Python environment
+-            local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
++            local_path.cached_path = os.path.dirname('@ARCHI_LOCAL_PATH@')
+         else:
+             # pray
+             local_path.cached_path = os.path.abspath(".")
+@@ -175,8 +175,11 @@ def user_path(*path: str) -> str:
+                     not os.path.exists(local_path("manifest.json")) or \
+                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
+                 import shutil
++                def copy_fn(src, dst):
++                    shutil.copy2(src,dst)
++                    os.chmod(dst,0o755)
+                 for dn in ("Players", "data/sprites", "data/lua"):
+-                    shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
++                    shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True, copy_function=copy_fn)
+                 if not os.path.exists(local_path("manifest.json")):
+                     warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
+                 else:
+diff --git a/WebHostLib/__init__.py b/WebHostLib/__init__.py
+index fdf3037f..420adfbf 100644
+--- a/WebHostLib/__init__.py
++++ b/WebHostLib/__init__.py
+@@ -9,10 +9,10 @@ from flask_compress import Compress
+ from pony.flask import Pony
+ from werkzeug.routing import BaseConverter
+ 
+-from Utils import title_sorted
++from Utils import title_sorted, user_path
+ 
+ UPLOAD_FOLDER = os.path.relpath('uploads')
+-LOGS_FOLDER = os.path.relpath('logs')
++LOGS_FOLDER = user_path('webhost-logs')
+ os.makedirs(LOGS_FOLDER, exist_ok=True)
+ 
+ app = Flask(__name__)
