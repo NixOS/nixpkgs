@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, pkg-config
-, cmake
-, openssl
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, Security
-, libiconv
-, protobuf
+{
+  lib,
+  rustPlatform,
+  pkg-config,
+  cmake,
+  openssl,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  Security,
+  libiconv,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,10 +33,19 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      libiconv
+    ];
 
   # relax lints to fix an error caused by invalid macro_export
   # error: `log_error` isn't a valid `#[macro_export]` argument
@@ -46,16 +56,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # TODO export TREMOR_PATH($out/lib) variable
-  postInstall = ''
-    # Copy the standard library to $out/lib
-    cp -r ${src}/tremor-script/lib/ $out
+  postInstall =
+    ''
+      # Copy the standard library to $out/lib
+      cp -r ${src}/tremor-script/lib/ $out
 
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd tremor \
-      --bash <($out/bin/tremor completions bash) \
-      --fish <($out/bin/tremor completions fish) \
-      --zsh <($out/bin/tremor completions zsh)
-  '';
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd tremor \
+        --bash <($out/bin/tremor completions bash) \
+        --fish <($out/bin/tremor completions fish) \
+        --zsh <($out/bin/tremor completions zsh)
+    '';
 
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
@@ -91,6 +103,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ humancalico happysalada ];
+    maintainers = with maintainers; [
+      humancalico
+      happysalada
+    ];
   };
 }
