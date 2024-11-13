@@ -1,6 +1,5 @@
 {
   cargo,
-  darwin,
   desktop-file-utils,
   fetchFromGitLab,
   gettext,
@@ -57,8 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     poppler
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (
