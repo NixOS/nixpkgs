@@ -10,6 +10,7 @@
 
   boost,
   double-conversion,
+  fast-float,
   gflags,
   glog,
   libevent,
@@ -34,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2024.03.11.00";
+  version = "2024.11.18.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
+    hash = "sha256-CX4YzNs64yeq/nDDaYfD5y8GKrxBueW4y275edPoS0c=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       boost
       double-conversion
+      fast-float
       gflags
       glog
       libevent
