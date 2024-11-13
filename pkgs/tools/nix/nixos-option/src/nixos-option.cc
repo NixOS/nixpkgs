@@ -397,7 +397,7 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
 
 void printList(Context & ctx, Out & out, Value & v)
 {
-    Out listOut(out, "[", "]", v.listSize());
+    Out listOut(out, "[", "]", static_cast<int>(v.listSize()));
     for (unsigned int n = 0; n < v.listSize(); ++n) {
         printValue(ctx, listOut, *v.listElems()[n], "");
         listOut << Out::sep;
@@ -406,7 +406,7 @@ void printList(Context & ctx, Out & out, Value & v)
 
 void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 {
-    Out attrsOut(out, "{", "}", v.attrs()->size());
+    Out attrsOut(out, "{", "}", static_cast<int>(v.attrs()->size()));
     for (const auto & a : v.attrs()->lexicographicOrder(ctx.state.symbols)) {
         if (!forbiddenRecursionName(a->name, ctx.state.symbols)) {
             std::string_view name = ctx.state.symbols[a->name];
