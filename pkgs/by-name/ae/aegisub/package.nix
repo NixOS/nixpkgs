@@ -4,7 +4,6 @@
   boost,
   cmake,
   config,
-  darwin,
   expat,
   fetchFromGitHub,
   fetchpatch,
@@ -91,9 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
-  ++ lib.optionals openalSupport [
-    (if stdenv.hostPlatform.isDarwin then OpenAL else openal)
-  ]
+  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
   ++ lib.optionals spellcheckSupport [ hunspell ];
@@ -129,6 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeBuildDir = "build-directory";
+
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && !openalSupport) [
+    # OpenAL is in the SDK and linked unless we disable it
+    "-DWITH_OPENAL=OFF"
+  ];
 
   strictDeps = true;
 
