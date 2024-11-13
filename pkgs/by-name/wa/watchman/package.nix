@@ -42,11 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
-    "-DWATCHMAN_STATE_DIR=${stateDir}"
-    "-DWATCHMAN_VERSION_OVERRIDE=${finalAttrs.version}"
+  patches = [
+    # fix build with rustc >=1.79
+    (fetchpatch {
+      url = "https://github.com/facebook/watchman/commit/c3536143cab534cdd9696eb3e2d03c4ac1e2f883.patch";
+      hash = "sha256-lpGr5H28gfVXkWNdfDo4SCbF/p5jB4SNlHj6km/rfw4=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -83,19 +84,18 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
+    "-DWATCHMAN_STATE_DIR=${stateDir}"
+    "-DWATCHMAN_VERSION_OVERRIDE=${finalAttrs.version}"
+  ];
+
   cargoRoot = "watchman/cli";
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
-
-  patches = [
-    # fix build with rustc >=1.79
-    (fetchpatch {
-      url = "https://github.com/facebook/watchman/commit/c3536143cab534cdd9696eb3e2d03c4ac1e2f883.patch";
-      hash = "sha256-lpGr5H28gfVXkWNdfDo4SCbF/p5jB4SNlHj6km/rfw4=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
