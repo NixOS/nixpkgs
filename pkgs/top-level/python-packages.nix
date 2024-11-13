@@ -14940,6 +14940,8 @@ self: super: with self; {
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
 
+  sphinx-multiversion = callPackage ../development/python-modules/sphinx-multiversion { };
+
   sphinx-notfound-page = callPackage ../development/python-modules/sphinx-notfound-page { };
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };

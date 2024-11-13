@@ -76,10 +76,11 @@ rec {
 
   };
 
-  yaml = {}: {
+  yaml = yaml_1_1;
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
-      nativeBuildInputs = [ remarshal ];
+  yaml_1_1 = {}: {
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal_0_17 }: runCommand name {
+      nativeBuildInputs = [ remarshal_0_17 ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
       preferLocalBuild = true;
