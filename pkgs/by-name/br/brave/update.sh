@@ -48,7 +48,6 @@ callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ]) (
   archive
   // {
     inherit pname version;
-    platform = stdenv.system;
   }
 )
 EOF
