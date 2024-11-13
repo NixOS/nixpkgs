@@ -10172,6 +10172,8 @@ self: super: with self; {
 
   picobox = callPackage ../development/python-modules/picobox { };
 
+  picologging = callPackage ../development/python-modules/picologging { };
+
   picos = callPackage ../development/python-modules/picos { };
 
   picosvg = callPackage ../development/python-modules/picosvg { };
@@ -10736,6 +10738,8 @@ self: super: with self; {
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 
   polyline = callPackage ../development/python-modules/polyline { };
+
+  polyfactory = callPackage ../development/python-modules/polyfactory { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
