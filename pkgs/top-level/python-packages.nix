@@ -9123,6 +9123,8 @@ self: super: with self; {
 
   nlpcloud = callPackage ../development/python-modules/nlpcloud { };
 
+  nlpo3 =  callPackage ../development/python-modules/nlpo3 { };
+
   nltk = callPackage ../development/python-modules/nltk { };
 
   nnpdf = toPythonModule (pkgs.nnpdf.override {
