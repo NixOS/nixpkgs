@@ -5733,9 +5733,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa AppKit;
   };
 
-  watchman = darwin.apple_sdk_11_0.callPackage ../development/tools/watchman {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
-  };
+  watchman = callPackage ../development/tools/watchman { };
 
   webassemblyjs-cli = nodePackages."@webassemblyjs/cli-1.11.1";
   webassemblyjs-repl = nodePackages."@webassemblyjs/repl-1.11.1";
