@@ -3,40 +3,31 @@
   stdenv,
   buildPythonPackage,
   isPyPy,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
+  fetchFromGitHub,
   curl,
   openssl,
   bottle,
   pytestCheckHook,
   flaky,
+  flask,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.3";
+  version = "7.45.3-unstable-2024-10-17";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.8"; # https://github.com/pycurl/pycurl/issues/208
+  disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jCRxr5B5rXmOFkXsCw09QiPbaHN50X3TanBjdEn4HWs=";
+  src = fetchFromGitHub {
+    owner = "pycurl";
+    repo = "pycurl";
+    # Pinned to newer commit, since the release cadence is not keeping up with curl itself
+    #rev = "refs/tags/REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "885d08b4d3cbc59547b8b80fbd13ab5fc6f27238";
+    hash = "sha256-WnrQhv6xiA+/Uz0hUmQxmEUasxtvlIV2EjlO+ZOUgI8=";
   };
-
-  patches = [
-    # Don't use -flat_namespace on macOS
-    # https://github.com/pycurl/pycurl/pull/855 remove on next update
-    (fetchpatch {
-      name = "no_flat_namespace.patch";
-      url = "https://github.com/pycurl/pycurl/commit/7deb85e24981e23258ea411dcc79ca9b527a297d.patch";
-      hash = "sha256-tk0PQy3cHyXxFnoVYNQV+KD/07i7AUYHNJnrw6H8tHk=";
-    })
-  ];
-
-  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -46,18 +37,23 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [ curl ];
+
   buildInputs = [
     curl
     openssl
   ];
 
-  nativeBuildInputs = [ curl ];
+  pythonImportsCheck = [ "pycurl" ];
 
   nativeCheckInputs = [
     bottle
     flaky
+    flask
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     # don't pick up the tests directory below examples/
@@ -67,8 +63,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
-
-  pythonImportsCheck = [ "pycurl" ];
 
   disabledTests =
     [
@@ -83,26 +77,23 @@ buildPythonPackage rec {
       "test_libcurl_ssl_gnutls"
       # AssertionError: assert 'crypto' in ['curl']
       "test_ssl_in_static_libs"
-      # tests that require curl with http3Support
-      "test_http_version_3"
       # https://github.com/pycurl/pycurl/issues/819
       "test_multi_socket_select"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/pycurl/pycurl/issues/729
       "test_easy_pause_unpause"
       "test_multi_socket_action"
-      # https://github.com/pycurl/pycurl/issues/822
-      "test_request_with_verifypeer"
-      # https://github.com/pycurl/pycurl/issues/836
-      "test_proxy_tlsauth"
-      # AssertionError: 'Москва' != '\n...
-      "test_encoded_unicode_header"
-      # https://github.com/pycurl/pycurl/issues/856
-      "test_multi_info_read"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Segmentation fault
       "cadata_test"
     ];
+
+  disabledTestPaths = [
+    # https://github.com/pycurl/pycurl/issues/856
+    "tests/multi_test.py"
+  ];
 
   meta = with lib; {
     description = "Python Interface To The cURL library";
