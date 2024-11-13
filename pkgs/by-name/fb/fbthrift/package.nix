@@ -1,22 +1,26 @@
 {
+  lib,
   stdenv,
+
   fetchFromGitHub,
+
   cmake,
   bison,
-  libevent,
-  double-conversion,
-  fizz,
   flex,
-  folly,
-  glog,
-  gflags,
-  libiberty,
-  mvfst,
+
   openssl,
-  lib,
+  gflags,
+  glog,
+  folly,
+  fizz,
   wangle,
   zlib,
   zstd,
+  mvfst,
+  double-conversion,
+  libevent,
+  libiberty,
+  libsodium,
   apple-sdk_11,
   darwinMinVersionHook,
 }:
@@ -40,18 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      double-conversion
-      fizz
-      folly
-      glog
-      gflags
-      libevent
-      libiberty
-      mvfst
       openssl
+      gflags
+      glog
+      folly
+      fizz
       wangle
       zlib
       zstd
+      mvfst
+      double-conversion
+      libevent
+      libiberty
+      libsodium
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
