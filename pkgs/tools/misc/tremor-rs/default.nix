@@ -14,24 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
-  version = "0.12.4";
+  version = "0.13.0-rc.33";
 
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-runtime";
     rev = "v${version}";
-    sha256 = "sha256-+cN+nMDMX4rxjs1VQnSgjBvCsjxxAd13otp9qd21SYo=";
+    hash = "sha256-DoFqHKTu4CvgDYPT4vbwNvSZ/lNTdAF+wlHOOIBJKUw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "http-client-6.5.1" = "sha256-IfFZSiNqN4kiro8qSR5HV7e0U3nadS2vaYtBF+7UPVs=";
-      "qwal-0.1.0" = "sha256-PFdqRTNht77+/7GWzJm7/wESEaO3QjTTY+aRwpK9Ddo=";
-      "rdkafka-0.28.0" = "sha256-6dUGf5TRtiGz9OCxcrPmLdhtZoOd/aJR9VgNFQC2tnQ=";
-      "window-0.1.1" = "sha256-H6w1Y8ClhXISNYmALSRSwfREOaMzccNafygc6E44NYs=";
-    };
-  };
+  cargoHash = "sha256-mgg6yzjRZsDbnK19nhNmy2I95tPWD4NmGCXtI957D0M=";
 
   nativeBuildInputs = [
     cmake
