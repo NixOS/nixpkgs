@@ -17430,6 +17430,8 @@ self: super: with self; {
 
   vine = callPackage ../development/python-modules/vine { };
 
+  vinput = callPackage ../development/python-modules/vinput { };
+
   virt-firmware = callPackage ../development/python-modules/virt-firmware { };
 
   virtkey = callPackage ../development/python-modules/virtkey { };
