@@ -1779,6 +1779,8 @@ self: super: with self; {
 
   bloodyad = callPackage ../development/python-modules/bloodyad { };
 
+  bloom = callPackage ../development/python-modules/bloom { };
+
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
   bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
