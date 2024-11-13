@@ -7610,6 +7610,8 @@ self: super: with self; {
 
   lunarcalendar = callPackage ../development/python-modules/lunarcalendar { };
 
+  luna-soc = callPackage ../development/python-modules/luna-soc { };
+
   luna-usb = callPackage ../development/python-modules/luna-usb { };
 
   luqum = callPackage ../development/python-modules/luqum { };
