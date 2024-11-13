@@ -313,7 +313,7 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
 {
     auto root = findAlongOptionPath(ctx, path);
     recurse(
-        [f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
+        [&f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
             const bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
