@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shantellsans.com/";
     description = "A marker-style font built for creative expression, typographic play, and animation.";
-    license = licenses.ofl;
-    maintainers = [ maintainers.bodby ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ bodby ];
+    platforms = lib.platforms.all;
   };
 }
