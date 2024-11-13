@@ -3,8 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyramid,
-  unittestCheckHook,
+  pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,11 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-Bz53iCGsl6WZASIvBQ1pFfcGLra82vA2OLWjhLVdkrw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ pyramid ];
+  dependencies = [ pyramid ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/mozilla-services/pyramid_multiauth/releases/tag/${version}";
