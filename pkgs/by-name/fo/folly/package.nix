@@ -27,14 +27,14 @@
   watchman,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
   version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   # patch prefix issues again
   # see https://github.com/NixOS/nixpkgs/issues/144170
   postFixup = ''
-    substituteInPlace $dev/lib/cmake/${pname}/${pname}-targets-release.cmake  \
+    substituteInPlace $dev/lib/cmake/${finalAttrs.pname}/${finalAttrs.pname}-targets-release.cmake  \
       --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
   '';
 
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
       pierreis
     ];
   };
-}
+})
