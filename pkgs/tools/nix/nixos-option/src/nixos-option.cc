@@ -34,7 +34,6 @@
 
 #include "libnix-copy-paste.hh"
 
-using nix::absPath;
 using nix::Bindings;
 using nix::Error;
 using nix::EvalError;
@@ -45,9 +44,7 @@ using nix::Strings;
 using nix::Symbol;
 using nix::nAttrs;
 using nix::ThrownError;
-using nix::tLambda;
 using nix::nString;
-using nix::UsageError;
 using nix::Value;
 
 struct Context
@@ -144,7 +141,7 @@ bool isOption(Context & ctx, const Value & v)
         return false;
     }
     try {
-        Value evaluatedType = evaluateValue(ctx, *actualType->value);
+        const Value evaluatedType = evaluateValue(ctx, *actualType->value);
         if (evaluatedType.type() != nString) {
             return false;
         }
@@ -208,7 +205,7 @@ void recurse(const std::function<bool(const std::string & path, std::variant<Val
         if (forbiddenRecursionName(child->name, ctx.state.symbols)) {
             continue;
         }
-        std::string_view name = ctx.state.symbols[child->name];
+        const std::string_view name = ctx.state.symbols[child->name];
         recurse(f, ctx, *child->value, appendPath(path, name));
     }
 }
@@ -220,7 +217,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
         if (typeLookup == v.attrs()->end()) {
             return false;
         }
-        Value type = evaluateValue(ctx, *typeLookup->value);
+        const Value type = evaluateValue(ctx, *typeLookup->value);
         if (type.type() != nAttrs) {
             return false;
         }
@@ -228,7 +225,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
         if (nameLookup == type.attrs()->end()) {
             return false;
         }
-        Value name = evaluateValue(ctx, *nameLookup->value);
+        const Value name = evaluateValue(ctx, *nameLookup->value);
         if (name.type() != nString) {
             return false;
         }
@@ -273,7 +270,7 @@ FindAlongOptionPathRet findAlongOptionPath(Context & ctx, const std::string & pa
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
         const std::string_view attr = ctx.state.symbols[*i];
         try {
-            bool lastAttribute = std::next(i) == tokens.end();
+            const bool lastAttribute = std::next(i) == tokens.end();
             v = evaluateValue(ctx, v);
             if (attr.empty()) {
                 throw OptionPathError(ctx.state, "empty attribute name");
@@ -316,7 +313,7 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
     auto root = findAlongOptionPath(ctx, path);
     recurse(
         [f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
-            bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
+            const bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
             }
@@ -359,7 +356,7 @@ void mapConfigValuesInOption(
     }
     recurse(
         [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
-            bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type() != nAttrs ||
+            const bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type() != nAttrs ||
                         ctx.state.isDerivation(std::get<Value>(v));
             if (!leaf) {
                 return true; // Keep digging
@@ -387,7 +384,7 @@ void describeDerivation(Context & ctx, Out & out, Value v)
     out << "»";
 }
 
-Value parseAndEval(EvalState & state, const std::string & expression, const std::string & path)
+Value parseAndEval(EvalState & state, const std::string & expression)
 {
     Value v{};
     state.eval(state.parseExprFromString(expression, state.rootPath(".")), v);
@@ -410,7 +407,7 @@ void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
     Out attrsOut(out, "{", "}", static_cast<int>(v.attrs()->size()));
     for (const auto & a : v.attrs()->lexicographicOrder(ctx.state.symbols)) {
         if (!forbiddenRecursionName(a->name, ctx.state.symbols)) {
-            std::string_view name = ctx.state.symbols[a->name];
+            const std::string_view name = ctx.state.symbols[a->name];
             attrsOut << name << " = ";
             printValue(ctx, attrsOut, *a->value, appendPath(path, name));
             attrsOut << ";" << Out::sep;
@@ -439,11 +436,11 @@ void multiLineStringEscape(Out & out, const std::string_view & s)
 
 void printMultiLineString(Out & out, const Value & v)
 {
-    std::string_view s = v.string_view();
+    const std::string_view s = v.string_view();
     Out strOut(out, "''", "''", Out::MULTI_LINE);
     std::string::size_type begin = 0;
     while (begin < s.size()) {
-        std::string::size_type end = s.find('\n', begin);
+        const std::string::size_type end = s.find('\n', begin);
         if (end == std::string::npos) {
             multiLineStringEscape(strOut, s.substr(begin, s.size() - begin));
             break;
@@ -639,8 +636,8 @@ int main(int argc, char ** argv)
         auto state = nix::make_ref<nix::EvalState>(
             myArgs.lookupPath, evalStore, nix::fetchSettings, nix::evalSettings);
 
-        Value optionsRoot = parseAndEval(*state, optionsExpr, path);
-        Value configRoot = parseAndEval(*state, configExpr, path);
+        const Value optionsRoot = parseAndEval(*state, optionsExpr);
+        const Value configRoot = parseAndEval(*state, configExpr);
 
         Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
         Out out(std::cout);

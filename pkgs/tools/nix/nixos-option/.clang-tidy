@@ -1,6 +1,5 @@
 Checks:
 - -*
-- misc-include-cleaner
 - bugprone-*
 # don't find them too problematic
 - -bugprone-easily-swappable-parameters
@@ -14,8 +13,10 @@ Checks:
 - concurrency-*
 - google-*
 - -google-readability-todo
+- misc-*
+# we maybe want to address this?
+- -misc-no-recursion
 # TODO
-#  - misc-*
 #  - cppcoreguidelines-*
 #  - -cppcoreguidelines-avoid-magic-numbers
 UseColor: true
