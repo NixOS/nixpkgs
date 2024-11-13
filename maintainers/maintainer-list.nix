@@ -7610,6 +7610,12 @@
     githubId = 248148;
     name = "Sigrid Solveig Haflínudóttir";
   };
+  ftsimas = {
+    name = "Filippos Tsimas";
+    email = "filippos.tsimas@outlook.com";
+    github = "ftsimas";
+    githubId = 47324723;
+  };
   fuerbringer = {
     email = "severin@fuerbringer.info";
     github = "fuerbringer";
