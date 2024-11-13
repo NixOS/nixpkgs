@@ -20,6 +20,6 @@ buildGoModule rec {
     mainProgram = "gqlgenc";
     homepage = "https://github.com/Yamashou/gqlgenc";
     license = licenses.mit;
-    maintainers = with maintainers; [ milran ];
+    maintainers = with maintainers; [ wattmto ];
   };
 }
