@@ -1,33 +1,34 @@
-{ cargo
-, cmake
-, CoreServices
-, cpptoml
-, double-conversion
-, edencommon
-, ensureNewerSourcesForZipFilesHook
-, fb303
-, fbthrift
-, fetchFromGitHub
-, fetchpatch
-, fizz
-, folly
-, glog
-, gtest
-, lib
-, libevent
-, libiconv
-, libsodium
-, libunwind
-, lz4
-, openssl
-, pcre2
-, pkg-config
-, rustPlatform
-, rustc
-, stateDir ? "/tmp"
-, stdenv
-, wangle
-, zstd
+{
+  cargo,
+  cmake,
+  CoreServices,
+  cpptoml,
+  double-conversion,
+  edencommon,
+  ensureNewerSourcesForZipFilesHook,
+  fb303,
+  fbthrift,
+  fetchFromGitHub,
+  fetchpatch,
+  fizz,
+  folly,
+  glog,
+  gtest,
+  lib,
+  libevent,
+  libiconv,
+  libsodium,
+  libunwind,
+  lz4,
+  openssl,
+  pcre2,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stateDir ? "/tmp",
+  stdenv,
+  wangle,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,14 +42,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
-    "-DWATCHMAN_STATE_DIR=${stateDir}"
-    "-DWATCHMAN_VERSION_OVERRIDE=${version}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
+      "-DWATCHMAN_STATE_DIR=${stateDir}"
+      "-DWATCHMAN_VERSION_OVERRIDE=${version}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   nativeBuildInputs = [
     cmake
