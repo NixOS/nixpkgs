@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, nix-update-script
-, pkg-config
-, openssl
-, darwin,
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 
 let
@@ -34,11 +35,13 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -63,7 +66,6 @@ rustPlatform.buildRustPackage {
   #   "--skip=run::parser::tests::test_parse_config_with_depends_on"
   #   "--skip=util::tests::test_process_multi_addr"
   # ];
-
 
   meta = with lib; {
     description = "TUS protocol implementation in Rust";
