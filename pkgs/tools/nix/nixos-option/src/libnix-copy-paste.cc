@@ -2,8 +2,9 @@
 // Since they are not, copy/paste them here.
 // TODO: Delete these and use the ones in the library as they become available.
 
+#include <string_view>
 #include "libnix-copy-paste.hh"
-#include <nix/print.hh>                           // for Strings
+#include <nix/print.hh>
 
 // From nix/src/nix/repl.cc
 bool isVarName(const std::string_view & s)
