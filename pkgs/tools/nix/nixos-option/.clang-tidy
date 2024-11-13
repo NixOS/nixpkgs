@@ -6,17 +6,17 @@ Checks:
 - -bugprone-easily-swappable-parameters
 - performance-*
 - modernize-*
+- readability-*
+# don't find them too problematic
+- -readability-identifier-length
+- -readability-magic-numbers
 # TODO
-#  - readability-*
 #  - misc-*
 #  - portability-*
 #  - concurrency-*
 #  - google-*
 #  - -google-readability-todo
 #
-#  # don't find them too problematic
-#  - -readability-identifier-length
-#  - -readability-magic-numbers
 #
 #  - cppcoreguidelines-*
 #  - -cppcoreguidelines-avoid-magic-numbers

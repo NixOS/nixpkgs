@@ -168,7 +168,7 @@ std::string quoteAttribute(const std::string_view & attribute)
     return buf.str();
 }
 
-const std::string appendPath(const std::string & prefix, const std::string_view & suffix)
+std::string appendPath(const std::string & prefix, const std::string_view & suffix)
 {
     if (prefix.empty()) {
         return quoteAttribute(suffix);
@@ -376,7 +376,7 @@ void describeDerivation(Context & ctx, Out & out, Value v)
 {
     // Copy-pasted from nix/src/nix/repl.cc printDerivation()  :(
     std::optional<nix::StorePath> storePath = std::nullopt;
-    if (auto i = v.attrs()->get(ctx.state.sDrvPath)) {
+    if (const auto *i = v.attrs()->get(ctx.state.sDrvPath)) {
         nix::NixStringContext context;
         storePath = ctx.state.coerceToStorePath(i->pos, *i->value, context, "while evaluating the drvPath of a derivation");
     }
@@ -457,7 +457,7 @@ void printMultiLineString(Out & out, const Value & v)
 void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path)
 {
     try {
-        if (auto ex = std::get_if<std::exception_ptr>(&maybeValue)) {
+        if (auto *ex = std::get_if<std::exception_ptr>(&maybeValue)) {
             std::rethrow_exception(*ex);
         }
         Value v = evaluateValue(ctx, std::get<Value>(maybeValue));

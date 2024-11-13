@@ -6,6 +6,7 @@
 #include "libnix-copy-paste.hh"
 #include <nix/print.hh>
 
+// NOLINTBEGIN
 // From nix/src/nix/repl.cc
 bool isVarName(const std::string_view & s)
 {
@@ -21,3 +22,4 @@ bool isVarName(const std::string_view & s)
             return false;
     return true;
 }
+// NOLINTEND
