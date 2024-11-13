@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     fbthrift
     fizz
     folly
-    folly.boost
-    folly.fmt
     glog
     libsodium
     mvfst

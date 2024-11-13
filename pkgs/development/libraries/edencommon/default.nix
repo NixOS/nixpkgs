@@ -1,9 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, boost
 , cmake
-, fmt_8
 , folly
 , glog
 , gtest
@@ -34,8 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glog
     folly
-    fmt_8
-    boost
     gtest
   ];
 

@@ -2,11 +2,9 @@
 , lib
 , fetchFromGitHub
 , cmake
-, boost
 , libevent
 , double-conversion
 , glog
-, fmt_8
 , gflags
 , openssl
 , fizz
@@ -39,10 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt_8
     libsodium
     zlib
-    boost
     double-conversion
     fizz
     folly
