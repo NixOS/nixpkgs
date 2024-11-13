@@ -198,6 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       abbradar
       pierreis
+      emily
     ];
   };
 })
