@@ -1,0 +1,18 @@
+diff --git a/src/xrt/compositor/client/comp_egl_client.c b/src/xrt/compositor/client/comp_egl_client.c
+index 45b7d4e8..e507b644 100644
+--- a/src/xrt/compositor/client/comp_egl_client.c
++++ b/src/xrt/compositor/client/comp_egl_client.c
+@@ -365,11 +365,11 @@ get_client_gl_functions(client_gl_swapchain_create_func_t *out_sc_create_func,
+ 	 * generic synchronization mechanism is implemented.
+ 	 */
+ 	if (GLAD_EGL_ANDROID_native_fence_sync) {
+-		insert_fence_func = client_egl_insert_fence;
++		insert_fence_func = NULL;
+ 	}
+ 
+ 	*out_sc_create_func = sc_create_func;
+-	*out_insert_fence = insert_fence_func;
++	*out_insert_fence = NULL;
+ 
+ 	return XRT_SUCCESS;
+ }
