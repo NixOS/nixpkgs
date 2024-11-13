@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source C++ networking library";
     longDescription = ''
       Wangle is a framework providing a set of common client/server
@@ -83,9 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       composable way.
     '';
     homepage = "https://github.com/facebook/wangle";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       pierreis
       kylesferrazza
     ];
