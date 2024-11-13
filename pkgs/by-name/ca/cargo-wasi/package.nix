@@ -5,7 +5,6 @@
   pkg-config,
   stdenv,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,8 +22,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   # Checks need to be disabled here because the current test suite makes assumptions
   # about the surrounding environment that aren't Nix friendly. See these lines for specifics:
