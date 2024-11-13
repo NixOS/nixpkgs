@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , buildPackages
 , coreutils
@@ -17,27 +16,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
   # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
   # e.g. links to man pages, value constraints etc.
-  version = "1.9.16";
+  version = "1.9.16p2";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wNhNeX8GtzL8Vz0LeYroMSjCvDMFIFfwW1YOxry/oD0=";
+    hash = "sha256-l2qlbT47KnVZMweGQoit23SMnBNuJdlanMaZqvp3I5w=";
   };
 
   prePatch = ''
     # do not set sticky bit in nix store
     substituteInPlace src/Makefile.in --replace 04755 0755
   '';
-
-  patches = [
-    # Fix for https://github.com/NixOS/nixpkgs/issues/354544
-    (fetchpatch {
-      url = "https://www.sudo.ws/repos/sudo/raw-rev/71e3f5a288e1ac21151b1b9577f0fe3745671cf7";
-      hash = "sha256-L4AF1ee+qW9QKLrUzL5+hC5EznNC9k7sNeVGNBAJ6S4=";
-    })
-  ];
 
   configureFlags = [
     "--with-env-editor"
