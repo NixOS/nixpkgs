@@ -30,6 +30,7 @@
   xorgproto,
   xwininfo,
   withDebug ? false,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,6 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withDebug ''
       cp -r ../src $out/
     '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Fork of XCompMgr, a sample compositing manager for X servers";
