@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   cmake,
+  ninja,
 
   folly,
   fizz,
@@ -30,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fDtJ+9bZj+siKlMglYMkLO/+jldUmsS5V3Umk1gNdlo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs =
     [
