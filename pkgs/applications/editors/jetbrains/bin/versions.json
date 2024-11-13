@@ -11,10 +11,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
-      "version": "2024.2.2",
-      "sha256": "1658fb15d41dfb804ab0ea3ed4781d4ae0f41d25cc9df17c3f536a565423aa5b",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.2.tar.gz",
-      "build_number": "242.22855.75"
+      "version": "2024.2.3",
+      "sha256": "0afb6e32fe1ceb77ddd07ca7fa7d01a0a5e73a0df42ec58183f9c1a06b84446e",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.3.tar.gz",
+      "build_number": "242.23726.125"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -108,34 +108,34 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.tar.gz",
-      "version": "2024.2.3",
-      "sha256": "54991cb37fd6495ad52a1b2b6bc1d6d7ab4fff20a1bd393cab72ac57ca4e31a5",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.3.tar.gz",
-      "build_number": "242.23339.18"
+      "version": "2024.2.4",
+      "sha256": "20638d9ac06d840b3bbd5782de4230735380a3b42844ca8fc22af6b2f33f3c58",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.4.tar.gz",
+      "build_number": "242.23726.97"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2024.2.4",
-      "sha256": "e8ba0dd398c5ec426128640ffc7eb94728b8f13cd33874712da0c04efa02286c",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.4.tar.gz",
-      "build_number": "242.23726.110"
+      "version": "2024.2.5",
+      "sha256": "b3ce4f354d4fdbee8dff5d8120db098502f7393fbebe25891f8bd76e51736b69",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.5.tar.gz",
+      "build_number": "242.23726.162"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.tar.gz",
-      "version": "2024.2.4",
-      "sha256": "c7cd4f9c5affc7f2d24e50130d5565165cc88ac3a4f7fbefd9986a03727f753e",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.2.4.tar.gz",
-      "build_number": "242.23726.96"
+      "version": "2024.3",
+      "sha256": "23858c20f84a10f3be6ac05cdb03a47e6862fabbf4a748ecef7902f882a9e935",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.3.tar.gz",
+      "build_number": "243.21565.180"
     },
     "writerside": {
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.tar.gz",
-      "version": "2024.2 EAP",
-      "sha256": "89d1f4bda404bb81c315600f6b673f89e2798066f68b661a904c9e30db45b4e8",
-      "url": "https://download.jetbrains.com/writerside/writerside-242.21870.138.tar.gz",
-      "build_number": "242.21870.138"
+      "version": "2024.3 EAP",
+      "sha256": "651491afd8a42431045b8d6af13954c001aa45f59f905481b1b3b821f140b60b",
+      "url": "https://download.jetbrains.com/writerside/writerside-243.21565.432.tar.gz",
+      "build_number": "243.21565.432"
     }
   },
   "aarch64-linux": {
@@ -150,10 +150,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.tar.gz",
-      "version": "2024.2.2",
-      "sha256": "35e089b8d8bf5f32c80022f394fe525b8aa37540d26c27e861db0df9e34716a4",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.2-aarch64.tar.gz",
-      "build_number": "242.22855.75"
+      "version": "2024.2.3",
+      "sha256": "be3e6f0d490517c8f6e7c7ac248ab8e8823bf19c8102e7695725f80df6c11d63",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.3-aarch64.tar.gz",
+      "build_number": "242.23726.125"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -247,34 +247,34 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.tar.gz",
-      "version": "2024.2.3",
-      "sha256": "2be5fa28bd5313b9a043818207b9f76f3f38513ec400dfd76b01b543ff8013cf",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.3-aarch64.tar.gz",
-      "build_number": "242.23339.18"
+      "version": "2024.2.4",
+      "sha256": "2d08c9b203db20f4d0f78ddd2a1c6a861a78659045a38e9868d060588f3c3cd3",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.4-aarch64.tar.gz",
+      "build_number": "242.23726.97"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.tar.gz",
-      "version": "2024.2.4",
-      "sha256": "d0ca0cd4e6023fd4494c5f50f07acc35809721ef04b82735a367526d0d4ffc5e",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.4-aarch64.tar.gz",
-      "build_number": "242.23726.110"
+      "version": "2024.2.5",
+      "sha256": "b208af1d63ccdf6411916c087a08830b947fd6d63d86c2b6ceee7394f5538383",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.5-aarch64.tar.gz",
+      "build_number": "242.23726.162"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.tar.gz",
-      "version": "2024.2.4",
-      "sha256": "80b64046d1eab7f1487110095fdcbb4b1bb2543f900e3a7ab7badcf2f7c17c96",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.2.4-aarch64.tar.gz",
-      "build_number": "242.23726.96"
+      "version": "2024.3",
+      "sha256": "85541c9e8209d7b99422ea2bd1c3b3c14b680f7c5a92cd37f9476c41bfb3c0eb",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.3-aarch64.tar.gz",
+      "build_number": "243.21565.180"
     },
     "writerside": {
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.tar.gz",
-      "version": "2024.2 EAP",
-      "sha256": "28a7504a29ba573632e300fbe845d3b2fe3f2c689a853abf83e32ae161e476da",
-      "url": "https://download.jetbrains.com/writerside/writerside-242.21870.138-aarch64.tar.gz",
-      "build_number": "242.21870.138"
+      "version": "2024.3 EAP",
+      "sha256": "c745b284f057bd150b19f773fdfbb4f54922040faaa01293538f51ede9802e35",
+      "url": "https://download.jetbrains.com/writerside/writerside-243.21565.432-aarch64.tar.gz",
+      "build_number": "243.21565.432"
     }
   },
   "x86_64-darwin": {
@@ -289,10 +289,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.dmg",
-      "version": "2024.2.2",
-      "sha256": "35e1a0348353bc8c741c2dea429d0554c7d2a201e9c69b3bfc11c67accab2c52",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.2.dmg",
-      "build_number": "242.22855.75"
+      "version": "2024.2.3",
+      "sha256": "0dfc4d50268e58bb6b3c42c270ea8cca638a8733a5e2e010447cc74d585895e8",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.3.dmg",
+      "build_number": "242.23726.125"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -386,34 +386,34 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.dmg",
-      "version": "2024.2.3",
-      "sha256": "abb6c51d39c3132f60f0f5d8fd5038f908247c0c029b34ef63821ef2fc79b7fa",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.3.dmg",
-      "build_number": "242.23339.18"
+      "version": "2024.2.4",
+      "sha256": "b3eec9db897a46c4becb5e1cd123d47879a2547632d11ec8c04e946182b74ccf",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.4.dmg",
+      "build_number": "242.23726.97"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2024.2.4",
-      "sha256": "1f14c203ef186339a5305008ce2112275a6b293ce422b355bba0e8554b9656e2",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.4.dmg",
-      "build_number": "242.23726.110"
+      "version": "2024.2.5",
+      "sha256": "906bc85ada746fd8e783c4fa524458f6cedde7c77499728da8ccae050201a400",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.5.dmg",
+      "build_number": "242.23726.162"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.dmg",
-      "version": "2024.2.4",
-      "sha256": "63ebaffb17bcbe8759fbe256a7764aea3feadf18ac817a27f80b8cfed1af62d1",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.2.4.dmg",
-      "build_number": "242.23726.96"
+      "version": "2024.3",
+      "sha256": "fccac67e93d69ad98a36b0b8c092913fbc8bfc06b1cb7ee3932bad4394f78c78",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.3.dmg",
+      "build_number": "243.21565.180"
     },
     "writerside": {
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.dmg",
-      "version": "2024.2 EAP",
-      "sha256": "bcf989440a220fff70600d38333bc99feef0453779e60caae0d05d1168cfffb0",
-      "url": "https://download.jetbrains.com/writerside/writerside-242.21870.138.dmg",
-      "build_number": "242.21870.138"
+      "version": "2024.3 EAP",
+      "sha256": "5a44fc83964514916c52b9cd49fa13e3f16757474a84dca85af7c6d97c2ede4b",
+      "url": "https://download.jetbrains.com/writerside/writerside-243.21565.432.dmg",
+      "build_number": "243.21565.432"
     }
   },
   "aarch64-darwin": {
@@ -428,10 +428,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.dmg",
-      "version": "2024.2.2",
-      "sha256": "428d557d4b5eb7687c7c8142b61591ef4fe7825891d91616019292280696180e",
-      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.2-aarch64.dmg",
-      "build_number": "242.22855.75"
+      "version": "2024.2.3",
+      "sha256": "998d629381e6f596b8e0cf5289fe8ca7cfd3221fc73b6c8548d768889b14196f",
+      "url": "https://download.jetbrains.com/cpp/CLion-2024.2.3-aarch64.dmg",
+      "build_number": "242.23726.125"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -525,34 +525,34 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.dmg",
-      "version": "2024.2.3",
-      "sha256": "79ac4f9fb54f7049c2bb5ab3ec78280fe4991e3aaa4cc608cb06ce980c76a05a",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.3-aarch64.dmg",
-      "build_number": "242.23339.18"
+      "version": "2024.2.4",
+      "sha256": "4ccaff57fe8605962797313b3dcea2b4f373249bbaa9e56f242acacbd88d5635",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2024.2.4-aarch64.dmg",
+      "build_number": "242.23726.97"
     },
     "rust-rover": {
       "update-channel": "RustRover RELEASE",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2024.2.4",
-      "sha256": "3bdde43216bd21fcb93483dd9026ea15859e3e5a8d3d14c6e59526b734ebed69",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.4-aarch64.dmg",
-      "build_number": "242.23726.110"
+      "version": "2024.2.5",
+      "sha256": "f0ccd53e5cd8a0a143db956fbc6d118d3771bc42c62b846e9d396a620bea79d1",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-2024.2.5-aarch64.dmg",
+      "build_number": "242.23726.162"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.dmg",
-      "version": "2024.2.4",
-      "sha256": "38c75389c1948e9a1343ad54e050483966a6eae1a4b862dc1d1bbe8e580de5f4",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.2.4-aarch64.dmg",
-      "build_number": "242.23726.96"
+      "version": "2024.3",
+      "sha256": "b3fed87c00746694419b0da71baf71ebb10a8c3803c5a1502c689ff9ce7831f4",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2024.3-aarch64.dmg",
+      "build_number": "243.21565.180"
     },
     "writerside": {
       "update-channel": "Writerside EAP",
       "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.dmg",
-      "version": "2024.2 EAP",
-      "sha256": "cb815cfe2fa9fd69675a31cb870ccf5037ac429a954cb950141074668f250014",
-      "url": "https://download.jetbrains.com/writerside/writerside-242.21870.138-aarch64.dmg",
-      "build_number": "242.21870.138"
+      "version": "2024.3 EAP",
+      "sha256": "04996f17dfb4a840c74270266efc4dad9b78fa498fb9016109d1b58b498791b5",
+      "url": "https://download.jetbrains.com/writerside/writerside-243.21565.432-aarch64.dmg",
+      "build_number": "243.21565.432"
     }
   }
 }
