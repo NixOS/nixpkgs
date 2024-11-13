@@ -6,11 +6,9 @@
 , fizz
 , folly
 , glog
-, libsodium
 , mvfst
 , python3
 , wangle
-, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -36,11 +34,9 @@ stdenv.mkDerivation rec {
     fizz
     folly
     glog
-    libsodium
     mvfst
     python3
     wangle
-    zlib
   ];
 
   meta = with lib; {

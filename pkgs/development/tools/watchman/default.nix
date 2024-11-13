@@ -27,7 +27,6 @@
 , stateDir ? "/tmp"
 , stdenv
 , wangle
-, zlib
 , zstd
 }:
 
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
     glog
     libevent
     libsodium
-    zlib
     folly
     fizz
     wangle
