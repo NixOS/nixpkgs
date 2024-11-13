@@ -10,14 +10,12 @@ Checks:
 # don't find them too problematic
 - -readability-identifier-length
 - -readability-magic-numbers
+- portability-*
+- concurrency-*
+- google-*
+- -google-readability-todo
 # TODO
 #  - misc-*
-#  - portability-*
-#  - concurrency-*
-#  - google-*
-#  - -google-readability-todo
-#
-#
 #  - cppcoreguidelines-*
 #  - -cppcoreguidelines-avoid-magic-numbers
 UseColor: true
