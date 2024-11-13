@@ -13594,13 +13594,6 @@ with pkgs;
     gtk = gtk3;
   };
 
-  bluej = callPackage ../applications/editors/bluej {
-    openjdk = openjdk17.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx17.override { withWebKit = true; };
-    };
-  };
-
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
   bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };

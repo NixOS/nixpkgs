@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, openjdk, glib, dpkg, wrapGAppsHook3 }:
-
+{ lib, stdenv, fetchurl, glib, dpkg, wrapGAppsHook3, openjdk17, openjfx17 }:
+let
+  openjdk = openjdk17.override {
+    withJavaFX = true;
+    openjfx_jdk = openjfx17.override { withWebKit = true; };
+  };
+in
 stdenv.mkDerivation rec {
   pname = "bluej";
   version = "5.2.0";
