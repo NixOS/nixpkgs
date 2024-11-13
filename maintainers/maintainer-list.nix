@@ -3041,6 +3041,12 @@
     githubId = 6375609;
     name = "Bob van der Linden";
   };
+  bodby = {
+    email = "baraa.homsi@proton.me";
+    github = "bodby";
+    githubId = 49784526;
+    name = "bodby";
+  };
   bodil = {
     email = "nix@bodil.org";
     github = "bodil";
