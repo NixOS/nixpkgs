@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, AppKit
 , libxcb
 }:
 
@@ -19,8 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-DMswC+Qp6w7Dcp5YYV4EGWUylv/ouG0ukAdCdDnOA/8=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   meta = with lib; {
     homepage = "https://github.com/replydev/cotp";
