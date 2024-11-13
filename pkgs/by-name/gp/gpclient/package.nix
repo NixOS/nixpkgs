@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient $out/bin/gpclient
+      --replace-fail /usr/bin/gpclient gpclient
   '';
 }
