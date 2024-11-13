@@ -5,6 +5,7 @@
   avahi-compat,
   nodejs_18,
   python3,
+  stdenv,
 }:
 
 buildNpmPackage rec {
@@ -55,11 +56,17 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ]; # aarch64-linux wasn't support in upstream according to README
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "fx_cast_bridge";
   };
 }
