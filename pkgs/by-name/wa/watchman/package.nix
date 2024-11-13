@@ -31,14 +31,14 @@
   darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
   version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
     "-DWATCHMAN_STATE_DIR=${stateDir}"
-    "-DWATCHMAN_VERSION_OVERRIDE=${version}"
+    "-DWATCHMAN_VERSION_OVERRIDE=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    cp ${./Cargo.lock} ${cargoRoot}/Cargo.lock
+    cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
   '';
 
   meta = with lib; {
@@ -109,4 +109,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
   };
-}
+})
