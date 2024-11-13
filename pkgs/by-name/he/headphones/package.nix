@@ -3,7 +3,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
   version = "0.6.3";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "rembo10";

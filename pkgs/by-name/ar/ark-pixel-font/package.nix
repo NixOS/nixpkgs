@@ -27,7 +27,7 @@ python312Packages.buildPythonPackage rec {
     hash = "sha256-PGhhKWHDpvOqa3vaI40wuIsAEdWGb62cN7QJeHQqiss=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = with python312Packages; [
     pixel-font-builder-compat

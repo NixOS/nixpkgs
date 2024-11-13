@@ -107,8 +107,7 @@ let
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
-    pyproject = null;
-    format = "other";
+    pyproject = false;
 
     dontBuild = true;
     dontInstall = true;

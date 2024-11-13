@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "yarGen";
   version = "0.23.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Neo23x0";

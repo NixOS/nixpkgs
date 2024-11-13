@@ -18,7 +18,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
   version = "0.6.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "tabos";

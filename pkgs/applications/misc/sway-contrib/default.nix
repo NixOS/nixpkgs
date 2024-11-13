@@ -89,7 +89,7 @@ in python3Packages.buildPythonApplication {
 
   pname = "sway-${lname}";
 
-  format = "other";
+  pyproject = false;
   dontBuild = true;
   dontConfigure = true;
 

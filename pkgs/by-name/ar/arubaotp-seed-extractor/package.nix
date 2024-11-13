@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-1pv88OClskQOPtJaP7g0duXMe/X3M6Tk+ituZ9UxoIE=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     python3Packages.wrapPython

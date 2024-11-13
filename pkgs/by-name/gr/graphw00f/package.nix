@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "graphw00f";
   version = "1.1.18";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dolevf";

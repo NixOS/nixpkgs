@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zeronet";
   version = "0.7.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "HelloZeroNet";

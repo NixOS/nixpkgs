@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1amz48ijwjjkccg6gmdn3ffnyp2p52ksagy4m9gy8l2v5wj3j32h";
   };
 
-  format = "other"; # no setup.py
+  pyproject = false; # no setup.py
 
   installPhase = ''
     install -Dm0775 hash-id.py $out/bin/hash-identifier

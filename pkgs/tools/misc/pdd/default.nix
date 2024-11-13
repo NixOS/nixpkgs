@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
   };
 
-  format = "other";
+  pyproject = false;
 
   propagatedBuildInputs = [ python-dateutil ];
 

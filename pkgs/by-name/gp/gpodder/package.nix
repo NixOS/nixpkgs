@@ -14,7 +14,7 @@
 python311Packages.buildPythonApplication rec {
   pname = "gpodder";
   version = "3.11.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = pname;

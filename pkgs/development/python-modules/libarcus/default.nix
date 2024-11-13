@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "libarcus";
   version = "4.12.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";

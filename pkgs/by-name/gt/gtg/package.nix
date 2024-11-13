@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     export HOME="$TMP"
   '';
 
-  format = "other";
+  pyproject = false;
 
   checkPhase = "xvfb-run pytest ../tests/";
 

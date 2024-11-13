@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-gBDkvlZCndQjochn6TZtM/Lanza64LqMjNnLjn+pPR4=";
   };
 
-  format = "other";
+  pyproject = false;
 
   outputs = [ "out" "doc" ];
 

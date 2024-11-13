@@ -7,7 +7,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
   version = "0.9.99";
 
-  format = "other";
+  pyproject = false;
   doCheck = false;
 
   src = fetchgit {

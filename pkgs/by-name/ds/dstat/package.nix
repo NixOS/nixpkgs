@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dstat";
-  format = "other";
+  pyproject = false;
   version = "0.7.4";
 
   src = fetchFromGitHub {

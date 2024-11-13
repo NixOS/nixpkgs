@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   pname = "lyrebird";
   version = "1.2.0";
 
-  format = "other";
+  pyproject = false;
   doCheck = false;
 
   src = fetchFromGitHub {

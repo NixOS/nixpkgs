@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zpool-iostat-viz";
   version = "unstable-2021-11-13";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "chadmiller";

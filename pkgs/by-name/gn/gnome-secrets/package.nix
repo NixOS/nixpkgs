@@ -18,7 +18,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
   version = "9.6";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

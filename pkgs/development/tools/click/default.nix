@@ -19,7 +19,7 @@
 buildPythonApplication {
   pname = "click";
   version = "unstable-2023-02-22";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "ubports";

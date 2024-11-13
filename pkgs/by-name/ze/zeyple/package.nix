@@ -4,7 +4,7 @@ python3Packages.buildPythonApplication rec {
   pname = "zeyple";
   version = "unstable-2021-04-10";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "infertux";

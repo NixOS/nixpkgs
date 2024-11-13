@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0hxlh0319rl28iba02917z3n6d5cq2qcgpj2ng31bkjjhlvvfm2g";
   };
 
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     patchShebangs scripts/meson_post_install.py

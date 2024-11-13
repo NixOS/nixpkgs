@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   version = "4.12.0";
   pname = "uranium";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";

@@ -26,7 +26,7 @@ buildPythonApplication rec {
   version = "1.0.0";
 
   # This packages doesn't have a setup.py
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "vagnum08";

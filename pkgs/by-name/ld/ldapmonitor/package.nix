@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ldapmonitor";
   version = "1.4";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";

@@ -17,7 +17,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "dynamic-wallpaper";
   version = "0.1.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dusansimic";

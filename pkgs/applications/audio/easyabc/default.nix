@@ -39,7 +39,7 @@ in python.pkgs.buildPythonApplication {
   # apparently setup.py only supports Windows and Darwin
   # everything is very non-standard in this project
   dontBuild = true;
-  format = "other";
+  pyproject = false;
 
   # https://discourse.nixos.org/t/packaging-mcomix3-python-gtk-missing-gsettings-schemas-issue/10190/2
   strictDeps = false;

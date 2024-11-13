@@ -55,7 +55,7 @@ pypkgs.buildPythonApplication rec {
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
   '';
 
-  format = "other";
+  pyproject = false;
 
   # there are no tests
   doCheck = false;

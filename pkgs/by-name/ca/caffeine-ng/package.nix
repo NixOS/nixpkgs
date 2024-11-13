@@ -19,7 +19,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "4.2.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitea {
     domain = "codeberg.org";

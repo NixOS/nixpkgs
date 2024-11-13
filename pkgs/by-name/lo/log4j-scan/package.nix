@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "log4j-scan";
   version = "unstable-2021-12-18";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fullhunt";

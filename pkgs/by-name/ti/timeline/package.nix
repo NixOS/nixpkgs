@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
   version = "2.6.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";

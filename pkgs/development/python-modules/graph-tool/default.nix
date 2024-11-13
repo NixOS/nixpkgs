@@ -35,7 +35,7 @@ in
 buildPythonPackage rec {
   pname = "graph-tool";
   version = "2.78";
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";

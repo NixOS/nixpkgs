@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "drawing";
   version = "1.0.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "maoschanz";

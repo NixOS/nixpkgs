@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gyb";
   version = "1.82";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "GAM-team";

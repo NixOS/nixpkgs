@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   pname = "rcu";
   version = "2024.001q";
 
-  format = "other";
+  pyproject = false;
 
   src = let
     src-tarball = requireFile {

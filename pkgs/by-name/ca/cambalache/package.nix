@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
   version = "0.90.4";
 
-  format = "other";
+  pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
   src = fetchFromGitLab {

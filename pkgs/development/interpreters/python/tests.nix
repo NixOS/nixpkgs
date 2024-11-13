@@ -207,7 +207,7 @@ let
       python.pkgs.buildPythonPackage {
         pname = "requests";
         version = "2.24.0";
-        format = "other";
+        pyproject = false;
         src = fetchurl {
           url = "https://repo.anaconda.com/pkgs/main/noarch/requests-2.24.0-py_0.tar.bz2";
           sha256 = "02qzaf6gwsqbcs69pix1fnjxzgnngwzvrsy65h1d521g750mjvvp";

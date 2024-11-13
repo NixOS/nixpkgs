@@ -16,7 +16,7 @@ buildPythonApplication rec {
     chmod -x src/daemon/desktops_memory.py
   '';
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     pyqt5   # pyuic5 and pyrcc5 to build resources.

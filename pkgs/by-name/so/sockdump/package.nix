@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = [ bcc ];
 
-  format = "other"; # none
+  pyproject = false; # none
 
   installPhase = "install -D ${pname}.py $out/bin/${pname}";
 

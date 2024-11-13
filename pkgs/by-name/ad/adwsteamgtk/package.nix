@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   pname = "adwsteamgtk";
   version = "0.6.11";
   # built with meson, not a python format
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Foldex";

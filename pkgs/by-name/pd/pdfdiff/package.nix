@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-NPki/PFm0b71Ksak1mimR4w6J2a0jBCbQDTMQR4uZFI=";
   };
 
-  format = "other";
+  pyproject = false;
 
   dontConfigure = true;
   dontBuild = true;

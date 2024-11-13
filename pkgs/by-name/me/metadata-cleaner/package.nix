@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
   version = "2.5.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     owner = "rmnvgr";

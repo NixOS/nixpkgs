@@ -6,7 +6,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "piper";
   version = "0.7";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner  = "libratbag";

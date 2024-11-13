@@ -16,7 +16,7 @@ buildPythonApplication rec {
   pname = "gnome-browser-connector";
   version = "42.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-browser-connector/${lib.versions.major version}/gnome-browser-connector-${version}.tar.xz";

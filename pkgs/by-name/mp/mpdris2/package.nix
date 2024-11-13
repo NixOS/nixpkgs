@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
   version = "0.9.1";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "eonpatapon";

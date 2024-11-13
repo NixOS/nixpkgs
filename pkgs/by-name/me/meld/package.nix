@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "meld";
   version = "3.22.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

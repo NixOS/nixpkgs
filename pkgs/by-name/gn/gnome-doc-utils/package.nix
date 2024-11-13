@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   pname = "gnome-doc-utils";
   version = "0.20.10";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

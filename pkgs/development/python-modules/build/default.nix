@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit src version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;

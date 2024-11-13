@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "giara";
   version = "1.1.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

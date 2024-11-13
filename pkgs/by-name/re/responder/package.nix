@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "responder";
   version = "3.1.4.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lgandx";

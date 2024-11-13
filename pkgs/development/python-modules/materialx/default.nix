@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     cmake

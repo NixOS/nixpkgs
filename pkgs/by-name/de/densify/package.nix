@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "densify";
   version = "0.3.2";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hkdb";

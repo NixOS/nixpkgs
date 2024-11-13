@@ -22,7 +22,7 @@ let
   appMap = pypkgs.buildPythonApplication rec {
     pname = "keyd-application-mapper";
     inherit version src;
-    format = "other";
+    pyproject = false;
 
     postPatch = ''
       substituteInPlace scripts/${pname} \

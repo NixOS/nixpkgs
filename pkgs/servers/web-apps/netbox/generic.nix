@@ -16,7 +16,7 @@
       pname = "netbox";
       inherit version;
 
-      format = "other";
+      pyproject = false;
 
       src = fetchFromGitHub {
         owner = "netbox-community";

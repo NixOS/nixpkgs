@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zeronet-conservancy";
   version = "0.7.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";

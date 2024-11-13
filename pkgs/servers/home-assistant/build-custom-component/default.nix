@@ -6,7 +6,7 @@
 { owner
 , domain
 , version
-, format ? "other"
+, pyproject ? false
 , ...
 }@args:
 
@@ -19,7 +19,7 @@ in
 home-assistant.python.pkgs.buildPythonPackage (
   {
     pname = "${owner}/${domain}";
-    inherit format;
+    inherit pyproject;
 
     installPhase = ''
       runHook preInstall

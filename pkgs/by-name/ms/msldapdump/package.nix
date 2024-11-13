@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "msldapdump";
   version = "unstable-2023-06-12";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "dievus";

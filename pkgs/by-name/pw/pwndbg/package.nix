@@ -20,7 +20,7 @@ in
 stdenv.mkDerivation {
   pname = "pwndbg";
   version = lib.getVersion pwndbg-py;
-  format = "other";
+  pyproject = false;
 
   inherit (pwndbg-py) src;
 

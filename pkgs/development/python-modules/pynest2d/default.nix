@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   version = "4.12.0";
   pname = "pynest2d";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";

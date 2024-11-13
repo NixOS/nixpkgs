@@ -10,7 +10,7 @@ in pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
   version = "0.4.8";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "svsdval";
