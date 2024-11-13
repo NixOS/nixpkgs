@@ -17772,6 +17772,8 @@ self: super: with self; {
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
+  vcstools = callPackage ../development/python-modules/vcstools { };
+
   vcver = callPackage ../development/python-modules/vcver { };
 
   vcversioner = callPackage ../development/python-modules/vcversioner { };

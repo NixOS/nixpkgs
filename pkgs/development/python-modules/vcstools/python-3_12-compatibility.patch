@@ -1,0 +1,369 @@
+diff --git a/src/vcstools/common.py b/src/vcstools/common.py
+index 6c1fa7f..a9e939b 100644
+--- a/src/vcstools/common.py
++++ b/src/vcstools/common.py
+@@ -319,7 +319,7 @@ def run_shell_command(cmd, cwd=None, shell=False, us_env=True,
+                                  args=[proc, no_filter, verbose, show_stdout, q])
+             t.start()
+             t.join(timeout)
+-            if t.isAlive():
++            if t.is_alive():
+                 if hasattr(os.sys, 'winver'):
+                     os.kill(proc.pid, signal.CTRL_BREAK_EVENT)
+                 else:
+diff --git a/src/vcstools/tar.py b/src/vcstools/tar.py
+index d27df9e..f30a1fc 100644
+--- a/src/vcstools/tar.py
++++ b/src/vcstools/tar.py
+@@ -77,7 +77,7 @@ class TarClient(VcsClientBase):
+         """
+         if self.detect_presence():
+             with open(self.metadata_path, 'r') as metadata_file:
+-                metadata = yaml.load(metadata_file.read())
++                metadata = yaml.safe_load(metadata_file.read())
+                 if 'url' in metadata:
+                     return metadata['url']
+         return None
+@@ -111,7 +111,7 @@ class TarClient(VcsClientBase):
+             members = None  # means all members in extractall
+             if version == '' or version is None:
+                 subdir = tempdir
+-                self.logger.warn("No tar subdirectory chosen via the 'version' argument for url: %s" % url)
++                self.logger.warning("No tar subdirectory chosen via the 'version' argument for url: %s" % url)
+             else:
+                 # getmembers lists all files contained in tar with
+                 # relative path
+@@ -165,7 +165,7 @@ class TarClient(VcsClientBase):
+ 
+         if self.detect_presence():
+             with open(self.metadata_path, 'r') as metadata_file:
+-                metadata = yaml.load(metadata_file.read())
++                metadata = yaml.safe_load(metadata_file.read())
+                 if 'version' in metadata:
+                     return metadata['version']
+         return None
+diff --git a/test/test_bzr.py b/test/test_bzr.py
+index 4337828..733e49f 100644
+--- a/test/test_bzr.py
++++ b/test/test_bzr.py
+@@ -212,11 +212,11 @@ class BzrClientTest(BzrClientTestSetups):
+ 
+     def testDiffClean(self):
+         client = BzrClient(self.remote_path)
+-        self.assertEquals('', client.get_diff())
++        self.assertEqual('', client.get_diff())
+ 
+     def testStatusClean(self):
+         client = BzrClient(self.remote_path)
+-        self.assertEquals('', client.get_status())
++        self.assertEqual('', client.get_status())
+ 
+     def test_get_environment_metadata(self):
+         # Verify that metadata is generated
+@@ -239,8 +239,8 @@ class BzrClientLogTest(BzrClientTestSetups):
+         client = BzrClient(self.local_path)
+         client.checkout(self.remote_path)
+         log = client.get_log()
+-        self.assertEquals(3, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(3, len(log))
++        self.assertEqual('modified', log[0]['message'])
+         for key in ['id', 'author', 'email', 'date', 'message']:
+             self.assertTrue(log[0][key] is not None, key)
+ 
+@@ -248,14 +248,14 @@ class BzrClientLogTest(BzrClientTestSetups):
+         client = BzrClient(self.local_path)
+         client.checkout(self.remote_path)
+         log = client.get_log(limit=1)
+-        self.assertEquals(1, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(1, len(log))
++        self.assertEqual('modified', log[0]['message'])
+ 
+     def test_get_log_path(self):
+         client = BzrClient(self.local_path)
+         client.checkout(self.remote_path)
+         log = client.get_log(relpath='fixed.txt')
+-        self.assertEquals('initial', log[0]['message'])
++        self.assertEqual('initial', log[0]['message'])
+ 
+ 
+ class BzrClientAffectedFilesTest(BzrClientTestSetups):
+@@ -330,19 +330,19 @@ class BzrDiffStatClientTest(BzrClientTestSetups):
+         client = BzrClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('+N  ./added.txt\n D  ./deleted-fs.txt\n-D  ./deleted.txt\n M  ./modified-fs.txt\n M  ./modified.txt\n', client.get_status())
++        self.assertEqual('+N  ./added.txt\n D  ./deleted-fs.txt\n-D  ./deleted.txt\n M  ./modified-fs.txt\n M  ./modified.txt\n', client.get_status())
+ 
+     def test_status_relpath(self):
+         client = BzrClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('+N  local/added.txt\n D  local/deleted-fs.txt\n-D  local/deleted.txt\n M  local/modified-fs.txt\n M  local/modified.txt\n', client.get_status(basepath=os.path.dirname(self.local_path)))
++        self.assertEqual('+N  local/added.txt\n D  local/deleted-fs.txt\n-D  local/deleted.txt\n M  local/modified-fs.txt\n M  local/modified.txt\n', client.get_status(basepath=os.path.dirname(self.local_path)))
+ 
+     def test_status_untracked(self):
+         client = BzrClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('?   ./added-fs.txt\n+N  ./added.txt\n D  ./deleted-fs.txt\n-D  ./deleted.txt\n M  ./modified-fs.txt\n M  ./modified.txt\n', client.get_status(untracked=True))
++        self.assertEqual('?   ./added-fs.txt\n+N  ./added.txt\n D  ./deleted-fs.txt\n-D  ./deleted.txt\n M  ./modified-fs.txt\n M  ./modified.txt\n', client.get_status(untracked=True))
+ 
+ 
+ class BzrDiffStatClientTest(BzrClientTestSetups):
+diff --git a/test/test_git.py b/test/test_git.py
+index efc5737..ba83635 100644
+--- a/test/test_git.py
++++ b/test/test_git.py
+@@ -482,11 +482,11 @@ class GitClientTest(GitClientTestSetups):
+ 
+     def testDiffClean(self):
+         client = GitClient(self.remote_path)
+-        self.assertEquals('', client.get_diff())
++        self.assertEqual('', client.get_diff())
+ 
+     def testStatusClean(self):
+         client = GitClient(self.remote_path)
+-        self.assertEquals('', client.get_status(porcelain=True))
++        self.assertEqual('', client.get_status(porcelain=True))
+ 
+     def test_get_environment_metadata(self):
+         # Verify that metadata is generated
+@@ -582,22 +582,22 @@ class GitClientLogTest(GitClientTestSetups):
+     def test_get_log_defaults(self):
+         client = GitClient(self.local_path)
+         log = client.get_log()
+-        self.assertEquals(self.n_commits + 1, len(log))
+-        self.assertEquals('local_%d' % (self.n_commits - 1), log[0]['message'])
++        self.assertEqual(self.n_commits + 1, len(log))
++        self.assertEqual('local_%d' % (self.n_commits - 1), log[0]['message'])
+         for key in ['id', 'author', 'email', 'date', 'message']:
+             self.assertTrue(log[0][key] is not None, key)
+ 
+     def test_get_log_limit(self):
+         client = GitClient(self.local_path)
+         log = client.get_log(limit=1)
+-        self.assertEquals(1, len(log))
+-        self.assertEquals('local_%d' % (self.n_commits - 1), log[0]['message'])
++        self.assertEqual(1, len(log))
++        self.assertEqual('local_%d' % (self.n_commits - 1), log[0]['message'])
+ 
+     def test_get_log_path(self):
+         client = GitClient(self.local_path)
+         for count in range(self.n_commits):
+             log = client.get_log(relpath='local_%d.txt' % count)
+-            self.assertEquals(1, len(log))
++            self.assertEqual(1, len(log))
+ 
+ 
+ class GitClientAffectedFiles(GitClientTestSetups):
+@@ -619,7 +619,7 @@ class GitClientAffectedFiles(GitClientTestSetups):
+         self.assertEqual(sorted(['local_file']),
+                          sorted(affected))
+ 
+-        self.assertEquals(['local_file'], affected)
++        self.assertEqual(['local_file'], affected)
+ 
+ 
+ class GitClientDanglingCommitsTest(GitClientTestSetups):
+@@ -864,7 +864,7 @@ class GitDiffStatClientTest(GitClientTestSetups):
+         client = GitClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals(
++        self.assertEqual(
+             '''\
+ diff --git ./added.txt ./added.txt
+ new file mode 100644
+@@ -900,7 +900,7 @@ index e69de29..454f6b3 100644
+         client = GitClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals(
++        self.assertEqual(
+             '''\
+ diff --git ros/added.txt ros/added.txt
+ new file mode 100644
+@@ -936,7 +936,7 @@ index e69de29..454f6b3 100644
+         client = GitClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals(
++        self.assertEqual(
+             '''\
+ A  ./added.txt
+  D ./deleted-fs.txt
+@@ -950,7 +950,7 @@ M  ./modified.txt
+         client = GitClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals(
++        self.assertEqual(
+             '''\
+ A  ros/added.txt
+  D ros/deleted-fs.txt
+@@ -964,7 +964,7 @@ M  ros/modified.txt
+         client = GitClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals(
++        self.assertEqual(
+             '''\
+ A  ./added.txt
+  D ./deleted-fs.txt
+@@ -1054,8 +1054,8 @@ class GitTimeoutTest(unittest.TestCase):
+ 
+         self.assertFalse(client.checkout(url, timeout=2.0))
+         stop = time.time()
+-        self.assertTrue(stop - start > 1.9)
+-        self.assertTrue(stop - start < 3.0)
++        self.assertGreater(stop - start, 1.9, msg="timeout of 2.0s not reached")
++        self.assertLess(stop - start, 3.0, msg="timeout of 2.0s exceeded")
+         # the git processes will clean up the checkout dir, we have to wait
+         # for them to finish in order to avoid a race condition with rmtree()
+         while os.path.exists(self.local_path):
+diff --git a/test/test_hg.py b/test/test_hg.py
+index 7812625..501eaa1 100644
+--- a/test/test_hg.py
++++ b/test/test_hg.py
+@@ -233,11 +233,11 @@ class HGClientTest(HGClientTestSetups):
+ 
+     def testDiffClean(self):
+         client = HgClient(self.remote_path)
+-        self.assertEquals('', client.get_diff())
++        self.assertEqual('', client.get_diff())
+ 
+     def testStatusClean(self):
+         client = HgClient(self.remote_path)
+-        self.assertEquals('', client.get_status())
++        self.assertEqual('', client.get_status())
+ 
+     def test_get_environment_metadata(self):
+         # Verify that metadata is generated
+@@ -260,8 +260,8 @@ class HGClientLogTest(HGClientTestSetups):
+         client = HgClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log()
+-        self.assertEquals(4, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(4, len(log))
++        self.assertEqual('modified', log[0]['message'])
+         for key in ['id', 'author', 'email', 'date', 'message']:
+             self.assertTrue(log[0][key] is not None, key)
+ 
+@@ -269,14 +269,14 @@ class HGClientLogTest(HGClientTestSetups):
+         client = HgClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log(limit=1)
+-        self.assertEquals(1, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(1, len(log))
++        self.assertEqual('modified', log[0]['message'])
+ 
+     def test_get_log_path(self):
+         client = HgClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log(relpath='fixed.txt')
+-        self.assertEquals('initial', log[0]['message'])
++        self.assertEqual('initial', log[0]['message'])
+ 
+ 
+ class HGAffectedFilesTest(HGClientTestSetups):
+@@ -331,7 +331,7 @@ class HGDiffStatClientTest(HGClientTestSetups):
+         client = HgClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('diff --git ./added.txt ./added.txt\nnew file mode 100644\n--- /dev/null\n+++ ./added.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git ./deleted.txt ./deleted.txt\ndeleted file mode 100644\ndiff --git ./modified-fs.txt ./modified-fs.txt\n--- ./modified-fs.txt\n+++ ./modified-fs.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git ./modified.txt ./modified.txt\n--- ./modified.txt\n+++ ./modified.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file', client.get_diff())
++        self.assertEqual('diff --git ./added.txt ./added.txt\nnew file mode 100644\n--- /dev/null\n+++ ./added.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git ./deleted.txt ./deleted.txt\ndeleted file mode 100644\ndiff --git ./modified-fs.txt ./modified-fs.txt\n--- ./modified-fs.txt\n+++ ./modified-fs.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git ./modified.txt ./modified.txt\n--- ./modified.txt\n+++ ./modified.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file', client.get_diff())
+ 
+     def test_diff_relpath(self):
+ 
+@@ -339,7 +339,7 @@ class HGDiffStatClientTest(HGClientTestSetups):
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+ 
+-        self.assertEquals('diff --git local/added.txt local/added.txt\nnew file mode 100644\n--- /dev/null\n+++ local/added.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git local/deleted.txt local/deleted.txt\ndeleted file mode 100644\ndiff --git local/modified-fs.txt local/modified-fs.txt\n--- local/modified-fs.txt\n+++ local/modified-fs.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git local/modified.txt local/modified.txt\n--- local/modified.txt\n+++ local/modified.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file', client.get_diff(basepath=os.path.dirname(self.local_path)))
++        self.assertEqual('diff --git local/added.txt local/added.txt\nnew file mode 100644\n--- /dev/null\n+++ local/added.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git local/deleted.txt local/deleted.txt\ndeleted file mode 100644\ndiff --git local/modified-fs.txt local/modified-fs.txt\n--- local/modified-fs.txt\n+++ local/modified-fs.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file\ndiff --git local/modified.txt local/modified.txt\n--- local/modified.txt\n+++ local/modified.txt\n@@ -0,0 +1,1 @@\n+0123456789abcdef\n\\ No newline at end of file', client.get_diff(basepath=os.path.dirname(self.local_path)))
+ 
+     def test_get_version_modified(self):
+         client = HgClient(self.local_path)
+@@ -349,19 +349,19 @@ class HGDiffStatClientTest(HGClientTestSetups):
+         client = HgClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('M modified-fs.txt\nM modified.txt\nA added.txt\nR deleted.txt\n! deleted-fs.txt\n', client.get_status())
++        self.assertEqual('M modified-fs.txt\nM modified.txt\nA added.txt\nR deleted.txt\n! deleted-fs.txt\n', client.get_status())
+ 
+     def test_status_relpath(self):
+         client = HgClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('M local/modified-fs.txt\nM local/modified.txt\nA local/added.txt\nR local/deleted.txt\n! local/deleted-fs.txt\n', client.get_status(basepath=os.path.dirname(self.local_path)))
++        self.assertEqual('M local/modified-fs.txt\nM local/modified.txt\nA local/added.txt\nR local/deleted.txt\n! local/deleted-fs.txt\n', client.get_status(basepath=os.path.dirname(self.local_path)))
+ 
+     def testStatusUntracked(self):
+         client = HgClient(self.local_path)
+         self.assertTrue(client.path_exists())
+         self.assertTrue(client.detect_presence())
+-        self.assertEquals('M modified-fs.txt\nM modified.txt\nA added.txt\nR deleted.txt\n! deleted-fs.txt\n? added-fs.txt\n', client.get_status(untracked=True))
++        self.assertEqual('M modified-fs.txt\nM modified.txt\nA added.txt\nR deleted.txt\n! deleted-fs.txt\n? added-fs.txt\n', client.get_status(untracked=True))
+ 
+     def test_hg_diff_path_change_None(self):
+         from vcstools.hg import _hg_diff_path_change
+diff --git a/test/test_svn.py b/test/test_svn.py
+index ee4f067..3615689 100644
+--- a/test/test_svn.py
++++ b/test/test_svn.py
+@@ -274,11 +274,11 @@ class SvnClientTest(SvnClientTestSetups):
+ 
+     def testDiffClean(self):
+         client = SvnClient(self.remote_path)
+-        self.assertEquals('', client.get_diff())
++        self.assertEqual('', client.get_diff())
+ 
+     def testStatusClean(self):
+         client = SvnClient(self.remote_path)
+-        self.assertEquals('', client.get_status())
++        self.assertEqual('', client.get_status())
+ 
+     def test_get_environment_metadata(self):
+         # Verify that metadata is generated
+@@ -301,8 +301,8 @@ class SvnClientLogTest(SvnClientTestSetups):
+         client = SvnClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log()
+-        self.assertEquals(3, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(3, len(log))
++        self.assertEqual('modified', log[0]['message'])
+         for key in ['id', 'author', 'date', 'message']:
+             self.assertTrue(log[0][key] is not None, key)
+         # svn logs don't have email, but key should be in dict
+@@ -312,14 +312,14 @@ class SvnClientLogTest(SvnClientTestSetups):
+         client = SvnClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log(limit=1)
+-        self.assertEquals(1, len(log))
+-        self.assertEquals('modified', log[0]['message'])
++        self.assertEqual(1, len(log))
++        self.assertEqual('modified', log[0]['message'])
+ 
+     def test_get_log_path(self):
+         client = SvnClient(self.local_path)
+         client.checkout(self.local_url)
+         log = client.get_log(relpath='fixed.txt')
+-        self.assertEquals('initial', log[0]['message'])
++        self.assertEqual('initial', log[0]['message'])
+ 
+ 
+ class SVNClientAffectedFiles(SvnClientTestSetups):
+@@ -409,7 +409,7 @@ class SvnDiffStatClientTest(SvnClientTestSetups):
+             block = filter_block(block)
+             expected_blocks.append(block)
+         filtered = "\n".join(filtered_actual_blocks)
+-        self.assertEquals(set(expected_blocks), set(filtered_actual_blocks))
++        self.assertEqual(set(expected_blocks), set(filtered_actual_blocks))
+ 
+     def test_diff(self):
+         client = SvnClient(self.local_path)
