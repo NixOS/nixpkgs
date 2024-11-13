@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ bodby ];
     platforms = lib.platforms.all;
   };
-}
+})
