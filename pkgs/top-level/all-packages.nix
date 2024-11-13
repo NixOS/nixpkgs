@@ -9203,8 +9203,6 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  fizz = callPackage ../development/libraries/fizz { };
-
   flint = callPackage ../development/libraries/flint { };
 
   flint3 = callPackage ../development/libraries/flint/3.nix { };
