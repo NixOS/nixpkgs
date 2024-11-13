@@ -30,7 +30,7 @@
 
   gtest,
 
-  stateDir ? "/tmp",
+  stateDir ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
