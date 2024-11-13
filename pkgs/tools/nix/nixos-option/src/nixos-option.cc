@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iterator>
 #include <optional>
+#include <span>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -347,7 +348,7 @@ void mapConfigValuesInOption(
     const std::function<void(const std::string & path, std::variant<Value, std::exception_ptr> v)> & f,
     const std::string & path, Context & ctx)
 {
-    Value * option;
+    Value * option = nullptr;
     try {
         option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot).first;
     } catch (Error &) {
@@ -396,8 +397,8 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
 void printList(Context & ctx, Out & out, Value & v)
 {
     Out listOut(out, "[", "]", static_cast<int>(v.listSize()));
-    for (unsigned int n = 0; n < v.listSize(); ++n) {
-        printValue(ctx, listOut, *v.listElems()[n], "");
+    for (auto *elem : v.listItems()) {
+        printValue(ctx, listOut, *elem, "");
         listOut << Out::sep;
     }
 }
@@ -417,7 +418,7 @@ void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 
 void multiLineStringEscape(Out & out, const std::string_view & s)
 {
-    size_t i;
+    size_t i = 0;
     for (i = 1; i < s.size(); i++) {
         if (s[i - 1] == '$' && s[i] == '{') {
             out << "''${";
@@ -591,7 +592,8 @@ void printOne(Context & ctx, Out & out, const std::string & path)
 
 int main(int argc, char ** argv)
 {
-    return nix::handleExceptions(argv[0], [&]() {
+    auto args = std::span(argv, argc);
+    return nix::handleExceptions(args[0], [&]() {
         bool recursive = false;
         std::string path = ".";
         std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
@@ -600,10 +602,15 @@ int main(int argc, char ** argv)
 
         struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
         {
+            MyArgs(const MyArgs& other) = default;
+            MyArgs(MyArgs&& other) noexcept = default;
+            auto operator=(const MyArgs& other) noexcept -> MyArgs& = default;
+            auto operator=(MyArgs&& other) noexcept -> MyArgs& = default;
+            virtual ~MyArgs() = default;
             using nix::LegacyArgs::LegacyArgs;
         };
 
-        MyArgs myArgs(std::string(nix::baseNameOf(argv[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
+        MyArgs myArgs(std::string(nix::baseNameOf(args[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
             if (*arg == "--help") {
                 nix::showManPage("nixos-option");
             } else if (*arg == "--version") {
