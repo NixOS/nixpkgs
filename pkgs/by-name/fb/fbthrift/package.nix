@@ -16,9 +16,10 @@
   zlib,
   zstd,
   xxHash,
-  mvfst,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  mvfst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,12 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       zstd
       xxHash
-      mvfst
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  propagatedBuildInputs = [
+    mvfst
+  ];
 
   cmakeFlags =
     [

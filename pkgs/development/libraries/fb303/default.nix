@@ -6,7 +6,6 @@
 , fizz
 , folly
 , glog
-, mvfst
 , python3
 , wangle
 }:
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     fizz
     folly
     glog
-    mvfst
     python3
     wangle
   ];
