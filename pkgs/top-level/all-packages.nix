@@ -9196,8 +9196,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
-  edencommon = callPackage ../development/libraries/edencommon { };
-
   eigen = callPackage ../development/libraries/eigen { };
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
