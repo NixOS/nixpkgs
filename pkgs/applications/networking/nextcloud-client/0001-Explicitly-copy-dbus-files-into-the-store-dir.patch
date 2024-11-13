@@ -1,0 +1,21 @@
+From bbd366348d1f0e334d4604d04e293a046070e666 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 23 Aug 2019 00:19:20 +0200
+Subject: [PATCH] Explicitly copy dbus files into the store dir
+
+---
+ shell_integration/libcloudproviders/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/shell_integration/libcloudproviders/CMakeLists.txt b/shell_integration/libcloudproviders/CMakeLists.txt
+index b4434d0..b57e033 100644
+--- a/shell_integration/libcloudproviders/CMakeLists.txt
++++ b/shell_integration/libcloudproviders/CMakeLists.txt
+@@ -4,6 +4,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.28.0")
+ else()
+     pkg_get_variable(_install_dir dbus-1 session_bus_services_dir)
+ endif()
++    set(_install_dir "${CMAKE_INSTALL_DATADIR}/dbus-1/service")
+     foreach (_i ${_sources})
+         get_filename_component(_service_file ${_i} ABSOLUTE)
+         string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
