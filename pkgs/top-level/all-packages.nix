@@ -3588,6 +3588,15 @@ with pkgs;
     gz-cmake_3
     gz-cmake_4;
 
+  inherit ({
+    ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
+    gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
+    gz-utils_3 = callPackage ../development/libraries/gz-utils/3.nix { };
+  })
+    ignition-utils_1
+    gz-utils_2
+    gz-utils_3;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
