@@ -5,6 +5,7 @@
 , wrapQtAppsHook
 , qtbase
 , qtwayland
+, qtsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [ qtbase ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+    qtwayland qtsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
