@@ -88,10 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
 
-    # temporary hack until folly builds work on aarch64,
-    # see https://github.com/facebook/folly/issues/1880
-    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
-
     # Folly uses these instead of the standard CMake variables for some reason.
     (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
