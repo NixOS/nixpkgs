@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       fpletz
       fgaz
+      jk
     ];
     mainProgram = if buildClient then "luanti" else "luantiserver";
   };
