@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2024.03.11.00";
+  version = "2024.11.18.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "mvfst";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-KjNTDgpiR9EG42Agl2JFJoPo5+8GlS27oPMWpdLq2v8=";
+    hash = "sha256-2Iqk6QshM8fVO65uIqrTbex7aj8ELNSzNseYEeNdzCY=";
   };
 
   nativeBuildInputs = [
