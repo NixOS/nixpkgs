@@ -593,65 +593,67 @@ void printOne(Context & ctx, Out & out, const std::string & path)
 
 int main(int argc, char ** argv)
 {
-    bool recursive = false;
-    std::string path = ".";
-    std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
-    std::string configExpr = "(import <nixpkgs/nixos> {}).config";
-    std::vector<std::string> args;
+    return nix::handleExceptions(argv[0], [&]() {
+        bool recursive = false;
+        std::string path = ".";
+        std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
+        std::string configExpr = "(import <nixpkgs/nixos> {}).config";
+        std::vector<std::string> args;
 
-    struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
-    {
-        using nix::LegacyArgs::LegacyArgs;
-    };
+        struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
+        {
+            using nix::LegacyArgs::LegacyArgs;
+        };
 
-    MyArgs myArgs(std::string(nix::baseNameOf(argv[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
-        if (*arg == "--help") {
-            nix::showManPage("nixos-option");
-        } else if (*arg == "--version") {
-            nix::printVersion("nixos-option");
-        } else if (*arg == "-r" || *arg == "--recursive") {
-            recursive = true;
-        } else if (*arg == "--path") {
-            path = nix::getArg(*arg, arg, end);
-        } else if (*arg == "--options_expr") {
-            optionsExpr = nix::getArg(*arg, arg, end);
-        } else if (*arg == "--config_expr") {
-            configExpr = nix::getArg(*arg, arg, end);
-        } else if (!arg->empty() && arg->at(0) == '-') {
-            return false;
-        } else {
-            args.push_back(*arg);
+        MyArgs myArgs(std::string(nix::baseNameOf(argv[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
+            if (*arg == "--help") {
+                nix::showManPage("nixos-option");
+            } else if (*arg == "--version") {
+                nix::printVersion("nixos-option");
+            } else if (*arg == "-r" || *arg == "--recursive") {
+                recursive = true;
+            } else if (*arg == "--path") {
+                path = nix::getArg(*arg, arg, end);
+            } else if (*arg == "--options_expr") {
+                optionsExpr = nix::getArg(*arg, arg, end);
+            } else if (*arg == "--config_expr") {
+                configExpr = nix::getArg(*arg, arg, end);
+            } else if (!arg->empty() && arg->at(0) == '-') {
+                return false;
+            } else {
+                args.push_back(*arg);
+            }
+            return true;
+        });
+
+        myArgs.parseCmdline(nix::argvToStrings(argc, argv));
+
+        nix::initNix();
+        nix::initGC();
+        nix::settings.readOnlyMode = true;
+        auto store = nix::openStore();
+
+        auto evalStore = myArgs.evalStoreUrl ? nix::openStore(*myArgs.evalStoreUrl)
+                                             : nix::openStore();
+        auto state = nix::make_ref<nix::EvalState>(
+            myArgs.lookupPath, evalStore, nix::fetchSettings, nix::evalSettings);
+
+        Value optionsRoot = parseAndEval(*state, optionsExpr, path);
+        Value configRoot = parseAndEval(*state, configExpr, path);
+
+        Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
+        Out out(std::cout);
+
+        auto print = recursive ? printRecursive : printOne;
+        if (args.empty()) {
+            print(ctx, out, "");
         }
-        return true;
+        for (const auto & arg : args) {
+            print(ctx, out, arg);
+        }
+
+        ctx.state.maybePrintStats();
+
+        return 0;
     });
-
-    myArgs.parseCmdline(nix::argvToStrings(argc, argv));
-
-    nix::initNix();
-    nix::initGC();
-    nix::settings.readOnlyMode = true;
-    auto store = nix::openStore();
-
-    auto evalStore = myArgs.evalStoreUrl ? nix::openStore(*myArgs.evalStoreUrl)
-                                       : nix::openStore();
-    auto state = nix::make_ref<nix::EvalState>(
-        myArgs.lookupPath, evalStore, nix::fetchSettings, nix::evalSettings);
-
-    Value optionsRoot = parseAndEval(*state, optionsExpr, path);
-    Value configRoot = parseAndEval(*state, configExpr, path);
-
-    Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
-    Out out(std::cout);
-
-    auto print = recursive ? printRecursive : printOne;
-    if (args.empty()) {
-        print(ctx, out, "");
-    }
-    for (const auto & arg : args) {
-        print(ctx, out, arg);
-    }
-
-    ctx.state.maybePrintStats();
-
-    return 0;
 }
