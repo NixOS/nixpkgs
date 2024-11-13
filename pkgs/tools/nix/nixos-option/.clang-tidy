@@ -1,8 +1,10 @@
 Checks:
 - -*
 - misc-include-cleaner
+- bugprone-*
+# don't find them too problematic
+- -bugprone-easily-swappable-parameters
 # TODO
-#  - bugprone-*
 #  - performance-*
 #  - modernize-*
 #  - readability-*
