@@ -4,12 +4,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shantell-sans";
   version = "1.011";
 
   src = fetchzip {
-    url = "https://github.com/arrowtype/shantell-sans/releases/download/${version}/Shantell_Sans_${version}.zip";
+    url = "https://github.com/arrowtype/shantell-sans/releases/download/${finalAttrs.version}/Shantell_Sans_${finalAttrs.version}.zip";
     hash = "sha256-xgE4BSl2A7yeVP5hWWUViBDoU8pZ8KkJJrsSfGRIjOk=";
   };
 
