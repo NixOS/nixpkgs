@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <cstdint>
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -69,7 +70,7 @@ class Out
     class Separator
     {};
     const static Separator sep;
-    enum LinePolicy
+    enum LinePolicy : std::uint8_t
     {
         ONE_LINE,
         MULTI_LINE
@@ -504,7 +505,7 @@ void printRecursive(Context & ctx, Out & out, const std::string & path)
             mapConfigValuesInOption(
                 [&ctx, &out, &path](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
                     if (configPath.starts_with(path)) {
-                        printConfigValue(ctx, out, configPath, v);
+                        printConfigValue(ctx, out, configPath, std::move(v));
                     }
                 },
                 optionPath, ctx);
