@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fizz
-, folly
-, gflags
-, glog
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fizz,
+  folly,
+  gflags,
+  glog,
 }:
 
 stdenv.mkDerivation rec {
