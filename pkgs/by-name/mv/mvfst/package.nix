@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the QUIC transport protocol";
     homepage = "https://github.com/facebook/mvfst";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ris ];
   };
 })
