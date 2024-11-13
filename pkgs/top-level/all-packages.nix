@@ -9242,8 +9242,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  fbthrift = callPackage ../development/libraries/fbthrift { };
-
   fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 
   inherit (callPackage ../development/libraries/ffmpeg { })
