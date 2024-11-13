@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.bazarr;
+
+  defaultDataDir = "/var/lib/bazarr";
 in
 {
   options = {
@@ -11,7 +13,7 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.str;
-        default = "/var/lib/bazarr";
+        default = defaultDataDir;
         description = "The directory where Bazarr stores its data files.";
       };
 
@@ -43,7 +45,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.tmpfiles.settings."10-bazarr".${cfg.dataDir}.d =
-      lib.mkIf (cfg.dataDir != "/var/lib/bazarr") {
+      lib.mkIf (cfg.dataDir != defaultDataDir) {
       inherit (cfg) user group;
       mode = "0700";
     };
@@ -57,8 +59,8 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/bazarr") "bazarr";
-        ReadWritePaths = lib.mkIf (cfg.dataDir != "/var/lib/bazarr") cfg.dataDir;
+        StateDirectory = lib.mkIf (cfg.dataDir == defaultDataDir) "bazarr";
+        ReadWritePaths = lib.mkIf (cfg.dataDir != defaultDataDir) cfg.dataDir;
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
           ${cfg.package}/bin/bazarr \
