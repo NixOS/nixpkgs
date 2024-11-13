@@ -11,7 +11,6 @@
   gtk3,
   pango,
   stdenv,
-  darwin,
   wayland,
   gtk-layer-shell,
   unstableGitUpdater,
@@ -39,18 +38,16 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      gtk-layer-shell
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    gtk-layer-shell
+    pango
+    wayland
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -73,5 +70,6 @@ rustPlatform.buildRustPackage rec {
       NotAShelf
     ];
     mainProgram = "anyrun";
+    platforms = lib.platforms.linux;
   };
 }
