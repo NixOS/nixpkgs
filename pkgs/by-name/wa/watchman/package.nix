@@ -102,11 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with maintainers; [ kylesferrazza ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ kylesferrazza ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 })
